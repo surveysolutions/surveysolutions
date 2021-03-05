@@ -1,0 +1,825 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WB0001_NoQuestions" xml:space="preserve">
+    <value>Chestionarul trebuie să conțină cel puțin o întrebare</value>
+  </data>
+  <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
+    <value>Condiția de validare are o eroare de sintaxă</value>
+  </data>
+  <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
+    <value>Condiția de activare are o eroare de sintaxă</value>
+  </data>
+  <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
+    <value>Variabila nu poate fi necompletată</value>
+  </data>
+  <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Variabila are o lungime mai mare de {0} caractere</value>
+  </data>
+  <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
+    <value>Numai o singură întrebare de GPS poate fi marcată ca fiind întrebare de identificare</value>
+  </data>
+  <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+    <value>O întrebare cu răspunsuri multiple de tipul da/nu nu poate fi legată</value>
+  </data>
+  <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
+    <value>Nu este permisă utilizarea de substituiri în eticheta variabilei</value>
+  </data>
+  <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
+    <value>Dimensiunea intrebarii de tip lista lipseste </value>
+  </data>
+  <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
+    <value>Macrocomanda are un nume eronat</value>
+  </data>
+  <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
+    <value>Întrebarea se leagă de o altă întrebare inexistentă</value>
+  </data>
+  <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
+    <value>Întrebarea se leagă de o altă întrebare al cărui tip nu este acceptat pentru legare</value>
+  </data>
+  <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
+    <value>Întrebarea se leagă de o altă întrebare care nu se află într-o listă</value>
+  </data>
+  <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
+    <value>Macrocomanda nu poate avea numele gol</value>
+  </data>
+  <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
+    <value>Întrebarea care conține substituiri de date în titlu sau instrucțiuni nu poate fi marcată ca întrebare de identificare</value>
+  </data>
+  <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
+    <value>Substituirea face legătura cu o variabilă sau întrebare inexistentă</value>
+  </data>
+  <data name="WB0018_SubstitutionReferencesUnsupportedEntity" xml:space="preserve">
+    <value>Substituirea face legătura cu un element care nu este acceptat în substituiri</value>
+  </data>
+  <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
+    <value>Substituirea nu poate face legătura cu elemente care sunt la un nivel inferior în liste</value>
+  </data>
+  <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+    <value>Există o altă macrocomandă cu același nume</value>
+  </data>
+  <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
+    <value>Numărul maxim de răspunsuri este mai mare decât numărul de variante de răspuns</value>
+  </data>
+  <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
+    <value>Acest tip de întrebare nu poate fi o întrebare de identificare</value>
+  </data>
+  <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
+    <value>Întrebarea care este sursa mărimii listei este incorectă. Nu pot fi folosite decât întrebări numerice, categoriale cu selecție multiplă sau liste text.</value>
+  </data>
+  <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
+    <value>Tabelul de căutare are un nume eronat.</value>
+  </data>
+  <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
+    <value>Tabelul de căutare nu poate avea numele gol.</value>
+  </data>
+  <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
+    <value>Au fost găsite elemente cu același nume</value>
+  </data>
+  <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Condiția are o eroare de sintaxă</value>
+  </data>
+  <data name="WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Condiția de filtrare are mai mult de {0} caractere</value>
+  </data>
+  <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
+    <value>Întrebarea cu un filtru la variantele de răspuns nu poate fi întrebare de identificare</value>
+  </data>
+  <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
+    <value>Întrebările de identificare nu pot fi plasate într-o listă</value>
+  </data>
+  <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
+    <value>Tabelul de căutare are titluri de rânduri eronate</value>
+  </data>
+  <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
+    <value>Lista legată de o întrebare nu poate avea un număr fix de elemente</value>
+  </data>
+  <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
+    <value>Lista cu număr fix de elemente nu poate fi generată de o altă listă</value>
+  </data>
+  <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
+    <value>Lista cu număr fix de elemente nu poate avea titlul legat de o altă listă</value>
+  </data>
+  <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
+    <value>Lista care are o altă listă drept sursă are o întrebare greșită ca sursă a numelor rândurilor</value>
+  </data>
+  <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
+    <value>Lista care are drept sursă o întrebare categorială cu răspusuri multiple, sau o întrebare listă nu poate să aibă o altă listă ca titlu</value>
+  </data>
+  <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
+    <value>Lista cu număr fix de elemente nu poate avea titluri goale sau mai puțin de două rânduri</value>
+  </data>
+  <data name="WB0038_RosterFixedTitlesHaveMoreThan200Items" xml:space="preserve">
+    <value>Lista cu număr fix de elemente nu poate avea mai mult de {0} rânduri</value>
+  </data>
+  <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
+    <value>Întrebarea de tip listă nu poate fi întrebare de identificare</value>
+  </data>
+  <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
+    <value>Întrebarea de tip listă nu poate fi completată de controlor</value>
+  </data>
+  <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
+    <value>Valorile din lista cu număr fix de elemente trebuie să fie unice</value>
+  </data>
+  <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
+    <value>Numărul maxim de elemente din listă trebuie să fie cuprins în intervalul [{1}, {0}]</value>
+  </data>
+  <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
+    <value>Tabelul de căutare are prea multe rânduri</value>
+  </data>
+  <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
+    <value>Tabelul de căutare are prea multe coloane</value>
+  </data>
+  <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
+    <value>Întrebarea are variante de răspuns cu valori goale</value>
+  </data>
+  <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+    <value>Condiția de activare nu se poate referi la o întrebare dintr-o listă de la un nivel inferior</value>
+  </data>
+  <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
+    <value>Tabelul de căutare nu are coduri de rânduri unice</value>
+  </data>
+  <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+    <value>Tabelul de căutare nu poate fi gol</value>
+  </data>
+  <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
+    <value>Întrebarea tip cod de bare nu poate fi completată de controlor</value>
+  </data>
+  <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
+    <value>Întrebarea tip cod de bare nu poate fi întrebare de identificare</value>
+  </data>
+  <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
+    <value>Condiția de activare a sub-secțiunii nu poate fi o întrebare în interiorul acesteia</value>
+  </data>
+  <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+    <value>Numele tabelului de căutare nu poate fi un cuvânt rezervat</value>
+  </data>
+  <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
+    <value>Trebuie să existe o listă care să fie sursa legăturii</value>
+  </data>
+  <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
+    <value>Lista trebuie să fie la același nivel, sau la un nivel inferior listei care conține întrebarea sursă</value>
+  </data>
+  <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
+    <value>Lista nu poate avea mai mult de {0} liste superioare</value>
+  </data>
+  <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
+    <value>Referințele circulare nu sunt permise</value>
+  </data>
+  <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+    <value>Nu sunt permise legături pe elementele de navigare: secțiuni, sub-secțiuni, liste</value>
+  </data>
+  <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
+    <value>Numele variabilei sau identificatorul listei nu poate fi un cuvânt rezervat</value>
+  </data>
+  <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
+    <value>Dacă elementul folosește subsituția %rostertitle%, trebuie să fie plasat în interiorul listei</value>
+  </data>
+  <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
+    <value>Întrebarea are mai puțin de {0} variante de răspuns</value>
+  </data>
+  <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
+    <value>Întrebarea poate avea cel mult {0} răspunsuri</value>
+  </data>
+  <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Condiția de filtrare a variantei de răspuns are o eroare de sintaxă</value>
+  </data>
+  <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
+    <value>Întrebarea categorială legată nu poate fi folosită în condiția de validare nr. {0}</value>
+  </data>
+  <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
+    <value>Întrebarea categorială legată nu poate fi folosită în condiția de activare</value>
+  </data>
+  <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
+    <value>Există un alt atașament cu acest nume</value>
+  </data>
+  <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
+    <value>Acest tip de întrebare nu poate fi folosit aici</value>
+  </data>
+  <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+    <value>Numele identificatorului listei sau al variabilei nu poate fi gol</value>
+  </data>
+  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
+    <value>Lista nu poate avea mai mult de {0} liste la nivelul ierarhic inferior</value>
+  </data>
+  <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
+    <value>Lista are identificatorul identic cu titlul chestionarului</value>
+  </data>
+  <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
+    <value>Textul static nu poate fi gol</value>
+  </data>
+  <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+    <value>Titlurile variantelor de răspuns trebuie să fie unice</value>
+  </data>
+  <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+    <value>Valorile variantelor de răspuns trebuie să fie unice</value>
+  </data>
+  <data name="WB0074_CategoricalQuestionHasOptionsAndIsLinked" xml:space="preserve">
+    <value>Întrebările categoriale nu pot să aibă variante de răspuns și în același timp să fie legate de altă întrebare</value>
+  </data>
+  <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
+    <value>Conține mai mult de {0} variante de răspuns</value>
+  </data>
+  <data name="WB0076_CategoricalOptionsCountMoreThan200" xml:space="preserve">
+    <value>Conține mai mult de {0} variante de răspuns</value>
+  </data>
+  <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
+    <value>Întrebarea are denumire greșită de variabilă</value>
+  </data>
+  <data name="WB0078_MultimediaQuestionIsInterviewersOnly" xml:space="preserve">
+    <value>Întrebarea cu imagini nu poate nu poate fi folosită decât de anchetator</value>
+  </data>
+  <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
+    <value>Întrebarea cu imagini nu poate avea condiții de validare</value>
+  </data>
+  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
+    <value>Lista cu mai mult de {0} întrebări nu poate conține alte liste </value>
+  </data>
+  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
+    <value>Lista cu mai mult de {0} întrebări nu poate fi inclusă în altă listă</value>
+  </data>
+  <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
+    <value>Întrebarea cu variante de răspuns multiple care este sursa acestei liste trebuie să aibă definit un număr maxim de întrebări</value>
+  </data>
+  <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
+    <value>Întrebarea de acest tip nu poate fi folosită ca titlu a unei liste</value>
+  </data>
+  <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
+    <value>Variantele de răspuns din întrebarea de tip combo-box de la nivelul ierarhic inferior trebuie să se refere numai la opțiunile din întrebarea de care se leagă</value>
+  </data>
+  <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
+    <value>Întrebarea trebuie să aibă același nivel ierarhic sau unul inferior decât întrebarea de care se leagă</value>
+  </data>
+  <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
+    <value>Lipsesc legăturile întrebării de tip combo-box de la nivelul ierarhic superior, sau nu sunt acceptate</value>
+  </data>
+  <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
+    <value>Nu sunt admise referințele circulare în întrebările de tip combo-box legate</value>
+  </data>
+  <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
+    <value>Întrebarea de tip combo-box legată trebuie să aibă mai puțin de {0} variante de răspuns</value>
+  </data>
+  <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
+    <value>Întrebarea de tip combo-box legată trebuie să aibă o valoare unică și o listă de variante de răspuns de care să se lege</value>
+  </data>
+  <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
+    <value>Întrebarea legată poate fi numai pentru anchetator</value>
+  </data>
+  <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
+    <value>Întrebarea de tip combo-box de la nivelul ierarhic inferior nu poate avea condiții de activare</value>
+  </data>
+  <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
+    <value>Întrebarea de tip combo-box  de la nivelul ierarhic inferior nu poate avea condiții de validare</value>
+  </data>
+  <data name="WB0093_RosterSizeListOptionQuestionShouldBeLimit" xml:space="preserve">
+    <value>Întrebarea sursă a listei trebuie să aibă setat un număr maxim de elemente</value>
+  </data>
+  <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Condiția de activare are o lungime de mai mare de {0} caractere</value>
+  </data>
+  <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+    <value>Textul static se leagă de un atașament inexistent</value>
+  </data>
+  <data name="WB0096_GeneralCompilationError" xml:space="preserve">
+    <value>Eroare la compilarea chestionarului</value>
+  </data>
+  <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
+    <value>În titlul chestionarului sunt admise numai următoarele caractere  A..Z a..z 0..9 ( ) \ / _ - și spațiul.</value>
+  </data>
+  <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
+    <value>Chestionarul are aproximativ {0:0.##}MB și este prea mare pentru a funcționa corect în Survey Solutions. Încercați să reduceți volumul de date până va avea cel mult {1}MB.</value>
+  </data>
+  <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
+    <value>Numărul maxim de răspunsuri pentru întrebarea care determină mărimea listei nu poate fi mai mare de {0}</value>
+  </data>
+  <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
+    <value>Sub-secțiunea nu poate avea mai mult de {0} sub-secțiuni incluse.</value>
+  </data>
+  <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
+    <value>Elementele care umează (întrebare/grup/text static) au același identificator. Ștergeți unul dintre ele.</value>
+  </data>
+  <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
+    <value>Lista care este sursa legăturii este tot o listă, nu o sub-secțiune</value>
+  </data>
+  <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
+    <value>Condiția de validare nr. {0} este prea lungă. Trebuie să conțină cel mult {1} caractere.</value>
+  </data>
+  <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
+    <value>Mesajul de eroare nr. {0} este prea lung. Treguie să conțină cel mult {1} caractere.</value>
+  </data>
+  <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
+    <value>Condiția de validare nr. {0} este goală</value>
+  </data>
+  <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
+    <value>Mesajul de validare nr. {0} este gol</value>
+  </data>
+  <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Expresia filtrului întrebării legate este mai mare de {0} caractere</value>
+  </data>
+  <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+    <value>Întrebarea nu poate fi folosită ca propria sa condiție de filtrare</value>
+  </data>
+  <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Condiția de filtrare are o eroare de sintaxă</value>
+  </data>
+  <data name="WB0111_AttachmentHasEmptyContent" xml:space="preserve">
+    <value>Atașamentul nu poate fi gol</value>
+  </data>
+  <data name="WB0112_VariableHasInvalidName" xml:space="preserve">
+    <value>Variabila are un nume eronat</value>
+  </data>
+  <data name="WB0113_VariableHasEmptyVariableName" xml:space="preserve">
+    <value>Variabila nu poate avea un nume gol</value>
+  </data>
+  <data name="WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+    <value>Întrebările categoriale pot avea drept răspuns numai numere întregi cuprinse între {0} și {1}</value>
+  </data>
+  <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
+    <value>Listele cu număr fix de elemente nu acceptă decât numere întregi</value>
+  </data>
+  <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
+    <value>Întrebarea se leagă de o întrebare listă de la un nivel ierarhic greșit</value>
+  </data>
+  <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
+    <value>Întrebarea legată la o listă nu poate avea filtru de variante de răspuns</value>
+  </data>
+  <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
+    <value>Condiția face referință la proprietăți nepermise pentru DateTime: {0}, {1}, {2}. Folosiți opțiunea ora curentă în întrebare</value>
+  </data>
+  <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
+    <value>Titlul chestionarului nu poate avea mai mult de {0} caractere.</value>
+  </data>
+  <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
+    <value>Titlurile secțiunilor sau sub-secțiunilor nu pot fi goale sau completate numai cu spații.</value>
+  </data>
+  <data name="WB0121_VariableNameTooLong" xml:space="preserve">
+    <value>Numele sau identificatorul acestui element nu trebuie să fie mai lung de {0} caractere.</value>
+  </data>
+  <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
+    <value>Numele sau identificatorul variabilei sau al listei trebuie să conțină numai litere, cifre și caracterul "_"</value>
+  </data>
+  <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
+    <value>Numele sau identificatorul variabilei sau al listei nu trebuie să înceapă cu o cifră sau cu "_"</value>
+  </data>
+  <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
+    <value>Numele sau identificatorul variabilei sau al listei nu trebuie să se termine cu caracterul "_"</value>
+  </data>
+  <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
+    <value>Numele sau identificatorul variabilei sau al listei nu trebuie să conțină caractere succesive "_"</value>
+  </data>
+  <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
+    <value>Numele sau identificatorul variabilei sau al listei trebuie să fie unic în cadrul chestionarului</value>
+  </data>
+  <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>Există cel puțin o pereche de valori "Titlu" și "Valoare inițială". Lista nu trebuie să conțină nicio valoare duplicată.</value>
+  </data>
+  <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
+    <value>Numărul de zecimale trebuie să fie între {0} și {1}</value>
+  </data>
+  <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
+    <value>Titlul variantei de răspuns este prea lung. Lungimea titlului trebuie să fie între {0} și {1} caractere.</value>
+  </data>
+  <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
+    <value>Nu se pot folosi elemente de la nivelurile ierarhice inferioare în condițiile de activare pentru secțiuni, subsecțiuni și liste.</value>
+  </data>
+  <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
+    <value>Valorile speciale nu acceptă decât numere întregi între {0} și {1}</value>
+  </data>
+  <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
+    <value>Titlul valorii speciale este gol sau prea lung. Lungimea titlului trebuie să fie între {0} și {1}</value>
+  </data>
+  <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
+    <value>Valorile speciale trebuie să fie unice.</value>
+  </data>
+  <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
+    <value>Conține mai mult de {0} valori speciale</value>
+  </data>
+  <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
+    <value>Întrebarea conține o valoare specială, care este prea mare și nu poate fi folosită în această întrebare întrucât  detemină dimensiunea unei liste.</value>
+  </data>
+  <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+    <value>Întrebarea conține o valoare specială, care este nulă</value>
+  </data>
+  <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+    <value>Titlurile valorilor speciale trebuie să fie unice</value>
+  </data>
+  <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+    <value>A fost creat un număr prea mare de liste. Exportul acestor structuri în fișiere de date ar putea crea probleme. Vă rugăm să considerați reducerea numărului acestor liste.</value>
+  </data>
+  <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
+    <value>Secțiunea sau Lista conține mai mult de {0} întrebări, sugerăm să o împărțiți în sub-secțiuni</value>
+  </data>
+  <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+    <value>Secțiunea nu conține întrebări. Recomandăm ștergerea acestei secțiuni goale.</value>
+  </data>
+  <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
+    <value>Lista conține numai o întrebare. Recomandăm să fie grupată cu alte liste. Pentu o listă cu număr fix de elemente, recomandăm prezentarea acestora ca un set de întrebări independente.</value>
+  </data>
+  <data name="WB0204_EmptyRoster" xml:space="preserve">
+    <value>Lista este goală. Ștergeți-o dacă nu este necesară.</value>
+  </data>
+  <data name="WB0205_TooManyQuestions" xml:space="preserve">
+    <value>Chestionarul are mai mult de {0} întrebări. Completarea lui ar putea fi dificilă.</value>
+  </data>
+  <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+    <value>Chestionarul are mai mult de {0} întrebări dar doar una sau două secțiuni. Grupați întrebările în secțiuni pentru a simplifica derularea acestora și a îmbunătăți performanța.</value>
+  </data>
+  <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+    <value>Lista cu număr fix de elemente conține {0} elemente sau mai puține. Recomandăm folosirea de sub-secțiuni cu întrebări. Listele complică structura datelor exportate.</value>
+  </data>
+  <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
+    <value>Mai mult de {0}% din întrebări nu au condiții de validare. Adăugați condiții de validare pentru a îmbunătăți calitatea datelor.</value>
+  </data>
+  <data name="WB0209_LongEnablementCondition" xml:space="preserve">
+    <value>Condiția de activare este prea lungă. Este posibil să se producă condții mai scurte și mai lizibile folosind funcțiile incluse (de ex. InList())</value>
+  </data>
+  <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+    <value>Întrebarea cu răspunsuri unice are prea multe variante de răspuns, vă recomandăm să o înlocuiți cu o întrebare de tipul "combo-box"</value>
+  </data>
+  <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+    <value>Chestionarul nu are întrebări de geolocalizare GPS. Vă recomandăm să adăugați o astfel de întrebare.</value>
+  </data>
+  <data name="WB0212_LongValidationCondition" xml:space="preserve">
+    <value>Condiția de validare {0} este prea lungă. Este posibil să se producă condții mai scurte și mai lizibile folosind funcțiile incluse (de ex. InList())</value>
+  </data>
+  <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+    <value>Atașamentul are mai mult de {0}Mb</value>
+  </data>
+  <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+    <value>Dimensiunea totală a atașamentelor este mai mare de {0}Mb</value>
+  </data>
+  <data name="WB0215_UnusedAttachments" xml:space="preserve">
+    <value>Chestionarul conține atașamente nefolosite</value>
+  </data>
+  <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
+    <value>Nu a fost creată nicio întrebare de identificare. Creați cel puțin o întrebare de identificare.</value>
+  </data>
+  <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
+    <value>Eticheta variabilei este prea mare (mai mult de {0} caractere) și va fi trunchiată în exportul SPSS</value>
+  </data>
+  <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
+    <value>Există întrebări consecutive care au condiții de activare identice. Recomandăm plasarea acestora într-o sub-secțiune și aplicarea condiției de activare la sub-secțiune</value>
+  </data>
+  <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
+    <value>Există mai multe întrebări consecutive cu răspunuri unice care au {0} variante de răspuns. Recomandăm folosirea unei singure întrebări cu răspunsuri multiple. </value>
+  </data>
+  <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
+    <value>Nu este recomandat să folosiți @{0} într-o listă cu opțiuni multiple. Recomandăm să folosiți @{1}.</value>
+  </data>
+  <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
+    <value>Nu există nicio întrebare despre data și ora curentă. Recomandăm să înregistrați data și ora interviului în chestionar</value>
+  </data>
+  <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
+    <value>Intrebarea cu răspunsuri unice este marcată ca întrebare de identificare. Recomandăm folosirea unei întrebări de tip text</value>
+  </data>
+  <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
+    <value>Secțiunea conține mai puțin de cinci întrebări. Recomandăm unirea cu o altă secțiune</value>
+  </data>
+  <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
+    <value>Sunt prea multe sub-secțiuni în acest nivel. Recomandăm să folosiți o structură ierarhică</value>
+  </data>
+  <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
+    <value>Meniul de tip listă derulantă (combo-box) conține mai puțin de 10 elemente. Recomandăm înlocuirea lui cu o întrebare cu răspunsuri unice.</value>
+  </data>
+  <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
+    <value>Întrebările combo-box legate sunt legate de aceeași întrebare la nivelul ierarhic superior</value>
+  </data>
+  <data name="WB0227_NotShared" xml:space="preserve">
+    <value>Chestionarul nu a fost analizat. Recomandăm să îl distribuiți către alte persoane pentru a primi analiză și opinii</value>
+  </data>
+  <data name="WB0228_OmittedOptions" xml:space="preserve">
+    <value>Întrebarea categorială are coduri de variante de răspuns neconsecutive. Verificați dacă există variante de răspuns omise.</value>
+  </data>
+  <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
+    <value>În validare se folosesc întrebări ale controlorului. Verificați corelațiile pentru situația de non-răspuns a controlorului sau instruiți controlorii să răspundă întotdeauna.</value>
+  </data>
+  <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
+    <value>Întrebări neconsecutive legate de un nivel superior. Vă trecomandăm să puneți întrebările una după alta.</value>
+  </data>
+  <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
+    <value>Întrebarea cu variante multiple de răspuns conține prea multe variante de răspuns (&gt; {0}). Va fi dificil să se lucreze pe tablete. Vă recomandăm să o împărțiți în două întrebări cu opțiuni multiple, dacă este posibil.</value>
+  </data>
+  <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
+    <value>Cinci sau mai multe întrebări au aceeași condiție de activare. Pentru a îmbunătăți eficiența chestionarului, plasați întrebările într-un grup și aplicați o singură condiție de activare grupului.</value>
+  </data>
+  <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
+    <value>Ați creat o listă cu trei sau mai multe niveluri ierarhice inferioare. Încercați să evitați astfel de structuri complexe care ar putea duce la probleme în colectarea datelor.</value>
+  </data>
+  <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
+    <value>Nivelurile ierarhice inferioare din listă se bazează pe aceeași întrebare de la nivelul ierarhic superior. Astfel de liste pot duce la probleme în colectarea datelor.</value>
+  </data>
+  <data name="WB0235_FewQuestionsWithSameLongEnablement" xml:space="preserve">
+    <value>Aceeași condiție de activare lungă este utilizată în mai multe întrebări. Vă recomandăm să creați o variabilă booleană pentru a simplifica gestionarea codului.</value>
+  </data>
+  <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
+    <value>Aceeași condiție de validare lungă este utilizată în mai multe întrebări. Vă recomandăm să creați o variabilă booleană pentru a simplifica gestionarea codului.</value>
+  </data>
+  <data name="WB0237_BitwiseAnd" xml:space="preserve">
+    <value>Caracterul &amp; este folosit în expresie. Asigurați-vă că înțelegeți diferența dintre operatorii &amp; și &amp;&amp;. În majoritatea cazurilor, utilizați &amp;&amp;</value>
+  </data>
+  <data name="WB0238_BitwiseOr" xml:space="preserve">
+    <value>Caracterul | este folosit în expresie. Asigurați-vă că înțelegeți diferența dintre | și || operatorii. În majoritatea cazurilor, utilizați ||.</value>
+  </data>
+  <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>Condiția de validare # {0} se referă la o întrebare viitoare. Vă recomandăm inversarea ordinii.</value>
+  </data>
+  <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>Condiția de activare se referă la o întrebare viitoare. Vă recomandăm inversarea ordinii.</value>
+  </data>
+  <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
+    <value>Sunt definite prea puține etichete pentru variabile. Adăugați etichete la variabile pentru a îmbunătăți gradul de utilizare a datelor exportate și pentru a furniza metadate în formatul Data Documentation Initiative (DDI).</value>
+  </data>
+  <data name="WB0254_UseFunctionIsValidEmailToValidateEmailAddress" xml:space="preserve">
+    <value>Folosiți funcția IsValidEmail() pentru a valida adresa de e-mail.</value>
+  </data>
+  <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
+    <value>Întrebarea este prea scurtă, ar putea fi o întrebare incompletă.</value>
+  </data>
+  <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
+    <value>Numele traducerii nu este valid</value>
+  </data>
+  <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
+    <value>Traducerea are conținut lipsă</value>
+  </data>
+  <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
+    <value>Traducerile au nume duplicat</value>
+  </data>
+  <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
+    <value>Titlul întrebării este prea lung. Nu trebuie să aibă mai mult de {0} caractere.</value>
+  </data>
+  <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
+    <value>Titlul este prea lung. Nu trebuie să aibă mai mult de {0} caractere.</value>
+  </data>
+  <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+    <value>Chestionarul conține {0} liste, care depășesc limitele sistemului, de {1} liste.</value>
+  </data>
+  <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
+    <value>Lista a atins limita de mărime. Reduceți dimensiunea listei sau reduceți nivelurie ierarhice.</value>
+  </data>
+  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
+    <value>Prima secțiune nu poate avea condiție de activare.</value>
+  </data>
+  <data name="WB0264_GpsQuestion" xml:space="preserve">
+    <value>Aveți o întrebare de localizare GPS. Tabletele trebuie să dispună de geolocalizare pentru a fi utilizate împreună cu acest chestionar.</value>
+  </data>
+  <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
+    <value>Mai mult de {0}% dintre întrebări sunt întrebări text. Este dificil de răspuns la întrebările text pe tablete. Vă recomandăm utilizarea întrebărilor cu variante de răspuns simple sau multiple.</value>
+  </data>
+  <data name="WB0266_SameTitle" xml:space="preserve">
+    <value>Întrebări dublate. (Întrebările au același titlu.)</value>
+  </data>
+  <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
+    <value>Aveți o întrebare referitoare la codul de bare. Tabletele trebuie să aibă cameră cu focalizare automată pentru a fi utilizate cu acest chestionar.</value>
+  </data>
+  <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
+    <value>Ați încercat să utilizați o substituire pentru o componentă neacceptată.</value>
+  </data>
+  <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
+    <value>Întrebarea nu poate avea un titlu gol.</value>
+  </data>
+  <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
+    <value>Secțiunea nu trebuie să conțină mai mult de {0} întrebări.</value>
+  </data>
+  <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
+    <value>Macrocomanda nu poate fi goală.</value>
+  </data>
+  <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>Condiția de activare utilizează o expresie interzisă.</value>
+  </data>
+  <data name="WB0273_ValidationConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>Condiția de validare utilizează o expresie interzisă.</value>
+  </data>
+  <data name="WB0274_VariableUsingForbiddenClasses" xml:space="preserve">
+    <value>Variabila utilizează o expresie interzisă.</value>
+  </data>
+  <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
+    <value>Condiția de filtrare utilizează o expresie interzisă.</value>
+  </data>
+  <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
+    <value>Variabila @rowname nu mai este acceptată.</value>
+  </data>
+  <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
+    <value>Titlul chestionarului nu ar trebui să aibă două sau mai multe caractere underscore _ consecutive.</value>
+  </data>
+  <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Modul simplu este permis numai pentru listele cu cel mult {0} elemente.</value>
+  </data>
+  <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+    <value>Modul simplu nu permite utilizarea listelor cu niveluri ierarhice inferioare.</value>
+  </data>
+  <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+    <value>Textul conține o legătură către o întrebare, subsecțiune, listă sau atașament PDF necunoscut(ă).</value>
+  </data>
+  <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+    <value>Numărul total de elemente ({0}) a depășit limita de sistem ({1}). Vă recomandăm reducerea numărului de întrebări, texte statice, variabile sau elemente din listele cu lungime fixă.</value>
+  </data>
+  <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
+    <value>Întrebarea de identificare nu poate fi plasată în interiorul secțiunii care conține o condiție de activare.</value>
+  </data>
+  <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
+    <value>Lista în format tabular nu permite utilizarea grupurilor și listelor cu niveluri ierarhice.</value>
+  </data>
+  <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Formatul tabular este permis numai pentru listele cu cel mult {0} întrebări.</value>
+  </data>
+  <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
+    <value>Lista în format tabular nu permite utilizarea întrebărilor controlorului.</value>
+  </data>
+  <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+    <value>Lista în format tabular permite utilizarea numai a întrebărilor text și numerice.</value>
+  </data>
+  <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
+    <value>Lista în format tabular sau lista în format matriceal funcționează numai în sondajul web, pe tablete se va vedea modul „sub secțiune”.</value>
+  </data>
+  <data name="WB0287_TableRosterDoesntContainsQuestionWithSubstitutions" xml:space="preserve">
+    <value>Întrebările dintr-o listă de tabele nu pot să conțină înlocuiri în text.</value>
+  </data>
+  <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
+    <value>Eticheta {1} pentru cod {0} este un număr diferit de valoarea etichetată.</value>
+  </data>
+  <data name="WB0289" xml:space="preserve">
+    <value>Numele variantelor de răspuns nu trebuie să depășească {0} caractere.</value>
+  </data>
+  <data name="WB0290" xml:space="preserve">
+    <value>Numele variantelor de răspuns nu trebuie să se termine cu caracterul underscore _</value>
+  </data>
+  <data name="WB0291" xml:space="preserve">
+    <value>Numele variantelor de răspuns nu trebuie să aibă două sau mai multe caractere underscore _ consecutive.</value>
+  </data>
+  <data name="WB0292" xml:space="preserve">
+    <value>Numele variantelor de răspuns nu trebuie să fie gol.</value>
+  </data>
+  <data name="WB0293" xml:space="preserve">
+    <value>Numele variantelor de răspuns nu poate fi un cuvânt rezervat.</value>
+  </data>
+  <data name="WB0294" xml:space="preserve">
+    <value>Numele variantelor de răspuns trebuie să conțină numai litere, cifre și caractere underscore _</value>
+  </data>
+  <data name="WB0295" xml:space="preserve">
+    <value>Numele variantelor de răspuns nu ar trebui să înceapă cu cifre sau caractere underscore _</value>
+  </data>
+  <data name="WB0296" xml:space="preserve">
+    <value>Întrebările au aceleași variante de răspuns. Vă recomandăm să folosiți liste de reutilizabile de variante de răspuns</value>
+  </data>
+  <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+    <value>Lista matricială permite să se utilizeze numai întrebări categorice simple: nu sunt permise modurile combobox, în cascadă sau da / nu.</value>
+  </data>
+  <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Modul matricial este permis numai listelor cu cel mult {0} întrebări.</value>
+  </data>
+  <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+    <value>Lista matricială nu trebuie să conțină întrebări pentru controlor sau întrebări de identificare.</value>
+  </data>
+  <data name="WB0300" xml:space="preserve">
+    <value>Întrebarea din lista matricială nu trebuie să conțină substituții de tipul %rostertitle%.</value>
+  </data>
+  <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
+    <value>Lista matricială nu trebuie să conțină întrebări legate.</value>
+  </data>
+  <data name="WB0302" xml:space="preserve">
+    <value>Înlocuirea nu poate face referință la articole de la același nivel de listă.</value>
+  </data>
+  <data name="WB0303_MatrixRosterCannotHaveCustomTitle" xml:space="preserve">
+    <value>Lista matricială nu poate avea un titlu personalizat</value>
+  </data>
+  <data name="WB0304_TableRosterCannotHaveCustomTitle" xml:space="preserve">
+    <value>Lista tabulară nu poate avea un titlu de listă personalizat</value>
+  </data>
+  <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
+    <value>Lista reutilizabilă de variante de răspuns nu poate avea rând cu aceleași valori Id și ParentId</value>
+  </data>
+  <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
+    <value>Lista reutilizabilă de variante de răspuns nu poate avea rând cu aceleași valori ParentId și Text</value>
+  </data>
+  <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
+    <value>Întrebarea face referire la o listă reutilizabilă de variante de răspuns inexistentă</value>
+  </data>
+  <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
+    <value>Întrebările de identificare pot avea doar tipuri permise (Text, Numeric, DateTime, GpsCoordinates, SingleOption)</value>
+  </data>
+  <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+    <value>Întrebările din secțiunea Copertă trebuie să aibă nume de variabilă</value>
+  </data>
+  <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
+    <value>Nu se poate folosi ca sursă pentru numele atașamentului altceva decât o variabilă de tip șir de caractere</value>
+  </data>
+  <data name="WB0391" xml:space="preserve">
+    <value>Textul static nu pate să facă legătură către varabile dintr-o listă de la un nivel inferior textului static.</value>
+  </data>
+</root>

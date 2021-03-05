@@ -186,4 +186,136 @@
   <data name="Settings_Title" xml:space="preserve">
     <value>Setări</value>
   </data>
+  <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
+    <value>Editarea profilului enumeratorului</value>
+  </data>
+  <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
+    <value>Permiteți enumeratorilor să își actualizeze informațiile de contact din profil</value>
+  </data>
+  <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
+    <value>Notificări prin e-mail prin interviu web</value>
+  </data>
+  <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
+    <value>Permiteți respondenților Interviului Web să trimită e-mailuri (numai dacă a fost configurat furnizorul de e-mail)</value>
+  </data>
+  <data name="AutoUpdateDescription" xml:space="preserve">
+    <value>Dacă este bifată, numai ultima versiune a aplicației Anchetator / Controlor se poate sincroniza cu RINS</value>
+  </data>
+  <data name="DeviceNotifications" xml:space="preserve">
+    <value>Activați notificările pe dispozitiv</value>
+  </data>
+  <data name="DeviceNotificationsDescription" xml:space="preserve">
+    <value>Când sunt activate, dispozitivele vor informa proprietarii despre modificările și acțiunile care trebuie întreprinse</value>
+  </data>
+  <data name="EmailProvider_Address" xml:space="preserve">
+    <value>Adresa poștală a expeditorului</value>
+  </data>
+  <data name="EmailProvider_AddressHelp" xml:space="preserve">
+    <value>Adresa poștală curentă a expeditorului.</value>
+  </data>
+  <data name="EmailProvider_Amazon" xml:space="preserve">
+    <value>Serviciul de e-mail Amazon Simple Email (SES)</value>
+  </data>
+  <data name="EmailProvider_AmazonDescription" xml:space="preserve">
+    <value>Configurați parametrii de mai jos pentru a accesa Amazon SES. Sunt disponibile mai multe informații despre utilizarea Amazon SES împreună cu platforma Survey Solutions</value>
+  </data>
+  <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
+    <value>ID cheie de acces</value>
+  </data>
+  <data name="EmailProvider_AwsAccessKeyIdHelp" xml:space="preserve">
+    <value>Puteți găsi ID-ul contului AWS din AWS Management Console</value>
+  </data>
+  <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
+    <value>Cheie de acces secret</value>
+  </data>
+  <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
+    <value>Găsit în acreditările de securitate la AWS Management Console</value>
+  </data>
+  <data name="EmailProvider_GeneralError" xml:space="preserve">
+    <value>A apărut o eroare generală</value>
+  </data>
+  <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+    <value>aici</value>
+  </data>
+  <data name="EmailProvider_None" xml:space="preserve">
+    <value>Nici unul</value>
+  </data>
+  <data name="EmailProvider_NoneDescription" xml:space="preserve">
+    <value>Mesajele de invitație pentru interviurile web nu sunt trimise respondenților de Survey Solutions.</value>
+  </data>
+  <data name="EmailProvider_PageDesc" xml:space="preserve">
+    <value>Configurați furnizorul de servicii de e-mail în bloc. Configurați modul în care vor fi trimise invitațiile pentru interviurile web.</value>
+  </data>
+  <data name="EmailProvider_ReplyAddress" xml:space="preserve">
+    <value>Adresa de răspuns</value>
+  </data>
+  <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve">
+    <value>Adresa de e-mail unde pot fi trimise răspunsurile de la invitați (implicit este adresa de e-mail a expeditorului.)</value>
+  </data>
+  <data name="EmailProvider_SenderAddress" xml:space="preserve">
+    <value>Adresa de e-mail a expeditorului</value>
+  </data>
+  <data name="EmailProvider_SenderHeader" xml:space="preserve">
+    <value>Informații despre expeditor</value>
+  </data>
+  <data name="EmailProvider_SenderHelp" xml:space="preserve">
+    <value>Adresa de e-mail a expeditorului care va apărea în câmpul FROM al mesajelor primite.</value>
+  </data>
+  <data name="EmailProvider_SenderName" xml:space="preserve">
+    <value>Numele expeditorului</value>
+  </data>
+  <data name="EmailProvider_SenderNameHelp" xml:space="preserve">
+    <value>Numele expeditorului care va apărea în câmpul FROM al mesajelor primite.</value>
+  </data>
+  <data name="EmailProvider_Sendgrid" xml:space="preserve">
+    <value>Serviciu de livrare prin e-mail SendGrid</value>
+  </data>
+  <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
+    <value>Cheie API</value>
+  </data>
+  <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
+    <value>Îl puteți găsi pe pagina Chei API sub elementul din meniul Setări SendGrid</value>
+  </data>
+  <data name="EmailProvider_SendgridDescription" xml:space="preserve">
+    <value>Configurați parametrii pentru a accesa SendGrid mai jos. Sunt disponibile mai multe informații despre utilizarea SendGrid cu Survey Solutions</value>
+  </data>
+  <data name="EmailProvider_SendTestEmail" xml:space="preserve">
+    <value>Trimite email</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
+    <value>Trimiteți un e-mail de test</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
+    <value>Trimiteți-vă un mesaj de e-mail de test pentru a verifica dacă serviciul de e-mail în bloc este funcțional și pentru a obține o previzualizare a ceea ce vor primi respondenții.</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
+    <value>Un exemplu de e-mail de invitație a fost trimis cu succes</value>
+  </data>
+  <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve">
+    <value>Specificați furnizorul de servicii de e-mail în bloc</value>
+  </data>
+  <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve">
+    <value>Configurarea serviciului de e-mail a fost salvată cu succes.</value>
+  </data>
+  <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
+    <value>Adresa de email</value>
+  </data>
+  <data name="InterviewerPartialSynchronization" xml:space="preserve">
+    <value>Permiteți sincronizarea parțială</value>
+  </data>
+  <data name="MobileAppSettings_Description" xml:space="preserve">
+    <value>Unele setări specifice de către versiunea Android a aplicației Anchetator / Controlor</value>
+  </data>
+  <data name="MobileAppSettings_Title" xml:space="preserve">
+    <value>Setările aplicației Anchetator / Controlor</value>
+  </data>
+  <data name="PartialSynchronizationDescription" xml:space="preserve">
+    <value>Când este activată, tableta anchetatorului va trimite răspunsuri de la interviurile neterminate către RINS</value>
+  </data>
+  <data name="UserProfileSettings_Title" xml:space="preserve">
+    <value>Setările profilului utilizatorului</value>
+  </data>
+  <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
+    <value>Setările anchetei web</value>
+  </data>
 </root>

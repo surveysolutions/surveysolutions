@@ -136,10 +136,10 @@
     <value>Sincronizarea a eșuat. Aplicația dvs. nu este compatibilă cu serverul 1. Dezinstalați aplicația și descărcați noua versiune a aplicației Interviewer</value>
   </data>
   <data name="InvalidDeviceIdentifier" xml:space="preserve">
-    <value>Identificator de dispozitiv nevalid. Sunt probleme cu instalarea aplicației client, trimiteți informații despre tabletă.</value>
+    <value>Identificator de dispozitiv incorect. Sunt probleme cu instalarea aplicației client, trimiteți informații despre tabletă.</value>
   </data>
   <data name="InvalidSequenceIdentifier" xml:space="preserve">
-    <value>Sincronizarea a eșuat. Identificator de secvență nevalid. Sunt probleme cu instalarea aplicației client, apăsați butonul 'Trimiteți informații despre tabletă'.</value>
+    <value>Sincronizarea a eșuat. Identificator de secvență incorect. Sunt probleme cu instalarea aplicației client, apăsați butonul 'Trimiteți informații despre tabletă'.</value>
   </data>
   <data name="InvalidUserFormat" xml:space="preserve">
     <value>Sincronizarea a eșuat. Utilizatorul nu este autorizat. Verificați numele de utilizator / parola pentru {0}.</value>

@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AdditionalSettings" xml:space="preserve">
+    <value>Setari aditionale</value>
+  </data>
+  <data name="AfterXDay" xml:space="preserve">
+    <value>După {{count}} zi</value>
+  </data>
+  <data name="AfterXDay_plural" xml:space="preserve">
+    <value>După {{count}} zile</value>
+  </data>
+  <data name="AfterXWeek" xml:space="preserve">
+    <value>După {{count}} săptămână</value>
+  </data>
+  <data name="AfterXWeek_plural" xml:space="preserve">
+    <value>După {{count}} săptămâni</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Complet</value>
+  </data>
+  <data name="CompletePage" xml:space="preserve">
+    <value>Complet</value>
+  </data>
+  <data name="CustomizeDisplayedText" xml:space="preserve">
+    <value>Personalizați textul afișat pentru respondenți</value>
+  </data>
+  <data name="CustomizeEmailsText" xml:space="preserve">
+    <value>Personalizați textul e-mailurilor</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Descriere:</value>
+  </data>
+  <data name="DescriptionForPassword" xml:space="preserve">
+    <value>Descriere parolă:</value>
+  </data>
+  <data name="DoNotSend" xml:space="preserve">
+    <value>Nu trimite</value>
+  </data>
+  <data name="EmailMessage" xml:space="preserve">
+    <value>Mesaj:</value>
+  </data>
+  <data name="EmailSubject" xml:space="preserve">
+    <value>Subiect:</value>
+  </data>
+  <data name="EmailTemplateDescription" xml:space="preserve">
+    <value>Puteți utiliza șirul de caractere %SURVEYNAME% în locul numelui sondajului</value>
+  </data>
+  <data name="ExampleFinishPage" xml:space="preserve">
+    <value>Exemplu de pagină de finalizare</value>
+  </data>
+  <data name="ExampleInvitationEmailMessage" xml:space="preserve">
+    <value>Exemplu de mesaj de e-mail de invitație</value>
+  </data>
+  <data name="ExampleRejectEmailMessage" xml:space="preserve">
+    <value>Exemplu de mesaj respingere e-mail</value>
+  </data>
+  <data name="ExampleReminderEmailMessage" xml:space="preserve">
+    <value>Exemplu de mesaj de e-mail pentru memento</value>
+  </data>
+  <data name="ExampleResumePage" xml:space="preserve">
+    <value>Exemplu de pagină Reluare</value>
+  </data>
+  <data name="ExampleWelcomePage" xml:space="preserve">
+    <value>Exemplu de pagină de bun venit</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Câmpul este obligatoriu.</value>
+  </data>
+  <data name="FinishPage" xml:space="preserve">
+    <value>Finalizați pagina</value>
+  </data>
+  <data name="Invitation" xml:space="preserve">
+    <value>Invitație</value>
+  </data>
+  <data name="InvitationEmailMessage" xml:space="preserve">
+    <value>Invitație</value>
+  </data>
+  <data name="MainText" xml:space="preserve">
+    <value>Textul principal:</value>
+  </data>
+  <data name="NoteToSupervisor" xml:space="preserve">
+    <value>Notă pentru supraveghetor</value>
+  </data>
+  <data name="Reject" xml:space="preserve">
+    <value>Respinge</value>
+  </data>
+  <data name="RejectEmailMessage" xml:space="preserve">
+    <value>Respinge</value>
+  </data>
+  <data name="Reminder" xml:space="preserve">
+    <value>Aducere aminte</value>
+  </data>
+  <data name="ReminderNoResponseEmailMessage" xml:space="preserve">
+    <value>Niciun raspuns</value>
+  </data>
+  <data name="ReminderPartialResponseEmailMessage" xml:space="preserve">
+    <value>Răspuns parțial</value>
+  </data>
+  <data name="ReminderSetting" xml:space="preserve">
+    <value>Setare memento</value>
+  </data>
+  <data name="Resume" xml:space="preserve">
+    <value>Reluare</value>
+  </data>
+  <data name="ResumeEmailMessage" xml:space="preserve">
+    <value>Reluare</value>
+  </data>
+  <data name="ResumePage" xml:space="preserve">
+    <value>Reluați pagina</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvați</value>
+  </data>
+  <data name="SendWithNoResponse" xml:space="preserve">
+    <value>Aduceți aminte persoanelor care nu au răspuns</value>
+  </data>
+  <data name="SendWithPartialResponse" xml:space="preserve">
+    <value>Aduceți aminte persoanelor care au dat un răspuns parțial</value>
+  </data>
+  <data name="ShownPasswordIsRequired" xml:space="preserve">
+    <value>Afișat numai dacă este necesară și setată parola</value>
+  </data>
+  <data name="StartInterviewButton" xml:space="preserve">
+    <value>Butonul de începere a interviului</value>
+  </data>
+  <data name="StartNew" xml:space="preserve">
+    <value>Începeți un nou interviu</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titlu:</value>
+  </data>
+  <data name="WebInterviewSetupFor_Title" xml:space="preserve">
+    <value>Configurare interviu web pentru</value>
+  </data>
+  <data name="WelcomePage" xml:space="preserve">
+    <value>Pagina de bun venit</value>
+  </data>
+</root>

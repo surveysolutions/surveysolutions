@@ -142,13 +142,13 @@
     <value>SUB 100MB SPAȚIU LIBER</value>
   </data>
   <data name="COLUMN_NEVER_SYNCHED" xml:space="preserve">
-    <value>Niciodata sincronizat</value>
+    <value>NICIODATĂ SINCRONIZAT</value>
   </data>
   <data name="COLUMN_NEVER_UPLOADED" xml:space="preserve">
-    <value>Niciodata incarcat </value>
+    <value>NICIODATĂ ÎNCĂRCAT</value>
   </data>
   <data name="COLUMN_NO_ASSIGNMENTS_RECEIVED" xml:space="preserve">
-    <value>FĂRĂ INTERVIURI ALOCATE</value>
+    <value>NICIODATĂ RECEPȚIONAT</value>
   </data>
   <data name="COLUMN_OLD_VERSION" xml:space="preserve">
     <value>VERSIUNE VECHE</value>
@@ -185,5 +185,11 @@
   </data>
   <data name="TOTAL" xml:space="preserve">
     <value>Total</value>
+  </data>
+  <data name="COLUMN_TEAM_SIZE" xml:space="preserve">
+    <value>MĂRIMEA ECHIPEI</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Timp rămas</value>
   </data>
 </root>

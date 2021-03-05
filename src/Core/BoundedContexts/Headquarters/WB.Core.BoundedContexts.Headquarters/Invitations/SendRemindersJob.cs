@@ -70,6 +70,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     var questionnaireIdentity = questionnaire.Identity();
                     WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(questionnaireIdentity);
                     
+                    if(webInterviewConfig == null || !webInterviewConfig.Started)
+                        continue;
+
                     await SendNoResponseReminder(questionnaireIdentity, 
                             questionnaire.Title, webInterviewConfig, senderInfo)
                         .ConfigureAwait(false);

@@ -163,9 +163,9 @@
     <value>Importat pe data de</value>
   </data>
   <data name="UploadMappingsSummaryFormat" xml:space="preserve">
-    <value>legăturile pentru {0} hărți au fost procesate cu {1} nevalid</value>
+    <value>legăturile pentru {0} hărți au fost procesate cu {1} incorect</value>
   </data>
   <data name="UploadMapsSummaryFormat" xml:space="preserve">
-    <value>{0} hărțile au fost procesate cu {1} fișiere de hartă nevalide</value>
+    <value>{0} hărțile au fost procesate cu {1} fișiere de hartă incorecte</value>
   </data>
 </root>
