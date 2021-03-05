@@ -43,7 +43,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     if (interviewSummary.Status == InterviewStatus.Created
                         || interviewSummary.Status == InterviewStatus.SupervisorAssigned
                         || interviewSummary.Status == InterviewStatus.InterviewerAssigned
-                        || interviewSummary.Status == InterviewStatus.RejectedBySupervisor)
+                        || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                        || interviewSummary.Status == InterviewStatus.WebInterview)
                     {
                         yield return InterviewActionFlags.CanBeReassigned;
                     }

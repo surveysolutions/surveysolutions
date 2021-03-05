@@ -35,14 +35,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             return true;
         }
 
-        protected override bool IsNonPartialSynchedInterview(InterviewView interview)
+        protected override bool IsNonPartialSyncedInterview(InterviewView interview)
         {
-            return interview.Status == InterviewStatus.ApprovedBySupervisor;
+            return interview.Status == InterviewStatus.ApprovedBySupervisor
+                || interview.Status == InterviewStatus.WebInterview;
         }
 
         protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
         {
-            return this.interviewViewRepository.Where(interview => interview.Status == InterviewStatus.ApprovedBySupervisor);
+            return this.interviewViewRepository.Where(interview => 
+                interview.Status == InterviewStatus.ApprovedBySupervisor || 
+                interview.Status == InterviewStatus.WebInterview);
         }
     }
 }

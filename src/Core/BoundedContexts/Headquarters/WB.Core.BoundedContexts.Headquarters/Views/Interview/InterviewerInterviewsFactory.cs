@@ -10,7 +10,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -25,12 +24,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public InterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IStatefulInterviewRepository statefulInterviewRepository,
             IInterviewPackagesService incomingSyncPackagesQueue,
             IHeadquartersEventStore eventStore)
         {
             this.reader = reader;
-            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;            
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.eventStore = eventStore;
         }

@@ -640,7 +640,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'errors')
                     },
-                    width: '50px',
+                    width: '45px',
                 },{
                     data: 'notAnsweredCount',
                     name: 'NotAnsweredCount',

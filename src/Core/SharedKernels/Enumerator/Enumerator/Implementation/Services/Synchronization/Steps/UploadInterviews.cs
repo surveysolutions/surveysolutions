@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var interviewsToUpload = GetInterviewsForUpload();
             bool isNeedCompress = IsCompressEnabled();
 
-            var countInterviewsForFullUpload = interviewsToUpload.Count(i => IsNonPartialSynchedInterview(i));
+            var countInterviewsForFullUpload = interviewsToUpload.Count(i => IsNonPartialSyncedInterview(i));
             Context.Statistics.TotalCompletedInterviewsCount = countInterviewsForFullUpload;
             Context.Statistics.TotalPartialUploadedInterviewsCount = interviewsToUpload.Count - countInterviewsForFullUpload;
 
@@ -159,9 +159,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected abstract bool IsCompressEnabled();
 
-        protected abstract bool IsNonPartialSynchedInterview(InterviewView interview);
+        protected abstract bool IsNonPartialSyncedInterview(InterviewView interview);
 
-        protected bool IsPartialSynchedInterview(InterviewView interview) => !IsNonPartialSynchedInterview(interview);
+        protected bool IsPartialSynchedInterview(InterviewView interview) => !IsNonPartialSyncedInterview(interview);
 
         private void MarkInterviewAsSynchedAndNonRemovable(Guid interviewId)
         {
