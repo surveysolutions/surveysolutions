@@ -55,6 +55,9 @@ const router = new Router({
 sync(store, router)
 
 box.init(i18n, browserLanguage)
+
+Vue.prototype.$eventHub = new Vue()
+
 export default new Vue({
     el: '#vueApp',
     render: h => h('router-view'),

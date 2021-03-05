@@ -190,17 +190,16 @@ namespace WB.UI.Headquarters.Controllers
 
         private static string GetShortTitleForEmailTemplateGroup(EmailTextTemplateType type)
         {
-            switch (type)
+            return type switch
             {
-                case EmailTextTemplateType.InvitationTemplate: return WebInterviewSettings.InvitationEmailMessage;
-                case EmailTextTemplateType.ResumeTemplate: return WebInterviewSettings.ResumeEmailMessage;
-                case EmailTextTemplateType.Reminder_NoResponse: return WebInterviewSettings.ReminderNoResponseEmailMessage;
-                case EmailTextTemplateType.Reminder_PartialResponse: return WebInterviewSettings.ReminderPartialResponseEmailMessage;
-                case EmailTextTemplateType.RejectEmail: return WebInterviewSettings.RejectEmailMessage;
-                case EmailTextTemplateType.CompleteInterviewEmail: return WebInterviewSettings.CompleteEmailMessage;
-                default:
-                    throw new ArgumentException("Unknown email template type "+ type.ToString());
-            }
+                EmailTextTemplateType.InvitationTemplate => WebInterviewSettings.InvitationEmailMessage,
+                EmailTextTemplateType.ResumeTemplate => WebInterviewSettings.ResumeEmailMessage,
+                EmailTextTemplateType.Reminder_NoResponse => WebInterviewSettings.ReminderNoResponseEmailMessage,
+                EmailTextTemplateType.Reminder_PartialResponse => WebInterviewSettings.ReminderPartialResponseEmailMessage,
+                EmailTextTemplateType.RejectEmail => WebInterviewSettings.RejectEmailMessage,
+                EmailTextTemplateType.CompleteInterviewEmail => WebInterviewSettings.CompleteEmailMessage,
+                _ => throw new ArgumentException("Unknown email template type " + type.ToString()),
+            };
         }
 
         private QuestionnaireBrowseItem FindQuestionnaire(string id)

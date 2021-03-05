@@ -731,6 +731,70 @@ namespace WB.UI.Headquarters.Controllers
             return this.Redirect(returnUrl);
         }
 
+        [Route("Link/{assignmentId:int}/{id:Guid}")]
+        public ActionResult Link(int assignmentId, Guid interviewId)
+        {
+            var assignment = this.assignments.GetAssignment(assignmentId);
+
+            if(assignment == null)
+            {
+                return Error();
+            }
+
+            var interview = this.interviewSummary.GetById(interviewId.FormatGuid());
+
+            if(interview == null)
+            {
+                // TODO: Add link to non existing interview model
+                var model = GetLinkToWebInterviewModel(assignment);
+                return View(model);
+            }
+
+            if(interview.Status != InterviewStatus.WebInterview)
+            {
+                return Finish(interview.SummaryId);
+            }
+
+            return RedirectToAction(nameof(Resume), new
+            {
+                id = interview.SummaryId
+            });
+        }
+
+        private LinkToWebInterview GetLinkToWebInterviewModel(Assignment assignment)
+        {
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignment.QuestionnaireId, null);
+
+            if (questionnaire == null)
+            {
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                    Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
+            }
+
+            var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
+            var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
+
+            string GetText(WebInterviewUserMessages messageType)
+            {
+                return SubstituteQuestionnaireName(
+                    webInterviewConfig.CustomMessages.GetText(messageType).ToString(), questionnaire.Title);
+            }
+
+            return new LinkToWebInterview
+            {
+                QuestionnaireTitle = model.QuestionnaireTitle,
+                UseCaptcha = model.UseCaptcha,
+                HostedCaptchaHtml = model.HostedCaptchaHtml,
+                RecaptchaSiteKey = model.RecaptchaSiteKey,
+                HasPassword = model.HasPassword,
+                CaptchaErrors = model.CaptchaErrors,
+                IsPasswordInvalid = model.IsPasswordInvalid,
+                LinkInvitation = GetText(WebInterviewUserMessages.LinkInvitation),
+                LinkWelcome = GetText(WebInterviewUserMessages.LinkWelcome),
+                SubmitUrl = Url.Action("Resume", "WebInterview"),
+            };
+        }
+
         [Route("OutdatedBrowser")]
         public ActionResult OutdatedBrowser()
         {
