@@ -286,3 +286,15 @@
 .mr-5, .mx-5 {
     margin-right: 3rem!important;
 }
+
+.rule-actions{
+	select{
+		max-width: 305px;}
+}
+.vqb-rule{
+	label{
+		display:block;
+		margin-bottom:5px;}
+	select{
+		max-width: 305px;}
+}

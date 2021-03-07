@@ -959,11 +959,13 @@ export default {
                 this.questionnaireVersion = null
             }
             this.conditions = []
+            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
         },
 
         questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue
             this.conditions = []
+            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
         },
 
         userSelected(newValue) {

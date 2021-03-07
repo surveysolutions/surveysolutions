@@ -256,8 +256,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                           (x.QuestionType == QuestionType.SingleOption 
                            && !x.LinkedToQuestionId.HasValue 
                            && !x.LinkedToRosterId.HasValue 
-                           && x.CascadeFromQuestionId == null
-                           && x.IsFilteredCombobox != true))
+                           && x.CascadeFromQuestionId == null))
                 .Select(x => x.PublicKey);
 
             var permittedEntities = questionsNotInRosters.Union(variablesNotInRostersIds).Except(questionnaire.GetPrefilledEntities()).ToList();

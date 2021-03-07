@@ -51,6 +51,7 @@
                 :maxDepth="6"
                 :labels="labels"
                 v-model="queryExposedVariables"></vue-query-builder>
+            <!-- <div>{{queryExposedVariables}}</div> -->
             <div slot="actions">
                 <button
                     id="btnQuestionsExposedSelectorOk"
@@ -103,6 +104,8 @@ export default {
             questionnaireItems: [],
             selectedQuestion: null,
             checked: {},
+
+            deafultQueryExposedVariables:{},
         }
     },
 
@@ -121,7 +124,7 @@ export default {
     apollo: {
         questionnaireItems:{
             query :gql`query questionnaireItems($workspace: String!, $id: Uuid!, $version: Long!) {
-                questionnaireItems(workspace: $workspace, id: $id, version: $version, where: { or: [{identifying: {eq: true}} , {exposed: {eq: true}}]}) {
+                questionnaireItems(workspace: $workspace, id: $id, version: $version, where: { or: [{identifying: {eq: true}}, {exposed: {eq: true}}]}) {
                     title, label, type, variable, entityType, variableType, identifying
                     options { title, value, parentValue }
                 }
@@ -152,10 +155,14 @@ export default {
 
         questionnaireId() {
             this.conditions = this.value
+            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
+            this.saveExposedVariablesFilter()
         },
 
         questionnaireVersion() {
             this.conditions = this.value
+            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
+            this.saveExposedVariablesFilter()
         },
     },
 
@@ -204,7 +211,6 @@ export default {
             }
         },
         saveExposedVariablesFilter(){
-            //this.exposedValuesFilter = this.transformQuery
             this.$emit('changeFilter', this.transformQuery)
             this.$refs.questionsExposedSelector.hide()
         },
@@ -366,7 +372,8 @@ export default {
         isDynamicDisabled() {
             return this.questionnaireId == null
                 || this.questionnaireVersion == null
-                || this.questionnaireItemsList == null
+                || this.questionnaireAllItemsList == null
+                || this.questionnaireAllItemsList.length == 0
                 || this.rules.length == 0
         },
         rules(){
