@@ -402,6 +402,10 @@ export default {
         selectQuestionnaireVersion(value) {
             this.questionnaireVersion = value
             this.onChange(s => (s.version = value == null ? null : value.key))
+
+            this.conditions = []
+            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
+
             this.loadQuestions()
         },
 
@@ -417,6 +421,9 @@ export default {
             this.onChange(q => {
                 q.name = value == null ? null : value.value
             })
+
+            this.conditions = []
+            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
 
             if (isNull(value)) return
             this.loadQuestions().then(() => this.onChange(s => (s.name = value.value)))
