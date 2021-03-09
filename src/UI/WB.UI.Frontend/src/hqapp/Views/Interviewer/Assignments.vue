@@ -37,6 +37,7 @@
                     type="button"
                     class="btn btn-primary"
                     role="confirm"
+                    @disable="saveDisabled"
                     @click="updateCalendarEvent">
                     {{ $t("Common.Save") }}</button>
                 <button
@@ -58,7 +59,7 @@
 
 <script>
 import {DateFormats, convertToLocal} from '~/shared/helpers'
-import {addOrUpdateCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
+import {updateCalendarEvent, addAssignmentCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
 import moment from 'moment-timezone'
 import {map, join, escape } from 'lodash'
 
@@ -124,6 +125,9 @@ export default {
         },
         dateInPast(){
             return moment(this.selectedDate) < moment()
+        },
+        saveDisabled(){
+            return !this.newCalendarStart
         },
     },
 
@@ -261,7 +265,7 @@ export default {
             this.calendarAssinmentId = assignmentId
             this.calendarEventId = calendarEvent?.publicKey
             this.editCalendarComment = calendarEvent?.comment
-            this.newCalendarStart = calendarEvent?.startUtc
+            this.newCalendarStart = calendarEvent?.startUtc ?? moment().add(1, 'days').hours(10).startOf('hour').format(DateFormats.dateTime)
             this.newCalendarStarTimezone = calendarEvent?.startTimezone
             this.$refs.editCalendarModal.modal({keyboard: false})
         },
@@ -272,17 +276,21 @@ export default {
             const startDate = moment(self.newCalendarStart).format('YYYY-MM-DD[T]HH:mm:ss.SSSZ')
 
             const variables = {
-                interviewId : self.calendarInterviewId,
-                interviewKey: self.calendarInterviewKey,
-                assignmentId : self.calendarAssinmentId,
-                publicKey : self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-',''),
                 newStart : startDate,
                 comment : self.editCalendarComment,
                 startTimezone: moment.tz.guess(),
                 workspace: self.$store.getters.workspace,
             }
 
-            addOrUpdateCalendarEvent(self.$apollo, variables, self.reload)
+
+            if(self.calendarEventId != null){
+                variables.publicKey = self.calendarEventId.replaceAll('-',''),
+                updateCalendarEvent(self.$apollo, variables, self.reload)
+            }
+            else{
+                variables.assignmentId = self.calendarAssinmentId,
+                addAssignmentCalendarEvent(self.$apollo, variables, self.reload)
+            }
         },
     },
 }

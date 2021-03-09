@@ -32,6 +32,7 @@ namespace WB.UI.Headquarters.Services.Impl
         public bool IsInterviewer => this.IsCurrentUserInRole(UserRoles.Interviewer);
         public bool IsAdministrator => this.IsCurrentUserInRole(UserRoles.Administrator);
         public bool IsHeadquarter => this.IsCurrentUserInRole(UserRoles.Headquarter);
+        public bool IsApiUser => this.IsCurrentUserInRole(UserRoles.ApiUser);
 
         private bool IsCurrentUserInRole(UserRoles role) => this.User.IsInRole(role.ToString());
         
