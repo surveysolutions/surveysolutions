@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountBlocked" xml:space="preserve">
+    <value>Contul dvs. este blocat. Contactați administratorul pentru a vă debloca contul.</value>
+  </data>
+  <data name="ApplicationUpdateRequired" xml:space="preserve">
+    <value>Este necesară actualizarea aplicației.</value>
+  </data>
+  <data name="ClientVersionIsNotSupported" xml:space="preserve">
+    <value>Deschiderea chestionarului nu a reușit. Versiunea dvs. este {0}. Vă rugăm să o actualizați</value>
+  </data>
+  <data name="ConfirmAccount" xml:space="preserve">
+    <value>Vă rugăm să confirmați mai întâi contul. Am trimis un link de confirmare către {0}. Nu l-ați primit ?</value>
+  </data>
+  <data name="Email_required" xml:space="preserve">
+    <value>E-mailul este obligatoriu</value>
+  </data>
+  <data name="EmailOrLogin_required" xml:space="preserve">
+    <value>Este necesară autentificare sau e-mail</value>
+  </data>
+  <data name="EmptyTranslationFile" xml:space="preserve">
+    <value>Fișierul de traducere selectat este gol</value>
+  </data>
+  <data name="EmptyUserNameOrPassword" xml:space="preserve">
+    <value>Numele de utilizator sau parola sunt goale.</value>
+  </data>
+  <data name="FullNameMaxLengthError" xml:space="preserve">
+    <value>Numele complet nu poate conține mai mult de {1} caractere</value>
+  </data>
+  <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+    <value>Autentificarea sau parola sunt incorecte. Vă rugăm să încercați din nou.</value>
+  </data>
+  <data name="InvalidEmailAddress" xml:space="preserve">
+    <value>Nu este o adresă de e-mail validă</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Serverul este în întreținere acum. Scuze pentru neplăceri. Vă rugăm să încercați din nou mai târziu.</value>
+  </data>
+  <data name="NoAccessToQuestionnaire" xml:space="preserve">
+    <value>Utilizatorul nu are permisiunea de a accesa chestionarul solicitat.</value>
+  </data>
+  <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+    <value>ID-ul chestionarului nu a fost furnizat pentru validarea permisiunilor</value>
+  </data>
+  <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
+    <value>Importarea chestionarului nu a reușit. Chestionarul dvs. „{0}” are {1} versiune. Aplicația RINS acceptă doar până la versiunea {2}.</value>
+  </data>
+  <data name="OldClientPleaseUpdate" xml:space="preserve">
+    <value>Aveți o versiune învechită a aplicației pentru sediu. Vă rugăm să contactați support@mysurvey.solutions pentru a solicita o actualizare.</value>
+  </data>
+  <data name="OldPassword_required" xml:space="preserve">
+    <value>Introduceți parola curentă</value>
+  </data>
+  <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
+    <value>Parola trebuie să aibă cel puțin {2} caractere.</value>
+  </data>
+  <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
+    <value>Parola trebuie să conțină cel puțin un număr, un caracter cu majuscule și un caracter cu majuscule.</value>
+  </data>
+  <data name="Password_required" xml:space="preserve">
+    <value>Trebuie să introduceți parola</value>
+  </data>
+  <data name="PasswordResetNotAllowed" xml:space="preserve">
+    <value>Resetarea parolei nu este permisă</value>
+  </data>
+  <data name="Questionnaire_verification_failed" xml:space="preserve">
+    <value>Chestionarul dvs. conține erori. Vă rugăm să verificați chestionarul în Designer.</value>
+  </data>
+  <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+    <value>Titlul chestionarului nu poate avea mai mult de {1} simboluri.</value>
+  </data>
+  <data name="QuestionnaireTitle_required" xml:space="preserve">
+    <value>Titlul chestionarului este obligatoriu</value>
+  </data>
+  <data name="QuestionnaireTitle_rules" xml:space="preserve">
+    <value>Numai următoarele caractere pot fi utilizate în titlul chestionarului: A..Z a..z 0..9 () \ / _ - și spațiu - și nu ar trebui să aibă două sau mai multe caractere underscore _ consecutive.</value>
+  </data>
+  <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+    <value>Numele variabilelor și ID-urile listei pot avea între 1 și {1} caractere</value>
+  </data>
+  <data name="QuestionnaireVariable_required" xml:space="preserve">
+    <value>Este necesară selectare variabilei chestionarului</value>
+  </data>
+  <data name="QuestionnaireVariable_rules" xml:space="preserve">
+    <value>Variabila chestionarului este utilizată ca prefix în formarea numelor pentru fișierele de export. Numele variabilelor și ID-urile listei trebuie să conțină numai următoarele caractere: a-z, A-Z, _ sau 0-9. Primul caracter nu poate fi 0-9 sau _ și ultimul nu poate fi _.</value>
+  </data>
+  <data name="RequestAnotherEmail" xml:space="preserve">
+    <value>Cere altul.</value>
+  </data>
+  <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
+    <value>A fost trimis un mesaj în contul dvs. de e-mail. Vă rugăm să urmați instrucțiunile din e-mail pentru a restabili parola.</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>A apărut o eroare de server. Vă rugăm să contactați support@mysurvey.solutions.</value>
+  </data>
+  <data name="TemplateNotFound" xml:space="preserve">
+    <value>Chestionarul cu id = {0} nu poate fi găsit. Vă rugăm să verificați lista chestionarelor disponibile sau să contactați colegul care v-a distribuit linkul chestionarului.</value>
+  </data>
+  <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
+    <value>Combinația parola curentă / parola nouă este incorectă, vă rugăm să reintroduceți.</value>
+  </data>
+  <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
+    <value>Parola  curentă și parola de confirmare nu se potrivesc.</value>
+  </data>
+  <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
+    <value>Numele de utilizator sau parola furnizate sunt incorecte. Vă rugăm să încercați din nou</value>
+  </data>
+  <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
+    <value>A apărut o eroare neașteptată. Încercați din nou să accesați "Designer" mai târziu.</value>
+  </data>
+  <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+    <value>Nu s-au putut actualiza informațiile despre utilizator. Vă rugăm să încercați din nou mai târziu.</value>
+  </data>
+  <data name="User_already_confirmed_in_system" xml:space="preserve">
+    <value>Utilizatorul {0} a fost deja confirmat în sistem. Vă rugăm să introduceți datele de conectare și parola pentru a începe să utilizați Designer.</value>
+  </data>
+  <data name="User_does_not_exist" xml:space="preserve">
+    <value>Utilizatorul {0} nu există. Vă rugăm să introduceți un nume de utilizator sau un e-mail valid.</value>
+  </data>
+  <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
+    <value>Utilizatorul {0} nu există. Vă rugăm să introduceți un nume de utilizator sau un e-mail valid.</value>
+  </data>
+  <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
+    <value>Numele utilizatorului trebuie să aibă între 3 și 15 caractere și să conțină doar litere, cifre și simbol de subliniere.</value>
+  </data>
+  <data name="User_Not_authorized" xml:space="preserve">
+    <value>Utilizatorul nu este autorizat. Vă rugăm să verificați datele de conectare și parola.</value>
+  </data>
+  <data name="UserLockedOut" xml:space="preserve">
+    <value>Contul dvs. este blocat. Vă rugăm să contactați support@mysurvey.solutions pentru a-l debloca.</value>
+  </data>
+  <data name="UserName_required" xml:space="preserve">
+    <value>Este necesară autentificarea</value>
+  </data>
+  <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+    <value>Nu sunteți autorizat să efectuați această acțiune. Vă rugăm să contactați asistența. IP: {0}</value>
+  </data>
+  <data name="UserNotApproved" xml:space="preserve">
+    <value>Contul dvs. nu este aprobat. Vă rugăm să confirmați mai întâi contul. Am trimis un link de confirmare către {0}.</value>
+  </data>
+  <data name="VersionParameterIsIncorrect" xml:space="preserve">
+    <value>Există o problemă cu versiunea chestionarului dvs. Vă rugăm să contactați support@mysurvey.solutions.</value>
+  </data>
+  <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
+    <value>Cuvântul de verificare este incorect. Vă rugăm să încercați din nou.</value>
+  </data>
+  <data name="Your_email_is_verified" xml:space="preserve">
+    <value>Designerul a verificat cu succes e-mailul dvs.</value>
+  </data>
+  <data name="Your_password_successfully_changed" xml:space="preserve">
+    <value>Ați schimbat cu succes parola.</value>
+  </data>
+  <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
+    <value>Chestionarul dvs. „{0}” conține funcționalități noi: {1}. Instalarea dvs. nu acceptă funcții noi. Te rog actualizează.</value>
+  </data>
+</root>

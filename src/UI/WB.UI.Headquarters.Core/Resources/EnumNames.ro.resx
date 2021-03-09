@@ -183,4 +183,16 @@
   <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
     <value>Antetul de întâmpinare</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
+    <value>Complet</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Notă pentru Supraveghetor</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
+    <value>Rezumat</value>
+  </data>
+  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
+    <value>Începeți un interviu nou</value>
+  </data>
 </root>

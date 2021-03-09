@@ -1,0 +1,364 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Complete" xml:space="preserve">
+    <value>Complet</value>
+  </data>
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>Interviu complet</value>
+  </data>
+  <data name="CompletionText" xml:space="preserve">
+    <value>Acest interviu a fost finalizat</value>
+  </data>
+  <data name="DiscardAndStart" xml:space="preserve">
+    <value>Redeschide</value>
+  </data>
+  <data name="DownloadAnswers" xml:space="preserve">
+    <value>Descărcați transcrierea interviului</value>
+  </data>
+  <data name="DownloadAnswersHint" xml:space="preserve">
+    <value>Descărcați răspunsurile la interviu ca fișier pdf</value>
+  </data>
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve">
+    <value>Bun venit la %SURVEYNAME%!
+
+Pentru a participa la sondaj, faceți clic pe următorul link: %SURVEYLINK% și introduceți parola: %PASSWORD%
+ 
+Multumesc pentru cooperare!</value>
+  </data>
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
+    <value>Invitație de a participa la %SURVEYNAME%</value>
+  </data>
+  <data name="Email_NoResponse_Message" xml:space="preserve">
+    <value>Ați primit acest mesaj deoarece nu ați început să răspundeți la %SURVEYNAME%!
+Pentru a participa la sondaj, faceți clic pe următorul link: %SURVEYLINK% și introduceți parola: %PASSWORD%
+Vă mulțumim pentru cooperare !</value>
+  </data>
+  <data name="Email_NoResponse_Subject" xml:space="preserve">
+    <value>Nu uitați să participați la %SURVEYNAME% !</value>
+  </data>
+  <data name="Email_PartialResponse_Message" xml:space="preserve">
+    <value>Ați primit acest mesaj deoarece ați început să răspundeți la %SURVEYNAME%, dar nu ați finalizat procesul.
+Pentru a continua sondajul, faceți clic pe următorul link: %SURVEYLINK% și introduceți parola: %PASSWORD%
+Vă rugăm să răspundeți la toate întrebările și să faceți clic pe butonul „FINALIZARE” pentru a trimite răspunsurile dvs.
+Vă mulțumim pentru cooperare !</value>
+  </data>
+  <data name="Email_PartialResponse_Subject" xml:space="preserve">
+    <value>Nu uitați să completați răspunsurile la %SURVEYNAME% !</value>
+  </data>
+  <data name="Email_RejectEmail_Message" xml:space="preserve">
+    <value>Vă mulțumim că ați participat la %SURVEYNAME%!
+ 
+În timpul procesării răspunsurilor dvs., personalul nostru a găsit câteva probleme, pe care vă rugăm să le corectați.
+ 
+Pentru a continua sondajul, faceți clic pe următorul link: %SURVEYLINK% și introduceți parola: %PASSWORD%.
+ 
+Vă rugăm să revedeți toate problemele marcate în chestionarul dvs. și să faceți clic pe butonul "FINALIZARE” pentru a trimite răspunsurile dvs.
+Vă mulțumim pentru cooperare!</value>
+  </data>
+  <data name="Email_RejectEmail_Subject" xml:space="preserve">
+    <value>Trebuie să revedeți chestionarul %SURVEYNAME%</value>
+  </data>
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>Acest link este protejat cu o parolă, care a fost distribuită odată cu linkul. Vă rugăm să o introduceți aici</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Eroare</value>
+  </data>
+  <data name="Error_CookiesTurnedOff" xml:space="preserve">
+    <value>Cookie-urile nu sunt activate în browserul dvs. Vă rugăm să acceptați cookie-urile în preferințele browserului dvs. pentru a continua</value>
+  </data>
+  <data name="Error_Forbidden" xml:space="preserve">
+    <value>Interzis</value>
+  </data>
+  <data name="Error_InterviewExpired" xml:space="preserve">
+    <value>Linkul a expirat</value>
+  </data>
+  <data name="Error_NoActionsNeeded" xml:space="preserve">
+    <value>Informațiile despre acest interviu au fost înregistrate. Nu sunt necesare alte acțiuni</value>
+  </data>
+  <data name="Error_NotFound" xml:space="preserve">
+    <value>Interviul nu a fost găsit</value>
+  </data>
+  <data name="Error_UserNotAuthorised" xml:space="preserve">
+    <value>Utilizatorul nu este autorizat</value>
+  </data>
+  <data name="Filters_Answered" xml:space="preserve">
+    <value>Răspuns</value>
+  </data>
+  <data name="Filters_ClearSelection" xml:space="preserve">
+    <value>Resetați toate filtrele</value>
+  </data>
+  <data name="Filters_Flagged" xml:space="preserve">
+    <value>Semnalizat</value>
+  </data>
+  <data name="Filters_ForInterviewer" xml:space="preserve">
+    <value>Pentru anchetator</value>
+  </data>
+  <data name="Filters_ForSupervisor" xml:space="preserve">
+    <value>Pentru controlor</value>
+  </data>
+  <data name="Filters_Invalid" xml:space="preserve">
+    <value>Eronat</value>
+  </data>
+  <data name="Filters_NotAnswered" xml:space="preserve">
+    <value>Fara raspuns</value>
+  </data>
+  <data name="Filters_NotFlagged" xml:space="preserve">
+    <value>Nu este semnalizat</value>
+  </data>
+  <data name="Filters_Title" xml:space="preserve">
+    <value>Întrebări de filtrare</value>
+  </data>
+  <data name="Filters_Valid" xml:space="preserve">
+    <value>Valabil</value>
+  </data>
+  <data name="Filters_WithComments" xml:space="preserve">
+    <value>Cu comentarii</value>
+  </data>
+  <data name="FinishInterviewText" xml:space="preserve">
+    <value>Acest interviu a fost finalizat</value>
+  </data>
+  <data name="HasPreviousStartedInterview" xml:space="preserve">
+    <value>Ați început un interviu</value>
+  </data>
+  <data name="InProgressText" xml:space="preserve">
+    <value>In progres</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>{{value}} răspunsuri</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>un singur răspuns</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>{{value}} erori</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>o eroare</value>
+  </data>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>Secțiune finalizată: {{value}}</value>
+  </data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>Secțiunea nu a fost începută</value>
+  </data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>Secțiunea a început: {{value}}</value>
+  </data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value>Subsecțiuni {{value}}</value>
+  </data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>o subsecțiune</value>
+  </data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+    <value>fără subsecțiuni</value>
+  </data>
+  <data name="InterviewCompletionDateFormatText" xml:space="preserve">
+    <value>Data finalizării interviului:</value>
+  </data>
+  <data name="InterviewIdFormatText" xml:space="preserve">
+    <value>ID-ul interviului: {0}</value>
+  </data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>Nu se poate modifica interviul primit de dispozitiv</value>
+  </data>
+  <data name="InterviewSizeLimitReached" xml:space="preserve">
+    <value>Interviul conține numărul total de instanțe de listă și întrebări care depășesc limitele sistemului.</value>
+  </data>
+  <data name="InterviewStartDateFormatText" xml:space="preserve">
+    <value>Data de începere a interviului:</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Parola este greșită</value>
+  </data>
+  <data name="InvitationSmallText" xml:space="preserve">
+    <value>Procesul de interviu necesită o conexiune la internet. Nu este nevoie de software suplimentar.</value>
+  </data>
+  <data name="InvitationText" xml:space="preserve">
+    <value>Ați fost invitat să participați la următorul sondaj: „%QUESTIONNAIRE%”</value>
+  </data>
+  <data name="NoteForSupervisor" xml:space="preserve">
+    <value>Notă pentru controlor</value>
+  </data>
+  <data name="NotStartedText" xml:space="preserve">
+    <value>Nu a fost început</value>
+  </data>
+  <data name="Original_Language" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="OrStartInterview" xml:space="preserve">
+    <value>Sau puteți începe un nou interviu</value>
+  </data>
+  <data name="PictureQuestionNotAPicture" xml:space="preserve">
+    <value>Sunt acceptate numai fișiere imagine</value>
+  </data>
+  <data name="PleaseFillCaptcha" xml:space="preserve">
+    <value>Vă rugăm să completați câmpul CAPTCHA</value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>Cu sprijinul</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
+  </data>
+  <data name="RefreshPage" xml:space="preserve">
+    <value>Reîmprospătare pagină</value>
+  </data>
+  <data name="Resume_InvitationSmallText" xml:space="preserve">
+    <value>Procesul de interviu necesită conexiune la internet, nu este nevoie de software suplimentar</value>
+  </data>
+  <data name="Resume_InvitationText" xml:space="preserve">
+    <value>Puteți naviga la interviu în următoarea anchetă: „%QUESTIONNAIRE%”</value>
+  </data>
+  <data name="Resume_WelcomeText" xml:space="preserve">
+    <value>Bună ziua și Bine ați venit la Survey Solutions Web Survey</value>
+  </data>
+  <data name="ResumeInterview" xml:space="preserve">
+    <value>Reluați interviul</value>
+  </data>
+  <data name="ServerUnderLoad" xml:space="preserve">
+    <value>Ne pare rău, prea multe persoane accesează acest site în același timp. Lucrăm la această problemă. Vă rugăm să încercați din nou mai târziu.</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Începeți un nou interviu</value>
+  </data>
+  <data name="StartedInterviewText" xml:space="preserve">
+    <value>Acest interviu nu a fost finalizat</value>
+  </data>
+  <data name="StartPageTitle" xml:space="preserve">
+    <value>Sondaj web</value>
+  </data>
+  <data name="SurveyFormatText" xml:space="preserve">
+    <value>Sondaj: „%QUESTIONNAIRE%”</value>
+  </data>
+  <data name="ToInterview" xml:space="preserve">
+    <value>A intervieva/a ancheta</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Avertizare</value>
+  </data>
+  <data name="WebSurvey" xml:space="preserve">
+    <value>Survey Solutions Web Survey</value>
+  </data>
+  <data name="WelcomeText" xml:space="preserve">
+    <value>Bună ziua și Bine ați venit la Survey Solutions Web Survey</value>
+  </data>
+</root>

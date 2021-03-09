@@ -217,7 +217,7 @@
     <value>Durata medie de procesare a controlorului</value>
   </data>
   <data name="Report_Days_by_Interview_Status" xml:space="preserve">
-    <value>Zile dupa statusul interviului</value>
+    <value>Zile dupa stareul interviului</value>
   </data>
   <data name="Report_Devices_and_Interviewers" xml:space="preserve">
     <value>Dispozitive și anchetatori</value>
@@ -241,10 +241,10 @@
     <value>Cantitate pe controlori</value>
   </data>
   <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
-    <value>Durata între statusuri pe anchetatori</value>
+    <value>Durata între stări pe anchetatori</value>
   </data>
   <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
-    <value>Durata între statusuri pe controlori</value>
+    <value>Durata între stări pe controlori</value>
   </data>
   <data name="Report_Speed_By_Interviewers" xml:space="preserve">
     <value>Durata pe anchetatori</value>
@@ -253,19 +253,19 @@
     <value>Durata pe controlori</value>
   </data>
   <data name="Report_Status_Duration" xml:space="preserve">
-    <value>Durată status</value>
+    <value>Durată stare</value>
   </data>
   <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
-    <value>Controlori și statusuri</value>
+    <value>Controlori și stări</value>
   </data>
   <data name="Report_Surveys_and_Statuses" xml:space="preserve">
-    <value>Anchete și statusuri</value>
+    <value>Anchete și stări</value>
   </data>
   <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
-    <value>Membrii echipei și statusuri</value>
+    <value>Membrii echipei și stări</value>
   </data>
   <data name="Report_Teams_and_Statuses" xml:space="preserve">
-    <value>Echipe și statusuri </value>
+    <value>Echipe și stări </value>
   </data>
   <data name="Restarted" xml:space="preserve">
     <value>Repornit</value>
@@ -277,7 +277,7 @@
     <value>Selectați întrebarea </value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
-    <value>Număr zile ale interviului în status</value>
+    <value>Număr zile ale interviului în stare</value>
   </data>
   <data name="Sum" xml:space="preserve">
     <value>Suma</value>
@@ -292,13 +292,13 @@
     <value>Titlul chestionarului </value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Anchete și Statusuri </value>
+    <value>Anchete și stări </value>
   </data>
   <data name="TeamLeadsOnly" xml:space="preserve">
     <value>Echipe </value>
   </data>
   <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>Echipe și Statusuri </value>
+    <value>Echipe și stări </value>
   </data>
   <data name="TemplateVersion" xml:space="preserve">
     <value>Versiunea chestionarului</value>
@@ -323,5 +323,65 @@
   </data>
   <data name="WithInterviewers" xml:space="preserve">
     <value>Membrii echipei</value>
+  </data>
+  <data name="AllData" xml:space="preserve">
+    <value>Toate datele</value>
+  </data>
+  <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+    <value>Diagrama Cumulativă a Anchetelor arată evoluția numărului de anchete ăn diferitele lor stări pe parcurul timpului</value>
+  </data>
+  <data name="HeatMapView" xml:space="preserve">
+    <value>Afișază harta "heatmap"</value>
+  </data>
+  <data name="HeatRadius" xml:space="preserve">
+    <value>Raza "heatmap"</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Luna trecută</value>
+  </data>
+  <data name="LastNDays" xml:space="preserve">
+    <value>Ultimele {{days}} zile</value>
+  </data>
+  <data name="LastWeek" xml:space="preserve">
+    <value>Săptămâna trecută</value>
+  </data>
+  <data name="MapDataLoading" xml:space="preserve">
+    <value>Se încarcă datele hărții</value>
+  </data>
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>Luna trecută</value>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>Saptamana trecuta</value>
+  </data>
+  <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
+    <value>Există probleme de compatibilitate între versiunile chestionarului. Răspunsurile din versiunile anterioare ale chestionarului care nu mai există în ultima versiune a chestionarului au fost ignorate.</value>
+  </data>
+  <data name="QuickRanges" xml:space="preserve">
+    <value>Intervalele rapide de date</value>
+  </data>
+  <data name="RangeRelativeToData" xml:space="preserve">
+    <value>Raza relativă la date</value>
+  </data>
+  <data name="SaveAsImage" xml:space="preserve">
+    <value>Salvează ca imagine</value>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>Controlor</value>
+  </data>
+  <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+    <value>Raportul Echipe și stări arată numărul de anchete în fiecare stare defalcate pe echipe</value>
+  </data>
+  <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+    <value>Raportul Echipe și stări arată numărul de anchete în fiecare stare defalcate pe anchetator</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>Luna aceasta</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>Săptămâna aceasta</value>
+  </data>
+  <data name="ToAllQuestionnaires" xml:space="preserve">
+    <value>Înapi la chestionare</value>
   </data>
 </root>

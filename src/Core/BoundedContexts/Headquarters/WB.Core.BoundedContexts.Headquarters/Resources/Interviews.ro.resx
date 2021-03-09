@@ -121,7 +121,7 @@
     <value>Eroare de import a interviului cu întrebările de identificare {0}. Lipsește controlorul responsabil</value>
   </data>
   <data name="ImportInterviews_GenericError" xml:space="preserve">
-    <value>Eroare de import a interviurilor alocate cu răspunsurile: {0}.  Responsabil: {1}, Excepție: {2}</value>
+    <value>Eroare de import a sarcinilor cu răspunsurile: {0}.  Responsabil: {1}, Excepție: {2}</value>
   </data>
   <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
     <value>Fișierul de date este incorect</value>

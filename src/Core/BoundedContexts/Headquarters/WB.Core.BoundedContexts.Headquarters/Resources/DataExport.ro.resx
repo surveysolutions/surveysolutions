@@ -148,7 +148,7 @@
     <value>DDI</value>
   </data>
   <data name="DDIDescription" xml:space="preserve">
-    <value>Data Documentation Initiative XML data</value>
+    <value>Date XML pentru inițiativa EU "Data Initiative Documentation"</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Descărcare</value>
@@ -172,7 +172,7 @@
     <value>Domeniul de export</value>
   </data>
   <data name="FileSizeTitle" xml:space="preserve">
-    <value>Mărimea fișierului</value>
+    <value>Mărime fișierului</value>
   </data>
   <data name="Format" xml:space="preserve">
     <value>Format</value>
@@ -217,7 +217,7 @@
     <value>OneDrive</value>
   </data>
   <data name="ParaData" xml:space="preserve">
-    <value>Informații privind desfășurarea anchetei</value>
+    <value>Paradate: Informații privind desfășurarea anchetei</value>
   </data>
   <data name="ParadataDescription" xml:space="preserve">
     <value>Metadate privind desfașurarea interviului (evenimente si durată)</value>
@@ -226,7 +226,7 @@
     <value>În desfășurare</value>
   </data>
   <data name="QueuedTitle" xml:space="preserve">
-    <value>În așteptare</value>
+    <value>Traducere</value>
   </data>
   <data name="SaveBinaryDataTo" xml:space="preserve">
     <value>Salvați datele de tip binar pe:</value>
@@ -254,5 +254,158 @@
   </data>
   <data name="ZipFile" xml:space="preserve">
     <value>Fișier Zip</value>
+  </data>
+  <data name="AddToQueue" xml:space="preserve">
+    <value>Adaugă la coadă</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>toate stările</value>
+  </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>Stare: aprobat de RINS</value>
+  </data>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>Stare: aprobat de controlor</value>
+  </data>
+  <data name="DataDestination" xml:space="preserve">
+    <value>Calea fișierului exportat</value>
+  </data>
+  <data name="DataDestination_Dropbox" xml:space="preserve">
+    <value>Încărcați în Dropdox</value>
+  </data>
+  <data name="DataDestination_GoogleDrive" xml:space="preserve">
+    <value>Încărcați în Google Drive</value>
+  </data>
+  <data name="DataDestination_OneDrive" xml:space="preserve">
+    <value>Încărcați în OneDrive</value>
+  </data>
+  <data name="DataDestination_Zip" xml:space="preserve">
+    <value>Descărcați</value>
+  </data>
+  <data name="DataExport_CompletedOn" xml:space="preserve">
+    <value>Completat la {{date}}</value>
+  </data>
+  <data name="DataExport_Destination" xml:space="preserve">
+    <value>Destinație: {{dest}}</value>
+  </data>
+  <data name="DataExport_Destination_Dropbox" xml:space="preserve">
+    <value>Fișierul de export va fi încărcat în Dropbox</value>
+  </data>
+  <data name="DataExport_Destination_File" xml:space="preserve">
+    <value>Fișierul de export va fi disponibil pentru descărcare</value>
+  </data>
+  <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
+    <value>Fișierul de export va fi încărcat în Google Drive</value>
+  </data>
+  <data name="DataExport_Destination_OneDrive" xml:space="preserve">
+    <value>Fișierul de export va fi încărcat în OneDrive</value>
+  </data>
+  <data name="DataExport_FileLastUpdate" xml:space="preserve">
+    <value>Ultima actualizare: {{date}}</value>
+  </data>
+  <data name="DataExport_FileSize" xml:space="preserve">
+    <value>Dimensiunea fișierului: {{size}} MB</value>
+  </data>
+  <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+    <value>Fișierul a fost regenerat</value>
+  </data>
+  <data name="DataExport_InterviewsStatus" xml:space="preserve">
+    <value>Interviuri în {{status}}</value>
+  </data>
+  <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+    <value>{{title}} (ver. {{version}})</value>
+  </data>
+  <data name="DataExport_QueuedOn" xml:space="preserve">
+    <value>La coadă din {{date}}</value>
+  </data>
+  <data name="DataExport_Regenerate" xml:space="preserve">
+    <value>Regenerare</value>
+  </data>
+  <data name="DataExport_RegenerateDesc" xml:space="preserve">
+    <value>Exportați coada cu aceleași setări</value>
+  </data>
+  <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+    <value>Exportarea nu este posibilă</value>
+  </data>
+  <data name="DataExportApi" xml:space="preserve">
+    <value>API pentru exportul datelor</value>
+  </data>
+  <data name="DataExportApiDesc" xml:space="preserve">
+    <value>Puteți configura exportul automat al datelor colectate de interviu folosind setul nostru de instrumente API. Pentru mai multe informații și instrucțiuni, folosiți:</value>
+  </data>
+  <data name="DataExportApiInfoPage" xml:space="preserve">
+    <value>API de referință pentru exportul de date</value>
+  </data>
+  <data name="DataFormat" xml:space="preserve">
+    <value>Format dată</value>
+  </data>
+  <data name="DataFormat_Spss" xml:space="preserve">
+    <value>Format SPSS</value>
+  </data>
+  <data name="DataFormat_Stata" xml:space="preserve">
+    <value>Format Stata 14</value>
+  </data>
+  <data name="DataFormat_Tab" xml:space="preserve">
+    <value>Date separate prin tab</value>
+  </data>
+  <data name="DataType" xml:space="preserve">
+    <value>Tipul de date</value>
+  </data>
+  <data name="DataType_Binary" xml:space="preserve">
+    <value>Date binare. Arhive cu date binare (de exemplu, imagini, audio)</value>
+  </data>
+  <data name="DataType_Ddi" xml:space="preserve">
+    <value>DDI. Date XML pentru inițiativa EU "Data Initiative Documentation"</value>
+  </data>
+  <data name="DataType_MainSurveyData" xml:space="preserve">
+    <value>Date principale ale sondajului/anchetei. Arhiva ZIP cu datele principale ale interviului</value>
+  </data>
+  <data name="DataType_Paradata" xml:space="preserve">
+    <value>Paradate. Metadate despre procesul de interviu (evenimente și calendar)</value>
+  </data>
+  <data name="Error_Canceled" xml:space="preserve">
+    <value>Exportul a fost anulat de utilizator</value>
+  </data>
+  <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+    <value>Nu este suficient spațiu pentru stocarea în cloud selectată. Eliberați spațiu și reporniți lucrarea sau alegeți un alt furnizor.</value>
+  </data>
+  <data name="Error_Unhandled" xml:space="preserve">
+    <value>A apărut o eroare neașteptată în timpul exportului. Regretăm neplăcerile produse. Vă rugăm să contactați echipa de asistență la emailul: support@mysurvey.solutions și să furnizați fișierele jurnal * .log care sunt stocate în folderul aplicației. Informații suplimentare despre această problemă sunt disponibile la pagina de asistență: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>Filtrul pentru interviurile de exportat</value>
+  </data>
+  <data name="GeneratedDataSets" xml:space="preserve">
+    <value>Seturile exportate anterior</value>
+  </data>
+  <data name="GeneratedDataSets_Desc" xml:space="preserve">
+    <value>Datele sunt exportate într-o arhivă ZIP care conține fișierele de date de conținut și tip specificat. Mai jos este o listă a fișierelor de date exportate anterior.</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Starea anchetatorului desemnat</value>
+  </data>
+  <data name="NoDataSets" xml:space="preserve">
+    <value>Nu au fost încă generate seturi de date</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>Pregătire</value>
+  </data>
+  <data name="QuestionnaireInformation" xml:space="preserve">
+    <value>Progres</value>
+  </data>
+  <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
+    <value>Informații despre chestionar</value>
+  </data>
+  <data name="QuestionnaireInformation_Include" xml:space="preserve">
+    <value>Excludeți meta-informațiile despre chestionar</value>
+  </data>
+  <data name="QuestionnaireTranslation" xml:space="preserve">
+    <value>Includeți meta-informațiile despre chestionar</value>
+  </data>
+  <data name="SurveyQuestionnaire" xml:space="preserve">
+    <value>Șablon de sondaj/anchetă</value>
+  </data>
+  <data name="Translation_CardLabel" xml:space="preserve">
+    <value>Traducere: {{language}}</value>
   </data>
 </root>

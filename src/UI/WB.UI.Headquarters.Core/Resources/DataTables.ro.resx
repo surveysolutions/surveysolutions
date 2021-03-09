@@ -142,7 +142,7 @@
     <value>Afișați intrările _MENU_</value>
   </data>
   <data name="LoadingRecords" xml:space="preserve">
-    <value>Se încarcă</value>
+    <value>Se încarcă ...</value>
   </data>
   <data name="Paginate_First" xml:space="preserve">
     <value>Primul</value>
