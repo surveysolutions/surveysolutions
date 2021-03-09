@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
@@ -65,7 +66,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IOfflineSyncClient syncClient,
             IGoogleApiService googleApiService,
             IMapInteractionService mapInteractionService,
-            DashboardNotificationsViewModel dashboardNotifications) : base(principal, viewModelNavigationService, permissionsService,
+            DashboardNotificationsViewModel dashboardNotifications,
+            IWorkspaceService workspaceService) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection)
         {
             this.messenger = messenger;
@@ -89,6 +91,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             UserInteractionService = userInteractionService;
             GoogleApiService = googleApiService;
             this.mapInteractionService = mapInteractionService;
+            this.workspaceService = workspaceService;
 
             SubscribeOnMessages();
 
@@ -368,6 +371,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public Action? OnOfflineSynchronizationStarted;
         private readonly IMapInteractionService mapInteractionService;
+        private readonly IWorkspaceService workspaceService;
 
         private void StartOfflineSynchronization()
         {
@@ -481,6 +485,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         #endregion
+
+        public WorkspaceView[] GetWorkspaces()
+        {
+            return workspaceService.GetAll();
+        }
+
+        public void ChangeWorkspace(string workspaceName)
+        {
+            var interviewerIdentity = (InterviewerIdentity)principal.CurrentUserIdentity;
+            interviewerIdentity.Workspace = workspaceName;
+            principal.SaveInterviewer(interviewerIdentity);
+
+            ViewModelNavigationService.NavigateToDashboardAsync();
+        }
+
+        public void RefreshWorkspaces()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class DashboardViewModelArgs

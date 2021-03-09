@@ -21,12 +21,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public WorkspaceView[] GetAll()
         {
-            return workspaceRepository.LoadAll().ToArray();
+            return workspaceRepository.LoadAll()
+                .Where(s => s.Disabled == false)
+                .ToArray();
         }
 
         public WorkspaceView GetByName(string workspace)
         {
-            return workspaceRepository.FirstOrDefault(w => w.Name == workspace);
+            return workspaceRepository.GetById(workspace);
         }
     }
 }

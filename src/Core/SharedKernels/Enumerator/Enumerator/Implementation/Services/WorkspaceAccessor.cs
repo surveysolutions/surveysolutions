@@ -18,7 +18,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public WorkspaceView GetCurrent()
         {
-            var currentWorkspace = principal.CurrentUserIdentity.Workspace;
+            var currentWorkspace = principal.CurrentUserIdentity?.Workspace;
+            if (currentWorkspace == null)
+                return null;
             var workspace = workspaceService.GetByName(currentWorkspace);
             if (workspace != null)
                 return workspace;

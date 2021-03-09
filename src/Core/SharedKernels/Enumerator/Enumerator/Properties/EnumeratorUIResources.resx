@@ -515,6 +515,12 @@ You need internet connection to proceed with setting up the user and domain.</va
   <data name="MenuItem_Title_Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>Workspaces</value>
+  </data>
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>Refresh workspaces</value>
+  </data>
   <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
     <value>All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</value>
   </data>

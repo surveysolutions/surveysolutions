@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -802,6 +802,12 @@
   <data name="MenuItem_Title_Search" xml:space="preserve">
     <value>Поиск</value>
     <comment>Поиск</comment>
+  </data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>Рабочии области</value>
+  </data>
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>Обновить рабочие области</value>
   </data>
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Выйти из поиска</value>

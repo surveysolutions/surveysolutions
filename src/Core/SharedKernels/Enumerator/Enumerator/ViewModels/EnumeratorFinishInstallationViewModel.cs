@@ -274,7 +274,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             workspaceService.Save(workspaces.Select(w => new WorkspaceView()
             {
-                Name = w.Name,
+                Id = w.Name,
                 DisplayName = w.DisplayName,
                 Disabled = w.Disabled,
             }).ToArray());

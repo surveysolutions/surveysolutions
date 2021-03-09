@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
@@ -36,10 +37,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             ISerializer serializer,
             IUserInteractionService userInteractionService,
             IAuditLogService auditLogService,
-            IDeviceInformationService deviceInformationService) 
+            IDeviceInformationService deviceInformationService,
+            IWorkspaceService workspaceService) 
             : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, 
                 logger, qrBarcodeScanService, serializer, userInteractionService, auditLogService,
-                deviceInformationService)
+                deviceInformationService, workspaceService)
         {
             this.passwordHasher = passwordHasher;
             this.supervisorsPlainStorage = interviewersPlainStorage;

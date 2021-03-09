@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
+using WB.Core.BoundedContexts.Interviewer.Implementation;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -54,17 +56,17 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, PortableJsonAllTypesSerializer>();
 
-            registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, QuestionnaireKeyValueStorage>();
+            registry.Bind<IPlainKeyValueStorage<QuestionnaireDocument>, QuestionnaireKeyValueStorage>();
 
             registry.Bind<IInterviewerQuestionnaireAccessor, InterviewerQuestionnaireAccessor>();
             registry.Bind<IInterviewerInterviewAccessor, InterviewerInterviewAccessor>();
             registry.Bind<IInterviewEventStreamOptimizer, InterviewEventStreamOptimizer>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
-            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
-            registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
-            registry.BindAsSingleton<IAudioAuditService, AudioAuditService>();
+            registry.Bind<IQuestionnaireStorage, QuestionnaireStorage>();
+            registry.Bind<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
+            registry.Bind<IAudioAuditService, AudioAuditService>();
             
-            registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
+            registry.Bind<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();
 
             registry.BindToConstant(() => new SqliteSettings
@@ -73,15 +75,17 @@ namespace WB.UI.Interviewer.Infrastructure
                 PathToInterviewsDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory($"data{Path.DirectorySeparatorChar}interviews")
             });
 
-            registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>));
-            registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
+            registry.Bind(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>));
+            registry.Bind(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
 
-            registry.BindAsSingleton<IPlainStorage<PrefilledQuestionView>, PrefilledQuestionsRepository>();
+            registry.BindAsSingleton<IPlainStorage<InterviewerIdentity>, SqlitePlainStorageWithoutWorkspace<InterviewerIdentity>>();
+            registry.BindAsSingleton<IPlainStorage<WorkspaceView>, SqlitePlainStorageWithoutWorkspace<WorkspaceView>>();
+            registry.Bind<IPlainStorage<PrefilledQuestionView>, PrefilledQuestionsRepository>();
 
             registry.Bind<INotificationsCollector, InterviewerNotificationsCollector>();
             
-            registry.BindAsSingleton<ICalendarEventStorage, CalendarEventStorage>();
-            registry.BindAsSingleton<ICalendarEventRemoval, CalendarEventRemoval>();
+            registry.Bind<ICalendarEventStorage, CalendarEventStorage>();
+            registry.Bind<ICalendarEventRemoval, CalendarEventRemoval>();
         }
     }
 }

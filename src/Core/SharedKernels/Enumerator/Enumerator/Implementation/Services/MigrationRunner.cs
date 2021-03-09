@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
@@ -83,6 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 () => (IMigration) ActivatorUtilities.CreateInstance(this.serviceProvider, migrationType));
         }
 
+        [Workspaces]
         internal class Migration : IPlainStorageEntity<long>
         {
             public long Id { get; set; }

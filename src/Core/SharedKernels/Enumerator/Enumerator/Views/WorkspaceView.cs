@@ -10,7 +10,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         [PrimaryKey]
         public string Id { get; set; }
 
-        public string Name { get; set; }
+        [Ignore]
+        public string Name => Id;
         public string DisplayName { get; set; }
         public bool Disabled { get; set; }
     }

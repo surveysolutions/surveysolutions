@@ -8,14 +8,16 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     public class CalendarEventStorage : SqlitePlainStorage<CalendarEvent, Guid>, ICalendarEventStorage
     {
-        public CalendarEventStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings) 
-            : base(logger, fileSystemAccessor, settings)
+        public CalendarEventStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings,
+            IWorkspaceAccessor workspaceAccessor) 
+            : base(logger, fileSystemAccessor, settings, workspaceAccessor)
         {
         }
 
@@ -25,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public CalendarEvent? GetCalendarEventForInterview(Guid interviewId)
         {
-            return this.connection.Table<CalendarEvent>()
+            return this.GetConnection().Table<CalendarEvent>()
                 .SingleOrDefault(e =>  
                     e.InterviewId == interviewId
                     && e.IsDeleted == false
@@ -34,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public CalendarEvent? GetCalendarEventForAssigment(int assignmentId)
         {
-            return this.connection.Table<CalendarEvent>()
+            return this.GetConnection().Table<CalendarEvent>()
                 .SingleOrDefault(e => 
                     e.InterviewId == null 
                     && e.AssignmentId == assignmentId

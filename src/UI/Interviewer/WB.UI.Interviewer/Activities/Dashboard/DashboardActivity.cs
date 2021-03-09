@@ -5,6 +5,7 @@ using Android.App;
 using Android.Content;
 using Android.Gms.Nearby;
 using Android.OS;
+using Android.Runtime;
 using Android.Views;
 using AndroidX.AppCompat.Widget;
 using AndroidX.ViewPager.Widget;
@@ -212,6 +213,35 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
 
+            var workspaces = this.ViewModel.GetWorkspaces();
+            var workspacesMenuItem = menu.FindItem(Resource.Id.menu_workspaces);
+            var hasManyWorkspaces = workspaces.Length > 0; 
+            if (hasManyWorkspaces && workspacesMenuItem != null)
+            {
+                menu.LocalizeMenuItem(Resource.Id.menu_workspaces, EnumeratorUIResources.MenuItem_Title_Workspaces);
+
+                var sub = workspacesMenuItem.SubMenu;
+                foreach (var workspace in workspaces)
+                {
+                    var menuItem = sub!.Add(workspace.DisplayName);
+                    var workspaceName = workspace.Name;
+                    menuItem.SetOnMenuItemClickListener(new MenuItemOnMenuItemClickListener(() =>
+                    {
+                        ViewModel.ChangeWorkspace(workspaceName);
+                        return true;
+                    }));
+                }
+
+                sub.Add(EnumeratorUIResources.MenuItem_Title_RefreshWorkspaces)
+                    .SetOnMenuItemClickListener(new MenuItemOnMenuItemClickListener(() =>
+                    {
+                        ViewModel.RefreshWorkspaces();
+                        return true;
+                    }));
+            }
+
+            workspacesMenuItem.SetVisible(hasManyWorkspaces);
+
             SetMenuItemIcon(menu, Resource.Id.menu_search, Resource.Drawable.dashboard_search_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_synchronization, Resource.Drawable.synchronize_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_offline_synchronization, Resource.Drawable.synchronize_offline_icon);
@@ -239,7 +269,22 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             //menu.LocalizeMenuItem(Resource.Id.menu_map_dashboard, EnumeratorUIResources.MenuItem_Title_Map_Dashboard);
             return base.OnCreateOptionsMenu(menu);
         }
+        
+        private class MenuItemOnMenuItemClickListener : Java.Lang.Object, IMenuItemOnMenuItemClickListener
+        {
+            private readonly Func<bool> action;
 
+            public MenuItemOnMenuItemClickListener(Func<bool> action)
+            {
+                this.action = action;
+            }
+
+            public bool OnMenuItemClick(IMenuItem item)
+            {
+                return action.Invoke();
+            }
+        }
+        
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             switch (item.ItemId)
