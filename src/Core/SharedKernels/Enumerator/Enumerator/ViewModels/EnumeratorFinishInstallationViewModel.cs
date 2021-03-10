@@ -270,13 +270,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
-        private void SaveWorkspaces(List<WorkspaceApiView> workspaces)
+        private void SaveWorkspaces(List<UserWorkspaceApiView> workspaces)
         {
             workspaceService.Save(workspaces.Select(w => new WorkspaceView()
             {
                 Id = w.Name,
                 DisplayName = w.DisplayName,
                 Disabled = w.Disabled,
+                SupervisorId = w.SupervisorId,
             }).ToArray());
         }
 
@@ -296,7 +297,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         protected abstract Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token);
         protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token);
         
-        protected abstract Task<List<WorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials,
+        protected abstract Task<List<UserWorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials,
             CancellationToken token);
 
         public void CancellInProgressTask() => this.cancellationTokenSource?.Cancel();

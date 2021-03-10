@@ -343,6 +343,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refreshing workspaces.
+        /// </summary>
+        public static string Dashboard_RefreshWorkspaces {
+            get {
+                return ResourceManager.GetString("Dashboard_RefreshWorkspaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error. Can&apos;t update workspaces list..
+        /// </summary>
+        public static string Dashboard_RefreshWorkspacesError {
+            get {
+                return ResourceManager.GetString("Dashboard_RefreshWorkspacesError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspaces list updated.
+        /// </summary>
+        public static string Dashboard_RefreshWorkspacesFinished {
+            get {
+                return ResourceManager.GetString("Dashboard_RefreshWorkspacesFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This interview is completed. Do you want to reopen the interview?.
         /// </summary>
         public static string Dashboard_Reinitialize_Interview_Message {

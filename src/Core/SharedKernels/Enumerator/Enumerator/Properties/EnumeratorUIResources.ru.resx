@@ -178,6 +178,15 @@
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} интервью для {1}</value>
   </data>
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>Обновление рабочих областей</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>Список рабочих областей обновлен</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>Ошибка при обновление рабочих областей.</value>
+  </data>
   <data name="Login_FinishInstallation_Message" xml:space="preserve">
     <value>Это первый запуск приложения на этом устройстве. Пользователь и домен пока не заданы. &lt;br /&gt;Для продолжения работы необходимо подключение к сети</value>
   </data>

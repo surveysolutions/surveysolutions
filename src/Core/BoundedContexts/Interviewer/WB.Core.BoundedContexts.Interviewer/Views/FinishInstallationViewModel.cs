@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewerPrincipal.SaveInterviewer(interviewerIdentity);
         }
 
-        protected override async Task<List<WorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials,
+        protected override async Task<List<UserWorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials,
             CancellationToken token)
         {
             var interviewer = await this.synchronizationService.GetInterviewerAsync(credentials, token: token)
@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 Id = interviewer.Id.FormatGuid(),
                 UserId = interviewer.Id,
-                SupervisorId = interviewer.SupervisorId,
+                SupervisorId = interviewer.Workspaces.First().SupervisorId!.Value,
                 Name = this.UserName,
                 PasswordHash = this.passwordHasher.Hash(this.Password),
                 Token = credentials.Token,

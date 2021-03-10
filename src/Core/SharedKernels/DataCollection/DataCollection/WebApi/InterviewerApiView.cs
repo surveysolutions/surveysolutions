@@ -7,19 +7,23 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
     {
         public Guid Id { get; set; }
         
+        [Obsolete]
         public Guid SupervisorId { get; set; }
-
         public string SecurityStamp { get; set; }
         
-        public List<WorkspaceApiView> Workspaces { get; set; }
+        public List<UserWorkspaceApiView> Workspaces { get; set; }
     }
 
     public class WorkspaceApiView
     {
         public string Name { get; set; }
-        
         public string DisplayName { get; set; }
         public bool Disabled { get; set; }
+    }
+    
+    public class UserWorkspaceApiView : WorkspaceApiView
+    {
+        public Guid? SupervisorId { get; set; }
     }
 
     public class InterviewerFullApiView

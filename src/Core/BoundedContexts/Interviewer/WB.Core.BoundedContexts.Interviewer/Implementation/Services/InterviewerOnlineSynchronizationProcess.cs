@@ -1,5 +1,7 @@
 #nullable enable
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -15,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
@@ -23,6 +26,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         private readonly IInterviewerPrincipal principal;
         private readonly IPasswordHasher passwordHasher;
+        private readonly IWorkspaceService workspaceService;
         private readonly IInterviewerSynchronizationService synchronizationService;
 
         public InterviewerOnlineSynchronizationProcess(
@@ -37,12 +41,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IAuditLogService auditLogService,
             IDeviceInformationService deviceInformationService,
             IUserInteractionService userInteractionService,
-            IServiceLocator serviceLocator) : base(synchronizationService, logger, httpStatistician, principal,
+            IServiceLocator serviceLocator,
+            IWorkspaceService workspaceService) : base(synchronizationService, logger, httpStatistician, principal,
             interviewViewRepository, auditLogService, interviewerSettings, serviceLocator, deviceInformationService, userInteractionService,
             assignmentsStorage)
         {
             this.principal = principal;
             this.passwordHasher = passwordHasher;
+            this.workspaceService = workspaceService;
             this.synchronizationService = synchronizationService;
         }
 
@@ -61,6 +67,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             InterviewerApiView? interviewer = await this.synchronizationService.GetInterviewerAsync(this.RestCredentials, token: cancellationToken).ConfigureAwait(false);
             this.UpdateSecurityStampOfInterviewer(interviewer.SecurityStamp, this.RestCredentials.Login);
+            this.UpdateWorkspaceInfo(interviewer.Workspaces);
+        }
+
+        private void UpdateWorkspaceInfo(List<UserWorkspaceApiView> workspaces)
+        {
+            workspaceService.Save(workspaces.Select(w => new WorkspaceView()
+            {
+                Id = w.Name,
+                DisplayName = w.DisplayName,
+                SupervisorId = w.SupervisorId,
+                Disabled = w.Disabled,
+            }).ToArray());
         }
 
         private void UpdateSecurityStampOfInterviewer(string securityStamp, string name)

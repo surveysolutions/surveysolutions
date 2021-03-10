@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             IAuthorizedUser authorizedUser,
             UserManager<HqUser> userManager,
             SignInManager<HqUser> signInManager,
-            IUserViewFactory userViewFactory,
+            IUserRepository userViewFactory,
             IApiTokenProvider apiAuthTokenProvider,
             IWorkspacesCache workspacesCache,
             IUserToDeviceService userToDeviceService) : base(
@@ -45,8 +45,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         [Route("supervisor")]
         public Guid Supervisor()
         {
-            var user = userViewFactory.GetUser(new UserViewInputModel(this.authorizedUser.Id));
-            return user.Supervisor.Id;
+            var user = userViewFactory.FindById(this.authorizedUser.Id);
+            return user.Profile.SupervisorId!.Value;
         }
 
         [HttpGet]

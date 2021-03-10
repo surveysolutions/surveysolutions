@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.supervisorsPlainStorage.Store(supervisorIdentity);
         }
 
-        protected override async Task<List<WorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials, CancellationToken token)
+        protected override async Task<List<UserWorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials, CancellationToken token)
         {
             var supervisor = await this.synchronizationService.GetSupervisorAsync(credentials, token: token).ConfigureAwait(false);
             return supervisor.Workspaces;

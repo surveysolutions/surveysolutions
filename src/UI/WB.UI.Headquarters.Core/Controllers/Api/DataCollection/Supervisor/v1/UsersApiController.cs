@@ -47,7 +47,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             {
                 Id = user.Id,
                 Email = user.Email,
-                Workspaces = workspaces.Select(x => new WorkspaceApiView
+                Workspaces = workspaces.Select(x => new UserWorkspaceApiView
                 { 
                     Name = x.Name,
                     DisplayName = x.DisplayName

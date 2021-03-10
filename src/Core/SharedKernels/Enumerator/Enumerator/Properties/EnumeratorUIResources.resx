@@ -199,6 +199,15 @@ for further instructions</value>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} interviews for {1}</value>
   </data>
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>Refreshing workspaces</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>Workspaces list updated</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>Error. Can't update workspaces list.</value>
+  </data>
   <data name="Maps_Title" xml:space="preserve">
     <value>Maps</value>
   </data>
