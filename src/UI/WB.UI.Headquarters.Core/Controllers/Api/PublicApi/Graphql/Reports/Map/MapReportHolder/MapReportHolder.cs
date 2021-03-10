@@ -6,8 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Reports.Map.MapReportHolder
 {
-    class MapReportHolder<T> : ObjectType<IMapReportHolder<T>>, IMapReportHolder
-        where T : class, IType
+    class MapReportHolder : ObjectType<IMapReportHolder>, IMapReportHolder
     {
         public MapReportHolder() : base(descriptor => Configure(descriptor))
         {
@@ -20,7 +19,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Reports.Map.MapRe
 
         public IList Nodes { get; }
 
-        private new static void Configure(IObjectTypeDescriptor<IMapReportHolder<T>> descriptor)
+        private new static void Configure(IObjectTypeDescriptor<IMapReportHolder> descriptor)
         {
             descriptor.BindFields(BindingBehavior.Explicit);
             descriptor.Name("MapReportHolder");

@@ -1,11 +1,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using HotChocolate.Resolvers;
-using HotChocolate.Types;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Reports.Map.MapReportHolder
 {
-    internal sealed class MapReportHolderMiddleware<TClrType, TSchemaType> where TSchemaType : class, IType where TClrType : class
+    internal sealed class MapReportHolderMiddleware<GpsAnswerQuery> //where TClrType : class
     {
         private readonly FieldDelegate next;
 
@@ -18,9 +17,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Reports.Map.MapRe
         {
             await this.next(context).ConfigureAwait(false);
 
-            if (context.Result is IQueryable<TClrType> source)
+            if (context.Result is IQueryable<GpsAnswerQuery> source)
             {
-                context.Result = await new MapReportHolderResolver<TClrType, TSchemaType>(source)
+                context.Result = await new MapReportHolderResolver<GpsAnswerQuery>(source)
                     .ResolveAsync(context.RequestAborted)
                     .ConfigureAwait(false);
             }

@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
                     default,default,default,default!,default!))
                 .Authorize()
                 .HasWorkspace()
-                .WrapIntoHolder<MapReportType, GpsAnswerQuery>()
+                .WrapIntoHolder()
                 .UseFiltering<GpsAnswerFilterInputType>()
                 .Argument("questionnaireId", a => a.Description("Questionnaire id").Type<NonNullType<UuidType>>())
                 .Argument("questionnaireVersion", a => a.Description("Questionnaire version").Type<LongType>())

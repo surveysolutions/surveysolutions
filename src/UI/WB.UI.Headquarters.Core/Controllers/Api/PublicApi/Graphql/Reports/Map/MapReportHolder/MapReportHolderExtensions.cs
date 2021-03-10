@@ -5,13 +5,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Reports.Map.MapRe
 {
     internal static class MapReportHolderExtensions
     {
-        public static IObjectFieldDescriptor WrapIntoHolder<TSchemaType, TClrType>(
-            this IObjectFieldDescriptor descriptor)
-            where TSchemaType : class, IOutputType where TClrType : class
+        public static IObjectFieldDescriptor WrapIntoHolder(this IObjectFieldDescriptor descriptor)
         {
             return descriptor
-                .Type<MapReportHolder<TSchemaType>>()
-                .Use<MapReportHolderMiddleware<TClrType, TSchemaType>>();
+                .Type<MapReportHolder>()
+                .Use<MapReportHolderMiddleware<GpsAnswerQuery>>();
         }
     }
 }
