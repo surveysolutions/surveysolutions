@@ -115,6 +115,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -189,20 +190,27 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<PrefilledQuestionView> prefilledQuestions = null,
             IAnswerToStringConverter answerToStringConverter = null
         )
-            => new InterviewDashboardEventHandler(
-                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
-                prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(Mock.Of<ILogger>()),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>(),
-                Mock.Of<IAssignmentDocumentsStorage>(),
-                Mock.Of<ICalendarEventStorage>());
+        {
+            var serviceLocator = Create.Fake.ServiceLocator()
+                .With(interviewViewRepository ?? Substitute.For<IPlainStorage<InterviewView>>())
+                .With(questionnaireStorage ?? Substitute.For<IQuestionnaireStorage>())
+                .With(prefilledQuestions ?? Substitute.For<IPlainStorage<PrefilledQuestionView>>())
+                .With(answerToStringConverter ?? Substitute.For<IAnswerToStringConverter>())
+                .Object;
+            return new InterviewDashboardEventHandler(serviceLocator);
+        }
+        
+        CalendarEventEventHandler CalendarEventDenormalizer(ICalendarEventStorage calendarEventStorage = null)
+        {
+            var serviceLocator = Create.Fake.ServiceLocator()
+                .With(calendarEventStorage ?? Substitute.For<ICalendarEventStorage>())
+                .With(Substitute.For<IPlainStorage<InterviewView>>())
+                .With(Substitute.For<IAssignmentDocumentsStorage>())
+                .Object;
+            return new CalendarEventEventHandler(serviceLocator);
+        }
 
-        CalendarEventEventHandler CalendarEventDenormalizer(ICalendarEventStorage calendarEventStorage = null) =>
-            new CalendarEventEventHandler(calendarEventStorage ?? Mock.Of<ICalendarEventStorage>(),
-                Mock.Of<IPlainStorage<InterviewView>>(),
-                Mock.Of<IAssignmentDocumentsStorage>());
-        
-        
+
         public DomainRepository DomainRepository(
             IServiceLocator serviceLocator = null)
             => new DomainRepository(
@@ -493,7 +501,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAuditLogService>(),
                 Mock.Of<IDeviceInformationService>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                serviceLocator ?? Mock.Of<IServiceLocator>());
+                serviceLocator ?? Mock.Of<IServiceLocator>(),
+                Mock.Of<IWorkspaceService>());
         }
 
         public InterviewerOfflineSynchronizationProcess OfflineSynchronizationProcess(
