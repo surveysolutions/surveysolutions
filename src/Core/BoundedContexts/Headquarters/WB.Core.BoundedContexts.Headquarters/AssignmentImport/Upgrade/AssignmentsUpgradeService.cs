@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -17,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
         private readonly IUserRepository users;
         private static readonly Dictionary<Guid, AssignmentUpgradeProgressDetails> progressReporting = new Dictionary<Guid, AssignmentUpgradeProgressDetails>();
         private static readonly ConcurrentQueue<QueuedUpgrade> upgradeQueue = new ConcurrentQueue<QueuedUpgrade>();
-        private readonly Dictionary<Guid, CancellationTokenSource> cancellationTokens = new Dictionary<Guid, CancellationTokenSource>();
+        private static readonly ConcurrentDictionary<Guid, CancellationTokenSource> cancellationTokens = new ConcurrentDictionary<Guid, CancellationTokenSource>();
 
         public AssignmentsUpgradeService(ISystemLog auditLog, 
             IQuestionnaireStorage questionnaireStorage,
@@ -72,15 +71,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 
         public CancellationToken GetCancellationToken(Guid processId)
         {
-            var cancellationTokenSource = this.cancellationTokens.GetOrAdd(processId, () => new CancellationTokenSource());
+            var cancellationTokenSource = cancellationTokens.GetOrAdd(processId, (processId) => new CancellationTokenSource());
             return cancellationTokenSource.Token;
         }
 
         public void StopProcess(Guid processId)
         {
-            if (this.cancellationTokens.ContainsKey(processId))
+            if (cancellationTokens.ContainsKey(processId))
             {
-                this.cancellationTokens[processId].Cancel();
+                cancellationTokens[processId].Cancel();
             }
         }
     }
