@@ -2,6 +2,7 @@
 using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Events.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -20,17 +21,14 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<CalendarEventDeleted>,
                                          IEventHandler<CalendarEventRestored>
     {
-        private readonly ICalendarEventStorage calendarEventStorage;
-        private readonly IPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IAssignmentDocumentsStorage assignmentStorage;
+        private readonly IServiceLocator serviceLocator;
+        private ICalendarEventStorage calendarEventStorage => serviceLocator.GetInstance<ICalendarEventStorage>();
+        private IPlainStorage<InterviewView> interviewViewRepository => serviceLocator.GetInstance<IPlainStorage<InterviewView>>();
+        private IAssignmentDocumentsStorage assignmentStorage => serviceLocator.GetInstance<IAssignmentDocumentsStorage>();
 
-        public CalendarEventEventHandler(ICalendarEventStorage calendarEventStorage,
-            IPlainStorage<InterviewView> interviewViewRepository,
-            IAssignmentDocumentsStorage assignmentStorage)
+        public CalendarEventEventHandler(IServiceLocator serviceLocator)
         {
-            this.calendarEventStorage = calendarEventStorage;
-            this.interviewViewRepository = interviewViewRepository;
-            this.assignmentStorage = assignmentStorage;
+            this.serviceLocator = serviceLocator;
         }
 
         public void Handle(IPublishedEvent<CalendarEventCreated> evnt)

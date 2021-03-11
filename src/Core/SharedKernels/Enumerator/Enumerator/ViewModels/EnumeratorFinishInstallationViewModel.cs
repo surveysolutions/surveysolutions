@@ -221,8 +221,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
                 this.Principal.SignIn(restCredentials.Login, this.Password, true);
 
-                this.auditLogService.Write(new FinishInstallationAuditLogEntity(this.Endpoint));
-                this.auditLogService.Write(new LoginAuditLogEntity(this.UserName));
+                this.auditLogService.WriteApplicationLevelRecord(new FinishInstallationAuditLogEntity(this.Endpoint));
+                this.auditLogService.WriteApplicationLevelRecord(new LoginAuditLogEntity(this.UserName));
 
                 await this.ViewModelNavigationService.NavigateToDashboardAsync();
             }

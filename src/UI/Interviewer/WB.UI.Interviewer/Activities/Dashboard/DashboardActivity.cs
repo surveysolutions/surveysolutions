@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Dashboard;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Notifications;
@@ -292,21 +293,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             workspacesMenuItem.SetVisible(hasManyWorkspaces);
         }
 
-        private class MenuItemOnMenuItemClickListener : Java.Lang.Object, IMenuItemOnMenuItemClickListener
-        {
-            private readonly Func<bool> action;
-
-            public MenuItemOnMenuItemClickListener(Func<bool> action)
-            {
-                this.action = action;
-            }
-
-            public bool OnMenuItemClick(IMenuItem item)
-            {
-                return action.Invoke();
-            }
-        }
-        
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             switch (item.ItemId)

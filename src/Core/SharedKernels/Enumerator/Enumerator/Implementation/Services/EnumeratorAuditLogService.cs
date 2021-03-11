@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
@@ -17,6 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly ISerializer serializer;
         private readonly ILogger logger;
         private readonly IPrincipal principal;
+        private readonly IServiceProvider serviceProvider;
 
         private const string AuditLogSettingsKey = "settings";
 
@@ -24,23 +26,39 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage,
             ISerializer serializer,
             ILogger logger,
-            IPrincipal principal)
+            IPrincipal principal,
+            IServiceProvider serviceProvider)
         {
             this.auditLogStorage = auditLogStorage;
             this.auditLogSettingsStorage = auditLogSettingsStorage;
             this.serializer = serializer;
             this.logger = logger;
             this.principal = principal;
+            this.serviceProvider = serviceProvider;
         }
 
+        [Workspaces]
         public class AuditLogRecordView : IPlainStorageEntity<int?>
         {
             [PrimaryKey, Unique, AutoIncrement]
             public int? Id { get; set; }
             public string Json { get; set; }
         }
-
+        
         public void Write(IAuditLogEntity entity)
+        {
+            var workspaceAccessor = (IWorkspaceAccessor) serviceProvider.GetService(typeof(IWorkspaceAccessor));
+            var currentWorkspace = workspaceAccessor.GetCurrent();
+
+            WriteRecord(entity, currentWorkspace.Name);
+        }
+        
+        public void WriteApplicationLevelRecord(IAuditLogEntity entity)
+        {
+            WriteRecord(entity, null);
+        }
+
+        private void WriteRecord(IAuditLogEntity entity, string workspace)
         {
             try
             {
@@ -54,11 +72,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     TimeUtc = DateTime.UtcNow,
                     Type = entity.Type,
                     Payload = entity,
+                    Workspace = workspace,
                 };
 
                 WriteAuditLogRecord(auditLogEntityView);
 
-                this.logger.Info($"{entity.GetType().Name.Replace("AuditLogEntity", "")} {this.serializer.SerializeWithoutTypes(entity)}");
+                this.logger.Info(
+                    $"{entity.GetType().Name.Replace("AuditLogEntity", "")} {this.serializer.SerializeWithoutTypes(entity)}");
             }
             catch (Exception e)
             {

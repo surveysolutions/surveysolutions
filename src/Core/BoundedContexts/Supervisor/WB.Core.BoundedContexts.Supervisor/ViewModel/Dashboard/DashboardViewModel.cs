@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
@@ -6,10 +7,15 @@ using MvvmCross.Navigation.EventArguments;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Properties;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -25,6 +31,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
     public class DashboardViewModel : BaseViewModel<DashboardViewModelArgs>
     {
         private readonly IMvxNavigationService mvxNavigationService;
+        private readonly IWorkspaceService workspaceService;
+        private readonly ISupervisorSynchronizationService supervisorSynchronizationService;
+        private readonly IPlainStorage<SupervisorIdentity> supervisorPlainStorage;
         public Guid? LastVisitedInterviewId { get; set; }
 
         public IDashboardItemsAccessor DashboardItemsAccessor { get; }
@@ -48,10 +57,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             IMvxNavigationService mvxNavigationService,
             IMvxMessenger messenger,
             LocalSynchronizationViewModel synchronization,
-            DashboardNotificationsViewModel dashboardNotifications)
+            DashboardNotificationsViewModel dashboardNotifications,
+            IWorkspaceService workspaceService,
+            ISupervisorSynchronizationService supervisorSynchronizationService,
+            IPlainStorage<SupervisorIdentity> supervisorPlainStorage)
             : base(principal, viewModelNavigationService)
         {
             this.mvxNavigationService = mvxNavigationService;
+            this.workspaceService = workspaceService;
+            this.supervisorSynchronizationService = supervisorSynchronizationService;
+            this.supervisorPlainStorage = supervisorPlainStorage;
             DashboardItemsAccessor = dashboardItemsAccessor;
             this.Synchronization = synchronization;
             this.Synchronization.Init();
@@ -197,6 +212,60 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         {
             messengerSubscribtion.Dispose();
             this.mvxNavigationService.AfterNavigate -= OnAfterNavigate;
+        }
+        
+        public string CurrentWorkspace => Principal.CurrentUserIdentity.Workspace;
+        public WorkspaceView[] GetWorkspaces()
+        {
+            return workspaceService.GetAll();
+        }
+
+        public void ChangeWorkspace(string workspaceName)
+        {
+            var workspaceView = workspaceService.GetByName(workspaceName);
+            if (workspaceView?.SupervisorId == null)
+                throw new ArgumentException("Can't change workspace. Refresh list from server");
+
+            var supervisorIdentity = (SupervisorIdentity)Principal.CurrentUserIdentity;
+            supervisorIdentity.Workspace = workspaceView.Name;
+            supervisorPlainStorage.Store(supervisorIdentity);
+
+            ViewModelNavigationService.NavigateToDashboardAsync();
+        }
+
+        public event EventHandler WorkspaceListUpdated;
+        
+        public async Task RefreshWorkspaces()
+        {
+            try
+            {
+                this.Synchronization.IsSynchronizationInProgress = true;
+                this.Synchronization.IsSynchronizationInfoShowed = true;
+
+                this.Synchronization.Status = SynchronizationStatus.Started;
+                this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspaces;
+                
+                var interviewerApiView = await supervisorSynchronizationService.GetSupervisorAsync();
+                workspaceService.Save(interviewerApiView.Workspaces.Select(w => new WorkspaceView()
+                {
+                    Id = w.Name,
+                    DisplayName = w.DisplayName,
+                    SupervisorId = w.SupervisorId,
+                    Disabled = w.Disabled,
+                }).ToArray());
+
+                this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspacesFinished;
+
+                WorkspaceListUpdated?.Invoke(this, EventArgs.Empty);
+            }
+            catch (Exception e)
+            {
+                this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspacesError;
+            }
+            finally
+            {
+                this.Synchronization.IsSynchronizationInProgress = false;
+            }
         }
     }
 }

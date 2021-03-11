@@ -75,7 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
             registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             registry.Bind<IAudioAuditFileStorage, InterviewerAudioAuditFileStorage>();
-            registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
+            registry.Bind<IAuditLogService, EnumeratorAuditLogService>();
             registry.Bind<IServiceProvider, MvxServiceProvider>();
             registry.Bind<IMigrationRunner, MigrationRunner>();
 
