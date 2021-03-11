@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Android.App;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -6,6 +7,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -92,6 +94,16 @@ namespace WB.UI.Interviewer.Settings
             {
                settings.IsOfflineSynchronizationDone = true;
             });
+        }
+
+        public void SetQuestionnaireInWebMode(List<QuestionnaireIdentity> questionnairesInWebMode)
+        {
+            this.SaveCurrentSettings(settings => settings.QuestionnairesInWebMode = questionnairesInWebMode);
+        }
+
+        public void SetWebInterviewUrlTemplate(string webInterviewUriTemplate)
+        {
+            this.SaveCurrentSettings(settings => settings.WebInterviewUriTemplate = webInterviewUriTemplate);
         }
 
         public void SetGpsResponseTimeout(int timeout)

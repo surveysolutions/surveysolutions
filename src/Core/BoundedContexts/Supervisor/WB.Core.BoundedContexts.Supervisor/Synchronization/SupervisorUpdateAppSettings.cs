@@ -14,8 +14,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
         public SupervisorUpdateAppSettings(int sortOrder, 
             ISynchronizationService synchronizationService, 
             ILogger logger, 
-            ISupervisorSettings interviewerSettings,
-            ITabletDiagnosticService diagnosticService) : 
+            ISupervisorSettings interviewerSettings) : 
             base(synchronizationService, logger, sortOrder)
         {
             this.supervisorSettings = interviewerSettings ?? throw new ArgumentNullException(nameof(interviewerSettings));
