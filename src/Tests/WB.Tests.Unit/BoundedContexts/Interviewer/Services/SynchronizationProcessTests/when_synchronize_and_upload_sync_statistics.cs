@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             synchronizationServiceMock.Setup(x => x.CheckObsoleteInterviewsAsync(It.IsAny<List<ObsoletePackageCheck>>(), CancellationToken.None))
                 .ReturnsAsync(new List<Guid>());
             synchronizationServiceMock.Setup(x => x.GetInterviewerAsync(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new InterviewerApiView());
+                .ReturnsAsync(new InterviewerApiView() { Workspaces = new List<UserWorkspaceApiView>()});
 
             this.httpStatistician = new Mock<IHttpStatistician>();
 
