@@ -207,7 +207,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             IInterviewExpressionStorage state = GetLatestExpressionStorage(assemblyLoadContext, questionnaireDocument);
             questionnaire.ExpressionStorageType = state.GetType();
-            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionStorage(It.IsAny<QuestionnaireIdentity>()) == state);
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStorageProvider>(a => a.GetExpressionStorage(It.IsAny<QuestionnaireIdentity>()) == state);
 
             var interview = IntegrationCreate.Interview(questionnaireId, questionnaireRepository, statePrototypeProvider, optionRepo);
 
@@ -275,18 +275,11 @@ namespace WB.Tests.Integration.InterviewTests
             return (T) firstTypedEvent?.Payload;
         }
 
-        protected static Assembly CompileAssemblyUsingQuestionnaireEngine(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument)
-            => CompileAssembly(assemblyLoadContext, questionnaireDocument, IntegrationCreate.DesignerEngineVersionService().GetQuestionnaireContentVersion(questionnaireDocument));
-
-        protected static Assembly CompileAssemblyUsingLatestEngine(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument)
-            => CompileAssembly(assemblyLoadContext, questionnaireDocument, IntegrationCreate.DesignerEngineVersionService().LatestSupportedVersion);
-
         protected static Assembly CompileAssembly(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument, int engineVersion)
         {
             var expressionProcessorGenerator =
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(),
-                    IntegrationCreate.CodeGenerator(),
                     IntegrationCreate.CodeGeneratorV2(),
                     new DynamicCompilerSettingsProvider());
 
@@ -322,26 +315,6 @@ namespace WB.Tests.Integration.InterviewTests
                 throw new Exception("Error on IInterviewExpressionState generation");
 
             return interviewExpressionStorage;
-        }
-
-        public static ILatestInterviewExpressionState GetInterviewExpressionState(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument, bool useLatestEngine = true)
-        {
-            var compiledAssembly = useLatestEngine 
-                ? CompileAssemblyUsingLatestEngine(assemblyLoadContext, questionnaireDocument) 
-                : CompileAssemblyUsingQuestionnaireEngine(assemblyLoadContext, questionnaireDocument);
-
-            Type interviewExpressionStateType =
-                compiledAssembly.GetTypes()
-                    .FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IInterviewExpressionState)));
-
-            if (interviewExpressionStateType == null)
-                throw new Exception("Type InterviewExpressionState was not found");
-
-            var interviewExpressionState = new InterviewExpressionStateUpgrader().UpgradeToLatestVersionIfNeeded(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
-            if (interviewExpressionState == null)
-                throw new Exception("Error on IInterviewExpressionState generation");
-
-            return interviewExpressionState;
         }
     }
 }

@@ -14,13 +14,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public bool? IsAudioRecordingEnabled { get; set; }
 
         public InterviewCreated(Guid userId, Guid questionnaireId, long questionnaireVersion, 
-            int? assignmentId, bool? isAudioRecordingEnabled, DateTimeOffset originDate, bool usesExpressionStorage = false)
+            int? assignmentId, bool? isAudioRecordingEnabled, DateTimeOffset originDate)
             : base(userId, originDate)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;
             this.AssignmentId = assignmentId;
-            this.UsesExpressionStorage = usesExpressionStorage;
             this.IsAudioRecordingEnabled = isAudioRecordingEnabled;
 
             if (originDate != default(DateTimeOffset))

@@ -144,13 +144,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.translationsStorage.Remove(storedTranslations);
         }
 
-        public List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities()
-        {
-            return this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census)
-                    .Select(questionnaire => QuestionnaireIdentity.Parse(questionnaire.Id))
-                    .ToList();
-        }
-
         public List<QuestionnaireIdentity> GetAllQuestionnaireIdentities()
         {
             return this.questionnaireViewRepository.Where(x => true)

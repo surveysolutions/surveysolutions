@@ -206,7 +206,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(unitOfWork, memoryCache), 
                 new QuestionnaireQuestionOptionsRepository(), 
                 new SubstitutionService(), 
-                Mock.Of<IInterviewExpressionStatePrototypeProvider>(), 
+                Mock.Of<IInterviewExpressionStorageProvider>(), 
                 Mock.Of<IReusableCategoriesFillerIntoQuestionnaire>(),
                 Create.Storage.NewMemoryCache()
             );

@@ -7,7 +7,6 @@ namespace WB.UI.Interviewer.CustomControls
 {
     public class InterviewerDashboardTemplateSelector : IMvxTemplateSelector
     {
-        private static readonly Type CensusType = typeof(CensusQuestionnaireDashboardItemViewModel);
         private static readonly Type InterviewType = typeof(InterviewDashboardItemViewModel);
         private static readonly Type AssignmentType = typeof(InterviewerAssignmentDashboardItemViewModel);
         private static readonly Type SubtitleType = typeof(DashboardSubTitleViewModel);
@@ -17,9 +16,6 @@ namespace WB.UI.Interviewer.CustomControls
             if (forItemObject == null) return -1;
 
             var typeOfViewModel = forItemObject.GetType();
-
-            if (typeOfViewModel == CensusType)
-                return Resource.Layout.dashboard_census_questionnare_item;
 
             if (typeOfViewModel == InterviewType || typeOfViewModel == AssignmentType)
                 return Resource.Layout.dashboard_interview_item;

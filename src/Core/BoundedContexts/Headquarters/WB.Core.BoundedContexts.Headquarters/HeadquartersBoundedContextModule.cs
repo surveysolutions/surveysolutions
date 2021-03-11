@@ -266,7 +266,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<IQuestionnaireStorage, HqQuestionnaireStorage>(); 
            
-            registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
+            registry.Bind<IInterviewExpressionStorageProvider, InterviewExpressionStorageProvider>();
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
             
             registry.BindToConstant<UserPreloadingSettings>(() => this.userPreloadingSettings);
@@ -306,7 +306,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentFactory, AssignmentFactory>();
             registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
-            registry.Bind<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
             registry.BindAsSingleton<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
             registry.BindInPerLifetimeScope<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();

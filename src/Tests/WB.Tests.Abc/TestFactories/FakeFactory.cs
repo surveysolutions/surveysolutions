@@ -62,9 +62,13 @@ namespace WB.Tests.Abc.TestFactories
         public IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
             Guid questionnaireId, IQuestionnaire questionnaire = null, long? questionnaireVersion = null)
         {
-            questionnaire = questionnaire ?? Mock.Of<IQuestionnaire>(x => x.IsUsingExpressionStorage() == true && x.GetExpressionsPlayOrder() == new List<Guid>() &&
-              x.ExpressionStorageType == typeof(DummyInterviewExpressionStorage));
-
+            if (questionnaire == null)
+            {
+                questionnaire = Mock.Of<IQuestionnaire>();
+            }
+            
+            questionnaire.EnsureQuestionnaireMockSetup();
+                        
             return Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire
                 && repository.GetQuestionnaireOrThrow(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
