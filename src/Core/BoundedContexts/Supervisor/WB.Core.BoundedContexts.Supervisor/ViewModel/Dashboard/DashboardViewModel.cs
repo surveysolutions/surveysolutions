@@ -223,8 +223,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public void ChangeWorkspace(string workspaceName)
         {
             var workspaceView = workspaceService.GetByName(workspaceName);
-            if (workspaceView?.SupervisorId == null)
-                throw new ArgumentException("Can't change workspace. Refresh list from server");
 
             var supervisorIdentity = (SupervisorIdentity)Principal.CurrentUserIdentity;
             supervisorIdentity.Workspace = workspaceView.Name;

@@ -261,8 +261,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             IMenu menu = dashboardMenu;
             var workspaces = this.ViewModel.GetWorkspaces();
             var workspacesMenuItem = menu.FindItem(Resource.Id.menu_workspaces);
-            var hasManyWorkspaces = workspaces.Length > 0;
-            if (hasManyWorkspaces && workspacesMenuItem != null)
+            if (workspacesMenuItem != null)
             {
                 menu.LocalizeMenuItem(Resource.Id.menu_workspaces, EnumeratorUIResources.MenuItem_Title_Workspaces);
 
@@ -290,7 +289,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     }));
             }
 
-            workspacesMenuItem.SetVisible(hasManyWorkspaces);
+            workspacesMenuItem.SetVisible(true);
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)

@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.UI.Shared.Enumerator.Migrations;
+using WB.UI.Shared.Enumerator.Migrations.Workspaces;
 using WB.UI.Supervisor.Activities;
 
 namespace WB.UI.Supervisor

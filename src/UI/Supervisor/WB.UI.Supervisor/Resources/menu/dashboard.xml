@@ -12,7 +12,12 @@
     <item
         android:id="@+id/menu_search"
         local:showAsAction="ifRoom"/>
-
+    <item 
+        android:id="@+id/menu_workspaces"
+        local:showAsAction="never">
+        <menu>
+        </menu>
+    </item>
     <item
         android:id="@+id/menu_maps"
         local:showAsAction="never" />
