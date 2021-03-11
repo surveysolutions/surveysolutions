@@ -15,8 +15,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
         public InterviewerUpdateAppSettings(int sortOrder, 
             ISynchronizationService synchronizationService,
             ILogger logger, 
-            IInterviewerSettings interviewerSettings,
-            ITabletDiagnosticService diagnosticService) : base(synchronizationService, 
+            IInterviewerSettings interviewerSettings) : base(synchronizationService, 
             logger, sortOrder)
         {
             this.interviewerSettings = interviewerSettings ?? throw new ArgumentNullException(nameof(interviewerSettings));
@@ -28,6 +27,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
             var tabletSettings = await this.synchronizationService.GetTabletSettings(Context.CancellationToken);
             interviewerSettings.SetPartialSynchronizationEnabled(tabletSettings.PartialSynchronizationEnabled);
+            interviewerSettings.SetQuestionnaireInWebMode(tabletSettings.QuestionnairesInWebMode);
+            interviewerSettings.SetWebInterviewUrlTemplate(tabletSettings.WebInterviewUrlTemplate);
         }
 
 

@@ -57,6 +57,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IArchiveUtils archiver;
         private readonly IInvitationService invitationService;
         private readonly ICalendarEventService calendarEventService;
+        private readonly IWebInterviewLinkProvider webInterviewLinkProvider;
 
         public AssignmentsController(IAuthorizedUser currentUser, 
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
@@ -72,7 +73,9 @@ namespace WB.UI.Headquarters.Controllers
             IPreloadedDataVerifier dataVerifier,
             ILogger<AssignmentsController> logger,
             IArchiveUtils archiver,
-            IInvitationService invitationService, ICalendarEventService calendarEventService)
+            IInvitationService invitationService, 
+            ICalendarEventService calendarEventService, 
+            IWebInterviewLinkProvider webInterviewLinkProvider)
         {
             this.currentUser = currentUser;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
@@ -90,6 +93,7 @@ namespace WB.UI.Headquarters.Controllers
             this.archiver = archiver;
             this.invitationService = invitationService;
             this.calendarEventService = calendarEventService;
+            this.webInterviewLinkProvider = webInterviewLinkProvider;
         }
         
         [ActivePage(MenuItem.Assignments)]
@@ -184,7 +188,8 @@ namespace WB.UI.Headquarters.Controllers
                         StartTimezone1 = calendarEvent.Start.Zone.Id
                     } 
                     : null,
-                LinkToWebInterviewExample = Url.Content($"~/webinterview/link/{assignment.Id}/{Guid.Empty}")
+                LinkToWebInterviewExample = this.webInterviewLinkProvider.WebInterviewRequestLink(
+                    assignment.Id.ToString(), Guid.Empty.ToString())
             });
         }
 
@@ -281,7 +286,7 @@ namespace WB.UI.Headquarters.Controllers
                 if (isTextFile)
                 {
                     var file = this.assignmentsImportReader.ReadTextFileInfo(model.File.OpenReadStream(), fileName);
-                    file.QuestionnaireOrRosterName = questionnaire.VariableName ?? questionnaire.Title; /*we expect that it is main file*/
+                    file.QuestionnaireOrRosterName = questionnaire?.VariableName ?? questionnaire?.Title; /*we expect that it is main file*/
 
                     allImportedFileInfos = new[] {file};
                 }

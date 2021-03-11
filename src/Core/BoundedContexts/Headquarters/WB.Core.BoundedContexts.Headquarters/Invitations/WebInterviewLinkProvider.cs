@@ -27,5 +27,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         {
             return pathService.GetAbsolutePath(WebInterviewContinuePath(invitation));
         }
+
+        public string WebInterviewRequestLink(string assignmentId, string guid)
+        {
+            return pathService.GetAbsolutePath($"~/webinterview/link/{assignmentId}/{guid}");
+        }
     }
 }
