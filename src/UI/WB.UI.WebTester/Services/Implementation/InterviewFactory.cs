@@ -102,7 +102,6 @@ namespace WB.UI.WebTester.Services.Implementation
             }
             catch (InterviewException ie)
             {
-                Evict(designerToken);
                 return CreationResult.DataPartialRestored;
             }
             catch
@@ -151,8 +150,6 @@ namespace WB.UI.WebTester.Services.Implementation
             }
             catch (InterviewException ie)
             {
-                Evict(designerToken);
-
                 if (existingInterviewCommands != null && existingInterviewCommands.Count > 0 && lastCommandIndex > 0)
                 {
                     int count = existingInterviewCommands.Count - lastCommandIndex;
@@ -161,6 +158,7 @@ namespace WB.UI.WebTester.Services.Implementation
                     return CreationResult.DataPartialRestored;
                 }
 
+                Evict(designerToken);
                 await this.ImportQuestionnaireAndCreateInterview(designerToken);
                 return CreationResult.EmptyCreated;
             }
