@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Views;
@@ -8,20 +10,24 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.Infrastructure.HttpServices.Services;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 {
     public class SupervisorSynchronizationProcess : AbstractSynchronizationProcess
     {
+        private readonly ISupervisorSynchronizationService synchronizationService;
         private readonly IPrincipal principal;
         private readonly IPlainStorage<SupervisorIdentity> supervisorsPlainStorage;
         private readonly IPasswordHasher passwordHasher;
+        private readonly IWorkspaceService workspaceService;
 
         public SupervisorSynchronizationProcess(
             ISupervisorSynchronizationService synchronizationService,
@@ -36,16 +42,39 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             ISupervisorSettings supervisorSettings,
             IDeviceInformationService deviceInformationService,
             IAuditLogService auditLogService,
-            IServiceLocator serviceLocator) : base(synchronizationService, logger, httpStatistician, principal,
+            IServiceLocator serviceLocator,
+            IWorkspaceService workspaceService) : base(synchronizationService, logger, httpStatistician, principal,
             interviewViewRepository, auditLogService, supervisorSettings, serviceLocator, deviceInformationService, userInteractionService,
             assignmentsStorage)
         {
+            this.synchronizationService = synchronizationService;
             this.principal = principal;
             this.supervisorsPlainStorage = supervisorsPlainStorage;
             this.passwordHasher = passwordHasher;
+            this.workspaceService = workspaceService;
         }
 
-        protected override Task CheckAfterStartSynchronization(CancellationToken cancellationToken) => Task.CompletedTask;
+        protected override async Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
+        {
+            if (RestCredentials == null)
+            {
+                throw new NullReferenceException("Rest credentials not set");
+            }
+            
+            SupervisorApiView supervisor = await this.synchronizationService.GetSupervisorAsync(this.RestCredentials, token: cancellationToken).ConfigureAwait(false);
+            this.UpdateWorkspaceInfo(supervisor.Workspaces);
+        }
+        
+        private void UpdateWorkspaceInfo(List<UserWorkspaceApiView> workspaces)
+        {
+            workspaceService.Save(workspaces.Select(w => new WorkspaceView()
+            {
+                Id = w.Name,
+                DisplayName = w.DisplayName,
+                SupervisorId = w.SupervisorId,
+                Disabled = w.Disabled,
+            }).ToArray());
+        }
 
         protected override void UpdatePasswordOfResponsible(RestCredentials credentials)
         {
