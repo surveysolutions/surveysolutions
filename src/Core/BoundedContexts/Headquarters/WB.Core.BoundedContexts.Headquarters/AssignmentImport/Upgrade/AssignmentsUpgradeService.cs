@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
+using Microsoft.Extensions.Caching.Memory;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -15,17 +15,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
         private readonly ISystemLog auditLog;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IUserRepository users;
+        private readonly IMemoryCache memoryCache;
+        
         private static readonly Dictionary<Guid, AssignmentUpgradeProgressDetails> progressReporting = new Dictionary<Guid, AssignmentUpgradeProgressDetails>();
         private static readonly ConcurrentQueue<QueuedUpgrade> upgradeQueue = new ConcurrentQueue<QueuedUpgrade>();
-        private readonly Dictionary<Guid, CancellationTokenSource> cancellationTokens = new Dictionary<Guid, CancellationTokenSource>();
 
         public AssignmentsUpgradeService(ISystemLog auditLog, 
             IQuestionnaireStorage questionnaireStorage,
-            IUserRepository users)
+            IUserRepository users,
+            IMemoryCache memoryCache)
         {
             this.auditLog = auditLog;
             this.questionnaireStorage = questionnaireStorage;
             this.users = users;
+            this.memoryCache = memoryCache;
         }
 
         public void EnqueueUpgrade(Guid processId,
@@ -39,7 +42,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             this.auditLog.AssignmentsUpgradeStarted(questionnaire.Title, migrateFrom.Version, migrateTo.Version, userId, user.UserName);
 
             upgradeQueue.Enqueue(new QueuedUpgrade(processId, userId, migrateFrom, migrateTo));
-            progressReporting[processId] = new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, 0, 0, new List<AssignmentUpgradeError>(), AssignmentUpgradeStatus.Queued);
+            progressReporting[processId] = new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo,
+                0, 0, 
+                new List<AssignmentUpgradeError>(), AssignmentUpgradeStatus.Queued);
         }
 
         public void ReportProgress(Guid processId, AssignmentUpgradeProgressDetails progressDetails)
@@ -64,6 +69,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
         {
             if (progressReporting.ContainsKey(processId))
             {
+                //extend life of cancellation token
+                memoryCache.TryGetValue(GetCacheKey(processId), out CancellationTokenSource source);
                 return progressReporting[processId];
             }
 
@@ -72,16 +79,23 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 
         public CancellationToken GetCancellationToken(Guid processId)
         {
-            var cancellationTokenSource = this.cancellationTokens.GetOrAdd(processId, () => new CancellationTokenSource());
-            return cancellationTokenSource.Token;
+            var source = memoryCache.Set(GetCacheKey(processId),  
+                new CancellationTokenSource(),
+                new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(60)));
+
+            return source.Token;
         }
 
         public void StopProcess(Guid processId)
         {
-            if (this.cancellationTokens.ContainsKey(processId))
+            if (memoryCache.TryGetValue(GetCacheKey(processId), out CancellationTokenSource source))
             {
-                this.cancellationTokens[processId].Cancel();
+                source.Cancel();
             }
         }
+        
+        private string GetCacheKey(Guid id)=> "AssignmentsUpgradeService-" + id;
+
     }
 }

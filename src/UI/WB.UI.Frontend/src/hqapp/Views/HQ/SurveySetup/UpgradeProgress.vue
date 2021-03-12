@@ -78,7 +78,7 @@ export default {
             progress: {
                 progressDetails: {
                     status: 'Queued',
-                    assignmentsMigratedWithError: [],
+                    assignmentsMigratedWithErrorCount: 0,
                 },
             },
         }
@@ -97,12 +97,12 @@ export default {
             return `${this.$config.model.exportErrorsUrl}/${this.processId}`
         },
         errorsCount() {
-            return this.progress.progressDetails.assignmentsMigratedWithError.length
+            return this.progress.progressDetails.assignmentsMigratedWithErrorCount
         },
         totalProcessedCount() {
             return (
                 this.progress.progressDetails.assignmentsMigratedSuccessfully +
-                this.progress.progressDetails.assignmentsMigratedWithError.length
+                this.progress.progressDetails.assignmentsMigratedWithErrorCount
             )
         },
         overallProgressPercent() {

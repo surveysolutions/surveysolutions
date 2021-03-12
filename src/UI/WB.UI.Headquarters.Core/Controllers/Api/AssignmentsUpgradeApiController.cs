@@ -84,7 +84,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             csvWriter.WriteHeader<AssignmentUpgradeError>();
             csvWriter.NextRecord();
-            csvWriter.WriteRecords((IEnumerable) assignmentUpgradeProgressDetails.AssignmentsMigratedWithError);
+            csvWriter.WriteRecords((IEnumerable) assignmentUpgradeProgressDetails.GetAssignmentUpgradeErrors());
             csvWriter.Flush();
             streamWriter.Flush();
 
