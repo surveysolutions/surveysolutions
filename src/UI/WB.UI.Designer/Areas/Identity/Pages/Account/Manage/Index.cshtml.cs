@@ -3,12 +3,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Models;
+using WB.UI.Designer.Models.Mails;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
 {
@@ -16,13 +21,19 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly SignInManager<DesignerIdentityUser> _signInManager;
+        private readonly IViewRenderService viewRenderService;
+        private readonly IEmailSender emailSender;
 
         public IndexModel(
             UserManager<DesignerIdentityUser> userManager,
-            SignInManager<DesignerIdentityUser> signInManager)
+            SignInManager<DesignerIdentityUser> signInManager,
+            IViewRenderService viewRenderService,
+            IEmailSender emailSender)
         {
             this.userManager = userManager;
             _signInManager = signInManager;
+            this.viewRenderService = viewRenderService;
+            this.emailSender = emailSender;
         }
 
         [TempData]
@@ -30,6 +41,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
 
         [TempData]
         public string? ErrorMessage { get; set; }
+
+        public string? PendingEmail { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; } = new InputModel();
@@ -60,6 +73,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
                 Email = email,
                 FullName = fullName
             };
+            PendingEmail = user.PendingEmail;
 
             return Page();
         }
@@ -80,12 +94,27 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
             var email = await userManager.GetEmailAsync(user);
             if (Input.Email != email)
             {
-                var setEmailResult = await userManager.SetEmailAsync(user, Input.Email);
-                if (!setEmailResult.Succeeded)
-                {
-                    this.ErrorMessage = setEmailResult.Errors.First().Description;
-                    return RedirectToPage();
-                }
+                user.PendingEmail = Input.Email;
+
+                var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                var confirmationLink = Url.Page(
+                    "/Account/ConfirmEmailChange",
+                    pageHandler: null,
+                    values: new { userId = user.Id, code = code },
+                    protocol: Request.Scheme);
+
+                var model = new EmailChangeConfirmationModel(user.UserName, confirmationLink);
+                var messageBody = await viewRenderService.RenderToStringAsync("Emails/EmailChange", model);
+
+                await emailSender.SendEmailAsync(Input.Email,
+                    NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process,
+                    messageBody);
+
+                StatusMessage = string.Format(AccountResources.EmailChangeShouldBeConfirmed, Input.Email);
+
+                await this.userManager.UpdateAsync(user);
+                return RedirectToPage();
             }
 
             var claims = await userManager.GetClaimsAsync(user);
