@@ -566,26 +566,30 @@ namespace WB.Enumerator.Native.WebInterview.Services
             return this.enumeratorGroupStateCalculationStrategy.CalculateDetailedStatus(@group.Identity, interview, questionnaire);
         }
 
-        public GroupStatus GetInterviewSimpleStatus(IStatefulInterview interview, bool isReviewMode)
+        public InterviewSimpleStatus GetInterviewStatus(IStatefulInterview interview, bool isReviewMode)
         {
-            if (InvalidEntities() > 0)
-                return GroupStatus.StartedInvalid;
-
-            return ActiveQuestions() == AnsweredQuestions()
-                ? GroupStatus.Completed
-                : GroupStatus.NotStarted;
-
-            int InvalidEntities() => isReviewMode
+            int invalidEntities = isReviewMode
                 ? interview.CountInvalidEntitiesInInterviewForSupervisor()
                 : interview.CountInvalidEntitiesInInterview();
 
-            int ActiveQuestions() => isReviewMode
+            int activeQuestions = isReviewMode
                 ? interview.CountActiveQuestionsInInterviewForSupervisor()
                 : interview.CountActiveQuestionsInInterview();
 
-            int AnsweredQuestions() => isReviewMode
+            int answeredQuestions = isReviewMode
                 ? interview.CountActiveAnsweredQuestionsInInterviewForSupervisor()
                 : interview.CountActiveAnsweredQuestionsInInterview();
+            
+            return new InterviewSimpleStatus()
+            {
+                SimpleStatus =(invalidEntities > 0) 
+                    ? GroupStatus.StartedInvalid 
+                    : (activeQuestions == answeredQuestions
+                        ? GroupStatus.Completed
+                        : GroupStatus.NotStarted),
+                ActiveQuestionCount = activeQuestions,
+                AnsweredQuestionsCount = answeredQuestions
+            };
         }
 
         public Identity GetUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)

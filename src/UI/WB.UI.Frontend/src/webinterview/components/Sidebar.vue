@@ -2,6 +2,7 @@
     <aside class="content"
         v-if="sections"
         style="transform: translateZ(0);">
+        <div><h5>Completion: {{interviewState.answeredQuestionsCount}}/{{interviewState.activeQuestionCount}}<h5></div>
         <wb-humburger id="sidebarHamburger"
             :show-foldback-button-as-hamburger="showFoldbackButtonAsHamburger" />
         <div class="panel-group structured-content">
@@ -69,9 +70,9 @@ export default {
                 to: {
                     name: 'complete',
                 },
-                status: this.interviewState,
+                status: this.interviewState.simpleStatus,
                 validity: {
-                    isValid: !(this.interviewState == GroupStatus.StartedInvalid || this.interviewState == GroupStatus.CompletedInvalid),
+                    isValid: !(this.interviewState.simpleStatus == GroupStatus.StartedInvalid || this.interviewState.simpleStatus == GroupStatus.CompletedInvalid),
                 },
             }
         },

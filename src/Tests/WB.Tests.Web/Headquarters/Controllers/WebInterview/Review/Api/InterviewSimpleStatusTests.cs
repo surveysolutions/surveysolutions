@@ -3,6 +3,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
 
@@ -29,14 +30,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
                 }));
         }
 
-        protected GroupStatus GetInterviewSimpleStatus() => Subject.GetInterviewSimpleStatus(this.CurrentInterview, this.IsReviewMode);
+        protected InterviewSimpleStatus GetInterviewStatus() => Subject.GetInterviewStatus(this.CurrentInterview, this.IsReviewMode);
 
         [Test]
         public void when_all_questions_answered_should_return_completed_state()
         {
             AnswerTextQuestions(SecA_InterviewerQuestion, SecA_Roster_InterviewerQuestion);
 
-            Assert.That(GetInterviewSimpleStatus(), Is.EqualTo(GroupStatus.Completed));
+            Assert.That(GetInterviewStatus().SimpleStatus, Is.EqualTo(GroupStatus.Completed));
         }
 
         [Test]
@@ -45,7 +46,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             AnswerTextQuestions(SecA_InterviewerQuestion, SecA_Roster_InterviewerQuestion);
             MarkQuestionAsInvalid(SecA_Roster_InterviewerQuestion);
 
-            Assert.That(GetInterviewSimpleStatus(), Is.EqualTo(GroupStatus.StartedInvalid));
+            Assert.That(GetInterviewStatus().SimpleStatus, Is.EqualTo(GroupStatus.StartedInvalid));
         }
 
         [Test]
@@ -53,13 +54,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         {
             AnswerTextQuestions(SecA_InterviewerQuestion);
 
-            Assert.That(GetInterviewSimpleStatus(), Is.EqualTo(GroupStatus.NotStarted));
+            Assert.That(GetInterviewStatus().SimpleStatus, Is.EqualTo(GroupStatus.NotStarted));
         }
 
         [Test]
         public void when_interviews_ha_has_no_answers_should_return_not_started_status()
         {
-            Assert.That(GetInterviewSimpleStatus(), Is.EqualTo(GroupStatus.NotStarted));
+            Assert.That(GetInterviewStatus().SimpleStatus, Is.EqualTo(GroupStatus.NotStarted));
         }
     }
 }
