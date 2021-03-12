@@ -535,7 +535,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
                 WorkspaceListUpdated?.Invoke(this, EventArgs.Empty);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspacesError;
             }
