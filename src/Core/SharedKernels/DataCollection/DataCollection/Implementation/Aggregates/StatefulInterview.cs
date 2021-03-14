@@ -217,6 +217,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Command handlers
 
+        public void RequestWebInterview(Guid userId, DateTimeOffset originDate, string comment)
+
+            this.ApplyEvent(new WebInterviewRequested(userId, originDate, comment));
+
 
         public void Complete(Guid userId, string comment, DateTimeOffset originDate)
         {

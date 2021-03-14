@@ -65,6 +65,7 @@
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
     <Compile Include="CustomBindings\ButtonGroupStyleBinding.cs" />
     <Compile Include="CustomBindings\EditTextMaxLengthBinding.cs" />
+    <Compile Include="CustomBindings\ImageViewQRCodeBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewDisableDefaultSearchBinding.cs" />
     <Compile Include="CustomBindings\MaterialButtonToQuestionStateBinding.cs" />
     <Compile Include="CustomBindings\TextInputLayoutHintBinding.cs" />

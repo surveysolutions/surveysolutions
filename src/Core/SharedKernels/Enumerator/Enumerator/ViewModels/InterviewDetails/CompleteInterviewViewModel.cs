@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public CompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService,
             ICommandService commandService,
-            IPrincipal principal, 
+            IPrincipal principal,
             IMvxMessenger messenger,
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
             ILastCompletionComments lastCompletionComments,
@@ -93,6 +93,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public string EntitiesWithErrorsDescription { get; private set; }
 
+        public bool CanSwitchToWebMode
+        {
+            get => canSwitchToWebMode;
+            set => this.RaiseAndSetIfChanged(ref this.canSwitchToWebMode, value);
+        }
+
+        public bool RequestWebInterview
+        {
+            get => requestWebInterview;
+            set => this.RaiseAndSetIfChanged(ref this.requestWebInterview, value);
+        }
+
+        public string WebInterviewUrl { get; set; }
+
         public IList<EntityWithErrorsViewModel> EntitiesWithErrors { get; private set; }
 
         private IMvxAsyncCommand completeInterviewCommand;
@@ -100,8 +114,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get
             {
-                return this.completeInterviewCommand ?? 
-                    (this.completeInterviewCommand = new MvxAsyncCommand(async () => await this.CompleteInterviewAsync(), () => !WasThisInterviewCompleted));
+                return this.completeInterviewCommand ??= new MvxAsyncCommand(async () =>
+                    await this.CompleteInterviewAsync(), () => !WasThisInterviewCompleted);
             }
         }
 
@@ -125,6 +139,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         private string comment;
+        private bool requestWebInterview;
+        private bool canSwitchToWebMode;
 
         private async Task CompleteInterviewAsync()
         {
@@ -134,7 +150,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.WasThisInterviewCompleted = true;
             await this.commandService.WaitPendingCommandsAsync();
 
-            var completeInterview = new CompleteInterviewCommand(
+            ICommand completeInterview = this.RequestWebInterview
+            ? new RequestWebInterviewCommand(
+                interviewId: this.interviewId,
+                userId: this.principal.CurrentUserIdentity.UserId,
+                comment: this.Comment)
+            : new CompleteInterviewCommand(
                 interviewId: this.interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
                 comment: this.Comment);

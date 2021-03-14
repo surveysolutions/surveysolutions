@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -22,6 +23,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
     {
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
+        private readonly IWebInterviewConfigProvider interviewConfigProvider;
         private readonly IWebInterviewLinkProvider webInterviewLinkProvider;
         
         public SettingsV2Controller(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
@@ -29,12 +31,14 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             IPlainStorageAccessor<ServerSettings> tenantSettings,
             ISecureStorage secureStorage, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
-            IWebInterviewLinkProvider webInterviewLinkProvider) 
+            IWebInterviewLinkProvider webInterviewLinkProvider, 
+            IWebInterviewConfigProvider interviewConfigProvider) 
             : base(appSettingsStorage, tenantSettings, secureStorage)
         {
             this.interviewerSettingsStorage = interviewerSettingsStorage;
             this.questionnaires = questionnaires;
             this.webInterviewLinkProvider = webInterviewLinkProvider;
+            this.interviewConfigProvider = interviewConfigProvider;
         }
 
         [HttpGet]
@@ -69,10 +73,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
                 .IsPartialSynchronizationEnabled(),
 
             QuestionnairesInWebMode = questionnaires
-                .Query(_ => _.Where(q => q.WebModeEnabled && !q.Disabled)
-                    .Select(w => QuestionnaireIdentity.Parse(w.Id))
+                .Query(_ => _.Where(q => !q.Disabled)
+                    .Select(w => w.Id)
                     .ToList()
-                ),
+                ).Where(q => this.interviewConfigProvider.Get(QuestionnaireIdentity.Parse(q)).Started)
+                .ToList(),
 
             WebInterviewUrlTemplate = this.webInterviewLinkProvider.WebInterviewRequestLink(
                 "{assignment}", "{interviewId}")

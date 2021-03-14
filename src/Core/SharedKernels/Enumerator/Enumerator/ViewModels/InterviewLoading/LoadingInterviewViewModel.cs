@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                 return;
             }
 
-            if (interview.Status == InterviewStatus.Completed && this.ShouldReopen)
+            if ((interview.Status == InterviewStatus.Completed || interview.Status == InterviewStatus.WebInterview)&& this.ShouldReopen)
             {
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
                 var restartInterviewCommand = new RestartInterviewCommand(interviewId,
