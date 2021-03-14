@@ -731,7 +731,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.Redirect(returnUrl);
         }
 
-        [Route("Link/{assignmentId:int}/{id:Guid}")]
+        [Route("Link/{assignmentId:int}/{interviewId:Guid}")]
         public ActionResult Link(int assignmentId, Guid interviewId)
         {
             var assignment = this.assignments.GetAssignment(assignmentId);

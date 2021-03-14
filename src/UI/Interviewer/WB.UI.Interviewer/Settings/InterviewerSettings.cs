@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Android.App;
@@ -64,26 +65,26 @@ namespace WB.UI.Interviewer.Settings
         {
             Id = "settings",
             Endpoint = string.Empty,
-            HttpResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout),
-            EventChunkSize = Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize),
-            CommunicationBufferSize = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize),
-            GpsResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.GpsReceiveTimeoutSec),
-            GpsDesiredAccuracy = Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy),
-            VibrateOnError = Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError),
-            AllowSyncWithHq = Application.Context.Resources.GetBoolean(Resource.Boolean.AllowSyncWithHq)
+            HttpResponseTimeoutInSec = Application.Context.Resources?.GetInteger(Resource.Integer.HttpResponseTimeout) ?? 1200,
+            EventChunkSize = Application.Context.Resources? .GetInteger(Resource.Integer.EventChunkSize) ?? 1000,
+            CommunicationBufferSize = Application.Context.Resources?.GetInteger(Resource.Integer.BufferSize) ?? 4096,
+            GpsResponseTimeoutInSec = Application.Context.Resources?.GetInteger(Resource.Integer.GpsReceiveTimeoutSec) ?? 30,
+            GpsDesiredAccuracy = Application.Context.Resources?.GetInteger(Resource.Integer.GpsDesiredAccuracy) ?? 50,
+            VibrateOnError = Application.Context.Resources?.GetBoolean(Resource.Boolean.VibrateOnError) ?? true,
+            AllowSyncWithHq = Application.Context.Resources?.GetBoolean(Resource.Boolean.AllowSyncWithHq) ?? true
         };
 
         protected override EnumeratorSettingsView CurrentSettings => this.currentSettings;
 
-        public override bool VibrateOnError => this.currentSettings.VibrateOnError ?? Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError);
+        public override bool VibrateOnError => this.currentSettings.VibrateOnError ?? Application.Context.Resources?.GetBoolean(Resource.Boolean.VibrateOnError) ?? true;
 
-        public override double GpsDesiredAccuracy => this.currentSettings.GpsDesiredAccuracy.GetValueOrDefault(Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy));
+        public override double GpsDesiredAccuracy => this.currentSettings.GpsDesiredAccuracy.GetValueOrDefault(Application.Context.Resources?.GetInteger(Resource.Integer.GpsDesiredAccuracy) ?? 50);
 
         public override bool ShowLocationOnMap => this.currentSettings.ShowLocationOnMap.GetValueOrDefault(true);
 
         public override int GpsReceiveTimeoutSec => this.currentSettings.GpsResponseTimeoutInSec;
 
-        public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize));
+        public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources?.GetInteger(Resource.Integer.EventChunkSize) ?? 1000);
 
         public bool AllowSyncWithHq => this.currentSettings.AllowSyncWithHq.GetValueOrDefault(true);
         public bool IsOfflineSynchronizationDone => this.currentSettings.IsOfflineSynchronizationDone.GetValueOrDefault(false);
@@ -96,9 +97,14 @@ namespace WB.UI.Interviewer.Settings
             });
         }
 
-        public void SetQuestionnaireInWebMode(List<QuestionnaireIdentity> questionnairesInWebMode)
+        public List<QuestionnaireIdentity> QuestionnairesInWebMode => (this.currentSettings.QuestionnairesInWebMode ?? string.Empty).Split(',')
+            .Select(QuestionnaireIdentity.Parse).ToList();
+
+        public string? WebInterviewUriTemplate => this.currentSettings.WebInterviewUriTemplate;
+
+        public void SetQuestionnaireInWebMode(List<string> questionnairesInWebMode)
         {
-            this.SaveCurrentSettings(settings => settings.QuestionnairesInWebMode = questionnairesInWebMode);
+            this.SaveCurrentSettings(settings => settings.QuestionnairesInWebMode = string.Join(",", questionnairesInWebMode));
         }
 
         public void SetWebInterviewUrlTemplate(string webInterviewUriTemplate)

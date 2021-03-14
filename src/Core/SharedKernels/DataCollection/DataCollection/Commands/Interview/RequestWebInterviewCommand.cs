@@ -5,9 +5,11 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
     public class RequestWebInterviewCommand : InterviewCommand
     {
-        public RequestWebInterviewCommand(Guid interviewId, Guid userId) : base(interviewId, userId)
+        public string Comment { get; }
+
+        public RequestWebInterviewCommand(Guid interviewId, Guid userId, string comment) : base(interviewId, userId)
         {
-            
+            Comment = comment;
         }
     }
 }

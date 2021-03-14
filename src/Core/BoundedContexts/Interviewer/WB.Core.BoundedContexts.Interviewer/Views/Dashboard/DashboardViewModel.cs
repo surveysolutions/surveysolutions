@@ -266,7 +266,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             if (interviewView.Status == InterviewStatus.RejectedBySupervisor)
                 this.TypeOfInterviews = this.RejectedInterviews.InterviewStatus;
 
-            if (interviewView.Status == InterviewStatus.Completed)
+            if (interviewView.Status == InterviewStatus.Completed || interviewView.Status == InterviewStatus.WebInterview)
                 this.TypeOfInterviews = this.CompletedInterviews.InterviewStatus;
 
             if (interviewView.Status == InterviewStatus.InterviewerAssigned ||

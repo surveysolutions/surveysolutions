@@ -231,7 +231,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
         }
 
-        private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus, DateTime? startedDateTime)
+        private DashboardInterviewStatus 
+            
+            GetDashboardCategoryForInterview(InterviewStatus interviewStatus, DateTime? startedDateTime)
         {
             switch (interviewStatus)
             {
@@ -244,6 +246,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 case InterviewStatus.Restarted:
                     return DashboardInterviewStatus.InProgress;
                 case InterviewStatus.Completed:
+                case InterviewStatus.WebInterview:
                     return DashboardInterviewStatus.Completed;
                 case InterviewStatus.InterviewerAssigned:
                     return startedDateTime.HasValue

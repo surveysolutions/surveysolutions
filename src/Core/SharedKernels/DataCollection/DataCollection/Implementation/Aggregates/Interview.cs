@@ -561,6 +561,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.CompletedDate = @event.OriginDate ?? @event.CompleteTime;
         }
 
+        protected virtual void Apply(WebInterviewRequested @event) { }
+
         protected virtual void Apply(InterviewRestarted @event) { }
 
         protected virtual void Apply(InterviewApproved @event) { }
@@ -1526,7 +1528,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
-            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed);
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.WebInterview);
 
             this.ApplyEvent(new InterviewRestarted(userId, originDate, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted, comment, previousStatus: this.properties.Status, originDate: originDate));

@@ -1,6 +1,7 @@
 using System;
 using MvvmCross.Plugin.Messenger;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -19,6 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAuditLogService auditLogService;
+        private readonly IInterviewerSettings interviewerSettings;
 
         public InterviewerCompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService, 
@@ -31,12 +33,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             DynamicTextViewModel dynamicTextViewModel,
             ILastCompletionComments lastCompletionComments,
             IAuditLogService auditLogService,
+            IInterviewerSettings interviewerSettings,
             ILogger logger)
             : base(viewModelNavigationService, commandService, principal, messenger, 
                 entitiesListViewModelFactory, lastCompletionComments,interviewState, dynamicTextViewModel, logger)
         {
             this.interviewRepository = interviewRepository;
             this.auditLogService = auditLogService;
+            this.interviewerSettings = interviewerSettings;
         }
 
         public override void Configure(string interviewId, NavigationState navigationState)
@@ -49,13 +53,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.CompleteScreenTitle = string.IsNullOrEmpty(interviewKey)
                 ? UIResources.Interview_Complete_Screen_Description
                 : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
-            
+
+            if (interviewerSettings.QuestionnairesInWebMode.Contains(interview.QuestionnaireIdentity))
+            {
+                if (interviewerSettings.WebInterviewUriTemplate != null)
+                {
+                    this.CanSwitchToWebMode = true;
+
+                    this.WebInterviewUrl = interviewerSettings.WebInterviewUriTemplate
+                        .Replace("{assignment}", (interview.GetAssignmentId() ?? 0).ToString())
+                        .Replace("{interviewId}", interview.Id.ToString());
+                }
+            }
+
             if (string.IsNullOrEmpty(this.Comment))
             {
                 this.Comment = interview.InterviewerCompleteComment;
             }
         }
-
+        
         protected override Task CloseInterviewAfterComplete()
         {
             var statefulInterview = this.interviewRepository.GetOrThrow(this.interviewId.FormatGuid());

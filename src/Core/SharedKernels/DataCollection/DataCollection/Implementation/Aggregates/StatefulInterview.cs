@@ -215,7 +215,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Command handlers
         
-        public void RequestWebInterview(Guid userId, DateTimeOffset originDate)
+        public void RequestWebInterview(Guid userId, DateTimeOffset originDate, string comment)
         {
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
@@ -226,6 +226,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewStatus.Restarted, 
                 InterviewStatus.RejectedBySupervisor);
             
+
+            this.ApplyEvent(new WebInterviewRequested(userId, originDate, comment));
+
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.WebInterview,
                 comment: null, previousStatus: this.properties.Status, originDate: originDate));
 

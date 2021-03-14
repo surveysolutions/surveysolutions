@@ -765,4 +765,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="NoComment" xml:space="preserve">
     <value>No comment specified</value>
   </data>
+  <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
+    <value>Switch interview to Web Mode?</value>
+  </data>
+   <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
+    <value>There is a text with instruction on what to do with QR Code. And what will happen to interivew after sync</value>
+  </data>
 </root>

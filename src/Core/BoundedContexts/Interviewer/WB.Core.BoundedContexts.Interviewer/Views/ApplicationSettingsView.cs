@@ -12,7 +12,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public bool? ShowLocationOnMap { get; set; }
         public bool? AllowSyncWithHq { get; set; }
         public bool? IsOfflineSynchronizationDone { get; set; }
-        public List<QuestionnaireIdentity>? QuestionnairesInWebMode { get; set; }
+
+        public string? QuestionnairesInWebMode { get; set; }
         public string? WebInterviewUriTemplate { get; set; }
     }
 }
