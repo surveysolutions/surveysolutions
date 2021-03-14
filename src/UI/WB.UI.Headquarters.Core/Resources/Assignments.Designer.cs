@@ -664,7 +664,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Link to Web Interview example.
+        ///   Looks up a localized string similar to Swich to Web Interview link sample.
         /// </summary>
         public static string LinkToWebInterviewExample {
             get {

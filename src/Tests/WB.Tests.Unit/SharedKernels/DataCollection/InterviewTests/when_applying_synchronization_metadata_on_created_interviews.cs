@@ -62,7 +62,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         [NUnit.Framework.Test] public void should_interview_in_status_Restored_be_allowed_to_change_on_Completed_RejectedBySupervisor_InterviewerAssigned_recheck_this_one () =>
             interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Restored].Should().BeEquivalentTo(new[]
             {
-                InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor
+                InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor,
+                InterviewStatus.WebInterview
             });
 
         [NUnit.Framework.Test] public void should_interview_in_status_SupervisorAssigned_be_allowed_to_change_on_ApprovedBySupervisor_InterviewerAssigned_recheck_this_one () =>
@@ -74,7 +75,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         [NUnit.Framework.Test] public void should_interview_in_status_InterviewerAssigned_be_allowed_to_change_on_Completed_RejectedBySupervisor_InterviewerAssigned_ApprovedBySupervisor_recheck_this_one () =>
             interviewStatusesWhichWasChangedWithoutException[InterviewStatus.InterviewerAssigned].Should().BeEquivalentTo(new[]
             {
-                InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.ApprovedBySupervisor, InterviewStatus.Restarted
+                InterviewStatus.InterviewerAssigned, 
+                InterviewStatus.Completed, 
+                InterviewStatus.WebInterview,
+                InterviewStatus.RejectedBySupervisor, 
+                InterviewStatus.ApprovedBySupervisor, 
+                InterviewStatus.Restarted
             });
 
         [NUnit.Framework.Test] public void should_interview_in_status_Completed_be_allowed_to_change_on_InterviewerAssigned_RejectedBySupervisor_recheck_this_one () =>
@@ -86,13 +92,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         [NUnit.Framework.Test] public void should_interview_in_status_Restarted_be_allowed_to_change_on_Completed_RejectedBySupervisor_InterviewerAssigned_recheck_this_one () =>
              interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Restarted].Should().BeEquivalentTo(new[]
              {
-                InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor
+                InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor,
+                InterviewStatus.WebInterview
              });
 
         [NUnit.Framework.Test] public void should_interview_in_status_RejectedBySupervisor_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one () =>
             interviewStatusesWhichWasChangedWithoutException[InterviewStatus.RejectedBySupervisor].Should().BeEquivalentTo(new[]
             {
-                InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.ApprovedBySupervisor, InterviewStatus.Restarted, 
+                InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.ApprovedBySupervisor, InterviewStatus.Restarted, InterviewStatus.WebInterview
             });
 
         [NUnit.Framework.Test] public void should_interview_in_status_ApprovedBySupervisor_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one () =>

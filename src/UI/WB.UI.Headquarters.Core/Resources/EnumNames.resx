@@ -196,7 +196,7 @@
     <value>Resume</value>
   </data>
   <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
-    <value>Invitation</value>
+      <value>QR Code link</value>
   </data>
   <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
     <value>Welcome Header</value>

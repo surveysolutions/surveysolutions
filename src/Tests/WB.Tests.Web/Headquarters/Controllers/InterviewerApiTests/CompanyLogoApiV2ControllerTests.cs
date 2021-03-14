@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -73,12 +74,15 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
         SettingsV2Controller GetController(IPlainKeyValueStorage<CompanyLogo> logoStorage = null,
             string requestEtag = null, IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage = null)
         {
-            var companyLogoApiV2Controller = new SettingsV2Controller(logoStorage ?? new InMemoryKeyValueStorage<CompanyLogo>(),
+            var companyLogoApiV2Controller = new SettingsV2Controller(
+                logoStorage ?? new InMemoryKeyValueStorage<CompanyLogo>(),
                 interviewerSettingsStorage ?? new InMemoryKeyValueStorage<InterviewerSettings>(),
-                new TestPlainStorage<ServerSettings>(), 
+                new TestPlainStorage<ServerSettings>(),
                 Mock.Of<ISecureStorage>(),
-                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(), 
-                Mock.Of<IWebInterviewLinkProvider>());
+                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
+                Mock.Of<IWebInterviewLinkProvider>(),
+                Mock.Of<IWebInterviewConfigProvider>()
+            );
 
             var defaultHttpContext = new DefaultHttpContext();
             companyLogoApiV2Controller.ControllerContext  = new ControllerContext

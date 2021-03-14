@@ -370,7 +370,4 @@
     <value>Неправильный пароль</value>
     <comment>Неправильный пароль</comment>
   </data>
-  <data name="LinkToWebInterviewExample" xml:space="preserve">
-    <value>Пример ссылки на веб интервью</value>
-  </data>
 </root>

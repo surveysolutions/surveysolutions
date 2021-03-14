@@ -9,7 +9,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
         {
             Execute.Sql(@"DROP EXTENSION IF EXISTS ""uuid-ossp"";create extension if not exists ""uuid-ossp"" schema public;");
             Execute.Sql(@"
-INSERT INTO ws_automation.events
+INSERT INTO events
 (id, origin, ""timestamp"", eventsourceid, value, eventtype, eventsequence)
 select
     public.uuid_generate_v4() as id,

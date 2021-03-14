@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invitation.
+        ///   Looks up a localized string similar to QR Code link.
         /// </summary>
         public static string WebInterviewUserMessages_LinkInvitation {
             get {
