@@ -376,9 +376,6 @@
     <PackageReference Include="ZXing.Net.Mobile">
       <Version>3.0.0-beta5</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.AndroidX.Migration">
-      <Version>1.0.8</Version>
-    </PackageReference>
     <PackageReference Include="MvvmCross.DroidX.RecyclerView">
       <Version>7.1.2</Version>
     </PackageReference>
