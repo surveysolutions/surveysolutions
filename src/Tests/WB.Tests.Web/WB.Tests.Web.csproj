@@ -8,13 +8,13 @@
     </PropertyGroup>
     <ItemGroup>
         <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
-        <PackageReference Include="ApprovalTests" Version="5.4.5" />
+        <PackageReference Include="ApprovalTests" Version="5.4.6" />
         <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
 
         <PackageReference Include="Autofac" Version="4.9.4" />
         <PackageReference Include="FluentAssertions" Version="5.10.3" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-        <PackageReference Include="NUnit" Version="3.12.0" />
+        <PackageReference Include="NUnit" Version="3.13.1" />
         <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.6.0" />
         <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.8" />
         <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.8.0" />
@@ -22,7 +22,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj" />

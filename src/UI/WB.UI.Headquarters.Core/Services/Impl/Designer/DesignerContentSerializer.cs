@@ -1,8 +1,9 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Refit;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 
 namespace WB.UI.Headquarters.Services.Impl
@@ -10,25 +11,9 @@ namespace WB.UI.Headquarters.Services.Impl
     /// <summary>
     /// JsonContentSerializer with ability to handle RestFile result separately
     /// </summary>
-    internal class DesignerContentSerializer : IContentSerializer
+    internal class DesignerContentSerializer : IHttpContentSerializer
     {
-        NewtonsoftJsonContentSerializer json = new NewtonsoftJsonContentSerializer();
-
-        public async Task<T> DeserializeAsync<T>(HttpContent content)
-        {
-            if (typeof(T) == typeof(RestFile))
-            {
-                object result = await AsRestFileAsync(content);
-                return (T)result;
-            }
-
-            return await json.DeserializeAsync<T>(content);
-        }
-
-        public Task<HttpContent> SerializeAsync<T>(T item)
-        {
-            return json.SerializeAsync(item);
-        }
+        NewtonsoftJsonContentSerializer json = new();
 
         public async Task<RestFile> AsRestFileAsync(HttpContent content)
         {
@@ -39,6 +24,27 @@ namespace WB.UI.Headquarters.Services.Impl
 
             return new RestFile(content: fileContent, contentType: rawContentType,
                 null, contentLength: length, fileName: fileName, HttpStatusCode.OK);
+        }
+
+        public HttpContent ToHttpContent<T>(T item)
+        {
+            return json.ToHttpContent(item);
+        }
+
+        public async Task<T> FromHttpContentAsync<T>(HttpContent content, CancellationToken cancellationToken = default)
+        {
+            if (typeof(T) == typeof(RestFile))
+            {
+                object result = await AsRestFileAsync(content);
+                return (T)result;
+            }
+
+            return await json.FromHttpContentAsync<T>(content, cancellationToken);
+        }
+
+        public string GetFieldNameForProperty(PropertyInfo propertyInfo)
+        {
+            return json.GetFieldNameForProperty(propertyInfo);
         }
     }
 }
