@@ -983,4 +983,7 @@
   <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
       <value>Ваша учётная запись не активна на данном сервере т.к. рабочее простанство в котром она определена отключено админстратором. Пожалуйста, обратитесь к супервизору.</value>
   </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Заполнение: {0}/{1}</value>
+  </data>
 </root>

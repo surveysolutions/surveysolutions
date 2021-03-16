@@ -189,6 +189,12 @@
     <item name="android:singleLine">false</item>
   </style>
 
+  <style name="Interview_Sidebar_Progress" parent="Interview_Sidebar_Title">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:gravity">center</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+  </style>
+
   <style name="Divider_ListStyle">
     <item name="android:divider">@color/list_style_divider_color</item>
     <item name="android:dividerHeight">@dimen/ListStyle_Divider_height</item>
