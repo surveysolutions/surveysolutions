@@ -122,6 +122,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
                 .Where(HasEmail())
                 .Where(NotArchived())
+                .Where(NotCompletedAssignment())
                 .Where(x => x.SentOnUtc == null)
                 .Select(x => x.Id)
                 .ToList());
@@ -156,14 +157,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             DateTime thresholdDate = DateTime.UtcNow.AddDays(-thresholdDays);
             var noResponseInvitationsWithoutReminders = invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
-                .Where(HasNoInterview())
+                .Where(NotCompletedAssignment())
                 .Where(NoReminderAndInvitationIsExpired(thresholdDate))
                 .Select(x => x.Id)
                 .ToList());
 
             var noResponseInvitationsWithReminders = invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
-                .Where(HasNoInterview())
+                .Where(NotCompletedAssignment())
                 .Where(LastReminderIsExpired(thresholdDate))
                 .Select(x => x.Id)
                 .ToList());
@@ -215,9 +216,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
                 .Where(NotArchived())
-                .Where(HasNoInterview())
-                .Where(x => (x.Assignment.Quantity ?? int.MaxValue) - x.Assignment.InterviewSummaries.Count > 0)
+                .Where(NotCompletedAssignment())
                 .ToList());
+        }
+
+        private static Expression<Func<Invitation, bool>> NotCompletedAssignment()
+        {
+            return x => (x.Assignment.Quantity ?? int.MaxValue) - x.Assignment.InterviewSummaries.Count > 0;
         }
 
         public InvitationDistributionStatus GetEmailDistributionStatus()
@@ -386,11 +391,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private static Expression<Func<Invitation, bool>> HasInterview()
         {
             return x => x.InterviewId != null;
-        }
-        
-        private static Expression<Func<Invitation, bool>> HasNoInterview()
-        {
-            return x => x.InterviewId == null;
         }
 
         private static Expression<Func<Invitation, bool>> NotArchived()
