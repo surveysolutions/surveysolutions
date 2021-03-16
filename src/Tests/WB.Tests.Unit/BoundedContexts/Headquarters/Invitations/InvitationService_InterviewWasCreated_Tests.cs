@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             promoter.Verify(p => p.MaterializePrototypeIfRequired(Id.g1), Times.Once);
         }
 
-        [Test]
+        [Test(Description = "KP-14642")]
         public void should_not_send_invitation_for_completed_assignment()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
