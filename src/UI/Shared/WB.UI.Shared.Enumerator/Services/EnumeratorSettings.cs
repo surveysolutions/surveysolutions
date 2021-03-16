@@ -43,10 +43,10 @@ namespace WB.UI.Shared.Enumerator.Services
         public string Endpoint => this.CurrentSettings.Endpoint;
         public long? LastHqSyncTimestamp => this.CurrentSettings.LastHqSyncTimestamp;
 
-        public DateTime? LastSync => this.CurrentWorkspaceSettings.LastSync;
+        public DateTime? LastSync => this.CurrentWorkspaceSettings?.LastSync;
 
-        public bool? LastSyncSucceeded => this.CurrentWorkspaceSettings.LastSyncSucceeded;
-        public string LastOpenedMapName => this.CurrentWorkspaceSettings.LastOpenedMapName;
+        public bool? LastSyncSucceeded => this.CurrentWorkspaceSettings?.LastSyncSucceeded;
+        public string LastOpenedMapName => this.CurrentWorkspaceSettings?.LastOpenedMapName;
 
         public abstract bool VibrateOnError { get; }
         public abstract bool ShowLocationOnMap { get; }
