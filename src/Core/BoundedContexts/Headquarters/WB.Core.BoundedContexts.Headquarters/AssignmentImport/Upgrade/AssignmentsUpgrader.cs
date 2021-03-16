@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -16,23 +17,30 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAssignmentsUpgradeService upgradeService;
         private readonly IInScopeExecutor inScopeExecutor;
+        private readonly ILogger<AssignmentsUpgrader> logger;
 
         public AssignmentsUpgrader(IAssignmentsService assignments,
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentsUpgradeService upgradeService,
-            IInScopeExecutor inScopeExecutor)
+            IInScopeExecutor inScopeExecutor,
+            ILogger<AssignmentsUpgrader> logger)
         {
             this.assignments = assignments ?? throw new ArgumentNullException(nameof(assignments));
             this.questionnaireStorage =
                 questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.upgradeService = upgradeService;
             this.inScopeExecutor = inScopeExecutor;
+            this.logger = logger;
         }
 
         public void Upgrade(Guid processId, Guid userId, QuestionnaireIdentity migrateFrom,
             QuestionnaireIdentity migrateTo, CancellationToken cancellation)
         {
+            logger.LogInformation($"Upgrade assignments requested. From {migrateFrom} to {migrateTo}. Process: {processId}.");
+
             var idsToMigrate = assignments.GetAllAssignmentIdsForMigrateToNewVersion(migrateFrom);
+
+            logger.LogInformation($"Assignments to upgrade: {idsToMigrate.Count}. Process: {processId}.");
 
             IQuestionnaire targetQuestionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(migrateTo, null);
             int migratedSuccessfully = 0;

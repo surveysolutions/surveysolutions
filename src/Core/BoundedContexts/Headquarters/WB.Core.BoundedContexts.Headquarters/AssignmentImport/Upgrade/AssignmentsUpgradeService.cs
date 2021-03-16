@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -19,16 +20,19 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
         
         private static readonly Dictionary<Guid, AssignmentUpgradeProgressDetails> progressReporting = new Dictionary<Guid, AssignmentUpgradeProgressDetails>();
         private static readonly ConcurrentQueue<QueuedUpgrade> upgradeQueue = new ConcurrentQueue<QueuedUpgrade>();
+        private readonly ILogger<AssignmentsUpgradeService> logger;
 
         public AssignmentsUpgradeService(ISystemLog auditLog, 
             IQuestionnaireStorage questionnaireStorage,
             IUserRepository users,
+            ILogger<AssignmentsUpgradeService> logger,
             IMemoryCache memoryCache)
         {
             this.auditLog = auditLog;
             this.questionnaireStorage = questionnaireStorage;
             this.users = users;
             this.memoryCache = memoryCache;
+            this.logger = logger;
         }
 
         public void EnqueueUpgrade(Guid processId,
@@ -45,6 +49,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             progressReporting[processId] = new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo,
                 0, 0, 
                 new List<AssignmentUpgradeError>(), AssignmentUpgradeStatus.Queued);
+
+            logger.LogInformation($"Upgrade assignments enqueued. From {migrateFrom} to {migrateTo}. Process: {processId}. Queued count: {upgradeQueue.Count}.");
         }
 
         public void ReportProgress(Guid processId, AssignmentUpgradeProgressDetails progressDetails)
@@ -61,7 +67,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                     return request;
                 }
             }
-
             return null;
         }
 
@@ -71,6 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             {
                 //extend life of cancellation token
                 memoryCache.TryGetValue(GetCacheKey(processId), out CancellationTokenSource source);
+                
                 return progressReporting[processId];
             }
 
