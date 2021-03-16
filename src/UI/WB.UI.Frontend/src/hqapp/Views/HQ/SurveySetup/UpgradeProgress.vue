@@ -24,6 +24,7 @@
             <div class="col-sm-7 col-xs-12 action-block uploading-verifying active-preloading">
                 <div class="import-progress">
                     <p>{{ $t('Assignments.UpgradeProgressNumbers', { processed: totalProcessedCount, totalCount: progress.progressDetails.totalAssignmentsToMigrate }) }}</p>
+                    <p>{{ $t('Assignments.UpgradeProgressErrors', { errorCount: errorsCount }) }}</p>
                 </div>
                 <div class="cancelable-progress">
                     <div class="progress">

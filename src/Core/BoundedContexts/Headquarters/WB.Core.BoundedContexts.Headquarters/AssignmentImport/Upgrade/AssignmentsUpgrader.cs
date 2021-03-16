@@ -37,14 +37,22 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             QuestionnaireIdentity migrateTo, CancellationToken cancellation)
         {
             logger.LogInformation($"Upgrade assignments requested. From {migrateFrom} to {migrateTo}. Process: {processId}.");
-
-            var idsToMigrate = assignments.GetAllAssignmentIdsForMigrateToNewVersion(migrateFrom);
-
-            logger.LogInformation($"Assignments to upgrade: {idsToMigrate.Count}. Process: {processId}.");
-
-            IQuestionnaire targetQuestionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(migrateTo, null);
             int migratedSuccessfully = 0;
             List<AssignmentUpgradeError> upgradeErrors = new List<AssignmentUpgradeError>();
+
+            this.upgradeService.ReportProgress(processId,
+                new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, 0,
+                    migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.InProgress));
+
+            var idsToMigrate = assignments.GetAllAssignmentIdsForMigrateToNewVersion(migrateFrom);
+            
+            logger.LogInformation($"Assignments to upgrade: {idsToMigrate.Count}. Process: {processId}.");
+
+            this.upgradeService.ReportProgress(processId,
+                new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, idsToMigrate.Count,
+                    migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.InProgress));
+
+            IQuestionnaire targetQuestionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(migrateTo, null);
 
             try
             {

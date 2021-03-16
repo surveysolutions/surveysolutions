@@ -235,6 +235,9 @@
   <data name="UpgradeProgressNumbers" xml:space="preserve">
     <value>Обновление {{processed}} из {{totalCount}}</value>
   </data>
+  <data name="UpgradeProgressErrors" xml:space="preserve">
+    <value>С ошибками {{errorCount}}</value>
+  </data>
   <data name="UpgradeProgressTitle" xml:space="preserve">
     <value>Обновление заданий из {{from}} в {{to}}</value>
   </data>
