@@ -158,6 +158,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var noResponseInvitationsWithoutReminders = invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
                 .Where(NotCompletedAssignment())
+                .Where(HasNoInterview())
                 .Where(NoReminderAndInvitationIsExpired(thresholdDate))
                 .Select(x => x.Id)
                 .ToList());
@@ -165,6 +166,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var noResponseInvitationsWithReminders = invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
                 .Where(NotCompletedAssignment())
+                .Where(HasNoInterview())
                 .Where(LastReminderIsExpired(thresholdDate))
                 .Select(x => x.Id)
                 .ToList());
@@ -216,8 +218,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
                 .Where(NotArchived())
+                .Where(HasNoInterview())
                 .Where(NotCompletedAssignment())
                 .ToList());
+        }
+
+        private static Expression<Func<Invitation, bool>> HasNoInterview()
+        {
+            return x => x.InterviewId == null;
         }
 
         private static Expression<Func<Invitation, bool>> NotCompletedAssignment()
