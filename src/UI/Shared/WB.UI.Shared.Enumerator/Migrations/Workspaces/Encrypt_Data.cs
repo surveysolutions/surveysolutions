@@ -3,7 +3,7 @@ using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
 {
-    [Migration(201904051420)]
+    /*[Migration(201904051420)]
     public class Encrypt_Data : IMigration
     {
         private readonly IApplicationCypher applicationCypher;
@@ -17,5 +17,5 @@ namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
         {
             applicationCypher.EncryptAppData();
         }
-    }
+    }*/
 }

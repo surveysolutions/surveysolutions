@@ -63,7 +63,7 @@ namespace WB.UI.Shared.Enumerator.Services
             settings.SetEncrypted(true);
         }
 
-           private void EncryptMultimedia()
+        private void EncryptMultimedia()
         {
             EncryptPictures();
             EncryptAudio();
