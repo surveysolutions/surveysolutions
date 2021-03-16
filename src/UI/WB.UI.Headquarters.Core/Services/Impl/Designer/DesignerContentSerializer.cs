@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿#nullable enable
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading;
@@ -17,9 +18,9 @@ namespace WB.UI.Headquarters.Services.Impl
 
         public async Task<RestFile> AsRestFileAsync(HttpContent content)
         {
-            var rawContentType = content?.Headers?.ContentType?.MediaType;
-            var length = content?.Headers?.ContentLength;
-            var fileName = content?.Headers?.ContentDisposition?.FileName;
+            var rawContentType = content.Headers.ContentType?.MediaType;
+            var length = content.Headers.ContentLength;
+            var fileName = content.Headers.ContentDisposition?.FileName;
             var fileContent = await content.ReadAsByteArrayAsync();
 
             return new RestFile(content: fileContent, contentType: rawContentType,
@@ -31,7 +32,7 @@ namespace WB.UI.Headquarters.Services.Impl
             return json.ToHttpContent(item);
         }
 
-        public async Task<T> FromHttpContentAsync<T>(HttpContent content, CancellationToken cancellationToken = default)
+        public async Task<T?> FromHttpContentAsync<T>(HttpContent content, CancellationToken cancellationToken = default)
         {
             if (typeof(T) == typeof(RestFile))
             {
@@ -39,10 +40,10 @@ namespace WB.UI.Headquarters.Services.Impl
                 return (T)result;
             }
 
-            return await json.FromHttpContentAsync<T>(content, cancellationToken);
+            return await json.FromHttpContentAsync<T>(content);
         }
 
-        public string GetFieldNameForProperty(PropertyInfo propertyInfo)
+        public string? GetFieldNameForProperty(PropertyInfo propertyInfo)
         {
             return json.GetFieldNameForProperty(propertyInfo);
         }
