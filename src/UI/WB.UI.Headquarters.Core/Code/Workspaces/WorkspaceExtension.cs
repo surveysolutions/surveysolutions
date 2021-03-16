@@ -1,6 +1,4 @@
 #nullable enable
-using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -29,8 +27,6 @@ namespace WB.UI.Headquarters.Code.Workspaces
             app.UseMiddleware<WorkspaceRedirectMiddleware>();
         }
 
-        private static readonly ConcurrentDictionary<(string, Type), object> httpClientsCache = new();
-        
         public static void AddWorkspaceAwareHttpClient<TApi, TConfigurator, THandler>(
             this IServiceCollection services,
             RefitSettings? refitSettings = null)
