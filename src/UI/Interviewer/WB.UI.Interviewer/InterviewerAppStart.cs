@@ -53,7 +53,7 @@ namespace WB.UI.Interviewer
 
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
-            migrationRunner.MigrateUp(this.GetType().Assembly, typeof(M201912091307_ChangeIdTypeInOptionViewTable).Assembly);
+            migrationRunner.MigrateUp(this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
             Mvx.IoCProvider.Resolve<IAudioAuditService>().CheckAndProcessAllAuditFiles();
             

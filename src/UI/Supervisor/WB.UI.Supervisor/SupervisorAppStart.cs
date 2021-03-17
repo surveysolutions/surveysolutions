@@ -44,7 +44,7 @@ namespace WB.UI.Supervisor
             var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
-            this.migrationRunner.MigrateUp(this.GetType().Assembly, typeof(M201912091307_ChangeIdTypeInOptionViewTable).Assembly);
+            this.migrationRunner.MigrateUp(this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
             this.CheckAndProcessInterviews();
             return base.ApplicationStartup(hint);

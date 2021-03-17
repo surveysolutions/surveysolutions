@@ -95,7 +95,7 @@ namespace WB.UI.Shared.Enumerator.Services
                 ? EnumeratorApplicationType.WithMaps
                 : EnumeratorApplicationType.WithoutMaps;
 
-        public bool Encrypted => this.CurrentWorkspaceSettings?.Encrypted ?? false;
+        public bool Encrypted => this.CurrentSettings?.Encrypted ?? false;
         public void SetEncrypted(bool encrypted) => this.SaveCurrentSettings(s => s.Encrypted = encrypted);
         public bool DashboardViewsUpdated => this.CurrentWorkspaceSettings?.DashboardViewsUpdated ?? false;
         public void SetDashboardViewsUpdated(bool updated) => this.SaveCurrentSettings(s => s.DashboardViewsUpdated = updated);
