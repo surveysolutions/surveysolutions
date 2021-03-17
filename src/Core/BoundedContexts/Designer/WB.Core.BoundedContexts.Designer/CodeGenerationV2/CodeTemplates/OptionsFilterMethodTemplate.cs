@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+    #line 1 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class OptionsFilterMethodTemplate : OptionsFilterMethodTemplateBase
     {
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
         {
             this.Write("\r\n");
             
-            #line 10 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+            #line 10 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
  
 	if(!InSingleFile) 
 	{
@@ -46,14 +46,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
-using WB.Core.SharedKernels.DataCollection.V3.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.V4.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.V5.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions;
 ");
             
-            #line 24 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+            #line 23 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
  
 	}
 
@@ -63,35 +62,35 @@ using WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions;
             this.Write("\r\nnamespace WB.Core.SharedKernels.DataCollection.Generated\r\n{\r\n\tinternal partial " +
                     "class ");
             
-            #line 30 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+            #line 29 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
             this.Write("\r\n\t{   \r\n\t\tprivate ");
             
-            #line 32 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+            #line 31 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ReturnType));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 32 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+            #line 31 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.MethodName));
             
             #line default
             #line hidden
             this.Write("(int optioncode)\r\n\t\t{\r\n\t\t\tvar self = ");
             
-            #line 34 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+            #line 33 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.Variable));
             
             #line default
             #line hidden
             this.Write("; \r\n\t\t\treturn ");
             
-            #line 35 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+            #line 34 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.Expression));
             
             #line default

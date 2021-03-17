@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AttachmentIdIsMissing" xml:space="preserve">
+    <value>Lipsește atașamentul nr. {0}</value>
+  </data>
+  <data name="Attachments_Unsupported_content" xml:space="preserve">
+    <value>Conținutul încărcat nu este acceptat.</value>
+  </data>
+  <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
+    <value>Fișierul încărcat nu este o imagine</value>
+  </data>
+  <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+    <value>Aceasta este secțiunea Copertă, care nu este editabilă. Nu puteți edita sau re-ordona întrebările din ea.</value>
+  </data>
+  <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+    <value>Nu puteți să vă deplasați la sub-secțiunea {0} pentru că poziția {1} nu este acceptabilă.</value>
+  </data>
+  <data name="CantPasteQuestion" xml:space="preserve">
+    <value>Întrebarea nu poate fi lipită aici.</value>
+  </data>
+  <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+    <value>Secțiunea Copertă nu poate fi ștearsă din chestionar.</value>
+  </data>
+  <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+    <value>Ultima secțiune care există nu poate fi ștearsă din chestionar (trebuie să rămână cel puțin o secțiune în chestionar).</value>
+  </data>
+  <data name="CantRemoveUserFromTheList" xml:space="preserve">
+    <value>Nu pot înlătura utilizatorul, pentru că nu există în lista de partajare</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+    <value>Variantele de răspuns din întrebările succesive nu pot avea coloana valorii inițiale necompletată.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+    <value>Variantele de răspuns din întrebările succesive trebuie să aibă coloana valorii inițiale completată cu numere.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>Există cel puțin o pereche de variabile "Titlu" și "Valoare Inițială" dublate. Lista nu trebuie să conțină nicio valoare duplicată.</value>
+  </data>
+  <data name="CategoriesCantBeExtracted" xml:space="preserve">
+    <value>Nu s-au putut extrage variantele de răspuns din fișierul încărcat</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>coloană</value>
+  </data>
+  <data name="ComboboxCannotBeFound" xml:space="preserve">
+    <value>Întrebarea de tip combo-box cu cheia publică {0} nu poate fi găsită</value>
+  </data>
+  <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+    <value>Secțiunea Copertă trebuie să fie prima secțiune din chestionar</value>
+  </data>
+  <data name="Excel_Categories_Duplicated" xml:space="preserve">
+    <value>Variante de răspuns dublate în rândurile: {0}</value>
+  </data>
+  <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+    <value>Anumite variante de răspuns nu se leagă de un identificator anterior</value>
+  </data>
+  <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+    <value>[{0}] Text lipsă</value>
+  </data>
+  <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+    <value>[{0}] Valoare lipsă</value>
+  </data>
+  <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+    <value>[{0}] Valoare numerică eronată</value>
+  </data>
+  <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+    <value>Lista variantelor de răspuns trebuie să aibă cel puțin 2 variante</value>
+  </data>
+  <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+    <value>Lista variantelor de răspuns are mai mult de {0} variante</value>
+  </data>
+  <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+    <value>[{0}] Textul introdus pe o variantă de răspuns nu trebuie să depășească 250 de caractere</value>
+  </data>
+  <data name="Excel_NoCategories" xml:space="preserve">
+    <value>Fișierul nu conține o listă de categorii</value>
+  </data>
+  <data name="FailedToAddGroup" xml:space="preserve">
+    <value>Eroare - nu a fost adăugat grupul {0} în grupul {1}. Grupul {1} nu există în documentul {2}.</value>
+  </data>
+  <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+    <value>Se încearcă importarea șablonului unui chestionar șters</value>
+  </data>
+  <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+    <value>Varianta de răspuns {0} a fost dublată cu variabila inițială {1}</value>
+  </data>
+  <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+    <value>Întrebarea inițială "{0}" are {1} variante de răspuns cu valoarea {2}</value>
+  </data>
+  <data name="ImportOptions_EmptyValue" xml:space="preserve">
+    <value>Valoare lipsă</value>
+  </data>
+  <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+    <value>Unele coloane lipsesc. Asigurați-vă că ați încărcat fișierul cu coloanele necesare</value>
+  </data>
+  <data name="ImportOptions_NotNumber" xml:space="preserve">
+    <value>Variabila {0} trebuie să fie număr întreg pe 32 biți. Valoarea variabilei trebuie să fie cuprinsă între -2147483647 și2147483647</value>
+  </data>
+  <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+    <value>Întrebarea anterioară din setul de întrebări succesive nu conține nicio variantă de răspuns cu valoarea '{0}'</value>
+  </data>
+  <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+    <value>Sunt acceptate numai fișiere cu date separate cu TAB (*.tab, *.txt, *.tsv) sau fișiere de tip Excel (*.xslx, *.xls, *.ods).</value>
+  </data>
+  <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+    <value>Titlul este prea lung. Lungimea titlului trebuie să fie mai mică de '{0}' caractere.</value>
+  </data>
+  <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+    <value>Există mai multe variante de răspuns {0} cu valoarea {1} </value>
+  </data>
+  <data name="InvalidFixedTitle" xml:space="preserve">
+    <value>Titlul listei este incorect.</value>
+  </data>
+  <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+    <value>Titlurile listelor cu un număr fix de elemente trebuie nu pot să conțină valori nule.</value>
+  </data>
+  <data name="ItemWithIdExistsAlready" xml:space="preserve">
+    <value>Există unul sau mai multe elemente din chestionar care au același identificator {0}</value>
+  </data>
+  <data name="LookupTableAlreadyExist" xml:space="preserve">
+    <value>Există deja un tabel de căutare cu acest identificator.</value>
+  </data>
+  <data name="LookupTableHasEmptyContent" xml:space="preserve">
+    <value>Tabelul de căutare cu identificatorul {0} nu are conținut.</value>
+  </data>
+  <data name="LookupTableIsAbsent" xml:space="preserve">
+    <value>Tabelul de căutare cu acest identificator nu există.</value>
+  </data>
+  <data name="LookupTableIsMissing" xml:space="preserve">
+    <value>Nu există tabelul de căutare cu identificatorul {0}.</value>
+  </data>
+  <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
+    <value>Nu se poate încărca un fișier fără date</value>
+  </data>
+  <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+    <value>Valoarea {0} nu poate fi preluată ca număr zecimal. Coloana {1}, rândul {2}.</value>
+  </data>
+  <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+    <value>Nu sunt acceptate antete cu același nume.</value>
+  </data>
+  <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+    <value>Nu sunt acceptate antete goale sau incorecte</value>
+  </data>
+  <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+    <value>Lipsește coloana cu cod de rând obligatoriu</value>
+  </data>
+  <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+    <value>Valoarea {0} nu poate fi preluată ca număr întreg lung (long integer). Coloana {1}, rândul {2}.</value>
+  </data>
+  <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+    <value>Codurile rândurilor trebuie să fie unice</value>
+  </data>
+  <data name="LookupTables_too_many_columns" xml:space="preserve">
+    <value>În fișierul încărcat sunt prea multe coloane. Numărul maxim de coloane acceptate este {0}</value>
+  </data>
+  <data name="LookupTables_too_many_rows" xml:space="preserve">
+    <value>Tabelul de căutare conține {1} rânduri, care depășesc numărul maxim de rânduri dintr-un tabel de căutare, care este {0} rânduri</value>
+  </data>
+  <data name="MacroAlreadyExist" xml:space="preserve">
+    <value>Macrocomanda există deja</value>
+  </data>
+  <data name="MacroIsAbsent" xml:space="preserve">
+    <value>Lipsește macrocomanda</value>
+  </data>
+  <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+    <value>Una sau mai multe întrebări cu același identificator {0} există deja: {1}{2}</value>
+  </data>
+  <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+    <value>Una sau mai multe sub-secțiuni cu același identificator {0} există deja: {1}{2}</value>
+  </data>
+  <data name="NoParentCascadingOptions" xml:space="preserve">
+    <value>Nu există variante de răspuns pentru întrebarea inițială din setul de întrebări succesive {0} de la nivelul ierarhic superior</value>
+  </data>
+  <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+    <value>Nu aveți permisiunea să modificați chestionarul</value>
+  </data>
+  <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+    <value>Identificatorul atașamentului vechi este gol și fișierul lipsește pentru atașamentul {0} din chestionarul {1}</value>
+  </data>
+  <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+    <value>În prezent sunt acceptate numai chestionare de tip document (QuestionnaireDocuments)</value>
+  </data>
+  <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+    <value>Valoarea variantei de răspuns nu poate fi decât tip caracter numeric</value>
+  </data>
+  <data name="ProvidedFileHasErrors" xml:space="preserve">
+    <value>Au fost găsite erori în fișierul furnizat</value>
+  </data>
+  <data name="QuestionCannotBeFound" xml:space="preserve">
+    <value>Întrebarea cu cheia publică {0} nu poate fi găsită</value>
+  </data>
+  <data name="QuestionIsNotCombobox" xml:space="preserve">
+    <value>Întrebarea {0} nu este de tip "combo box"</value>
+  </data>
+  <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+    <value>Chestionarul are deja o Copertă</value>
+  </data>
+  <data name="QuestionnaireCantBeFound" xml:space="preserve">
+    <value>Elementul cu identificatorul {0} din chestionar nu poate fi găsit</value>
+  </data>
+  <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+    <value>Chestionarul {0} al versiunii {1} nu poate fi găsit</value>
+  </data>
+  <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+    <value>Chestionarul are deja o pagină tip Copertă</value>
+  </data>
+  <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+    <value>Titlul chestionarului nu poate fi gol si nici nu poate fi compus numai din caractere "Spațiu"</value>
+  </data>
+  <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+    <value>Tipul întrebării nu este acceptat: {0}</value>
+  </data>
+  <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+    <value>Antetul {0} nu a fost găsit în fișierul excel</value>
+  </data>
+  <data name="RosterCantBePaste" xml:space="preserve">
+    <value>Lista nu poate fi pusă aici</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>rând</value>
+  </data>
+  <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+    <value>Secțiunea nu poate avea mai mult de {0} elemente componente.</value>
+  </data>
+  <data name="StaticTextCantBePaste" xml:space="preserve">
+    <value>Textul Static nu poate fi lipit aici</value>
+  </data>
+  <data name="SubSectionCantBeFound" xml:space="preserve">
+    <value>Sub-secțiunea cu cheia publică {0} nu poate fi găsită</value>
+  </data>
+  <data name="SubSectionDepthLimit" xml:space="preserve">
+    <value>Sub-secțiunea sau Lista nu poate fi mai lungă de {0} niveluri</value>
+  </data>
+  <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+    <value>S-au identificat erori în fișierul excel</value>
+  </data>
+  <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+    <value>{0} are un identificator eronat la [{1}]</value>
+  </data>
+  <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+    <value>{0} are un index eronat la [{1}]</value>
+  </data>
+  <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+    <value>{0} are tipul [{1}] eronat</value>
+  </data>
+  <data name="TranslationFileIsEmpty" xml:space="preserve">
+    <value>Fișierul excel este gol - nu are foi (worksheets)</value>
+  </data>
+  <data name="TranslationsCantBeExtracted" xml:space="preserve">
+    <value>Nu s-au putut extrage traduceri din fișierul încărcat</value>
+  </data>
+  <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+    <value>Foaia excel cu traducerile nu poate fi găsită</value>
+  </data>
+  <data name="UnknownTypeCantBePaste" xml:space="preserve">
+    <value>Element necunoscut. Copierea a eșuat.</value>
+  </data>
+  <data name="UserIsInTheList" xml:space="preserve">
+    <value>Utilizatorul {0} există deja în lista de distribuție</value>
+  </data>
+  <data name="UserIsOwner" xml:space="preserve">
+    <value>Utilizatorul {0} este proprietarul chestionarului. Vă rugăm să adăugați o altă adresă de email.</value>
+  </data>
+  <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+    <value>Valoarea elementelor fixe din  lista  trebuie să aibă numai caractere numerice</value>
+  </data>
+  <data name="VariableCantBePaste" xml:space="preserve">
+    <value>Variabila nu poate fi copiată aici.</value>
+  </data>
+  <data name="VariableWithIdWasNotFound" xml:space="preserve">
+    <value>Variabila cu identificatorul {0} nu a fost găsită în chestionarul {1}</value>
+  </data>
+</root>

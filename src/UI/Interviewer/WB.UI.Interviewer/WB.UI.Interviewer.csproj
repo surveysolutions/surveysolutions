@@ -151,7 +151,6 @@
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\layout\dashboard.axml" />
     <AndroidResource Include="Resources\layout\relink.axml" />
-    <AndroidResource Include="Resources\layout\dashboard_census_questionnare_item.axml" />
     <AndroidResource Include="Resources\layout\finish_installation.axml" />
     <AndroidResource Include="Resources\layout\diagnostics__check_new_version.axml" />
     <AndroidResource Include="Resources\layout\diagnostics__backup_restore.axml" />

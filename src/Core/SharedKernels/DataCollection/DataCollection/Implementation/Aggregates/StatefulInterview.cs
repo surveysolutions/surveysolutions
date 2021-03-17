@@ -54,7 +54,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 @event.QuestionnaireVersion);
 
             this.properties.InterviewerId = @event.UserId;
-            this.UsesExpressionStorage = @event.UsesExpressionStorage;
             this.sourceInterview = this.Tree.Clone();
         }
 
@@ -77,7 +76,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (question == null)
                 {
                     //now answers from removed rosters are in sync package.
-                    continue;    
+                    continue;
                 }
 
                 if (answerDto.Answer != null)
@@ -96,48 +95,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ActualizeRostersIfQuestionIsRosterSize(answerDto.Id);
             }
 
-            if (this.UsesExpressionStorage)
-            {
-                this.UpdateTreeWithDependentChanges(this.Tree, this.GetQuestionnaireOrThrow(), entityIdentity: null, DateTimeOffset.UtcNow, removeLinkedAnswers: false);
-            }
-            else
-            {
-                // titles for numeric questions should be recalculated afterward because answers for roster title questions
-                // could be not processed by the time roster instance was created.
-                this.Tree.FindRosters().Where(x => x.IsNumeric).ForEach(x => x.UpdateRosterTitle());
-
-                foreach (var disabledGroup in @event.InterviewData.DisabledGroups)
-                    this.Tree.GetGroup(Identity.Create(disabledGroup.Id, disabledGroup.InterviewItemRosterVector))?.Disable();
-
-                foreach (var disabledQuestion in @event.InterviewData.DisabledQuestions)
-                    this.Tree.GetQuestion(Identity.Create(disabledQuestion.Id, disabledQuestion.InterviewItemRosterVector))?.Disable();
-
-                foreach (var invalidQuestion in @event.InterviewData.FailedValidationConditions)
-                    this.Tree.GetQuestion(invalidQuestion.Key)?.MarkInvalid(invalidQuestion.Value);
-
-                foreach (var disabledStaticText in @event.InterviewData.DisabledStaticTexts)
-                    this.Tree.GetStaticText(disabledStaticText)?.Disable();
-
-                foreach (var invalidStaticText in @event.InterviewData.InvalidStaticTexts)
-                    this.Tree.GetStaticText(invalidStaticText.Key)?.MarkInvalid(invalidStaticText.Value);
-
-                foreach (var validStaticText in @event.InterviewData.ValidStaticTexts)
-                    this.Tree.GetStaticText(validStaticText)?.MarkValid();
-
-                foreach (var variable in @event.InterviewData.Variables)
-                    this.Tree.GetVariable(Identity.Create(variable.Key.Id, variable.Key.InterviewItemRosterVector))?.SetValue(variable.Value);
-
-                foreach (var disabledVariable in @event.InterviewData.DisabledVariables)
-                    this.Tree.GetVariable(Identity.Create(disabledVariable.Id, disabledVariable.InterviewItemRosterVector))?.Disable();
-
-                this.Tree.ReplaceSubstitutions();
-            
-                CalculateLinkedToListOptionsOnTree(this.Tree, this.ExpressionProcessorStatePrototype, false);
-
-                base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
-
-                this.UpdateLinkedQuestions(this.Tree, this.ExpressionProcessorStatePrototype, false);
-            }
+            this.UpdateTreeWithDependentChanges(this.Tree, this.GetQuestionnaireOrThrow(), entityIdentity: null,
+                DateTimeOffset.UtcNow, removeLinkedAnswers: false);
 
             foreach (var readonlyQuestion in @event.InterviewData.ReadonlyQuestions)
             {
@@ -154,7 +113,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Apply(InterviewAnswersFromSyncPackageRestored @event)
         {
-            
+
         }
 
         protected override void Apply(InterviewCompleted @event)
@@ -226,7 +185,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool HasErrors { get; private set; }
 
         public bool IsCompleted { get; private set; }
-       
+
         public InterviewTreeGroup GetGroup(Identity identity) => this.Tree.GetGroup(identity);
         public InterviewTreeRoster GetRoster(Identity identity) => this.Tree.GetRoster(identity);
         public InterviewTreeVariable GetVariable(Identity identity) => this.Tree.GetVariable(identity);
@@ -249,7 +208,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public InterviewTreeQuestion GetQuestion(Identity identity) => this.Tree.GetQuestion(identity);
         public InterviewTreeStaticText GetStaticText(Identity identity) => this.Tree.GetStaticText(identity);
-        
+
         public InterviewTreeAreaQuestion GetAreaQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeAreaQuestion();
 
         public IEnumerable<InterviewTreeSection> GetEnabledSections() => this.Tree.Sections.Where(s => !s.IsDisabled());
@@ -313,13 +272,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.SynchronizedInterview.InterviewerAssignedDateTime,
                 true,
                 command.CreatedOnClient,
-                command.OriginDate,
-                questionnaire.IsUsingExpressionStorage()
+                command.OriginDate
             );
-            
+
             if (command.SynchronizedInterview.Language != null)
-                this.ApplyEvent(new TranslationSwitched(command.SynchronizedInterview.Language, command.UserId, originDate:command.OriginDate));
-            
+                this.ApplyEvent(new TranslationSwitched(command.SynchronizedInterview.Language, command.UserId, originDate: command.OriginDate));
+
             var synchronizedInterviewInterviewKey = command.SynchronizedInterview.InterviewKey;
             if (synchronizedInterviewInterviewKey != null)
             {
@@ -341,14 +299,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.SynchronizedInterview.QuestionnaireId,
                 command.SynchronizedInterview.QuestionnaireVersion,
                 command.SynchronizedInterview.Status,
-                new AnsweredQuestionSynchronizationDto[0], 
+                new AnsweredQuestionSynchronizationDto[0],
                 command.SynchronizedInterview.Comments,
                 command.SynchronizedInterview.RejectDateTime,
                 command.SynchronizedInterview.InterviewerAssignedDateTime,
                 true,
                 command.SynchronizedInterview.CreatedOnClient,
-                command.OriginDate,
-                questionnaire.IsUsingExpressionStorage()
+                command.OriginDate
             );
 
             if (command.SynchronizedInterview.Language != null)
@@ -435,7 +392,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     }
                 };
             }
-            
+
             var isCover = this.sourceInterview.Questionnaire.IsCoverPage(sectionId.Id);
 
             return section.Children
@@ -446,7 +403,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Identity> GetUnderlyingEntitiesForReviewRecursive(Identity sectionId)
         {
             var section = this.Tree.GetNodeByIdentity(sectionId);
-            
+
             if (section == null)
             {
                 throw new ArgumentException($"Section not found", nameof(sectionId))
@@ -484,7 +441,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public int GetGroupsInGroupCount(Identity group) => this.GetGroupsAndRostersInGroup(group).Count();
 
-        private IEnumerable<InterviewTreeQuestion> GetEnabledNotHiddenQuestions() 
+        private IEnumerable<InterviewTreeQuestion> GetEnabledNotHiddenQuestions()
             => this.Tree.FindQuestions().Where(question => !question.IsDisabled() && !question.IsHidden);
 
         private IEnumerable<InterviewTreeQuestion> GetEnabledInterviewerQuestions()
@@ -496,18 +453,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 (question.IsInterviewer || question.IsSupervisors) && !question.IsReadonly);
 
 
-        public int CountActiveAnsweredQuestionsInInterview() => 
+        public int CountActiveAnsweredQuestionsInInterview() =>
             this.GetEnabledInterviewerQuestions().Count(question => question.IsAnswered());
 
-        public int CountActiveQuestionsInInterview() => 
+        public int CountActiveQuestionsInInterview() =>
             this.GetEnabledInterviewerQuestions().Count();
 
         public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
 
-        public int CountActiveAnsweredQuestionsInInterviewForSupervisor() => 
+        public int CountActiveAnsweredQuestionsInInterviewForSupervisor() =>
             this.GetEnabledQuestionsForSupervisor().Count(question => question.IsAnswered());
 
-        public int CountActiveQuestionsInInterviewForSupervisor() => 
+        public int CountActiveQuestionsInInterviewForSupervisor() =>
             this.GetEnabledQuestionsForSupervisor().Count();
 
         public int CountInvalidEntitiesInInterviewForSupervisor() => this.GetInvalidEntitiesInInterviewForSupervisor().Count();
@@ -560,7 +517,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool HasEnabledInvalidQuestionsAndStaticTexts(Identity group)
             => this.CountEnabledInvalidQuestionsAndStaticTexts(group) > 0;
 
-        public bool HasUnansweredQuestions(Identity group) 
+        public bool HasUnansweredQuestions(Identity group)
             => this.Tree.GetGroup(group)?.HasUnansweredQuestions() ?? false;
 
         public IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibleToInterviewer()
@@ -607,7 +564,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.Tree.GetNodeByIdentity(groupOrQuestion)?.Parent?.Identity;
 
         public Identity[] GetParentGroups(Identity groupOrQuestion)
-            => this.Tree.GetNodeByIdentity(groupOrQuestion)?.Parents?.Select(x=>x.Identity).ToArray();
+            => this.Tree.GetNodeByIdentity(groupOrQuestion)?.Parents?.Select(x => x.Identity).ToArray();
 
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
             => this.GetAllChildrenOrEmptyList(groupIdentity)
@@ -694,8 +651,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 return GetValidationMessages(question.FailedWarnings, question.ValidationMessages, defaltErrorMessageFallback);
             }
-            
-            var staticText =  this.Tree.GetStaticText(questionOrStaticTextId);
+
+            var staticText = this.Tree.GetStaticText(questionOrStaticTextId);
             if (staticText?.FailedWarnings != null)
             {
                 return GetValidationMessages(staticText.FailedWarnings, staticText.ValidationMessages,
@@ -713,8 +670,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 return GetValidationMessages(questionFailedErrorValidations, question.ValidationMessages, defaltErrorMessageFallback);
             }
-            
-            var staticText =  this.Tree.GetStaticText(questionOrStaticTextId);
+
+            var staticText = this.Tree.GetStaticText(questionOrStaticTextId);
             if (staticText?.FailedErrors != null)
             {
                 return GetValidationMessages(staticText.FailedErrors, staticText.ValidationMessages,
@@ -734,10 +691,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     : substitutionText.BrowserReadyText)
                 .ToList();
 
-            if (failedConditions.Count > 0 && questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
+            if (failedConditions.Count > 0 && questionValidationMassages.Count == 1) return new[] { questionValidationMassages[0] };
 
-             return failedConditions.Select(failedValidation =>
-                $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} [{failedValidation.FailedConditionIndex + 1}]");
+            return failedConditions.Select(failedValidation =>
+               $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} [{failedValidation.FailedConditionIndex + 1}]");
         }
 
         public bool IsEnabled(Identity entityIdentity)
@@ -780,16 +737,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             var options = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter, excludedOptionIds);
-            
+
             if (!questionnaire.IsSupportFilteringForOptions(questionIdentity.Id))
                 return options.Take(itemsCount).ToList();
 
-            if (this.UsesExpressionStorage)
-                return this.FilteredCategoricalOptions(questionIdentity, itemsCount, options);
-
-            return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(questionIdentity, options).Take(itemsCount).ToList();
+            return this.FilteredCategoricalOptions(questionIdentity, itemsCount, options);
         }
-        
+
         private IEnumerable<CategoricalOption> OptionsForLinkedToTextListQuestion(Identity questionId)
         {
             var questionnaire = GetQuestionnaireOrThrow(Language);
@@ -800,7 +754,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var asInterviewTreeTextListQuestion = listQuestion.GetAsInterviewTreeTextListQuestion();
             var listOptions = asInterviewTreeTextListQuestion.GetAnswer()?.Rows;
             var filteredOptions = GetSingleOptionLinkedToListQuestion(questionId)?.Options;
-            
+
             if (listOptions == null || filteredOptions == null) yield break;
 
             foreach (var textListAnswerRow in listOptions)
@@ -824,7 +778,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return false;
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            var optionsCount =  questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestion.GetAnswer().SelectedValue, null, null).Take(threshold + 1).Count();
+            var optionsCount = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestion.GetAnswer().SelectedValue, null, null).Take(threshold + 1).Count();
 
             if (optionsCount > threshold)
                 return true;
@@ -842,23 +796,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var linkedQuestion = GetSingleOptionLinkedToListQuestion(question);
                 var answer = linkedQuestion.GetAnswer();
                 if (answer == null) return null;
-                
-                
+
+
                 var listQuestion = FindQuestionInQuestionBranch(linkedQuestion.LinkedSourceId, question)
                     .GetAsInterviewTreeTextListQuestion();
 
                 var linkedToText = listQuestion.GetTitleByItemCode(answer.SelectedValue);
-                    
+
                 return new CategoricalOption
                 {
                     Title = linkedToText,
                     Value = answer.SelectedValue
                 };
             }
-            
+
             return questionnaire.GetOptionForQuestionByOptionValue(question.Id, value, parentQuestionValue);
         }
-        
+
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value,
             int? parentQuestionValue) => this.GetOptionForQuestionWithFilter(question, value, parentQuestionValue);
 
@@ -870,7 +824,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return GetFirstTopFilteredOptionsForQuestion(question, null, optionText, 1, Array.Empty<int>())
                     .FirstOrDefault();
             }
-            
+
             CategoricalOption filteredOption = questionnaire.GetOptionForQuestionByOptionText(question.Id, optionText, parentQuestionValue);
 
             if (filteredOption == null)
@@ -878,15 +832,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.IsSupportFilteringForOptions(question.Id))
             {
-                if (this.UsesExpressionStorage)
-                {
-                    return FilteredCategoricalOptions(question, 1, filteredOption.ToEnumerable()).SingleOrDefault();
-                }
-                return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question, Enumerable.Repeat(filteredOption, 1)).SingleOrDefault();
+                return FilteredCategoricalOptions(question, 1, filteredOption.ToEnumerable()).SingleOrDefault();
             }
+
             return filteredOption;
         }
-        
+
         private static AnswerComment ToAnswerComment(AnsweredQuestionSynchronizationDto answerDto, CommentSynchronizationDto commentDto)
             => new AnswerComment(
                 userId: commentDto.UserId,
@@ -931,15 +882,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var questionnaire = this.GetQuestionnaireOrThrow(this.Language);
             string attachmentName = questionnaire.GetAttachmentNameForEntity(entityId.Id);
-            
+
             if (questionnaire.HasVariable(attachmentName))
             {
                 var staticText = this.Tree.GetStaticText(entityId);
-                
+
                 Guid attachedVariable = questionnaire.GetVariableIdByVariableName(attachmentName);
                 var interviewTreeGroup = (InterviewTreeGroup)staticText.Parent;
                 InterviewTreeVariable variable = interviewTreeGroup.GetVariableFromThisOrUpperLevel(attachedVariable);
-                var attachmentNameFromInterview = (string) variable?.Value;
+                var attachmentNameFromInterview = (string)variable?.Value;
                 return attachmentNameFromInterview == null ? null : questionnaire.GetAttachmentIdByName(attachmentNameFromInterview);
             }
 
@@ -960,7 +911,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// Timespan within which two pause/resume sessions should be merged as a single one
         /// </summary>
         private readonly TimeSpan pauseResumeQuiteWindow = TimeSpan.FromMinutes(1);
-        
+
         public void Resume(ResumeInterviewCommand command)
         {
             DateTimeOffset? lastResume = this.properties.LastResumed;
@@ -970,23 +921,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     return;
                 }
-                
-                DateTimeOffset closePreviousNonClosedSessionDate = 
+
+                DateTimeOffset closePreviousNonClosedSessionDate =
                     lastResume.Value.AddMinutes(15);
 
                 if (command.OriginDate < closePreviousNonClosedSessionDate)
                 {
                     closePreviousNonClosedSessionDate = command.OriginDate;
                 }
-                
+
                 if (this.properties.LastAnswerDate > closePreviousNonClosedSessionDate)
                 {
                     closePreviousNonClosedSessionDate = this.properties.LastAnswerDate.Value;
                 }
-                
+
                 ApplyEvent(new InterviewPaused(command.UserId, closePreviousNonClosedSessionDate));
             }
-            
+
             ApplyEvent(new InterviewResumed(command.UserId, command.OriginDate, command.DeviceType));
         }
 
@@ -1005,7 +956,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 return;
             }
-            
+
             ApplyEvent(new InterviewPaused(command.UserId, command.OriginDate));
         }
 
@@ -1024,7 +975,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 return;
             }
-            
+
             ApplyEvent(new InterviewClosedBySupervisor(command.UserId, command.OriginDate));
         }
 
@@ -1037,21 +988,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     return;
                 }
-                
-                DateTimeOffset closePreviousNonClosedSessionDate = 
+
+                DateTimeOffset closePreviousNonClosedSessionDate =
                     lastOpenDate.Value.AddMinutes(15);
 
                 if (command.OriginDate < closePreviousNonClosedSessionDate)
                 {
                     closePreviousNonClosedSessionDate = command.OriginDate;
                 }
-                
+
                 ApplyEvent(new InterviewClosedBySupervisor(command.UserId, closePreviousNonClosedSessionDate));
             }
-            
+
             ApplyEvent(new InterviewOpenedBySupervisor(command.UserId, command.OriginDate));
         }
-        
+
         private void Apply(InterviewPaused @event)
         {
             this.properties.LastPaused = @event.OriginDate;

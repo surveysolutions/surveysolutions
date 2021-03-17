@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -133,7 +133,7 @@
     <value>Toți responsabilii</value>
   </data>
   <data name="AllStatuses" xml:space="preserve">
-    <value>Toate statusurile</value>
+    <value>Toate stÄƒrile</value>
   </data>
   <data name="AllSupervisors" xml:space="preserve">
     <value>Toți controlorii</value>
@@ -226,7 +226,7 @@
     <value>Nu a fost nimic selectat</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>OK</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Deschide</value>
@@ -238,7 +238,7 @@
     <value>Întrebări de identificare</value>
   </data>
   <data name="Processing" xml:space="preserve">
-    <value>În curs de procesare...</value>
+    <value>În curs de procesare…</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Chestionar</value>
@@ -274,13 +274,13 @@
     <value>Arată datele de identificare</value>
   </data>
   <data name="ShowStatusHistory" xml:space="preserve">
-    <value>Arată istoricul statusurilor</value>
+    <value>AratÄƒ istoricul stÄƒrilor</value>
   </data>
   <data name="SignIn" xml:space="preserve">
     <value>Intrare în cont</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Stare</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Template</value>
@@ -305,6 +305,36 @@
   </data>
   <data name="SelectQuestionnaire" xml:space="preserve">
       <value>Selectează chestionarul</value>
-      <comment>Selectează chestionarul</comment>
+    <comment>Selectează chestionarul</comment>
+  </data>
+  <data name="AllVersions" xml:space="preserve">
+    <value>Toate versiunile</value>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Furnizori de servicii email</value>
+  </data>
+  <data name="Equals" xml:space="preserve">
+    <value>Egal</value>
+  </data>
+  <data name="NotEquals" xml:space="preserve">
+    <value>Nu este egal</value>
+  </data>
+  <data name="OpenAssignment" xml:space="preserve">
+    <value>Deschide o sarcinÄƒ</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>Versiunea chestionarului</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Restabilire</value>
+  </data>
+  <data name="SelectOption" xml:space="preserve">
+    <value>SelecteazÄƒ o opÈ›iune</value>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>ÃŽncepe cu</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Necunoscut</value>
   </data>
 </root>

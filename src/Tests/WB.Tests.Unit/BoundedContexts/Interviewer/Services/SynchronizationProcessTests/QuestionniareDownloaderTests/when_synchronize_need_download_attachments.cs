@@ -47,9 +47,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 );
 
             interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
-                x => x.GetCensusQuestionnaireIdentities() == new List<QuestionnaireIdentity>()
-                && x.IsQuestionnaireAssemblyExists(Moq.It.IsAny<QuestionnaireIdentity>()) == true
-                );
+                x => x.IsQuestionnaireAssemblyExists(Moq.It.IsAny<QuestionnaireIdentity>())
+            );
 
             attachmentContentStorage = Mock.Of<IAttachmentContentStorage>(
                 x => x.Exists("1") == false
@@ -63,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 attachmentContentStorage: attachmentContentStorage,
                 synchronizationService: synchronizationService,
                 questionnairesAccessor: interviewerQuestionnaireAccessor
-                );
+            );
 
             await downloader.DownloadQuestionnaireAsync(newCensusInterviewIdentities[0], new SynchronizationStatistics(), null, CancellationToken.None);
             await downloader.DownloadQuestionnaireAsync(newCensusInterviewIdentities[1], new SynchronizationStatistics(), null, CancellationToken.None);

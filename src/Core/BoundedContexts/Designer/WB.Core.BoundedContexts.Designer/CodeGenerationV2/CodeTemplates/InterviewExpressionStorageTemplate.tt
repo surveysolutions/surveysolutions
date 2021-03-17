@@ -16,7 +16,6 @@ using System.Text.RegularExpressions;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Portable;
 using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
-using WB.Core.SharedKernels.DataCollection.V3.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.V4.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.V5.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions;

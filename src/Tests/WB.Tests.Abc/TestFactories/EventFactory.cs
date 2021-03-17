@@ -123,8 +123,7 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireVersion: questionnaireVersion ?? 7,
                 assignmentId: null,
                 isAudioRecordingEnabled:false,
-                originDate: originDate ?? DateTimeOffset.Now,
-                usesExpressionStorage: true);
+                originDate: originDate ?? DateTimeOffset.Now);
 
         public InterviewFromPreloadedDataCreated InterviewFromPreloadedDataCreated(Guid? questionnaireId = null, long? questionnaireVersion = null, DateTimeOffset? originDate = null)
             => new InterviewFromPreloadedDataCreated(

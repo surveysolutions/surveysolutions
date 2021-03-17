@@ -144,4 +144,10 @@
   <data name="WrongDateOnTablet" xml:space="preserve">
     <value>Ora greșită pe tabletă</value>
   </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Anchetatori</value>
+  </data>
+  <data name="TeamSize" xml:space="preserve">
+    <value>Mărimea echipei</value>
+  </data>
 </root>

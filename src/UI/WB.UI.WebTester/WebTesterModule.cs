@@ -121,7 +121,7 @@ namespace WB.UI.WebTester
             registry.Bind<IImageFileStorage, WebTesterImageFileStorage>();
 
             // TODO: Find a generic place for each of the dependencies below
-            registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
+            registry.Bind<IInterviewExpressionStorageProvider, InterviewExpressionStorageProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
             registry.Bind<ISubstitutionService, SubstitutionService>();
@@ -129,7 +129,6 @@ namespace WB.UI.WebTester
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.BindInPerLifetimeScope<IQuestionnaireAssemblyAccessor, WebTesterQuestionnaireAssemblyAccessor>();
             registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
-            registry.BindAsSingleton<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
             registry.Bind<IReusableCategoriesStorage, ReusableCategoriesStorage>();
             registry.Bind<IReusableCategoriesFillerIntoQuestionnaire, ReusableCategoriesFillerIntoQuestionnaire>();

@@ -11,20 +11,11 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.Infrastructure.EventBus;
-using WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTests;
 
 namespace WB.Tests.Unit
 {
     internal static class ShouldExtensions
     {
-        [DebuggerStepThrough]
-        public static void ShouldMatchMethodInfo(this MetodInfo left, MetodInfo right)
-        {
-            left.Name.Should().Be(right.Name);
-            left.ReturnType.Should().Be(right.ReturnType);
-            left.ParamsType.Should().BeEquivalentTo(right.ParamsType);
-        }
-
         [DebuggerStepThrough]
         public static void ShouldContainValues(this QuestionTemplateModel question,
             Guid id,

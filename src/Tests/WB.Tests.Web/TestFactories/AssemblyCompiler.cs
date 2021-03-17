@@ -44,7 +44,6 @@ namespace WB.Tests.Web.TestFactories
             var expressionProcessorGenerator =
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(), 
-                    null,
                     new CodeGeneratorV2(CodeGenerationModelsFactory()),
                     new DynamicCompilerSettingsProvider());
 

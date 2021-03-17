@@ -239,13 +239,22 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="rosterVector">Roster row. In simple rosters, the row code. In nested rosters, an array of row codes: first, the row code of the parent(s); followed by the row code of the target child roster (e.g., a question in a second-level roster needs 2 row codes, a question in a first-level roster only 1). For variables not in rosters, this parameter may be left blank</param>
         /// <param name="comment">Comment. Comment to be posted to the chosen question </param>
         /// <returns></returns>
+        /// <response code="400">Provided request fails validation.</response>
+        /// <response code="200">Comment added.</response>
+        /// <response code="406">Questionnaire not found.</response>
         [HttpPost]
         [Route("{id:guid}/comment-by-variable/{variable}")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
         [ObservingNotAllowed]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public ActionResult CommentByVariable(Guid id, [Required]string variable, int[] rosterVector, [Required]string comment)
         {
             var questionnaireIdentity = this.GetQuestionnaireIdForInterview(id);
+            if (questionnaireIdentity == null)
+            {
+                ModelState.AddModelError("id", "Interview not found");
+                return ValidationProblem();
+            }
 
             var questionnaire = questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
@@ -255,7 +264,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var questionId = questionnaire.GetQuestionIdByVariable(variable);
 
             if (questionId == null)
-                return StatusCode(StatusCodes.Status406NotAcceptable, "Question was not found.");
+            {
+                ModelState.AddModelError("variable", "Question was not found.");
+                return ValidationProblem();
+            }
 
             return this.CommentAnswer(id, Identity.Create(questionId.Value, rosterVector), comment);
         }
@@ -266,18 +278,28 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
         /// <param name="questionId">Question Id. Identifier of the question constructed as follows. First, take the question GUID from the JSON version of the questionnaire. Then, remove all dashes. If the question is not in a roster, use this as the question Id. If the question is in a roster, append its address to the question Id using the following pattern : [questionId]_#-#-#, where [questionId] is the question GUID without dashes, # represents the row code of each roster from the top level of the questionnaire to the current question, and only the needed number of row codes is used (e.g., a question in a second-level roster needs 2 row codes, a question in a first-level roster only 1)</param>
         /// <param name="comment">Comment. Comment to be posted to the chosen question </param>
-        /// <returns></returns>
+        /// <response code="400">Provided request fails validation.</response>
+        /// <response code="200">Comment added.</response>
+        /// <response code="406">Questionnaire not found.</response>
         [HttpPost]
         [Route("{id:guid}/comment/{questionId}")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
         [ObservingNotAllowed]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public ActionResult CommentByIdentity(Guid id, [Required]string questionId, [Required]string comment)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
-            if (q == null) return NotFound();
+            if (q == null)
+            {
+                ModelState.AddModelError("id", "Interview not found");
+                return ValidationProblem();
+            }
 
-            if(!Identity.TryParse(questionId, out var questionIdentity))
-                return StatusCode(StatusCodes.Status400BadRequest, $@"bad {nameof(questionId)} format");
+            if (!Identity.TryParse(questionId, out var questionIdentity))
+            {
+                ModelState.AddModelError("questionId", "bad {nameof(questionId)} format");
+                return ValidationProblem();
+            }
 
             return CommentAnswer(id, questionIdentity, comment);
         }

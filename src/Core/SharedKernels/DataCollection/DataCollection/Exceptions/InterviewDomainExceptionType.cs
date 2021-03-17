@@ -16,6 +16,7 @@
         PackageIsOudated,
         QuestionIsMissing,
         InterviewSizeLimitReached,
-        DuplicateCreationCommand
+        DuplicateCreationCommand,
+        QuestionnaireOutdated
     }
 }

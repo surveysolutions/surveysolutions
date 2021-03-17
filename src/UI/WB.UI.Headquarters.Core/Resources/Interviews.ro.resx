@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-      <value>{{count}} interviuri vor fi aprobate.</value>
+      <value>{{count}} interviu va fi aprobat.</value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri vor fi aprobate.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Puteți aproba doar interviuri cu următorul status: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;, &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Puteți aproba doar interviuri cu următoarea stare: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;, &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri selectate pentru realocare.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Puteți aloca doar interviuri cu următoarele statusuri: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (numai către un alt anchetator)&lt;/i&gt; și &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Puteți aloca doar interviuri cu următoarele stări: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (numai către un alt anchetator)&lt;/i&gt; și &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="Assignment" xml:space="preserve">
     <value>Interviuri alocate</value>
@@ -136,7 +136,7 @@
   </data>
   <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri vor fi alocate.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Numai interviurile care nu au statusul &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt; pot fi realocate.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Numai interviurile care nu au stareul &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt; pot fi realocate.</value>
   </data>
   <data name="ChooseResponsible" xml:space="preserve">
     <value>Nu s-a ales niciun responsabil pentru unele interviuri. Vă rugăm să alegeți un controlor sau anchetator responsabil.</value>
@@ -158,18 +158,18 @@
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri vor fi șterse.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Puteți șterge interviurile care nu au fost primite de către anchetator cu următoarele statusuri doar: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Puteți șterge interviurile care nu au fost primite de către anchetator cu următoarele stări doar: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="Errors" xml:space="preserve">
     <value>Erori</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri vor fi respinse.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Puteți respinge doar interviurile cu următoarele statusuri: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Puteți respinge doar interviurile cu următoarele stări: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri vor fi respinse.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Puteți respinge doar interviurile cu următorul status: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Puteți respinge doar interviurile cu următoarea stare: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>ID de alocare. Faceți click pentru a introduce ID-ul complet.</value>
@@ -181,13 +181,13 @@
     <value>Utilizator responsabil. Faceți click în câmp pentru a alege un nume de utilizator fie prin selectarea directă, fie tastând pentru a filtra în continuare lista de nume de utilizator.</value>
   </data>
   <data name="Tooltip_Filter_Status" xml:space="preserve">
-    <value>Statusul interviului. Selectați un status pentru a vedea toate interviurile cu acel status. Selectați 'Toate statusurile' pentru a vedea interviuri cu orice status.</value>
+    <value>stareul interviului. Selectați un stare pentru a vedea toate interviurile cu acel stare. Selectați 'Toate stările' pentru a vedea interviuri cu orice stare.</value>
   </data>
   <data name="Tooltip_Table_Assignment" xml:space="preserve">
     <value>Identificator pentru alocarea de care aparține acest interviu. Faceți click pe pictograma de sortare pentru a sorta după numărul de alocare.</value>
   </data>
   <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
-    <value>Afișează numărul total de întrebări nevalide și texte statice în interviu. Condițiile de validare eșuate de mai multe ori pentru aceeași entitate sunt numărate ca 1.</value>
+    <value>Afișează numărul total de întrebări incorecte și texte statice în interviu. Condițiile de validare eșuate de mai multe ori pentru aceeași entitate sunt numărate ca 1.</value>
   </data>
   <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
     <value>Faceți click aici pentru a ascunde sau pentru a afișa întrebările de identificare. Ascunderea întrebărilor de identificare poate oferi mai mult spațiu pentru alte informații. Afișarea întrebărilor de identificare poate oferi detalii pentru diferențierea interviurilor.</value>
@@ -208,16 +208,46 @@
     <value>Utilizatorul responsabil cu alocarea. Dați click pe pictograma sortare pentru a sorta numele de utilizator.</value>
   </data>
   <data name="Tooltip_Table_Status" xml:space="preserve">
-    <value>Starea interviului în fluxul anchetei. Faceți click pe pictograma de sortare pentru a sorta după status.</value>
+    <value>Starea interviului în fluxul anchetei. Faceți click pe pictograma de sortare pentru a sorta după stare.</value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri vor fi dezaprobate.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Puteți dezaproba doar interviurile cu următorul status: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Puteți dezaproba doar interviurile cu următoarea stare: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
   </data>
   <data name="Note" xml:space="preserve">
       <value>Notă!</value>
   </data>
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
-      <value>Puteți aproba doar interviuri cu următoarele statusuri: {{status1}}, {{status2}}, {{status3}}.</value>
+      <value>Puteți aproba doar interviuri cu următoarele stări: {{status1}}, {{status2}}, {{status3}}.</value>
+  </data>
+  <data name="ApproveConfirmMessage_plural" xml:space="preserve">
+    <value>{{count}} interviuri vor fi aprobate.</value>
+  </data>
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Anchetatorii responsabili la momentul actual nu vor fi informați cu privire la realocarea chestionarului până la următoarea sincronizare. Dacă au început deja să lucreze la interviu, toate datele pe care le-au introdus înainte de următoarea sincronizare vor fi ȘTERSE!</value>
+  </data>
+  <data name="ChooseQuestionsTitle" xml:space="preserve">
+    <value>Alegeți întrebarea de identificare pe care o veți folosi în filtru</value>
+  </data>
+  <data name="FiltersByQuestions" xml:space="preserve">
+    <value>Filtrare prin întrebări</value>
+  </data>
+  <data name="NotAnsweredCount" xml:space="preserve">
+    <value>Nu s-a răspuns</value>
+  </data>
+  <data name="QuestionsFilterNotAvailable" xml:space="preserve">
+    <value>Filtrarea prin întrebări este disponibilă numai când a fost selecată o anumită versiune a chestionarului</value>
+  </data>
+  <data name="QuestionsSelector" xml:space="preserve">
+    <value>Selectarea întrebărilor</value>
+  </data>
+  <data name="RejectToNewResponsible" xml:space="preserve">
+    <value>Respingeți și alegeți un nou responsabil</value>
+  </data>
+  <data name="RejectToOriginal" xml:space="preserve">
+    <value>Respingeți către responsabilul inițial</value>
+  </data>
+  <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
+    <value>Număr de întrebări fără răspuns. Include întrebări despre supervizor, identificare și anchetator. Poate conține valori nule pentru interviurile care au fost finalizate înainte de lansarea 20.09.</value>
   </data>
 </root>

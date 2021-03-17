@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsQuestionLinked(Guid questionId);
 
         bool IsLinkedToListQuestion(Guid questionId);
-
+        bool IsUsingExpressionStorage();
         Guid[] GetQuestionsLinkedToRoster();
 
         Guid[] GetQuestionsLinkedToQuestion();
@@ -291,7 +291,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasStaticText(Guid entityId);
         Guid GetFirstSectionId();
         IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId);
-        bool IsUsingExpressionStorage();
 
         List<Guid> GetExpressionsPlayOrder();
         bool SupportsExpressionsGraph();
