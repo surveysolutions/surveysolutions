@@ -20,7 +20,7 @@ namespace Main.Core.Entities.SubEntities
             builder.BlockParsers.AddIfNotAlready<ParagraphBlockParser>();
             builder.InlineParsers.AddIfNotAlready<HtmlEntityParser>();
             builder.InlineParsers.AddIfNotAlready<LinkInlineParser>();
-            builder.InlineParsers.AddIfNotAlready<AutolineInlineParser>();
+            builder.InlineParsers.AddIfNotAlready<AutolinkInlineParser>();
 
             var pipeline = builder.Build();
             return pipeline;
