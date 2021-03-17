@@ -123,7 +123,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             }
             else if (deviceSyncProtocolVersion < SupervisorSyncProtocolVersionProvider.V3_ResetPasswordIntroduced)
             {
-                if (authorizedUser.NeedChangePassword)
+                if (authorizedUser.PasswordChangeRequired)
                     return StatusCode(StatusCodes.Status426UpgradeRequired);
             }
             else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)

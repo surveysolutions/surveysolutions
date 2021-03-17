@@ -85,7 +85,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                 return;
             }
 
-            var forcePasswordClaim = GetFirstClaim(AuthorizedUser.ForceChangePasswordType);
+            var forcePasswordClaim = GetFirstClaim(AuthorizedUser.PasswordChangeRequiredType);
             bool forcePasswordChanged = forcePasswordClaim != null;
 
             // Look for the LastChanged claim.

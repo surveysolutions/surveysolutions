@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Code.Authentication
         private readonly IApiTokenProvider authTokenProvider;
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
         private bool isUserLocked;
-        private bool forceChangePassword;
+        private bool passwordChangeRequired;
 
         public AuthTokenAuthenticationHandler(IOptionsMonitor<AuthTokenAuthenticationSchemeOptions> options, 
             ILoggerFactory logger,
@@ -64,7 +64,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                 return AuthenticateResult.Fail("User is locked");
             }
             
-            if (user.ForceChangePassword)
+            if (user.PasswordChangeRequired)
             {
                 var allowedUrlToAccess = Request.Path.HasValue 
                     && Request.Path.Value != null
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                     );
                 if (!allowedUrlToAccess)
                 {
-                    this.forceChangePassword = true;
+                    this.passwordChangeRequired = true;
                     return AuthenticateResult.Fail("User must change password");
                 }
             }
@@ -113,13 +113,13 @@ namespace WB.UI.Headquarters.Code.Authentication
                 await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
                 await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "User is locked"}));
             }
-            if (this.forceChangePassword)
+            if (this.passwordChangeRequired)
             {
                 await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
                 var serverError = new ServerError()
                 {
-                    Code = ServerErrorCodes.ForceChangePassword,
-                    Message = "Your must change your password for access to server"
+                    Code = ServerErrorCodes.PasswordChangeRequired,
+                    Message = "Your must change your password to get server access"
                 };
                 await bodyWriter.WriteAsync(JsonConvert.SerializeObject(serverError));
                 //await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "Force change password"}));

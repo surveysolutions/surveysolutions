@@ -2,7 +2,7 @@
 {
     public static class ServerErrorCodes
     {
-        public const string ForceChangePassword = "Force change password";
+        public const string PasswordChangeRequired = "Password change required";
         public const string ChangePasswordError = "Change password error";
     }
 }

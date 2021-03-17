@@ -1899,15 +1899,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your password has been reset. You must change it to get access to site..
-        /// </summary>
-        public static string Synchronization_ForceChangeUserPassword {
-            get {
-                return ResourceManager.GetString("Synchronization_ForceChangeUserPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to interviews.
         /// </summary>
         public static string Synchronization_Interviews {
@@ -1976,6 +1967,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Synchronization_PartialInterviews {
             get {
                 return ResourceManager.GetString("Synchronization_PartialInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your password has been reset. You must change it to get access to site..
+        /// </summary>
+        public static string Synchronization_PasswordChangeRequired {
+            get {
+                return ResourceManager.GetString("Synchronization_PasswordChangeRequired", resourceCulture);
             }
         }
         

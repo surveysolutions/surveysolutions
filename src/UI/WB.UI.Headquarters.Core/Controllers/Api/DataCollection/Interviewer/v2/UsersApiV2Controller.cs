@@ -33,11 +33,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             SignInManager<HqUser> signInManager,
             IUserViewFactory userViewFactory,
             IApiTokenProvider apiAuthTokenProvider,
-            IWorkspacesCache workspacesCache,
             IUserToDeviceService userToDeviceService) : base(
                 authorizedUser,
                 userViewFactory,
-                userToDeviceService)
+                userToDeviceService,
+                userManager, signInManager, apiAuthTokenProvider)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -93,52 +93,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         [HttpPost]
         [Route("changePassword")]
         [WriteToSyncLog(SynchronizationLogType.ChangePassword)]
-        public async Task<ActionResult<string>> ChangePassword([FromBody]ChangePasswordInfo userChangePassword)
-        {
-            var user = await this.userManager.FindByNameAsync(userChangePassword.Username);
-
-            if (user == null)
-                return Unauthorized();
-            
-            var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userChangePassword.Password, false);
-            if (signInResult.IsLockedOut)
-            {
-                return Unauthorized(new {Message = "User is locked"});
-            }
-
-            if (signInResult.Succeeded)
-            {
-                if (!user.ForceChangePassword)
-                    return Forbid();
-
-                var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
-                var result = await userManager.ResetPasswordAsync(user, resetToken, userChangePassword.NewPassword);
-
-                if (result.Succeeded)
-                {
-                    user.ForceChangePassword = false;
-                    var updateResult = await userManager.UpdateAsync(user);
-
-                    if (updateResult.Succeeded)
-                    {
-                        var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
-                        return new JsonResult(authToken);
-                    }
-                    return this.StatusCode(StatusCodes.Status403Forbidden, new ServerError()
-                    {
-                        Code = ServerErrorCodes.ChangePasswordError,
-                        Message = string.Join("\r\n", updateResult.Errors.Select(e => e.Description))
-                    });
-                }
-
-                return this.StatusCode(StatusCodes.Status403Forbidden, new ServerError()
-                {
-                    Code = ServerErrorCodes.ChangePasswordError,
-                    Message = string.Join("\r\n", result.Errors.Select(e => e.Description))
-                });
-            }
-
-            return Unauthorized();
-        }
+        public Task<ActionResult<string>> ChangePassword([FromBody] ChangePasswordInfo userChangePassword)
+            => base.ChangePassword(userChangePassword);
     }
 }

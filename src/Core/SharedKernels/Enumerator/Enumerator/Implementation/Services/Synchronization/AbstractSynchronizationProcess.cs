@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         private bool remoteLoginRequired;
         private bool shouldUpdatePasswordOfResponsible;
-        private bool shouldChangePassword;
+        private bool changePasswordRequired;
         protected RestCredentials? RestCredentials;
         
         protected AbstractSynchronizationProcess(
@@ -345,7 +345,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         this.shouldUpdatePasswordOfResponsible = true;
                         break;
                     case SynchronizationExceptionType.ShouldChangePassword:
-                        this.shouldChangePassword = true;
+                        this.changePasswordRequired = true;
                         break;
                     case SynchronizationExceptionType.UserLocked:
                         progress.Report(new SyncProgressInfo
@@ -514,9 +514,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
             }
             
-            if (!cancellationToken.IsCancellationRequested && this.shouldChangePassword)
+            if (!cancellationToken.IsCancellationRequested && this.changePasswordRequired)
             {
-                this.shouldChangePassword = false;
+                this.changePasswordRequired = false;
 
                 var password = await this.GetNewChangedPasswordAsync().ConfigureAwait(false);
                 if (password == null)
@@ -576,7 +576,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         
         protected virtual async Task<ChangePasswordDialogResult?> GetNewChangedPasswordAsync()
         {
-            var message = EnumeratorUIResources.Synchronization_ForceChangeUserPassword;
+            var message = EnumeratorUIResources.Synchronization_PasswordChangeRequired;
 
             var dialogResult = await this.userInteractionService.ConfirmNewPasswordInputAsync(
                 message,

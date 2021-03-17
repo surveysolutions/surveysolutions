@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 
         Guid Id { get; }
         string UserName { get; }
-        bool NeedChangePassword { get; }
+        bool PasswordChangeRequired { get; }
         bool HasNonDefaultWorkspace { get; }
         IEnumerable<string> Workspaces { get; }
 
@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         /// <returns>Return true if user assigned to workspace, even for disabled one</returns>
         bool HasAccessToWorkspace(string workspace);
         IEnumerable<WorkspaceContext> GetEnabledWorkspaces();
-        void ResetForceChangePasswordFlag();
+        void ResetPasswordChangeRequiredFlag();
     }
 
     public static class AuthorizedUserHelpers

@@ -38,8 +38,8 @@ namespace WB.UI.Headquarters.Code.Authentication
                 ? this.authorizedUser.Workspaces.ToHashSet()
                 : null;
             
-            if (principal.Identity is ClaimsIdentity claimIde && user.ForceChangePassword)
-                claimIde.AddClaim(new Claim(AuthorizedUser.ForceChangePasswordType, "true"));
+            if (principal.Identity is ClaimsIdentity claimIde && user.PasswordChangeRequired)
+                claimIde.AddClaim(new Claim(AuthorizedUser.PasswordChangeRequiredType, "true"));
 
             this.inScopeExecutor.Execute(workspacesService =>
             {

@@ -122,7 +122,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 this.captchaService.ResetFailedLogin(model.UserName);
 
-                if (user!.ForceChangePassword)
+                if (user!.PasswordChangeRequired)
                 {
                     var controllerName = nameof(UsersController);
                     var actionName = nameof(UsersController.ChangePassword);
@@ -177,7 +177,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (signInResult.Succeeded)
             {
-                if (user!.ForceChangePassword)
+                if (user!.PasswordChangeRequired)
                 {
                     var controllerName = nameof(UsersController);
                     var actionName = nameof(UsersController.ChangePassword);

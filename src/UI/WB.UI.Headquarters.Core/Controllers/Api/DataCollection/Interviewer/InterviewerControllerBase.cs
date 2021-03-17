@@ -184,7 +184,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             }
             else if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResetPasswordIntroduced)
             {
-                if (authorizedUser.NeedChangePassword)
+                if (authorizedUser.PasswordChangeRequired)
                     return StatusCode(StatusCodes.Status426UpgradeRequired);
             }
             else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)

@@ -206,7 +206,7 @@ namespace WB.UI.Headquarters.Controllers
                     UserName = user.UserName,
                     Role = userRole.ToString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
-                    ForceChangePassword = user.Id == this.authorizedUser.Id && user.ForceChangePassword,
+                    ForceChangePassword = user.Id == this.authorizedUser.Id && user.PasswordChangeRequired,
                     CanChangePassword = user.Id == this.authorizedUser.Id || authorizedUser.IsAdministrator,
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
@@ -521,12 +521,12 @@ namespace WB.UI.Headquarters.Controllers
             if (this.ModelState.IsValid)
             {
                 var passwordResetToken = await this.userManager.GeneratePasswordResetTokenAsync(currentUser);
-                currentUser.ForceChangePassword = model.UserId != this.authorizedUser.Id;
+                currentUser.PasswordChangeRequired = model.UserId != this.authorizedUser.Id;
                 var updateResult = await this.userManager.ResetPasswordAsync(currentUser, passwordResetToken, model.Password);
 
                 if (updateResult.Succeeded && model.UserId == this.authorizedUser.Id)
                 {
-                    this.authorizedUser.ResetForceChangePasswordFlag();
+                    this.authorizedUser.ResetPasswordChangeRequiredFlag();
                 }
 
                 if (!updateResult.Succeeded)

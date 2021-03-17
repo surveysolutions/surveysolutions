@@ -272,7 +272,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private async Task ChangePasswordAsync()
         {
-            var message = EnumeratorUIResources.Synchronization_ForceChangeUserPassword;
+            var message = EnumeratorUIResources.Synchronization_PasswordChangeRequired;
 
             var passwordDialogResult = await this.userInteractionService.ConfirmNewPasswordInputAsync(
                 message,

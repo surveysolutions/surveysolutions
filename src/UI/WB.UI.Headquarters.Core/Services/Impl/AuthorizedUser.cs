@@ -14,7 +14,7 @@ namespace WB.UI.Headquarters.Services.Impl
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IWorkspacesCache workspacesCache;
         public const string ObserverClaimType = "observer";
-        public const string ForceChangePasswordType = "forse-change-password";
+        public const string PasswordChangeRequiredType = "forse-change-password";
 
         public AuthorizedUser(IHttpContextAccessor httpContextAccessor, IWorkspacesCache workspacesCache)
         {
@@ -47,8 +47,8 @@ namespace WB.UI.Headquarters.Services.Impl
 
         public string UserName => this.User?.Identity?.Name;
 
-        public bool NeedChangePassword => User.HasClaim(claim => 
-            claim.Type == ForceChangePasswordType && claim.Value == "true");
+        public bool PasswordChangeRequired => User.HasClaim(claim => 
+            claim.Type == PasswordChangeRequiredType && claim.Value == "true");
 
         public bool HasNonDefaultWorkspace => User.Claims.Any(x =>
             x.Type == WorkspaceConstants.ClaimType && x.Value != WorkspaceConstants.DefaultWorkspaceName);
@@ -69,10 +69,10 @@ namespace WB.UI.Headquarters.Services.Impl
             return userWorkspaces;
         }
 
-        public void ResetForceChangePasswordFlag()
+        public void ResetPasswordChangeRequiredFlag()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
-            var claim = claimsIdentity?.FindFirst(c => c.Type == ForceChangePasswordType);
+            var claim = claimsIdentity?.FindFirst(c => c.Type == PasswordChangeRequiredType);
             if (claim != null)
             {
                 claimsIdentity.TryRemoveClaim(claim);

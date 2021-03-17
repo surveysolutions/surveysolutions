@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.Code.ResetPassword
         {
             var authorizedUser = context.RequestServices.GetRequiredService<IAuthorizedUser>();
 
-            if (authorizedUser != null && authorizedUser.NeedChangePassword)
+            if (authorizedUser != null && authorizedUser.PasswordChangeRequired)
             {
                 if (!context.Request.Path.StartsWithSegments("/Users/ChangePassword")
                     && !context.Request.Path.StartsWithSegments("/Users/UpdatePassword")

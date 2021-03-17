@@ -47,9 +47,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                 case RestExceptionType.ServerErrorResponse:
                     switch (restException.ServerErrorCode)
                     {
-                        case ServerErrorCodes.ForceChangePassword: 
+                        case ServerErrorCodes.PasswordChangeRequired: 
                             exceptionType = SynchronizationExceptionType.ShouldChangePassword;
-                            exceptionMessage = EnumeratorUIResources.Synchronization_ForceChangeUserPassword;
+                            exceptionMessage = EnumeratorUIResources.Synchronization_PasswordChangeRequired;
                             break;        
                         case ServerErrorCodes.ChangePasswordError: 
                             exceptionType = SynchronizationExceptionType.ShouldChangePassword;
@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             else if(restException.Message.Contains("Force change password"))
                             {
                                 exceptionType = SynchronizationExceptionType.ShouldChangePassword;
-                                exceptionMessage = EnumeratorUIResources.Synchronization_ForceChangeUserPassword;
+                                exceptionMessage = EnumeratorUIResources.Synchronization_PasswordChangeRequired;
                             }
                             else
                             {

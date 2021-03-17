@@ -83,7 +83,7 @@ namespace WB.UI.Headquarters.SupportTool
                         bool disableForcePassword = role == UserRoles.Administrator || role == UserRoles.ApiUser;
                         if (disableForcePassword)
                         {
-                            user.ForceChangePassword = false;
+                            user.PasswordChangeRequired = false;
                             await userManager.UpdateAsync(user);
                         }
                         
@@ -139,7 +139,7 @@ namespace WB.UI.Headquarters.SupportTool
 
                     bool disableForcePassword = user.IsInRole(UserRoles.Administrator) || user.IsInRole(UserRoles.ApiUser);
                     if (!disableForcePassword)
-                        user.ForceChangePassword = true;
+                        user.PasswordChangeRequired = true;
 
                     var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
                     var result = await userManager.ResetPasswordAsync(user, resetToken, password);

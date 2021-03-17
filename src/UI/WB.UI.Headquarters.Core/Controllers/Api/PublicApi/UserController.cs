@@ -56,9 +56,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
                 if (resetPasswordResult.Succeeded)
                 {
-                    if (user.ForceChangePassword)
+                    if (user.PasswordChangeRequired)
                     {
-                        user.ForceChangePassword = false;
+                        user.PasswordChangeRequired = false;
                         await userManager.UpdateAsync(user);
                     }
                     return new ChangePasswordResult()

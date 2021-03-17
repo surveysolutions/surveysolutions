@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         
         public virtual ISet<WorkspacesUsers> Workspaces { get; protected set; }
         
-        public virtual bool ForceChangePassword { get; set; }
+        public virtual bool PasswordChangeRequired { get; set; }
     }
 
     public class HqUserToken : IdentityUserToken<Guid>
