@@ -1899,7 +1899,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your password has been reseted. You must change it to get access to site..
+        ///   Looks up a localized string similar to Your password has been reset. You must change it to get access to site..
         /// </summary>
         public static string Synchronization_ForceChangeUserPassword {
             get {
@@ -2565,7 +2565,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You changed your current password. Try login again with new password..
+        ///   Looks up a localized string similar to You changed your current password. Try to login again with new password..
         /// </summary>
         public static string YouChangeYouPasswordTryToLoginAgainWithNewPassword {
             get {

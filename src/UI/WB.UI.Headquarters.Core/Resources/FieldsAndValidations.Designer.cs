@@ -178,7 +178,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your password has been reseted. You must change it to get access to site..
+        ///   Looks up a localized string similar to Your password has been reset. You must change it to get access to site..
         /// </summary>
         public static string ForceChangePassword {
             get {

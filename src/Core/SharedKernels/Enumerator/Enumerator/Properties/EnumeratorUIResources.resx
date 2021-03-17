@@ -398,13 +398,13 @@ for further instructions</value>
     <value>Authentication problem. We were unable to confirm your credentials '{0}'. Your account may have a different password, be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor or Headquarters.</value>
   </data>
   <data name="Synchronization_ForceChangeUserPassword" xml:space="preserve">
-    <value>Your password has been reseted. You must change it to get access to site.</value>
+    <value>Your password has been reset. You must change it to get access to site.</value>
   </data>
   <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
     <value>User no longer belongs to this Supervisor team. Please contact your Headquarters for details.</value>
   </data>
   <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
-    <value>You changed your current password. Try login again with new password.</value>
+    <value>You changed your current password. Try to login again with new password.</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Your login or password is incorrect</value>

@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void UserPasswordChangeFailed(string currentUser, string userName)
         {
-            this.Append(LogEntryType.UserPasswordChangFailed, $"user '{userName}'", "password change failed", currentUser !=null ? $"By {currentUser}" : null);
+            this.Append(LogEntryType.UserPasswordChangeFailed, $"user '{userName}'", "password change failed", currentUser !=null ? $"By {currentUser}" : null);
         }
 
         public void AssignmentSizeChanged(int id, int? quantity)

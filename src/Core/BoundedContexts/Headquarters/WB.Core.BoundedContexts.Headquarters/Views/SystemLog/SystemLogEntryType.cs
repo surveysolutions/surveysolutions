@@ -26,6 +26,6 @@
         WorkspaceUserUnAssigned = 21,
         WorkspaceUpdated = 22,
         UserPasswordChanged = 23,
-        UserPasswordChangFailed = 24,
+        UserPasswordChangeFailed = 24,
     }
 }
