@@ -24,6 +24,7 @@
             <div class="col-sm-7 col-xs-12 action-block uploading-verifying active-preloading">
                 <div class="import-progress">
                     <p>{{ $t('Assignments.UpgradeProgressNumbers', { processed: totalProcessedCount, totalCount: progress.progressDetails.totalAssignmentsToMigrate }) }}</p>
+                    <p>{{ $t('Assignments.UpgradeProgressErrors', { errorCount: errorsCount }) }}</p>
                 </div>
                 <div class="cancelable-progress">
                     <div class="progress">
@@ -67,6 +68,11 @@
                         :href="$config.model.surveySetupUrl">{{$t('MainMenu.SurveySetup')}}</a>
                 </div>
             </div>
+        </div>
+        <div class="row-fluid"
+            v-else-if="progress.progressDetails.status === 'Error'">
+            <div
+                class="col-sm-12 prefilled-data-info info-block">{{$t('Assignments.UpgradeError')}}</div>
         </div>
     </HqLayout>
 </template>

@@ -57,7 +57,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         Queued = 1,
         InProgress = 2,
         Done = 3,
-        Cancelled = 4
+        Cancelled = 4,
+        Error = 5
     }
 
     public class AssignmentUpgradeError
