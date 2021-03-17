@@ -270,6 +270,9 @@
   <data name="UpgradeCancelled" xml:space="preserve">
     <value>Upgrade stopped</value>
   </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>Error occurred. Try again later.</value>
+  </data>
   <data name="UpgradeProgressDone" xml:space="preserve">
     <value>Done</value>
   </data>

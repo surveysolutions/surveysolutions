@@ -69,6 +69,11 @@
                 </div>
             </div>
         </div>
+        <div class="row-fluid"
+            v-else-if="progress.progressDetails.status === 'Error'">
+            <div
+                class="col-sm-12 prefilled-data-info info-block">{{$t('Assignments.UpgradeError')}}</div>
+        </div>
     </HqLayout>
 </template>
 

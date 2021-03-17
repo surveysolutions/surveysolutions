@@ -250,6 +250,9 @@
   <data name="UpgradeCancelled" xml:space="preserve">
     <value>Обновление остановлено</value>
   </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>Произошла ошибка. Попробуйте позже.</value>
+  </data>
   <data name="UpgradePreparation" xml:space="preserve">
     <value>Ожидание завершения других процессов обновления </value>
   </data>

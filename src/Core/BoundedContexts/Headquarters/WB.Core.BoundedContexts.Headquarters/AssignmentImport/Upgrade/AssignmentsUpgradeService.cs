@@ -17,9 +17,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IUserRepository users;
         private readonly IMemoryCache memoryCache;
-        
-        private static readonly Dictionary<Guid, AssignmentUpgradeProgressDetails> progressReporting = new Dictionary<Guid, AssignmentUpgradeProgressDetails>();
-        private static readonly ConcurrentQueue<QueuedUpgrade> upgradeQueue = new ConcurrentQueue<QueuedUpgrade>();
         private readonly ILogger<AssignmentsUpgradeService> logger;
 
         public AssignmentsUpgradeService(ISystemLog auditLog, 
@@ -45,47 +42,56 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             var user = this.users.FindById(userId);
             this.auditLog.AssignmentsUpgradeStarted(questionnaire.Title, migrateFrom.Version, migrateTo.Version, userId, user.UserName);
 
-            upgradeQueue.Enqueue(new QueuedUpgrade(processId, userId, migrateFrom, migrateTo));
-            progressReporting[processId] = new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo,
-                0, 0, 
-                new List<AssignmentUpgradeError>(), AssignmentUpgradeStatus.Queued);
+            var upgradeQueue = memoryCache.GetOrCreate(GetQueueCacheKey(),q=>
+            {
+                ConcurrentQueue<QueuedUpgrade> upgradeQueue = new ConcurrentQueue<QueuedUpgrade>();
+                q.Priority = CacheItemPriority.NeverRemove;
+                return upgradeQueue;
+            } );
 
-            logger.LogInformation($"Upgrade assignments enqueued. From {migrateFrom} to {migrateTo}. Process: {processId}. Queued count: {upgradeQueue.Count}.");
+            upgradeQueue.Enqueue(new QueuedUpgrade(processId, userId, migrateFrom, migrateTo));
+
+            memoryCache.Set(GetStatusCacheKey(processId),  
+                new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo,
+                    0, 0, 
+                    new List<AssignmentUpgradeError>(), AssignmentUpgradeStatus.Queued),
+                new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(60)));
+
+            logger.LogInformation($"Upgrade assignments enqueued. From {migrateFrom} to {migrateTo}. Process: {processId}.");
         }
 
         public void ReportProgress(Guid processId, AssignmentUpgradeProgressDetails progressDetails)
         {
-            progressReporting[processId] = progressDetails;
+            memoryCache.Set(GetStatusCacheKey(processId),  
+                progressDetails,
+                new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(60)));
         }
 
         public QueuedUpgrade DequeueUpgrade()
         {
-            if (!upgradeQueue.IsEmpty)
-            {
-                if(upgradeQueue.TryDequeue(out QueuedUpgrade request))
-                {
-                    return request;
-                }
-            }
-            return null;
+            if (!memoryCache.TryGetValue(GetQueueCacheKey(),
+                out ConcurrentQueue<QueuedUpgrade> upgradeQueue)) return null;
+
+            if (upgradeQueue.IsEmpty) return null;
+
+            return upgradeQueue.TryDequeue(out QueuedUpgrade request) ? request : null;
         }
 
         public AssignmentUpgradeProgressDetails Status(Guid processId)
         {
-            if (progressReporting.ContainsKey(processId))
-            {
-                //extend life of cancellation token
-                memoryCache.TryGetValue(GetCacheKey(processId), out CancellationTokenSource source);
-                
-                return progressReporting[processId];
-            }
-
-            return null;
+            if (!memoryCache.TryGetValue(GetStatusCacheKey(processId),
+                out AssignmentUpgradeProgressDetails progress)) return null;
+            
+            //extend life of cancellation token
+            memoryCache.TryGetValue(GetCancellationCacheKey(processId), out CancellationTokenSource source);
+            return progress;
         }
 
         public CancellationToken GetCancellationToken(Guid processId)
         {
-            var source = memoryCache.Set(GetCacheKey(processId),  
+            var source = memoryCache.Set(GetCancellationCacheKey(processId),  
                 new CancellationTokenSource(),
                 new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromMinutes(60)));
@@ -95,13 +101,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 
         public void StopProcess(Guid processId)
         {
-            if (memoryCache.TryGetValue(GetCacheKey(processId), out CancellationTokenSource source))
+            if (memoryCache.TryGetValue(GetCancellationCacheKey(processId), out CancellationTokenSource source))
             {
                 source.Cancel();
             }
         }
         
-        private string GetCacheKey(Guid id)=> "AssignmentsUpgradeService-" + id;
-
+        private string GetCancellationCacheKey(Guid id)=> "AssignmentsUpgradeService-c-" + id;
+        private string GetStatusCacheKey(Guid id)=> "AssignmentsUpgradeService-s-" + id;
+        private string GetQueueCacheKey()=> "AssignmentsUpgradeService-q";
     }
 }

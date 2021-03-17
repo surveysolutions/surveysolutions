@@ -44,18 +44,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                 new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, 0,
                     migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.InProgress));
 
-            var idsToMigrate = assignments.GetAllAssignmentIdsForMigrateToNewVersion(migrateFrom);
-            
-            logger.LogInformation($"Assignments to upgrade: {idsToMigrate.Count}. Process: {processId}.");
-
-            this.upgradeService.ReportProgress(processId,
-                new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, idsToMigrate.Count,
-                    migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.InProgress));
-
-            IQuestionnaire targetQuestionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(migrateTo, null);
-
             try
             {
+                var idsToMigrate = assignments.GetAllAssignmentIdsForMigrateToNewVersion(migrateFrom);
+            
+                logger.LogInformation($"Assignments to upgrade: {idsToMigrate.Count}. Process: {processId}.");
+
+                this.upgradeService.ReportProgress(processId,
+                    new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, idsToMigrate.Count,
+                        migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.InProgress));
+                
+                IQuestionnaire targetQuestionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(migrateTo, null);
+
                 foreach (var assignmentId in idsToMigrate)
                 {
                     cancellation.ThrowIfCancellationRequested();
@@ -86,8 +86,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             catch (OperationCanceledException)
             {
                 this.upgradeService.ReportProgress(processId,
-                    new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, idsToMigrate.Count,
+                    new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, 0,
                         migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.Cancelled));
+            }
+            catch(Exception ex) 
+            {
+                this.upgradeService.ReportProgress(processId,
+                    new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, 0,
+                        migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.Error));
+                logger.LogInformation($"Error on assignments upgrade. Process: {processId}. Error:{ex}");
+                throw;
             }
         }
     }
