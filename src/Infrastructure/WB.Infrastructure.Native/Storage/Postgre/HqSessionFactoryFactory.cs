@@ -90,7 +90,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 .Where(x => x.GetCustomAttribute<UsersAttribute>() != null &&
                             x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
 
-            mapper.AfterMapProperty += (inspector, member, customizer) =>
+            mapper.BeforeMapProperty += (inspector, member, customizer) =>
             {
                 var propertyInfo = (PropertyInfo)member.LocalMember;
 
