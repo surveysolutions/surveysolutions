@@ -87,9 +87,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             var reportQuestionIdentities = GetExposedEntitiesIdentities(state, @event.Payload.Questions);
             if (reportQuestionIdentities.Count == 0) return state;
-            
-            foreach (var answer in state.IdentifyEntitiesValues
-                .Where(g => reportQuestionIdentities.Contains(g.Entity.EntityId) && g.Identifying != true))
+
+            var valuesToRemove = state.IdentifyEntitiesValues
+                .Where(g => reportQuestionIdentities.Contains(g.Entity.EntityId) && g.Identifying != true).ToList();
+
+            foreach (var answer in valuesToRemove)
             {
                 state.IdentifyEntitiesValues.Remove(answer);
             }

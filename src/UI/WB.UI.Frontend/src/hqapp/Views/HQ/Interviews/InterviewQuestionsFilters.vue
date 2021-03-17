@@ -259,21 +259,28 @@ export default {
             }
 
             var entity = this.questionnaireItems.find(i =>  i.variable === query.rule)
+            var ruleMap = this.getRuleMap(entity)
+            var operator = this.getOperatorMap(query.operator)
 
-            if(query.operator == undefined){
-                if(entity.entityType === 'QUESTION' && entity.type === 'SINGLEOPTION')
-                    some.answerCode = {eq: query.value}
-                else
-                    some.valueBool = {eq: query.value == '1' ? true : false}
+            if(operator === 'noanswer')
+            {
+                return {identifyingData : { none: some }}
+            }
+
+            var condition = {}
+
+            if(ruleMap.ruleType == 'radio'){
+                condition[operator] = query.value == '1' ? true : false
+            }
+            else if(ruleMap.ruleType == 'numeric')
+            {
+                condition[operator] = Number(query.value)
             }
             else{
-                var ruleMap = this.getRuleMap(entity)
-
-                var condition = {}
-                condition[this.getOperatorMap(query.operator)] = ruleMap.ruleType == 'numeric'? Number(query.value) : query.value
-
-                some[ruleMap.valueName] = condition
+                condition[operator] = query.value
             }
+
+            some[ruleMap.valueName] = condition
 
             var result = {identifyingData : { some: some }}
 
@@ -281,8 +288,10 @@ export default {
         },
         getRuleMap(entity){
 
-            const comparableOperators = ['=','<>','<','<=','>','>=']
-            const textOperators = ['equals','not equals','contains','not contains','starts with','not starts with']
+            const comparableOperators = ['=','<>','<','<=','>','>=','not answered']
+            const textOperators = ['equals','not equals','contains','not contains','starts with','not starts with', 'not answered']
+            const selectOperators = ['equals','not equals','not answered']
+            const boolOperators = ['equals','not equals','not answered']
 
             if(entity.entityType =='QUESTION')
             {
@@ -290,7 +299,7 @@ export default {
                     case 'NUMERIC':
                         return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators}
                     case 'SINGLEOPTION':
-                        return {ruleType: 'select', valueName: 'answerCode'}
+                        return {ruleType: 'select', valueName: 'answerCode', operators: selectOperators}
                     case 'DATETIME':
                         return {ruleType: 'date', valueName: 'valueDate', operators: comparableOperators }
                     case 'TEXT':
@@ -305,7 +314,7 @@ export default {
                     case 'LONGINTEGER':
                         return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators}
                     case 'BOOLEAN':
-                        return {ruleType: 'radio',valueName: 'valueBool'}
+                        return {ruleType: 'radio',valueName: 'valueBool', operators: boolOperators}
                     case 'DATETIME':
                         return {ruleType: 'date', valueName: 'valueDate', operators: comparableOperators}
                     case 'STRING' :
@@ -330,6 +339,8 @@ export default {
                 case 'not contains': return 'ncontains'
                 case 'starts with': return 'startsWith'
                 case 'not starts with': return 'nstartsWith'
+
+                case 'not answered' : return 'noanswer'
             }
         },
         getDisplayTitle(title){
