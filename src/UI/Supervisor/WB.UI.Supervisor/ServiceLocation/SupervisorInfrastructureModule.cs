@@ -78,11 +78,11 @@ namespace WB.UI.Supervisor.ServiceLocation
                 PathToInterviewsDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory($"data{Path.DirectorySeparatorChar}interviews")
             });
 
-            registry.Bind(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>));
-            registry.Bind(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
+            registry.Bind(typeof(IPlainStorage<,>), typeof(SqlitePlainStorageWithWorkspace<,>));
+            registry.Bind(typeof(IPlainStorage<>), typeof(SqlitePlainStorageWithWorkspace<>));
 
-            registry.BindAsSingleton<IPlainStorage<SupervisorIdentity>, SqlitePlainStorageWithoutWorkspace<SupervisorIdentity>>();
-            registry.BindAsSingleton<IPlainStorage<WorkspaceView>, SqlitePlainStorageWithoutWorkspace<WorkspaceView>>();
+            registry.BindAsSingleton<IPlainStorage<SupervisorIdentity>, SqlitePlainStorage<SupervisorIdentity>>();
+            registry.BindAsSingleton<IPlainStorage<WorkspaceView>, SqlitePlainStorage<WorkspaceView>>();
         }
     }
 }

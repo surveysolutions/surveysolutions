@@ -8,7 +8,7 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator
 {
-    [TestOf(typeof(SqlitePlainStorage<,>))]
+    [TestOf(typeof(SqlitePlainStorageWithWorkspace<,>))]
     public class SqliteStorageTests
     {
         [Test]

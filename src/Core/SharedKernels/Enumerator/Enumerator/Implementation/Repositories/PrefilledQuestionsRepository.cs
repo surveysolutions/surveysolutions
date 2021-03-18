@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
-    public class PrefilledQuestionsRepository : SqlitePlainStorage<PrefilledQuestionView>
+    public class PrefilledQuestionsRepository : SqlitePlainStorageWithWorkspace<PrefilledQuestionView>
     {
         private readonly IEncryptionService encryptionService;
 

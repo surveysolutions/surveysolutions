@@ -36,8 +36,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             using var workspacesLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
             {
-                cb.RegisterGeneric(typeof(SqlitePlainStorageWithoutWorkspace<>)).As(typeof(IPlainStorage<,>));
-                cb.RegisterGeneric(typeof(SqlitePlainStorageWithoutWorkspace<>)).As(typeof(IPlainStorage<>));
+                cb.RegisterGeneric(typeof(SqlitePlainStorage<>)).As(typeof(IPlainStorage<,>));
+                cb.RegisterGeneric(typeof(SqlitePlainStorage<>)).As(typeof(IPlainStorage<>));
             });
             
             workspacesLifetimeScope.Resolve<MigrationRunner>().Migrate(scanInAssembly, 

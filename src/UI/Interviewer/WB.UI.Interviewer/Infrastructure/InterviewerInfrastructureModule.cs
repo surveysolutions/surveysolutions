@@ -75,11 +75,11 @@ namespace WB.UI.Interviewer.Infrastructure
                 PathToInterviewsDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory($"data{Path.DirectorySeparatorChar}interviews")
             });
 
-            registry.Bind(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>));
-            registry.Bind(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
+            registry.Bind(typeof(IPlainStorage<,>), typeof(SqlitePlainStorageWithWorkspace<,>));
+            registry.Bind(typeof(IPlainStorage<>), typeof(SqlitePlainStorageWithWorkspace<>));
 
-            registry.BindAsSingleton<IPlainStorage<InterviewerIdentity>, SqlitePlainStorageWithoutWorkspace<InterviewerIdentity>>();
-            registry.BindAsSingleton<IPlainStorage<WorkspaceView>, SqlitePlainStorageWithoutWorkspace<WorkspaceView>>();
+            registry.BindAsSingleton<IPlainStorage<InterviewerIdentity>, SqlitePlainStorage<InterviewerIdentity>>();
+            registry.BindAsSingleton<IPlainStorage<WorkspaceView>, SqlitePlainStorage<WorkspaceView>>();
             registry.Bind<IPlainStorage<PrefilledQuestionView>, PrefilledQuestionsRepository>();
 
             registry.Bind<INotificationsCollector, InterviewerNotificationsCollector>();

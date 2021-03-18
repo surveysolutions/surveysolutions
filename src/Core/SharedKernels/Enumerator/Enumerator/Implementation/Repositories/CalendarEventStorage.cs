@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
-    public class CalendarEventStorage : SqlitePlainStorage<CalendarEvent, Guid>, ICalendarEventStorage
+    public class CalendarEventStorage : SqlitePlainStorageWithWorkspace<CalendarEvent, Guid>, ICalendarEventStorage
     {
         public CalendarEventStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings,
             IWorkspaceAccessor workspaceAccessor) 
