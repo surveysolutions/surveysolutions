@@ -499,7 +499,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IDeviceInformationService>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
-                Mock.Of<IWorkspaceService>());
+                Mock.Of<IWorkspaceService>(),
+                Mock.Of<IViewModelNavigationService>());
         }
 
         public InterviewerOfflineSynchronizationProcess OfflineSynchronizationProcess(

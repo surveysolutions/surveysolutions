@@ -477,6 +477,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 return;
             }
 
+            if (e.Status == SynchronizationStatus.Fail
+                || e.Status == SynchronizationStatus.Canceled
+                || e.Status == SynchronizationStatus.Stopped
+                || e.Status == SynchronizationStatus.Success)
+            {
+                WorkspaceListUpdated?.Invoke(this, EventArgs.Empty);
+            }
+
             if (SynchronizationWithHqEnabled) return;
 
             var request = new SendSyncProgressInfoRequest
@@ -533,6 +541,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
                 this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspacesFinished;
 
+                if (interviewerApiView.Workspaces.All(w => CurrentWorkspace != w.Name))
+                {
+                    await ViewModelNavigationService.NavigateToDashboardAsync();
+                    return;
+                }
+                
                 WorkspaceListUpdated?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception)

@@ -94,6 +94,9 @@ namespace WB.UI.Shared.Enumerator.Services
         private void EncryptEvents()
         {
             var pathToInterviewsDirectory = fileSystemAccessor.CombinePath(databaseSettings.PathToDatabaseDirectory, databaseSettings.InterviewsDirectory);
+            if (!fileSystemAccessor.IsDirectoryExists(pathToInterviewsDirectory))
+                fileSystemAccessor.CreateDirectory(pathToInterviewsDirectory);
+            
             foreach (var interviewFile in this.fileSystemAccessor.GetFilesInDirectory(pathToInterviewsDirectory, "*.sqlite3"))
             {
                 var sqConnection = new SQLiteConnectionString(interviewFile, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true, null);

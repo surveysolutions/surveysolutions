@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -461,6 +462,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Stage = SyncStage.Failed
                 });
             }
+            catch (ActiveWorkspaceRemovedException we)
+            {
+                var workspace = principal.CurrentUserIdentity.Workspace;
+                this.logger.Error($"Workspace {workspace} removed.", we);
+
+                await ChangeAndNavigateToNewDefaultWorkspaceAsync();
+            }
             catch (Exception ex)
             {
                 progress.Report(new SyncProgressInfo
@@ -528,7 +536,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         protected virtual void OnSuccessfulSynchronization() { }
 
         protected abstract Task CheckAfterStartSynchronization(CancellationToken cancellationToken);
-
+        protected abstract Task ChangeAndNavigateToNewDefaultWorkspaceAsync();
         protected abstract void UpdatePasswordOfResponsible(RestCredentials credentials);
 
         protected abstract string GetRequiredUpdate(string targetVersion, string appVersion);

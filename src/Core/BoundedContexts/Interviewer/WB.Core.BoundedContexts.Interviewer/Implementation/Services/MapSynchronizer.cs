@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
@@ -59,5 +60,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                    + Environment.NewLine + string.Format(EnumeratorUIResources.InterviewerVersion, appVersion);
         }
 
+        protected override Task ChangeAndNavigateToNewDefaultWorkspaceAsync()
+            => throw new NotImplementedException("Remove workspace by offline synchronization no supported");
     }
 }

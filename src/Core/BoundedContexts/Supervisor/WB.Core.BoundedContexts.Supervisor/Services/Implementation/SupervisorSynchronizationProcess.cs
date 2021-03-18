@@ -24,16 +24,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
     public class SupervisorSynchronizationProcess : AbstractSynchronizationProcess
     {
         private readonly ISupervisorSynchronizationService synchronizationService;
-        private readonly IPrincipal principal;
+        private readonly ISupervisorPrincipal principal;
         private readonly IPlainStorage<SupervisorIdentity> supervisorsPlainStorage;
         private readonly IPasswordHasher passwordHasher;
         private readonly IWorkspaceService workspaceService;
+        private readonly IPlainStorage<SupervisorIdentity> supervisorPlainStorage;
+        private readonly IViewModelNavigationService navigationService;
 
         public SupervisorSynchronizationProcess(
             ISupervisorSynchronizationService synchronizationService,
             IPlainStorage<SupervisorIdentity> supervisorsPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
-            IPrincipal principal,
+            ISupervisorPrincipal principal,
             ILogger logger,
             IUserInteractionService userInteractionService,
             IPasswordHasher passwordHasher,
@@ -43,7 +45,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             IDeviceInformationService deviceInformationService,
             IAuditLogService auditLogService,
             IServiceLocator serviceLocator,
-            IWorkspaceService workspaceService) : base(synchronizationService, logger, httpStatistician, principal,
+            IWorkspaceService workspaceService,
+            IPlainStorage<SupervisorIdentity> supervisorPlainStorage,
+            IViewModelNavigationService navigationService) : base(synchronizationService, logger, httpStatistician, principal,
             interviewViewRepository, auditLogService, supervisorSettings, serviceLocator, deviceInformationService, userInteractionService,
             assignmentsStorage)
         {
@@ -52,6 +56,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             this.supervisorsPlainStorage = supervisorsPlainStorage;
             this.passwordHasher = passwordHasher;
             this.workspaceService = workspaceService;
+            this.supervisorPlainStorage = supervisorPlainStorage;
+            this.navigationService = navigationService;
         }
 
         protected override async Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
@@ -63,6 +69,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             
             SupervisorApiView supervisor = await this.synchronizationService.GetSupervisorAsync(this.RestCredentials, token: cancellationToken).ConfigureAwait(false);
             this.UpdateWorkspaceInfo(supervisor.Workspaces);
+            
+            if (supervisor.Workspaces.All(w => w.Name != principal.CurrentUserIdentity.Workspace))
+                throw new ActiveWorkspaceRemovedException();
+        }
+        
+        protected override Task ChangeAndNavigateToNewDefaultWorkspaceAsync()
+        {
+            var workspaceView = workspaceService.GetAll().First();
+            var supervisorIdentity = (SupervisorIdentity)principal.CurrentUserIdentity;
+            supervisorIdentity.Workspace = workspaceView.Name;
+            supervisorPlainStorage.Store(supervisorIdentity);
+            
+            return navigationService.NavigateToDashboardAsync();
         }
         
         private void UpdateWorkspaceInfo(List<UserWorkspaceApiView> workspaces)

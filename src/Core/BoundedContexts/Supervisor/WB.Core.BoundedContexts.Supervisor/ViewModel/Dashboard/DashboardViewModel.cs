@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
@@ -73,6 +74,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.DashboardNotifications = dashboardNotifications;
             
             this.mvxNavigationService.AfterNavigate += OnAfterNavigate;
+            this.Synchronization.OnProgressChanged += SynchronizationOnProgressChanged;
+
             messengerSubscribtion = messenger.Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
         }
 
@@ -212,8 +215,20 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         {
             messengerSubscribtion.Dispose();
             this.mvxNavigationService.AfterNavigate -= OnAfterNavigate;
+            this.Synchronization.OnProgressChanged -= SynchronizationOnProgressChanged;
         }
-        
+
+        private void SynchronizationOnProgressChanged(object sender, SyncProgressInfo e)
+        {
+            if (e.Status == SynchronizationStatus.Fail
+                || e.Status == SynchronizationStatus.Canceled
+                || e.Status == SynchronizationStatus.Stopped
+                || e.Status == SynchronizationStatus.Success)
+            {
+                WorkspaceListUpdated?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
         public string CurrentWorkspace => Principal.CurrentUserIdentity.Workspace;
         public WorkspaceView[] GetWorkspaces()
         {
@@ -243,8 +258,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
                 this.Synchronization.Status = SynchronizationStatus.Started;
                 this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspaces;
                 
-                var interviewerApiView = await supervisorSynchronizationService.GetSupervisorAsync();
-                workspaceService.Save(interviewerApiView.Workspaces.Select(w => new WorkspaceView()
+                var supervisorApiView = await supervisorSynchronizationService.GetSupervisorAsync();
+                workspaceService.Save(supervisorApiView.Workspaces.Select(w => new WorkspaceView()
                 {
                     Id = w.Name,
                     DisplayName = w.DisplayName,
@@ -253,6 +268,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
                 }).ToArray());
 
                 this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspacesFinished;
+
+                if (supervisorApiView.Workspaces.All(w => CurrentWorkspace != w.Name))
+                {
+                    await ViewModelNavigationService.NavigateToDashboardAsync();
+                    return;
+                }
 
                 WorkspaceListUpdated?.Invoke(this, EventArgs.Empty);
             }

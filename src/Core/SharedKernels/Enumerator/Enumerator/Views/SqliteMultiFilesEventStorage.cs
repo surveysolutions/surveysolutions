@@ -52,6 +52,10 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         private SQLiteConnectionWithLock CreateConnection(string connectionString)
         {
+            var directory = fileSystemAccessor.GetDirectory(connectionString);
+            if (!fileSystemAccessor.IsDirectoryExists(directory))
+                fileSystemAccessor.CreateDirectory(directory);
+            
             var sqConnection = new SQLiteConnectionString(connectionString, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true, null);
             var connection = new SQLiteConnectionWithLock(sqConnection);
 
@@ -76,7 +80,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 {
                     if (!this.connectionByEventSource.TryGetValue(eventSourceId, out connection))
                     {
-                        connection = this.CreateConnection(this.GetEventSourceConnectionString(eventSourceId));
+                        var eventSourceConnectionString = this.GetEventSourceConnectionString(eventSourceId);
+                        connection = this.CreateConnection(eventSourceConnectionString);
                         this.connectionByEventSource.Add(eventSourceId, connection);
                     }
                 }
