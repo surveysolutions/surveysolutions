@@ -52,6 +52,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             protected set => this.RaiseAndSetIfChanged(ref this.questionsCount, value);
         }
 
+        private int answeredProgress = 0; 
+        public int AnsweredProgress 
+        {
+            get => this.answeredProgress;
+            protected set => this.RaiseAndSetIfChanged(ref this.answeredProgress, value);
+        }
+
         public int SubgroupsCount { get; protected set; }
         public int InvalidAnswersCount { get; protected set; }
 

@@ -1,3 +1,4 @@
+using System;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -34,6 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.SubgroupsCount = 0;
             this.AnsweredQuestionsCount = interview.CountActiveAnsweredQuestionsInInterview();
             this.InvalidAnswersCount = interview.CountInvalidEntitiesInInterview();
+            this.AnsweredProgress = (int)Math.Round((double)(this.AnsweredQuestionsCount * 100)/ this.QuestionsCount);
             this.SimpleStatus = this.CalculateInterviewSimpleStatus();
             this.Status = this.CalculateDetailedStatus();
         }
