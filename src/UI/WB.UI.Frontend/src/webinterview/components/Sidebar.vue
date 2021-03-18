@@ -2,10 +2,19 @@
     <aside class="content"
         v-if="sections"
         style="transform: translateZ(0);">
-        <div style="text-align:center;">
-            <h5>
-                {{progress}}
-            </h5>
+        <div v-if="interviewState!=null"
+            class="interview-progress">
+            <div class="progress-counts">
+                {{this.$t('WebInterviewUI.Progress')}}:{{progress}}
+            </div>
+            <wb-progress
+                :striped = false
+                :visible="interviewState!=null"
+                :valuemax="interviewState.activeQuestionCount"
+                :valuenow="interviewState.answeredQuestionsCount" />
+            <div class="progress-percents">
+                {{progressPercent}}%
+            </div>
         </div>
         <wb-humburger id="sidebarHamburger"
             :show-foldback-button-as-hamburger="showFoldbackButtonAsHamburger" />
@@ -82,8 +91,11 @@ export default {
         },
         progress(){
             if(this.interviewState)
-                return this.$t('WebInterviewUI.Progress') + ': ' + Math.round((this.interviewState.answeredQuestionsCount / this.interviewState.activeQuestionCount) * 100) + '% (' + this.interviewState.answeredQuestionsCount + '/' + this.interviewState.activeQuestionCount + ')'
+                return this.interviewState.answeredQuestionsCount + '/' + this.interviewState.activeQuestionCount
             return ''
+        },
+        progressPercent(){
+            return Math.round((this.interviewState.answeredQuestionsCount / this.interviewState.activeQuestionCount) * 100)
         },
     },
     beforeMount() {

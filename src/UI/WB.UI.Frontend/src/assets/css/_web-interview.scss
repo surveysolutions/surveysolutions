@@ -789,6 +789,25 @@
 	}
 }
 
+.interview-progress{
+    display:flex;
+    .progress-counts{
+        margin:10px 10px 10px 30px;
+    }
+    .progress {
+        position:inherit;
+        height:14px;
+        background-color:#ebebeb;
+        margin-top:11px;
+        flex:1;
+        min-width:20px;
+    }
+    .progress-percents
+    {
+        margin:10px 30px 10px 10px;
+    }
+}
+
 @media only screen and (max-width: 1525px){
 	.content{
 		width: $content-width-small;
