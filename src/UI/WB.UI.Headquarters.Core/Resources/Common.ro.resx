@@ -133,7 +133,7 @@
     <value>Toți responsabilii</value>
   </data>
   <data name="AllStatuses" xml:space="preserve">
-    <value>Toate statusurile</value>
+    <value>Toate stÄƒrile</value>
   </data>
   <data name="AllSupervisors" xml:space="preserve">
     <value>Toți controlorii</value>
@@ -226,7 +226,7 @@
     <value>Nu a fost nimic selectat</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>OK</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Deschide</value>
@@ -274,13 +274,13 @@
     <value>Arată datele de identificare</value>
   </data>
   <data name="ShowStatusHistory" xml:space="preserve">
-    <value>Arată istoricul statusurilor</value>
+    <value>AratÄƒ istoricul stÄƒrilor</value>
   </data>
   <data name="SignIn" xml:space="preserve">
     <value>Intrare în cont</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Stare</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Template</value>
@@ -307,7 +307,34 @@
       <value>Selectează chestionarul</value>
     <comment>Selectează chestionarul</comment>
   </data>
-  <data name="Assignments" xml:space="preserve">
-    <value>Misiuni</value>
+  <data name="AllVersions" xml:space="preserve">
+    <value>Toate versiunile</value>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Furnizori de servicii email</value>
+  </data>
+  <data name="Equals" xml:space="preserve">
+    <value>Egal</value>
+  </data>
+  <data name="NotEquals" xml:space="preserve">
+    <value>Nu este egal</value>
+  </data>
+  <data name="OpenAssignment" xml:space="preserve">
+    <value>Deschide o sarcinÄƒ</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>Versiunea chestionarului</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Restabilire</value>
+  </data>
+  <data name="SelectOption" xml:space="preserve">
+    <value>SelecteazÄƒ o opÈ›iune</value>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>ÃŽncepe cu</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Necunoscut</value>
   </data>
 </root>

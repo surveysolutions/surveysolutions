@@ -307,6 +307,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetQuestionOrThrow(linkedQuestionId.Value).QuestionType == QuestionType.TextList;
         }
 
+        public bool IsUsingExpressionStorage() => this.QuestionnaireDocument.IsUsingExpressionStorage;
+
         public Guid[] GetQuestionsLinkedToRoster()
         {
             return this.QuestionCache.Values.Where(x => x.LinkedToRosterId.HasValue).Select(x => x.PublicKey).ToArray();
@@ -1857,11 +1859,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .Select(x => x.PublicKey);
         }
 
-        public bool IsUsingExpressionStorage()
-        {
-            return this.QuestionnaireDocument.IsUsingExpressionStorage;
-        }
-
         public List<Guid> GetExpressionsPlayOrder()
         {
             return this.QuestionnaireDocument.ExpressionsPlayOrder;
@@ -1881,21 +1878,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public List<Guid> GetValidationExpressionsPlayOrder(IEnumerable<Guid> entities)
         {
-            if (IsUsingExpressionStorage())
+            HashSet<Guid> entityIds = new HashSet<Guid>();
+            foreach (var entity in entities)
             {
-                HashSet<Guid> entityIds = new HashSet<Guid>();
-                foreach (var entity in entities)
-                {
-                    entityIds.Add(entity);
+                entityIds.Add(entity);
 
-                    if (this.QuestionnaireDocument.ValidationDependencyGraph.TryGetValue(entity, out Guid[] referancecs))
-                        referancecs.ForEach(id => entityIds.Add(id));
-                }
-
-                return entityIds.ToList();
+                if (this.QuestionnaireDocument.ValidationDependencyGraph.TryGetValue(entity, out Guid[] referancecs))
+                    referancecs.ForEach(id => entityIds.Add(id));
             }
 
-            return this.QuestionnaireDocument.ExpressionsPlayOrder;
+            return entityIds.ToList();
         }
 
         public bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId,

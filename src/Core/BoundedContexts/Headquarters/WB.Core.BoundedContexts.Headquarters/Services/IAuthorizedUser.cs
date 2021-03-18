@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         bool IsAdministrator { get; }
         bool IsHeadquarter { get; }
         bool IsSupervisor { get; }
+        bool IsApiUser { get; }
         bool IsObserver { get; }
         bool IsObserving { get; }
         bool IsAuthenticated { get; }

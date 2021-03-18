@@ -213,12 +213,24 @@ task PackageHq frontend, {
 }
 
 task PackageHqOffline frontend, {
+    if(Test-Path ./src/UI/WB.UI.Headquarters.Core/Export.Service){
+        Remove-Item ./src/UI/WB.UI.Headquarters.Core/Export.Service -Recurse -Force
+    }    
+
+    exec {
+        dotnet publish ./src/Services/Export/WB.Services.Export.Host `
+            -c Release -r win-x64 --no-self-contained  `
+            -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION `
+            -o ./src/UI/WB.UI.Headquarters.Core/Export.Service
+    }
+     
     exec {
         dotnet publish ./src/UI/WB.UI.Headquarters.Core `
             /p:PublishSingleFile=true /p:SelfContained=False /p:AspNetCoreHostingModel=outofprocess `
             /p:IncludeAllContentForSelfExtract=true `
-            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/hq-offline
+            -c Release -r win-x64 --no-self-contained    -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/hq-offline
     }
+
     New-Item -Type Directory $tmp/hq-prepare -ErrorAction SilentlyContinue | Out-Null
     copy-item $tmp/hq-offline/WB.UI.Headquarters.exe $tmp/hq-prepare
     copy-item $tmp/hq-offline/web.config $tmp/hq-prepare/Web.config
@@ -281,7 +293,7 @@ task DockerHq {
 
     if ($isRelease) {
         $tags += Get-DockerTags "surveysolutions" "surveysolutions"
-        $tags += @("--tag", "surveysolutions/surveysolutions:latest")
+        $tags += @("surveysolutions/surveysolutions:latest")
     }
 
     # if (-not $noDockerPush.IsPresent) {

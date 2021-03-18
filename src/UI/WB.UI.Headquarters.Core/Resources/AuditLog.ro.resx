@@ -126,4 +126,16 @@
   <data name="ServerFilePath" xml:space="preserve">
     <value>Locația fișierului pe server </value>
   </data>
+  <data name="EventType" xml:space="preserve">
+    <value>Tipul evenimentului</value>
+  </data>
+  <data name="Log" xml:space="preserve">
+    <value>Jurnal</value>
+  </data>
+  <data name="LogDate" xml:space="preserve">
+    <value>Data jurnalului</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Utilizator</value>
+  </data>
 </root>

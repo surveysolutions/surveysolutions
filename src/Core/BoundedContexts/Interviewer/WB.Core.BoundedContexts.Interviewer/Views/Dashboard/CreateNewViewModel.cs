@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IInterviewerSettings interviewerSettings;
         private LocalSynchronizationViewModel synchronization = null!;
 
-        public IMvxCommand SynchronizationCommand => new MvxCommand(this.RunSynchronization, 
+        public IMvxCommand SynchronizationCommand => new MvxCommand(this.RunSynchronization,
             () => !this.synchronization.IsSynchronizationInProgress && this.interviewerSettings.AllowSyncWithHq);
 
         public CreateNewViewModel(
@@ -75,21 +75,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             var dbQuestionnaires = this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census);
             var dbAssignments = this.assignmentsRepository.LoadAll().SortAssignments();
-            
+
             if (dbQuestionnaires.Count > 0 || dbAssignments.Count > 0)
             {
                 var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
                 subTitle.Title = EnumeratorUIResources.Dashboard_CreateNewTabText;
 
                 yield return subTitle;
-            }
-
-            foreach (var censusQuestionnaireView in dbQuestionnaires)
-            {
-                var censusQuestionnaireDashboardItem = this.viewModelFactory.GetNew<CensusQuestionnaireDashboardItemViewModel>();
-                censusQuestionnaireDashboardItem.Init(censusQuestionnaireView);
-
-                yield return censusQuestionnaireDashboardItem;
             }
 
             foreach (var assignment in dbAssignments)
@@ -106,7 +98,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         protected override IDashboardItemWithEvents GetUpdatedDashboardItem(IDashboardItemWithEvents dashboardItem)
         {
-            var assignmentModel = (AssignmentDashboardItemViewModel) dashboardItem;
+            var assignmentModel = (AssignmentDashboardItemViewModel)dashboardItem;
             var newAssignmentModel = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
             var assignment = this.assignmentsRepository.GetById(assignmentModel.AssignmentId);
             newAssignmentModel.Init(assignment);
@@ -115,20 +107,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public void UpdateAssignment(int? assignmentId)
         {
-            if (!assignmentId.HasValue)
-            {
-                this.UiItems.OfType<CensusQuestionnaireDashboardItemViewModel>()
-                    .ForEach(x => x.UpdateSubtitle());
-            }
-            else
-            {
-                this.assignmentsRepository.DecreaseInterviewsCount(assignmentId.Value);
-                
-                this.UiItems
-                    .OfType<InterviewerAssignmentDashboardItemViewModel>()
-                    .FirstOrDefault(x => x.AssignmentId == assignmentId.Value)
-                    ?.DecreaseInterviewsCount();
-            }
+            if (assignmentId == null) return; 
+
+            this.assignmentsRepository.DecreaseInterviewsCount(assignmentId.Value);
+
+            this.UiItems
+                .OfType<InterviewerAssignmentDashboardItemViewModel>()
+                .FirstOrDefault(x => x.AssignmentId == assignmentId.Value)
+                ?.DecreaseInterviewsCount();
         }
     }
 }

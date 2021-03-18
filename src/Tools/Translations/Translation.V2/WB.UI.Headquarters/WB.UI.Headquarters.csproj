@@ -1182,6 +1182,12 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.zh.resx">
       <Link>Resources\WebInterviewUI.zh.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Workspaces.resx">
+      <Link>Resources\Workspaces.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Workspaces.ru.resx">
+      <Link>Resources\Workspaces.ru.resx</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

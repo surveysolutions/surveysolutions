@@ -124,7 +124,7 @@
     <value>Mesajul personalizat nu trebuie să conțină mai mult de {0} caractere (inclusiv html)</value>
   </data>
   <data name="CustomText" xml:space="preserve">
-    <value>Foloseşte text personalizat</value>
+    <value>Foloseşte un text personalizat</value>
   </data>
   <data name="Done" xml:space="preserve">
     <value>Efectuat</value>
@@ -188,5 +188,65 @@
   </data>
   <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
     <value>Antetul afişat pe pagina de start a interviului Web</value>
+  </data>
+  <data name="Invitations" xml:space="preserve">
+    <value>Invitații</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
+    <value>Puteți modifica aceste setări pe pagina &lt;a href="{{url}}"&gt;„Furnizori de e-mail”&lt;/a&gt;.</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
+    <value>Cereți administratorului dvs. să modifice aceste setări la pagina „Furnizori de e-mail”.</value>
+  </data>
+  <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
+    <value>Furnizorul de e-mail nu este configurat.</value>
+  </data>
+  <data name="Invitations_NothingSent" xml:space="preserve">
+    <value>Nu s-au trimis încă invitații.</value>
+  </data>
+  <data name="Invitations_NothingToSend" xml:space="preserve">
+    <value>Nici o invitație de trimis de acum.</value>
+  </data>
+  <data name="Invitations_SendAction" xml:space="preserve">
+    <value>Trimiteți {{count}} invitații</value>
+  </data>
+  <data name="Invitations_Sent" xml:space="preserve">
+    <value>{{count}} invitații au fost deja trimise.</value>
+  </data>
+  <data name="Invitations_SetupError" xml:space="preserve">
+    <value>Invitațiile nu pot fi trimise.</value>
+  </data>
+  <data name="Invitations_SuccessfulSetup" xml:space="preserve">
+    <value>Sondajul web a fost început și furnizorul de e-mail a fost configurat corect. Sistemul este gata să trimită invitații.</value>
+  </data>
+  <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
+    <value>Sondajul web nu este pornit. Configurați și &lt;a href="{{url}}"&gt; începeți sondajul web &lt;/a&gt; înainte de a trimite invitații.</value>
+  </data>
+  <data name="Invitations_ToSend" xml:space="preserve">
+    <value>{{count}} invitații de trimis.</value>
+  </data>
+  <data name="Invitations_TotalInvitations" xml:space="preserve">
+    <value>{{count}} invitații în total.</value>
+  </data>
+  <data name="SingleResponse" xml:space="preserve">
+    <value>Limitați la o anchetă pe respondent</value>
+  </data>
+  <data name="UseCaptcha" xml:space="preserve">
+    <value>Folosiți CAPTCHA înainte de începerea anchetei</value>
+  </data>
+  <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
+    <value>Trimiteți invitațiile</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
+    <value>Complet</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
+    <value>Notă pentru Controlor</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
+    <value>Reluare</value>
+  </data>
+  <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
+    <value>Începe o nouă anchetă</value>
   </data>
 </root>

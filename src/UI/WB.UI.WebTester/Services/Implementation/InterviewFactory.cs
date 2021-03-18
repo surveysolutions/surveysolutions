@@ -78,7 +78,7 @@ namespace WB.UI.WebTester.Services.Implementation
             var questionnaire = await ImportQuestionnaireAndCreateInterview(designerToken);
 
             var scenarioSerialized = await this.webTesterApi.GetScenario(designerToken.ToString(), scenarioId);
-            if(scenarioSerialized.StatusCode == HttpStatusCode.NotFound)
+            if(scenarioSerialized.StatusCode == HttpStatusCode.NotFound || scenarioSerialized.Content == null)
                 return CreationResult.EmptyCreated;
             
             var scenario = this.serializer.Deserialize(scenarioSerialized.Content);

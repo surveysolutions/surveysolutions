@@ -133,7 +133,7 @@
     <value>Date aprobate</value>
   </data>
   <data name="ApprovedDataSpss" xml:space="preserve">
-    <value>date aprobate SPSS</value>
+    <value>Date aprobate SPSS</value>
   </data>
   <data name="ApprovedDataStata" xml:space="preserve">
     <value>Date aprobate Stata</value>
@@ -203,5 +203,38 @@
   </data>
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>Setarea chestionarului web</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Detalii</value>
+  </data>
+  <data name="DownloadLinks" xml:space="preserve">
+    <value>Descarcă legături web</value>
+  </data>
+  <data name="ImportedBy" xml:space="preserve">
+    <value>Importat de </value>
+  </data>
+  <data name="ImportedByText" xml:space="preserve">
+    <value>{{role}} utilizator {{name}}</value>
+  </data>
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve">
+    <value>Anchetele {{receivedInterviews}} și sarcinile {{receivedAssignments}}  au fost primite de anchetatorii / supraveghetorii care lucrează deconectați. După ce confirmați ștergerea sondajului, serverul nu va mai accepta informațiile pe baza acestor anchete / sarcini, care vor dispărea la următoarea sincronizare fără posibilitatea de recuperare, chiar dacă conțin informații introduse / editate recent. Este responsabilitatea dumneavoastră să avertizați / să anunțați anchetatorii să nu mai completeze acele anchete / sarcini, deoarece aceștia nu vor fi anunțați automat. Doriți să continuați?</value>
+  </data>
+  <data name="RecordAudio" xml:space="preserve">
+    <value>Înregistrați audio</value>
+  </data>
+  <data name="RecordAudioTitle" xml:space="preserve">
+    <value>Aplicația Intervievator va înregistra sunetul interviului atunci când auditul audio este activat. Rețineți că cantitatea de date de sincronizare ar fi semnificativ mai mare.</value>
+  </data>
+  <data name="SendInvitations" xml:space="preserve">
+    <value>Trimite invitații</value>
+  </data>
+  <data name="ShowOnDesigner" xml:space="preserve">
+    <value>Afișați pe Designer</value>
+  </data>
+  <data name="TypeQuestionnaireName" xml:space="preserve">
+    <value>Vă rugăm să introduceți '{{questionnaireTitle}}' pentru a confirma</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Modul WEB</value>
   </data>
 </root>

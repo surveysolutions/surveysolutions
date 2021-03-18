@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CloseInterview" xml:space="preserve">
-    <value>Interviu {0} închis</value>
+    <value>Interviul {0} a fost închis</value>
   </data>
   <data name="CompleteInterview" xml:space="preserve">
-    <value>Interviu {0} finalizat</value>
+    <value>Interviul {0} a fost finalizat</value>
   </data>
   <data name="CreateInterviewFromAssignment" xml:space="preserve">
-    <value>Interviu {0} creat din atribuirea {1}</value>
+    <value>Interviul {0} a fost creat din sarcina  {1}</value>
   </data>
   <data name="DeleteInterview" xml:space="preserve">
-    <value>Interviu {0} șters</value>
+    <value>Interviul {0} a fost șters</value>
   </data>
   <data name="DetailedActionLog" xml:space="preserve">
     <value>Jurnal de acțiuni detaliat</value>
@@ -166,13 +166,13 @@
     <value>Sincronizare finalizată:</value>
   </data>
   <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve">
-    <value>{0} interviuri noi alocate descărcate</value>
+    <value>{0} sarcini noi descărcate</value>
   </data>
   <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve">
-    <value>{0} interviuri alocate eliminate</value>
+    <value>{0} sarcini eliminate</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve">
-    <value>{0} interviuri noi descărcate</value>
+    <value>{0} interviu(ri) noi descărcate</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
     <value>{0} interviu(ri) respins(e)</value>
@@ -191,5 +191,29 @@
   </data>
   <data name="SynchronizationStarted" xml:space="preserve">
     <value>Sincronizarea a început ({0})</value>
+  </data>
+  <data name="ApproveInterview" xml:space="preserve">
+    <value>Interviu {0} a fost aprobat</value>
+  </data>
+  <data name="AssignResponsibleToAssignment" xml:space="preserve">
+    <value>Atribuiți responsabilul {0} sarcinii nr. {1}</value>
+  </data>
+  <data name="AssignResponsibleToInterview" xml:space="preserve">
+    <value>Atribuiți responsabilul {0} interviului nr. {1}</value>
+  </data>
+  <data name="FinishInstallation" xml:space="preserve">
+    <value>Instalarea s-a încheiat</value>
+  </data>
+  <data name="RejectInterview" xml:space="preserve">
+    <value>Interviul {0} a fost respins</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
+    <value>{0} interviu(ri) actualizate de către RINS</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
+    <value>{0} interviu(ri) încărcate parțial</value>
+  </data>
+  <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
+    <value>{0} interviu(ri) au fost redeschise după ce au primit comentarii</value>
   </data>
 </root>

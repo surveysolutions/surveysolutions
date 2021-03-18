@@ -121,7 +121,7 @@
     <value>Administrator</value>
   </data>
   <data name="ApiUser" xml:space="preserve">
-    <value>Utilizator Api</value>
+    <value>Utilizator API</value>
   </data>
   <data name="FileContentIsMissingForFileNameAndInterviewFormat" xml:space="preserve">
     <value>Nu există conținut pentru fișierul {0} interviul {1}</value>
@@ -133,7 +133,7 @@
     <value>Anchetator</value>
   </data>
   <data name="InterviewWithIdIsAbsentFormat" xml:space="preserve">
-    <value>Interviul cu id-ul '{0}' lipsește</value>
+    <value>Interviul cu numărul '{0}' lipsește</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
     <value>Controlor</value>

@@ -217,10 +217,10 @@
     <value>Variabile definite în Designer ca fiind de identificare.</value>
   </data>
   <data name="DownloadInvalidAssignments" xml:space="preserve">
-    <value>Descarcă interviurile alocate nevalide</value>
+    <value>Descarcă interviurile alocate incorecte</value>
   </data>
   <data name="DownloadInvalidInterviews" xml:space="preserve">
-    <value>Descarcă interviurile nevalide</value>
+    <value>Descarcă interviurile incorecte</value>
   </data>
   <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
     <value>template .tab.</value>
@@ -343,7 +343,7 @@
     <value>Importarea eșantionului</value>
   </data>
   <data name="ImportStatus" xml:space="preserve">
-    <value>Statusul importării</value>
+    <value>stareul importării</value>
   </data>
   <data name="InterviewsAreNotCreated" xml:space="preserve">
     <value>Nu au fost create interviuri</value>
@@ -355,7 +355,7 @@
     <value>este în proces de verificare, verificat</value>
   </data>
   <data name="IsInvalid" xml:space="preserve">
-    <value>este nevalid. Vă rugăm rezolvați erorile de mai jos și încărcați din nou.</value>
+    <value>este incorect. Vă rugăm rezolvați erorile de mai jos și încărcați din nou.</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
     <value>Data ultimei încărcări</value>
@@ -481,7 +481,7 @@
     <value>1 interviu eșuat</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Stare</value>
   </data>
   <data name="SupervisorMustBeSelected" xml:space="preserve">
     <value>Trebuie selectat controlorul sau anchetatorul</value>
@@ -560,5 +560,39 @@
   </data>
   <data name="ViewListPreloadedData" xml:space="preserve">
     <value>Vizualizarea listei cu valori preîncărcate</value>
+  </data>
+  <data name="BatchDescription" xml:space="preserve">
+    <value>Încărcați o arhivă zip cu unul sau mai multe fișiere cu date separate prin tab-uri care să corespundă nivelului principal al interviului și listelor subordonate. Este permisă încărcarea variabilelor la orice nivel al interviului. &lt;br/&gt;
+Toate fișierele de date trebuie să conțină o variabilă denumită interviu__id compusă dintr-un șir de caractere sau identificator numeric al interviului care să fie unic. &lt;br/&gt;
+&lt;br/&gt;
+Opțional, puteți specifica următoarele coloane în fișierul de la nivelul principal al interviului: &lt;br/&gt;
+_responsible - numele de utilizator al unui sediu, al supraveghetorului sau al unui intervievator care va fi responsabil pentru sarcină; &lt;br/&gt;
+_quantity - capacitatea sarcinii; &lt;br/&gt;
+_email - e-mail-ul respondentului (numai pentru interviuri web); &lt;br/&gt;
+_password - parola pentru a începe un interviu (numai pentru interviuri web); &lt;br/&gt;
+_webmode - dacă această sarcină este în modul web (ar trebui utilizată valoarea 1); &lt;br/&gt;
+_record_audio - înregistrarea audio este activată pentru interviuri (1 - activată, 0 - dezactivată, necompletată - obțineți această valoare din chestionar); &lt;br/&gt;
+_comment - comentarii pentru sarcină</value>
+  </data>
+  <data name="FileTypeDescription" xml:space="preserve">
+    <value>Salvați fișierulcu codare UTF8 pentru a putea suporta textele din limba specificată</value>
+  </data>
+  <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>Dacă niciun responsabil desemnat în fișier nu folosește acest cont de sediu / controlor / anchetator:</value>
+  </data>
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>Încărcați un fișier cu date separate prin tab-uri cu valori pentru întrebările de la acest nivel al anchetei. Este permisă includerea valorilor pentru întrebările de identificare și celelalte întrebări la nivelul principal al interviului.&lt;br/&gt;
+Opțional, puteți specifica următoarele coloane în fișierul de la nivelul principal al interviului: &lt;br/&gt;
+_responsible - numele de utilizator al unui sediu, al supraveghetorului sau al unui intervievator care va fi responsabil pentru sarcină; &lt;br/&gt;
+_quantity - capacitatea sarcinii; &lt;br/&gt;
+_email - e-mail-ul respondentului (numai pentru interviuri web); &lt;br/&gt;
+_password - parola pentru a începe un interviu (numai pentru interviuri web); &lt;br/&gt;
+_webmode - dacă această sarcină este în modul web (ar trebui utilizată valoarea 1); &lt;br/&gt;
+_record_audio - înregistrarea audio este activată pentru interviuri (1 - activată, 0 - dezactivată, necompletată - obțineți această valoare din chestionar); &lt;br/&gt;
+_comment - comentarii pentru sarcină</value>
+  </data>
+  <data name="UploadDescription" xml:space="preserve">
+    <value>Încărcați un fișier cu date de identificare pentru a crea noi sarcini.
+Specificați numele de utilizator pentru RINS, supraveghetori sau intervievatori pentru a executa sarcini multiple.</value>
   </data>
 </root>

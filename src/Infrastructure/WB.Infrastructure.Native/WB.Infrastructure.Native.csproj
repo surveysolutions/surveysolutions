@@ -20,20 +20,20 @@
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.95.3" />
+    <PackageReference Include="ClosedXML" Version="0.95.4" />
     <PackageReference Include="Dapper" Version="2.0.78" />
     <PackageReference Include="DotNetZip" Version="1.15.0" />
-    <PackageReference Include="FluentMigrator" Version="3.2.9" />
-    <PackageReference Include="FluentMigrator.Runner" Version="3.2.9" />
-    <PackageReference Include="FluentMigrator.Runner.Core" Version="3.2.9" />
+    <PackageReference Include="FluentMigrator" Version="3.2.15" />
+    <PackageReference Include="FluentMigrator.Runner" Version="3.2.15" />
+    <PackageReference Include="FluentMigrator.Runner.Core" Version="3.2.15" />
     <PackageReference Include="HtmlSanitizer" Version="5.0.376" />
     <PackageReference Include="Humanizer.Core" Version="2.8.26" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="NHibernate" Version="5.3.5" />
-    <PackageReference Include="Npgsql" Version="5.0.1.1" />
+    <PackageReference Include="NHibernate" Version="5.3.6" />
+    <PackageReference Include="Npgsql" Version="5.0.3" />
     <PackageReference Include="prometheus-net" Version="4.1.1" />
     <PackageReference Include="System.IO.Packaging" Version="5.0.0" />
   </ItemGroup>
