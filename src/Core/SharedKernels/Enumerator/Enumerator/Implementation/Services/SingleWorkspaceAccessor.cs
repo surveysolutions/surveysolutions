@@ -12,6 +12,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.workspaceView = workspaceView;
         }
 
+        public string GetCurrentWorkspaceName() => workspaceView.Name;
+
         public WorkspaceView GetCurrent() => workspaceView;
     }
 }

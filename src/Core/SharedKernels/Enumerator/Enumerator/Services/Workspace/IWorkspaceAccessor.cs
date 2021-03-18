@@ -4,6 +4,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Workspace
 {
     public interface IWorkspaceAccessor
     {
+        string GetCurrentWorkspaceName();
         WorkspaceView GetCurrent();
     }
 }

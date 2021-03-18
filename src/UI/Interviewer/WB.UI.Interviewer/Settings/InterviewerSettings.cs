@@ -82,7 +82,7 @@ namespace WB.UI.Interviewer.Settings
         {
             get
             {
-                var workspace = workspaceAccessor.GetCurrent()?.Name;
+                var workspace = workspaceAccessor.GetCurrentWorkspaceName();
                 if (workspace == null)
                     return null;
                 

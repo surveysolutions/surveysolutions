@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
@@ -31,13 +32,14 @@ namespace WB.Tests.Unit.Infrastructure
               new SqliteSettings
               {
                   PathToDatabaseDirectory = "",
-                  PathToInterviewsDirectory = "",
+                  InterviewsDirectory = "",
                   InMemoryStorage = true
               },
               Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100),
               Mock.Of<IFileSystemAccessor>(x=>x.IsFileExists(Moq.It.IsAny<string>()) == true),
               Mock.Of<IEventTypeResolver>(x => x.ResolveType("TextQuestionAnswered") == typeof(TextQuestionAnswered)), 
-              mockOfEncryptionService.Object);
+              mockOfEncryptionService.Object,
+              Mock.Of<IWorkspaceAccessor>());
         }
 
         [Test]

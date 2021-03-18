@@ -71,8 +71,8 @@ namespace WB.UI.Interviewer.Infrastructure
 
             registry.BindToConstant(() => new SqliteSettings
             {
-                PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"),
-                PathToInterviewsDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory($"data{Path.DirectorySeparatorChar}interviews")
+                PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"), 
+                InterviewsDirectory = "interviews"
             });
 
             registry.Bind(typeof(IPlainStorage<,>), typeof(SqlitePlainStorageWithWorkspace<,>));

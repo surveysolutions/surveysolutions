@@ -48,9 +48,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public void Write(IAuditLogEntity entity)
         {
             var workspaceAccessor = (IWorkspaceAccessor) serviceProvider.GetService(typeof(IWorkspaceAccessor));
-            var currentWorkspace = workspaceAccessor.GetCurrent();
+            var currentWorkspace = workspaceAccessor.GetCurrentWorkspaceName();
 
-            WriteRecord(entity, currentWorkspace.Name);
+            WriteRecord(entity, currentWorkspace);
         }
         
         public void WriteApplicationLevelRecord(IAuditLogEntity entity)

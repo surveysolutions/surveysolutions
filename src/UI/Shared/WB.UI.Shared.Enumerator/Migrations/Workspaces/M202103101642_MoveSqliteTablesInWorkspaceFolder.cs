@@ -35,6 +35,22 @@ namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
             if (!fileSystemAccessor.IsDirectoryExists(workspaceFolder))
                 fileSystemAccessor.CreateDirectory(workspaceFolder);
 
+            var interviewsDirectory = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "interviews");
+            if (fileSystemAccessor.IsDirectoryExists(interviewsDirectory))
+            {
+                var newInterviewsDirectory = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, workspace, "interviews");
+                if (!fileSystemAccessor.IsDirectoryExists(newInterviewsDirectory))
+                    fileSystemAccessor.CreateDirectory(newInterviewsDirectory);
+
+                var interviews = fileSystemAccessor.GetFilesInDirectory(interviewsDirectory);
+                foreach (var interviewPath in interviews)
+                {
+                    var fileName = fileSystemAccessor.GetFileName(interviewPath);
+                    var newInterviewPath = fileSystemAccessor.CombinePath(newInterviewsDirectory, fileName);
+                    fileSystemAccessor.MoveFile(interviewPath, newInterviewPath);
+                }
+            }
+            
             var files = fileSystemAccessor.GetFilesInDirectory(settings.PathToDatabaseDirectory, "*-data.sqlite3");
 
             var excludeFiles = new List<string>()

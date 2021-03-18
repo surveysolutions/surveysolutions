@@ -66,7 +66,7 @@ namespace WB.UI.Supervisor.Services.Implementation
         {
             get
             {
-                var workspace = workspaceAccessor.GetCurrent()?.Name;
+                var workspace = workspaceAccessor.GetCurrentWorkspaceName();
                 if (workspace == null)
                     return null;
                 

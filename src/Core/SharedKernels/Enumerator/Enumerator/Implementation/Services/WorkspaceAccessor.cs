@@ -16,6 +16,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.workspaceService = workspaceService;
         }
 
+        public string GetCurrentWorkspaceName()
+        {
+            var currentWorkspace = principal.CurrentUserIdentity?.Workspace;
+            return currentWorkspace;
+        }
+
         public WorkspaceView GetCurrent()
         {
             var currentWorkspace = principal.CurrentUserIdentity?.Workspace;
