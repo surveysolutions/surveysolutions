@@ -167,6 +167,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             entity.AnswerCode = optionCode;
         }
 
+        public virtual void AnswerIntegerFeaturedQuestion(int entityId, int answer)
+        {
+            var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
+            entity.ValueLong = answer;
+            entity.Value = AnswerUtils.AnswerToString(answer);
+        }
+
+        public virtual void AnswerRealFeaturedQuestion(int entityId, decimal answer)
+        {
+            var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
+            entity.ValueDouble = Convert.ToDouble(answer);
+            entity.Value = AnswerUtils.AnswerToString(answer);
+        }
+
         public virtual void AnswerFeaturedVariable(int entityId, object value, VariableType variableType)
         {
             var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
@@ -187,7 +201,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     entity.ValueLong = Convert.ToInt64(value);
                     break;
                 case VariableType.String:
-                    entity.Value = AnswerUtils.AnswerToString(value);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(variableType), variableType, null);

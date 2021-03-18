@@ -262,14 +262,18 @@ export default {
             var ruleMap = this.getRuleMap(entity)
             var operator = this.getOperatorMap(query.operator)
 
-            if(operator === 'noanswer')
+            if(operator === 'notanswered')
             {
                 return {identifyingData : { none: some }}
+            }
+            else if(operator === 'answered')
+            {
+                return {identifyingData : { some: some }}
             }
 
             var condition = {}
 
-            if(ruleMap.ruleType == 'radio'){
+            if(ruleMap.ruleType === 'select' && entity.variableType === 'BOOLEAN'){
                 condition[operator] = query.value == '1' ? true : false
             }
             else if(ruleMap.ruleType == 'numeric')
@@ -288,10 +292,9 @@ export default {
         },
         getRuleMap(entity){
 
-            const comparableOperators = ['=','<>','<','<=','>','>=','not answered']
-            const textOperators = ['equals','not equals','contains','not contains','starts with','not starts with', 'not answered']
-            const selectOperators = ['equals','not equals','not answered']
-            const boolOperators = ['equals','not equals','not answered']
+            const comparableOperators = ['=','<>','<','<=','>','>=', 'answered', 'not answered']
+            const textOperators = ['equals','not equals','contains','not contains','starts with','not starts with','answered', 'not answered']
+            const selectOperators = ['equals','not equals', 'answered', 'not answered']
 
             if(entity.entityType =='QUESTION')
             {
@@ -314,7 +317,7 @@ export default {
                     case 'LONGINTEGER':
                         return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators}
                     case 'BOOLEAN':
-                        return {ruleType: 'radio',valueName: 'valueBool', operators: boolOperators}
+                        return {ruleType: 'select',valueName: 'valueBool', operators: selectOperators}
                     case 'DATETIME':
                         return {ruleType: 'date', valueName: 'valueDate', operators: comparableOperators}
                     case 'STRING' :
@@ -340,7 +343,8 @@ export default {
                 case 'starts with': return 'startsWith'
                 case 'not starts with': return 'nstartsWith'
 
-                case 'not answered' : return 'noanswer'
+                case 'not answered' : return 'notanswered'
+                case 'answered' : return 'answered'
             }
         },
         getDisplayTitle(title){
@@ -388,28 +392,28 @@ export default {
                 || this.rules.length == 0
         },
         rules(){
-            return this.questionnaireAllItemsList.map(i => {
+            return this.questionnaireAllItemsList.map(entity => {
 
-                var map = this.getRuleMap(i)
+                var map = this.getRuleMap(entity)
                 var type = map.ruleType
 
                 var rule = {
                     type: type,
-                    id: i.variable,
-                    label: i.label
-                        ? this.getDisplayTitle(i.label)
-                        : (i.title ? this.getDisplayTitle(i.title) : i.variable),
+                    id: entity.variable,
+                    label: entity.label
+                        ? this.getDisplayTitle(entity.label)
+                        : (entity.title ? this.getDisplayTitle(entity.title) : entity.variable),
                 }
 
-                if(type == 'select')
+                if(type === 'select')
                 {
-                    rule.choices = i.options.map(o=>({label:this.getDisplayTitle(o.title), value: o.value}))
+                    if(entity.entityType == 'VARIABLE' && entity.variableType === 'BOOLEAN'){
+                        rule.choices = [{label: 'True', value: '1'}, {label: 'False', value: '0'}]
+                    }
+                    else
+                        rule.choices = entity.options.map(o=>({label:this.getDisplayTitle(o.title), value: o.value}))
                 }
-                else if(type == 'radio')
-                {
-                    rule.choices = [{label: 'True', value: '1'}, {label: 'False', value: '0'}]
-                }
-                else if(type == 'date')
+                else if(type === 'date')
                 {
                     rule.inputType = 'date'
                 }

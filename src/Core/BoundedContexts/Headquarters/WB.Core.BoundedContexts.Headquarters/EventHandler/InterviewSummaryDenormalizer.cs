@@ -104,6 +104,38 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             });
         }
 
+        private InterviewSummary AnswerIntegerQuestion(InterviewSummary interviewSummary, Guid questionId, int answer, DateTime updateDate, DateTime answerDate)
+        {
+            var questionnaire = GetQuestionnaire(interviewSummary);
+
+            return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
+            {
+                var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
+                if (interview.IsEntityIdentifying(questionCompositeId))
+                {
+                    interview.AnswerIntegerFeaturedQuestion(questionCompositeId, answer);
+                }
+                
+                RecordFirstAnswer(interview, answerDate);
+            });
+        }
+
+        private InterviewSummary AnswerRealQuestion(InterviewSummary interviewSummary, Guid questionId, decimal answer, DateTime updateDate, DateTime answerDate)
+        {
+            var questionnaire = GetQuestionnaire(interviewSummary);
+
+            return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
+            {
+                var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
+                if (interview.IsEntityIdentifying(questionCompositeId))
+                {
+                    interview.AnswerRealFeaturedQuestion(questionCompositeId, answer);
+                }
+                
+                RecordFirstAnswer(interview, answerDate);
+            });
+        }
+
         private InterviewSummary AnswerFeaturedQuestionWithOptions(InterviewSummary interviewSummary, Guid questionId, 
             DateTime updateDate, DateTime? answerDateTime,
             params decimal[] answers)
@@ -268,12 +300,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericRealQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
+            return this.AnswerRealQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericIntegerQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
+            return this.AnswerIntegerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<DateTimeQuestionAnswered> @event)
