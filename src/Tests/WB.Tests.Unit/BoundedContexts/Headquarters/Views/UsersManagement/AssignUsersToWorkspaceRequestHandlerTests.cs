@@ -206,7 +206,32 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             {
                 "cyber", "test"
             }.OrderBy(n => n)));
-        }  
+        }
+
+        [Test]
+        public async Task should_return_error_if_removal_not_allowed()
+        {
+            workspacesService.Setup(x => x.AssignWorkspaces(It.IsAny<HqUser>(), It.IsAny<List<AssignUserWorkspace>>()))
+                .Throws<WorkspaceRemovalNotAllowedException>();
+            Users = new[] { Create.Entity.HqUser(Id.g1, 
+                role: UserRoles.Headquarter)};
+
+            await Subject.Handle(new AssignWorkspacesToUserModelRequest(modelState,
+                new AssignWorkspacesToUserModel
+                {
+                    Mode = AssignWorkspacesMode.Remove,
+                    UserIds = new[] { Id.g1 }
+                }));
+
+            Assert.That(modelState.IsValid, Is.False);
+            var modelValidationState = modelState[nameof(AssignWorkspacesToUserModel.UserIds)];
+            Assert.That(modelValidationState.ValidationState, Is.EqualTo(ModelValidationState.Invalid));
+            var errorMessage =
+                string.Format(WB.UI.Headquarters.Resources.Workspaces.WorkspaceCantBeRemoved, 0, 0);
+            Assert.That(modelValidationState.Errors[0], Is.EqualTo(errorMessage
+            ));
+
+        }
 
         [Test]
         public async Task should_assign_workspaces_in_remove_mode_remove_workspace_to_existing()

@@ -75,37 +75,46 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
                 if (ModelState.IsValid)
                 {
-                    switch (request.AssignModel.Mode)
+                    try
                     {
-                        case AssignWorkspacesMode.Assign:
-                            workspacesService.AssignWorkspaces(user, dbWorkspaces);
-                            break;
-                        case AssignWorkspacesMode.Add:
+                        switch (request.AssignModel.Mode)
                         {
-                            var userWorkspaces = user.Workspaces.Select(u => u.Workspace);
-                            var newWorkspaces = dbWorkspaces.Where(aw => !userWorkspaces.Contains(aw.Workspace));
-                            var resultWorkspaces = user.Workspaces.Select(u => new AssignUserWorkspace()
+                            case AssignWorkspacesMode.Assign:
+                                workspacesService.AssignWorkspaces(user, dbWorkspaces);
+                                break;
+                            case AssignWorkspacesMode.Add:
                             {
-                                Workspace = u.Workspace,
-                                SupervisorId = u.SupervisorId
-                            }).Concat(newWorkspaces);
-                            workspacesService.AssignWorkspaces(user, resultWorkspaces.ToList());
-                            break;
-                        }
-                        case AssignWorkspacesMode.Remove:
-                        {
-                            var workspacesToRemove = dbWorkspaces.Select(d => d.Workspace);
-                            var workspacesAfterRemove = user.Workspaces.Where(uw => !workspacesToRemove.Contains(uw.Workspace));
-                            var resultWorkspaces = workspacesAfterRemove.Select(u => new AssignUserWorkspace()
+                                var userWorkspaces = user.Workspaces.Select(u => u.Workspace);
+                                var newWorkspaces = dbWorkspaces.Where(aw => !userWorkspaces.Contains(aw.Workspace));
+                                var resultWorkspaces = user.Workspaces.Select(u => new AssignUserWorkspace()
+                                {
+                                    Workspace = u.Workspace,
+                                    SupervisorId = u.SupervisorId
+                                }).Concat(newWorkspaces);
+                                workspacesService.AssignWorkspaces(user, resultWorkspaces.ToList());
+                                break;
+                            }
+                            case AssignWorkspacesMode.Remove:
                             {
-                                Workspace = u.Workspace,
-                                SupervisorId = u.SupervisorId
-                            });
-                            workspacesService.AssignWorkspaces(user, resultWorkspaces.ToList());
-                            break;
+                                var workspacesToRemove = dbWorkspaces.Select(d => d.Workspace);
+                                var workspacesAfterRemove = user.Workspaces.Where(uw => !workspacesToRemove.Contains(uw.Workspace));
+                                var resultWorkspaces = workspacesAfterRemove.Select(u => new AssignUserWorkspace()
+                                {
+                                    Workspace = u.Workspace,
+                                    SupervisorId = u.SupervisorId
+                                });
+                                workspacesService.AssignWorkspaces(user, resultWorkspaces.ToList());
+                                break;
+                            }
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
-                        default:
-                            throw new ArgumentOutOfRangeException();
+                    }
+                    catch (WorkspaceRemovalNotAllowedException e)
+                    {
+                        var errorMessage =
+                            string.Format(WB.UI.Headquarters.Resources.Workspaces.WorkspaceCantBeRemoved, e.InterviewsCount, e.AssignmentsCount);
+                        ModelState.AddModelError(nameof(model.UserIds), errorMessage);
                     }
                 }
             }

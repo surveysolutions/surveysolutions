@@ -7,10 +7,16 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using NHibernate.Linq;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -28,6 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
         private readonly IUserRepository userRepository;
         private readonly ISystemLog systemLog;
         private readonly IWorkspacesUsersCache usersCache;
+        private readonly IInScopeExecutor inScopeExecutor;
 
         public WorkspacesService(UnitOfWorkConnectionSettings connectionSettings,
             ILoggerProvider loggerProvider, 
@@ -35,7 +42,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             IPlainStorageAccessor<WorkspacesUsers> workspaceUsers,
             IUserRepository userRepository,
             ILogger<WorkspacesService> logger, 
-            ISystemLog systemLog, IWorkspacesUsersCache usersCache)
+            ISystemLog systemLog, 
+            IWorkspacesUsersCache usersCache,
+            IInScopeExecutor inScopeExecutor)
         {
             this.connectionSettings = connectionSettings;
             this.loggerProvider = loggerProvider;
@@ -44,6 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             this.logger = logger;
             this.systemLog = systemLog;
             this.usersCache = usersCache;
+            this.inScopeExecutor = inScopeExecutor;
             this.userRepository = userRepository;
         }
 
@@ -81,6 +91,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
                 
                 if(!workspaceExists)
                 {
+                    var pendingWork = this.GetWorkAssignedToUser(user, userWorkspace.Workspace);
+                    if (pendingWork.AssignmentsCount > 0 || pendingWork.InterviewsCount > 0)
+                    {
+                        throw new WorkspaceRemovalNotAllowedException(pendingWork.InterviewsCount, pendingWork.AssignmentsCount);
+                    }
+
                     this.workspaceUsers.Remove(userWorkspace.Id);
                     user.Workspaces.Remove(userWorkspace);
                     workspacesRemoved.Add(userWorkspace.Workspace.Name);
@@ -169,6 +185,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             this.workspaceUsers.Store(workspaceUser, workspaceUser.Id);
             
             this.logger.LogInformation("Added {user} to {workspace}", user.UserName, workspace);
+        }
+
+        private AssignedWorkInfo GetWorkAssignedToUser(HqUser user, Workspace workspace)
+        {
+            return this.inScopeExecutor.Execute(sl =>
+            {
+                var interviewinfo = sl.GetInstance<IInterviewInformationFactory>();
+                var assignmentsService = sl.GetInstance<IAssignmentsService>();
+
+                int interviewsCount = 0;
+                int assignmentsCount = 0;
+                if (user.IsInRole(UserRoles.Interviewer))
+                {
+                    interviewsCount = interviewinfo.GetInProgressInterviewsForInterviewer(user.Id).Count;
+                    assignmentsCount = assignmentsService.GetAllAssignmentIds(user.Id).Count;
+                }
+                else if (user.IsInRole(UserRoles.Supervisor))
+                {
+                    interviewsCount = interviewinfo.GetInProgressInterviewsForSupervisor(user.Id).Count;
+                    assignmentsCount = assignmentsService.GetAllAssignmentIds(user.Id).Count;
+                }
+
+                return new AssignedWorkInfo
+                {
+                    InterviewsCount = interviewsCount,
+                    AssignmentsCount = assignmentsCount
+                };
+            }, workspace.Name);
         }
     }
 }

@@ -1328,7 +1328,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerInterviewsFactory ?? Mock.Of<IInterviewInformationFactory>());
         }
 
-        public WorkspacesService WorkspacesService(IPlainStorageAccessor<Workspace> workspaces)
+        public WorkspacesService WorkspacesService(IPlainStorageAccessor<Workspace> workspaces,
+            IServiceLocator serviceLocator = null)
         {
             return new WorkspacesService(
                 new UnitOfWorkConnectionSettings(),
@@ -1338,7 +1339,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IUserRepository>(),
                 Mock.Of<ILogger<WorkspacesService>>(),
                 Mock.Of<ISystemLog>(),
-                Mock.Of<IWorkspacesUsersCache>()
+                Mock.Of<IWorkspacesUsersCache>(),
+                new NoScopeInScopeExecutor(serviceLocator ?? Create.Service.ServiceLocatorService())
             );
         }
     }
