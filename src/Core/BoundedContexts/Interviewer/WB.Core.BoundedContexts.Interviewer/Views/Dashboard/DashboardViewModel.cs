@@ -472,17 +472,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async void Synchronization_OnProgressChanged(object sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
         {
-            if (this.cancellationTokenSource == null || this.cancellationTokenSource.IsCancellationRequested)
-            {
-                return;
-            }
-
             if (e.Status == SynchronizationStatus.Fail
                 || e.Status == SynchronizationStatus.Canceled
                 || e.Status == SynchronizationStatus.Stopped
                 || e.Status == SynchronizationStatus.Success)
             {
                 WorkspaceListUpdated?.Invoke(this, EventArgs.Empty);
+            }
+
+            if (this.cancellationTokenSource == null || this.cancellationTokenSource.IsCancellationRequested)
+            {
+                return;
             }
 
             if (SynchronizationWithHqEnabled) return;
