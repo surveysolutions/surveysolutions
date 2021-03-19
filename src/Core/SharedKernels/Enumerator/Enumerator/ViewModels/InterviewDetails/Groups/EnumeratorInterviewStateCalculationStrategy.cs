@@ -42,5 +42,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                     return GroupStatus.Started;
             }
         }
+
+        public int GetAnsweredQuestions(IStatefulInterview interview)
+        {
+            return interview.CountActiveAnsweredQuestionsInInterview();
+        }
+
+        public int GetCountActiveQuestions(IStatefulInterview interview)
+        {
+            return interview.CountActiveQuestionsInInterview();
+        }
     }
 }

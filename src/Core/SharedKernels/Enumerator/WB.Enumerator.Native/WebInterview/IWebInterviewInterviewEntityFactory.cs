@@ -19,11 +19,4 @@ namespace WB.Enumerator.Native.WebInterview
         InterviewEntityType GetEntityType(Identity identity, IQuestionnaire callerQuestionnaire,
             IStatefulInterview interview, bool isReviewMode);
     }
-
-    public class InterviewSimpleStatus
-    {
-        public GroupStatus SimpleStatus { get; set; }
-        public int ActiveQuestionCount { get; set; }
-        public int AnsweredQuestionsCount { get; set; }
-    }
 }

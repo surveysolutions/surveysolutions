@@ -42,5 +42,15 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                     return GroupStatus.Started;
             }
         }
+
+        public int GetAnsweredQuestions(IStatefulInterview interview)
+        {
+            return interview.CountActiveAnsweredQuestionsInInterviewForSupervisor();
+        }
+
+        public int GetCountActiveQuestions(IStatefulInterview interview)
+        {
+            return interview.CountActiveQuestionsInInterviewForSupervisor();
+        }
     }
 }

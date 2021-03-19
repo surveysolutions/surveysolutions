@@ -7,5 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
     {
         SimpleGroupStatus CalculateSimpleStatus(IStatefulInterview interview);
         GroupStatus CalculateDetailedStatus(IStatefulInterview interview);
+        int GetAnsweredQuestions(IStatefulInterview interview);
+        int GetCountActiveQuestions(IStatefulInterview interview);
     }
 }
