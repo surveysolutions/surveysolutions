@@ -9,7 +9,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
     [Authorize(Roles = "Interviewer")]
     public class AuditLogApiV2Controller : AuditLogControllerBase
     {
-        public AuditLogApiV2Controller(IPlainStorageAccessor<AuditLogRecord> auditLogStorage) : base(auditLogStorage)
+        public AuditLogApiV2Controller(IPlainStorageAccessor<AuditLogRecord> auditLogStorage,
+            IPlainStorageAccessor<GlobalAuditLogRecord> globalAuditLogStorage) 
+            : base(auditLogStorage, globalAuditLogStorage)
         {
         }
 

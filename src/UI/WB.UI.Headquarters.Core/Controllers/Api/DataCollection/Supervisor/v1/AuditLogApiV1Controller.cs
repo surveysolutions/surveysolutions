@@ -9,7 +9,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
     [Authorize(Roles = "Supervisor")]
     public class AuditLogApiV1Controller : AuditLogControllerBase
     {
-        public AuditLogApiV1Controller(IPlainStorageAccessor<AuditLogRecord> auditLogStorage) : base(auditLogStorage)
+        public AuditLogApiV1Controller(IPlainStorageAccessor<AuditLogRecord> auditLogStorage,
+            IPlainStorageAccessor<GlobalAuditLogRecord> globalAuditLogStorage) 
+            : base(auditLogStorage, globalAuditLogStorage)
         {
         }
 

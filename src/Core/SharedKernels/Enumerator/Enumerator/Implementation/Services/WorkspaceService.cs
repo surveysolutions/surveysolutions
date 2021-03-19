@@ -32,7 +32,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 foreach (var removedWorkspace in removedWorkspaces)
                 {
                     var workspaceDirectory = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, removedWorkspace.Name);
-                    fileSystemAccessor.DeleteDirectory(workspaceDirectory);
+                    if (fileSystemAccessor.IsDirectoryExists(workspaceDirectory))
+                        fileSystemAccessor.DeleteDirectory(workspaceDirectory);
                 }
                 workspaceRepository.Remove(removedWorkspaces);
             }
