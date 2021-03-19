@@ -228,7 +228,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             Assert.That(modelValidationState.ValidationState, Is.EqualTo(ModelValidationState.Invalid));
             var errorMessage =
                 string.Format(WB.UI.Headquarters.Resources.Workspaces.WorkspaceCantBeRemoved, 0, 0);
-            Assert.That(modelValidationState.Errors[0], Is.EqualTo(errorMessage
+            Assert.That(modelValidationState.Errors[0].ErrorMessage, Is.EqualTo(errorMessage
             ));
 
         }
