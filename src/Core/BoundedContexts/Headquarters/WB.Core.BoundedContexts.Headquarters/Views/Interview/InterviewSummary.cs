@@ -167,6 +167,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             entity.AnswerCode = optionCode;
         }
 
+        public virtual void RemoveAnswerFeaturedQuestion(int entityId)
+        {
+            var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
+            entity.Value = String.Empty;
+            entity.AnswerCode = null;
+            entity.ValueDate = null;
+            entity.ValueDouble = null;
+            entity.ValueBool = null;
+            entity.ValueLong = null;
+        }
+
+        public virtual void AnswerDateTimeFeaturedQuestion(int entityId, DateTime answer, string answerString)
+        {
+            var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
+            entity.ValueDate = answer;
+            entity.Value = answerString;
+        }
+
         public virtual void AnswerIntegerFeaturedQuestion(int entityId, int answer)
         {
             var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
