@@ -121,5 +121,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                 Substitute.For<IInterviewViewModelFactory>(),
                 Substitute.For<IPlainStorage<PrefilledQuestionView>>(),
                 Substitute.For<IPrincipal>());
+
+        private static WebInterviewsViewModel DashboardWebInterviewsViewModel()
+            => new WebInterviewsViewModel(
+                Substitute.For<IPlainStorage<InterviewView>>(),
+                Substitute.For<IInterviewViewModelFactory>(),
+                Substitute.For<IPlainStorage<PrefilledQuestionView>>(),
+                Substitute.For<IPrincipal>());
     }
 }

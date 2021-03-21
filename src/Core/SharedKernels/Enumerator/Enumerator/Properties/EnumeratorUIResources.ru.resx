@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -981,6 +981,15 @@
     <value>Время находится в прошлом</value>
   </data>
   <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
-      <value>Ваша учётная запись не активна на данном сервере т.к. рабочее простанство в котром она определена отключено админстратором. Пожалуйста, обратитесь к супервизору.</value>
+    <value>Ваша учётная запись не активна на данном сервере т.к. рабочее простанство в котром она определена отключено админстратором. Пожалуйста, обратитесь к супервизору.</value>
+  </data>
+  <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>Веб Интервью ({0})</value>
+  </data>
+  <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>Интервью в режиме веб интервью. Будут удалены из списка при синхронизации, если веб интервью завершено респондентом</value>
+  </data>
+  <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>Показать QR код</value>
   </data>
 </root>

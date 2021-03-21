@@ -98,7 +98,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             {
                 ActionType = ActionType.Context,
                 Command = new MvxCommand(this.RemoveCalendarEvent, 
-                    () => this.isInterviewReadyToLoad && interview.CalendarEvent.HasValue && interview.Status != InterviewStatus.Completed),
+                    () => this.isInterviewReadyToLoad && interview.CalendarEvent.HasValue 
+                                                      && interview.Status != InterviewStatus.Completed),
                 Label = EnumeratorUIResources.Dashboard_RemoveCalendarEvent
             });
 
@@ -116,35 +117,44 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 Label = DiscardLabel()
             });
 
+            if(interview.Status == InterviewStatus.WebInterview)
+            {
+                Actions.Add(new ActionDefinition
+                {
+                    ActionType = ActionType.Secondary,
+                    Command = new MvxAsyncCommand(this.ShowQRCodeAsync),
+                    Label = EnumeratorUIResources.DashboardItem_QRCode
+                });
+            }
+
             string MainLabel()
             {
-                switch (Status) {
-                    case DashboardInterviewStatus.New:
-                        return EnumeratorUIResources.Dashboard_Open;
-                    case DashboardInterviewStatus.InProgress:
-                        return EnumeratorUIResources.Dashboard_Open;
-                    case DashboardInterviewStatus.Completed:
-                        return EnumeratorUIResources.Dashboard_Reopen;
-                    case DashboardInterviewStatus.Rejected:
-                        return EnumeratorUIResources.Dashboard_ViewIssues;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                return Status switch
+                {
+                    DashboardInterviewStatus.New => EnumeratorUIResources.Dashboard_Open,
+                    DashboardInterviewStatus.InProgress => EnumeratorUIResources.Dashboard_Open,
+                    DashboardInterviewStatus.Completed => EnumeratorUIResources.Dashboard_Reopen,
+                    DashboardInterviewStatus.Rejected => EnumeratorUIResources.Dashboard_ViewIssues,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
             }
 
             string DiscardLabel()
             {
-                switch (Status)
+                return Status switch
                 {
-                    case DashboardInterviewStatus.Completed:
-                    case DashboardInterviewStatus.New:
-                    case DashboardInterviewStatus.InProgress:
-                    case DashboardInterviewStatus.Rejected:
-                        return EnumeratorUIResources.Dashboard_Discard;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                    DashboardInterviewStatus.Completed => EnumeratorUIResources.Dashboard_Discard,
+                    DashboardInterviewStatus.New => EnumeratorUIResources.Dashboard_Discard,
+                    DashboardInterviewStatus.InProgress => EnumeratorUIResources.Dashboard_Discard,
+                    DashboardInterviewStatus.Rejected => EnumeratorUIResources.Dashboard_Discard,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
             }
+        }
+
+        private Task ShowQRCodeAsync()
+        {
+            throw new NotImplementedException();
         }
 
         private void BindDetails(List<PrefilledQuestion> preffilledQuestions)
