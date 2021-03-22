@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         void AddUserToWorkspace(HqUser user, string workspace, Guid? supervisorId);
         List<WorkspaceContext> GetEnabledWorkspaces();
         List<WorkspaceContext> GetAllWorkspaces();
-        void AssignWorkspaces(HqUser user, List<AssignUserWorkspace> workspacesList);
+        Task AssignWorkspacesAsync(HqUser user, List<AssignUserWorkspace> workspacesList);
         Task DeleteAsync(WorkspaceContext workspace, CancellationToken token = default);
     }
 }

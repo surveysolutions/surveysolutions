@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
@@ -56,14 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
 
         private async Task<MoveInterviewerToAnotherTeamResult> MoveUserAndAssignDataToOriginalSupervisor(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
         {
-            var result = new MoveInterviewerToAnotherTeamResult();
-            
-            var interviewIds = GetInterviewIds(interviewerId);
-            foreach (var interviewId in interviewIds)
-            {
-                var moveInterviewToTeam = new MoveInterviewToTeam(interviewId, userId, previousSupervisorId, null);
-                ExecuteMoveInterviewToTeam(moveInterviewToTeam, result, interviewId);
-            }
+            MoveInterviewerToAnotherTeamResult result = MoveInterviewsToSupervisor(userId, interviewerId, previousSupervisorId);
 
             var assignmentIds = assignmentsService.GetAllAssignmentIds(interviewerId);
             foreach (var assignmentId in assignmentIds)
@@ -85,6 +75,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
             if (!updateResult.Succeeded)
                 result.Errors.AddRange(updateResult.Errors.Select(x => x.Description));
 
+            return result;
+        }
+
+        public MoveInterviewerToAnotherTeamResult MoveInterviewsToSupervisor(Guid userId, Guid interviewerId, Guid supervisorId)
+        {
+            var result = new MoveInterviewerToAnotherTeamResult();
+            var interviewIds = GetInterviewIds(interviewerId);
+            foreach (var interviewId in interviewIds)
+            {
+                var moveInterviewToTeam = new MoveInterviewToTeam(interviewId, userId, supervisorId, null);
+                ExecuteMoveInterviewToTeam(moveInterviewToTeam, result, interviewId);
+            }
             return result;
         }
 

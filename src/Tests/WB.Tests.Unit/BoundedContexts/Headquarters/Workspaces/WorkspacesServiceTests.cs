@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -51,18 +52,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
 
             var assignmentsService =
                 Mock.Of<IAssignmentsService>(a => a.GetAllAssignmentIds(Id.gA) == new List<Guid>());
+            var userViewFactory = Mock.Of<IUserViewFactory>(u => u.GetInterviewers(It.IsAny<Guid>()) == new List<InterviewerFullApiView>());
             var serviceLocator = Mock.Of<IServiceLocator>(sl => sl.GetInstance<IInterviewInformationFactory>() == interviewFactory &&
-                                                                sl.GetInstance<IAssignmentsService>() == assignmentsService);
+                                                                sl.GetInstance<IAssignmentsService>() == assignmentsService &&
+                                                                sl.GetInstance<IUserViewFactory>() == userViewFactory);
             var service = Create.Service.WorkspacesService(storage,
                 serviceLocator);
 
             // Act
             var hqUser = Create.Entity.HqUser(role: role, userId: Id.gA);
             hqUser.Workspaces.Add(new WorkspacesUsers(enabledWorkspace, hqUser, null));
-            TestDelegate act = () => service.AssignWorkspaces(hqUser, new List<AssignUserWorkspace>());
+            AsyncTestDelegate act = async () => await service.AssignWorkspacesAsync(hqUser, new List<AssignUserWorkspace>());
 
             // Assert
-            Assert.Throws<WorkspaceRemovalNotAllowedException>(act);
+            Assert.ThrowsAsync<WorkspaceRemovalNotAllowedException>(act);
         }
     }
 }

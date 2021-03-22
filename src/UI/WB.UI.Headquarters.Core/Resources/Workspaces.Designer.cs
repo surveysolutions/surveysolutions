@@ -316,7 +316,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Workspace can not be removed because user has assigned tasks. Interviews: {0}, Assignments: {1}.
+        ///   Looks up a localized string similar to Workspace can not be removed because user has assigned work. Reassign all assignments (including archived), not completed interviews and for Supervisor move all team members to another team. Interviews: {0}, Assignments: {1}, Team members: {2}.
         /// </summary>
         public static string WorkspaceCantBeRemoved {
             get {

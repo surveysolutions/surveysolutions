@@ -1334,6 +1334,7 @@ namespace WB.Tests.Abc.TestFactories
             return new WorkspacesService(
                 new UnitOfWorkConnectionSettings(),
                 Mock.Of<Microsoft.Extensions.Logging.ILoggerProvider>(),
+                Mock.Of<IAuthorizedUser>(),
                 workspaces,
                 new TestPlainStorage<WorkspacesUsers>(),
                 Mock.Of<IUserRepository>(),

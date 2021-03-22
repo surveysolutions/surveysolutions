@@ -4,5 +4,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
     {
         public int InterviewsCount { get; set; }
         public int AssignmentsCount { get; set; }
+        public int AssignedInterviewers { get; set; }
     }
 }

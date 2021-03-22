@@ -80,7 +80,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                         switch (request.AssignModel.Mode)
                         {
                             case AssignWorkspacesMode.Assign:
-                                workspacesService.AssignWorkspaces(user, dbWorkspaces);
+                                await workspacesService.AssignWorkspacesAsync(user, dbWorkspaces);
                                 break;
                             case AssignWorkspacesMode.Add:
                             {
@@ -91,7 +91,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                                     Workspace = u.Workspace,
                                     SupervisorId = u.SupervisorId
                                 }).Concat(newWorkspaces);
-                                workspacesService.AssignWorkspaces(user, resultWorkspaces.ToList());
+                                await workspacesService.AssignWorkspacesAsync(user, resultWorkspaces.ToList());
                                 break;
                             }
                             case AssignWorkspacesMode.Remove:
@@ -103,7 +103,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                                     Workspace = u.Workspace,
                                     SupervisorId = u.SupervisorId
                                 });
-                                workspacesService.AssignWorkspaces(user, resultWorkspaces.ToList());
+                                await workspacesService.AssignWorkspacesAsync(user, resultWorkspaces.ToList());
                                 break;
                             }
                             default:
@@ -113,7 +113,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     catch (WorkspaceRemovalNotAllowedException e)
                     {
                         var errorMessage =
-                            string.Format(WB.UI.Headquarters.Resources.Workspaces.WorkspaceCantBeRemoved, e.InterviewsCount, e.AssignmentsCount);
+                            string.Format(Resources.Workspaces.WorkspaceCantBeRemoved, e.InterviewsCount, e.AssignmentsCount, e.InterviewersCount);
                         ModelState.AddModelError(nameof(model.UserIds), errorMessage);
                     }
                 }
