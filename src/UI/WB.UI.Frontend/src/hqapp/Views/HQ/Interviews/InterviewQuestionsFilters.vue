@@ -89,7 +89,8 @@
 
 import VueQueryBuilder from 'vue-query-builder'
 import 'vue-query-builder/dist/VueQueryBuilder.css'
-
+import moment from 'moment'
+import { DateFormats } from '~/shared/helpers'
 import gql from 'graphql-tag'
 import InterviewFilter from './InterviewFilter'
 import { find, filter } from 'lodash'
@@ -284,6 +285,10 @@ export default {
             else if(ruleMap.ruleType == 'numeric')
             {
                 condition[operator] = Number(query.value)
+            }
+            else if(ruleMap.ruleType == 'date')
+            {
+                condition[operator] = moment(query.value).format(DateFormats.date) + 'T00:00:00Z'
             }
             else{
                 condition[operator] = query.value
