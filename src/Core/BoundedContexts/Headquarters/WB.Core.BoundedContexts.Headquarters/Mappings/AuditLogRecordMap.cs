@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
         {
             this.Id(x => x.Id, idMap =>
             {
-                idMap.Generator(Generators.Increment);
+                idMap.Generator(Generators.Identity);
                 idMap.Column("Id");
             });
 
