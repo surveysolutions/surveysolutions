@@ -676,7 +676,8 @@ export default {
             const heatmapData = {data: []}
 
             this.map.data.forEach(feature => {
-                toRemove[feature.getId()] = feature
+                //toRemove[feature.getId()] = feature
+                this.map.data.remove(feature)
             })
 
             const markers = {

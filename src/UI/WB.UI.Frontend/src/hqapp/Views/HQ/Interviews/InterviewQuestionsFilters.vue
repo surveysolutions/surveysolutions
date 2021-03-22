@@ -264,16 +264,21 @@ export default {
 
             if(operator === 'notanswered')
             {
-                return {identifyingData : { none: some }}
-            }
-            else if(operator === 'answered')
-            {
-                return {identifyingData : { some: some }}
+                var none = {
+                    entity: {variable: {eq: query.rule}},
+                }
+                some.value = {eq:''}
+                var notAnsweredResult = {}
+                notAnsweredResult.or= [{identifyingData : { none: none }}, {identifyingData : { some: some }}]
+                return notAnsweredResult
             }
 
             var condition = {}
-
-            if(ruleMap.ruleType === 'select' && entity.variableType === 'BOOLEAN'){
+            if(operator === 'answered')
+            {
+                condition['neq'] = null
+            }
+            else if(ruleMap.ruleType === 'select' && entity.variableType === 'BOOLEAN'){
                 condition[operator] = query.value == '1' ? true : false
             }
             else if(ruleMap.ruleType == 'numeric')
