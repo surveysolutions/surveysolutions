@@ -59,10 +59,18 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             if (answer is AnsweredYesNoOption[] yesNoAnswer)
             {
                 var yesAnsweredValues = yesNoAnswer.Where(a => a.Yes).Select(a => a.OptionValue);
+                var noAnsweredValues = yesNoAnswer.Where(a => !a.Yes).Select(a => a.OptionValue);
 
-                return getCategoricalAnswerOptionText == null
+                var yesAnswers = getCategoricalAnswerOptionText == null
                     ? string.Join(", ", yesAnsweredValues)
                     : string.Join(", ", yesAnsweredValues.Select(getCategoricalAnswerOptionText));
+                
+                var noAnswers = getCategoricalAnswerOptionText == null
+                        ? string.Join(", ", noAnsweredValues)
+                        : string.Join(", ", noAnsweredValues.Select(getCategoricalAnswerOptionText));
+                
+                return $"{yesAnswers}|{noAnswers}";
+
             }
             if (answer is decimal[][] multiLinkDecimalAnswer)
             {
