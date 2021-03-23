@@ -5,7 +5,7 @@
         <div v-if="interviewState!=null"
             class="interview-progress">
             <div class="progress-counts">
-                {{this.$t('WebInterviewUI.Progress')}}:{{progress}}
+                {{this.$t('WebInterviewUI.Progress')}}:{{interviewState.answeredQuestionsCount}}/{{interviewState.activeQuestionCount}}
             </div>
             <wb-progress
                 :striped = false
@@ -89,11 +89,7 @@ export default {
                 },
             }
         },
-        progress(){
-            if(this.interviewState)
-                return this.interviewState.answeredQuestionsCount + '/' + this.interviewState.activeQuestionCount
-            return ''
-        },
+
         progressPercent(){
             return Math.round((this.interviewState.answeredQuestionsCount / this.interviewState.activeQuestionCount) * 100)
         },

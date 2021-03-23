@@ -97,6 +97,10 @@
 		@include width-questionnaire($content-width);
 	}
 }
+.interview-progress{
+    font: 16px/18px $roboto_medium;
+}
+
 .structured-content >.panel-default:first-of-type > .panel-heading h3 > a{
 	padding-right: 30px;
 }
