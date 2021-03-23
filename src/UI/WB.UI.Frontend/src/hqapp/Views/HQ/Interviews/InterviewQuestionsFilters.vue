@@ -62,6 +62,7 @@
                     id="btnQuestionsExposedSelectorOk"
                     type="button"
                     class="btn btn-primary"
+                    :disabled="saveDisabled"
                     @click="saveExposedVariablesFilter">{{ $t("Common.Save") }}</button>
             </div>
         </ModalFrame>
@@ -113,6 +114,7 @@ export default {
             checked: {},
 
             deafultQueryExposedVariables:{},
+            lastSavedQuery: null,
         }
     },
 
@@ -218,6 +220,7 @@ export default {
             }
         },
         saveExposedVariablesFilter(){
+            this.lastSavedQuery = this.transformQuery
             this.$emit('changeFilter', this.transformQuery)
             this.$refs.questionsExposedSelector.hide()
         },
@@ -262,7 +265,7 @@ export default {
 
             var some = {
                 entity: {variable: {eq: query.rule}},
-                isEnabled: {neq: false},
+                isEnabled: {eq: true},
             }
 
             var entity = this.questionnaireItems.find(i =>  i.variable === query.rule)
@@ -274,16 +277,16 @@ export default {
                 var none = {
                     entity: {variable: {eq: query.rule}},
                 }
-                some.value = {eq:''}
+                some.value = {eq : ''}
                 var notAnsweredResult = {}
-                notAnsweredResult.or= [{identifyingData : { none: none }}, {identifyingData : { some: some }}]
+                notAnsweredResult.or = [{identifyingData : { none: none }}, {identifyingData : { some: some }}]
                 return notAnsweredResult
             }
 
             var condition = {}
             if(operator === 'answered')
             {
-                condition['neq'] = null
+                condition['neq'] = ruleMap.ruleType == 'text' ? '' : null
             }
             else if(ruleMap.ruleType === 'select' && entity.variableType === 'BOOLEAN'){
                 condition[operator] = query.value == '1' ? true : false
@@ -461,6 +464,9 @@ export default {
                 'removeGroup': '&times;',
                 'textInputPlaceholder': this.$t('Interviews.DynamicFilter_MatchTypes_ValuePlaceholder'),
             }
+        },
+        saveDisabled(){
+            return this.transformQuery === this.lastSavedQuery
         },
     },
 
