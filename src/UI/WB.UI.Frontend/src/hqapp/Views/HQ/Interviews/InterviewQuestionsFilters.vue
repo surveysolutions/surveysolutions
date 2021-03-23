@@ -50,7 +50,12 @@
                 :rules="rules"
                 :maxDepth="6"
                 :labels="labels"
-                v-model="queryExposedVariables"></vue-query-builder>
+                v-model="queryExposedVariables">
+                <template v-slot:default="slotProps">
+                    <query-builder-group v-bind="slotProps"
+                        :query.sync="queryExposedVariables"/>
+                </template>
+            </vue-query-builder>
             <!-- <div>{{queryExposedVariables}}</div> -->
             <div slot="actions">
                 <button
@@ -89,6 +94,7 @@
 
 import VueQueryBuilder from 'vue-query-builder'
 import 'vue-query-builder/dist/VueQueryBuilder.css'
+import QueryBuilderGroup from './components/CustomBootstrapGroup.vue'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import gql from 'graphql-tag'
@@ -284,11 +290,11 @@ export default {
             }
             else if(ruleMap.ruleType == 'numeric')
             {
-                condition[operator] = Number(query.value)
+                condition[operator] = query.value ? Number(query.value) : null
             }
             else if(ruleMap.ruleType == 'date')
             {
-                condition[operator] = moment(query.value).format(DateFormats.date) + 'T00:00:00Z'
+                condition[operator] = query.value ? moment(query.value).format(DateFormats.date) + 'T00:00:00Z' : null
             }
             else{
                 condition[operator] = query.value
@@ -305,33 +311,34 @@ export default {
             const comparableOperators = ['=','<>','<','<=','>','>=', 'answered', 'not answered']
             const textOperators = ['equals','not equals','contains','not contains','starts with','not starts with','answered', 'not answered']
             const selectOperators = ['equals','not equals', 'answered', 'not answered']
+            const unaryOperators = ['answered', 'not answered']
 
             if(entity.entityType =='QUESTION')
             {
                 switch(entity.type) {
                     case 'NUMERIC':
-                        return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators}
+                        return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators, unaryOperators: unaryOperators}
                     case 'SINGLEOPTION':
-                        return {ruleType: 'select', valueName: 'answerCode', operators: selectOperators}
+                        return {ruleType: 'select', valueName: 'answerCode', operators: selectOperators, unaryOperators: unaryOperators}
                     case 'DATETIME':
-                        return {ruleType: 'date', valueName: 'valueDate', operators: comparableOperators }
+                        return {ruleType: 'date', valueName: 'valueDate', operators: comparableOperators, unaryOperators: unaryOperators }
                     case 'TEXT':
-                        return {ruleType:'text', valueName: 'value' , operators: textOperators}
+                        return {ruleType:'text', valueName: 'value' , operators: textOperators, unaryOperators: unaryOperators}
                 }
             }
             else if(entity.entityType == 'VARIABLE')
             {
                 switch(entity.variableType) {
                     case 'DOUBLE':
-                        return {ruleType: 'numeric', valueName: 'valueDouble', operators: comparableOperators}
+                        return {ruleType: 'numeric', valueName: 'valueDouble', operators: comparableOperators, unaryOperators: unaryOperators}
                     case 'LONGINTEGER':
-                        return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators}
+                        return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators, unaryOperators: unaryOperators}
                     case 'BOOLEAN':
-                        return {ruleType: 'select',valueName: 'valueBool', operators: selectOperators}
+                        return {ruleType: 'select',valueName: 'valueBool', operators: selectOperators, unaryOperators: unaryOperators}
                     case 'DATETIME':
-                        return {ruleType: 'date', valueName: 'valueDate', operators: comparableOperators}
+                        return {ruleType: 'date', valueName: 'valueDate', operators: comparableOperators, unaryOperators: unaryOperators}
                     case 'STRING' :
-                        return {ruleType:'text', valueName: 'value', operators: textOperators}
+                        return {ruleType:'text', valueName: 'value', operators: textOperators, unaryOperators: unaryOperators}
                 }
             }
             return 'text'
@@ -431,6 +438,9 @@ export default {
                 if(map.operators !== undefined)
                     rule.operators = map.operators
 
+                if(map.unaryOperators !== undefined)
+                    rule.unaryOperators = map.unaryOperators
+
                 return rule
             })
 
@@ -457,6 +467,7 @@ export default {
     components: {
         InterviewFilter,
         VueQueryBuilder,
+        QueryBuilderGroup,
     },
 }
 </script>
