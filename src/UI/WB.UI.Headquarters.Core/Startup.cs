@@ -282,9 +282,12 @@ namespace WB.UI.Headquarters
             services.AddTransient<ExportServiceApiConfigurator>();
             
             services.AddHttpClient();
-            services.AddWorkspaceAwareHttpClient<IExportServiceApi, 
-                ExportServiceApiConfigurator, 
-                ExportServiceApiHttpHandler>();
+            services.AddWorkspaceAwareHttpClient<IExportServiceApi,
+                ExportServiceApiConfigurator,
+                ExportServiceApiHttpHandler>(new RefitSettings
+            {
+                ContentSerializer = new NewtonsoftJsonContentSerializer()
+            });
 
             services.AddWorkspaceAwareHttpClient<IDesignerApi, 
                 DesignerApiConfigurator,

@@ -14,12 +14,12 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
-        <PackageReference Include="Npgsql" Version="5.0.1.1" />
-        <PackageReference Include="refit" Version="5.2.4" />
-        <PackageReference Include="Refit.HttpClientFactory" Version="5.2.4" />
+        <PackageReference Include="Npgsql" Version="5.0.3" />
+        <PackageReference Include="refit" Version="6.0.24" />
+        <PackageReference Include="Refit.HttpClientFactory" Version="6.0.24" />
         <PackageReference Include="Serilog" Version="2.10.0" />
-        <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
-        <PackageReference Include="Serilog.Exceptions" Version="6.0.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="4.0.0" />
+        <PackageReference Include="Serilog.Exceptions" Version="6.1.0" />
         <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="5.0.1" />
         <PackageReference Include="Polly.Contrib.WaitAndRetry" Version="1.1.1" />
     </ItemGroup>    

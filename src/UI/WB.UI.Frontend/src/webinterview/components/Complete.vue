@@ -44,7 +44,8 @@
                     <li v-for="entity in completeInfo.entitiesWithError"
                         :key="entity.id">
                         <a href="javascript:void(0);"
-                            @click="navigateTo(entity)">{{ entity.title }}</a>
+                            @click="navigateTo(entity)"
+                            v-html="entity.title"></a>
                     </li>
                 </ul>
             </div>
