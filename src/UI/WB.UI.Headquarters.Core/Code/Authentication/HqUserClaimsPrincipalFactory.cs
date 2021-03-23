@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.Domain;
 using WB.Infrastructure.Native.Workspaces;
+using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.UI.Headquarters.Code.Authentication
 {
@@ -36,6 +37,9 @@ namespace WB.UI.Headquarters.Code.Authentication
             HashSet<string>? workspaces = this.authorizedUser.IsAuthenticated && this.authorizedUser.IsObserver
                 ? this.authorizedUser.Workspaces.ToHashSet()
                 : null;
+            
+            if (principal.Identity is ClaimsIdentity claimIde && user.PasswordChangeRequired)
+                claimIde.AddClaim(new Claim(AuthorizedUser.PasswordChangeRequiredType, "true"));
 
             this.inScopeExecutor.Execute(workspacesService =>
             {

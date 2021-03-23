@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Amazon.SimpleEmail.Model;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -9,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code;
@@ -29,11 +33,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             SignInManager<HqUser> signInManager,
             IUserViewFactory userViewFactory,
             IApiTokenProvider apiAuthTokenProvider,
-            IWorkspacesCache workspacesCache,
             IUserToDeviceService userToDeviceService) : base(
                 authorizedUser,
                 userViewFactory,
-                userToDeviceService)
+                userToDeviceService,
+                userManager, signInManager, apiAuthTokenProvider)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -85,5 +89,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 
             return Unauthorized();
         }
+
+        [HttpPost]
+        [Route("changePassword")]
+        [WriteToSyncLog(SynchronizationLogType.ChangePassword)]
+        public Task<ActionResult<string>> ChangePassword([FromBody] ChangePasswordInfo userChangePassword)
+            => base.ChangePassword(userChangePassword);
     }
 }

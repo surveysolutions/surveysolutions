@@ -274,4 +274,7 @@
   <data name="PasswordTooShort" xml:space="preserve">
       <value>Пароли должны содержать не менее {0} символов.</value>
   </data>
+  <data name="PasswordChangeRequired" xml:space="preserve">
+    <value>Ваш пароль был сброшен. Вы должны изменить его для получения доступа к сайту.</value>
+  </data>
 </root>

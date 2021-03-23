@@ -4,11 +4,15 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.Gms.Common;
 using Android.Text;
 using Android.Text.Format;
+using Android.Views;
 using Android.Widget;
 using Google.Android.Material.DatePicker;
 using Google.Android.Material.Dialog;
+using Google.Android.Material.TextField;
+using Java.Lang;
 using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -74,6 +78,27 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.ConfirmWithTextInputImpl(message, k => tcs.TrySetResult(k ?? string.Empty),
                 () => tcs.TrySetResult(null), title,
                 okButton, cancelButton, isTextInputPassword);
+            return tcs.Task;
+        }
+        
+        public Task<ChangePasswordDialogResult> ConfirmNewPasswordInputAsync(
+           string message,
+           string title = "",
+           string okButton = null,
+           string cancelButton = null,
+           Func<ChangePasswordDialogOkCallback, Task> okCallback = null)
+        {
+            var tcs = new TaskCompletionSource<ChangePasswordDialogResult>();
+            okButton ??= UIResources.Ok;
+            cancelButton ??= UIResources.Cancel;
+
+            this.ConfirmPasswordInputImpl(message, 
+                (dialogResult) => tcs.TrySetResult(dialogResult),
+                okCallback,
+                () => tcs.TrySetResult(null), 
+                title,
+                okButton, 
+                cancelButton);
             return tcs.Task;
         }
 
@@ -283,6 +308,152 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             }
         }
 
+        private void ConfirmPasswordInputImpl(string message, 
+            Action<ChangePasswordDialogResult> okCallback, 
+            Func<ChangePasswordDialogOkCallback, Task> canClose,
+            Action cancelCallBack, 
+            string title, 
+            string okButton, 
+            string cancelButton)
+        {
+            var userInteractionId = Guid.NewGuid();
+
+            try
+            {
+                HandleDialogOpen(userInteractionId);
+
+                Application.SynchronizationContext.Post(
+                    ignored =>
+                    {
+                        if (this.mvxCurrentTopActivity.Activity == null)
+                        {
+                            HandleDialogClose(userInteractionId);
+                            return;
+                        }
+
+                        var inflatedView = (LinearLayout)this.mvxCurrentTopActivity.Activity.LayoutInflater.Inflate(Resource.Layout.confirmation_password, null);
+                        EditText oldPasswordText = inflatedView.FindViewById<EditText>(Resource.Id.oldPasswordEditText);
+                        //oldPasswordText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
+                        EditText passwordText = inflatedView.FindViewById<EditText>(Resource.Id.confirmationEditText);
+                        //passwordText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
+                        EditText confirmPasswordText = inflatedView.FindViewById<EditText>(Resource.Id.reconfirmationEditText);
+
+                        inflatedView.FindViewById<TextInputLayout>(Resource.Id.oldPasswordEditTextWrapper).Hint = UIResources.OldPasswordHint;
+                        inflatedView.FindViewById<TextInputLayout>(Resource.Id.confirmationEditTextWrapper).Hint = UIResources.NewPasswordHint;
+                        var oldPassError = inflatedView.FindViewById<TextInputLayout>(Resource.Id.oldPasswordEditTextWrapper);
+                        var passError = inflatedView.FindViewById<TextInputLayout>(Resource.Id.confirmationEditTextWrapper);
+                        var confirmPassError = inflatedView.FindViewById<TextInputLayout>(Resource.Id.reconfirmationEditTextWrapper);
+                        confirmPassError.Hint = UIResources.ConfirmNewPasswordHint;
+                        //confirmPasswordText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
+                        var dialogBuilder = new MaterialAlertDialogBuilder(this.mvxCurrentTopActivity.Activity)
+                            .SetMessage(message.ToAndroidSpanned())
+                            .SetTitle(title.ToAndroidSpanned()).SetView(inflatedView)
+                            .SetPositiveButton(okButton, (IDialogInterfaceOnClickListener)null)
+                            .SetNegativeButton(cancelButton,
+                                delegate
+                                {
+                                    HandleDialogClose(userInteractionId,
+                                        () =>
+                                        {
+                                            cancelCallBack?.Invoke();
+                                        });
+                                    this.mvxCurrentTopActivity.Activity.HideKeyboard(inflatedView.WindowToken);
+                                })
+                            .SetCancelable(false);
+                        var dialog = dialogBuilder.Create();
+                        dialog.Show();
+                        Button button = dialog.GetButton((int)DialogButtonType.Positive);
+                        button.SetOnClickListener(new OnClickListener(async delegate
+                        {
+                            oldPassError.Error = null;
+                            passError.Error = null;
+                            confirmPassError.Error = null;
+
+                            if (!string.IsNullOrWhiteSpace(passwordText.Text) &&
+                                passwordText.Text != confirmPasswordText.Text)
+                            {
+                                confirmPassError.Error = UIResources.PasswordMatchError;
+                                return;
+                            }
+                                
+                            var dialogCallback = new ChangePasswordDialogOkCallback()
+                            {
+                                DialogResult = new ChangePasswordDialogResult()
+                                {
+                                    NewPassword = passwordText.Text,
+                                    OldPassword = oldPasswordText.Text,
+                                }
+                            };
+                            if (canClose != null)
+                                await canClose.Invoke(dialogCallback);
+                            if (!dialogCallback.NeedClose)
+                            {
+                                oldPassError.Error = dialogCallback.OldPasswordError;
+                                passError.Error = dialogCallback.NewPasswordError;
+                                return;
+                            }
+                                    
+                            HandleDialogClose(userInteractionId, () =>
+                            {
+                                okCallback?.Invoke(dialogCallback.DialogResult);
+                            });
+                            
+                            dialog.Hide();
+
+                            this.mvxCurrentTopActivity.Activity.HideKeyboard(inflatedView.WindowToken);
+                        }));
+                        
+                        oldPasswordText.AddTextChangedListener(new PasswordTextWatcher(() => { oldPassError.Error = null; }));
+                        passwordText.AddTextChangedListener(new PasswordTextWatcher(() => { passError.Error = null; }));
+                        confirmPasswordText.AddTextChangedListener(new PasswordTextWatcher(() => { confirmPassError.Error = null; }));
+                    },
+                    null);
+            }
+            catch
+            {
+                HandleDialogClose(userInteractionId);
+                throw;
+            }
+        }
+        
+        private class PasswordTextWatcher : Java.Lang.Object, ITextWatcher
+        {
+            private readonly Action action;
+
+            public PasswordTextWatcher(Action action)
+            {
+                this.action = action;
+            }
+
+            public void AfterTextChanged(IEditable s)
+            {
+                action.Invoke();
+            }
+
+            public void BeforeTextChanged(ICharSequence s, int start, int count, int after)
+            {
+            }
+
+            public void OnTextChanged(ICharSequence s, int start, int before, int count)
+            {
+            }
+        }
+        
+        private class OnClickListener : Java.Lang.Object, View.IOnClickListener
+        {
+            private readonly Action action;
+
+            public OnClickListener(Action action)
+            {
+                this.action = action;
+            }
+
+            public void OnClick(View v)
+            {
+                action();
+            }
+        }
+        
         private void AlertImpl(string message, Action callback, string title, string okButton)
         {
             var userInteractionId = Guid.NewGuid();
