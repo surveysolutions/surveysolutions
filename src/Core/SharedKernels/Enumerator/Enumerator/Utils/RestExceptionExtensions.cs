@@ -121,8 +121,11 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             }else if(restException.Message.Contains("Workspace is disabled"))
                             {
                                 exceptionType = SynchronizationExceptionType.WorkspaceDisabled;
-                                exceptionMessage =
-                                    EnumeratorUIResources.Synchronization_WorkspaceDisabled;
+                                exceptionMessage = EnumeratorUIResources.Synchronization_WorkspaceDisabled;
+                            }else if(restException.Message.Contains("WorkspaceAccessDisabledReason"))
+                            {
+                                exceptionType = SynchronizationExceptionType.WorkspaceAccessDisabledReason;
+                                exceptionMessage = EnumeratorUIResources.Synchronization_WorkspaceAccessDisabledReason;
                             }
                             else
                             {

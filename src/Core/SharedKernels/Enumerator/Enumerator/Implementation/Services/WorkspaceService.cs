@@ -12,14 +12,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly IPlainStorage<WorkspaceView> workspaceRepository;
         private readonly SqliteSettings settings;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IExecuteInWorkspaceService executeInWorkspaceService;
 
         public WorkspaceService(IPlainStorage<WorkspaceView> workspaceRepository,
             SqliteSettings settings,
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor,
+            IExecuteInWorkspaceService executeInWorkspaceService
+            )
         {
             this.workspaceRepository = workspaceRepository;
             this.settings = settings;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.executeInWorkspaceService = executeInWorkspaceService;
         }
 
         public void Save(WorkspaceView[] workspaces)
@@ -33,9 +37,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 {
                     var workspaceDirectory = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, removedWorkspace.Name);
                     if (fileSystemAccessor.IsDirectoryExists(workspaceDirectory))
-                        fileSystemAccessor.DeleteDirectory(workspaceDirectory);
+                    {
+                        executeInWorkspaceService.Execute(removedWorkspace, serviceProvider =>
+                        {
+                            var interviewViewRepository = (IPlainStorage<InterviewView>)serviceProvider.GetService(typeof(IPlainStorage<InterviewView>));
+                            var interviewsCount = interviewViewRepository.Count();
+                            if (interviewsCount > 0)
+                            {
+                                var assignmentsStorage = (IAssignmentDocumentsStorage)serviceProvider.GetService(typeof(IAssignmentDocumentsStorage));
+                                assignmentsStorage.RemoveAll();                            
+                            }
+                            else
+                            {
+                                fileSystemAccessor.DeleteDirectory(workspaceDirectory);
+                                workspaceRepository.Remove(removedWorkspaces);
+                            }
+                        });
+                    }
                 }
-                workspaceRepository.Remove(removedWorkspaces);
             }
 
             workspaceRepository.Store(workspaces);

@@ -438,6 +438,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Stage = SyncStage.UserAuthentication
                         });
                         break;
+                    case SynchronizationExceptionType.WorkspaceAccessDisabledReason:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Description = EnumeratorUIResources.Synchronization_WorkspaceAccessDisabledReason,
+                            Status = SynchronizationStatus.Fail,
+                            Stage = SyncStage.UserAuthentication
+                        });
+                        break;
                     default:
                         progress.Report(new SyncProgressInfo
                         {

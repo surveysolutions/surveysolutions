@@ -2295,6 +2295,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your account is no longer active in the workspace. Please contact your supervisor..
+        /// </summary>
+        public static string Synchronization_WorkspaceAccessDisabledReason {
+            get {
+                return ResourceManager.GetString("Synchronization_WorkspaceAccessDisabledReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your account is no longer active on this server, because the workspace in which it is defined was disabled by the administrator. Please contact your supervisor..
         /// </summary>
         public static string Synchronization_WorkspaceDisabled {

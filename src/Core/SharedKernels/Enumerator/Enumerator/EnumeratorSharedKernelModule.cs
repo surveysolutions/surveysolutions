@@ -60,6 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IAttachmentsCleanupService, AttachmentsCleanupService>();
             registry.BindAsSingleton<IWorkspaceService, WorkspaceService>();
             registry.BindAsSingleton<IWorkspaceAccessor, WorkspaceAccessor>();
+            registry.BindAsSingleton<IExecuteInWorkspaceService, ExecuteInWorkspaceService>();
 
             registry.Bind<NavigationState>();
             registry.Bind<AnswerNotifier>();

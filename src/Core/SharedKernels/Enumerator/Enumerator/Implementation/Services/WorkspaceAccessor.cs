@@ -8,29 +8,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     public class WorkspaceAccessor : IWorkspaceAccessor
     {
         private readonly IPrincipal principal;
-        private readonly IWorkspaceService workspaceService;
 
-        public WorkspaceAccessor(IPrincipal principal, IWorkspaceService workspaceService)
+        public WorkspaceAccessor(IPrincipal principal)
         {
             this.principal = principal;
-            this.workspaceService = workspaceService;
         }
 
         public string GetCurrentWorkspaceName()
         {
             var currentWorkspace = principal.CurrentUserIdentity?.Workspace;
             return currentWorkspace;
-        }
-
-        public WorkspaceView GetCurrent()
-        {
-            var currentWorkspace = principal.CurrentUserIdentity?.Workspace;
-            if (currentWorkspace == null)
-                return null;
-            var workspace = workspaceService.GetByName(currentWorkspace);
-            if (workspace != null)
-                return workspace;
-            return workspaceService.GetAll().FirstOrDefault();
         }
     }
 }
