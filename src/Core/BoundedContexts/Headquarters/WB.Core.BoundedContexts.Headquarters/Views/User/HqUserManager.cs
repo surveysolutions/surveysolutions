@@ -15,7 +15,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
     public class HqUserManager : UserManager<HqUser>
     {
-        private readonly IWorkspacesService workspacesService;
         private readonly ISystemLog systemLog;
         private readonly IAuthorizedUser authorizedUser;
 
@@ -27,14 +26,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             ILookupNormalizer keyNormalizer, 
             IdentityErrorDescriber errors, 
             IServiceProvider services, 
-            ILogger<UserManager<HqUser>> logger,
-            IWorkspacesService workspacesService) 
-            IWorkspaceContextAccessor workspaceContextAccessor,
+            ILogger<HqUserManager> logger,
+            IWorkspacesService workspacesService,
             ISystemLog systemLog,
             IAuthorizedUser authorizedUser) 
             : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
-            this.workspacesService = workspacesService;
             this.systemLog = systemLog;
             this.authorizedUser = authorizedUser;
         }

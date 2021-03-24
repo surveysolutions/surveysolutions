@@ -2016,6 +2016,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your password has been reset. You must change it to get access to site..
+        /// </summary>
+        public static string Synchronization_PasswordChangeRequired {
+            get {
+                return ResourceManager.GetString("Synchronization_PasswordChangeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to questionnaires.
         /// </summary>
         public static string Synchronization_Questionnaires {
@@ -2606,6 +2615,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Warning {
             get {
                 return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You changed your current password. Try to login again with new password..
+        /// </summary>
+        public static string YouChangeYouPasswordTryToLoginAgainWithNewPassword {
+            get {
+                return ResourceManager.GetString("YouChangeYouPasswordTryToLoginAgainWithNewPassword", resourceCulture);
             }
         }
     }
