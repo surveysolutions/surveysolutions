@@ -69,7 +69,7 @@
                 :value="conditions"
                 :exposedValuesFilter="exposedValuesFilter"
                 @change="questionFilterChanged"
-                @changeFilter="changeexposedValuesFilter" />
+                @changeFilter="changeExposedValuesFilter" />
 
             <div class="preset-filters-container">
                 <div class="center-block"
@@ -380,7 +380,7 @@ export default {
             this.conditions = conditions
             this.reloadMarkersInBounds()
         },
-        changeexposedValuesFilter(exposedValuesFilter) {
+        changeExposedValuesFilter(exposedValuesFilter) {
             this.exposedValuesFilter = exposedValuesFilter
             this.reloadMarkersInBounds()
         },

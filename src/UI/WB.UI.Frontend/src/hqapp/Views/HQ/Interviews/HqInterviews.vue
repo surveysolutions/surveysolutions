@@ -83,7 +83,7 @@
                 :value="conditions"
                 :exposedValuesFilter="exposedValuesFilter"
                 @change="questionFilterChanged"
-                @changeFilter="changeexposedValuesFilter" />
+                @changeFilter="changeExposedValuesFilter" />
         </Filters>
 
         <DataTables
@@ -897,7 +897,7 @@ export default {
             this.conditions = conditions
             this.reloadTableAndSaveRoute()
         },
-        changeexposedValuesFilter(exposedValuesFilter) {
+        changeExposedValuesFilter(exposedValuesFilter) {
             this.exposedValuesFilter = exposedValuesFilter
             this.reloadTableAndSaveRoute()
         },

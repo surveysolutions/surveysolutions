@@ -52,7 +52,8 @@
                 :labels="labels"
                 v-model="queryExposedVariables">
                 <template v-slot:default="slotProps">
-                    <query-builder-group v-bind="slotProps"
+                    <query-builder-group
+                        v-bind="slotProps"
                         :query.sync="queryExposedVariables"/>
                 </template>
             </vue-query-builder>
@@ -107,13 +108,12 @@ const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttr
 export default {
     data() {
         return {
-            queryExposedVariables:{},
+            queryExposedVariables: { logicalOperator : 'all', children : [] },
             conditions: [], /** { } */
             questionnaireItems: [],
             selectedQuestion: null,
             checked: {},
 
-            deafultQueryExposedVariables:{},
             lastSavedQuery: null,
         }
     },
