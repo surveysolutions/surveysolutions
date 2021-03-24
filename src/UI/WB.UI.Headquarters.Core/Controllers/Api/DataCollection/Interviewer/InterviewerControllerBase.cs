@@ -182,11 +182,16 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
                     return StatusCode(StatusCodes.Status426UpgradeRequired);
                 }   
             }
+            else if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResetPasswordIntroduced)
+            {
+                if (authorizedUser.PasswordChangeRequired)
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }
             else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable);
             }
-
+            
             return this.userToDeviceService.GetLinkedDeviceId(this.authorizedUser.Id) != deviceId
                 ? (IActionResult)StatusCode(StatusCodes.Status403Forbidden, new {Message = "relinked"})
                 : new JsonResult("449634775");

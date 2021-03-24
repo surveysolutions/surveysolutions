@@ -214,10 +214,16 @@
     <value>Download translations for questionnaire &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="InterviewerLoggedIn" xml:space="preserve">
-    <value>Interviewer logged in and aquired AuthToken</value>
+    <value>Interviewer logged in and acquired AuthToken</value>
   </data>
   <data name="InterviewerFailedToLogin" xml:space="preserve">
     <value>Interviewer failed to login</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Password changed and acquired AuthToken</value>
+  </data>
+  <data name="FailToChangePassword" xml:space="preserve">
+    <value>User failed to change password</value>
   </data>
   <data name="ApkRequested" xml:space="preserve">
     <value>New application file requested</value>

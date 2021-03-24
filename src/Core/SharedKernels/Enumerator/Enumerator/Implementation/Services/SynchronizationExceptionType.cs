@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         SupervisorRequireOnlineSync,
         UserLinkedToAnotherServer,
         WorkspaceDisabled,
+        ShouldChangePassword,
         WorkspaceAccessDisabledReason,
     }
 }

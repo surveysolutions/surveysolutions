@@ -104,6 +104,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual ICollection<DeviceSyncInfo> DeviceSyncInfos { get; set; }
         
         public virtual ISet<WorkspacesUsers> Workspaces { get; protected set; }
+        
+        public virtual bool PasswordChangeRequired { get; set; }
     }
 
     public class HqUserToken : IdentityUserToken<Guid>

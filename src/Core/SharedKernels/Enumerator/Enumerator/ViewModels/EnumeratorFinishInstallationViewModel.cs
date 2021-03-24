@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         private IMvxAsyncCommand signInCommand;
-        public IMvxAsyncCommand SignInCommand => this.signInCommand ??= new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress);
+        public IMvxAsyncCommand SignInCommand => this.signInCommand ??= new MvxAsyncCommand(() => this.SignInAsync(this.Password), () => !IsInProgress);
 
         public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
@@ -171,7 +171,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
-        private async Task SignInAsync()
+        private async Task SignInAsync(string userPassword, string token = null)
         {
             this.IsUserValid = true;
             this.ErrorMessage = null;
@@ -198,11 +198,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     throw new SynchronizationException(SynchronizationExceptionType.Unauthorized, EnumeratorUIResources.Login_WrongPassword);
                 }
 
-                var authToken = await this.synchronizationService.LoginAsync(new LogonInfo
-                {
-                    Username = this.UserName,
-                    Password = this.Password
-                }, restCredentials, cancellationTokenSource.Token).ConfigureAwait(false);
+                var authToken = token;
+                if (authToken == null)
+                    authToken = await this.synchronizationService.LoginAsync(new LogonInfo
+                    {
+                        Username = this.UserName,
+                        Password = userPassword
+                    }, restCredentials, cancellationTokenSource.Token).ConfigureAwait(false);
 
                 restCredentials.Token = authToken;
 
@@ -217,9 +219,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 await this.synchronizationService.CanSynchronizeAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false);
 
                 SaveWorkspaces(workspaces);
-                await this.SaveUserToLocalStorageAsync(restCredentials, cancellationTokenSource.Token);
+                await this.SaveUserToLocalStorageAsync(restCredentials, userPassword, cancellationTokenSource.Token);
 
-                this.Principal.SignIn(restCredentials.Login, this.Password, true);
+                this.Principal.SignIn(restCredentials.Login, userPassword, true);
 
                 this.auditLogService.WriteApplicationLevelRecord(new FinishInstallationAuditLogEntity(this.Endpoint));
                 this.auditLogService.WriteApplicationLevelRecord(new LoginAuditLogEntity(this.UserName));
@@ -245,7 +247,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         this.PasswordError = EnumeratorUIResources.Login_WrongPassword;
                         break;
                     case SynchronizationExceptionType.UserLinkedToAnotherDevice:
-                        await this.RelinkUserToAnotherDeviceAsync(restCredentials, cancellationTokenSource.Token);
+                        await this.RelinkUserToAnotherDeviceAsync(restCredentials, userPassword, cancellationTokenSource.Token);
+                        break;
+                    case SynchronizationExceptionType.ShouldChangePassword:
+                        await ChangePasswordAsync();
                         break;
                     
                     case SynchronizationExceptionType.UpgradeRequired:
@@ -280,6 +285,55 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 SupervisorId = w.SupervisorId,
             }).ToArray());
         }
+        
+        
+        private async Task ChangePasswordAsync()
+        {
+            var message = EnumeratorUIResources.Synchronization_PasswordChangeRequired;
+
+            var passwordDialogResult = await this.userInteractionService.ConfirmNewPasswordInputAsync(
+                message,
+                okCallback: ChangePasswordCallback,
+                okButton: UIResources.Ok,
+                cancelButton: EnumeratorUIResources.Synchronization_Cancel).ConfigureAwait(false);
+        }
+
+        private async Task ChangePasswordCallback(ChangePasswordDialogOkCallback callback)
+        {
+            if (callback.DialogResult != null)
+            {
+                var changePasswordInfo = new ChangePasswordInfo
+                {
+                    Username = this.UserName,
+                    Password = callback.DialogResult.OldPassword,
+                    NewPassword = callback.DialogResult.NewPassword,
+                };
+
+                try
+                {
+                    var token = await this.synchronizationService.ChangePasswordAsync(changePasswordInfo)
+                        .ConfigureAwait(false);
+
+                    if (!string.IsNullOrWhiteSpace(token))
+                    {
+                        this.ErrorMessage = EnumeratorUIResources.YouChangeYouPasswordTryToLoginAgainWithNewPassword;
+                        await SignInAsync(callback.DialogResult.NewPassword, token);
+                        return;
+                    }
+                }
+                catch (SynchronizationException ex)
+                {
+                    if (ex.Type == SynchronizationExceptionType.ShouldChangePassword)
+                        callback.NewPasswordError = ex.Message;
+                    else
+                        callback.OldPasswordError = ex.Message;
+                    
+                    logger.Error($"Cant change password for user {UserName}", ex);
+                }
+            }
+
+            callback.NeedClose = false;
+        }
 
         public string PasswordError
         {
@@ -294,13 +348,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         protected abstract string GetRequiredUpdateMessage(string targetVersion, string appVersion);
-        protected abstract Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token);
-        protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token);
+        protected abstract Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, string password, CancellationToken token);
+        protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, string password, CancellationToken token);
         
         protected abstract Task<List<UserWorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials,
             CancellationToken token);
 
-        public void CancellInProgressTask() => this.cancellationTokenSource?.Cancel();
+        public void CancelInProgressTask() => this.cancellationTokenSource?.Cancel();
 
         private IMvxAsyncCommand scanAsyncCommand;
         private string endpointValidationError;

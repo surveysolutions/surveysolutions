@@ -7,7 +7,8 @@ namespace WB.UI.WebTester.Services
     public enum CreationResult
     {
         DataRestored,
-        EmptyCreated
+        EmptyCreated,
+        DataPartialRestored,
     }
 
     public interface IInterviewFactory

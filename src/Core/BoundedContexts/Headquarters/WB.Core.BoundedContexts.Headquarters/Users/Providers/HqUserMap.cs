@@ -41,6 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
             this.Property(x => x.PasswordHashSha1);
             this.Property(x => x.IsArchived);
             this.Property(x => x.FullName);
+            this.Property(x => x.PasswordChangeRequired, c => c.Column("password_change_required"));
 
             this.Property(x => x.TwoFactorEnabled);
 

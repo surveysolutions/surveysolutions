@@ -41,6 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         private bool remoteLoginRequired;
         private bool shouldUpdatePasswordOfResponsible;
+        private bool changePasswordRequired;
         protected RestCredentials? RestCredentials;
         
         protected AbstractSynchronizationProcess(
@@ -233,8 +234,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Workspace = this.principal.CurrentUserIdentity.Workspace
                 };
 
+                bool shouldUpdateCredentialsInDb = false;
+
                 if (this.remoteLoginRequired)
                 {
+                    this.remoteLoginRequired = false;
+
                     var token = await this.synchronizationService.LoginAsync(new LogonInfo
                     {
                         Username = this.RestCredentials.Login,
@@ -244,12 +249,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.RestCredentials.Password = this.RestCredentials.Password;
                     this.RestCredentials.Token = token;
 
-                    this.remoteLoginRequired = false;
+                    shouldUpdateCredentialsInDb = true;
                 }
 
-                if (this.shouldUpdatePasswordOfResponsible)
+                if (shouldUpdateCredentialsInDb)
                 {
-                    this.shouldUpdatePasswordOfResponsible = false;
                     this.UpdatePasswordOfResponsible(this.RestCredentials);
                 }
 
@@ -340,6 +344,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         break;
                     case SynchronizationExceptionType.Unauthorized:
                         this.shouldUpdatePasswordOfResponsible = true;
+                        break;
+                    case SynchronizationExceptionType.ShouldChangePassword:
+                        this.changePasswordRequired = true;
                         break;
                     case SynchronizationExceptionType.UserLocked:
                         progress.Report(new SyncProgressInfo
@@ -497,10 +504,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             if (!cancellationToken.IsCancellationRequested && this.shouldUpdatePasswordOfResponsible)
             {
+                this.shouldUpdatePasswordOfResponsible = false;
+
                 var newPassword = await this.GetNewPasswordAsync().ConfigureAwait(false);
                 if (newPassword == null)
                 {
-                    this.shouldUpdatePasswordOfResponsible = false;
                     progress.Report(new SyncProgressInfo
                     {
                         Title = EnumeratorUIResources.Synchronization_Fail_Title,
@@ -518,6 +526,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         this.RestCredentials.Password = newPassword;
                     }
 
+                    await this.SynchronizeAsync(progress, cancellationToken).ConfigureAwait(false);
+                }
+            }
+            
+            if (!cancellationToken.IsCancellationRequested && this.changePasswordRequired)
+            {
+                this.changePasswordRequired = false;
+
+                var password = await this.GetNewChangedPasswordAsync().ConfigureAwait(false);
+                if (password == null)
+                {
+                    progress.Report(new SyncProgressInfo
+                    {
+                        Title = EnumeratorUIResources.Synchronization_Fail_Title,
+                        Description = EnumeratorUIResources.Unauthorized,
+                        Status = SynchronizationStatus.Fail,
+                        Statistics = statistics,
+                        Stage = SyncStage.FailedUnauthorized
+                    });
+                }
+                else
+                {
                     await this.SynchronizeAsync(progress, cancellationToken).ConfigureAwait(false);
                 }
             }
@@ -539,8 +569,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 throw;
             }
         }
-
-
+        
         protected virtual void OnSuccessfulSynchronization() { }
 
         protected abstract Task CheckAfterStartSynchronization(CancellationToken cancellationToken);
@@ -560,6 +589,60 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 cancelButton: EnumeratorUIResources.Synchronization_Cancel,
                 isTextInputPassword: true);
         }
+        
+        protected virtual async Task<ChangePasswordDialogResult?> GetNewChangedPasswordAsync()
+        {
+            var message = EnumeratorUIResources.Synchronization_PasswordChangeRequired;
+
+            var dialogResult = await this.userInteractionService.ConfirmNewPasswordInputAsync(
+                message,
+                okCallback: ChangePasswordCallback,
+                okButton: UIResources.Ok,
+                cancelButton: EnumeratorUIResources.Synchronization_Cancel);
+            
+            return dialogResult;
+        }
+        
+        private async Task ChangePasswordCallback(ChangePasswordDialogOkCallback callback)
+        {
+            if (callback.DialogResult != null)
+            {
+                var username = principal.CurrentUserIdentity.Name;
+                var changePasswordInfo = new ChangePasswordInfo
+                {
+                    Username = username,
+                    Password = callback.DialogResult.OldPassword,
+                    NewPassword = callback.DialogResult.NewPassword,
+                };
+
+                try
+                {
+                    var token = await this.synchronizationService.ChangePasswordAsync(changePasswordInfo)
+                        .ConfigureAwait(false);
+
+                    if (this.RestCredentials != null && !string.IsNullOrWhiteSpace(token))
+                    {
+                        this.RestCredentials.Token = token;
+                        this.RestCredentials.Password = changePasswordInfo.NewPassword;
+
+                        this.UpdatePasswordOfResponsible(this.RestCredentials);
+                        return;
+                    }
+                }
+                catch (SynchronizationException ex)
+                {
+                    if (ex.Type == SynchronizationExceptionType.ShouldChangePassword)
+                        callback.NewPasswordError = ex.Message;
+                    else
+                        callback.OldPasswordError = ex.Message;
+                    
+                    logger.Error($"Cant change password for user {username}", ex);
+                }
+            }
+
+            callback.NeedClose = false;
+        }
+        
         protected virtual void WriteToAuditLogStartSyncMessage()
         {
             this.auditLogService.Write(new SynchronizationStartedAuditLogEntity(SynchronizationType.Online));

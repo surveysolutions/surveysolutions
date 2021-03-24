@@ -1,4 +1,5 @@
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -10,7 +11,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 {
-    public abstract class UsersControllerBase : ControllerBase
+    public abstract class UsersControllerBase : UsersApiControllerBase
     {
         protected readonly IAuthorizedUser authorizedUser;
         protected readonly IUserRepository userViewFactory;
@@ -19,7 +20,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         protected UsersControllerBase(
             IAuthorizedUser authorizedUser,
             IUserRepository userViewFactory,
-            IUserToDeviceService userToDeviceService)
+            IUserToDeviceService userToDeviceService,
+            UserManager<HqUser> userManager,
+            SignInManager<HqUser> signInManager,
+            IApiTokenProvider apiAuthTokenProvider)
+            :base(userManager, signInManager, apiAuthTokenProvider)
         {
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;

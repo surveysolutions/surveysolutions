@@ -259,6 +259,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your password has been reset. You must change it to get access to site..
+        /// </summary>
+        public static string PasswordChangeRequired {
+            get {
+                return ResourceManager.GetString("PasswordChangeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password must contain at least one number, one upper case character, and one lower case character.
         /// </summary>
         public static string PasswordErrorMessage {

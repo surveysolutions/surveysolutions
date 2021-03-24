@@ -75,6 +75,13 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public string Username { get; set; }
         public string Password { get; set; }
     }
+    
+    public class ChangePasswordInfo
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string NewPassword { get; set; }
+    }
 
     public class InterviewAnswerApiView
     {

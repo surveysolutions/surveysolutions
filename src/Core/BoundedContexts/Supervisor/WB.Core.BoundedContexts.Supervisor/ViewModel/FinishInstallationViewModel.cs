@@ -65,9 +65,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                    + Environment.NewLine + string.Format(EnumeratorUIResources.SupervisorVersion, appVersion);
         }
 
-        protected override Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token) => throw new NotImplementedException();
+        protected override Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, string password, CancellationToken token) 
+            => throw new NotImplementedException();
 
-        protected override async Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token)
+        protected override async Task SaveUserToLocalStorageAsync(RestCredentials credentials, string password, CancellationToken token)
         {
             var supervisor = await this.synchronizationService.GetSupervisorAsync(credentials, token: token).ConfigureAwait(false);
             var tenantId = await this.synchronizationService.GetTenantId(credentials, token).ConfigureAwait(false);
@@ -78,7 +79,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 UserId = supervisor.Id,
                 Name = this.UserName,
                 Email = supervisor.Email,
-                PasswordHash = this.passwordHasher.Hash(this.Password),
+                PasswordHash = this.passwordHasher.Hash(password),
                 Token = credentials.Token,
                 TenantId = tenantId,
                 Workspace = supervisor.Workspaces.First().Name
