@@ -11,9 +11,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
         {
             descriptor.Name("Map");
             descriptor.Ignore(x => x.FileName);
-            descriptor.Field(x => x.Id).Type<NonNullType<StringType>>().Name("fileName").Description("Map file name");
+            descriptor.Field(x => x.Id)
+                .Type<NonNullType<StringType>>()
+                .Name("fileName")
+                .Description("Map file name");
             descriptor.Field(x => x.Size).Description("Size of map in bytes");
-            descriptor.Field(x => x.ImportDate).Description("Utc date when map was imported on HQ");
+            descriptor.Field(x => x.ImportDate)
+                .Name("importDateUtc")
+                .Description("Utc date when map was imported on HQ");
             descriptor.Field(x => x.Users)
                 .Description("List of users assigned to map")
                 .Type<NonNullType<ListType<NonNullType<UserMapObjectType>>>>()
