@@ -37,7 +37,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
         public Task ArchiveSupervisorAndDependentInterviewersAsync(Guid supervisorId)
         {
             var supervisorAndDependentInterviewers = this.userRepository.Users.Where(
-                user => user.Profile != null && user.Profile.SupervisorId == supervisorId || user.Id == supervisorId).ToList();
+                user => user.Id == supervisorId || user.Workspaces.Any(w => w.SupervisorId == supervisorId))
+                .ToList();
 
             foreach (var accountToArchive in supervisorAndDependentInterviewers)
             {
@@ -52,13 +53,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
             var usersToArhive = this.userRepository.Users.Where(user => userIds.Contains(user.Id)).ToList();
             foreach (HqUser userToArchive in usersToArhive)
             {
-                if (userToArchive.IsInRole(UserRoles.Supervisor))
-                {
-                    await this.ArchiveSupervisorAndDependentInterviewersAsync(userToArchive.Id);
-                }
-                else
+                if (userToArchive.IsInRole(UserRoles.Interviewer))
                 {
                     this.ArchiveUser(userToArchive);
+                }
+                else if (userToArchive.IsInRole(UserRoles.Supervisor))
+                {
+                    await this.ArchiveSupervisorAndDependentInterviewersAsync(userToArchive.Id);
                 }
             }
         }

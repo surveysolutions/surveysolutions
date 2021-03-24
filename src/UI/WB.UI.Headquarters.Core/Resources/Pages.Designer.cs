@@ -3887,7 +3887,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the interviewer has completed interviews on his tablet then the data will be lost..
+        ///   Looks up a localized string similar to Supervisor will be archived with his team. If the supervisor&apos;s interviewers has completed interviews on his tablet then the data will be lost..
         /// </summary>
         public static string Supervisors_ArchiveSupervisorsConfirmMessage {
             get {
@@ -4347,6 +4347,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your will be archive interviewers and supervisors with his team. Supervisors interviewers will be archived in all workspaces. If the interviewers has completed interviews on his tablet then the data will be lost..
+        /// </summary>
+        public static string Users_ArchiveUsersConfirmMessage {
+            get {
+                return ResourceManager.GetString("Users_ArchiveUsersConfirmMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Press Add Headquarters button to create a new HQ user..
         /// </summary>
         public static string Users_Headquarters_Instruction1 {
@@ -4415,6 +4424,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string Users_Supervisors_Instruction2 {
             get {
                 return ResourceManager.GetString("Users_Supervisors_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Users will be unarchived..
+        /// </summary>
+        public static string Users_UnarchiveUsersWarning {
+            get {
+                return ResourceManager.GetString("Users_UnarchiveUsersWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to continue?.
+        /// </summary>
+        public static string Users_UsersConfirm {
+            get {
+                return ResourceManager.GetString("Users_UsersConfirm", resourceCulture);
             }
         }
         

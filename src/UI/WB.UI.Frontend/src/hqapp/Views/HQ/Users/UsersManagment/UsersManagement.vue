@@ -130,14 +130,17 @@
         <Confirm
             ref="confirmArchive"
             id="confirmArchive"
-            slot="modals">{{$t('Pages.Interviewers_ArchiveInterviewersConfirmMessage')}}
+            slot="modals">
+            {{$t('Pages.Users_ArchiveUsersConfirmMessage')}}
+            <br />
+            {{$t('Pages.Users_UsersConfirm')}}
         </Confirm>
         <Confirm ref="confirmUnarchive"
             id="confirmUnarchive"
             slot="modals">
-            {{$t('Archived.UnarchiveInterviewerWarning')}}
+            {{$t('Pages.Users_UnarchiveUsersWarning')}}
             <br />
-            {{$t('Pages.Interviewers_ArchiveInterviewersConfirm')}}
+            {{$t('Pages.Users_UsersConfirm')}}
         </Confirm>
 
         <InterviewersMoveToOtherTeam
@@ -248,12 +251,12 @@ export default {
         },
         isVisibleArchive() {
             return (
-                this.isAnyInterviewerSelected && this.model.canArchiveUnarchive && this.selectedArchive.key == 'false'
+                this.isAnyInterviewerOrSupervisorSelected && this.model.canArchiveUnarchive && this.selectedArchive.key == 'false'
             )
         },
         isVisibleUnarchive() {
             return (
-                this.isAnyInterviewerSelected && this.model.canArchiveUnarchive && this.selectedArchive.key == 'true'
+                this.isAnyInterviewerOrSupervisorSelected && this.model.canArchiveUnarchive && this.selectedArchive.key == 'true'
             )
         },
 
@@ -369,6 +372,11 @@ export default {
             }).length > 0
         },
 
+        isAnyInterviewerOrSupervisorSelected(){
+            return this.getFilteredItems(item => {
+                return item.role == 'Interviewer' || item.role == 'Supervisor'
+            }).length > 0
+        },
     },
 
     methods: {

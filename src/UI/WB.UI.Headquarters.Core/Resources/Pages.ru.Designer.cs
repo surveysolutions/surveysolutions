@@ -4347,6 +4347,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Будут заархивированы интервьюверы и супервизоры с их командами. Интервьюверы супервизора будут заархевированы во всех рабочих облостях. Если интервьюеры имеют законченные интервью на планшетах, то они будут потерянны..
+        /// </summary>
+        public static string Users_ArchiveUsersConfirmMessage {
+            get {
+                return ResourceManager.GetString("Users_ArchiveUsersConfirmMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Нажмите на кнопку Добавить Хэдквотера, чтобы создать нового хэдквотера..
         /// </summary>
         public static string Users_Headquarters_Instruction1 {
@@ -4415,6 +4424,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string Users_Supervisors_Instruction2 {
             get {
                 return ResourceManager.GetString("Users_Supervisors_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Пользователи будут восстановлены..
+        /// </summary>
+        public static string Users_UnarchiveUsersWarning {
+            get {
+                return ResourceManager.GetString("Users_UnarchiveUsersWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Вы хотите продолжить?.
+        /// </summary>
+        public static string Users_UsersConfirm {
+            get {
+                return ResourceManager.GetString("Users_UsersConfirm", resourceCulture);
             }
         }
         

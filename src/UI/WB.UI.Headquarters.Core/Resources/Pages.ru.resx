@@ -878,6 +878,12 @@
   <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
     <value>Вы хотите продолжить?</value>
   </data>
+  <data name="Users_UsersConfirm" xml:space="preserve">
+    <value>Вы хотите продолжить?</value>
+  </data>
+  <data name="Users_UnarchiveUsersWarning" xml:space="preserve">
+    <value>Пользователи будут восстановлены.</value>
+  </data>
   <data name="Profile_InterviewerEditFormat" xml:space="preserve">
     <value>Редактирование профиля интервьюера: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
@@ -943,6 +949,9 @@
   <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
     <value>Если интервьюер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</value>
     <comment>Если интервьюер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</comment>
+  </data>
+  <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
+    <value>Будут заархивированы интервьюверы и супервизоры с их командами. Интервьюверы супервизора будут заархевированы во всех рабочих облостях. Если интервьюеры имеют законченные интервью на планшетах, то они будут потерянны.</value>
   </data>
   <data name="Supervisors_Archive" xml:space="preserve">
     <value>Архивировать</value>

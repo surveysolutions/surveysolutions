@@ -943,8 +943,17 @@
   <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
     <value>Do you want to continue?</value>
   </data>
+  <data name="Users_UsersConfirm" xml:space="preserve">
+    <value>Do you want to continue?</value>
+  </data>
+  <data name="Users_UnarchiveUsersWarning" xml:space="preserve">
+    <value>Users will be unarchived.</value>
+  </data>
   <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
     <value>If the interviewer has completed interviews on his tablet then the data will be lost.</value>
+  </data>
+  <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
+    <value>Your will be archive interviewers and supervisors with his team. Supervisors interviewers will be archived in all workspaces. If the interviewers has completed interviews on his tablet then the data will be lost.</value>
   </data>
   <data name="Supervisors_Selected" xml:space="preserve">
     <value>supervisor(s) selected</value>
