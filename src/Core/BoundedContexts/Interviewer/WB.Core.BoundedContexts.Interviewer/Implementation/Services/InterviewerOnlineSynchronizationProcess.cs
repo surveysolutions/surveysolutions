@@ -72,9 +72,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             InterviewerApiView? interviewer = await this.synchronizationService.GetInterviewerAsync(this.RestCredentials, token: cancellationToken).ConfigureAwait(false);
             this.UpdateSecurityStampOfInterviewer(interviewer.SecurityStamp, this.RestCredentials.Login);
             this.UpdateWorkspaceInfo(interviewer.Workspaces);
-
-            if (interviewer.Workspaces.All(w => w.Name != principal.CurrentUserIdentity.Workspace))
-                throw new ActiveWorkspaceRemovedException();
         }
 
         protected override Task ChangeAndNavigateToNewDefaultWorkspaceAsync()

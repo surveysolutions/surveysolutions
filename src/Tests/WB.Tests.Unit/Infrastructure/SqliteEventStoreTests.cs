@@ -31,6 +31,8 @@ namespace WB.Tests.Unit.Infrastructure
             sqliteEventStorage = new SqliteMultiFilesEventStorage(Mock.Of<ILogger>(),
               new SqliteSettings
               {
+                  DataDirectoryName = "",
+                  PathToRootDirectory = "",
                   PathToDatabaseDirectory = "",
                   InterviewsDirectoryName = "",
                   InMemoryStorage = true
@@ -39,7 +41,7 @@ namespace WB.Tests.Unit.Infrastructure
               Mock.Of<IFileSystemAccessor>(x=>x.IsFileExists(Moq.It.IsAny<string>()) == true),
               Mock.Of<IEventTypeResolver>(x => x.ResolveType("TextQuestionAnswered") == typeof(TextQuestionAnswered)), 
               mockOfEncryptionService.Object,
-              Mock.Of<IWorkspaceAccessor>());
+              Mock.Of<IWorkspaceAccessor>(x => x.GetCurrentWorkspaceName() == ""));
         }
 
         [Test]
