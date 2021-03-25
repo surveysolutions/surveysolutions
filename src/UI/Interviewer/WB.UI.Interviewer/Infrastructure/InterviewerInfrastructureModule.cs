@@ -51,7 +51,7 @@ namespace WB.UI.Interviewer.Infrastructure
                 new ConstructorArgument("sendTabletInfoRelativeUrl", context => "api/interviewer/v2/tabletInfo"));
 
             registry.BindWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
-                "assembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
+                "assembliesDirectory", "assemblies");
             registry.Bind<ISerializer, PortableJsonSerializer>();
             registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, PortableJsonAllTypesSerializer>();

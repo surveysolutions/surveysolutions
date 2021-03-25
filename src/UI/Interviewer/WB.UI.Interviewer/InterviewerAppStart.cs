@@ -15,8 +15,10 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
+using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Migrations;
 using WB.UI.Shared.Enumerator.Migrations.Workspaces;
+using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Notifications;
 
 namespace WB.UI.Interviewer
@@ -55,7 +57,7 @@ namespace WB.UI.Interviewer
 
             migrationRunner.MigrateUp(this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
-            Mvx.IoCProvider.Resolve<IAudioAuditService>().CheckAndProcessAllAuditFiles();
+            CheckAndProcessAllAuditFiles();
             
             this.UpdateNotificationsWorker();
 
@@ -64,6 +66,17 @@ namespace WB.UI.Interviewer
             this.CheckAndProcessUserLogins();
 
             return base.ApplicationStartup(hint);
+        }
+
+        private void CheckAndProcessAllAuditFiles()
+        {
+            var audioPath = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("audio");
+            var scope = lifetimeScope.BeginLifetimeScope(cb =>
+            {
+                cb.RegisterType<AudioService>().As<IAudioService>()
+                    .WithParameter("pathToAudioDirectory", audioPath);
+            });
+            scope.Resolve<IAudioAuditService>().CheckAndProcessAllAuditFiles();
         }
 
         private void CheckAndProcessUserLogins()

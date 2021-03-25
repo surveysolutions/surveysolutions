@@ -60,8 +60,32 @@ namespace WB.UI.Shared.Enumerator.Services
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
-        private readonly string pathToStore;
-        private readonly BackwardCompatibleQuestionnaireAssemblyFileAccessor backwardCompatibleAccessor;
+        private readonly string assembliesDirectory;
+        private readonly IWorkspaceAccessor workspaceAccessor;
+        private readonly string pathToAssembliesDirectory = null;
+
+        private string PathToStore 
+        {
+            get
+            {
+                if (this.pathToAssembliesDirectory != null)
+                    return this.pathToAssembliesDirectory;
+                
+                var appDirectory = AndroidPathUtils.GetPathToInternalDirectory();
+                var workspace = workspaceAccessor.GetCurrentWorkspaceName();
+                var pathToDirectory = fileSystemAccessor.CombinePath(
+                    appDirectory,
+                    workspace,
+                    assembliesDirectory);
+                if (!fileSystemAccessor.IsDirectoryExists(pathToDirectory))
+                    fileSystemAccessor.CreateDirectory(pathToDirectory);
+                return pathToDirectory;
+            }
+        }
+
+        private BackwardCompatibleQuestionnaireAssemblyFileAccessor BackwardCompatibleAccessor =>
+            new BackwardCompatibleQuestionnaireAssemblyFileAccessor(this.PathToStore,
+                this.fileSystemAccessor);
 
         public InterviewerQuestionnaireAssemblyAccessor(IFileSystemAccessor fileSystemAccessor,
             ILogger logger, 
@@ -70,31 +94,32 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
+            this.assembliesDirectory = assembliesDirectory;
+            this.workspaceAccessor = workspaceAccessor;
+        }
+        
+        public InterviewerQuestionnaireAssemblyAccessor(IFileSystemAccessor fileSystemAccessor,
+            ILogger logger, 
+            string pathToAssembliesDirectory)
+        {
+            this.fileSystemAccessor = fileSystemAccessor;
+            this.logger = logger;
             
-            var appDirectory = AndroidPathUtils.GetPathToInternalDirectory();
-            var workspace = workspaceAccessor.GetCurrentWorkspaceName();
-            var pathToAssembliesDirectory = fileSystemAccessor.CombinePath(
-                appDirectory,
-                workspace,
-                assembliesDirectory);
             if (!fileSystemAccessor.IsDirectoryExists(pathToAssembliesDirectory))
                 fileSystemAccessor.CreateDirectory(pathToAssembliesDirectory);
             
-            this.pathToStore = pathToAssembliesDirectory;
-
-            this.backwardCompatibleAccessor = new BackwardCompatibleQuestionnaireAssemblyFileAccessor(this.pathToStore,
-                this.fileSystemAccessor);
+            this.pathToAssembliesDirectory = pathToAssembliesDirectory;
         }
 
         private string CheckAndGetFullPathToAssemblyOrEmpty(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            var pathToAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
+            var pathToAssembly = this.fileSystemAccessor.CombinePath(this.PathToStore, assemblyFileName);
 
             if (this.fileSystemAccessor.IsFileExists(pathToAssembly))
                 return pathToAssembly;
 
-            var oldPath = this.backwardCompatibleAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
+            var oldPath = this.BackwardCompatibleAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
 
             return this.fileSystemAccessor.IsFileExists(oldPath) ? oldPath : string.Empty;
         }
@@ -118,7 +143,7 @@ namespace WB.UI.Shared.Enumerator.Services
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, byte[] assembly)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
+            var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.PathToStore, assemblyFileName);
 
             if (assembly.Length == 0)
                 throw new Exception(
@@ -132,7 +157,7 @@ namespace WB.UI.Shared.Enumerator.Services
         public async Task StoreAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
-            var path = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
+            var path = this.fileSystemAccessor.CombinePath(this.PathToStore, assemblyFileName);
 
             if (this.fileSystemAccessor.IsFileExists(path))
             {
@@ -148,7 +173,7 @@ namespace WB.UI.Shared.Enumerator.Services
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
+            var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.PathToStore, assemblyFileName);
 
             this.logger.Info(
                 $"Trying to delete assembly for questionnaire {questionnaireId} version {questionnaireVersion}");
@@ -170,7 +195,7 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
             
-            this.fileSystemAccessor.DeleteFile(this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName));
+            this.fileSystemAccessor.DeleteFile(this.fileSystemAccessor.CombinePath(this.PathToStore, assemblyFileName));
         }
 
         public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)
@@ -183,10 +208,10 @@ namespace WB.UI.Shared.Enumerator.Services
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            string pathToAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
+            string pathToAssembly = this.fileSystemAccessor.CombinePath(this.PathToStore, assemblyFileName);
 
             if (!this.fileSystemAccessor.IsFileExists(pathToAssembly))
-                return this.backwardCompatibleAccessor.GetAssemblyAsByteArray(questionnaireId, questionnaireVersion);
+                return this.BackwardCompatibleAccessor.GetAssemblyAsByteArray(questionnaireId, questionnaireVersion);
 
             return this.fileSystemAccessor.ReadAllBytes(pathToAssembly);
         }

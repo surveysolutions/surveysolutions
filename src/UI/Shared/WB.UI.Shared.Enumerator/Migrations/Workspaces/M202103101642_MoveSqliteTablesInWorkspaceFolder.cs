@@ -58,7 +58,7 @@ namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
             var subFolders = fileSystemAccessor.GetDirectoriesInDirectory(settings.PathToDatabaseDirectory);
             foreach (var subFolder in subFolders)
             {
-                var folderName = fileSystemAccessor.GetDirectory(subFolder);
+                var folderName = fileSystemAccessor.GetDirectoryName(subFolder);
                 var newFolderPath = fileSystemAccessor.CombinePath(workspaceDataFolder, folderName);
                 fileSystemAccessor.MoveDirectory(subFolder, newFolderPath);
             }

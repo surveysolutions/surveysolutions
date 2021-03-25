@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Autofac;
+using Autofac.Core;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -13,6 +16,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
 {
@@ -25,15 +29,20 @@ namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
         private readonly IPlainStorage<TranslationInstance> translationsStorage;
 
         public UpdateOptionsForMultiComboboxQuestions(
-            IInterviewerQuestionnaireAccessor questionnaireRepository,
-            IQuestionnaireStorage questionnaireStorage,
-            IPlainStorage<Old.OptionView> optionsStorage,
-            IPlainStorage<TranslationInstance> translationsStorage)
+            ILifetimeScope lifetimeScope
+            )
         {
-            this.questionnaireRepository = questionnaireRepository;
-            this.questionnaireStorage = questionnaireStorage;
-            this.optionsStorage = optionsStorage;
-            this.translationsStorage = translationsStorage;
+            var migrationScope = lifetimeScope.BeginLifetimeScope(cb =>
+                {
+                    var assembliesDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies");
+                    cb.RegisterType<InterviewerQuestionnaireAssemblyAccessor>().As<IQuestionnaireAssemblyAccessor>()
+                        .WithParameter("pathToAssembliesDirectory", assembliesDirectory);
+                }
+            );
+            this.questionnaireRepository = migrationScope.Resolve<IInterviewerQuestionnaireAccessor>();
+            this.questionnaireStorage = migrationScope.Resolve<IQuestionnaireStorage>();
+            this.optionsStorage = migrationScope.Resolve<IPlainStorage<Old.OptionView>>();
+            this.translationsStorage = migrationScope.Resolve<IPlainStorage<TranslationInstance>>();
         }
         
         public class Old

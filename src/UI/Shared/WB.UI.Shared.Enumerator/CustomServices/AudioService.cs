@@ -82,6 +82,26 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 this.fileSystemAccessor.CreateDirectory(pathToAudioAuditDirectory);
         }
 
+        public AudioService(string pathToAudioDirectory, 
+            IFileSystemAccessor fileSystemAccessor,
+            IAudioFileStorage audioFileStorage, 
+            ILogger logger)
+        {
+            this.fileSystemAccessor = fileSystemAccessor;
+            this.audioFileStorage = audioFileStorage;
+            this.logger = logger;
+            if (!fileSystemAccessor.IsDirectoryExists(pathToAudioDirectory))
+                fileSystemAccessor.CreateDirectory(pathToAudioDirectory);
+            this.pathToAudioFile = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, audioFileName);
+            this.tempFileName = Path.GetTempFileName();
+            mediaPlayer.Completion += MediaPlayerOnCompletion;
+
+            this.pathToAudioAuditDirectory = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, "audit");
+
+            if (!this.fileSystemAccessor.IsDirectoryExists(pathToAudioAuditDirectory))
+                this.fileSystemAccessor.CreateDirectory(pathToAudioAuditDirectory);
+        }
+
         private void MediaPlayerOnCompletion(object sender, EventArgs eventArgs)
         {
             this.OnOnPlaybackCompleted(new PlaybackCompletedEventArgs(this.playingIdentity));

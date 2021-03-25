@@ -36,6 +36,10 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         public void DeleteDirectory(string path) => Directory.Delete(path, true);
 
         public string GetDirectory(string path) => Path.GetDirectoryName(path);
+        public string GetDirectoryName(string path)
+        {
+            return new DirectoryInfo(path).Name;
+        }
 
         public bool IsFileExists(string pathToFile) => File.Exists(pathToFile);
 
