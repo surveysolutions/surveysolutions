@@ -17,6 +17,11 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             File.Move(pathToFile, newPathToFile);
         }
 
+        public void MoveDirectory(string pathToDir, string newPathToDir)
+        {
+            Directory.Move(pathToDir, newPathToDir);
+        }
+
 
         public long GetFileSize(string filePath) => this.IsFileExists(filePath) ? new FileInfo(filePath).Length : -1;
 

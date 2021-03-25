@@ -13,6 +13,8 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
+using WB.UI.Shared.Enumerator.Services;
 using Exception = System.Exception;
 using IOException = Java.IO.IOException;
 using Math = System.Math;
@@ -53,14 +55,23 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private bool isAuditShouldBeRestarted = false;
         private bool isAuditRecording = false;
 
-        public AudioService(string pathToAudioDirectory, 
+        public AudioService(string audioDirectory, 
             IFileSystemAccessor fileSystemAccessor,
             IAudioFileStorage audioFileStorage, 
-            ILogger logger)
+            ILogger logger,
+            IWorkspaceAccessor workspaceAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.audioFileStorage = audioFileStorage;
             this.logger = logger;
+            var appDirectory = AndroidPathUtils.GetPathToInternalDirectory();
+            var workspace = workspaceAccessor.GetCurrentWorkspaceName();
+            var pathToAudioDirectory = fileSystemAccessor.CombinePath(
+                appDirectory,
+                workspace,
+                audioDirectory);
+            if (!fileSystemAccessor.IsDirectoryExists(pathToAudioDirectory))
+                fileSystemAccessor.CreateDirectory(pathToAudioDirectory);
             this.pathToAudioFile = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, audioFileName);
             this.tempFileName = Path.GetTempFileName();
             mediaPlayer.Completion += MediaPlayerOnCompletion;

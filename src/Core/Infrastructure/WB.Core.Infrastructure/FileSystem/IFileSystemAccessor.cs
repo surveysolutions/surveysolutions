@@ -48,5 +48,6 @@ namespace WB.Core.Infrastructure.FileSystem
         string ChangeExtension(string path1, string newExtension);
 
         void MoveFile(string pathToFile, string newPathToFile);
+        void MoveDirectory(string pathToDir, string newPathToDir);
     }
 }

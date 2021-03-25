@@ -65,7 +65,12 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         }
 
         private string GetEventSourceConnectionString(Guid eventSourceId)
-            => this.ToSqliteConnectionString(Path.Combine(this.settings.PathToDatabaseDirectory, workspaceAccessor.GetCurrentWorkspaceName(), this.settings.InterviewsDirectory, $"{eventSourceId.FormatGuid()}.sqlite3"));
+            => this.ToSqliteConnectionString(Path.Combine(
+                this.settings.PathToRootDirectory, 
+                workspaceAccessor.GetCurrentWorkspaceName(), 
+                this.settings.DataDirectoryName, 
+                this.settings.InterviewsDirectoryName, 
+                $"{eventSourceId.FormatGuid()}.sqlite3"));
 
         private string ToSqliteConnectionString(string pathToDatabase)
             => this.settings.InMemoryStorage ? $":memory:" : pathToDatabase;
@@ -337,7 +342,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             var pathToInterviewsDirectory = fileSystemAccessor.CombinePath(
                 this.settings.PathToDatabaseDirectory,
                 workspaceAccessor.GetCurrentWorkspaceName(),
-                this.settings.InterviewsDirectory);
+                this.settings.InterviewsDirectoryName);
             if (!Directory.Exists(pathToInterviewsDirectory))
                 return new List<Guid>();
 

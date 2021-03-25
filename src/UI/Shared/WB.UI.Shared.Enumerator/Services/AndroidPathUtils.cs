@@ -7,6 +7,17 @@ namespace WB.UI.Shared.Enumerator.Services
 {
     public class AndroidPathUtils : IPathUtils
     {
+        public static string GetAndCreatePathToSubfolder(string workspace, string subFolderName)
+        {
+            var pathToSubfolderInLocalDirectory = Path.Combine(GetPathToInternalDirectory(), workspace, subFolderName);
+            if (!Directory.Exists(pathToSubfolderInLocalDirectory))
+            {
+                Directory.CreateDirectory(pathToSubfolderInLocalDirectory);
+            }
+
+            return pathToSubfolderInLocalDirectory;
+        }
+        
         public static string GetPathToSubfolderInLocalDirectory(string subFolderName)
         {
             var pathToSubfolderInLocalDirectory = Path.Combine(GetPathToInternalDirectory(), subFolderName);

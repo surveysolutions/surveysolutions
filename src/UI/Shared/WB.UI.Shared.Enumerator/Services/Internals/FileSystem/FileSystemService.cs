@@ -220,5 +220,10 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
 
             File.Delete(pathToFile);
         }
+
+        public void MoveDirectory(string pathToDir, string newPathToDir)
+        {
+            Directory.Move(pathToDir, newPathToDir);
+        }
     }
 }

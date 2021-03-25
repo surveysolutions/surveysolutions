@@ -31,26 +31,39 @@ namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
             if (string.IsNullOrWhiteSpace(workspace))
                 return;
 
-            var workspaceFolder = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, workspace);
+            var workspaceFolder = fileSystemAccessor.CombinePath(settings.PathToRootDirectory, workspace);
             if (!fileSystemAccessor.IsDirectoryExists(workspaceFolder))
                 fileSystemAccessor.CreateDirectory(workspaceFolder);
 
-            var interviewsDirectory = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "interviews");
-            if (fileSystemAccessor.IsDirectoryExists(interviewsDirectory))
+            void TryMoveDirectoryInWorkspaceDirectory(string dirName)
             {
-                var newInterviewsDirectory = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, workspace, "interviews");
-                if (!fileSystemAccessor.IsDirectoryExists(newInterviewsDirectory))
-                    fileSystemAccessor.CreateDirectory(newInterviewsDirectory);
+                var dirPath = fileSystemAccessor.CombinePath(settings.PathToRootDirectory, dirName);
+                if (!fileSystemAccessor.IsDirectoryExists(dirPath))
+                    return;
+                
+                var newFolderPath = fileSystemAccessor.CombinePath(workspaceFolder, dirName);
+                fileSystemAccessor.MoveDirectory(dirPath, newFolderPath);
+            }
 
-                var interviews = fileSystemAccessor.GetFilesInDirectory(interviewsDirectory);
-                foreach (var interviewPath in interviews)
-                {
-                    var fileName = fileSystemAccessor.GetFileName(interviewPath);
-                    var newInterviewPath = fileSystemAccessor.CombinePath(newInterviewsDirectory, fileName);
-                    fileSystemAccessor.MoveFile(interviewPath, newInterviewPath);
-                }
+            // move "audio" and "assemblies" to workspace subfolder
+            TryMoveDirectoryInWorkspaceDirectory("audio");
+            TryMoveDirectoryInWorkspaceDirectory("assemblies");
+
+            // create "data" folder in workspace
+            var workspaceDataFolder = fileSystemAccessor.CombinePath(workspaceFolder, "data");
+            if (!fileSystemAccessor.IsDirectoryExists(workspaceDataFolder))
+                fileSystemAccessor.CreateDirectory(workspaceDataFolder);
+
+            // move all subfolders in data like "interviews" to workspace
+            var subFolders = fileSystemAccessor.GetDirectoriesInDirectory(settings.PathToDatabaseDirectory);
+            foreach (var subFolder in subFolders)
+            {
+                var folderName = fileSystemAccessor.GetDirectory(subFolder);
+                var newFolderPath = fileSystemAccessor.CombinePath(workspaceDataFolder, folderName);
+                fileSystemAccessor.MoveDirectory(subFolder, newFolderPath);
             }
             
+            // move workspace specific databases to workspace directory
             var files = fileSystemAccessor.GetFilesInDirectory(settings.PathToDatabaseDirectory, "*-data.sqlite3");
 
             var excludeFiles = new List<string>()
@@ -74,12 +87,7 @@ namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
                 if (excludeFiles.Contains(entityTypeName))
                     continue;
 
-                // var entityType = Type.GetType(entityTypeName);
-                // var workspacesAttribute = entityType.GetCustomAttribute<WorkspacesAttribute>();
-                // if (workspacesAttribute != null)
-                //     continue;
-
-                var newFilePath = fileSystemAccessor.CombinePath(workspaceFolder, fileName);
+                var newFilePath = fileSystemAccessor.CombinePath(workspaceDataFolder, fileName);
                 fileSystemAccessor.MoveFile(file, newFilePath);
             }
         }

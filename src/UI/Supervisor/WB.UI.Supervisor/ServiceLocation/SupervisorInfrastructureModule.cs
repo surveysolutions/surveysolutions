@@ -51,7 +51,7 @@ namespace WB.UI.Supervisor.ServiceLocation
                 new ConstructorArgument("sendTabletInfoRelativeUrl", context => "api/supervisor/v1/tabletInfo"));
 
             registry.BindWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
-                "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
+                "assembliesDirectory", "assemblies");
             registry.Bind<ISerializer, PortableJsonSerializer>();
             registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, PortableJsonAllTypesSerializer>();
@@ -74,8 +74,10 @@ namespace WB.UI.Supervisor.ServiceLocation
 
             registry.BindToConstant(() => new SqliteSettings
             {
+                PathToRootDirectory = AndroidPathUtils.GetPathToInternalDirectory(), 
                 PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"),
-                InterviewsDirectory = "interviews",
+                DataDirectoryName = "data",
+                InterviewsDirectoryName = "interviews",
             });
 
             registry.Bind(typeof(IPlainStorage<,>), typeof(SqlitePlainStorageWithWorkspace<,>));

@@ -53,6 +53,7 @@ namespace WB.UI.Tester.Infrastructure
 
             registry.BindToConstant(() => new SqliteSettings
             {
+                PathToRootDirectory = AndroidPathUtils.GetPathToInternalDirectory(), 
                 PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
             });
 

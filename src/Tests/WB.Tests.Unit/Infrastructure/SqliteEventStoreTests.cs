@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Infrastructure
               new SqliteSettings
               {
                   PathToDatabaseDirectory = "",
-                  InterviewsDirectory = "",
+                  InterviewsDirectoryName = "",
                   InMemoryStorage = true
               },
               Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100),

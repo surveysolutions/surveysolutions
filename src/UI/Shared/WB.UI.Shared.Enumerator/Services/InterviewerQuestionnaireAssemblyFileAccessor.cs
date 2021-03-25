@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
@@ -64,10 +65,21 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public InterviewerQuestionnaireAssemblyAccessor(IFileSystemAccessor fileSystemAccessor,
             ILogger logger, 
-            string pathToAssembliesDirectory)
+            string assembliesDirectory,
+            IWorkspaceAccessor workspaceAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
+            
+            var appDirectory = AndroidPathUtils.GetPathToInternalDirectory();
+            var workspace = workspaceAccessor.GetCurrentWorkspaceName();
+            var pathToAssembliesDirectory = fileSystemAccessor.CombinePath(
+                appDirectory,
+                workspace,
+                assembliesDirectory);
+            if (!fileSystemAccessor.IsDirectoryExists(pathToAssembliesDirectory))
+                fileSystemAccessor.CreateDirectory(pathToAssembliesDirectory);
+            
             this.pathToStore = pathToAssembliesDirectory;
 
             this.backwardCompatibleAccessor = new BackwardCompatibleQuestionnaireAssemblyFileAccessor(this.pathToStore,

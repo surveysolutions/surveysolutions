@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 foreach (var removedWorkspace in removedWorkspaces)
                 {
-                    var workspaceDirectory = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, removedWorkspace.Name);
+                    var workspaceDirectory = fileSystemAccessor.CombinePath(settings.PathToRootDirectory, removedWorkspace.Name);
                     if (fileSystemAccessor.IsDirectoryExists(workspaceDirectory))
                     {
                         executeInWorkspaceService.Execute(removedWorkspace, serviceProvider =>

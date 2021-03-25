@@ -38,14 +38,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected override string GetPathToDatabase()
         {
             var entityName = typeof(TEntity).Name;
-            var pathToDatabase = settings.PathToDatabaseDirectory;
+            string pathToDatabase = settings.PathToDatabaseDirectory;
             
             var workspaces = typeof(TEntity).GetCustomAttribute(typeof(WorkspacesAttribute));
             if (workspaces == null)
             {
                 var workspaceName = workspaceAccessor.GetCurrentWorkspaceName();
                 if (!string.IsNullOrEmpty(workspaceName))
-                    pathToDatabase = fileSystemAccessor.CombinePath(pathToDatabase, workspaceName);
+                    pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToRootDirectory, workspaceName, settings.DataDirectoryName);
             }
 
             pathToDatabase = fileSystemAccessor.CombinePath(pathToDatabase, entityName + "-data.sqlite3");

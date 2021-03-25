@@ -29,7 +29,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public InMemorySqliteMultiFilesEventStorage(IEnumeratorSettings enumeratorSettings)
             : base(Mock.Of<ILogger>(),
-                new SqliteSettings() { InMemoryStorage = true, PathToDatabaseDirectory = "", InterviewsDirectory = ""},
+                new SqliteSettings() { InMemoryStorage = true, PathToDatabaseDirectory = "", InterviewsDirectoryName = ""},
                 enumeratorSettings,
                 Mock.Of<IFileSystemAccessor>(s => s.IsFileExists(":memory:") == true),
                 new EventTypeResolver(typeof(QuestionAnswered).Assembly),

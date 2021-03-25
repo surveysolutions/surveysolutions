@@ -51,7 +51,7 @@ namespace WB.UI.Interviewer.Infrastructure
                 new ConstructorArgument("sendTabletInfoRelativeUrl", context => "api/interviewer/v2/tabletInfo"));
 
             registry.BindWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
-                "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
+                "assembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
             registry.Bind<ISerializer, PortableJsonSerializer>();
             registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, PortableJsonAllTypesSerializer>();
@@ -71,8 +71,10 @@ namespace WB.UI.Interviewer.Infrastructure
 
             registry.BindToConstant(() => new SqliteSettings
             {
-                PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"), 
-                InterviewsDirectory = "interviews"
+                PathToRootDirectory = AndroidPathUtils.GetPathToInternalDirectory(), 
+                PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"),
+                DataDirectoryName = "data",
+                InterviewsDirectoryName = "interviews"
             });
 
             registry.Bind(typeof(IPlainStorage<,>), typeof(SqlitePlainStorageWithWorkspace<,>));

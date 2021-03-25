@@ -93,7 +93,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         private void EncryptEvents()
         {
-            var pathToInterviewsDirectory = fileSystemAccessor.CombinePath(databaseSettings.PathToDatabaseDirectory, databaseSettings.InterviewsDirectory);
+            var pathToInterviewsDirectory = fileSystemAccessor.CombinePath(databaseSettings.PathToDatabaseDirectory, databaseSettings.InterviewsDirectoryName);
             if (!fileSystemAccessor.IsDirectoryExists(pathToInterviewsDirectory))
                 fileSystemAccessor.CreateDirectory(pathToInterviewsDirectory);
             
