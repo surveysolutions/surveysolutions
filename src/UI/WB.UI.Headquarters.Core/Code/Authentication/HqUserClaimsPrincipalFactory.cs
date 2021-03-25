@@ -37,6 +37,16 @@ namespace WB.UI.Headquarters.Code.Authentication
             HashSet<string>? workspaces = this.authorizedUser.IsAuthenticated && this.authorizedUser.IsObserver
                 ? this.authorizedUser.Workspaces.ToHashSet()
                 : null;
+
+            if (workspaces == null 
+                && principal.Identity is ClaimsIdentity principalIdentity
+                && principalIdentity.HasClaim(c => c.Type == AuthorizedUser.ObserverClaimType))
+            {
+                workspaces = principalIdentity.Claims
+                    .Where(c => c.Type == WorkspaceConstants.ClaimType)
+                    .Select(c => c.Value)
+                    .ToHashSet();
+            }
             
             if (principal.Identity is ClaimsIdentity claimIde && user.PasswordChangeRequired)
                 claimIde.AddClaim(new Claim(AuthorizedUser.PasswordChangeRequiredType, "true"));
@@ -46,12 +56,13 @@ namespace WB.UI.Headquarters.Code.Authentication
                 var userWorkspaces = user.IsInRole(UserRoles.Administrator)
                     ? workspacesService.AllWorkspaces()
                     : user.Workspaces.Select(x => x.Workspace.AsContext());
-
+                
                 if (principal.Identity is ClaimsIdentity principalIdentity)
                 {
                     foreach (var workspace in userWorkspaces)
                     {
                         if(workspaces != null && !workspaces.Contains(workspace.Name)) continue;
+                        if(principalIdentity.HasClaim(WorkspaceConstants.ClaimType, workspace.Name)) continue;
 
                         principalIdentity.AddClaims(new[]
                         {
