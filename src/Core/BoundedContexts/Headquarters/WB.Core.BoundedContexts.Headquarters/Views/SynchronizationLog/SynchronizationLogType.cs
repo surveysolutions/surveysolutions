@@ -43,6 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
         GetInterviewPatch,
         PostCalendarEvent,
         GetCalendarEvent,
-        GetCalendarEvents
+        GetCalendarEvents,
+        ChangePassword,
     }
 }

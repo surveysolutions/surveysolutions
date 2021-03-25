@@ -15,26 +15,32 @@
   
     }
 
-    <form method="post" class="form-signin" autocomplete="off">
-        @Html.AntiForgeryToken()
-        <h1>@AccountResources.EditProfile</h1>
+<form method="post" class="form-signin" autocomplete="off">
+    @Html.AntiForgeryToken()
+    <h1>@AccountResources.EditProfile</h1>
 
-        <div class="form-group">
-            <input type="text" asp-for="Input.FullName" class="form-control" placeholder="@AccountResources.FullName" />
-            <span asp-validation-for="Input.FullName" class="text-danger help-inline"></span>
-        </div>
-        <div class="form-group">
-            <input type="text" asp-for="Input.Email" class="form-control" placeholder="@AccountResources.Email" />
-            <span asp-validation-for="Input.Email" class="text-danger help-inline"></span>
-        </div>
-        <div class="form-actions">
-            <input type="submit" class="btn btn-success btn-lg" value="@AccountResources.Change" />
-            <a asp-page="./questionnaire/my" class="btn">
-                @QuestionnaireController.Cancel
-            </a>
-        </div>
+    <div class="form-group">
+        <input type="text" asp-for="Input.FullName" class="form-control" placeholder="@AccountResources.FullName" />
+        <span asp-validation-for="Input.FullName" class="text-danger help-inline"></span>
+    </div>
+    <div class="form-group">
+        <input type="text" asp-for="Input.Email" class="form-control" placeholder="@AccountResources.Email" />
+        <span asp-validation-for="Input.Email" class="text-danger help-inline"></span>
+        @if (Model.PendingEmail != null)
+        {
+            <p class="help-block">
+                @string.Format(AccountResources.PendingEmailUpdate, Model.PendingEmail)
+            </p>
+        }
+    </div>
+    <div class="form-actions">
+        <input type="submit" class="btn btn-success btn-lg" value="@AccountResources.Change" />
+        <a asp-page="./questionnaire/my" class="btn">
+            @QuestionnaireController.Cancel
+        </a>
+    </div>
 
-    </form>
+</form>
 
 </div>
 @section Scripts {

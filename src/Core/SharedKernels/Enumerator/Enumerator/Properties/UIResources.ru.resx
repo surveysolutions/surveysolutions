@@ -147,6 +147,15 @@
   <data name="PasswordHint" xml:space="preserve">
     <value>Пароль</value>
   </data>
+  <data name="OldPasswordHint" xml:space="preserve">
+    <value>Текущий пароль</value>
+  </data>
+  <data name="NewPasswordHint" xml:space="preserve">
+    <value>Новый пароль</value>
+  </data>
+  <data name="ConfirmNewPasswordHint" xml:space="preserve">
+    <value>Подтвердите новый пароль</value>
+  </data>
   <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
     <value>Время ожидания ответа от сервера Survey Solutions Designer истекло. Пожалуйста, проверьте Ваше интернет соединение.</value>
   </data>
@@ -349,6 +358,9 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
+  </data>
+  <data name="PasswordMatchError" xml:space="preserve">
+    <value>Пароли должны совпадать</value>
   </data>
   <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
     <value>Сервис Google Play недоступен</value>

@@ -5,6 +5,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 {
     public class RegisterUserModel
     {
+        private string email;
+
         [Required]
         public Roles Role { get; set; }
 
@@ -16,7 +18,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
         public string PhoneNumber { get; set; }
 
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email
+        {
+            get => email;
+            set => email = string.IsNullOrEmpty(value) ? null : value;
+        }
 
         [Required]
         public string Password { get; set; }
