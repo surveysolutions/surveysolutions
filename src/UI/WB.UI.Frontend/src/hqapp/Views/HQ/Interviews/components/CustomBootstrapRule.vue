@@ -10,7 +10,7 @@
             <select
                 v-if="typeof rule.operands !== 'undefined'"
                 v-model="query.operand"
-                class="form-control mr-2">
+                class="form-control mr-2 mb-5">
                 <option
                     v-for="operand in rule.operands"
                     :key="operand">
@@ -22,7 +22,7 @@
             <select
                 v-if="typeof rule.operators !== 'undefined' && rule.operators.length > 1"
                 v-model="query.operator"
-                class="form-control mr-2">
+                class="form-control mr-2 mb-5">
                 <option
                     v-for="operator in rule.operators"
                     :key="operator"
@@ -35,7 +35,7 @@
             <input
                 v-if="rule.inputType === 'text'"
                 v-model="query.value"
-                class="form-control"
+                class="form-control mb-5"
                 type="text"
                 :disabled="unaryOperatorSelected"
                 :placeholder="labels.textInputPlaceholder">
@@ -45,7 +45,7 @@
                 v-if="rule.inputType === 'number'"
                 v-model="query.value"
                 :disabled="unaryOperatorSelected"
-                class="form-control"
+                class="form-control mb-5"
                 type="number">
 
             <!-- Datepicker -->
@@ -53,7 +53,7 @@
                 v-if="rule.inputType === 'date'"
                 v-model="query.value"
                 :disabled="unaryOperatorSelected"
-                class="form-control"
+                class="form-control mb-5"
                 type="date">
 
             <!-- Custom component input -->
@@ -116,7 +116,7 @@
                 v-if="rule.inputType === 'select' && !hasOptionGroups"
                 v-model="query.value"
                 :disabled="unaryOperatorSelected"
-                class="form-control"
+                class="form-control mb-5"
                 :multiple="rule.type === 'multi-select'">
                 <option
                     v-for="option in selectOptions"
@@ -130,7 +130,7 @@
             <select
                 v-if="rule.inputType === 'select' && hasOptionGroups"
                 v-model="query.value"
-                class="form-control"
+                class="form-control mb-5"
                 :disabled="unaryOperatorSelected"
                 :multiple="rule.type === 'multi-select'">
                 <optgroup

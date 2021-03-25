@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <select
                         v-model="selectedRule"
-                        class="form-control mr-2">
+                        class="form-control mr-2 mb-5">
                         <option
                             v-for="rule in rules"
                             :key="rule.id"
@@ -49,7 +49,7 @@
 
                     <button
                         type="button"
-                        class="btn btn-secondary mr-2"
+                        class="btn btn-secondary mr-2 mb-5"
                         @click="addRule">
                         {{ labels.addRule }}
                     </button>
@@ -57,7 +57,7 @@
                     <button
                         v-if="depth < maxDepth"
                         type="button"
-                        class="btn btn-secondary"
+                        class="btn btn-secondary mb-5"
                         @click="addGroup">
                         {{ labels.addGroup }}
                     </button>
