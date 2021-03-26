@@ -274,36 +274,84 @@ export default {
 
             if(operator === 'notanswered')
             {
-                var none = {
-                    entity: {variable: {eq: query.rule}},
-                }
                 some.value = {eq : ''}
                 var notAnsweredResult = {}
-                notAnsweredResult.or = [{identifyingData : { none: none }}, {identifyingData : { some: some }}]
+                notAnsweredResult.or =
+                        [{identifyingData : { none: { entity: {variable: {eq: query.rule}}} }},
+                            {identifyingData : { some: some }}]
                 return notAnsweredResult
             }
 
-            var condition = {}
+            var singleCondition = {}
             if(operator === 'answered')
             {
-                condition['neq'] = ruleMap.ruleType == 'text' ? '' : null
+                singleCondition['neq'] = ruleMap.ruleType == 'text' ? '' : null
             }
             else if(ruleMap.ruleType === 'select' && entity.variableType === 'BOOLEAN'){
-                condition[operator] = query.value == '1' ? true : false
+                singleCondition[operator] = query.value == '1' ? true : false
             }
             else if(ruleMap.ruleType == 'numeric')
             {
-                condition[operator] = query.value ? Number(query.value) : null
+                singleCondition[operator] = query.value ? Number(query.value) : null
             }
             else if(ruleMap.ruleType == 'date')
             {
-                condition[operator] = query.value ? moment(query.value).format(DateFormats.date) + 'T00:00:00Z' : null
+                if(!query.value)
+                {
+                    singleCondition['eq'] = null
+                }
+                else
+                    switch (operator) {
+                        case 'on': {
+                            var leftOn = {...some}
+                            leftOn[ruleMap.valueName] = {gte : moment(query.value).format(DateFormats.date) + 'T00:00:00Z' }
+                            var rightOn = {...some}
+                            rightOn[ruleMap.valueName] = {lte : moment(query.value).format(DateFormats.date) + 'T23:59:59Z' }
+
+                            var dateOnResult = {
+                                and : [
+                                    {identifyingData : { some: leftOn }},
+                                    {identifyingData : { some: rightOn }},
+                                ]}
+                            return dateOnResult
+                        }
+                        case 'noton': {
+
+                            var leftNotOn = {...some}
+                            leftNotOn[ruleMap.valueName] = {lt : moment(query.value).format(DateFormats.date) + 'T00:00:00Z' }
+                            var rightNotOn = {...some}
+                            rightNotOn[ruleMap.valueName] = {gt: moment(query.value).format(DateFormats.date) + 'T23:59:59Z' }
+
+                            var dateNotOnResult = {
+                                or : [
+                                    {identifyingData : { some: leftNotOn }},
+                                    {identifyingData : { some: rightNotOn }},
+                                ]}
+                            return dateNotOnResult
+                        }
+                        case 'before':{
+                            singleCondition['lt'] = moment(query.value).format(DateFormats.date) + 'T00:00:00Z'
+                            break
+                        }
+                        case 'notlaterthan': {
+                            singleCondition['lte'] = moment(query.value).format(DateFormats.date) + 'T23:59:59Z'
+                            break
+                        }
+                        case 'after': {
+                            singleCondition['gt'] = moment(query.value).format(DateFormats.date) + 'T23:59:59Z'
+                            break
+                        }
+                        case 'onorafter':{
+                            singleCondition['gte'] = moment(query.value).format(DateFormats.date) + 'T00:00:00Z'
+                            break
+                        }
+                    }
             }
             else{
-                condition[operator] = query.value
+                singleCondition[operator] = query.value
             }
 
-            some[ruleMap.valueName] = condition
+            some[ruleMap.valueName] = singleCondition
 
             var result = {identifyingData : { some: some }}
 
@@ -311,37 +359,38 @@ export default {
         },
         getRuleMap(entity){
 
-            const comparableOperators = ['=','<>','<','<=','>','>=', 'answered', 'not answered']
-            const textOperators = ['equals','not equals','contains','not contains','starts with','not starts with','answered', 'not answered']
-            const selectOperators = ['equals','not equals', 'answered', 'not answered']
+            const comparableOperators = ['=','<>','<','<=','>','>=']
+            const textOperators = ['equals','not equals','contains','not contains','starts with','not starts with']
+            const selectOperators = ['equals','not equals']
+            const dateOperators = ['on', 'not on', 'before', 'not later than', 'after', 'on or after']
             const unaryOperators = ['answered', 'not answered']
 
             if(entity.entityType =='QUESTION')
             {
                 switch(entity.type) {
                     case 'NUMERIC':
-                        return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators, unaryOperators: unaryOperators}
+                        return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators.concat(unaryOperators), unaryOperators: unaryOperators}
                     case 'SINGLEOPTION':
-                        return {ruleType: 'select', valueName: 'answerCode', operators: selectOperators, unaryOperators: unaryOperators}
+                        return {ruleType: 'select', valueName: 'answerCode', operators: selectOperators.concat(unaryOperators), unaryOperators: unaryOperators}
                     case 'DATETIME':
-                        return {ruleType: 'date', valueName: 'valueDate', operators: comparableOperators, unaryOperators: unaryOperators }
+                        return {ruleType: 'date', valueName: 'valueDate', operators: dateOperators.concat(unaryOperators), unaryOperators: unaryOperators }
                     case 'TEXT':
-                        return {ruleType:'text', valueName: 'value' , operators: textOperators, unaryOperators: unaryOperators}
+                        return {ruleType:'text', valueName: 'value' , operators: textOperators.concat(unaryOperators), unaryOperators: unaryOperators}
                 }
             }
             else if(entity.entityType == 'VARIABLE')
             {
                 switch(entity.variableType) {
                     case 'DOUBLE':
-                        return {ruleType: 'numeric', valueName: 'valueDouble', operators: comparableOperators, unaryOperators: unaryOperators}
+                        return {ruleType: 'numeric', valueName: 'valueDouble', operators: comparableOperators.concat(unaryOperators), unaryOperators: unaryOperators}
                     case 'LONGINTEGER':
-                        return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators, unaryOperators: unaryOperators}
+                        return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators.concat(unaryOperators), unaryOperators: unaryOperators}
                     case 'BOOLEAN':
-                        return {ruleType: 'select',valueName: 'valueBool', operators: selectOperators, unaryOperators: unaryOperators}
+                        return {ruleType: 'select',valueName: 'valueBool', operators: selectOperators.concat(unaryOperators), unaryOperators: unaryOperators}
                     case 'DATETIME':
-                        return {ruleType: 'date', valueName: 'valueDate', operators: comparableOperators, unaryOperators: unaryOperators}
+                        return {ruleType: 'date', valueName: 'valueDate', operators: dateOperators.concat(unaryOperators), unaryOperators: unaryOperators}
                     case 'STRING' :
-                        return {ruleType:'text', valueName: 'value', operators: textOperators, unaryOperators: unaryOperators}
+                        return {ruleType:'text', valueName: 'value', operators: textOperators.concat(unaryOperators), unaryOperators: unaryOperators}
                 }
             }
             return 'text'
@@ -362,6 +411,13 @@ export default {
                 case 'not contains': return 'ncontains'
                 case 'starts with': return 'startsWith'
                 case 'not starts with': return 'nstartsWith'
+
+                case 'on': return 'on'
+                case 'not on': return 'noton'
+                case 'before': return 'before'
+                case 'not later than': return 'notlaterthan'
+                case 'after': return 'after'
+                case 'on or after': return 'onorafter'
 
                 case 'not answered' : return 'notanswered'
                 case 'answered' : return 'answered'
@@ -387,12 +443,11 @@ export default {
 
         questionnaireAllItemsList() {
             const array = filter([...(this.questionnaireItems || [])], q => {
-                return (q.type == 'SINGLEOPTION'
+                return q.type == 'SINGLEOPTION'
                     || q.type == 'TEXT'
                     || q.type == 'NUMERIC'
-                    || q.entityType == 'VARIABLE')
-                    ||
-                    (!q.identifying && q.type == 'DATETIME')
+                    || q.type == 'DATETIME'
+                    || q.entityType == 'VARIABLE'
             })
 
             return array
