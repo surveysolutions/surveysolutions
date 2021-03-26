@@ -48,6 +48,9 @@
     <EmbeddedResource Include="..\..\..\..\Core\Infrastructure\WB.Core.Infrastructure\Resources\Modules.resx">
       <Link>Resources\Modules.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\Infrastructure\WB.Core.Infrastructure\Resources\Modules.ro.resx">
+      <Link>Resources\Modules.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\Infrastructure\WB.Core.Infrastructure\Resources\Modules.ru.resx">
       <Link>Resources\Modules.ru.resx</Link>
     </EmbeddedResource>

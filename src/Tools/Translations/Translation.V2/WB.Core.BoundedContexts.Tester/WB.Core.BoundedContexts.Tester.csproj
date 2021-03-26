@@ -71,6 +71,9 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.resx">
       <Link>TesterUIResources.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.ro.resx">
+      <Link>TesterUIResources.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.ru.resx">
       <Link>TesterUIResources.ru.resx</Link>
     </EmbeddedResource>
