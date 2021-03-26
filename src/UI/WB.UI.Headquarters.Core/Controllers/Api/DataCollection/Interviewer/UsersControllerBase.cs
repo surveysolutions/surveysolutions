@@ -44,12 +44,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
                 Name = x.Workspace.Name,
                 DisplayName = x.Workspace.DisplayName,
                 SupervisorId = x.SupervisorId,
-            });
+            }).ToList();
 
             return new InterviewerApiView
             {
                 Id = user.Id,
-                SupervisorId = user.Profile.SupervisorId!.Value,
+                SupervisorId = apiViewsForWorkspaces.First().SupervisorId!.Value,
                 SecurityStamp = user.SecurityStamp,
                 Workspaces = apiViewsForWorkspaces.ToList() 
             };
