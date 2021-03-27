@@ -750,7 +750,7 @@ namespace WB.UI.Headquarters.Controllers
                 return View(model);
             }
 
-            if(interview.Status != InterviewStatus.WebInterview)
+            if(interview.InterviewMode != InterviewMode.CAWI)
             {
                 return Finish(interview.SummaryId);
             }
