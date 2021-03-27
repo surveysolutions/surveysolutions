@@ -16,7 +16,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
             Alter.Table("interviewsummaries")
                 .AddColumn("interview_mode").AsInt32().NotNullable()
                 .Indexed("ix_interview_summaries_mode")
-                .SetExistingRowsTo(InterviewMode.CAPI);
+                .SetExistingRowsTo((int)InterviewMode.CAPI);
         }
     }
 }

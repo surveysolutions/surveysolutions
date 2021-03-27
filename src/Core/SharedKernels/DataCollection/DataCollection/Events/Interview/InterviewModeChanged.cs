@@ -12,10 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         {
             Mode = mode;
             this.Comment = comment;
-            this.CompleteTime = originDate.UtcDateTime;
         }
-
-        public DateTime? CompleteTime { get; }
+        
         public InterviewMode Mode { get; }
         public string? Comment { get; }
     }

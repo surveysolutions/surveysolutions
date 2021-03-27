@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -55,5 +56,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public DateTimeOffset? LastClosedBySupervisor { get; set; }
 
         public DateTimeOffset? LastAnswerDate { get; set; }
+
+        public bool AcceptsCAWIAnswers => Mode == InterviewMode.CAWI && AllowedStatusesForCAWI.Contains(Status);
+
+        public static HashSet<InterviewStatus> AllowedStatusesForCAWI = new()
+        {
+            InterviewStatus.SupervisorAssigned,
+            InterviewStatus.InterviewerAssigned,
+            InterviewStatus.RejectedBySupervisor
+        };
     }
 }

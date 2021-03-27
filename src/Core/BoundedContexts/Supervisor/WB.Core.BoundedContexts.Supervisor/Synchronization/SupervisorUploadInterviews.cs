@@ -37,12 +37,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
         protected override bool IsNonPartialSynchedInterview(InterviewView interview)
         {
-            return interview.Status == InterviewStatus.ApprovedBySupervisor;
+            return interview.Status == InterviewStatus.ApprovedBySupervisor
+                   || interview.Mode != InterviewMode.CAPI;
         }
 
         protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
         {
-            return this.interviewViewRepository.Where(interview => interview.Status == InterviewStatus.ApprovedBySupervisor);
+            return this.interviewViewRepository.Where(interview => 
+                interview.Status == InterviewStatus.ApprovedBySupervisor
+                || interview.Mode != InterviewMode.CAPI);
         }
     }
 }

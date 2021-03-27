@@ -296,7 +296,7 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         if (IsInterviewExists(invitation.InterviewId))
                         {
-                            if (invitation.Interview.Status >= InterviewStatus.Completed)
+                            if (invitation.Interview.GetInterviewProperties().AcceptsCAWIAnswers)
                                 throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded,
                                     Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
                             

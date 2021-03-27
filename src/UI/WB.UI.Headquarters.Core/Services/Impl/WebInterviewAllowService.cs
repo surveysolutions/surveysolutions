@@ -18,18 +18,11 @@ namespace WB.UI.Headquarters.Services.Impl
         private readonly IAuthorizedUser authorizedUser;
         private readonly IAggregateRootPrototypeService prototypeService;
 
-        private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
+        private static readonly List<InterviewStatus> AllowedInterviewStatuses = new()
         {
             InterviewStatus.SupervisorAssigned,
             InterviewStatus.InterviewerAssigned,
             InterviewStatus.Restarted,
-            InterviewStatus.RejectedBySupervisor
-        };
-
-        private static readonly List<InterviewStatus> AnonymousUserAllowedStatuses = new List<InterviewStatus>
-        {
-            InterviewStatus.SupervisorAssigned,
-            InterviewStatus.InterviewerAssigned,
             InterviewStatus.RejectedBySupervisor
         };
 
@@ -81,13 +74,20 @@ namespace WB.UI.Headquarters.Services.Impl
             WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get( questionnaireIdentity);
 
             //interview is not public available and logged in user is not current interview responsible
-            if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned && this.authorizedUser.IsAuthenticated)
+            if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned 
+                && this.authorizedUser.IsAuthenticated)
             {
                 throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised,
                     Enumerator.Native.Resources.WebInterview.Error_UserNotAuthorised);
             }
 
-            if (!webInterviewConfig.Started || !AnonymousUserAllowedStatuses.Contains(interview.Status))
+            if (!webInterviewConfig.Started)
+            {
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                    Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
+            }
+
+            if (!interview.AcceptsCAWIAnswers())
             {
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
