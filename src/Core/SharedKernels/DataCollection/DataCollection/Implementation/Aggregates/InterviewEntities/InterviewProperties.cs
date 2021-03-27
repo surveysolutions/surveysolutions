@@ -31,6 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public DateTimeOffset? RejectDateTime { get; set; }
         public DateTimeOffset? InterviewerAssignedDateTime { get; set; }
         public int? AssignmentId { get; set; }
+        public InterviewMode Mode { get; set; }
 
         private Guid? supervisorId;
 

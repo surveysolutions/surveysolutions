@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -158,6 +159,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual string ResponsibleNameLowerCase { get; protected set; }
         public virtual bool HasSmallSubstitutions { get; set; }
         public virtual int? NotAnsweredCount { get; set; }
+        public virtual InterviewMode InterviewMode { get; set; }
 
         public virtual void AnswerFeaturedQuestion(int questionId, string answer, decimal? optionCode = null)
         {

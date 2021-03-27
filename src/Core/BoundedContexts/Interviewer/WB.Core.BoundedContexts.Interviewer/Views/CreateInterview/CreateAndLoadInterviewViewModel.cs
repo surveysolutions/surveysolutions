@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -137,7 +138,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                     interviewerIdentity.UserId,
                     interviewKey,
                     assignment.Id,
-                    assignment.IsAudioRecordingEnabled
+                    assignment.IsAudioRecordingEnabled, 
+                    InterviewMode.CAPI
                 );
 
                 this.commandService.Execute(createInterviewCommand);

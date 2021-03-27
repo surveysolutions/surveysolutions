@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Code.CommandTransformation;
 
 namespace WB.UI.Headquarters.Services.Impl
@@ -113,7 +114,8 @@ namespace WB.UI.Headquarters.Services.Impl
                 null,
                 interviewKey,
                 null,
-                isAudioRecordingEnabled:false);
+                isAudioRecordingEnabled:false,
+                InterviewMode.CAPI);
 
             return resultCommand;
         }

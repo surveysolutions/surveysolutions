@@ -765,7 +765,8 @@ namespace WB.UI.Headquarters.Controllers
                 interviewer.IsInterviewer() ? interviewer.PublicKey : (Guid?)null,
                 interviewKey,
                 assignment.Id,
-                assignment.AudioRecording);
+                assignment.AudioRecording,
+                InterviewMode.CAWI);
 
             this.commandService.Execute(createInterviewCommand);
             

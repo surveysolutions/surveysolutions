@@ -604,6 +604,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
         }
 
+        protected virtual void Apply(InterviewModeChanged @event)
+        {
+            this.properties.Mode = @event.Mode;
+        }
+
         #endregion
 
         #region Questionnaire
@@ -1155,6 +1160,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.UserId, command.OriginDate));
             this.ApplyEvent(new InterviewKeyAssigned(new InterviewKey(0), command.OriginDate));
+            this.ApplyEvent(command.InterviewModeChanged(InterviewMode.CAPI));
 
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null,
                 previousStatus: InterviewStatus.SupervisorAssigned, originDate: command.OriginDate));
@@ -1188,7 +1194,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId, command.OriginDate));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null, previousStatus: null, originDate: command.OriginDate));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, 
+                comment: null, previousStatus: null, originDate: command.OriginDate));
+            this.ApplyEvent(command.InterviewModeChanged(command.Mode));
 
             if (command.InterviewerId.HasValue)
             {

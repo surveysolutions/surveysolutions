@@ -67,7 +67,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 interviewerId: Guid.NewGuid(),
                 interviewKey: new InterviewKey(new Random().Next(99999999)),
                 assignmentId: null,
-                isAudioRecordingEnabled: false);
+                isAudioRecordingEnabled: false, InterviewMode.CAPI);
 
             this.commandService.Execute(createInterview);
 
