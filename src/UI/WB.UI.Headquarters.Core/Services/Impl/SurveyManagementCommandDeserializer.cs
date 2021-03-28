@@ -13,46 +13,42 @@ namespace WB.UI.Headquarters.Services.Impl
         {
         }
 
-        protected override Dictionary<string, Type> KnownCommandTypes
+        protected override Dictionary<string, Type> KnownCommandTypes => new()
         {
-            get
-            {
-                return new Dictionary<string, Type>
-                    {
-                        { "CreateInterviewCommand", typeof (CreateInterviewControllerCommand) },
-                        { "DeleteInterviewCommand", typeof (DeleteInterviewCommand) },
-                        //assign
-                        { "AssignInterviewerCommand", typeof (AssignInterviewerCommand) },
-                        { "AssignSupervisorCommand", typeof (AssignSupervisorCommand) },
-                        { "AssignResponsibleCommand", typeof (AssignResponsibleCommand) },
-                        // flags and comments
-                        { "SetFlagToAnswerCommand", typeof (SetFlagToAnswerCommand) },
-                        { "RemoveFlagFromAnswerCommand", typeof (RemoveFlagFromAnswerCommand ) },
-                        { "CommentAnswerCommand", typeof (CommentAnswerCommand ) },
-                        // answer question
-                        { "AnswerDateTimeQuestionCommand", typeof (AnswerDateTimeQuestionCommand ) },
-                        { "AnswerMultipleOptionsQuestionCommand", typeof (AnswerMultipleOptionsQuestionCommand ) },
-                        { "AnswerNumericRealQuestionCommand", typeof (AnswerNumericRealQuestionCommand ) },
-                        { "AnswerNumericIntegerQuestionCommand", typeof (AnswerNumericIntegerQuestionCommand ) },
-                        { "AnswerSingleOptionQuestionCommand", typeof (AnswerSingleOptionQuestionCommand ) },
-                        { "AnswerTextQuestionCommand", typeof (AnswerTextQuestionCommand ) },
-                        { "AnswerGeoLocationQuestionCommand", typeof(AnswerGeoLocationQuestionCommand)},
-                        { "AnswerYesNoQuestion", typeof(AnswerYesNoQuestion)},
-                        // statuses
-                        { "ApproveInterviewCommand", typeof (ApproveInterviewCommand ) },
-                        { "RejectInterviewCommand", typeof ( RejectInterviewCommand) },
-                        { "RejectInterviewToInterviewerCommand", typeof ( RejectInterviewToInterviewerCommand) },
-                        { "HqRejectInterviewToInterviewerCommand", typeof ( HqRejectInterviewToInterviewerCommand) },
-                        { "HqRejectInterviewToSupervisorCommand", typeof ( HqRejectInterviewToSupervisorCommand) },
+            { "CreateInterviewCommand", typeof(CreateInterviewControllerCommand) },
+            { "DeleteInterviewCommand", typeof(DeleteInterviewCommand) },
+            { nameof(ChangeInterviewModeCommand), typeof(ChangeInterviewModeCommand) },
+            //assign
+            { "AssignInterviewerCommand", typeof(AssignInterviewerCommand) },
+            { "AssignSupervisorCommand", typeof(AssignSupervisorCommand) },
+            { "AssignResponsibleCommand", typeof(AssignResponsibleCommand) },
+            // flags and comments
+            { "SetFlagToAnswerCommand", typeof(SetFlagToAnswerCommand) },
+            { "RemoveFlagFromAnswerCommand", typeof(RemoveFlagFromAnswerCommand) },
+            { "CommentAnswerCommand", typeof(CommentAnswerCommand) },
+            // answer question
+            { "AnswerDateTimeQuestionCommand", typeof(AnswerDateTimeQuestionCommand) },
+            { "AnswerMultipleOptionsQuestionCommand", typeof(AnswerMultipleOptionsQuestionCommand) },
+            { "AnswerNumericRealQuestionCommand", typeof(AnswerNumericRealQuestionCommand) },
+            { "AnswerNumericIntegerQuestionCommand", typeof(AnswerNumericIntegerQuestionCommand) },
+            { "AnswerSingleOptionQuestionCommand", typeof(AnswerSingleOptionQuestionCommand) },
+            { "AnswerTextQuestionCommand", typeof(AnswerTextQuestionCommand) },
+            { "AnswerGeoLocationQuestionCommand", typeof(AnswerGeoLocationQuestionCommand) },
+            { "AnswerYesNoQuestion", typeof(AnswerYesNoQuestion) },
+            // statuses
+            { "ApproveInterviewCommand", typeof(ApproveInterviewCommand) },
+            { "RejectInterviewCommand", typeof(RejectInterviewCommand) },
+            { "RejectInterviewToInterviewerCommand", typeof(RejectInterviewToInterviewerCommand) },
+            { "HqRejectInterviewToInterviewerCommand", typeof(HqRejectInterviewToInterviewerCommand) },
+            { "HqRejectInterviewToSupervisorCommand", typeof(HqRejectInterviewToSupervisorCommand) },
 
-                        { "HqApproveInterviewCommand", typeof (HqApproveInterviewCommand ) },
-                        { "HqRejectInterviewCommand", typeof ( HqRejectInterviewCommand) },
-                        { "UnapproveByHeadquarterCommand", typeof ( UnapproveByHeadquartersCommand) },
-                        
-                        //switch translation
-                        { "SwitchTranslation", typeof(SwitchTranslation) }
-                    };
-            }
-        }
+            { "HqApproveInterviewCommand", typeof(HqApproveInterviewCommand) },
+            { "HqRejectInterviewCommand", typeof(HqRejectInterviewCommand) },
+            { "UnapproveByHeadquarterCommand", typeof(UnapproveByHeadquartersCommand) },
+
+            //switch translation
+            { "SwitchTranslation", typeof(SwitchTranslation) },
+            
+        };
     }
 }

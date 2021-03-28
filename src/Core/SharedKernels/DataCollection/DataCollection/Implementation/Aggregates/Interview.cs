@@ -1807,7 +1807,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewDeclaredInvalid(originDate));
         }
 
-        public void SwitchInterviewMode(Guid userId, DateTimeOffset originDate, 
+        public void ChangeInterviewMode(Guid userId, DateTimeOffset originDate, 
             InterviewMode mode, string comment = null)
         {
             this.ApplyEvent(new InterviewModeChanged(userId, originDate, mode, comment));

@@ -8,6 +8,8 @@
         CanBeUnApprovedByHq,
         CanBeRejected,
         CanBeRestarted,
-        CanBeOpened
+        CanBeOpened,
+        CanChangeToCAPI,
+        CanChangeToCAWI
     }
 }

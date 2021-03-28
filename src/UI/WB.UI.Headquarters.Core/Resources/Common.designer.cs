@@ -232,6 +232,42 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change to CAPI.
+        /// </summary>
+        public static string ChangeToCAPI {
+            get {
+                return ResourceManager.GetString("ChangeToCAPI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected {{count}} interviews mode will be changed to CAPI.
+        /// </summary>
+        public static string ChangeToCAPIConfirmHQ {
+            get {
+                return ResourceManager.GetString("ChangeToCAPIConfirmHQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change to CAWI.
+        /// </summary>
+        public static string ChangeToCAWI {
+            get {
+                return ResourceManager.GetString("ChangeToCAWI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected {{count}} interviews mode will be changed to CAWI.
+        /// </summary>
+        public static string ChangeToCAWIConfirmHQ {
+            get {
+                return ResourceManager.GetString("ChangeToCAWIConfirmHQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {
@@ -315,9 +351,9 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Equals.
         /// </summary>
-        public static string Equals {
+        public static string EqualValues {
             get {
-                return ResourceManager.GetString("Equals", resourceCulture);
+                return ResourceManager.GetString("EqualValues", resourceCulture);
             }
         }
         
@@ -511,7 +547,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Processing....
+        ///   Looks up a localized string similar to Processing….
         /// </summary>
         public static string Processing {
             get {

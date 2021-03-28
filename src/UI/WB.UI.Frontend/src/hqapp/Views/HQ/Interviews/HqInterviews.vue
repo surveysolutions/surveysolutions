@@ -129,6 +129,16 @@
                         :disabled="getFilteredToUnApprove().length == 0"
                         @click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
                     <button
+                        class="btn btn-lg btn-primary"
+                        v-if="selectedRows.length && !config.isSupervisor"
+                        :disabled="getFilteredToCapi().length == 0"
+                        @click="changeToCAPI">{{ $t("Common.ChangeToCAPI")}}</button>
+                    <button
+                        class="btn btn-lg btn-primary"
+                        v-if="selectedRows.length && !config.isSupervisor"
+                        :disabled="getFilteredToCawi().length == 0"
+                        @click="changeToCAWI">{{ $t("Common.ChangeToCAWI")}}</button>
+                    <button
                         class="btn btn-link"
                         v-if="selectedRows.length && !config.isSupervisor"
                         :disabled="getFilteredToDelete().length == 0"
@@ -412,6 +422,19 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
+        <ChangeToCapi ref="modalChangeToCAWI"
+            :title="$t('Common.ChangeToCAWI')"
+            :confirmMessage="$t('Common.ChangeToCAWIConfirmHQ', {
+                count: getFilteredToCawi().length})"
+            :filteredCount="getFilteredToCawi().length"
+            @confirm="changeInterviewMode(getFilteredToCawi(), 'CAWI')" />
+
+        <ChangeToCapi ref="modalChangeToCAPI"
+            :title="$t('Common.ChangeToCAPI')"
+            :confirmMessage="$t('Common.ChangeToCAPIConfirmHQ', {
+                count: getFilteredToCapi().length})"
+            :filteredCount="getFilteredToCapi().length"
+            @confirm="changeInterviewMode(getFilteredToCapi(), 'CAPI')" />
     </HqLayout>
 </template>
 
@@ -423,6 +446,7 @@ import {lowerCase, find, filter, flatten, map,
 import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
 import * as toastr from 'toastr'
+import ChangeToCapi from './ChangeModeModal.vue'
 
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
@@ -489,6 +513,7 @@ function queryStringToCondition(queryStringArray) {
 export default {
     components: {
         InterviewFilter,
+        ChangeToCapi,
     },
 
     data() {
@@ -640,7 +665,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'errors')
                     },
-                    width: '50px',
+                    width: '45px',
                 },{
                     data: 'notAnsweredCount',
                     name: 'NotAnsweredCount',
@@ -666,7 +691,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'status')
                     },
-                    width: '100px',
+                    width: '120px',
                 },
                 {
                     data: 'receivedByInterviewerAtUtc',
@@ -901,6 +926,22 @@ export default {
                 return !isNaN(value) && value
             })
         },
+
+        getFilteredToCapi() {
+            return this.getFilteredItems(function(item) {
+                var value = item.actionFlags.indexOf('CANCHANGETOCAPI') >= 0
+                return !isNaN(value) && value
+            })
+
+        },
+
+        getFilteredToCawi() {
+            return this.getFilteredItems(function(item) {
+                var value = item.actionFlags.indexOf('CANCHANGETOCAWI') >= 0
+                return !isNaN(value) && value
+            })
+        },
+
         getFilteredToAssign() {
             return this.getFilteredItems(function(item) {
                 var value =  item.actionFlags.indexOf('CANBEREASSIGNED') >= 0
@@ -1319,6 +1360,38 @@ export default {
             this.$refs.deleteModal.modal({keyboard: false})
         },
 
+        changeToCAWI() {
+            this.$refs.modalChangeToCAWI.modal({keyboard: false})
+        },
+
+        changeToCAPI() {
+            this.$refs.modalChangeToCAPI.modal({keyboard: false})
+        },
+
+        changeInterviewMode(filteredItems, mode) {
+            const self = this
+
+            const commands = map(filteredItems, i => {
+                return JSON.stringify({
+                    InterviewId: i.id,
+                    Mode: mode,
+                })
+            })
+
+            const command = {
+                type: 'ChangeInterviewModeCommand',
+                commands,
+            }
+
+            this.executeCommand(
+                command,
+                function() {},
+                function() {
+                    self.reloadTable()
+                }
+            )
+        },
+
         newResponsibleSelected(newValue) {
             this.newResponsibleId = newValue
         },
@@ -1438,6 +1511,20 @@ export default {
                     disabled: !canBeRejected,
                 })
 
+                if(rowData.actionFlags.indexOf('CANCHANGETOCAPI') >= 0) {
+                    menu.push({
+                        name: self.$t('Common.ChangeToCAPI'),
+                        callback: () => self.changeToCAPI(),
+                    })
+                }
+
+                if(rowData.actionFlags.indexOf('CANCHANGETOCAWI') >= 0) {
+                    menu.push({
+                        name: self.$t('Common.ChangeToCAWI'),
+                        callback: () => self.changeToCAWI(),
+                    })
+                }
+
                 if (!self.config.isSupervisor) {
                     menu.push({
                         name: self.$t('Common.Unapprove'),
@@ -1457,6 +1544,7 @@ export default {
                         disabled: !canBeDeleted,
                     })
                 }
+
             }
 
             return menu
