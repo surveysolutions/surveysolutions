@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
         protected override bool IsNonPartialSynchedInterview(InterviewView interview)
         {
-            return interview.Status == InterviewStatus.Completed;
+            return interview.Status == InterviewStatus.Completed || interview.Mode != InterviewMode.CAPI;
         }
 
         protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()

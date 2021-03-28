@@ -149,7 +149,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         private IReadOnlyCollection<CommittedEvent> GetFilteredEventsToSend(Guid interviewId)
         {
-            var lastCompleteSequence = this.eventStore.GetMaxSequenceForAnyEvent(interviewId, nameof(InterviewCompleted), nameof(WebInterviewRequested));
+            var lastCompleteSequence = this.eventStore.GetMaxSequenceForAnyEvent(interviewId, nameof(InterviewCompleted), nameof(InterviewModeChanged));
             var lastComplete = this.eventStore.GetEventByEventSequence(interviewId, lastCompleteSequence);
 
             return this.eventStreamOptimizer.FilterEventsToBeSent(

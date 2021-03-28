@@ -150,7 +150,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             switch (interviewStatus)
             {
                 case InterviewStatus.Completed:
-                case InterviewStatus.WebInterview:
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned,
                         InterviewStatus.Restored,
                         InterviewStatus.RejectedBySupervisor,

@@ -153,6 +153,9 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>Completed ({0})</value>
   </data>
+  <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>WebInterviews ({0})</value>
+  </data>
   <data name="Dashboard_Start" xml:space="preserve">
     <value>Start</value>
   </data>
@@ -297,7 +300,7 @@ for further instructions</value>
   </data>
   <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
     <value>Updating calendar events</value>
-  </data>  
+  </data>
   <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
     <value>Updating local interviews with changes from server</value>
   </data>
@@ -329,7 +332,7 @@ for further instructions</value>
     <value>Assignments are locked until synchronization is complete</value>
   </data>
   <data name="Synchronization_LinkToErrors" xml:space="preserve">
-      <value>More information on the synchronization errors may be found at the &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;support site&lt;/a&gt;</value>
+    <value>More information on the synchronization errors may be found at the &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;support site&lt;/a&gt;</value>
   </data>
   <data name="Synchronization_Questionnaires" xml:space="preserve">
     <value>questionnaires</value>
@@ -342,7 +345,7 @@ for further instructions</value>
   </data>
   <data name="TransferringCalendarEvents" xml:space="preserve">
     <value>Transferring calendar events</value>
-  </data>  
+  </data>
   <data name="Synchronization_Success_Description" xml:space="preserve">
     <value>All assignments were updated</value>
   </data>
@@ -375,7 +378,7 @@ for further instructions</value>
   </data>
   <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
     <value>calendar events</value>
-  </data>  
+  </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} of {1} {2} done</value>
   </data>
@@ -777,6 +780,9 @@ Please resolve issues noted on the cover page and send them back to the supervis
     <value>Completed interviews, will be uploaded during 
 your next synchronization</value>
   </data>
+  <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>Interviews in Web interview mode. Will be removed during synchronization when web interview is completed by respondend</value>
+  </data>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
     <value>You can create new interviews using assignments</value>
   </data>
@@ -964,6 +970,9 @@ It will appear on interviewer device after next synchronization</value>
     <value>Logs are sent to HQ</value>
   </data>
   <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
-      <value>Your account is no longer active on this server, because the workspace in which it is defined was disabled by the administrator. Please contact your supervisor.</value>
+    <value>Your account is no longer active on this server, because the workspace in which it is defined was disabled by the administrator. Please contact your supervisor.</value>
+  </data>
+  <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>Show QR Code</value>
   </data>
 </root>

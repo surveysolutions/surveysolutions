@@ -87,7 +87,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     userInteractionService: Mock.Of<IUserInteractionService>(),
                     googleApiService: Mock.Of<IGoogleApiService>(),
                     mapInteractionService: Mock.Of<IMapInteractionService>(),
-                    dashboardNotifications: dashboardNotifications ?? Create.ViewModel.DashboardNotificationsViewModel());
+                    dashboardNotifications: dashboardNotifications ?? Create.ViewModel.DashboardNotificationsViewModel(),
+                    webInterviews: Mock.Of<WebInterviewsViewModel>());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();
@@ -117,6 +118,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 
         private static RejectedInterviewsViewModel DashboardRejectedInterviewsViewModel()
             => new RejectedInterviewsViewModel(
+                Substitute.For<IPlainStorage<InterviewView>>(),
+                Substitute.For<IInterviewViewModelFactory>(),
+                Substitute.For<IPlainStorage<PrefilledQuestionView>>(),
+                Substitute.For<IPrincipal>());
+
+        private static WebInterviewsViewModel DashboardWebInterviewsViewModel()
+            => new WebInterviewsViewModel(
                 Substitute.For<IPlainStorage<InterviewView>>(),
                 Substitute.For<IInterviewViewModelFactory>(),
                 Substitute.For<IPlainStorage<PrefilledQuestionView>>(),

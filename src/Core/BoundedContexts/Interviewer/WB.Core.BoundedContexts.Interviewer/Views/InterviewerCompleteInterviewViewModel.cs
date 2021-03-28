@@ -43,12 +43,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewerSettings = interviewerSettings;
         }
 
-        public override void Configure(string interviewId, NavigationState navigationState)
+        public override void Configure(string interviewUid, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            base.Configure(interviewId, navigationState);
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewUid));
+            base.Configure(interviewUid, navigationState);
 
-            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            var interview = this.interviewRepository.GetOrThrow(interviewUid);
             var interviewKey = interview.GetInterviewKey()?.ToString();
             this.CompleteScreenTitle = string.IsNullOrEmpty(interviewKey)
                 ? UIResources.Interview_Complete_Screen_Description
@@ -60,9 +60,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 {
                     this.CanSwitchToWebMode = true;
 
-                    this.WebInterviewUrl = interviewerSettings.WebInterviewUriTemplate
-                        .Replace("{assignment}", (interview.GetAssignmentId() ?? 0).ToString())
-                        .Replace("{interviewId}", interview.Id.ToString());
+                    this.WebInterviewUrl = interviewerSettings.RenderWebInterviewUri(
+                        interview.GetAssignmentId() ?? 0,
+                        interview.Id
+                    );
                 }
             }
 

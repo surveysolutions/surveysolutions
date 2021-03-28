@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
@@ -17,7 +16,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         void SetPartialSynchronizationEnabled(bool enable);
         void SetQuestionnaireInWebMode(List<string> tabletSettingsQuestionnairesInWebMode);
         void SetWebInterviewUrlTemplate(string tabletSettingsWebInterviewUrlTemplate);
-        List<QuestionnaireIdentity> QuestionnairesInWebMode { get; }
-        string? WebInterviewUriTemplate { get; }
     }
 }

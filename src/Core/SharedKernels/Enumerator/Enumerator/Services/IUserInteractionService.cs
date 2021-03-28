@@ -20,5 +20,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         Task AskDateAsync(EventHandler<DateTime> okCallback, DateTime date, DateTime? minDate = null);
         Task AskTimeAsync(EventHandler<TimeSpan> okCallback, TimeSpan time);
+        Task ShowAlertWithQRCodeAndText(string qrCodeText, string description);
     }
 }

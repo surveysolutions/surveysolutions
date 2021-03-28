@@ -73,9 +73,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return filteredInterviews;
         }
 
-        private readonly Expression<Func<InterviewSummary, bool>> ForInterviewer = summary => 
-            summary.Status == InterviewStatus.InterviewerAssigned 
-            || summary.Status == InterviewStatus.RejectedBySupervisor;
+        private readonly Expression<Func<InterviewSummary, bool>> ForInterviewer =
+            summary =>
+                summary.InterviewMode == InterviewMode.CAPI &&
+                (summary.Status == InterviewStatus.InterviewerAssigned
+                 || summary.Status == InterviewStatus.RejectedBySupervisor);
 
         public bool HasAnyInterviewsInProgressWithResolvedCommentsForInterviewer(Guid authorizedUserId)
         {
@@ -117,7 +119,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var processigPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
 
             var inProgressInterviews = this.reader.Query(interviews =>
-                interviews.Where(interview => 
+                interviews
+                    .Where(interview => interview.InterviewMode == InterviewMode.CAPI)
+                    .Where(interview =>
                         ( // assigned on supervisor
                             interview.ResponsibleId == supervisorId &&
                             (interview.Status == InterviewStatus.SupervisorAssigned || interview.Status == InterviewStatus.RejectedByHeadquarters)

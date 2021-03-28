@@ -380,7 +380,6 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
         {
             return status == InterviewStatus.Completed || 
                    status == InterviewStatus.Restarted || 
-                   status == InterviewStatus.WebInterview ||
                    status == InterviewStatus.RejectedBySupervisor ||
                    status == InterviewStatus.ApprovedBySupervisor ||
                    status == InterviewStatus.RejectedByHeadquarters;

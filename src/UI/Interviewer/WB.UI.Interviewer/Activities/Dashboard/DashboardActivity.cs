@@ -93,6 +93,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.ViewModel.StartedInterviews.PropertyChanged -= this.StartedInterviewsOnPropertyChanged;
             this.ViewModel.RejectedInterviews.PropertyChanged -= this.RejectedInterviewsOnPropertyChanged;
             this.ViewModel.CompletedInterviews.PropertyChanged -= this.CompletedInterviewsOnPropertyChanged;
+            this.ViewModel.WebInterviews.PropertyChanged -= this.WebInterviewInterviewsOnPropertyChanged;
         }
 
         private void CreateFragments()
@@ -106,6 +107,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.ViewModel.StartedInterviews.PropertyChanged += this.StartedInterviewsOnPropertyChanged;
             this.ViewModel.RejectedInterviews.PropertyChanged += this.RejectedInterviewsOnPropertyChanged;
             this.ViewModel.CompletedInterviews.PropertyChanged += this.CompletedInterviewsOnPropertyChanged;
+            this.ViewModel.WebInterviews.PropertyChanged += this.WebInterviewInterviewsOnPropertyChanged;
 
             this.fragmentStatePagerAdapter.InsertFragment(typeof(QuestionnairesFragment), this.ViewModel.CreateNew,
                 nameof(InterviewTabPanel.Title));
@@ -117,6 +119,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.RejectedInterviewsOnPropertyChanged(this.ViewModel.RejectedInterviews,
                 new PropertyChangedEventArgs(itemsCountPropertyCountName));
             this.CompletedInterviewsOnPropertyChanged(this.ViewModel.CompletedInterviews,
+                new PropertyChangedEventArgs(itemsCountPropertyCountName));
+            this.WebInterviewInterviewsOnPropertyChanged(this.ViewModel.WebInterviews,
                 new PropertyChangedEventArgs(itemsCountPropertyCountName));
 
             var tabLayout = this.FindViewById<TabLayout>(Resource.Id.tabs);
@@ -138,6 +142,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 }
             }
         }
+
+        private void WebInterviewInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+            => this.UpdateFragmentByViewModelPropertyChange<WebInterviewsFragment>((ListViewModel)sender, propertyChangedEventArgs.PropertyName, 4);
 
         private void CompletedInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
             => this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>((ListViewModel)sender, propertyChangedEventArgs.PropertyName, 3);

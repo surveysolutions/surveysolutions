@@ -207,6 +207,7 @@
     <Compile Include="Services\Internals\FileSystem\FileSystemService.cs" />
     <Compile Include="Services\Internals\GpsLocationService.cs" />
     <Compile Include="Services\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
+    <Compile Include="Services\IQRCodeRenderer.cs" />
     <Compile Include="Services\Logging\NLogLogger.cs" />
     <Compile Include="Services\Logging\NLogLoggerProvider.cs" />
     <Compile Include="Services\Internals\PictureChooser.cs" />
@@ -2035,6 +2036,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\calendar_event_dialog.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\qr_code_popup.axml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>

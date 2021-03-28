@@ -32,12 +32,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             var interviewerId = Principal.CurrentUserIdentity.UserId;
 
             return interview => interview.ResponsibleId == interviewerId &&
-                                (
-                                    interview.Status == SharedKernels.DataCollection.ValueObjects.Interview
-                                        .InterviewStatus.Completed ||
-                                    interview.Status == SharedKernels.DataCollection.ValueObjects.Interview
-                                        .InterviewStatus.WebInterview
-                                );
+                                interview.Mode == InterviewMode.CAPI && 
+                                interview.Status == SharedKernels.DataCollection.ValueObjects.Interview
+                                    .InterviewStatus.Completed;
         }
 
         protected override void OnItemCreated(InterviewDashboardItemViewModel interviewDashboardItem)

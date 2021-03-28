@@ -96,22 +96,7 @@ namespace WB.UI.Interviewer.Settings
                settings.IsOfflineSynchronizationDone = true;
             });
         }
-
-        public List<QuestionnaireIdentity> QuestionnairesInWebMode => (this.currentSettings.QuestionnairesInWebMode ?? string.Empty).Split(',')
-            .Select(QuestionnaireIdentity.Parse).ToList();
-
-        public string? WebInterviewUriTemplate => this.currentSettings.WebInterviewUriTemplate;
-
-        public void SetQuestionnaireInWebMode(List<string> questionnairesInWebMode)
-        {
-            this.SaveCurrentSettings(settings => settings.QuestionnairesInWebMode = string.Join(",", questionnairesInWebMode));
-        }
-
-        public void SetWebInterviewUrlTemplate(string webInterviewUriTemplate)
-        {
-            this.SaveCurrentSettings(settings => settings.WebInterviewUriTemplate = webInterviewUriTemplate);
-        }
-
+        
         public void SetGpsResponseTimeout(int timeout)
         {
             this.SaveCurrentSettings(settings =>

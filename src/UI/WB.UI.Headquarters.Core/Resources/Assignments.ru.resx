@@ -489,4 +489,7 @@
   <data name="NoComment" xml:space="preserve">
       <value>(нет комментария)</value>
   </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+      <value>Пример ссылки при переключении интерьвю в Веб Режим</value>
+  </data>
 </root>

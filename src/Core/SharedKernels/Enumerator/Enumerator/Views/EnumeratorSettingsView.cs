@@ -24,5 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public bool? DashboardViewsUpdated { get; set; }
 
         public string LastOpenedMapName { get; set; }
+        public string QuestionnairesInWebMode { get; set; }
+        public string WebInterviewUriTemplate { get; set; }
     }
 }
