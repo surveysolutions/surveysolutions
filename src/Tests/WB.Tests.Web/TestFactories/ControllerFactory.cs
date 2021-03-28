@@ -3,7 +3,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -80,7 +82,8 @@ namespace WB.Tests.Web.TestFactories
                 interviewerSettings ?? Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
                 tenantSettings ?? new TestPlainStorage<ServerSettings>(),
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
-                userToDeviceService ?? Mock.Of<IUserToDeviceService>()
+                userToDeviceService ?? Mock.Of<IUserToDeviceService>(),
+                Mock.Of<IOptions<HeadquartersConfig>>()
             );
 
             result.ControllerContext = new ControllerContext
