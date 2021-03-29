@@ -51,18 +51,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                    + Environment.NewLine + string.Format(EnumeratorUIResources.InterviewerVersion, appVersion);
         }
 
-        protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token)
+        protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, string password, CancellationToken token)
         {
-            var identity = await GenerateInterviewerIdentity(credentials, token);
+            var identity = await GenerateInterviewerIdentity(credentials, password, token);
 
             await this.ViewModelNavigationService
                 .NavigateToAsync<RelinkDeviceViewModel, RelinkDeviceViewModelArg>(
                     new RelinkDeviceViewModelArg { Identity = identity });
         }
 
-        protected override async Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token)
+        protected override async Task SaveUserToLocalStorageAsync(RestCredentials credentials, string password, CancellationToken token)
         {
-            var interviewerIdentity = await GenerateInterviewerIdentity(credentials, token);
+            var interviewerIdentity = await GenerateInterviewerIdentity(credentials, password, token);
 
             this.interviewerPrincipal.SaveInterviewer(interviewerIdentity);
         }
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             return interviewer.Workspaces;
         }
 
-        private async Task<InterviewerIdentity> GenerateInterviewerIdentity(RestCredentials credentials, CancellationToken token)
+        private async Task<InterviewerIdentity> GenerateInterviewerIdentity(RestCredentials credentials, string password, CancellationToken token)
         {
             var interviewer = await this.synchronizationService.GetInterviewerAsync(credentials, token: token)
                 .ConfigureAwait(false);
@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 UserId = interviewer.Id,
                 SupervisorId = interviewer.SupervisorId,
                 Name = this.UserName,
-                PasswordHash = this.passwordHasher.Hash(this.Password),
+                PasswordHash = this.passwordHasher.Hash(password),
                 Token = credentials.Token,
                 SecurityStamp = interviewer.SecurityStamp,
                 TenantId = tenantId,

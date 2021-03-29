@@ -8,6 +8,7 @@ namespace WB.Core.Infrastructure.HttpServices.HttpClient
         NoNetwork,
         HostUnreachable,
         InvalidUrl,
-        UnacceptableCertificate
+        UnacceptableCertificate,
+        ServerErrorResponse,
     }
 }

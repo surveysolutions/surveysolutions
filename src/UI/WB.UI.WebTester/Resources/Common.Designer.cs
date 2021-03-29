@@ -19,7 +19,7 @@ namespace WB.UI.WebTester.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Common {
@@ -129,6 +129,15 @@ namespace WB.UI.WebTester.Resources {
         public static string ReloadInterviewErrorMessage {
             get {
                 return ResourceManager.GetString("ReloadInterviewErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview data can&apos;t be applied to new version of questionnaire. We apply same data only.
+        /// </summary>
+        public static string ReloadPartialInterviewErrorMessage {
+            get {
+                return ResourceManager.GetString("ReloadPartialInterviewErrorMessage", resourceCulture);
             }
         }
         

@@ -80,6 +80,13 @@ namespace WB.UI.Headquarters.SupportTool
                     {
                         await userManager.AddToRoleAsync(user, role.ToString());
                         
+                        bool disableForcePassword = role == UserRoles.Administrator || role == UserRoles.ApiUser;
+                        if (disableForcePassword)
+                        {
+                            user.PasswordChangeRequired = false;
+                            await userManager.UpdateAsync(user);
+                        }
+                        
                         logger.LogInformation("Created user {user} as {role}", login, role);
                     }
                     else
@@ -129,6 +136,10 @@ namespace WB.UI.Headquarters.SupportTool
                         unitOfWork.DiscardChanges();
                         return;
                     }
+
+                    bool disableForcePassword = user.IsInRole(UserRoles.Administrator) || user.IsInRole(UserRoles.ApiUser);
+                    if (!disableForcePassword)
+                        user.PasswordChangeRequired = true;
 
                     var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
                     var result = await userManager.ResetPasswordAsync(user, resetToken, password);

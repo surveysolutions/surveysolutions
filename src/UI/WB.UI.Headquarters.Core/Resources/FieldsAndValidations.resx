@@ -270,4 +270,7 @@
   <data name="PasswordTooShort" xml:space="preserve">
       <value>Passwords must be at least {0} characters.</value>
   </data>
+  <data name="PasswordChangeRequired" xml:space="preserve">
+    <value>Your password has been reset. You must change it to get access to site.</value>
+  </data>
 </root>
