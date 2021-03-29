@@ -3,7 +3,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
@@ -30,26 +29,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public override void UpdateFromGroupModel()
         {           
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
-            
-            this.QuestionsCount = this.interviewStateCalculationStrategy.GetCountActiveQuestions(interview);
+            var interviewSimpleStatus = this.interviewStateCalculationStrategy.GetInterviewSimpleStatus(interview);
+
+            this.QuestionsCount = interviewSimpleStatus.ActiveQuestionCount;
             this.SubgroupsCount = 0;
-            this.AnsweredQuestionsCount = this.interviewStateCalculationStrategy.GetAnsweredQuestions(interview);
+            this.AnsweredQuestionsCount = interviewSimpleStatus.AnsweredQuestionsCount;
             this.InvalidAnswersCount = interview.CountInvalidEntitiesInInterview();
             this.AnsweredProgress = (int)Math.Round((double)(this.AnsweredQuestionsCount * 100)/ this.QuestionsCount);
-            this.SimpleStatus = this.CalculateInterviewSimpleStatus();
-            this.Status = this.CalculateDetailedStatus();
-        }
-
-        private SimpleGroupStatus CalculateInterviewSimpleStatus()
-        {
-            IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
-            return this.interviewStateCalculationStrategy.CalculateSimpleStatus(interview);
-        }
-
-        private GroupStatus CalculateDetailedStatus()
-        {
-            IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
-            return this.interviewStateCalculationStrategy.CalculateDetailedStatus(interview);
+            this.SimpleStatus = interviewSimpleStatus.SimpleStatus;
+            this.Status = interviewSimpleStatus.Status;
         }
     }
 }

@@ -6,51 +6,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
     public class SupervisorInterviewStateCalculationStrategy : IInterviewStateCalculationStrategy
     {
-        public SimpleGroupStatus CalculateSimpleStatus(IStatefulInterview interview)
+        public InterviewSimpleStatus GetInterviewSimpleStatus(IStatefulInterview interview)
         {
-            var invalidAnswersCount = interview.CountInvalidEntitiesInInterviewForSupervisor();
-            var questionsCount = interview.CountActiveQuestionsInInterviewForSupervisor();
-            var answeredQuestionsCount = interview.CountActiveAnsweredQuestionsInInterviewForSupervisor();
-
-            if (invalidAnswersCount > 0)
-                return SimpleGroupStatus.Invalid;
-
-            if (questionsCount == answeredQuestionsCount)
-                return SimpleGroupStatus.Completed;
-
-            return SimpleGroupStatus.Other;
-        }
-
-        public GroupStatus CalculateDetailedStatus(IStatefulInterview interview)
-        {
-            var questionsCount = interview.CountActiveQuestionsInInterviewForSupervisor();
-            var answeredQuestionsCount = interview.CountActiveAnsweredQuestionsInInterviewForSupervisor();
-            var simpleStatus = this.CalculateSimpleStatus(interview);
-
-            switch (simpleStatus)
-            {
-                case SimpleGroupStatus.Completed:
-                    return GroupStatus.Completed;
-
-                case SimpleGroupStatus.Invalid:
-                    return questionsCount == answeredQuestionsCount ? GroupStatus.CompletedInvalid : GroupStatus.StartedInvalid;
-
-                case SimpleGroupStatus.Other:
-                    return answeredQuestionsCount > 0 ? GroupStatus.Started : GroupStatus.NotStarted;
-
-                default:
-                    return GroupStatus.Started;
-            }
-        }
-
-        public int GetAnsweredQuestions(IStatefulInterview interview)
-        {
-            return interview.CountActiveAnsweredQuestionsInInterviewForSupervisor();
-        }
-
-        public int GetCountActiveQuestions(IStatefulInterview interview)
-        {
-            return interview.CountActiveQuestionsInInterviewForSupervisor();
+            return interview.GetInterviewSimpleStatus(true);
         }
     }
 }

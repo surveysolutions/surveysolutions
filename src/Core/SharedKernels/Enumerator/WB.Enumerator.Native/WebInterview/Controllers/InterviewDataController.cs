@@ -112,9 +112,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         public virtual InterviewSimpleStatus GetInterviewStatus(Guid interviewId)
         {
             var interview = this.GetCallerInterview(interviewId);
-            if (interview == null) return new InterviewSimpleStatus(){ SimpleStatus = GroupStatus.StartedInvalid };
+            if (interview == null) return new InterviewSimpleStatus(){ Status = GroupStatus.StartedInvalid };
 
-            return this.interviewEntityFactory.GetInterviewStatus(interview, IsReviewMode());
+            return interview.GetInterviewSimpleStatus(IsReviewMode());
         }
 
         private IdentifyingEntity GetIdentifyingEntity(Guid entityId, IStatefulInterview interview, IQuestionnaire questionnaire)
@@ -293,7 +293,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 button.Id = id;
                 button.Target = target.Identity.ToString();
                 button.Status = button.Type == ButtonType.Complete
-                    ? this.interviewEntityFactory.GetInterviewStatus(statefulInterview, IsReviewMode()).SimpleStatus
+                    ? statefulInterview.GetInterviewSimpleStatus(IsReviewMode()).Status
                     : this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode(), statefulInterview, questionnaire);
 
                 this.interviewEntityFactory.ApplyValidity(button.Validity, button.Status);

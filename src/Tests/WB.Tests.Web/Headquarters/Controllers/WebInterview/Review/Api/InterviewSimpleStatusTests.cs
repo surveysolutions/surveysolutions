@@ -3,7 +3,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
 
@@ -30,37 +29,37 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
                 }));
         }
 
-        protected InterviewSimpleStatus GetInterviewStatus() => Subject.GetInterviewStatus(this.CurrentInterview, this.IsReviewMode);
+        protected InterviewSimpleStatus GetInterviewStatus() => CurrentInterview.GetInterviewSimpleStatus(this.IsReviewMode);
 
         [Test]
         public void when_all_questions_answered_should_return_completed_state()
         {
             AnswerTextQuestions(SecA_InterviewerQuestion, SecA_Roster_InterviewerQuestion);
 
-            Assert.That(GetInterviewStatus().SimpleStatus, Is.EqualTo(GroupStatus.Completed));
+            Assert.That(GetInterviewStatus().Status, Is.EqualTo(GroupStatus.Completed));
         }
 
         [Test]
         public void when_subgroups_has_errors_should_return_interview_invalid_status()
         {
-            AnswerTextQuestions(SecA_InterviewerQuestion, SecA_Roster_InterviewerQuestion);
+            AnswerTextQuestions( SecA_Roster_InterviewerQuestion);
             MarkQuestionAsInvalid(SecA_Roster_InterviewerQuestion);
 
-            Assert.That(GetInterviewStatus().SimpleStatus, Is.EqualTo(GroupStatus.StartedInvalid));
+            Assert.That(GetInterviewStatus().Status, Is.EqualTo(GroupStatus.StartedInvalid));
         }
 
         [Test]
-        public void when_any_group_without_answers_should_return_not_started_status()
+        public void when_interview_not_all_has_answers_should_return_started_status()
         {
             AnswerTextQuestions(SecA_InterviewerQuestion);
 
-            Assert.That(GetInterviewStatus().SimpleStatus, Is.EqualTo(GroupStatus.NotStarted));
+            Assert.That(GetInterviewStatus().Status, Is.EqualTo(GroupStatus.Started));
         }
 
         [Test]
         public void when_interviews_ha_has_no_answers_should_return_not_started_status()
         {
-            Assert.That(GetInterviewStatus().SimpleStatus, Is.EqualTo(GroupStatus.NotStarted));
+            Assert.That(GetInterviewStatus().Status, Is.EqualTo(GroupStatus.NotStarted));
         }
     }
 }
