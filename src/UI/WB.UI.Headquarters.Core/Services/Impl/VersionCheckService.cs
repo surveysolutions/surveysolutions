@@ -10,7 +10,6 @@ using WB.Core.Infrastructure.Versions;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Models.VersionCheck;
 
-
 namespace WB.UI.Headquarters.Services.Impl
 {
     public class VersionCheckService : IVersionCheckService
@@ -25,6 +24,7 @@ namespace WB.UI.Headquarters.Services.Impl
         private static bool isChecking = false;
         private readonly IMemoryCache memoryCache;
         private static readonly string CachePrefix = $"AvailableVersion:";
+
 
         public VersionCheckService(
             IProductVersion productVersion,
