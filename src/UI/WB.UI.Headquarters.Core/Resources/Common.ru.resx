@@ -372,15 +372,15 @@
     <value>Переключить в CAPI</value>
   </data>
   <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
-    <value>Выбранные {{ count }} интерьвю будут переключен в режим CAPI</value>
+    <value>Выбранные {{count}} интерьвю будут переключен в режим CAPI</value>
   </data>
   <data name="ChangeToCAWI" xml:space="preserve">
     <value>Переключить в CAWI</value>
   </data>
   <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
-    <value>Выбранные {{ count }} интерьвю будут переключен в режим CAWI</value>
+    <value>Выбранные {{count}} интерьвю будут переключен в режим CAWI</value>
   </data>
-  <data name="Interview Mode" xml:space="preserve">
+  <data name="InterviewMode" xml:space="preserve">
     <value>Режим интервью</value>
   </data>
 </root>

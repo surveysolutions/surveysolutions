@@ -123,6 +123,7 @@ type Interview {
   assignmentId: Int!
   id: ID!
   status: InterviewStatus!
+  interviewMode: InterviewMode!
   "Login of current responsible user"
   responsibleName: String!
   responsibleId: Uuid!
@@ -345,6 +346,13 @@ input IdentifyEntityValueFilter {
   entity: QuestionnaireItemsFilter
 }
 
+input InterviewModeOperationFilterInput {
+  eq: InterviewMode
+  neq: InterviewMode
+  in: [InterviewMode!]
+  nin: [InterviewMode!]
+}
+
 input InterviewSort {
   key: SortEnumType
   createdDate: SortEnumType
@@ -372,6 +380,7 @@ input InterviewsFilter {
   and: [InterviewsFilter!]
   or: [InterviewsFilter!]
   status: InterviewStatusOperationFilterInput
+  interviewMode: InterviewModeOperationFilterInput
   questionnaireId: ComparableGuidOperationFilterInput
   questionnaireVariable: StringOperationFilterInput
   questionnaireVersion: ComparableInt64OperationFilterInput
@@ -519,6 +528,11 @@ enum InterviewActionFlags {
   CANBEOPENED
   CANCHANGETOCAPI
   CANCHANGETOCAWI
+}
+
+enum InterviewMode {
+  CAPI
+  CAWI
 }
 
 enum InterviewStatus {
