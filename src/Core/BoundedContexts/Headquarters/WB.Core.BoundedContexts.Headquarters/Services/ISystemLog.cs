@@ -12,6 +12,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void QuestionnaireDeleted(string title, QuestionnaireIdentity questionnaire);
         void QuestionnaireImported(string title, QuestionnaireIdentity questionnaire, Guid userId, string userName);
         void UserCreated(UserRoles role, string userName);
+        void UserPasswordChanged(string currentUser, string userName);
+        void UserPasswordChangeFailed(string currentUser, string userName);
         void AssignmentSizeChanged(int id, int? quantity);
         void ExportEncryptionChanged(bool enabled);
         void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName, string previousSupervisorName);

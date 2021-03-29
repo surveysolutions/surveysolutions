@@ -307,4 +307,10 @@
   <data name="Forum" xml:space="preserve">
     <value>Форум</value>
   </data>
+  <data name="EmailChangeShouldBeConfirmed" xml:space="preserve">
+    <value>Следуйте инструкциям, отправленным на указанный адрес электронной почты ({0}), чтобы подтвердить изменение адреса электронной почты.</value>
+  </data>
+  <data name="PendingEmailUpdate" xml:space="preserve">
+    <value>Запрошено изменение на {0}</value>
+  </data>
 </root>

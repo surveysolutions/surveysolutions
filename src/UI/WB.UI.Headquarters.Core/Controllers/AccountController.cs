@@ -101,9 +101,11 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View(model);
             }
 
+            HqUser user = null;
+
             if (model.UserName != null)
             {
-                var user = await userManager.FindByNameAsync(model.UserName);
+                user = await userManager.FindByNameAsync(model.UserName);
                 if (user?.IsInRole(UserRoles.ApiUser) == true)
                 {
                     this.ModelState.AddModelError(nameof(model.UserName), ErrorMessages.ApiUserIsNotAllowedToSignIn);
@@ -120,6 +122,12 @@ namespace WB.UI.Headquarters.Controllers
             {
                 this.captchaService.ResetFailedLogin(model.UserName);
 
+                if (user!.PasswordChangeRequired)
+                {
+                    var controllerName = nameof(UsersController);
+                    var actionName = nameof(UsersController.ChangePassword);
+                    return RedirectToAction(actionName, controllerName);
+                }
 
                 if (returnUrl != null && returnUrl != "/")
                 {
@@ -169,6 +177,13 @@ namespace WB.UI.Headquarters.Controllers
 
             if (signInResult.Succeeded)
             {
+                if (user!.PasswordChangeRequired)
+                {
+                    var controllerName = nameof(UsersController);
+                    var actionName = nameof(UsersController.ChangePassword);
+                    return RedirectToAction(actionName, controllerName);
+                }
+                
                 return Redirect(returnUrl ?? Url.Action("Index", "Home"));
             }
 

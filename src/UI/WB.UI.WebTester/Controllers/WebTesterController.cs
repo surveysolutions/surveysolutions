@@ -59,7 +59,11 @@ namespace WB.UI.WebTester.Controllers
                 if (!string.IsNullOrEmpty(scenarioId))
                 {
                     var result = await this.interviewFactory.ImportQuestionnaireAndCreateInterview(id, int.Parse(scenarioId));
-                    if (result != CreationResult.DataRestored)
+                    if (result == CreationResult.DataPartialRestored)
+                    {
+                        TempData["Message"] = Common.ReloadPartialInterviewErrorMessage;
+                    }
+                    else if (result != CreationResult.DataRestored)
                     {
                         TempData["Message"] = Common.ReloadInterviewErrorMessage;
                     }
@@ -67,7 +71,11 @@ namespace WB.UI.WebTester.Controllers
                 else if (!string.IsNullOrEmpty(originalInterviewId))
                 {
                     var result = await this.interviewFactory.ImportQuestionnaireAndCreateInterview(id, Guid.Parse(originalInterviewId));
-                    if (result != CreationResult.DataRestored)
+                    if (result == CreationResult.DataPartialRestored)
+                    {
+                        TempData["Message"] = Common.ReloadPartialInterviewErrorMessage;
+                    }
+                    else if (result != CreationResult.DataRestored)
                     {
                         TempData["Message"] = Common.ReloadInterviewErrorMessage;
                     }

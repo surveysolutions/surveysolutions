@@ -196,6 +196,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User failed to change password.
+        /// </summary>
+        public static string FailToChangePassword {
+            get {
+                return ResourceManager.GetString("FailToChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download assignment ({0})&lt;/br&gt;.
         /// </summary>
         public static string GetAssignmentFormat {
@@ -376,7 +385,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer logged in and aquired AuthToken.
+        ///   Looks up a localized string similar to Interviewer logged in and acquired AuthToken.
         /// </summary>
         public static string InterviewerLoggedIn {
             get {
@@ -426,6 +435,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string NoNewInterviewPackagesToDownload {
             get {
                 return ResourceManager.GetString("NoNewInterviewPackagesToDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password changed and acquired AuthToken.
+        /// </summary>
+        public static string PasswordChanged {
+            get {
+                return ResourceManager.GetString("PasswordChanged", resourceCulture);
             }
         }
         
