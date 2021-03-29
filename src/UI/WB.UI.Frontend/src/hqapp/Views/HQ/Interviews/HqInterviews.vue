@@ -77,6 +77,16 @@
                 </div>
             </FilterBlock>
 
+            <FilterBlock :title="$t('Pages.Filters_InterviewMode')">
+                <Typeahead
+                    no-search
+                    control-id="responsibleId"
+                    :placeholder="$t('Pages.Filters_InterviewModePlaceHolder')"
+                    :value="interviewMode"
+                    :values="interviewModes"
+                    v-on:selected="inteviewModeSelected"></Typeahead>
+            </FilterBlock>
+
             <InterviewFilter slot="additional"
                 :questionnaireId="where.questionnaireId"
                 :questionnaireVersion="where.questionnaireVersion"
@@ -463,6 +473,7 @@ const query = gql`query hqInterviews($workspace: String!, $order: [InterviewSort
       questionnaireId
       responsibleId
       responsibleName
+      interviewMode
       responsibleRole
       errorsCount
       assignmentId
@@ -523,6 +534,7 @@ export default {
             questionnaireVersion: null,
             isLoading: false,
             selectedRows: [],
+            interviewMode: null,
             selectedRowWithMenu: null,
             totalRows: 0, filteredCount: 0,
             draw: 0,
@@ -542,6 +554,8 @@ export default {
             isVisiblePrefilledColumns: true,
 
             conditions: [],
+
+            interviewModes: [{ key: 'CAWI', value: 'CAWI'}, { key: 'CAPI', value: 'CAPI'}],
         }
     },
 
@@ -677,6 +691,16 @@ export default {
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'nonAnswered')
+                    },
+                    width: '50px',
+                },
+                {
+                    data: 'interviewMode',
+                    name: 'InterviewMode',
+                    title: this.$t('Common.InterviewMode'),
+                    orderable: false,
+                    createdCell(td, cellData, rowData, row, col) {
+                        $(td).attr('role', 'mode')
                     },
                     width: '50px',
                 },
@@ -834,6 +858,7 @@ export default {
             if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
             if (this.responsibleId) data.responsibleName = this.responsibleId.value
             if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
+            if (this.interviewMode) data.interviewMode = this.interviewMode.key
 
             return data
         },
@@ -852,6 +877,10 @@ export default {
 
             if(this.where.status) {
                 and.push({ status: {in: JSON.parse(this.status.alias)}})
+            }
+
+            if(this.where.interviewMode) {
+                and.push({interviewMode: {eq: this.where.interviewMode}})
             }
 
             if(this.conditions != null && this.conditions.length > 0) {
@@ -998,8 +1027,13 @@ export default {
         userSelected(newValue) {
             this.responsibleId = newValue
         },
+
         statusSelected(newValue) {
             this.status = newValue
+        },
+
+        inteviewModeSelected(newValue) {
+            this.interviewMode = newValue
         },
 
         viewInterview() {
@@ -1635,6 +1669,10 @@ export default {
                 self.status = self.statuses.find(o => o.key === query.status)
             }
 
+            if(query.mode != null) {
+                self.interviewMode = self.interviewModes.find(o => o.key == query.mode)
+            }
+
             self.loadQuestionnaireId((questionnaireId, version) => {
                 if (questionnaireId != null) {
                     self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId)
@@ -1663,7 +1701,8 @@ export default {
                         'questionnaireId',
                         'status',
                         'assignmentId',
-                        'questionnaireVersion'],
+                        'questionnaireVersion',
+                        'interviewMode'],
                     self.reloadTableAndSaveRoute.bind(self)
                 )
             })

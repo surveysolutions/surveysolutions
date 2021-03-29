@@ -517,6 +517,8 @@ enum InterviewActionFlags {
   CANBEREJECTED
   CANBERESTARTED
   CANBEOPENED
+  CANCHANGETOCAPI
+  CANCHANGETOCAWI
 }
 
 enum InterviewStatus {

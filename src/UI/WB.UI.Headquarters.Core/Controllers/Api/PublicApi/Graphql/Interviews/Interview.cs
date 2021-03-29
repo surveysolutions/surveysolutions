@@ -36,7 +36,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             
             descriptor.Field(x => x.Status)
                 .Type<NonNullType<EnumType<InterviewStatus>>>();
-            
+
+            descriptor.Field(x => x.InterviewMode)
+                .Type<NonNullType<EnumType<InterviewMode>>>();
+
             descriptor.Field(x => x.ResponsibleName).Type<NonNullType<StringType>>()
                 .Description("Login of current responsible user");
             
@@ -82,6 +85,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.QuestionnaireVariable).Type<NonNullType<StringType>>();
             descriptor.Field(x => x.QuestionnaireVersion).Type<NonNullType<LongType>>();
             
+
             descriptor.Field(x => x.IdentifyEntitiesValues)
                 .Name("identifyingData")
                 .Description("Information that identifies each assignment. These are the answers to questions marked as identifying in Designer")
@@ -93,7 +97,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                         var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
                             .Where(a => keys.Contains(a.InterviewSummary.SummaryId))
                             .OrderBy(a => a.Position)
-                            .ToListAsync()
+                            .ToListAsync(cancellationToken: token)
                             .ConfigureAwait(false);
                         
                         var answers = questionAnswers

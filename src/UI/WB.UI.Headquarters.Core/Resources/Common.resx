@@ -372,4 +372,7 @@
   <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
     <value>Selected {{count}} interviews mode will be changed to CAWI</value>
   </data>
+  <data name="InterviewMode" xml:space="preserve">
+    <value>Interview Mode</value>
+  </data>
 </root>

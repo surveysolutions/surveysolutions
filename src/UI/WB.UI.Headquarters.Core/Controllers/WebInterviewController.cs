@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -296,7 +296,8 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         if (IsInterviewExists(invitation.InterviewId))
                         {
-                            if (invitation.Interview.GetInterviewProperties().AcceptsCAWIAnswers)
+                            var interviewProperties = invitation.Interview.GetInterviewProperties();
+                            if (!interviewProperties.AcceptsCAWIAnswers)
                                 throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded,
                                     Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
                             

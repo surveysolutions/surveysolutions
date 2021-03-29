@@ -108,6 +108,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Common.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Pages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Pages.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Workspaces.ru.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Workspaces.ru.resx</DependentUpon>
@@ -118,6 +122,9 @@
   <ItemGroup>
     <EmbeddedResource Update="Resources\Common.resx">
       <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages.resx">
+      <LastGenOutput>Pages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

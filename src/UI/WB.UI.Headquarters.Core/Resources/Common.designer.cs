@@ -394,6 +394,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview Mode.
+        /// </summary>
+        public static string InterviewMode {
+            get {
+                return ResourceManager.GetString("InterviewMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviews.
         /// </summary>
         public static string Interviews {

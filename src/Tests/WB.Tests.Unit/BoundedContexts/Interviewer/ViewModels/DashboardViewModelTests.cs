@@ -29,36 +29,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             base.Setup();
         }
 
-        [Test]
-        public void When_execute_SynchronizationCommand_and_census_interview_creating_Then_should_not_be_called_synchronization_and_waiting_message_showed()
-        {
-            // arrange
-            var mockOfViewModelNavigationService = new Mock<IViewModelNavigationService>();
-            mockOfViewModelNavigationService.SetupGet(x => x.HasPendingOperations).Returns(true);
-
-            var mockOfSynchronizationViewModel = new Mock<LocalSynchronizationViewModel>(
-                Mock.Of<IMvxMessenger>(),
-                new SynchronizationCompleteSource(),
-                Mock.Of<ITabletDiagnosticService>(),
-                Mock.Of<ILogger>());
-
-            var mockOfdashboardNotifications = Create.ViewModel.DashboardNotificationsViewModel(
-                mockOfViewModelNavigationService.Object
-            );
-            
-            var viewModel = CreateDashboardViewModel(
-                viewModelNavigationService: mockOfViewModelNavigationService.Object,
-                synchronization: mockOfSynchronizationViewModel.Object,
-                dashboardNotifications: mockOfdashboardNotifications);
-
-            //act
-            viewModel.SynchronizationCommand.Execute();
-
-            //assert
-            mockOfViewModelNavigationService.Verify(m => m.ShowWaitMessage(), Times.Once);
-            mockOfSynchronizationViewModel.Verify(m => m.Synchronize(), Times.Never);
-        }
-
         private static DashboardViewModel CreateDashboardViewModel(
             IViewModelNavigationService viewModelNavigationService = null,
             IInterviewerPrincipal principal = null,

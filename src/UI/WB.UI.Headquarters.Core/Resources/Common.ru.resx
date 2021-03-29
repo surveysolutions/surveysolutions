@@ -380,4 +380,7 @@
   <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
     <value>Выбранные {{ count }} интерьвю будут переключен в режим CAWI</value>
   </data>
+  <data name="Interview Mode" xml:space="preserve">
+    <value>Режим интервью</value>
+  </data>
 </root>

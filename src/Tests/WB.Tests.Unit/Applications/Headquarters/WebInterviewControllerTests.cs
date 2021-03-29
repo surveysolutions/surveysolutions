@@ -22,6 +22,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -70,11 +71,19 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 a.Id == 3
                 && a.WebMode == true
                 && a.Quantity == quantity);
+
             var invitation = Mock.Of<Invitation>(i =>
                 i.InterviewId == interviewId
                 && i.Assignment == assignment
                 && i.IsWithAssignmentResolvedByPassword() == true
-                && i.Interview == Mock.Of<InterviewSummary>(s => s.Status == InterviewStatus.InterviewerAssigned));
+
+                && i.Interview == Mock.Of<InterviewSummary>(s =>
+                    s.GetInterviewProperties() == new InterviewProperties
+                    {
+                        Mode = InterviewMode.CAWI, 
+                        Status = InterviewStatus.InterviewerAssigned
+                    }
+                && s.Status == InterviewStatus.InterviewerAssigned));
 
             var o = (object)invitation;
 

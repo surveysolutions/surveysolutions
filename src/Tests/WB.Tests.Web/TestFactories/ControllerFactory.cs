@@ -83,7 +83,10 @@ namespace WB.Tests.Web.TestFactories
                 tenantSettings ?? new TestPlainStorage<ServerSettings>(),
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
                 userToDeviceService ?? Mock.Of<IUserToDeviceService>(),
-                Mock.Of<IOptions<HeadquartersConfig>>()
+                Mock.Of<IOptions<HeadquartersConfig>>(c => c.Value == new HeadquartersConfig()
+                {
+                    IgnoreCompatibility = false
+                })
             );
 
             result.ControllerContext = new ControllerContext
