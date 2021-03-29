@@ -105,7 +105,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                     long downloded = 0;
                     using (var streamToSave = this.mapService.GetTempMapSaveStream(mapDescription.MapName))
                     using (var contentStreamResult = await this.synchronizationService
-                        .GetMapContentStream(mapDescription.MapName, cancellationToken).ConfigureAwait(false))
+                        .GetMapContentStream(mapDescription.MapName, cancellationToken)
+                        .ConfigureAwait(false))
                     {
                         if (cancellationToken.IsCancellationRequested)
                         {
