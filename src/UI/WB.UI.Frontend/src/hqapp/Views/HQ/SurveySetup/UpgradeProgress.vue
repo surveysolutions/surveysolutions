@@ -24,6 +24,7 @@
             <div class="col-sm-7 col-xs-12 action-block uploading-verifying active-preloading">
                 <div class="import-progress">
                     <p>{{ $t('Assignments.UpgradeProgressNumbers', { processed: totalProcessedCount, totalCount: progress.progressDetails.totalAssignmentsToMigrate }) }}</p>
+                    <p>{{ $t('Assignments.UpgradeProgressErrors', { errorCount: errorsCount }) }}</p>
                 </div>
                 <div class="cancelable-progress">
                     <div class="progress">
@@ -68,6 +69,11 @@
                 </div>
             </div>
         </div>
+        <div class="row-fluid"
+            v-else-if="progress.progressDetails.status === 'Error'">
+            <div
+                class="col-sm-12 prefilled-data-info info-block">{{$t('Assignments.UpgradeError')}}</div>
+        </div>
     </HqLayout>
 </template>
 
@@ -78,7 +84,7 @@ export default {
             progress: {
                 progressDetails: {
                     status: 'Queued',
-                    assignmentsMigratedWithError: [],
+                    assignmentsMigratedWithErrorCount: 0,
                 },
             },
         }
@@ -97,12 +103,12 @@ export default {
             return `${this.$config.model.exportErrorsUrl}/${this.processId}`
         },
         errorsCount() {
-            return this.progress.progressDetails.assignmentsMigratedWithError.length
+            return this.progress.progressDetails.assignmentsMigratedWithErrorCount
         },
         totalProcessedCount() {
             return (
                 this.progress.progressDetails.assignmentsMigratedSuccessfully +
-                this.progress.progressDetails.assignmentsMigratedWithError.length
+                this.progress.progressDetails.assignmentsMigratedWithErrorCount
             )
         },
         overallProgressPercent() {
