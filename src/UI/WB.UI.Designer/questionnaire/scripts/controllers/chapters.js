@@ -42,7 +42,8 @@
                 var newChapter = {
                     title: $i18next.t('DefaultNewSection'),
                     itemId: newId,
-                    itemType: "Chapter"
+                    itemType: "Chapter",
+                    isCover: false
                 };
 
                 commandService.addChapter($state.params.questionnaireId, newChapter).then(function () {
