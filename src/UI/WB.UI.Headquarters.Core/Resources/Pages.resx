@@ -608,7 +608,7 @@
     <value>Interviewers</value>
   </data>
   <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
-      <value>You are moving an interviewer who was having assignments for web interviews to another team. These assignments will be assigned to the original supervisor. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignment is reassigned to a user in the role INTERVIEWER.</value>
+    <value>You are moving an interviewer who was having assignments for web interviews to another team. These assignments will be assigned to the original supervisor. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignment is reassigned to a user in the role INTERVIEWER.</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
@@ -1365,7 +1365,7 @@
     <value>Select a team where to move {{names}}</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-      <value>{{names}} and {{lastname}}</value>
+    <value>{{names}} and {{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
     <value>{{names}} and {{more}} more</value>
@@ -1613,5 +1613,11 @@
   </data>
   <data name="Interviewer_CreateText" xml:space="preserve">
     <value>This action will create individual user with interviewer rights,&lt;br&gt; to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
+  </data>
+  <data name="UsersManage_TeamFilterPlaceHolder" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="UsersManage_TeamFilter" xml:space="preserve">
+    <value>Team</value>
   </data>
 </root>

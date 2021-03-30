@@ -281,7 +281,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 {
                     if (createdUserRole == UserRoles.Interviewer)
                     {
-                        var supervisorId = (await userManager.FindByNameAsync(model.Supervisor)).Id;
+                        var supervisorId = (await userManager.FindByNameAsync(model.Supervisor));
                         createdUser.Workspaces.Single().ChangeSupervisorId(supervisorId);
                     }
 

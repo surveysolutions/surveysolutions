@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public bool Disabled { get; set; }
+        public string Supervisor { get; set; }
     }
     
     public class UserWorkspaceApiView : WorkspaceApiView

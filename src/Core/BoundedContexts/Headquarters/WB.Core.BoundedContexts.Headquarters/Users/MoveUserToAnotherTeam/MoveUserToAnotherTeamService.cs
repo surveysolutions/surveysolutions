@@ -99,8 +99,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
             
             //interviewer.Profile.SupervisorId = newSupervisorId;
             var userWorkspace = interviewer.Workspaces
-                .First(w => w.Workspace.Name == workspaceName && w.SupervisorId == previousSupervisorId);
-            userWorkspace.ChangeSupervisorId(newSupervisorId);
+                .First(w => w.Workspace.Name == workspaceName && w.Supervisor.Id == previousSupervisorId);
+            userWorkspace.ChangeSupervisorId(newSupervisor);
 
             this.auditLog.UserMovedToAnotherTeam(interviewer.UserName, newSupervisor.UserName, previousSupervisor.UserName);
 

@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Pages {
@@ -3887,7 +3887,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor will be archived with his team. If the supervisor&apos;s interviewers has completed interviews on his tablet then the data will be lost..
+        ///   Looks up a localized string similar to If the interviewer has completed interviews on his tablet then the data will be lost..
         /// </summary>
         public static string Supervisors_ArchiveSupervisorsConfirmMessage {
             get {
@@ -4478,6 +4478,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string UsersManage_SupervisorFilterTitle {
             get {
                 return ResourceManager.GetString("UsersManage_SupervisorFilterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team.
+        /// </summary>
+        public static string UsersManage_TeamFilter {
+            get {
+                return ResourceManager.GetString("UsersManage_TeamFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team.
+        /// </summary>
+        public static string UsersManage_TeamFilterPlaceHolder {
+            get {
+                return ResourceManager.GetString("UsersManage_TeamFilterPlaceHolder", resourceCulture);
             }
         }
         

@@ -207,7 +207,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
                     }
                 };
 
-            var workspaceUser = new WorkspacesUsers(workspaceEntity, user, supervisorId);
+            var workspaceUser = new WorkspacesUsers(workspaceEntity, user, supervisorId.HasValue ? this.userRepository.FindById(supervisorId.Value) : null);
 
             this.workspaceUsers.Store(workspaceUser, workspaceUser.Id);
 

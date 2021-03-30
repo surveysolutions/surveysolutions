@@ -502,10 +502,11 @@ namespace WB.UI.Headquarters.Controllers
             var workspace = await workspaces.GetByIdAsync(model.Workspace);
             if (workspace == null)
                 this.ModelState.AddModelError(nameof(CreateUserModel.Workspace), FieldsAndValidations.WorkspaceMissing);
-            
+
+            HqUser supervisor = null;
             if (model.SupervisorId.HasValue)
             {
-                var supervisor = await this.userManager.FindByIdAsync(model.SupervisorId.FormatGuid());
+                supervisor = await this.userManager.FindByIdAsync(model.SupervisorId.FormatGuid());
                 if (supervisor == null || !supervisor.IsInRole(UserRoles.Supervisor) || supervisor.IsArchivedOrLocked)
                     this.ModelState.AddModelError(nameof(CreateUserModel.SupervisorId), HQ.SupervisorNotFound);
             }
@@ -523,7 +524,7 @@ namespace WB.UI.Headquarters.Controllers
                     PhoneNumber = model.PhoneNumber,
                 };
 
-                user.Workspaces.Add(new WorkspacesUsers(workspace!, user, model.SupervisorId));
+                user.Workspaces.Add(new WorkspacesUsers(workspace!, user, supervisor));
 
                 var identityResult = await this.userManager.CreateAsync(user, model.Password);
                 if (!identityResult.Succeeded)

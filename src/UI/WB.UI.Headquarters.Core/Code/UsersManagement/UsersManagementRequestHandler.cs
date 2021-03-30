@@ -90,7 +90,8 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                     {
                         Disabled = w.Workspace.DisabledAtUtc != null,
                         Name = w.Workspace.Name,
-                        DisplayName = w.Workspace.DisplayName
+                        DisplayName = w.Workspace.DisplayName,
+                        Supervisor = w.Supervisor != null ? w.Supervisor.UserName : null
                     }).ToList()
                 }).ToListAsync(cancellationToken))
                 .ToDictionary(u => u.Id, u => u.Workspaces);
@@ -105,7 +106,7 @@ namespace WB.UI.Headquarters.Code.UsersManagement
 
             return new DataTableResponse<UserManagementListItem>
             {
-                Draw = request.Draw + 1,
+                Draw = request.Draw,
                 RecordsTotal = recordsTotal,
                 RecordsFiltered = recordsFiltered,
                 Data = list
@@ -145,6 +146,11 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                     //UserManagementFilter.Archived => query.Where(u => u.IsArchived),
                     _ => query
                 };
+            }
+
+            if (request.TeamId != null)
+            {
+                query = query.Where(x => x.Workspaces.Any(s => s.Supervisor.Id == request.TeamId));
             }
 
             query = query.Where(u => u.IsArchived == request.Archive);

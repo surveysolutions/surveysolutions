@@ -43,7 +43,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             {
                 Name = x.Workspace.Name,
                 DisplayName = x.Workspace.DisplayName,
-                SupervisorId = x.SupervisorId,
+                SupervisorId = x.Supervisor.Id,
             }).ToList();
 
             return new InterviewerApiView

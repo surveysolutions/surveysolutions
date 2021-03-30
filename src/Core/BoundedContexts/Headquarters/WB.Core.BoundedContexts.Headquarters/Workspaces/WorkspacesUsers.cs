@@ -12,19 +12,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             User = null!;
         }
 
-        public WorkspacesUsers(Workspace workspace, HqUser user, Guid? supervisorId)
+        public WorkspacesUsers(Workspace workspace, HqUser user, HqUser? supervisorId)
         {
             Workspace = workspace;
             User = user;
-            SupervisorId = supervisorId;
+            Supervisor = supervisorId;
         }
 
         public virtual int Id { get; protected set; }
-        public virtual Guid? SupervisorId { get; protected set; }
         public virtual Workspace Workspace { get; protected set; }
         public virtual HqUser User { get; protected set; }
+        public virtual HqUser? Supervisor { get; set; }
 
-        public virtual void ChangeSupervisorId(Guid supervisorId)
-            => SupervisorId = supervisorId;
+        public virtual void ChangeSupervisorId(HqUser supervisorId)
+            => Supervisor = supervisorId;
     }
 }

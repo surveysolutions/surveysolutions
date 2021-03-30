@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                     InWorkspaces = x.Workspaces.Select(w => new InWorkspace()
                     {
                         WorkspaceName = w.Workspace.Name,
-                        SupervisorId = w.SupervisorId,
+                        SupervisorId = w.Supervisor?.Id,
                     }).ToList(),
                 })
                 .ToArray();

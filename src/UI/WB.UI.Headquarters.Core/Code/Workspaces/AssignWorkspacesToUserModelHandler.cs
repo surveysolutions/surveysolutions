@@ -89,7 +89,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                                 var resultWorkspaces = user.Workspaces.Select(u => new AssignUserWorkspace()
                                 {
                                     Workspace = u.Workspace,
-                                    SupervisorId = u.SupervisorId
+                                    SupervisorId = u.Supervisor?.Id
                                 }).Concat(newWorkspaces);
                                 await workspacesService.AssignWorkspacesAsync(user, resultWorkspaces.ToList());
                                 break;
@@ -101,7 +101,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                                 var resultWorkspaces = workspacesAfterRemove.Select(u => new AssignUserWorkspace()
                                 {
                                     Workspace = u.Workspace,
-                                    SupervisorId = u.SupervisorId
+                                    SupervisorId = u.Supervisor?.Id
                                 });
                                 await workspacesService.AssignWorkspacesAsync(user, resultWorkspaces.ToList());
                                 break;

@@ -40,6 +40,16 @@
                     v-on:selected="onRoleSelected" />
             </FilterBlock>
 
+            <FilterBlock :title="$t('Pages.UsersManage_TeamFilter')"
+                v-if="this.selectedWorkspace">
+                <Typeahead
+                    control-id="teamSelector"
+                    :placeholder="$t('Pages.UsersManage_TeamFilterPlaceHolder')"
+                    :value="selectedTeam"
+                    :fetch-url="supervisorsUri"
+                    v-on:selected="onTeamSelected" />
+            </FilterBlock>
+
             <FilterBlock :title="$t('Pages.AccountManage_ShowUsers')"
                 v-if="this.$config.model.filters.length > 0">
                 <Typeahead
@@ -200,6 +210,7 @@ export default {
         return {
             workspaces: [],
             selectedWorkspace: null,
+            selectedTeam: null,
             selectedRole: null,
             selectedFilter: null,
             selectedArchive: null,
@@ -246,6 +257,10 @@ export default {
     },
 
     computed: {
+        supervisorsUri() {
+            return `/${this.selectedWorkspace.key}/api/v1/users/supervisors`
+        },
+
         model() {
             return this.$config.model
         },
@@ -298,8 +313,17 @@ export default {
                         className: 'suso-workspaces',
                         sortable: false,
                         render(data, type, row) {
-                            return map(row.workspaces, w => w.disabled ? '<strike>'
-                                + $('<div>').text(w.displayName).html() + '</strike>' : $('<div>').text(w.displayName).html()).join(', ')
+                            return map(row.workspaces, function(w) {
+                                let supervisorName = ''
+                                if(w.supervisor) {
+                                    supervisorName = ` (<span class="supervisor">${w.supervisor}</span>)`
+                                }
+                                if(w.disabled)
+                                    return `<strike>${$('<div>').text(w.displayName).html()}${supervisorName}</strike>`
+                                else
+                                    return $('<div>').text(w.displayName).html() + supervisorName
+
+                            }).join(', ')
                         },
                     },
                     {
@@ -457,6 +481,10 @@ export default {
             if(this.selectedArchive) {
                 requestData.archive = this.selectedArchive.key
             }
+
+            if(this.selectedTeam) {
+                requestData.teamId = this.selectedTeam.key
+            }
         },
 
 
@@ -477,6 +505,13 @@ export default {
 
             this.onChange(query => {
                 query.role = role == null ? null : role.key
+            })
+        },
+
+        onTeamSelected(team){
+            this.selectedTeam = team
+            this.onChange(query => {
+                query.team = team == null ? null : team.key
             })
         },
 

@@ -1330,7 +1330,7 @@ namespace WB.Tests.Abc.TestFactories
             foreach (var workspace in workspaces)
             {
                 var ws = new Workspace(workspace, workspace);
-                user.Workspaces.Add(new WorkspacesUsers(ws, user, supervisorId));
+                user.Workspaces.Add(new WorkspacesUsers(ws, user, supervisorId != null ? new HqUser{Id = supervisorId.Value}: null));
             }
             
             return user;
