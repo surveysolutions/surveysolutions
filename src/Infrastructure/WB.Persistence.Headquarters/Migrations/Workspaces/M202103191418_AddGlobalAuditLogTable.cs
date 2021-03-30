@@ -11,7 +11,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
                 .WithColumn("id").AsInt32().Identity().PrimaryKey()
                 .WithColumn("recordid").AsInt32()
                 .WithColumn("responsibleid").AsGuid().Nullable()
-                .WithColumn("responsiblename").AsString()
+                .WithColumn("responsiblename").AsString().Nullable()
                 .WithColumn("type").AsString()
                 .WithColumn("time").AsDateTime()
                 .WithColumn("timeutc").AsDateTime()
