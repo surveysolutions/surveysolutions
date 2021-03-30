@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("users/{id}/changepassword")]
         [ObservingNotAllowed]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor, UserRoles.Observer)]
         public async Task<ActionResult<ChangePasswordResult>> ChangePassword(Guid id, [FromBody, BindRequired]ChangePasswordRequest model)
         {
             if (id != User.UserId())
