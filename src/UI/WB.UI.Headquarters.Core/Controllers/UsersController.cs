@@ -521,12 +521,20 @@ namespace WB.UI.Headquarters.Controllers
             if (this.ModelState.IsValid)
             {
                 var passwordResetToken = await this.userManager.GeneratePasswordResetTokenAsync(currentUser);
-                currentUser.PasswordChangeRequired = model.UserId != this.authorizedUser.Id;
+                if (model.UserId != this.authorizedUser.Id)
+                    currentUser.PasswordChangeRequired = true;
                 var updateResult = await this.userManager.ResetPasswordAsync(currentUser, passwordResetToken, model.Password);
 
-                if (updateResult.Succeeded && model.UserId == this.authorizedUser.Id)
+                if (updateResult.Succeeded 
+                    && model.UserId == this.authorizedUser.Id
+                    && currentUser.PasswordChangeRequired)
                 {
-                    this.authorizedUser.ResetPasswordChangeRequiredFlag();
+                    currentUser.PasswordChangeRequired = false;
+                    var updateUserResult = await userManager.UpdateAsync(currentUser);
+                    if (!updateUserResult.Succeeded)
+                        this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
+                    else
+                        this.authorizedUser.ResetPasswordChangeRequiredFlag();
                 }
 
                 if (!updateResult.Succeeded)
