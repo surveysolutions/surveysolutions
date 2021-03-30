@@ -235,6 +235,9 @@
   <data name="UpgradeProgressNumbers" xml:space="preserve">
     <value>Обновление {{processed}} из {{totalCount}}</value>
   </data>
+  <data name="UpgradeProgressErrors" xml:space="preserve">
+    <value>С ошибками {{errorCount}}</value>
+  </data>
   <data name="UpgradeProgressTitle" xml:space="preserve">
     <value>Обновление заданий из {{from}} в {{to}}</value>
   </data>
@@ -246,6 +249,9 @@
   </data>
   <data name="UpgradeCancelled" xml:space="preserve">
     <value>Обновление остановлено</value>
+  </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>Произошла ошибка. Попробуйте позже.</value>
   </data>
   <data name="UpgradePreparation" xml:space="preserve">
     <value>Ожидание завершения других процессов обновления </value>
