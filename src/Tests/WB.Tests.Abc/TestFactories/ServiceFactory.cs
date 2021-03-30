@@ -788,7 +788,8 @@ namespace WB.Tests.Abc.TestFactories
                 assignmentsService,
                 questionnaires,
                 upgService,
-                Create.Service.InScopeExecutor(sl));
+                Create.Service.InScopeExecutor(sl),
+                Mock.Of<ILogger<AssignmentsUpgrader>>());
         }
 
         public IAssignmentFactory AssignmentFactory(
