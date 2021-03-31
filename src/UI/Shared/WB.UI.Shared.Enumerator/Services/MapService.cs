@@ -4,35 +4,46 @@ using System.IO;
 using System.Linq;
 using Android.App;
 using Plugin.Permissions.Abstractions;
+using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
     public class MapService : IMapService
     {
-        private readonly IPermissions permissions;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly string mapsLocation;
         private readonly string shapefilesLocation;
         private readonly ILogger logger;
+        private readonly IWorkspaceAccessor workspaceAccessor;
 
         string[] mapFilesToSearch = { "*.tpk", "*.tpkx", "*.mmpk", "*.mmpkx",  "*.tif" };
         string[] shapefilesToSearch = { "*.shp"};
         string tempSuffix = ".part";
 
-        public MapService(IPermissions permissions,
+        public MapService(
             IFileSystemAccessor fileSystemAccessor,
-            ILogger logger)
+            ILogger logger,
+            IWorkspaceAccessor workspaceAccessor)
         {
-            this.permissions = permissions;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
+            this.workspaceAccessor = workspaceAccessor;
 
-            this.mapsLocation = fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "TheWorldBank/Shared/MapCache/");
-            this.shapefilesLocation = fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "TheWorldBank/Shared/ShapefileCache");
+            var workspaceName = workspaceAccessor.GetCurrentWorkspaceName();
+            this.mapsLocation = fileSystemAccessor.CombinePath(
+                AndroidPathUtils.GetPathToExternalDirectory(), 
+                "TheWorldBank/Shared/MapCache/",
+                workspaceName);
+            this.shapefilesLocation = fileSystemAccessor.CombinePath(
+                AndroidPathUtils.GetPathToExternalDirectory(), 
+                "TheWorldBank/Shared/ShapefileCache",
+                workspaceName);
         }
 
 
@@ -85,7 +96,6 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
                 return mapList;
 
-            
             var localMaps = this.mapFilesToSearch
                 .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(this.mapsLocation, i))
                 .OrderBy(x => x)
@@ -95,7 +105,6 @@ namespace WB.UI.Shared.Enumerator.Services
                     Size = this.fileSystemAccessor.GetFileSize(x),
                     MapFileName = this.fileSystemAccessor.GetFileName(x),
                     CreationDate = this.fileSystemAccessor.GetCreationTime(x)
-
                 }).ToList();
 
             return mapList.Union(localMaps).ToList();
