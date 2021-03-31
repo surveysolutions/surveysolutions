@@ -89,7 +89,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         [HttpGet]
         [Route("getInterviewStatus")]
-        public override GroupStatus GetInterviewStatus(Guid interviewId) => base.GetInterviewStatus(interviewId);
+        public override InterviewSimpleStatus GetInterviewStatus(Guid interviewId) => base.GetInterviewStatus(interviewId);
 
         [HttpGet]
         [Route("getNavigationButtonState")]
