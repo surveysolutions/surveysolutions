@@ -4,48 +4,32 @@ using System.IO;
 using System.Linq;
 using Android.App;
 using Plugin.Permissions.Abstractions;
-using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
-using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
     public class MapService : IMapService
     {
+        private readonly IPermissions permissions;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly string mapsLocation;
         private readonly string shapefilesLocation;
         private readonly ILogger logger;
-        private readonly IPlainStorage<MapDescriptionView> mapsStorage;
-        private readonly IWorkspaceAccessor workspaceAccessor;
 
         string[] mapFilesToSearch = { "*.tpk", "*.tpkx", "*.mmpk", "*.mmpkx",  "*.tif" };
         string[] shapefilesToSearch = { "*.shp"};
         string tempSuffix = ".part";
 
-        [Workspaces]
-        public class MapDescriptionView: IPlainStorageEntity
-        {
-            [PrimaryKey]
-            public string Id { get; set; }
-            public string MapName { get; set; }
-            public string Workspace { get; set; }
-        }
-        
-        public MapService(
+        public MapService(IPermissions permissions,
             IFileSystemAccessor fileSystemAccessor,
-            ILogger logger,
-            IPlainStorage<MapDescriptionView> mapsStorage,
-            IWorkspaceAccessor workspaceAccessor)
+            ILogger logger)
         {
+            this.permissions = permissions;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
-            this.mapsStorage = mapsStorage;
-            this.workspaceAccessor = workspaceAccessor;
 
             this.mapsLocation = fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "TheWorldBank/Shared/MapCache/");
             this.shapefilesLocation = fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "TheWorldBank/Shared/ShapefileCache");
@@ -101,6 +85,7 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
                 return mapList;
 
+            
             var localMaps = this.mapFilesToSearch
                 .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(this.mapsLocation, i))
                 .OrderBy(x => x)
@@ -110,6 +95,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     Size = this.fileSystemAccessor.GetFileSize(x),
                     MapFileName = this.fileSystemAccessor.GetFileName(x),
                     CreationDate = this.fileSystemAccessor.GetCreationTime(x)
+
                 }).ToList();
 
             return mapList.Union(localMaps).ToList();
@@ -133,20 +119,6 @@ namespace WB.UI.Shared.Enumerator.Services
 
                 this.fileSystemAccessor.WriteAllBytes(filename, content);
             }
-
-            var workspaceName = workspaceAccessor.GetCurrentWorkspaceName();
-
-            mapsStorage.Store(new MapDescriptionView()
-            {
-                Id = GetMapRecordId(mapName, workspaceName),
-                MapName = mapName,
-                Workspace = workspaceName,
-            });
-        }
-
-        private static string GetMapRecordId(string mapName, string workspaceName)
-        {
-            return $"{mapName}_{workspaceName}";
         }
 
         public Stream GetTempMapSaveStream(string mapName)
@@ -173,31 +145,14 @@ namespace WB.UI.Shared.Enumerator.Services
             var newName = this.fileSystemAccessor.ChangeExtension(tempFileName, null);
 
             this.fileSystemAccessor.MoveFile(tempFileName, newName);
-            
-            var workspaceName = workspaceAccessor.GetCurrentWorkspaceName();
-
-            mapsStorage.Store(new MapDescriptionView()
-            {
-                Id = GetMapRecordId(mapName, workspaceName),
-                MapName = mapName,
-                Workspace = workspaceName,
-            });
         }
 
         public void RemoveMap(string mapName)
         {
-            var countOfMaps = mapsStorage.Count(m => m.MapName == mapName);
-            if (countOfMaps <= 1)
-            {
-                var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
+            var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
 
-                if (this.fileSystemAccessor.IsFileExists(filename))
-                    this.fileSystemAccessor.DeleteFile(filename);
-            }
-
-            var workspaceName = workspaceAccessor.GetCurrentWorkspaceName();
-            var mapRecordId = GetMapRecordId(mapName, workspaceName);
-            mapsStorage.Remove(mapRecordId);
+            if (this.fileSystemAccessor.IsFileExists(filename))
+                this.fileSystemAccessor.DeleteFile(filename);
         }
 
         public List<ShapefileDescription> GetAvailableShapefiles()
