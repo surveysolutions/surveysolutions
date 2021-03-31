@@ -13,11 +13,21 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
     public class SupervisorInterviewViewModel : BaseInterviewViewModel
     {
-        public SupervisorInterviewViewModel(IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository interviewRepository, SideBarSectionsViewModel sectionsViewModel, BreadCrumbsViewModel breadCrumbsViewModel, NavigationState navigationState, AnswerNotifier answerNotifier, GroupStateViewModel groupState, InterviewStateViewModel interviewState, CoverStateViewModel coverState, IPrincipal principal, IViewModelNavigationService viewModelNavigationService, IInterviewViewModelFactory interviewViewModelFactory, ICommandService commandService, VibrationViewModel vibrationViewModel, IEnumeratorSettings enumeratorSettings) : base(questionnaireRepository, interviewRepository, sectionsViewModel, breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService, interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
+        public SupervisorInterviewViewModel(IQuestionnaireStorage questionnaireRepository, 
+            IStatefulInterviewRepository interviewRepository, SideBarSectionsViewModel sectionsViewModel,
+            BreadCrumbsViewModel breadCrumbsViewModel, NavigationState navigationState, 
+            AnswerNotifier answerNotifier, GroupStateViewModel groupState, InterviewStateViewModel interviewState, 
+            CoverStateViewModel coverState, IPrincipal principal, IViewModelNavigationService viewModelNavigationService, 
+            IInterviewViewModelFactory interviewViewModelFactory, ICommandService commandService, 
+            VibrationViewModel vibrationViewModel, IEnumeratorSettings enumeratorSettings) 
+            : base(questionnaireRepository, interviewRepository, sectionsViewModel, breadCrumbsViewModel, navigationState, 
+                answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService, 
+                interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
         {
         }
 
-        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
+        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () 
+            => await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
 
         public override async Task NavigateBack()

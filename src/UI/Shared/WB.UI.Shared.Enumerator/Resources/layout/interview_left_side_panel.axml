@@ -5,10 +5,25 @@
                  style="@style/Interview_Sidebar_Body">
 
   <LinearLayout style="@style/Interview_Sidebar_Header" android:id="@+id/sidebarHeader">
-    <TextView style="@style/Interview_Sidebar_Title"
-              local:MvxBind="Text InterviewKey; Visible InterviewKey;" />
-    <TextView style="@style/Interview_Sidebar_Title"
-              local:MvxBind="Text QuestionnaireTitle" />
+      <LinearLayout
+          style="@style/Interview_Sidebar_Interview_Progress">
+          <TextView style="@style/Interview_Sidebar_Progress"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="left"
+                    local:MvxBind="Text Format(Localization('Interview_Progress_Format'), InterviewState.AnsweredQuestionsCount, InterviewState.QuestionsCount);" />
+          <ProgressBar
+              style="@style/Interview_Sidebar_Interview_ProgressBar"
+              android:layout_weight="1"
+              android:max="100"
+              local:MvxBind="Progress InterviewState.AnsweredProgress;" />
+          <TextView style="@style/Interview_Sidebar_Progress"
+                    android:layout_gravity="right"
+                    local:MvxBind="Text Format('{0}%', InterviewState.AnsweredProgress);" />
+      </LinearLayout>
+      <TextView style="@style/Interview_Sidebar_Title"
+                local:MvxBind="Text InterviewKey; Visible InterviewKey;" />
+      <TextView style="@style/Interview_Sidebar_Title"
+              local:MvxBind="Text QuestionnaireTitle;" />
   </LinearLayout>
 
   <View style="@style/Interview_Entity_Divider" />

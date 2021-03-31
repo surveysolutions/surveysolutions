@@ -566,28 +566,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
             return this.enumeratorGroupStateCalculationStrategy.CalculateDetailedStatus(@group.Identity, interview, questionnaire);
         }
 
-        public GroupStatus GetInterviewSimpleStatus(IStatefulInterview interview, bool isReviewMode)
-        {
-            if (InvalidEntities() > 0)
-                return GroupStatus.StartedInvalid;
-
-            return ActiveQuestions() == AnsweredQuestions()
-                ? GroupStatus.Completed
-                : GroupStatus.NotStarted;
-
-            int InvalidEntities() => isReviewMode
-                ? interview.CountInvalidEntitiesInInterviewForSupervisor()
-                : interview.CountInvalidEntitiesInInterview();
-
-            int ActiveQuestions() => isReviewMode
-                ? interview.CountActiveQuestionsInInterviewForSupervisor()
-                : interview.CountActiveQuestionsInInterview();
-
-            int AnsweredQuestions() => isReviewMode
-                ? interview.CountActiveAnsweredQuestionsInInterviewForSupervisor()
-                : interview.CountActiveAnsweredQuestionsInInterview();
-        }
-
         public Identity GetUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
         {
             var parent = interview.GetParentGroup(identity);
