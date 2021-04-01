@@ -11,13 +11,13 @@ using WB.UI.Shared.Enumerator.Services;
 namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
 {
     [Migration(202103291222)]
-    public class M202103291222_CreateMapsTable : IMigration
+    public class M202103291222_MoveMapsFiles : IMigration
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPrincipal principal;
         private readonly IPermissions permissions;
 
-        public M202103291222_CreateMapsTable(IFileSystemAccessor fileSystemAccessor,
+        public M202103291222_MoveMapsFiles(IFileSystemAccessor fileSystemAccessor,
             IPrincipal principal,
             IPermissions permissions)
         {
