@@ -9,12 +9,12 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
         [SuppressMessage("ReSharper", "StringLiteralTypo")]
         public override void Up()
         {
-            Execute.Sql(@"DROP EXTENSION IF EXISTS ""uuid-ossp"";create extension if not exists ""uuid-ossp"" schema public;");
+            Execute.Sql(@"DROP EXTENSION IF EXISTS ""uuid-ossp"";create extension if not exists ""uuid-ossp"" schema workspaces;");
             
             Execute.Sql($@"INSERT INTO events
                 (id, origin, ""timestamp"", eventsourceid, value, eventsequence, eventtype)
             select
-                public.uuid_generate_v4() as id,
+                workspaces.uuid_generate_v4() as id,
                 'migration_to_web_interview' as origin,
                 CURRENT_TIMESTAMP as ""timestamp"",
                 i.interviewid as eventsourceid,
