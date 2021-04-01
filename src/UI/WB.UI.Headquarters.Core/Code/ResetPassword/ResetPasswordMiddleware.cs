@@ -1,9 +1,7 @@
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.UI.Headquarters.Code.ResetPassword
 {
@@ -23,7 +21,7 @@ namespace WB.UI.Headquarters.Code.ResetPassword
             if (authorizedUser != null && authorizedUser.PasswordChangeRequired)
             {
                 if (!context.Request.Path.StartsWithSegments("/ChangePassword")
-                    && !context.Request.Path.StartsWithSegments("/UpdatePassword")
+                    && !context.Request.Path.StartsWithSegments("/Users/UpdatePassword")
                     && !context.Request.Path.StartsWithSegments("/Account/LogOff")
                     && !context.Request.Path.StartsWithSegments("/.hc")
                     && !context.Request.Path.StartsWithSegments("/api"))

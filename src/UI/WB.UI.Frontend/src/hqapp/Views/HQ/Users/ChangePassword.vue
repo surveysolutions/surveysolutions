@@ -12,7 +12,7 @@
                 class="alerts form-group"
                 style="margin-left:-10px">
                 <div class="alert">
-                    {{ $t('FieldsAndValidations.ForceChangePassword') }}
+                    {{ $t('FieldsAndValidations.PasswordChangeRequired') }}
                 </div>
                 <br/>
             </div>
@@ -145,6 +145,7 @@ export default {
             }).then(
                 response => {
                     self.$refs.profile.successMessage = self.$t('Strings.HQ_AccountController_AccountPasswordChangedSuccessfully')
+                    window.location = '/'
                 },
                 error => {
                     self.processModelState(error.response.data, self)

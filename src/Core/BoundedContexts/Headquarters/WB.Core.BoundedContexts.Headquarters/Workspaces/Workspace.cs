@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         
         public static Workspace Default { get; } = new Workspace(WorkspaceConstants.DefaultWorkspaceName, "Default Space");
         public static Workspace Admin { get; } = new Workspace(WorkspaceConstants.WorkspaceNames.AdminWorkspaceName, "Server Administration"); 
-        public static Workspace UsersWorkspace { get; } = new Workspace(WorkspaceConstants.WorkspaceNames.UsersWorkspaceName, "Users"); 
+        public static Workspace UsersWorkspace { get; } = new Workspace(WorkspaceConstants.WorkspaceNames.UsersWorkspaceName, "User"); 
         
         public virtual ISet<WorkspacesUsers> Users { get; set; } = new HashSet<WorkspacesUsers>();
         public virtual DateTime? DisabledAtUtc { get; protected set; }
