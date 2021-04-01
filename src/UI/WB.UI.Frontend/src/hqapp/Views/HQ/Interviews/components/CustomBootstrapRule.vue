@@ -1,5 +1,4 @@
 <template>
-    <!-- eslint-disable vue/no-v-html -->
     <div class="vqb-rule card">
         <div class="form-inline">
             <label class="mr-5">

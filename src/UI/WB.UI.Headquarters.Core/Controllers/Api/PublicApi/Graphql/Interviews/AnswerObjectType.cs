@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Bool answer value");
 
             descriptor.Field(x => x.ValueDate)
-                .Type<DateType>()
+                .Type<DateTimeType>()
                 .Name("valueDate")
                 .Description("Date answer value");
 

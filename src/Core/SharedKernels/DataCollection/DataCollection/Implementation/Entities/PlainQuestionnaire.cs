@@ -246,7 +246,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public QuestionType GetQuestionType(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionType;
 
-        public VariableType GetVariableType(Guid variableId) => this.GetVariable(variableId).Type;
+        public VariableType GetVariableVariableType(Guid variableId) => this.GetVariable(variableId).Type;
 
         public QuestionScope GetQuestionScope(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionScope;
 

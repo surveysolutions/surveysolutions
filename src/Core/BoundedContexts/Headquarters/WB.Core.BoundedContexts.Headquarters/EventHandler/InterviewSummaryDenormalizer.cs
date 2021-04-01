@@ -587,7 +587,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 foreach (var changedVariable in @event.Payload.ChangedVariables)
                 {
                     var variableId = questionnaire.GetEntityIdMapValue(changedVariable.Identity.Id);
-                    var varType = questionnaire.GetVariableType(changedVariable.Identity.Id);
+                    var varType = questionnaire.GetVariableVariableType(changedVariable.Identity.Id);
                     if (interview.IsEntityIdentifying(variableId))
                     {
                         interview.AnswerFeaturedVariable(variableId, changedVariable.NewValue, varType);

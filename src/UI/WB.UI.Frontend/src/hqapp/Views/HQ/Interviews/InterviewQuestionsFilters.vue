@@ -268,7 +268,7 @@ export default {
                 isEnabled: {eq: true},
             }
 
-            var entity = this.questionnaireItems.find(i =>  i.variable === query.rule)
+            var entity = find(this.questionnaireItems, {variable: query.rule})
             var ruleMap = this.getRuleMap(entity)
             var operator = this.getOperatorMap(query.operator)
 

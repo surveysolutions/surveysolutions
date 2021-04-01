@@ -162,14 +162,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual void AnswerFeaturedQuestion(int entityId, string answer, decimal? optionCode = null)
         {
-            var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
+            var entity = this.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.Id == entityId);
+            if (entity == null)
+                throw new ArgumentException($@"Cannot find entity {entityId} ", nameof(entityId));
+
             entity.Value = answer;
             entity.AnswerCode = optionCode;
         }
 
         public virtual void RemoveAnswerFeaturedQuestion(int entityId)
         {
-            var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
+            var entity = this.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.Id == entityId);
+            if (entity == null)
+                throw new ArgumentException($@"Cannot find entity {entityId} ", nameof(entityId));
+
             entity.Value = String.Empty;
             entity.AnswerCode = null;
             entity.ValueDate = null;
@@ -180,28 +186,36 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual void AnswerDateTimeFeaturedQuestion(int entityId, DateTime answer, string answerString)
         {
-            var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
+            var entity = this.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.Id == entityId);
+            if (entity == null)
+                throw new ArgumentException($@"Cannot find entity {entityId} ", nameof(entityId));
             entity.ValueDate = answer;
             entity.Value = answerString;
         }
 
         public virtual void AnswerIntegerFeaturedQuestion(int entityId, int answer)
         {
-            var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
+            var entity = this.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.Id == entityId);
+            if (entity == null)
+                throw new ArgumentException($@"Cannot find entity {entityId} ", nameof(entityId));
             entity.ValueLong = answer;
             entity.Value = AnswerUtils.AnswerToString(answer);
         }
 
         public virtual void AnswerRealFeaturedQuestion(int entityId, decimal answer)
         {
-            var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
+            var entity = this.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.Id == entityId);
+            if (entity == null)
+                throw new ArgumentException($@"Cannot find entity {entityId} ", nameof(entityId));
             entity.ValueDouble = Convert.ToDouble(answer);
             entity.Value = AnswerUtils.AnswerToString(answer);
         }
 
         public virtual void AnswerFeaturedVariable(int entityId, object value, VariableType variableType)
         {
-            var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
+            var entity = this.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.Id == entityId);
+            if (entity == null)
+                throw new ArgumentException($@"Cannot find entity {entityId} ", nameof(entityId));
             entity.Value = AnswerUtils.AnswerToString(value);
 
             switch (variableType)

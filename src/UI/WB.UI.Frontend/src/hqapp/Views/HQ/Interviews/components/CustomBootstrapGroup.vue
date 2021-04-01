@@ -85,7 +85,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .vue-query-builder .vqb-group .rule-actions {
     margin-bottom: 20px;
   }

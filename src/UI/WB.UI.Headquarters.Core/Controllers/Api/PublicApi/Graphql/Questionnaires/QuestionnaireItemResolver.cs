@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                     QuestionType = entityType == EntityType.Question ? questionnaire.GetQuestionType(q) : (QuestionType?)null,
                     QuestionText = GetTitle(q, entityType, questionnaire),
                     QuestionScope = entityType == EntityType.Question ? questionnaire.GetQuestionScope(q) : (QuestionScope?)null,
-                    VariableType = entityType == EntityType.Variable ? questionnaire.GetVariableType(q): (VariableType?)null,
+                    VariableType = entityType == EntityType.Variable ? questionnaire.GetVariableVariableType(q): (VariableType?)null,
                     UsedInReporting = exposed.Contains(q)
                 };
         }

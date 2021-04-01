@@ -130,12 +130,9 @@
 </template>
 
 <script>
-import { template, map, find, filter, escape } from 'lodash'
-import {DateFormats} from '~/shared/helpers'
-import moment from 'moment'
+import { map } from 'lodash'
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
-
 
 export default {
 
@@ -173,13 +170,6 @@ export default {
                         title: this.$t('Pages.ExposedVariables_VariableName'),
                         sortable: false,
                     },
-                    // {
-                    //     data: 'label',
-                    //     name: 'label',
-                    //     'width': '15%',
-                    //     title: this.$t('Pages.ExposedVariables_VariableLabel'),
-                    //     sortable: false,
-                    // },
                     {
                         data: 'title',
                         name: 'Title',

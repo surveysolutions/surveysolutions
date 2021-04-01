@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.Caching.Memory;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -36,23 +37,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
-        //TODO: add cache
+        private readonly IMemoryCache memoryCache;
         private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
         
 
         public InterviewDynamicReportAnswersDenormalizer(IQuestionnaireStorage questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems,
+            IMemoryCache memoryCache)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireItems = questionnaireItems;
+            this.memoryCache = memoryCache;
         }
-
 
         static readonly ConcurrentDictionary<Type, MethodInfo> MethodsCache = new ConcurrentDictionary<Type, MethodInfo>();
 
         public void Handle(InterviewSummary state, IEnumerable<IPublishableEvent> evts)
         {
-
             var newState = state;
 
             foreach (var evt in evts)
@@ -126,25 +127,33 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return state;
         }
 
-        private HashSet<Guid> GetDynamicReportEntitiesIds(InterviewSummary interview)
+        private HashSet<Guid> GetDynamicReportEntitiesIds(string questionnaireIdentity)
         {
-            return this.questionnaireItems.Query(_ => _
-                .Where(x => x.QuestionnaireIdentity == interview.QuestionnaireIdentity && x.UsedInReporting == true)
-                .Select(x => x.EntityId))
+            var cachedUserDocument = this.memoryCache.GetOrCreate($"idr:{questionnaireIdentity}", entry =>
+            {
+                entry.SlidingExpiration = TimeSpan.FromMinutes(10);
+
+                return this.questionnaireItems.Query(_ => _
+                        .Where(x => x.QuestionnaireIdentity == questionnaireIdentity && x.UsedInReporting == true)
+                        .Select(x => x.EntityId))
                     .ToHashSet();
+            });
+
+            return cachedUserDocument;
         }
+
 
         private HashSet<Guid> GetExposedEntitiesIdentities(InterviewSummary interview, IEnumerable<Identity> allEntitiesIdentities)
         {
             return allEntitiesIdentities
-                .Where(x => GetDynamicReportEntitiesIds(interview).Contains(x.Id))
+                .Where(x => GetDynamicReportEntitiesIds(interview.QuestionnaireIdentity).Contains(x.Id))
                 .Select(x => x.Id)
                 .ToHashSet();
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<TextQuestionAnswered> @event)
         {
-            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
+            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state.QuestionnaireIdentity);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
             var answer = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
@@ -156,7 +165,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
             else
             {
-                var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+                var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
                 var id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId);
 
                 state.IdentifyEntitiesValues.Add(new IdentifyEntityValue
@@ -177,7 +186,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SingleOptionQuestionAnswered> @event)
         {
-            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
+            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state.QuestionnaireIdentity);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
             var answer = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
@@ -189,7 +198,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
             else
             {
-                var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+                var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
                 var id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId);
 
                 state.IdentifyEntitiesValues.Add(new IdentifyEntityValue
@@ -210,7 +219,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericRealQuestionAnswered> @event)
         {
-            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
+            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state.QuestionnaireIdentity);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
             var answer = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
@@ -222,7 +231,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
             else
             {
-                var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+                var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
                 var id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId);
 
                 state.IdentifyEntitiesValues.Add(new IdentifyEntityValue()
@@ -243,7 +252,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericIntegerQuestionAnswered> @event)
         {
-            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
+            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state.QuestionnaireIdentity);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
             var answer = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
@@ -255,7 +264,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
             else
             {
-                var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+                var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
                 var id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId);
 
                 state.IdentifyEntitiesValues.Add(new IdentifyEntityValue()
@@ -276,7 +285,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
-            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
+            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state.QuestionnaireIdentity);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
             var answer = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
@@ -288,7 +297,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
             else
             {
-                var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+                var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
                 var id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId);
 
                 state.IdentifyEntitiesValues.Add(new IdentifyEntityValue()
@@ -309,7 +318,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<VariablesChanged> @event)
         {
-            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
+            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state.QuestionnaireIdentity);
             if (reportQuestionIdentities.Count == 0) return state;
 
             foreach (var variable in @event.Payload.ChangedVariables.Where(x=> reportQuestionIdentities.Contains(x.Identity.Id)))
@@ -324,9 +333,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 }
                 else
                 {
-                    var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+                    var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
                     var id = questionnaire.GetEntityIdMapValue(variable.Identity.Id);
-                    var varType = questionnaire.GetVariableType(variable.Identity.Id);
+                    var varType = questionnaire.GetVariableVariableType(variable.Identity.Id);
 
                     var identifyingValue = new IdentifyEntityValue()
                     {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
@@ -31,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DynamicRe
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader;
         private readonly IScheduledTask<UpdateDynamicReportJob, UpdateDynamicReportRequest> updateDynamicReportTask;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IMemoryCache memoryCache;
 
 
         public ExposedVariablesService(
@@ -40,7 +42,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DynamicRe
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader, 
             IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireCompositeItem,
             IHeadquartersEventStore hqEventStore,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            IMemoryCache  memoryCache)
         {
             this.sessionFactory = sessionFactory ?? throw new ArgumentNullException(nameof(sessionFactory));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -49,6 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DynamicRe
             this.questionnaireCompositeItem = questionnaireCompositeItem ?? throw new ArgumentNullException(nameof(questionnaireCompositeItem));
             this.hqEventStore = hqEventStore ?? throw new ArgumentNullException(nameof(hqEventStore));
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
+            this.memoryCache = memoryCache;
         }
 
         public async Task UpdateExposedVariables(QuestionnaireIdentity questionnaireIdentity, int[] exposedVariables, Guid userId)
@@ -135,14 +139,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DynamicRe
             if(variables.Count == 0)
                 return;
 
-            
             var interviews = this.sessionFactory.Session.Query<InterviewSummary>()
                 .Where(s => s.QuestionnaireId == questionnaireIdentity.QuestionnaireId
                             && s.QuestionnaireVersion == questionnaireIdentity.Version);
 
             var dynamicReportDenormalizer = new InterviewDynamicReportAnswersDenormalizer(
                 this.questionnaireStorage,
-                this.questionnaireCompositeItem);
+                this.questionnaireCompositeItem,
+                this.memoryCache );
 
 
             foreach (var interviewSummary in interviews)

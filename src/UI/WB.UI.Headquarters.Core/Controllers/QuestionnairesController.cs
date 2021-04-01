@@ -21,13 +21,14 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
     [Localizable(false)]
     public class QuestionnairesController : Controller
     {
@@ -136,7 +137,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [AntiForgeryFilter]
-        [Authorize(Roles = "Administrator")]
+        [AuthorizeByRole(UserRoles.Administrator)]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult Clone(Guid id, long version)
         {
@@ -156,7 +157,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [AuthorizeByRole(UserRoles.Administrator)]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult Clone(CloneQuestionnaireModel model)
         {
@@ -189,7 +190,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [AntiForgeryFilter]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult ExposedVariables(string id)
         {
@@ -225,7 +226,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult ExposedVariables(QuestionnaireExposedVariablesModel model)
         {

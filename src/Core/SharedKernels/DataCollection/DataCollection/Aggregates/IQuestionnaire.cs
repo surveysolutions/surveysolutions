@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         QuestionType GetQuestionType(Guid questionId);
 
-        VariableType GetVariableType(Guid questionId);
+        VariableType GetVariableVariableType(Guid questionId);
 
         QuestionScope GetQuestionScope(Guid questionId);
 
