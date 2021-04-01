@@ -126,9 +126,9 @@ export default {
             return this.userInfo.role == 'Interviewer'
         },
         canLockBySupervisor() {
-            return this.isInterviewer
+            return this.userInfo.canBeLockedAsSupervisor
         },
-        canBeLockedAsHeadquarters(){
+        canBeLockedAsHeadquarters() {
             return this.userInfo.canBeLockedAsHeadquarters
         },
         lockMessage() {

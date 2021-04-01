@@ -228,7 +228,8 @@ namespace WB.UI.Headquarters.Controllers
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
-                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
+                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
+                    CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
                     CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser),
                     RecoveryCodes = ""
                 },
@@ -299,7 +300,8 @@ namespace WB.UI.Headquarters.Controllers
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
-                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
+                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
+                    CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
 
                     RecoveryCodes = string.Join(" ", RecoveryCodes)
 
@@ -387,7 +389,8 @@ namespace WB.UI.Headquarters.Controllers
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
-                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
+                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
+                    CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
                 },
                 Api = new
                 {
@@ -636,8 +639,12 @@ namespace WB.UI.Headquarters.Controllers
                 currentUser.Email = editModel.Email;
                 currentUser.FullName = editModel.PersonName;
                 currentUser.PhoneNumber = editModel.PhoneNumber;
-                currentUser.IsLockedByHeadquaters = editModel.IsLockedByHeadquarters;
-                currentUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
+
+                if (authorizedUser.IsAdministrator)
+                {
+                    currentUser.IsLockedByHeadquaters = editModel.IsLockedByHeadquarters;
+                    currentUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
+                }
 
                 var updateResult = await this.userManager.UpdateAsync(currentUser);
 
