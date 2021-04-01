@@ -1,7 +1,8 @@
 <template>
     <div class="progress question-progress"
         v-if="isVisible">
-        <div class="progress-bar progress-bar-striped active"
+        <div class="progress-bar active"
+            :class="{'progress-bar-striped':striped}"
             role="progressbar"
             :style="style">
             <span class="sr-only"> {{ $t("WebInterviewUI.ProgressText", { progress } ) }}</span>
@@ -18,6 +19,7 @@ export default {
         valuemax: { type: Number, default: 100 },
         visible: { type: Boolean, default: false },
         delay: { type: Number, default: 150 },
+        striped: { type: Boolean, default: true },
     },
     watch: {
         visible(to, from) {

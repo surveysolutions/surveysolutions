@@ -12,7 +12,7 @@
                 class="alerts form-group"
                 style="margin-left:-10px">
                 <div class="alert">
-                    {{ $t('FieldsAndValidations.ForceChangePassword') }}
+                    {{ $t('FieldsAndValidations.PasswordChangeRequired') }}
                 </div>
                 <br/>
             </div>

@@ -161,7 +161,7 @@ type Map {
   "Size of map in bytes"
   size: Long!
   "Utc date when map was imported on HQ"
-  importDate: DateTime
+  importDateUtc: DateTime
   "List of users assigned to map"
   users: [UserMap]
   xMaxVal: Float!

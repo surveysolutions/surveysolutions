@@ -130,6 +130,30 @@
     <item name="android:paddingBottom">@dimen/Interview_Sidebar_Header_padding_bottom</item>
   </style>
 
+  <style name="Interview_Sidebar_Interview_Progress">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:layout_marginBottom">5dp</item>
+  </style>
+
+    <style name="Interview_Sidebar_Interview_Progress_Title" parent="Interview_Sidebar_Title">
+        <item name="android:layout_width">match_parent</item>
+    </style>
+    
+  <style name="Interview_Sidebar_Interview_ProgressBar" parent="android:Widget.ProgressBar.Horizontal">
+      <item name="android:indeterminate">false</item>
+      <item name="android:focusable">false</item>
+      <item name="android:layout_height">@dimen/LoadingProgressIndicator_height</item>
+      <item name="android:layout_width">match_parent</item>
+      <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
+      <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+      <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_small_vertical</item>
+      <item name="android:keepScreenOn">false</item>
+      <item name="android:indeterminateDrawable">@drawable/progress_bar_loading_indeterminate</item>
+      <item name="android:progressDrawable">@drawable/progress_bar_loading</item>
+  </style>
+
   <style name="Interview_Sidebar_Sections" parent="VerticalFullWidthWrappingLayout">
     <item name="android:layout_height">match_parent</item>
     <item name="android:orientation">vertical</item>
@@ -187,6 +211,10 @@
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:singleLine">false</item>
+  </style>
+
+  <style name="Interview_Sidebar_Progress" parent="Interview_Sidebar_Title">
+      <item name="android:textSize">@dimen/textsize_16</item>
   </style>
 
   <style name="Divider_ListStyle">

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -991,6 +991,9 @@
   </data>
   <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
     <value>Веб Интервью ({0})</value>
+  </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Заполнение: {0}/{1}</value>
   </data>
   <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
     <value>Интервью в режиме веб интервью. Будут удалены из списка при синхронизации, если веб интервью завершено респондентом</value>

@@ -13,7 +13,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 
             using (XLWorkbook excelPackage = new XLWorkbook())
             {
-                var worksheet = excelPackage.Worksheets.Add(report.Name?.Substring(0, 31) ?? "Data");
+                var sheetName = report.Name == null
+                        ? "Data"
+                        : (report.Name.Length > 31 ? report.Name?.Substring(0, 31) : report.Name );
+
+                var worksheet = excelPackage.Worksheets.Add(sheetName);
                 var rowIndex = 1;
 
                 // setting headers

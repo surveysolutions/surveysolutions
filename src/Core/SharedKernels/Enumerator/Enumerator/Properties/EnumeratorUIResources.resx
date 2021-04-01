@@ -975,4 +975,7 @@ It will appear on interviewer device after next synchronization</value>
   <data name="DashboardItem_QRCode" xml:space="preserve">
     <value>Show QR Code</value>
   </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Progress: {0}/{1}</value>
+  </data>
 </root>

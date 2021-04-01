@@ -31,10 +31,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public NavigationState navigationState { get; }
         private readonly AnswerNotifier answerNotifier;
         private readonly GroupStateViewModel groupState;
-        private readonly InterviewStateViewModel interviewState;
         private readonly CoverStateViewModel coverState;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         public static BaseInterviewViewModel CurrentInterviewScope;
+
+        public InterviewStateViewModel InterviewState { get; private set; }
 
         protected BaseInterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -59,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
             this.answerNotifier = answerNotifier;
             this.groupState = groupState;
-            this.interviewState = interviewState;
+            this.InterviewState = interviewState;
             this.coverState = coverState;
             this.interviewViewModelFactory = interviewViewModelFactory;
 
@@ -139,6 +140,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.IsSuccessfullyLoaded = true;
 
             this.IsAudioRecordingEnabled = interview.GetIsAudioRecordingEnabled();
+
+            this.InterviewState.Init(this.navigationState.InterviewId, null);
         }
 
         public bool? IsAudioRecordingEnabled { get; set; }
@@ -187,6 +190,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 coverState.UpdateFromGroupModel();
                 this.Status = this.coverState.Status;
             }
+
+            InterviewState.UpdateFromGroupModel();
         }
 
         private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
@@ -195,8 +200,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 case ScreenType.Complete:
                     this.vibrationViewModel.Disable();
-                    this.interviewState.Init(this.navigationState.InterviewId, null);
-                    this.Status = this.interviewState.Status;
+                    this.InterviewState.Init(this.navigationState.InterviewId, null);
+                    this.Status = this.InterviewState.Status;
                     break;
                 case ScreenType.Cover:
                     this.vibrationViewModel.Disable();
@@ -317,6 +322,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 if (this.status != value)
                 {
                     this.status = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
+
+        private string progress;
+        public string Progress
+        {
+            get => progress;
+            private set
+            {
+                if (this.progress != value)
+                {
+                    this.progress = value;
                     this.RaisePropertyChanged();
                 }
             }
