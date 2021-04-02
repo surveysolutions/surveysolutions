@@ -81,7 +81,9 @@
                 :questionnaireId="where.questionnaireId"
                 :questionnaireVersion="where.questionnaireVersion"
                 :value="conditions"
-                @change="questionFilterChanged" />
+                :exposedValuesFilter="exposedValuesFilter"
+                @change="questionFilterChanged"
+                @changeFilter="changeExposedValuesFilter" />
         </Filters>
 
         <DataTables
@@ -517,6 +519,8 @@ export default {
             isVisiblePrefilledColumns: true,
 
             conditions: [],
+            exposedValuesFilter: null,
+
         }
     },
 
@@ -848,6 +852,10 @@ export default {
 
             }
 
+            if(this.exposedValuesFilter != null) {
+                and.push(this.exposedValuesFilter)
+            }
+
             if(this.responsibleId) {
                 and.push({
                     or: [
@@ -887,6 +895,10 @@ export default {
     methods: {
         questionFilterChanged(conditions) {
             this.conditions = conditions
+            this.reloadTableAndSaveRoute()
+        },
+        changeExposedValuesFilter(exposedValuesFilter) {
+            this.exposedValuesFilter = exposedValuesFilter
             this.reloadTableAndSaveRoute()
         },
 
@@ -947,11 +959,13 @@ export default {
                 this.questionnaireVersion = null
             }
             this.conditions = []
+            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
         },
 
         questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue
             this.conditions = []
+            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
         },
 
         userSelected(newValue) {

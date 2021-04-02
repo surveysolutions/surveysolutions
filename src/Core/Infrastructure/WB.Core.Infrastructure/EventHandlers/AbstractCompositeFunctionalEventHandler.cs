@@ -9,13 +9,8 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.EventHandlers
 {
-    public interface ICompositeFunctionalPartEventHandler<TEntity, TStorage>
-        where TEntity : class, IReadSideRepositoryEntity
-        where TStorage : class, IReadSideStorage<TEntity>
-    { }
-
-
-    public abstract class AbstractCompositeFunctionalEventHandler<TEntity, TStorage> : AbstractFunctionalEventHandler<TEntity, TStorage>
+    public abstract class AbstractCompositeFunctionalEventHandler<TEntity, TStorage> 
+        : AbstractFunctionalEventHandler<TEntity, TStorage>
         where TEntity : class, IReadSideRepositoryEntity
         where TStorage : class, IReadSideStorage<TEntity>
     {

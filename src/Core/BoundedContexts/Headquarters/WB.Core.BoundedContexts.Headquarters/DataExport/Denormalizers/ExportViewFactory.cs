@@ -115,13 +115,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 {
                     Name = variable.Name,
                     Title = variable.Label,
-                    ExportType = GetGtorageType(variable) 
+                    ExportType = GetStorageType(variable) 
                 }};
 
             return exportedHeaderItem;
         }
 
-        private ExportValueType GetGtorageType(IVariable variable)
+        private ExportValueType GetStorageType(IVariable variable)
         {
             switch (variable.Type)
             {

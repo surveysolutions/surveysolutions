@@ -1,6 +1,5 @@
 #nullable enable
 using HotChocolate.Types;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;

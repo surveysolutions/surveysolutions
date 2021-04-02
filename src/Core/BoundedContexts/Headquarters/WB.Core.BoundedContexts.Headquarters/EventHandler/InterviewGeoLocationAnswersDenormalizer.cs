@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.SqlServerCe;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;

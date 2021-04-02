@@ -235,14 +235,23 @@
   <data name="ChooseQuestionsTitle" xml:space="preserve">
     <value>Choose identifying questions to use in the filter</value>
   </data>
+  <data name="DynamicFilter" xml:space="preserve">
+    <value>Dynamic filter</value>
+  </data>
   <data name="FiltersByQuestions" xml:space="preserve">
     <value>Filters by questions</value>
   </data>
   <data name="QuestionsSelector" xml:space="preserve">
     <value>Questions selector</value>
   </data>
+  <data name="AdvancedFilterSelector" xml:space="preserve">
+    <value>Dynamic filter</value>
+  </data>
   <data name="QuestionsFilterNotAvailable" xml:space="preserve">
     <value>Filters by questions is only available when specific questionnaire version is selected</value>
+  </data>
+  <data name="DynamicFilterNotAvailable" xml:space="preserve">
+    <value>No data available</value>
   </data>
   <data name="ApproveConfirmMessage_plural" xml:space="preserve">
       <value>{{count}} interviews will be approved.</value>
@@ -252,5 +261,23 @@
   </data>
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
       <value>You can approve interviews with the following statuses only: {{status1}},  {{status2}} and {{status3}}.</value>
+  </data>
+  <data name="DynamicFilter_MatchType" xml:space="preserve">
+    <value>Match Type</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_And" xml:space="preserve">
+    <value>AND</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_Or" xml:space="preserve">
+    <value>OR</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddRule" xml:space="preserve">
+    <value>Add Rule</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddGroup" xml:space="preserve">
+    <value>Add Group</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_ValuePlaceholder" xml:space="preserve">
+    <value>value</value>
   </data>
 </root>
