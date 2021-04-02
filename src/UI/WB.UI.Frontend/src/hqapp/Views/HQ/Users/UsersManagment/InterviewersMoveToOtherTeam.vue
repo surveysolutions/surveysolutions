@@ -196,7 +196,6 @@ export default {
                 var progressItem = {}
                 progressItem.userId = interviewer.userId
                 progressItem.userName = interviewer.userName
-                progressItem.supervisorId = interviewer.supervisorId
                 progressItem.inProgress = false
                 progressItem.processed = false
                 progressItem.interviewsProcessed = '-'
@@ -257,11 +256,16 @@ export default {
         interviewersToMove() {
             var self = this
             return filter(this.interviewers, function(interviewer) {
-                return interviewer.supervisorName != self.selectedSupervisor
+                let supervisorName = filter(interviewer.workspaces, {name: self.workspace})[0].supervisor
+                return supervisorName != self.selectedSupervisor
             })
         },
         interviewersToStay() {
-            return filter(this.interviewers, {supervisorName: this.selectedSupervisor})
+            var self = this
+            return filter(this.interviewers, function(interviewer) {
+                let supervisorName = filter(interviewer.workspaces, {name: self.workspace})[0].supervisor
+                return supervisorName == self.selectedSupervisor
+            })
         },
         interviewersToMoveNamesOnly() {
             return this.formatNames(this.interviewersToMove)
@@ -288,7 +292,7 @@ export default {
                     query,
                     variables: {
                         where: where,
-                        workspace: this.$store.getters.workspace,
+                        workspace: self.workspace,
                     },
                     fetchPolicy: 'network-only',
                 })
