@@ -201,7 +201,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public void Dispose()
         {
-            this.GetConnection().Dispose();
+            connection?.Dispose();
         }
 
         protected TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)

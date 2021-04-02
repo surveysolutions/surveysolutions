@@ -80,6 +80,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind(typeof(IPlainStorage<,>), typeof(SqlitePlainStorageWithWorkspace<,>));
             registry.Bind(typeof(IPlainStorage<>), typeof(SqlitePlainStorageWithWorkspace<>));
 
+            // this storages need before identity and workspaceaccessor exists 
             registry.BindAsSingleton<IPlainStorage<InterviewerIdentity>, SqlitePlainStorage<InterviewerIdentity>>();
             registry.BindAsSingleton<IPlainStorage<WorkspaceView>, SqlitePlainStorage<WorkspaceView>>();
             registry.Bind<IPlainStorage<PrefilledQuestionView>, PrefilledQuestionsRepository>();
