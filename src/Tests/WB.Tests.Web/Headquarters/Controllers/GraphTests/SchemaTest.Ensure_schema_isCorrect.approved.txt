@@ -148,7 +148,7 @@ type IdentifyingEntity {
   "Bool answer value"
   valueBool: Boolean
   "Date answer value"
-  valueDate: Date
+  valueDate: DateTime
   "Long answer value"
   valueLong: Long
   "Double answer value"
@@ -246,7 +246,7 @@ type QuestionnaireItem {
   type: QuestionType
   variableType: VariableType
   identifying: Boolean
-  exposed: Boolean
+  includedInReportingAtUtc: DateTime
   options: [CategoricalOption!]!
 }
 
@@ -553,8 +553,8 @@ input QuestionnaireItemsFilter {
   scope: NullableOfQuestionScopeOperationFilterInput
   "Find only identifying entities"
   identifying: BooleanOperationFilterInput
-  "Is this entity exposed"
-  exposed: BooleanOperationFilterInput
+  "When item was included in reporting"
+  includedInReportingAtUtc: ComparableNullableOfDateTimeOperationFilterInput
 }
 
 input StringOperationFilterInput {
@@ -715,9 +715,6 @@ directive @specifiedBy("The specifiedBy URL points to a human-readable specifica
 directive @stream("If this argument label has a value other than null, it will be passed on to the result of this stream directive. This label is intended to give client applications a way to identify to which fragment a streamed result belongs to." label: String "The initial elements that shall be send down to the consumer." initialCount: Int! "Streamed when true." if: Boolean!) on FIELD
 
 scalar Any
-
-"The `Date` scalar represents an ISO-8601 compliant date type."
-scalar Date
 
 "The `DateTime` scalar represents an ISO-8601 compliant date time type."
 scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")
