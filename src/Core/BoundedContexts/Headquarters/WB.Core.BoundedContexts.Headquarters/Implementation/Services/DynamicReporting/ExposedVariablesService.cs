@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DynamicRe
 
             if (questionnaire != null)
             {
-                var variables = this.questionnaireCompositeItem.Query(q =>
+                var questionnaireCompositeItems = this.questionnaireCompositeItem.Query(q =>
                 {
                     q = q.Where(i => i.QuestionnaireIdentity == questionnaireIdentity.ToString());
                     return q.ToList();
@@ -70,12 +70,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DynamicRe
 
                 var top15Variables = exposedVariables.Take(15).ToHashSet();
 
-                foreach (var questionnaireCompositeItem in variables)
+                foreach (var compositeItem in questionnaireCompositeItems)
                 {
-                    questionnaireCompositeItem.UsedInReporting = top15Variables.Contains(questionnaireCompositeItem.Id);
+                    compositeItem.IncludedInReportingAtUtc = 
+                        top15Variables.Contains(compositeItem.Id)
+                        ? DateTime.UtcNow 
+                        : null;
                 }
 
-                this.questionnaireCompositeItem.Store(variables);
+                this.questionnaireCompositeItem.Store(questionnaireCompositeItems);
 
                 await this.updateDynamicReportTask.Schedule(new UpdateDynamicReportRequest()
                 {
@@ -131,7 +134,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DynamicRe
             var variables = this.questionnaireCompositeItem.Query(q =>
             {
                 q = q.Where(i => 
-                    i.UsedInReporting == true &&
+                    i.IncludedInReportingAtUtc != null &&
                     i.QuestionnaireIdentity == questionnaireIdentity.ToString());
                 return q.ToList();
             });
@@ -145,8 +148,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DynamicRe
 
             var dynamicReportDenormalizer = new InterviewDynamicReportAnswersDenormalizer(
                 this.questionnaireStorage,
-                this.questionnaireCompositeItem,
-                this.memoryCache );
+                this.questionnaireCompositeItem);
 
 
             foreach (var interviewSummary in interviews)

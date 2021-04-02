@@ -213,7 +213,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
 
             return this.questionnaireItems.Query(_ => _
-                    .Where(x => x.QuestionnaireIdentity == questionnaireIdentity.ToString() && x.UsedInReporting == true)
+                    .Where(x => x.QuestionnaireIdentity == questionnaireIdentity.ToString() && x.IncludedInReportingAtUtc != null)
                     .OrderUsingSortExpression("Id Asc")
                     .Select(x => new QuestionnaireExposableEntity
                     {
@@ -221,7 +221,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                         Title = x.QuestionText,
                         Variable = x.StataExportCaption,
                         Label = x.VariableLabel ?? "",
-                        IsExposed = x.UsedInReporting ?? false,
+                        IsExposed = x.IncludedInReportingAtUtc != null,
                         EntityType = x.EntityType
                     }))
                 .ToList();
@@ -290,7 +290,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                         Title = x.QuestionText,
                         Id = x.Id,
                         VariableName = x.StataExportCaption,
-                        IsExposed = x.UsedInReporting,
+                        IsExposed = x.IncludedInReportingAtUtc != null,
                         Label = x.VariableLabel,
                         EntityType = x.EntityType
                         

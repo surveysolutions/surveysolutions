@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -19,6 +20,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     internal class InterviewDynamicReportAnswersDenormalizer :
+        FunctionalEventHandlerBase<InterviewSummary>,
         ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
         
         IUpdateHandler<InterviewSummary, QuestionsEnabled>,
@@ -34,54 +36,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, VariablesChanged>,
         IUpdateHandler<InterviewSummary, VariablesEnabled>,
         IUpdateHandler<InterviewSummary, VariablesDisabled>
-
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IMemoryCache memoryCache;
+        private readonly IMemoryCache localCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
-        
 
         public InterviewDynamicReportAnswersDenormalizer(IQuestionnaireStorage questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems,
-            IMemoryCache memoryCache)
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireItems = questionnaireItems;
-            this.memoryCache = memoryCache;
-        }
-
-        static readonly ConcurrentDictionary<Type, MethodInfo> MethodsCache = new ConcurrentDictionary<Type, MethodInfo>();
-
-        public void Handle(InterviewSummary state, IEnumerable<IPublishableEvent> evts)
-        {
-            var newState = state;
-
-            foreach (var evt in evts)
-            {
-                var payloadType = evt.Payload.GetType();
-
-                var updateMethod = MethodsCache.GetOrAdd(payloadType, t =>
-                {
-                    var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
-
-                    return this
-                        .GetType()
-                        .GetMethod("Update", new[] { typeof(InterviewSummary), eventType });
-                });
-
-                if (updateMethod == null)
-                    continue;
-
-                newState = (InterviewSummary)updateMethod
-                    .Invoke(this, new object[] { newState, this.CreatePublishedEvent(evt) });
-
-            }
-        }
-
-        private PublishedEvent CreatePublishedEvent(IUncommittedEvent evt)
-        {
-            var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
-            return (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, evt);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswersRemoved> @event)
@@ -129,17 +93,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private HashSet<Guid> GetDynamicReportEntitiesIds(string questionnaireIdentity)
         {
-            var cachedUserDocument = this.memoryCache.GetOrCreate($"idr:{questionnaireIdentity}", entry =>
+            var cachedDynamicReportEntitiesIds = this.localCache.GetOrCreate($"idr:{questionnaireIdentity}", entry =>
             {
                 entry.SlidingExpiration = TimeSpan.FromMinutes(10);
 
                 return this.questionnaireItems.Query(_ => _
-                        .Where(x => x.QuestionnaireIdentity == questionnaireIdentity && x.UsedInReporting == true)
+                        .Where(x => x.QuestionnaireIdentity == questionnaireIdentity && x.IncludedInReportingAtUtc != null)
                         .Select(x => x.EntityId))
                     .ToHashSet();
             });
 
-            return cachedUserDocument;
+            return cachedDynamicReportEntitiesIds;
         }
 
 

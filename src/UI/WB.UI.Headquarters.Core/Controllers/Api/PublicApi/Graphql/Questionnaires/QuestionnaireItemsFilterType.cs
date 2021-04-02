@@ -23,9 +23,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                 .Name("identifying")
                 .Description("Find only identifying entities");
 
-            descriptor.Field(x => x.UsedInReporting)
-                .Name("exposed")
-                .Description("Is this entity exposed");
+            descriptor.Field(x => x.IncludedInReportingAtUtc)
+                .Name("includedInReportingAtUtc")
+                .Description("When item was included in reporting");
         }
     }
 }

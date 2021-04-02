@@ -31,9 +31,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 
             IQueryable<QuestionnaireCompositeItem> compositeItem = unitOfWork.Session.Query<QuestionnaireCompositeItem>();
 
-            var exposed = compositeItem.Where(x=> x.UsedInReporting == true 
-                                                  && x.QuestionnaireIdentity == questionnaireIdentity.ToString())
-                .Select(x => x.EntityId).ToHashSet();
+            var exposed = compositeItem
+                .Where(x => x.IncludedInReportingAtUtc != null
+                            && x.QuestionnaireIdentity == questionnaireIdentity.ToString())
+
+
+                .Select(x => new {Id = x.EntityId, IncludedInReportingAtUtc = x.IncludedInReportingAtUtc})
+                .ToDictionary(x=>x.Id, x=> x.IncludedInReportingAtUtc);
             
             resolverContext.ScopedContextData = resolverContext.ScopedContextData.SetItem("language", language);
 
@@ -57,7 +61,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                     QuestionText = GetTitle(q, entityType, questionnaire),
                     QuestionScope = entityType == EntityType.Question ? questionnaire.GetQuestionScope(q) : (QuestionScope?)null,
                     VariableType = entityType == EntityType.Variable ? questionnaire.GetVariableVariableType(q): (VariableType?)null,
-                    UsedInReporting = exposed.Contains(q)
+                    IncludedInReportingAtUtc= exposed.ContainsKey(q) ? exposed[q] : null
                 };
         }
 

@@ -75,7 +75,9 @@
                             <!-- <td>{{ variable.label }}</td> -->
                             <td>{{ getVariableLabel(variable) }}</td>
                             <td>
-                                <button class="close"
+                                <button
+                                    style="font-size:19px;"
+                                    class="close"
                                     @click="removeExposedClicked(variable.id)">&times;</button>
                             </td>
                         </tr>

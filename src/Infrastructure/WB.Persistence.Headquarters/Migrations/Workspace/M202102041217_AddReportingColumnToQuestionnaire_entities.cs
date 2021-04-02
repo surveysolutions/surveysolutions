@@ -8,9 +8,9 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
     {
         public override void Up()
         {
-            Create.Column("used_in_reporting")
+            Create.Column("included_in_reporting_at_utc")
                 .OnTable("questionnaire_entities")
-                .AsBoolean()
+                .AsDateTime()
                 .Nullable();
 
             Create.Column("variable_type")

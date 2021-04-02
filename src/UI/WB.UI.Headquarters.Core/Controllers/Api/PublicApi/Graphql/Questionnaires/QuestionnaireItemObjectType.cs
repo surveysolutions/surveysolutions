@@ -53,9 +53,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                 .Name("identifying")
                 .Type<BooleanType>();
 
-            descriptor.Field(x => x.UsedInReporting)
-                .Name("exposed")
-                .Type<BooleanType>();
+            descriptor.Field(x => x.IncludedInReportingAtUtc)
+                .Name("includedInReportingAtUtc")
+                .Type<DateTimeType>();
 
             descriptor.Field("options")
                 .Name("options")

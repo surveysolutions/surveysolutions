@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         public virtual string VariableLabel { get; set; }
 
         public virtual VariableType? VariableType { get; set; }
-        public virtual bool? UsedInReporting { get; set; }
+        public virtual DateTime? IncludedInReportingAtUtc { get; set; }
     }
 
     public class QuestionnaireCompositeItemAnswer
