@@ -165,4 +165,7 @@
   <data name="ShowQuestionnaireDetails" xml:space="preserve">
     <value>Show questionnaire details</value>
   </data>
+  <data name="InterviewMode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
 </root>

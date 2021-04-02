@@ -301,6 +301,17 @@ export default {
         Vue.$api.interview.answer(null, 'completeInterview', { comment })
     },
 
+    requestWebInterview({ state, commit, rootState }, comment) {
+        if (state.interviewCompleted) return
+
+        //commit('COMPLETE_INTERVIEW')
+
+        const interviewId = rootState.route.params.interviewId
+        commit('CURRENT_SECTION', { interviewId: interviewId, section: null })
+
+        Vue.$api.interview.answer(null, 'requestWebInterview', { comment })
+    },
+
     cleanUpEntity: batchedAction(({ commit }, ids) => {
         commit('CLEAR_ENTITIES', { ids })
     }, null, /* limit */ 100),

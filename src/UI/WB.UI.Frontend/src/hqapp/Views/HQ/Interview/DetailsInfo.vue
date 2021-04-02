@@ -9,6 +9,16 @@
                         <li id="detailsInfo_interviewKeyListItem">{{this.$t('Common.InterviewKey')}}: {{$config.model.key}}({{this.$t('Common.Assignment')}} #{{this.$config.model.assignmentId}})</li>
                         <li id="detailsInfo_qusetionnaireTitleListItem"
                             class="questionnaire-title">[ver.{{this.$config.model.questionnaireVersion}}] {{this.$config.model.questionnaireTitle}}</li>
+
+                        <li id="detailsInfo_interviewMode">
+                            <span class="data-label">{{this.$t('Details.InterviewMode')}}: </span>
+                            <span v-if="interviewMode == 2">
+                                <button type="button"
+                                    class="btn btn-link gray-action-unit"
+                                    @click="showModeDetails">CAWI</button>
+                            </span>
+                            <span v-else>CAPI</span>
+                        </li>
                     </ul>
                     <ul class="list-unstyled pull-left table-info">
                         <li id="detailsInfo_interviewDurationListItem"
@@ -32,7 +42,8 @@
                         </li>
                     </ul>
                     <ul class="list-unstyled pull-left table-info">
-                        <li id="detailsInfo_StatusListItem"><span class="data-label">{{this.$t('Details.Status')}}</span>
+                        <li id="detailsInfo_StatusListItem">
+                            <span class="data-label">{{this.$t('Details.Status')}}</span>
                             <span class="data">{{this.$config.model.statusName}}</span>
                             <button type="button"
                                 class="btn btn-link gray-action-unit"
@@ -188,6 +199,21 @@
                 v-model="rejectComment"></textarea>
             <span class="countDown">{{rejectCharsLeft}}</span>
         </Confirm>
+
+        <ModalFrame ref="modeDetails"
+            id="modeDetails">
+            <h3>{{$t("Details.InterviewMode")}}: {{interviewMode == 1? 'CAPI' : 'CAWI'}}</h3>
+            <div>
+                <p>{{webLink}}</p>
+            </div>
+            <div slot="actions">
+                <button type="button"
+                    class="btn btn-link"
+                    @click="hideModeDetails">
+                    {{ $t("Pages.CloseLabel") }}
+                </button>
+            </div>
+        </ModalFrame>
     </div>
 </template>
 
@@ -243,6 +269,12 @@ export default {
         showOverview() {
         //this.$router.push({name: "Overview"})
             this.$refs.overview.show()
+        },
+        showModeDetails(){
+            this.$refs.modeDetails.modal('show')
+        },
+        hideModeDetails() {
+            $(this.$refs.modeDetails).modal('hide')
         },
     },
 
@@ -303,6 +335,12 @@ export default {
             return this.calendarEvent != null
                 ? convertToLocal(this.calendarEvent.startUtc, this.calendarEvent.startTimezone)
                 : ''
+        },
+        interviewMode(){
+            return this.$config.model.interviewMode
+        },
+        webLink(){
+            return this.$config.model.webInterviewUrl ?? ''
         },
     },
 

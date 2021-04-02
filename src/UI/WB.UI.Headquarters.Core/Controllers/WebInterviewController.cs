@@ -72,6 +72,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IOptions<CaptchaConfig> captchaConfig;
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateRootPrototypeService prototypeService;
+        private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
@@ -81,6 +82,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ICalendarEventService calendarEventService;
         
         private readonly IMemoryCache memoryCache;
+        private IWebInterviewLinkProvider webInterviewLinkProvider;
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
         {
@@ -129,7 +131,9 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireStorage questionnaireStorage, 
             IAggregateRootPrototypePromoterService promoterService,
             IMemoryCache memoryCache,
-            ICalendarEventService calendarEventService)
+            ICalendarEventService calendarEventService,
+            IWebInterviewConfigProvider webInterviewConfigProvider,
+            IWebInterviewLinkProvider webInterviewLinkProvider)
         {
             this.commandService = commandService;
             this.configProvider = configProvider;
@@ -151,7 +155,8 @@ namespace WB.UI.Headquarters.Controllers
             this.promoterService = promoterService;
             this.memoryCache = memoryCache;
             this.calendarEventService = calendarEventService;
-
+            this.webInterviewConfigProvider = webInterviewConfigProvider;
+            this.webInterviewLinkProvider = webInterviewLinkProvider;
         }
 
         [Route("Error")]
@@ -218,7 +223,9 @@ namespace WB.UI.Headquarters.Controllers
             var askForEmail = isAskForEmailAvailable ? Request.Cookies[AskForEmail] ?? "false" : "false";
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity) 
                                 ?? throw new ArgumentNullException("Questionnaire not found");
-            
+
+            var config = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity);
+
             foreach (var messageKey in webInterviewConfig.CustomMessages.Keys.ToList())
             {
                 var oldMessage = webInterviewConfig.CustomMessages[messageKey];
@@ -231,8 +238,15 @@ namespace WB.UI.Headquarters.Controllers
                 Id = interviewId,
                 CoverPageId = questionnaire.IsCoverPageSupported ? questionnaire.CoverPageSectionId.FormatGuid() : "",
                 AskForEmail = askForEmail,
-                CustomMessages = webInterviewConfig.CustomMessages
+                CustomMessages = webInterviewConfig.CustomMessages,
+                MayBeSwitchedToWebMode = config.Started,
+                WebInterviewUrl = RenderWebInterviewUri(interview.GetAssignmentId() ?? 0, interview.Id)
             };
+        }
+
+        private string RenderWebInterviewUri(int assignmentId, Guid interviewId)
+        {
+            return webInterviewLinkProvider.WebInterviewRequestLink(assignmentId.ToString(), interviewId.ToString());
         }
 
         public string GenerateUrl(string action, string interviewId, string? sectionId = null)

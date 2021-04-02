@@ -108,9 +108,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Common.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Details.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Details.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Pages.Designer.cs">
       <DesignTime>True</DesignTime>
       <DependentUpon>Pages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\WebInterviewUI.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\Workspaces.ru.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -123,8 +131,14 @@
     <EmbeddedResource Update="Resources\Common.resx">
       <LastGenOutput>Common.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Details.resx">
+      <LastGenOutput>Details.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Pages.resx">
       <LastGenOutput>Pages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\WebInterviewUI.resx">
+      <LastGenOutput>WebInterviewUI.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

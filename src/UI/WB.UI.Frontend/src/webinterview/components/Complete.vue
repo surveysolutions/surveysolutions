@@ -78,6 +78,30 @@
                         'btn-primary' : hasUnansweredQuestions,
                         'btn-danger' : hasInvalidQuestions }"
                     @click="completeInterview">{{ competeButtonTitle }}</a>
+                <input
+                    v-if="mayBeSwitchedToWebMode"
+                    class="wb-checkbox"
+                    type="checkbox"
+                    id="switchToWeb_id"
+                    name="switchToWeb"
+                    v-model="switchToWeb"/>
+                <label for="switchToWeb_id"
+                    class="font-bold"
+                    v-if="mayBeSwitchedToWebMode">
+                    <span class="tick"></span>
+                    {{$t('WebInterviewUI.SwitchToWebMode')}}
+                </label>
+            </div>
+        </div>
+        <div class="wrapper-info"
+            v-if="switchToWeb">
+            <div class="container-info">
+                <p calss="gray-uppercase">
+                    {{$t('WebInterviewUI.SwitchToWebMode_LinkDescription')}}
+                </p>
+                <p class="font-bold">
+                    {{webLink}}
+                </p>
             </div>
         </div>
     </div>
@@ -85,6 +109,7 @@
 
 <script lang="js">
 import modal from '@/shared/modal'
+import Vue from 'vue'
 
 export default {
     name: 'complete-view',
@@ -141,10 +166,17 @@ export default {
         doesShowErrorsCommentWithCount() {
             return this.completeInfo.entitiesWithError.length < this.completeInfo.errorsCount
         },
+        mayBeSwitchedToWebMode(){
+            return this.$config.mayBeSwitchedToWebMode === true
+        },
+        webLink(){
+            return this.$config.webInterviewUrl ?? ''
+        },
     },
     data () {
         return {
             comment: '',
+            switchToWeb: false,
         }
     },
     methods: {
@@ -165,8 +197,10 @@ export default {
 
                 return
             }
-
-            this.$store.dispatch('completeInterview', this.comment)
+            if(this.switchToWeb)
+                this.$store.dispatch('requestWebInterview', this.comment)
+            else
+                this.$store.dispatch('completeInterview', this.comment)
         },
 
         navigateTo(entityWithError) {

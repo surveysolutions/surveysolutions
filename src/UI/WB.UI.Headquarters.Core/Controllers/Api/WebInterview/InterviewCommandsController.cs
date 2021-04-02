@@ -122,7 +122,23 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         [Route("completeInterview")]
         public override IActionResult CompleteInterview(Guid interviewId, [FromBody]CompleteInterviewRequest completeInterviewRequest)
         {
-            var command = new CompleteInterviewCommand(interviewId, GetCommandResponsibleId(interviewId), completeInterviewRequest.Comment);
+            ICommand command = new CompleteInterviewCommand(interviewId, GetCommandResponsibleId(interviewId), completeInterviewRequest.Comment);
+            this.commandService.Execute(command);
+            return Ok();
+        }
+
+        public class RequestWebInterviewRequest : AnswerRequest
+        {
+            public string Comment { get; set; }
+        }
+
+        [HttpPost]
+        [Route("requestWebInterview")]
+        public IActionResult RequestWebInterview(Guid interviewId, [FromBody]RequestWebInterviewRequest completeInterviewRequest)
+        {
+            ICommand command = new RequestWebInterviewCommand(interviewId, GetCommandResponsibleId(interviewId),
+                completeInterviewRequest.Comment);
+                
             this.commandService.Execute(command);
             return Ok();
         }
