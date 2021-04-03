@@ -168,9 +168,6 @@
   <data name="LogoSettings" xml:space="preserve">
     <value>Sigla companiei</value>
   </data>
-  <data name="LogoSettings_Description" xml:space="preserve">
-    <value>Sigla companiei afișează o imagine particularizată pe pagina de conectare a serverului și pe pagina de conectare a aplicației operatorului. Faceți clic pe butonul Alegeți fișierul pentru a încărca o imagine de pe computer pe server.</value>
-  </data>
   <data name="LogoUpdated" xml:space="preserve">
     <value>Sigla companiei a fost actualizată</value>
   </data>

@@ -168,9 +168,6 @@
   <data name="LogoSettings" xml:space="preserve">
     <value>Logo d'entreprise</value>
   </data>
-  <data name="LogoSettings_Description" xml:space="preserve">
-    <value>Le logo de la société affiche une image personnalisée sur la page de connexion du serveur et sur la page de connexion de l'application Interviewer. Cliquez sur le bouton Choisir un fichier pour importer une image de votre ordinateur sur le serveur.</value>
-  </data>
   <data name="LogoUpdated" xml:space="preserve">
     <value>Le logo de l'entreprise</value>
   </data>

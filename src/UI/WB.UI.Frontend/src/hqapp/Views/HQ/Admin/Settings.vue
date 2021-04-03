@@ -209,6 +209,7 @@
             <div class="col-sm-7">
                 <h2>{{$t('Settings.LogoSettings')}}</h2>
                 <p>{{$t('Settings.LogoSettings_Description')}}</p>
+                <p>{{$t('Settings.LogoSettings_Description1')}}</p>
             </div>
             <form :action="$config.model.updateLogoUrl"
                 method="post"
@@ -254,7 +255,7 @@
                             @error="logoError" />
                     </figure>
                 </div>
-                <div class="block-filter">
+                <div class="block-filter action-block">
                     <form :action="$config.model.removeLogoUrl"
                         method="post">
                         <input
