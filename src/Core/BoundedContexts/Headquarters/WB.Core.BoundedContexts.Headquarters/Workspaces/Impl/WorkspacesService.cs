@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
 
                     if(moveResult.Errors.Count > 0)
                     {
-                        throw new ApplicationException("Failed to reassign interviewer tasks to other responsible");
+                        throw new Exception("Failed to reassign interviewer tasks to other responsible");
                     }
 
                 }, userWorkspace.Workspace.Name);

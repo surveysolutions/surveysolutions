@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.HealthChecks
                 }
                 catch (Exception e)
                 {
-                    throw new ApplicationException("Cannot start application with current Amazon S3 configuration: ",
+                    throw new Exception("Cannot start application with current Amazon S3 configuration: ",
                         e);
                 }
 

@@ -2,7 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 {
-    public class WorkspaceRemovalNotAllowedException : ApplicationException
+    public class WorkspaceRemovalNotAllowedException : Exception
     {
         public WorkspaceRemovalNotAllowedException()
         {
