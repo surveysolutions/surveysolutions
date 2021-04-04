@@ -2,6 +2,7 @@
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -88,8 +89,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 statefullInterviewSearcher: statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>(),
                 diagnosticsFactory: Mock.Of<IInterviewDiagnosticsFactory>(),
                 pdfInterviewGenerator: pdfInterviewGenerator ?? Mock.Of<IPdfInterviewGenerator>(),
-                calendarEventService: calendarEventService ?? Mock.Of<ICalendarEventService>()
-                );
+                calendarEventService: calendarEventService ?? Mock.Of<ICalendarEventService>(),
+                webInterviewLinkProvider : Mock.Of<IWebInterviewLinkProvider>());
 
             return controller;
         }
