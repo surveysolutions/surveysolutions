@@ -302,8 +302,7 @@ export default {
     },
 
     requestWebInterview({ state, commit, rootState }, comment) {
-        if (state.interviewCompleted) return
-
+        //if (state.interviewCompleted) return
         //commit('COMPLETE_INTERVIEW')
 
         const interviewId = rootState.route.params.interviewId

@@ -121,7 +121,9 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IAggregateRootPrototypePromoterService>(),
                 memoryCache.Object,
-                calendarEventService: Mock.Of<ICalendarEventService>());
+                calendarEventService: Mock.Of<ICalendarEventService>(),
+                webInterviewConfigProvider: Mock.Of<IWebInterviewConfigProvider>() ,
+                webInterviewLinkProvider: Mock.Of<IWebInterviewLinkProvider>());
             controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c => 
                 c.Session == new MockHttpSession()
                 && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
