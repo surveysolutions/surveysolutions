@@ -49,6 +49,36 @@ type Entity {
   scope: QuestionScope
   type: QuestionType!
   variable: String
+  variableType: VariableType!
+}
+
+type Feature {
+  "Type of the feature"
+  type: GeoJSONObjectType!
+  "Id of the feature"
+  id: String
+  "Geometry of the feature"
+  geometry: Any
+  "Properties of the feature"
+  properties: Any
+}
+
+type FeatureCollection {
+  "List of the features"
+  features: [Feature]
+  "Feature collection type"
+  type: GeoJSONObjectType!
+}
+
+type GeoBounds {
+  "North bound"
+  north: Float!
+  "South bound"
+  south: Float!
+  "East bound"
+  east: Float!
+  "West bound"
+  west: Float!
 }
 
 type HeadquartersMutation {
@@ -70,6 +100,7 @@ type HeadquartersQuery {
   questions("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionFilter): [Entity] @authorize(apply: BEFORE_RESOLVER)
   questionnaireItems("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionnaireItemsFilter): [QuestionnaireItem] @authorize(apply: BEFORE_RESOLVER)
   viewer: User @authorize(apply: BEFORE_RESOLVER)
+  mapReport("Workspace name" workspace: String! = "primary" "Questionnaire id" questionnaireId: Uuid! "Questionnaire version" questionnaireVersion: Long "Variable name for question" variable: String "Zoom level" zoom: Int! "Visible area width" clientMapWidth: Int! "East coordinate" east: Float! "West coordinate" west: Float! "North coordinate" north: Float! "South coordinate" south: Float! where: MapReportFilter): MapReportHolder @authorize(apply: BEFORE_RESOLVER)
 }
 
 type IPagedConnectionOfAssignment {
@@ -114,6 +145,15 @@ type IdentifyingEntity {
   answerValue: Int
   entity: Entity!
   value: String
+  "Bool answer value"
+  valueBool: Boolean
+  "Date answer value"
+  valueDate: DateTime
+  "Long answer value"
+  valueLong: Long
+  "Double answer value"
+  valueDouble: Float
+  isEnabled: Boolean
 }
 
 type Interview {
@@ -173,6 +213,20 @@ type Map {
   minScale: Float!
 }
 
+type MapReport {
+  "Total number of points"
+  totalPoint: Int!
+  "Bounds of the area"
+  initialBounds: GeoBounds
+  "Collection of features"
+  featureCollection: FeatureCollection
+}
+
+type MapReportHolder {
+  "Map report"
+  report: MapReport!
+}
+
 type Questionnaire {
   variable: String!
   questionnaireId: Uuid!
@@ -191,7 +245,9 @@ type QuestionnaireItem {
   scope: QuestionScope
   label: String
   type: QuestionType
+  variableType: VariableType
   identifying: Boolean
+  includedInReportingAtUtc: DateTime
   options: [CategoricalOption!]!
 }
 
@@ -318,6 +374,21 @@ input ComparableNullableOfDecimalOperationFilterInput {
   nlte: Decimal
 }
 
+input ComparableNullableOfDoubleOperationFilterInput {
+  eq: Float
+  neq: Float
+  in: [Float]
+  nin: [Float]
+  gt: Float
+  ngt: Float
+  gte: Float
+  ngte: Float
+  lt: Float
+  nlt: Float
+  lte: Float
+  nlte: Float
+}
+
 input ComparableNullableOfInt32OperationFilterInput {
   eq: Int
   neq: Int
@@ -333,6 +404,21 @@ input ComparableNullableOfInt32OperationFilterInput {
   nlte: Int
 }
 
+input ComparableNullableOfInt64OperationFilterInput {
+  eq: Long
+  neq: Long
+  in: [Long]
+  nin: [Long]
+  gt: Long
+  ngt: Long
+  gte: Long
+  ngte: Long
+  lt: Long
+  nlt: Long
+  lte: Long
+  nlte: Long
+}
+
 input IdentifyEntityValueFilter {
   and: [IdentifyEntityValueFilter!]
   or: [IdentifyEntityValueFilter!]
@@ -344,6 +430,16 @@ input IdentifyEntityValueFilter {
   valueLowerCase: StringOperationFilterInput
   "Question or variable entity"
   entity: QuestionnaireItemsFilter
+  "Boolean answer value"
+  valueBool: BooleanOperationFilterInput
+  "Date answer value"
+  valueDate: ComparableNullableOfDateTimeOperationFilterInput
+  "Double answer value"
+  valueDouble: ComparableNullableOfDoubleOperationFilterInput
+  "Long answer value"
+  valueLong: ComparableNullableOfInt64OperationFilterInput
+  "Shows if this value enabled"
+  isEnabled: BooleanOperationFilterInput
 }
 
 input InterviewModeOperationFilterInput {
@@ -414,6 +510,12 @@ input ListFilterInputTypeOfUserMapFilterInput {
   any: Boolean
 }
 
+input MapReportFilter {
+  and: [MapReportFilter!]
+  or: [MapReportFilter!]
+  interviewFilter: InterviewsFilter
+}
+
 input MapsFilter {
   and: [MapsFilter!]
   or: [MapsFilter!]
@@ -460,6 +562,8 @@ input QuestionnaireItemsFilter {
   scope: NullableOfQuestionScopeOperationFilterInput
   "Find only identifying entities"
   identifying: BooleanOperationFilterInput
+  "When item was included in reporting"
+  includedInReportingAtUtc: ComparableNullableOfDateTimeOperationFilterInput
 }
 
 input StringOperationFilterInput {
@@ -516,6 +620,18 @@ enum EntityType {
   STATICTEXT
   VARIABLE
   ROSTER
+}
+
+enum GeoJSONObjectType {
+  Point
+  MultiPoint
+  LineString
+  MultiLineString
+  Polygon
+  MultiPolygon
+  GeometryCollection
+  Feature
+  FeatureCollection
 }
 
 enum InterviewActionFlags {
@@ -586,6 +702,14 @@ enum UserRoles {
   APIUSER
 }
 
+enum VariableType {
+  LONGINTEGER
+  DOUBLE
+  BOOLEAN
+  DATETIME
+  STRING
+}
+
 directive @authorize("The name of the authorization policy that determines access to the annotated resource." policy: String "Roles that are allowed to access the annotated resource." roles: [String!] "Defines when when the resolver shall be executed.By default the resolver is executed after the policy has determined that the current user is allowed to access the field." apply: ApplyPolicy! = BEFORE_RESOLVER) repeatable on SCHEMA | OBJECT | FIELD_DEFINITION
 
 "The `@defer` directive may be provided for fragment spreads and inline fragments to inform the executor to delay the execution of the current fragment to indicate deprioritization of the current fragment. A query with `@defer` directive will cause the request to potentially return multiple responses, where non-deferred data is delivered in the initial response and data deferred is delivered in a subsequent response. `@include` and `@skip` take precedence over `@defer`."
@@ -605,6 +729,8 @@ directive @specifiedBy("The specifiedBy URL points to a human-readable specifica
 
 "The `@stream` directive may be provided for a field of `List` type so that the backend can leverage technology such as asynchronous iterators to provide a partial list in the initial response, and additional list items in subsequent responses. `@include` and `@skip` take precedence over `@stream`."
 directive @stream("If this argument label has a value other than null, it will be passed on to the result of this stream directive. This label is intended to give client applications a way to identify to which fragment a streamed result belongs to." label: String "The initial elements that shall be send down to the consumer." initialCount: Int! "Streamed when true." if: Boolean!) on FIELD
+
+scalar Any
 
 "The `DateTime` scalar represents an ISO-8601 compliant date time type."
 scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")

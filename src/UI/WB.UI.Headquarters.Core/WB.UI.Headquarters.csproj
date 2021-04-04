@@ -104,13 +104,13 @@
 
     <EmbeddedResource Include="wwwroot\**\*.*" />
     <EmbeddedResource Include="Content\**\*.*" />
-    <Compile Update="Resources\Common.designer.cs">
+    <Compile Update="Resources\Dashboard.designer.cs">
       <DesignTime>True</DesignTime>
-      <DependentUpon>Common.resx</DependentUpon>
+      <DependentUpon>Dashboard.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Details.Designer.cs">
+    <Compile Update="Resources\Interviews.Designer.cs">
       <DesignTime>True</DesignTime>
-      <DependentUpon>Details.resx</DependentUpon>
+      <DependentUpon>Interviews.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\Pages.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -128,11 +128,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Common.resx">
-      <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="Resources\Dashboard.resx">
+      <LastGenOutput>Dashboard.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Details.resx">
-      <LastGenOutput>Details.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="Resources\Interviews.resx">
+      <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Pages.resx">
       <LastGenOutput>Pages.Designer.cs</LastGenOutput>

@@ -21,6 +21,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DynamicReporting;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
@@ -30,6 +31,7 @@ using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.Services.DynamicReporting;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
@@ -188,7 +190,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<AssignmentDenormalizer>();
             registry.Bind<CompletedEmailDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
-            
+            registry.Bind<InterviewDynamicReportAnswersDenormalizer>();
+
             registry.Bind<CalendarEventDenormalizer>();
           
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
@@ -257,7 +260,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
             registry.Bind<ICalendarEventPackageService, CalendarEventPackageService>();
             
-            registry.Bind<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
+            registry.Bind<IExposedVariablesService, ExposedVariablesService>();
             registry.Bind<ISubstitutionService, SubstitutionService>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
 
@@ -373,6 +376,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindScheduledJob<DeleteQuestionnaireJob, DeleteQuestionnaireRequest>();
             registry.BindScheduledJob<UpgradeAssignmentJob, AssignmentsUpgradeProcess>();
             registry.BindScheduledJob<UsersImportJob, Unit>();
+            registry.BindScheduledJob<UpdateDynamicReportJob, UpdateDynamicReportRequest>();
 
             registry.Bind<CalendarEvent>();
 

@@ -1,9 +1,5 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using HotChocolate.Resolvers;
-using HotChocolate.Types;
+﻿using HotChocolate.Types;
 using Main.Core.Entities.SubEntities;
-using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
 {

@@ -1652,4 +1652,28 @@
   <data name="Filters_InterviewModePlaceHolder" xml:space="preserve">
     <value>Все режимы</value>
   </data>
+  <data name="ExposedVariables_VariableDisplayTitle" xml:space="preserve">
+    <value>Отображаемый заголовок</value>
+  </data>
+  <data name="ExposedVariables_VariableLabel" xml:space="preserve">
+    <value>Метка</value>
+  </data>
+  <data name="ExposedVariables_ChangeMessage" xml:space="preserve">
+    <value>Вы меняете список переменных. Перестройка отчетов займет некоторое время.</value>
+  </data>
+  <data name="Exposed_Variables_AvailableVariablesTitle" xml:space="preserve">
+    <value>Доступные переменные</value>
+  </data>
+  <data name="Exposed_Variables_Description" xml:space="preserve">
+    <value>Выбирор этих переменных позволит использовать их в некоторых отчетах. Изменение списка переменных потребует времени, чтобы данные стали доступны. Можно выбрать до 15 переменных.</value>
+  </data>
+  <data name="Exposed_Variables_SelectedVariablesTitle" xml:space="preserve">
+    <value>Открытые переменные</value>
+  </data>
+  <data name="ExposedVariables_RemoveMessage" xml:space="preserve">
+    <value>Вы хотите убрать переменную из списка?</value>
+  </data>
+  <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
+    <value>Открытые переменные по опроснику</value>
+  </data>
 </root>
