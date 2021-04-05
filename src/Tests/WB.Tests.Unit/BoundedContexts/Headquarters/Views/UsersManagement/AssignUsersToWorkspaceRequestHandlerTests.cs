@@ -7,10 +7,12 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
@@ -50,10 +52,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             {
                 assignedWorkspaces = workspaces.Select(s => s.Workspace).ToList();
             });
+            workspacesService.Setup(w => w.GetEnabledWorkspaces())
+                .Returns(() =>
+                {
+                    var query = workspaces.Query(q =>
+                            q.Select(w => new WorkspaceContext(w.Name, w.DisplayName, w.DisabledAtUtc)));
+                    return query.ToList();
+                });
 
             Subject = new AssignWorkspacesToUserModelHandler(
                 workspaces,
-                userRepo.Object, workspacesService.Object);
+                userRepo.Object, 
+                workspacesService.Object,
+                Mock.Of<IWorkspacesUsersCache>(),
+                Mock.Of<IAuthorizedUser>(u => u.IsAdministrator == true));
 
             modelState = new ModelStateDictionary();
         }
