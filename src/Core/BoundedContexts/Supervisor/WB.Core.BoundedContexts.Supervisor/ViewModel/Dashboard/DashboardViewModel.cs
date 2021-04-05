@@ -35,6 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         private readonly IWorkspaceService workspaceService;
         private readonly ISupervisorSynchronizationService supervisorSynchronizationService;
         private readonly IPlainStorage<SupervisorIdentity> supervisorPlainStorage;
+        private readonly IWorkspaceMemoryCacheSource memoryCacheSource;
         public Guid? LastVisitedInterviewId { get; set; }
 
         public IDashboardItemsAccessor DashboardItemsAccessor { get; }
@@ -61,13 +62,15 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             DashboardNotificationsViewModel dashboardNotifications,
             IWorkspaceService workspaceService,
             ISupervisorSynchronizationService supervisorSynchronizationService,
-            IPlainStorage<SupervisorIdentity> supervisorPlainStorage)
+            IPlainStorage<SupervisorIdentity> supervisorPlainStorage,
+            IWorkspaceMemoryCacheSource memoryCacheSource)
             : base(principal, viewModelNavigationService)
         {
             this.mvxNavigationService = mvxNavigationService;
             this.workspaceService = workspaceService;
             this.supervisorSynchronizationService = supervisorSynchronizationService;
             this.supervisorPlainStorage = supervisorPlainStorage;
+            this.memoryCacheSource = memoryCacheSource;
             DashboardItemsAccessor = dashboardItemsAccessor;
             this.Synchronization = synchronization;
             this.Synchronization.Init();
@@ -242,6 +245,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             var supervisorIdentity = (SupervisorIdentity)Principal.CurrentUserIdentity;
             supervisorIdentity.Workspace = workspaceView.Name;
             supervisorPlainStorage.Store(supervisorIdentity);
+            
+            memoryCacheSource.ClearAll();
 
             ViewModelNavigationService.NavigateToDashboardAsync();
         }

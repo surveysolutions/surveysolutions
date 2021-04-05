@@ -69,7 +69,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IMapInteractionService mapInteractionService,
             DashboardNotificationsViewModel dashboardNotifications,
             IWorkspaceService workspaceService,
-            IOnlineSynchronizationService onlineSynchronizationService) : base(principal, viewModelNavigationService, permissionsService,
+            IOnlineSynchronizationService onlineSynchronizationService,
+            IWorkspaceMemoryCacheSource memoryCacheSource) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection)
         {
             this.messenger = messenger;
@@ -95,6 +96,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.mapInteractionService = mapInteractionService;
             this.workspaceService = workspaceService;
             this.onlineSynchronizationService = onlineSynchronizationService;
+            this.memoryCacheSource = memoryCacheSource;
 
             SubscribeOnMessages();
 
@@ -376,6 +378,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IMapInteractionService mapInteractionService;
         private readonly IWorkspaceService workspaceService;
         private readonly IOnlineSynchronizationService onlineSynchronizationService;
+        private readonly IWorkspaceMemoryCacheSource memoryCacheSource;
 
         private void StartOfflineSynchronization()
         {
@@ -514,6 +517,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             interviewerIdentity.Workspace = workspaceView.Name;
             interviewerIdentity.SupervisorId = workspaceView.SupervisorId.Value;
             principal.SaveInterviewer(interviewerIdentity);
+            
+            memoryCacheSource.ClearAll();
 
             ViewModelNavigationService.NavigateToDashboardAsync();
         }

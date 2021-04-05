@@ -5,5 +5,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Workspace
     public interface IWorkspaceMemoryCacheSource
     {
         IMemoryCache GetCache(string workspace);
+
+        void ClearAll();
     }
 }
