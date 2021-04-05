@@ -287,7 +287,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPost]
         [Route("assign")]
         [ObservingNotAllowed]
-        [AuthorizeByRole(UserRoles.Administrator)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
         public async Task<ActionResult> AssignWorkspaces([FromBody] AssignWorkspacesToUserModel model, CancellationToken cancellationToken)
         {
             await this.mediator.Send(new AssignWorkspacesToUserModelRequest(ModelState, model), cancellationToken);

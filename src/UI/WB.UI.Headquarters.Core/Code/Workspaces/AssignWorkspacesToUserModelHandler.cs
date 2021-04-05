@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MediatR;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
@@ -17,14 +18,20 @@ namespace WB.UI.Headquarters.Code.Workspaces
         private readonly IPlainStorageAccessor<Workspace> workspaces;
         private readonly IUserRepository users;
         private readonly IWorkspacesService workspacesService;
+        private readonly IWorkspacesUsersCache workspacesUsers;
+        private readonly IAuthorizedUser authorizedUser;
 
         public AssignWorkspacesToUserModelHandler(IPlainStorageAccessor<Workspace> workspaces,
             IUserRepository users,
-            IWorkspacesService workspacesService)
+            IWorkspacesService workspacesService,
+            IWorkspacesUsersCache workspacesUsers,
+            IAuthorizedUser authorizedUser)
         {
             this.workspaces = workspaces;
             this.users = users;
             this.workspacesService = workspacesService;
+            this.workspacesUsers = workspacesUsers;
+            this.authorizedUser = authorizedUser;
         }
 
         public async Task<Unit> Handle(AssignWorkspacesToUserModelRequest request,
@@ -33,12 +40,22 @@ namespace WB.UI.Headquarters.Code.Workspaces
             var model = request.AssignModel;
             var ModelState = request.ModelState;
 
+            var accessibleWorkspaces = new List<string>();
+            if (authorizedUser.IsAdministrator)
+                accessibleWorkspaces.AddRange(workspacesService.GetEnabledWorkspaces().Select(w => w.Name));
+            else if (authorizedUser.IsHeadquarter)
+            {
+                var userWorkspaces = await workspacesUsers.GetUserWorkspaces(authorizedUser.Id, cancellationToken);
+                accessibleWorkspaces.AddRange(userWorkspaces);
+            }
+
             List<AssignUserWorkspace> dbWorkspaces = new();
 
             foreach (var modelWorkspace in model.Workspaces)
             {
                 var workspace = this.workspaces.GetById(modelWorkspace.Workspace);
-                if (workspace == null)
+                var hasAccess = accessibleWorkspaces.Contains(modelWorkspace.Workspace);
+                if (workspace == null || !hasAccess)
                 {
                     ModelState.AddModelError(nameof(model.Workspaces), $"Workspace '{modelWorkspace.Workspace}' not found");
                 }
