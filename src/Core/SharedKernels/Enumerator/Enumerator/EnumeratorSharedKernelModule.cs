@@ -84,6 +84,14 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<ILiteEventBus, LiteEventBus>();
             registry.Bind<IAsyncEventDispatcher, AsyncEventDispatcher>();
             registry.BindAsSingleton<IAsyncEventQueue, AsyncEventQueue>();
+            
+            registry.BindAsSingleton<IWorkspaceMemoryCacheSource, WorkspaceMemoryCacheSource>();
+            registry.BindToMethod(ctx =>
+            {
+                var cacheSource = ctx.Resolve<IWorkspaceMemoryCacheSource>();
+                var contextAccessor = ctx.Resolve<IWorkspaceAccessor>();
+                return cacheSource.GetCache(contextAccessor.GetCurrentWorkspaceName() ?? "common");
+            }, externallyOwned: true);
 
             RegisterViewModels(registry);
         }
