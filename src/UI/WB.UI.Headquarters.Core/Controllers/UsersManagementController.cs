@@ -74,6 +74,9 @@ namespace WB.UI.Headquarters.Controllers
 
         private ComboboxViewItem[] GetRolesForFiltering()
         {
+            if (authorizedUser.IsSupervisor)
+                return new ComboboxViewItem[0];
+            
             var items = new List<ComboboxViewItem>();
             
             void addUserRole(UserRoles useRole)

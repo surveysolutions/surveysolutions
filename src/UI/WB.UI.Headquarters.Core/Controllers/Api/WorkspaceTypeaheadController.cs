@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public TypeaheadApiView<string> Workspaces(string query, int limit = 10)
         {
             var result =
