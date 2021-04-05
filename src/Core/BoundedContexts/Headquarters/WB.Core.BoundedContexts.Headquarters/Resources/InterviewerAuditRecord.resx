@@ -218,4 +218,7 @@
   <data name="SynchronizationStarted" xml:space="preserve">
     <value>Sync started ({0})</value>
   </data>
+  <data name="SwitchInterviewToCawiMode" xml:space="preserve">
+    <value>Interview {0} switched to CAWI mode</value>
+  </data>
 </root>

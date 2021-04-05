@@ -141,6 +141,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAudi
                     return InterviewerAuditRecord.AssignResponsibleToAssignment.FormatString(assignResponsibleToAssignmentAuditLogEntity.ResponsibleName, assignResponsibleToAssignmentAuditLogEntity.AssignmentId);
                 case AuditLogEntityType.FinishInstallation:
                     return InterviewerAuditRecord.FinishInstallation.FormatString();
+                case AuditLogEntityType.SwitchInterviewToCawiMode:
+                    var switchInterviewToCawiModeAuditLogEntity = record.GetEntity<SwitchInterviewToCawiModeAuditLogEntity>();
+                    return InterviewerAuditRecord.SwitchInterviewToCawiMode.FormatString(switchInterviewToCawiModeAuditLogEntity.InterviewKey);
                 default:
                     throw new ArgumentException("Unknown audit record type: " + record.Type);
             }

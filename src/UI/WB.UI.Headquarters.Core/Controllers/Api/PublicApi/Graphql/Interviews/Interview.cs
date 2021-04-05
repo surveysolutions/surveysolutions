@@ -127,6 +127,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                                              && x.DeletedAtUtc == null);
                        return calendarEvent;
                 });
+
+            descriptor.Field(x => x.InterviewMode)
+                .Description("Current mode of interview")
+                .Type<NonNullType<EnumType<InterviewMode>>>();
         }
     }
 }

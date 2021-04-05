@@ -226,9 +226,11 @@
   </data>
   <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
     <value>{0} интервью были переоткрыты после получения комментариев по ним</value>
-
   </data>
   <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
     <value>{0} интервью частично отправлены</value>
+  </data>
+  <data name="SwitchInterviewToCawiMode" xml:space="preserve">
+    <value>Интервью {0} переключено в режим CAWI</value>
   </data>
 </root>

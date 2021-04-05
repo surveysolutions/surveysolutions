@@ -160,6 +160,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                     return ExportHelper.GetUserRoleDisplayValue(statusChangeOriginatorRole);
                 case InterviewExportedAction.SupervisorAssigned:
                 case InterviewExportedAction.Completed:
+                case InterviewExportedAction.InterviewSwitchedToCapiMode:
+                case InterviewExportedAction.InterviewSwitchedToCawiMode:
                 case InterviewExportedAction.RejectedByHeadquarter:
                 case InterviewExportedAction.UnapprovedByHeadquarter:
                 case InterviewExportedAction.OpenedBySupervisor:

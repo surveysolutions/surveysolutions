@@ -265,7 +265,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var invitation = GetInvitation(invitationId);
 
-            bool IsInterviewExists(string? interviewId)
+            bool DoesInterviewExist(string? interviewId)
             {
                 if (interviewId == null) return false;
                 return this.statefulInterviewRepository.Get(interviewId) != null;
@@ -277,7 +277,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!invitation.IsWithAssignmentResolvedByPassword() && invitation.InterviewId != null)
             {
-                if (IsInterviewExists(invitation.InterviewId))
+                if (DoesInterviewExist(invitation.InterviewId))
                     return this.RedirectToAction("Resume", routeValues: new { id = invitation.InterviewId });
             }
 
@@ -308,7 +308,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     if (invitation.InterviewId != null)
                     {
-                        if (IsInterviewExists(invitation.InterviewId))
+                        if (DoesInterviewExist(invitation.InterviewId))
                         {
                             var interviewProperties = invitation.Interview.GetInterviewProperties();
                             if (!interviewProperties.AcceptsCAWIAnswers)
@@ -338,7 +338,7 @@ namespace WB.UI.Headquarters.Controllers
                 if (interviewIdCookie != null && Guid.TryParse(interviewIdCookie, out var pendingInterviewId) &&
                     webInterviewConfig.SingleResponse)
                 {
-                    if (IsInterviewExists(invitation.InterviewId))
+                    if (DoesInterviewExist(invitation.InterviewId))
                     {
                         HttpContext.Session.SaveWebInterviewAccessForCurrentUser(invitation.InterviewId);
                         return this.Redirect(GenerateUrl("Cover", pendingInterviewId.FormatGuid()));
@@ -362,7 +362,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     var interviewId = this.CreateInterview(assignment);
 
-                    if (IsInterviewExists(invitation.InterviewId))
+                    if (DoesInterviewExist(invitation.InterviewId))
                     {
                         Response.Cookies.Append($"InterviewId-{assignment.Id}", interviewId, new CookieOptions
                         {
@@ -588,13 +588,16 @@ namespace WB.UI.Headquarters.Controllers
         [Route("Finish/{id:Guid}")]
         public ActionResult Finish(string id)
         {
-            var interview = this.statefulInterviewRepository.Get(id);
-            if (interview == null || !interview.IsCompleted) return NotFound();
+            var interview = this.statefulInterviewRepository.Get(id);            
+            if (interview == null ) return NotFound();
 
-            if (this.IsAuthorizedUser(interview.CurrentResponsibleId))
+            if ((interview.IsCompleted || interview.Mode == InterviewMode.CAWI) 
+                && this.IsAuthorizedUser(interview.CurrentResponsibleId))
             {
                 return RedirectToAction("Completed", "InterviewerHq");
             }
+
+            if(!interview.IsCompleted) return NotFound();
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 

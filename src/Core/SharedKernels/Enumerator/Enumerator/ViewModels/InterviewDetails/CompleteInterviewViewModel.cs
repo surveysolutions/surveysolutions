@@ -170,13 +170,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
 
             this.lastCompletionComments.Remove(interviewId);
-            await this.CloseInterviewAfterComplete();
+            await this.CloseInterviewAfterComplete(this.RequestWebInterview);
         }
 
-        protected virtual async Task CloseInterviewAfterComplete()
+        protected virtual async Task CloseInterviewAfterComplete(bool switchInterviewToCawiMode)
         {
             await this.viewModelNavigationService.NavigateToDashboardAsync(this.interviewId.ToString());
-
             this.messenger.Publish(new InterviewCompletedMessage(this));
         }
 

@@ -19,6 +19,7 @@
         RejectInterview,
         AssignResponsibleToInterview,
         AssignResponsibleToAssignment,
-        FinishInstallation
+        FinishInstallation,
+        SwitchInterviewToCawiMode
     }
 }

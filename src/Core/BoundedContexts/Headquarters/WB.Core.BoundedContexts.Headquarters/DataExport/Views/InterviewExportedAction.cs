@@ -20,6 +20,8 @@
         Paused = 15,
         TranslationSwitched = 16,
         OpenedBySupervisor = 17,
-        ClosedBySupervisor = 18
+        ClosedBySupervisor = 18,
+        InterviewSwitchedToCawiMode = 19,
+        InterviewSwitchedToCapiMode = 20
     }
 }

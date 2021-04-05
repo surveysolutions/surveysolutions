@@ -232,6 +232,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview {0} switched to CAWI mode.
+        /// </summary>
+        public static string SwitchInterviewToCawiMode {
+            get {
+                return ResourceManager.GetString("SwitchInterviewToCawiMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sync canceled.
         /// </summary>
         public static string SynchronizationCanceled {
@@ -277,7 +286,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interview(s) partial updated from server.
+        ///   Looks up a localized string similar to {0} interview(s) updated from Headquarters.
         /// </summary>
         public static string SynchronizationCompleted_InterviewsPartialDownloaded {
             get {
@@ -286,7 +295,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interview(s) partial uploaded.
+        ///   Looks up a localized string similar to {0} interview(s) partially uploaded.
         /// </summary>
         public static string SynchronizationCompleted_InterviewsPartialUploaded {
             get {
@@ -331,7 +340,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interview(s) have been reopened after receiving comments.
+        ///   Looks up a localized string similar to {0} interview(s) were reopened after receiving comments.
         /// </summary>
         public static string SynchronizationCompleted_ReopenedInterviewsAfterComments {
             get {

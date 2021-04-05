@@ -73,11 +73,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
         
-        protected override Task CloseInterviewAfterComplete()
+        protected override Task CloseInterviewAfterComplete(bool switchInterviewToCawiMode)
         {
             var statefulInterview = this.interviewRepository.GetOrThrow(this.interviewId.FormatGuid());
-            auditLogService.Write(new CompleteInterviewAuditLogEntity(this.interviewId, statefulInterview.GetInterviewKey().ToString()));
-            return base.CloseInterviewAfterComplete();
+
+            if(switchInterviewToCawiMode)            
+                auditLogService.Write(new SwitchInterviewToCawiModeAuditLogEntity(this.interviewId, statefulInterview.GetInterviewKey().ToString()));
+            else
+                auditLogService.Write(new CompleteInterviewAuditLogEntity(this.interviewId, statefulInterview.GetInterviewKey().ToString()));
+            
+            return base.CloseInterviewAfterComplete(switchInterviewToCawiMode);
         }
     }
 }
