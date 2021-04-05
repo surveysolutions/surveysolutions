@@ -83,7 +83,7 @@
             data-suso="usermanagement-list"
             :tableOptions="tableOptions"
             :addParamsToRequest="addParamsToRequest"
-            :selectable="model.canArchiveUnarchive || model.canArchiveMoveToOtherTeam || model.canAddRemoveWorkspaces"
+            :selectable="canManageUsers"
             @selectedRowsChanged="rows => selectedRows = rows"
             mutliRowSelect
             :selectableId="'userId'"
@@ -257,6 +257,10 @@ export default {
     },
 
     computed: {
+        canManageUsers() {
+            return this.model.canArchiveUnarchive || this.model.canArchiveMoveToOtherTeam || this.model.canAddRemoveWorkspaces
+        },
+
         supervisorsUri() {
             return `/${this.selectedWorkspace.key}/api/v1/users/supervisors`
         },
@@ -277,6 +281,7 @@ export default {
 
         tableOptions() {
             var self = this
+            let defaultOrder = this.canManageUsers ? [[1, 'asc']] : [[0, 'asc']]
             return {
                 deferLoading: 0,
                 rowId: function(row) {
@@ -358,7 +363,7 @@ export default {
                     contentType: 'application/json',
                 },
                 responsive: false,
-                order: [[1, 'asc']],
+                order: defaultOrder,
                 sDom: 'rf<"table-with-scroll"t>ip',
                 createdRow: function(row, data) {
                     if (data.isLocked) {

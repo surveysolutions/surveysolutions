@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.Code.UsersManagement
             {
                 query = query.Where(u => 
                     u.Roles.Any(r => r.Id == UserRoles.Interviewer.ToUserId()
-                    && u.Profile.SupervisorId == authorizedUser.Id));
+                    && u.Workspaces.Any(wu => wu.Supervisor.Id == authorizedUser.Id)));
             }
 
             if (authorizedUser.IsInterviewer)

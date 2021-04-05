@@ -1,0 +1,24 @@
+﻿@using WB.Core.BoundedContexts.Headquarters.Resources
+@using WB.Core.BoundedContexts.Headquarters.Workspaces
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.UI.Headquarters.Services
+@{
+    var page = ViewBag.ActivePage ?? MenuItem.Logon;
+}
+<ul class="nav navbar-nav">
+    @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Index", "UsersManagement", Dashboard.UsersManagement, MenuItem.UsersManagement)
+</ul>
+<ul class="nav navbar-nav navbar-right" role="menu">
+    <li><a href="http://support.mysurvey.solutions/supervisor" target="_blank" title="Help">@MainMenu.Help</a></li>
+    <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+           title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li>@Html.ActionLink(Common.DownloadSupervisor, "Supervisor", "Download", new {area = string.Empty}, null)</li>
+            @Html.MainMenuItem("Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
+            <li>
+                <a href="/Account/LogOff">@Common.Logoff</a>
+            </li>
+        </ul>
+    </li>
+</ul>
