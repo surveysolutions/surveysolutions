@@ -1676,4 +1676,10 @@
   <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
     <value>Открытые переменные по опроснику</value>
   </data>
+  <data name="ExposedVariables_VariableName" xml:space="preserve">
+    <value>Имя переменной</value>
+  </data>
+  <data name="ExposedVariables_VariableTitle" xml:space="preserve">
+    <value>Заголовок</value>
+  </data>
 </root>
