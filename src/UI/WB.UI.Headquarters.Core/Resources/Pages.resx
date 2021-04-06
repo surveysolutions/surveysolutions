@@ -947,7 +947,7 @@
     <value>Do you want to continue?</value>
   </data>
   <data name="Users_UnarchiveUsersWarning" xml:space="preserve">
-    <value>Users will be unarchived.</value>
+    <value>User(s) will be unarchived.</value>
   </data>
   <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
     <value>If the interviewer has completed interviews on his tablet then the data will be lost.</value>

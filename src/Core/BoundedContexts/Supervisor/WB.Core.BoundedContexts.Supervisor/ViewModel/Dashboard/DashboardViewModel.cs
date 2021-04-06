@@ -284,6 +284,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             }
             catch (Exception)
             {
+                this.Synchronization.Status = SynchronizationStatus.Fail;
+                this.Synchronization.SynchronizationErrorOccured = true;
                 this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspacesError;
             }
             finally

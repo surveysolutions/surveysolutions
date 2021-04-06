@@ -352,7 +352,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error. Can&apos;t update workspaces list..
+        ///   Looks up a localized string similar to Error getting list of workspaces. Please contact your system administrator. .
         /// </summary>
         public static string Dashboard_RefreshWorkspacesError {
             get {
@@ -2304,7 +2304,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your account is no longer active in the workspace. Please contact your supervisor..
+        ///   Looks up a localized string similar to Your account is no longer active in the workspace. Please contact your system administrator..
         /// </summary>
         public static string Synchronization_WorkspaceAccessDisabledReason {
             get {

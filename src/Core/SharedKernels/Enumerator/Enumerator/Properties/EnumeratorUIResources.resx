@@ -206,7 +206,7 @@ for further instructions</value>
     <value>Workspaces list updated</value>
   </data>
   <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
-    <value>Error. Can't update workspaces list.</value>
+    <value>Error getting list of workspaces. Please contact your system administrator. </value>
   </data>
   <data name="Maps_Title" xml:space="preserve">
     <value>Maps</value>
@@ -982,6 +982,6 @@ It will appear on interviewer device after next synchronization</value>
       <value>Your account is no longer active on this server, because the workspace in which it is defined was disabled by the administrator. Please contact your supervisor.</value>
   </data>
   <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
-      <value>Your account is no longer active in the workspace. Please contact your supervisor.</value>
+      <value>Your account is no longer active in the workspace. Please contact your system administrator.</value>
   </data>
 </root>

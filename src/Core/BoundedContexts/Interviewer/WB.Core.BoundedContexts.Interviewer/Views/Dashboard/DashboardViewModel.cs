@@ -556,6 +556,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
             catch (Exception)
             {
+                this.Synchronization.Status = SynchronizationStatus.Fail;
+                this.Synchronization.SynchronizationErrorOccured = true;
                 this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspacesError;
             }
             finally
