@@ -344,6 +344,13 @@ export default {
                             window.location = this.workspacePath(rowData.Name) + 'Administration/TabletInfos'
                         },
                     },
+                    {
+                        name: this.$t('Pages.InterviewPackages'),
+                        className: 'suso-interview-packages',
+                        callback: (_, opt) => {
+                            window.location = this.workspacePath(rowData.Name) + 'ControlPanel/InterviewPackages'
+                        },
+                    },
                 ]
 
                 if(rowData.Name != 'primary') {
