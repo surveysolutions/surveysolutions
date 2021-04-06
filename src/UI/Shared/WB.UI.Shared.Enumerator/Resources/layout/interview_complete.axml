@@ -53,6 +53,11 @@
           android:id="@+id/tv_Complete_SwitchTo_WebMode_Instruction"
           local:MvxBind="Text Localization('Interview_Complete_SwitchTo_WebMode_Instruction')" />
 
+      <TextView
+          style="@style/Interview_Complete_Screen_Web_Interview_Link"
+          android:id="@+id/tv_Complete_SwitchTo_WebMode_Link"
+          local:MvxBind="Text WebInterviewUrl;" />
+
       <ImageView
           style="@style/Interview_Attachment_Picture"
           android:scaleType="fitCenter"

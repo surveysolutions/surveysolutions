@@ -123,6 +123,7 @@
     <color name="complete_screen_statistics_unanswered_color">#000000</color>
     <color name="complete_screen_statistics_error_color">#e64a19</color>
     <color name="complete_screen_statistics_neutral_color">#9a9a9a</color>
+    <color name="complete_screen_statistics_web_interview_link_color">#000000</color>
 
     <color name="interview_question_yes_no">#36AEE5</color>
     <color name="interview_question_yesno_selected_text">#3f3f3f</color>
