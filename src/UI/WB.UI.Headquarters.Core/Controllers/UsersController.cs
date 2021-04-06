@@ -861,7 +861,8 @@ namespace WB.UI.Headquarters.Controllers
             if (this.authorizedUser.IsHeadquarter && (user.Id == this.authorizedUser.Id  || user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer)))
                 return true;
 
-            if (this.authorizedUser.IsSupervisor && (user.Id == this.authorizedUser.Id || (user.IsInRole(UserRoles.Interviewer) && user.Profile?.SupervisorId == this.authorizedUser.Id)))
+            if (this.authorizedUser.IsSupervisor 
+                && (user.Id == this.authorizedUser.Id || (user.IsInRole(UserRoles.Interviewer) && user.Workspaces.Any(u => u.Supervisor?.Id == this.authorizedUser.Id))))
                 return true;
 
             if (this.authorizedUser.IsInterviewer 
