@@ -90,7 +90,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     mapInteractionService: Mock.Of<IMapInteractionService>(),
                     dashboardNotifications: dashboardNotifications ?? Create.ViewModel.DashboardNotificationsViewModel(),
                     workspaceService: Mock.Of<IWorkspaceService>(),
-                    onlineSynchronizationService: Mock.Of<IOnlineSynchronizationService>());
+                    onlineSynchronizationService: Mock.Of<IOnlineSynchronizationService>(),
+                    memoryCacheSource: Mock.Of<IWorkspaceMemoryCacheSource>());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();
