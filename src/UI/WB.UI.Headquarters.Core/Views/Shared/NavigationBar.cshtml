@@ -59,14 +59,7 @@
             }
             else if (authorizedUser.IsSupervisor)
             {
-                @if (this.workspaceAccessor.CurrentWorkspace()?.IsSpecialWorkspace() ?? false)
-                {
-                    <partial name="UsersSupervisorMainMenu" />
-                }
-                else
-                {
-                    <partial name="SupervisorMainMenu" />
-                }
+                <partial name="SupervisorMainMenu" />
             }
             else if (authorizedUser.IsInterviewer)
             {
