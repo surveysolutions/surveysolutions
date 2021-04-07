@@ -1,11 +1,15 @@
 
+# Notice
+
+Reading, cloning, forking, or otherwise compiling the source code in this repository is an explicit acknowledgement of license terms outlined in the [license](https://github.com/surveysolutions/surveysolutions/blob/master/LICENSE.md) file.
 # Overview
 
-Survey Solutions is a survey management and data collection system developed by the World Bank. The software is used worldwide by the National Statistical Offices, Central Banks, Non-Government Organizations (NGOs) and universities to collect and manage surveys of households, individuals, enterprises (firms/establishments), infrastructure (schools, hospitals, etc) and communities. It has been used to conduct censuses, household income and expenditure surveys, labor force surveys, price surveys, and other types of data collection operations.
+Survey Solutions is a survey management and data collection system developed by the World Bank. The software is used worldwide by the National Statistical Offices, Central Banks, Non-Government Organizations and universities to collect and manage surveys of households, individuals, enterprises (firms/establishments), infrastructure (schools, hospitals, etc) and communities. It has been used to conduct censuses, household income and expenditure surveys, labor force surveys, price surveys, and other types of data collection operations.
 
-Comprehensive documentation can be found on [support portal](https://support.mysurvey.solutions/). Deployment instructions for production instances can be also found [there](https://support.mysurvey.solutions/headquarters/config/server-setup/).
+# Documentation
+Comprehensive documentation is available at https://docs.mysurvey.solutions. Deployment instructions for production instances can be also found [there](https://docs.mysurvey.solutions/headquarters/config/server-setup/). To see the history of previous releases please take a look at our [release notes](https://docs.mysurvey.solutions/release-notes/).
 
-Survey solutions consists of the following major components:
+This repository contains source code for the following major components of Survey solutions:
 
 ## Web applications
 
@@ -20,9 +24,12 @@ Survey solutions consists of the following major components:
 1. **Supervisor** - can be used as temporary storage of interviews in the ares where there is no internet connectivity. Allows to receive interviews and distribute work for interviewers with [nearby communication](https://developers.google.com/nearby).
 1. **Tester** - same as interviewer application, but works directly with Designer application. Should be used to verify perfomance and usability of questionnaire during design time.
 
-# Dev environment
+# Contributing
+All contributions, bug reports, documentation improvements, helping with translations, and new feature ideas are welcome.
 
-Prerequesties:
+# Development environment
+
+In order to be able to buld Survey Solutions locally, you will need to install several prerequesties fist:
 
 - Install PostgreSQL.
 - Install LTS version of node JS (we currently use version 12).
@@ -32,7 +39,7 @@ Prerequesties:
 
 ## Running locally
 
-First you need to build javascript UI. It Can be done by running either `.build.ps1`, `build.all.deps.bat` or `build_deps.sh` scripts. Front end is built for Designer, Headquarters and Web Tester applications.
+First you need to build javascript UI. It Can be done by running either `.build.ps1`, `build.all.deps.bat` or `build_deps.sh` scripts. This will build frontend components for Designer, Headquarters and Web Tester applications.
 
 By default web applications use PostgreSQL installed locally. Review connection strings in `appsettings.ini` files to be able to run applications properly.
 
@@ -71,6 +78,4 @@ msbuild src/UI/Supervisor/WB.UI.Supervisor/WB.UI.Supervisor.csproj /restore /p:X
 msbuild src/UI/Tester/WB.UI.Tester/WB.UI.Tester.csproj /restore /p:XamarinBuildDownloadAllowUnsecure=true /t:SignAndroidPackage
 ```
 
-in the log there will be location of compiled apks. But in order to go to production you will need to create your or signature to [sign apks](https://docs.microsoft.com/en-us/xamarin/android/deploy-test/signing/).
-
-[Release notes](https://support.mysurvey.solutions/release-notes/)
+in the log there will be location of compiled apks. But in order to go to production you will need to create your own signature to [sign apks](https://docs.microsoft.com/en-us/xamarin/android/deploy-test/signing/).
