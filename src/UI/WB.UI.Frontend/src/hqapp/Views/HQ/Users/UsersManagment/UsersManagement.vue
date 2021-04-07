@@ -499,9 +499,11 @@ export default {
 
         onWorkspaceSelected(workspace) {
             this.selectedWorkspace = workspace
+            this.selectedTeam = null
 
             this.onChange(query => {
                 query.workspace = workspace == null ? null : workspace.key
+                query.team = null
             })
         },
 
