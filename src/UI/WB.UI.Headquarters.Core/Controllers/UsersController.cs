@@ -229,8 +229,8 @@ namespace WB.UI.Headquarters.Controllers
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
                     CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
-                    CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
-                    CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser),
+                    CanBeLockedAsSupervisor = authorizedUser.IsAdministrator && (userRole == UserRoles.Interviewer),
+                    CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
                     RecoveryCodes = ""
                 },
                 Api = new

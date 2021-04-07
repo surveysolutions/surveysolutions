@@ -139,7 +139,7 @@ export default {
             return null
         },
         referrerUrl() {
-            return '/'
+            return '/users/UsersManagement'
         },
     },
     mounted() {

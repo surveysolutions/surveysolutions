@@ -88,34 +88,6 @@
                             :haserror="modelState['ConfirmPassword'] !== undefined"
                             id="ConfirmPassword"/>
                     </form-group>
-                    <p v-if="lockMessage != null">{{lockMessage}}</p>
-                    <form-group>
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            id="IsLocked"
-                            name="IsLocked"
-                            type="checkbox"
-                            v-model="isLockedByHeadquarters"/>
-                        <label for="IsLocked"
-                            style="font-weight: bold">
-                            <span class="tick"></span>
-                            {{$t('FieldsAndValidations.IsLockedFieldName')}}
-                        </label>
-                    </form-group>
-                    <form-group v-if="isInterviewer">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            data-val="true"
-                            id="IsLockedBySupervisor"
-                            name="IsLockedBySupervisor"
-                            type="checkbox"
-                            v-model="isLockedBySupervisor"/>
-                        <label for="IsLockedBySupervisor"
-                            style="font-weight: bold">
-                            <span class="tick"></span>
-                            {{$t('FieldsAndValidations.IsLockedBySupervisorFieldName')}}
-                        </label>
-                    </form-group>
                 </div>
                 <div class="col-sm-12">
                     <div class="separate-line"></div>
@@ -223,12 +195,6 @@ export default {
         },
         isApiUser() {
             return this.role && this.role.key == 'ApiUser'
-        },
-        lockMessage() {
-            if (this.isHeadquarters) return this.$t('Pages.HQ_LockWarning')
-            if (this.isSupervisor) return this.$t('Pages.Supervisor_LockWarning')
-            if (this.isInterviewer) return this.$t('Pages.Interviewer_LockWarning')
-            return null
         },
         referrerTitle() {
             if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
