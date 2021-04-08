@@ -86,7 +86,7 @@
                     name="switchToWeb"
                     v-model="switchToWeb"/>
                 <label for="switchToWeb_id"
-                    class="font-bold"
+                    class="font-bold marl"
                     v-if="mayBeSwitchedToWebMode">
                     <span class="tick"></span>
                     {{$t('WebInterviewUI.SwitchToWebMode')}}
