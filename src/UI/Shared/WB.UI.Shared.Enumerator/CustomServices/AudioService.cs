@@ -145,7 +145,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public string GetAuditPath()
         {
-            return GetPathToAudioDirectory();
+            return GetPathToAudioAuditDirectory();
         }
 
         public void StartRecording()
