@@ -27,7 +27,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private bool disposed = false;
         private object lockObject = new object();
 
-        private readonly IAudioFileStorage audioFileStorage;
         private readonly ILogger logger;
         private readonly IWorkspaceAccessor workspaceAccessor;
 
@@ -57,39 +56,17 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public AudioService(string audioDirectory, 
             IFileSystemAccessor fileSystemAccessor,
-            IAudioFileStorage audioFileStorage, 
             ILogger logger,
             IWorkspaceAccessor workspaceAccessor)
         {
             this.audioDirectory = audioDirectory;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.audioFileStorage = audioFileStorage;
             this.logger = logger;
             this.workspaceAccessor = workspaceAccessor;
             
             this.tempFileName = Path.GetTempFileName();
             mediaPlayer.Completion += MediaPlayerOnCompletion;
         }
-
-        /*public AudioService(string pathToAudioDirectory, 
-            IFileSystemAccessor fileSystemAccessor,
-            IAudioFileStorage audioFileStorage, 
-            ILogger logger)
-        {
-            this.fileSystemAccessor = fileSystemAccessor;
-            this.audioFileStorage = audioFileStorage;
-            this.logger = logger;
-            if (!fileSystemAccessor.IsDirectoryExists(pathToAudioDirectory))
-                fileSystemAccessor.CreateDirectory(pathToAudioDirectory);
-            this.pathToAudioFile = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, audioFileName);
-            this.tempFileName = Path.GetTempFileName();
-            mediaPlayer.Completion += MediaPlayerOnCompletion;
-
-            this.pathToAudioAuditDirectory = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, "audit");
-
-            if (!this.fileSystemAccessor.IsDirectoryExists(pathToAudioAuditDirectory))
-                this.fileSystemAccessor.CreateDirectory(pathToAudioAuditDirectory);
-        }*/
 
         private string GetPathToAudioFile()
         {
@@ -131,10 +108,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public event EventHandler OnMaxDurationReached;
         public event EventHandler<PlaybackCompletedEventArgs> OnPlaybackCompleted;
 
-        public async Task Play(Guid interviewId, Identity questionId, string fileName)
+        public void Play(byte[] content, Identity identity)
         {
-            var interviewBinaryData = await this.audioFileStorage.GetInterviewBinaryDataAsync(interviewId, fileName);
-
             lock (this.lockObject)
             {
                 if (this.mediaPlayer.IsPlaying)
@@ -146,13 +121,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 this.mediaPlayer.Reset();
                 this.fileSystemAccessor.DeleteFile(this.tempFileName);
 
-                this.fileSystemAccessor.WriteAllBytes(this.tempFileName, interviewBinaryData);
+                this.fileSystemAccessor.WriteAllBytes(this.tempFileName, content);
                 
                 this.mediaPlayer.SetDataSource(this.tempFileName);
                 this.mediaPlayer.SetVolume(1, 1);
                 this.mediaPlayer.Prepare();
                 this.mediaPlayer.Start();
-                this.playingIdentity = questionId;
+                this.playingIdentity = identity;
             }
         }
 

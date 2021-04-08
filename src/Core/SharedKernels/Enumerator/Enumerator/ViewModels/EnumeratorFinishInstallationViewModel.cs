@@ -125,9 +125,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.Endpoint =  this.deviceSettings.Endpoint;
 
 #if DEBUG
-            this.Endpoint = "http://192.168.50.213:5001";
-            this.UserName = "in1sv3";
-            this.Password = "Qwerty1234";
+            this.Endpoint = "http://192.168.0.1";
+            this.UserName = "int";
+            this.Password = "1";
 #endif
         }
 
