@@ -1614,6 +1614,6 @@
     <value>Label</value>
   </data>
   <data name="ExposedVariables_ChangeMessage" xml:space="preserve">
-    <value>You are changing the set of variables. It would take time to update reports</value>
+    <value>You are changing the set of exposed variables. It will take some time to update the reports.</value>
   </data>
 </root>
