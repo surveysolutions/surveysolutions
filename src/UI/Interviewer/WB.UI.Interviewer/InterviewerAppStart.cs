@@ -70,13 +70,18 @@ namespace WB.UI.Interviewer
 
         private void CheckAndProcessAllAuditFiles()
         {
-            var audioPath = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("audio");
-            var scope = lifetimeScope.BeginLifetimeScope(cb =>
+            var workspaces = workspaceService.GetAll();
+            foreach (var workspace in workspaces)
             {
-                cb.RegisterType<AudioService>().As<IAudioService>()
-                    .WithParameter("pathToAudioDirectory", audioPath);
-            });
-            scope.Resolve<IAudioAuditService>().CheckAndProcessAllAuditFiles();
+                var workspaceAccessor = new SingleWorkspaceAccessor(workspace);
+                using var workspaceLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
+                {
+                    cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();
+                    cb.RegisterType<AudioService>().As<IAudioService>()
+                        .WithParameter("audioDirectory", "audio");
+                });
+                workspaceLifetimeScope.Resolve<IAudioAuditService>().CheckAndProcessAllAuditFiles();
+            }
         }
 
         private void CheckAndProcessUserLogins()
