@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Pages {
@@ -4328,6 +4328,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This action will create individual user,
+        ///        &lt;br&gt;to create several interviewers and supervisors you can use &lt;a href=&quot;{{link}}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;.
+        /// </summary>
+        public static string User_CreateText {
+            get {
+                return ResourceManager.GetString("User_CreateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to workspaces.
         /// </summary>
         public static string UserManagement_AddToWorkspace {
@@ -4364,6 +4374,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select workspace and supervisor (need to assign interviewer) that need to be added to selected users.
+        /// </summary>
+        public static string UserManagement_SubtitleAddInterviewer {
+            get {
+                return ResourceManager.GetString("UserManagement_SubtitleAddInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select workspaces that need to be removed from selected users.
         /// </summary>
         public static string UserManagement_SubtitleRemove {
@@ -4382,6 +4401,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active users.
+        /// </summary>
+        public static string Users_ActiveUsers {
+            get {
+                return ResourceManager.GetString("Users_ActiveUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Press Add API button to create a new API user..
         /// </summary>
         public static string Users_API_Instruction1 {
@@ -4396,6 +4424,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string Users_API_Instruction2 {
             get {
                 return ResourceManager.GetString("Users_API_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archived users.
+        /// </summary>
+        public static string Users_ArchivedUsers {
+            get {
+                return ResourceManager.GetString("Users_ArchivedUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your will be archive interviewers and supervisors with his team. Supervisors interviewers will be archived in all workspaces. If the interviewers has completed interviews on his tablet then the data will be lost..
+        /// </summary>
+        public static string Users_ArchiveUsersConfirmMessage {
+            get {
+                return ResourceManager.GetString("Users_ArchiveUsersConfirmMessage", resourceCulture);
             }
         }
         
@@ -4472,6 +4518,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User(s) will be unarchived..
+        /// </summary>
+        public static string Users_UnarchiveUsersWarning {
+            get {
+                return ResourceManager.GetString("Users_UnarchiveUsersWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to continue?.
+        /// </summary>
+        public static string Users_UsersConfirm {
+            get {
+                return ResourceManager.GetString("Users_UsersConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All roles.
         /// </summary>
         public static string UsersManage_RoleFilterPlaceholder {
@@ -4486,6 +4550,42 @@ namespace WB.UI.Headquarters.Resources {
         public static string UsersManage_ShowUsersFilterPlaceholder {
             get {
                 return ResourceManager.GetString("UsersManage_ShowUsersFilterPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select supervisor.
+        /// </summary>
+        public static string UsersManage_SupervisorFilterPlaceholder {
+            get {
+                return ResourceManager.GetString("UsersManage_SupervisorFilterPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor (Interviewers will add to team of this supervisor).
+        /// </summary>
+        public static string UsersManage_SupervisorFilterTitle {
+            get {
+                return ResourceManager.GetString("UsersManage_SupervisorFilterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team.
+        /// </summary>
+        public static string UsersManage_TeamFilter {
+            get {
+                return ResourceManager.GetString("UsersManage_TeamFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team.
+        /// </summary>
+        public static string UsersManage_TeamFilterPlaceHolder {
+            get {
+                return ResourceManager.GetString("UsersManage_TeamFilterPlaceHolder", resourceCulture);
             }
         }
         
