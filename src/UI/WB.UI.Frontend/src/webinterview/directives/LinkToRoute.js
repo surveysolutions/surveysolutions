@@ -25,17 +25,20 @@ Vue.directive('linkToRoute', {
                 // don't handle same page links/anchors
                 const url = new URL(target.href)
                 const to = url.pathname
-                if (window.location.pathname !== to && event.preventDefault) {
-                    event.preventDefault()
 
-                    // do not go into interview from take new page
-                    if (vnode.context.$store.getters.isTakeNewAssignment === true || to.includes('void(0)'))
-                        return
+                if (url.protocol !== 'mailto:' && url.protocol !== 'tel:') {
+                    if (window.location.pathname !== to && event.preventDefault) {
+                        event.preventDefault()
 
-                    var toPath = vnode.context.$router.options.base == '/'
-                        ? to
-                        : to.replace(vnode.context.$router.options.base, '')
-                    vnode.context.$router.push({ path: toPath })
+                        // do not go into interview from take new page
+                        if (vnode.context.$store.getters.isTakeNewAssignment === true || to.includes('void(0)'))
+                            return
+
+                        var toPath = vnode.context.$router.options.base == '/'
+                            ? to
+                            : to.replace(vnode.context.$router.options.base, '')
+                        vnode.context.$router.push({ path: toPath })
+                    }
                 }
             }
         })

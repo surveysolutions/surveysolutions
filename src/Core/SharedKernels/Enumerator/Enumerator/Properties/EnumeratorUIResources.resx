@@ -984,4 +984,7 @@ It will appear on interviewer device after next synchronization</value>
   <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
       <value>Your account is no longer active in the workspace. Please contact your system administrator.</value>
   </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Progress: {0}/{1}</value>
+  </data>
 </root>

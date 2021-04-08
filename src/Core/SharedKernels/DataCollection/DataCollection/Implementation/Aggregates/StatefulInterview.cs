@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Ncqrs;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -469,7 +468,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public int CountInvalidEntitiesInInterviewForSupervisor() => this.GetInvalidEntitiesInInterviewForSupervisor().Count();
 
-
         public int CountAllEnabledAnsweredQuestions()
             => this.GetEnabledNotHiddenQuestions().Count(question => question.IsAnswered());
         public int CountAllEnabledQuestions() => this.GetEnabledNotHiddenQuestions().Count();
@@ -895,6 +893,55 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             return questionnaire.GetAttachmentIdByName(attachmentName);
+        }
+
+        public InterviewSimpleStatus GetInterviewSimpleStatus(bool includingSupervisorEntities)
+        {
+            int invalidEntities = includingSupervisorEntities
+                ? this.CountInvalidEntitiesInInterviewForSupervisor()
+                : this.CountInvalidEntitiesInInterview();
+
+            int activeQuestionsCount = includingSupervisorEntities
+                ? this.CountActiveQuestionsInInterviewForSupervisor()
+                : this.CountActiveQuestionsInInterview();
+
+            int answeredQuestionsCount = includingSupervisorEntities
+                ? this.CountActiveAnsweredQuestionsInInterviewForSupervisor()
+                : this.CountActiveAnsweredQuestionsInInterview();
+
+            var simpleStatus = (invalidEntities > 0)
+                ? SimpleGroupStatus.Invalid
+                : ((activeQuestionsCount == answeredQuestionsCount)
+                    ? SimpleGroupStatus.Completed
+                    : SimpleGroupStatus.Other);
+
+            var status = GetGroupStatus(simpleStatus, activeQuestionsCount, answeredQuestionsCount);
+
+            return new InterviewSimpleStatus()
+            {
+                Status = status,
+                SimpleStatus = simpleStatus,
+                ActiveQuestionCount = activeQuestionsCount,
+                AnsweredQuestionsCount = answeredQuestionsCount
+            };
+        }
+
+        private GroupStatus GetGroupStatus(SimpleGroupStatus simpleStatus, int questionsCount, int answeredQuestionsCount)
+        {
+            switch (simpleStatus)
+            {
+                case SimpleGroupStatus.Completed:
+                    return GroupStatus.Completed;
+
+                case SimpleGroupStatus.Invalid:
+                    return questionsCount == answeredQuestionsCount ? GroupStatus.CompletedInvalid : GroupStatus.StartedInvalid;
+
+                case SimpleGroupStatus.Other:
+                    return answeredQuestionsCount > 0 ? GroupStatus.Started : GroupStatus.NotStarted;
+
+                default:
+                    return GroupStatus.Started;
+            }			
         }
 
         public bool IsParentOf(Identity parentIdentity, Identity childIdentity)

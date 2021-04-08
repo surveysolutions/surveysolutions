@@ -46,6 +46,24 @@ class QuestionnaireApi {
             enabled: enabled,
         })
     }
+
+    async ExposedVariables(id) {
+        const response = await this.http.get(`api/QuestionnairesApi/GetQuestionnaireExposedVariables?id=${id}`,
+            {
+                params: {
+                    limit: 100,
+                },
+            })
+        return response.data
+    }
+
+    ChangeVariableExposeStatus(questionnaireIdentity, variables){
+        return this.http.post('api/QuestionnairesApi/changeVariableExposeStatus', {
+            questionnaireIdentity: questionnaireIdentity,
+            variables: variables,
+        })
+    }
+
 }
 
 class SurveyStatistics {

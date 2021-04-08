@@ -1,0 +1,56 @@
+.vue-query-builder{
+  .vqb-group{
+	margin-top: 15px !important;
+  }
+  .vqb-group.depth-4{
+    .vqb-rule{
+        border-left:2px solid #ffff00 !important;
+    }
+  }  	 
+  .vqb-group.depth-5{
+      border-left:2px solid #ffff00;
+      .vqb-rule{
+        border-left:2px solid #ff00ff !important;
+      }
+  }
+  .vqb-group.depth-6{
+      border-left:2px solid #ff00ff;
+        .vqb-rule{
+          border-left:2px solid #9900ff !important;
+        }
+    }
+  .vqb-group.depth-7{
+      border-left:2px solid #9900ff;
+        .vqb-rule{
+          border-left:2px solid #999900 !important;
+        }
+    }	 
+  .vqb-group.depth-8{
+      border-left:2px solid #999900;
+    }
+    
+  .close{
+       position:absolute !important;
+       top:0;
+       right:0;
+       margin-top: 3px;
+       margin-right: 5px;
+   }
+
+   input[type=date].form-control{
+       line-height: inherit;
+   }
+
+   .form-inline{
+       .form-check{
+           display: inline-flex;
+           margin-right: .75rem;
+           input[type=radio]{
+               margin-right: .25rem;
+           }
+           label{
+               margin-top: 2px;
+           }
+       }
+   }
+}  

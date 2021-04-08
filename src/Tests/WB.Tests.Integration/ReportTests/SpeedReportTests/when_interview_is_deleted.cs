@@ -1,12 +1,16 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -41,6 +45,12 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var userViewFactory = Mock.Of<IUserViewFactory>(_ => _.GetUser(Moq.It.IsAny<UserViewInputModel>()) == defaultUserView);
             var questionnaireDocument = Create.Entity.QuestionnaireDocument();
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
+
+            var questionnaireItems = Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>();
+            Mock.Get(questionnaireItems)
+                .Setup(reader => reader.Query(It.IsAny<Func<IQueryable<QuestionnaireCompositeItem>, List<QuestionnaireCompositeItem>>>()))
+                .Returns(new List<QuestionnaireCompositeItem>());
+
             return new InterviewSummaryCompositeDenormalizer(
                 new EventBusSettings(),
                 interviewStatuses,
@@ -49,7 +59,8 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
                 new InterviewStatusTimeSpanDenormalizer(),
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(), 
                 new InterviewGeoLocationAnswersDenormalizer(questionnaireStorage),
-                new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage)                );
+                new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage),
+                new InterviewDynamicReportAnswersDenormalizer(questionnaireStorage, questionnaireItems));
         }
 
         protected void UseTransactionToSaveSummaryAndSpeedReport(InterviewSummary interviewSummary)

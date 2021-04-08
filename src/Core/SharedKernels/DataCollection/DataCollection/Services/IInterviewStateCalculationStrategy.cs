@@ -5,7 +5,6 @@ namespace WB.Core.SharedKernels.DataCollection.Services
 {
     public interface IInterviewStateCalculationStrategy
     {
-        SimpleGroupStatus CalculateSimpleStatus(IStatefulInterview interview);
-        GroupStatus CalculateDetailedStatus(IStatefulInterview interview);
+        InterviewSimpleStatus GetInterviewSimpleStatus(IStatefulInterview interview);
     }
 }

@@ -97,6 +97,10 @@
 		@include width-questionnaire($content-width);
 	}
 }
+.interview-progress{
+    font: 16px/18px $roboto_medium;
+}
+
 .structured-content >.panel-default:first-of-type > .panel-heading h3 > a{
 	padding-right: 30px;
 }
@@ -787,6 +791,26 @@
 	.btn.btn-clear{
 		display: none;
 	}
+}
+
+.interview-progress{
+    display:flex;
+    .progress-counts{
+        margin:10px 10px 10px 30px;
+    }
+    .progress {
+        position:inherit;
+        height:14px;
+        background-color:#ebebeb;
+        margin-top:11px;
+        flex:1;
+        min-width:20px;
+    }
+    .progress-percents
+    {
+        margin:10px 0px 10px 10px;
+        padding-right: 35px;
+    }
 }
 
 @media only screen and (max-width: 1525px){

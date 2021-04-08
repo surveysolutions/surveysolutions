@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private HashSet<string> questionVariableNamesCache = null;
         private HashSet<string> rosterVariableNamesCache = null;
         private Dictionary<string, IVariable> variableNamesCache = null;
-
+        private HashSet<int> identifyingMappedEntitiesCache = null;
 
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
@@ -245,6 +245,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool HasGroup(Guid groupId) => this.GetGroup(groupId) != null;
 
         public QuestionType GetQuestionType(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionType;
+
+        public VariableType GetVariableVariableType(Guid variableId) => this.GetVariable(variableId).Type;
 
         public QuestionScope GetQuestionScope(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionScope;
 
@@ -584,6 +586,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 return GetPrefilledQuestions();
             }
         }
+
+        public HashSet<int> GetIdentifyingMappedEntities()
+            => this.identifyingMappedEntitiesCache 
+               ?? (this.identifyingMappedEntitiesCache = 
+                   this.GetPrefilledEntities()
+                       .Where(x => (this.IsQuestion(x) && this.GetQuestionType(x) != QuestionType.GpsCoordinates) || this.IsVariable(x))
+                       .Select(GetEntityIdMapValue)
+                       .ToHashSet());
 
         public ReadOnlyCollection<Guid> GetHiddenQuestions()
             => this
@@ -1801,6 +1811,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private IQuestion GetQuestion(Guid questionId) => GetQuestion(this.QuestionCache, questionId);
 
         private IVariable GetVariable(Guid variableId) => GetVariable(this.VariablesCache, variableId);
+        private IVariable GetVariableOrThrow(Guid variableId) => GetVariableOrThrow(this.VariablesCache, variableId);
 
         private IStaticText GetStaticTextImpl(Guid staticTextId) => GetEntity(this.EntityCache, staticTextId) as IStaticText;
 
@@ -1823,6 +1834,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 };
 
             return question;
+        }
+
+        private static IVariable GetVariableOrThrow(Dictionary<Guid, IVariable> variables, Guid variableId)
+        {
+            IVariable variable = GetVariable(variables, variableId);
+
+            if (variable == null)
+                throw new QuestionnaireException("Variable is not found.")
+                {
+                    Data = {{"VariableId", variableId}}
+                };
+
+            return variable;
         }
 
         private static IComposite GetEntityOrThrow(Dictionary<Guid, IComposite> entities, Guid entityId)

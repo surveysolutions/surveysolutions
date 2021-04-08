@@ -165,6 +165,7 @@ import * as toastr from 'toastr'
 import { keyBy, map, find, filter, escape } from 'lodash'
 import routeSync from '~/shared/routeSync'
 import WorkspaceManager from './WorkspaceManager.vue'
+import InterviewQuestionsFiltersVue from '../../Interviews/InterviewQuestionsFilters.vue'
 import AddInterviewerToWorkspace from './AddInterviewerToWorkspace'
 import InterviewersMoveToOtherTeam from './InterviewersMoveToOtherTeam'
 

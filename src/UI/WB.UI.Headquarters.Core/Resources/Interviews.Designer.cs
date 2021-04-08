@@ -61,6 +61,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dynamic filter.
+        /// </summary>
+        public static string AdvancedFilterSelector {
+            get {
+                return ResourceManager.GetString("AdvancedFilterSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} interview will be approved..
         /// </summary>
         public static string ApproveConfirmMessage {
@@ -223,6 +232,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string DeleteConfirmMessageHQ {
             get {
                 return ResourceManager.GetString("DeleteConfirmMessageHQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dynamic filter.
+        /// </summary>
+        public static string DynamicFilter {
+            get {
+                return ResourceManager.GetString("DynamicFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No data available.
+        /// </summary>
+        public static string DynamicFilterNotAvailable {
+            get {
+                return ResourceManager.GetString("DynamicFilterNotAvailable", resourceCulture);
             }
         }
         

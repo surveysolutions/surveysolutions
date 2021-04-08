@@ -62,6 +62,15 @@
                         style="width: 100%"></div>
                 </div>
             </FilterBlock>
+
+            <InterviewFilter slot="additional"
+                :questionnaireId="where.questionnaireId"
+                :questionnaireVersion="where.questionnaireVersion"
+                :value="conditions"
+                :exposedValuesFilter="exposedValuesFilter"
+                @change="questionFilterChanged"
+                @changeFilter="changeExposedValuesFilter" />
+
             <div class="preset-filters-container">
                 <div class="center-block"
                     style="margin-left: 0">
@@ -144,8 +153,10 @@
 <script>
 import * as toastr from 'toastr'
 import Vue from 'vue'
-import {isNull, chain, debounce, delay, forEach, find } from 'lodash'
+import gql from 'graphql-tag'
+import {isNull, chain, debounce, delay, forEach, find, toNumber, isNumber} from 'lodash'
 import routeSync from '~/shared/routeSync'
+import InterviewFilter from '../Interviews/InterviewQuestionsFilters'
 
 const mapStyles = [
     {
@@ -170,7 +181,38 @@ const mapStyles = [
     },
 ]
 
+const query = gql`query mapReport($workspace: String!, $questionnaireId: Uuid!, $questionnaireVersion: Long, 
+$variable: String, $zoom: Int!, $clientMapWidth: Int!, $north: Float!, $south: Float!, $east: Float!, $west: Float!, $where: MapReportFilter) {
+  mapReport(workspace: $workspace, questionnaireId:$questionnaireId, questionnaireVersion: $questionnaireVersion, 
+  variable: $variable, zoom:$zoom , clientMapWidth: $clientMapWidth ,north: $north, south: $south, east: $east, west:$west, where:$where) {
+      report{    
+    featureCollection
+    {
+        type
+        features
+        {
+            id
+            type
+            geometry            
+            properties            
+        }
+    }
+    totalPoint    
+    initialBounds
+    {
+        north
+        south
+        east
+        west
+    }
+  }
+  }
+}`
+
 export default {
+    components: {
+        InterviewFilter,
+    },
     mixins: [routeSync],
 
     data() {
@@ -194,6 +236,9 @@ export default {
                 maxIntensity: null,
             },
             totalAnswers: 0,
+
+            conditions: [],
+            exposedValuesFilter: null,
         }
     },
 
@@ -281,6 +326,42 @@ export default {
             if (this.query.question == null || this.gpsQuestions == null) return null
             return find(this.gpsQuestions, {key: this.query.question})
         },
+        where() {
+            const data = {}
+
+            if (this.selectedQuestionnaireId) data.questionnaireId = this.selectedQuestionnaireId.key
+            if (this.selectedVersionValue) data.questionnaireVersion = toNumber(this.selectedVersionValue)
+
+            return data
+        },
+        whereQuery() {
+            const and = []
+            if(this.conditions != null && this.conditions.length > 0) {
+
+                var identifyingData = []
+                this.conditions.forEach(cond => {
+                    if(cond.value == null) return
+
+                    const value_filter = { entity: {variable: {eq: cond.variable}}}
+                    const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
+
+                    var field_values = cond.field.split('|')
+                    var value_part = {}
+                    value_part[field_values[1]] = value
+                    value_filter[field_values[0]] = value_part
+
+                    and.push({identifyingData : {some: value_filter}})
+                })
+
+            }
+
+            if(this.exposedValuesFilter != null) {
+                and.push(this.exposedValuesFilter)
+            }
+
+            return and
+        },
+
     },
 
     mounted() {
@@ -295,6 +376,14 @@ export default {
     },
 
     methods: {
+        questionFilterChanged(conditions) {
+            this.conditions = conditions
+            this.reloadMarkersInBounds()
+        },
+        changeExposedValuesFilter(exposedValuesFilter) {
+            this.exposedValuesFilter = exposedValuesFilter
+            this.reloadMarkersInBounds()
+        },
         setMapCanvasStyle() {
             $('body').addClass('map-report')
             var windowHeight = $(window).height()
@@ -313,6 +402,10 @@ export default {
         selectQuestionnaireVersion(value) {
             this.questionnaireVersion = value
             this.onChange(s => (s.version = value == null ? null : value.key))
+
+            this.conditions = []
+            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
+
             this.loadQuestions()
         },
 
@@ -328,6 +421,9 @@ export default {
             this.onChange(q => {
                 q.name = value == null ? null : value.value
             })
+
+            this.conditions = []
+            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
 
             if (isNull(value)) return
             this.loadQuestions().then(() => this.onChange(s => (s.name = value.value)))
@@ -518,19 +614,20 @@ export default {
                 return
             }
 
+            const self = this
+
             var request = {
-                Variable: this.selectedQuestion.key,
-                QuestionnaireId: this.selectedQuestionnaireId.key,
-                QuestionnaireVersion: this.selectedVersionValue,
-                Zoom: this.showHeatmap && zoom != -1 ? zoom + 3 : zoom,
+                variable: this.selectedQuestion.key,
+                questionnaireId: this.selectedQuestionnaireId.key.replaceAll('-',''),
+                questionnaireVersion: this.selectedVersionValue ? toNumber(this.selectedVersionValue) : null,
+                zoom: this.showHeatmap && zoom != -1 ? zoom + 3 : zoom,
                 east,
                 north,
                 west,
                 south,
                 clientMapWidth: this.map.getDiv().clientWidth,
+                workspace: self.$store.getters.workspace,
             }
-
-            const self = this
 
             let stillLoading = true
 
@@ -538,9 +635,32 @@ export default {
                 if (stillLoading == true) this.isLoading = true
             }, 5000)
 
-            const response = await this.api.Report(request)
+            //const response = await this.api.Report(request)
 
-            this.setMapData(response.data, extendBounds)
+            const where = {
+                and: [...self.whereQuery],
+            }
+
+            if(where.and.length > 0) {
+                request.where = {interviewFilter : where}
+            }
+
+            const report = await this.$apollo.query({
+                query,
+                variables: request,
+                fetchPolicy: 'network-only',
+            })
+
+            var mapReport = report.data.mapReport.report
+            forEach(mapReport.featureCollection.features, feature => {
+                if(!Array.isArray(feature.geometry.coordinates))
+                {
+                    var coordinates = feature.geometry.coordinates
+                    feature.geometry.coordinates = [coordinates.longitude, coordinates.latitude]
+                }
+            })
+
+            this.setMapData(mapReport, extendBounds)
 
             stillLoading = false
             this.isLoading = false
@@ -556,7 +676,8 @@ export default {
             const heatmapData = {data: []}
 
             this.map.data.forEach(feature => {
-                toRemove[feature.getId()] = feature
+                //toRemove[feature.getId()] = feature
+                this.map.data.remove(feature)
             })
 
             const markers = {

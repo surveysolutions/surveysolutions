@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
@@ -206,5 +204,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool? GetIsAudioRecordingEnabled();
 
         Guid? GetAttachmentForEntity(Identity entityId);
+
+        InterviewSimpleStatus GetInterviewSimpleStatus(bool includingSupervisorEntities);
     }
 }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1006,5 +1006,8 @@
   </data>
   <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
       <value>Ваша учётная запись не активна в текушем рабочем простанстве. Пожалуйста, обратитесь к администратору.</value>
+  </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Заполнение: {0}/{1}</value>
   </data>
 </root>

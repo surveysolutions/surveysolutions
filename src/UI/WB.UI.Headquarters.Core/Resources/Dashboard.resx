@@ -247,4 +247,10 @@
   <data name="CreateUser" xml:space="preserve">
       <value>Create User</value>
   </data>
+  <data name="ExposedVariables" xml:space="preserve">
+    <value>Exposed Variables</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
 </root>
