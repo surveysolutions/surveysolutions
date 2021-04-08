@@ -391,6 +391,13 @@ namespace WB.Enumerator.Native.WebInterview
         }
 
         public InterviewLifecycle Update(InterviewLifecycle cycle, IPublishedEvent<InterviewModeChanged> @event)
-            => cycle.FinishInterview(@event.EventSourceId);
+        {
+            if (!@event.IsPrototype())
+            {
+                return cycle.FinishInterview(@event.EventSourceId);
+            }
+
+            return cycle;
+        }
     }
 }
