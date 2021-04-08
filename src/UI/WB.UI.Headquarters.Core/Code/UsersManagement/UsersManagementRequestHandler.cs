@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,10 +34,12 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                 .Where(u => 
                     u.Roles.All(r => r.Id != UserRoles.Administrator.ToUserId())
                 );
-            
+
+            List<string> authorizedUserWorkspaces = null;
+
             if (!authorizedUser.IsAdministrator)
             {
-                var authorizedUserWorkspaces = authorizedUser.Workspaces;
+                authorizedUserWorkspaces = authorizedUser.Workspaces.ToList();
                 query = query.Where(u => u.Workspaces.Any(w => authorizedUserWorkspaces.Contains(w.Workspace.Name)));
             }
 
@@ -86,7 +89,8 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                 .Select(u => new
                 {
                     u.Id,
-                    Workspaces = u.Workspaces.Select(w => new WorkspaceApiView
+                    Workspaces = u.Workspaces
+                        .Select(w => new WorkspaceApiView
                     {
                         Disabled = w.Workspace.DisabledAtUtc != null,
                         Name = w.Workspace.Name,
@@ -100,7 +104,11 @@ namespace WB.UI.Headquarters.Code.UsersManagement
             {
                 if(workspaces.TryGetValue(user.UserId, out var ws))
                 {
-                    user.Workspaces = ws;
+                    user.Workspaces = ws
+                        .Where(w => 
+                            authorizedUserWorkspaces == null 
+                            || authorizedUserWorkspaces.Contains(w.Name)
+                    ).ToList();
                 }
             }
 
