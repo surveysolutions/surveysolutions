@@ -94,7 +94,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IPlainKeyValueStorage<ProfileSettings>>(),
                 Mock.Of<UrlEncoder>(),
                 Mock.Of<IOptions<HeadquartersConfig>>(),
-                null);
+                null,
+                Mock.Of<SignInManager<HqUser>>());
             controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c => 
                 c.Session == new MockHttpSession()
                 && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
@@ -115,9 +116,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<ILookupNormalizer>(),
                 Mock.Of<IdentityErrorDescriber>(),
                 Mock.Of<IServiceProvider>(),
-                Mock.Of<ILogger<UserManager<HqUser>>>(),
+                Mock.Of<ILogger<HqUserManager>>(),
                 Mock.Of<IWorkspacesService>(),
-                Mock.Of<IWorkspaceContextAccessor>(),
                 Mock.Of<ISystemLog>(),
                 Mock.Of<IAuthorizedUser>());
             hqUserManager.RegisterTokenProvider(
