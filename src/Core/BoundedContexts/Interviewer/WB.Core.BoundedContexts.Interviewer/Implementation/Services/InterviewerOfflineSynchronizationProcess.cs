@@ -68,6 +68,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.UpdateSupervisorOfInterviewer(currentSupervisorId, this.RestCredentials.Login);
             }
         }
+        
+        protected override Task RefreshUserInfo(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
 
         protected override Task ChangeAndNavigateToNewDefaultWorkspaceAsync()
             => throw new NotImplementedException("Remove workspace by offline synchronization no supported");

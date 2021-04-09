@@ -56,22 +56,40 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.synchronizationService = synchronizationService;
         }
 
+        protected override async Task RefreshUserInfo(CancellationToken cancellationToken)
+        {
+            if (RestCredentials == null)
+            {
+                throw new NullReferenceException("Rest credentials not set");
+            }
+
+            InterviewerApiView? interviewer = await this.synchronizationService.GetInterviewerAsync(this.RestCredentials, token: cancellationToken).ConfigureAwait(false);
+            if (interviewer.Workspaces.Count == 0)
+                throw new NooneWorkspaceFoundException();
+            this.UpdateWorkspaceInfo(interviewer.Workspaces);
+            this.UpdateSecurityStampOfInterviewer(interviewer.SecurityStamp, this.RestCredentials.Login);
+
+            var workspaces = workspaceService.GetAll();
+            if (interviewer.Workspaces.Count == 0 || workspaces.Length == 0)
+                throw new NooneWorkspaceFoundException();
+            if (workspaces.All(w => w.Name != principal.CurrentUserIdentity.Workspace))
+                throw new ActiveWorkspaceRemovedException();
+            if (interviewer.Workspaces.All(w => w.Name != principal.CurrentUserIdentity.Workspace))
+                throw new WorkspaceAccessException();
+        }
+        
         protected override async Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
         {
             if (RestCredentials == null)
             {
                 throw new NullReferenceException("Rest credentials not set");
             }
-            
+
             var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.RestCredentials);
             if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)
             {
                 this.UpdateSupervisorOfInterviewer(currentSupervisorId, this.RestCredentials.Login);
             }
-
-            InterviewerApiView? interviewer = await this.synchronizationService.GetInterviewerAsync(this.RestCredentials, token: cancellationToken).ConfigureAwait(false);
-            this.UpdateSecurityStampOfInterviewer(interviewer.SecurityStamp, this.RestCredentials.Login);
-            this.UpdateWorkspaceInfo(interviewer.Workspaces);
         }
 
         protected override Task ChangeAndNavigateToNewDefaultWorkspaceAsync()

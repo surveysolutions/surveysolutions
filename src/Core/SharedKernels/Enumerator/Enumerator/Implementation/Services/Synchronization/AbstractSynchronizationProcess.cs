@@ -257,6 +257,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.UpdatePasswordOfResponsible(this.RestCredentials);
                 }
 
+                await RefreshUserInfo(cancellationToken).ConfigureAwait(false);
+
                 await CanSynchronizeAsync(progress, cancellationToken, statistics).ConfigureAwait(false);
 
                 await CheckAfterStartSynchronization(cancellationToken).ConfigureAwait(false);
@@ -484,6 +486,33 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 await ChangeAndNavigateToNewDefaultWorkspaceAsync();
             }
+            catch (WorkspaceAccessException wae)
+            {
+                var workspace = principal.CurrentUserIdentity.Workspace;
+                this.logger.Error($"Workspace {workspace} access removed.", wae);
+
+                progress.Report(new SyncProgressInfo
+                {
+                    Title = EnumeratorUIResources.Synchronization_WorkspaceAccessDisabledReason,
+                    Description = string.Empty,
+                    Status = SynchronizationStatus.Fail,
+                    Statistics = statistics,
+                    Stage = SyncStage.Failed
+                });
+            }
+            catch (NooneWorkspaceFoundException wae)
+            {
+                this.logger.Error($"Any one workspace found.", wae);
+
+                progress.Report(new SyncProgressInfo
+                {
+                    Title = EnumeratorUIResources.Dashboard_RefreshWorkspacesError,
+                    Description = string.Empty,
+                    Status = SynchronizationStatus.Fail,
+                    Statistics = statistics,
+                    Stage = SyncStage.Failed
+                });
+            }
             catch (Exception ex)
             {
                 progress.Report(new SyncProgressInfo
@@ -572,6 +601,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         
         protected virtual void OnSuccessfulSynchronization() { }
 
+        protected abstract Task RefreshUserInfo(CancellationToken cancellationToken);
         protected abstract Task CheckAfterStartSynchronization(CancellationToken cancellationToken);
         protected abstract Task ChangeAndNavigateToNewDefaultWorkspaceAsync();
         protected abstract void UpdatePasswordOfResponsible(RestCredentials credentials);

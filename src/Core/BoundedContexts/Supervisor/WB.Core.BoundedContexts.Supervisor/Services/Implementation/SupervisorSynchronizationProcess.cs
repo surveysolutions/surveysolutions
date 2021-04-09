@@ -60,7 +60,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             this.navigationService = navigationService;
         }
 
-        protected override async Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
+        protected override Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+        protected override async Task RefreshUserInfo(CancellationToken cancellationToken)
         {
             if (RestCredentials == null)
             {
@@ -68,10 +72,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             }
             
             SupervisorApiView supervisor = await this.synchronizationService.GetSupervisorAsync(this.RestCredentials, token: cancellationToken).ConfigureAwait(false);
+            if (supervisor.Workspaces.Count == 0)
+                throw new NooneWorkspaceFoundException();
             this.UpdateWorkspaceInfo(supervisor.Workspaces);
             
-            if (supervisor.Workspaces.All(w => w.Name != principal.CurrentUserIdentity.Workspace))
+            var workspaces = workspaceService.GetAll();
+            if (supervisor.Workspaces.Count == 0 || workspaces.Length == 0)
+                throw new NooneWorkspaceFoundException();
+            if (workspaces.All(w => w.Name != principal.CurrentUserIdentity.Workspace))
                 throw new ActiveWorkspaceRemovedException();
+            if (supervisor.Workspaces.All(w => w.Name != principal.CurrentUserIdentity.Workspace))
+                throw new WorkspaceAccessException();
         }
         
         protected override Task ChangeAndNavigateToNewDefaultWorkspaceAsync()
