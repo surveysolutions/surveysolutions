@@ -3,6 +3,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NHibernate.Criterion;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
@@ -64,7 +65,8 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             if (!string.IsNullOrEmpty(query))
             {
-                result = result.Where(w => w.DisplayName.Contains(query));
+                var lowerCaseQuery = query.ToLower();
+                result = result.Where(w => w.DisplayName.ToLower().Contains(lowerCaseQuery));
             }
 
             return result;
