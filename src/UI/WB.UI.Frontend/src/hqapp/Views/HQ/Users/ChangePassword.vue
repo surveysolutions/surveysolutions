@@ -48,6 +48,7 @@
                 <input
                     id="ShowPassword"
                     type="checkbox"
+                    style="margin-right:5px"
                     onclick="if(window.CONFIG.model.userInfo.isOwnProfile){var oldPass = document.getElementById('OldPassword');oldPass.type = (oldPass.type === 'text' ? 'password' : 'text');} var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');var confirm = document.getElementById('ConfirmPassword');confirm.type = (confirm.type === 'text' ? 'password' : 'text');">
                 <label for="ShowPassword"                    >
                     <span></span>{{$t('Pages.ShowPassword')}}

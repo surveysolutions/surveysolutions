@@ -88,6 +88,16 @@
                             :haserror="modelState['ConfirmPassword'] !== undefined"
                             id="ConfirmPassword"/>
                     </form-group>
+                    <div class="block-filter">
+                        <input
+                            id="ShowPassword"
+                            type="checkbox"
+                            style="margin-right:5px"
+                            onclick="var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');var confirm = document.getElementById('ConfirmPassword');confirm.type = (confirm.type === 'text' ? 'password' : 'text');">
+                        <label for="ShowPassword"                    >
+                            <span></span>{{$t('Pages.ShowPassword')}}
+                        </label>
+                    </div>
                 </div>
                 <div class="col-sm-12">
                     <div class="separate-line"></div>
