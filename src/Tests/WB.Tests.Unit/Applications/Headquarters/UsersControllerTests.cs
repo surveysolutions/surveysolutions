@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             userManager.Setup(u => u.FindByIdAsync(userId.FormatGuid(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(user));
             userManager.Setup(u => u.UpdateAsync(user, It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(new IdentityResult()));
+                .Returns(Task.FromResult(IdentityResult.Success));
             userManager.As<IUserPasswordStore<HqUser>>();
             
             var controller = CreateController(userManager.Object, authorizedUser);
