@@ -533,8 +533,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.Synchronization.IsSynchronizationInfoShowed = true;
 
                 this.Synchronization.Status = SynchronizationStatus.Started;
-                this.Synchronization.ProcessOperation = string.Empty;
-                this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspaces;
+                this.Synchronization.ProcessOperation = EnumeratorUIResources.Dashboard_RefreshWorkspaces;
+                this.Synchronization.ProcessOperationDescription = string.Empty;
                 
                 var interviewerApiView = await onlineSynchronizationService.GetInterviewerAsync();
                 workspaceService.Save(interviewerApiView.Workspaces.Select(w => new WorkspaceView()
@@ -545,7 +545,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     Disabled = w.Disabled,
                 }).ToArray());
 
-                this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspacesFinished;
+                this.Synchronization.ProcessOperation = EnumeratorUIResources.Dashboard_RefreshWorkspacesFinished;
 
                 if (interviewerApiView.Workspaces.All(w => CurrentWorkspace != w.Name))
                 {
@@ -559,7 +559,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             {
                 this.Synchronization.Status = SynchronizationStatus.Fail;
                 this.Synchronization.SynchronizationErrorOccured = true;
-                this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspacesError;
+                this.Synchronization.ProcessOperation = EnumeratorUIResources.Dashboard_RefreshWorkspacesError;
             }
             finally
             {
