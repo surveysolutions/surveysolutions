@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<UrlEncoder>(),
                 Mock.Of<IOptions<HeadquartersConfig>>(),
                 null,
-                Mock.Of<SignInManager<HqUser>>());
+                null);
             controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c => 
                 c.Session == new MockHttpSession()
                 && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
