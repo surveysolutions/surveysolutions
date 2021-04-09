@@ -533,6 +533,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.Synchronization.IsSynchronizationInfoShowed = true;
 
                 this.Synchronization.Status = SynchronizationStatus.Started;
+                this.Synchronization.ProcessOperation = string.Empty;
                 this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspaces;
                 
                 var interviewerApiView = await onlineSynchronizationService.GetInterviewerAsync();

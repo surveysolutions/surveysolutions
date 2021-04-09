@@ -261,6 +261,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
                 this.Synchronization.IsSynchronizationInfoShowed = true;
 
                 this.Synchronization.Status = SynchronizationStatus.Started;
+                this.Synchronization.ProcessOperation = string.Empty;
                 this.Synchronization.ProcessOperationDescription = EnumeratorUIResources.Dashboard_RefreshWorkspaces;
                 
                 var supervisorApiView = await supervisorSynchronizationService.GetSupervisorAsync();
