@@ -482,7 +482,8 @@ namespace WB.Tests.Abc.TestFactories
             IPasswordHasher passwordHasher = null,
             IInterviewerPrincipal principal = null,
             IHttpStatistician httpStatistician = null,
-            IServiceLocator serviceLocator = null)
+            IServiceLocator serviceLocator = null,
+            IWorkspaceService workspaceService = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<IOnlineSynchronizationService>();
 
@@ -499,7 +500,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IDeviceInformationService>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
-                Mock.Of<IWorkspaceService>(),
+                workspaceService ?? Mock.Of<IWorkspaceService>(),
                 Mock.Of<IViewModelNavigationService>());
         }
 
