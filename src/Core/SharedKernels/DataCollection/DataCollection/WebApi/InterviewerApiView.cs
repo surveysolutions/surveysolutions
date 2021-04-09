@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public Guid Id { get; set; }
         
         [Obsolete]
-        public Guid SupervisorId { get; set; }
+        public Guid? SupervisorId { get; set; }
         public string SecurityStamp { get; set; }
         
         public List<UserWorkspaceApiView> Workspaces { get; set; }

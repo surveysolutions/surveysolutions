@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             return new InterviewerApiView
             {
                 Id = user.Id,
-                SupervisorId = apiViewsForWorkspaces.First().SupervisorId!.Value,
+                SupervisorId = apiViewsForWorkspaces.FirstOrDefault()?.SupervisorId,
                 SecurityStamp = user.SecurityStamp,
                 Workspaces = apiViewsForWorkspaces.ToList() 
             };
