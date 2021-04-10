@@ -154,7 +154,7 @@
 import * as toastr from 'toastr'
 import Vue from 'vue'
 import gql from 'graphql-tag'
-import {isNull, chain, debounce, delay, forEach, find, toNumber, isNumber} from 'lodash'
+import {isNull, chain, debounce, delay, forEach, find, flatten, toNumber,isEqual, isNumber} from 'lodash'
 import routeSync from '~/shared/routeSync'
 import InterviewFilter from '../Interviews/InterviewQuestionsFilters'
 
@@ -208,6 +208,34 @@ $variable: String, $zoom: Int!, $clientMapWidth: Int!, $north: Float!, $south: F
   }
   }
 }`
+
+
+/** convert
+ * [{variable, field, value}, {variable, field, value}]
+ * ["variable,field,value", "variable,field,value"]
+ */
+function conditionToQueryString(conditions) {
+    const result = []
+    conditions.forEach(c => {
+        result.push(`${c.variable},${c.field},${JSON.stringify(c.value)}`)
+    })
+    return result.length > 0 ? result : null
+}
+
+function queryStringToCondition(queryStringArray) {
+    const result = []
+    queryStringArray.forEach(q => {
+        const parts = q.split(',')
+        const value = parts.slice(2).join(',')
+
+        result.push({
+            variable: parts[0],
+            field: parts[1],
+            value: JSON.parse(value),
+        })
+    })
+    return result
+}
 
 export default {
     components: {
@@ -297,11 +325,17 @@ export default {
         },
 
         queryString() {
-            return {
+            var query = {
                 name: this.query.name,
                 version: this.query.version,
                 question: this.query.question,
             }
+
+            if(this.conditions.length > 0) {
+                query.conditions = conditionToQueryString(this.conditions)
+            }
+
+            return query
         },
 
         selectedQuestionnaireId() {
@@ -370,19 +404,24 @@ export default {
 
         if (this.selectedQuestionnaireId == null && this.questionnaires.length > 0) {
             this.selectQuestionnaire(this.questionnaires[0])
-        } else if (this.selectedQuestionnaireId != null) {
+        }
+        else if (this.selectedQuestionnaireId != null) {
             this.selectQuestionnaire(this.selectedQuestionnaireId)
+        }
+
+        if(this.query.conditions != null) {
+            this.conditions = queryStringToCondition(flatten([this.query.conditions]))
         }
     },
 
     methods: {
         questionFilterChanged(conditions) {
             this.conditions = conditions
-            this.reloadMarkersInBounds()
+            this.updateRouteAndreloadMarkersInBounds()
         },
         changeExposedValuesFilter(exposedValuesFilter) {
             this.exposedValuesFilter = exposedValuesFilter
-            this.reloadMarkersInBounds()
+            this.updateRouteAndreloadMarkersInBounds()
         },
         setMapCanvasStyle() {
             $('body').addClass('map-report')
@@ -587,6 +626,11 @@ export default {
             }
         },
 
+        updateRouteAndreloadMarkersInBounds(){
+            this.reloadMarkersInBounds()
+            this.addParamsToQueryString()
+        },
+
         reloadMarkersInBounds() {
             var bounds = this.map.getBounds()
 
@@ -600,6 +644,15 @@ export default {
                     bounds.getSouthWest().lat(),
                     false
                 )
+            }
+        },
+
+        addParamsToQueryString() {
+            const query = Object.assign({} , this.queryString)
+
+            if (!isEqual(this.$route.query, query)) {
+                this.$router.push({ query })
+                    .catch(() => {})
             }
         },
 
