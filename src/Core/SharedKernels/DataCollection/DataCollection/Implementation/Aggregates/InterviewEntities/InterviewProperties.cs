@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public DateTimeOffset? LastAnswerDate { get; set; }
 
-        public bool AcceptsCAWIAnswers => Mode == InterviewMode.CAWI && AllowedStatusesForCAWI.Contains(Status);
+        public bool AcceptsCAWIAnswers => Mode != InterviewMode.CAPI && AllowedStatusesForCAWI.Contains(Status);
 
         public static HashSet<InterviewStatus> AllowedStatusesForCAWI = new()
         {

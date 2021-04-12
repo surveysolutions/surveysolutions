@@ -73,7 +73,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 {
                     yield return InterviewActionFlags.CanBeDeleted;
 
-                    if (interviewSummary.InterviewMode == InterviewMode.CAPI)
+                    if (interviewSummary.InterviewMode != InterviewMode.CAWI)
                     {
                         yield return InterviewActionFlags.CanChangeToCAWI;
                     }
@@ -82,7 +82,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 if ((interviewSummary.Status == InterviewStatus.InterviewerAssigned
                     || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
                     || interviewSummary.Status == InterviewStatus.Restarted
-                    ) && interviewSummary.InterviewMode == InterviewMode.CAWI)
+                    ) && interviewSummary.InterviewMode != InterviewMode.CAPI)
                 {
                     yield return InterviewActionFlags.CanChangeToCAPI;
                 }

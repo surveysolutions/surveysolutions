@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private readonly Expression<Func<InterviewSummary, bool>> ForInterviewer =
             summary =>
-                summary.InterviewMode == InterviewMode.CAPI &&
+                summary.InterviewMode != InterviewMode.CAWI &&
                 (summary.Status == InterviewStatus.InterviewerAssigned
                  || summary.Status == InterviewStatus.RejectedBySupervisor);
 
@@ -120,7 +120,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             var inProgressInterviews = this.reader.Query(interviews =>
                 interviews
-                    .Where(interview => interview.InterviewMode == InterviewMode.CAPI)
+                    .Where(interview => interview.InterviewMode != InterviewMode.CAWI)
                     .Where(interview =>
                         ( // assigned on supervisor
                             interview.ResponsibleId == supervisorId &&

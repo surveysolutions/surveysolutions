@@ -2,6 +2,7 @@
 {
     public enum InterviewMode
     {
+        Unknown = 0,
         CAPI = 1,
         CAWI = 2
     }
