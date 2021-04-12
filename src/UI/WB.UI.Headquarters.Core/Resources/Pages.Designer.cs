@@ -4328,12 +4328,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This action will create individual user,
-        ///        &lt;br&gt;to create several interviewers and supervisors you can use &lt;a href=&quot;{{link}}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;.
+        ///   Looks up a localized string similar to user batch creation.
         /// </summary>
-        public static string User_CreateText {
+        public static string User_CreateText_UserBatchUploadLinkText {
             get {
-                return ResourceManager.GetString("User_CreateText", resourceCulture);
+                return ResourceManager.GetString("User_CreateText_UserBatchUploadLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action will create individual user,.
+        /// </summary>
+        public static string User_CreateText1 {
+            get {
+                return ResourceManager.GetString("User_CreateText1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to create several interviewers and supervisors you can use {{link}}.
+        /// </summary>
+        public static string User_CreateText2 {
+            get {
+                return ResourceManager.GetString("User_CreateText2", resourceCulture);
             }
         }
         
@@ -4374,7 +4391,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select workspace and supervisor (need to assign interviewer) that need to be added to selected users.
+        ///   Looks up a localized string similar to Select workspace and supervisor that need to create interviewer.
         /// </summary>
         public static string UserManagement_SubtitleAddInterviewer {
             get {
@@ -4437,7 +4454,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your will be archive interviewers and supervisors with his team. Supervisors interviewers will be archived in all workspaces. If the interviewers has completed interviews on his tablet then the data will be lost..
+        ///   Looks up a localized string similar to You will archive supervisors and interviewers within his team. Interviewers assigned to archived supervisor will be also archived in all workspaces. If interviewers have any non synchronized data tablets it will be deleted..
         /// </summary>
         public static string Users_ArchiveUsersConfirmMessage {
             get {
@@ -4563,7 +4580,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor (Interviewers will add to team of this supervisor).
+        ///   Looks up a localized string similar to Supervisor (Interviewers will be added to his team).
         /// </summary>
         public static string UsersManage_SupervisorFilterTitle {
             get {

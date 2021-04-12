@@ -863,9 +863,14 @@
     <value>This action will create individual user with supervisor rights,
         &lt;br&gt;to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;</value>
   </data>
-  <data name="User_CreateText" xml:space="preserve">
-    <value>This action will create individual user,
-        &lt;br&gt;to create several interviewers and supervisors you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;</value>
+  <data name="User_CreateText1" xml:space="preserve">
+    <value>This action will create individual user,</value>
+  </data>
+  <data name="User_CreateText2" xml:space="preserve">
+    <value>to create several interviewers and supervisors you can use {{link}}</value>
+  </data>
+  <data name="User_CreateText_UserBatchUploadLinkText" xml:space="preserve">
+    <value>user batch creation</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
     <value>Personal information details (optional) &lt;br&gt; will be visible to HQ users only</value>
@@ -1611,7 +1616,7 @@
     <value>Select workspaces that need to be added to selected users</value>
   </data>
   <data name="UserManagement_SubtitleAddInterviewer" xml:space="preserve">
-    <value>Select workspace and supervisor (need to assign interviewer) that need to be added to selected users</value>
+    <value>Select workspace and supervisor that need to create interviewer</value>
   </data>
   <data name="UserManagement_SubtitleRemove" xml:space="preserve">
     <value>Select workspaces that need to be removed from selected users</value>

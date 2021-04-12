@@ -11,7 +11,11 @@
         <div class="extra-margin-bottom">
             <div class="profile">
                 <div class="col-sm-7">
-                    <p v-html="$t('Pages.User_CreateText', {link: uploadUri})"></p>
+                    <p>
+                        <span v-html="$t('Pages.User_CreateText1')"></span>
+                        <br />
+                        <span v-html="$t('Pages.User_CreateText2', {link: uploadUri})"></span>
+                    </p>
                 </div>
                 <div class="col-sm-12">
                     <form-group
@@ -184,7 +188,9 @@ export default {
             return this.$config.model
         },
         uploadUri() {
-            return this.$hq.basePath + 'Upload'
+            const url = this.$hq.basePath + 'Upload'
+            const link = '<a href="' + url + '" target="_blank">' + this.$t('Pages.User_CreateText_UserBatchUploadLinkText') + '</a>'
+            return link
         },
         userInfo() {
             return this.model.userInfo
