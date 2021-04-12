@@ -51,7 +51,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         {
             var user = userViewFactory.FindById(this.authorizedUser.Id);
             if (!user.WorkspaceProfile.SupervisorId.HasValue)
-                throw new ArgumentException("SupervisorId must exists");
+                throw new ArgumentException("SupervisorId must be set for interviewer");
+
             return user.WorkspaceProfile.SupervisorId.Value;
         }
 
