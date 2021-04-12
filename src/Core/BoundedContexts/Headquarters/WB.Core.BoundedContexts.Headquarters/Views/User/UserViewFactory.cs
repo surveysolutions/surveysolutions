@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             else if (!string.IsNullOrEmpty(input.UserEmail))
                 query = query.Where(x => x.Email.ToLower() == input.UserEmail.ToLower());
             else if (!string.IsNullOrEmpty(input.DeviceId))
-                query = query.Where(x => x.WorkspacesProfile.DeviceId == input.DeviceId);
+                query = query.Where(x => x.Profile.DeviceId == input.DeviceId);
 
             var dbUser =
                 (from user in query
@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     CreationDate = user.CreationDate,
                     Roles = user.Roles,
                     SecurityStamp = user.SecurityStamp,
-                    SupervisorId = user.Profile.SupervisorId
+                    SupervisorId = user.WorkspaceProfile.SupervisorId
                 }).FirstOrDefault();
 
             if (dbUser == null) return null;
@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 .Select(x => new UserToVerify
                 {
                     IsLocked = x.IsLockedByHeadquaters || x.IsLockedBySupervisor,
-                    SupervisorId = x.Roles.Any(role => role.Id == supervisorRoleId) ? x.Id : x.Profile.SupervisorId,
+                    SupervisorId = x.Roles.Any(role => role.Id == supervisorRoleId) ? x.Id : x.WorkspaceProfile.SupervisorId,
                     InterviewerId = x.Roles.Any(role => role.Id == interviewerRoleId) ? x.Id : (Guid?)null,
                     HeadquartersId = x.Roles.Any(role => role.Id == hqRoleId) ? x.Id : (Guid?)null
                 }).ToArray();
@@ -138,7 +138,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     IsLockedByHQ = x.IsLockedByHeadquaters,
                     UserName = x.UserName,
                     FullName = x.FullName,
-                    DeviceId = x.WorkspacesProfile.DeviceId
+                    DeviceId = x.Profile.DeviceId
                 });
 
             orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
@@ -163,7 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 .Where(user => showLocked || (!user.IsLockedBySupervisor && !user.IsLockedByHeadquaters));
 
             if (supervisorId.HasValue)
-                users = users.Where(user => user.Profile.SupervisorId == supervisorId);
+                users = users.Where(user => user.WorkspaceProfile.SupervisorId == supervisorId);
 
             var filteredUsers = users
                 .OrderBy(x => x.UserName)
@@ -240,11 +240,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 IsLockedByHQ = x.IsLockedByHeadquaters,
                 UserName = x.UserName,
                 FullName = x.FullName,
-                SupervisorId = x.Profile.SupervisorId,
-                DeviceId = x.Profile.DeviceId,
+                SupervisorId = x.WorkspaceProfile.SupervisorId,
+                DeviceId = x.WorkspaceProfile.DeviceId,
                 IsArchived = x.IsArchived,
-                EnumeratorVersion = x.Profile.DeviceAppVersion,
-                EnumeratorBuild = x.Profile.DeviceAppBuildVersion,
+                EnumeratorVersion = x.WorkspaceProfile.DeviceAppVersion,
+                EnumeratorBuild = x.WorkspaceProfile.DeviceAppBuildVersion,
                 LastLoginDate = x.LastLoginDate
             });
             
@@ -311,7 +311,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             if (supervisorId.HasValue)
                 interviewers =
-                    interviewers.Where(x => x.Profile.SupervisorId != null && x.Profile.SupervisorId == supervisorId);
+                    interviewers.Where(x => x.WorkspaceProfile.SupervisorId != null && x.WorkspaceProfile.SupervisorId == supervisorId);
             return interviewers;
         }
 
@@ -320,15 +320,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             switch (facet)
             {
                 case InterviewerFacet.NeverSynchonized:
-                    interviewers = interviewers.Where(x => x.Profile.DeviceId == null);
+                    interviewers = interviewers.Where(x => x.WorkspaceProfile.DeviceId == null);
                     break;
                 case InterviewerFacet.OutdatedApp:
                     interviewers = interviewers.Where(x =>
-                        x.Profile.DeviceAppBuildVersion.HasValue && x.Profile.DeviceAppBuildVersion < apkBuildVersion);
+                        x.WorkspaceProfile.DeviceAppBuildVersion.HasValue && x.WorkspaceProfile.DeviceAppBuildVersion < apkBuildVersion);
                     break;
                 case InterviewerFacet.LowStorage:
                     interviewers = from i in interviewers
-                                    where i.Profile.StorageFreeInBytes < InterviewerIssuesConstants.LowMemoryInBytesSize
+                                    where i.WorkspaceProfile.StorageFreeInBytes < InterviewerIssuesConstants.LowMemoryInBytesSize
                                     select i;
                     break;
                 case InterviewerFacet.NoAssignmentsReceived:
@@ -365,8 +365,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
                 return responsible.Select(x => new ResponsiblesViewItem
                 {
-                    InterviewerId = x.Profile.SupervisorId.HasValue ? x.Id : (Guid?)null,
-                    SupervisorId = x.Profile.SupervisorId ?? x.Id,
+                    InterviewerId = x.WorkspaceProfile.SupervisorId.HasValue ? x.Id : (Guid?)null,
+                    SupervisorId = x.WorkspaceProfile.SupervisorId ?? x.Id,
                     UserName = x.UserName,
                     Rank = x.UserName.ToLower().StartsWith(searchByToLower) ? 1 : 0
                 });

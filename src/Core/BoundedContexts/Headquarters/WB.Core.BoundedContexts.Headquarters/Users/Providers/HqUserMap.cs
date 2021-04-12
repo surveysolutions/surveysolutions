@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
             }, rel => rel.ManyToMany(p => p.Column("\"RoleId\"")));
 
 
-            ManyToOne(x => x.Profile, oto =>
+            ManyToOne(x => x.WorkspaceProfile, oto =>
             {
                 oto.Cascade(Cascade.None);
                 oto.Insert(false);
@@ -110,7 +110,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
                 oto.Lazy(LazyRelation.Proxy);
                 oto.Column("\"UserProfileId\"");
             });
-            ManyToOne(x => x.WorkspacesProfile, oto =>
+            ManyToOne(x => x.Profile, oto =>
             {
                 oto.Cascade(Cascade.All);
                 oto.Column("\"UserProfileId\"");

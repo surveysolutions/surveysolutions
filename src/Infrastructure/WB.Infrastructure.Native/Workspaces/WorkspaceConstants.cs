@@ -8,15 +8,15 @@ namespace WB.Infrastructure.Native.Workspaces
         public const string DefaultWorkspaceName = "primary";
         public const string RevisionClaimType = "WorkspaceRevision";
 
-        public static bool IsSpecialWorkspace(string name)
+        public static bool IsSystemDefinedWorkspace(string name)
         {
             return name == WorkspaceNames.AdminWorkspaceName
                    || name == WorkspaceNames.UsersWorkspaceName;
         }
         public static class WorkspaceNames
         {
-            public const string UsersWorkspaceName = "users";
-            public const string AdminWorkspaceName = "administration";
+            public static readonly string UsersWorkspaceName = "users";
+            public static readonly string AdminWorkspaceName = "administration";
         }
     }
 }

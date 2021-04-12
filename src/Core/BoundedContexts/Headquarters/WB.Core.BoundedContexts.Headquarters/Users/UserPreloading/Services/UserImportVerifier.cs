@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -47,10 +48,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                 .Where(u => u.IsArchived && u.IsInterviewer)
                 .ToDictionary(u => u.UserName.ToLower(), u => u);
 
+            var allInterviewersAndSupervisorsMap = allInterviewersAndSupervisors
+                .ToDictionary(u => u.UserId, u => u);
+
             return new[]
             {
                 new PreloadedDataValidator(row => LoginNameUsedByExistingUser(activeUserNames, row), "PLU0001", u => u.Login),
-                new PreloadedDataValidator(row => LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(archivedInterviewersMap, allInterviewersAndSupervisors, row), "PLU0003", u => u.Login),
+                new PreloadedDataValidator(row => LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(archivedInterviewersMap, allInterviewersAndSupervisorsMap, row), "PLU0003", u => u.Login),
                 new PreloadedDataValidator(row => LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(archivedInterviewersMap, archivedSupervisorNames, row), "PLU0004", u => u.Login),
                 new PreloadedDataValidator(LoginFormatVerification, "PLU0005", u => u.Login),
                 new PreloadedDataValidator(EmailFormatVerification, "PLU0007", u => u.Email),
@@ -216,7 +220,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 
         bool LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(
             Dictionary<string, UserToValidate> archivedInterviewersMap,
-            UserToValidate[] allInterviewersAndSupervisors,
+            Dictionary<Guid, UserToValidate> allInterviewersAndSupervisorsMap,
             UserToImport userPreloadingDataRecord)
         {
             var desiredRole = userPreloadingDataRecord.UserRole;
@@ -231,15 +235,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             foreach (var userWorkspace in userWorkspaces)
             {
                 var archivedInterviewerInWorkspace = archivedInterviewersMap[loginName]
-                    .InWorkspaces
+                    .Workspaces
                     .FirstOrDefault(w => w.WorkspaceName == userWorkspace);
                 if (archivedInterviewerInWorkspace?.SupervisorId == null)
                     return true;
-                var supervisorName = allInterviewersAndSupervisors
-                    .FirstOrDefault(u => u.UserId == archivedInterviewerInWorkspace.SupervisorId.Value)?
-                    .UserName.ToLower();
-                if (supervisorName == userPreloadingDataRecord.Supervisor.ToLower())
-                    return true;
+                if (allInterviewersAndSupervisorsMap.TryGetValue(archivedInterviewerInWorkspace.SupervisorId.Value,
+                    out var supervisor))
+                {
+                    var supervisorName = supervisor.UserName.ToLower();
+                    if (supervisorName == userPreloadingDataRecord.Supervisor.ToLower())
+                        return true;
+                }
             }
 
             return false;
@@ -280,7 +286,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             if (activeSupervisors.ContainsKey(supervisorNameLowerCase))
             {
                 var userWorkspaces = userPreloadingDataRecord.GetWorkspaces();
-                var svWorkspaces = activeSupervisors[supervisorNameLowerCase].InWorkspaces.Select(w => w.WorkspaceName).ToArray();
+                var svWorkspaces = activeSupervisors[supervisorNameLowerCase].Workspaces.Select(w => w.WorkspaceName).ToArray();
                 return !userWorkspaces.All(uw => svWorkspaces.Contains(uw));
             }
 

@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.CompletedTask;
         }
 
-        protected override Task ChangeAndNavigateToNewDefaultWorkspaceAsync()
+        protected override Task ChangeWorkspaceAndNavigateToItAsync()
             => throw new NotImplementedException("Remove workspace by offline synchronization no supported");
 
         private void UpdateSupervisorOfInterviewer(Guid supervisorId, string name)

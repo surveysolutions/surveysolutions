@@ -123,9 +123,9 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
             var supervisorUser = new HqUser()
             {
                 Id = supervisorId,
-                Profile = new WorkspaceUserProfile(),
+                WorkspaceProfile = new WorkspaceUserProfile(),
             };
-            supervisorUser.Profile.AsDynamic().SupervisorId = Guid.NewGuid();
+            supervisorUser.WorkspaceProfile.AsDynamic().SupervisorId = Guid.NewGuid();
             supervisorUser.Roles.Add(supervisorRole);
             usersRepository.Setup(x => x.FindByIdAsync(supervisorId, It.IsAny<CancellationToken>())).Returns(Task.FromResult(supervisorUser));
             EnumerableQuery<HqUser> allUsers = new EnumerableQuery<HqUser>(new[] { supervisorUser });

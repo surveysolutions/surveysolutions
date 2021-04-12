@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.serviceProvider = serviceProvider;
         }
 
-        [Workspaces]
+        [NonWorkspaced]
         public class AuditLogRecordView : IPlainStorageEntity<int?>
         {
             [PrimaryKey, Unique, AutoIncrement]

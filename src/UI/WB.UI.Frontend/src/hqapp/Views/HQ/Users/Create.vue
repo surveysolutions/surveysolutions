@@ -155,6 +155,7 @@
 import Vue from 'vue'
 import {each} from 'lodash'
 import VuePageTitle from 'vue-page-title'
+import {RoleNames} from '~/shared/constants'
 
 Vue.use(VuePageTitle, {})
 
@@ -189,22 +190,22 @@ export default {
             return this.model.userInfo
         },
         isAdmin() {
-            return this.role && this.role.key == 'Administrator'
+            return this.role && this.role.key == RoleNames.ADMINISTRATOR
         },
         isHeadquarters() {
-            return this.role && this.role.key == 'Headquarter'
+            return this.role && this.role.key == RoleNames.HQ
         },
         isSupervisor() {
-            return this.role && this.role.key == 'Supervisor'
+            return this.role && this.role.key == RoleNames.SUPERVISOR
         },
         isInterviewer() {
-            return this.role && this.role.key == 'Interviewer'
+            return this.role && this.role.key == RoleNames.INTERVIEWER
         },
         isObserver() {
-            return this.role && this.role.key == 'Observer'
+            return this.role && this.role.key == RoleNames.OBSERVER
         },
         isApiUser() {
-            return this.role && this.role.key == 'ApiUser'
+            return this.role && this.role.key == RoleNames.API
         },
         referrerTitle() {
             if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')

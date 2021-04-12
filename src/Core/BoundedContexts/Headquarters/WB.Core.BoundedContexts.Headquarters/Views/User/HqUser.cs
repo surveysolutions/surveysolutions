@@ -65,12 +65,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             Roles = new List<HqRole>();
             Logins = new List<HqUserLogin>();
             DeviceSyncInfos = new HashSet<DeviceSyncInfo>();
-            WorkspacesProfile = new HqUserProfile();
+            Profile = new HqUserProfile();
             Workspaces = new HashSet<WorkspacesUsers>();
         }
 
-        public virtual HqUserProfile WorkspacesProfile { get; set; }
-        public virtual WorkspaceUserProfile Profile { get; set; }
+        public virtual HqUserProfile Profile { get; set; }
+        public virtual WorkspaceUserProfile WorkspaceProfile { get; set; }
 
         public virtual string FullName { get; set; }
 
@@ -126,16 +126,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual string DeviceAppVersion { get; set; }
         public virtual int? DeviceAppBuildVersion { get; set; }
         public virtual long? StorageFreeInBytes { get; set; }
-    }
-    
-    public class WorkspaceUserProfile
-    {
-        public virtual int Id { get; protected set; }
-        public virtual Guid? SupervisorId { get; protected set; }
-        public virtual string DeviceId { get; protected set; }
-        public virtual DateTime? DeviceRegistrationDate { get; protected set; }
-        public virtual string DeviceAppVersion { get; protected set; }
-        public virtual int? DeviceAppBuildVersion { get; protected set; }
-        public virtual long? StorageFreeInBytes { get; protected set; }
     }
 }

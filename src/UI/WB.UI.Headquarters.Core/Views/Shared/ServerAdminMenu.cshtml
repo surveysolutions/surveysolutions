@@ -12,7 +12,7 @@
                 <a href="@Url.Content(w.PathBase + "/" + w.Name)">@w.DisplayName</a>
             </li>*@
         @Html.MainMenuItem(Workspace.Admin.AsContext(),"Index", "Workspaces", @MainMenu.Workspaces, MenuItem.Workspaces)
-        @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Index", "UsersManagement", Dashboard.UsersManagement, MenuItem.UsersManagement)
+        @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Index", "UsersManagement", MainMenu.Users, MenuItem.UsersManagement)
     }
 </ul>
 <ul class="nav navbar-nav navbar-right">

@@ -8,7 +8,7 @@
 
 @{
     var workspace = workspaceAccessor.CurrentWorkspace();
-    var isSystemWorkspace = workspace?.IsSpecialWorkspace() ?? false;
+    var isSystemWorkspace = workspace?.IsSystemDefinedWorkspace() ?? false;
 }
 
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -38,7 +38,7 @@
             <partial name="_WorkspaceSelector" />
 
             @if (authorizedUser.IsAdministrator 
-                && (this.workspaceAccessor.CurrentWorkspace()?.IsSpecialWorkspace() ?? false))
+                && (this.workspaceAccessor.CurrentWorkspace()?.IsSystemDefinedWorkspace() ?? false))
             {
                 <partial name="ServerAdminMenu" />
             }
@@ -48,7 +48,7 @@
             }
             else if (authorizedUser.IsHeadquarter)
             {
-                @if (this.workspaceAccessor.CurrentWorkspace()?.IsSpecialWorkspace() ?? false)
+                @if (this.workspaceAccessor.CurrentWorkspace()?.IsSystemDefinedWorkspace() ?? false)
                 {
                     <partial name="UsersHeadquartersMainMenu" />
                 }

@@ -35,19 +35,6 @@
     </li>
     @Html.MainMenuItem("Index", "Interviews", @MainMenu.Interviews, MenuItem.Interviews)
 
-    @*<li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Interviewers || page == MenuItem.UserBatchUpload ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.TeamsAndRoles">
-            @MainMenu.TeamsAndRoles <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-            @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Index", "Supervisors", @MainMenu.Supervisors, MenuItem.Teams)
-            @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Interviewers", "Users", @MainMenu.Interviewers, MenuItem.Interviewers)
-            @if (!authorizedUser.IsObserver)
-            {
-                @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Upload", "Users", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
-            }
-        </ul>
-    </li>*@
     <li class="dropdown  @(page == MenuItem.Questionnaires || page == MenuItem.Assignments || page == MenuItem.Maps ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.SurveySetup">
             @MainMenu.SurveySetup <span class="caret"></span>

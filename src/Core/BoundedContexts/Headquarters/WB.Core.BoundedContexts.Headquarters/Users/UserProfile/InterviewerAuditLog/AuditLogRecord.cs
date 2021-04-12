@@ -32,9 +32,4 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAudi
             return entitySerializer.Deserialize<T>(Payload);
         }
     }
-
-    public class GlobalAuditLogRecord : AuditLogRecord
-    {
-        
-    }
 }

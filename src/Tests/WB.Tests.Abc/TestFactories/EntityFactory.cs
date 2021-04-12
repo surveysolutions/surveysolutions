@@ -1305,8 +1305,8 @@ namespace WB.Tests.Abc.TestFactories
                 IsLockedByHeadquaters = isLockedByHQ,
                 FullName = string.Empty,
                 IsLockedBySupervisor = lockedBySupervisor,
-                Profile = new WorkspaceUserProfile(),
-                WorkspacesProfile = new HqUserProfile
+                WorkspaceProfile = new WorkspaceUserProfile(),
+                Profile = new HqUserProfile
                 {
                     DeviceId = deviceId,
                     DeviceAppBuildVersion = interviewerBuild,
@@ -1319,7 +1319,7 @@ namespace WB.Tests.Abc.TestFactories
                 SecurityStamp = securityStamp ?? Guid.NewGuid().ToString()
             };
 
-            var userProfile = user.Profile.AsDynamic();
+            var userProfile = user.WorkspaceProfile.AsDynamic();
             userProfile.SupervisorId = supervisorId;
             userProfile.DeviceId = deviceId;
             userProfile.DeviceAppBuildVersion = interviewerBuild;

@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
         }
 
-        protected override Task ChangeAndNavigateToNewDefaultWorkspaceAsync()
+        protected override Task ChangeWorkspaceAndNavigateToItAsync()
         {
             var workspaceView = workspaceService.GetAll().First();
             var interviewerIdentity = (InterviewerIdentity)principal.CurrentUserIdentity;

@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    [Workspaces]
+    [NonWorkspaced]
     public class InterviewerIdentity : IInterviewerUserIdentity, IPlainStorageEntity
     {
         public string Name { get; set; } = null!;

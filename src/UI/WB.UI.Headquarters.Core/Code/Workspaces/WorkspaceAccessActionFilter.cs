@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             if (workspace?.IsEnabled() == true || allowedDisabledWorkspace)
             {
 
-                if (hasAuthorization && !allowAnonymous && workspace.IsSpecialWorkspace())
+                if (hasAuthorization && !allowAnonymous && workspace.IsSystemDefinedWorkspace())
                 {
                     if (workspace.IsAdministrationWorkspace())
                     {

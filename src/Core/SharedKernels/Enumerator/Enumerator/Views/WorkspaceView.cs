@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
-    [Workspaces]
+    [NonWorkspaced]
     public class WorkspaceView : IPlainStorageEntity
     {
         [PrimaryKey]

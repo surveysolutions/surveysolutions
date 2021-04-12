@@ -83,8 +83,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 .Returns(Mock.Of<IInterviewUniqueKeyGenerator>);
 
             var users = new Mock<IUserRepository>();
-            var hqUser = new HqUser() {Profile = new WorkspaceUserProfile()};
-            hqUser.Profile.AsDynamic().SupervisorId = supervisorId;
+            var hqUser = new HqUser() {WorkspaceProfile = new WorkspaceUserProfile()};
+            hqUser.WorkspaceProfile.AsDynamic().SupervisorId = supervisorId;
             
             users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(hqUser));

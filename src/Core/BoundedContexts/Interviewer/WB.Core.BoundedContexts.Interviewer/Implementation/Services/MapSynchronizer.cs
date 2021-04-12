@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                    + Environment.NewLine + string.Format(EnumeratorUIResources.InterviewerVersion, appVersion);
         }
 
-        protected override Task ChangeAndNavigateToNewDefaultWorkspaceAsync()
+        protected override Task ChangeWorkspaceAndNavigateToItAsync()
             => throw new NotImplementedException("Remove workspace by offline synchronization no supported");
     }
 }

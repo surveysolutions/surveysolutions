@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
 
                     var moveResult = moveService.MoveInterviewsToSupervisor(this.authorizedUser.Id,
                         user.Id,
-                        scopedInterviewer.Profile.SupervisorId.GetValueOrDefault());
+                        scopedInterviewer.WorkspaceProfile.SupervisorId.GetValueOrDefault());
 
                     if(moveResult.Errors.Count > 0)
                     {

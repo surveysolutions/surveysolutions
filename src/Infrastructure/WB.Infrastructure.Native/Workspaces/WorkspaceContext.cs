@@ -20,7 +20,7 @@ namespace WB.Infrastructure.Native.Workspaces
         public string DisplayName { get; }
         public string? PathBase { get; set; }
 
-        public string SchemaName => WorkspaceConstants.IsSpecialWorkspace(Name)
+        public string SchemaName => WorkspaceConstants.IsSystemDefinedWorkspace(Name)
             ? WorkspaceConstants.SchemaName 
             : $"{SchemaPrefix}{Name}";
 

@@ -68,7 +68,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         public virtual async Task<bool> HasDevice()
         {
             var user = await this.userViewFactory.FindByIdAsync(this.authorizedUser.Id);
-            return !string.IsNullOrEmpty(user.Profile?.DeviceId);
+            return !string.IsNullOrEmpty(user.WorkspaceProfile?.DeviceId);
         }
 
         [HttpPost]

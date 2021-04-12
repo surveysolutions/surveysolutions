@@ -50,7 +50,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         public Guid Supervisor()
         {
             var user = userViewFactory.FindById(this.authorizedUser.Id);
-            return user.Profile.SupervisorId!.Value;
+            if (!user.WorkspaceProfile.SupervisorId.HasValue)
+                throw new ArgumentException("SupervisorId must exists");
+            return user.WorkspaceProfile.SupervisorId.Value;
         }
 
         [HttpGet]

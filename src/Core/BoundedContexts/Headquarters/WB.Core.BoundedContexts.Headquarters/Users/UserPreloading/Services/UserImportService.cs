@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                 : authorizedUser.Workspaces.ToList();
                 
             if (string.IsNullOrWhiteSpace(workspace) || allWorkspace.All(w => w != workspace))
-                throw new MissingWorkspaceException("Cannot preload users outside of workspace");
+                throw new MissingWorkspaceException("Cannot preload users outside of workspace or in disabled workspace");
 
             var usersToImport = new List<UserToImport>();
 
@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                     IsArchived = x.IsArchived,
                     IsSupervisor = x.Roles.Any(role => role.Id == supervisorRoleId),
                     IsInterviewer = x.Roles.Any(role => role.Id == interviewerRoleId),
-                    InWorkspaces = x.Workspaces.Select(w => new InWorkspace()
+                    Workspaces = x.Workspaces.Select(w => new UserToValidateWorkspace()
                     {
                         WorkspaceName = w.Workspace.Name,
                         SupervisorId = w.Supervisor?.Id,

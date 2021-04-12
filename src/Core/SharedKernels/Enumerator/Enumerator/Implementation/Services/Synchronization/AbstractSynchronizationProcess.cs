@@ -484,7 +484,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 var workspace = principal.CurrentUserIdentity.Workspace;
                 this.logger.Error($"Workspace {workspace} removed.", we);
 
-                await ChangeAndNavigateToNewDefaultWorkspaceAsync();
+                await ChangeWorkspaceAndNavigateToItAsync();
             }
             catch (WorkspaceAccessException wae)
             {
@@ -603,7 +603,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected abstract Task RefreshUserInfo(CancellationToken cancellationToken);
         protected abstract Task CheckAfterStartSynchronization(CancellationToken cancellationToken);
-        protected abstract Task ChangeAndNavigateToNewDefaultWorkspaceAsync();
+        protected abstract Task ChangeWorkspaceAndNavigateToItAsync();
         protected abstract void UpdatePasswordOfResponsible(RestCredentials credentials);
 
         protected abstract string GetRequiredUpdate(string targetVersion, string appVersion);

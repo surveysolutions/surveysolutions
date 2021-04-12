@@ -350,7 +350,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 UserName = "name",
                 CreationDate = DateTime.UtcNow,
             };
-            user.Profile = null;
+            user.WorkspaceProfile = null;
             //user.Roles.Add(new HqRole() { Id = Guid.NewGuid(), Name = "Hq" });
             await usersStorage.CreateAsync(user);
             var userId = usersStorage.Users.Single().Id;

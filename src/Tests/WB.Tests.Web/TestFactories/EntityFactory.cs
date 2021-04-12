@@ -100,14 +100,14 @@ namespace WB.Tests.Web.TestFactories
                 UserName = userName,
                 IsLockedByHeadquaters = isLockedByHQ,
                 IsLockedBySupervisor = lockedBySupervisor,
-                Profile = new WorkspaceUserProfile(),
+                WorkspaceProfile = new WorkspaceUserProfile(),
                 PasswordHash = passwordHash,
                 PasswordHashSha1 = passwordHashSha1
             };
-            user.Profile.AsDynamic().SupervisorId = supervisorId;
-            user.Profile.AsDynamic().DeviceId = deviceId;
-            user.Profile.AsDynamic().DeviceAppBuildVersion = interviewerBuild;
-            user.Profile.AsDynamic().DeviceAppVersion = interviewerVersion;
+            user.WorkspaceProfile.AsDynamic().SupervisorId = supervisorId;
+            user.WorkspaceProfile.AsDynamic().DeviceId = deviceId;
+            user.WorkspaceProfile.AsDynamic().DeviceAppBuildVersion = interviewerBuild;
+            user.WorkspaceProfile.AsDynamic().DeviceAppVersion = interviewerVersion;
 
             user.Roles.Add(new HqRole { Id = role.ToUserId() });
 

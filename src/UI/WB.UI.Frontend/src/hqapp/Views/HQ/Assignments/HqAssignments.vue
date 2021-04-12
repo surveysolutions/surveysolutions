@@ -337,7 +337,7 @@ export default {
         showWebModeReassignWarning() {
             if(!this.newResponsibleId) return false
 
-            return this.anyWebModeAssignmentSelected && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER
+            return this.anyWebModeAssignmentSelected && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER.toLowerCase()
         },
         quantityValidations() {
             return {

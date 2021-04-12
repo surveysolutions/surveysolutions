@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
-    [Workspaces]
+    [NonWorkspaced]
     public class AuditLogSettingsView : IPlainStorageEntity
     {
         [PrimaryKey]

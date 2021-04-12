@@ -215,7 +215,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
 
             if (interviewer == null) return null;
 
-            var supervisor = await this.userManager.FindByIdAsync(interviewer.Profile.SupervisorId.Value);
+            var supervisor = await this.userManager.FindByIdAsync(interviewer.WorkspaceProfile.SupervisorId.Value);
 
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(userId);
             var registeredDeviceCount = this.deviceSyncInfoRepository.GetRegisteredDeviceCount(userId);
@@ -398,13 +398,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
         private IEnumerable<InterviewerProfileToExport> GetProfilesForInterviewers(Guid[] interviewersIds, int? hqInterviewerVersion)
         {
             var interviewerProfiles = this.userManager.Users.Where(x => interviewersIds.Contains(x.Id))
-                .Fetch(x => x.Profile)
+                .Fetch(x => x.WorkspaceProfile)
                 .Where(x => x!= null)
                 .ToList();
 
             var supervisorIds = interviewerProfiles
-                .Where(x => x.Profile.SupervisorId.HasValue)
-                .Select(x => x.Profile.SupervisorId.Value)
+                .Where(x => x.WorkspaceProfile.SupervisorId.HasValue)
+                .Select(x => x.WorkspaceProfile.SupervisorId.Value)
                 .ToArray();
             
             var supervisorsProfiles = this.userManager.Users.Where(x => supervisorIds.Contains(x.Id))
@@ -428,7 +428,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                 .Select(interviewer => FillInterviewerProfileForExport(
                         new InterviewerProfileToExport(), 
                         interviewer, 
-                        interviewer.Profile.SupervisorId.HasValue? supervisorsProfiles.GetOrNull(interviewer.Profile.SupervisorId.Value) : null,
+                        interviewer.WorkspaceProfile.SupervisorId.HasValue? supervisorsProfiles.GetOrNull(interviewer.WorkspaceProfile.SupervisorId.Value) : null,
                         deviceSyncInfos.GetOrNull(interviewer.Id),
                         deviceFailedSyncInfos.GetOrNull(interviewer.Id),
                         syncStats.GetOrNull(interviewer.Id)?.SuccessSynchronizationsCount ?? 0,
@@ -481,7 +481,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
 
             profile.SupervisorName = supervisorName;
             profile.SupervisorId = supervisorId;
-            profile.DeviceAssignmentDate = interviewer.Profile.DeviceRegistrationDate;
+            profile.DeviceAssignmentDate = interviewer.WorkspaceProfile.DeviceRegistrationDate;
             profile.HasUpdateForInterviewerApp = hasUpdateForInterviewerApp;
             profile.TotalNumberOfSuccessSynchronizations = totalSuccessSynchronizationCount;
             profile.TotalNumberOfFailedSynchronizations = totalFailedSynchronizationCount;
@@ -517,8 +517,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             if (lastSuccessDeviceInfo == null)
                 return profile;
 
-            profile.InterviewerAppVersion = interviewer.Profile?.DeviceAppVersion ?? lastSuccessDeviceInfo.AppVersion;
-            profile.DeviceId = interviewer.Profile?.DeviceId ?? lastSuccessDeviceInfo.DeviceId;
+            profile.InterviewerAppVersion = interviewer.WorkspaceProfile?.DeviceAppVersion ?? lastSuccessDeviceInfo.AppVersion;
+            profile.DeviceId = interviewer.WorkspaceProfile?.DeviceId ?? lastSuccessDeviceInfo.DeviceId;
             profile.DeviceSerialNumber = lastSuccessDeviceInfo.DeviceSerialNumber;
             profile.DeviceType = lastSuccessDeviceInfo.DeviceType;
             profile.DeviceManufacturer = lastSuccessDeviceInfo.DeviceManufacturer;

@@ -6,7 +6,7 @@
     var workspaces = (IEnumerable<WorkspaceContext>)ViewData["UserWorkspacesList"];
     var hasAnotherWorkspace = workspaces.Count() > 1;
     var workspace = workspaceContext.CurrentWorkspace();
-    var isSystemWorkspace = workspace?.IsSpecialWorkspace() ?? false;
+    var isSystemWorkspace = workspace?.IsSystemDefinedWorkspace() ?? false;
 }
 
 @if (workspace != null || isSystemWorkspace)

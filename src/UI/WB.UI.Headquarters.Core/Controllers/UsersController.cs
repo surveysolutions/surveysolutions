@@ -35,7 +35,6 @@ using WB.UI.Headquarters.Services.Impl;
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize]
-    [Workspace(WorkspaceConstants.WorkspaceNames.UsersWorkspaceName)]
     public class UsersController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;

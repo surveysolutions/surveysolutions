@@ -172,7 +172,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
             return Task.CompletedTask;
         }
         
-        protected override Task ChangeAndNavigateToNewDefaultWorkspaceAsync()
+        protected override Task ChangeWorkspaceAndNavigateToItAsync()
             => throw new NotImplementedException("Remove workspace by offline synchronization no supported");
     }
 }

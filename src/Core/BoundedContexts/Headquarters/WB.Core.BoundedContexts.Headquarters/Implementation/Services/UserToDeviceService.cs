@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public string GetLinkedDeviceId(Guid authorizedUserId)
         {
             var user = userRepository.FindById(authorizedUserId);
-            return user.Profile?.DeviceId;
+            return user.WorkspaceProfile?.DeviceId;
         }
 
         public async Task LinkDeviceToUserAsync(Guid authorizedUserId, string deviceId)
@@ -30,11 +30,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 throw new InvalidOperationException("Only IN or SV can be linked to device");
             }
 
-            if(user.Profile == null)
-                user.WorkspacesProfile = new HqUserProfile();
+            if(user.WorkspaceProfile == null)
+                user.Profile = new HqUserProfile();
 
-            user.WorkspacesProfile.DeviceId = deviceId;
-            user.WorkspacesProfile.DeviceRegistrationDate = DateTime.UtcNow;
+            user.Profile.DeviceId = deviceId;
+            user.Profile.DeviceRegistrationDate = DateTime.UtcNow;
         }
     }
 }

@@ -249,14 +249,14 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (interviewer == null)
                 return NotFound();
             
-            if (!interviewer.IsInRole(UserRoles.Interviewer) || !interviewer.Profile.SupervisorId.HasValue)
+            if (!interviewer.IsInRole(UserRoles.Interviewer) || !interviewer.WorkspaceProfile.SupervisorId.HasValue)
                 return NotFound();
 
             var result = await this.moveUserToAnotherTeamService.Move(
                 userId,
                 moveRequest.InterviewerId,
                 moveRequest.NewSupervisorId, 
-                interviewer.Profile.SupervisorId.Value, 
+                interviewer.WorkspaceProfile.SupervisorId.Value, 
                 moveRequest.Mode);
 
             return Ok(result);

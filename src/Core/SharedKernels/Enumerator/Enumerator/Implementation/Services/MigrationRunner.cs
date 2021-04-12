@@ -41,6 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             });
             
             workspacesLifetimeScope.Resolve<MigrationRunner>().Migrate(scanInAssembly, 
+                "workspaces",
                 new HashSet<string>()
                 {
                     "WB.UI.Shared.Enumerator.Migrations.Workspaces",
@@ -57,6 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();
                 });
                 workspaceLifetimeScope.Resolve<MigrationRunner>().Migrate(scanInAssembly,
+                    workspace.Name,
                     new HashSet<string>()
                     {
                         "WB.UI.Shared.Enumerator.Migrations.Workspace",
@@ -65,21 +67,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        private void Migrate(Assembly[] scanInAssembly, HashSet<string> migrationNamespaces)
+        private void Migrate(Assembly[] scanInAssembly, string workspaceDescription, HashSet<string> migrationNamespaces)
         {
             var migrationInfos = scanInAssembly.SelectMany(ass => this.LoadMigrations(ass, migrationNamespaces))
                 .Where(x => this.migrationsRepository.Count(y => y.Id == x.Key) == 0)
                 .Select(x => x.Value)
                 .ToArray();
 
-            this.logger.Trace($"Migrations. {migrationInfos.Length} new migration(s) found");
+            this.logger.Trace($"Migrations {workspaceDescription}. {migrationInfos.Length} new migration(s) found");
 
             foreach (var migrationInfo in migrationInfos)
             {
                 var migration = migrationInfo.Migration;
                 var migrationDescription = migrationInfo.Description ?? migration.GetType().Name;
 
-                this.logger.Debug($"Migrations. Migration: {migrationDescription}({migrationInfo.Version}) started");
+                this.logger.Debug($"Migrations {workspaceDescription}. Migration: {migrationDescription}({migrationInfo.Version}) started");
 
                 Stopwatch sw = Stopwatch.StartNew();
 
@@ -92,7 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 });
 
                 this.logger.Debug(
-                    $"Migrations. Migration: {migrationDescription}({migrationInfo.Version}) completed. Took {sw.Elapsed}");
+                    $"Migrations {workspaceDescription}. Migration: {migrationDescription}({migrationInfo.Version}) completed. Took {sw.Elapsed}");
             }
         }
 

@@ -79,8 +79,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 StorageTotalInBytes = info.StorageInfo?.Total ?? 0
             });
 
-            user.WorkspacesProfile.DeviceAppBuildVersion = info.AppBuildVersion;
-            user.WorkspacesProfile.DeviceAppVersion = info.AppVersion;
+            user.Profile.DeviceAppBuildVersion = info.AppBuildVersion;
+            user.Profile.DeviceAppVersion = info.AppVersion;
 
             return this.Ok();
         }

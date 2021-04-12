@@ -75,8 +75,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
                 .Returns(new TestInMemoryWriter<InterviewSummary>());
 
             var users = new Mock<IUserRepository>();
-            var hqUser = new HqUser() {Profile = new WorkspaceUserProfile()};
-            hqUser.Profile.AsDynamic().SupervisorId = newSupervisorId;
+            var hqUser = new HqUser() {WorkspaceProfile = new WorkspaceUserProfile()};
+            hqUser.WorkspaceProfile.AsDynamic().SupervisorId = newSupervisorId;
 
             users.Setup(x => x.FindById(It.IsAny<Guid>()))
                 .Returns(hqUser);
@@ -129,8 +129,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
                 .Returns(new TestInMemoryWriter<InterviewSummary>());
 
             var users = new Mock<IUserRepository>();
-            var hqUser = new HqUser() {Profile = new WorkspaceUserProfile()};
-            hqUser.Profile.AsDynamic().SupervisorId = oldSupervisorId;
+            var hqUser = new HqUser() {WorkspaceProfile = new WorkspaceUserProfile()};
+            hqUser.WorkspaceProfile.AsDynamic().SupervisorId = oldSupervisorId;
 
             users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(hqUser));

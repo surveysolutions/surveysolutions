@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var entityName = typeof(TEntity).Name;
             string pathToDatabase = settings.PathToDatabaseDirectory;
             
-            var workspaces = typeof(TEntity).GetCustomAttribute(typeof(WorkspacesAttribute));
+            var workspaces = typeof(TEntity).GetCustomAttribute(typeof(NonWorkspacedAttribute));
             if (workspaces == null)
             {
                 var workspaceName = workspaceAccessor.GetCurrentWorkspaceName();

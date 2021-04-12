@@ -24,7 +24,7 @@ namespace WB.UI.Headquarters.Filters
 
                 var workspace = filterContext.HttpContext.RequestServices.GetWorkspaceContext();
 
-                if (workspace == null || workspace.IsSpecialWorkspace()) return;
+                if (workspace == null || workspace.IsSystemDefinedWorkspace()) return;
                 
                 //respect scope
                 var plainKeyValueStorage = filterContext.HttpContext.RequestServices.GetRequiredService<IPlainKeyValueStorage<GlobalNotice>>();

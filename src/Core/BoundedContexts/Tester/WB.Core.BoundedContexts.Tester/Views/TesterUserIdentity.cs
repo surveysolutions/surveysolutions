@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 // ReSharper disable once CheckNamespace
 namespace WB.UI.Tester.Infrastructure.Internals.Security
 {
-    [Workspaces]
+    [NonWorkspaced]
     public class TesterUserIdentity : IUserIdentity, IPlainStorageEntity
     {
         [PrimaryKey]

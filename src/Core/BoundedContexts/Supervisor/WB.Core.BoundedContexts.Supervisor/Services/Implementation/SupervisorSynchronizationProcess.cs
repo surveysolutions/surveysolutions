@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 throw new WorkspaceAccessException();
         }
         
-        protected override Task ChangeAndNavigateToNewDefaultWorkspaceAsync()
+        protected override Task ChangeWorkspaceAndNavigateToItAsync()
         {
             var workspaceView = workspaceService.GetAll().First();
             var supervisorIdentity = (SupervisorIdentity)principal.CurrentUserIdentity;

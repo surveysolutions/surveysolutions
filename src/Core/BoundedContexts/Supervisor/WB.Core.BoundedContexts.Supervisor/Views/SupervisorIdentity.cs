@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.Core.BoundedContexts.Supervisor.Views
 {
-    [Workspaces]
+    [NonWorkspaced]
     public class SupervisorIdentity : ISupervisorUserIdentity, IPlainStorageEntity
     {
         public string Id { get; set; }
