@@ -163,6 +163,7 @@ type Interview {
   assignmentId: Int!
   id: ID!
   status: InterviewStatus!
+  "Current mode of interview"
   interviewMode: InterviewMode!
   "Login of current responsible user"
   responsibleName: String!
@@ -647,6 +648,7 @@ enum InterviewActionFlags {
 }
 
 enum InterviewMode {
+  UNKNOWN
   CAPI
   CAWI
 }
