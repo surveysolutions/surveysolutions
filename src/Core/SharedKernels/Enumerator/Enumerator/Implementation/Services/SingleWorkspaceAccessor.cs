@@ -5,15 +5,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class SingleWorkspaceAccessor : IWorkspaceAccessor
     {
-        private readonly WorkspaceView workspaceView;
+        private readonly string workspace;
 
-        public SingleWorkspaceAccessor(WorkspaceView workspaceView)
+        public SingleWorkspaceAccessor(string workspace)
         {
-            this.workspaceView = workspaceView;
+            this.workspace = workspace;
         }
 
-        public string GetCurrentWorkspaceName() => workspaceView.Name;
-
-        public WorkspaceView GetCurrent() => workspaceView;
+        public string GetCurrentWorkspaceName() => workspace;
     }
 }

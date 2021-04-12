@@ -4,6 +4,7 @@ using Ncqrs;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -60,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IAttachmentsCleanupService, AttachmentsCleanupService>();
             registry.BindAsSingleton<IWorkspaceService, WorkspaceService>();
             registry.BindAsSingleton<IWorkspaceAccessor, WorkspaceAccessor>();
-            registry.BindAsSingleton<IExecuteInWorkspaceService, ExecuteInWorkspaceService>();
+            registry.BindAsSingleton<IInScopeExecutor, ExecuteInWorkspaceService>();
 
             registry.Bind<NavigationState>();
             registry.Bind<AnswerNotifier>();

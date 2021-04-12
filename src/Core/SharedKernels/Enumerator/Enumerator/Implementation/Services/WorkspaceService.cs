@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -12,12 +13,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly IPlainStorage<WorkspaceView> workspaceRepository;
         private readonly SqliteSettings settings;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IExecuteInWorkspaceService executeInWorkspaceService;
+        private readonly IInScopeExecutor executeInWorkspaceService;
 
         public WorkspaceService(IPlainStorage<WorkspaceView> workspaceRepository,
             SqliteSettings settings,
             IFileSystemAccessor fileSystemAccessor,
-            IExecuteInWorkspaceService executeInWorkspaceService
+            IInScopeExecutor executeInWorkspaceService
             )
         {
             this.workspaceRepository = workspaceRepository;
@@ -38,13 +39,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     var workspaceDirectory = fileSystemAccessor.CombinePath(settings.PathToRootDirectory, removedWorkspace.Name);
                     if (fileSystemAccessor.IsDirectoryExists(workspaceDirectory))
                     {
-                        executeInWorkspaceService.Execute(removedWorkspace, serviceProvider =>
+                        executeInWorkspaceService.Execute(serviceProvider =>
                         {
-                            var interviewViewRepository = (IPlainStorage<InterviewView>)serviceProvider.GetService(typeof(IPlainStorage<InterviewView>));
+                            var interviewViewRepository = serviceProvider.GetInstance<IPlainStorage<InterviewView>>();
                             var interviewsCount = interviewViewRepository.Count();
                             if (interviewsCount > 0)
                             {
-                                var assignmentsStorage = (IAssignmentDocumentsStorage)serviceProvider.GetService(typeof(IAssignmentDocumentsStorage));
+                                var assignmentsStorage = serviceProvider.GetInstance<IAssignmentDocumentsStorage>();
                                 assignmentsStorage.RemoveAll();                            
                             }
                             else
@@ -52,7 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                                 fileSystemAccessor.DeleteDirectory(workspaceDirectory);
                                 workspaceRepository.Remove(removedWorkspaces);
                             }
-                        });
+                        }, removedWorkspace.Name);
                     }
                 }
             }

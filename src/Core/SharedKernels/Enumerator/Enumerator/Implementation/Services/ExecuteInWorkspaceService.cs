@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Autofac;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
-using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class ExecuteInWorkspaceService : IExecuteInWorkspaceService
+    public class ExecuteInWorkspaceService : IInScopeExecutor
     {
         private readonly ILifetimeScope lifetimeScope;
 
@@ -14,17 +17,41 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.lifetimeScope = lifetimeScope;
         }
 
-        public void Execute(WorkspaceView workspace, Action<IServiceProvider> action)
+        private IServiceLocator CreateChildScopeWithWorkspace(string workspace)
         {
             var workspaceAccessor = new SingleWorkspaceAccessor(workspace);
             using var workspaceLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
             {
                 cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();
-                cb.RegisterType<AutofacServiceProvider>().As<IServiceProvider>();
+                cb.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>();
             });
 
-            var workspaceServiceProvider = workspaceLifetimeScope.Resolve<IServiceProvider>();
-            action.Invoke(workspaceServiceProvider);
+            var workspaceServiceLocator = workspaceLifetimeScope.Resolve<IServiceLocator>();
+            return workspaceServiceLocator;
+        }
+
+        public void Execute(Action<IServiceLocator> action, string workspace = null)
+        {
+            var serviceLocator = CreateChildScopeWithWorkspace(workspace);
+            action.Invoke(serviceLocator);
+        }
+
+        public T Execute<T>(Func<IServiceLocator, T> func, string workspace = null)
+        {
+            var serviceLocator = CreateChildScopeWithWorkspace(workspace);
+            return func.Invoke(serviceLocator);
+        }
+
+        public Task<T> ExecuteAsync<T>(Func<IServiceLocator, Task<T>> func, string workspace = null)
+        {
+            var serviceLocator = CreateChildScopeWithWorkspace(workspace);
+            return func.Invoke(serviceLocator);
+        }
+
+        public Task ExecuteAsync(Func<IServiceLocator, Task> func, string workspace = null)
+        {
+            var serviceLocator = CreateChildScopeWithWorkspace(workspace);
+            return func.Invoke(serviceLocator);
         }
     }
 }

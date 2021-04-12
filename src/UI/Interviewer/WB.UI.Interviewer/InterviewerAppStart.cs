@@ -73,7 +73,7 @@ namespace WB.UI.Interviewer
             var workspaces = workspaceService.GetAll();
             foreach (var workspace in workspaces)
             {
-                var workspaceAccessor = new SingleWorkspaceAccessor(workspace);
+                var workspaceAccessor = new SingleWorkspaceAccessor(workspace.Name);
                 using var workspaceLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
                 {
                     cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();
@@ -118,7 +118,7 @@ namespace WB.UI.Interviewer
             var workspaces = workspaceService.GetAll();
             foreach (var workspace in workspaces)
             {
-                var workspaceAccessor = new SingleWorkspaceAccessor(workspace);
+                var workspaceAccessor = new SingleWorkspaceAccessor(workspace.Name);
                 using var workspaceLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
                 {
                     cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();

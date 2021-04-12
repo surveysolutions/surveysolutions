@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var workspaces = workspaceService.GetAll();
             foreach (var workspace in workspaces)
             {
-                var workspaceAccessor = new SingleWorkspaceAccessor(workspace);
+                var workspaceAccessor = new SingleWorkspaceAccessor(workspace.Name);
                 using var workspaceLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
                 {
                     cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();
