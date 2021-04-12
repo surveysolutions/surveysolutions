@@ -2,8 +2,5 @@
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Workspace
 {
-    public class NooneWorkspaceFoundException : Exception
-    {
-        
-    }
+    public class WorkspaceException : Exception { }
 }

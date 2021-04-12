@@ -500,7 +500,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Stage = SyncStage.Failed
                 });
             }
-            catch (NooneWorkspaceFoundException wae)
+            catch (NoWorkspaceFoundException wae)
             {
                 this.logger.Error($"Any one workspace found.", wae);
 

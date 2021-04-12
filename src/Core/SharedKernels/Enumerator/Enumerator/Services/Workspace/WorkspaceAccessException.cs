@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Workspace
 {
-    public class WorkspaceAccessException : Exception
+    public class WorkspaceAccessException : WorkspaceException
     {
         
     }

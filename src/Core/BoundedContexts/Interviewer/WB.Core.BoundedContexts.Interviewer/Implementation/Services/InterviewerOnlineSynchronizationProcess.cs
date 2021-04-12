@@ -65,13 +65,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             InterviewerApiView? interviewer = await this.synchronizationService.GetInterviewerAsync(this.RestCredentials, token: cancellationToken).ConfigureAwait(false);
             if (interviewer.Workspaces.Count == 0)
-                throw new NooneWorkspaceFoundException();
+                throw new NoWorkspaceFoundException();
             this.UpdateWorkspaceInfo(interviewer.Workspaces);
             this.UpdateSecurityStampOfInterviewer(interviewer.SecurityStamp, this.RestCredentials.Login);
 
             var workspaces = workspaceService.GetAll();
             if (interviewer.Workspaces.Count == 0 || workspaces.Length == 0)
-                throw new NooneWorkspaceFoundException();
+                throw new NoWorkspaceFoundException();
             if (workspaces.All(w => w.Name != principal.CurrentUserIdentity.Workspace))
                 throw new ActiveWorkspaceRemovedException();
             if (interviewer.Workspaces.All(w => w.Name != principal.CurrentUserIdentity.Workspace))
