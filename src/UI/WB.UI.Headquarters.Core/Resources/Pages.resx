@@ -958,7 +958,8 @@
     <value>If the interviewer has completed interviews on his tablet then the data will be lost.</value>
   </data>
   <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
-    <value>You will archive supervisors and interviewers within his team. Interviewers assigned to archived supervisor will be also archived in all workspaces. If interviewers have any non synchronized data tablets it will be deleted.</value>
+    <value>You will archive supervisors and interviewers within theirs team. Interviewers assigned to archived supervisor will be also archived in all workspaces. If interviewers have any non synchronized data on tablets it will be deleted.</value>
+
 
   </data>
   <data name="Supervisors_Selected" xml:space="preserve">
