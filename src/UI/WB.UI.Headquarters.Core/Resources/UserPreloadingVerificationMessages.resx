@@ -307,10 +307,12 @@
     <value>Add password</value>
   </data>
   <data name="PLU0022" xml:space="preserve">
-    <value>Workspace don't found</value>
+    <value>Workspace not found</value>
+
   </data>
   <data name="PLU0022Description" xml:space="preserve">
-    <value>Workspace must exists and be enabled</value>
+    <value>Workspace must exist and be enabled</value>
+
   </data>
   <data name="PLU0022Recomendation" xml:space="preserve">
     <value>Check workspace name</value>

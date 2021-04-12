@@ -250,7 +250,7 @@
     <value>Workspace is required</value>
   </data>
   <data name="WorkspaceMissing" xml:space="preserve">
-    <value>Workspace don't found</value>
+    <value>Workspace not found</value>
   </data>
   <data name="UserRoleRequired" xml:space="preserve">
     <value>User role is required</value>
