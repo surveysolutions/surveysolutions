@@ -294,6 +294,20 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             Assert.That(context.Result, Is.InstanceOf<ForbidResult>());
             Assert.That(GetForbidReason(context.Result), Is.EqualTo(ForbidReason.WorkspaceDisabledReason));
         }
+        
+        [Test]
+        public void user_should_be_allowed_access_to_users_workspace()
+        {
+            CurrentWorkspace = Workspace.UsersWorkspace.AsContext();
+            Role = UserRoles.Headquarter;
+
+            // act
+            var context = Act();
+
+            // assert
+            Assert.Null(context.Result);
+        }
+
 
         private AuthorizationFilterContext Act()
         {

@@ -2,6 +2,7 @@
 using NLog.Common;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -16,14 +17,17 @@ namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPrincipal principal;
         private readonly IPermissions permissions;
+        private readonly ILogger logger;
 
         public M202103291222_MoveMapsFiles(IFileSystemAccessor fileSystemAccessor,
             IPrincipal principal,
-            IPermissions permissions)
+            IPermissions permissions,
+            ILogger logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.principal = principal;
             this.permissions = permissions;
+            this.logger = logger;
         }
 
         public void Up()
@@ -53,6 +57,8 @@ namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
         {
             if (!this.fileSystemAccessor.IsDirectoryExists(originPath))
                 return;
+            
+            logger.Warn($"M202103291222_MoveMapsFiles: moving map files from {originPath} to {newPath}");
 
             bool hasPermissions = false;
 
@@ -78,6 +84,7 @@ namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
                 var fileName = fileSystemAccessor.GetFileName(file);
                 var newFilePath = fileSystemAccessor.CombinePath(newPath, fileName); 
                 fileSystemAccessor.MoveFile(file, newFilePath);
+                logger.Warn($"M202103291222_MoveMapsFiles: moved file {fileName} from {file} to {newFilePath}");
             }
         }
     }

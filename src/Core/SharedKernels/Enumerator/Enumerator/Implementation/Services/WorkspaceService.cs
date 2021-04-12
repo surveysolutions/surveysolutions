@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -14,17 +15,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly SqliteSettings settings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInScopeExecutor executeInWorkspaceService;
+        private readonly ILogger logger;
 
         public WorkspaceService(IPlainStorage<WorkspaceView> workspaceRepository,
             SqliteSettings settings,
             IFileSystemAccessor fileSystemAccessor,
-            IInScopeExecutor executeInWorkspaceService
+            IInScopeExecutor executeInWorkspaceService,
+            ILogger logger
             )
         {
             this.workspaceRepository = workspaceRepository;
             this.settings = settings;
             this.fileSystemAccessor = fileSystemAccessor;
             this.executeInWorkspaceService = executeInWorkspaceService;
+            this.logger = logger;
         }
 
         public void Save(WorkspaceView[] workspaces)
@@ -34,8 +38,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (removedWorkspaces.Count > 0)
             {
+                logger.Warn($"WorkspaceService: need to remove {removedWorkspaces.Count} workspaces");
+                
                 foreach (var removedWorkspace in removedWorkspaces)
                 {
+                    logger.Warn($"WorkspaceService: removing {removedWorkspace.Name} workspace");
+
                     var workspaceDirectory = fileSystemAccessor.CombinePath(settings.PathToRootDirectory, removedWorkspace.Name);
                     if (fileSystemAccessor.IsDirectoryExists(workspaceDirectory))
                     {
@@ -46,12 +54,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             if (interviewsCount > 0)
                             {
                                 var assignmentsStorage = serviceProvider.GetInstance<IAssignmentDocumentsStorage>();
-                                assignmentsStorage.RemoveAll();                            
+                                assignmentsStorage.RemoveAll();  
+                                logger.Warn($"WorkspaceService: removed assignments in {removedWorkspace.Name} workspace, because exists {interviewsCount} interviews");
                             }
                             else
                             {
                                 fileSystemAccessor.DeleteDirectory(workspaceDirectory);
                                 workspaceRepository.Remove(removedWorkspaces);
+                                logger.Warn($"WorkspaceService: removed data of {removedWorkspace.Name} workspace");
                             }
                         }, removedWorkspace.Name);
                     }
@@ -63,7 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public WorkspaceView[] GetAll()
         {
-            return workspaceRepository.LoadAll()
+            return workspaceRepository
                 .Where(s => s.Disabled == false)
                 .ToArray();
         }
