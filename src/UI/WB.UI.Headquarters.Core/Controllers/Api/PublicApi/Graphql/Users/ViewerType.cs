@@ -1,18 +1,15 @@
 ﻿using System.Linq;
 using HotChocolate.Types;
 using Main.Core.Entities.SubEntities;
-using Quartz.Xml.JobSchedulingData20;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Conventions;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
 {
-    [PagedTypeName("Users")]
-    public class UserType : ObjectType<HqUser>
+    public class ViewerType : ObjectType<UserDto>
     {
-        protected override void Configure(IObjectTypeDescriptor<HqUser> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<UserDto> descriptor)
         {
-            descriptor.Name("User");
+            descriptor.Name("Viewer");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(x => x.Id).Type<NonNullType<IdType>>();

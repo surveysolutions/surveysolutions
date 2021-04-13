@@ -1,30 +1,22 @@
 ﻿#nullable enable
-using System.Collections.Generic;
 using System.Linq;
 using HotChocolate;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
 {
     public class UsersResolver
     {
-        public UserDto GetViewer([Service] IAuthorizedUser authorizedUser)
+        public IQueryable<HqUser> GetUsers(
+            [Service] IUnitOfWork unitOfWork,
+            [Service] IAuthorizedUser authorizedUser)
         {
-            var roles = new List<UserRoles>();
-            
-            if(authorizedUser.IsAdministrator) roles.Add(UserRoles.Administrator);
-            if(authorizedUser.IsHeadquarter) roles.Add(UserRoles.Headquarter);
-            if(authorizedUser.IsInterviewer) roles.Add(UserRoles.Interviewer);
-            if(authorizedUser.IsSupervisor) roles.Add(UserRoles.Supervisor);
+            unitOfWork.DiscardChanges();
+            var query = unitOfWork.Session.Query<HqUser>();
 
-            return new UserDto
-            {
-                Id = authorizedUser.Id,
-                UserName = authorizedUser.UserName,
-                Roles = roles.ToArray(),
-                Workspaces = authorizedUser.Workspaces.ToArray()
-            };
+            return query;
         }
     }
 }
