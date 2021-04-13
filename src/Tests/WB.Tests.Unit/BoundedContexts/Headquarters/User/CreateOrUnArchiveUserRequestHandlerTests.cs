@@ -86,7 +86,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.User
                 Mock.Of<IdentityErrorDescriber>(),
                 Mock.Of<IServiceProvider>(),
                 Mock.Of<ILogger<HqUserManager>>(),
-                Mock.Of<IWorkspacesService>(),
                 Mock.Of<ISystemLog>(),
                 Mock.Of<IAuthorizedUser>());
             hqUserManager.RegisterTokenProvider(

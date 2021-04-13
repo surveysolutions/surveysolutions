@@ -117,7 +117,6 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IdentityErrorDescriber>(),
                 Mock.Of<IServiceProvider>(),
                 Mock.Of<ILogger<HqUserManager>>(),
-                Mock.Of<IWorkspacesService>(),
                 Mock.Of<ISystemLog>(),
                 Mock.Of<IAuthorizedUser>());
             hqUserManager.RegisterTokenProvider(

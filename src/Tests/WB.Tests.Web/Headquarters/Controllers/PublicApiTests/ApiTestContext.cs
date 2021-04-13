@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ServiceModel.Syndication;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -18,6 +19,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc.Storage;
 using WB.Tests.Web;
 using WB.UI.Headquarters.API.WebInterview;
@@ -44,7 +46,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 Mock.Of<IAuditLogService>(),
                 Create.Service.UserManager(),
                 Mock.Of<IUnitOfWork>(),
-                Mock.Of<ISystemLog>());
+                Mock.Of<ISystemLog>(),
+                Mock.Of<IWorkspaceContextAccessor>(),
+                Mock.Of<IPlainStorageAccessor<Workspace>>());
         }
 
         protected static QuestionnairesPublicApiController CreateQuestionnairesController(
