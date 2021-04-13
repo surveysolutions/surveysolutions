@@ -225,8 +225,11 @@ namespace WB.UI.Shared.Enumerator.Services
             this.SaveCurrentSettings(settings => { settings.PartialSynchronizationEnabled = enable; });
         }
 
-        public List<QuestionnaireIdentity> QuestionnairesInWebMode => (this.CurrentSettings.QuestionnairesInWebMode ?? string.Empty).Split(',')
-            .Select(QuestionnaireIdentity.Parse).ToList();
+        public List<QuestionnaireIdentity> QuestionnairesInWebMode => 
+            string.IsNullOrWhiteSpace(this.CurrentSettings.QuestionnairesInWebMode)
+                ? new List<QuestionnaireIdentity>()
+                : this.CurrentSettings.QuestionnairesInWebMode.Split(',')
+                    .Select(QuestionnaireIdentity.Parse).ToList();
 
         public string WebInterviewUriTemplate => this.CurrentSettings.WebInterviewUriTemplate;
 
