@@ -501,4 +501,10 @@
   <data name="LinkToWebInterviewExample" xml:space="preserve">
       <value>Пример ссылки при переключении интерьвю в Веб Режим</value>
   </data>
+  <data name="ChangeModeModalTitle" xml:space="preserve">
+    <value>Изменить режим назначения {{assignmentId}}</value>
+  </data>
+  <data name="ModeExplanation" xml:space="preserve">
+    <value>CAWI режим позволяет собирать данные непосредственно вводом отвечающего</value>
+  </data>
 </root>
