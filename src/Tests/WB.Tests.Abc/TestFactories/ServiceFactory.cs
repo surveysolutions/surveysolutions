@@ -1246,9 +1246,9 @@ namespace WB.Tests.Abc.TestFactories
              Mock.Of<ILogger<MapFileStorageService>>()); 
         }
 
-        public WebModeResponsibleAssignmentValidator WebModeResponsibleAssignmentValidator(IUserViewFactory userViewFactory = null)
+        public ResponsibleAssignmentValidator WebModeResponsibleAssignmentValidator(IUserViewFactory userViewFactory = null)
         {
-            return new WebModeResponsibleAssignmentValidator(userViewFactory ?? Create.Storage.UserViewFactory());
+            return new ResponsibleAssignmentValidator(userViewFactory ?? Create.Storage.UserViewFactory());
         }
 
         public QuestionnaireTranslator QuestionnaireTranslator()
