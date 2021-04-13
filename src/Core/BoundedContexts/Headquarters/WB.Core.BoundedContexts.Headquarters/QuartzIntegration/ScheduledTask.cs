@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -72,7 +73,8 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
             var trigger = TriggerBuilder.Create()
                 .ForJob(Key)
-                .UsingJobData(BaseTask.TaskDataKey, JsonSerializer.Serialize(data));
+                .UsingJobData(BaseTask.TaskDataKey, JsonSerializer.Serialize(data))
+                .StartAt(DateTimeOffset.Now.AddSeconds(3));
 
             if (workspace != null)
             {
