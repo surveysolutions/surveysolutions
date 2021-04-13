@@ -106,6 +106,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual ISet<WorkspacesUsers> Workspaces { get; protected set; }
         
         public virtual bool PasswordChangeRequired { get; set; }
+
+        public virtual UserRoles Role => this.Roles.First().Id.ToUserRole();
     }
 
     public class HqUserToken : IdentityUserToken<Guid>

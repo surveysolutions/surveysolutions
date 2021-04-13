@@ -1,5 +1,8 @@
 using System.Collections;
+using System.Reflection;
 using HotChocolate.Types;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Conventions;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
 {
@@ -25,6 +28,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
         private new static void Configure(IObjectTypeDescriptor<IPagedConnection<T>> descriptor)
         {
             descriptor.BindFields(BindingBehavior.Explicit);
+
+            var customAttribute = typeof(T).GetCustomAttribute<PagedTypeNameAttribute>();
+            if(customAttribute != null)
+            {
+                descriptor.Name(customAttribute.Name);
+            }
 
             descriptor.Field("nodes")
                 .Description("A flattened list of the nodes.")
