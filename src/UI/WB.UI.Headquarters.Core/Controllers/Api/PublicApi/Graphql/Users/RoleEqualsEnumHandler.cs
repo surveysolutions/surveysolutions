@@ -67,20 +67,27 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
         {
             if (parsedValue is UserRoles role)
             {
+                // Expression<Func<HqUser, bool>> result = (user) => user.Roles.Any(r => r.Id == role.ToUserId());
+                
                 var expression1 = (MemberExpression)context.GetInstance();
                 var hqUserType = expression1.Member.DeclaringType;
 
                 var parameter = Expression.Parameter(typeof(HqUser), "u");
                 
-                //
-                // var result = FilterExpressionBuilder.Any(hqUserType,
-                //     Expression.Property(parameter, hqUserType.GetProperty(nameof(HqUser.Roles))),
-                //     (HqRole r) => r.Id == role.ToUserId()
-                // );
-                //
-                Expression<Func<HqUser, bool>> result = (user) =>
-                    user.Roles.Any(r => r.Id == role.ToUserId());
+                var roleParameter = Expression.Parameter(typeof(HqRole), "r");
                 
+                Expression rolesProperty = Expression.Property(parameter, hqUserType.GetProperty(nameof(HqUser.Roles)));
+
+                var userId = role.ToUserId();
+                Expression roleIdProperty = Expression.Property(roleParameter, typeof(HqRole).GetProperty(nameof(HqRole.Id)));
+                Expression comparison = Expression.Equal(roleIdProperty, Expression.Constant(userId));
+                
+                Expression result = FilterExpressionBuilder.Any(typeof(HqRole),
+                    rolesProperty,
+                    comparison,
+                    roleParameter
+                );
+
                 return result;
             }
          
