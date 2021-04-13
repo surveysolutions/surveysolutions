@@ -147,6 +147,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                             this.userPreloadingSettings.MaxAllowedRecordNumber));
                 } while (userToImports.Current != null);
             }
+            
+            if (usersToImport.Count == 0)
+                throw new PreloadingException(string.Format(UserPreloadingServiceMessages.FileDoesNotContainAnyData, fileName));
 
             validations = this.userImportVerifier.GetAllUsersValidations(allInterviewersAndSupervisors, usersToImport);
 

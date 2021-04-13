@@ -53,7 +53,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
             catch (Exception ex)
             {
                 logger.LogError(ex, "User import job: FAILED");
-                throw;
             }
         }
     }
