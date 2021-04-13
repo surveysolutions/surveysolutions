@@ -504,11 +504,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         }
 
         /// <summary>
-        /// Gets Quantity Settings for provided assignment
+        /// Updates assignment mode
         /// </summary>
         /// <param name="id">Assignment id</param>
         /// <response code="200"></response>
         /// <response code="404">Assignment not found</response>
+        /// <response code="406">Mode cannot be changed</response>
         [HttpPatch]
         [Route("{id:int}/changeMode")]
         [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
@@ -521,6 +522,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (assignment.WebMode == request.Enabled)
                 return NoContent();
 
+            if (request.Enabled)
+            {
+                if (!string.IsNullOrEmpty(assignment.Email) && assignment.Quantity != 1)
+                    this.BadRequest(new {Message = "For assignments with provided email allowed quantity is 1"});
+            }
+            else
+            {
+                if ((!string.IsNullOrEmpty(assignment.Email) || !string.IsNullOrEmpty(assignment.Password)))
+                    this.BadRequest(new {Message = "For assignments having Email or Password Web Mode (CAWI) should be activated"});
+            }
 
             commandService.Execute(
                 new UpdateAssignmentWebMode(assignment.PublicKey, authorizedUser.Id, request.Enabled));
