@@ -304,6 +304,9 @@
   <data name="AudioRecordingEnable" xml:space="preserve">
     <value>Вести аудио запись</value>
   </data>
+  <data name="CawiModeEnable" xml:space="preserve">
+    <value>Режим CAWI</value>
+  </data>
   <data name="AudioRecordingExplanation" xml:space="preserve">
     <value>Вести аудио запись во время интервью. При включении аудио аудита размер данных синхронизации значительно увеличится</value>
   </data>

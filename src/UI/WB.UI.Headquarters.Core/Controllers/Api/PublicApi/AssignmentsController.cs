@@ -509,6 +509,31 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="id">Assignment id</param>
         /// <response code="200"></response>
         /// <response code="404">Assignment not found</response>
+        [HttpPatch]
+        [Route("{id:int}/changeMode")]
+        [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
+        public ActionResult ChangeMode(int id, [FromBody] UpdateModeRequest request)
+        {
+            var assignment = assignmentsStorage.GetAssignment(id);
+            if (assignment == null || assignment.Archived)
+                return NotFound();
+
+            if (assignment.WebMode == request.Enabled)
+                return NoContent();
+
+
+            commandService.Execute(
+                new UpdateAssignmentWebMode(assignment.PublicKey, authorizedUser.Id, request.Enabled));
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Gets Quantity Settings for provided assignment
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <response code="200"></response>
+        /// <response code="404">Assignment not found</response>
         [HttpGet]
         [Route("{id:int}/assignmentQuantitySettings")]
         [Authorize(Roles = "ApiUser, Headquarter, Administrator")]

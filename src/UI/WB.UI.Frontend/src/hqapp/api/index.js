@@ -360,6 +360,14 @@ class AssignmentsApi {
             },
         })
     }
+
+    changeMode(assignmentId, isEnabled) {
+        var url = `${this.base}/${assignmentId}/changeMode`
+
+        return this.http.patch(url, {
+            enabled: isEnabled,
+        })
+    }
 }
 
 class WebInterviewSettingsApi {
