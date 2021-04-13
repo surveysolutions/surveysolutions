@@ -461,7 +461,6 @@ namespace WB.UI.Headquarters.Controllers
             Api = new
             {
                 UploadUsersUrl = Url.Action("Upload"),
-                QuestionnairesUrl = Url.Action("Index", "SurveySetup"),
                 ImportUsersTemplateUrl = Url.Action("ImportUsersTemplate", "UsersApi"),
                 ImportUsersUrl = Url.Action("ImportUsers", "UsersApi"),
                 ImportUsersStatusUrl = Url.Action("ImportStatus", "UsersApi"),
