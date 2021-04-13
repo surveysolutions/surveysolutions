@@ -42,7 +42,6 @@
                             style="padding:0 10px">
                             <Typeahead
                                 control-id="role"
-                                no-search
                                 :value="role"
                                 :values="model.roles"
                                 @selected="roleSelected"></Typeahead>
