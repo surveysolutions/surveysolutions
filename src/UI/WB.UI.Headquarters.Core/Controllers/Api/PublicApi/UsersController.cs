@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -11,9 +12,12 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
@@ -28,15 +32,20 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IUserViewFactory usersFactory;
         private readonly IUserArchiveService archiveService;
         private readonly IAuditLogService auditLogService;
-        private readonly UserManager<HqUser> userManager;
+        private readonly HqUserManager userManager;
         private readonly IUnitOfWork unitOfWork;
         private readonly ISystemLog systemLog;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
+        private readonly IPlainStorageAccessor<Workspace> workspaces;
 
         public UsersController(IUserViewFactory usersFactory,
             IUserArchiveService archiveService,
             IAuditLogService auditLogService,
-            UserManager<HqUser> userManager, IUnitOfWork unitOfWork,
-            ISystemLog systemLog)
+            HqUserManager userManager, 
+            IUnitOfWork unitOfWork,
+            ISystemLog systemLog,
+            IWorkspaceContextAccessor workspaceContextAccessor,
+            IPlainStorageAccessor<Workspace> workspaces)
         {
             this.usersFactory = usersFactory;
             this.archiveService = archiveService;
@@ -44,6 +53,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.userManager = userManager;
             this.unitOfWork = unitOfWork;
             this.systemLog = systemLog;
+            this.workspaceContextAccessor = workspaceContextAccessor;
+            this.workspaces = workspaces;
         }
 
         /// <summary>
@@ -273,18 +284,26 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     FullName = model.FullName,
                     PhoneNumber = model.PhoneNumber,
                     Email = model.Email,
-                    NormalizedEmail = model.Email?.Trim().ToUpper()
+                    NormalizedEmail = model.Email?.Trim().ToUpper(),
                 };
+
+                HqUser? supervisor = null;
+
+                if (createdUserRole == UserRoles.Interviewer)
+                    supervisor = await userManager.FindByNameAsync(model.Supervisor);
+
+                var workspaceContext = workspaceContextAccessor.CurrentWorkspace();
+                if (workspaceContext == null)
+                    throw new ArgumentException("Workspace context must exists");
+                
+                var workspace = await workspaces.GetByIdAsync(workspaceContext.Name);
+                var workspacesUser = new WorkspacesUsers(workspace, createdUser, supervisor);
+                createdUser.Workspaces.Add(workspacesUser);
+                
                 var creationResult = await this.userManager.CreateAsync(createdUser, model.Password);
 
                 if (creationResult.Succeeded)
                 {
-                    if (createdUserRole == UserRoles.Interviewer)
-                    {
-                        var supervisorId = (await userManager.FindByNameAsync(model.Supervisor));
-                        createdUser.Workspaces.Single().ChangeSupervisorId(supervisorId);
-                    }
-
                     var addResult = await userManager.AddToRoleAsync(createdUser, model.Role.ToString());
                     if (addResult.Succeeded)
                     {

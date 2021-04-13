@@ -27,7 +27,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             IdentityErrorDescriber errors, 
             IServiceProvider services, 
             ILogger<HqUserManager> logger,
-            IWorkspacesService workspacesService,
             ISystemLog systemLog,
             IAuthorizedUser authorizedUser) 
             : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
