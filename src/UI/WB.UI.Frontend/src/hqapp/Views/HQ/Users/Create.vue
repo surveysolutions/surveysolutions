@@ -194,9 +194,6 @@ export default {
         userInfo() {
             return this.model.userInfo
         },
-        isAdmin() {
-            return this.role && this.role.key == RoleNames.ADMINISTRATOR
-        },
         isHeadquarters() {
             return this.role && this.role.key == RoleNames.HQ
         },
@@ -257,6 +254,9 @@ export default {
         },
         role: function(val) {
             delete this.modelState['Role']
+        },
+        title : function(val) {
+            this.$title = val
         },
     },
     methods: {
