@@ -7,7 +7,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 {
-    [TestOf(typeof(WebModeResponsibleAssignmentValidator))]
+    [TestOf(typeof(ResponsibleAssignmentValidator))]
     public class WebModeResponsibleAssignmentValidatorTests 
     {
         [Test]
