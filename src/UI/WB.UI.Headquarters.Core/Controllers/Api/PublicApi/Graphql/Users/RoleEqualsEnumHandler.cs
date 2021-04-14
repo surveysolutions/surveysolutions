@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using HotChocolate.Configuration;
 using HotChocolate.Data.Filters;
 using HotChocolate.Data.Filters.Expressions;
@@ -15,49 +16,18 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
 {
-    
-    // public class RolesObjectHandler : QueryableDefaultFieldHandler
-    // {
-    //     public override bool CanHandle(ITypeCompletionContext context, IFilterInputTypeDefinition typeDefinition,
-    //         IFilterFieldDefinition fieldDefinition)
-    //     {
-    //         var filterFieldDefinition = fieldDefinition as FilterFieldDefinition;
-    //         return filterFieldDefinition?.Name == "role";
-    //     }
-    //
-    //     // public override bool TryHandleEnter(QueryableFilterContext context, IFilterField field, ObjectFieldNode node,
-    //     //     out ISyntaxVisitorAction? action)
-    //     // {
-    //     //     action = SyntaxVisitor.Continue;
-    //     //     return true;
-    //     // }
-    //     //
-    //     // public override Expression HandleOperation(QueryableFilterContext context, IFilterOperationField field, IValueNode value,
-    //     //     object parsedValue)
-    //     // {
-    //     //     return null;
-    //     // }
-    // }
-
-
     public class RoleEqualsEnumHandler : QueryableEnumEqualsHandler
     {
+        private static PropertyInfo RolesPropetyInfo;
+        private static PropertyInfo RoleIdPropertyInfo;
+
+        static RoleEqualsEnumHandler()
+        {
+            RoleIdPropertyInfo = typeof(HqRole).GetProperty(nameof(HqRole.Id)) ?? throw new InvalidCastException();
+            RolesPropetyInfo = typeof(HqUser).GetProperty(nameof(HqUser.Roles)) ?? throw new InvalidCastException();
+        }
         public RoleEqualsEnumHandler(ITypeConverter typeConverter) : base(typeConverter)
         {
-        }
-
-        public override bool TryHandleEnter(QueryableFilterContext context, IFilterField field, ObjectFieldNode node,
-            out ISyntaxVisitorAction? action)
-        {
-            var tryHandleEnter = base.TryHandleEnter(context, field, node, out action);
-            return tryHandleEnter;
-        }
-
-        public override bool TryHandleOperation(QueryableFilterContext context, IFilterOperationField field, ObjectFieldNode node,
-            out Expression result)
-        {
-            var tryHandleOperation = base.TryHandleOperation(context, field, node, out result);
-            return tryHandleOperation;
         }
 
         public override Expression HandleOperation(QueryableFilterContext context,
@@ -65,21 +35,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             IValueNode value,
             object? parsedValue)
         {
-            if (parsedValue is UserRoles role)
+            if (parsedValue is UserRoles role && context.Scopes.Peek() is QueryableScope userQueryableScope)
             {
-                // Expression<Func<HqUser, bool>> result = (user) => user.Roles.Any(r => r.Id == role.ToUserId());
-                
-                var expression1 = (MemberExpression)context.GetInstance();
-                var hqUserType = expression1.Member.DeclaringType;
-
-                var parameter = Expression.Parameter(typeof(HqUser), "u");
-                
-                var roleParameter = Expression.Parameter(typeof(HqRole), "r");
-                
-                Expression rolesProperty = Expression.Property(parameter, hqUserType.GetProperty(nameof(HqUser.Roles)));
+                // This builds following lambda: u.Roles.Any(r => r.roleId = guidOfRole)
+                var parameter = userQueryableScope.Parameter;
+                Expression rolesProperty = Expression.Property(parameter, RolesPropetyInfo);
 
                 var userId = role.ToUserId();
-                Expression roleIdProperty = Expression.Property(roleParameter, typeof(HqRole).GetProperty(nameof(HqRole.Id)));
+                var roleParameter = Expression.Parameter(typeof(HqRole), "r");
+                Expression roleIdProperty = Expression.Property(roleParameter, RoleIdPropertyInfo);
                 Expression comparison = Expression.Equal(roleIdProperty, Expression.Constant(userId));
                 
                 Expression result = FilterExpressionBuilder.Any(typeof(HqRole),

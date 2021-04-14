@@ -21,10 +21,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
             descriptor.Field<UsersResolver>(x => x.GetUsers(default, default))
                 .Authorize()
                 .Name("users")
+                .Argument("workspace", 
+                    a => a.Type<StringType>().Description("SupervisorId field can be included only if workspace specified"))
                 .Type<ListType<UserType>>()
+                .UseSimplePaging<UserType, HqUser>()
                 .UseSorting<UsersSortInputType>()
-                .UseFiltering<UsersFilterInputType>()
-                .UseSimplePaging<UserType, HqUser>();
+                .UseFiltering<UsersFilterInputType>();
         }
     }
 }

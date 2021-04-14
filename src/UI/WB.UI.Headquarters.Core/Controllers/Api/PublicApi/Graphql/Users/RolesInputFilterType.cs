@@ -8,11 +8,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
     {
         protected override void Configure(IFilterInputTypeDescriptor descriptor)
         {
-            descriptor.Name("RoleFilter");
+            descriptor.Name("RoleFilterInput");
             descriptor.Operation(DefaultFilterOperations.Equals).Type<EnumType<UserRoles>>();
-            descriptor.AllowAnd(false);
-            descriptor.AllowOr(false);
-            // descriptor.Operation(DefaultFilterOperations.NotEquals).Type<EnumType<UserRoles>>();
         }
     }
 }
