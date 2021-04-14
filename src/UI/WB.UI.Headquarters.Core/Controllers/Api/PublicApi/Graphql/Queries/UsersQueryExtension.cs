@@ -3,6 +3,7 @@ using System;
 using System.Reflection.Metadata.Ecma335;
 using HotChocolate;
 using HotChocolate.Types;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging;
@@ -22,7 +23,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
                 .Name("viewer");
 
             descriptor.Field<UsersResolver>(x => x.GetUsers(default, default))
-                .Authorize()
+                .Authorize(roles: UserRoles.Administrator.ToString())
                 .Name("users")
                 .Type<ListType<UserType>>()
                 .UseSimplePaging<UserType, HqUser>()
@@ -30,7 +31,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
                 .UseFiltering<UsersFilterInputType>();
 
             descriptor.Field<UserResolver>(x => x.GetUser(default, default))
-                .Authorize()
+                .Authorize(UserRoles.Administrator.ToString(), UserRoles.ApiUser.ToString(), UserRoles.Supervisor.ToString())
                 .Name("user")
                 .Description("Gets detailed information about single user within workspace")
                 .Type<WorkspaceUserType>()
