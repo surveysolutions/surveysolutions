@@ -64,7 +64,7 @@
                     type="button"
                     class="btn btn-primary"
                     :disabled="saveDisabled"
-                    @click="saveExposedVariablesFilter">{{ $t("Common.Save") }}</button>
+                    @click="saveExposedVariablesFilter">{{ $t("Common.Apply") }}</button>
             </div>
         </ModalFrame>
 
