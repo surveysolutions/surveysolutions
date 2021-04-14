@@ -8,7 +8,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
         protected override void Configure(IFilterInputTypeDescriptor<HqUser> descriptor)
         {
             descriptor.BindFieldsExplicitly();
-            descriptor.Name("UsersFilter");
+            descriptor.Name("UsersFilterInput");
             descriptor.Field(x => x.UserName);
             descriptor.Field(x => x.FullName);
             descriptor.Field(x => x.IsArchived);

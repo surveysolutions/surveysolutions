@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             {
                 Id = authorizedUser.Id,
                 UserName = authorizedUser.UserName,
-                Roles = roles.ToArray(),
+                Role = roles[0],
                 Workspaces = authorizedUser.Workspaces.ToArray()
             };
         }

@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using HotChocolate.Types;
+﻿using HotChocolate.Types;
 using Main.Core.Entities.SubEntities;
-using Quartz.Xml.JobSchedulingData20;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Conventions;
 
