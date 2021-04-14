@@ -51,13 +51,13 @@
                     <div class="">
                         <button type="submit"
                             :disabled="!isDirty('$linkPage')"
-                            @click="savePageTextEditMode('linkPage', 'linkWelcome', 'linkInvitation', 'linkButton')"
+                            @click="savePageTextEditMode('linkPage', 'linkWelcome', 'linkInvitation')"
                             class="btn btn-md btn-success">
                             {{$t('WebInterviewSettings.Save')}}
                         </button>
                         <button type="submit"
                             :disabled="!isDirty('$linkPage')"
-                            @click="cancelPageTextEditMode('linkPage', 'linkWelcome', 'linkInvitation', 'linkButton')"
+                            @click="cancelPageTextEditMode('linkPage', 'linkWelcome', 'linkInvitation')"
                             class="btn btn-md btn-link">
                             {{$t('WebInterviewSettings.Cancel')}}
                         </button>
