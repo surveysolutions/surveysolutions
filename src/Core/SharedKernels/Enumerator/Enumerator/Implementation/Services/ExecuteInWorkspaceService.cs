@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var workspaceLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
             {
                 cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();
+                cb.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>().InstancePerLifetimeScope();
             });
 
             return workspaceLifetimeScope;

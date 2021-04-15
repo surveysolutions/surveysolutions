@@ -70,7 +70,6 @@ namespace WB.UI.Shared.Enumerator
             
             registry.BindAsSingletonWithConstructorArgument<IAudioService, AudioService>("audioDirectory", "audio");
             registry.BindAsSingleton<IAudioDialog, AudioDialog>();
-            registry.BindInPerLifetimeScope<IServiceLocator, AutofacServiceLocatorAdapter>();
             registry.BindToConstant<IEventTypeResolver>(() => new EventTypeResolver(
                 typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                 typeof(EnumeratorSharedKernelModule).Assembly));
