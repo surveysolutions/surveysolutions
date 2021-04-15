@@ -387,7 +387,7 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Nu aveți acces prin Internet la serverul dvs. Verificați adresa serverului și (sau) setările de rețea</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Eroare de server.  Vă rugăm să contactați echipa de suport la support@mysurvey.solutions</value>
+    <value>Eroare de server. Vă rugăm să contactați administratorul serverului.</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>Încărcare</value>
