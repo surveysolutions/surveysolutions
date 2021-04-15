@@ -209,6 +209,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 restCredentials.Token = authToken;
 
                 var workspaces = await GetUserWorkspaces(restCredentials, cancellationTokenSource.Token);
+                if (workspaces.Count == 0)
+                    throw new NoWorkspaceFoundException();
                 restCredentials.Workspace = workspaces.First().Name;
                 
                 if (!await this.synchronizationService.HasCurrentUserDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false))
@@ -227,6 +229,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.auditLogService.WriteApplicationLevelRecord(new LoginAuditLogEntity(this.UserName));
 
                 await this.ViewModelNavigationService.NavigateToDashboardAsync();
+            }
+            catch (NoWorkspaceFoundException we)
+            {
+                this.ErrorMessage = EnumeratorUIResources.Synchronization_WorkspaceAccessDisabledReason;
+                this.logger.Error($"Any one workspace found.", we);
             }
             catch (SynchronizationException ex)
             {
