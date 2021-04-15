@@ -48,11 +48,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         {
             var questionnaireCacheKey = PlainQuestionnaireCacheKey(identity, language);
 
-            return this.memoryCache.GetOrCreate(questionnaireCacheKey, (entry) =>
+            var plainQuestionnaire = this.memoryCache.GetOrCreate(questionnaireCacheKey, (entry) =>
             {
                 entry.SetSlidingExpiration(QuestionnaireDocumentExpiration);
                 return CreatePlainQuestionnaire(identity, language);
             });
+            plainQuestionnaire.QuestionOptionsRepository = questionOptionsRepository;
+            return plainQuestionnaire;
         }
 
         private static string PlainQuestionnaireCacheKey(QuestionnaireIdentity identity, string language = null)
