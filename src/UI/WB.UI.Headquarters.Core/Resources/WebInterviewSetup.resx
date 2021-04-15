@@ -256,6 +256,9 @@
   <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
     <value>Attach Pdf transcript</value>
   </data>
+  <data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
+    <value>Allow Interviewer to switch to CAWI mode</value>
+  </data>
   <data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
     <value>Text that shown to user when they navigate to link to interview that is not yet synced to server</value>
   </data>

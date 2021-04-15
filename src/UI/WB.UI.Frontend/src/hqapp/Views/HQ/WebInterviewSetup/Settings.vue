@@ -447,6 +447,17 @@
                     <div class="form-group mb-20">
                         <input class="checkbox-filter"
                             v-validate="''"
+                            data-vv-name="allowSwitchToCawiForInterviewer"
+                            id="allowSwitchToCawiForInterviewer"
+                            type="checkbox"
+                            v-model="allowSwitchToCawiForInterviewerEnabled">
+                        <label for="allowSwitchToCawiForInterviewer">
+                            <span class="tick"></span>{{$t('WebInterviewSetup.AllowSwitchToCawiForInterviewer')}}
+                        </label>
+                    </div>
+                    <div class="form-group mb-20">
+                        <input class="checkbox-filter"
+                            v-validate="''"
                             data-vv-name="attachAnswersInEmail"
                             id="attachAnswersInEmail"
                             type="checkbox"
@@ -591,6 +602,7 @@ export default {
             singleResponseIsEnabled: true,
             emailOnCompleteIsEnabled: false,
             attachAnswersInEmailIsEnabled: false,
+            allowSwitchToCawiForInterviewerEnabled: false,
             started: false,
             reminderAfterDaysIfNoResponse: 3,
             reminderAfterDaysIfPartialResponse: 3,
@@ -609,6 +621,7 @@ export default {
         self.singleResponseIsEnabled = this.$config.model.singleResponse
         self.emailOnCompleteIsEnabled = this.$config.model.emailOnComplete
         self.attachAnswersInEmailIsEnabled = this.$config.model.attachAnswersInEmail
+        self.allowSwitchToCawiForInterviewerEnabled = this.$config.model.allowSwitchToCawiForInterviewer
         self.reminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse
         self.reminderAfterDaysIfPartialResponse = this.$config.model.reminderAfterDaysIfPartialResponse
         self.cancelSpamProtectionIsEnabled = this.$config.model.useCaptcha
@@ -617,6 +630,7 @@ export default {
         self.cancelSingleResponseIsEnabled = this.$config.model.singleResponse
         self.cancelEmailOnCompleteIsEnabled = this.$config.model.emailOnComplete
         self.cancelAttachAnswersInEmailIsEnabled = this.$config.model.attachAnswersInEmail
+        self.cancelAllowSwitchToCawiForInterviewerEnabled = this.$config.model.allowSwitchToCawiForInterviewer
         self.logoUrl = this.$config.model.logoUrl
         self.hasLogo = this.$config.model.hasLogo
 
@@ -808,7 +822,8 @@ export default {
                 this.reminderAfterDaysIfPartialResponse == 'null' ? null : this.reminderAfterDaysIfPartialResponse,
                 this.singleResponseIsEnabled,
                 this.emailOnCompleteIsEnabled,
-                this.attachAnswersInEmailIsEnabled)
+                this.attachAnswersInEmailIsEnabled,
+                this.allowSwitchToCawiForInterviewerEnabled)
                 .then(function (response) {
                     self.cancelSpamProtectionIsEnabled = self.spamProtectionIsEnabled
                     self.cancelReminderAfterDaysIfNoResponse = self.reminderAfterDaysIfNoResponse
@@ -816,6 +831,7 @@ export default {
                     self.cancelSingleResponseIsEnabled = self.singleResponseIsEnabled
                     self.cancelEmailOnCompleteIsEnabled = self.emailOnCompleteIsEnabled
                     self.cancelAttachAnswersInEmailIsEnabled = self.attachAnswersInEmailIsEnabled
+                    self.cancelAllowSwitchToCawiForInterviewerEnabled = self.allowSwitchToCawiForInterviewerEnabled
                     self.$validator.reset('additionalSettings')
                 })
                 .catch(function (error) {
@@ -832,6 +848,7 @@ export default {
             this.singleResponseIsEnabled = this.cancelSingleResponseIsEnabled
             this.emailOnCompleteIsEnabled = this.cancelEmailOnCompleteIsEnabled
             this.attachAnswersInEmailIsEnabled = this.cancelAttachAnswersInEmailIsEnabled
+            this.allowSwitchToCawiForInterviewerEnabled = this.cancelAllowSwitchToCawiForInterviewerEnabled
             this.$validator.reset('additionalSettings')
         },
         previewHtml(text) {

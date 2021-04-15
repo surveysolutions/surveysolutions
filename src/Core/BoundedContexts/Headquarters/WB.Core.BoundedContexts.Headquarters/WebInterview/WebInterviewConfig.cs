@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         public bool UseCaptcha { get; set; }
         public bool EmailOnComplete { get; set; }
         public bool AttachAnswersInEmail { get; set; }
+        public bool AllowSwitchToCawiForInterviewer { get;set; }
 
         public Dictionary<WebInterviewUserMessages, string> CustomMessages { get; set; }
 

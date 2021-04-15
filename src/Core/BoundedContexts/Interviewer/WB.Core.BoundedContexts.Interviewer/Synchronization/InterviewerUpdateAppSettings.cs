@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
             var tabletSettings = await this.synchronizationService.GetTabletSettings(Context.CancellationToken);
             interviewerSettings.SetPartialSynchronizationEnabled(tabletSettings.PartialSynchronizationEnabled);
-            interviewerSettings.SetQuestionnaireInWebMode(tabletSettings.QuestionnairesInWebMode);
+            interviewerSettings.SetQuestionnaireInWebMode(tabletSettings.QuestionnairesPermittedToSwitchToWebMode);
             interviewerSettings.SetWebInterviewUrlTemplate(tabletSettings.WebInterviewUrlTemplate);
         }
 

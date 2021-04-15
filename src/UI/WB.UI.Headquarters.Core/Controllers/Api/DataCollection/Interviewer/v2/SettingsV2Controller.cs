@@ -72,15 +72,21 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             PartialSynchronizationEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
                 .IsPartialSynchronizationEnabled(),
 
-            QuestionnairesInWebMode = questionnaires
+            QuestionnairesPermittedToSwitchToWebMode = questionnaires
                 .Query(_ => _.Where(q => !q.Disabled)
                     .Select(w => w.Id)
                     .ToList()
-                ).Where(q => this.interviewConfigProvider.Get(QuestionnaireIdentity.Parse(q)).Started)
+                ).Where(PermittedQuestionnaire)
                 .ToList(),
 
             WebInterviewUrlTemplate = this.webInterviewLinkProvider.WebInterviewRequestLink(
                 "{assignment}", "{interviewId}")
         };
+
+        private bool PermittedQuestionnaire(string questionnaireId)
+        {
+            var properties= this.interviewConfigProvider.Get(QuestionnaireIdentity.Parse(questionnaireId));
+            return properties.Started && properties.AllowSwitchToCawiForInterviewer;
+        }
     }
 }

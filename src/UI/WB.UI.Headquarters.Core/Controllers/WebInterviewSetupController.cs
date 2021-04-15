@@ -184,6 +184,7 @@ namespace WB.UI.Headquarters.Controllers
             model.SingleResponse = config.SingleResponse;
             model.EmailOnComplete = config.EmailOnComplete;
             model.AttachAnswersInEmail = config.AttachAnswersInEmail;
+            model.AllowSwitchToCawiForInterviewer = config.AllowSwitchToCawiForInterviewer;
 
             return View(model);
         }
@@ -249,6 +250,7 @@ namespace WB.UI.Headquarters.Controllers
         public long QuestionnaireVersion { get; set; }
         public bool EmailOnComplete { get; set; }
         public bool AttachAnswersInEmail { get; set; }
+        public bool AllowSwitchToCawiForInterviewer { set;get;}
     }
 
     public class EmailTextTemplateViewModel

@@ -424,7 +424,8 @@ class WebInterviewSettingsApi {
         reminderAfterDaysIfPartialResponse,
         singleResponse,
         emailOnComplete,
-        attachAnswersInEmail) {
+        attachAnswersInEmail,
+        allowSwitchToCawiForInterviewer) {
         var url = `${this.base}/${questionnaireId}/additionalSettings`
         return this.http.post(url, {
             spamProtection: isEnabledSpamProtection,
@@ -433,6 +434,7 @@ class WebInterviewSettingsApi {
             singleResponse: singleResponse,
             emailOnComplete: emailOnComplete,
             attachAnswersInEmail: attachAnswersInEmail,
+            allowSwitchToCawiForInterviewer: allowSwitchToCawiForInterviewer,
         })
     }
 
