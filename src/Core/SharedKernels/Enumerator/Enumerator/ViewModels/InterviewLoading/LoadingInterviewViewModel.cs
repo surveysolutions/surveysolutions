@@ -95,6 +95,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                     .ConfigureAwait(false);
             }
 
+            else if (interview.Mode == InterviewMode.CAWI && this.ShouldReopen)
+            {
+                this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
+                var requestCapimodeCommand = new RequestCapiModeCommand(interviewId,
+                    this.Principal.CurrentUserIdentity.UserId, "");
+                
+                await this.commandService.ExecuteAsync(requestCapimodeCommand)
+                    .ConfigureAwait(false);
+            }
+
             var interviewView = this.interviewsRepository.GetById(interviewId.FormatGuid());
 
             if (interviewView != null && 

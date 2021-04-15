@@ -130,6 +130,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             string MainLabel()
             {
+                if (interview.Mode == InterviewMode.CAWI)
+                    return EnumeratorUIResources.Dashboard_Reopen;
+
                 return Status switch
                 {
                     DashboardInterviewStatus.New => EnumeratorUIResources.Dashboard_Open,
@@ -310,7 +313,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             this.isInterviewReadyToLoad = false;
             try
             {
-                if (this.Status == DashboardInterviewStatus.Completed)
+                if (this.Status == DashboardInterviewStatus.Completed || interview.Mode == InterviewMode.CAWI)
                 {
                     var isReopen = await this.UserInteractionService.ConfirmAsync(
                         EnumeratorUIResources.Dashboard_Reinitialize_Interview_Message,

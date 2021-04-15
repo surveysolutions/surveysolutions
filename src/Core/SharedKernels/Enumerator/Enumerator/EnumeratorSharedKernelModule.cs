@@ -199,6 +199,7 @@ namespace WB.Core.SharedKernels.Enumerator
                 .Handles<ResolveCommentAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.ResolveComment(command))
                 .Handles<CompleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Complete(command.UserId, command.Comment, command.OriginDate))
                 .Handles<RequestWebInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.ChangeInterviewMode(command.UserId, command.OriginDate, InterviewMode.CAWI, command.Comment))
+                .Handles<RequestCapiModeCommand>(command => command.InterviewId, (command, aggregate) => aggregate.ChangeInterviewMode(command.UserId, command.OriginDate, InterviewMode.CAPI, command.Comment))
                 .Handles<DeleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Delete(command.UserId, command.OriginDate))
                 .Handles<HardDeleteInterview>(command => command.InterviewId, (command, aggregate) => aggregate.HardDelete(command.UserId, command.OriginDate))
                 .Handles<HqApproveInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqApprove(command.UserId, command.Comment, command.OriginDate))
