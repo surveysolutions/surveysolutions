@@ -9,35 +9,20 @@
 
     <include
         layout="@layout/interview_complete_info" />
+
     <LinearLayout
         style="@style/Interview_Question"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/Interview_Group_margin_top">
-      <LinearLayout
+        android:layout_marginTop="@dimen/Interview_Group_margin_top"
+        local:MvxBind="Visible CanSwitchToWebMode;">
+      <CheckBox
           android:layout_width="match_parent"
-          android:layout_height="match_parent">
-        <Button
-            android:id="@+id/Complete_CompleteBtn"
-            style="@style/Button_Success"
-            local:MvxBind="HideKeyboardOnClick .; 
-                          Click CompleteInterviewCommand; 
-                          Text Localization('Interview_Complete_Button'); 
-                          ButtonGroupStyle InterviewState.Status; 
-                          Enabled Not(WasThisInterviewCompleted)" />
-
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            local:MvxBind="
+          android:layout_height="wrap_content"
+          local:MvxBind="
                       Visible CanSwitchToWebMode;
                       Text Localization('Interview_Complete_SwitchTo_WebMode_Checkbox'); 
                       Checked RequestWebInterview;
                       Bold RequestWebInterview;" />
-      </LinearLayout>
-      <TextView
-          style="@style/Interview_Complete_Screen_Text"
-          android:id="@+id/tv_Complete_Instruction"
-          local:MvxBind="Text Localization('Interview_Complete_Consequences_Instrunction')" />
     </LinearLayout>
 
     <LinearLayout
@@ -64,5 +49,25 @@
           android:adjustViewBounds="true"
           local:MvxBind="QRCode WebInterviewUrl;"/>
     </LinearLayout>
+
+    <LinearLayout
+        style="@style/Interview_Question"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/Interview_Group_margin_top">
+
+      <Button
+              android:id="@+id/Complete_CompleteBtn"
+              style="@style/Button_Success"
+              local:MvxBind="HideKeyboardOnClick .; 
+                          Click CompleteInterviewCommand; 
+                          Text Localization('Interview_Complete_Button'); 
+                          ButtonGroupStyle InterviewState.Status; 
+                          Enabled Not(WasThisInterviewCompleted)" />
+      <TextView
+          style="@style/Interview_Complete_Screen_Text"
+          android:id="@+id/tv_Complete_Instruction"
+          local:MvxBind="Text Localization('Interview_Complete_Consequences_Instrunction')" />
+    </LinearLayout>
+
   </LinearLayout>
 </ScrollView>

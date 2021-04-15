@@ -782,9 +782,9 @@
     <value>Комментарий не указан</value>
   </data>
     <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
-    <value>Switch interview to Web Mode?</value>
+    <value>Переключить интервью в Веб режим</value>
   </data>
    <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
-    <value>There is a text with instruction on what to do with QR Code. And what will happen to interivew after sync</value>
+    <value>Это интервью будет доступно онлайн после синхронизации. Чтобы получить доступ, респондент должен ввести ссылку на компьютере, планшете или смартфоне, имеющем доступ в интернет. Эта же ссылка может быть отсканирована, используя QR-код</value>
   </data>
 </root>

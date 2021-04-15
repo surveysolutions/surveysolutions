@@ -778,9 +778,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>No comment specified</value>
   </data>
   <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
-    <value>Switch interview to Web Mode?</value>
+    <value>Switch interview to Web Mode</value>
   </data>
    <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
-    <value>There is a text with instruction on what to do with QR Code. And what will happen to interivew after sync</value>
+    <value>This interview will be accessible online after synchronization. To access the interview the respondent should enter the link below in the browser on an internet-connected computer, tablet, or smartphone. The same link can be scanned using the QR-code shown below.</value>
   </data>
 </root>
