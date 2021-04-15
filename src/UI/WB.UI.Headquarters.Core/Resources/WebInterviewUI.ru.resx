@@ -491,4 +491,7 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="EnterPassword" xml:space="preserve">
     <value>Введите пароль</value>
   </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Заполнение</value>
+  </data>
 </root>

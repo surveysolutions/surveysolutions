@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -34,10 +35,11 @@ namespace WB.UI.Headquarters.Controllers
     public class UsersController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;
-        private readonly UserManager<HqUser> userManager;
+        private readonly HqUserManager userManager;
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private UrlEncoder urlEncoder;
         private IOptions<HeadquartersConfig> options;
+        private readonly SignInManager<HqUser> signInManager;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -45,16 +47,18 @@ namespace WB.UI.Headquarters.Controllers
         public string[] RecoveryCodes { get; set; }
 
         public UsersController(IAuthorizedUser authorizedUser, 
-            UserManager<HqUser> userManager, 
+            HqUserManager userManager, 
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
             UrlEncoder urlEncoder,
-            IOptions<HeadquartersConfig> options)
+            IOptions<HeadquartersConfig> options,
+            SignInManager<HqUser> signInManager)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
             this.profileSettingsStorage = profileSettingsStorage;
             this.urlEncoder = urlEncoder;
             this.options = options;
+            this.signInManager = signInManager;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -125,7 +129,7 @@ namespace WB.UI.Headquarters.Controllers
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+            if (!HasPermissionsToChangeUserPassword(user)) return this.Forbid();
 
             return View(await GetUserInfo(user));
         }
@@ -202,6 +206,8 @@ namespace WB.UI.Headquarters.Controllers
                     UserName = user.UserName,
                     Role = userRole.ToString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
+                    ForceChangePassword = user.Id == this.authorizedUser.Id && user.PasswordChangeRequired,
+                    CanChangePassword = user.Id == this.authorizedUser.Id || authorizedUser.IsAdministrator,
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
@@ -498,7 +504,7 @@ namespace WB.UI.Headquarters.Controllers
             var currentUser = await this.userManager.FindByIdAsync(model.UserId.FormatGuid());
             if (currentUser == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+            if (!HasPermissionsToChangeUserPassword(currentUser)) return this.Forbid();
 
             if (currentUser.IsArchived)
                 this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
@@ -515,7 +521,21 @@ namespace WB.UI.Headquarters.Controllers
             if (this.ModelState.IsValid)
             {
                 var passwordResetToken = await this.userManager.GeneratePasswordResetTokenAsync(currentUser);
+                if (model.UserId != this.authorizedUser.Id)
+                    currentUser.PasswordChangeRequired = true;
                 var updateResult = await this.userManager.ResetPasswordAsync(currentUser, passwordResetToken, model.Password);
+
+                if (updateResult.Succeeded 
+                    && model.UserId == this.authorizedUser.Id
+                    && currentUser.PasswordChangeRequired)
+                {
+                    currentUser.PasswordChangeRequired = false;
+                    var updateUserResult = await userManager.UpdateAsync(currentUser);
+                    if (!updateUserResult.Succeeded)
+                        this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
+                    else
+                        this.authorizedUser.ResetPasswordChangeRequiredFlag();
+                }
 
                 if (!updateResult.Succeeded)
                     this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
@@ -790,6 +810,26 @@ namespace WB.UI.Headquarters.Controllers
             if (this.authorizedUser.IsInterviewer 
                 && user.Id == this.authorizedUser.Id
                 && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
+                return true;
+
+            if (this.authorizedUser.IsObserver && user.Id == this.authorizedUser.Id)
+                return true;
+
+            return false;
+        }
+
+        private bool HasPermissionsToChangeUserPassword(HqUser user)
+        {
+            if (this.authorizedUser.IsAdministrator)
+                return true;
+
+            if (this.authorizedUser.IsHeadquarter && user.Id == this.authorizedUser.Id)
+                return true;
+
+            if (this.authorizedUser.IsSupervisor && user.Id == this.authorizedUser.Id)
+                return true;
+
+            if (this.authorizedUser.IsInterviewer && user.Id == this.authorizedUser.Id)
                 return true;
 
             if (this.authorizedUser.IsObserver && user.Id == this.authorizedUser.Id)

@@ -2,10 +2,20 @@
     <ProfileLayout ref="profile"
         :role="userInfo.role"
         :isOwnProfile="userInfo.isOwnProfile"
+        :forceChangePassword="userInfo.forceChangePassword"
+        :canChangePassword="userInfo.canChangePassword"
         :userName="userInfo.userName"
         :userId="userInfo.userId"
         :currentTab="currentTab">
-        <div >
+        <div>
+            <div v-if="userInfo.forceChangePassword && userInfo.isOwnProfile"
+                class="alerts form-group"
+                style="margin-left:-10px">
+                <div class="alert">
+                    {{ $t('FieldsAndValidations.PasswordChangeRequired') }}
+                </div>
+                <br/>
+            </div>
             <form-group
                 v-if="isOwnProfile"
                 :label="$t('FieldsAndValidations.OldPasswordFieldName')"
@@ -55,6 +65,7 @@
                     v-bind:disabled="userInfo.isObserving"
                     @click="updatePassword">{{$t('Pages.Update')}}</button>
                 <a class="btn btn-default"
+                    v-if="!userInfo.forceChangePassword"
                     v-bind:href="referrerUrl"
                     id="lnkCancelUpdatePassword">
                     {{$t('Common.Cancel')}}

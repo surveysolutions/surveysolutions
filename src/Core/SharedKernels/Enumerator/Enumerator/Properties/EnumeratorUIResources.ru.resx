@@ -198,6 +198,9 @@
 С Вашей учетной записью возможны следующие проблемы: пароль отличается от того что Вы вводили, учетная запись заблокирована или удалена Хедквотером.
 Пожалуйста введите Ваш обновленный пароль. Если проблема не будет решена, пожалуйста, обратитесь к Супервизору или Хедквотеру.</value>
   </data>
+  <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+    <value>Ваш пароль был сброшен. Вы должны изменить его для получения доступа к сайту.</value>
+  </data>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
     <value>Ваша учетная запись заблокирована. Обратитесь к Вашему супервизору.</value>
   </data>
@@ -858,6 +861,9 @@
     <value>Пользователь больше не состоит в команде этого супервизора. Пожалуйста свяжитесь с Вашим Хедквотером.</value>
     <comment>Пользователь больше не состоит в команде супервизора {0}. Пожалуйста свяжитесь с Вашим Хедквотером</comment>
   </data>
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>Вы изменили ваш текущий пароль. Попробуйте залогинется с новым паролем.</value>
+  </data>
   <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
     <value>Отклонено хедквотером {0}</value>
   </data>
@@ -982,5 +988,8 @@
   </data>
   <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
       <value>Ваша учётная запись не активна на данном сервере т.к. рабочее простанство в котром она определена отключено админстратором. Пожалуйста, обратитесь к супервизору.</value>
+  </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Заполнение: {0}/{1}</value>
   </data>
 </root>

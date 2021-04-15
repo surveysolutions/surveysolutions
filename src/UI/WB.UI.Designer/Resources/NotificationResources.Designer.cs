@@ -81,6 +81,25 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hello {0}, &lt;br/&gt; &lt;br/&gt;
+        ///To confirm email change please use following link: .
+        /// </summary>
+        public static string EmailChange {
+            get {
+                return ResourceManager.GetString("EmailChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to confirm.
+        /// </summary>
+        public static string EmailChangeLink {
+            get {
+                return ResourceManager.GetString("EmailChangeLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to view.
         /// </summary>
         public static string MailNotifier_NotifyOwnerAboutShareChange_view {
@@ -133,15 +152,6 @@ namespace WB.UI.Designer.Resources {
             get {
                 return ResourceManager.GetString("OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_" +
                         "access_for__2__to_your_questionnaire___3_", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Hello {0}, &lt;br&gt; {1} has transferred ownership of the questionnaire {2} to You.
-        /// </summary>
-        public static string TranfserOwnershipNotification {
-            get {
-                return ResourceManager.GetString("TranfserOwnershipNotification", resourceCulture);
             }
         }
         
@@ -237,6 +247,15 @@ namespace WB.UI.Designer.Resources {
             get {
                 return ResourceManager.GetString("TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_s" +
                         "topped_to_share_with_you_questionnaire___2_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello {0}, &lt;br&gt; {1} has transferred ownership of the questionnaire {2} to You.
+        /// </summary>
+        public static string TranfserOwnershipNotification {
+            get {
+                return ResourceManager.GetString("TranfserOwnershipNotification", resourceCulture);
             }
         }
     }

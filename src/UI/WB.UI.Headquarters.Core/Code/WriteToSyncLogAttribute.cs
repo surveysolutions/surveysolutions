@@ -165,6 +165,12 @@ namespace WB.UI.Headquarters.Code
                             ? SyncLogMessages.InterviewerLoggedIn
                             : SyncLogMessages.InterviewerFailedToLogin;
                         break;
+                    case SynchronizationLogType.ChangePassword:
+                        var successChange = responseStatusCode == StatusCodes.Status200OK;
+                        logItem.Log = successChange
+                            ? SyncLogMessages.PasswordChanged
+                            : SyncLogMessages.FailToChangePassword;
+                        break;
                     case SynchronizationLogType.GetAssignmentsList:
                         logItem.Log = GetAssignmentsLogMessage(actionExecutedContext, questionnaireStorage);
                         break;

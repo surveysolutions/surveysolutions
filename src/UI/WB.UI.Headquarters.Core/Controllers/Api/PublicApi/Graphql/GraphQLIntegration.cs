@@ -37,6 +37,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
         private static IRequestExecutorBuilder GetExecutorBuilder(IServiceCollection services)
         {
+            services.AddHttpResultSerializer<CompositeSerializer>();
+
             return services
                 .AddGraphQLServer()
                 .ConfigureSchema(x=>x.Use<WorkspaceGraphQlMiddleware>())
@@ -50,6 +52,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .AddType<QuestionsQueryExtension>()
                 .AddType<QuestionnaireItemsQueryExtension>()
                 .AddType<UsersQueryExtension>()
+                .AddType<MapReportQueryExtension>()
                 .AddMutationType(x => x.Name("HeadquartersMutation"))
                 .AddType<CalendarEventsMutationExtension>()
                 .AddType<MapsMutationExtension>()
