@@ -53,7 +53,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
 
         private async Task<MoveInterviewerToAnotherTeamResult> MoveUserAndAssignDataToOriginalSupervisor(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
         {
-            MoveInterviewerToAnotherTeamResult result = MoveInterviewsToSupervisor(userId, interviewerId, previousSupervisorId);
+            var moveInterviewsResult = MoveInterviewsToSupervisor(userId, interviewerId, previousSupervisorId);
+
+            var result = new MoveInterviewerToAnotherTeamResult()
+            {
+                InterviewsProcessed = moveInterviewsResult.InterviewsProcessed,
+                InterviewsProcessedWithErrors = moveInterviewsResult.InterviewsProcessedWithErrors,
+            };
 
             var assignmentIds = assignmentsService.GetAllAssignmentIds(interviewerId);
             foreach (var assignmentId in assignmentIds)
@@ -78,9 +84,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
             return result;
         }
 
-        public MoveInterviewerToAnotherTeamResult MoveInterviewsToSupervisor(Guid userId, Guid interviewerId, Guid supervisorId)
+        public MoveInterviewsToSupervisorResult MoveInterviewsToSupervisor(Guid userId, Guid interviewerId, Guid supervisorId)
         {
-            var result = new MoveInterviewerToAnotherTeamResult();
+            var result = new MoveInterviewsToSupervisorResult();
             var interviewIds = GetInterviewIds(interviewerId);
             foreach (var interviewId in interviewIds)
             {
@@ -133,7 +139,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
             return interviewsReader.Query(_ => _.Where(x => x.ResponsibleId == interviewerId).Select(x => x.InterviewId).ToList());
         }
 
-        private void ExecuteMoveInterviewToTeam(MoveInterviewToTeam moveInterviewToTeam, MoveInterviewerToAnotherTeamResult errors, Guid interviewId)
+        private void ExecuteMoveInterviewToTeam(MoveInterviewToTeam moveInterviewToTeam, IMoveInterviewsResult errors, Guid interviewId)
         {
             try
             {
