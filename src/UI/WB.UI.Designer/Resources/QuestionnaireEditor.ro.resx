@@ -1449,7 +1449,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Ați introdus ceva nevalid. Fiecare linie trebuie să urmeze formatul: "Title...ParentValue/Value". "Value" și "ParentValue" trebuie să fie un număr întreg. Titlul trebuie să fie un șir alfa-numeric. Nu sunt permise linii goale.</value>
   </data>
   <data name="OptionsSizeLimit" xml:space="preserve">
-    <value>Maxim {{Max}} rânduri permise</value>
+    <value>Maxim {{ max }} rânduri permise</value>
   </data>
   <data name="OptionsUploadRevert" xml:space="preserve">
     <value>Reveniți la modificări</value>
