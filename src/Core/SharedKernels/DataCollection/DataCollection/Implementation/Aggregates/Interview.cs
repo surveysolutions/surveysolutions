@@ -1151,7 +1151,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.QuestionnaireIdentity.Version,
                 null,
                 false,
-                command.OriginDate));
+                command.OriginDate,
+                true));
 
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.UserId, command.OriginDate));
             this.ApplyEvent(new InterviewKeyAssigned(new InterviewKey(0), command.OriginDate));
@@ -1184,7 +1185,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.QuestionnaireIdentity.Version,
                 command.AssignmentId,
                 command.IsAudioRecordingEnabled,
-                command.OriginDate));
+                command.OriginDate,
+                questionnaire.IsUsingExpressionStorage()));
 
 
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId, command.OriginDate));
