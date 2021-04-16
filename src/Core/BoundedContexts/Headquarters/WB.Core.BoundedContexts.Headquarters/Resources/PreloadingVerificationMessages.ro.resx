@@ -223,7 +223,7 @@
     <value>Cod necorespunzător pentru lista numerică. Secvența codurilor trebuie să fie 0, 1, ... pentru a număra înregistrările din listă</value>
   </data>
   <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
-    <value>Utilizatorul nu are roluri de RINS, Controlor sau Anchetator pentru 1 sau mai multe observații</value>
+    <value>Utilizatorul nu are roluri de Coordonator, Supervizor sau Anchetator pentru 1 sau mai multe observații</value>
   </data>
   <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
     <value>Cantitatea maximă nu trebuie să depășească {0}.</value>

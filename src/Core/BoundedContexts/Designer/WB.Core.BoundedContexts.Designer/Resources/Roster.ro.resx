@@ -127,9 +127,9 @@
     <value>Întrebare de tip listă</value>
   </data>
   <data name="RosterType_Multi" xml:space="preserve">
-    <value>Întrebare multi-selectie</value>
+    <value>Întrebare cu selectare multiplă</value>
   </data>
   <data name="RosterType_Numeric" xml:space="preserve">
-    <value>Întrebare de tip numeric</value>
+    <value>Întrebare numerică</value>
   </data>
 </root>

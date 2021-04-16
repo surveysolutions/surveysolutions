@@ -124,7 +124,7 @@
     <value>Utilizator pentru interfața de programare a aplicației</value>
   </data>
   <data name="Headquarter" xml:space="preserve">
-    <value>RINS</value>
+    <value>Coordonatori</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
     <value>Anchetator</value>
@@ -133,6 +133,6 @@
     <value>Observator</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
-    <value>Controlor</value>
+    <value>Supervizor</value>
   </data>
 </root>

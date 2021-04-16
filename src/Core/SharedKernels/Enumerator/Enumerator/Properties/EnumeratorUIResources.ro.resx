@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
-    <value>Contul dvs. este blocat. Contactați controlorul.</value>
+    <value>Contul dvs. este blocat. Contactați supervizorul.</value>
   </data>
   <data name="AccountIsNotAnInterviewer" xml:space="preserve">
     <value>Contul dvs nu are rol de anchetator.</value>
   </data>
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>Contul dvs. nu a fost aprobat. Contactați controlorul.</value>
+    <value>Contul dvs. nu a fost aprobat. Contactați supervizorul.</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
     <value>Aplicația nu este compatibilă cu serverul. Actualizați aplicația Interviewer.</value>
@@ -202,13 +202,13 @@
     <value>Sincronizare</value>
   </data>
   <data name="Dashboard_NoInterviewsText" xml:space="preserve">
-    <value>Sincronizați pentru sarcini noi sau contactați controlorul pentru instrucțiuni</value>
+    <value>Sincronizați pentru sarcini noi sau contactați supervizorul pentru instrucțiuni</value>
   </data>
   <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
     <value>Nu aveți sarcini noi</value>
   </data>
   <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
-    <value>Niciun element nou</value>
+    <value>Nimic nou</value>
   </data>
   <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
     <value>Nimic găsit</value>
@@ -229,7 +229,7 @@
     <value>Respins ({0})</value>
   </data>
   <data name="Dashboard_RejectedTabText" xml:space="preserve">
-    <value>Interviuri care au fost respinse de către controlor
+    <value>Interviuri care au fost respinse de către supervizor
 Trebuie să rezolvați problemele menționate pe copertă</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
@@ -242,7 +242,7 @@ Trebuie să rezolvați problemele menționate pe copertă</value>
     <value>{0} elemente găsite</value>
   </data>
   <data name="Dashboard_SearchWatermark" xml:space="preserve">
-    <value>Introduceți text pentru căutare</value>
+    <value>Introducere text pentru căutare</value>
   </data>
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Ieșire din Căutare</value>
@@ -396,7 +396,7 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Încărcare... {0}%</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
-    <value>Site-ul de controlor este incorect. Verificați dacă adresa URL introdusă este corectă</value>
+    <value>Site-ul de supervizor este incorect. Verificați dacă adresa URL introdusă este corectă</value>
   </data>
   <data name="Login_FinishInstallation_Message" xml:space="preserve">
     <value>Aceasta este prima autentificare pe această tabletă. Utilizatorul și domeniul nu sunt setate.&lt;br /&gt;Aveți nevoie de conexiune la internet pentru a continua</value>
@@ -405,7 +405,7 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Puteți încerca să vă autentificați online dacă ați uitat parola sau a fost resetată</value>
   </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
-    <value>Problemă de autentificare pe server. Contactați controlorul.</value>
+    <value>Problemă de autentificare pe server. Contactați supervizorul.</value>
   </data>
   <data name="Login_WrongPassword" xml:space="preserve">
     <value>Parolă incorectă</value>
@@ -428,7 +428,7 @@ Descărcat {3}%</value>
   </data>
   <data name="Maps_NoMapsText" xml:space="preserve">
     <value>Sincronizați pentru a obține hărți
-sau contactați controlorul
+sau contactați supervizorul
 pentru instrucțiuni suplimentare</value>
   </data>
   <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
@@ -477,7 +477,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Versiune aplicație:</value>
   </data>
   <data name="Prefs_BufferSizeSummary" xml:space="preserve">
-    <value>Numărul de biți ale datelor primite/transmise de la/către controlor</value>
+    <value>Numărul de biți ale datelor primite/transmise de la/către supervizor</value>
   </data>
   <data name="Prefs_BufferSizeTitle" xml:space="preserve">
     <value>Dimensiunea pachetului de comunicare</value>
@@ -489,7 +489,7 @@ pentru instrucțiuni suplimentare</value>
     <value>ID dispozitiv:</value>
   </data>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
-    <value>Adresa URL a controlorului</value>
+    <value>Adresa URL a supervizorului</value>
   </data>
   <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
     <value>Câte sarcini de lucru pot fi citite într-o singură interogare</value>
@@ -573,7 +573,7 @@ pentru instrucțiuni suplimentare</value>
     <value>{0} din {1} chestionare noi descărcate</value>
   </data>
   <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0} din {1} chestionare respinse și returnate de către controlor</value>
+    <value>{0} din {1} chestionare respinse și returnate de către supervizor</value>
   </data>
   <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} din {1} chestionare finalizare încarcate</value>
@@ -606,7 +606,7 @@ pentru instrucțiuni suplimentare</value>
     <value>{0} chestionare noi descărcate</value>
   </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0} chestionare respinse și returnate de către controlor</value>
+    <value>{0} chestionare respinse și returnate de către supervizor</value>
   </data>
   <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} chestionare finalizate și încărcate</value>
@@ -642,7 +642,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Contul dvs. a fost realocat pe o altă tabletă</value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Problemă de autentificare. Datele de logare nu pot fi confirmate ('{0}'). Contul dvs. poate avea o altă parolă; poate fi șters sau blocat. Reintroduceți parola. Dacă problema persistă, contactați controlorul</value>
+    <value>Problemă de autentificare. Datele de logare nu pot fi confirmate ('{0}'). Contul dvs. poate avea o altă parolă; poate fi șters sau blocat. Reintroduceți parola. Dacă problema persistă, contactați Supervizorul</value>
   </data>
   <data name="Troubleshooting_Backup" xml:space="preserve">
     <value>Creare copie de siguranță</value>
@@ -738,16 +738,16 @@ pentru instrucțiuni suplimentare</value>
     <value>Sincronizarea sarcinilor</value>
   </data>
   <data name="Dashboard_Assign" xml:space="preserve">
-    <value>Atribuie</value>
+    <value>Alocă</value>
   </data>
   <data name="Dashboard_Searching" xml:space="preserve">
     <value>Căutare ...</value>
   </data>
   <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
-    <value>Aprobat de Controlor la {0}</value>
+    <value>Aprobat de Supervizor la {0}</value>
   </data>
   <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
-    <value>Respinse de RINS la {0}</value>
+    <value>Respinse de Coordonatori la {0}</value>
   </data>
   <data name="DashboardItem_Responsible" xml:space="preserve">
     <value>Responsabil: {0}</value>
@@ -762,10 +762,10 @@ pentru instrucțiuni suplimentare</value>
     <value>Trimiteți jurnale de urmărire</value>
   </data>
   <data name="Diagnostics_SendLogs_Description" xml:space="preserve">
-    <value>Trimiteți jurnale detaliate la RINS pentru investigarea problemelor</value>
+    <value>Trimiteți jurnale detaliate la coordonatori pentru investigarea problemelor</value>
   </data>
   <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
-    <value>Jurnalele sunt trimise la RINS</value>
+    <value>Jurnalele sunt trimise la HQ</value>
   </data>
   <data name="FailedToLoadInterviewDescription" xml:space="preserve">
     <value>Cazul interviului este incorect și nu poate fi deschis. Contactați asistența sau încercați să sincronizați pentru a reîmprospăta cazurile.</value>
@@ -774,7 +774,7 @@ pentru instrucțiuni suplimentare</value>
     <value>A apărut o eroare la scanare</value>
   </data>
   <data name="HeadquartersVersion" xml:space="preserve">
-    <value>Versiunea aplicației RINS acceptată: {0}</value>
+    <value>Versiunea aplicației acceptată de Coorodnatori: {0}</value>
   </data>
   <data name="Interview_Creating" xml:space="preserve">
     <value>Crearea interviului</value>
@@ -787,7 +787,7 @@ nu închideți această aplicație”</value>
     <value>Interviul va începe imediat</value>
   </data>
   <data name="InterviewerFromDifferentTeam" xml:space="preserve">
-    <value>Anchetatorul face parte dintr-o altă echipă. Vă rugăm să vă sincronizați cu RINS.</value>
+    <value>Anchetatorul face parte dintr-o altă echipă. Vă rugăm să vă sincronizați cu Coordonatorii.</value>
   </data>
   <data name="InterviewerVersion" xml:space="preserve">
     <value>Versiunea aplicației Anchetator: {0}</value>
@@ -799,7 +799,7 @@ nu închideți această aplicație”</value>
     <value>Pentru sincronizarea offline este necesară permisiunea de localizare</value>
   </data>
   <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
-    <value>Configurarea hărților</value>
+    <value>Tablou de bord hartă</value>
   </data>
   <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
     <value>Sincronizarea hărților</value>
@@ -832,13 +832,13 @@ nu închideți această aplicație”</value>
     <value>Sincronizarea nu a fost efectuată în ultima vreme. Vă rugăm să sincronizați</value>
   </data>
   <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
-    <value>Permiteți sincronizarea cu RINS</value>
+    <value>Permiteți sincronizarea cu Coordonatorii</value>
   </data>
   <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
-    <value>Dezactivați această setare dacă doriți să sincronizați numai cu aplicația mobilă de Controlor. După prima sincronizare reușită cu aplicația Controlor, nu va fi posibilă reactivarea acestei setări</value>
+    <value>Dezactivați această setare dacă doriți să sincronizați numai cu aplicația mobilă de Supervizor. După prima sincronizare reușită cu aplicația Supervizor, nu va fi posibilă reactivarea acestei setări</value>
   </data>
   <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
-    <value>Nu este posibilă sincronizarea cu RINS odată ce a existat cel puțin o sincronizare reușită cu aplicația de Controlor</value>
+    <value>Nu este posibilă sincronizarea cu Coordonatorii odată ce a existat cel puțin o sincronizare reușită cu aplicația de Supervizor</value>
   </data>
   <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
     <value>Anulare</value>
@@ -854,7 +854,7 @@ nu închideți această aplicație”</value>
 Va apărea pe dispozitivul Anchetator după următoarea sincronizare </value>
   </data>
   <data name="SupervisorVersion" xml:space="preserve">
-    <value>Versiune aplicație Controlor: {0}</value>
+    <value>Versiune aplicație Supervizor: {0}</value>
   </data>
   <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
     <value>Verificați dacă există interviuri învechite</value>
@@ -872,7 +872,7 @@ Va apărea pe dispozitivul Anchetator după următoarea sincronizare </value>
     <value>Sincronizarea anchetatorului {0} din {1} anchetatori</value>
   </data>
   <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
-    <value>Sincronizarea detaliilor Controlorului</value>
+    <value>Sincronizarea detaliilor Supervizorului</value>
   </data>
   <data name="Synchronization_PartialInterviews" xml:space="preserve">
     <value>schimbările de interviu</value>
@@ -893,7 +893,7 @@ Va apărea pe dispozitivul Anchetator după următoarea sincronizare </value>
     <value>{0} chestionare încărcate parțial</value>
   </data>
   <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
-    <value>Controlorul ar trebui să aibă întotdeauna cele mai recente modificări de la RINS, deci ar trebui sincronizat ultima dată în echipă înainte ca sincronizarea offline să fie disponibilă</value>
+    <value>Supervizorul ar trebui să aibă întotdeauna cele mai recente modificări de la Coordonatori, deci ar trebui sincronizat ultima dată în echipă înainte ca sincronizarea offline să fie disponibilă</value>
   </data>
   <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
     <value>Aplicația de supraveghere trebuie sincronizată.</value>
@@ -908,10 +908,10 @@ Va apărea pe dispozitivul Anchetator după următoarea sincronizare </value>
     <value>Se încarcă sigla</value>
   </data>
   <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
-    <value>Utilizatorul nu mai aparține acestei echipe de controlori. Vă rugăm să contactați RINS pentru detalii.</value>
+    <value>Utilizatorul nu mai aparține acestei echipe de Supervizori. Vă rugăm să contactați Coordonatorii pentru detalii.</value>
   </data>
   <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
-    <value>Utilizatorul actual a fost creat pe o altă instanță a aplicației RINS. Schimbați adresa URL a punctului final de sincronizare pe serverul original</value>
+    <value>Utilizatorul actual a fost creat pe o altă instanță a aplicației Coordonator. Schimbați adresa URL a punctului final de sincronizare pe serverul original</value>
   </data>
   <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
     <value>Utilizator conectat la alt server</value>
@@ -921,5 +921,35 @@ Va apărea pe dispozitivul Anchetator după următoarea sincronizare </value>
   </data>
   <data name="UpdatingQuestionnaires" xml:space="preserve">
     <value>Actualizarea chestionarului</value>
+  </data>
+  <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+    <value>Adăugați un eveniment din calendar</value>
+  </data>
+  <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+    <value>Adăugați un eveniment calendar</value>
+  </data>
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>Data selectată este în trecut</value>
+  </data>
+  <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>Timpul selectat este în trecut</value>
+  </data>
+  <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>Ștergeți evenimentul calendar</value>
+  </data>
+  <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>Următorul contact: {0}</value>
+  </data>
+  <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>Actualizare evenimente calendar</value>
+  </data>
+  <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>evenimente calendar</value>
+  </data>
+  <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+    <value>Contul dvs. nu mai este activ pe acest server, deoarece spațiul de lucru în care este definit a fost dezactivat de administrator. Vă rugăm să contactați supervizorul.</value>
+  </data>
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>Transferarea evenimentelor calendar</value>
   </data>
 </root>

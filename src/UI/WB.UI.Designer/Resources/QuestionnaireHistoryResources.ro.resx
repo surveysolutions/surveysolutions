@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Attachment_Delete" xml:space="preserve">
-    <value>{0} atașamente au fost șterse</value>
+    <value>{0} atașamente șterse</value>
   </data>
   <data name="Attachment_Update" xml:space="preserve">
-    <value>{0} atașamente au fost actualizate</value>
+    <value>{0} atașamente actualizate</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Anulare</value>
   </data>
   <data name="Categories_Add" xml:space="preserve">
-    <value>Au fost adăugate {0} variante de răspuns </value>
+    <value>{0} variante de răspuns adăugate</value>
   </data>
   <data name="Categories_Delete" xml:space="preserve">
-    <value>Au fost șterse {0} variante de răspuns</value>
+    <value>{0} variante de răspuns șterse</value>
   </data>
   <data name="Categories_Update" xml:space="preserve">
-    <value>Au fost actualizate {0} variante de răspuns</value>
+    <value>{0} variante de răspuns actualizate</value>
   </data>
   <data name="Change" xml:space="preserve">
     <value>Schimbare</value>
@@ -142,13 +142,13 @@
     <value>Cometariu</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Confirmați</value>
+    <value>Confirmare</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Editați</value>
+    <value>Editare</value>
   </data>
   <data name="ExtractAtRevision" xml:space="preserve">
-    <value>Extrageți revizuirea</value>
+    <value>Extragere revizuirea</value>
   </data>
   <data name="LeaveComment" xml:space="preserve">
     <value>Lasă un comentariu</value>

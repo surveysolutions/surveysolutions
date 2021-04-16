@@ -127,10 +127,10 @@
     <value>Durata medie de când un interviu este alocat unui anchetator până când butonul finalizat este apăsat pe o tabletă</value>
   </data>
   <data name="AverageHQProcessingTime" xml:space="preserve">
-    <value>Durata medie de procesare de către RINS</value>
+    <value>Durata medie de procesare de către HQ</value>
   </data>
   <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>Durata medie de când un controlor aprobă un interviu până când interviull este fie aprobat, fie respins de RINS</value>
+    <value>Durata medie de când un supervizor aprobă un interviu până când interviull este fie aprobat, fie respins de HQ</value>
   </data>
   <data name="AverageInterviewDuration" xml:space="preserve">
     <value>Durata medie a interviului</value>
@@ -142,16 +142,16 @@
     <value>Durata medie de procesare globală a cazurilor</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>Durata medie de când un interviu este atribuit pentru prima oară până când RINS îl aprobă.</value>
+    <value>Durata medie de când un interviu este atribuit pentru prima oară până când HQ îl aprobă.</value>
   </data>
   <data name="AverageSupervisorProcessingTime" xml:space="preserve">
-    <value>Durata medie de procesare de către controlor</value>
+    <value>Durata medie de procesare de către supervizor</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>Durata medie de când un anchetator apasă butonul Finalizare până când controlorul acceptă sau respinge intreviul.</value>
+    <value>Durata medie de când un anchetator apasă butonul Finalizare până când supervizorul acceptă sau respinge intreviul.</value>
   </data>
   <data name="BackToSupervisors" xml:space="preserve">
-    <value>Înapoi la controlori</value>
+    <value>Înapoi la supervizori</value>
   </data>
   <data name="By" xml:space="preserve">
     <value>De</value>
@@ -184,22 +184,22 @@
     <value>Numărul total de interviuri realizate de o echipă. Interviurile respinse și apoi finalizate sunt considerate evenimente separate de completare.</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
-    <value>Numărul de interviuri aprobate de RINS</value>
+    <value>Numărul de interviuri aprobate de HQ</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
-    <value>Numărul de interviuri colectate de {0} aprobate de RINS</value>
+    <value>Numărul de interviuri colectate de {0} aprobate de HQ</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
-    <value>Număr de interviuri gestionate de RINS</value>
+    <value>Număr de interviuri gestionate de HQ</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>Numărul de aprobări și respingeri din partea RINS pentru interviurile colectate de {0}.</value>
+    <value>Numărul de aprobări și respingeri din partea HQ pentru interviurile colectate de {0}.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
-    <value>Număr de interviuri gestionate de Controlor</value>
+    <value>Număr de interviuri gestionate de Supervizor</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
-    <value>Numărul de aprobări și respingeri din partea Controlorului pentru interviurile colectate de {0}.</value>
+    <value>Numărul de aprobări și respingeri din partea Supervizorului pentru interviurile colectate de {0}.</value>
   </data>
   <data name="OverTheLast" xml:space="preserve">
     <value>În perioada precedentă</value>
@@ -238,12 +238,15 @@
     <value>Săptămâni</value>
   </data>
   <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
-    <value>Durata medie în care interviul a fost activ pe ecranul tabletei controlorului înainte de finalizare</value>
+    <value>Durata medie în care interviul a fost activ pe ecranul tabletei supervizorului înainte de finalizare</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
     <value>Numărul total de interviuri realizate de un anchetator. Interviurile respinse și apoi finalizate sunt considerate evenimente separate de completare.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
-    <value>Numărul de aprobări și respingeri din partea Controlorului pentru interviurile colectate de anchetator.</value>
+    <value>Numărul de aprobări și respingeri din partea Supervizorului pentru interviurile colectate de anchetator.</value>
+  </data>
+  <data name="BackToTeams" xml:space="preserve">
+    <value>Înapoi la echipe</value>
   </data>
 </root>
