@@ -53,7 +53,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 entry.SetSlidingExpiration(QuestionnaireDocumentExpiration);
                 return CreatePlainQuestionnaire(identity, language);
             });
-            plainQuestionnaire.QuestionOptionsRepository = questionOptionsRepository;
+            if (plainQuestionnaire != null)
+                plainQuestionnaire.QuestionOptionsRepository = questionOptionsRepository;
             return plainQuestionnaire;
         }
 
