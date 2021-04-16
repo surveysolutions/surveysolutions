@@ -19,9 +19,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 idMap.Column("Id");
             });
 
-            this.Property(x => x.RecordId);
-            this.Property(x => x.ResponsibleId);
-            this.Property(x => x.ResponsibleName);
+            this.Property(x => x.RecordId, _ => _.Column("record_id"));
+            this.Property(x => x.ResponsibleId, _ => _.Column("responsible_id"));
+            this.Property(x => x.ResponsibleName, _ => _.Column("responsible_name"));
             this.Property(x => x.Time);
             this.Property(x => x.TimeUtc);
             this.Property(x => x.Type);

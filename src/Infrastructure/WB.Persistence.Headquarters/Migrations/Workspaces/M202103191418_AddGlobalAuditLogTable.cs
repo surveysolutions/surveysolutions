@@ -9,18 +9,18 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
         {
             Create.Table("auditlogrecords")
                 .WithColumn("id").AsInt32().Identity().PrimaryKey()
-                .WithColumn("recordid").AsInt32()
-                .WithColumn("responsibleid").AsGuid().Nullable()
-                .WithColumn("responsiblename").AsString().Nullable()
+                .WithColumn("record_id").AsInt32()
+                .WithColumn("responsible_id").AsGuid().Nullable()
+                .WithColumn("responsible_name").AsString().Nullable()
                 .WithColumn("type").AsString()
                 .WithColumn("time").AsDateTime()
                 .WithColumn("timeutc").AsDateTime()
                 .WithColumn("payload").AsString();
 
-            Create.Index("auditlogrecords_responsibleid")
+            Create.Index("auditlogrecords_responsible_id")
                 .OnTable("auditlogrecords")
                 .OnColumn("responsibleid");
-            Create.Index("auditlogrecords_recordid")
+            Create.Index("auditlogrecords_record_id")
                 .OnTable("auditlogrecords")
                 .OnColumn("recordid");
         }
