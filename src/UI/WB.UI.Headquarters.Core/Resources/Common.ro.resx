@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -133,10 +133,10 @@
     <value>Toți responsabilii</value>
   </data>
   <data name="AllStatuses" xml:space="preserve">
-    <value>Toate stÄƒrile</value>
+    <value>Toate stările</value>
   </data>
   <data name="AllSupervisors" xml:space="preserve">
-    <value>Toți controlorii</value>
+    <value>Toți supervizorii</value>
   </data>
   <data name="AlRightsReserved" xml:space="preserve">
     <value>Toate drepturile rezervate</value>
@@ -151,10 +151,10 @@
     <value>Arhivat</value>
   </data>
   <data name="Assign" xml:space="preserve">
-    <value>Alocat</value>
+    <value>Alocare</value>
   </data>
   <data name="Assignment" xml:space="preserve">
-    <value>Alocare</value>
+    <value>Sarcină</value>
   </data>
   <data name="AuditLog" xml:space="preserve">
     <value>Jurnal de audit</value>
@@ -238,7 +238,7 @@
     <value>Întrebări de identificare</value>
   </data>
   <data name="Processing" xml:space="preserve">
-    <value>În curs de procesare…</value>
+    <value>În curs de procesare...</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Chestionar</value>
@@ -253,7 +253,7 @@
     <value>Actualizare</value>
   </data>
   <data name="Reject" xml:space="preserve">
-    <value>Respinse</value>
+    <value>Respingere</value>
   </data>
   <data name="Responsible" xml:space="preserve">
     <value>Responsabil</value>
@@ -274,7 +274,7 @@
     <value>Arată datele de identificare</value>
   </data>
   <data name="ShowStatusHistory" xml:space="preserve">
-    <value>AratÄƒ istoricul stÄƒrilor</value>
+    <value>Arată istoricul stărilor</value>
   </data>
   <data name="SignIn" xml:space="preserve">
     <value>Intrare în cont</value>
@@ -304,7 +304,7 @@
     <value>Cu erori</value>
   </data>
   <data name="SelectQuestionnaire" xml:space="preserve">
-      <value>Selectează chestionarul</value>
+      <value>Selectare chestionar</value>
     <comment>Selectează chestionarul</comment>
   </data>
   <data name="AllVersions" xml:space="preserve">
@@ -320,7 +320,7 @@
     <value>Nu este egal</value>
   </data>
   <data name="OpenAssignment" xml:space="preserve">
-    <value>Deschide o sarcinÄƒ</value>
+    <value>Deschide o sarcină</value>
   </data>
   <data name="QuestionnaireVersion" xml:space="preserve">
     <value>Versiunea chestionarului</value>
@@ -329,12 +329,36 @@
     <value>Restabilire</value>
   </data>
   <data name="SelectOption" xml:space="preserve">
-    <value>SelecteazÄƒ o opÈ›iune</value>
+    <value>Selectare opțiune</value>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>ÃŽncepe cu</value>
+    <value>Începe cu</value>
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>Necunoscut</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Adăugare</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Sarcini</value>
+  </data>
+  <data name="CalendarEvent" xml:space="preserve">
+    <value>Eveniment Calentar</value>
+  </data>
+  <data name="EditCalendarEvent" xml:space="preserve">
+    <value>Editare Eveniment Calendar</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Tablou de bord hartă</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Eliminare</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>Întoarcere</value>
+  </data>
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+    <value>Vizualizare detalii sarcină</value>
   </data>
 </root>

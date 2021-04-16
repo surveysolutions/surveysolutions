@@ -184,19 +184,19 @@
     <value>Rolul '{0}' nu este valid</value>
   </data>
   <data name="PLU0009Recomendation" xml:space="preserve">
-    <value>Este permisă crearea doar a utlizatorilor cu rol de “anchetator” sau “controlor”</value>
+    <value>Este permisă crearea doar a utlizatorilor cu rol de “anchetator” sau “supervizor”</value>
   </data>
   <data name="PLU0010" xml:space="preserve">
     <value>Eroare de dependență</value>
   </data>
   <data name="PLU0010Description" xml:space="preserve">
-    <value>Controlorul '{0}' nu există</value>
+    <value>Supervizorul '{0}' nu există</value>
   </data>
   <data name="PLU0011" xml:space="preserve">
     <value>Eroare de dependență</value>
   </data>
   <data name="PLU0011Description" xml:space="preserve">
-    <value>Pentru utilizatorii cu rol de controlor, coloana “supervisor” trebuie să fie necompletată</value>
+    <value>Pentru utilizatorii cu rol de supervizor, coloana “supervisor” trebuie să fie necompletată</value>
   </data>
   <data name="PLU0012" xml:space="preserve">
     <value>Numele complet are lungimea incorectă</value>

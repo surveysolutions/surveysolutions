@@ -166,7 +166,7 @@
     <value>Introducere comentariu</value>
   </data>
   <data name="CommentHeadquarters" xml:space="preserve">
-    <value>Comentariu RINS</value>
+    <value>Comentariu Coordonatori</value>
   </data>
   <data name="CommentHide" xml:space="preserve">
     <value>Ascundere comentariu</value>
@@ -181,7 +181,7 @@
     <value>In curs de postare…</value>
   </data>
   <data name="CommentSupervisor" xml:space="preserve">
-    <value>Comentariu controlor</value>
+    <value>Comentariu supervizor</value>
   </data>
   <data name="CommentYours" xml:space="preserve">
     <value>Comentariul dvs.</value>
@@ -199,7 +199,7 @@
     <value>Primele {{count}} entități cu erori:</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Notă pentru controlor</value>
+    <value>Notă pentru supervizor</value>
   </data>
   <data name="CompleteQuestionsAnswered" xml:space="preserve">
     <value>Răspunse</value>
@@ -237,7 +237,7 @@ Contactați echipa de suport pentru asistență.</value>
     <value>Primele {{count}} entități cu comentarii:</value>
   </data>
   <data name="CoverSupervisorNote" xml:space="preserve">
-    <value>Notă controlor:</value>
+    <value>Notă supervizor:</value>
   </data>
   <data name="DecimalCannotParse" xml:space="preserve">
     <value>Valoarea introdusă nu poate fi considerată ca valoare zecimală</value>
@@ -429,7 +429,7 @@ Contactați echipa de suport pentru asistență.</value>
     <value>Introduceți adresa de email</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Puteți anula acum și continua cu interviul. Și îl puteți trimite mai târziu făcând clic pe elementul „Trimiteți prin e-mail linkul de reluare” din meniul de sus.</value>
+    <value>Puteți anula acum și continua cu interviul. Și îl puteți trimite mai târziu făcând clic pe elementul 'Trimiteți prin e-mail linkul de reluare' din meniul de sus.</value>
   </data>
   <data name="EnterPassword" xml:space="preserve">
     <value>introducere parolă</value>
@@ -484,5 +484,11 @@ Contactați echipa de suport pentru asistență.</value>
   </data>
   <data name="ShowResolved" xml:space="preserve">
     <value>Arată rezolvatele</value>
+  </data>
+  <data name="Interview_Overview_NoValue" xml:space="preserve">
+    <value>Fără valoare</value>
+  </data>
+  <data name="NotCalculated" xml:space="preserve">
+    <value>Necalculat</value>
   </data>
 </root>

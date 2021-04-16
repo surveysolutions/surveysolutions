@@ -127,7 +127,7 @@
     <value>Nu s-au putut actualiza informațiile despre utilizator deoarece nu aveți permisiunea de a efectua această operație.</value>
   </data>
   <data name="ObserverCreatedFormat" xml:space="preserve">
-    <value>Contul de responsabil DTS  &lt;b&gt;{0}&lt;/b&gt;  fost creat cu succes.</value>
+    <value>Contul obervator  &lt;b&gt;{0}&lt;/b&gt;  fost creat cu succes.</value>
   </data>
   <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
     <value>Chestionarul '{0}' a fost duplicat cu succes cu un nou titlu '{1}'.</value>
@@ -139,16 +139,16 @@
     <value>Chestionarul cu id {0} și versiunea {1} nu poate fi găsit.</value>
   </data>
   <data name="SuccessfullyCreatedFormat" xml:space="preserve">
-    <value>Contul de controlor &lt;b&gt;{0}&lt;/b&gt; a fost creat cu succes.</value>
+    <value>Contul de supervizor &lt;b&gt;{0}&lt;/b&gt; a fost creat cu succes.</value>
   </data>
   <data name="SupervisorNotFound" xml:space="preserve">
-    <value>Nu s-a putut crea contul pentru anchetator. Controlorul selectat nu există</value>
+    <value>Nu s-a putut crea contul pentru anchetator. Supervizorul selectat nu există</value>
   </data>
   <data name="UserNotExists" xml:space="preserve">
     <value>Nu s-a putut actualiza informațiile despre utilizator deoarece nu există utilizator</value>
   </data>
   <data name="UserWasCreatedFormat" xml:space="preserve">
-    <value>Contul RINS {0} a fost creat cu succes.</value>
+    <value>Contul Coordonator {0} a fost creat cu succes.</value>
   </data>
   <data name="UserWasUpdatedFormat" xml:space="preserve">
     <value>Informațiile despre &lt;b&gt;{0}&lt;/b&gt; au fost actualizate cu succes</value>

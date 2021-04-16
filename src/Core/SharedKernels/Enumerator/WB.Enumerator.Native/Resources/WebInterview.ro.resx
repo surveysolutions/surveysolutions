@@ -212,7 +212,7 @@ Vă mulțumim pentru cooperare!</value>
     <value>Pentru anchetator</value>
   </data>
   <data name="Filters_ForSupervisor" xml:space="preserve">
-    <value>Pentru controlor</value>
+    <value>Pentru supervizor</value>
   </data>
   <data name="Filters_Invalid" xml:space="preserve">
     <value>Eronat</value>
@@ -296,7 +296,7 @@ Vă mulțumim pentru cooperare!</value>
     <value>Ați fost invitat să participați la următorul sondaj: „%QUESTIONNAIRE%”</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Notă pentru controlor</value>
+    <value>Notă pentru supervizor</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
     <value>Nu a fost început</value>

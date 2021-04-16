@@ -184,10 +184,10 @@
     <value>Setări</value>
   </data>
   <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
-    <value>Editarea profilului enumeratorului</value>
+    <value>Editarea profilului recenzorului</value>
   </data>
   <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
-    <value>Permiteți enumeratorilor să își actualizeze informațiile de contact din profil</value>
+    <value>Permiteți recenzorilor să își actualizeze informațiile de contact din profil</value>
   </data>
   <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
     <value>Notificări prin e-mail prin interviu web</value>
@@ -196,7 +196,7 @@
     <value>Permiteți respondenților Interviului Web să trimită e-mailuri (numai dacă a fost configurat furnizorul de e-mail)</value>
   </data>
   <data name="AutoUpdateDescription" xml:space="preserve">
-    <value>Dacă este bifată, numai ultima versiune a aplicației Anchetator / Controlor se poate sincroniza cu RINS</value>
+    <value>Dacă este bifată, numai ultima versiune a aplicației Anchetator / Supervizor se poate sincroniza cu Headquarters</value>
   </data>
   <data name="DeviceNotifications" xml:space="preserve">
     <value>Activați notificările pe dispozitiv</value>
@@ -226,7 +226,7 @@
     <value>Cheie de acces secret</value>
   </data>
   <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
-    <value>Găsit în acreditările de securitate la AWS Management Console</value>
+    <value>Găsit în Security Credentials ale AWS Management Console</value>
   </data>
   <data name="EmailProvider_GeneralError" xml:space="preserve">
     <value>A apărut o eroare generală</value>
@@ -301,18 +301,30 @@
     <value>Permiteți sincronizarea parțială</value>
   </data>
   <data name="MobileAppSettings_Description" xml:space="preserve">
-    <value>Unele setări specifice de către versiunea Android a aplicației Anchetator / Controlor</value>
+    <value>Unele setări specifice de către versiunea Android a aplicației Anchetator / Supervizor</value>
   </data>
   <data name="MobileAppSettings_Title" xml:space="preserve">
-    <value>Setările aplicației Anchetator / Controlor</value>
+    <value>Setările aplicației Anchetator / Supervizor</value>
   </data>
   <data name="PartialSynchronizationDescription" xml:space="preserve">
-    <value>Când este activată, tableta anchetatorului va trimite răspunsuri de la interviurile neterminate către RINS</value>
+    <value>Când este activată, tableta anchetatorului va trimite răspunsuri de la interviurile neterminate către Coordonatori</value>
   </data>
   <data name="UserProfileSettings_Title" xml:space="preserve">
     <value>Setările profilului utilizatorului</value>
   </data>
   <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
     <value>Setările anchetei web</value>
+  </data>
+  <data name="EmailProvider_AwsRegion" xml:space="preserve">
+    <value>Regiunea</value>
+  </data>
+  <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve">
+    <value>Regiune necunoscută selectată. Te rog verifică.</value>
+  </data>
+  <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
+    <value>Regiune pentru AWS Management Console</value>
+  </data>
+  <data name="LogoSettings_Description" xml:space="preserve">
+    <value>Sigla companiei afișează o imagine particularizată pe pagina de conectare a serverului și pe pagina de conectare a aplicației operatorului. Faceți clic pe butonul Alegeți fișierul pentru a încărca o imagine de pe computer pe server.</value>
   </data>
 </root>

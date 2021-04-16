@@ -127,16 +127,16 @@
     <value>Ascuns</value>
   </data>
   <data name="QuestionScopeIdentifying" xml:space="preserve">
-    <value>Întrebare de identificare</value>
+    <value>De identificare</value>
   </data>
   <data name="QuestionScopeInterviewer" xml:space="preserve">
     <value>Anchetator</value>
   </data>
   <data name="QuestionScopeSupervisor" xml:space="preserve">
-    <value>controlor</value>
+    <value>supervizor</value>
   </data>
   <data name="QuestionTypeArea" xml:space="preserve">
-    <value>Zona</value>
+    <value>Zonă</value>
   </data>
   <data name="QuestionTypeAudio" xml:space="preserve">
     <value>Audio</value>
@@ -157,16 +157,16 @@
     <value>Listă</value>
   </data>
   <data name="QuestionTypeMultiSelect" xml:space="preserve">
-    <value>Categorie: selectie multipla (raspuns unic)</value>
+    <value>Categorie: selectare multiplă (răspuns unic)</value>
   </data>
   <data name="QuestionTypeNumeric" xml:space="preserve">
-    <value>Numeric:</value>
+    <value>Numeric</value>
   </data>
   <data name="QuestionTypePicture" xml:space="preserve">
     <value>Imagine</value>
   </data>
   <data name="QuestionTypeSingleSelect" xml:space="preserve">
-    <value>Categorie: selectie unica (raspuns multiplu)</value>
+    <value>Categorie: selectare unică (răspuns multiplu)</value>
   </data>
   <data name="QuestionTypeText" xml:space="preserve">
     <value>Text</value>

@@ -127,7 +127,7 @@
     <value>Nu există conținut pentru fișierul {0} interviul {1}</value>
   </data>
   <data name="Headquarter" xml:space="preserve">
-    <value>RINS</value>
+    <value>Coordonator</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
     <value>Anchetator</value>
@@ -136,7 +136,7 @@
     <value>Interviul cu numărul '{0}' lipsește</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
-    <value>Controlor</value>
+    <value>Supervizor</value>
   </data>
   <data name="UnknownRole" xml:space="preserve">
     <value>&lt;FUNCȚIE NECUNOSCUTĂ&gt;</value>
