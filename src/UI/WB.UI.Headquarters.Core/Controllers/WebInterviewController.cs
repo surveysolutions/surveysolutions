@@ -239,7 +239,7 @@ namespace WB.UI.Headquarters.Controllers
                 CoverPageId = questionnaire.IsCoverPageSupported ? questionnaire.CoverPageSectionId.FormatGuid() : "",
                 AskForEmail = askForEmail,
                 CustomMessages = webInterviewConfig.CustomMessages,
-                MayBeSwitchedToWebMode = config.Started && (interview.Mode != InterviewMode.CAWI),
+                MayBeSwitchedToWebMode = config.Started && config.AllowSwitchToCawiForInterviewer && (interview.Mode != InterviewMode.CAWI),
                 WebInterviewUrl = RenderWebInterviewUri(interview.GetAssignmentId() ?? 0, interview.Id)
             };
         }

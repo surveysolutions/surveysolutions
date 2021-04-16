@@ -68,6 +68,33 @@
                 </div>
             </div>
         </div>
+        <div class="wrapper-info"
+            v-if="mayBeSwitchedToWebMode">
+            <div class="container-info">
+                <input
+                    v-if="mayBeSwitchedToWebMode"
+                    class="wb-checkbox"
+                    type="checkbox"
+                    id="switchToWeb_id"
+                    name="switchToWeb"
+                    v-model="switchToWeb"/>
+                <label for="switchToWeb_id"
+                    class="font-bold"
+                    v-if="mayBeSwitchedToWebMode">
+                    <span class="tick"></span>
+                    {{$t('WebInterviewUI.SwitchToWebMode')}}
+                </label>
+            </div>
+            <div class="container-info action-block"
+                v-if="switchToWeb">
+                <p calss="gray-uppercase">
+                    {{$t('WebInterviewUI.SwitchToWebMode_LinkDescription')}}
+                </p>
+                <p class="font-bold">
+                    {{webLink}}
+                </p>
+            </div>
+        </div>
         <div class="wrapper-info">
             <div class="container-info">
                 <a href="javascript:void(0);"
@@ -78,30 +105,6 @@
                         'btn-primary' : hasUnansweredQuestions,
                         'btn-danger' : hasInvalidQuestions }"
                     @click="completeInterview">{{ competeButtonTitle }}</a>
-                <input
-                    v-if="mayBeSwitchedToWebMode"
-                    class="wb-checkbox"
-                    type="checkbox"
-                    id="switchToWeb_id"
-                    name="switchToWeb"
-                    v-model="switchToWeb"/>
-                <label for="switchToWeb_id"
-                    class="font-bold marl"
-                    v-if="mayBeSwitchedToWebMode">
-                    <span class="tick"></span>
-                    {{$t('WebInterviewUI.SwitchToWebMode')}}
-                </label>
-            </div>
-        </div>
-        <div class="wrapper-info"
-            v-if="switchToWeb">
-            <div class="container-info">
-                <p calss="gray-uppercase">
-                    {{$t('WebInterviewUI.SwitchToWebMode_LinkDescription')}}
-                </p>
-                <p class="font-bold">
-                    {{webLink}}
-                </p>
             </div>
         </div>
     </div>
