@@ -121,7 +121,7 @@
     <value>Chestionarul '{0}' există deja. Alegeți un alt nume.</value>
   </data>
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
-    <value>Numai controlorul responsabil de această sarcină poate răspunde acestor întrebări.</value>
+    <value>Numai supervizorul responsabil de această sarcină poate răspunde acestor întrebări.</value>
   </data>
   <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
     <value>Ați importat deja un chestionar cu titlul '{0}' din Designer. Dacă doriți totuși să îl importați pe acesta, redenumiți-l în Designer.</value>

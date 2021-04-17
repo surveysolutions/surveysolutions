@@ -195,6 +195,9 @@
   <data name="Save" xml:space="preserve">
     <value>Сохранить</value>
   </data>
+  <data name="Apply" xml:space="preserve">
+        <value>Применить</value>
+  </data>
   <data name="SaveChanges" xml:space="preserve">
     <value>Сохранить изменения</value>
   </data>

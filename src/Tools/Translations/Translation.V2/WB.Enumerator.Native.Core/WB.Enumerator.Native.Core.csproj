@@ -63,6 +63,9 @@
     <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\Resources\WebInterview.resx">
       <Link>Resources\WebInterview.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\Resources\WebInterview.ro.resx">
+      <Link>Resources\WebInterview.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\Resources\WebInterview.ru.resx">
       <Link>Resources\WebInterview.ru.resx</Link>
     </EmbeddedResource>

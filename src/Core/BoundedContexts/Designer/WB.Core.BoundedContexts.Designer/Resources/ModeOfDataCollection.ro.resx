@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Capi" xml:space="preserve">
-    <value>Interviu față-în-față asistat de calculator (CAPI)</value>
+    <value>CAPI</value>
   </data>
   <data name="Cati" xml:space="preserve">
-    <value>Interviu telefonic asistat de calculator (CATI)</value>
+    <value>CATI</value>
   </data>
   <data name="FaceToFace" xml:space="preserve">
     <value>Față-în-față</value>
   </data>
   <data name="FocusGroup" xml:space="preserve">
-    <value>Focus Group</value>
+    <value>Focus grup</value>
   </data>
   <data name="Internet" xml:space="preserve">
     <value>Internet</value>

@@ -208,7 +208,7 @@
     <value>Interviul {0} a fost respins</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
-    <value>{0} interviu(ri) actualizate de către RINS</value>
+    <value>{0} interviu(ri) actualizate de către Coordonatori</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
     <value>{0} interviu(ri) încărcate parțial</value>

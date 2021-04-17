@@ -32,26 +32,23 @@
 
             <!-- Basic text input -->
             <input
-                v-if="rule.inputType === 'text'"
+                v-if="rule.inputType === 'text' && !unaryOperatorSelected"
                 v-model="query.value"
                 class="form-control mb-5"
                 type="text"
-                :disabled="unaryOperatorSelected"
                 :placeholder="labels.textInputPlaceholder">
 
             <!-- Basic number input -->
             <input
-                v-if="rule.inputType === 'number'"
+                v-if="rule.inputType === 'number' && !unaryOperatorSelected"
                 v-model="query.value"
-                :disabled="unaryOperatorSelected"
                 class="form-control mb-5"
                 type="number">
 
             <!-- Datepicker -->
             <input
-                v-if="rule.inputType === 'date'"
+                v-if="rule.inputType === 'date' && !unaryOperatorSelected"
                 v-model="query.value"
-                :disabled="unaryOperatorSelected"
                 class="form-control mb-5"
                 type="date">
 
@@ -67,8 +64,7 @@
 
             <!-- Checkbox input -->
             <template
-                v-if="rule.inputType === 'checkbox'"
-                :disabled="unaryOperatorSelected">
+                v-if="rule.inputType === 'checkbox' && !unaryOperatorSelected">
                 <div
                     v-for="choice in rule.choices"
                     :key="choice.value"
@@ -89,8 +85,7 @@
 
             <!-- Radio input -->
             <template
-                v-if="rule.inputType === 'radio'"
-                :disabled="unaryOperatorSelected">
+                v-if="rule.inputType === 'radio' && !unaryOperatorSelected">
                 <div
                     v-for="choice in rule.choices"
                     :key="choice.value"
@@ -112,9 +107,8 @@
 
             <!-- Select without groups -->
             <select
-                v-if="rule.inputType === 'select' && !hasOptionGroups"
+                v-if="rule.inputType === 'select' && !hasOptionGroups && !unaryOperatorSelected"
                 v-model="query.value"
-                :disabled="unaryOperatorSelected"
                 class="form-control mb-5"
                 :multiple="rule.type === 'multi-select'">
                 <option
@@ -127,10 +121,9 @@
 
             <!-- Select with groups -->
             <select
-                v-if="rule.inputType === 'select' && hasOptionGroups"
+                v-if="rule.inputType === 'select' && hasOptionGroups && !unaryOperatorSelected"
                 v-model="query.value"
                 class="form-control mb-5"
-                :disabled="unaryOperatorSelected"
                 :multiple="rule.type === 'multi-select'">
                 <optgroup
                     v-for="(option, option_key) in selectOptions"

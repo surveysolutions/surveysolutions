@@ -127,6 +127,6 @@
     <value>Numele utilizatorului '{0}' există deja.Vă rugăm alegeți alt nume de utilizator.</value>
   </data>
   <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat" xml:space="preserve">
-    <value>Nu puteți reactiva anchetatorul {0} atât timp cât controlorul este inactiv.</value>
+    <value>Nu puteți reactiva anchetatorul {0} atât timp cât supervizorul este inactiv.</value>
   </data>
 </root>

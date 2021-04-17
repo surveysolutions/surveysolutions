@@ -47,6 +47,9 @@
     <EmbeddedResource Include="..\..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\Properties\Resources.resx">
       <Link>Resources.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\Properties\Resources.ro.resx">
+      <Link>Resources.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\Properties\Resources.ru.resx">
       <Link>Resources.ru.resx</Link>
     </EmbeddedResource>

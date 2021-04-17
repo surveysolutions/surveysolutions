@@ -130,7 +130,7 @@
     <value>Ați fost invitat să participați la următorul sondaj: „% QUESTIONNAIRE%”</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Notă pentru controlor</value>
+    <value>Notă pentru supervizor</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
     <value>Puteți naviga la interviu în următorul sondaj: „% QUESTIONNAIRE%”</value>

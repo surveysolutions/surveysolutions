@@ -144,6 +144,9 @@
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="Apply" xml:space="preserve">
+        <value>Apply</value>
+  </data>
   <data name="ErrorsLog" xml:space="preserve">
     <value>Errors log</value>
   </data>

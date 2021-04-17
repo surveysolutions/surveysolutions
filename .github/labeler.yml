@@ -28,7 +28,5 @@ tests:
 # vue:
 #   - src/UI/WB.UI.Frontend/**/*
 #   - src/UI/WB.UI.Designer/questionnaire-app/**/*
-installator:
-  - src/Installation/**/*
 # version_bump:
 #   - src/.version

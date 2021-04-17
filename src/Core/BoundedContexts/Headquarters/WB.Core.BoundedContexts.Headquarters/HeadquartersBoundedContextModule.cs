@@ -255,7 +255,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<InterviewSummaryErrorsCountPostProcessor>();
             registry.Bind<InterviewReceivedByInterviewerCommandValidator>();
             registry.Bind<QuestionnaireValidator>();
-            registry.Bind<WebModeResponsibleAssignmentValidator>();
+            registry.Bind<ResponsibleAssignmentValidator>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
             registry.Bind<ICalendarEventPackageService, CalendarEventPackageService>();
@@ -404,7 +404,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             CommandRegistry
                 .Setup<AssignmentAggregateRoot>()
                 .ResolvesIdFrom<AssignmentCommand>(command => command.PublicKey)
-                .InitializesWith<CreateAssignment>(aggregate => aggregate.CreateAssignment, cfg =>cfg.ValidatedBy<WebModeResponsibleAssignmentValidator>())
+                .InitializesWith<CreateAssignment>(aggregate => aggregate.CreateAssignment, cfg =>cfg.ValidatedBy<ResponsibleAssignmentValidator>())
                 .StatelessHandles<DeleteAssignment>(aggregate => aggregate.DeleteAssignment)
 
                 .Handles<ReassignAssignment>(aggregate => aggregate.Reassign)

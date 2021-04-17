@@ -193,16 +193,16 @@
     <value>ApiUser</value>
   </data>
   <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>RINS</value>
+    <value>Coordonatori</value>
   </data>
   <data name="UserRoles_Interviewer" xml:space="preserve">
     <value>Anchetator</value>
   </data>
   <data name="UserRoles_Observer" xml:space="preserve">
-    <value>Responsabil DTS</value>
+    <value>Observator</value>
   </data>
   <data name="UserRoles_Supervisor" xml:space="preserve">
-    <value>Controlor</value>
+    <value>Supervizor</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>versiunea {0}</value>
@@ -215,5 +215,8 @@
   </data>
   <data name="YesNo" xml:space="preserve">
     <value>Da / Nu</value>
+  </data>
+  <data name="NotCalculated" xml:space="preserve">
+    <value>Fără valoare</value>
   </data>
 </root>
