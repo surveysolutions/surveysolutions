@@ -5,6 +5,7 @@ using HotChocolate.Types;
 using Main.Core.Entities.SubEntities;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -131,6 +132,22 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.InterviewMode)
                 .Description("Current mode of interview")
                 .Type<NonNullType<EnumType<InterviewMode>>>();
+
+            descriptor.Field("cawiLink")
+                .Description("Link for interview in CAWI mode")
+                .Type<StringType>()
+                .Resolve(context =>
+                {
+                    var provider = context.Service<IWebInterviewLinkProvider>()!;
+                    var summary = context.Parent<InterviewSummary>()!;
+
+                    if (summary.InterviewMode == InterviewMode.CAWI)
+                    {
+                        return provider.WebInterviewRequestLink(summary.AssignmentId.ToString(), summary.SummaryId);
+                    }
+
+                    return null;
+                });
         }
     }
 }

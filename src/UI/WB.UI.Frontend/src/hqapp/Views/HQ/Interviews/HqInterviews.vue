@@ -474,6 +474,7 @@ const query = gql`query hqInterviews($workspace: String!, $order: [InterviewSort
       status
       questionnaireId
       responsibleId
+      cawiLink,
       responsibleName
       interviewMode
       responsibleRole
@@ -705,6 +706,12 @@ export default {
                     orderable: false,
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'mode')
+                    },
+                    render(data, type, rowData) {
+                        if(rowData.cawiLink != null) {
+                            return '<a href="'+ rowData.cawiLink+'">' + data + ' <span class="glyphicon glyphicon-link"/></a>'
+                        }
+                        return data
                     },
                     width: '50px',
                 },

@@ -89,15 +89,6 @@
                                 <td>{{interviewsCount}}</td>
                             </tr>
                             <tr>
-                                <td>{{ $t("Assignments.LinkToWebInterviewExample") }}</td>
-                                <td>
-                                    <a v-bind:href="model.linkToWebInterviewExample">
-                                        {{model.linkToWebInterviewExample}}
-                                        <span class="glyphicon glyphicon-link"/>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
                                 <td class="text-nowrap">
                                     {{$t("Assignments.IdentifyingQuestions")}}
                                 </td>

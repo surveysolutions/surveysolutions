@@ -162,7 +162,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual bool HasSmallSubstitutions { get; set; }
         public virtual int? NotAnsweredCount { get; set; }
         public virtual InterviewMode InterviewMode { get; set; } = InterviewMode.CAPI;
-
+        
         public virtual InterviewProperties GetInterviewProperties()
         {
             return new() {

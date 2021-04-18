@@ -10,6 +10,6 @@
         CanBeRestarted,
         CanBeOpened,
         CanChangeToCAPI,
-        CanChangeToCAWI
+        CanChangeToCAWI,
     }
 }
