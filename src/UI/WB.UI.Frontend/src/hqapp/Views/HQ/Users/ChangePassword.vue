@@ -6,7 +6,8 @@
         :canChangePassword="userInfo.canChangePassword"
         :userName="userInfo.userName"
         :userId="userInfo.userId"
-        :currentTab="currentTab">
+        :currentTab="currentTab"
+        :successMessage="successMessage">
         <div>
             <div v-if="userInfo.forceChangePassword && userInfo.isOwnProfile"
                 class="alerts form-group"
@@ -87,6 +88,7 @@ export default {
             oldPassword: null,
             password: null,
             confirmPassword: null,
+            successMessage: null,
         }
     },
     computed: {
@@ -145,7 +147,7 @@ export default {
                 },
             }).then(
                 response => {
-                    self.$refs.profile.successMessage = self.$t('Strings.HQ_AccountController_AccountPasswordChangedSuccessfully')
+                    self.successMessage = self.$t('Strings.HQ_AccountController_AccountPasswordChangedSuccessfully')
                 },
                 error => {
                     self.processModelState(error.response.data, self)
