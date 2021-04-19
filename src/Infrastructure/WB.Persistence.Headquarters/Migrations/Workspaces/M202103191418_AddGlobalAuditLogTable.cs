@@ -19,10 +19,10 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
 
             Create.Index("auditlogrecords_responsible_id")
                 .OnTable("auditlogrecords")
-                .OnColumn("responsibleid");
+                .OnColumn("responsible_id");
             Create.Index("auditlogrecords_record_id")
                 .OnTable("auditlogrecords")
-                .OnColumn("recordid");
+                .OnColumn("record_id");
         }
 
         public override void Down()
