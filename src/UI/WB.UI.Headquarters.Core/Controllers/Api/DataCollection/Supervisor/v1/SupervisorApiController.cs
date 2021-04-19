@@ -126,6 +126,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 if (authorizedUser.PasswordChangeRequired)
                     return StatusCode(StatusCodes.Status426UpgradeRequired);
             }
+            else if (deviceSyncProtocolVersion < SupervisorSyncProtocolVersionProvider.V4_MultiWorkspacesIntroduced)
+            {
+                if (authorizedUser.Workspaces.Count() > 1)
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }
             else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable);

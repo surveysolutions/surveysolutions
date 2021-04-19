@@ -186,6 +186,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             {
                 if (authorizedUser.PasswordChangeRequired)
                     return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }          
+            else if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.MultiWorkspacesIntroduced)
+            {
+                if (authorizedUser.Workspaces.Count() > 1)
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
             }
             else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
             {
