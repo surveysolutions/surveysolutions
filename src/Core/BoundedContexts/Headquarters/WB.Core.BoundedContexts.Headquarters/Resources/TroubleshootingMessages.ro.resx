@@ -133,7 +133,7 @@
     <value>Interviul {0} nu a fost sincronizat</value>
   </data>
   <data name="NoData_InterviewDeleted" xml:space="preserve">
-    <value>Interviul {0} a fost șters de către RINS sau administrator și nu poate fi recuperat</value>
+    <value>Interviul {0} a fost șters de către HQ sau Administrator și nu poate fi recuperat</value>
   </data>
   <data name="NoData_InterviewerChangedDevice" xml:space="preserve">
     <value>Anchetatorul a schimbat tabletele. Datele din interviul {0} se pot pierde deoarece au fost șterse atunci când anchetatorul s-a conectat pe o altă tabletă. În acest caz, interviul nu mai poate fi recuperat</value>

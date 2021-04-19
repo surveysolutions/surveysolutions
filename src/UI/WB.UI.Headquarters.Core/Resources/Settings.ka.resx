@@ -159,9 +159,6 @@
   <data name="LogoSettings" xml:space="preserve">
     <value>კომპანიის ლოგო</value>
   </data>
-  <data name="LogoSettings_Description" xml:space="preserve">
-    <value>კომპანია ლოგო გვიჩვენებს ჩვეულერბივ სურათს სერვერის შესვლის გვერდზე და ინტერვიუერის აპლიკაციის გვერდზე. დააჭირეთ აირჩიეთ ფაილის ღილაკი იმისათვის, რომ ატვირთოთ სურათი თქვენი კომპიუტერიდან სერვერზე.</value>
-  </data>
   <data name="LogoUpdated" xml:space="preserve">
     <value>კომპანიის ლოგო განახლდა</value>
   </data>

@@ -130,7 +130,7 @@
     <value>Toate echipele</value>
   </data>
   <data name="AnyHeadquarters" xml:space="preserve">
-    <value>orice RINS</value>
+    <value>oricare coordonator</value>
   </data>
   <data name="Assignments" xml:space="preserve">
     <value>Sarcini</value>
@@ -172,10 +172,10 @@
     <value>Interviuri</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Aprobate de RINS</value>
+    <value>Aprobate de Coordonatori</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Aprobate de controlor</value>
+    <value>Aprobate de Supervizor</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
     <value>Finalizate</value>
@@ -193,10 +193,10 @@
     <value>Pregătite de interviu</value>
   </data>
   <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
-    <value>Respinse de RINS</value>
+    <value>Respinse de Coordonatori</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>Respinse de controlor</value>
+    <value>Respinse de Supervizor</value>
   </data>
   <data name="InterviewStatus_Restarted" xml:space="preserve">
     <value>Restartate</value>
@@ -208,10 +208,10 @@
     <value>Trimise către Capi</value>
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
-    <value>Interviuri alocate controlorului </value>
+    <value>Interviuri alocate supervizorului</value>
   </data>
   <data name="ObserverNotAllowed" xml:space="preserve">
-    <value>Responsabilul DTS nu poate realiza această acțiune</value>
+    <value>Observatorul nu poate realiza această acțiune</value>
   </data>
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
     <value>Gestionarea contului</value>
@@ -229,7 +229,7 @@
     <value>Cu erori</value>
   </data>
   <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
-    <value>Nu a fost aprobat de către RINS</value>
+    <value>Neaprobat de HQ</value>
   </data>
   <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
     <value>Dezactivați autentificarea cu doi factori</value>
@@ -278,5 +278,8 @@
   </data>
   <data name="Teams" xml:space="preserve">
     <value>Echipe</value>
+  </data>
+  <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+    <value>Nealocat Anchetatorului</value>
   </data>
 </root>

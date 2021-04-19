@@ -121,7 +121,7 @@
     <value>Răspuns acceptat. Procesarea a durat {0} </value>
   </data>
   <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
-    <value>Revocă</value>
+    <value>Revocare</value>
   </data>
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
     <value>HARTA ACTIVĂ:</value>
@@ -294,7 +294,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Finalizat</value>
   </data>
   <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
-    <value>După ce terminați interviul, acesta va avea stareul 'Finalizat' și va fi trimis către controlor la următoarea sincronizare</value>
+    <value>După ce terminați interviul, acesta va avea stareul 'Finalizat' și va fi trimis către supervizor la următoarea sincronizare</value>
   </data>
   <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
     <value>Entitățile cu erori:</value>
@@ -309,7 +309,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Fără</value>
   </data>
   <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
-    <value>Comentariu pentru controlor</value>
+    <value>Comentariu pentru supervizor</value>
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>stareul întrebării</value>
@@ -330,13 +330,13 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Primele {0} întrebări cu comentarii:</value>
   </data>
   <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
-    <value>Întrebări cu comentariile controlorului:</value>
+    <value>Întrebări cu comentariile supervizorului:</value>
   </data>
   <data name="Interview_Cover_Screen_Title" xml:space="preserve">
     <value>Copertă</value>
   </data>
   <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
-    <value>Nota controlorului:</value>
+    <value>Nota supervizorului:</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
     <value>{0} răspunsuri</value>
@@ -369,7 +369,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>fără sub-secțiuni</value>
   </data>
   <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
-    <value>Comentariul RINS</value>
+    <value>Comentariu Coordonatori</value>
   </data>
   <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
     <value>Arată instrucțiunile</value>
@@ -459,13 +459,13 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Semnează aici</value>
   </data>
   <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
-    <value>Comentariu controlor</value>
+    <value>Comentariu supervizor</value>
   </data>
   <data name="Interview_TakeSignature" xml:space="preserve">
     <value>Stocați semnătura</value>
   </data>
   <data name="LoginNameHint" xml:space="preserve">
-    <value>Utilizator</value>
+    <value>Autentificarea dvs.</value>
   </data>
   <data name="LoginText" xml:space="preserve">
     <value>Intră în cont</value>
@@ -600,7 +600,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Atenționări</value>
   </data>
   <data name="Supervisor_ApplicationName" xml:space="preserve">
-    <value>Controlor Survey Solutions</value>
+    <value>Supervizor Survey Solutions</value>
   </data>
   <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
     <value>Aprobare</value>
@@ -657,13 +657,13 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Rezolvă</value>
   </data>
   <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
-    <value>Nu sunt comentarii de la Controlor</value>
+    <value>Nu sunt comentarii de la Supervizor</value>
   </data>
   <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
     <value>S-a selectat numărul maxim de variante ({0}) în această întrebare</value>
   </data>
   <data name="Interview_Question_HideResolvedComments" xml:space="preserve">
-    <value>Ascundeți-le pe cele rezolvate</value>
+    <value>Ascundere rezolvate</value>
   </data>
   <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
     <value>Arătați-le pe cele rezolvate</value>
@@ -741,7 +741,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Descărcați actualizări pentru aplicația Anchetator</value>
   </data>
   <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
-    <value>Dacă anchetatorii nu au acces la Internet, această funcționalitate ar trebui activată, deoarece face posibilă actualizarea aplicațiilor lor în timpul sincronizării offline cu aplicația Controlor</value>
+    <value>Dacă anchetatorii nu au acces la Internet, această funcționalitate ar trebui activată, deoarece face posibilă actualizarea aplicațiilor lor în timpul sincronizării offline cu aplicația Supervizor</value>
   </data>
   <data name="Synchronization_FoundDevice" xml:space="preserve">
     <value>A fost găsit dispozitivul pentru anchetator ({0})</value>
@@ -751,5 +751,17 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   </data>
   <data name="Validity_QuestionDoesntExist" xml:space="preserve">
     <value>Lista curentă nu mai există. Mergeți la următoarea secțiune sau listă disponibilă folosind meniul de navigare.</value>
+  </data>
+  <data name="Adjust" xml:space="preserve">
+    <value>Reglare</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comentariu</value>
+  </data>
+  <data name="InvalidTimeMessage" xml:space="preserve">
+    <value>Este important ca setarea ceasului să fie corectă. Ceasul dvs. indică faptul că data curentă este setată incorect. Reglați ceasul setând data / ora corectă înainte de a continua munca.</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>Nu este specificat niciun comentariu</value>
   </data>
 </root>

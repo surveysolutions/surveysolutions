@@ -163,10 +163,10 @@
     <value>Verificare configurare BaseUrl</value>
   </data>
   <data name="hq_baseurl_check_Degraded" xml:space="preserve">
-    <value>Sediul central configurat cu Sediul RINS:BaseUrl: {0} este diferit de adresa URL actuală din bara de adrese a browserului. Acest lucru poate cauza probleme cu legăturile de e-mail și funcționalitatea Serviciului de export</value>
+    <value>Coordonatori configurat cu Headquarters:BaseUrl: {0} este diferit de adresa URL actuală din bara de adrese a browserului. Acest lucru poate cauza probleme cu legăturile de e-mail și funcționalitatea Serviciului de export</value>
   </data>
   <data name="hq_baseurl_check_Healthy" xml:space="preserve">
-    <value>Sediul central configurat cu Sediul RINS:BaseUrl: {0} este același cu adresa URL actuală din bara de adrese a browserului.</value>
+    <value>Coordonatori configurat cu Headquarters:BaseUrl: {0} este același cu adresa URL actuală din bara de adrese a browserului.</value>
   </data>
   <data name="ServerMetrics" xml:space="preserve">
     <value>Valori de server</value>
@@ -176,5 +176,11 @@
   </data>
   <data name="WaitForHealthcheck" xml:space="preserve">
     <value>Se așteaptă rezultatele verificărilor de integritate</value>
+  </data>
+  <data name="Connectivity" xml:space="preserve">
+    <value>Conectivitate socket web</value>
+  </data>
+  <data name="WaitingForMetrics" xml:space="preserve">
+    <value>Calculul valorilor</value>
   </data>
 </root>

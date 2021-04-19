@@ -512,6 +512,23 @@ export default {
                     width: '180px',
                 },
                 {
+                    data: 'receivedByInterviewerAtUtc',
+                    name: 'ReceivedByInterviewerAtUtc',
+                    title: this.$t('Common.ReceivedByInterviewer'),
+                    render(data) {
+                        if (data)
+                            return moment
+                                .utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
+                        return self.$t('Common.No')
+                    },
+                    createdCell(td, cellData, rowData, row, col) {
+                        $(td).attr('role', 'received')
+                    },
+                    width: '50px',
+                },
+                {
                     data: 'calendarEvent',
                     title: this.$t('Common.CalendarEvent'),
                     orderable: false,

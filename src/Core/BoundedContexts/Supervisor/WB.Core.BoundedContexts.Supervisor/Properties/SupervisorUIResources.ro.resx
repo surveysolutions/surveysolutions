@@ -118,8 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="OfflineSync_NoDevicesDetectedFormat" xml:space="preserve">
-    <value>„Nu s-a detectat niciun dispozitiv de trimitere.
-ID-ul dispozitivului dvs. este „{0}” "</value>
+    <value>Nu s-a detectat niciun dispozitiv de trimitere.
+ID-ul dispozitivului dvs. este '{0}'</value>
   </data>
   <data name="OfflineSync_ReceivingInterviews" xml:space="preserve">
     <value>Primirea interviurilor</value>
@@ -153,5 +153,8 @@ ID-ul dispozitivului dvs. este „{0}” "</value>
   </data>
   <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
     <value>Încărcat {0} din {1}</value>
+  </data>
+  <data name="Confirm_Approve_Synchronized_Interview_Message" xml:space="preserve">
+    <value>Actualul anchetator responsabil nu va fi informat despre aprobarea chestionarului până la următoarea sincronizare. Dacă anchetatorul a început deja să lucreze pe chestionar, toate datele pe care le-a introdus acesta înainte de următoarea sincronizare vor fi PIERDUTE!</value>
   </data>
 </root>

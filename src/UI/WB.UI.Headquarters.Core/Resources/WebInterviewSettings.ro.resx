@@ -136,10 +136,10 @@
     <value>Anulare</value>
   </data>
   <data name="Complete" xml:space="preserve">
-    <value>Complet</value>
+    <value>Finalizare</value>
   </data>
   <data name="CompletePage" xml:space="preserve">
-    <value>Complet</value>
+    <value>Finalizare</value>
   </data>
   <data name="CustomizeDisplayedText" xml:space="preserve">
     <value>Personalizați textul afișat pentru respondenți</value>
@@ -187,7 +187,7 @@
     <value>Câmpul este obligatoriu.</value>
   </data>
   <data name="FinishPage" xml:space="preserve">
-    <value>Finalizați pagina</value>
+    <value>Finalizare pagină</value>
   </data>
   <data name="Invitation" xml:space="preserve">
     <value>Invitație</value>
@@ -199,13 +199,13 @@
     <value>Textul principal:</value>
   </data>
   <data name="NoteToSupervisor" xml:space="preserve">
-    <value>Notă pentru supraveghetor</value>
+    <value>Notă pentru supervizor</value>
   </data>
   <data name="Reject" xml:space="preserve">
-    <value>Respinge</value>
+    <value>Respingere</value>
   </data>
   <data name="RejectEmailMessage" xml:space="preserve">
-    <value>Respinge</value>
+    <value>Respingere</value>
   </data>
   <data name="Reminder" xml:space="preserve">
     <value>Aducere aminte</value>
@@ -226,16 +226,16 @@
     <value>Reluare</value>
   </data>
   <data name="ResumePage" xml:space="preserve">
-    <value>Reluați pagina</value>
+    <value>Reluare pagină</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Salvați</value>
+    <value>salvare</value>
   </data>
   <data name="SendWithNoResponse" xml:space="preserve">
-    <value>Aduceți aminte persoanelor care nu au răspuns</value>
+    <value>Transmitere reminder persoanelor care nu au răspuns</value>
   </data>
   <data name="SendWithPartialResponse" xml:space="preserve">
-    <value>Aduceți aminte persoanelor care au dat un răspuns parțial</value>
+    <value>Transmitere reminder persoanelor care au dat un răspuns parțial</value>
   </data>
   <data name="ShownPasswordIsRequired" xml:space="preserve">
     <value>Afișat numai dacă este necesară și setată parola</value>
@@ -244,7 +244,7 @@
     <value>Butonul de începere a interviului</value>
   </data>
   <data name="StartNew" xml:space="preserve">
-    <value>Începeți un nou interviu</value>
+    <value>Începere interviu nou</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Titlu:</value>
@@ -254,5 +254,20 @@
   </data>
   <data name="WelcomePage" xml:space="preserve">
     <value>Pagina de bun venit</value>
+  </data>
+  <data name="AnswerOn" xml:space="preserve">
+    <value>răspuns pe {{variable}}</value>
+  </data>
+  <data name="CompleteEmailMessage" xml:space="preserve">
+    <value>Finalizare</value>
+  </data>
+  <data name="InterviewDataInsertBarcodeDescription" xml:space="preserve">
+    <value>%question_variable:barcode% - așifează răspunsul ca Barcode Code 128</value>
+  </data>
+  <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
+    <value>În acest șablon de e-mail puteți utiliza %question_variable% ca substituent în text ca răspuns la întrebare în chestionarul de interviu. Întrebarea trebuie să aparțină celui mai înalt nivel al chestionarului (nu în liste).</value>
+  </data>
+  <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve">
+    <value>%question_variable:qrcode% - afișează răspunsul ca QR Code</value>
   </data>
 </root>
