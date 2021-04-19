@@ -181,5 +181,9 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DataExport\Dtos" />
+  </ItemGroup>
+
 
 </Project>
