@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             this.Property(x => x.ResponsibleId, _ => _.Column("responsible_id"));
             this.Property(x => x.ResponsibleName, _ => _.Column("responsible_name"));
             this.Property(x => x.Time);
-            this.Property(x => x.TimeUtc);
+            this.Property(x => x.TimeUtc, _ => _.Column("time_utc"));
             this.Property(x => x.Type);
             this.Property("Payload", m =>
             {

@@ -14,7 +14,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
                 .WithColumn("responsible_name").AsString().Nullable()
                 .WithColumn("type").AsString()
                 .WithColumn("time").AsDateTime()
-                .WithColumn("timeutc").AsDateTime()
+                .WithColumn("time_utc").AsDateTime()
                 .WithColumn("payload").AsString();
 
             Create.Index("auditlogrecords_responsible_id")
