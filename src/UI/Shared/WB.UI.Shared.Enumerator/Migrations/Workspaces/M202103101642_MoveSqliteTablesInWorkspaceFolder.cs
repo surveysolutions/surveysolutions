@@ -90,6 +90,14 @@ namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
                 var newFilePath = fileSystemAccessor.CombinePath(workspaceDataFolder, fileName);
                 fileSystemAccessor.MoveFile(file, newFilePath);
             }
+
+            // duplicate file for save settings for offline sync
+            var applicationSettingsPath = fileSystemAccessor.CombinePath(workspaceDataFolder, "ApplicationSettingsView");
+            if (fileSystemAccessor.IsFileExists(applicationSettingsPath))
+            {
+                var applicationWorkspaceSettingsPath = fileSystemAccessor.CombinePath(workspaceDataFolder, "ApplicationWorkspaceSettingsView");
+                fileSystemAccessor.CopyFileOrDirectory(applicationSettingsPath, applicationWorkspaceSettingsPath);
+            }
         }
     }
 }
