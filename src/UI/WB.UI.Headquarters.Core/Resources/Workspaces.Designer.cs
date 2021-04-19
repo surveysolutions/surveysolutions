@@ -307,7 +307,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your account in the workspace disabled by the system administrator, and as a result you can&apos;t use the functionality of this site. If you believe that this is an error, please contact your server administrator..
+        ///   Looks up a localized string similar to Your account is in the workspace disabled by the system administrator, and as a result you can&apos;t use the functionality of this site. If you believe that this is an error, please contact your server administrator..
         /// </summary>
         public static string WorkspaceAccessDisabledReason {
             get {

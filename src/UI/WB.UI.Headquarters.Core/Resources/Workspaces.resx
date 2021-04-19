@@ -214,7 +214,7 @@ The following data associated with this workspace will be deleted:</value>
     <value>Workspace disabled and cannot be accessed. If you believe that this is an error, please contact your server administrator.</value>
   </data>
   <data name="WorkspaceAccessDisabledReason" xml:space="preserve">
-    <value>Your account in the workspace disabled by the system administrator, and as a result you can't use the functionality of this site. If you believe that this is an error, please contact your server administrator.</value>
+    <value>Your account is in the workspace disabled by the system administrator, and as a result you can't use the functionality of this site. If you believe that this is an error, please contact your server administrator.</value>
   </data>
   <data name="WorkspaceCantBeRemoved" xml:space="preserve">
     <value>Workspace can not be removed because user has assigned work. Reassign all assignments (including archived), not completed interviews and for Supervisor move all team members to another team. Interviews: {0}, Assignments: {1}, Team members: {2}</value>
