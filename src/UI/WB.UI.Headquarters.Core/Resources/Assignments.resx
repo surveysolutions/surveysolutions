@@ -361,7 +361,7 @@
     <value>This Assignment will be used with Web Mode</value>
   </data>
   <data name="Activated" xml:space="preserve">
-    <value>Activated</value>
+    <value>CAWI Activated</value>
   </data>
   <data name="Tooltip_Table_WebMode" xml:space="preserve">
     <value>Assignment Mode</value>

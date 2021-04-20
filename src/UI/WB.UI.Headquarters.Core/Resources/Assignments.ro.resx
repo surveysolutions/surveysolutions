@@ -322,7 +322,7 @@
     <value>Modul Web este activat</value>
   </data>
   <data name="Activated" xml:space="preserve">
-    <value>Activat</value>
+    <value>CAWI Activat</value>
   </data>
   <data name="Actor" xml:space="preserve">
     <value>De către </value>
@@ -472,7 +472,7 @@
     <value>Sarcina a fost creată în modul Web</value>
   </data>
   <data name="WebMode" xml:space="preserve">
-    <value>Modul Web</value>
+    <value>Modul</value>
   </data>
   <data name="WebModeNonInterviewer" xml:space="preserve">
     <value>Toate sarcinile pentru interviuri web trebuie alocate unor anchetatori</value>

@@ -205,7 +205,7 @@ export default {
                 : this.$t('Common.No')
         },
         isWebMode() {
-            return this.model.webMode === false ?  this.$t('Common.No') : this.$t('Common.Yes')
+            return this.model.webMode === false ? 'CAPI' : 'CAWI'
         },
         interviewsCount() {
             if (this.model.quantity == null || this.model.quantity < 0) return this.$t('Assignments.Unlimited')

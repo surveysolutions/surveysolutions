@@ -178,7 +178,7 @@
     <value>Modaliteti Ueb u aktivizua</value>
   </data>
   <data name="Activated" xml:space="preserve">
-    <value>Aktivizuar</value>
+    <value>CAWI Aktivizuar</value>
   </data>
   <data name="Active" xml:space="preserve">
     <value>Aktiv</value>
@@ -469,6 +469,6 @@
     <value>Kalimi i detyrave nga niveli {{from}} në {{to}}</value>
   </data>
   <data name="WebMode" xml:space="preserve">
-    <value>Modaliteti Ueb</value>
+    <value>Modaliteti</value>
   </data>
 </root>
