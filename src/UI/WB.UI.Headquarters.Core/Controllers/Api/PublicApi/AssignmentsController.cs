@@ -536,6 +536,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             commandService.Execute(
                 new UpdateAssignmentWebMode(assignment.PublicKey, authorizedUser.Id, request.Enabled));
 
+            if (request.Enabled)
+            {
+                var invitation = this.invitationService.GetInvitationByAssignmentId(assignment.Id);
+
+                if(invitation == null)
+                    this.invitationService.CreateInvitationForWebInterview(assignment);
+            }
+
             return NoContent();
         }
 
