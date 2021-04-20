@@ -56,18 +56,8 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
                 if (hasAuthorization && !allowAnonymous && workspace.IsSystemDefinedWorkspace())
                 {
-                    if (workspace.IsSystemDefinedWorkspace())
-                    {
-                        var isUserHasAccess = (context.HttpContext.User?.IsInRole(UserRoles.Administrator.ToString()) ?? false) || 
-                                              (context.HttpContext.User?.IsInRole(UserRoles.Headquarter.ToString()) ?? false);
-                        if (isUserHasAccess)
-                            return;
-                    }
-                    else
-                    {
-                        // allow user to access to special workspace
-                        return;
-                    }
+                    // allow user to access to special workspace
+                    return;
                 }
 
                 if (hasAuthorization && !allowAnonymous && !(workspace != null && authorizedUser.HasAccessToWorkspace(workspace.Name)))
