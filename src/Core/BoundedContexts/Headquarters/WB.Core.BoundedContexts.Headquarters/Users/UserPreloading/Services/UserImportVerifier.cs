@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                     out var supervisor))
                 {
                     var supervisorName = supervisor.UserName.ToLower();
-                    if (supervisorName == userPreloadingDataRecord.Supervisor.ToLower())
+                    if (supervisorName != userPreloadingDataRecord.Supervisor.ToLower())
                         return true;
                 }
             }
