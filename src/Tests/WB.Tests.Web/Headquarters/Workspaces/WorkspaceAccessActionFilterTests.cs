@@ -71,10 +71,10 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         }
 
         [Test]
-        public void non_admin_should_not_be_allowed_access_to_admin_workspace()
+        public void non_admin_should_not_be_allowed_access_to_special_workspace()
         {
             CurrentWorkspace = Workspace.Admin.AsContext();
-            Role = UserRoles.Headquarter;
+            Role = UserRoles.Supervisor;
 
             // act
             var context = Act();
