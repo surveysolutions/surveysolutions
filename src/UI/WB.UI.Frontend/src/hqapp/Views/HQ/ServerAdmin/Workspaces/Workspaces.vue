@@ -310,7 +310,7 @@ export default {
                 })
             }
             else {
-                items = [
+                items.push(
                     {
                         name: this.$t('Workspaces.Edit'),
                         className: 'suso-edit',
@@ -363,8 +363,8 @@ export default {
                         callback: (_, opt) => {
                             window.location = this.workspacePath(rowData.Name) + 'ControlPanel/InterviewPackages'
                         },
-                    },
-                ]
+                    }
+                )
 
                 if(rowData.Name != 'primary') {
                     items.push({
