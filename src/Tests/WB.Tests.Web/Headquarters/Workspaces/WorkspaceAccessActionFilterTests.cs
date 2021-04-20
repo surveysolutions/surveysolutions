@@ -71,20 +71,6 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         }
 
         [Test]
-        public void non_admin_should_not_be_allowed_access_to_special_workspace()
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            Role = UserRoles.Supervisor;
-
-            // act
-            var context = Act();
-
-            // assert
-            Assert.NotNull(context.Result);
-            Assert.That(GetForbidReason(context.Result), Is.EqualTo(ForbidReason.WorkspaceAccessDisabledReason));
-        }
-
-        [Test]
         public void admin_should_not_be_allowed_to_disabled_workspace()
         {
             CurrentWorkspace = new WorkspaceContext("wspc", "Some", DateTime.Now);
