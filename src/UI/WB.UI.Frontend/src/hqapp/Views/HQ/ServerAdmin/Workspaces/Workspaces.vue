@@ -24,7 +24,8 @@
             noSelect
             noSearch
             :noPaging="false"
-            :contextMenuItems="contextMenuItems">
+            :contextMenuItems="contextMenuItems"
+            :supportContextMenu="this.$config.model.canManage">
         </DataTables>
         <ModalFrame
             ref="createWorkspaceModal"
