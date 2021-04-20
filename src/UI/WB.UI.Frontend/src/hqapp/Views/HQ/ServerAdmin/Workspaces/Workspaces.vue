@@ -5,6 +5,7 @@
             <div class="topic-with-button">
                 <h1 v-html="$t('MainMenu.Workspaces')"></h1>
                 <button type="button"
+                    v-if="this.$config.model.canManage"
                     class="btn btn-success"
                     data-suso="create-new-workspace"
                     @click="createNewWorkspace">
@@ -274,6 +275,17 @@ export default {
         contextMenuItems({rowData}) {
             let items = []
 
+            items.push({
+                name: this.$t('Workspaces.Open'),
+                className: 'suso-open',
+                callback: (_, opt) => {
+                    window.location = this.workspacePath(rowData.Name)
+                },
+            })
+
+            if (!this.$config.model.canManage)
+                return items
+
             if(rowData.isDisabled) {
                 items.push({
                     name: this.$t('Workspaces.Enable'),
@@ -415,6 +427,10 @@ export default {
                         name: 'Name',
                         title: this.$t('Workspaces.Name'),
                         sortable: false,
+                        render(data, type, row) {
+                            const workspaceUrl = self.workspacePath(data)
+                            return `<a href='${workspaceUrl}'>${data}</a>`
+                        },
                     },
                     {
                         data: 'DisplayName',

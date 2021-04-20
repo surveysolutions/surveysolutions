@@ -220,4 +220,7 @@ The following data associated with this workspace will be deleted:</value>
     <value>Workspace can not be removed because user has assigned work. Reassign all assignments (including archived), not completed interviews and for Supervisor move all team members to another team. Interviews: {0}, Assignments: {1}, Team members: {2}</value>
     <comment>{0} interviews count, {1} Assignments count, {2} Interviewers count</comment>
   </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
 </root>

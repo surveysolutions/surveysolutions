@@ -9,9 +9,9 @@
     var isSystemWorkspace = workspace?.IsSystemDefinedWorkspace() ?? false;
 }
 
-@if (workspace != null || isSystemWorkspace)
+@if (workspace != null && !isSystemWorkspace)
 {
-    @if (hasAnotherWorkspace || isSystemWorkspace)
+    @if (hasAnotherWorkspace)
     {
         <ul class="nav navbar-nav">
             <li class="dropdown">

@@ -6,6 +6,7 @@
     var page = ViewBag.ActivePage ?? MenuItem.UsersManagement;
 }
 <ul class="nav navbar-nav">
+    @Html.MainMenuItem(Workspace.Admin.AsContext(),"Index", "Workspaces", @MainMenu.Workspaces, MenuItem.Workspaces)
     @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Index", "UsersManagement", MainMenu.Users, MenuItem.UsersManagement)
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">

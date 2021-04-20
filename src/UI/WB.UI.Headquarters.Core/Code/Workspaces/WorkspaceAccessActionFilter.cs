@@ -56,10 +56,11 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
                 if (hasAuthorization && !allowAnonymous && workspace.IsSystemDefinedWorkspace())
                 {
-                    if (workspace.IsAdministrationWorkspace())
+                    if (workspace.IsSystemDefinedWorkspace())
                     {
-                        var isUserAdmin = context.HttpContext.User?.IsInRole(UserRoles.Administrator.ToString()) ?? false;
-                        if (isUserAdmin)
+                        var isUserHasAccess = (context.HttpContext.User?.IsInRole(UserRoles.Administrator.ToString()) ?? false) || 
+                                              (context.HttpContext.User?.IsInRole(UserRoles.Headquarter.ToString()) ?? false);
+                        if (isUserHasAccess)
                             return;
                     }
                     else

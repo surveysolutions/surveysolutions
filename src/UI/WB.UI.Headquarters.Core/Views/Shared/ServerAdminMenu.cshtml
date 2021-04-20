@@ -13,12 +13,12 @@
             </li>*@
         @Html.MainMenuItem(Workspace.Admin.AsContext(),"Index", "Workspaces", @MainMenu.Workspaces, MenuItem.Workspaces)
         @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Index", "UsersManagement", MainMenu.Users, MenuItem.UsersManagement)
+        @Html.MainMenuItem("AuditLog", "Diagnostics", AuditLog.PageTitle, MenuItem.AuditLog)
+        @Html.MainMenuItem("Diagnostics", "Administration", Pages.Diagnostics, MenuItem.Administration_Config)
     }
 </ul>
 <ul class="nav navbar-nav navbar-right">
     <li><a href="http://support.mysurvey.solutions/admin" target="_blank" title="Help">@MainMenu.Help</a></li>
-    @Html.MainMenuItem("AuditLog", "Diagnostics", AuditLog.PageTitle, MenuItem.AuditLog)
-    @Html.MainMenuItem("Diagnostics", "Administration", Pages.Diagnostics, MenuItem.Administration_Config)
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">

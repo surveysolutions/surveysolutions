@@ -51,8 +51,8 @@
     }
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
-    @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Index", "UsersManagement", 
-        @MainMenu.Users, MenuItem.UsersManagement)
+    @Html.MainMenuItem(Workspace.Admin.AsContext(), "Index", "Workspaces", 
+        @MainMenu.ServerAdministration, MenuItem.ServerAdministration)
     <li><a href="http://support.mysurvey.solutions/headquarters" target="_blank" title="Help">@MainMenu.Help</a></li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@User.Identity.Name">
