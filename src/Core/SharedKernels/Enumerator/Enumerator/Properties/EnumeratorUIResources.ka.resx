@@ -339,7 +339,7 @@
     <value>ინტერნეტზე წვდომა არ არის თქვენს სერვერთან. შეამოწმეთ სერვერის მისამართი და (ან) ქსელის პარამეტრები</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>სერვერის შეცდომა. გთხოვთ დაუკავშირდეთ მხარდაჭერის ჯგუფს მისამართზე support@mysurvey.solutions</value>
+    <value>Სერვერის შეცდომა. გთხოვთ, დაუკავშირდეთ სერვერის ადმინისტრატორს.</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>იტვირთება...</value>
