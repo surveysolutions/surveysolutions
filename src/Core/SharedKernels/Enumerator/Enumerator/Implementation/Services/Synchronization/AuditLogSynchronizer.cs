@@ -49,7 +49,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             var auditLogEntities = auditLogService.GetAuditLogEntitiesForSync();
 
-            AuditLogEntitiesApiView entities = new AuditLogEntitiesApiView();
+            AuditLogEntitiesApiView entities = new AuditLogEntitiesApiView()
+            {
+                IsWorkspaceSupported = true,
+            };
 
             entities.Entities = auditLogEntities.Select(auditLogEntity => new AuditLogEntityApiView()
                 {
@@ -60,7 +63,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     TimeUtc = auditLogEntity.TimeUtc,
                     PayloadType = auditLogEntity.Payload.GetType().Name,
                     Payload = typesSerializer.Serialize(auditLogEntity.Payload),
-                    Type = auditLogEntity.Type
+                    Type = auditLogEntity.Type,
+                    Workspace = auditLogEntity.Workspace,
                 }
             ).ToArray();
 

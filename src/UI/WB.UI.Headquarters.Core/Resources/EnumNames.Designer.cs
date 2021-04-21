@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarter.
+        ///   Looks up a localized string similar to Headquarters.
         /// </summary>
         public static string UserRoles_Headquarter {
             get {

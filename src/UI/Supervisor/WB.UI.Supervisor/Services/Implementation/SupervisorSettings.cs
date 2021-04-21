@@ -5,7 +5,9 @@ using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Supervisor.Views;
@@ -16,18 +18,24 @@ namespace WB.UI.Supervisor.Services.Implementation
     internal class SupervisorSettings : EnumeratorSettings, ISupervisorSettings
     {
         private readonly IPlainStorage<ApplicationSettingsView> settingsStorage;
+        private readonly IPlainStorage<ApplicationWorkspaceSettingsView> workspaceSettingsStorage;
         private readonly IPlainStorage<SupervisorIdentity> usersStorage;
+        private readonly IWorkspaceAccessor workspaceAccessor;
 
         public SupervisorSettings(IPlainStorage<ApplicationSettingsView> settingsStorage,
+            IPlainStorage<ApplicationWorkspaceSettingsView> workspaceSettingsStorage,
             ISupervisorSyncProtocolVersionProvider syncProtocolVersionProvider,
             IQuestionnaireContentVersionProvider questionnaireContentVersionProvider,
             IPlainStorage<SupervisorIdentity> usersStorage,
             IFileSystemAccessor fileSystemAccessor,
-            string backupFolder, string restoreFolder) : base(syncProtocolVersionProvider,
+            string backupFolder, string restoreFolder,
+            IWorkspaceAccessor workspaceAccessor) : base(syncProtocolVersionProvider,
             questionnaireContentVersionProvider, fileSystemAccessor, backupFolder, restoreFolder)
         {
             this.settingsStorage = settingsStorage;
+            this.workspaceSettingsStorage = workspaceSettingsStorage;
             this.usersStorage = usersStorage;
+            this.workspaceAccessor = workspaceAccessor;
         }
 
 
@@ -54,7 +62,23 @@ namespace WB.UI.Supervisor.Services.Implementation
             DownloadUpdatesForInterviewerApp = Application.Context.Resources.GetBoolean(Resource.Boolean.DownloadUpdatesForInterviewerApp),
         };
 
+        private ApplicationWorkspaceSettingsView currentWorkspaceSettings
+        {
+            get
+            {
+                var workspace = workspaceAccessor.GetCurrentWorkspaceName();
+                if (workspace == null)
+                    return null;
+                
+                return this.workspaceSettingsStorage.GetById(workspace) ?? new ApplicationWorkspaceSettingsView
+                {
+                    Id = workspace,
+                };
+            }
+        }
+
         protected override EnumeratorSettingsView CurrentSettings => this.currentSettings;
+        protected override EnumeratorWorkspaceSettingsView CurrentWorkspaceSettings => this.currentWorkspaceSettings;
         public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize));
         public override double GpsDesiredAccuracy => throw new NotImplementedException();
         public override bool VibrateOnError => false;
@@ -85,5 +109,8 @@ namespace WB.UI.Supervisor.Services.Implementation
 
         protected override void SaveSettings(EnumeratorSettingsView settings)
             => this.settingsStorage.Store((ApplicationSettingsView)settings);
+
+        protected override void SaveSettings(EnumeratorWorkspaceSettingsView settings)
+            => this.workspaceSettingsStorage.Store((ApplicationWorkspaceSettingsView)settings);
     }
 }

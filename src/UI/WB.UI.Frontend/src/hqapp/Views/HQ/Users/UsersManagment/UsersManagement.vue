@@ -1,37 +1,79 @@
 <template>
-    <HqLayout :hasFilter="true">
+    <HqLayout
+        :hasFilter="true">
+        <div slot="headers">
+            <div class="topic-with-button">
+                <h1 v-html="$t('Users.UsersTitle')"></h1>
+                <a class="btn btn-success"
+                    v-if="model.canAddUsers"
+                    :href="this.$config.model.createUrl">
+                    {{ $t('Users.AddUser') }}
+                </a>
+                <a class="btn btn-success"
+                    style="margin-left:10px"
+                    v-if="model.canAddUsers"
+                    :href="this.$hq.basePath + 'Upload'">
+                    {{ $t('Users.UploadUsers') }}
+                </a>
+            </div>
+        </div>
 
         <Filters slot="filters">
-            <FilterBlock
-                :title="$t('Pages.UsersManage_WorkspacesFilterTitle')">
+            <FilterBlock :title="$t('Pages.UsersManage_WorkspacesFilterTitle')">
                 <Typeahead
                     control-id="workspaceSelector"
                     :placeholder="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
                     :value="selectedWorkspace"
-                    :values="workspaces"
+                    :ajax-params="{ }"
+                    :fetch-url="this.$config.model.workspacesUrl"
                     v-on:selected="onWorkspaceSelected" />
             </FilterBlock>
 
-            <FilterBlock
-                :title="$t('Pages.AccountManage_Role')">
+            <FilterBlock :title="$t('Pages.AccountManage_Role')"
+                v-if="this.$config.model.roles.length > 0">
                 <Typeahead
                     no-search
                     control-id="roleSelector"
                     :placeholder="$t('Pages.UsersManage_RoleFilterPlaceholder')"
                     :value="selectedRole"
-                    :values="roles"
+                    :values="this.$config.model.roles"
                     v-on:selected="onRoleSelected" />
             </FilterBlock>
 
-            <FilterBlock
-                :title="$t('Pages.AccountManage_ShowUsers')">
+            <FilterBlock :title="$t('Pages.UsersManage_TeamFilter')"
+                v-if="this.selectedWorkspace">
+                <Typeahead
+                    control-id="teamSelector"
+                    :placeholder="$t('Pages.UsersManage_TeamFilterPlaceHolder')"
+                    :value="selectedTeam"
+                    :fetch-url="supervisorsUri"
+                    v-on:selected="onTeamSelected" />
+            </FilterBlock>
+
+            <FilterBlock :title="$t('Pages.AccountManage_ShowUsers')"
+                v-if="this.$config.model.filters.length > 0">
                 <Typeahead
                     no-search
                     control-id="filterSelector"
                     :placeholder="$t('Pages.UsersManage_ShowUsersFilterPlaceholder')"
-                    :values="filters"
+                    :values="this.$config.model.filters"
                     :value="selectedFilter"
                     v-on:selected="onFilterSelected"/>
+            </FilterBlock>
+
+            <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
+                <Typeahead
+                    ref="archiveStatusControl"
+                    control-id="archiveStatus"
+                    no-clear
+                    :noPaging="false"
+                    data-vv-name="archive"
+                    data-vv-as="archive"
+                    :value="selectedArchive"
+                    :values="this.$config.model.archiveStatuses"
+                    :selectedKey="this.query.archive"
+                    :selectFirst="true"
+                    v-on:selected="onArchiveStatusSelected"/>
             </FilterBlock>
 
         </Filters>
@@ -41,9 +83,9 @@
             data-suso="usermanagement-list"
             :tableOptions="tableOptions"
             :addParamsToRequest="addParamsToRequest"
+            :selectable="canManageUsers"
             @selectedRowsChanged="rows => selectedRows = rows"
             mutliRowSelect
-            selectable
             :selectableId="'userId'"
             :noPaging="false">
             <div
@@ -69,6 +111,21 @@
                         class="btn btn-lg btn-success"
                         :disabled="filteredToAdd.length == 0"
                         @click="removeFromWorkspace">{{ $t("Pages.UserManagement_RemoveFromWorkspace")}}</button>
+                    <button
+                        type="button"
+                        v-if="isVisibleArchive"
+                        class="btn btn-default btn-danger"
+                        @click="archiveUsers">{{ $t("Pages.Interviewers_Archive") }}</button>
+                    <button
+                        type="button"
+                        v-if="isVisibleUnarchive"
+                        class="btn btn-default btn-success"
+                        @click="unarchiveUsers">{{ $t("Pages.Interviewers_Unarchive") }}</button>
+                    <button
+                        type="button"
+                        class="btn btn-default btn-warning last-btn"
+                        v-if="isAnyInterviewerSelected && selectedWorkspace"
+                        @click="moveToAnotherTeam">{{ $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
                 </div>
             </div>
         </DataTables>
@@ -77,13 +134,39 @@
             @addWorkspacesSelected="addWorkspacesSelected"
             @removeWorkspacesSelected="removeWorkspacesSelected"  />
 
+        <AddInterviewerToWorkspace ref="addInterviewerToWorkspace"
+            @addInterviewerWorkspace="addInterviewerWorkspace" />
+
+        <Confirm
+            ref="confirmArchive"
+            id="confirmArchive"
+            slot="modals">
+            {{$t('Pages.Users_ArchiveUsersConfirmMessage')}}
+            <br />
+            {{$t('Pages.Users_UsersConfirm')}}
+        </Confirm>
+        <Confirm ref="confirmUnarchive"
+            id="confirmUnarchive"
+            slot="modals">
+            {{$t('Pages.Users_UnarchiveUsersWarning')}}
+            <br />
+            {{$t('Pages.Users_UsersConfirm')}}
+        </Confirm>
+
+        <InterviewersMoveToOtherTeam
+            ref="interviewersMoveToOtherTeam"
+            @moveInterviewersCompleted="loadData"></InterviewersMoveToOtherTeam>
+
     </HqLayout>
 </template>
 
 <script>
+import * as toastr from 'toastr'
 import { keyBy, map, find, filter, escape } from 'lodash'
 import routeSync from '~/shared/routeSync'
 import WorkspaceManager from './WorkspaceManager.vue'
+import AddInterviewerToWorkspace from './AddInterviewerToWorkspace'
+import InterviewersMoveToOtherTeam from './InterviewersMoveToOtherTeam'
 
 var arrayFilter = function(array, predicate) {
     array = array || []
@@ -120,33 +203,17 @@ var arrayFilter = function(array, predicate) {
  * Users management page
  */
 export default {
-    components: { WorkspaceManager },
+    components: { WorkspaceManager, AddInterviewerToWorkspace, InterviewersMoveToOtherTeam },
     name: 'users-management',
 
     data() {
-        const filters = [
-            { key: 'WithMissingWorkspace', value: this.$t('Users.Filter_WithMissingWorkspace')},
-            { key: 'WithDisabledWorkspaces', value: this.$t('Users.Filter_WithDisabledWorkspaces')},
-            { key: 'Locked', value: this.$t('Users.Filter_Locked')},
-            { key: 'Archived', value: this.$t('Users.Filter_Archived')},
-        ]
-
         return {
             workspaces: [],
-
-            roles: [
-                { key: 'Headquarter', value: this.$t('Users.Headquarters') },
-                { key: 'ApiUser',     value: this.$t('Users.APIUsers') },
-                { key: 'Interviewer', value: this.$t('Users.Interviewer') },
-                { key: 'Supervisor',     value: this.$t('Users.Supervisor') },
-                { key: 'Observer',     value: this.$t('Users.Observer') },
-            ],
-
-            filters,
-
             selectedWorkspace: null,
+            selectedTeam: null,
             selectedRole: null,
             selectedFilter: null,
+            selectedArchive: null,
             selectedRows: [],
         }
     },
@@ -157,9 +224,7 @@ export default {
 
     watch: {
         queryString(to) {
-            if (this.$refs.table) {
-                this.$refs.table.reload()
-            }
+            this.loadData()
         },
     },
 
@@ -181,19 +246,42 @@ export default {
             })
 
         if(this.queryString.role) {
-            this.selectedRole = find(this.roles, { key: this.queryString.role})
+            this.selectedRole = find(this.this.$config.model.roles, { key: this.queryString.role})
         }
 
         if(this.queryString.filter) {
-            this.selectedFilter = find(this.filters, { key: this.queryString.filter})
+            this.selectedFilter = find(this.this.$config.model.filters, { key: this.queryString.filter})
         } else {
             this.selectedFilter = null
         }
     },
 
     computed: {
+        canManageUsers() {
+            return this.model.canArchiveUnarchive || this.model.canArchiveMoveToOtherTeam || this.model.canAddRemoveWorkspaces
+        },
+
+        supervisorsUri() {
+            return `/${this.selectedWorkspace.key}/api/v1/users/supervisors`
+        },
+
+        model() {
+            return this.$config.model
+        },
+        isVisibleArchive() {
+            return (
+                this.isAnyInterviewerOrSupervisorSelected && this.model.canArchiveUnarchive && this.selectedArchive.key == 'false'
+            )
+        },
+        isVisibleUnarchive() {
+            return (
+                this.isAnyInterviewerOrSupervisorSelected && this.model.canArchiveUnarchive && this.selectedArchive.key == 'true'
+            )
+        },
+
         tableOptions() {
             var self = this
+            let defaultOrder = this.canManageUsers ? [[1, 'asc']] : [[0, 'asc']]
             return {
                 deferLoading: 0,
                 rowId: function(row) {
@@ -230,8 +318,17 @@ export default {
                         className: 'suso-workspaces',
                         sortable: false,
                         render(data, type, row) {
-                            return map(row.workspaces, w => w.disabled ? '<strike>'
-                                + $('<div>').text(w.displayName).html() + '</strike>' : $('<div>').text(w.displayName).html()).join(', ')
+                            return map(row.workspaces, function(w) {
+                                let supervisorName = ''
+                                if(w.supervisor) {
+                                    supervisorName = ` (<span class="supervisor">${w.supervisor}</span>)`
+                                }
+                                if(w.disabled)
+                                    return `<strike>${$('<div>').text(w.displayName).html()}${supervisorName}</strike>`
+                                else
+                                    return $('<div>').text(w.displayName).html() + supervisorName
+
+                            }).join(', ')
                         },
                     },
                     {
@@ -266,7 +363,7 @@ export default {
                     contentType: 'application/json',
                 },
                 responsive: false,
-                order: [[1, 'asc']],
+                order: defaultOrder,
                 sDom: 'rf<"table-with-scroll"t>ip',
                 createdRow: function(row, data) {
                     if (data.isLocked) {
@@ -282,67 +379,55 @@ export default {
                 workspace: this.query.workspace,
                 role: this.query.role,
                 filter: this.query.filter,
+                archive: this.query.archive,
             }
         },
 
         filteredToAdd() {
             return this.getFilteredItems(item => {
-                return item.role == 'Headquarter' || item.role == 'ApiUser'|| item.role == 'Observer'
+                return true //item.role == 'Headquarter' || item.role == 'ApiUser'|| item.role == 'Observer'
             })
         },
 
         filteredToRemove() {
             return this.getFilteredItems(item => {
-                return item.role == 'Headquarter' || item.role == 'ApiUser'|| item.role == 'Observer'
+                return true //item.role == 'Headquarter' || item.role == 'ApiUser'|| item.role == 'Observer'
             })
         },
 
+        isAnyInterviewerSelected() {
+            return this.getFilteredItems(item => {
+                return item.role == 'Interviewer'
+            }).length > 0
+        },
+
+        isAnyInterviewerOrSupervisorSelected(){
+            return this.getFilteredItems(item => {
+                return item.role == 'Interviewer' || item.role == 'Supervisor'
+            }).length > 0
+        },
     },
 
     methods: {
-
+        loadData() {
+            if (this.$refs.table) {
+                this.$refs.table.reload()
+            }
+        },
         /**
          * Return link to user profile
          * @param {UserInfo} row - user info row
          */
         getUserProfileLink(row) {
-            const returnUrl = encodeURIComponent(this.$config.basePath + this.$route.fullPath.substring(1))
-            const userWorkspace = row.workspaces == null || row.workspaces.length == 0 ? null : row.workspaces[0].name
-
-            const InUserWorkspace = (path, includeReturnUrl = true) => {
-                return this.$hq.workspacePath(userWorkspace) + path + '/' + row.userId + (includeReturnUrl ? '?returnUrl=' + returnUrl : '')
-            }
-
-            const InAdminWorkspace = (path) => {
-                return this.$config.basePath + path + '/' + row.userId + '?returnUrl=' + returnUrl
-            }
-
-            const GetUrl = () => {
-                switch(row.role) {
-                    case 'ApiUser': return InAdminWorkspace('Users/Manage')
-                    case 'Headquarter': return InAdminWorkspace('Users/Manage')
-                    case 'Observer': return InAdminWorkspace('Users/Manage')
-                    case 'Interviewer': {
-                        if(row.workspaces && row.workspaces.length > 0 && row.workspaces[0].disabled) {
-                            return InAdminWorkspace('Users/Manage')
-                        }
-                        return InUserWorkspace('Interviewer/Profile', false)
-                    }
-                    case 'Supervisor': {
-                        if(row.workspaces && row.workspaces.length > 0 && row.workspaces[0].disabled) {
-                            return InAdminWorkspace('Users/Manage')
-                        }
-                        return InUserWorkspace('Users/Manage')
-                    }
-                    default: return InAdminWorkspace('Users/Manage')
-                }
-            }
-
-            return GetUrl()
+            return this.$config.basePath + 'Manage/' + row.userId //+ '?returnUrl=' + returnUrl
         },
 
         addToWorkspace() {
-            this.$refs.manageWorkspaces.addToWorkspace(this.workspaces)
+            let isSelectedAnyInterviewer = this.isAnyInterviewerSelected
+            if (isSelectedAnyInterviewer)
+                this.$refs.addInterviewerToWorkspace.addToWorkspace()
+            else
+                this.$refs.manageWorkspaces.addToWorkspace(this.workspaces)
         },
 
         removeFromWorkspace() {
@@ -361,6 +446,11 @@ export default {
 
         async addWorkspacesSelected(workspaces) {
             const response = await this.$hq.Workspaces.Assign(map(this.filteredToAdd, 'userId'), workspaces, 'Add')
+            this.$refs.table.reload()
+        },
+
+        async addInterviewerWorkspace(workspace, supervisor) {
+            const response = await this.$hq.Workspaces.AssignInterviewer(map(this.filteredToAdd, 'userId'), workspace, supervisor, 'Add')
             this.$refs.table.reload()
         },
 
@@ -392,6 +482,14 @@ export default {
             if(this.selectedFilter) {
                 requestData.filter = this.selectedFilter.key
             }
+
+            if(this.selectedArchive) {
+                requestData.archive = this.selectedArchive.key
+            }
+
+            if(this.selectedTeam) {
+                requestData.teamId = this.selectedTeam.key
+            }
         },
 
 
@@ -401,9 +499,11 @@ export default {
 
         onWorkspaceSelected(workspace) {
             this.selectedWorkspace = workspace
+            this.selectedTeam = null
 
             this.onChange(query => {
                 query.workspace = workspace == null ? null : workspace.key
+                query.team = null
             })
         },
 
@@ -415,6 +515,13 @@ export default {
             })
         },
 
+        onTeamSelected(team){
+            this.selectedTeam = team
+            this.onChange(query => {
+                query.team = team == null ? null : team.key
+            })
+        },
+
         onFilterSelected(value) {
             this.selectedFilter = value
 
@@ -422,6 +529,46 @@ export default {
                 query.filter = value == null ? null : value.key
             })
         },
+
+        onArchiveStatusSelected(value) {
+            this.selectedArchive = value
+
+            this.onChange(query => {
+                query.archive = value == null ? null : value.key
+            })
+        },
+
+        async archiveUsersAsync(isArchive) {
+            var response = await this.$http.post(this.model.archiveUsersUrl, {
+                archive: isArchive,
+                userIds: this.selectedRows,
+            })
+
+            if(!response.data.isSuccess)
+                toastr.warning(response.data.domainException)
+
+            this.loadData()
+        },
+        archiveUsers() {
+            var self = this
+            this.$refs.confirmArchive.promt(async ok => {
+                if (ok) await self.archiveUsersAsync(true)
+            })
+        },
+        unarchiveUsers() {
+            var self = this
+            this.$refs.confirmUnarchive.promt(async ok => {
+                if (ok) await self.archiveUsersAsync(false)
+            })
+        },
+        moveToAnotherTeam() {
+            let interviewers = this.getFilteredItems(item => {
+                return item.role == 'Interviewer'
+            })
+            let workspace = this.selectedWorkspace.key
+            this.$refs.interviewersMoveToOtherTeam.moveToAnotherTeam(workspace, interviewers)
+        },
+
     },
 }
 </script>

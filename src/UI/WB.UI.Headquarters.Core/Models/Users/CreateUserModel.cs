@@ -24,6 +24,9 @@ namespace WB.UI.Headquarters.Models.Users
         public string ConfirmPassword { get; set; }
 
         public Guid? SupervisorId { get; set; }
+        [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.UserRoleRequired), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         public string Role { get; set; }
+        [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.WorkspaceRequired), ErrorMessageResourceType = typeof(FieldsAndValidations))]
+        public string Workspace { get; set; }
     }
 }

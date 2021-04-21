@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Main.Core.Entities.SubEntities;
 
@@ -14,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto
         public virtual string PhoneNumber { get; set; }
         public virtual string Role { get; set; }
         public virtual string Supervisor { get; set; }
+        public virtual string Workspace { get; set; }
 
         [IgnoreDataMember]
         public virtual UserRoles UserRole
@@ -27,6 +30,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto
 
                 return 0;
             }
+        }
+
+        public virtual string[] GetWorkspaces()
+        {
+            if (string.IsNullOrWhiteSpace(Workspace))
+                return new string[0];
+
+            return Workspace.Split(',').Select(w => w.Trim()).ToArray();
         }
     }
 }

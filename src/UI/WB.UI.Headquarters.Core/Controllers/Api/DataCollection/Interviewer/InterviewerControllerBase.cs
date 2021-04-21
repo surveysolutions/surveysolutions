@@ -187,18 +187,22 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
                     if (this.authorizedUser.HasNonDefaultWorkspace)
                     {
                         return StatusCode(StatusCodes.Status426UpgradeRequired);
-                    }
+                    }   
                 }
-                else if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResetPasswordIntroduced)
+                if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResetPasswordIntroduced)
                 {
                     if (authorizedUser.PasswordChangeRequired)
                         return StatusCode(StatusCodes.Status426UpgradeRequired);
+                }          
+                if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.MultiWorkspacesIntroduced)
+                {
+                    if (authorizedUser.Workspaces.Count() > 1)
+                        return StatusCode(StatusCodes.Status426UpgradeRequired);
                 }
-                else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
+                if (deviceSyncProtocolVersion > serverSyncProtocolVersion)
                 {
                     return StatusCode(StatusCodes.Status406NotAcceptable);
                 }
-
             }
             return this.userToDeviceService.GetLinkedDeviceId(this.authorizedUser.Id) != deviceId
                 ? (IActionResult)StatusCode(StatusCodes.Status403Forbidden, new { Message = "relinked" })

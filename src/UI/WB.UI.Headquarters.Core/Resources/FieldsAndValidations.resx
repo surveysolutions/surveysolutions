@@ -246,6 +246,15 @@
   <data name="ConfirmPasswordRequired" xml:space="preserve">
     <value>Confirm password is required</value>
   </data>
+  <data name="WorkspaceRequired" xml:space="preserve">
+    <value>Workspace is required</value>
+  </data>
+  <data name="WorkspaceMissing" xml:space="preserve">
+    <value>Workspace not found</value>
+  </data>
+  <data name="UserRoleRequired" xml:space="preserve">
+    <value>User role is required</value>
+  </data>
   <data name="UserIsLockedByHq" xml:space="preserve">
     <value>User is locked by Headquarter</value>
   </data>

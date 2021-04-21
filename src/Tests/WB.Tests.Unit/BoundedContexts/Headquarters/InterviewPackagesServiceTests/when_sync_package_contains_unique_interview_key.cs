@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
                 .Returns(new TestInMemoryWriter<InterviewSummary>());
 
             var users = new Mock<IUserRepository>();
-            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new HqUser() { Profile = new HqUserProfile() { /*SupervisorId = supervisorId*/ } }));
+            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new HqUser() { WorkspaceProfile = new WorkspaceUserProfile() { /*SupervisorId = supervisorId*/ } }));
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
 

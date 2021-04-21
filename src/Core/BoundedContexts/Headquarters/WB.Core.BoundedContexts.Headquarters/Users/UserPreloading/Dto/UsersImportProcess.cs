@@ -10,5 +10,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto
         public virtual int InterviewersCount { get; set; }
         public virtual string Responsible { get; set; }
         public virtual DateTime StartedDate { get; set; }
+        public virtual string Workspace { get; set; }
     }
 }

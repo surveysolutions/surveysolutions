@@ -343,6 +343,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refreshing workspaces.
+        /// </summary>
+        public static string Dashboard_RefreshWorkspaces {
+            get {
+                return ResourceManager.GetString("Dashboard_RefreshWorkspaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error getting list of workspaces. Please contact your system administrator. .
+        /// </summary>
+        public static string Dashboard_RefreshWorkspacesError {
+            get {
+                return ResourceManager.GetString("Dashboard_RefreshWorkspacesError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspaces list updated.
+        /// </summary>
+        public static string Dashboard_RefreshWorkspacesFinished {
+            get {
+                return ResourceManager.GetString("Dashboard_RefreshWorkspacesFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This interview is completed. Do you want to reopen the interview?.
         /// </summary>
         public static string Dashboard_Reinitialize_Interview_Message {
@@ -1367,6 +1394,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refresh workspaces.
+        /// </summary>
+        public static string MenuItem_Title_RefreshWorkspaces {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_RefreshWorkspaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string MenuItem_Title_Search {
@@ -1390,6 +1426,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MenuItem_Title_SignOut {
             get {
                 return ResourceManager.GetString("MenuItem_Title_SignOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspaces.
+        /// </summary>
+        public static string MenuItem_Title_Workspaces {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Workspaces", resourceCulture);
             }
         }
         
@@ -2291,6 +2336,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Synchronization_UserPassword_Update_Format {
             get {
                 return ResourceManager.GetString("Synchronization_UserPassword_Update_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your account is no longer active in the workspace. Please contact your system administrator..
+        /// </summary>
+        public static string Synchronization_WorkspaceAccessDisabledReason {
+            get {
+                return ResourceManager.GetString("Synchronization_WorkspaceAccessDisabledReason", resourceCulture);
             }
         }
         

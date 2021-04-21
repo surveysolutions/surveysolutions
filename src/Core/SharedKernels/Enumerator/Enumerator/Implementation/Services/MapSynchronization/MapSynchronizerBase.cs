@@ -105,7 +105,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                     long downloded = 0;
                     using (var streamToSave = this.mapService.GetTempMapSaveStream(mapDescription.MapName))
                     using (var contentStreamResult = await this.synchronizationService
-                        .GetMapContentStream(mapDescription.MapName, cancellationToken).ConfigureAwait(false))
+                        .GetMapContentStream(mapDescription.MapName, cancellationToken)
+                        .ConfigureAwait(false))
                     {
                         if (cancellationToken.IsCancellationRequested)
                         {
@@ -165,5 +166,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
         {
             return Task.CompletedTask;
         }
+        
+        protected override Task RefreshUserInfo(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+        
+        protected override Task ChangeWorkspaceAndNavigateToItAsync()
+            => throw new NotImplementedException("Remove workspace by offline synchronization no supported");
     }
 }

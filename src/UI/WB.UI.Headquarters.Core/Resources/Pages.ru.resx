@@ -868,11 +868,26 @@
 Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{{link}}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
     <comment>&lt;strong&gt;{0}&lt;/strong&gt; - link to batch user creation</comment>
   </data>
+  <data name="User_CreateText1" xml:space="preserve">
+    <value>Это действие создаст индивидуального пользователя,</value>
+  </data>
+  <data name="User_CreateText2" xml:space="preserve">
+    <value>Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией {{link}}</value>
+  </data>
+  <data name="User_CreateText_UserBatchUploadLinkText" xml:space="preserve">
+    <value>массового создания пользователей</value>
+  </data>
   <data name="FilterTitle" xml:space="preserve">
     <value>Фильтры</value>
   </data>
   <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
     <value>Вы хотите продолжить?</value>
+  </data>
+  <data name="Users_UsersConfirm" xml:space="preserve">
+    <value>Вы хотите продолжить?</value>
+  </data>
+  <data name="Users_UnarchiveUsersWarning" xml:space="preserve">
+    <value>Пользователи будут разархивированы.</value>
   </data>
   <data name="Profile_InterviewerEditFormat" xml:space="preserve">
     <value>Редактирование профиля интервьюера: &lt;strong&gt;{0}&lt;/strong&gt;</value>
@@ -939,6 +954,10 @@
   <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
     <value>Если интервьюер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</value>
     <comment>Если интервьюер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</comment>
+  </data>
+  <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
+    <value>Будут заархивированы интервьюверы и супервизоры с их командами. Интервьюверы супервизора будут заархивированы во всех рабочих областях. Если интервьюеры имеют не просинхронизированные данные на на планшетах, то они будут удалены.</value>
+
   </data>
   <data name="Supervisors_Archive" xml:space="preserve">
     <value>Архивировать</value>
@@ -1137,6 +1156,12 @@
   </data>
   <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
     <value>Статус архивирования</value>
+  </data>
+  <data name="Users_ActiveUsers" xml:space="preserve">
+    <value>Активные пользователи</value>
+  </data>
+  <data name="Users_ArchivedUsers" xml:space="preserve">
+    <value>Архивные пользователи</value>
   </data>
   <data name="InterviewersAndDevicesTitle" xml:space="preserve">
     <value>Устройства/Интервьюеры</value>
@@ -1619,6 +1644,13 @@
   <data name="UsersManage_WorkspacesFilterPlaceholder" xml:space="preserve">
     <value>Все рабочие области</value>
   </data>
+  <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
+    <value>Супервизор (Интервьюеры будут добавлены в команду этого супервизора)</value>
+
+  </data>
+  <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
+    <value>Выберите супервизора</value>
+  </data>
   <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
     <value>Все роли</value>
   </data>
@@ -1626,7 +1658,12 @@
     <value>Все пользователи</value>
   </data>
   <data name="UserManagement_SubtitleAdd" xml:space="preserve">
-    <value>Выберите к каким рабочим пронстранствам нужно добавить выбранных пользователей</value>
+    <value>Выберите к каким рабочим областям нужно добавить выбранных пользователей</value>
+
+  </data>
+  <data name="UserManagement_SubtitleAddInterviewer" xml:space="preserve">
+    <value>Выберите к какой рабочей области и супервизору (необходим для добавления интервьюверов) нужно добавить выбранных пользователей</value>
+
   </data>
   <data name="UserManagement_SubtitleRemove" xml:space="preserve">
     <value>Выберите рабочие области из которых нужно убрать выбранных пользователей</value>
@@ -1652,6 +1689,18 @@
   <data name="Filters_InterviewModePlaceHolder" xml:space="preserve">
     <value>Все режимы</value>
   </data>
+  <data name="UsersManage_TeamFilterPlaceHolder" xml:space="preserve">
+    <value>Команда</value>
+  </data>
+  <data name="UsersManage_TeamFilter" xml:space="preserve">
+    <value>Команда</value>
+  </data>
+  <data name="ExposedVariables_VariableName" xml:space="preserve">
+    <value>Имя переменной</value>
+  </data>
+  <data name="ExposedVariables_VariableTitle" xml:space="preserve">
+    <value>Заголовок</value>
+  </data>
   <data name="ExposedVariables_VariableDisplayTitle" xml:space="preserve">
     <value>Отображаемый заголовок</value>
   </data>
@@ -1665,7 +1714,7 @@
     <value>Доступные переменные</value>
   </data>
   <data name="Exposed_Variables_Description" xml:space="preserve">
-    <value>Выбирор этих переменных позволит использовать их в некоторых отчетах. Изменение списка переменных потребует времени, чтобы данные стали доступны. Можно выбрать до 15 переменных.</value>
+    <value>Выбир этих переменных позволит использовать их в некоторых отчетах. Изменение списка переменных потребует времени, чтобы данные стали доступны. Можно выбрать до 15 переменных.</value>
   </data>
   <data name="Exposed_Variables_SelectedVariablesTitle" xml:space="preserve">
     <value>Открытые переменные</value>
@@ -1675,11 +1724,5 @@
   </data>
   <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
     <value>Открытые переменные по опроснику</value>
-  </data>
-  <data name="ExposedVariables_VariableName" xml:space="preserve">
-    <value>Имя переменной</value>
-  </data>
-  <data name="ExposedVariables_VariableTitle" xml:space="preserve">
-    <value>Заголовок</value>
   </data>
 </root>

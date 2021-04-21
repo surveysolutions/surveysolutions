@@ -4,11 +4,18 @@ using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 {
-    public class TypeaheadApiView : BaseApiView
+    public class TypeaheadApiView : TypeaheadApiView<Guid>
     {
-        public IEnumerable<TypeaheadOptionalApiView> options { get; set; }
+        public TypeaheadApiView(int page, int pageSize, int totalCount, IEnumerable<TypeaheadOptionalApiView<Guid>> options, string order) 
+            : base(page, pageSize, totalCount, options, order)
+        {
+        }
+    }
+    public class TypeaheadApiView<T> : BaseApiView
+    {
+        public IEnumerable<TypeaheadOptionalApiView<T>> options { get; set; }
 
-        public TypeaheadApiView(int page, int pageSize, int totalCount, IEnumerable<TypeaheadOptionalApiView> options, string order)
+        public TypeaheadApiView(int page, int pageSize, int totalCount, IEnumerable<TypeaheadOptionalApiView<T>> options, string order)
         {
             this.Offset = page;
             this.TotalCount = totalCount;
@@ -19,9 +26,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 
     }
 
-    public class TypeaheadOptionalApiView
+    public class TypeaheadOptionalApiView : TypeaheadOptionalApiView<Guid>
     {
-        public Guid key { get; set; }
+    }
+
+    public class TypeaheadOptionalApiView<T>
+    {
+        public T key { get; set; }
         public string value { get; set; }
     }
 }

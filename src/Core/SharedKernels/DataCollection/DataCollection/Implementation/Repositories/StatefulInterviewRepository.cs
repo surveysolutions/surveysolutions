@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public IStatefulInterview GetOrThrow(string interviewId)
             => this.GetImpl(interviewId, null, CancellationToken.None) ??
-               throw new ApplicationException("Interview not found")
+               throw new Exception("Interview not found")
                {
                    Data = {{"InterviewId", interviewId}}
                };

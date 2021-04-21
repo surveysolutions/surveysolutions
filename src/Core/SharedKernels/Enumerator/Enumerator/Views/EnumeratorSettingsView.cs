@@ -1,9 +1,11 @@
 ﻿using System;
 using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
+    [NonWorkspaced]
     public abstract class EnumeratorSettingsView : IPlainStorageEntity
     {
         [PrimaryKey]

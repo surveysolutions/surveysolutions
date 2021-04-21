@@ -56,6 +56,7 @@
     <Compile Include="Activities\ActivityExtensions.cs" />
     <Compile Include="Activities\CalendarEventDialog.cs" />
     <Compile Include="Activities\Dashboard\ExpandableViewHolder.cs" />
+    <Compile Include="Activities\Dashboard\MenuItemOnMenuItemClickListener.cs" />
     <Compile Include="Activities\EnumeratorSplashScreenAppCompatActivity.cs" />
     <Compile Include="Activities\SearchActivity.cs" />
     <Compile Include="Activities\SelectResponsibleForInterviewFragment.cs" />
@@ -83,10 +84,13 @@
     <Compile Include="CustomServices\GoogleApiService.cs" />
     <Compile Include="CustomServices\StringFormat.cs" />
     <Compile Include="EnumeratorLoggingModule.cs" />
-    <Compile Include="Migrations\Encrypt_Data.cs" />
-    <Compile Include="Migrations\M201912091307_ChangeIdTypeInOptionViewTable.cs" />
-    <Compile Include="Migrations\M202001291224_RemoveDuplicatedCategoriesInOptionViewTable.cs" />
-    <Compile Include="Migrations\UpdateOptionsForMultiComboboxQuestions.cs" />
+    <Compile Include="Migrations\Workspaces\Encrypt_Data.cs" />
+    <Compile Include="Migrations\Workspaces\M201912091307_ChangeIdTypeInOptionViewTable.cs" />
+    <Compile Include="Migrations\Workspaces\M202001291224_RemoveDuplicatedCategoriesInOptionViewTable.cs" />
+    <Compile Include="Migrations\Workspaces\M202103101642_MoveSqliteTablesInWorkspaceFolder.cs" />
+    <Compile Include="Migrations\Workspaces\M202103291222_MoveMapsFiles.cs" />
+    <Compile Include="Migrations\Workspaces\UpdateOptionsForMultiComboboxQuestions.cs" />
+    <Compile Include="Migrations\Workspace\M20211539_Init.cs" />
     <Compile Include="OfflineSync\Activities\BluetoothReceiver.cs" />
     <Compile Include="OfflineSync\Activities\GoogleApiConnectedActivity.cs" />
     <Compile Include="Activities\Dashboard\RecyclerViewAdapter.cs" />

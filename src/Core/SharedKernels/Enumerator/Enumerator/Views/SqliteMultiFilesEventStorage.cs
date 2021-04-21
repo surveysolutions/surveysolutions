@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
@@ -27,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         private readonly ILogger logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IEncryptionService encryptionService;
+        private readonly IWorkspaceAccessor workspaceAccessor;
 
         private static readonly object lockObject = new object();
         private readonly EventSerializer eventSerializer;
@@ -36,10 +38,12 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             IEnumeratorSettings enumeratorSettings,
             IFileSystemAccessor fileSystemAccessor,
             IEventTypeResolver eventTypesResolver,
-            IEncryptionService encryptionService)
+            IEncryptionService encryptionService,
+            IWorkspaceAccessor workspaceAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.encryptionService = encryptionService;
+            this.workspaceAccessor = workspaceAccessor;
             this.settings = settings;
             this.enumeratorSettings = enumeratorSettings;
             this.logger = logger;
@@ -48,6 +52,10 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         private SQLiteConnectionWithLock CreateConnection(string connectionString)
         {
+            var directory = fileSystemAccessor.GetDirectory(connectionString);
+            if (!fileSystemAccessor.IsDirectoryExists(directory))
+                fileSystemAccessor.CreateDirectory(directory);
+            
             var sqConnection = new SQLiteConnectionString(connectionString, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true, null);
             var connection = new SQLiteConnectionWithLock(sqConnection);
 
@@ -57,7 +65,12 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         }
 
         private string GetEventSourceConnectionString(Guid eventSourceId)
-            => this.ToSqliteConnectionString(Path.Combine(this.settings.PathToInterviewsDirectory, $"{eventSourceId.FormatGuid()}.sqlite3"));
+            => this.ToSqliteConnectionString(Path.Combine(
+                this.settings.PathToRootDirectory, 
+                workspaceAccessor.GetCurrentWorkspaceName(), 
+                this.settings.DataDirectoryName, 
+                this.settings.InterviewsDirectoryName, 
+                $"{eventSourceId.FormatGuid()}.sqlite3"));
 
         private string ToSqliteConnectionString(string pathToDatabase)
             => this.settings.InMemoryStorage ? $":memory:" : pathToDatabase;
@@ -72,7 +85,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 {
                     if (!this.connectionByEventSource.TryGetValue(eventSourceId, out connection))
                     {
-                        connection = this.CreateConnection(this.GetEventSourceConnectionString(eventSourceId));
+                        var eventSourceConnectionString = this.GetEventSourceConnectionString(eventSourceId);
+                        connection = this.CreateConnection(eventSourceConnectionString);
                         this.connectionByEventSource.Add(eventSourceId, connection);
                     }
                 }
@@ -325,11 +339,15 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public List<Guid> GetListOfAllItemsIds()
         {
-            if (!Directory.Exists(this.settings.PathToInterviewsDirectory))
+            var pathToInterviewsDirectory = fileSystemAccessor.CombinePath(
+                this.settings.PathToDatabaseDirectory,
+                workspaceAccessor.GetCurrentWorkspaceName(),
+                this.settings.InterviewsDirectoryName);
+            if (!Directory.Exists(pathToInterviewsDirectory))
                 return new List<Guid>();
 
             Guid item = Guid.Empty;
-            var files = Directory.GetFiles(this.settings.PathToInterviewsDirectory, "*.sqlite3")
+            var files = Directory.GetFiles(pathToInterviewsDirectory, "*.sqlite3")
                 .Select(fn => Path.GetFileNameWithoutExtension(fn))
                 .Where(x => Guid.TryParse(x, out item)).Select(x => item).ToList();
 

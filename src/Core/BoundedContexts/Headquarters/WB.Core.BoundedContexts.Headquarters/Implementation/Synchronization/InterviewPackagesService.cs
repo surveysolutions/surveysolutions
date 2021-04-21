@@ -383,7 +383,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             if (interviewer == null)
                 return false;
 
-            newSupervisorId = interviewer.Profile.SupervisorId;
+            newSupervisorId = interviewer.WorkspaceProfile.SupervisorId;
             return newSupervisorId != supervisorAssigned.SupervisorId;
         }
 

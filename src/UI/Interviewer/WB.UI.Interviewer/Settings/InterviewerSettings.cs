@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator.Services;
 using Environment = System.Environment;
@@ -20,24 +21,31 @@ namespace WB.UI.Interviewer.Settings
     internal class InterviewerSettings : EnumeratorSettings, IInterviewerSettings
     {
         private readonly IPlainStorage<ApplicationSettingsView> settingsStorage;
+        private readonly IPlainStorage<ApplicationWorkspaceSettingsView> workspaceSettingsStorage;
         private readonly IInterviewerPrincipal principal;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
+        private readonly IWorkspaceAccessor workspaceAccessor;
 
         public InterviewerSettings(IPlainStorage<ApplicationSettingsView> settingsStorage,
+            IPlainStorage<ApplicationWorkspaceSettingsView> workspaceSettingsStorage,
             IInterviewerSyncProtocolVersionProvider syncProtocolVersionProvider,
             IQuestionnaireContentVersionProvider questionnaireContentVersionProvider,
             IInterviewerPrincipal principal,
             IPlainStorage<InterviewView> interviewViewRepository,
             IPlainStorage<QuestionnaireView> questionnaireViewRepository, 
             IFileSystemAccessor fileSystemAccessor,
-            string backupFolder, string restoreFolder) : base(syncProtocolVersionProvider,
+            string backupFolder, 
+            string restoreFolder,
+            IWorkspaceAccessor workspaceAccessor) : base(syncProtocolVersionProvider,
             questionnaireContentVersionProvider, fileSystemAccessor, backupFolder, restoreFolder)
         {
             this.settingsStorage = settingsStorage;
+            this.workspaceSettingsStorage = workspaceSettingsStorage;
             this.principal = principal;
             this.interviewViewRepository = interviewViewRepository;
             this.questionnaireViewRepository = questionnaireViewRepository;
+            this.workspaceAccessor = workspaceAccessor;
         }
         
         private string GetUserInformation()
@@ -73,8 +81,26 @@ namespace WB.UI.Interviewer.Settings
             VibrateOnError = Application.Context.Resources?.GetBoolean(Resource.Boolean.VibrateOnError) ?? true,
             AllowSyncWithHq = Application.Context.Resources?.GetBoolean(Resource.Boolean.AllowSyncWithHq) ?? true
         };
+        
+        private ApplicationWorkspaceSettingsView currentWorkspaceSettings
+        {
+            get
+            {
+                var workspace = workspaceAccessor.GetCurrentWorkspaceName();
+                if (workspace == null)
+                    return null;
+                
+                return this.workspaceSettingsStorage.GetById(workspace) ?? new ApplicationWorkspaceSettingsView()
+                {
+                    Id = workspace,
+                    AllowSyncWithHq = Application.Context.Resources.GetBoolean(Resource.Boolean.AllowSyncWithHq)
+                };
+            }
+        }
+
 
         protected override EnumeratorSettingsView CurrentSettings => this.currentSettings;
+        protected override EnumeratorWorkspaceSettingsView CurrentWorkspaceSettings => this.currentWorkspaceSettings;
 
         public override bool VibrateOnError => this.currentSettings.VibrateOnError ?? Application.Context.Resources?.GetBoolean(Resource.Boolean.VibrateOnError) ?? true;
 
@@ -86,8 +112,8 @@ namespace WB.UI.Interviewer.Settings
 
         public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources?.GetInteger(Resource.Integer.EventChunkSize) ?? 1000);
 
-        public bool AllowSyncWithHq => this.currentSettings.AllowSyncWithHq.GetValueOrDefault(true);
-        public bool IsOfflineSynchronizationDone => this.currentSettings.IsOfflineSynchronizationDone.GetValueOrDefault(false);
+        public bool AllowSyncWithHq => this.currentWorkspaceSettings?.AllowSyncWithHq ?? true;
+        public bool IsOfflineSynchronizationDone => this.currentWorkspaceSettings?.IsOfflineSynchronizationDone ?? false;
 
         public void SetOfflineSynchronizationCompleted()
         {
@@ -143,5 +169,15 @@ namespace WB.UI.Interviewer.Settings
 
         protected override void SaveSettings(EnumeratorSettingsView settings)
             => this.settingsStorage.Store((ApplicationSettingsView)settings);
+
+        private void SaveCurrentSettings(Action<ApplicationWorkspaceSettingsView> onChanging)
+        {
+            var settings = this.currentWorkspaceSettings;
+            onChanging(settings);
+            SaveSettings(settings);
+        }
+
+        protected override void SaveSettings(EnumeratorWorkspaceSettingsView settings)
+            => this.workspaceSettingsStorage.Store((ApplicationWorkspaceSettingsView)settings);
     }
 }
