@@ -540,6 +540,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 var invitation = this.invitationService.GetInvitationByAssignmentId(assignment.Id);
 
+                assignment.WebMode = true;
                 if(invitation == null)
                     this.invitationService.CreateInvitationForWebInterview(assignment);
             }
