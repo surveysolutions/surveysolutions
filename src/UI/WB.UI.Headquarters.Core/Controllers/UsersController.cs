@@ -556,6 +556,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
+        [Route("/ChangePassword")]
         public async Task<ActionResult> UpdatePassword([FromBody] ChangePasswordModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
@@ -616,6 +617,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
+        [Route("/Manage")]
         public async Task<ActionResult> UpdateUser([FromBody] EditUserModel editModel)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
