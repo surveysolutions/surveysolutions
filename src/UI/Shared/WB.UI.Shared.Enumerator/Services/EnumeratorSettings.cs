@@ -235,12 +235,12 @@ namespace WB.UI.Shared.Enumerator.Services
         }
 
         public List<QuestionnaireIdentity> QuestionnairesInWebMode => 
-            string.IsNullOrWhiteSpace(this.CurrentSettings.QuestionnairesInWebMode)
+            string.IsNullOrWhiteSpace(this.CurrentWorkspaceSettings.QuestionnairesInWebMode)
                 ? new List<QuestionnaireIdentity>()
-                : this.CurrentSettings.QuestionnairesInWebMode.Split(',')
+                : this.CurrentWorkspaceSettings.QuestionnairesInWebMode.Split(',')
                     .Select(QuestionnaireIdentity.Parse).ToList();
 
-        public string WebInterviewUriTemplate => this.CurrentSettings.WebInterviewUriTemplate;
+        public string WebInterviewUriTemplate => this.CurrentWorkspaceSettings.WebInterviewUriTemplate;
 
         public void SetQuestionnaireInWebMode(List<string> questionnairesInWebMode)
         {

@@ -17,16 +17,5 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public long? LastHqSyncTimestamp { get; set; }
         public bool? Encrypted { get; set; }
         public bool? NotificationsEnabled { get; set; }
-        public bool? PartialSynchronizationEnabled { get; set; }
-
-        public DateTime? LastSync { get; set; }
-
-        public bool? LastSyncSucceeded { get; set; }
-
-        public bool? DashboardViewsUpdated { get; set; }
-
-        public string LastOpenedMapName { get; set; }
-        public string QuestionnairesInWebMode { get; set; }
-        public string WebInterviewUriTemplate { get; set; }
     }
 }

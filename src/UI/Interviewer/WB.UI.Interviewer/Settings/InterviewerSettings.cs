@@ -78,11 +78,10 @@ namespace WB.UI.Interviewer.Settings
             CommunicationBufferSize = Application.Context.Resources?.GetInteger(Resource.Integer.BufferSize) ?? 4096,
             GpsResponseTimeoutInSec = Application.Context.Resources?.GetInteger(Resource.Integer.GpsReceiveTimeoutSec) ?? 30,
             GpsDesiredAccuracy = Application.Context.Resources?.GetInteger(Resource.Integer.GpsDesiredAccuracy) ?? 50,
-            VibrateOnError = Application.Context.Resources?.GetBoolean(Resource.Boolean.VibrateOnError) ?? true,
-            AllowSyncWithHq = Application.Context.Resources?.GetBoolean(Resource.Boolean.AllowSyncWithHq) ?? true
+            VibrateOnError = Application.Context.Resources?.GetBoolean(Resource.Boolean.VibrateOnError) ?? true
         };
         
-        private ApplicationWorkspaceSettingsView currentWorkspaceSettings
+        private ApplicationWorkspaceSettingsView? currentWorkspaceSettings
         {
             get
             {
@@ -93,14 +92,14 @@ namespace WB.UI.Interviewer.Settings
                 return this.workspaceSettingsStorage.GetById(workspace) ?? new ApplicationWorkspaceSettingsView()
                 {
                     Id = workspace,
-                    AllowSyncWithHq = Application.Context.Resources.GetBoolean(Resource.Boolean.AllowSyncWithHq)
+                    AllowSyncWithHq = Application.Context.Resources?.GetBoolean(Resource.Boolean.AllowSyncWithHq)
                 };
             }
         }
 
 
         protected override EnumeratorSettingsView CurrentSettings => this.currentSettings;
-        protected override EnumeratorWorkspaceSettingsView CurrentWorkspaceSettings => this.currentWorkspaceSettings;
+        protected override EnumeratorWorkspaceSettingsView? CurrentWorkspaceSettings => this.currentWorkspaceSettings;
 
         public override bool VibrateOnError => this.currentSettings.VibrateOnError ?? Application.Context.Resources?.GetBoolean(Resource.Boolean.VibrateOnError) ?? true;
 
@@ -173,8 +172,11 @@ namespace WB.UI.Interviewer.Settings
         private void SaveCurrentSettings(Action<ApplicationWorkspaceSettingsView> onChanging)
         {
             var settings = this.currentWorkspaceSettings;
-            onChanging(settings);
-            SaveSettings(settings);
+            if (settings != null)
+            {
+                onChanging(settings);
+                SaveSettings(settings);
+            }
         }
 
         protected override void SaveSettings(EnumeratorWorkspaceSettingsView settings)
