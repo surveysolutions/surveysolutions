@@ -415,7 +415,7 @@
     <value>Nuk ka akses në internet në serverin tuaj. Kontrollo adresën e serverit dhe(ose) cilësimet e rrjetit</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Gabim i serverit. Ju lutemi, kontaktoni me ekipin mbështetës support@mysurvey.solutions</value>
+    <value>Gabim i serverit. Ju lutemi kontaktoni administratorin e serverit tuaj.</value>
   </data>
   <data name="Interview_Creating" xml:space="preserve">
     <value>Intervista po krijohet</value>

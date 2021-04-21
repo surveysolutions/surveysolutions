@@ -365,7 +365,7 @@
     <value>لا يوجد اتصال بالإنترنت إلى الخادم الخاص بك. تحقق من عنوان الخادم و (أو) إعدادات الشبكة</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>خطأ في الخادم .الرجاء التواصل مع فريق الدعم عن طريقsupport@mysurvey.solutions</value>
+    <value>خطأ في الخادم. يرجى الاتصال بمسؤول الخادم الخاص بك.</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>جار التحميل</value>

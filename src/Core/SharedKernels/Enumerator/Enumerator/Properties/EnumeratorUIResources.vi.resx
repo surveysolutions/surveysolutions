@@ -286,7 +286,7 @@
     <value>Bạn có phiên bản mới nhất của ứng dụng</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Lỗi máy chủ. Xin vui lòng liên hệ với nhóm hỗ trợ tại support@mysurvey.solutions.</value>
+    <value>Lỗi máy chủ. Vui lòng liên hệ với quản trị viên máy chủ của bạn.</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>Địa chỉ trang web giám sát là không hợp lệ. Hãy chắc chắn rằng bạn nhập đúng địa chỉ url.</value>

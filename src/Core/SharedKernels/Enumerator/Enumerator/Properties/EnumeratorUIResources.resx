@@ -209,7 +209,7 @@ for further instructions</value>
     <value>No internet access to your server. Check server address and(or) network settings</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Server error. Please contact the support team at support@mysurvey.solutions</value>
+    <value>Server error. Please contact your server administrator.</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
     <value>Your application is not compatible with server one. Update your Interviewer application.</value>

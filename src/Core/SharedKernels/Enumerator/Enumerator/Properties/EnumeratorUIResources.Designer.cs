@@ -1074,7 +1074,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server error. Please contact the support team at support@mysurvey.solutions.
+        ///   Looks up a localized string similar to Server error. Please contact your server administrator..
         /// </summary>
         public static string InternalServerError {
             get {
@@ -1125,6 +1125,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Loading_With_Percents {
             get {
                 return ResourceManager.GetString("Interview_Loading_With_Percents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Progress: {0}/{1}.
+        /// </summary>
+        public static string Interview_Progress_Format {
+            get {
+                return ResourceManager.GetString("Interview_Progress_Format", resourceCulture);
             }
         }
         

@@ -49,7 +49,7 @@ namespace WB.Tests.Abc.TestFactories
             => new InterviewCreated(ToGuid(userId) ?? Guid.NewGuid(), 
                     ToGuid(questionnaireId) ?? Guid.NewGuid(), 
                     questionnaireVersion, null,isAudioRecordingEnabled:false, 
-                    originDate: originDate ?? DateTimeOffset.Now)
+                    originDate: originDate ?? DateTimeOffset.Now, true)
                 .ToPublishedEvent(eventSourceId: interviewId, eventTimeStamp: eventTimeStamp);
 
         public IPublishedEvent<InterviewDeleted> InterviewDeleted(string userId = null, string origin = null, Guid? interviewId = null, DateTimeOffset? originDate = null)

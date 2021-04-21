@@ -289,7 +289,7 @@
     <value>ចំនុចបញ្ជប់ ការគ្រប់គ្រងរូម'{0}' តើខុសពីការផ្តល់ដោយ Settings ('{1}').  URLទាញចេញពីsettingsដែរឬទេ?</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Server មានបញ្ហា។ សូមទាក់ទងក្រុមជំនួយតាមអ៊ីមែល support@mysurvey.solutions</value>
+    <value>កំហុសម៉ាស៊ីនមេ។ សូមទាក់ទងអ្នកគ្រប់គ្រងម៉ាស៊ីនមេរបស់អ្នក។</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>អាស័យដ្ឋាន គេហទំព័រប្រធានមិនត្រឹមត្រូវ។ ប្រាកដថា អ្នកបញ្ចូលអាស័យដ្ឋានត្រឹមត្រូវ</value>

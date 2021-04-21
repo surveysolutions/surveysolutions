@@ -184,7 +184,7 @@
     <value>{0} (v{1})</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>ข้อผิดพลาดของเซิร์ฟเวอร์ กรุณาติดต่อทีมสนับสนุนที่ support@mysurvey.solutions</value>
+    <value>เซิร์ฟเวอร์ผิดพลาด. โปรดติดต่อผู้ดูแลเซิร์ฟเวอร์ของคุณ</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>แอดเดรสของเว็บไซต์ Survey Solutions Supervisor ไม่ถูกต้อง กรุณาระบุแอดเดรสที่ถูกต้อง</value>

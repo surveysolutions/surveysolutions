@@ -190,7 +190,7 @@
     <value>Немає доступу в Інтернет до вашого серверу. Перевірте настройки адреси серверу та мережі</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Помилка сервера. Будь ласка, зв'яжіться зі службою підтримки на support@mysurvey.solutions.</value>
+    <value>Помилка сервера. Будь ласка, зв'яжіться з адміністратором сервера.</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>Адреса веб-сайту є неприпустимою. Переконайтеся, що введено правильну URL-адресу.</value>
