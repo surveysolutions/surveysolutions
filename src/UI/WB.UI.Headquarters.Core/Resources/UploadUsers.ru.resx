@@ -232,4 +232,14 @@
     <value>определение времени</value>
     <comment>определение времени</comment>
   </data>
+  <data name="Workspace" xml:space="preserve">
+    <value>Рабочая область</value>
+  </data>
+  <data name="SelectWorkspace" xml:space="preserve">
+    <value>Выберите рабочую область</value>
+  </data>
+  <data name="SelectWorkspaceDescription" xml:space="preserve">
+    <value>Если рабочая область не указана в файле, то эта рабочая облась будет использоваться по умолчанию</value>
+  </data>
+
 </root>

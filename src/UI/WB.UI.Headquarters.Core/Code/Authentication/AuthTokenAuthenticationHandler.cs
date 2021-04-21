@@ -103,6 +103,14 @@ namespace WB.UI.Headquarters.Code.Authentication
                 await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
                 await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "Workspace is disabled"}));
             }
+            else if (properties.TryGetForbidReason(out var reason))
+            {
+                if (reason == ForbidReason.WorkspaceAccessDisabledReason)
+                {
+                    await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
+                    await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "WorkspaceAccessDisabledReason"}));
+                }
+            }
         }
 
         protected override async Task HandleChallengeAsync(AuthenticationProperties properties)

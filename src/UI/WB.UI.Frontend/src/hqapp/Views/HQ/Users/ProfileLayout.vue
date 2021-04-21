@@ -111,20 +111,7 @@ export default {
             return this.isInterviewer
         },
         referrerTitle() {
-            const returnUrl = this.$route.query['returnUrl']
-            if(returnUrl != null) {
-                return this.$t('Dashboard.UsersManagement')
-            }
-
-            if (!this.isOwnProfile) {
-                if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
-                if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
-                if (this.isInterviewer) return this.$t('Pages.Profile_InterviewerProfile')
-                if (this.isObserver) return this.$t('Pages.Profile_ObserversList')
-                if (this.isApiUser) return this.$t('Pages.Profile_ApiUsersList')
-            }
-
-            return this.$t('Pages.Home')
+            return this.$t('Dashboard.UsersManagement')
         },
         showWorkspaces() {
             return this.$config.model.userInfo.canChangeWorkspacesList
@@ -135,15 +122,7 @@ export default {
                 return returnUrl
             }
 
-            if (!this.isOwnProfile) {
-                if (this.isHeadquarters) return '../../Headquarters'
-                if (this.isSupervisor) return '../../Supervisors'
-                if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userId
-                if (this.isObserver) return '../../Observers'
-                if (this.isApiUser) return '../../ApiUsers'
-            }
-
-            return '/'
+            return '/users/UsersManagement'
         },
 
     },

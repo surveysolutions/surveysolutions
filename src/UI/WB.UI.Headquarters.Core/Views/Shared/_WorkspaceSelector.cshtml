@@ -6,10 +6,10 @@
     var workspaces = (IEnumerable<WorkspaceContext>)ViewData["UserWorkspacesList"];
     var hasAnotherWorkspace = workspaces.Count() > 1;
     var workspace = workspaceContext.CurrentWorkspace();
-    var isSystemWorkspace = workspace?.IsServerAdministration() ?? false;
+    var isSystemWorkspace = workspace?.IsSystemDefinedWorkspace() ?? false;
 }
 
-@if (workspace != null || isSystemWorkspace)
+@if (workspace != null && !isSystemWorkspace)
 {
     @if (hasAnotherWorkspace)
     {
@@ -32,7 +32,7 @@
     else
     {
         <ul class="nav navbar-nav">
-            <li><a href="javascript:void(0)" title="Interviews">@workspace.DisplayName</a></li>
+            <li><a href="javascript:void(0)">@workspace.DisplayName</a></li>
         </ul>
     }
 }

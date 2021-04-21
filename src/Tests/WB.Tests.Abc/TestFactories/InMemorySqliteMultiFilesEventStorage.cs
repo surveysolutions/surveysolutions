@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Tests.Abc.TestFactories
@@ -28,11 +29,19 @@ namespace WB.Tests.Abc.TestFactories
 
         public InMemorySqliteMultiFilesEventStorage(IEnumeratorSettings enumeratorSettings)
             : base(Mock.Of<ILogger>(),
-                new SqliteSettings() { InMemoryStorage = true, PathToDatabaseDirectory = "", PathToInterviewsDirectory = ""},
+                new SqliteSettings()
+                {
+                    InMemoryStorage = true, 
+                    PathToDatabaseDirectory = "", 
+                    InterviewsDirectoryName = "",
+                    DataDirectoryName = "",
+                    PathToRootDirectory = "",
+                },
                 enumeratorSettings,
                 Mock.Of<IFileSystemAccessor>(s => s.IsFileExists(":memory:") == true),
                 new EventTypeResolver(typeof(QuestionAnswered).Assembly),
-                new FakeEncryptionService())
+                new FakeEncryptionService(),
+                Mock.Of<IWorkspaceAccessor>(s => s.GetCurrentWorkspaceName() == ""))
         {
         }
     }

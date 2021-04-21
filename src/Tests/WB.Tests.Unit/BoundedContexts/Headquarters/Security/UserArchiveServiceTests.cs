@@ -28,5 +28,22 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Security
             Assert.ThrowsAsync<UserArchiveException>(() => 
                 userManager.UnarchiveUsersAsync(new[] {interviewer.Id}));
         }
+
+        [Test]
+        public async Task when_archive_supervisor_should_also_archive_interviewers()
+        {
+            var supervisor = Create.Entity.HqUser(Guid.NewGuid(), role: UserRoles.Supervisor, isArchived: false);
+            var interviewer = Create.Entity.HqUser(Guid.NewGuid(), supervisorId: supervisor.Id, isArchived: false);
+
+            var userRepository = Mock.Of<IUserRepository>(x =>
+                x.Users == new[] {supervisor, interviewer}.AsQueryable());
+
+            var userManager = Create.Service.UserArchiveService(userRepository);
+
+            await userManager.ArchiveSupervisorAndDependentInterviewersAsync(supervisor.Id);
+            
+            Assert.That(supervisor.IsArchived, Is.True);
+            Assert.That(interviewer.IsArchived, Is.True);
+        }
     }
 }

@@ -4,6 +4,7 @@ using Ncqrs;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -26,6 +27,7 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -57,7 +59,10 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IInterviewsRemover, Implementation.Services.Synchronization.Steps.InterviewsRemover>();
             registry.Bind<ICompanyLogoSynchronizer, CompanyLogoSynchronizer>();
             registry.Bind<IAttachmentsCleanupService, AttachmentsCleanupService>();
-            
+            registry.BindAsSingleton<IWorkspaceService, WorkspaceService>();
+            registry.BindAsSingleton<IWorkspaceAccessor, WorkspaceAccessor>();
+            registry.Bind<IInScopeExecutor, ExecuteInWorkspaceService>();
+
             registry.Bind<NavigationState>();
             registry.Bind<AnswerNotifier>();
 
@@ -71,7 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
             registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             registry.Bind<IAudioAuditFileStorage, InterviewerAudioAuditFileStorage>();
-            registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
+            registry.Bind<IAuditLogService, EnumeratorAuditLogService>();
             registry.Bind<IServiceProvider, MvxServiceProvider>();
             registry.Bind<IMigrationRunner, MigrationRunner>();
 
@@ -80,6 +85,14 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<ILiteEventBus, LiteEventBus>();
             registry.Bind<IAsyncEventDispatcher, AsyncEventDispatcher>();
             registry.BindAsSingleton<IAsyncEventQueue, AsyncEventQueue>();
+            
+            registry.BindAsSingleton<IWorkspaceMemoryCacheSource, WorkspaceMemoryCacheSource>();
+            registry.BindToMethod(ctx =>
+            {
+                var cacheSource = ctx.Resolve<IWorkspaceMemoryCacheSource>();
+                var contextAccessor = ctx.Resolve<IWorkspaceAccessor>();
+                return cacheSource.GetCache(contextAccessor.GetCurrentWorkspaceName() ?? "common");
+            }, externallyOwned: true);
 
             RegisterViewModels(registry);
         }

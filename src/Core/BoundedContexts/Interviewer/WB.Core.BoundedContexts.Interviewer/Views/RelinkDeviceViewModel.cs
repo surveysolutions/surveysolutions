@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 this.interviewerPrincipal.SaveInterviewer(this.userIdentityToRelink);
                 this.interviewerPrincipal.SignIn(this.userIdentityToRelink.Id, true);
-                auditLogService.Write(new RelinkAuditLogEntity());
+                auditLogService.WriteApplicationLevelRecord(new RelinkAuditLogEntity());
                 await this.ViewModelNavigationService.NavigateToDashboardAsync();
             }
             catch (SynchronizationException ex)

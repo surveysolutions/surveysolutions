@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
@@ -19,6 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
@@ -65,7 +67,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IOfflineSyncClient syncClient,
             IGoogleApiService googleApiService,
             IMapInteractionService mapInteractionService,
-            DashboardNotificationsViewModel dashboardNotifications) : base(principal, viewModelNavigationService, permissionsService,
+            DashboardNotificationsViewModel dashboardNotifications,
+            IWorkspaceService workspaceService,
+            IOnlineSynchronizationService onlineSynchronizationService,
+            IWorkspaceMemoryCacheSource memoryCacheSource) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection)
         {
             this.messenger = messenger;
@@ -89,6 +94,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             UserInteractionService = userInteractionService;
             GoogleApiService = googleApiService;
             this.mapInteractionService = mapInteractionService;
+            this.workspaceService = workspaceService;
+            this.onlineSynchronizationService = onlineSynchronizationService;
+            this.memoryCacheSource = memoryCacheSource;
 
             SubscribeOnMessages();
 
@@ -368,6 +376,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public Action? OnOfflineSynchronizationStarted;
         private readonly IMapInteractionService mapInteractionService;
+        private readonly IWorkspaceService workspaceService;
+        private readonly IOnlineSynchronizationService onlineSynchronizationService;
+        private readonly IWorkspaceMemoryCacheSource memoryCacheSource;
 
         private void StartOfflineSynchronization()
         {
@@ -446,7 +457,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private void StopDiscovery() => this.nearbyConnection.StopDiscovery();
 
         protected override string GetDeviceIdentification() =>
-            this.principal.CurrentUserIdentity.SupervisorId.FormatGuid();
+            this.principal.CurrentUserIdentity.SupervisorId.FormatGuid() + this.principal.CurrentUserIdentity.Workspace;
 
         public void ShowSynchronizationError(string error)
         {
@@ -464,6 +475,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async void Synchronization_OnProgressChanged(object sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
         {
+            if (e.Status == SynchronizationStatus.Fail
+                || e.Status == SynchronizationStatus.Canceled
+                || e.Status == SynchronizationStatus.Stopped
+                || e.Status == SynchronizationStatus.Success)
+            {
+                WorkspaceListUpdated?.Invoke(this, EventArgs.Empty);
+            }
+
             if (this.cancellationTokenSource == null || this.cancellationTokenSource.IsCancellationRequested)
             {
                 return;
@@ -481,6 +500,72 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         #endregion
+
+        public string CurrentWorkspace => principal.CurrentUserIdentity.Workspace;
+        public WorkspaceView[] GetWorkspaces()
+        {
+            return workspaceService.GetAll();
+        }
+
+        public void ChangeWorkspace(string workspaceName)
+        {
+            var workspaceView = workspaceService.GetByName(workspaceName);
+            if (workspaceView?.SupervisorId == null)
+                throw new ArgumentException("Can't change workspace. Refresh list from server");
+
+            var interviewerIdentity = (InterviewerIdentity)principal.CurrentUserIdentity;
+            interviewerIdentity.Workspace = workspaceView.Name;
+            interviewerIdentity.SupervisorId = workspaceView.SupervisorId.Value;
+            principal.SaveInterviewer(interviewerIdentity);
+            
+            memoryCacheSource.ClearAll();
+
+            ViewModelNavigationService.NavigateToDashboardAsync();
+        }
+
+        public event EventHandler? WorkspaceListUpdated;
+        
+        public async Task RefreshWorkspaces()
+        {
+            try
+            {
+                this.Synchronization.IsSynchronizationInProgress = true;
+                this.Synchronization.IsSynchronizationInfoShowed = true;
+
+                this.Synchronization.Status = SynchronizationStatus.Started;
+                this.Synchronization.ProcessOperation = EnumeratorUIResources.Dashboard_RefreshWorkspaces;
+                this.Synchronization.ProcessOperationDescription = string.Empty;
+                
+                var interviewerApiView = await onlineSynchronizationService.GetInterviewerAsync();
+                workspaceService.Save(interviewerApiView.Workspaces.Select(w => new WorkspaceView()
+                {
+                    Id = w.Name,
+                    DisplayName = w.DisplayName,
+                    SupervisorId = w.SupervisorId,
+                    Disabled = w.Disabled,
+                }).ToArray());
+
+                this.Synchronization.ProcessOperation = EnumeratorUIResources.Dashboard_RefreshWorkspacesFinished;
+
+                if (interviewerApiView.Workspaces.All(w => CurrentWorkspace != w.Name))
+                {
+                    await ViewModelNavigationService.NavigateToDashboardAsync();
+                    return;
+                }
+                
+                WorkspaceListUpdated?.Invoke(this, EventArgs.Empty);
+            }
+            catch (Exception)
+            {
+                this.Synchronization.Status = SynchronizationStatus.Fail;
+                this.Synchronization.SynchronizationErrorOccured = true;
+                this.Synchronization.ProcessOperation = EnumeratorUIResources.Dashboard_RefreshWorkspacesError;
+            }
+            finally
+            {
+                this.Synchronization.IsSynchronizationInProgress = false;
+            }
+        }
     }
 
     public class DashboardViewModelArgs

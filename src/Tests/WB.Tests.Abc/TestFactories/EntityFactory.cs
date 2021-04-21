@@ -1305,9 +1305,9 @@ namespace WB.Tests.Abc.TestFactories
                 IsLockedByHeadquaters = isLockedByHQ,
                 FullName = string.Empty,
                 IsLockedBySupervisor = lockedBySupervisor,
+                WorkspaceProfile = new WorkspaceUserProfile(),
                 Profile = new HqUserProfile
                 {
-                    SupervisorId = supervisorId,
                     DeviceId = deviceId,
                     DeviceAppBuildVersion = interviewerBuild,
                     DeviceAppVersion = interviewerVersion
@@ -1319,12 +1319,18 @@ namespace WB.Tests.Abc.TestFactories
                 SecurityStamp = securityStamp ?? Guid.NewGuid().ToString()
             };
 
+            var userProfile = user.WorkspaceProfile.AsDynamic();
+            userProfile.SupervisorId = supervisorId;
+            userProfile.DeviceId = deviceId;
+            userProfile.DeviceAppBuildVersion = interviewerBuild;
+            userProfile.DeviceAppVersion = interviewerVersion;
+
             workspaces ??= new[] {WorkspaceConstants.DefaultWorkspaceName};
 
             foreach (var workspace in workspaces)
             {
                 var ws = new Workspace(workspace, workspace);
-                user.Workspaces.Add(new WorkspacesUsers(ws, user));
+                user.Workspaces.Add(new WorkspacesUsers(ws, user, supervisorId != null ? new HqUser{Id = supervisorId.Value}: null));
             }
             
             return user;
@@ -1353,7 +1359,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public UserToImport UserToImport(
             string login = "test", string supervisor = "", string password = "P@$$w0rd$less", string email = "", string phoneNumber = "",
-            string role = null, string fullName = null)
+            string role = null, string fullName = null, string workspace = null)
             => new UserToImport
             {
                 Login = login,
@@ -1362,7 +1368,8 @@ namespace WB.Tests.Abc.TestFactories
                 Password = password,
                 Email = email,
                 PhoneNumber = phoneNumber,
-                FullName = fullName 
+                FullName = fullName,
+                Workspace = workspace,
             };
 
         public UserPreloadingSettings UserPreloadingSettings()
@@ -1809,7 +1816,7 @@ namespace WB.Tests.Abc.TestFactories
             };
             readonlyUser.RoleIds.Add(UserRoles.Interviewer.ToUserId());
 
-            var readonlyProfile = new HqUserProfile();
+            var readonlyProfile = new WorkspaceUserProfile();
             readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
             result.AsDynamic().Responsible = readonlyUser;
 

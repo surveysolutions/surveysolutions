@@ -229,7 +229,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             SetStatus(ConnectionStatus.Sync, dataInfo.ToString());
         }
 
-        protected override string GetDeviceIdentification() => this.Principal.CurrentUserIdentity.UserId.FormatGuid();
+        protected override string GetDeviceIdentification() => 
+            this.Principal.CurrentUserIdentity.UserId.FormatGuid() + this.Principal.CurrentUserIdentity.Workspace;
 
         public IMvxCommand CancelCommand => new MvxCommand(() => { });
 

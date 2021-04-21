@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -256,6 +257,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.UpdatePasswordOfResponsible(this.RestCredentials);
                 }
 
+                await RefreshUserInfo(cancellationToken).ConfigureAwait(false);
+
                 await CanSynchronizeAsync(progress, cancellationToken, statistics).ConfigureAwait(false);
 
                 await CheckAfterStartSynchronization(cancellationToken).ConfigureAwait(false);
@@ -444,6 +447,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Stage = SyncStage.UserAuthentication
                         });
                         break;
+                    case SynchronizationExceptionType.WorkspaceAccessDisabledReason:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Description = EnumeratorUIResources.Synchronization_WorkspaceAccessDisabledReason,
+                            Status = SynchronizationStatus.Fail,
+                            Stage = SyncStage.UserAuthentication
+                        });
+                        break;
                     default:
                         progress.Report(new SyncProgressInfo
                         {
@@ -463,6 +474,40 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     Title = EnumeratorUIResources.Synchronization_Fail_Title,
                     Description = ex.Message,
+                    Status = SynchronizationStatus.Fail,
+                    Statistics = statistics,
+                    Stage = SyncStage.Failed
+                });
+            }
+            catch (ActiveWorkspaceRemovedException we)
+            {
+                var workspace = principal.CurrentUserIdentity.Workspace;
+                this.logger.Error($"Workspace {workspace} removed.", we);
+
+                await ChangeWorkspaceAndNavigateToItAsync();
+            }
+            catch (WorkspaceAccessException wae)
+            {
+                var workspace = principal.CurrentUserIdentity.Workspace;
+                this.logger.Error($"Workspace {workspace} access removed.", wae);
+
+                progress.Report(new SyncProgressInfo
+                {
+                    Title = EnumeratorUIResources.Synchronization_WorkspaceAccessDisabledReason,
+                    Description = string.Empty,
+                    Status = SynchronizationStatus.Fail,
+                    Statistics = statistics,
+                    Stage = SyncStage.Failed
+                });
+            }
+            catch (NoWorkspaceFoundException wae)
+            {
+                this.logger.Error($"Any one workspace found.", wae);
+
+                progress.Report(new SyncProgressInfo
+                {
+                    Title = EnumeratorUIResources.Dashboard_RefreshWorkspacesError,
+                    Description = string.Empty,
                     Status = SynchronizationStatus.Fail,
                     Statistics = statistics,
                     Stage = SyncStage.Failed
@@ -556,8 +601,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         
         protected virtual void OnSuccessfulSynchronization() { }
 
+        protected abstract Task RefreshUserInfo(CancellationToken cancellationToken);
         protected abstract Task CheckAfterStartSynchronization(CancellationToken cancellationToken);
-
+        protected abstract Task ChangeWorkspaceAndNavigateToItAsync();
         protected abstract void UpdatePasswordOfResponsible(RestCredentials credentials);
 
         protected abstract string GetRequiredUpdate(string targetVersion, string appVersion);

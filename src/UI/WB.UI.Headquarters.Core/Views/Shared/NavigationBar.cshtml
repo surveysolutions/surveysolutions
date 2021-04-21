@@ -8,8 +8,7 @@
 
 @{
     var workspace = workspaceAccessor.CurrentWorkspace();
-    var isSystemWorkspace = workspace?.IsServerAdministration() ?? false;
-
+    var isSystemWorkspace = workspace?.IsSystemDefinedWorkspace() ?? false;
 }
 
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -26,7 +25,7 @@
             <div class="navbar-brand">
                 @if (isSystemWorkspace)
                 {
-                    <a class="logo" asp-action="Index" asp-controller="Workspaces"></a>
+                    <a class="logo" asp-action="Index" asp-controller="UsersManagement"></a>
                 }
                 else
                 {
@@ -38,7 +37,8 @@
         <div class="collapse navbar-collapse" id="navbar">
             <partial name="_WorkspaceSelector" />
 
-            @if (this.workspaceAccessor.CurrentWorkspace()?.IsServerAdministration() ?? false)
+            @if (authorizedUser.IsAdministrator 
+                && (this.workspaceAccessor.CurrentWorkspace()?.IsSystemDefinedWorkspace() ?? false))
             {
                 <partial name="ServerAdminMenu" />
             }
@@ -48,7 +48,14 @@
             }
             else if (authorizedUser.IsHeadquarter)
             {
-                <partial name="HeadquartersMainMenu" />
+                @if (this.workspaceAccessor.CurrentWorkspace()?.IsSystemDefinedWorkspace() ?? false)
+                {
+                    <partial name="UsersHeadquartersMainMenu" />
+                }
+                else
+                {
+                    <partial name="HeadquartersMainMenu" />
+                }
             }
             else if (authorizedUser.IsSupervisor)
             {

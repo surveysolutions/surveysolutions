@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Workspace cannot be deleted. There is at least one questionnaire associated with this workspace. Only workspaces without questionnaires can be deleted. Following data associated with this workspace will be deleted:.
+        ///   Looks up a localized string similar to Workspace cannot be deleted. There is at least one questionnaire associated with this workspace. Only workspaces without questionnaires can be deleted..
         /// </summary>
         public static string CantDeleteExplanation {
             get {
@@ -124,9 +124,10 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are You sure that You want to delete workspace &lt;strong&gt;{{name}}&lt;/strong&gt;? 
-        ///All interviewers and supervisors connected to this workspace will be also deleted. All Interviewer and Supervisor application will require data reset.
-        ///Following data associated with this workspace will be deleted:.
+        ///   Looks up a localized string similar to Are you sure that you want to delete workspace &lt;strong&gt;{{name}}&lt;/strong&gt;?
+        ///All interviewer, supervisor, and observer accounts connected to this workspace will also be deleted. The Survey Solutions Interviewer and Supervisor applications installed on the tablets of these users will no longer be able to communicate with this server and require a data reset. 
+        ///
+        ///The following data associated with this workspace will be deleted:.
         /// </summary>
         public static string DeleteExplanation {
             get {
@@ -135,7 +136,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete workspace {{name}}.
+        ///   Looks up a localized string similar to Delete workspace &quot;{{name}}&quot;.
         /// </summary>
         public static string DeleteWorkspacePopupTitle {
             get {
@@ -153,15 +154,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Workspace &quot;{0}&quot; is disabled. Workspace functionality is limited..
-        /// </summary>
-        public static string DisabledNotice {
-            get {
-                return ResourceManager.GetString("DisabledNotice", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Disabling workspace will stop access to it for all users. It will stop all data collection that might be in progress..
         /// </summary>
         public static string DisableExplanation {
@@ -171,7 +163,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Confirm disabling {{name}}.
+        ///   Looks up a localized string similar to Confirm disabling &quot;{{name}}&quot;.
         /// </summary>
         public static string DisableWorkspacePopupTitle {
             get {
@@ -216,7 +208,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit workspace {{name}}.
+        ///   Looks up a localized string similar to Edit workspace &quot;{{name}}&quot;.
         /// </summary>
         public static string EditWorkspace {
             get {
@@ -297,6 +289,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        public static string Open {
+            get {
+                return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisors: {{count}}.
         /// </summary>
         public static string SupervisorsCount {
@@ -315,11 +316,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your account in the workspace disabled by the system administrator, and as a result you can&apos;t use the functionality of this site. If you believe that this is an error, please contact your server administrator..
+        ///   Looks up a localized string similar to Your account is in the workspace disabled by the system administrator, and as a result you can&apos;t use the functionality of this site. If you believe that this is an error, please contact your server administrator..
         /// </summary>
         public static string WorkspaceAccessDisabledReason {
             get {
                 return ResourceManager.GetString("WorkspaceAccessDisabledReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspace can not be removed because user has assigned work. Reassign all assignments (including archived), not completed interviews and for Supervisor move all team members to another team. Interviews: {0}, Assignments: {1}, Team members: {2}.
+        /// </summary>
+        public static string WorkspaceCantBeRemoved {
+            get {
+                return ResourceManager.GetString("WorkspaceCantBeRemoved", resourceCulture);
             }
         }
         

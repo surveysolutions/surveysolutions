@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             userManager.Setup(u => u.FindByIdAsync(userId.FormatGuid(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(user));
             userManager.Setup(u => u.UpdateAsync(user, It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(new IdentityResult()));
+                .Returns(Task.FromResult(IdentityResult.Success));
             userManager.As<IUserPasswordStore<HqUser>>();
             
             var controller = CreateController(userManager.Object, authorizedUser);
@@ -94,6 +94,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IPlainKeyValueStorage<ProfileSettings>>(),
                 Mock.Of<UrlEncoder>(),
                 Mock.Of<IOptions<HeadquartersConfig>>(),
+                null,
                 null);
             controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c => 
                 c.Session == new MockHttpSession()
@@ -115,9 +116,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<ILookupNormalizer>(),
                 Mock.Of<IdentityErrorDescriber>(),
                 Mock.Of<IServiceProvider>(),
-                Mock.Of<ILogger<UserManager<HqUser>>>(),
-                Mock.Of<IWorkspacesService>(),
-                Mock.Of<IWorkspaceContextAccessor>(),
+                Mock.Of<ILogger<HqUserManager>>(),
                 Mock.Of<ISystemLog>(),
                 Mock.Of<IAuthorizedUser>());
             hqUserManager.RegisterTokenProvider(

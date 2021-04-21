@@ -7,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using NHibernate;
 using NUnit.Framework;
+using ReflectionMagic;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
@@ -78,7 +79,11 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             Guid supervisorId = Id.g9;
 
             var users = new Mock<IUserRepository>();
-            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new HqUser() { Profile = new HqUserProfile() { SupervisorId = supervisorId } }));
+            var hqUser = new HqUser() { WorkspaceProfile = new WorkspaceUserProfile() };
+            hqUser.WorkspaceProfile.AsDynamic().SupervisorId = supervisorId;
+            
+            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(hqUser));
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUnitOfWork>()).Returns(UnitOfWork);

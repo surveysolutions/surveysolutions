@@ -289,4 +289,13 @@
   <data name="PLU0021Recomendation" xml:space="preserve">
       <value>Добавьте пароль</value>
   </data>
+  <data name="PLU0022" xml:space="preserve">
+    <value>Рабочая область не найдена</value>
+  </data>
+  <data name="PLU0022Description" xml:space="preserve">
+    <value>Рабочая область должна существовать и быть включена</value>
+  </data>
+  <data name="PLU0022Recomendation" xml:space="preserve">
+    <value>Проверте имя рабочей области</value>
+  </data>
 </root>

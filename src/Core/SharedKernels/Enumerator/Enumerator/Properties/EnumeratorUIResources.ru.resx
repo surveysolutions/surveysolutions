@@ -178,6 +178,15 @@
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} интервью для {1}</value>
   </data>
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>Обновление рабочих областей</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>Список рабочих областей обновлен</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>Ошибка при обновление рабочих областей. Пожалуйста обратитесь к администратору.</value>
+  </data>
   <data name="Login_FinishInstallation_Message" xml:space="preserve">
     <value>Это первый запуск приложения на этом устройстве. Пользователь и домен пока не заданы. &lt;br /&gt;Для продолжения работы необходимо подключение к сети</value>
   </data>
@@ -806,6 +815,12 @@
     <value>Поиск</value>
     <comment>Поиск</comment>
   </data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>Рабочии области</value>
+  </data>
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>Обновить рабочие области</value>
+  </data>
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Выйти из поиска</value>
   </data>
@@ -988,6 +1003,9 @@
   </data>
   <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
       <value>Ваша учётная запись не активна на данном сервере т.к. рабочее простанство в котром она определена отключено админстратором. Пожалуйста, обратитесь к супервизору.</value>
+  </data>
+  <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+      <value>Ваша учётная запись не активна в текущем рабочем простанстве. Пожалуйста, обратитесь к администратору.</value>
   </data>
   <data name="Interview_Progress_Format" xml:space="preserve">
     <value>Заполнение: {0}/{1}</value>

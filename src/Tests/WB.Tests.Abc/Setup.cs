@@ -162,9 +162,9 @@ namespace WB.Tests.Abc
             return zipUtilsMock.Object;
         }
 
-        public static IInterviewerPrincipal InterviewerPrincipal(string name, string pass)
+        public static IInterviewerPrincipal InterviewerPrincipal(string name = "name", string pass= "pass", string workspace = "primary")
         {
-            var interviewerIdentity = new InterviewerIdentity() {Name = "name", PasswordHash = "pass"};
+            var interviewerIdentity = new InterviewerIdentity() {Name = name, PasswordHash = pass, Workspace = workspace};
             return InterviewerPrincipal(interviewerIdentity);
         }
 

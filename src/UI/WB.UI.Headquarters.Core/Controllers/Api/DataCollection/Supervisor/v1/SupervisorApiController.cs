@@ -121,12 +121,17 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             {
                 // allowed to synchronize
             }
-            else if (deviceSyncProtocolVersion < SupervisorSyncProtocolVersionProvider.V3_ResetPasswordIntroduced)
+            if (deviceSyncProtocolVersion < SupervisorSyncProtocolVersionProvider.V3_ResetPasswordIntroduced)
             {
                 if (authorizedUser.PasswordChangeRequired)
                     return StatusCode(StatusCodes.Status426UpgradeRequired);
             }
-            else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
+            if (deviceSyncProtocolVersion < SupervisorSyncProtocolVersionProvider.V4_MultiWorkspacesIntroduced)
+            {
+                if (authorizedUser.Workspaces.Count() > 1)
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }
+            if (deviceSyncProtocolVersion > serverSyncProtocolVersion)
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable);
             }

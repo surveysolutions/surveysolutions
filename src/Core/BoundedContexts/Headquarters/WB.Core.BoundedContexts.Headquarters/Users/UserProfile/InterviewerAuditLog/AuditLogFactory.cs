@@ -8,10 +8,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAudi
     class AuditLogFactory : IAuditLogFactory
     {
         private readonly IPlainStorageAccessor<AuditLogRecord> storageAccessor;
+        private readonly IPlainStorageAccessor<GlobalAuditLogRecord> globalStorageAccessor;
 
-        public AuditLogFactory(IPlainStorageAccessor<AuditLogRecord> storageAccessor)
+        public AuditLogFactory(IPlainStorageAccessor<AuditLogRecord> storageAccessor,
+            IPlainStorageAccessor<GlobalAuditLogRecord> globalStorageAccessor)
         {
             this.storageAccessor = storageAccessor;
+            this.globalStorageAccessor = globalStorageAccessor;
         }
 
         public IEnumerable<AuditLogRecord> GetRecords(Guid responsibleId, DateTime startDateTime, DateTime endDateTime)
@@ -56,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAudi
 
         private IEnumerable<AuditLogRecord> GetRecordsImpl(Guid responsibleId, DateTime? startDate, DateTime? endDate)
         {
-            return storageAccessor.Query(_ =>
+            var workspaceRecords = storageAccessor.Query(_ =>
             {
                 var records = _.Where(r => r.ResponsibleId == responsibleId);
 
@@ -68,6 +71,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAudi
 
                 return records.OrderByDescending(r => r.Id);
             }).ToList();
+
+            if (workspaceRecords.Count == 0)
+                return workspaceRecords;
+
+            var globalRecords = globalStorageAccessor.Query(_ =>
+            {
+                var records = _.Where(r => r.ResponsibleId == responsibleId);
+
+                if (startDate.HasValue)
+                    records = records.Where(r => r.TimeUtc >= startDate);
+
+                if (endDate.HasValue)
+                    records = records.Where(r => r.TimeUtc < endDate);
+
+                return records.OrderByDescending(r => r.Id);
+            }).ToList();
+            
+            return workspaceRecords.Concat(globalRecords).OrderByDescending(r => r.TimeUtc);
         }
     }
 }

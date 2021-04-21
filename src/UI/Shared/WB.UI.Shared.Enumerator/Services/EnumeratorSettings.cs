@@ -38,14 +38,15 @@ namespace WB.UI.Shared.Enumerator.Services
         }
 
         protected abstract EnumeratorSettingsView CurrentSettings { get; }
+        protected abstract EnumeratorWorkspaceSettingsView CurrentWorkspaceSettings { get; }
 
         public string Endpoint => this.CurrentSettings.Endpoint;
         public long? LastHqSyncTimestamp => this.CurrentSettings.LastHqSyncTimestamp;
 
-        public DateTime? LastSync => this.CurrentSettings.LastSync;
+        public DateTime? LastSync => this.CurrentWorkspaceSettings?.LastSync;
 
-        public bool? LastSyncSucceeded => this.CurrentSettings.LastSyncSucceeded;
-        public string LastOpenedMapName => this.CurrentSettings.LastOpenedMapName;
+        public bool? LastSyncSucceeded => this.CurrentWorkspaceSettings?.LastSyncSucceeded;
+        public string LastOpenedMapName => this.CurrentWorkspaceSettings?.LastOpenedMapName;
 
         public abstract bool VibrateOnError { get; }
         public abstract bool ShowLocationOnMap { get; }
@@ -94,9 +95,9 @@ namespace WB.UI.Shared.Enumerator.Services
                 ? EnumeratorApplicationType.WithMaps
                 : EnumeratorApplicationType.WithoutMaps;
 
-        public bool Encrypted => this.CurrentSettings.Encrypted ?? false;
+        public bool Encrypted => this.CurrentSettings?.Encrypted ?? false;
         public void SetEncrypted(bool encrypted) => this.SaveCurrentSettings(s => s.Encrypted = encrypted);
-        public bool DashboardViewsUpdated => this.CurrentSettings.DashboardViewsUpdated ?? false;
+        public bool DashboardViewsUpdated => this.CurrentWorkspaceSettings?.DashboardViewsUpdated ?? false;
         public void SetDashboardViewsUpdated(bool updated) => this.SaveCurrentSettings(s => s.DashboardViewsUpdated = updated);
 
         public bool NotificationsEnabled => this.CurrentSettings.NotificationsEnabled ?? true;
@@ -206,7 +207,15 @@ namespace WB.UI.Shared.Enumerator.Services
             this.SaveSettings(settings);
         }
 
+        private void SaveCurrentSettings(Action<EnumeratorWorkspaceSettingsView> onChanging)
+        {
+            var settings = this.CurrentWorkspaceSettings;
+            onChanging(settings);
+            this.SaveSettings(settings);
+        }
+
         protected abstract void SaveSettings(EnumeratorSettingsView settings);
+        protected abstract void SaveSettings(EnumeratorWorkspaceSettingsView settings);
 
         private string GetRAMInformation()
             => AndroidInformationUtils.GetRAMInformation();
@@ -217,7 +226,7 @@ namespace WB.UI.Shared.Enumerator.Services
         public string GetDataBaseSize() => 
             FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()));
 
-        public bool PartialSynchronizationEnabled => this.CurrentSettings.PartialSynchronizationEnabled ?? false;
+        public bool PartialSynchronizationEnabled => this.CurrentWorkspaceSettings.PartialSynchronizationEnabled ?? false;
 
         public void SetPartialSynchronizationEnabled(bool enable)
         {

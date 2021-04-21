@@ -199,6 +199,15 @@ for further instructions</value>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} interviews for {1}</value>
   </data>
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>Refreshing workspaces</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>Workspaces list updated</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>Error getting list of workspaces. Please contact your system administrator. </value>
+  </data>
   <data name="Maps_Title" xml:space="preserve">
     <value>Maps</value>
   </data>
@@ -520,6 +529,12 @@ You need internet connection to proceed with setting up the user and domain.</va
   </data>
   <data name="MenuItem_Title_Search" xml:space="preserve">
     <value>Search</value>
+  </data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>Workspaces</value>
+  </data>
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>Refresh workspaces</value>
   </data>
   <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
     <value>All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</value>
@@ -965,6 +980,9 @@ It will appear on interviewer device after next synchronization</value>
   </data>
   <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
       <value>Your account is no longer active on this server, because the workspace in which it is defined was disabled by the administrator. Please contact your supervisor.</value>
+  </data>
+  <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+      <value>Your account is no longer active in the workspace. Please contact your system administrator.</value>
   </data>
   <data name="Interview_Progress_Format" xml:space="preserve">
     <value>Progress: {0}/{1}</value>

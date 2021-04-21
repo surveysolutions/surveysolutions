@@ -608,7 +608,7 @@
     <value>Interviewers</value>
   </data>
   <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
-      <value>You are moving an interviewer who was having assignments for web interviews to another team. These assignments will be assigned to the original supervisor. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignment is reassigned to a user in the role INTERVIEWER.</value>
+    <value>You are moving an interviewer who was having assignments for web interviews to another team. These assignments will be assigned to the original supervisor. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignment is reassigned to a user in the role INTERVIEWER.</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
@@ -799,6 +799,12 @@
   <data name="Supervisors_ArchivedUsers" xml:space="preserve">
     <value>Archived supervisors</value>
   </data>
+  <data name="Users_ActiveUsers" xml:space="preserve">
+    <value>Active users</value>
+  </data>
+  <data name="Users_ArchivedUsers" xml:space="preserve">
+    <value>Archived users</value>
+  </data>
   <data name="Interviewers_Connected" xml:space="preserve">
     <value>Connected</value>
   </data>
@@ -856,6 +862,15 @@
   <data name="Supervisor_CreateText" xml:space="preserve">
     <value>This action will create individual user with supervisor rights,
         &lt;br&gt;to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;</value>
+  </data>
+  <data name="User_CreateText1" xml:space="preserve">
+    <value>This action will create individual user,</value>
+  </data>
+  <data name="User_CreateText2" xml:space="preserve">
+    <value>to create several interviewers and supervisors you can use {{link}}</value>
+  </data>
+  <data name="User_CreateText_UserBatchUploadLinkText" xml:space="preserve">
+    <value>user batch creation</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
     <value>Personal information details (optional) &lt;br&gt; will be visible to HQ users only</value>
@@ -933,8 +948,19 @@
   <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
     <value>Do you want to continue?</value>
   </data>
+  <data name="Users_UsersConfirm" xml:space="preserve">
+    <value>Do you want to continue?</value>
+  </data>
+  <data name="Users_UnarchiveUsersWarning" xml:space="preserve">
+    <value>User(s) will be unarchived.</value>
+  </data>
   <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
     <value>If the interviewer has completed interviews on his tablet then the data will be lost.</value>
+  </data>
+  <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
+    <value>You will archive supervisors and interviewers within theirs team. Interviewers assigned to archived supervisor will be also archived in all workspaces. If interviewers have any non synchronized data on tablets it will be deleted.</value>
+
+
   </data>
   <data name="Supervisors_Selected" xml:space="preserve">
     <value>supervisor(s) selected</value>
@@ -1346,7 +1372,7 @@
     <value>Select a team where to move {{names}}</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-      <value>{{names}} and {{lastname}}</value>
+    <value>{{names}} and {{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
     <value>{{names}} and {{more}} more</value>
@@ -1574,6 +1600,13 @@
   <data name="UsersManage_WorkspacesFilterPlaceholder" xml:space="preserve">
     <value>All workspaces</value>
   </data>
+  <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
+    <value>Supervisor (Interviewers will be added to his team)</value>
+
+  </data>
+  <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
+    <value>Select supervisor</value>
+  </data>
   <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
     <value>All roles</value>
   </data>
@@ -1582,6 +1615,9 @@
   </data>
   <data name="UserManagement_SubtitleAdd" xml:space="preserve">
     <value>Select workspaces that need to be added to selected users</value>
+  </data>
+  <data name="UserManagement_SubtitleAddInterviewer" xml:space="preserve">
+    <value>Select workspace and supervisor that need to create interviewer</value>
   </data>
   <data name="UserManagement_SubtitleRemove" xml:space="preserve">
     <value>Select workspaces that need to be removed from selected users</value>
@@ -1600,6 +1636,12 @@
   </data>
   <data name="Interviewer_CreateText" xml:space="preserve">
     <value>This action will create individual user with interviewer rights,&lt;br&gt; to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
+  </data>
+  <data name="UsersManage_TeamFilterPlaceHolder" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="UsersManage_TeamFilter" xml:space="preserve">
+    <value>Team</value>
   </data>
   <data name="ExposedVariables_VariableName" xml:space="preserve">
     <value>Variable Name</value>

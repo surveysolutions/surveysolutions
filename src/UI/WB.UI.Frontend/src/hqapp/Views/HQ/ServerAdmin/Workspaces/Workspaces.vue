@@ -5,6 +5,7 @@
             <div class="topic-with-button">
                 <h1 v-html="$t('MainMenu.Workspaces')"></h1>
                 <button type="button"
+                    v-if="this.$config.model.canManage"
                     class="btn btn-success"
                     data-suso="create-new-workspace"
                     @click="createNewWorkspace">
@@ -23,7 +24,8 @@
             noSelect
             noSearch
             :noPaging="false"
-            :contextMenuItems="contextMenuItems">
+            :contextMenuItems="contextMenuItems"
+            :supportContextMenu="this.$config.model.canManage">
         </DataTables>
         <ModalFrame
             ref="createWorkspaceModal"
@@ -274,6 +276,17 @@ export default {
         contextMenuItems({rowData}) {
             let items = []
 
+            items.push({
+                name: this.$t('Workspaces.Open'),
+                className: 'suso-open',
+                callback: (_, opt) => {
+                    window.location = this.workspacePath(rowData.Name)
+                },
+            })
+
+            if (!this.$config.model.canManage)
+                return items
+
             if(rowData.isDisabled) {
                 items.push({
                     name: this.$t('Workspaces.Enable'),
@@ -297,7 +310,7 @@ export default {
                 })
             }
             else {
-                items = [
+                items.push(
                     {
                         name: this.$t('Workspaces.Edit'),
                         className: 'suso-edit',
@@ -344,7 +357,14 @@ export default {
                             window.location = this.workspacePath(rowData.Name) + 'Administration/TabletInfos'
                         },
                     },
-                ]
+                    {
+                        name: this.$t('Pages.InterviewPackages'),
+                        className: 'suso-interview-packages',
+                        callback: (_, opt) => {
+                            window.location = this.workspacePath(rowData.Name) + 'ControlPanel/InterviewPackages'
+                        },
+                    }
+                )
 
                 if(rowData.Name != 'primary') {
                     items.push({
@@ -408,6 +428,10 @@ export default {
                         name: 'Name',
                         title: this.$t('Workspaces.Name'),
                         sortable: false,
+                        render(data, type, row) {
+                            const workspaceUrl = self.workspacePath(data)
+                            return `<a href='${workspaceUrl}'>${data}</a>`
+                        },
                     },
                     {
                         data: 'DisplayName',

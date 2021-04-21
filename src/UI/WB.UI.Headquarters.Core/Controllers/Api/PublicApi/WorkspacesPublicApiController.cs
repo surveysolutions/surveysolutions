@@ -34,6 +34,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IMapper mapper;
         private readonly IWorkspacesService workspacesService;
         private readonly IWorkspacesCache workspacesCache;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IMediator mediator;
         private readonly ILogger<WorkspacesPublicApiController> logger;
         private readonly IAuthorizedUser authorizedUser;
@@ -44,6 +45,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IMapper mapper,
             IWorkspacesService workspacesService,
             IWorkspacesCache workspacesCache,
+            IUnitOfWork unitOfWork,
             IMediator mediator,
             ILogger<WorkspacesPublicApiController> logger,
             IAuthorizedUser authorizedUser, ISystemLog systemLog, 
@@ -53,6 +55,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.mapper = mapper;
             this.workspacesService = workspacesService;
             this.workspacesCache = workspacesCache;
+            this.unitOfWork = unitOfWork;
             this.mediator = mediator;
             this.logger = logger;
             this.authorizedUser = authorizedUser;
@@ -65,7 +68,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         [HttpGet]
         [SwaggerResponse(200, Type = typeof(WorkspaceApiView))]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         public WorkspacesApiView Index([FromQuery] WorkspacesListFilter filter)
         {
             IEnumerable<WorkspaceApiView> result =
@@ -154,6 +157,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     value: this.mapper.Map<WorkspaceApiView>(workspace));
             }
 
+            unitOfWork.DiscardChanges();
             return ValidationProblem();
         }
 
@@ -193,6 +197,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NoContent();
             }
 
+            unitOfWork.DiscardChanges();
             return ValidationProblem();
         }
 
@@ -234,6 +239,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NoContent();
             }
 
+            unitOfWork.DiscardChanges();
             return ValidationProblem();
         }
 
@@ -269,6 +275,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NoContent();
             }
 
+            unitOfWork.DiscardChanges();
             return ValidationProblem();
         }
 
@@ -280,7 +287,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPost]
         [Route("assign")]
         [ObservingNotAllowed]
-        [AuthorizeByRole(UserRoles.Administrator)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
         public async Task<ActionResult> AssignWorkspaces([FromBody] AssignWorkspacesToUserModel model, CancellationToken cancellationToken)
         {
             await this.mediator.Send(new AssignWorkspacesToUserModelRequest(ModelState, model), cancellationToken);
@@ -290,6 +297,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NoContent();
             }
 
+            unitOfWork.DiscardChanges();
             return ValidationProblem();
         }
 

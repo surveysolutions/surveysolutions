@@ -18,6 +18,8 @@
       <None Remove="Migrations\ReadSide\M101-200\**" />
       <None Remove="Migrations\Workspace\Init.sql" />
       <EmbeddedResource Include="Migrations\Workspace\Init.sql" />
+      <None Remove="Migrations\Workspace\M202102231117_AddedUserProfileView.sql" />
+      <EmbeddedResource Include="Migrations\Workspace\M202102231117_AddedUserProfileView.sql" />
     </ItemGroup>
     <ItemGroup>
       <None Remove="Migrations\Logs\M201904221727_AddErrorsTable.sql" />
