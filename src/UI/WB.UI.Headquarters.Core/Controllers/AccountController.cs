@@ -129,14 +129,14 @@ namespace WB.UI.Headquarters.Controllers
                     return RedirectToAction(actionName, controllerName);
                 }
 
-                if (user.IsInRole(UserRoles.Administrator))
-                {
-                    return Redirect(Url.Content("~/administration/Workspaces"));
-                }
-
                 if (returnUrl != null && returnUrl != "/")
                 {
                     return Redirect(returnUrl);
+                }
+
+                if (user.IsInRole(UserRoles.Administrator))
+                {
+                    return Redirect(Url.Content("~/administration/Workspaces"));
                 }
 
                 return Redirect(Url.Content("~/"));
