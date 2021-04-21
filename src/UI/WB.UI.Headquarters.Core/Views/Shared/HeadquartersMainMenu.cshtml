@@ -59,7 +59,7 @@
             @User.Identity.Name <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            @Html.MainMenuItem("Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
+            @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(),"Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
             <li>
                 <a href="/Account/LogOff">@Common.Logoff</a>
             </li>
