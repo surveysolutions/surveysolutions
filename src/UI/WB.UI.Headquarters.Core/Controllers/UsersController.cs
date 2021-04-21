@@ -616,7 +616,6 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
-        [Route("/UpdateUser")]
         public async Task<ActionResult> UpdateUser([FromBody] EditUserModel editModel)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
