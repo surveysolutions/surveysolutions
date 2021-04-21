@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Workspaces;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 {
@@ -61,6 +62,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         [Route("current")]
         [AllowPrimaryWorkspaceFallback]
         [IgnoreWorkspacesLimitation]
+        [AllowDisabledWorkspaceAccess]
         public override ActionResult<InterviewerApiView> Current() => base.Current();
 
         [HttpGet]

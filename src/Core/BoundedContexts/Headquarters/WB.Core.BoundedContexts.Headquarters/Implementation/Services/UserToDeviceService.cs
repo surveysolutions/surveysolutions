@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public string GetLinkedDeviceId(Guid authorizedUserId)
         {
             var user = userRepository.FindById(authorizedUserId);
-            return user.WorkspaceProfile?.DeviceId;
+            return user.Profile?.DeviceId;
         }
 
         public async Task LinkDeviceToUserAsync(Guid authorizedUserId, string deviceId)
