@@ -194,6 +194,8 @@ type Interview {
   notAnsweredCount: Int
   "Active Calendar Event associated with interview"
   calendarEvent: CalendarEvent
+  "Link for interview in CAWI mode"
+  cawiLink: String
 }
 
 type Map {
