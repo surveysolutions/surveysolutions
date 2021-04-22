@@ -520,11 +520,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User role is required.
+        /// </summary>
+        public static string UserRoleRequired {
+            get {
+                return ResourceManager.GetString("UserRoleRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verification code.
         /// </summary>
         public static string VerificationCodeFieldName {
             get {
                 return ResourceManager.GetString("VerificationCodeFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspace don&apos;t found.
+        /// </summary>
+        public static string WorkspaceMissing {
+            get {
+                return ResourceManager.GetString("WorkspaceMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspace is required.
+        /// </summary>
+        public static string WorkspaceRequired {
+            get {
+                return ResourceManager.GetString("WorkspaceRequired", resourceCulture);
             }
         }
     }

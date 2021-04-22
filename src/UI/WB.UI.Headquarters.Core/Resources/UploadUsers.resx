@@ -228,4 +228,13 @@
   <data name="TimeDetermination" xml:space="preserve">
     <value>time determination</value>
   </data>
+  <data name="Workspace" xml:space="preserve">
+    <value>Workspace</value>
+  </data>
+  <data name="SelectWorkspace" xml:space="preserve">
+    <value>Select Workspace</value>
+  </data>
+  <data name="SelectWorkspaceDescription" xml:space="preserve">
+    <value>If no workspace assigned in batch file use this workspace as default</value>
+  </data>
 </root>

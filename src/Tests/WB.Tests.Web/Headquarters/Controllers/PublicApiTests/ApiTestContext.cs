@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation;
@@ -18,6 +19,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc.Storage;
 using WB.Tests.Web;
 using WB.UI.Headquarters.API.WebInterview;
@@ -44,7 +46,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 Mock.Of<IAuditLogService>(),
                 Create.Service.UserManager(),
                 Mock.Of<IUnitOfWork>(),
-                Mock.Of<ISystemLog>());
+                Mock.Of<ISystemLog>(),
+                Mock.Of<IWorkspaceContextAccessor>(),
+                Mock.Of<IPlainStorageAccessor<Workspace>>());
         }
 
         protected static QuestionnairesPublicApiController CreateQuestionnairesController(

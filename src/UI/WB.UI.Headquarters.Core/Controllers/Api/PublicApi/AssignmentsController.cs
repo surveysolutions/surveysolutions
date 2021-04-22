@@ -596,7 +596,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 var responsible = await this.userManager.FindByIdAsync(assignment.ResponsibleId);
                 if (!responsible.IsInRole(UserRoles.Interviewer))
                     return Forbid();
-                if (responsible.Profile.SupervisorId != this.authorizedUser.Id)
+                if (responsible.WorkspaceProfile.SupervisorId != this.authorizedUser.Id)
                     return Forbid();
             }
 

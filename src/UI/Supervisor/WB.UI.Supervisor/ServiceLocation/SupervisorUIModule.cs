@@ -74,7 +74,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IDashboardItemsAccessor, DashboardItemsAccessor>();
             BindOfflineServices(registry);
 
-            registry.BindAsSingleton<IInterviewViewModelFactory, SupervisorInterviewViewModelFactory>();
+            registry.Bind<IInterviewViewModelFactory, SupervisorInterviewViewModelFactory>();
 
            
 #if EXCLUDEEXTENSIONS

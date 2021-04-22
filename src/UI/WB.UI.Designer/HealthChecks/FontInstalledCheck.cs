@@ -33,7 +33,7 @@ namespace WB.UI.Designer.HealthChecks
                 if (fontTester.Name !!= fontName)
                 {
                     logger.LogCritical("Cannot start Designer. Noto Sans font is required for PDF functionality. Download it here https://www.google.com/get/noto/#sans-lgc");
-                    throw new ApplicationException("Cannot start Designer application. There is no installed Noto Sans font in system");
+                    throw new Exception("Cannot start Designer application. There is no installed Noto Sans font in system");
                 }
             }
             else

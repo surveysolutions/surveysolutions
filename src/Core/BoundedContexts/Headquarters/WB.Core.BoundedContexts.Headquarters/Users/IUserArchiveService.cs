@@ -37,7 +37,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
         public Task ArchiveSupervisorAndDependentInterviewersAsync(Guid supervisorId)
         {
             var supervisorAndDependentInterviewers = this.userRepository.Users.Where(
-                user => user.Profile != null && user.Profile.SupervisorId == supervisorId || user.Id == supervisorId).ToList();
+                user => user.Id == supervisorId || user.Workspaces.Any(w => w.Supervisor.Id == supervisorId))
+                .ToList();
 
             foreach (var accountToArchive in supervisorAndDependentInterviewers)
             {
@@ -52,13 +53,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
             var usersToArhive = this.userRepository.Users.Where(user => userIds.Contains(user.Id)).ToList();
             foreach (HqUser userToArchive in usersToArhive)
             {
-                if (userToArchive.IsInRole(UserRoles.Supervisor))
-                {
-                    await this.ArchiveSupervisorAndDependentInterviewersAsync(userToArchive.Id);
-                }
-                else
+                if (userToArchive.IsInRole(UserRoles.Interviewer))
                 {
                     this.ArchiveUser(userToArchive);
+                }
+                else if (userToArchive.IsInRole(UserRoles.Supervisor))
+                {
+                    await this.ArchiveSupervisorAndDependentInterviewersAsync(userToArchive.Id);
                 }
             }
         }
@@ -76,10 +77,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
         {
             if (userToUnarchive.IsInRole(UserRoles.Interviewer))
             {
-                var supervisor = await this.userRepository.FindByIdAsync(userToUnarchive.Profile.SupervisorId.Value);
-                if (supervisor.IsArchived)
-                    throw new UserArchiveException(string.Format(HeadquarterUserCommandValidatorMessages.YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat,
-                        userToUnarchive.UserName));
+                var supervisorIds = userToUnarchive.Workspaces
+                    .Where(w => w.Supervisor != null)
+                    .Select(w => w.Supervisor.Id);
+                foreach (var supervisorId in supervisorIds)
+                {
+                    var supervisor = await this.userRepository.FindByIdAsync(supervisorId);
+                    if (supervisor.IsArchived)
+                        throw new UserArchiveException(string.Format(HeadquarterUserCommandValidatorMessages.YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat,
+                            userToUnarchive.UserName));
+                }
             }
 
             userToUnarchive.IsArchived = false;

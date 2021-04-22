@@ -14,9 +14,14 @@ namespace WB.Infrastructure.Native.Workspaces
             return serviceLocator.GetInstance<IWorkspaceContextAccessor>().CurrentWorkspace();
         }
 
-        public static bool IsServerAdministration(this WorkspaceContext? context)
+        public static bool IsSystemDefinedWorkspace(this WorkspaceContext? context)
         {
-            return context?.Name == WorkspaceConstants.AdminWorkspaceName;
+            return context != null && WorkspaceConstants.IsSystemDefinedWorkspace(context.Name);
+        }   
+        
+        public static bool IsAdministrationWorkspace(this WorkspaceContext? context)
+        {
+            return context?.Name == WorkspaceConstants.WorkspaceNames.AdminWorkspaceName;
         }
 
         public static void ForEachWorkspaceExecute(this IServiceLocator serviceLocator,

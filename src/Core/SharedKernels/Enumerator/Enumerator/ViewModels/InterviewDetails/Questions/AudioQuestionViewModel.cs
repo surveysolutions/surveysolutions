@@ -129,7 +129,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             else
             {
-                await this.audioService.Play(this.interviewId, this.questionIdentity, this.GetAudioFileName());
+                var interviewBinaryData = await this.audioFileStorage.GetInterviewBinaryDataAsync(interviewId, this.GetAudioFileName());
+                this.audioService.Play(interviewBinaryData, this.questionIdentity);
                 this.IsPlaying = true;
             }
         });

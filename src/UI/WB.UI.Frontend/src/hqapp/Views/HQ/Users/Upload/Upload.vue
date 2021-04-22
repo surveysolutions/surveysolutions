@@ -32,7 +32,33 @@
                     <li>{{$t('UploadUsers.FullName')}}</li>
                     <li>{{$t('UploadUsers.Email')}}</li>
                     <li>{{$t('UploadUsers.Phone')}}</li>
+                    <li>{{$t('UploadUsers.Workspace')}}</li>
                 </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-xs-10 prefilled-data-info info-block full-prefilled-data-info">
+                <h3>{{$t('UploadUsers.SelectWorkspace')}}</h3>
+                <p>{{$t('UploadUsers.SelectWorkspaceDescription')}}</p>
+                <form-group :error="errorByWorkspace">
+                    <div
+                        class="field form-control"
+                        :class="{answered: workspace != null}"
+                        style="padding:0">
+                        <Typeahead
+                            control-id="workspace"
+                            :value="workspace"
+                            :ajax-params="{ }"
+                            :fetch-url="config.api.workspacesUrl"
+                            @selected="workspaceSelected"></Typeahead>
+                    </div>
+                </form-group>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-7 col-xs-10 prefilled-data-info info-block">
                 <a v-bind:href="config.api.importUsersTemplateUrl"
                     target="_blank"
                     class="btn btn-link">
@@ -64,7 +90,7 @@
                         class="btn btn-default btn-lg btn-action-questionnaire" />
                     <button type="button"
                         class="btn btn-success"
-                        @click="$refs.uploader.click()">
+                        @click="upload">
                         {{$t('UploadUsers.UploadBtn')}}
                     </button>
                 </div>
@@ -81,6 +107,8 @@ export default {
     data: function() {
         return {
             timerId: 0,
+            workspace: null,
+            errorByWorkspace: null,
         }
     },
     computed: {
@@ -118,6 +146,19 @@ export default {
         },
     },
     methods: {
+        setErrorByWorkspace() {
+            if (this.workspace == null)
+                this.errorByWorkspace = this.$t('BatchUpload.RequiredField')
+            else this.errorByWorkspace = undefined
+        },
+        workspaceSelected(newValue) {
+            this.workspace = newValue
+            this.setErrorByWorkspace()
+        },
+        upload() {
+            this.setErrorByWorkspace()
+            if (!this.errorByWorkspace) this.$refs.uploader.click()
+        },
         onFileChange(e) {
             const files = e.target.files || e.dataTransfer.files
 
@@ -128,6 +169,7 @@ export default {
             var file = files[0]
             var formData = new FormData()
             formData.append('file', file)
+            formData.append('workspace', this.workspace.key)
 
             var self = this
 

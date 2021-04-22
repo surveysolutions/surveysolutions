@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NHibernate;
 using NUnit.Framework;
+using ReflectionMagic;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -122,8 +123,9 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
             var supervisorUser = new HqUser()
             {
                 Id = supervisorId,
-                Profile = new HqUserProfile() { SupervisorId = Guid.NewGuid() },
+                WorkspaceProfile = new WorkspaceUserProfile(),
             };
+            supervisorUser.WorkspaceProfile.AsDynamic().SupervisorId = Guid.NewGuid();
             supervisorUser.Roles.Add(supervisorRole);
             usersRepository.Setup(x => x.FindByIdAsync(supervisorId, It.IsAny<CancellationToken>())).Returns(Task.FromResult(supervisorUser));
             EnumerableQuery<HqUser> allUsers = new EnumerableQuery<HqUser>(new[] { supervisorUser });

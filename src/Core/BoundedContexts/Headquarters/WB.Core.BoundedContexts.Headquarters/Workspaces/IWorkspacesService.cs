@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,10 +12,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
     public interface IWorkspacesService
     {
         public Task Generate(string name, DbUpgradeSettings upgradeSettings);
-        void AddUserToWorkspace(HqUser user, string workspace);
+        void AddUserToWorkspace(HqUser user, string workspace, Guid? supervisorId);
         List<WorkspaceContext> GetEnabledWorkspaces();
         List<WorkspaceContext> GetAllWorkspaces();
-        void AssignWorkspaces(HqUser user, List<Workspace> workspacesList);
+        Task AssignWorkspacesAsync(HqUser user, List<AssignUserWorkspace> workspacesList);
         Task DeleteAsync(WorkspaceContext workspace, CancellationToken token = default);
     }
 }

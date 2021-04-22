@@ -18,7 +18,7 @@ import Download from './Download'
 import WebInterview from './WebInterview'
 import Workspaces from './ServerAdmin/Workspaces'
 import MapDashboard from './MapDashboard'
-import UsersManagment from './ServerAdmin/UsersManagment'
+import UsersManagment from './Users/UsersManagment'
 
 export default [
     Assignments,

@@ -24,5 +24,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         UserLinkedToAnotherServer,
         WorkspaceDisabled,
         ShouldChangePassword,
+        WorkspaceAccessDisabledReason,
     }
 }

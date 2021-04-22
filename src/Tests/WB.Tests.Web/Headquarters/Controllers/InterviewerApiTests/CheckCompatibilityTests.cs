@@ -219,5 +219,41 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
                 Assert.That(httpResponseMessage, Is.InstanceOf<JsonResult>());
             }
         }
+        
+        [Test]
+        public async Task when_user_has_old_interviewer_and_user_assigner_to_second_workspace_should_return_update_requared()
+        {
+            var interviewerVersionReader = new Mock<IInterviewerVersionReader>();
+            interviewerVersionReader.Setup(x => x.InterviewerBuildNumber())
+                .ReturnsAsync(0);
+            
+            var synchronizedUserId = Id.gA;
+
+            var userWorkspaces = new List<string>()
+            {
+                "first",
+                "second"
+            };
+            
+            var deviceId = "device";
+            var authorizedUser = Mock.Of<IAuthorizedUser>(x => 
+                    x.Id == synchronizedUserId
+                    && x.Workspaces == userWorkspaces 
+            );
+            var userToDeviceService = Mock.Of<IUserToDeviceService>(x => x.GetLinkedDeviceId(synchronizedUserId) == deviceId);
+
+            var interviewerApiController = Web.Create.Controller.InterviewerApiController(
+                syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
+                authorizedUser: authorizedUser,
+                interviewerVersionReader: interviewerVersionReader.Object,
+                userToDeviceService: userToDeviceService);
+
+            // Act
+            IActionResult httpResponseMessage = await interviewerApiController.CheckCompatibility(deviceId, 7300);
+
+            // Assert
+            Assert.That(httpResponseMessage, Is.InstanceOf<StatusCodeResult>());
+            Assert.That(((StatusCodeResult)httpResponseMessage).StatusCode, Is.EqualTo(StatusCodes.Status426UpgradeRequired));
+        }
     }
 }

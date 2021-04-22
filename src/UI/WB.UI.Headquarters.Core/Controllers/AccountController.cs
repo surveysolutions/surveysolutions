@@ -134,6 +134,11 @@ namespace WB.UI.Headquarters.Controllers
                     return Redirect(returnUrl);
                 }
 
+                if (user.IsInRole(UserRoles.Administrator))
+                {
+                    return Redirect(Url.Content("/administration/Workspaces"));
+                }
+
                 return Redirect(Url.Content("~/"));
             }
             if (signInResult.RequiresTwoFactor)

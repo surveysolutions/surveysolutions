@@ -301,9 +301,9 @@ namespace WB.UI.Headquarters.Code
             var interviewerApiView = this.GetResponseObject<InterviewerApiView>(context);
 
             UserView supervisorInfo;
-            if (interviewerApiView != null)
+            if (interviewerApiView != null && interviewerApiView.SupervisorId.HasValue)
             {
-                supervisorInfo = userViewFactory.GetUser(new UserViewInputModel(interviewerApiView.SupervisorId));
+                supervisorInfo = userViewFactory.GetUser(new UserViewInputModel(interviewerApiView.SupervisorId.Value));
             }
             else
             {

@@ -6,6 +6,7 @@ using AndroidX.Preference;
 using MvvmCross;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Interviewer.SharedPreferences;
 using WB.UI.Shared.Enumerator.Settings;
 
@@ -37,6 +38,7 @@ namespace WB.UI.Interviewer.Activities
             private void SetupPreferences()
             {
                 var interviewerSettings = Mvx.IoCProvider.Resolve<IInterviewerSettings>();
+                var principal = Mvx.IoCProvider.Resolve<IPrincipal>();
 
                 this.SetPreferenceTitleAndSummary("interview_settings_category", EnumeratorUIResources.Prefs_InterviewSettings, string.Empty);
                 this.SetPreferenceTitleAndSummary("about_category", EnumeratorUIResources.Prefs_AboutApplication, string.Empty);
@@ -102,7 +104,7 @@ namespace WB.UI.Interviewer.Activities
                 };
 
                 var allowSyncWithHq = this.FindPreference(SettingsNames.AllowSyncWithHq);
-                
+                allowSyncWithHq.Enabled = principal.CurrentUserIdentity?.Workspace != null;
                 allowSyncWithHq.PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetAllowSyncWithHq(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.AllowSyncWithHq));

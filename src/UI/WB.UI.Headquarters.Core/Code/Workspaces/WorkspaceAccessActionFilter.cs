@@ -51,15 +51,12 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 workspace = WorkspaceContext.Default;
             }
 
-            var isUserAdmin = context.HttpContext.User?.IsInRole(UserRoles.Administrator.ToString()) ?? false;
-
-
             if (workspace?.IsEnabled() == true || allowedDisabledWorkspace)
             {
 
-                if (isUserAdmin && workspace.IsServerAdministration())
+                if (hasAuthorization && !allowAnonymous && workspace.IsSystemDefinedWorkspace())
                 {
-                    // allow admin to access to server administration workspace
+                    // allow user to access to special workspace
                     return;
                 }
 

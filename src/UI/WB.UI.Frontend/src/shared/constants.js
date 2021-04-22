@@ -1,6 +1,8 @@
 export const RoleNames = Object.freeze({
-    INTERVIEWER: 'interviewer',
-    SUPERVISOR: 'supervisor',
+    INTERVIEWER: 'Interviewer',
+    SUPERVISOR: 'Supervisor',
     HQ: 'Headquarter',
     API: 'ApiUser',
+    ADMINISTRATOR: 'Administrator',
+    OBSERVER: 'Observer',
 })

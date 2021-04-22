@@ -2,7 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
 {
-    public class MoveInterviewerToAnotherTeamResult
+    public class MoveInterviewerToAnotherTeamResult : IMoveInterviewsResult
     {
         public MoveInterviewerToAnotherTeamResult()
         {

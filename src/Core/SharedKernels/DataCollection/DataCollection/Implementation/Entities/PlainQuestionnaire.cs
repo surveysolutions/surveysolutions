@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
     {
         public ISubstitutionService SubstitutionService { get; }
 
-        private readonly IQuestionOptionsRepository questionOptionsRepository;
+        public IQuestionOptionsRepository QuestionOptionsRepository { get; set; }
 
         #region State
 
@@ -207,7 +207,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             this.Revision = document.Revision;
             this.Version = version;
             this.translation = translation;
-            this.questionOptionsRepository = questionOptionsRepository;
+            this.QuestionOptionsRepository = questionOptionsRepository;
             this.SubstitutionService = substitutionService;
 
             this.QuestionnaireIdentity = new QuestionnaireIdentity(this.QuestionnaireId, Version);
@@ -381,7 +381,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 => this.GetMultiSelectAnswerOptionsAsValuesImpl(questionId));
 
         public IEnumerable<CategoricalOption> GetCategoricalMultiOptionsByValues(Guid questionId, int[] values) =>
-            this.questionOptionsRepository.GetOptionsByOptionValues(this, questionId, values, this.translation);
+            this.QuestionOptionsRepository.GetOptionsByOptionValues(this, questionId, values, this.translation);
 
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue,
             string searchFor, int[] excludedOptionIds)
@@ -391,7 +391,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
-                return questionOptionsRepository.GetOptionsForQuestion(this,
+                return QuestionOptionsRepository.GetOptionsForQuestion(this,
                     questionId, parentQuestionValue, searchFor, this.translation, excludedOptionIds);
             }
 
@@ -419,7 +419,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
-                return questionOptionsRepository.GetOptionForQuestionByOptionText(
+                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(
                     this,
                     questionId,
                     optionText, 
@@ -487,7 +487,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
-                return questionOptionsRepository.GetOptionForQuestionByOptionValue(this,
+                return QuestionOptionsRepository.GetOptionForQuestionByOptionValue(this,
                     questionId, optionValue, answerParentValue, this.translation);
             }
 

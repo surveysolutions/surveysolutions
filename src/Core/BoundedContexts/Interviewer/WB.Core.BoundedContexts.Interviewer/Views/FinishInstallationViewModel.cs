@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -34,10 +35,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ISerializer serializer,
             IUserInteractionService userInteractionService,
             IAuditLogService auditLogService,
-            IDeviceInformationService deviceInformationService) 
+            IDeviceInformationService deviceInformationService,
+            IWorkspaceService workspaceService) 
             : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, 
                 logger, qrBarcodeScanService, serializer, userInteractionService, auditLogService,
-                deviceInformationService)
+                deviceInformationService, workspaceService)
         {
             this.passwordHasher = passwordHasher;
             this.interviewerPrincipal = principal;
@@ -67,7 +69,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewerPrincipal.SaveInterviewer(interviewerIdentity);
         }
 
-        protected override async Task<List<WorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials,
+        protected override async Task<List<UserWorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials,
             CancellationToken token)
         {
             var interviewer = await this.synchronizationService.GetInterviewerAsync(credentials, token: token)
@@ -85,13 +87,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 Id = interviewer.Id.FormatGuid(),
                 UserId = interviewer.Id,
-                SupervisorId = interviewer.SupervisorId,
+                SupervisorId = interviewer.Workspaces.First().SupervisorId!.Value,
                 Name = this.UserName,
                 PasswordHash = this.passwordHasher.Hash(password),
                 Token = credentials.Token,
                 SecurityStamp = interviewer.SecurityStamp,
                 TenantId = tenantId,
-                Workspace = interviewer.Workspaces.First().Name
+                Workspace = interviewer.Workspaces.First().Name,
             };
             return interviewerIdentity;
         }

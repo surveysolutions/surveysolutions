@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MediatR;
 using NHibernate.Linq;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Utils;
@@ -17,18 +19,46 @@ namespace WB.UI.Headquarters.Code.UsersManagement
         IRequestHandler<UsersManagementRequest, DataTableResponse<UserManagementListItem>>
     {
         private readonly IUserRepository userRepository;
+        private readonly IAuthorizedUser authorizedUser;
 
-        public UsersManagementRequestHandler(IUserRepository userRepository)
+        public UsersManagementRequestHandler(IUserRepository userRepository, IAuthorizedUser authorizedUser)
         {
             this.userRepository = userRepository;
+            this.authorizedUser = authorizedUser;
         }
 
         public async Task<DataTableResponse<UserManagementListItem>> Handle(
             UsersManagementRequest request, CancellationToken cancellationToken = default)
         {
             var query = this.userRepository.Users
-                .Where(u => u.Roles.All(r => r.Id != UserRoles.Administrator.ToUserId()));
-            
+                .Where(u => 
+                    u.Roles.All(r => r.Id != UserRoles.Administrator.ToUserId())
+                );
+
+            List<string> authorizedUserWorkspaces = null;
+
+            if (!authorizedUser.IsAdministrator)
+            {
+                authorizedUserWorkspaces = authorizedUser.Workspaces.ToList();
+                query = query.Where(u => u.Workspaces.Any(w => authorizedUserWorkspaces.Contains(w.Workspace.Name)));
+            }
+
+            if (authorizedUser.IsHeadquarter)
+            {
+                var hqAllowedRoles = new[] {UserRoles.Supervisor.ToUserId(), UserRoles.Interviewer.ToUserId()};
+                query = query.Where(u => u.Roles.Any(r => hqAllowedRoles.Contains(r.Id)));
+            }
+
+            if (authorizedUser.IsSupervisor)
+            {
+                query = query.Where(u => 
+                    u.Roles.Any(r => r.Id == UserRoles.Interviewer.ToUserId()
+                    && u.Workspaces.Any(wu => wu.Supervisor.Id == authorizedUser.Id)));
+            }
+
+            if (authorizedUser.IsInterviewer)
+                throw new ArgumentException("Interviewer can't see users");
+
             var recordsTotal = await query.CountAsync(cancellationToken);
 
             query = ApplyFiltering(request, query);
@@ -59,11 +89,13 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                 .Select(u => new
                 {
                     u.Id,
-                    Workspaces = u.Workspaces.Select(w => new WorkspaceApiView
+                    Workspaces = u.Workspaces
+                        .Select(w => new WorkspaceApiView
                     {
                         Disabled = w.Workspace.DisabledAtUtc != null,
                         Name = w.Workspace.Name,
-                        DisplayName = w.Workspace.DisplayName
+                        DisplayName = w.Workspace.DisplayName,
+                        Supervisor = w.Supervisor != null ? w.Supervisor.UserName : null
                     }).ToList()
                 }).ToListAsync(cancellationToken))
                 .ToDictionary(u => u.Id, u => u.Workspaces);
@@ -72,13 +104,17 @@ namespace WB.UI.Headquarters.Code.UsersManagement
             {
                 if(workspaces.TryGetValue(user.UserId, out var ws))
                 {
-                    user.Workspaces = ws;
+                    user.Workspaces = ws
+                        .Where(w => 
+                            authorizedUserWorkspaces == null 
+                            || authorizedUserWorkspaces.Contains(w.Name)
+                    ).ToList();
                 }
             }
 
             return new DataTableResponse<UserManagementListItem>
             {
-                Draw = request.Draw + 1,
+                Draw = request.Draw,
                 RecordsTotal = recordsTotal,
                 RecordsFiltered = recordsFiltered,
                 Data = list
@@ -115,10 +151,17 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                     UserManagementFilter.WithMissingWorkspace => query.Where(u => u.Workspaces.Count == 0),
                     UserManagementFilter.WithDisabledWorkspaces => query.Where(u => u.Workspaces.Any() && u.Workspaces.All(w => w.Workspace.DisabledAtUtc != null)),
                     UserManagementFilter.Locked => query.Where(u => u.IsLockedByHeadquaters || u.IsLockedBySupervisor),
-                    UserManagementFilter.Archived => query.Where(u => u.IsArchived),
+                    //UserManagementFilter.Archived => query.Where(u => u.IsArchived),
                     _ => query
                 };
             }
+
+            if (request.TeamId != null)
+            {
+                query = query.Where(x => x.Workspaces.Any(s => s.Supervisor.Id == request.TeamId));
+            }
+
+            query = query.Where(u => u.IsArchived == request.Archive);
             
             return query;
         }
