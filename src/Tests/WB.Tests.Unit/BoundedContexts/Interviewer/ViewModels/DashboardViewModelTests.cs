@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     workspaceService: Mock.Of<IWorkspaceService>(),
                     onlineSynchronizationService: Mock.Of<IOnlineSynchronizationService>(),
                     memoryCacheSource: Mock.Of<IWorkspaceMemoryCacheSource>(),
-                    webInterviews: Mock.Of<WebInterviewsViewModel>());
+                    webInterviews: DashboardWebInterviewsViewModel());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();

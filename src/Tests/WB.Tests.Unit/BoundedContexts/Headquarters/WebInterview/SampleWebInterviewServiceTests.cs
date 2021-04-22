@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             var assignmentId = 5;
             var assignment = Create.Entity.Assignment(id: assignmentId, questionnaireIdentity: questionnaireId,
-                assigneeSupervisorId: Guid.NewGuid(), email: "email@super.com", password: "PASSWORD");
+                assigneeSupervisorId: Guid.NewGuid(), email: "email@super.com", password: "PASSWORD", webMode:true);
             var invitations = Create.Service.InvitationService(Create.Entity.Invitation(48, token: "AAAAAAAA", assignment: assignment));
             var service = this.GetService(invitations);
 
