@@ -139,7 +139,7 @@
     <value>Edit workspace "{{name}}"</value>
   </data>
   <data name="WorkspacesSubtitle" xml:space="preserve">
-    <value>Each workspace has isolated questionnaires, interviews, assignments and users.</value>
+    <value>Each workspace has isolated questionnaires, interviews and assignments.</value>
   </data>
   <data name="AddNew" xml:space="preserve">
     <value>Create new</value>
