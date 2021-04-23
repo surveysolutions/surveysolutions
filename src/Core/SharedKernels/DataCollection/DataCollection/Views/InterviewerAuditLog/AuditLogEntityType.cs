@@ -20,6 +20,7 @@
         AssignResponsibleToInterview,
         AssignResponsibleToAssignment,
         FinishInstallation,
-        SwitchInterviewToCawiMode
+        SwitchInterviewMode,
+        RestartInterview
     }
 }

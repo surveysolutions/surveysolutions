@@ -386,4 +386,10 @@
   <data name="InterviewMode" xml:space="preserve">
     <value>Режим интервью</value>
   </data>
+  <data name="Capi" xml:space="preserve">
+    <value>CAPI</value>
+  </data>
+  <data name="Cawi" xml:space="preserve">
+    <value>CAWI</value>
+  </data>
 </root>

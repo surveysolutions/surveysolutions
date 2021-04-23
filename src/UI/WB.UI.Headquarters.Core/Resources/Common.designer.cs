@@ -160,6 +160,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply.
+        /// </summary>
+        public static string Apply {
+            get {
+                return ResourceManager.GetString("Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approve.
         /// </summary>
         public static string Approve {
@@ -228,6 +237,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CAPI.
+        /// </summary>
+        public static string Capi {
+            get {
+                return ResourceManager.GetString("Capi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CAWI.
+        /// </summary>
+        public static string Cawi {
+            get {
+                return ResourceManager.GetString("Cawi", resourceCulture);
             }
         }
         
