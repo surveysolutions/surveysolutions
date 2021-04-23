@@ -67,6 +67,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
         {
             var interview = Substitute.For<IStatefulInterview>();
             interview.Status.Returns(InterviewStatus.Completed);
+            interview.GetInterviewKey().Returns(new InterviewKey(111111));
 
             var statefulInterviewRepository = Substitute.For<IStatefulInterviewRepository>();
             statefulInterviewRepository.GetAsync(null, It.IsAny<IProgress<EventReadingProgress>>(), It.IsAny<CancellationToken>()).ReturnsForAnyArgs(Task.FromResult(interview));
@@ -128,7 +129,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
                 interactionService: Mock.Of<IUserInteractionService>(),
                 interviewsRepository: interviewsRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 new JsonAllTypesSerializer(),
-                auditLogService ?? Mock.Of<IAuditLogService>());
+                auditLogService ?? Substitute.For<IAuditLogService>());
 
             return loadingViewModel;
         }
