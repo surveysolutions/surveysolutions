@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -56,12 +57,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             if (interviewerSettings.QuestionnairesInWebMode.Contains(interview.QuestionnaireIdentity))
             {
-                if (interviewerSettings.WebInterviewUriTemplate != null)
+                if (interviewerSettings.WebInterviewUriTemplate != null && interview.GetAssignmentId() != null)
                 {
                     this.CanSwitchToWebMode = true;
 
                     this.WebInterviewUrl = interviewerSettings.RenderWebInterviewUri(
-                        interview.GetAssignmentId() ?? 0,
+                        interview.GetAssignmentId()!.Value,
                         interview.Id
                     );
                 }
@@ -78,7 +79,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             var statefulInterview = this.interviewRepository.GetOrThrow(this.interviewId.FormatGuid());
 
             if(switchInterviewToCawiMode)            
-                auditLogService.Write(new SwitchInterviewToCawiModeAuditLogEntity(this.interviewId, statefulInterview.GetInterviewKey().ToString()));
+                auditLogService.Write(new SwitchInterviewModeAuditLogEntity(this.interviewId, statefulInterview.GetInterviewKey().ToString(), InterviewMode.CAWI));
             else
                 auditLogService.Write(new CompleteInterviewAuditLogEntity(this.interviewId, statefulInterview.GetInterviewKey().ToString()));
             

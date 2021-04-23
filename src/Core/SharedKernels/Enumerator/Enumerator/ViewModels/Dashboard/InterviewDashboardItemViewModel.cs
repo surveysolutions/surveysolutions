@@ -158,7 +158,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         private async Task ShowQRCodeAsync()
         {
-            var qrCodeText = Settings.RenderWebInterviewUri(interview.Assignment ?? 0, interview.InterviewId);
+            //interview created before assignments
+            if (interview.Assignment == null)
+                return;
+
+            var qrCodeText = Settings.RenderWebInterviewUri(interview.Assignment.Value, interview.InterviewId);
             await UserInteractionService.ShowAlertWithQRCodeAndText(qrCodeText, interview.InterviewKey);
         }
 

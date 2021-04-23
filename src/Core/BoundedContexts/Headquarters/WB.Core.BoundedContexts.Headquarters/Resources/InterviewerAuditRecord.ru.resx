@@ -123,6 +123,9 @@
   <data name="CompleteInterview" xml:space="preserve">
     <value>Интервью {0} завершено</value>
   </data>
+  <data name="RestartInterview" xml:space="preserve">
+    <value>Интервью {0} перезапущено</value>
+  </data>
   <data name="ApproveInterview" xml:space="preserve">
     <value>Интервью {0} подтверждено</value>
   </data>
@@ -230,7 +233,7 @@
   <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
     <value>{0} интервью частично отправлены</value>
   </data>
-  <data name="SwitchInterviewToCawiMode" xml:space="preserve">
-    <value>Интервью {0} переключено в режим CAWI</value>
+  <data name="SwitchInterviewMode" xml:space="preserve">
+    <value>Интервью {0} переключено в режим {1}</value>
   </data>
 </root>

@@ -33,7 +33,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
         private readonly ICommandService commandService;
         private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
         private readonly ILogger logger;
-        private readonly IAuditLogService auditLogService;
         private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly IUserInteractionService userInteractionService;
         private readonly ICalendarEventStorage calendarEventStorage;
@@ -54,7 +53,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             IJsonAllTypesSerializer serializer,
             ICalendarEventStorage calendarEventStorage) 
             : base(interviewerPrincipal, viewModelNavigationService, interviewRepository, commandService, logger,
-                userInteractionService, interviewsRepository, serializer)
+                userInteractionService, interviewsRepository, serializer, auditLogService)
         {
             this.assignmentsRepository = assignmentsRepository;
             this.interviewerPrincipal = interviewerPrincipal;
@@ -62,7 +61,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             this.commandService = commandService;
             this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
             this.logger = logger;
-            this.auditLogService = auditLogService;
             this.answerSerializer = answerSerializer;
             this.userInteractionService = userInteractionService;
             this.calendarEventStorage = calendarEventStorage;

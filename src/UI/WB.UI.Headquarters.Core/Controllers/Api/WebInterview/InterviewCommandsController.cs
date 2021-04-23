@@ -136,8 +136,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         [Route("requestWebInterview")]
         public IActionResult RequestWebInterview(Guid interviewId, [FromBody]RequestWebInterviewRequest completeInterviewRequest)
         {
-            ICommand command = new RequestWebInterviewCommand(interviewId, GetCommandResponsibleId(interviewId),
-                completeInterviewRequest.Comment);
+            ICommand command = new ChangeInterviewModeCommand(interviewId, GetCommandResponsibleId(interviewId), 
+                InterviewMode.CAWI, completeInterviewRequest.Comment);
                 
             this.commandService.Execute(command);
             return Ok();

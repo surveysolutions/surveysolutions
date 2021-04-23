@@ -467,8 +467,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<PauseInterviewCommand>(cmd => cmd.InterviewId, a => a.Pause)
                 .Handles<ResumeInterviewCommand>(cmd => cmd.InterviewId, a => a.Resume)
                 .Handles<OpenInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.OpenBySupervisor)
-                .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupervisor)
-                .Handles<RequestWebInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.ChangeInterviewMode(command.UserId, command.OriginDate, InterviewMode.CAWI, command.Comment));
+                .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupervisor);
             
             CommandRegistry
                 .Setup<CalendarEvent>()

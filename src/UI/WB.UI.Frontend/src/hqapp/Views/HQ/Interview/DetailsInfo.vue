@@ -12,12 +12,12 @@
 
                         <li id="detailsInfo_interviewMode">
                             <span class="data-label">{{this.$t('Details.InterviewMode')}}: </span>
-                            <span v-if="interviewMode == 2">
+                            <span v-if="interviewMode === 2">
                                 <button type="button"
                                     class="btn btn-link gray-action-unit"
-                                    @click="showModeDetails">CAWI</button>
+                                    @click="showModeDetails">{{this.$t('Common.Cawi')}}</button>
                             </span>
-                            <span v-else>CAPI</span>
+                            <span v-else>{{this.$t('Common.Capi')}}</span>
                         </li>
                     </ul>
                     <ul class="list-unstyled pull-left table-info">
@@ -202,7 +202,7 @@
 
         <ModalFrame ref="modeDetails"
             id="modeDetails">
-            <h3>{{$t("Details.InterviewMode")}}: {{interviewMode == 1? 'CAPI' : 'CAWI'}}</h3>
+            <h3>{{$t("Details.InterviewMode")}}: {{interviewMode === 2? this.$t('Common.Cawi') : this.$t('Common.Capi')}}</h3>
             <div>
                 <p>{{webLink}}</p>
             </div>

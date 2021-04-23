@@ -574,10 +574,11 @@ export default {
 
                         if(isUnfinished && data === true && row.webModeEnabledOnQuestionnaire === false) {
                             const title = self.$t('Assignments.WebModeEnabledWarning')
-                            return `<span class='text-danger' title='${title}'>CAWI</span>`
+                            const cawiMode = self.$t('Common.Cawi')
+                            return `<span class='text-danger' title='${title}'>${cawiMode}</span>`
                         }
 
-                        return data === false ? 'CAPI' : 'CAWI'
+                        return data === false ? this.$t('Common.Capi') : this.$t('Common.Cawi')
                     },
                 },
             ]

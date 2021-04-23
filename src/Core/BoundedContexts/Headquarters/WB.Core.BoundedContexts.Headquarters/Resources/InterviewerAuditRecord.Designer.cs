@@ -223,6 +223,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview {0} restarted.
+        /// </summary>
+        public static string RestartInterview {
+            get {
+                return ResourceManager.GetString("RestartInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show previous 7 active days.
         /// </summary>
         public static string ShowPrevious7Days {
@@ -232,11 +241,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview {0} switched to CAWI mode.
+        ///   Looks up a localized string similar to Interview {0} switched to {1} mode.
         /// </summary>
-        public static string SwitchInterviewToCawiMode {
+        public static string SwitchInterviewMode {
             get {
-                return ResourceManager.GetString("SwitchInterviewToCawiMode", resourceCulture);
+                return ResourceManager.GetString("SwitchInterviewMode", resourceCulture);
             }
         }
         

@@ -116,7 +116,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
           IStatefulInterviewRepository interviewRepository = null,
           ICommandService commandService = null,
           IPrincipal principal = null,
-          IPlainStorage<InterviewView> interviewsRepository = null)
+          IPlainStorage<InterviewView> interviewsRepository = null,
+          IAuditLogService auditLogService = null)
         {
             var loadingViewModel = new LoadingInterviewViewModel(
                 principal ?? Substitute.For<IPrincipal>(),
@@ -126,7 +127,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
                 logger: Mock.Of<ILogger>(),
                 interactionService: Mock.Of<IUserInteractionService>(),
                 interviewsRepository: interviewsRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
-                new JsonAllTypesSerializer());
+                new JsonAllTypesSerializer(),
+                auditLogService ?? Mock.Of<IAuditLogService>());
 
             return loadingViewModel;
         }

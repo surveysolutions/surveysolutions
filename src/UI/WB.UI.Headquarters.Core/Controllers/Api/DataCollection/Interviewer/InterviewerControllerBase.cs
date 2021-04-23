@@ -146,7 +146,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         public virtual async Task<IActionResult> CheckCompatibility(string deviceId, int deviceSyncProtocolVersion,
             string tenantId = null)
         {
-            if (this.hqConfig.Value.IgnoreCompatibility == false)
+            //if (this.hqConfig.Value.IgnoreCompatibility == false)
             {
                 int serverSyncProtocolVersion = this.syncVersionProvider.GetProtocolVersion();
                 int lastNonUpdatableSyncProtocolVersion = this.syncVersionProvider.GetLastNonUpdatableVersion();

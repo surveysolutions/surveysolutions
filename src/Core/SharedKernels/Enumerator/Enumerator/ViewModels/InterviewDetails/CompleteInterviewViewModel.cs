@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -151,9 +152,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             await this.commandService.WaitPendingCommandsAsync();
 
             ICommand completeInterview = this.RequestWebInterview
-            ? new RequestWebInterviewCommand(
+            ? new ChangeInterviewModeCommand(
                 interviewId: this.interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
+                InterviewMode.CAWI,
                 comment: this.Comment)
             : new CompleteInterviewCommand(
                 interviewId: this.interviewId,

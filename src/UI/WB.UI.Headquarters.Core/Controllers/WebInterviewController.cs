@@ -763,7 +763,6 @@ namespace WB.UI.Headquarters.Controllers
 
             if(interview == null)
             {
-                // TODO: Add link to non existing interview model
                 var model = GetLinkToWebInterviewModel(assignment);
                 return View(model);
             }

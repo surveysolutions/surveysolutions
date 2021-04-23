@@ -311,7 +311,7 @@ export default {
                         orderable: false,
                         title: this.$t('Dashboard.WebMode'),
                         render: function(data, type, row) {
-                            return data === true ? 'CAWI' : 'CAPI'
+                            return data === true ? self.$t('Common.Cawi') : self.$t('Common.Capi')
                         },
                     },
                 ],

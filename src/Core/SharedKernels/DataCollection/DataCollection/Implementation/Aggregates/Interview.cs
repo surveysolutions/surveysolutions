@@ -1812,6 +1812,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void ChangeInterviewMode(Guid userId, DateTimeOffset originDate, 
             InterviewMode mode, string comment = null)
         {
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
+                InterviewStatus.Created,
+                InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, 
+                InterviewStatus.Restarted, 
+                InterviewStatus.RejectedBySupervisor);
+
             this.ApplyEvent(new InterviewModeChanged(userId, originDate, mode, comment));
         }
 
