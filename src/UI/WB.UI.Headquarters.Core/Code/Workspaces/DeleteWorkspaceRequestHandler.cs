@@ -80,7 +80,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             await deleteService.ExecuteAsync(async (map, workspacesService) =>
             {
                 await map.DeleteAllMaps();
-                await workspacesService.DeleteAsync(workspace, cancellationToken);
+                workspacesService.Delete(workspace);
             }, workspace.Name);
 
             workspacesCache.InvalidateCache();
