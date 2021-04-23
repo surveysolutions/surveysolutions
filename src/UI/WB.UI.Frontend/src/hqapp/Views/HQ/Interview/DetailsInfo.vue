@@ -12,7 +12,7 @@
 
                         <li id="detailsInfo_interviewMode">
                             <span class="data-label">{{this.$t('Details.InterviewMode')}}: </span>
-                            <span v-if="interviewMode === 2">
+                            <span v-if="interviewinCawiMode">
                                 <button type="button"
                                     class="btn btn-link gray-action-unit"
                                     @click="showModeDetails">{{this.$t('Common.Cawi')}}</button>
@@ -202,7 +202,7 @@
 
         <ModalFrame ref="modeDetails"
             id="modeDetails">
-            <h3>{{$t("Details.InterviewMode")}}: {{interviewMode === 2? this.$t('Common.Cawi') : this.$t('Common.Capi')}}</h3>
+            <h3>{{$t("Details.InterviewMode")}}: {{interviewinCawiMode ? this.$t('Common.Cawi') : this.$t('Common.Capi')}}</h3>
             <div>
                 <p>{{webLink}}</p>
             </div>
@@ -336,8 +336,8 @@ export default {
                 ? convertToLocal(this.calendarEvent.startUtc, this.calendarEvent.startTimezone)
                 : ''
         },
-        interviewMode(){
-            return this.$config.model.interviewMode
+        interviewinCawiMode(){
+            return this.$config.model.interviewMode === 2
         },
         webLink(){
             return this.$config.model.webInterviewUrl ?? ''

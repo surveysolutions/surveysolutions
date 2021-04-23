@@ -146,64 +146,63 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         public virtual async Task<IActionResult> CheckCompatibility(string deviceId, int deviceSyncProtocolVersion,
             string tenantId = null)
         {
-            //if (this.hqConfig.Value.IgnoreCompatibility == false)
+            
+            int serverSyncProtocolVersion = this.syncVersionProvider.GetProtocolVersion();
+            int lastNonUpdatableSyncProtocolVersion = this.syncVersionProvider.GetLastNonUpdatableVersion();
+
+            if (deviceSyncProtocolVersion < lastNonUpdatableSyncProtocolVersion)
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
+
+            if (!UserIsFromThisTenant(tenantId))
             {
-                int serverSyncProtocolVersion = this.syncVersionProvider.GetProtocolVersion();
-                int lastNonUpdatableSyncProtocolVersion = this.syncVersionProvider.GetLastNonUpdatableVersion();
-
-                if (deviceSyncProtocolVersion < lastNonUpdatableSyncProtocolVersion)
-                    return StatusCode(StatusCodes.Status426UpgradeRequired);
-
-                if (!UserIsFromThisTenant(tenantId))
-                {
-                    return StatusCode(StatusCodes.Status409Conflict);
-                }
-
-                var serverApkBuildNumber = await interviewerVersionReader.InterviewerBuildNumber();
-                var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
-
-                if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)
-                {
-                    return StatusCode(StatusCodes.Status406NotAcceptable);
-                }
-
-                if (clientApkBuildNumber != null && this.syncVersionProvider.GetBlackListedBuildNumbers().Contains(clientApkBuildNumber.Value))
-                {
-                    return StatusCode(StatusCodes.Status426UpgradeRequired);
-                }
-
-                if (IsNeedUpdateAppBySettings(clientApkBuildNumber, serverApkBuildNumber))
-                {
-                    return StatusCode(StatusCodes.Status426UpgradeRequired);
-                }
-
-                if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResolvedCommentsIntroduced)
-                {
-                    return StatusCode(StatusCodes.Status426UpgradeRequired);
-                }
-
-                if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.WorkspacesIntroduced)
-                {
-                    if (this.authorizedUser.HasNonDefaultWorkspace)
-                    {
-                        return StatusCode(StatusCodes.Status426UpgradeRequired);
-                    }   
-                }
-                if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResetPasswordIntroduced)
-                {
-                    if (authorizedUser.PasswordChangeRequired)
-                        return StatusCode(StatusCodes.Status426UpgradeRequired);
-                }          
-                if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.MultiWorkspacesIntroduced)
-                {
-                    if (authorizedUser.Workspaces.Count() > 1)
-                        return StatusCode(StatusCodes.Status426UpgradeRequired);
-                }
-                if (deviceSyncProtocolVersion > serverSyncProtocolVersion)
-                {
-                    return StatusCode(StatusCodes.Status406NotAcceptable);
-                }
+                return StatusCode(StatusCodes.Status409Conflict);
             }
+
+            var serverApkBuildNumber = await interviewerVersionReader.InterviewerBuildNumber();
+            var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
+
+            if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable);
+            }
+
+            if (clientApkBuildNumber != null && this.syncVersionProvider.GetBlackListedBuildNumbers().Contains(clientApkBuildNumber.Value))
+            {
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }
+
+            if (IsNeedUpdateAppBySettings(clientApkBuildNumber, serverApkBuildNumber))
+            {
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }
+
+            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResolvedCommentsIntroduced)
+            {
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }
+
+            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.WorkspacesIntroduced)
+            {
+                if (this.authorizedUser.HasNonDefaultWorkspace)
+                {
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
+                }   
+            }
+            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResetPasswordIntroduced)
+            {
+                if (authorizedUser.PasswordChangeRequired)
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }          
+            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.MultiWorkspacesIntroduced)
+            {
+                if (authorizedUser.Workspaces.Count() > 1)
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }
+            if (deviceSyncProtocolVersion > serverSyncProtocolVersion)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable);
+            }
+            
             return this.userToDeviceService.GetLinkedDeviceId(this.authorizedUser.Id) != deviceId
                 ? (IActionResult)StatusCode(StatusCodes.Status403Forbidden, new { Message = "relinked" })
                 : new JsonResult("449634775");
