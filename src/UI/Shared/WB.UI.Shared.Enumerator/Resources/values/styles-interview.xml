@@ -116,6 +116,13 @@
     <item name="android:letterSpacing">0.1</item>
   </style>
 
+  <style name="Interview_Complete_Screen_Web_Interview_Link" parent="Interview_Complete_Screen_Text">
+      <item name="android:textAllCaps">false</item>
+      <item name="android:textStyle">bold</item>
+      <item name="android:textColor">@color/complete_screen_statistics_web_interview_link_color</item>
+      <item name="android:textSize">@dimen/textsize_16</item>
+  </style>
+
   <style name="Interview_Complete_Screen_Statistics_Column">
     <item name="android:layout_width">@dimen/zero</item>
     <item name="android:layout_weight">1</item>

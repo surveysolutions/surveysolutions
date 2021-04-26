@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         QuestionnaireIdentity QuestionnaireIdentity { get; }
         string QuestionnaireId { get; }
         InterviewStatus Status { get; }
+        InterviewMode Mode { get; }
         bool IsDeleted { get; }
         bool WasCompleted { get; }
         bool WasRejected { get; }
@@ -188,6 +189,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Identity> FindEntity(Guid id);
 
         bool AcceptsInterviewerAnswers();
+        bool AcceptsCAWIAnswers();
 
         IReadOnlyCollection<IInterviewTreeNode> GetAllSections();
 

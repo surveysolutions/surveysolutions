@@ -91,7 +91,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     dashboardNotifications: dashboardNotifications ?? Create.ViewModel.DashboardNotificationsViewModel(),
                     workspaceService: Mock.Of<IWorkspaceService>(),
                     onlineSynchronizationService: Mock.Of<IOnlineSynchronizationService>(),
-                    memoryCacheSource: Mock.Of<IWorkspaceMemoryCacheSource>());
+                    memoryCacheSource: Mock.Of<IWorkspaceMemoryCacheSource>(),
+                    webInterviews: DashboardWebInterviewsViewModel());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();
@@ -121,6 +122,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 
         private static RejectedInterviewsViewModel DashboardRejectedInterviewsViewModel()
             => new RejectedInterviewsViewModel(
+                Substitute.For<IPlainStorage<InterviewView>>(),
+                Substitute.For<IInterviewViewModelFactory>(),
+                Substitute.For<IPlainStorage<PrefilledQuestionView>>(),
+                Substitute.For<IPrincipal>());
+
+        private static WebInterviewsViewModel DashboardWebInterviewsViewModel()
+            => new WebInterviewsViewModel(
                 Substitute.For<IPlainStorage<InterviewView>>(),
                 Substitute.For<IInterviewViewModelFactory>(),
                 Substitute.For<IPlainStorage<PrefilledQuestionView>>(),

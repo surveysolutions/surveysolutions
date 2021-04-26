@@ -19,6 +19,12 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string ResumeButton { get; set; }
     }
 
+    public class LinkToWebInterview : StartOrResumeWebInterview
+    {
+        public string LinkWelcome { get; set; }
+        public string LinkInvitation { get; set; }
+    }
+
     public class StartOrResumeWebInterview
     {
         public string RecaptchaSiteKey { get; set; }

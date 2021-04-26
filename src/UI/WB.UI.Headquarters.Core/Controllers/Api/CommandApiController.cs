@@ -85,7 +85,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 try
                 {
                     ICommand concreteCommand = this.commandDeserializer.Deserialize(request.Type, request.Command);
-                    ICommand transformedCommand = this.commandTransformator.TransformCommnadIfNeeded(concreteCommand);
+                    ICommand transformedCommand = this.commandTransformator.TransformCommandIfNeeded(concreteCommand);
 
                     switch (transformedCommand)
                     {
@@ -116,6 +116,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                         case HqApproveInterviewCommand approveInterview:
                             this.commandService.Execute(transformedCommand);
                             CompleteCalendarEventIfExists(approveInterview.InterviewId, approveInterview.UserId);
+                            break;
+                        case ChangeInterviewModeCommand changeInterviewMode:
+                            this.commandService.Execute(changeInterviewMode);
                             break;
                         default:
                             this.commandService.Execute(transformedCommand);

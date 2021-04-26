@@ -494,4 +494,10 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="Progress" xml:space="preserve">
     <value>Заполнение</value>
   </data>
+  <data name="SwitchToWebMode" xml:space="preserve">
+    <value>Переключить в режим Веб</value>
+  </data>
+  <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
+    <value>Следующая ссылка может быть использована, чтобы продолжить интервью</value>
+  </data>
 </root>

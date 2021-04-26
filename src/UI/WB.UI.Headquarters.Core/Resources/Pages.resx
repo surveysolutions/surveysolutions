@@ -1658,4 +1658,10 @@
   <data name="ExposedVariables_ChangeMessage" xml:space="preserve">
     <value>You are changing the set of exposed variables. It will take some time to update the reports.</value>
   </data>
+  <data name="Filters_InterviewMode" xml:space="preserve">
+    <value>Interview Mode</value>
+  </data>
+  <data name="Filters_InterviewModePlaceHolder" xml:space="preserve">
+    <value>All interview modes</value>
+  </data>
 </root>

@@ -7,6 +7,7 @@ using Android.OS;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator.Utils;
@@ -231,6 +232,24 @@ namespace WB.UI.Shared.Enumerator.Services
         public void SetPartialSynchronizationEnabled(bool enable)
         {
             this.SaveCurrentSettings(settings => { settings.PartialSynchronizationEnabled = enable; });
+        }
+
+        public List<QuestionnaireIdentity> QuestionnairesInWebMode => 
+            string.IsNullOrWhiteSpace(this.CurrentWorkspaceSettings.QuestionnairesInWebMode)
+                ? new List<QuestionnaireIdentity>()
+                : this.CurrentWorkspaceSettings.QuestionnairesInWebMode.Split(',')
+                    .Select(QuestionnaireIdentity.Parse).ToList();
+
+        public string WebInterviewUriTemplate => this.CurrentWorkspaceSettings.WebInterviewUriTemplate;
+
+        public void SetQuestionnaireInWebMode(List<string> questionnairesInWebMode)
+        {
+            this.SaveCurrentSettings(settings => settings.QuestionnairesInWebMode = string.Join(",", questionnairesInWebMode));
+        }
+
+        public void SetWebInterviewUrlTemplate(string webInterviewUriTemplate)
+        {
+            this.SaveCurrentSettings(settings => settings.WebInterviewUriTemplate = webInterviewUriTemplate);
         }
     }
 }

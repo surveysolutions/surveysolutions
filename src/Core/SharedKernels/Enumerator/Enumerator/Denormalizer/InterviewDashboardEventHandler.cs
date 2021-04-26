@@ -29,6 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<SynchronizationMetadataApplied>,
                                          IEventHandler<InterviewSynchronized>,
                                          IEventHandler<InterviewStatusChanged>,
+                                         IEventHandler<InterviewModeChanged>,
                                          IEventHandler<InterviewHardDeleted>,
                                          IEventHandler<InterviewerAssigned>,
                                          IEventHandler<SupervisorAssigned>,
@@ -662,6 +663,16 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 Answer = stringValue,
             };
             return prefilledView;
+        }
+
+        public void Handle(IPublishedEvent<InterviewModeChanged> evnt)
+        {
+            InterviewView interviewView = this.interviewViewRepository.GetById(evnt.EventSourceId.FormatGuid());
+            if (interviewView == null)
+                return;
+
+            interviewView.Mode = evnt.Payload.Mode;
+            this.interviewViewRepository.Store(interviewView);
         }
     }
 }

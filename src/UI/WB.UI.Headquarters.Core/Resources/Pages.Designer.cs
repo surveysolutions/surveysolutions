@@ -1105,6 +1105,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview Mode.
+        /// </summary>
+        public static string Filters_InterviewMode {
+            get {
+                return ResourceManager.GetString("Filters_InterviewMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All interview modes.
+        /// </summary>
+        public static string Filters_InterviewModePlaceHolder {
+            get {
+                return ResourceManager.GetString("Filters_InterviewModePlaceHolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filters.
         /// </summary>
         public static string FilterTitle {

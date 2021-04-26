@@ -271,7 +271,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerId, 
                 interviewKey, 
                 assignmentId,
-                false);
+                false,
+                InterviewMode.CAPI);
         }
 
         public CreateInterview CreateInterview(Guid? questionnaireId = null,

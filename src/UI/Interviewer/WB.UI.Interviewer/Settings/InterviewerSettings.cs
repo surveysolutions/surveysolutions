@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq;
 using Android.App;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -70,15 +71,15 @@ namespace WB.UI.Interviewer.Settings
         {
             Id = "settings",
             Endpoint = string.Empty,
-            HttpResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout),
-            EventChunkSize = Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize),
-            CommunicationBufferSize = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize),
-            GpsResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.GpsReceiveTimeoutSec),
-            GpsDesiredAccuracy = Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy),
-            VibrateOnError = Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError),
+            HttpResponseTimeoutInSec = Application.Context.Resources?.GetInteger(Resource.Integer.HttpResponseTimeout) ?? 1200,
+            EventChunkSize = Application.Context.Resources? .GetInteger(Resource.Integer.EventChunkSize) ?? 1000,
+            CommunicationBufferSize = Application.Context.Resources?.GetInteger(Resource.Integer.BufferSize) ?? 4096,
+            GpsResponseTimeoutInSec = Application.Context.Resources?.GetInteger(Resource.Integer.GpsReceiveTimeoutSec) ?? 30,
+            GpsDesiredAccuracy = Application.Context.Resources?.GetInteger(Resource.Integer.GpsDesiredAccuracy) ?? 50,
+            VibrateOnError = Application.Context.Resources?.GetBoolean(Resource.Boolean.VibrateOnError) ?? true
         };
         
-        private ApplicationWorkspaceSettingsView currentWorkspaceSettings
+        private ApplicationWorkspaceSettingsView? currentWorkspaceSettings
         {
             get
             {
@@ -89,24 +90,24 @@ namespace WB.UI.Interviewer.Settings
                 return this.workspaceSettingsStorage.GetById(workspace) ?? new ApplicationWorkspaceSettingsView()
                 {
                     Id = workspace,
-                    AllowSyncWithHq = Application.Context.Resources.GetBoolean(Resource.Boolean.AllowSyncWithHq)
+                    AllowSyncWithHq = Application.Context.Resources?.GetBoolean(Resource.Boolean.AllowSyncWithHq)
                 };
             }
         }
 
 
         protected override EnumeratorSettingsView CurrentSettings => this.currentSettings;
-        protected override EnumeratorWorkspaceSettingsView CurrentWorkspaceSettings => this.currentWorkspaceSettings;
+        protected override EnumeratorWorkspaceSettingsView? CurrentWorkspaceSettings => this.currentWorkspaceSettings;
 
-        public override bool VibrateOnError => this.currentSettings.VibrateOnError ?? Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError);
+        public override bool VibrateOnError => this.currentSettings.VibrateOnError ?? Application.Context.Resources?.GetBoolean(Resource.Boolean.VibrateOnError) ?? true;
 
-        public override double GpsDesiredAccuracy => this.currentSettings.GpsDesiredAccuracy.GetValueOrDefault(Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy));
+        public override double GpsDesiredAccuracy => this.currentSettings.GpsDesiredAccuracy.GetValueOrDefault(Application.Context.Resources?.GetInteger(Resource.Integer.GpsDesiredAccuracy) ?? 50);
 
         public override bool ShowLocationOnMap => this.currentSettings.ShowLocationOnMap.GetValueOrDefault(true);
 
         public override int GpsReceiveTimeoutSec => this.currentSettings.GpsResponseTimeoutInSec;
 
-        public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize));
+        public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources?.GetInteger(Resource.Integer.EventChunkSize) ?? 1000);
 
         public bool AllowSyncWithHq => this.currentWorkspaceSettings?.AllowSyncWithHq ?? true;
         public bool IsOfflineSynchronizationDone => this.currentWorkspaceSettings?.IsOfflineSynchronizationDone ?? false;
@@ -118,7 +119,7 @@ namespace WB.UI.Interviewer.Settings
                settings.IsOfflineSynchronizationDone = true;
             });
         }
-
+        
         public void SetGpsResponseTimeout(int timeout)
         {
             this.SaveCurrentSettings(settings =>
@@ -169,6 +170,9 @@ namespace WB.UI.Interviewer.Settings
         private void SaveCurrentSettings(Action<ApplicationWorkspaceSettingsView> onChanging)
         {
             var settings = this.currentWorkspaceSettings;
+            if (settings == null)
+                throw new InvalidOperationException("Saving workspace settings outside a workspace is not valid.");
+            
             onChanging(settings);
             SaveSettings(settings);
         }

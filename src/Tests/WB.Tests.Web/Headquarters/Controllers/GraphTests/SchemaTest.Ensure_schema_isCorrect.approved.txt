@@ -163,6 +163,8 @@ type Interview {
   assignmentId: Int!
   id: ID!
   status: InterviewStatus!
+  "Current mode of interview"
+  interviewMode: InterviewMode!
   "Login of current responsible user"
   responsibleName: String!
   responsibleId: Uuid!
@@ -192,6 +194,8 @@ type Interview {
   notAnsweredCount: Int
   "Active Calendar Event associated with interview"
   calendarEvent: CalendarEvent
+  "Link for interview in CAWI mode"
+  cawiLink: String
 }
 
 type Map {
@@ -441,6 +445,13 @@ input IdentifyEntityValueFilter {
   isEnabled: BooleanOperationFilterInput
 }
 
+input InterviewModeOperationFilterInput {
+  eq: InterviewMode
+  neq: InterviewMode
+  in: [InterviewMode!]
+  nin: [InterviewMode!]
+}
+
 input InterviewSort {
   key: SortEnumType
   createdDate: SortEnumType
@@ -468,6 +479,7 @@ input InterviewsFilter {
   and: [InterviewsFilter!]
   or: [InterviewsFilter!]
   status: InterviewStatusOperationFilterInput
+  interviewMode: InterviewModeOperationFilterInput
   questionnaireId: ComparableGuidOperationFilterInput
   questionnaireVariable: StringOperationFilterInput
   questionnaireVersion: ComparableInt64OperationFilterInput
@@ -633,6 +645,14 @@ enum InterviewActionFlags {
   CANBEREJECTED
   CANBERESTARTED
   CANBEOPENED
+  CANCHANGETOCAPI
+  CANCHANGETOCAWI
+}
+
+enum InterviewMode {
+  UNKNOWN
+  CAPI
+  CAWI
 }
 
 enum InterviewStatus {

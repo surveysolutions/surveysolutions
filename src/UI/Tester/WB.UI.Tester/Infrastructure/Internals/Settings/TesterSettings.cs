@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Android.App;
 using Android.Content;
 using AndroidX.Preference;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Settings
@@ -159,5 +160,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         {
             throw new NotImplementedException();
         }
+
+        public List<QuestionnaireIdentity> QuestionnairesInWebMode { get; }
+        public string WebInterviewUriTemplate { get; }
     }
 }

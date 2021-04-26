@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
@@ -13,5 +14,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         bool PartialSynchronizationEnabled { get; }
         void SetPartialSynchronizationEnabled(bool enable);
+        void SetQuestionnaireInWebMode(List<string> tabletSettingsQuestionnairesInWebMode);
+        void SetWebInterviewUrlTemplate(string tabletSettingsWebInterviewUrlTemplate);
     }
 }

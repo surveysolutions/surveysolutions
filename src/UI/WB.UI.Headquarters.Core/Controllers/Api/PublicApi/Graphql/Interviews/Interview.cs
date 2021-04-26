@@ -5,6 +5,7 @@ using HotChocolate.Types;
 using Main.Core.Entities.SubEntities;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -35,7 +36,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             
             descriptor.Field(x => x.Status)
                 .Type<NonNullType<EnumType<InterviewStatus>>>();
-            
+
+            descriptor.Field(x => x.InterviewMode)
+                .Type<NonNullType<EnumType<InterviewMode>>>();
+
             descriptor.Field(x => x.ResponsibleName).Type<NonNullType<StringType>>()
                 .Description("Login of current responsible user");
             
@@ -81,6 +85,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.QuestionnaireVariable).Type<NonNullType<StringType>>();
             descriptor.Field(x => x.QuestionnaireVersion).Type<NonNullType<LongType>>();
             
+
             descriptor.Field(x => x.IdentifyEntitiesValues)
                 .Name("identifyingData")
                 .Description("Information that identifies each assignment. These are the answers to questions marked as identifying in Designer")
@@ -92,7 +97,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                         var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
                             .Where(a => keys.Contains(a.InterviewSummary.SummaryId) && a.Identifying)
                             .OrderBy(a => a.Position)
-                            .ToListAsync()
+                            .ToListAsync(cancellationToken: token)
                             .ConfigureAwait(false);
                         
                         var answers = questionAnswers
@@ -122,6 +127,26 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                                              && x.CompletedAtUtc == null
                                              && x.DeletedAtUtc == null);
                        return calendarEvent;
+                });
+
+            descriptor.Field(x => x.InterviewMode)
+                .Description("Current mode of interview")
+                .Type<NonNullType<EnumType<InterviewMode>>>();
+
+            descriptor.Field("cawiLink")
+                .Description("Link for interview in CAWI mode")
+                .Type<StringType>()
+                .Resolve(context =>
+                {
+                    var provider = context.Service<IWebInterviewLinkProvider>()!;
+                    var summary = context.Parent<InterviewSummary>()!;
+
+                    if (summary.InterviewMode == InterviewMode.CAWI)
+                    {
+                        return provider.WebInterviewRequestLink(summary.AssignmentId.ToString(), summary.SummaryId);
+                    }
+
+                    return null;
                 });
         }
     }

@@ -25,5 +25,6 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public TimeSpan? InterviewDuration { get; set; }
         public int? AssignmentId { get; set; }
         public DateTime UpdatedAtUtc { get; set; }
+        public string WebInterviewUrl { get; set; }
     }
 }

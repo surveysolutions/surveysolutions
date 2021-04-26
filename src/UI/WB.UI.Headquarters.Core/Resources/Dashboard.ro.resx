@@ -235,7 +235,7 @@
     <value>Vă rugăm să introduceți '{{questionnaireTitle}}' pentru a confirma</value>
   </data>
   <data name="WebMode" xml:space="preserve">
-    <value>Modul WEB</value>
+    <value>Modul</value>
   </data>
   <data name="MapDashboard" xml:space="preserve">
     <value>Tablou de bord hartă</value>

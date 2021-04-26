@@ -560,7 +560,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.WasCompleted = true;
             this.properties.CompletedDate = @event.OriginDate ?? @event.CompleteTime;
         }
-
+        
         protected virtual void Apply(InterviewRestarted @event) { }
 
         protected virtual void Apply(InterviewApproved @event) { }
@@ -602,6 +602,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).RemoveAnswer();
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
+        }
+
+        protected virtual void Apply(InterviewModeChanged @event)
+        {
+            this.properties.Mode = @event.Mode;
         }
 
         #endregion
@@ -1156,6 +1161,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.UserId, command.OriginDate));
             this.ApplyEvent(new InterviewKeyAssigned(new InterviewKey(0), command.OriginDate));
+            this.ApplyEvent(command.InterviewModeChanged(InterviewMode.CAPI));
 
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null,
                 previousStatus: InterviewStatus.SupervisorAssigned, originDate: command.OriginDate));
@@ -1190,7 +1196,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId, command.OriginDate));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null, previousStatus: null, originDate: command.OriginDate));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, 
+                comment: null, previousStatus: null, originDate: command.OriginDate));
+            this.ApplyEvent(command.InterviewModeChanged(command.Mode));
 
             if (command.InterviewerId.HasValue)
             {
@@ -1799,6 +1807,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewDeclaredValid(originDate));
             else
                 this.ApplyEvent(new InterviewDeclaredInvalid(originDate));
+        }
+
+        public void ChangeInterviewMode(Guid userId, DateTimeOffset originDate, 
+            InterviewMode mode, string comment = null)
+        {
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
+                InterviewStatus.Created,
+                InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, 
+                InterviewStatus.Restarted, 
+                InterviewStatus.RejectedBySupervisor);
+
+            this.ApplyEvent(new InterviewModeChanged(userId, originDate, mode, comment));
         }
 
         #endregion

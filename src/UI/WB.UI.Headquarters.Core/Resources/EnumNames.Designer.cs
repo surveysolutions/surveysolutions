@@ -232,6 +232,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invitation.
+        /// </summary>
+        public static string WebInterviewUserMessages_LinkInvitation {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_LinkInvitation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome Header.
+        /// </summary>
+        public static string WebInterviewUserMessages_LinkWelcome {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_LinkWelcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resume.
         /// </summary>
         public static string WebInterviewUserMessages_ResumeButton {

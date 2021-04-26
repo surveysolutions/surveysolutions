@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
 {
@@ -35,5 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void SetLastOpenedMapName(string mapName);
         bool DashboardViewsUpdated { get; }
         void SetDashboardViewsUpdated(bool updated);
+
+        List<QuestionnaireIdentity> QuestionnairesInWebMode { get; }
+        string WebInterviewUriTemplate { get; }
     }
 }

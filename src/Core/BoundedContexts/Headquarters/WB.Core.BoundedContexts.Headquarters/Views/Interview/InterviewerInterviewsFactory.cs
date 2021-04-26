@@ -8,10 +8,8 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -20,20 +18,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly IHeadquartersEventStore eventStore;
 
         public InterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IStatefulInterviewRepository statefulInterviewRepository,
             IInterviewPackagesService incomingSyncPackagesQueue,
             IHeadquartersEventStore eventStore)
         {
             this.reader = reader;
-            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.statefulInterviewRepository = statefulInterviewRepository;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;            
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.eventStore = eventStore;
         }
@@ -78,9 +73,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return filteredInterviews;
         }
 
-        private readonly Expression<Func<InterviewSummary, bool>> ForInterviewer = summary => 
-            summary.Status == InterviewStatus.InterviewerAssigned 
-            || summary.Status == InterviewStatus.RejectedBySupervisor;
+        private readonly Expression<Func<InterviewSummary, bool>> ForInterviewer =
+            summary =>
+                summary.InterviewMode != InterviewMode.CAWI &&
+                (summary.Status == InterviewStatus.InterviewerAssigned
+                 || summary.Status == InterviewStatus.RejectedBySupervisor);
 
         public bool HasAnyInterviewsInProgressWithResolvedCommentsForInterviewer(Guid authorizedUserId)
         {
@@ -122,7 +119,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var processigPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
 
             var inProgressInterviews = this.reader.Query(interviews =>
-                interviews.Where(interview => 
+                interviews
+                    .Where(interview => interview.InterviewMode != InterviewMode.CAWI)
+                    .Where(interview =>
                         ( // assigned on supervisor
                             interview.ResponsibleId == supervisorId &&
                             (interview.Status == InterviewStatus.SupervisorAssigned || interview.Status == InterviewStatus.RejectedByHeadquarters)

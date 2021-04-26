@@ -505,4 +505,10 @@ Contact support for assistance.</value>
   <data name="Progress" xml:space="preserve">
     <value>Progress</value>
   </data>
+  <data name="SwitchToWebMode" xml:space="preserve">
+    <value>Switch interview to Web Mode</value>
+  </data>
+  <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
+    <value>The following link could be used to continue this interview</value>
+  </data>
 </root>

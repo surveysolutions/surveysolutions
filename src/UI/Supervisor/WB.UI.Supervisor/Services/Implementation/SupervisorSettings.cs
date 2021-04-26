@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using Android.App;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views;
@@ -55,14 +56,14 @@ namespace WB.UI.Supervisor.Services.Implementation
         {
             Id = "settings",
             Endpoint = string.Empty,
-            HttpResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout),
-            EventChunkSize = Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize),
-            CommunicationBufferSize = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize),
-            ShowLocationOnMap = Application.Context.Resources.GetBoolean(Resource.Boolean.ShowLocationOnMap),
-            DownloadUpdatesForInterviewerApp = Application.Context.Resources.GetBoolean(Resource.Boolean.DownloadUpdatesForInterviewerApp),
+            HttpResponseTimeoutInSec = Application.Context.Resources?.GetInteger(Resource.Integer.HttpResponseTimeout) ?? 1200,
+            EventChunkSize = Application.Context.Resources?.GetInteger(Resource.Integer.EventChunkSize),
+            CommunicationBufferSize = Application.Context.Resources?.GetInteger(Resource.Integer.BufferSize) ?? 4096,
+            ShowLocationOnMap = Application.Context.Resources?.GetBoolean(Resource.Boolean.ShowLocationOnMap) ?? true,
+            DownloadUpdatesForInterviewerApp = Application.Context.Resources?.GetBoolean(Resource.Boolean.DownloadUpdatesForInterviewerApp),
         };
 
-        private ApplicationWorkspaceSettingsView currentWorkspaceSettings
+        private ApplicationWorkspaceSettingsView? currentWorkspaceSettings
         {
             get
             {
@@ -78,8 +79,8 @@ namespace WB.UI.Supervisor.Services.Implementation
         }
 
         protected override EnumeratorSettingsView CurrentSettings => this.currentSettings;
-        protected override EnumeratorWorkspaceSettingsView CurrentWorkspaceSettings => this.currentWorkspaceSettings;
-        public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize));
+        protected override EnumeratorWorkspaceSettingsView? CurrentWorkspaceSettings => this.currentWorkspaceSettings;
+        public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources?.GetInteger(Resource.Integer.EventChunkSize) ?? 1000);
         public override double GpsDesiredAccuracy => throw new NotImplementedException();
         public override bool VibrateOnError => false;
         public override bool ShowLocationOnMap => this.currentSettings.ShowLocationOnMap;

@@ -45,6 +45,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public CreateNewViewModel CreateNew { get; }
         public StartedInterviewsViewModel StartedInterviews { get; }
         public CompletedInterviewsViewModel CompletedInterviews { get; }
+        public WebInterviewsViewModel WebInterviews { get; }
         public RejectedInterviewsViewModel RejectedInterviews { get; }
         public IUserInteractionService UserInteractionService { get; }
         public IGoogleApiService GoogleApiService { get; }
@@ -70,7 +71,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             DashboardNotificationsViewModel dashboardNotifications,
             IWorkspaceService workspaceService,
             IOnlineSynchronizationService onlineSynchronizationService,
-            IWorkspaceMemoryCacheSource memoryCacheSource) : base(principal, viewModelNavigationService, permissionsService,
+            IWorkspaceMemoryCacheSource memoryCacheSource,
+            WebInterviewsViewModel webInterviews ) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection)
         {
             this.messenger = messenger;
@@ -81,7 +83,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.syncClient = syncClient;
             this.Synchronization = synchronization;
             this.DashboardNotifications = dashboardNotifications;
-
+            
             this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(async r =>
             {
                 await this.RefreshDashboard();
@@ -91,6 +93,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.StartedInterviews = startedInterviewsViewModel;
             this.CompletedInterviews = completedInterviewsViewModel;
             this.RejectedInterviews = rejectedInterviewsViewModel;
+            this.WebInterviews = webInterviews;
+
             UserInteractionService = userInteractionService;
             GoogleApiService = googleApiService;
             this.mapInteractionService = mapInteractionService;
@@ -105,10 +109,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.OnProgressChanged += Synchronization_OnProgressChanged;
             this.StartedInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
             this.CompletedInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
+            this.WebInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
+
             this.StartedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.RejectedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.CompletedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded += this.OnItemsLoaded;
+            this.WebInterviews.OnItemsLoaded += this.OnItemsLoaded;
         }
 
         public DashboardNotificationsViewModel DashboardNotifications { get; set; }
@@ -227,7 +234,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private int NumberOfAssignedInterviews => this.StartedInterviews.ItemsCount
                                                   + this.CompletedInterviews.ItemsCount
-                                                  + this.RejectedInterviews.ItemsCount;
+                                                  + this.RejectedInterviews.ItemsCount
+                                                  + this.WebInterviews.ItemsCount;
 
         public LocalSynchronizationViewModel Synchronization { get; set; }
 
@@ -243,8 +251,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         private void OnItemsLoaded(object sender, EventArgs e) =>
-            this.IsInProgress = !(this.StartedInterviews.IsItemsLoaded && this.RejectedInterviews.IsItemsLoaded &&
-                                  this.CompletedInterviews.IsItemsLoaded && this.CreateNew.IsItemsLoaded);
+            this.IsInProgress = !(this.StartedInterviews.IsItemsLoaded
+                                  && this.RejectedInterviews.IsItemsLoaded
+                                  && this.CompletedInterviews.IsItemsLoaded
+                                  && this.CreateNew.IsItemsLoaded
+                                  && this.WebInterviews.IsItemsLoaded);
 
         private async Task RefreshDashboard(Guid? lastVisitedInterviewId = null)
         {
@@ -253,7 +264,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             await Task.WhenAll(this.CreateNew.LoadAsync(this.Synchronization),
                 this.StartedInterviews.LoadAsync(lastVisitedInterviewId),
                 this.RejectedInterviews.LoadAsync(lastVisitedInterviewId),
-                this.CompletedInterviews.LoadAsync(lastVisitedInterviewId));
+                this.CompletedInterviews.LoadAsync(lastVisitedInterviewId),
+                this.WebInterviews.LoadAsync(lastVisitedInterviewId));
             
             DashboardNotifications.CheckTabletTimeAndWarn();
 
@@ -271,15 +283,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             var interviewView = this.interviewsRepository.GetById(lastVisitedInterviewId.FormatGuid());
             if (interviewView == null) return;
 
-            if (interviewView.Status == InterviewStatus.RejectedBySupervisor)
-                this.TypeOfInterviews = this.RejectedInterviews.InterviewStatus;
-
-            if (interviewView.Status == InterviewStatus.Completed)
-                this.TypeOfInterviews = this.CompletedInterviews.InterviewStatus;
-
-            if (interviewView.Status == InterviewStatus.InterviewerAssigned ||
-                interviewView.Status == InterviewStatus.Restarted)
-                this.TypeOfInterviews = this.StartedInterviews.InterviewStatus;
+            this.TypeOfInterviews = (interviewView.Mode, interviewView.Status) switch
+            {
+                (InterviewMode.CAPI, InterviewStatus.RejectedBySupervisor) => this.RejectedInterviews.InterviewStatus,
+                (InterviewMode.CAPI, InterviewStatus.Completed) => this.CompletedInterviews.InterviewStatus,
+                (InterviewMode.CAPI, InterviewStatus.InterviewerAssigned) => this.StartedInterviews.InterviewStatus,
+                (InterviewMode.CAPI, InterviewStatus.Restarted) => this.StartedInterviews.InterviewStatus,
+                (InterviewMode.CAWI, InterviewStatus.InterviewerAssigned) => this.WebInterviews.InterviewStatus,
+                (InterviewMode.CAWI, InterviewStatus.Completed) => this.WebInterviews.InterviewStatus,
+                (InterviewMode.CAWI, InterviewStatus.RejectedBySupervisor) => this.WebInterviews.InterviewStatus,
+                (InterviewMode.CAWI, InterviewStatus.Restarted) => this.WebInterviews.InterviewStatus,
+                _ => this.TypeOfInterviews
+            };
         }
 
         private void RunSynchronization()
@@ -328,9 +343,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.StartedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
             this.CompletedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
+            this.WebInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
             this.StartedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
             this.RejectedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
             this.CompletedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
+            this.WebInterviews.OnItemsLoaded -= this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded -= this.OnItemsLoaded;
             this.Synchronization.OnCancel -= this.Synchronization_OnCancel;
             this.Synchronization.OnProgressChanged -= this.Synchronization_OnProgressChanged;

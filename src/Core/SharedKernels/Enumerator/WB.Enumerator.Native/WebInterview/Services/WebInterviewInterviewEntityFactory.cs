@@ -100,6 +100,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 {
                     opts.AfterMap((g, sidebarPanel) =>
                     {
+                        if(g == null)
+                            return;
+
                         sidebarPanel.Status = this.CalculateSimpleStatus(g, isReviewMode, interview, questionnaire);
 
                         this.ApplyValidity(sidebarPanel.Validity, sidebarPanel.Status);

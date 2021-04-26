@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
         IUpdateHandler<InterviewSummary, InterviewOnClientCreated>,
         IUpdateHandler<InterviewSummary, InterviewStatusChanged>,
+        IUpdateHandler<InterviewSummary, InterviewModeChanged>,
         IUpdateHandler<InterviewSummary, SupervisorAssigned>,
         IUpdateHandler<InterviewSummary, TextQuestionAnswered>,
         IUpdateHandler<InterviewSummary, MultipleOptionsQuestionAnswered>,
@@ -593,6 +594,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                         interview.AnswerFeaturedVariable(variableId, changedVariable.NewValue, varType);
                     }
                 }
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewModeChanged> @event)
+        {
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
+            {
+                interview.InterviewMode = @event.Payload.Mode;
             });
         }
     }

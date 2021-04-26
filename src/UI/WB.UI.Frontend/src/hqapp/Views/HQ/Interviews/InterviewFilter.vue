@@ -113,22 +113,22 @@ export default {
             if (this.item.entityType == 'VARIABLE') {
                 return [
                     { id: 'valueLowerCase|startsWith', value: this.$t('Common.StartsWith') },
-                    { id: 'valueLowerCase|eq', value: this.$t('Common.Equals') },
+                    { id: 'valueLowerCase|eq', value: this.$t('Common.EqualValues') },
                 ]
             }
 
             switch(this.item.type) {
                 case 'SINGLEOPTION': return [
-                    { id: 'answerCode|eq', value: this.$t('Common.Equals') },
+                    { id: 'answerCode|eq', value: this.$t('Common.EqualValues') },
                     { id: 'answerCode|neq', value: this.$t('Common.NotEquals') },
                 ]
                 case 'TEXT': return [
                     { id: 'valueLowerCase|startsWith', value: this.$t('Common.StartsWith') },
-                    { id: 'valueLowerCase|eq', value: this.$t('Common.Equals') },
+                    { id: 'valueLowerCase|eq', value: this.$t('Common.EqualValues') },
 
                 ]
                 case 'NUMERIC': return [
-                    { id: 'value|eq', value: this.$t('Common.Equals')},
+                    { id: 'value|eq', value: this.$t('Common.EqualValues')},
                 ]}
             return null
         },

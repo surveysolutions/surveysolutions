@@ -77,6 +77,16 @@
                 </div>
             </FilterBlock>
 
+            <FilterBlock :title="$t('Pages.Filters_InterviewMode')">
+                <Typeahead
+                    no-search
+                    control-id="responsibleId"
+                    :placeholder="$t('Pages.Filters_InterviewModePlaceHolder')"
+                    :value="interviewMode"
+                    :values="interviewModes"
+                    v-on:selected="inteviewModeSelected"></Typeahead>
+            </FilterBlock>
+
             <InterviewFilter slot="additional"
                 :questionnaireId="where.questionnaireId"
                 :questionnaireVersion="where.questionnaireVersion"
@@ -130,6 +140,16 @@
                         v-if="selectedRows.length && !config.isSupervisor"
                         :disabled="getFilteredToUnApprove().length == 0"
                         @click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
+                    <button
+                        class="btn btn-lg btn-primary"
+                        v-if="selectedRows.length && !config.isSupervisor"
+                        :disabled="getFilteredToCapi().length == 0"
+                        @click="changeToCAPI">{{ $t("Common.ChangeToCAPI")}}</button>
+                    <button
+                        class="btn btn-lg btn-primary"
+                        v-if="selectedRows.length && !config.isSupervisor"
+                        :disabled="getFilteredToCawi().length == 0"
+                        @click="changeToCAWI">{{ $t("Common.ChangeToCAWI")}}</button>
                     <button
                         class="btn btn-link"
                         v-if="selectedRows.length && !config.isSupervisor"
@@ -414,6 +434,19 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
+        <ChangeToCapi ref="modalChangeToCAWI"
+            :title="$t('Common.ChangeToCAWI')"
+            :confirmMessage="$t('Common.ChangeToCAWIConfirmHQ', {
+                count: getFilteredToCawi().length})"
+            :filteredCount="getFilteredToCawi().length"
+            @confirm="changeInterviewMode(getFilteredToCawi(), 'CAWI')" />
+
+        <ChangeToCapi ref="modalChangeToCAPI"
+            :title="$t('Common.ChangeToCAPI')"
+            :confirmMessage="$t('Common.ChangeToCAPIConfirmHQ', {
+                count: getFilteredToCapi().length})"
+            :filteredCount="getFilteredToCapi().length"
+            @confirm="changeInterviewMode(getFilteredToCapi(), 'CAPI')" />
     </HqLayout>
 </template>
 
@@ -425,6 +458,7 @@ import {lowerCase, find, filter, flatten, map,
 import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
 import * as toastr from 'toastr'
+import ChangeToCapi from './ChangeModeModal.vue'
 
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
@@ -440,7 +474,9 @@ const query = gql`query hqInterviews($workspace: String!, $order: [InterviewSort
       status
       questionnaireId
       responsibleId
+      cawiLink,
       responsibleName
+      interviewMode
       responsibleRole
       errorsCount
       assignmentId
@@ -491,6 +527,7 @@ function queryStringToCondition(queryStringArray) {
 export default {
     components: {
         InterviewFilter,
+        ChangeToCapi,
     },
 
     data() {
@@ -500,6 +537,7 @@ export default {
             questionnaireVersion: null,
             isLoading: false,
             selectedRows: [],
+            interviewMode: null,
             selectedRowWithMenu: null,
             totalRows: 0, filteredCount: 0,
             draw: 0,
@@ -519,6 +557,8 @@ export default {
             isVisiblePrefilledColumns: true,
 
             conditions: [],
+
+            interviewModes: [{ key: 'CAWI', value: 'CAWI'}, { key: 'CAPI', value: 'CAPI'}],
             exposedValuesFilter: null,
 
         }
@@ -644,7 +684,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'errors')
                     },
-                    width: '50px',
+                    width: '45px',
                 },{
                     data: 'notAnsweredCount',
                     name: 'NotAnsweredCount',
@@ -660,6 +700,22 @@ export default {
                     width: '50px',
                 },
                 {
+                    data: 'interviewMode',
+                    name: 'InterviewMode',
+                    title: this.$t('Common.InterviewMode'),
+                    orderable: false,
+                    createdCell(td, cellData, rowData, row, col) {
+                        $(td).attr('role', 'mode')
+                    },
+                    render(data, type, rowData) {
+                        if(rowData.cawiLink != null) {
+                            return '<a href="'+ rowData.cawiLink+'">' + data + ' <span class="glyphicon glyphicon-link"/></a>'
+                        }
+                        return data
+                    },
+                    width: '50px',
+                },
+                {
                     data: 'status',
                     name: 'Status',
                     title: this.$t('Common.Status'),
@@ -670,7 +726,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'status')
                     },
-                    width: '100px',
+                    width: '120px',
                 },
                 {
                     data: 'receivedByInterviewerAtUtc',
@@ -813,6 +869,7 @@ export default {
             if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
             if (this.responsibleId) data.responsibleName = this.responsibleId.value
             if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
+            if (this.interviewMode) data.interviewMode = this.interviewMode.key
 
             return data
         },
@@ -831,6 +888,10 @@ export default {
 
             if(this.where.status) {
                 and.push({ status: {in: JSON.parse(this.status.alias)}})
+            }
+
+            if(this.where.interviewMode) {
+                and.push({interviewMode: {eq: this.where.interviewMode}})
             }
 
             if(this.conditions != null && this.conditions.length > 0) {
@@ -913,6 +974,22 @@ export default {
                 return !isNaN(value) && value
             })
         },
+
+        getFilteredToCapi() {
+            return this.getFilteredItems(function(item) {
+                var value = item.actionFlags.indexOf('CANCHANGETOCAPI') >= 0
+                return !isNaN(value) && value
+            })
+
+        },
+
+        getFilteredToCawi() {
+            return this.getFilteredItems(function(item) {
+                var value = item.actionFlags.indexOf('CANCHANGETOCAWI') >= 0
+                return !isNaN(value) && value
+            })
+        },
+
         getFilteredToAssign() {
             return this.getFilteredItems(function(item) {
                 var value =  item.actionFlags.indexOf('CANBEREASSIGNED') >= 0
@@ -971,8 +1048,13 @@ export default {
         userSelected(newValue) {
             this.responsibleId = newValue
         },
+
         statusSelected(newValue) {
             this.status = newValue
+        },
+
+        inteviewModeSelected(newValue) {
+            this.interviewMode = newValue
         },
 
         viewInterview() {
@@ -1333,6 +1415,38 @@ export default {
             this.$refs.deleteModal.modal({keyboard: false})
         },
 
+        changeToCAWI() {
+            this.$refs.modalChangeToCAWI.modal({keyboard: false})
+        },
+
+        changeToCAPI() {
+            this.$refs.modalChangeToCAPI.modal({keyboard: false})
+        },
+
+        changeInterviewMode(filteredItems, mode) {
+            const self = this
+
+            const commands = map(filteredItems, i => {
+                return JSON.stringify({
+                    InterviewId: i.id,
+                    Mode: mode,
+                })
+            })
+
+            const command = {
+                type: 'ChangeInterviewModeCommand',
+                commands,
+            }
+
+            this.executeCommand(
+                command,
+                function() {},
+                function() {
+                    self.reloadTable()
+                }
+            )
+        },
+
         newResponsibleSelected(newValue) {
             this.newResponsibleId = newValue
         },
@@ -1452,6 +1566,20 @@ export default {
                     disabled: !canBeRejected,
                 })
 
+                if(rowData.actionFlags.indexOf('CANCHANGETOCAPI') >= 0) {
+                    menu.push({
+                        name: self.$t('Common.ChangeToCAPI'),
+                        callback: () => self.changeToCAPI(),
+                    })
+                }
+
+                if(rowData.actionFlags.indexOf('CANCHANGETOCAWI') >= 0) {
+                    menu.push({
+                        name: self.$t('Common.ChangeToCAWI'),
+                        callback: () => self.changeToCAWI(),
+                    })
+                }
+
                 if (!self.config.isSupervisor) {
                     menu.push({
                         name: self.$t('Common.Unapprove'),
@@ -1471,6 +1599,7 @@ export default {
                         disabled: !canBeDeleted,
                     })
                 }
+
             }
 
             return menu
@@ -1561,6 +1690,10 @@ export default {
                 self.status = self.statuses.find(o => o.key === query.status)
             }
 
+            if(query.mode != null) {
+                self.interviewMode = self.interviewModes.find(o => o.key == query.mode)
+            }
+
             self.loadQuestionnaireId((questionnaireId, version) => {
                 if (questionnaireId != null) {
                     self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId)
@@ -1589,7 +1722,8 @@ export default {
                         'questionnaireId',
                         'status',
                         'assignmentId',
-                        'questionnaireVersion'],
+                        'questionnaireVersion',
+                        'interviewMode'],
                     self.reloadTableAndSaveRoute.bind(self)
                 )
             })

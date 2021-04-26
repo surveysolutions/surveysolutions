@@ -78,6 +78,7 @@
                                 <td>
                                     <a v-bind:href="interviewsUrl">
                                         {{model.interviewsProvided}}
+                                        <span class="glyphicon glyphicon-link"/>
                                     </a>
                                 </td>
                             </tr>
@@ -204,7 +205,7 @@ export default {
                 : this.$t('Common.No')
         },
         isWebMode() {
-            return this.model.webMode === false ?  this.$t('Common.No') : this.$t('Common.Yes')
+            return this.model.webMode === false ? this.$t('Common.Capi') : this.$t('Common.Cawi')
         },
         interviewsCount() {
             if (this.model.quantity == null || this.model.quantity < 0) return this.$t('Assignments.Unlimited')

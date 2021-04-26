@@ -34,6 +34,12 @@ namespace WB.Tests.Abc.TestFactories
             => new InterviewCompleted(ToGuid(userId) ?? Guid.NewGuid(), originDate ?? DateTimeOffset.Now, comment)
                 .ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
 
+        public IPublishedEvent<InterviewModeChanged> InterviewModeChanged(
+            Guid? interviewId = null, string userId = null, Guid? eventId = null,
+            DateTimeOffset? originDate = null, InterviewMode mode = InterviewMode.CAWI)
+            => new InterviewModeChanged(ToGuid(userId) ?? Guid.NewGuid(), originDate ?? DateTimeOffset.Now, mode)
+                .ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
+
         public IPublishedEvent<InterviewCreated> InterviewCreated(
             Guid? interviewId = null, string userId = null, 
             string questionnaireId = null,

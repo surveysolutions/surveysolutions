@@ -154,6 +154,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public DateTimeOffset? StartedDate => this.properties.StartedDate;
         public DateTimeOffset? CompletedDate => this.properties.CompletedDate;
         public InterviewStatus Status => this.properties.Status;
+        public InterviewMode Mode => this.properties.Mode;
+
         public bool IsDeleted => this.properties.IsHardDeleted || this.Status == InterviewStatus.Deleted;
 
         public Guid Id => this.EventSourceId;
@@ -849,6 +851,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool AcceptsInterviewerAnswers()
         {
             return !IsDeleted && (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.Restarted || Status == InterviewStatus.RejectedBySupervisor);
+        }
+
+        public bool AcceptsCAWIAnswers()
+        {
+            return !IsDeleted && properties.AcceptsCAWIAnswers;
         }
 
         public IReadOnlyCollection<IInterviewTreeNode> GetAllSections()

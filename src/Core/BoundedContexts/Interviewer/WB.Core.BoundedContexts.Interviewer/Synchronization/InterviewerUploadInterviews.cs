@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
         protected override bool IsNonPartialSynchedInterview(InterviewView interview)
         {
-            return interview.Status == InterviewStatus.Completed;
+            return interview.Status == InterviewStatus.Completed || interview.Mode != InterviewMode.CAPI;
         }
 
         protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
@@ -59,14 +59,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                     || interview.Status == InterviewStatus.Restarted
                     || interview.Status == InterviewStatus.InterviewerAssigned
                     || interview.Status == InterviewStatus.RejectedBySupervisor
+                    || interview.Mode != InterviewMode.CAPI
                 ).Where(interview =>
                     interview.Status == InterviewStatus.Completed
+                    || interview.Mode != InterviewMode.CAPI
                     || eventStorage.HasEventsWithoutHqFlag(interview.InterviewId)
                 ).ToReadOnlyCollection();
             }
 
             return interviewViewRepository.Where(interview =>
-                interview.Status == InterviewStatus.Completed
+                interview.Status == InterviewStatus.Completed || interview.Mode != InterviewMode.CAPI
             );
         }
     }

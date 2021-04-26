@@ -551,7 +551,8 @@ namespace WB.Tests.Abc.TestFactories
                 CanBeDeleted = canBeDeleted ?? true,
                 ResponsibleId = responsibleId.GetValueOrDefault(),
                 ReceivedByInterviewerAtUtc = receivedByInterviewerAt,
-                FromHqSyncDateTime = fromHqSyncDateTime
+                FromHqSyncDateTime = fromHqSyncDateTime,
+                Mode = InterviewMode.CAPI
             };
         }
 

@@ -34,7 +34,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     {
                         yield return InterviewActionFlags.CanBeOpened;
                     }
-
+                    
                     yield break;
                 }
 
@@ -60,18 +60,43 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     {
                         yield return InterviewActionFlags.CanBeRejected;
                     }
-                    
+
                     yield break;
+                }
+
+                if (!user.IsInterviewer)
+                {
+                    if (interviewSummary.InterviewMode != InterviewMode.CAWI
+                        &&(interviewSummary.Status == InterviewStatus.Created
+                            || interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                            || interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                            || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                            || interviewSummary.Status == InterviewStatus.Restarted))
+                    {
+                        yield return InterviewActionFlags.CanChangeToCAWI;
+                    }
+
+                    if (interviewSummary.InterviewMode != InterviewMode.CAPI
+                        &&(interviewSummary.Status == InterviewStatus.Created
+                           || interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                           || interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                           || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                           || interviewSummary.Status == InterviewStatus.Restarted))
+                    {
+                        yield return InterviewActionFlags.CanChangeToCAPI;
+                    }
                 }
 
                 if ((interviewSummary.Status == InterviewStatus.Created
                      || interviewSummary.Status == InterviewStatus.SupervisorAssigned
                      || interviewSummary.Status == InterviewStatus.InterviewerAssigned
-                     || interviewSummary.Status == InterviewStatus.SentToCapi) 
-                    && !interviewSummary.ReceivedByInterviewerAtUtc.HasValue 
+                     || interviewSummary.Status == InterviewStatus.SentToCapi)
+                    && !interviewSummary.ReceivedByInterviewerAtUtc.HasValue
                     && !interviewSummary.WasCompleted)
+                {
                     yield return InterviewActionFlags.CanBeDeleted;
-
+                }
+                
                 if (interviewSummary.Status == InterviewStatus.ApprovedBySupervisor 
                     || interviewSummary.Status == InterviewStatus.Completed
                     || interviewSummary.Status == InterviewStatus.RejectedBySupervisor)
@@ -90,6 +115,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
                     || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters)
                     yield return InterviewActionFlags.CanBeReassigned;
+
             }
 
             return GetFlags().ToList();

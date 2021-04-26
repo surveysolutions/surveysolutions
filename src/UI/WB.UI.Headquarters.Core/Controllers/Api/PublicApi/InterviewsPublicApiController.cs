@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -51,6 +52,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IInterviewDiagnosticsFactory diagnosticsFactory;
         private readonly IPdfInterviewGenerator pdfInterviewGenerator;
         private readonly ICalendarEventService calendarEventService;
+        private readonly IWebInterviewLinkProvider webInterviewLinkProvider;
 
         public InterviewsPublicApiController(
             IAllInterviewsFactory allInterviewsViewFactory,
@@ -65,7 +67,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IStatefullInterviewSearcher statefullInterviewSearcher,
             IInterviewDiagnosticsFactory diagnosticsFactory,
             IPdfInterviewGenerator pdfInterviewGenerator,
-            ICalendarEventService calendarEventService)
+            ICalendarEventService calendarEventService,
+            IWebInterviewLinkProvider webInterviewLinkProvider)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
@@ -80,6 +83,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.diagnosticsFactory = diagnosticsFactory;
             this.pdfInterviewGenerator = pdfInterviewGenerator;
             this.calendarEventService = calendarEventService;
+            this.webInterviewLinkProvider = webInterviewLinkProvider;
         }
 
 
@@ -148,11 +152,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             var statistics = this.statefullInterviewSearcher.GetStatistics(interview);
             var diagnosticsInfo = diagnosticsFactory.GetById(id);
-            var interviewSummary = this.allInterviewsViewFactory.Load(new AllInterviewsInputModel
-            {
-                InterviewId = id
-            });
 
+            InterviewSummary interviewSummary = this.allInterviewsViewFactory.Load(id);
+            
             return new InterviewApiStatistics
             {
                 Answered = statistics[FilterOption.Answered],
@@ -175,7 +177,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 NumberRejectionsBySupervisor = diagnosticsInfo.NumberRejectionsBySupervisor,
                 NumberRejectionsByHq = diagnosticsInfo.NumberRejectionsByHq,
                 InterviewDuration = diagnosticsInfo.InterviewDuration != null ? new TimeSpan(diagnosticsInfo.InterviewDuration.Value) : (TimeSpan?)null,
-                UpdatedAtUtc = interviewSummary.Items.First().LastEntryDateUtc
+                UpdatedAtUtc = interviewSummary.UpdateDate,
+                WebInterviewUrl = interviewSummary.InterviewMode == InterviewMode.CAWI
+                    ? webInterviewLinkProvider.WebInterviewRequestLink((interviewSummary.AssignmentId ?? 0).ToString(), id.ToString())
+                    : string.Empty
             };
         }
 

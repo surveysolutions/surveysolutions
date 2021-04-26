@@ -1683,6 +1683,12 @@
   <data name="Interviewer_CreateText" xml:space="preserve">
     <value>Это действие создаст индивидуального пользователя с правами интервьюера&lt;br&gt; Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{{link}}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
   </data>
+  <data name="Filters_InterviewMode" xml:space="preserve">
+    <value>Режим интервью</value>
+  </data>
+  <data name="Filters_InterviewModePlaceHolder" xml:space="preserve">
+    <value>Все режимы</value>
+  </data>
   <data name="UsersManage_TeamFilterPlaceHolder" xml:space="preserve">
     <value>Команда</value>
   </data>

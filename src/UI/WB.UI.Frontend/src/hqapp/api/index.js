@@ -381,6 +381,14 @@ class AssignmentsApi {
             },
         })
     }
+
+    changeMode(assignmentId, isEnabled) {
+        var url = `${this.base}/${assignmentId}/changeMode`
+
+        return this.http.patch(url, {
+            enabled: isEnabled,
+        })
+    }
 }
 
 class WebInterviewSettingsApi {
@@ -437,7 +445,8 @@ class WebInterviewSettingsApi {
         reminderAfterDaysIfPartialResponse,
         singleResponse,
         emailOnComplete,
-        attachAnswersInEmail) {
+        attachAnswersInEmail,
+        allowSwitchToCawiForInterviewer) {
         var url = `${this.base}/${questionnaireId}/additionalSettings`
         return this.http.post(url, {
             spamProtection: isEnabledSpamProtection,
@@ -446,6 +455,7 @@ class WebInterviewSettingsApi {
             singleResponse: singleResponse,
             emailOnComplete: emailOnComplete,
             attachAnswersInEmail: attachAnswersInEmail,
+            allowSwitchToCawiForInterviewer: allowSwitchToCawiForInterviewer,
         })
     }
 

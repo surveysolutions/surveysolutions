@@ -534,6 +534,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to WebInterviews ({0}).
+        /// </summary>
+        public static string Dashboard_WebInterviewsLinkText {
+            get {
+                return ResourceManager.GetString("Dashboard_WebInterviewsLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews in Web interview mode. Will be removed during synchronization when web interview is completed by respondend.
+        /// </summary>
+        public static string Dashboard_WebInterviewTabText {
+            get {
+                return ResourceManager.GetString("Dashboard_WebInterviewTabText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approved by Supervisor: {0}.
         /// </summary>
         public static string DashboardItem_ApprovedBySupervisor {
@@ -602,6 +620,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string DashboardItem_NotStarted {
             get {
                 return ResourceManager.GetString("DashboardItem_NotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show QR Code.
+        /// </summary>
+        public static string DashboardItem_QRCode {
+            get {
+                return ResourceManager.GetString("DashboardItem_QRCode", resourceCulture);
             }
         }
         

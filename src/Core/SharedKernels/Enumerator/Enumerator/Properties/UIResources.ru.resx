@@ -781,4 +781,10 @@
   <data name="NoComment" xml:space="preserve">
     <value>Комментарий не указан</value>
   </data>
+    <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
+    <value>Переключить интервью в Веб режим</value>
+  </data>
+   <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
+    <value>Это интервью будет доступно онлайн после синхронизации. Чтобы получить доступ, респондент должен ввести ссылку на компьютере, планшете или смартфоне, имеющем доступ в интернет. Эта же ссылка может быть отсканирована, используя QR-код</value>
+  </data>
 </root>

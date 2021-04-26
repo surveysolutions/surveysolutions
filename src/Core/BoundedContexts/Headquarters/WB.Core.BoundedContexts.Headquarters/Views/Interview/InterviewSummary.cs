@@ -4,7 +4,9 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -159,6 +161,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual string ResponsibleNameLowerCase { get; protected set; }
         public virtual bool HasSmallSubstitutions { get; set; }
         public virtual int? NotAnsweredCount { get; set; }
+        public virtual InterviewMode InterviewMode { get; set; } = InterviewMode.CAPI;
+        
+        public virtual InterviewProperties GetInterviewProperties()
+        {
+            return new() {
+                Mode = InterviewMode,
+                Status = Status,
+                AssignmentId = AssignmentId,
+                WasCompleted = this.WasCompleted
+            };
+        }
 
         public virtual void AnswerFeaturedQuestion(int entityId, string answer, decimal? optionCode = null)
         {

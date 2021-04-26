@@ -171,7 +171,10 @@
     <value>Страница продолжения</value>
   </data>
   <data name="FinishPage" xml:space="preserve">
-    <value>Финишная страница</value>
+    <value>Страница завершения</value>
+  </data>
+  <data name="LinkToInterviewPage" xml:space="preserve">
+    <value>Целевая страница веб интервью</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>сохранить</value>

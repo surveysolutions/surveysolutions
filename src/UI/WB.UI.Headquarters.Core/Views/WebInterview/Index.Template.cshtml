@@ -51,7 +51,9 @@
             customTexts: {
                 completeButton: '@Html.ToSafeJavascriptMessage(Model.CustomMessages.GetText(WebInterviewUserMessages.CompleteButton).ToString())',
                 noteToSupervisor: '@Html.ToSafeJavascriptMessage(Model.CustomMessages.GetText(WebInterviewUserMessages.CompleteNoteToSupervisor).ToString())'
-            }
+            },
+            mayBeSwitchedToWebMode: @(Model.MayBeSwitchedToWebMode ? "true" : "false"),
+            webInterviewUrl: '@Model.WebInterviewUrl'
         }
     </script>
     <locale component="webinterview"></locale>
