@@ -18,8 +18,8 @@ namespace WB.Core.BoundedContexts.Interviewer
             registry.BindWithConstructorArgument<ISynchronizationStep, UploadCalendarEvents>("sortOrder", 35);
             registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerUploadInterviews>("sortOrder", 40);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAssignments>("sortOrder", 50);
-            registry.BindWithConstructorArgument<ISynchronizationStep, RemoveObsoleteQuestionnaires>("sortOrder", 70);
-            registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerDownloadInterviews>("sortOrder", 80);
+            registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerDownloadInterviews>("sortOrder", 70);
+            registry.BindWithConstructorArgument<ISynchronizationStep, UpdateQuestionnaires>("sortOrder", 80);//all questionnaires are downloaded, updating 
             registry.BindWithConstructorArgument<ISynchronizationStep, DownloadCalendarEvents>("sortOrder", 85);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeLogo>("sortOrder", 90);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAuditLog>("sortOrder", 100);

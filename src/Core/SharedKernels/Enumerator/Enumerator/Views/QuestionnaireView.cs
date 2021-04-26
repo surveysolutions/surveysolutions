@@ -16,5 +16,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public string Title { get; set; }
         public bool Census { get; set; }
+        public int? WebModeAllowed { get; set; } // library does not support good way of handling default values and bools https://github.com/praeclarum/sqlite-net/issues/326
     }
 }

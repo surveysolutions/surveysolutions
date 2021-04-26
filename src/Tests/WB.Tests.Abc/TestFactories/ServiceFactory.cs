@@ -958,21 +958,21 @@ namespace WB.Tests.Abc.TestFactories
             return interviewerDownloadInterviews;
         }
 
-        public RemoveObsoleteQuestionnaires RemoveObsoleteQuestionnaires(ISynchronizationService synchronizationService = null,
+        public UpdateQuestionnaires RemoveObsoleteQuestionnaires(ISynchronizationService synchronizationService = null,
             IInterviewerQuestionnaireAccessor questionnairesAccessor = null,
             IPlainStorage<InterviewView> interviewViewRepository = null,
             IAttachmentsCleanupService attachmentsCleanupService = null,
             IInterviewsRemover interviewsRemover = null)
         {
-            var result = new RemoveObsoleteQuestionnaires(
+            var result = new UpdateQuestionnaires(
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
                 interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(Mock.Of<ILogger>()),
                 attachmentsCleanupService ?? Mock.Of<IAttachmentsCleanupService>(),
                 interviewsRemover ?? Mock.Of<IInterviewsRemover>(),
                 Mock.Of<ILogger>(),
-                10
-                );
+                10);
+
             result.Context = new EnumeratorSynchonizationContext
             {
                 CancellationToken = CancellationToken.None,

@@ -80,9 +80,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
                 new TestPlainStorage<ServerSettings>(),
                 Mock.Of<ISecureStorage>(),
                 Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
-                Mock.Of<IWebInterviewLinkProvider>(),
-                Mock.Of<IWebInterviewConfigProvider>()
-            );
+                Mock.Of<IWebInterviewLinkProvider>());
 
             var defaultHttpContext = new DefaultHttpContext();
             companyLogoApiV2Controller.ControllerContext  = new ControllerContext

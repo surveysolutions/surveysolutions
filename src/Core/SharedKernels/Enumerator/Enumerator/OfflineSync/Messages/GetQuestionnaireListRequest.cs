@@ -142,4 +142,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public Guid UserId { get; set; }
         public DeviceInfoApiView DeviceInfo { get; set; }
     }
+
+    public class GetQuestionnairesWebModeRequest: ICommunicationMessage { }
+
+    public class GetQuestionnairesWebModeResponse : ICommunicationMessage
+    {
+        public List<QuestionnaireIdentity> Questionnaires { get; set; } = new List<QuestionnaireIdentity>();
+    }
 }
