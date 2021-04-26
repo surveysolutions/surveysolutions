@@ -578,7 +578,7 @@ export default {
                             return `<span class='text-danger' title='${title}'>${cawiMode}</span>`
                         }
 
-                        return data === false ? this.$t('Common.Capi') : this.$t('Common.Cawi')
+                        return data === false ? self.$t('Common.Capi') : self.$t('Common.Cawi')
                     },
                 },
             ]
