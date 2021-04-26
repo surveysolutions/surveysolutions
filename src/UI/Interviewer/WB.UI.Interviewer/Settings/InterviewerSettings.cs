@@ -170,11 +170,11 @@ namespace WB.UI.Interviewer.Settings
         private void SaveCurrentSettings(Action<ApplicationWorkspaceSettingsView> onChanging)
         {
             var settings = this.currentWorkspaceSettings;
-            if (settings != null)
-            {
-                onChanging(settings);
-                SaveSettings(settings);
-            }
+            if (settings == null)
+                throw new InvalidOperationException("Saving workspace settings outside a workspace is not valid.");
+            
+            onChanging(settings);
+            SaveSettings(settings);
         }
 
         protected override void SaveSettings(EnumeratorWorkspaceSettingsView settings)
