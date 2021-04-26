@@ -125,7 +125,7 @@ namespace WB.UI.Headquarters.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to Are you sure that you want to delete workspace &lt;strong&gt;{{name}}&lt;/strong&gt;?
-        ///All interviewer, supervisor, and observer accounts connected to this workspace will also be deleted. The Survey Solutions Interviewer and Supervisor applications installed on the tablets of these users will no longer be able to communicate with this server and require a data reset. 
+        ///All user accounts connected to this workspace will be removed from it. The Survey Solutions Interviewer and Supervisor applications installed on the tablets of these users will no longer be able to communicate with this workspace and data collected in this workspace will be lost. 
         ///
         ///The following data associated with this workspace will be deleted:.
         /// </summary>
@@ -352,7 +352,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Each workspace has isolated questionnaires, interviews, assignments and users..
+        ///   Looks up a localized string similar to Each workspace has isolated questionnaires, interviews and assignments..
         /// </summary>
         public static string WorkspacesSubtitle {
             get {

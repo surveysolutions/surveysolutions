@@ -157,22 +157,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             }
         }
 
-        public async Task DeleteAsync(WorkspaceContext workspace, CancellationToken token = default)
+        public void Delete(WorkspaceContext workspace)
         {
             if (workspace.Name == WorkspaceConstants.DefaultWorkspaceName)
             {
                 return;
             }
-
-            var selectedRoleId = new[] { UserRoles.Interviewer, UserRoles.Supervisor }
-                .Select(x => x.ToUserId()).ToArray();
-
-            var usersToDelete = await this.workspaceUsers
-                .Query(u =>
-                    u.Where(w =>
-                            w.Workspace.Name == workspace.Name
-                            && w.User.Roles.Any(r => selectedRoleId.Contains(r.Id)))
-                    .ToListAsync(cancellationToken: token));
 
             logger.LogWarning("Deleting workspace {name} from workspaces table", workspace.Name);
 
@@ -180,11 +170,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             this.workspaces.Remove(workspace.Name);
 
             logger.LogWarning("Deleting interviewers and supervisors in workspace {name}", workspace.Name);
-
-            var orphanedUsers = usersToDelete.Select(u => u.User.Id);
-
-            await this.userRepository.Users.Where(u => orphanedUsers.Contains(u.Id))
-                .DeleteAsync(cancellationToken: token);
         }
 
         public void AddUserToWorkspace(HqUser user, string workspace, Guid? supervisorId)
