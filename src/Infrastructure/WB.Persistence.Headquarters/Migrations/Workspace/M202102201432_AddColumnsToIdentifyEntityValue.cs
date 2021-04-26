@@ -39,8 +39,8 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
                 .WithDefaultValue(false);
 
             Update.Table("identifyingentityvalue")
-                .Set(new {identifying = true}).AllRows();
-
+                .Set(new {identifying = true, enabled = true}).AllRows();
+            
             Create.Index().OnTable("identifyingentityvalue").OnColumn("value_date");
             Create.Index().OnTable("identifyingentityvalue").OnColumn("value_double");
             Create.Index().OnTable("identifyingentityvalue").OnColumn("value_long");
