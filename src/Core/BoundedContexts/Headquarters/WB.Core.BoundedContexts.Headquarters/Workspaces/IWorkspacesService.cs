@@ -16,6 +16,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         List<WorkspaceContext> GetEnabledWorkspaces();
         List<WorkspaceContext> GetAllWorkspaces();
         Task AssignWorkspacesAsync(HqUser user, List<AssignUserWorkspace> workspacesList);
-        Task DeleteAsync(WorkspaceContext workspace, CancellationToken token = default);
+        void Delete(WorkspaceContext workspace);
     }
 }

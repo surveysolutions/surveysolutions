@@ -162,6 +162,7 @@ class Workspaces {
     }
 
     async Status(workspace) {
+        return await this.http.get('api/v1/workspaces/status/' + workspace)
     }
 
     async Delete(workspace) {
