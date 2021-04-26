@@ -91,12 +91,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void UserPasswordChanged(string currentUser, string userName)
         {
-            this.Append(LogEntryType.UserPasswordChanged, $"user '{userName}'", "password changed", currentUser !=null ? $"By {currentUser}" : null);
+            this.Append(LogEntryType.UserPasswordChanged, $"user '{userName}'", "password changed");
         }
 
         public void UserPasswordChangeFailed(string currentUser, string userName)
         {
-            this.Append(LogEntryType.UserPasswordChangeFailed, $"user '{userName}'", "password change failed", currentUser !=null ? $"By {currentUser}" : null);
+            this.Append(LogEntryType.UserPasswordChangeFailed, $"user '{userName}'", "password change failed");
         }
 
         public void AssignmentSizeChanged(int id, int? quantity)

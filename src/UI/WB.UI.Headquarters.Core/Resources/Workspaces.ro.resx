@@ -211,7 +211,7 @@ Următoarele date asociate acestui spațiu de lucru vor fi șterse:</value>
     <value>Setări</value>
   </data>
   <data name="WorkspacesSubtitle" xml:space="preserve">
-    <value>Fiecare spațiu de lucru are chestionare izolate, interviuri, sarcini și utilizatori.</value>
+    <value>Fiecare spațiu de lucru are chestionare izolate, interviuri și sarcini.</value>
   </data>
   <data name="WorkspacesUpdated" xml:space="preserve">
     <value>Lista spațiilor de lucru actualizate</value>

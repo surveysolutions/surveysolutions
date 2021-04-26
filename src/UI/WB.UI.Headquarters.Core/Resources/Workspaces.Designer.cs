@@ -352,7 +352,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Each workspace has isolated questionnaires, interviews, assignments and users..
+        ///   Looks up a localized string similar to Each workspace has isolated questionnaires, interviews and assignments..
         /// </summary>
         public static string WorkspacesSubtitle {
             get {
