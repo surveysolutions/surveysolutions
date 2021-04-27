@@ -225,6 +225,7 @@
     <Compile Include="OfflineSync\Entities\OnDiscoveryCallback.cs" />
     <Compile Include="OfflineSync\Entities\OnPayloadCallback.cs" />
     <Compile Include="Services\Notifications\IEnumeratorWorkerManager.cs" />
+    <Compile Include="Services\Notifications\IInAppNotificationsCollector.cs" />
     <Compile Include="Services\Notifications\INotificationsCollector.cs" />
     <Compile Include="Services\Notifications\NotificationModel.cs" />
     <Compile Include="Services\Notifications\NotificationPublisher.cs" />

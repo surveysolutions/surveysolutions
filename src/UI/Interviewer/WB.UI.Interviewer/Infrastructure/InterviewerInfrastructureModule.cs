@@ -86,6 +86,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind<IPlainStorage<PrefilledQuestionView>, PrefilledQuestionsRepository>();
 
             registry.Bind<INotificationsCollector, InterviewerNotificationsCollector>();
+            registry.Bind<IInAppNotificationsCollector, InterviewerInAppNotificationsCollector>();
             
             registry.Bind<ICalendarEventStorage, CalendarEventStorage>();
             registry.Bind<ICalendarEventRemoval, CalendarEventRemoval>();
