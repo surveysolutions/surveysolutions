@@ -401,7 +401,7 @@ export default {
             var self = this
             modal.dialog({
                 closeButton: false,
-                message: self.$t('Settings.ChangeStateConfirm'),
+                message: self.encryptionEnabled ? self.$t('Settings.ChangeStateConfirm') : self.$t('Settings.ChangeStateDisabledConfirm'),
                 buttons: {
                     cancel: {
                         label: self.$t('Common.No'),

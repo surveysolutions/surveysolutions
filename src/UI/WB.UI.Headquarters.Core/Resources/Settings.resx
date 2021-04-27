@@ -183,6 +183,9 @@
   <data name="ChangeStateConfirm" xml:space="preserve">
     <value>Are you sure you want to change the export file security settings? All export data files will be protected by a password.</value>
   </data>
+  <data name="ChangeStateDisabledConfirm" xml:space="preserve">
+    <value>Are you sure you want to change the export file security settings? The exported data files will no longer be protected by a password.</value>
+  </data>
   <data name="GlobalNoteSettings" xml:space="preserve">
     <value>Global note</value>
   </data>
@@ -202,10 +205,10 @@
     <value>Specify text in the 'Global note' field to be shown on the top of every screen on the server.</value>
   </data>
   <data name="LogoSettings_Description" xml:space="preserve">
-    <value>Company logo shows a custom image on the server login page and on the login page of the Interviewer app.</value>
+    <value>Company logo is an image that appears on the server login page and on the login page of the Interviewer app.</value>
   </data>
   <data name="LogoSettings_Description1" xml:space="preserve">
-    <value>Click the Choose file button to upload an image from your computer to the server.</value>
+    <value>Click the 'Choose file' button to upload an image from your computer to the server to be used as a logo image. Then click 'Save' button.</value>
   </data>
   <data name="CurrentLogo" xml:space="preserve">
     <value>Current logo</value>
