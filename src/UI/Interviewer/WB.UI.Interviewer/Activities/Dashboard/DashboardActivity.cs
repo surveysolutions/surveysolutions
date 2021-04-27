@@ -74,7 +74,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             var enumeratorSettings = Mvx.IoCProvider.Resolve<IEnumeratorSettings>();
             if (!enumeratorSettings.NotificationsEnabled) return;
 
-            var notificationsCollector = Mvx.IoCProvider.Resolve<INotificationsCollector>();
+            var notificationsCollector = Mvx.IoCProvider.Resolve<IInAppNotificationsCollector>();
             List<SimpleNotification> notifications = notificationsCollector.CollectInAppNotifications();
 
             if (notifications.Count <= 0) return;

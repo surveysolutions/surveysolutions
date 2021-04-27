@@ -126,6 +126,7 @@
     <Compile Include="ServiceLocation\InterviewerUIModule.cs" />
     <Compile Include="Services\CheckForExtendedVersionUriProvider.cs" />
     <Compile Include="Services\CheckForVersionUriProvider.cs" />
+    <Compile Include="Services\InterviewerInAppNotificationsCollector.cs" />
     <Compile Include="Services\InterviewerInterviewUniqueKeyGenerator.cs" />
     <Compile Include="Services\InterviewerNotificationsCollector.cs" />
     <Compile Include="Settings\InterviewerSettings.cs" />
