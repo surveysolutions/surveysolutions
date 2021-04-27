@@ -122,7 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             {
                 Actions.Add(new ActionDefinition
                 {
-                    ActionType = ActionType.Secondary,
+                    ActionType = ActionType.Extra,
                     Command = new MvxAsyncCommand(this.ShowQRCodeAsync),
                     Label = EnumeratorUIResources.DashboardItem_QRCode
                 });
