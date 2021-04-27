@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             });
             Property(x => x.AssignmentId, pm => pm.Column("assignment_id"));
             Property(x => x.InterviewId, pm => pm.Column("interview_id"));
+            Property(x => x.InterviewKey, pm => pm.Column("interview_key"));
             Property(x => x.CompletedAtUtc, pm =>
             {
                 pm.Type<UtcDateTimeType>();
