@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
 
             var questionnaireView = interviewViewRepository.GetById(interview.QuestionnaireIdentity.ToString());
-            if (questionnaireView.WebModeAllowed == 1 && interviewerSettings.WebInterviewUriTemplate != null && interview.GetAssignmentId() != null)
+            if (questionnaireView.WebModeAllowed && interviewerSettings.WebInterviewUriTemplate != null && interview.GetAssignmentId() != null)
             {
                 this.CanSwitchToWebMode = true;
 

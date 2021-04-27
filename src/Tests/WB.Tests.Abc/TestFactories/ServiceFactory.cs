@@ -958,7 +958,7 @@ namespace WB.Tests.Abc.TestFactories
             return interviewerDownloadInterviews;
         }
 
-        public UpdateQuestionnaires RemoveObsoleteQuestionnaires(ISynchronizationService synchronizationService = null,
+        public UpdateQuestionnaires UpdateQuestionnaires(ISynchronizationService synchronizationService = null,
             IInterviewerQuestionnaireAccessor questionnairesAccessor = null,
             IPlainStorage<InterviewView> interviewViewRepository = null,
             IAttachmentsCleanupService attachmentsCleanupService = null,

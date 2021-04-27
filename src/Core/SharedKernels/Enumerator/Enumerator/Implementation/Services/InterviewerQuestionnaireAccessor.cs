@@ -138,7 +138,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var questionnaires = this.questionnaireViewRepository.LoadAll();
             foreach (var questionnaire in questionnaires)
             {
-                questionnaire.WebModeAllowed = enabledQuestionnaires.Contains(questionnaire.GetIdentity()) ? 1 : 0;
+                questionnaire.WebModeAllowed = enabledQuestionnaires.Contains(questionnaire.GetIdentity());
             }
             this.questionnaireViewRepository.Store(questionnaires);
         }

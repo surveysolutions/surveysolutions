@@ -167,8 +167,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         {
             var deleted = deletedQuestionnairesStorage.LoadAll().Select(q => QuestionnaireIdentity.Parse(q.Id));
 
-            var response = this.questionnaireViewRepository.LoadAll()
-                .Where(x => x.WebModeAllowed == 1)
+            var response = this.questionnaireViewRepository
+                .Where(x => x.WebModeAllowed == true)
                 .Select(x=>x.GetIdentity())
                 .Except(deleted)
                 
