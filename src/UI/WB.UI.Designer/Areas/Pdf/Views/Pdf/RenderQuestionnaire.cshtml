@@ -334,7 +334,7 @@
 		{
         <section class="section" style="page-break-before: always">
             <div class="section_header">
-                <h2 id="@questionnaire.GetItemRef(sectionId)">@questionnaire.GetGroupTitle(sectionId, true)</h2>
+                <h2 id="@questionnaire.GetItemRef(sectionId)">@Html.Raw(questionnaire.GetGroupTitle(sectionId, true))</h2>
                 @{ var group = questionnaire.FindOrThrow<Group>(sectionId);}
                 <div class="generated_by">
                     <div class="variable_name">@(group.VariableName)</div>
