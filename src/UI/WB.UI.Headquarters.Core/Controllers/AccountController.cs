@@ -129,7 +129,8 @@ namespace WB.UI.Headquarters.Controllers
                     return RedirectToAction(actionName, controllerName);
                 }
 
-                if (returnUrl != null && returnUrl != "/")
+                
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
                     return Redirect(returnUrl);
                 }
@@ -188,8 +189,13 @@ namespace WB.UI.Headquarters.Controllers
                     var actionName = nameof(UsersController.ChangePassword);
                     return RedirectToAction(actionName, controllerName);
                 }
-                
-                return Redirect(returnUrl ?? Url.Action("Index", "Home"));
+
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+
+                return Redirect(Url.Action("Index", "Home"));
             }
 
             if (signInResult.IsLockedOut)
@@ -226,7 +232,12 @@ namespace WB.UI.Headquarters.Controllers
 
             if (signInResult.Succeeded)
             {
-                return Redirect(returnUrl ?? Url.Action("Index", "Home"));
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+
+                return Redirect(Url.Action("Index", "Home"));
             }
 
             if (signInResult.IsLockedOut)

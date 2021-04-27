@@ -647,10 +647,12 @@ namespace WB.UI.Headquarters.Controllers
             RememberCapchaFilled(id);
             HttpContext.Session.SaveWebInterviewAccessForCurrentUser(id);
 
-            if (returnUrl == null)
-                return Redirect(GenerateUrl(@"Cover", id));
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
 
-            return Redirect(returnUrl);
+            return Redirect(GenerateUrl(@"Cover", id));
         }
 
         [Route("{id:Guid}/Complete")]
@@ -743,10 +745,12 @@ namespace WB.UI.Headquarters.Controllers
             RememberCapchaFilled(id);
             HttpContext.Session.SaveWebInterviewAccessForCurrentUser(id);
 
-            if (returnUrl == null)
-                return Redirect(GenerateUrl(@"Cover", id));
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
 
-            return this.Redirect(returnUrl);
+            return Redirect(GenerateUrl(@"Cover", id));
         }
 
         [Route("Link/{assignmentId:int}/{interviewId:Guid}")]
