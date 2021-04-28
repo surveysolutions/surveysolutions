@@ -158,6 +158,16 @@
       app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
       app:layout_constraintLeft_toRightOf="@+id/main_action" />
 
+    <TextView
+        android:id="@+id/show_qr_code"
+        style="@style/Dashboard_Location"
+        app:MvxBind="Visible And(HasExtraAction, Or(IsExpanded, Not(HasExpandedView)));
+                Text ExtraAction.Label;                               
+                Click ExtraAction.Command;"
+
+        app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
+        app:layout_constraintLeft_toRightOf="@+id/main_action" />
+
     <View
       android:id="@+id/footer"
       android:layout_width="wrap_content"
