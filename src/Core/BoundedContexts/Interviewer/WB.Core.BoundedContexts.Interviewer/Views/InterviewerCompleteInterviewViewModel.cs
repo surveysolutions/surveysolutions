@@ -11,9 +11,11 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
@@ -22,6 +24,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAuditLogService auditLogService;
         private readonly IInterviewerSettings interviewerSettings;
+        private readonly IPlainStorage<QuestionnaireView> interviewViewRepository;
 
         public InterviewerCompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService, 
@@ -35,13 +38,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ILastCompletionComments lastCompletionComments,
             IAuditLogService auditLogService,
             IInterviewerSettings interviewerSettings,
-            ILogger logger)
+            ILogger logger,
+            IPlainStorage<QuestionnaireView> interviewViewRepository)
             : base(viewModelNavigationService, commandService, principal, messenger, 
                 entitiesListViewModelFactory, lastCompletionComments,interviewState, dynamicTextViewModel, logger)
         {
             this.interviewRepository = interviewRepository;
             this.auditLogService = auditLogService;
             this.interviewerSettings = interviewerSettings;
+            this.interviewViewRepository = interviewViewRepository;
         }
 
         public override void Configure(string interviewUid, NavigationState navigationState)
@@ -55,17 +60,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 ? UIResources.Interview_Complete_Screen_Description
                 : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
 
-            if (interviewerSettings.QuestionnairesInWebMode.Contains(interview.QuestionnaireIdentity))
+            var questionnaireView = interviewViewRepository.GetById(interview.QuestionnaireIdentity.ToString());
+            if (questionnaireView.WebModeAllowed && interviewerSettings.WebInterviewUriTemplate != null && interview.GetAssignmentId() != null)
             {
-                if (interviewerSettings.WebInterviewUriTemplate != null && interview.GetAssignmentId() != null)
-                {
-                    this.CanSwitchToWebMode = true;
+                this.CanSwitchToWebMode = true;
 
-                    this.WebInterviewUrl = interviewerSettings.RenderWebInterviewUri(
-                        interview.GetAssignmentId()!.Value,
-                        interview.Id
-                    );
-                }
+                this.WebInterviewUrl = interviewerSettings.RenderWebInterviewUri(
+                    interview.GetAssignmentId()!.Value,
+                    interview.Id
+                );
             }
 
             if (string.IsNullOrEmpty(this.Comment))
