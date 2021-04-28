@@ -24,7 +24,7 @@
                         <input
                             class="checkbox-filter single-checkbox"
                             v-model="encryptionEnabled"
-                            @click="clickEncryptionEnabled"
+                            @change="changeEncryptionEnabled"
                             id="isEnabled"
                             type="checkbox"/>
                         <label for="isEnabled"
@@ -397,7 +397,7 @@ export default {
             if (this.$refs.logoImage.src !== this.$config.model.defaultLogoUrl)
                 this.$refs.logoImage.src = this.$config.model.defaultLogoUrl
         },
-        clickEncryptionEnabled() {
+        changeEncryptionEnabled() {
             var self = this
             modal.dialog({
                 closeButton: false,
