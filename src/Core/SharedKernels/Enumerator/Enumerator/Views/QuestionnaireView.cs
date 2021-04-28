@@ -16,5 +16,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public string Title { get; set; }
         public bool Census { get; set; }
+        public bool WebModeAllowed { get; set; } 
     }
 }

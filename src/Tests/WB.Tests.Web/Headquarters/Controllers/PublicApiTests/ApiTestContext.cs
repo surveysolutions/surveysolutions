@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -111,14 +112,16 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             ISerializer serializer = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter = null)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter = null,
+            IWebInterviewConfigProvider interviewConfigProvider = null)
         {
             var questionnairesApiV2Controller = new QuestionnairesApiV2Controller(
                 questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyAccessor>(),
                 questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 serializer ?? Mock.Of<ISerializer>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                readsideRepositoryWriter ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
+                readsideRepositoryWriter ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
+                interviewConfigProvider ?? Mock.Of<IWebInterviewConfigProvider>());
 
             return questionnairesApiV2Controller;
         }

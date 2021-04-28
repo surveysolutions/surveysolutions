@@ -234,19 +234,7 @@ namespace WB.UI.Shared.Enumerator.Services
             this.SaveCurrentSettings(settings => { settings.PartialSynchronizationEnabled = enable; });
         }
 
-        public List<QuestionnaireIdentity> QuestionnairesInWebMode => 
-            string.IsNullOrWhiteSpace(this.CurrentWorkspaceSettings.QuestionnairesInWebMode)
-                ? new List<QuestionnaireIdentity>()
-                : this.CurrentWorkspaceSettings.QuestionnairesInWebMode.Split(',')
-                    .Select(QuestionnaireIdentity.Parse).ToList();
-
         public string WebInterviewUriTemplate => this.CurrentWorkspaceSettings.WebInterviewUriTemplate;
-
-        public void SetQuestionnaireInWebMode(List<string> questionnairesInWebMode)
-        {
-            this.SaveCurrentSettings(settings => settings.QuestionnairesInWebMode = string.Join(",", questionnairesInWebMode));
-        }
-
         public void SetWebInterviewUrlTemplate(string webInterviewUriTemplate)
         {
             this.SaveCurrentSettings(settings => settings.WebInterviewUriTemplate = webInterviewUriTemplate);

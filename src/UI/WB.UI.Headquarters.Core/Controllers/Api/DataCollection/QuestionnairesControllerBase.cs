@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -23,19 +24,22 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         protected readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository;
         private readonly ISerializer serializer;
+        private readonly IWebInterviewConfigProvider interviewConfigProvider;
 
         protected QuestionnairesControllerBase(
             IQuestionnaireAssemblyAccessor assemblyAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer, 
             IQuestionnaireStorage questionnaireStorage, 
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository,
+            IWebInterviewConfigProvider interviewConfigProvider)
         {
             this.assemblyAccessor = assemblyAccessor;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.serializer = serializer;
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireRepository = questionnaireRepository;
+            this.interviewConfigProvider = interviewConfigProvider;
         }
 
         public virtual ActionResult<List<QuestionnaireIdentity>> List()
@@ -43,6 +47,25 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             List<QuestionnaireIdentity> allQuestionnaireIdentities = this.questionnaireBrowseViewFactory.GetAllQuestionnaireIdentities().ToList();
 
             return allQuestionnaireIdentities;
+        }
+
+        public virtual ActionResult<List<QuestionnaireIdentity>> SwitchableToWeb()
+        {
+            var questionnairesPermittedToSwitchToWebMode = questionnaireRepository
+                .Query(_ => _.Where(q => !q.Disabled)
+                    .Select(w => w.Id)
+                    .ToList()
+                ).Where(PermittedQuestionnaire)
+                .Select(QuestionnaireIdentity.Parse)
+                .ToList();
+
+            return questionnairesPermittedToSwitchToWebMode;
+        }
+
+        private bool PermittedQuestionnaire(string questionnaireId)
+        {
+            var properties= this.interviewConfigProvider.Get(QuestionnaireIdentity.Parse(questionnaireId));
+            return properties.Started && properties.AllowSwitchToCawiForInterviewer;
         }
 
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaireAttachments)]
