@@ -11,10 +11,11 @@
         @*<li class="@(workspace.Name == w.Name ? "active" : "")">
                 <a href="@Url.Content(w.PathBase + "/" + w.Name)">@w.DisplayName</a>
             </li>*@
-        @Html.MainMenuItem(Workspace.Admin.AsContext(),"Index", "Workspaces", @MainMenu.Workspaces, MenuItem.Workspaces)
+        @Html.MainMenuItem(Workspace.Admin.AsContext(), "Index", "Workspaces", @MainMenu.Workspaces, MenuItem.Workspaces)
         @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Index", "UsersManagement", MainMenu.Users, MenuItem.UsersManagement)
         @Html.MainMenuItem(Workspace.Admin.AsContext(), "AuditLog", "Diagnostics", AuditLog.PageTitle, MenuItem.AuditLog)
         @Html.MainMenuItem(Workspace.Admin.AsContext(), "Diagnostics", "Administration", Pages.Diagnostics, MenuItem.Administration_Config)
+        @Html.MainMenuItem(Workspace.Admin.AsContext(), "TabletInfos", "Diagnostics", Pages.PackagesInfo_Header, MenuItem.Administration_TabletInfo)
     }
 </ul>
 <ul class="nav navbar-nav navbar-right">
