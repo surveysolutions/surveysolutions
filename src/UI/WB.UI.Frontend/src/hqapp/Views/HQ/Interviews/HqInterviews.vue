@@ -439,6 +439,7 @@
             :confirmMessage="$t('Common.ChangeToCAWIConfirmHQ', {
                 count: getFilteredToCawi().length})"
             :filteredCount="getFilteredToCawi().length"
+            :receivedByInterviewerItemsCount="CountReceivedByInterviewerItems()"
             @confirm="changeInterviewMode(getFilteredToCawi(), 'CAWI')" />
 
         <ChangeToCapi ref="modalChangeToCAPI"
@@ -446,6 +447,7 @@
             :confirmMessage="$t('Common.ChangeToCAPIConfirmHQ', {
                 count: getFilteredToCapi().length})"
             :filteredCount="getFilteredToCapi().length"
+            :receivedByInterviewerItemsCount="CountReceivedByInterviewerItems()"
             @confirm="changeInterviewMode(getFilteredToCapi(), 'CAPI')" />
     </HqLayout>
 </template>
@@ -711,7 +713,7 @@ export default {
                         if(rowData.cawiLink != null) {
                             return '<a href="'+ rowData.cawiLink+'">' + data + ' <span class="glyphicon glyphicon-link"/></a>'
                         }
-                        return data
+                        return data === 'UNKNOWN' ? `<span class="text-muted">${self.$t('Common.Unknown')}</span>` : data
                     },
                     width: '50px',
                 },
@@ -980,7 +982,6 @@ export default {
                 var value = item.actionFlags.indexOf('CANCHANGETOCAPI') >= 0
                 return !isNaN(value) && value
             })
-
         },
 
         getFilteredToCawi() {
@@ -1423,8 +1424,14 @@ export default {
             this.$refs.modalChangeToCAPI.modal({keyboard: false})
         },
 
-        changeInterviewMode(filteredItems, mode) {
+        changeInterviewMode(filteredItems, mode, confirmReceivedByInterviewer) {
             const self = this
+
+            if (!confirmReceivedByInterviewer) {
+                filteredItems = this.arrayFilter(filteredItems, function(item) {
+                    return item.receivedByInterviewerAtUtc === null
+                })
+            }
 
             const commands = map(filteredItems, i => {
                 return JSON.stringify({

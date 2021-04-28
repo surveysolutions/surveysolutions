@@ -5,6 +5,25 @@
         <div class="action-container">
             <p v-html="confirmMessage"></p>
         </div>
+        <div class="form-group"
+            v-if="receivedByInterviewerItemsCount > 0">
+            <br />
+            <input
+                type="checkbox"
+                id="approveReceivedByInterviewer"
+                v-model="confirmReceivedByInterviewer"
+                class="checkbox-filter"/>
+            <label for="approveReceivedByInterviewer"
+                style="font-weight: normal">
+                <span class="tick"></span>
+                {{$t("Interviews.AssignReceivedConfirm", receivedByInterviewerItemsCount)}}
+            </label>
+            <br />
+            <span v-if="confirmReceivedByInterviewer"
+                class="text-danger">
+                {{$t("Interviews.ApproveReceivedWarning")}}
+            </span>
+        </div>
         <div slot="actions">
             <button
                 type="button"
@@ -24,6 +43,12 @@
 
 <script>
 export default {
+    data() {
+        return {
+            confirmReceivedByInterviewer: false,
+        }
+    },
+
     props: {
         filteredCount: {
             type: Number,
@@ -36,6 +61,11 @@ export default {
         },
 
         confirmMessage: { type: String, require: true},
+
+        receivedByInterviewerItemsCount: {
+            type: Number,
+            require: true,
+        },
     },
 
     methods: {
@@ -45,7 +75,7 @@ export default {
 
         confirm() {
             this.$refs.modal.hide()
-            this.$emit('confirm')
+            this.$emit('confirm', this.confirmReceivedByInterviewer)
         },
     },
 }

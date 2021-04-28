@@ -197,7 +197,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             {
                 //could fail
                 //Uow would contain partial data
-                //so a new scope created
+                //so a new scope is created
 
                 inScopeExecutor.Execute(serviceLocator =>
                 {
