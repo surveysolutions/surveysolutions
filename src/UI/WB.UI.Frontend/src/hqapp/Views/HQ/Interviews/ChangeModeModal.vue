@@ -6,14 +6,15 @@
             <p v-html="confirmMessage"></p>
         </div>
         <div class="form-group"
+            :id="'group__' + modalId + '_' + filteredCount"
             v-if="receivedByInterviewerItemsCount > 0">
             <br />
             <input
                 type="checkbox"
-                id="approveReceivedByInterviewer"
+                :id="'switchModeReceivedByInterviewer_' + modalId"
                 v-model="confirmReceivedByInterviewer"
                 class="checkbox-filter"/>
-            <label for="approveReceivedByInterviewer"
+            <label :for="'switchModeReceivedByInterviewer_' + modalId"
                 style="font-weight: normal">
                 <span class="tick"></span>
                 {{$t("Interviews.AssignReceivedConfirm", receivedByInterviewerItemsCount)}}
@@ -21,7 +22,7 @@
             <br />
             <span v-if="confirmReceivedByInterviewer"
                 class="text-danger">
-                {{$t("Interviews.ApproveReceivedWarning")}}
+                {{$t("Interviews.SwitchToCawiReceivedWarning")}}
             </span>
         </div>
         <div slot="actions">
@@ -43,12 +44,6 @@
 
 <script>
 export default {
-    data() {
-        return {
-            confirmReceivedByInterviewer: false,
-        }
-    },
-
     props: {
         filteredCount: {
             type: Number,
@@ -64,6 +59,14 @@ export default {
 
         receivedByInterviewerItemsCount: {
             type: Number,
+            require: true,
+        },
+        confirmReceivedByInterviewer: {
+            type: Boolean,
+            default() { return false },
+        },
+        modalId: {
+            type: String,
             require: true,
         },
     },

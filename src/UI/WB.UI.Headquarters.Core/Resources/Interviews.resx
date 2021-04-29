@@ -138,7 +138,7 @@
     <value>Current responsible interviewers will not be notified about the interview(s) approving until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
   </data>
   <data name="SwitchToCawiReceivedWarning" xml:space="preserve">
-    <value>Current responsible interviewers will not be notified about the interview(s) switching to CAWI until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
+    <value>Current responsible interviewers will not be notified about the interview(s) switching interview mode until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
   </data>
   <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be assigned.&lt;/h3&gt;

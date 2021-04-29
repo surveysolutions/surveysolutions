@@ -435,20 +435,22 @@
             </div>
         </ModalFrame>
         <ChangeToCapi ref="modalChangeToCAWI"
+            :modalId="'switchToCawi_id'"
             :title="$t('Common.ChangeToCAWI')"
             :confirmMessage="$t('Common.ChangeToCAWIConfirmHQ', {
                 count: getFilteredToCawi().length})"
             :filteredCount="getFilteredToCawi().length"
             :receivedByInterviewerItemsCount="CountReceivedByInterviewerItems()"
-            @confirm="changeInterviewMode(getFilteredToCawi(), 'CAWI')" />
+            @confirm="changeInterviewModeToCawi" />
 
         <ChangeToCapi ref="modalChangeToCAPI"
+            :modalId="'switchToCapi_id'"
             :title="$t('Common.ChangeToCAPI')"
             :confirmMessage="$t('Common.ChangeToCAPIConfirmHQ', {
                 count: getFilteredToCapi().length})"
             :filteredCount="getFilteredToCapi().length"
             :receivedByInterviewerItemsCount="CountReceivedByInterviewerItems()"
-            @confirm="changeInterviewMode(getFilteredToCapi(), 'CAPI')" />
+            @confirm="changeInterviewModeToCapi" />
     </HqLayout>
 </template>
 
@@ -1424,6 +1426,15 @@ export default {
             this.$refs.modalChangeToCAPI.modal({keyboard: false})
         },
 
+        changeInterviewModeToCawi(confirmReceivedByInterviewer)
+        {
+            this.changeInterviewMode(this.getFilteredToCawi(), 'CAWI', confirmReceivedByInterviewer)
+        },
+        changeInterviewModeToCapi(confirmReceivedByInterviewer)
+        {
+            this.changeInterviewMode(this.getFilteredToCapi(), 'CAPI', confirmReceivedByInterviewer)
+        },
+
         changeInterviewMode(filteredItems, mode, confirmReceivedByInterviewer) {
             const self = this
 
@@ -1431,6 +1442,10 @@ export default {
                 filteredItems = this.arrayFilter(filteredItems, function(item) {
                     return item.receivedByInterviewerAtUtc === null
                 })
+            }
+
+            if (filteredItems.length == 0) {
+                return
             }
 
             const commands = map(filteredItems, i => {
