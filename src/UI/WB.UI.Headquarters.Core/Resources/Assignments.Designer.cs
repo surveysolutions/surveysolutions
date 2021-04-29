@@ -394,6 +394,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CAWI Activated.
+        /// </summary>
+        public static string CawiActivated {
+            get {
+                return ResourceManager.GetString("CawiActivated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable CAWI mode.
         /// </summary>
         public static string CawiModeEnable {
