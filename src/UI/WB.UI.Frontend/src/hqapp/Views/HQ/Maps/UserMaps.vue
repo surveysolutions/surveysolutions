@@ -25,8 +25,8 @@
 import {map, join, uniqBy, filter, some, orderBy} from 'lodash'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
-const query = gql`query UserMaps {
-  maps {
+const query = gql`query UserMaps($workspace: String!, $order: [MapsSort!], $skip: Int, $take: Int, $where: MapsFilter) {
+  maps(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount,
     filteredCount,
     nodes {
@@ -86,6 +86,7 @@ export default {
                         data: 'userName',
                         name: 'UserName',
                         class: 'title',
+
                         title: this.$t('Pages.MapList_Name'),
                     },
                     {
@@ -119,6 +120,9 @@ export default {
                     order[column.data] = order_col.dir.toUpperCase()
 
                     const variables = {
+                        skip: data.start,
+                        take: data.length,
+                        workspace: self.$store.getters.workspace,
                     }
 
                     const where = {
@@ -129,7 +133,7 @@ export default {
 
                     if(search && search != '') {
                         where.and.push({ or: [
-                            {fileName : {startsWith : search.toLowerCase() }},
+                            {fileName : {startsWith : search }},
                             {users : {some : {userName : {startsWith: search.toLowerCase()}}}},
                         ],
                         })
