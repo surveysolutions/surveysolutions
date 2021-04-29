@@ -38,6 +38,29 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     yield break;
                 }
 
+                if (!user.IsInterviewer)
+                {
+                    if (interviewSummary.InterviewMode != InterviewMode.CAWI
+                        &&(interviewSummary.Status == InterviewStatus.Created
+                           || interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                           || interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                           || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                           || interviewSummary.Status == InterviewStatus.Restarted))
+                    {
+                        yield return InterviewActionFlags.CanChangeToCAWI;
+                    }
+
+                    if (interviewSummary.InterviewMode != InterviewMode.CAPI
+                        &&(interviewSummary.Status == InterviewStatus.Created
+                           || interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                           || interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                           || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                           || interviewSummary.Status == InterviewStatus.Restarted))
+                    {
+                        yield return InterviewActionFlags.CanChangeToCAPI;
+                    }
+                }
+
                 if (user.IsSupervisor)
                 {
                     if (interviewSummary.Status == InterviewStatus.Created
@@ -62,29 +85,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     }
 
                     yield break;
-                }
-
-                if (!user.IsInterviewer)
-                {
-                    if (interviewSummary.InterviewMode != InterviewMode.CAWI
-                        &&(interviewSummary.Status == InterviewStatus.Created
-                            || interviewSummary.Status == InterviewStatus.SupervisorAssigned
-                            || interviewSummary.Status == InterviewStatus.InterviewerAssigned
-                            || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
-                            || interviewSummary.Status == InterviewStatus.Restarted))
-                    {
-                        yield return InterviewActionFlags.CanChangeToCAWI;
-                    }
-
-                    if (interviewSummary.InterviewMode != InterviewMode.CAPI
-                        &&(interviewSummary.Status == InterviewStatus.Created
-                           || interviewSummary.Status == InterviewStatus.SupervisorAssigned
-                           || interviewSummary.Status == InterviewStatus.InterviewerAssigned
-                           || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
-                           || interviewSummary.Status == InterviewStatus.Restarted))
-                    {
-                        yield return InterviewActionFlags.CanChangeToCAPI;
-                    }
                 }
 
                 if ((interviewSummary.Status == InterviewStatus.Created
