@@ -435,18 +435,22 @@
             </div>
         </ModalFrame>
         <ChangeToCapi ref="modalChangeToCAWI"
+            :modalId="'switchToCawi_id'"
             :title="$t('Common.ChangeToCAWI')"
             :confirmMessage="$t('Common.ChangeToCAWIConfirmHQ', {
                 count: getFilteredToCawi().length})"
             :filteredCount="getFilteredToCawi().length"
-            @confirm="changeInterviewMode(getFilteredToCawi(), 'CAWI')" />
+            :receivedByInterviewerItemsCount="CountReceivedByInterviewerItems()"
+            @confirm="changeInterviewModeToCawi" />
 
         <ChangeToCapi ref="modalChangeToCAPI"
+            :modalId="'switchToCapi_id'"
             :title="$t('Common.ChangeToCAPI')"
             :confirmMessage="$t('Common.ChangeToCAPIConfirmHQ', {
                 count: getFilteredToCapi().length})"
             :filteredCount="getFilteredToCapi().length"
-            @confirm="changeInterviewMode(getFilteredToCapi(), 'CAPI')" />
+            :receivedByInterviewerItemsCount="CountReceivedByInterviewerItems()"
+            @confirm="changeInterviewModeToCapi" />
     </HqLayout>
 </template>
 
@@ -711,7 +715,7 @@ export default {
                         if(rowData.cawiLink != null) {
                             return '<a href="'+ rowData.cawiLink+'">' + data + ' <span class="glyphicon glyphicon-link"/></a>'
                         }
-                        return data
+                        return data === 'UNKNOWN' ? `<span class="text-muted">${self.$t('Common.Unknown')}</span>` : data
                     },
                     width: '50px',
                 },
@@ -980,7 +984,6 @@ export default {
                 var value = item.actionFlags.indexOf('CANCHANGETOCAPI') >= 0
                 return !isNaN(value) && value
             })
-
         },
 
         getFilteredToCawi() {
@@ -1423,8 +1426,27 @@ export default {
             this.$refs.modalChangeToCAPI.modal({keyboard: false})
         },
 
-        changeInterviewMode(filteredItems, mode) {
+        changeInterviewModeToCawi(confirmReceivedByInterviewer)
+        {
+            this.changeInterviewMode(this.getFilteredToCawi(), 'CAWI', confirmReceivedByInterviewer)
+        },
+        changeInterviewModeToCapi(confirmReceivedByInterviewer)
+        {
+            this.changeInterviewMode(this.getFilteredToCapi(), 'CAPI', confirmReceivedByInterviewer)
+        },
+
+        changeInterviewMode(filteredItems, mode, confirmReceivedByInterviewer) {
             const self = this
+
+            if (!confirmReceivedByInterviewer) {
+                filteredItems = this.arrayFilter(filteredItems, function(item) {
+                    return item.receivedByInterviewerAtUtc === null
+                })
+            }
+
+            if (filteredItems.length == 0) {
+                return
+            }
 
             const commands = map(filteredItems, i => {
                 return JSON.stringify({
