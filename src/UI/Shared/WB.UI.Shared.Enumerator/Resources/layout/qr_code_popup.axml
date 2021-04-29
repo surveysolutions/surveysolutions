@@ -5,6 +5,10 @@
               xmlns:local="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/linkWebInterview"
+        style="@style/QRCode_link" />
+
     <ImageView
         android:id="@+id/qrCodeImage"
         android:layout_width="match_parent"

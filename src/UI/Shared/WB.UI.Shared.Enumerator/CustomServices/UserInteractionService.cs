@@ -513,7 +513,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
                         View view = this.mvxCurrentTopActivity.Activity.LayoutInflater
                             .Inflate(Resource.Layout.qr_code_popup, null);
-
+                        
+                        var textView = view!.FindViewById<TextView>(Resource.Id.linkWebInterview);
+                        textView.Text = qrCodeValue;
                         var image = view!.FindViewById<ImageView>(Resource.Id.qrCodeImage);
                         image!.SetImageBitmap(QRCodeRenderer.RenderToBitmap(qrCodeValue));
 

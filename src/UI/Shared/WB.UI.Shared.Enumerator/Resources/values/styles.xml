@@ -245,6 +245,13 @@
     <item name="android:paddingBottom">@dimen/Interview_Question_TextAnswer_margin_top</item>
   </style>
 
+    <style name="QRCode_link">
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/Interview_Entity_Element_margin_horizontal</item>
+        <item name="android:layout_margin">@dimen/Interview_Confirmation_EditText_margin</item>
+    </style>
 
     <style name="Button_Primary">
         <item name="android:layout_height">wrap_content</item>
@@ -267,4 +274,6 @@
         <item name="backgroundTint">@color/button_error_selector</item> <!--needed for android 5-->
     </style>
 
+
+  
 </resources>
