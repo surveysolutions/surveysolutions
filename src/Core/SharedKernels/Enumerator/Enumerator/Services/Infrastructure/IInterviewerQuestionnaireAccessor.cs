@@ -28,5 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         IReadOnlyCollection<QuestionnaireDocumentView> LoadAll();
 
         void StoreTranslations(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances);
+
+        void UpdateQuestionnaireWebModeSwitch(List<QuestionnaireIdentity> enabledQuestionnaires);
     }
 }
