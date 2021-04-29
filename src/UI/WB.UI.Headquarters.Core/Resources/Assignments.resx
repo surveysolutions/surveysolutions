@@ -362,6 +362,9 @@
   </data>
   <data name="Activated" xml:space="preserve">
     <value>Activated</value>
+  </data> 
+  <data name="CawiActivated" xml:space="preserve">
+    <value>CAWI Activated</value>
   </data>
   <data name="Tooltip_Table_WebMode" xml:space="preserve">
     <value>Assignment Mode</value>
