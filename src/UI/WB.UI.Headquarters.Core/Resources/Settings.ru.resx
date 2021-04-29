@@ -147,6 +147,9 @@
   <data name="ChangeStateConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите изменить настройки шифрования? Экспортные данные необходимо будет обновить перед тем как скачать.</value>
   </data>
+  <data name="ChangeStateDisabledConfirm" xml:space="preserve">
+    <value>Вы уверены, что хотите изменить настройки шифрования? Экспортные данные больше не будут защищены паролем.</value>
+  </data>
   <data name="GlobalNoteSettings" xml:space="preserve">
     <value>Настройка уведомления</value>
   </data>
