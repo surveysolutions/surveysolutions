@@ -745,6 +745,12 @@
   <data name="Dashboard_CensusAssignment" xml:space="preserve">
     <value>Цензус</value>
   </data>
+  <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>Вы не можите открыть интервью в CAWI режиме. Оно будет отослано на хедквотер при синхронизации.</value>
+  </data>
+  <data name="Dashboard_CawiLabel" xml:space="preserve">
+    <value>{0} (CAWI)</value>
+  </data>
   <data name="Dashboard_Reopen" xml:space="preserve">
     <value>Переоткрыть</value>
   </data>
