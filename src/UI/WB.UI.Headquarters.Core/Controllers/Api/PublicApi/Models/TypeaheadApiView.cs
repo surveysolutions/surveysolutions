@@ -34,5 +34,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
     {
         public T key { get; set; }
         public string value { get; set; }
+        public string iconClass { get; set; }
     }
 }

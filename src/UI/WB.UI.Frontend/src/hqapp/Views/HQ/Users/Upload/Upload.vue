@@ -108,7 +108,7 @@ export default {
         return {
             timerId: 0,
             workspace: null,
-            errorByWorkspace: null,
+            errorByWorkspace: undefined,
         }
     },
     computed: {
