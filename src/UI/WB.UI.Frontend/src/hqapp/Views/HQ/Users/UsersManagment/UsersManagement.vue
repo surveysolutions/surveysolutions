@@ -24,7 +24,7 @@
                     control-id="workspaceSelector"
                     :placeholder="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
                     :value="selectedWorkspace"
-                    :ajax-params="{ }"
+                    :ajax-params="{ includeDisabled: true }"
                     :fetch-url="this.$config.model.workspacesUrl"
                     v-on:selected="onWorkspaceSelected" />
             </FilterBlock>

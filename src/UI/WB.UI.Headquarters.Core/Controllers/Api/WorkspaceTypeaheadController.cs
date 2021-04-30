@@ -29,19 +29,20 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
-        public TypeaheadApiView<string> Workspaces(string query, int limit = 10)
+        public TypeaheadApiView<string> Workspaces(string query, bool includeDisabled = false, int limit = 10)
         {
             var result =
                 this.workspaces.Query(_ =>
-                        Filter(query, _)
+                        Filter(query, includeDisabled, _)
                             .Take(limit)
                             .ToList())
                     .Select(x => new TypeaheadOptionalApiView<string>()
                     {
                         key = x.Name,
                         value = x.DisplayName,
+                        iconClass = x.DisabledAtUtc != null ? "disabled-item" : null
                     }).ToList();
-            int totalCount = this.workspaces.Query(_ => Filter(query, _).Count());
+            int totalCount = this.workspaces.Query(_ => Filter(query, includeDisabled, _).Count());
 
             return new TypeaheadApiView<string>
             (
@@ -53,7 +54,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             );
         }
         
-        private IQueryable<Workspace> Filter(string query, IQueryable<Workspace> source)
+        private IQueryable<Workspace> Filter(string query, bool includeDisabled, IQueryable<Workspace> source)
         {
             IQueryable<Workspace> result = source.OrderBy(x => x.Name);
 
@@ -67,6 +68,11 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 var lowerCaseQuery = query.ToLower();
                 result = result.Where(w => w.DisplayName.ToLower().Contains(lowerCaseQuery));
+            }
+
+            if (!includeDisabled)
+            {
+                result = result.Where(w => w.DisabledAtUtc == null);
             }
 
             return result;

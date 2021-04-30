@@ -234,6 +234,9 @@
   <data name="ApproveReceivedWarning" xml:space="preserve">
     <value>Текущие интервьюверы не будут уведомлены об утверждении интервью. Данные, которые они начали собирать, будут удалены.</value>
   </data>
+  <data name="SwitchToCawiReceivedWarning" xml:space="preserve">
+    <value>Текущие интервьюверы не будут уведомлены об смене режима интервью. Данные, которые они начали собирать, будут удалены.</value>
+  </data>
   <data name="RejectToOriginal" xml:space="preserve">
     <value>Вернуть отправителю</value>
   </data>

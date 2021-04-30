@@ -322,6 +322,9 @@
     <value>Modul Web este activat</value>
   </data>
   <data name="Activated" xml:space="preserve">
+    <value>Activat</value>
+  </data>
+  <data name="CawiActivated" xml:space="preserve">
     <value>CAWI Activat</value>
   </data>
   <data name="Actor" xml:space="preserve">

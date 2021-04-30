@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
         {
             return this.interviewViewRepository.Where(interview => 
                 interview.Status == InterviewStatus.ApprovedBySupervisor
-                || interview.Mode != InterviewMode.CAPI);
+                || interview.Mode == InterviewMode.CAWI);
         }
     }
 }

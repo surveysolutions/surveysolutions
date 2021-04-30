@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -25,12 +26,14 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer,
             IQuestionnaireStorage questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository) : base(
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository,
+            IWebInterviewConfigProvider interviewConfigProvider) : base(
             questionnaireStorage: questionnaireStorage,
             questionnaireRepository: questionnaireRepository,
             assemblyAccessor: assemblyAccessor,
             questionnaireBrowseViewFactory: questionnaireBrowseViewFactory,
-            serializer: serializer)
+            serializer: serializer,
+            interviewConfigProvider:interviewConfigProvider)
         {
             this.questionnaireRepository = questionnaireRepository;
         }
@@ -67,5 +70,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 .Select(l => l.Id).ToList();
             return list;
         }
+
+        [HttpGet]
+        [Route("questionnaires/switchabletoweb")]
+        public override ActionResult<List<QuestionnaireIdentity>> SwitchableToWeb() => base.SwitchableToWeb();
     }
 }

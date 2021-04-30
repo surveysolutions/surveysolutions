@@ -160,6 +160,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can&apos;t open interview in CAWI mode. It will be send to headquarters after synchronization..
+        /// </summary>
+        public static string Dashboard_CantOpenCawi {
+            get {
+                return ResourceManager.GetString("Dashboard_CantOpenCawi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (CAWI).
+        /// </summary>
+        public static string Dashboard_CawiLabel {
+            get {
+                return ResourceManager.GetString("Dashboard_CawiLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Census.
         /// </summary>
         public static string Dashboard_CensusAssignment {
@@ -534,7 +552,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to WebInterviews ({0}).
+        ///   Looks up a localized string similar to Web Interviews ({0}).
         /// </summary>
         public static string Dashboard_WebInterviewsLinkText {
             get {

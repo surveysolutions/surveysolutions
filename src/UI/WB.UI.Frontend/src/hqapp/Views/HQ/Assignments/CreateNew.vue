@@ -116,7 +116,7 @@
                                             class="wb-checkbox">
                                         <label for="webModeId">
                                             <span class="tick"></span>
-                                            {{$t("Assignments.Activated")}}
+                                            {{$t("Assignments.CawiActivated")}}
                                         </label>
                                     </div>
                                 </div>

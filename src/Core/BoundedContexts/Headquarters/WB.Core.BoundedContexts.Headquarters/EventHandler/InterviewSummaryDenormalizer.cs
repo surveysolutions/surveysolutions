@@ -602,6 +602,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
                 interview.InterviewMode = @event.Payload.Mode;
+                interview.ReceivedByInterviewerAtUtc = null;
             });
         }
     }

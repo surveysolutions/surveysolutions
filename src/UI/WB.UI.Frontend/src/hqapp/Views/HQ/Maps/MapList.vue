@@ -245,7 +245,7 @@ export default {
 
                     if(search && search != '') {
                         where.and.push({ or: [
-                            { fileName : {startsWith : search.toLowerCase() }}],
+                            { fileName : {startsWith : search }}],
                         })
                     }
 

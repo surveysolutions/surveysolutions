@@ -338,6 +338,9 @@
     <value>Задание в Веб режиме</value>
   </data>
   <data name="Activated" xml:space="preserve">
+    <value>Активирован</value>
+  </data>
+  <data name="CawiActivated" xml:space="preserve">
     <value>CAWI Активирован</value>
   </data>
   <data name="Tooltip_Table_WebMode" xml:space="preserve">

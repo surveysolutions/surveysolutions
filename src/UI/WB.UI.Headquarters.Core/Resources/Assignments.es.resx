@@ -274,6 +274,9 @@
     <value>Web Mode habilitado</value>
   </data>
   <data name="Activated" xml:space="preserve">
+    <value>Activado</value>
+  </data>
+  <data name="CawiActivated" xml:space="preserve">
     <value>CAWI Activado</value>
   </data>
   <data name="Actor" xml:space="preserve">

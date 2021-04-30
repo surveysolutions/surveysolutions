@@ -1,21 +1,20 @@
-﻿using HotChocolate.Types;
+﻿using System.Linq;
+using HotChocolate.Types;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Conventions;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
 {
-    [PagedTypeName("Users")]
-    public class UserType : ObjectType<HqUser>
+    public class ViewerType : ObjectType<UserDto>
     {
-        protected override void Configure(IObjectTypeDescriptor<HqUser> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<UserDto> descriptor)
         {
-            descriptor.Name("User");
+            descriptor.Name("Viewer");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(x => x.Id).Type<NonNullType<IdType>>();
             descriptor.Field("role").Type<NonNullType<EnumType<UserRoles>>>()
-                .Resolver(ctx => ctx.Parent<HqUser>().Role);
+                .Resolver(ctx => ctx.Parent<HqUser>().Roles.First().Id.ToUserRole());
             descriptor.Field(x => x.UserName).Type<NonNullType<StringType>>();
             descriptor.Field(x => x.Workspaces).Type<NonNullType<ListType<NonNullType<StringType>>>>();
         }

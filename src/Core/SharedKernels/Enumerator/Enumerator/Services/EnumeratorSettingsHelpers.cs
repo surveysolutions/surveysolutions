@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
             Guid interviewId)
         {
             var template = setting.WebInterviewUriTemplate;
-            template ??= setting.Endpoint + "/webinterview/link/{assignment}/{interviewId}";
+            template = string.IsNullOrEmpty(template) ? setting.Endpoint + "/webinterview/link/{assignment}/{interviewId}" : template;
 
             return template
                 .Replace("{assignment}", assignmentId.ToString(CultureInfo.InvariantCulture))

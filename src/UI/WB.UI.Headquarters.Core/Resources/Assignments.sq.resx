@@ -178,6 +178,9 @@
     <value>Modaliteti Ueb u aktivizua</value>
   </data>
   <data name="Activated" xml:space="preserve">
+    <value>Aktivizuar</value>
+  </data>
+  <data name="CawiActivated" xml:space="preserve">
     <value>CAWI Aktivizuar</value>
   </data>
   <data name="Active" xml:space="preserve">
