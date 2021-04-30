@@ -55,9 +55,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             if (interviewerSettings.PartialSynchronizationEnabled && interviewerSettings.AllowSyncWithHq)
             {
                 return interviewViewRepository.Where(interview =>
-                    interview.Status == InterviewStatus.Completed
-                    || interview.Mode == InterviewMode.CAWI
-                    || eventStorage.HasEventsWithoutHqFlag(interview.InterviewId)
+                        interview.Status == InterviewStatus.Completed
+                        || interview.Status == InterviewStatus.Restarted
+                        || interview.Status == InterviewStatus.InterviewerAssigned
+                        || interview.Status == InterviewStatus.RejectedBySupervisor
+                        || interview.Mode == InterviewMode.CAWI
+                    ).Where(interview =>
+                        interview.Status == InterviewStatus.Completed
+                        || interview.Mode == InterviewMode.CAWI
+                        || eventStorage.HasEventsWithoutHqFlag(interview.InterviewId)
                 ).ToReadOnlyCollection();
             }
 
