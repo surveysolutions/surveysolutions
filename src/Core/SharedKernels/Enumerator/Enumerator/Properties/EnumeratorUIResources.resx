@@ -862,6 +862,12 @@ your next synchronization</value>
   <data name="Dashboard_CensusAssignment" xml:space="preserve">
     <value>Census</value>
   </data>
+  <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>You can't open interview in CAWI mode. It will be send to headquarters after synchronization.</value>
+  </data>  
+  <data name="Dashboard_CawiLabel" xml:space="preserve">
+    <value>{0} (CAWI)</value>
+  </data>
   <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
     <value>Checking maps on server</value>
   </data>

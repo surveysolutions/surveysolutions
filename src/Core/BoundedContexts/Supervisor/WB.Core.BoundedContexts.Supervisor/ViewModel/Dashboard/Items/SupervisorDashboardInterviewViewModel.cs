@@ -4,6 +4,7 @@ using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -19,16 +20,19 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IPrincipal principal;
         private readonly IPlainStorage<InterviewerDocument> interviewers;
+        private readonly IUserInteractionService userInteractionService;
 
         public SupervisorDashboardInterviewViewModel(IServiceLocator serviceLocator,
             IAuditLogService auditLogService,
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
-            IPlainStorage<InterviewerDocument> interviewers) : base(serviceLocator, auditLogService)
+            IPlainStorage<InterviewerDocument> interviewers,
+            IUserInteractionService userInteractionService) : base(serviceLocator, auditLogService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
             this.interviewers = interviewers;
+            this.userInteractionService = userInteractionService;
         }
 
         protected override void BindActions()
@@ -41,17 +45,18 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             {
                 ActionType = ActionType.Primary,
                 Command = new MvxAsyncCommand(this.LoadInterviewAsync, () => this.isInterviewReadyToLoad),
-                Label = MainLabel()
+                Label = EnumeratorUIResources.Dashboard_Open
             });
-
-            string MainLabel()
-            {
-                return EnumeratorUIResources.Dashboard_Open;
-            }
         }
 
         public override async Task LoadInterviewAsync()
         {
+            if (interview.Mode == InterviewMode.CAWI)
+            {
+                await userInteractionService.AlertAsync(EnumeratorUIResources.Dashboard_CantOpenCawi);
+                return;
+            }
+            
             this.isInterviewReadyToLoad = false;
             try
             {
@@ -77,6 +82,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         protected override void BindTitles()
         {
             base.BindTitles();
+
+            if (interview.Mode == InterviewMode.CAWI)
+            {
+                IdLabel = string.Format(EnumeratorUIResources.Dashboard_CawiLabel, IdLabel);
+            }
+            
             if (this.interview.ResponsibleId == this.principal.CurrentUserIdentity.UserId)
             {
                 Responsible = this.principal.CurrentUserIdentity.Name;
