@@ -12,10 +12,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
             this IObjectFieldDescriptor descriptor)
             where TSchemaType : class, IOutputType where TClrType : class
         {
-            return descriptor
+            var objectFieldDescriptor = descriptor
                 .AddSimplePagingArguments()
                 .Type<PagedConnection<TSchemaType>>()
                 .Use<PageConnectionMiddleware<TClrType, TSchemaType>>();
+
+            return objectFieldDescriptor;
         }
 
         public static IObjectFieldDescriptor AddSimplePagingArguments(
