@@ -270,7 +270,7 @@
             </div>
         </ModalFrame>
 
-        <ModalFrame
+        <!-- <ModalFrame
             ref="editModeModal"
             :title="$t('Assignments.ChangeModeModalTitle', {assignmentId: editedRowId} )">
             <p>{{ $t("Assignments.ModeExplanation")}}</p>
@@ -294,7 +294,7 @@
                     class="btn btn-link"
                     data-dismiss="modal">{{$t("Common.Cancel")}}</button>
             </div>
-        </ModalFrame>
+        </ModalFrame> -->
     </HqLayout>
 </template>
 
@@ -565,7 +565,6 @@ export default {
                 {
                     data: 'webMode',
                     name: 'WebMode',
-                    class: 'pointer editable',
                     title: this.$t('Assignments.WebMode'),
                     tooltip: this.$t('Assignments.Tooltip_Table_WebMode'),
                     searchable: false,
@@ -782,11 +781,11 @@ export default {
                     this.$refs.editAudioEnabledModal.modal('show')
                 })
             }
-            else if (columnName === 'WebMode' && this.config.isHeadquarter && !this.showArchive.key) {
-                this.editedRowId = parsedRowId
-                this.mode = cellData
-                this.$refs.editModeModal.modal('show')
-            }
+            // else if (columnName === 'WebMode' && this.config.isHeadquarter && !this.showArchive.key) {
+            //     this.editedRowId = parsedRowId
+            //     this.mode = cellData
+            //     this.$refs.editModeModal.modal('show')
+            // }
         },
 
         async updateQuantity() {
@@ -825,12 +824,12 @@ export default {
             return false
         },
 
-        updateMode() {
-            this.$hq.Assignments.changeMode(this.editedRowId, this.mode).then(() => {
-                this.$refs.editModeModal.hide()
-                this.reloadTable()
-            })
-        },
+        // updateMode() {
+        //     this.$hq.Assignments.changeMode(this.editedRowId, this.mode).then(() => {
+        //         this.$refs.editModeModal.hide()
+        //         this.reloadTable()
+        //     })
+        // },
 
         async loadResponsibleIdByName(onDone) {
             if (this.$route.query.responsible != undefined) {

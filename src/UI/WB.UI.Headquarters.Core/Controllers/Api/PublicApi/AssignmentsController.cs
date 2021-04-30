@@ -503,7 +503,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return NoContent();
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Updates assignment mode
         /// </summary>
         /// <param name="id">Assignment id</param>
@@ -546,7 +546,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
 
             return NoContent();
-        }
+        }*/
 
         /// <summary>
         /// Gets Quantity Settings for provided assignment
