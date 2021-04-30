@@ -27,6 +27,15 @@ Set-AndroidXmlResourceValue $AndroidProject "google_maps_api_key" $GoogleMapKey
 Set-AndroidXmlResourceValue $AndroidProject "appcenter_key" $AppCenterKey
 Set-AndroidXmlResourceValue $AndroidProject "arcgisruntime_key" $ArcGisKey
 
+$androidKeyStore = $ENV:ANDROID_KEY_STORE
+$keyStore = [System.IO.Path]::GetTempFileName()
+if ($null -ne $androidKeyStore) {
+    $keyStore = [System.IO.Path]::GetTempFileName()
+    [System.IO.File]::WriteAllBytes($keyStore, [System.Convert]::FromBase64String($androidKeyStore))
+}
+
+$PathToKeystore = $keyStore
+
 & (GetPathToMSBuild) -restore $AndroidProject -t:SignAndroidPackage `
     -p:Configuration=$BuildConfiguration `
     -p:AndroidKeyStore=True `
