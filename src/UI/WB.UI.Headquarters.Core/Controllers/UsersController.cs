@@ -832,7 +832,7 @@ namespace WB.UI.Headquarters.Controllers
         }     
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
-        [ActivePage(MenuItem.Teams)]
+        [ActivePage(MenuItem.Interviewers)]
         [Route("/Interviewers")]
         public ActionResult Interviewers()
         {
