@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.TabletInformation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -37,8 +36,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
             this.encryptionService = encryptionService;
 
             var workspaceName = contextAccessor.CurrentWorkspace()?.Name; 
-            this.basePath = Path.Combine(fileStorageOptions.Value.TempData, TabletInformationFolderName,
-                workspaceName == WorkspaceConstants.DefaultWorkspaceName ? "" : workspaceName);
+            
+            this.basePath = Path.Combine(fileStorageOptions.Value.GlobalTempData, TabletInformationFolderName);
+            
             if (!fileSystemAccessor.IsDirectoryExists(this.basePath))
                 fileSystemAccessor.CreateDirectory(this.basePath);
         }
