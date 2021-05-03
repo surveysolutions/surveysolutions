@@ -336,19 +336,14 @@
   <data name="BatchDescription" xml:space="preserve">
     <value>Upload a zip-archive with one or more tab separated files corresponding to the main interview level and subordinate rosters. Allows preloading variables at any level of the interview.&lt;br/&gt;
 All data files must contain variable interview__id with a unique string or numeric identifier of the interview. Links within rosters and nested rosters established the same way as in exported data.&lt;br/&gt;
-&lt;br/&gt;
-Optionally can specify the following columns in the main interview level file:&lt;br/&gt;
-_responsible - username of a headquarters, supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
-_quantity - capacity of the assignment;&lt;br/&gt;
-_email - email of the respondent (for web-interviews only);&lt;br/&gt;
-_password - password to start an interview (for web-interviews only);&lt;br/&gt;
-_webmode - is this assignment in the web mode (value 1 should be used);&lt;br/&gt;
-_record_audio - audio recording is enabled for interviews (1 - enabled, 0 - disabled, blank - get this value from questionnaire);&lt;br/&gt;
-_comment - comments for the assignment</value>
+</value>
     <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
   </data>
   <data name="BatchTitle" xml:space="preserve">
     <value>Identifying and collected data (archive)</value>
+  </data>
+  <data name="BatchColumnsTitle" xml:space="preserve">
+    <value>Optionally can specify the following columns in the main interview level file:</value>
   </data>
   <data name="CreatingMultipleInterviews" xml:space="preserve">
     <value>Creating multiple interviews</value>
@@ -366,20 +361,23 @@ _comment - comments for the assignment</value>
     <value>manual mode</value>
   </data>
   <data name="SimpleDescription" xml:space="preserve">
-    <value>Upload tab separated file with values for questions in the interview level only. Include values for identifying questions and other questions at the main interview level. Does not allow preloading values inside rosters.&lt;br/&gt;
-&lt;br/&gt;
-Optionally can specify the following columns:&lt;br/&gt;
-_responsible - username of a headquarters, supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
-_quantity - capacity of the assignment;&lt;br/&gt;
-_email - email of the respondent (for web-interviews only);&lt;br/&gt;
-_password - password to start an interview (for web-interviews only);&lt;br/&gt;
-_webmode - is this assignment in the web mode (value 1 should be used);&lt;br/&gt;
-_record_audio - audio recording is enabled for interviews (1 - enabled, 0 - disabled, blank - get this value from questionnaire);&lt;br/&gt;
-_comment - comments for the assignment</value>
-    <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
+    <value>Upload tab separated file with values for questions in the interview level only. Include values for identifying questions and other questions at the main interview level. Does not allow preloading values inside rosters.</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>Identifying data only</value>
+  </data>
+  <data name="SimpleColumnsTitle" xml:space="preserve">
+    <value>Optionally can specify the following columns:</value>
+  </data>
+  <data name="ColumnsDescription" xml:space="preserve">
+    <value>&lt;b&gt;_responsible&lt;/b&gt; - username of a headquarters, supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - capacity of the assignment;&lt;br/&gt;
+&lt;b&gt;_email&lt;/b&gt; - email of the respondent (for web-interviews only);&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - password to start an interview (for web-interviews only);&lt;br/&gt;
+&lt;b&gt;_webmode&lt;/b&gt; - mode for assignment (1 for CAWI, 0 or blank for CAPI);&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - audio recording is enabled for interviews (1 - enabled, 0 - disabled, blank - get this value from questionnaire);&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; - comments for the assignment</value>
+    <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
   </data>
   <data name="UploadDescription" xml:space="preserve">
     <value>Upload a file with identifying data to create new assignments.
