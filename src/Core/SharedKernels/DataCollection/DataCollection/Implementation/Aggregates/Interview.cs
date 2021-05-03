@@ -1740,6 +1740,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     this.Restore(command.UserId, command.OriginDate);
                 else
                     propertiesInvariants.ThrowIfStatusNotAllowedToBeChangedWithMetadata(command.InterviewStatus);
+
+                propertiesInvariants.ThrowIfInterviewIsInCawiMode();
             }
 
             foreach (AggregateRootEvent synchronizedEvent in command.SynchronizedEvents)
