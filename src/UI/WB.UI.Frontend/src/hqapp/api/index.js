@@ -127,7 +127,7 @@ class Workspaces {
                 params: {
                     userId,
                     includeDisabled,
-                    limit: 1000,
+                    length: 1000,
                 },
             })
         return response.data
