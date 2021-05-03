@@ -210,5 +210,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     }
                 };
         }
+
+        public void ThrowIfInterviewIsInCawiMode()
+        {
+            if (this.InterviewProperties.Mode == InterviewMode.CAWI)
+                throw new InterviewException(
+                    $"Interview is in CAWI mode",
+                    InterviewDomainExceptionType.InterviewHasIncompatibleMode)
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewProperties.Id}
+                    }
+                };
+        }
     }
 }
