@@ -90,7 +90,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
             return this.fileSystemAccessor.GetFilesInDirectory(this.basePath, $"*{this.zipExtension}")
                 .Select(this.ToTabletInfoView)
                 .Where(tabletInfo => tabletInfo != null)
-                .OrderByDescending(tabletInfo => tabletInfo.CreationDate)
                 .ToList();
         }
 
