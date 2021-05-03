@@ -142,12 +142,12 @@
                         @click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
                     <button
                         class="btn btn-lg btn-primary"
-                        v-if="selectedRows.length && !config.isSupervisor"
+                        v-if="selectedRows.length"
                         :disabled="getFilteredToCapi().length == 0"
                         @click="changeToCAPI">{{ $t("Common.ChangeToCAPI")}}</button>
                     <button
                         class="btn btn-lg btn-primary"
-                        v-if="selectedRows.length && !config.isSupervisor"
+                        v-if="selectedRows.length"
                         :disabled="getFilteredToCawi().length == 0"
                         @click="changeToCAWI">{{ $t("Common.ChangeToCAWI")}}</button>
                     <button

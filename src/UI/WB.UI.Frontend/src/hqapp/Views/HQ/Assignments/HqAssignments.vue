@@ -526,7 +526,7 @@ export default {
                 {
                     data: 'isAudioRecordingEnabled',
                     name: 'AudioRecording',
-                    class: 'pointer editable',
+                    class: this.getClass,
                     title: this.$t('Assignments.IsAudioRecordingEnabled'),
                     tooltip: this.$t('Assignments.Tooltip_Table_IsAudioRecordingEnabled'),
                     searchable: false,
@@ -615,6 +615,9 @@ export default {
             }
 
             return tableOptions
+        },
+        getClass(){
+            return this.config.isHeadquarter ? 'pointer editable' : ''
         },
     },
 
@@ -782,7 +785,7 @@ export default {
                     this.$refs.editAudioEnabledModal.modal('show')
                 })
             }
-            else if (columnName === 'WebMode' && this.config.isHeadquarter && !this.showArchive.key) {
+            else if (columnName === 'WebMode' && !this.showArchive.key) {
                 this.editedRowId = parsedRowId
                 this.mode = cellData
                 this.$refs.editModeModal.modal('show')
