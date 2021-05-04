@@ -607,6 +607,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(InterviewModeChanged @event)
         {
             this.properties.Mode = @event.Mode;
+			this.properties.IsReceivedByInterviewer = false;
         }
 
         #endregion
