@@ -156,7 +156,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 AudioQuestionsFilesMd5 = audioQuestionsFilesMd5,
                 AudioAuditFilesMd5 = audioAuditFilesMd5,
                 ResponsibleId = interview?.ResponsibleId,
-                IsReceivedByInterviewer = interview?.IsReceivedByInterviewer ?? false
+                IsReceivedByInterviewer = interview?.IsReceivedByInterviewer ?? false,
+                Mode = interview?.Mode ?? InterviewMode.Unknown
             };
         }
 

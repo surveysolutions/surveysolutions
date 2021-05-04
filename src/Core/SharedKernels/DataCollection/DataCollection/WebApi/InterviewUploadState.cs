@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.WebApi
 {
@@ -13,5 +14,6 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public HashSet<string> AudioAuditFilesMd5 { get; set; }
         public Guid? ResponsibleId { get; set; }
         public bool IsReceivedByInterviewer { get; set; }
+        public InterviewMode Mode { get; set; }
     }
 }
