@@ -105,7 +105,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Assignment cannot be found</response>
         [HttpGet]
         [Route("{id:int}")]
-        [Authorize(Roles = "ApiUser, Administrator")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<FullAssignmentDetails> Details(int id)
         {
             Assignment assignment = assignmentsStorage.GetAssignment(id);
@@ -126,7 +126,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <returns code="406">Incorrect filtering data provided</returns>
         [HttpGet]
         [Route("")]
-        [Authorize(Roles = "ApiUser, Administrator")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public async Task<ActionResult<AssignmentsListView>> List([FromQuery] AssignmentsListFilter filter)
         {
             filter ??= new AssignmentsListFilter
@@ -200,8 +200,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="400">Bad parameters provided or identifying data incorrect. See response details for more info</response>
         /// <response code="404">Questionnaire not found</response>
         [HttpPost]
-        [Authorize(Roles = "ApiUser, Administrator")]
         [Route("")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<CreateAssignmentResult> Create(
             [FromBody, BindRequired] CreateAssignmentApiRequest createItem)
         {
@@ -301,7 +301,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Assignee cannot be assigned to assignment</response>
         [HttpPatch]
         [Route("{id:int}/assign")]
-        [Authorize(Roles = "ApiUser, Administrator")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public async Task<ActionResult<AssignmentDetails>> Assign(int id,
             [FromBody, BindRequired] AssignmentAssignRequest assigneeRequest)
         {
@@ -389,7 +389,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Size cannot be changed</response>
         [HttpPatch]
         [Route("{id:int}/changeQuantity")]
-        [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
         [ObservingNotAllowed]
         public ActionResult<AssignmentDetails> ChangeQuantity(int id, [FromBody] int quantity)
         {
@@ -416,7 +416,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/archive")]
-        [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
         [ObservingNotAllowed]
         public ActionResult<AssignmentDetails> Archive(int id)
         {
@@ -440,7 +440,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/unarchive")]
-        [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
         [ObservingNotAllowed]
         public ActionResult<AssignmentDetails> Unarchive(int id)
         {
@@ -461,7 +461,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpGet]
         [Route("{id:int}/recordAudio")]
-        [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
         public ActionResult<AudioRecordingEnabled> AudioRecoding(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
@@ -486,7 +486,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:int}/recordAudio")]
         [ObservingNotAllowed]
-        [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
         public ActionResult AudioRecodingPatch(int id, [FromBody] UpdateRecordingRequest request)
         {
             if (!ModelState.IsValid)
@@ -512,7 +512,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Mode cannot be changed</response>
         [HttpPatch]
         [Route("{id:int}/changeMode")]
-        [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Supervisor, UserRoles.Headquarter, UserRoles.Administrator)]
         public ActionResult ChangeMode(int id, [FromBody] UpdateModeRequest request)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
@@ -556,7 +556,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpGet]
         [Route("{id:int}/assignmentQuantitySettings")]
-        [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
         public ActionResult<AssignmentQuantitySettings> AssignmentQuantitySettings(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
@@ -573,7 +573,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Obsolete("Use PATCH method instead")]
         [Route("{id:int}/close")]
         [ObservingNotAllowed]
-        [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
         public ActionResult ClosePost(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
@@ -599,7 +599,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:int}/close")]
         [ObservingNotAllowed]
-        [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
         public ActionResult<AssignmentDetails> Close(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
@@ -626,7 +626,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Assignment cannot be found</response>
         [HttpGet]
         [Route("{id:int}/history")]
-        [Authorize(Roles = "ApiUser, Supervisor, Headquarter, Administrator")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Supervisor, UserRoles.Headquarter, UserRoles.Administrator)]
         public async Task<ActionResult<AssignmentHistory>> History(int id, [FromQuery] int start = 0,
             [FromQuery] int length = 30)
         {

@@ -526,7 +526,7 @@ export default {
                 {
                     data: 'isAudioRecordingEnabled',
                     name: 'AudioRecording',
-                    class: 'pointer editable',
+                    class: this.getClass,
                     title: this.$t('Assignments.IsAudioRecordingEnabled'),
                     tooltip: this.$t('Assignments.Tooltip_Table_IsAudioRecordingEnabled'),
                     searchable: false,
@@ -614,6 +614,9 @@ export default {
             }
 
             return tableOptions
+        },
+        getClass(){
+            return this.config.isHeadquarter ? 'pointer editable' : ''
         },
     },
 

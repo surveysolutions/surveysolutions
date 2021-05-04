@@ -351,13 +351,6 @@ export default {
                         },
                     },
                     {
-                        name: this.$t('Pages.PackagesInfo_Header'),
-                        className: 'suso-tabletinfo',
-                        callback: (_, opt) => {
-                            window.location = this.workspacePath(rowData.Name) + 'Administration/TabletInfos'
-                        },
-                    },
-                    {
                         name: this.$t('Pages.InterviewPackages'),
                         className: 'suso-interview-packages',
                         callback: (_, opt) => {

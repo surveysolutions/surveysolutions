@@ -1,14 +1,10 @@
 <template>
     <HqLayout
         :hasFilter="true"
-        :title="title"
-        :topicButtonRef="this.model.createUrl"
-        :topicButton="$t('Users.AddInterviewer')">
+        :title="title">
         <div slot="subtitle">
             <div class="neighbor-block-to-search">
                 <ol class="list-unstyled">
-                    <li
-                        v-if="model.showFirstInstructions">{{ $t('Pages.Users_Interviewers_Instruction1') }}</li>
                     <li>{{ $t('Pages.Users_Interviewers_Instruction2') }}</li>
                 </ol>
             </div>
@@ -65,7 +61,6 @@
             :tableOptions="tableOptions"
             @ajaxComplete="onTableReload"
             exportable
-            :selectable="model.canArchiveUnarchive || model.canArchiveMoveToOtherTeam"
             mutliRowSelect
             :selectableId="'userId'"
             @selectedRowsChanged="rows => selectedInterviewers = rows"
@@ -101,23 +96,6 @@
                 </div>
             </div>
         </DataTables>
-        <Confirm
-            ref="confirmArchive"
-            id="confirmArchive"
-            slot="modals">{{$t('Pages.Interviewers_ArchiveInterviewersConfirmMessage')}}</Confirm>
-        <Confirm ref="confirmUnarchive"
-            id="confirmUnarchive"
-            slot="modals">
-            {{$t('Archived.UnarchiveInterviewerWarning')}}
-            <br />
-            {{$t('Pages.Interviewers_ArchiveInterviewersConfirm')}}
-        </Confirm>
-
-        <InterviewersMoveToOtherTeam
-            ref="interviewersMoveToOtherTeam"
-            :interviewers="selectedInterviewersFullInfo"
-            :moveUserToAnotherTeamUrl="model.moveUserToAnotherTeamUrl"
-            @moveInterviewersCompleted="loadData"></InterviewersMoveToOtherTeam>
     </HqLayout>
 </template>
 
@@ -132,10 +110,6 @@ import { DateFormats } from '~/shared/helpers'
 
 export default {
     mixins: [routeSync],
-
-    components: {
-        InterviewersMoveToOtherTeam,
-    },
 
     data() {
         return {
@@ -159,29 +133,6 @@ export default {
         onTableReload(data) {
             this.usersCount = formatNumber(data.recordsTotal)
             this.allInterviewers = data.data
-        },
-        async archiveInterviewersAsync(isArchive) {
-            var response = await this.$http.post(this.model.archiveUsersUrl, {
-                archive: isArchive,
-                userIds: this.selectedInterviewers,
-            })
-
-            if(!response.data.isSuccess)
-                toastr.warning(response.data.domainException)
-
-            this.loadData()
-        },
-        archiveInterviewers() {
-            var self = this
-            this.$refs.confirmArchive.promt(async ok => {
-                if (ok) await self.archiveInterviewersAsync(true)
-            })
-        },
-        unarchiveInterviewers() {
-            var self = this
-            this.$refs.confirmUnarchive.promt(async ok => {
-                if (ok) await self.archiveInterviewersAsync(false)
-            })
         },
         supervisorSelected(option) {
             this.supervisor = option
@@ -210,9 +161,6 @@ export default {
             requestData.archived = (this.archiveStatus || {}).key
             requestData.facet = (this.facet || {}).key
         },
-        moveToAnotherTeam() {
-            this.$refs.interviewersMoveToOtherTeam.moveToAnotherTeam()
-        },
     },
     computed: {
         model() {
@@ -226,16 +174,6 @@ export default {
             return map(this.selectedInterviewers, interviewerId => {
                 return find(self.allInterviewers, interviewer => interviewer.userId == interviewerId)
             })
-        },
-        isVisibleArchive() {
-            return (
-                this.selectedInterviewers.length && this.model.canArchiveUnarchive && this.archiveStatus.key == 'false'
-            )
-        },
-        isVisibleUnarchive() {
-            return (
-                this.selectedInterviewers.length && this.model.canArchiveUnarchive && this.archiveStatus.key == 'true'
-            )
         },
         tableOptions() {
             var self = this

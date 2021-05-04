@@ -37,10 +37,12 @@ export default {
             let columns = [
                 {
                     data: 'androidId',
+                    name: 'AndroidId',
                     title: this.$t('Pages.PackagesInfo_DeviceId'),
                 },
                 {
                     data: 'creationDate',
+                    name: 'CreationDate',
                     title: this.$t('Pages.PackagesInfo_UploadDate'),
                     render: function(data, type, row) {
                         return new moment(data).format(DateFormats.dateTime)
@@ -48,14 +50,17 @@ export default {
                 },
                 {
                     data: 'userName',
+                    name: 'UserName',
                     title: this.$t('Pages.PackagesInfo_UserName'),
                 },
                 {
                     data: 'userId',
+                    name: 'UserId',
                     title: this.$t('Pages.PackagesInfo_UserId'),
                 },
                 {
                     data: 'size',
+                    name: 'Size',
                     title: this.$t('Pages.PackagesInfo_Size'),
                     render: function(data, _, row) {
                         return `<a href=${row.downloadUrl}>${humanFileSize(
@@ -74,6 +79,7 @@ export default {
                 },
                 bInfo: false,
                 responsive: false,
+                order: [[1, 'desc']],
             }
         },
     },

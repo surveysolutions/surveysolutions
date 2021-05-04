@@ -11,6 +11,12 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
     [NonWorkspaced]
     public class TesterUserIdentity : IUserIdentity, IPlainStorageEntity
     {
+        public TesterUserIdentity()
+        {
+            //compatibility
+            Workspace = string.Empty;
+        }
+
         [PrimaryKey]
         public string Id  { get; set; }
         public string Name { get; set; }
