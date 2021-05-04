@@ -1670,8 +1670,8 @@ export default {
             }
         },
 
-        async loadResponsibleIdByName(onDone) {
-            if (this.$route.query.responsibleName != undefined) {
+        loadResponsibleIdByName(onDone) {
+            if (this.$route.query.responsibleName !== undefined) {
                 const requestParams = assign(
                     {
                         query: this.$route.query.responsibleName,
@@ -1682,22 +1682,32 @@ export default {
                     },
                     this.ajaxParams
                 )
+                const responsibleQueryName = this.$route.query.responsibleName
 
-                const response = await this.$http.get(this.config.api.responsible, {params: requestParams})
-
-                onDone(
-                    response.data.options.length > 0 && response.data.options[0].value == this.$route.query.responsibleName
-                        ? response.data.options[0].key
-                        : undefined
-                )
-            } else onDone()
+                this.$http.get(this.config.api.responsible, {params: requestParams})
+                    .then(function (response) {
+                        onDone(
+                            responsibleQueryName,
+                            response.data.options.length > 0 && response.data.options[0].value === responsibleQueryName
+                                ? response.data.options[0].key
+                                : undefined)
+                    })
+            }
+            else onDone()
         },
 
-        loadQuestionnaireId(onDone) {
-            const questionnaireId = this.$route.query.questionnaireId
-            const version = this.$route.query.questionnaireVersion
+        loadQuestionnaireId(self, questionnaireId, version) {
 
-            onDone(questionnaireId, version)
+            if (questionnaireId != null) {
+                self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId)
+                if (version != null && self.questionnaireId != null) {
+                    self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version)
+
+                    if(query.conditions != null) {
+                        self.conditions = queryStringToCondition(flatten([query.conditions]))
+                    }
+                }
+            }
         },
 
         initPageFilters() {
@@ -1716,28 +1726,16 @@ export default {
                 self.interviewMode = self.interviewModes.find(o => o.key == query.mode)
             }
 
-            self.loadQuestionnaireId((questionnaireId, version) => {
-                if (questionnaireId != null) {
-                    self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId)
-                    if (version != null && self.questionnaireId != null) {
-                        self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version)
-
-                        if(query.conditions != null) {
-                            self.conditions = queryStringToCondition(flatten([query.conditions]))
-                        }
-                    } else {
-                        if(version == null && self.questionnaireId.versions.length == 1) {
-                            self.questionnaireVersionSelected(self.questionnaireId.versions[0])
-                        }
-                    }
-                }
-            })
-
-            self.loadResponsibleIdByName(responsibleId => {
+            self.loadResponsibleIdByName((responsibleQueryName, responsibleId) => {
                 if (responsibleId != null)
-                    self.responsibleId = {key: responsibleId, value: query.responsibleName}
+                    self.responsibleId = {key: responsibleId, value: responsibleQueryName}
                 else
                     self.responsibleId = null
+
+                const questionnaireId = self.$route.query.questionnaireId
+                const version = self.$route.query.questionnaireVersion
+
+                self.loadQuestionnaireId(self, questionnaireId, version)
 
                 self.startWatchers(
                     ['responsibleId',
