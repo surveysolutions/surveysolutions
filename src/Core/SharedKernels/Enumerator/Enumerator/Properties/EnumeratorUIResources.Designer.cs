@@ -561,7 +561,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviews in Web interview mode. Will be removed during synchronization when web interview is completed by respondend.
+        ///   Looks up a localized string similar to Interviews in Web interview mode. Will be removed during synchronization when web interview is completed by respondent.
         /// </summary>
         public static string Dashboard_WebInterviewTabText {
             get {
