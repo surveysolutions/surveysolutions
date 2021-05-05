@@ -934,23 +934,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             Answer[]? answers;
 
-            if (command.Options == null && (command.IsFilteredCombobox || command.CascadeFromQuestionId.HasValue))
+            if ((command.IsFilteredCombobox || command.CascadeFromQuestionId.HasValue) && command.CategoriesId == null)
             {
                 IQuestion originalQuestion = this.GetQuestion(command.QuestionId);
                 answers = originalQuestion.Answers.ToArray();                
             }
             else
             {
-                answers = ConvertOptionsToAnswers(command?.Options);                
+                answers = ConvertOptionsToAnswers(command.Options);                
             }
 
             PrepareGeneralProperties(ref title, ref variableName);
-
-            if (command!.IsFilteredCombobox || command.CascadeFromQuestionId.HasValue)
-            {
-                var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(command.QuestionId);
-                answers = categoricalOneAnswerQuestion?.Answers.ToArray();
-            }
 
             Guid? linkedRosterId;
             Guid? linkedQuestionId;
