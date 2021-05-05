@@ -101,6 +101,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                     | AssignmentsInputModel.SearchTypes.IdentifyingQuestions
                     | AssignmentsInputModel.SearchTypes.QuestionnaireTitle;
                 input.ShowQuestionnaireTitle = true;
+                input.NonCawiOnly = true;
             }
 
             var result = this.assignmentViewFactory.Load(input);
