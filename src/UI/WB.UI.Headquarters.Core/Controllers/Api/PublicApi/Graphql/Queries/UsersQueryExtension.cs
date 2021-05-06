@@ -31,7 +31,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
                 .UseFiltering<UsersFilterInputType>();
 
             descriptor.Field<UserResolver>(x => x.GetUser(default, default))
-                .Authorize(UserRoles.Administrator.ToString(), UserRoles.ApiUser.ToString(), UserRoles.Supervisor.ToString())
+                .Authorize(
+                    UserRoles.Administrator.ToString(), 
+                    UserRoles.ApiUser.ToString(), 
+                    UserRoles.Headquarter.ToString(), 
+                    UserRoles.Supervisor.ToString())
                 .Name("user")
                 .Description("Gets detailed information about single user within workspace")
                 .Type<WorkspaceUserType>()
