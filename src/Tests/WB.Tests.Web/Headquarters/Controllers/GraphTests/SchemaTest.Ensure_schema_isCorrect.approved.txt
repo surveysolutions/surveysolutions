@@ -100,7 +100,7 @@ type HeadquartersQuery {
   questions("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionFilter): [Entity] @authorize(apply: BEFORE_RESOLVER)
   questionnaireItems("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionnaireItemsFilter): [QuestionnaireItem] @authorize(apply: BEFORE_RESOLVER)
   viewer: Viewer @authorize(apply: BEFORE_RESOLVER)
-  users(skip: Int take: Int order: [HqUserSortInput!] where: UsersFilterInput): Users @authorize(roles: [ "Administrator" ], apply: BEFORE_RESOLVER)
+  users(skip: Int take: Int order: [UsersSortInput!] where: UsersFilterInput): Users @authorize(roles: [ "Administrator" ], apply: BEFORE_RESOLVER)
   "Gets detailed information about single user within workspace"
   user("Workspace name" workspace: String! = "primary" id: ID!): WorkspaceUser @authorize(roles: [ "Administrator", "ApiUser", "Headquarter", "Supervisor" ], apply: BEFORE_RESOLVER)
   mapReport("Workspace name" workspace: String! = "primary" "Questionnaire id" questionnaireId: Uuid! "Questionnaire version" questionnaireVersion: Long "Variable name for question" variable: String "Zoom level" zoom: Int! "Visible area width" clientMapWidth: Int! "East coordinate" east: Float! "West coordinate" west: Float! "North coordinate" north: Float! "South coordinate" south: Float! where: MapReportFilter): MapReportHolder @authorize(apply: BEFORE_RESOLVER)
@@ -460,12 +460,6 @@ input ComparableNullableOfInt64OperationFilterInput {
   nlte: Long
 }
 
-input HqUserSortInput {
-  userName: SortEnumType
-  creationDate: SortEnumType
-  fullName: SortEnumType
-}
-
 input IdentifyEntityValueFilter {
   and: [IdentifyEntityValueFilter!]
   or: [IdentifyEntityValueFilter!]
@@ -673,6 +667,12 @@ input UsersFilterInput {
   phoneNumber: StringOperationFilterInput
   id: ComparableGuidOperationFilterInput
   role: RoleFilterInput
+}
+
+input UsersSortInput {
+  userName: SortEnumType
+  creationDate: SortEnumType
+  fullName: SortEnumType
 }
 
 enum ApplyPolicy {
