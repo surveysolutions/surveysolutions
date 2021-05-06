@@ -205,10 +205,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 .Union(ActionButtonsDefinition)
                 .ToArray();
 
+            var details = GetEntitiesDetails(interviewId, interviewEntityWithTypes.Select(e => e.Identity).ToArray());
+
             var result = new PrefilledPageData
             {
                 FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
                 Entities = interviewEntityWithTypes,
+                Details = details,
                 HasAnyQuestions = interviewEntityWithTypes.Length > 1
             };
 
