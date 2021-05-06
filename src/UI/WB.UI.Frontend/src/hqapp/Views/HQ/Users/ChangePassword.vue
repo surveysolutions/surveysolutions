@@ -148,7 +148,8 @@ export default {
             }).then(
                 response => {
                     self.successMessage = self.$t('Strings.HQ_AccountController_AccountPasswordChangedSuccessfully')
-                    window.location.href = '/'
+                    if (self.userInfo.forceChangePassword && self.userInfo.isOwnProfile)
+                        window.location.href = '/'
                 },
                 error => {
                     self.processModelState(error.response.data, self)
