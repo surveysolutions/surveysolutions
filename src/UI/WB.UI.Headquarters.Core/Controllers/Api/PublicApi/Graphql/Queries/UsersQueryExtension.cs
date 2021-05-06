@@ -33,7 +33,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
                 .UseSorting<UsersSortInputType>()
                 .UseFiltering<UsersFilterInputType>();
 
-            descriptor.Field<UserResolver>(x => x.GetUser(default, default))
+            /*descriptor.Field<UserResolver>(x => x.GetUser(default, default))
                 .Authorize(
                     UserRoles.Administrator.ToString(), 
                     UserRoles.ApiUser.ToString(), 
@@ -44,6 +44,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
                 .Type<WorkspaceUserType>()
                 .HasWorkspace()
                 .Argument("id", a => a.Type<NonNullType<IdType>>());
+        */
         }
     }
 
