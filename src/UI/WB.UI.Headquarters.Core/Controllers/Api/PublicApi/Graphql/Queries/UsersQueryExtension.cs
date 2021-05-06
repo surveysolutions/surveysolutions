@@ -23,7 +23,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
                 .Name("viewer");
 
             descriptor.Field<UsersResolver>(x => x.GetUsers(default, default))
-                .Authorize(roles: UserRoles.Administrator.ToString())
+                .Authorize(
+                    UserRoles.Administrator.ToString(), 
+                    UserRoles.Headquarter.ToString(),
+                    UserRoles.ApiUser.ToString())
                 .Name("users")
                 .Type<ListType<UserType>>()
                 .UseSimplePaging<UserType, HqUser>()
