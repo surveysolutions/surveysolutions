@@ -796,7 +796,7 @@ Please resolve issues noted on the cover page and send them back to the supervis
 your next synchronization</value>
   </data>
   <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
-    <value>Interviews in Web interview mode. Will be removed during synchronization when web interview is completed by respondend</value>
+    <value>Interviews in Web interview mode. Will be removed during synchronization when web interview is completed by respondent</value>
   </data>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
     <value>You can create new interviews using assignments</value>
