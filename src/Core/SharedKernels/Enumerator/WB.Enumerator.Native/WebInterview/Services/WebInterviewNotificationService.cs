@@ -69,61 +69,60 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 {
                     entitiesToRefresh.Add((WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id), identity));
                 }
-                else
+                
+
+                var currentEntity = identity;
+
+                while (currentEntity != null)
                 {
-
-                    var currentEntity = identity;
-
-                    while (currentEntity != null)
+                    if (questionnaire.ShouldBeHiddenIfDisabled(currentEntity.Id))
                     {
-                        if (questionnaire.ShouldBeHiddenIfDisabled(currentEntity.Id))
+                        doesNeedRefreshSectionList = true;
+                        break;
+                    }
+
+                    var parent = this.GetParentIdentity(currentEntity, interview);
+
+
+                    if (parent != null)
+                    {
+                        if (questionnaire.HasVariable(currentEntity.Id))
                         {
-                            doesNeedRefreshSectionList = true;
-                            break;
-                        }
-
-                        var parent = this.GetParentIdentity(currentEntity, interview);
-
-
-                        if (parent != null)
-                        {
-                            if (questionnaire.HasVariable(currentEntity.Id))
+                            if (questionnaire.IsPrefilled(currentEntity.Id))
                             {
-                                if (questionnaire.IsPrefilled(currentEntity.Id))
-                                {
-                                    entitiesToRefresh.Add((
-                                        WebInterview.GetConnectedClientSectionKey(parent, interview.Id),
-                                        currentEntity));
-                                }
-
-                                IEnumerable<Guid> affectedStaticTexts =
-                                    questionnaire.GetStaticTextsThatUseVariableAsAttachment(currentEntity.Id);
-                                foreach (var staticTextId in affectedStaticTexts.SelectMany(x =>
-                                    interview.GetAllIdentitiesForEntityId(x)))
-                                {
-                                    var parentGroup = interview.GetParentGroup(staticTextId);
-                                    entitiesToRefresh.Add((
-                                        WebInterview.GetConnectedClientSectionKey(parentGroup, interview.Id),
-                                        staticTextId));
-                                }
-                            }
-                            else if (questionnaire.IsCustomViewRoster(parent.Id))
-                            {
-                                var parentGroupIdentity = GetParentIdentity(parent, interview);
-                                var connectedClientSectionKey =
-                                    WebInterview.GetConnectedClientSectionKey(parentGroupIdentity, interview.Id);
-                                entitiesToRefresh.Add((connectedClientSectionKey, currentEntity));
-                            }
-                            else
-                            {
-                                entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id),
+                                entitiesToRefresh.Add((
+                                    WebInterview.GetConnectedClientSectionKey(parent, interview.Id),
                                     currentEntity));
                             }
-                        }
 
-                        currentEntity = parent;
+                            IEnumerable<Guid> affectedStaticTexts =
+                                questionnaire.GetStaticTextsThatUseVariableAsAttachment(currentEntity.Id);
+                            foreach (var staticTextId in affectedStaticTexts.SelectMany(x =>
+                                interview.GetAllIdentitiesForEntityId(x)))
+                            {
+                                var parentGroup = interview.GetParentGroup(staticTextId);
+                                entitiesToRefresh.Add((
+                                    WebInterview.GetConnectedClientSectionKey(parentGroup, interview.Id),
+                                    staticTextId));
+                            }
+                        }
+                        else if (questionnaire.IsCustomViewRoster(parent.Id))
+                        {
+                            var parentGroupIdentity = GetParentIdentity(parent, interview);
+                            var connectedClientSectionKey =
+                                WebInterview.GetConnectedClientSectionKey(parentGroupIdentity, interview.Id);
+                            entitiesToRefresh.Add((connectedClientSectionKey, currentEntity));
+                        }
+                        else
+                        {
+                            entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id),
+                                currentEntity));
+                        }
                     }
+
+                    currentEntity = parent;
                 }
+                
             }
 
             if (doesNeedRefreshSectionList)
