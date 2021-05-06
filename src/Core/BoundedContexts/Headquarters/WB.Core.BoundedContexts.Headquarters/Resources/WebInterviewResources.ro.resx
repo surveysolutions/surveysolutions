@@ -127,13 +127,13 @@
     <value>Nu se poate modifica interviul primit de dispozitiv</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>Ați fost invitat să participați la următorul sondaj: „% QUESTIONNAIRE%”</value>
+      <value>Ați fost invitat să participați la următorul sondaj: „%QUESTIONNAIRE%”</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
     <value>Notă pentru supervizor</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>Puteți naviga la interviu în următorul sondaj: „% QUESTIONNAIRE%”</value>
+      <value>Puteți naviga la interviu în următorul sondaj: „%QUESTIONNAIRE%”</value>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
     <value>Bună ziua și Bine ați venit la Survey Solutions Web Survey</value>
@@ -145,7 +145,7 @@
     <value>Începeți un nou interviu</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
-    <value>Sondaj: „% QUESTIONNAIRE%”</value>
+      <value>Sondaj: „%QUESTIONNAIRE%”</value>
   </data>
   <data name="WebSurvey" xml:space="preserve">
     <value>Survey Solutions Sondaj web</value>
