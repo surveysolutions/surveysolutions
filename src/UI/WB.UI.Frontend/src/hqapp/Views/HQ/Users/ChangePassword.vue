@@ -148,6 +148,7 @@ export default {
             }).then(
                 response => {
                     self.successMessage = self.$t('Strings.HQ_AccountController_AccountPasswordChangedSuccessfully')
+                    window.location.href = '/'
                 },
                 error => {
                     self.processModelState(error.response.data, self)
