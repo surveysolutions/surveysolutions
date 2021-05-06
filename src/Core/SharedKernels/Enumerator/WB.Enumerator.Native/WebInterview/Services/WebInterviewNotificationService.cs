@@ -52,21 +52,22 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             foreach (var identity in questions)
             {
-                if (this.IsQuestionPrefield(identity, interview))
-                {
-                    entitiesToRefresh.Add((WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id), identity));
-                }
-
                 if (questionnaire.IsQuestion(identity.Id) && (
-                        questionnaire.IsRosterSizeQuestion(identity.Id)
-                        || questionnaire.IsRosterTitleQuestion(identity.Id)
-                        || questionnaire.GetSubstitutedQuestions(identity.Id).Any()
-                        || questionnaire.GetSubstitutedGroups(identity.Id).Any()
-                        || questionnaire.GetSubstitutedStaticTexts(identity.Id).Any()
-                        || questionnaire.ShowCascadingAsList(identity.Id)
-                    ))
+                    questionnaire.IsRosterSizeQuestion(identity.Id)
+                    || questionnaire.IsRosterTitleQuestion(identity.Id)
+                    || questionnaire.GetSubstitutedQuestions(identity.Id).Any()
+                    || questionnaire.GetSubstitutedGroups(identity.Id).Any()
+                    || questionnaire.GetSubstitutedStaticTexts(identity.Id).Any()
+                    || questionnaire.ShowCascadingAsList(identity.Id)
+                ))
                 {
                     doesNeedRefreshSectionList = true;
+                }
+
+
+                if (questionnaire.IsPrefilled(identity.Id))
+                {
+                    entitiesToRefresh.Add((WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id), identity));
                 }
 
                 var currentEntity = identity;
