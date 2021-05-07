@@ -65,7 +65,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 }
 
 
-                if ((questionnaire.IsQuestion(identity.Id) ||questionnaire.IsStaticText(identity.Id)) && questionnaire.IsPrefilled(identity.Id))
+                if ((questionnaire.IsVariable(identity.Id) || questionnaire.IsQuestion(identity.Id) || questionnaire.IsStaticText(identity.Id)) && questionnaire.IsPrefilled(identity.Id))
                 {
                     entitiesToRefresh.Add((WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id), identity));
                 }
