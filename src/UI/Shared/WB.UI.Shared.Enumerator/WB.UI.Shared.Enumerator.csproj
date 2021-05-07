@@ -89,6 +89,7 @@
     <Compile Include="Migrations\Workspaces\M202001291224_RemoveDuplicatedCategoriesInOptionViewTable.cs" />
     <Compile Include="Migrations\Workspaces\M202103101642_MoveSqliteTablesInWorkspaceFolder.cs" />
     <Compile Include="Migrations\Workspaces\M202103291222_MoveMapsFiles.cs" />
+    <Compile Include="Migrations\Workspaces\M202103101500_UpdateInterviewsMode.cs" />
     <Compile Include="Migrations\Workspaces\UpdateOptionsForMultiComboboxQuestions.cs" />
     <Compile Include="Migrations\Workspace\M20211539_Init.cs" />
     <Compile Include="OfflineSync\Activities\BluetoothReceiver.cs" />
