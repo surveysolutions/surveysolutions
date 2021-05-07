@@ -536,6 +536,13 @@ input ListFilterInputTypeOfUserMapFilterInput {
   any: Boolean
 }
 
+input ListFilterInputTypeOfWorkspacesUsersFilterInput {
+  all: WorkspacesUsersFilterInput
+  none: WorkspacesUsersFilterInput
+  some: WorkspacesUsersFilterInput
+  any: Boolean
+}
+
 input MapReportFilter {
   and: [MapReportFilter!]
   or: [MapReportFilter!]
@@ -647,17 +654,42 @@ input UsersFilterInput {
   userName: StringOperationFilterInput
   fullName: StringOperationFilterInput
   isArchived: BooleanOperationFilterInput
+  isLocked: BooleanOperationFilterInput
   creationDate: ComparableDateTimeOperationFilterInput
   email: StringOperationFilterInput
   phoneNumber: StringOperationFilterInput
   id: ComparableGuidOperationFilterInput
   role: RoleFilterInput
+  workspaces: ListFilterInputTypeOfWorkspacesUsersFilterInput
 }
 
 input UsersSortInput {
   userName: SortEnumType
   creationDate: SortEnumType
   fullName: SortEnumType
+  role: SortEnumType
+  email: SortEnumType
+  phoneNumber: SortEnumType
+  isLocked: SortEnumType
+  isArchived: SortEnumType
+}
+
+input WorkspaceFilterInput {
+  and: [WorkspaceFilterInput!]
+  or: [WorkspaceFilterInput!]
+  name: StringOperationFilterInput
+  displayName: StringOperationFilterInput
+  users: ListFilterInputTypeOfWorkspacesUsersFilterInput
+  disabledAtUtc: ComparableNullableOfDateTimeOperationFilterInput
+}
+
+input WorkspacesUsersFilterInput {
+  and: [WorkspacesUsersFilterInput!]
+  or: [WorkspacesUsersFilterInput!]
+  id: ComparableInt32OperationFilterInput
+  workspace: WorkspaceFilterInput
+  user: UsersFilterInput
+  supervisor: UsersFilterInput
 }
 
 enum ApplyPolicy {

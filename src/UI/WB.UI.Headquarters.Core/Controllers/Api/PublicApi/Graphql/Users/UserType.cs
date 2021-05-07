@@ -32,10 +32,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             descriptor.Field(x => x.Email).Type<StringType>();
             descriptor.Field(x => x.PhoneNumber).Type<StringType>();
             descriptor.Field(x => x.CreationDate).Type<DateType>();
-            descriptor.Field("isLocked").Type<BooleanType>()
-                .Resolver(r => r.Parent<HqUser>().IsLockedByHeadquaters || r.Parent<HqUser>().IsLockedBySupervisor);
-            descriptor.Field("isArchived").Type<BooleanType>()
-                .Resolver(r => r.Parent<HqUser>().IsArchived);
+            descriptor.Field(x => x.IsLocked).Type<BooleanType>();
+            descriptor.Field(x => x.IsArchived).Type<BooleanType>();
         }
     }
 }

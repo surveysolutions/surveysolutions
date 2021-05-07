@@ -13,6 +13,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             descriptor.Field(x => x.UserName);
             descriptor.Field(x => x.CreationDate);
             descriptor.Field(x => x.FullName);
+            descriptor.Field(x => x.Role);
+            descriptor.Field(x => x.Email);
+            descriptor.Field(x => x.PhoneNumber);
+            descriptor.Field(x => x.IsLocked);
+            descriptor.Field(x => x.IsArchived);
         }
     }
 }
