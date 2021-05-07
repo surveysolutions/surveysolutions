@@ -50,6 +50,7 @@
     <color name="group_with_invalid_answers_pressed">#cd4927</color>
     <color name="group_plain_roster_text">#2D9CDB</color>
     <color name="group_plain_roster_background">#D5EBF8</color>
+    <color name="group_disabled">#afafaf</color>
 
     <color name="default_input_button_pressed">#0D6DBF</color>
     <color name="default_input_button_unpressed">#2A81CB</color>
