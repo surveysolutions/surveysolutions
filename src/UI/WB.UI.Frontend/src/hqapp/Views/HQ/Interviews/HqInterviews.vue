@@ -1696,15 +1696,15 @@ export default {
             else onDone()
         },
 
-        loadQuestionnaireId(self, questionnaireId, version) {
+        loadQuestionnaireId(self, questionnaireId, version, queryConditions) {
 
             if (questionnaireId != null) {
                 self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId)
                 if (version != null && self.questionnaireId != null) {
                     self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version)
 
-                    if(query.conditions != null) {
-                        self.conditions = queryStringToCondition(flatten([query.conditions]))
+                    if(queryConditions != null) {
+                        self.conditions = queryStringToCondition(flatten([queryConditions]))
                     }
                 }
             }
@@ -1734,8 +1734,9 @@ export default {
 
                 const questionnaireId = self.$route.query.questionnaireId
                 const version = self.$route.query.questionnaireVersion
+                const queryConditions = query.conditions
 
-                self.loadQuestionnaireId(self, questionnaireId, version)
+                self.loadQuestionnaireId(self, questionnaireId, version, queryConditions)
 
                 self.startWatchers(
                     ['responsibleId',
