@@ -16,6 +16,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             unitOfWork.DiscardChanges();
             var query = unitOfWork.Session.Query<HqUser>();
 
+            /*if (!authorizedUser.IsAdministrator)
+            {
+                var authorizedWorkspaces = authorizedUser.Workspaces.ToList();
+
+                query = query
+                    .Where(u =>
+                        u.Workspaces.Any(w => authorizedWorkspaces.Any(aw => aw == w.Workspace.Name)))
+                    /*.Select(u =>
+                        u.Workspaces.Where(w => authorizedWorkspaces.Any(aw => aw == w.Workspace.Name)))#1#;
+            }*/
+            
             return query;
         }
     }

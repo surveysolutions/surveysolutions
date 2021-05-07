@@ -100,9 +100,7 @@ type HeadquartersQuery {
   questions("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionFilter): [Entity] @authorize(apply: BEFORE_RESOLVER)
   questionnaireItems("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionnaireItemsFilter): [QuestionnaireItem] @authorize(apply: BEFORE_RESOLVER)
   viewer: Viewer @authorize(apply: BEFORE_RESOLVER)
-  users(skip: Int take: Int order: [HqUserSortInput!] where: UsersFilterInput): Users @authorize(roles: [ "Administrator" ], apply: BEFORE_RESOLVER)
-  "Gets detailed information about single user within workspace"
-  user("Workspace name" workspace: String! = "primary" id: ID!): WorkspaceUser @authorize(roles: [ "Administrator", "ApiUser", "Supervisor" ], apply: BEFORE_RESOLVER)
+  users(skip: Int take: Int order: [UsersSortInput!] where: UsersFilterInput): Users @authorize(roles: [ "Administrator" ], apply: BEFORE_RESOLVER)
   mapReport("Workspace name" workspace: String! = "primary" "Questionnaire id" questionnaireId: Uuid! "Questionnaire version" questionnaireVersion: Long "Variable name for question" variable: String "Zoom level" zoom: Int! "Visible area width" clientMapWidth: Int! "East coordinate" east: Float! "West coordinate" west: Float! "North coordinate" north: Float! "South coordinate" south: Float! where: MapReportFilter): MapReportHolder @authorize(apply: BEFORE_RESOLVER)
 }
 
@@ -266,6 +264,12 @@ type User {
   id: ID!
   role: UserRoles!
   userName: String!
+  fullName: String
+  email: String
+  phoneNumber: String
+  creationDate: Date
+  isLocked: Boolean
+  isArchived: Boolean
   workspaces: [String!]!
 }
 
@@ -288,14 +292,6 @@ type Viewer {
   role: UserRoles!
   userName: String!
   workspaces: [String!]!
-}
-
-type WorkspaceUser {
-  id: ID!
-  role: UserRoles!
-  userName: String!
-  workspaces: [String!]!
-  supervisorId: Uuid
 }
 
 input AssignmentsFilter {
@@ -447,12 +443,6 @@ input ComparableNullableOfInt64OperationFilterInput {
   nlt: Long
   lte: Long
   nlte: Long
-}
-
-input HqUserSortInput {
-  userName: SortEnumType
-  creationDate: SortEnumType
-  fullName: SortEnumType
 }
 
 input IdentifyEntityValueFilter {
@@ -659,8 +649,15 @@ input UsersFilterInput {
   isArchived: BooleanOperationFilterInput
   creationDate: ComparableDateTimeOperationFilterInput
   email: StringOperationFilterInput
+  phoneNumber: StringOperationFilterInput
   id: ComparableGuidOperationFilterInput
   role: RoleFilterInput
+}
+
+input UsersSortInput {
+  userName: SortEnumType
+  creationDate: SortEnumType
+  fullName: SortEnumType
 }
 
 enum ApplyPolicy {
@@ -777,6 +774,9 @@ directive @specifiedBy("The specifiedBy URL points to a human-readable specifica
 directive @stream("If this argument label has a value other than null, it will be passed on to the result of this stream directive. This label is intended to give client applications a way to identify to which fragment a streamed result belongs to." label: String "The initial elements that shall be send down to the consumer." initialCount: Int! "Streamed when true." if: Boolean!) on FIELD
 
 scalar Any
+
+"The `Date` scalar represents an ISO-8601 compliant date type."
+scalar Date
 
 "The `DateTime` scalar represents an ISO-8601 compliant date time type."
 scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")

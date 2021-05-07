@@ -8,6 +8,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
         protected override void Configure(ISortInputTypeDescriptor<HqUser> descriptor)
         {
             descriptor.BindFieldsExplicitly();
+            descriptor.Name("UsersSortInput");
+            
             descriptor.Field(x => x.UserName);
             descriptor.Field(x => x.CreationDate);
             descriptor.Field(x => x.FullName);

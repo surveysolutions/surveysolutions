@@ -7,8 +7,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
     {
         protected override void Configure(IObjectTypeDescriptor<HqUser> descriptor)
         {
-            base.Configure(descriptor);
             descriptor.Name("WorkspaceUser");
+            descriptor.BindFieldsExplicitly();
+            
+            ConfigureUserFields(descriptor);
+            
             descriptor.Field("supervisorId").Type<UuidType>()
                 .Resolver(r => r.Parent<HqUser>().WorkspaceProfile?.SupervisorId);
         }
