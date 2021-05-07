@@ -334,7 +334,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public Invitation GetInvitationByAssignmentId(int assignmentId)
         {
-            return invitationStorage.Query(_ => _.SingleOrDefault(x => x.AssignmentId == assignmentId && x.InterviewId == null));
+            return invitationStorage.Query(_ => _.SingleOrDefault(x => x.AssignmentId == assignmentId));
         }
 
         public void InterviewWasCreated(int invitationId, string interviewId)
