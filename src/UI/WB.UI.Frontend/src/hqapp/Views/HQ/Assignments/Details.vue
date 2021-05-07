@@ -27,7 +27,7 @@
                     <h3>
                         {{$t('Assignments.AssignmentInfo')}}
                         <a
-                            v-if="model.webMode"
+                            v-if="model.webMode && model.invitationToken"
                             :href="webInterviewUrl"
                             target="_blank">
                             <span
