@@ -1,7 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {

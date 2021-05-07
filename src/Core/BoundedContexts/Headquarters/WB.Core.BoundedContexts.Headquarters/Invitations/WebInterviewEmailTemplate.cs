@@ -1,6 +1,4 @@
-﻿using System.Text.Encodings.Web;
-
-namespace WB.Core.BoundedContexts.Headquarters.Invitations
+﻿namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
     public class WebInterviewEmailTemplate
     {

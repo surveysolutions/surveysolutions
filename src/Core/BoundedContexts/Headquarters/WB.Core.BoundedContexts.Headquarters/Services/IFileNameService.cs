@@ -1,6 +1,6 @@
 ﻿using System;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.ServicesIntegration.Export;
+using QuestionnaireIdentity = WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionnaireIdentity;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services
 {

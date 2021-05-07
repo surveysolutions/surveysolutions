@@ -5,7 +5,6 @@ using System.Security.Claims;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User

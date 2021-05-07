@@ -9,16 +9,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.ServicesIntegration.Export;
 using WB.UI.Headquarters.Code;
 using WB.UI.Shared.Web.Services;
+using InterviewStatus = WB.Core.SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus;
+using QuestionnaireIdentity = WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionnaireIdentity;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
 {
@@ -117,7 +116,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 exportFormat, interviewStatus, 
                 requestBody.From, requestBody.To, password,
                 requestBody.AccessToken, requestBody.RefreshToken, 
-                (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) requestBody.StorageType,
+                (ServicesIntegration.Export.ExternalStorageType?) requestBody.StorageType,
                 requestBody.TranslationId,
                 requestBody.IncludeMeta);
 
@@ -238,7 +237,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                     archivePassword);
 
                 var fileNameForDdiByQuestionnaire =
-                    this.exportFileNameService.GetFileNameForDdiByQuestionnaire(exportProcess.QuestionnaireIdentity);
+                    this.exportFileNameService.GetFileNameForDdiByQuestionnaire(
+                        new QuestionnaireIdentity(exportProcess.QuestionnaireIdentity.Id, exportProcess.QuestionnaireIdentity.Version));
 
                 var content = await ddiArchiveResponse.ReadAsStreamAsync();
 

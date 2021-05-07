@@ -1,5 +1,3 @@
-using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-
 namespace WB.Core.BoundedContexts.Headquarters.Views
 {
     public class RsaEncryptionSettings : AppSetting

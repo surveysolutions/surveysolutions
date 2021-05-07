@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
@@ -11,7 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
 {

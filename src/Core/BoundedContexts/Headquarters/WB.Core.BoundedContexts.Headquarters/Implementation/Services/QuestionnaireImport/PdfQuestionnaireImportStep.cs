@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using Polly;
 using WB.Core.BoundedContexts.Headquarters.Designer;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Extensions.Internal;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 

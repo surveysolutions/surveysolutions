@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace WB.Core.BoundedContexts.Headquarters.Invitations
+﻿namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
     public enum EmailAttachmentDisposition
     {

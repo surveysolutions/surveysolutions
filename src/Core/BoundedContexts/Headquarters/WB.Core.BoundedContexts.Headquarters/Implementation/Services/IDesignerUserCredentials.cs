@@ -1,5 +1,4 @@
-﻿using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.Infrastructure.HttpServices.HttpClient;
+﻿using WB.Core.Infrastructure.HttpServices.HttpClient;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {

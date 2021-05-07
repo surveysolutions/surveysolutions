@@ -1,5 +1,4 @@
-﻿using NHibernate.Mapping.ByCode;
-using NHibernate.Mapping.ByCode.Conformist;
+﻿using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.Providers

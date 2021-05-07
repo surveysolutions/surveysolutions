@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Dtos
+namespace WB.ServicesIntegration.Export
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum DataExportFormat

@@ -45,6 +45,7 @@
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernels\WB.ServicesIntegration\WB.ServicesIntegration.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.5.3.6" />
@@ -179,10 +180,6 @@
     <EmbeddedResource Update="Resources\WebInterviewResources.resx">
       <LastGenOutput>WebInterviewResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DataExport\Dtos" />
   </ItemGroup>
 
 

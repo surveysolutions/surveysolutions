@@ -1,5 +1,4 @@
 using System;
-using MassTransit;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.SystemLog
 {

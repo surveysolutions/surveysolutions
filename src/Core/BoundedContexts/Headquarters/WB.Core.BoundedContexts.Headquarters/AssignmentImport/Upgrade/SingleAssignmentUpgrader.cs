@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;

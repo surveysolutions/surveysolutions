@@ -1,5 +1,4 @@
 #nullable enable
-using System;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces

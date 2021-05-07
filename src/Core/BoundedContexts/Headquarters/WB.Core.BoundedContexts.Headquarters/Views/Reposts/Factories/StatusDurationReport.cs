@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Main.Core.Entities.SubEntities;
-using Npgsql;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;

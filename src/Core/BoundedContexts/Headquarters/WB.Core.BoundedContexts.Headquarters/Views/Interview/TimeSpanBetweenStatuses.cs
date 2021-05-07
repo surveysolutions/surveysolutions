@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.Infrastructure.Domain;
 

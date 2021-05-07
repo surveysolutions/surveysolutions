@@ -2,7 +2,6 @@
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {

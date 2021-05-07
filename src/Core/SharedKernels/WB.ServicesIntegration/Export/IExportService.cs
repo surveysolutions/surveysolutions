@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 
 namespace WB.ServicesIntegration.Export
 {

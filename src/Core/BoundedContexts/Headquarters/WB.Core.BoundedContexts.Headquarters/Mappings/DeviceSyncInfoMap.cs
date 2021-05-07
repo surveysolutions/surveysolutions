@@ -1,7 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings

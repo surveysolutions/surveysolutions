@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using WB.UI.Shared.Web.Services;
+﻿using WB.UI.Shared.Web.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {

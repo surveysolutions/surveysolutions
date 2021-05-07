@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.Questionnaire.Categories;

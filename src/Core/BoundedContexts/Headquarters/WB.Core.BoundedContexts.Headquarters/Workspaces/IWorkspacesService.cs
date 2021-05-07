@@ -1,7 +1,6 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Storage.Postgre;

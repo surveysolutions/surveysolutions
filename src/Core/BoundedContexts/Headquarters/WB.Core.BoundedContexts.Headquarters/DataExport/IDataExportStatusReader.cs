@@ -2,10 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.ServicesIntegration.Export;
+using InterviewStatus = WB.Core.SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus;
+using QuestionnaireIdentity = WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionnaireIdentity;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport
 {

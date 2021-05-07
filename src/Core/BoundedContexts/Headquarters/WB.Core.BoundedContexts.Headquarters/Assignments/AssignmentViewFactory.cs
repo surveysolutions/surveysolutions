@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.Storage;
-using NodaTime;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;

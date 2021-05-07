@@ -1,5 +1,4 @@
 using System;
-using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
 {

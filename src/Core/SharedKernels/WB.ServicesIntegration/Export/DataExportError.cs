@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
+﻿namespace WB.ServicesIntegration.Export
 {
     public enum DataExportError
     {

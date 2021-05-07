@@ -1,5 +1,4 @@
-﻿using System;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+﻿using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs
 {

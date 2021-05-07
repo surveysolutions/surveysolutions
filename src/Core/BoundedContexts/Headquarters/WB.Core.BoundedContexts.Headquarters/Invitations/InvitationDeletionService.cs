@@ -1,5 +1,4 @@
-﻿using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+﻿using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations

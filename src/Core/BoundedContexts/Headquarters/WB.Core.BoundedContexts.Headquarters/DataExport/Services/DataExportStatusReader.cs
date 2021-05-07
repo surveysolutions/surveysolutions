@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native;
+using WB.ServicesIntegration.Export;
+using InterviewStatus = WB.Core.SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus;
+using QuestionnaireIdentity = WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionnaireIdentity;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -46,7 +46,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public async Task<DataExportArchive?> GetDataArchive(long jobId)
         {
             var jobInfo = await exportServiceApi.GetJobsStatus(jobId);
-            var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(jobInfo.QuestionnaireIdentity);
+            var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(
+                new QuestionnaireIdentity(jobInfo.QuestionnaireIdentity.Id, jobInfo.QuestionnaireIdentity.Version)
+            );
             
             var result = await exportServiceApi.DownloadArchive(jobId, archiveFileName);
             
@@ -103,7 +105,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private void FillProcessViewMissingData(DataExportProcessView processView)
         {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(processView.QuestionnaireIdentity, null);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(
+                new QuestionnaireIdentity(processView.QuestionnaireIdentity!.Id,
+                    processView.QuestionnaireIdentity.Version),
+                null);
             if (questionnaire == null)
             {
                 processView.Deleted = true;

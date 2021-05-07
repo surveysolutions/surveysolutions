@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services

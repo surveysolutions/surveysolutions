@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Options;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;

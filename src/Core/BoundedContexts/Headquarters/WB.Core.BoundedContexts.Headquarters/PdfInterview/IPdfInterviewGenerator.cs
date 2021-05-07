@@ -2,7 +2,6 @@
 
 using System;
 using System.IO;
-using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 {

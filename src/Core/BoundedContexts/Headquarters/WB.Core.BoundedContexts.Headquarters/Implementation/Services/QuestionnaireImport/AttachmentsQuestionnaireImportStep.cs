@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 

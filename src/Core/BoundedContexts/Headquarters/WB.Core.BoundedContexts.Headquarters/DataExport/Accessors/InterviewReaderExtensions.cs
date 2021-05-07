@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 

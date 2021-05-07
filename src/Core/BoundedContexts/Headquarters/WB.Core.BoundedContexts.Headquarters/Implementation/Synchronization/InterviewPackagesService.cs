@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using Main.Core.Events;
 using Ncqrs.Eventing.Storage;
-using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -25,7 +24,6 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization

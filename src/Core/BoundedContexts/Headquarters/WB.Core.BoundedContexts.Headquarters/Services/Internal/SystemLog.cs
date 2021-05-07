@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.ServicesIntegration.Export;
+using QuestionnaireIdentity = WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionnaireIdentity;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 {

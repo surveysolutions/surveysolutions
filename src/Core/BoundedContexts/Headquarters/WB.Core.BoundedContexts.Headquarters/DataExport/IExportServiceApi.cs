@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Refit;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.ServicesIntegration.Export;
+using InterviewStatus = WB.Core.SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport
 {

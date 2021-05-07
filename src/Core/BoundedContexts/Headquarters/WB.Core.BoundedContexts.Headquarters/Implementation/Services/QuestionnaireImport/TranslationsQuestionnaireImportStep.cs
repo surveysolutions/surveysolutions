@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Designer;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Translations;

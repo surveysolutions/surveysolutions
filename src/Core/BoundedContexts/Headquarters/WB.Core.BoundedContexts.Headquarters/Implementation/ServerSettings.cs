@@ -1,7 +1,4 @@
-﻿using System;
-using WB.Core.BoundedContexts.Headquarters.Views;
-
-namespace WB.Core.BoundedContexts.Headquarters.Implementation
+﻿namespace WB.Core.BoundedContexts.Headquarters.Implementation
 {
     public class ServerSettings
     {

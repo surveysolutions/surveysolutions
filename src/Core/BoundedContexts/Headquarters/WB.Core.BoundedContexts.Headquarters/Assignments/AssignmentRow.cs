@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments

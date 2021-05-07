@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
 {

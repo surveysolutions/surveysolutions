@@ -1,4 +1,3 @@
-using System;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments

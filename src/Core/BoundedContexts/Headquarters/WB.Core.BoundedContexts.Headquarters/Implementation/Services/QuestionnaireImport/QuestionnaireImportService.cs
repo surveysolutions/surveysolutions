@@ -17,11 +17,9 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
-using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services

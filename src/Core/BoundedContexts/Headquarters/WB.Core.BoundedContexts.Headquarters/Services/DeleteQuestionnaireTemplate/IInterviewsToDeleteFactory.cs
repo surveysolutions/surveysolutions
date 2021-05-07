@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+﻿using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate

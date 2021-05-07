@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Refit;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
+using WB.ServicesIntegration.Export;
 using WB.UI.Headquarters.Code.Authentication;
 
 namespace WB.UI.Headquarters.Controllers.Services.Export

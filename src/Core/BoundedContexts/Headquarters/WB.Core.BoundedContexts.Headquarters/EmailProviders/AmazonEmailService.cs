@@ -8,7 +8,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.Runtime;
-using Amazon.Runtime.Internal;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using MimeKit;

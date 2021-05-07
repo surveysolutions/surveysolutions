@@ -7,7 +7,6 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
-using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 {

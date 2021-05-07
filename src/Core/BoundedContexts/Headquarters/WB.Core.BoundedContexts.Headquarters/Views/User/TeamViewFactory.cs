@@ -5,7 +5,6 @@ using Dapper;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Infrastructure.Native.Fetching;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 

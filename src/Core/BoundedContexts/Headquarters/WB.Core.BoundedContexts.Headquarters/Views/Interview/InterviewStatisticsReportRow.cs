@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 

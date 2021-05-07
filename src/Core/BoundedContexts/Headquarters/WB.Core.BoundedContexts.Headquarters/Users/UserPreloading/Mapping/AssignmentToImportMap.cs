@@ -2,7 +2,6 @@
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 

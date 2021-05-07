@@ -15,7 +15,6 @@ using Moq;
 using Ncqrs.Eventing;
 using NodaTime;
 using NodaTime.Extensions;
-using NUnit.Framework;
 using ReflectionMagic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters;
@@ -25,14 +24,11 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
@@ -96,8 +92,11 @@ using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Workspaces;
+using WB.ServicesIntegration.Export;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
+using InterviewStatus = WB.Core.SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus;
+using QuestionnaireIdentity = WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionnaireIdentity;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -213,12 +212,6 @@ namespace WB.Tests.Abc.TestFactories
             items.ForEach(item => compositeCollection.Add(item));
             return compositeCollection;
         }
-
-        public DataExportProcessDetails DataExportProcessDetails(QuestionnaireIdentity questionnaireIdentity = null, DataExportFormat? format = null)
-            => new DataExportProcessDetails(
-                format ?? DataExportFormat.Tabular,
-                questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
-                "some questionnaire");
 
         public InterviewTreeDateTimeQuestion InterviewTreeDateTimeQuestion(DateTime answer, bool isTimestampQuestion = false)
             => new InterviewTreeDateTimeQuestion(answer, isTimestampQuestion);

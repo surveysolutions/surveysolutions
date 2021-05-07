@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
-using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 {
