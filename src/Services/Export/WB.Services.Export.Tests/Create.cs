@@ -31,6 +31,7 @@ using WB.Services.Export.User;
 using WB.Services.Infrastructure;
 using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 using AnsweredYesNoOption = WB.Services.Export.Interview.Entities.AnsweredYesNoOption;
 
 namespace WB.Services.Export.Tests

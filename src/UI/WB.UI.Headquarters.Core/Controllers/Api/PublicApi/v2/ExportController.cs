@@ -233,12 +233,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 var archivePassword =
                     this.exportSettings.EncryptionEnforced() ? this.exportSettings.GetPassword() : null;
                 var ddiArchiveResponse = await exportServiceApi.GetDdiArchive(
-                    exportProcess.QuestionnaireIdentity.ToString(),
+                    exportProcess.QuestionnaireId,
                     archivePassword);
 
                 var fileNameForDdiByQuestionnaire =
                     this.exportFileNameService.GetFileNameForDdiByQuestionnaire(
-                        new QuestionnaireIdentity(exportProcess.QuestionnaireIdentity.Id, exportProcess.QuestionnaireIdentity.Version));
+                        QuestionnaireIdentity.Parse(exportProcess.QuestionnaireId));
 
                 var content = await ddiArchiveResponse.ReadAsStreamAsync();
 
@@ -259,7 +259,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             var process = new ExportProcess
             {
                 JobId = exportProcess.Id,
-                QuestionnaireId = exportProcess.QuestionnaireIdentity.ToString(),
+                QuestionnaireId = exportProcess.QuestionnaireId,
                 From = exportProcess.FromDate,
                 To = exportProcess.ToDate,
                 StartDate = exportProcess.BeginDate,

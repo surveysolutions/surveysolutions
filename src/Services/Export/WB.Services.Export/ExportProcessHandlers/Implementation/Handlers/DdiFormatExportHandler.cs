@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WB.Services.Export.Ddi;
 using WB.Services.Export.Services.Processing;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
 {

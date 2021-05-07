@@ -1,6 +1,7 @@
 ﻿using System;
 using WB.Services.Export.Events.Interview.Base;
 using WB.Services.Export.Interview;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Events.Interview
 {

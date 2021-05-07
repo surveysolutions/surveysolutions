@@ -1,6 +1,7 @@
 ﻿using System;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {

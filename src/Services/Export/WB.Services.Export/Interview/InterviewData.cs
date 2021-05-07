@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Services.Export.Interview.Entities;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Interview
 {

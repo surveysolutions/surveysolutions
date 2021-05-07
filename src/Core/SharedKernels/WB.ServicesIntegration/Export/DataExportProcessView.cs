@@ -13,7 +13,8 @@ namespace WB.ServicesIntegration.Export
         public DataExportType Type { get;  set; }
         public DataExportFormat Format { get;  set; }
         public InterviewStatus? InterviewStatus { get;  set; }
-        public QuestionnaireIdentity QuestionnaireIdentity { get; set; } = null!;
+
+        public string QuestionnaireId { get; set; } = null!; 
         public DataExportStatus ProcessStatus { get; set; }
         public DataExportJobStatus JobStatus { get; set; }
         public DateTime? FromDate { get; set; }

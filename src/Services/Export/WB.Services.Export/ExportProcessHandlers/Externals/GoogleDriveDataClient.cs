@@ -16,6 +16,7 @@ using Polly.Retry;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 using File = Google.Apis.Drive.v3.Data.File;
 
 namespace WB.Services.Export.ExportProcessHandlers.Externals

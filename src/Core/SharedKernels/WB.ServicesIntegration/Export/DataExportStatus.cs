@@ -5,6 +5,7 @@ namespace WB.ServicesIntegration.Export
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum DataExportStatus
     {
+        Unknown = 0,
         NotStarted = 1,
         Queued = 2,
         Running = 3,

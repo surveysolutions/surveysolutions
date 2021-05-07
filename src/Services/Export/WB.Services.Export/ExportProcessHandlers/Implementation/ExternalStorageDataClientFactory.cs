@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using WB.Services.Export.ExportProcessHandlers.Externals;
 using WB.Services.Export.Services.Processing;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
+using WB.ServicesIntegration.Export;
 using ILogger = Amazon.Runtime.Internal.Util.ILogger;
 
 namespace WB.Services.Export.Services

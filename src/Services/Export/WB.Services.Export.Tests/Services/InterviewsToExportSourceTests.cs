@@ -8,6 +8,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.Services
 {

@@ -5,6 +5,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
 {

@@ -14,6 +14,7 @@ using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Services;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Host.Controllers
 {

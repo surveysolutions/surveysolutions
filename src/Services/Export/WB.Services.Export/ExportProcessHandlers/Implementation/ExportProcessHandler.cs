@@ -9,6 +9,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.FileSystem;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {

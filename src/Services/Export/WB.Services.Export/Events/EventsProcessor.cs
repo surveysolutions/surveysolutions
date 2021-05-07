@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Events
 {

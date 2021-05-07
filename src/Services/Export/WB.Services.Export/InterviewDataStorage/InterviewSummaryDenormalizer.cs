@@ -6,6 +6,7 @@ using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Infrastructure.EventSourcing;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.InterviewDataStorage
 {

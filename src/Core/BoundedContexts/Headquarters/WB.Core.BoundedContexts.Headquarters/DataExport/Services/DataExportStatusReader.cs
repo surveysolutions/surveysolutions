@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         {
             var jobInfo = await exportServiceApi.GetJobsStatus(jobId);
             var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(
-                new QuestionnaireIdentity(jobInfo.QuestionnaireIdentity.Id, jobInfo.QuestionnaireIdentity.Version)
+                QuestionnaireIdentity.Parse(jobInfo.QuestionnaireId)
             );
             
             var result = await exportServiceApi.DownloadArchive(jobId, archiveFileName);
@@ -106,8 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private void FillProcessViewMissingData(DataExportProcessView processView)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(
-                new QuestionnaireIdentity(processView.QuestionnaireIdentity!.Id,
-                    processView.QuestionnaireIdentity.Version),
+                QuestionnaireIdentity.Parse(processView.QuestionnaireId),
                 null);
             if (questionnaire == null)
             {

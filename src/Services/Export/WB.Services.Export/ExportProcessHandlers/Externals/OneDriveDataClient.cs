@@ -12,6 +12,7 @@ using Polly.Retry;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 using File = System.IO.File;
 
 namespace WB.Services.Export.ExportProcessHandlers.Externals

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.Models;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Services.Processing
 {

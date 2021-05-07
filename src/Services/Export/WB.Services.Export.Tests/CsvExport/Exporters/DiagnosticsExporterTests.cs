@@ -9,6 +9,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Services;
 using WB.Services.Infrastructure;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.CsvExport.Exporters
 {

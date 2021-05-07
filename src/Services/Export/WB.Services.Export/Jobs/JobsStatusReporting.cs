@@ -11,6 +11,7 @@ using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Jobs
 {
@@ -150,10 +151,20 @@ namespace WB.Services.Export.Jobs
                 exports.Add(dataExportView);
             }
 
-            return new DataExportStatusView(
-                questionnaireId: questionnaireIdentity.Id,
-                dataExports: exports,
-                runningDataExportProcesses: allProcesses.Where(p => p.IsRunning).ToArray());
+            return new DataExportStatusView
+            {
+                DataExports = exports,
+                RunningDataExportProcesses = allProcesses.Where(p => p.IsRunning)
+                    .Select(x => new RunningDataExportProcessView
+                    {
+                        
+                    })
+                    .ToList(),
+                QuestionnaireId = questionnaireIdentity.Id
+            };
+            // questionnaireId: questionnaireIdentity.Id,
+            // dataExports: exports,
+            // runningDataExportProcesses: allProcesses.Where(p => p.IsRunning).ToArray());
         }
 
         private async Task<DataExportView> CreateDataExportView(
@@ -180,7 +191,7 @@ namespace WB.Services.Export.Jobs
                 (p.QuestionnaireId == null || p.QuestionnaireId == exportSettings.QuestionnaireId.ToString()));
 
             dataExportView.CanRefreshBeRequested = process?.IsRunning != true;
-            dataExportView.DataExportProcessId = process?.DataExportProcessId;
+            dataExportView.DataExportProcessId = process?.Id.ToString();
             dataExportView.ProgressInPercents = process?.Progress ?? 0;
             dataExportView.TimeEstimation = process?.TimeEstimation;
 
@@ -250,7 +261,6 @@ namespace WB.Services.Export.Jobs
             {
                 Id = dataExportProcessDetails.ProcessId,
                 IsRunning = status.IsRunning,
-                DataExportProcessId = dataExportProcessDetails.NaturalId,
                 BeginDate = status.BeginDate ?? status.CreatedDate,
                 EndDate = status.EndDate,
                 JobStatus = status.JobStatus,

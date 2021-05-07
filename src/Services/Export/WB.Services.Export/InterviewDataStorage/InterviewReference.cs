@@ -1,6 +1,7 @@
 ﻿using System;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.InterviewDataStorage
 {

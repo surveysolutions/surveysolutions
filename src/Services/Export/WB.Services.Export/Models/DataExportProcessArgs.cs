@@ -1,5 +1,5 @@
 ﻿using System;
-using WB.Services.Export.Services.Processing;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Models
 {

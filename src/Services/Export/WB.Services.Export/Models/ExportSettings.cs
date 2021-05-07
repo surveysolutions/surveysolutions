@@ -1,8 +1,7 @@
 ﻿using System;
-using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Models
 {

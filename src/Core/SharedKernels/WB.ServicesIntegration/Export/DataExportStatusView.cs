@@ -1,11 +1,13 @@
-﻿namespace WB.ServicesIntegration.Export
+﻿using System.Collections.Generic;
+
+namespace WB.ServicesIntegration.Export
 {
     public class DataExportStatusView
     {
-        QuestionnaireIdentity? QuestionnaireIdentity { get; set; }
+        public string? QuestionnaireId { get; set; }
 
-        public DataExportView[]? DataExports { get; set; }
-        public RunningDataExportProcessView[]? RunningDataExportProcesses { get; set; }
+        public List<DataExportView>? DataExports { get; set; }
+        public List<RunningDataExportProcessView>? RunningDataExportProcesses { get; set; }
 
         public bool Success { get; set; }
     }

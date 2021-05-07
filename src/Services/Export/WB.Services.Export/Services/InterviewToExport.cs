@@ -1,5 +1,6 @@
 ﻿using System;
 using WB.Services.Export.Interview;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Services
 {

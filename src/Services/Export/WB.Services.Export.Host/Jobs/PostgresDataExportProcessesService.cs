@@ -13,6 +13,7 @@ using WB.Services.Infrastructure.Logging;
 using WB.Services.Scheduler;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Services;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Host.Jobs
 {
