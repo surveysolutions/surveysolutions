@@ -295,9 +295,16 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 var response = await GetExternalStorageAuthTokenAsync(state, model.Code);
 
-                if (string.IsNullOrEmpty(response.AccessToken) || string.IsNullOrEmpty(response.RefreshToken))
+                if (!response.IsSuccessStatusCode)
                 {
-                    logger.LogError($"Access and/or refresh token tokens for {state.Type} are null or empty.");
+                    logger.LogError($"Not successful attempt of tokens retrieving for {state.Type}. Status: {response.StatusCode}");
+                    logger.LogError($"Reason: {response.ReasonPhrase}");
+                    return BadRequest($"Could not get tokens for {state.Type} by code. Result is empty.");
+                }
+
+                if (string.IsNullOrEmpty(response.Content?.AccessToken) || string.IsNullOrEmpty(response.Content?.RefreshToken))
+                {
+                    logger.LogError($"Access and/or refresh tokens for {state.Type} are null or empty.");
                     return BadRequest($"Could not get tokens for {state.Type} by code. Result is empty.");
                 }
 
@@ -306,8 +313,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                     state.InterviewStatus,
                     state.FromDate?.ToUniversalTime(),
                     state.ToDate?.ToUniversalTime(),
-                    response.AccessToken,
-                    response.RefreshToken,
+                    response.Content.AccessToken,
+                    response.Content.RefreshToken,
                     state.Type,
                     translation: state.TranslationId);
 
@@ -319,7 +326,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
         }
 
-        private Task<ExternalStorageTokenResponse> GetExternalStorageAuthTokenAsync(ExternalStorageStateModel state, string code)
+        private Task<ApiResponse<ExternalStorageTokenResponse>> GetExternalStorageAuthTokenAsync(ExternalStorageStateModel state, string code)
         {
             var storageSettings = this.GetExternalStorageSettings(state.Type);
             var client =  RestService.For<IOAuth2Api>(new HttpClient()
