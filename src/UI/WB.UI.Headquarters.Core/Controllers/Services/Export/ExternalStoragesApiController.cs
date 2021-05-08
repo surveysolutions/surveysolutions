@@ -39,10 +39,15 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         private async Task<ApiResponse<ExternalStorageTokenResponse>> GetAccessTokenByRefreshTokenAsync(ExternalStorageType type, string refreshToken)
         {
             var storageSettings = this.GetExternalStorageSettings(type);
-            var client =  RestService.For<IOAuth2Api>(new HttpClient()
-            {
-                BaseAddress = new Uri(storageSettings.TokenUri)
-            });
+            var client =  RestService.For<IOAuth2Api>(
+                new HttpClient()
+                {
+                    BaseAddress = new Uri(storageSettings.TokenUri)
+                },
+                new RefitSettings
+                {
+                    ContentSerializer = new NewtonsoftJsonContentSerializer()
+                });
             var request = new ExternalStorageRefreshTokenRequest
             {
                 RefreshToken = refreshToken,

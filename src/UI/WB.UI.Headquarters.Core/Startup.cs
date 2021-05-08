@@ -224,6 +224,7 @@ namespace WB.UI.Headquarters
                     options.AddPolicy("export", b => b
                         .WithOrigins(redirectUri)
                         .AllowAnyHeader()
+                        .AllowCredentials()
                         .WithMethods("POST")
                     );
                 }

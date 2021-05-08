@@ -330,10 +330,15 @@ namespace WB.UI.Headquarters.Controllers.Api
         private Task<ApiResponse<ExternalStorageTokenResponse>> GetExternalStorageAuthTokenAsync(ExternalStorageStateModel state, string code)
         {
             var storageSettings = this.GetExternalStorageSettings(state.Type);
-            var client =  RestService.For<IOAuth2Api>(new HttpClient(new LoggingHandler(logger, new HttpClientHandler()))
-            {
-                BaseAddress = new Uri(storageSettings.TokenUri)
-            });
+            var client =  RestService.For<IOAuth2Api>(
+                new HttpClient()
+                {
+                    BaseAddress = new Uri(storageSettings.TokenUri)
+                },
+                new RefitSettings
+                {
+                    ContentSerializer = new NewtonsoftJsonContentSerializer()
+                });
             var request = new ExternalStorageAccessTokenRequest
             {
                 Code = code,
@@ -383,29 +388,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             public DateTime? ToDate { get; set; }
             public DataExportFormat? Format { get; set; }
             public Guid? TranslationId { get; set; }
-        }
-    }
-
-    internal class LoggingHandler : DelegatingHandler
-    {
-        private readonly ILogger<DataExportApiController> logger;
-
-        public LoggingHandler(ILogger<DataExportApiController> logger, HttpClientHandler httpClientHandler)
-            : base(httpClientHandler)
-        {
-            this.logger = logger;
-        }
-
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-            if (response.Content != null)
-            {
-                logger.LogInformation("Response on oauth token request:");
-                logger.LogInformation(response.ToString());
-                logger.LogInformation(await response.Content.ReadAsStringAsync(cancellationToken));
-            }
-            return response;
         }
     }
 }
