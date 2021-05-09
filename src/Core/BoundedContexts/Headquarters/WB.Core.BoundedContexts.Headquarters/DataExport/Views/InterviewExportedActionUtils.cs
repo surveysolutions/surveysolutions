@@ -1,4 +1,5 @@
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.ServicesIntegration.Export;
+using InterviewStatus = WB.Core.SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {

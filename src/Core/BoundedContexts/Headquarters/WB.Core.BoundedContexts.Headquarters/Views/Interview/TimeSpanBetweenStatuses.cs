@@ -1,6 +1,7 @@
 using System;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.Infrastructure.Domain;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {

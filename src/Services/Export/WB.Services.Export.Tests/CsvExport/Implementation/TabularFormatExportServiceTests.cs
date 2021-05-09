@@ -34,7 +34,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
                 assignmentsActionsExporter: assignmentsExporter.Object);
 
             // act
-            var questionnaireId = new QuestionnaireId("questionnaire");
+            var questionnaireId = new QuestionnaireIdentity("questionnaire");
             await exportService.ExportInterviewsInTabularFormatAsync(new ExportSettings
             (
                 questionnaireId : questionnaireId,
@@ -84,7 +84,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
                 questionnaireStorage: questionnaireStorage.Object);
 
             // act
-            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId(questionnaireExportStructure.QuestionnaireId), "x:/", ".xlsx", new CancellationToken());
+            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireIdentity(questionnaireExportStructure.QuestionnaireId), "x:/", ".xlsx", new CancellationToken());
 
             // assert
             Assert.That(description, Is.Not.Null.Or.Empty);
@@ -124,7 +124,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
                 questionnaireStorage: questionnaireStorage.Object);
 
             // act
-            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId("id"), @"x:/", ".xlsx", new CancellationToken());
+            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireIdentity("id"), @"x:/", ".xlsx", new CancellationToken());
 
             // assert
             Assert.That(description, Is.Not.Empty);

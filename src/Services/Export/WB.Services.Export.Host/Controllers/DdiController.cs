@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WB.Services.Export.Ddi;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Host.Controllers
 {
@@ -26,7 +26,7 @@ namespace WB.Services.Export.Host.Controllers
             TenantInfo tenant)
         {
             var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadataAsync(tenant,
-                new QuestionnaireId(questionnaireId),
+                new QuestionnaireIdentity(questionnaireId),
                 archivePassword);
             var responseStream = System.IO.File.OpenRead(pathToFile);
             return File(responseStream, "application/zip");

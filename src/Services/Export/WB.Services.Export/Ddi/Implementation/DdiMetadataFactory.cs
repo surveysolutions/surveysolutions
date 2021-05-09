@@ -11,6 +11,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Ddi.Implementation
 {
@@ -43,7 +44,7 @@ namespace WB.Services.Export.Ddi.Implementation
         }
 
         public async Task<string> CreateDDIMetadataFileForQuestionnaireInFolderAsync(TenantInfo tenant,
-            QuestionnaireId questionnaireId, string basePath)
+            QuestionnaireIdentity questionnaireId, string basePath)
         {
             var bigTemplateObject = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
             if(bigTemplateObject == null)

@@ -13,7 +13,6 @@ using WB.Services.Export.ExportProcessHandlers.Implementation.Handlers;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
@@ -60,7 +59,7 @@ namespace WB.Services.Export.Tests.ExportProcessHandlersTests
             interviewDataExportSettings.Setup(x=> x.Value).Returns(new ExportServiceSettings() { MaxRecordsCountPerOneExportQuery = 1});
 
             var interviewsToExportSource = new Mock<IInterviewsToExportSource>();
-            interviewsToExportSource.Setup(x => x.GetInterviewsToExport(It.IsAny<QuestionnaireId>(),
+            interviewsToExportSource.Setup(x => x.GetInterviewsToExport(It.IsAny<QuestionnaireIdentity>(),
                     It.IsAny<InterviewStatus?>(),
                     It.IsAny<DateTime?>(),
                     It.IsAny<DateTime?>()
@@ -84,7 +83,7 @@ namespace WB.Services.Export.Tests.ExportProcessHandlersTests
 
             var state = new ExportState(new DataExportProcessArgs(new ExportSettings(
                 exportFormat: DataExportFormat.Tabular,
-                new QuestionnaireId(Guid.Empty.ToString()),
+                new QuestionnaireIdentity(Guid.Empty.ToString()),
                 new TenantInfo("http://test", ""))));
 
             await handler.ExportDataAsync(state, CancellationToken.None);

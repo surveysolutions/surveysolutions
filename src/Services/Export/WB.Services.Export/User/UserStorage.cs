@@ -6,6 +6,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Services;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.User
 {
@@ -32,13 +33,13 @@ namespace WB.Services.Export.User
             return user.Roles.Single();
         }
 
-        private Task<User> GetUserAsync(Guid userId)
+        private Task<ServicesIntegration.Export.User> GetUserAsync(Guid userId)
         {
             return memoryCache.GetOrCreateAsync(userId,
                 async entry =>
                 {
                     entry.SlidingExpiration = TimeSpan.FromMinutes(3);
-                    User user = await tenantContext.Api.GetUserAsync(userId);
+                    ServicesIntegration.Export.User user = await tenantContext.Api.GetUserAsync(userId);
                     return user;
                 });
         }

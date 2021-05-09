@@ -3,6 +3,7 @@ using System.Net.Http;
 using NUnit.Framework;
 using Refit;
 using WB.Services.Export.Services;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.Services.TenantApi
 {

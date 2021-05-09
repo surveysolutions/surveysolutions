@@ -8,9 +8,9 @@ using WB.Services.Export.Assignment;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Export.User;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.CsvExport.Exporters
 {
@@ -225,7 +225,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         [Test]
         public async Task should_be_able_to_export_all()
         {
-            await actionsExporter.ExportAllAsync(tenant, new QuestionnaireId(QuestionnaireId), "", new ExportProgress(),
+            await actionsExporter.ExportAllAsync(tenant, new QuestionnaireIdentity(QuestionnaireId), "", new ExportProgress(),
                 CancellationToken.None);
             Assert.That(fileData[1],
                 Is.EqualTo(new[]

@@ -1,11 +1,12 @@
 ﻿using System;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Questionnaire.Services
 {
     public interface IQuestionnaireStorageCache 
     {
-        bool TryGetValue(QuestionnaireId key, Guid? translation, out QuestionnaireDocument? document);
-        void Remove(QuestionnaireId key, Guid? translation);
-        void Set(QuestionnaireId key, Guid? translation, QuestionnaireDocument questionnaire);
+        bool TryGetValue(QuestionnaireIdentity key, Guid? translation, out QuestionnaireDocument? document);
+        void Remove(QuestionnaireIdentity key, Guid? translation);
+        void Set(QuestionnaireIdentity key, Guid? translation, QuestionnaireDocument questionnaire);
     }
 }

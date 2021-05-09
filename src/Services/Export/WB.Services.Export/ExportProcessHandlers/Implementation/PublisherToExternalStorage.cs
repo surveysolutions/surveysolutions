@@ -59,10 +59,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                     string? questionnaireNamePrefixOverride = null;
                     if (!string.IsNullOrEmpty(questionnaire.VariableName))
                     {
-                        var split = questionnaire.QuestionnaireId.Id.Split('$');
-                        var questionnaireVersion = split.Length == 2 
-                            ? split[1]
-                            : questionnaire.QuestionnaireId.Id;
+                        var questionnaireVersion = questionnaire.QuestionnaireId.Version;
                         questionnaireNamePrefixOverride = $"{questionnaire.VariableName}_v{questionnaireVersion}";
                     }
                     var filename = await this.exportFileNameService.GetFileNameForExportArchiveAsync(state.Settings, questionnaireNamePrefixOverride);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.ServicesIntegration.Export;
 using QuestionnaireIdentity = WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionnaireIdentity;
+using UserRoles = Main.Core.Entities.SubEntities.UserRoles;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services
 {

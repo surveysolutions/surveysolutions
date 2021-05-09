@@ -44,7 +44,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
         }
 
         private async Task CreateDoFilesForQuestionnaireAsync(TenantInfo tenant,
-            QuestionnaireId questionnaireIdentity,
+            QuestionnaireIdentity questionnaireIdentity,
             string directoryPath,
             Guid? translation,
             CancellationToken cancellationToken)

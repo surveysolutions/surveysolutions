@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Infrastructure.EventSourcing;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Events
 {

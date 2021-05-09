@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Infrastructure.EventSourcing;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.Services.TenantApi
 {

@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
+using WB.ServicesIntegration.Export;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.ReportTests.SpeedReportTests

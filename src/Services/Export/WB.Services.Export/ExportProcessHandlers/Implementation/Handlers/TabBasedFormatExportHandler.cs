@@ -4,8 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
 {
@@ -23,7 +23,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             this.tabularFormatExportService = tabularFormatExportService;
         }
 
-        protected Task GenerateDescriptionTxtAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
+        protected Task GenerateDescriptionTxtAsync(TenantInfo tenant, QuestionnaireIdentity questionnaireIdentity,
             string directoryPath, string dataFilesExtension, CancellationToken cancellationToken)
             => this.tabularFormatExportService.GenerateDescriptionFileAsync(tenant, questionnaireIdentity, directoryPath, dataFilesExtension, cancellationToken);
 

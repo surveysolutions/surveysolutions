@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using WB.Services.Export.Interview.Entities;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {

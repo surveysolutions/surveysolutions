@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Questionnaire;
 using WB.ServicesIntegration.Export;
 using ILogger = Amazon.Runtime.Internal.Util.ILogger;
 
@@ -12,7 +11,7 @@ namespace WB.Services.Export.Services
 {
     public interface IInterviewsToExportSource
     {
-        List<InterviewToExport> GetInterviewsToExport(QuestionnaireId questionnaireIdentity,
+        List<InterviewToExport> GetInterviewsToExport(QuestionnaireIdentity questionnaireIdentity,
             InterviewStatus? status, DateTime? fromDate, DateTime? toDate);
     }
 
@@ -27,7 +26,7 @@ namespace WB.Services.Export.Services
             this.logger = logger;
         }
 
-        public List<InterviewToExport> GetInterviewsToExport(QuestionnaireId questionnaireIdentity,
+        public List<InterviewToExport> GetInterviewsToExport(QuestionnaireIdentity questionnaireIdentity,
             InterviewStatus? status, DateTime? fromDate, DateTime? toDate)
         {
             if (questionnaireIdentity == null) throw new ArgumentNullException(nameof(questionnaireIdentity));

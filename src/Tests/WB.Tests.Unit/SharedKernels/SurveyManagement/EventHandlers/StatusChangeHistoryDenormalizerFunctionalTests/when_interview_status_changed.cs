@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.ServicesIntegration.Export;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 

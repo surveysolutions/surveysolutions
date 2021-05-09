@@ -9,6 +9,7 @@ using WB.Services.Export.Ddi;
 using WB.Services.Export.Ddi.Implementation;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.Ddi
 {
@@ -70,7 +71,7 @@ namespace WB.Services.Export.Tests.Ddi
         private async Task BecauseOf()
         {
             filePath = await ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolderAsync(
-                Create.Tenant(), new QuestionnaireId(questionnaireId), "");
+                Create.Tenant(), new QuestionnaireIdentity(questionnaireId), "");
         }
 
         [NUnit.Framework.Test] public void should_call_write_xml () =>

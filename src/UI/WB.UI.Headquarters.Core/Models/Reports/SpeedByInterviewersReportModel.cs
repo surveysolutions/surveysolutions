@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.GenericSubdomains.Portable;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {

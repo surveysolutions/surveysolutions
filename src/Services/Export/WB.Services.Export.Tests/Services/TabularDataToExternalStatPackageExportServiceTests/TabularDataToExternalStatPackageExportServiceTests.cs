@@ -10,7 +10,6 @@ using StatData.Core;
 using StatData.Writers;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
 using WB.ServicesIntegration.Export;
@@ -51,7 +50,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
             
             //act
             await _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
-                    Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), null, new[] {mailLevelFileName, nestedRosterFileName},
+                    Create.Tenant(), new QuestionnaireIdentity(questionnaireId.ToString()), null, new[] {mailLevelFileName, nestedRosterFileName},
                     new ExportProgress(), CancellationToken.None);
 
            //Assert
@@ -103,7 +102,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
 
             // Act
             await _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
-                    Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), null, new[] { mailLevelFileName, nestedRosterFileName , extraFile },
+                    Create.Tenant(), new QuestionnaireIdentity(questionnaireId.ToString()), null, new[] { mailLevelFileName, nestedRosterFileName , extraFile },
                     new ExportProgress(), CancellationToken.None);
 
             //Assert

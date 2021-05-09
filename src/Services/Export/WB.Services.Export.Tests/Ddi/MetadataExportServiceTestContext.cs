@@ -14,6 +14,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.Ddi
 {
@@ -38,7 +39,7 @@ namespace WB.Services.Export.Tests.Ddi
                 .Returns(new QuestionnaireExportStructure(questionnaireDocument.Id));
 
             questionnaireExportStructureFactory.Setup(x =>
-                    x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>(), It.IsAny<Guid?>()))
+                    x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireIdentity>(), It.IsAny<Guid?>()))
                 .Returns(Task.FromResult(new QuestionnaireExportStructure(questionnaireDocument.Id)));
 
             return new DdiMetadataFactory(

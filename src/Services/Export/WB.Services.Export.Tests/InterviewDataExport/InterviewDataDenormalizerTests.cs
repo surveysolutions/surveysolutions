@@ -25,6 +25,7 @@ using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.InterviewDataExport
 {
@@ -361,7 +362,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
 
             ITenantContext tenantContext = Mock.Of<ITenantContext>(t => t.Tenant == new TenantInfo("http://test","","tenant_name", TenantInfo.DefaultWorkspace));
             IQuestionnaireStorage questionnaireStorage = 
-                Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireAsync(It.IsAny<QuestionnaireId>(), It.IsAny<Guid?>(), It.IsAny<CancellationToken>()) == Task.FromResult(questionnaireDocument));
+                Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireAsync(It.IsAny<QuestionnaireIdentity>(), It.IsAny<Guid?>(), It.IsAny<CancellationToken>()) == Task.FromResult(questionnaireDocument));
             object value = questionnaireDocument.QuestionnaireId;
             IMemoryCache memoryCache = Mock.Of<IMemoryCache>(mc => mc.TryGetValue(It.IsAny<object>(), out value) == true);
             ILogger<InterviewDataDenormalizer> logger = Mock.Of<ILogger<InterviewDataDenormalizer>>();

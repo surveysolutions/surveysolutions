@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Services.Export.Infrastructure;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Questionnaire.Services.Implementation
 {
@@ -18,13 +19,13 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
             this.tenantContext = tenantContext;
         }
 
-        private string Key(QuestionnaireId id, Guid? translation)
+        private string Key(QuestionnaireIdentity id, Guid? translation)
         {
             keyPart ??= nameof(QuestionnaireStorageCache) + ":" + tenantContext.Tenant.Id + ":";
             return keyPart + id + (translation != null ? $":{translation}" : string.Empty);
         }
 
-        public bool TryGetValue(QuestionnaireId id, Guid? translation, out QuestionnaireDocument? document)
+        public bool TryGetValue(QuestionnaireIdentity id, Guid? translation, out QuestionnaireDocument? document)
         {
             if (memoryCache.TryGetValue(Key(id, translation), out var res))
             {
@@ -39,12 +40,12 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
             return false;
         }
 
-        public void Remove(QuestionnaireId id, Guid? translation)
+        public void Remove(QuestionnaireIdentity id, Guid? translation)
         {
             memoryCache.Remove(Key(id, translation));
         }
 
-        public void Set(QuestionnaireId id, Guid? translation, QuestionnaireDocument questionnaire)
+        public void Set(QuestionnaireIdentity id, Guid? translation, QuestionnaireDocument questionnaire)
         {
             memoryCache.Set(Key(id, translation), questionnaire, new MemoryCacheEntryOptions
             {

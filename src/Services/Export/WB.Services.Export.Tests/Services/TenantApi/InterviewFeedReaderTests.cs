@@ -6,6 +6,7 @@ using WB.Services.Export.Events;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.EventSourcing.Json;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.Services.TenantApi
 {

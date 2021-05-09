@@ -2,8 +2,9 @@ using System.Linq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.ServicesIntegration.Export;
 using WB.Tests.Abc;
+using InterviewStatus = WB.Core.SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 {

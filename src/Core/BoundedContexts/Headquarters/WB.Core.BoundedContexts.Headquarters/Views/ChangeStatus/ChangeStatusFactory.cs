@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.ServicesIntegration.Export;
+using UserRoles = Main.Core.Entities.SubEntities.UserRoles;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
 {

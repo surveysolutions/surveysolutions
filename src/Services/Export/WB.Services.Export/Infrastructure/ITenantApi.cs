@@ -1,9 +1,10 @@
 ﻿using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Infrastructure
 {
     public interface ITenantApi<T>
     {
-        T For(TenantInfo? tenant);
+        IHeadquartersApi For(TenantInfo? tenant);
     }
 }

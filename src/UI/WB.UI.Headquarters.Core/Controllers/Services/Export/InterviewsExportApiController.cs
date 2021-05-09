@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
@@ -12,7 +11,11 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.ServicesIntegration.Export;
 using WB.UI.Headquarters.Code.Authentication;
+using InterviewDiagnosticsInfo = WB.Core.BoundedContexts.Headquarters.Factories.InterviewDiagnosticsInfo;
+using InterviewHistoricalRecordView = WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory.InterviewHistoricalRecordView;
+using UserRoles = Main.Core.Entities.SubEntities.UserRoles;
 
 namespace WB.UI.Headquarters.Controllers.Services.Export
 {

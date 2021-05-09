@@ -10,6 +10,7 @@ using NUnit.Framework;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.CsvExport
 {
@@ -27,7 +28,7 @@ namespace WB.Services.Export.Tests.CsvExport
             var backupFileFromHq = new byte[] { 1, 2, 3 };
             
             hqApi.Setup(x => x.GetBackupAsync(questionnaire.QuestionnaireId))
-                .ReturnsAsync(new ByteArrayContent(backupFileFromHq));
+                .ReturnsAsync(new MemoryStream(backupFileFromHq));
            
             var fileSystem = new Mock<IFileSystemAccessor>();
             fileSystem.Setup(x => x.MakeValidFileName(It.IsAny<string>()))

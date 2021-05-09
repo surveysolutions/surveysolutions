@@ -2,9 +2,10 @@ using System;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Fetching;
 using WB.Infrastructure.Native.Utils;
+using WB.ServicesIntegration.Export;
+using InterviewStatus = WB.Core.SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {

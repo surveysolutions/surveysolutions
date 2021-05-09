@@ -1,8 +1,5 @@
-﻿using System.Text.Json.Serialization;
-
-namespace WB.ServicesIntegration.Export
+﻿namespace WB.ServicesIntegration.Export
 {
-    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum DataExportFormat
     {
         Tabular = 1,

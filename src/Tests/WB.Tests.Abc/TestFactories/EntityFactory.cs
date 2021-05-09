@@ -94,9 +94,11 @@ using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Workspaces;
 using WB.ServicesIntegration.Export;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
+using Categories = WB.Core.SharedKernels.SurveySolutions.Documents.Categories;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using InterviewStatus = WB.Core.SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus;
 using QuestionnaireIdentity = WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionnaireIdentity;
+using UserRoles = Main.Core.Entities.SubEntities.UserRoles;
 
 namespace WB.Tests.Abc.TestFactories
 {

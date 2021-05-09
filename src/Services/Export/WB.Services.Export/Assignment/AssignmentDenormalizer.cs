@@ -10,6 +10,7 @@ using WB.Services.Export.Events.Assignment.Base;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.EventSourcing;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Assignment
 {

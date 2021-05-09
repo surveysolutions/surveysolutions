@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Ddi
 {
     public interface IDdiMetadataFactory
     {
-        Task<string> CreateDDIMetadataFileForQuestionnaireInFolderAsync(TenantInfo tenant, QuestionnaireId questionnaireId,
+        Task<string> CreateDDIMetadataFileForQuestionnaireInFolderAsync(TenantInfo tenant, QuestionnaireIdentity questionnaireId,
             string basePath);
     }
 }

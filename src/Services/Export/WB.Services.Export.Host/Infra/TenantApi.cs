@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
@@ -11,12 +12,16 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Polly;
 using Refit;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire.Services.Implementation;
+using WB.Services.Export.Services.Implementation;
+using WB.Services.Infrastructure.EventSourcing.Json;
 using WB.Services.Infrastructure.Logging;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Host.Infra
 {
@@ -31,46 +36,57 @@ namespace WB.Services.Export.Host.Infra
             this.configuration = configuration;
         }
 
-        static readonly ConcurrentDictionary<TenantInfo, T> cache = new ConcurrentDictionary<TenantInfo, T>();
+        static readonly ConcurrentDictionary<TenantInfo, IHeadquartersApi> cache = new();
 
-        public T For(TenantInfo? tenant)
+        public IHeadquartersApi For(TenantInfo? tenant)
         {
             if (tenant == null) throw new InvalidOperationException("Tenant must be not null.");
 
-            return cache.GetOrAdd(tenant, id =>
+            if (tenant.BaseUrl != Constants.EmbeddedExportUrl)
             {
-                var httpClient = new HttpClient(new ApiKeyHandler(tenant, logger), true);
-
-                var urlOverrideKey = $"TenantUrlOverride:{tenant.ShortName}";
-
-                if (configuration[urlOverrideKey] != null)
+                return cache.GetOrAdd(tenant, id =>
                 {
-                    var uri = configuration[urlOverrideKey];
-                    
-                    httpClient.BaseAddress = new Uri($"{uri.TrimEnd('/')}/{tenant.Workspace}");
+                    var httpClient = new HttpClient(new ApiKeyHandler(tenant, logger), true);
 
-                    var aspnetcoreToken = Environment.GetEnvironmentVariable("ASPNETCORE_TOKEN");
-                    if (aspnetcoreToken != null)
+                    var urlOverrideKey = $"TenantUrlOverride:{tenant.ShortName}";
+
+                    if (configuration[urlOverrideKey] != null)
                     {
-                        httpClient.DefaultRequestHeaders.Add("MS-ASPNETCORE-TOKEN", aspnetcoreToken);
+                        var uri = configuration[urlOverrideKey];
+
+                        httpClient.BaseAddress = new Uri($"{uri.TrimEnd('/')}/{tenant.Workspace}");
+
+                        var aspnetcoreToken = Environment.GetEnvironmentVariable("ASPNETCORE_TOKEN");
+                        if (aspnetcoreToken != null)
+                        {
+                            httpClient.DefaultRequestHeaders.Add("MS-ASPNETCORE-TOKEN", aspnetcoreToken);
+                        }
                     }
-                }
-                else
-                {
-                    httpClient.BaseAddress = new Uri(tenant.BaseUrl);
-                }
-
-                logger.LogDebug("Using tenantApi for {tenant} - {url}", tenant.Name, httpClient.BaseAddress);
-
-                return RestService.For<T>(httpClient, new RefitSettings
-                {
-                    ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings
+                    else
                     {
-                        SerializationBinder = new QuestionnaireDocumentSerializationBinder(),
-                        TypeNameHandling = TypeNameHandling.Auto
-                    })
+                        httpClient.BaseAddress = new Uri(tenant.BaseUrl);
+                    }
+
+                    logger.LogDebug("Using tenantApi for {tenant} - {url}", tenant.Name, httpClient.BaseAddress);
+
+                    var result = RestService.For<IRemoteHeadquartersApi>(httpClient, new RefitSettings
+                    {
+                        ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings
+                        {
+                            SerializationBinder = new QuestionnaireDocumentSerializationBinder(),
+                            Converters = new List<JsonConverter>
+                            {
+                                new FeedEventConverter(),
+                                new StringEnumConverter()
+                            },
+                            TypeNameHandling = TypeNameHandling.Auto
+                        })
+                    });
+                    return new RemoteHeadquartersApi(result);
                 });
-            });
+            }
+
+            return new InMemoryHeadquartersApi();
         }
 
         private class ApiKeyHandler : HttpClientHandler

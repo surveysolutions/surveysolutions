@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 {
@@ -72,9 +73,13 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             return "_" + CompressGuidTo22Chars(@group.PublicKey);
         }
 
-        protected string GenerateQuestionnairePrefix(string questionnaireVariable, QuestionnaireId questionnaireId)
+        protected string GenerateQuestionnairePrefix(string questionnaireVariable, QuestionnaireIdentity questionnaireId)
         {
-            var strings = questionnaireId.Id.Split('$');
+            var strings = new string[2]
+            {
+                questionnaireId.Id.FormatGuid(),
+                questionnaireId.Version.ToString()
+            };
 
             if (!string.IsNullOrEmpty(questionnaireVariable) && questionnaireVariable.Length <= 22)
             {

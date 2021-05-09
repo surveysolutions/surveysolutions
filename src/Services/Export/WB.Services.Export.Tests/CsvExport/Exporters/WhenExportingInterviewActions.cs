@@ -7,9 +7,9 @@ using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
-using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Services;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
+using IHeadquartersApi = WB.ServicesIntegration.Export.IHeadquartersApi;
 
 namespace WB.Services.Export.Tests.CsvExport.Exporters
 {
@@ -237,7 +237,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         private static Guid interviewId = Guid.Parse("22222222222222222222222222222222");
         private static string fileName = "1.tab";
         private static List<string[]> fileData = new List<string[]>();
-        private static readonly QuestionnaireId questionnaireIdentity = new QuestionnaireId(questionnaireId);
+        private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(questionnaireId);
         private static TenantInfo tenant = Create.Tenant();
     }
 }

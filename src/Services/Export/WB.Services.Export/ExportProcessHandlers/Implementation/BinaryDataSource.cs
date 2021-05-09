@@ -12,6 +12,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {
@@ -94,17 +95,15 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                         {
                             case MultimediaType.Image:
                                 var imageContent = await api.GetInterviewImageAsync(answer.InterviewId, answer.Answer);
-                                var imageStream = new MemoryStream(await imageContent.ReadAsByteArrayAsync());
-                                data.Content = imageStream;
-                                data.ContentLength = imageStream.Length;
+                                data.Content = imageContent;
+                                data.ContentLength = imageContent.Length;
                                 data.Type = BinaryDataType.Image;
 
                                 break;
                             case MultimediaType.Audio:
                                 var audioContent = await api.GetInterviewAudioAsync(answer.InterviewId, answer.Answer);
-                                var audioStream = new MemoryStream(await audioContent.ReadAsByteArrayAsync());
-                                data.Content = audioStream;
-                                data.ContentLength = audioStream.Length;
+                                data.Content = audioContent;
+                                data.ContentLength = audioContent.Length;
                                 data.Type = BinaryDataType.Audio;
                                 
                                 break;
@@ -135,15 +134,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                         try
                         {
                             var audioContent = await api.GetAudioAuditAsync(audioAuditInfo.InterviewId, fileName);
-                            var memoryStream = new MemoryStream(await audioContent.ReadAsByteArrayAsync());
 
                             await binaryDataAction(new BinaryData
                             {
                                 InterviewId = audioAuditInfo.InterviewId,
                                 InterviewKey = interviewsKeyMap[audioAuditInfo.InterviewId],
                                 FileName = fileName,
-                                Content = memoryStream,
-                                ContentLength = memoryStream.Length,
+                                Content = audioContent,
+                                ContentLength = audioContent.Length,
                                 Type = BinaryDataType.AudioAudit
                             });
 

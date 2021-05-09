@@ -10,7 +10,6 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Models;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Services;
@@ -95,7 +94,7 @@ namespace WB.Services.Export.Host.Controllers
             var args = new DataExportProcessArgs(new ExportSettings
             (
                 tenant: tenantContext.Tenant,
-                questionnaireId: new QuestionnaireId(questionnaireId),
+                questionnaireId: new QuestionnaireIdentity(questionnaireId),
                 exportFormat: format,
                 fromDate: from,
                 toDate: to,
@@ -128,7 +127,7 @@ namespace WB.Services.Export.Host.Controllers
             DateTime? toDate)
         {
             return await this.jobsStatusReporting.GetDataExportStatusForQuestionnaireAsync(
-                new QuestionnaireId(questionnaireId), status, fromDate, toDate);
+                new QuestionnaireIdentity(questionnaireId), status, fromDate, toDate);
         }
 
         [HttpGet]
@@ -179,7 +178,7 @@ namespace WB.Services.Export.Host.Controllers
         {
             var exportSettings = new ExportSettings
             (
-                questionnaireId: new QuestionnaireId(questionnaireId),
+                questionnaireId: new QuestionnaireIdentity(questionnaireId),
                 exportFormat: format,
                 status: status,
                 tenant: tenantContext.Tenant,

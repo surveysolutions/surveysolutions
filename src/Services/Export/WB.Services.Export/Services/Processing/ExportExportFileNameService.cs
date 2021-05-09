@@ -6,7 +6,6 @@ using Unidecode.NET;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.ServicesIntegration.Export;
 
@@ -25,14 +24,14 @@ namespace WB.Services.Export.Services.Processing
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public string GetFileNameForDdiByQuestionnaire(QuestionnaireId questionnaire, string pathToDdiMetadata)
+        public string GetFileNameForDdiByQuestionnaire(QuestionnaireIdentity questionnaire, string pathToDdiMetadata)
         {
             return this.fileSystemAccessor.Combine(pathToDdiMetadata, $"{questionnaire}_ddi.zip");
         }
 
         public async Task<string> GetQuestionnaireDirectoryName(ExportSettings settings, CancellationToken cancellationToken)
         {
-            var questionnaireId = settings.QuestionnaireId;
+            QuestionnaireIdentity questionnaireId = settings.QuestionnaireId;
             var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, token: cancellationToken);
 
             if (questionnaire == null)
@@ -40,27 +39,9 @@ namespace WB.Services.Export.Services.Processing
 
             var variableName = questionnaire.VariableName ?? questionnaire.Id;
 
-            if (TryParseQuestionnaireVersion(questionnaireId, out var version))
-            {
-                return $"{variableName}${version}";
-            }
-
-            return $"{variableName}${questionnaireId}";
+            return $"{variableName}${questionnaireId.Version}";
         }
 
-
-        private bool TryParseQuestionnaireVersion(QuestionnaireId questionnaireId, out string version)
-        {
-            var split = questionnaireId.Id.Split('$');
-            if (split.Length == 2)
-            {
-                version = split[1];
-                return true;
-            }
-
-            version = string.Empty;
-            return false;
-        }
 
         public async Task<string> GetFileNameForExportArchiveAsync(ExportSettings exportSettings, string? questionnaireNamePrefixOverride = null)
         {

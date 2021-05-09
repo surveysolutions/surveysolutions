@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
@@ -43,7 +42,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
         }
 
         private async Task<string[]> CreateStataDataFilesFromTabularDataFilesAsync(TenantInfo tenant,
-            QuestionnaireId questionnaireIdentity, Guid? translationId, string[] tabDataFiles,
+            QuestionnaireIdentity questionnaireIdentity, Guid? translationId, string[] tabDataFiles,
             ExportProgress progress, CancellationToken cancellationToken)
         {
             var exportProgress = new ExportProgress();

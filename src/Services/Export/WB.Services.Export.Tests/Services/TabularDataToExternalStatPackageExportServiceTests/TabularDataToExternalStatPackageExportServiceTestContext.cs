@@ -9,6 +9,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExportServiceTests
 {
@@ -29,7 +30,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
                 datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>(), 
                 new QuestionnaireLabelFactory(),
                 Mock.Of<IQuestionnaireExportStructureFactory>(x => 
-                    x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>(), It.IsAny<Guid?>()) 
+                    x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireIdentity>(), It.IsAny<Guid?>()) 
                     == Task.FromResult(questionnaireExportStructure)),
                 exportServiceDataProvider ?? Mock.Of <IExportServiceDataProvider>());
         }

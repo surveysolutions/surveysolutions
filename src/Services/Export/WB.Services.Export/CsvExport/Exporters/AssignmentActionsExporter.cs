@@ -16,6 +16,7 @@ using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.User;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
@@ -90,13 +91,13 @@ namespace WB.Services.Export.CsvExport.Exporters
         }
 
         public async Task ExportAllAsync(TenantInfo tenantInfo, 
-            QuestionnaireId questionnaireIdentity, 
+            QuestionnaireIdentity questionnaireIdentity, 
             string basePath,
             ExportProgress progress,
             CancellationToken cancellationToken)
         {
             var allAssignments = await this.dbContext.Assignments
-                .Where(x => x.QuestionnaireId == questionnaireIdentity.Id)
+                .Where(x => x.QuestionnaireId == questionnaireIdentity.ToString())
                 .OrderBy(x => x.Id)
                 .Select(x => x.Id)
                 .ToListAsync(cancellationToken);

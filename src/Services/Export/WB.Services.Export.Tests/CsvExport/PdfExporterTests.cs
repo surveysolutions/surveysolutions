@@ -10,6 +10,7 @@ using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.CsvExport
 {
@@ -32,9 +33,9 @@ namespace WB.Services.Export.Tests.CsvExport
             var mainPdfFileFromHq = new byte[]{1,2,3};
             var translatedPdfFileFromHq = new byte[]{4,5,6};
             hqApi.Setup(x => x.GetPdfAsync(questionnaire.QuestionnaireId, null))
-                .ReturnsAsync(new ByteArrayContent(mainPdfFileFromHq));
+                .ReturnsAsync(new MemoryStream(mainPdfFileFromHq));
             hqApi.Setup(x => x.GetPdfAsync(questionnaire.QuestionnaireId, translationId))
-                .ReturnsAsync(new ByteArrayContent(translatedPdfFileFromHq));
+                .ReturnsAsync(new MemoryStream(translatedPdfFileFromHq));
 
             var fileSystem = new Mock<IFileSystemAccessor>();
             fileSystem.Setup(x => x.MakeValidFileName(It.IsAny<string>()))

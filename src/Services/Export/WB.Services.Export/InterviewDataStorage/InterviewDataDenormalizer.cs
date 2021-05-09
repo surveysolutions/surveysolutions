@@ -16,6 +16,7 @@ using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Infrastructure.EventSourcing;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.InterviewDataStorage
 {
@@ -663,7 +664,7 @@ namespace WB.Services.Export.InterviewDataStorage
                     if (interviewSummary == null)
                         return null;
 
-                    return new QuestionnaireId(interviewSummary.QuestionnaireId);
+                    return new QuestionnaireIdentity(interviewSummary.QuestionnaireId);
                 });
 
             if (questionnaireId == null)

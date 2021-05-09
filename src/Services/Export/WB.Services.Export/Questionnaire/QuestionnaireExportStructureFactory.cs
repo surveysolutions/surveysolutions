@@ -7,6 +7,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Questionnaire
 {
@@ -21,7 +22,7 @@ namespace WB.Services.Export.Questionnaire
         }
 
         public async Task<QuestionnaireExportStructure> GetQuestionnaireExportStructureAsync(TenantInfo tenant,
-            QuestionnaireId questionnaireId,
+            QuestionnaireIdentity questionnaireId,
             Guid? translation)
         {
             var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId, translation);

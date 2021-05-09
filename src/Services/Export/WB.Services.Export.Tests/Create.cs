@@ -116,7 +116,7 @@ namespace WB.Services.Export.Tests
                 PublicKey = id ?? Guid.NewGuid(),
                 VariableName = variableName,
             };
-            questionnaireDocument.QuestionnaireId = new QuestionnaireId(questionnaireDocument.PublicKey.FormatGuid() + "$" + version);
+            questionnaireDocument.QuestionnaireId = new QuestionnaireIdentity(questionnaireDocument.PublicKey.FormatGuid() + "$" + version);
 
             return questionnaireDocument;
         }
@@ -203,7 +203,7 @@ namespace WB.Services.Export.Tests
                 Mock.Of<ICommentsExporter>(),
                 Mock.Of<IDiagnosticsExporter>(),
                 Mock.Of<IInterviewActionsExporter>(),
-                Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>(), It.IsAny<Guid?>()) == Task.FromResult(questionnaireExportStructure)),
+                Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireIdentity>(), It.IsAny<Guid?>()) == Task.FromResult(questionnaireExportStructure)),
                 questionnaireStorage ?? defaultQuestionnaireStorage.Object,
                 Mock.Of<IProductVersion>(),
                 Mock.Of<IPdfExporter>(),
@@ -438,7 +438,7 @@ namespace WB.Services.Export.Tests
                     }
                 }
             };
-            questionnaireDocumentWithOneChapter.QuestionnaireId = new QuestionnaireId(questionnaireDocumentWithOneChapter.PublicKey.ToString("N") + "$" + "145");
+            questionnaireDocumentWithOneChapter.QuestionnaireId = new QuestionnaireIdentity(questionnaireDocumentWithOneChapter.PublicKey.ToString("N") + "$" + "145");
             questionnaireDocumentWithOneChapter.ConnectChildrenWithParent();
             return questionnaireDocumentWithOneChapter;
         }
@@ -887,7 +887,7 @@ namespace WB.Services.Export.Tests
                 new ExportSettings
                 (
                     exportFormat: DataExportFormat.Tabular,
-                    questionnaireId: new QuestionnaireId(Guid.Empty.FormatGuid() + "$" + 1),
+                    questionnaireId: new QuestionnaireIdentity(Guid.Empty.FormatGuid() + "$" + 1),
                     tenant: new TenantInfo("", "", tenant)
                 ));
         }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
 using WB.ServicesIntegration.Export;
@@ -18,7 +17,7 @@ namespace WB.Services.Export.Jobs
             InterviewStatus? interviewStatus, string? questionnaireIdentity, DataExportJobStatus? exportStatus, bool? hasFile, int? limit, int? offset);
 
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
-            QuestionnaireId questionnaireIdentity,
+            QuestionnaireIdentity questionnaireIdentity,
             InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null);
     }
 }

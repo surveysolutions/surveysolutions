@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Moq;
 using WB.Services.Export.Events;
-using WB.Services.Export.Services;
+using WB.ServicesIntegration.Export;
+using IHeadquartersApi = WB.ServicesIntegration.Export.IHeadquartersApi;
 
 namespace WB.Services.Export.Tests.EventsProcessorTests
 {

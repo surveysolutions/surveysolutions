@@ -2,7 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using WB.Services.Export.Infrastructure;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Questionnaire.Services.Implementation
 {
@@ -25,7 +28,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
         private static readonly SemaphoreSlim CacheLock = new SemaphoreSlim(1);
 
         public async Task<QuestionnaireDocument?> GetQuestionnaireAsync(
-            QuestionnaireId questionnaireId,
+            QuestionnaireIdentity questionnaireId,
             Guid? translation = null,
             CancellationToken token = default)
         {
@@ -43,8 +46,10 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
                     return result;
                 }
 
-                var questionnaire = await this.tenantContext.Api.GetQuestionnaireAsync(questionnaireId, translation, token);
+                string response = await this.tenantContext.Api.GetQuestionnaireAsync(questionnaireId, translation, token);
 
+                var questionnaire = JsonConvert.DeserializeObject<QuestionnaireDocument>(response);
+                
                 if (questionnaire == null) return null;
                 questionnaire.QuestionnaireId = questionnaireId;
 
@@ -79,7 +84,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
             }
         }
 
-        public void InvalidateQuestionnaire(QuestionnaireId questionnaireId, Guid? translation)
+        public void InvalidateQuestionnaire(QuestionnaireIdentity questionnaireId, Guid? translation)
         {
             if (cache.TryGetValue(questionnaireId, translation, out var questionnaire) && !questionnaire!.IsDeleted)
             {

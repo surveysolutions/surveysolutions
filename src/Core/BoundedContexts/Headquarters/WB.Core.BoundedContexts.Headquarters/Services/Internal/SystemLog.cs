@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.ServicesIntegration.Export;
 using QuestionnaireIdentity = WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionnaireIdentity;
+using UserRoles = Main.Core.Entities.SubEntities.UserRoles;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 {

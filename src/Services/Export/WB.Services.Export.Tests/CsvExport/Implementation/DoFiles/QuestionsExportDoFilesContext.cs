@@ -4,6 +4,7 @@ using Moq;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 {

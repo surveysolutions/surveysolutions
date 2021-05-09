@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Infrastructure.EventSourcing.Json
 {
@@ -19,58 +20,56 @@ namespace WB.Services.Infrastructure.EventSourcing.Json
             {
                 return null;
             }
-            else
+
+            try
             {
-                try
+
+                var @event = new Event();
+
+                while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
-
-                    var @event = new Event();
-
-                    while (reader.Read() && reader.TokenType != JsonToken.EndObject)
+                    if (reader.TokenType == JsonToken.PropertyName)
                     {
-                        if (reader.TokenType == JsonToken.PropertyName)
-                        {
-                            var propertyName = (string)reader.Value!;
+                        var propertyName = (string)reader.Value!;
 
-                            switch (propertyName)
-                            {
-                                case "$type":
-                                    @event.EventTypeName = reader.ReadAsString()!;
-                                    break;
-                                case nameof(Event.EventSourceId):
-                                    @event.EventSourceId = Guid.Parse(reader.ReadAsString());
-                                    break;
-                                case nameof(Event.GlobalSequence):
-                                    reader.Read();
-                                    @event.GlobalSequence = (long)reader.Value;
-                                    break;
-                                case nameof(Event.Sequence):
-                                    @event.Sequence = reader.ReadAsInt32() ?? 0;
-                                    break;
-                                case nameof(Event.EventTimeStamp):
-                                    @event.EventTimeStamp = reader.ReadAsDateTime() ?? DateTime.MinValue;
-                                    break;
-                                case nameof(Event.Payload):
-                                    reader.Read();
-                                    if (TypesCache.TryGetValue(@event.EventTypeName, out var eventType))
-                                    {
-                                        @event.Payload = (IEvent)PayloadSerializer.Deserialize(reader, eventType)!;
-                                    }
-                                    else
-                                    {
-                                        reader.Skip();
-                                    }
-                                    break;
-                            }
+                        switch (propertyName)
+                        {
+                            case "$type":
+                                @event.EventTypeName = reader.ReadAsString()!;
+                                break;
+                            case nameof(Event.EventSourceId):
+                                @event.EventSourceId = Guid.Parse(reader.ReadAsString());
+                                break;
+                            case nameof(Event.GlobalSequence):
+                                reader.Read();
+                                @event.GlobalSequence = (long)reader.Value;
+                                break;
+                            case nameof(Event.Sequence):
+                                @event.Sequence = reader.ReadAsInt32() ?? 0;
+                                break;
+                            case nameof(Event.EventTimeStamp):
+                                @event.EventTimeStamp = reader.ReadAsDateTime() ?? DateTime.MinValue;
+                                break;
+                            case nameof(Event.Payload):
+                                reader.Read();
+                                if (TypesCache.TryGetValue(@event.EventTypeName, out var eventType))
+                                {
+                                    @event.Payload = (IEvent)PayloadSerializer.Deserialize(reader, eventType)!;
+                                }
+                                else
+                                {
+                                    reader.Skip();
+                                }
+                                break;
                         }
                     }
+                }
 
-                    return @event;
-                }
-                catch (Exception ex)
-                {
-                    throw new JsonSerializationException("Error parsing identity string.", ex);
-                }
+                return @event;
+            }
+            catch (Exception ex)
+            {
+                throw new JsonSerializationException("Error parsing identity string.", ex);
             }
         }
 

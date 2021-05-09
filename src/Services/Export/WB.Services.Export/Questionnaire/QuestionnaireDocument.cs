@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Services.Export.Interview;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Questionnaire
 {
@@ -191,7 +192,7 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        public QuestionnaireId QuestionnaireId { get; set; } = null!;
+        public QuestionnaireIdentity QuestionnaireId { get; set; } = null!;
 
         public IEnumerable<Group> GetAllStoredGroups()
         {

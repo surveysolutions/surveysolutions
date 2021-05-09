@@ -14,6 +14,7 @@ using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.CsvExport.Implementation
 {
@@ -149,7 +150,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             );
         }
         
-        public async Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension, CancellationToken cancellationToken)
+        public async Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireIdentity questionnaireId, string basePath, string dataFilesExtension, CancellationToken cancellationToken)
         {
             var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId, token: cancellationToken);
             if (questionnaire == null)

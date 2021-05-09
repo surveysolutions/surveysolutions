@@ -52,7 +52,7 @@ namespace WB.Services.Export.Services
         private const string SpssFileNameExtension = ExportFileSettings.SpssDataFileExtension;
 
         public async Task<string[]> CreateAndGetStataDataFilesForQuestionnaireAsync(TenantInfo tenant, 
-            QuestionnaireId questionnaireId,
+            QuestionnaireIdentity questionnaireId,
             Guid? translationId,
             string[] tabularDataFiles,
             ExportProgress progress,
@@ -68,7 +68,7 @@ namespace WB.Services.Export.Services
         }
 
         public async Task<string[]> CreateAndGetSpssDataFilesForQuestionnaireAsync(TenantInfo tenant,
-            QuestionnaireId questionnaireId,
+            QuestionnaireIdentity questionnaireId,
             Guid? translationId,
             string[] tabularDataFiles,
             ExportProgress progress,
@@ -77,7 +77,7 @@ namespace WB.Services.Export.Services
             return await this.CreateAndGetExportDataFiles(tenant, questionnaireId, translationId, DataExportFormat.SPSS, tabularDataFiles, progress, cancellationToken);
         }
 
-        private async Task<string[]> CreateAndGetExportDataFiles(TenantInfo tenant, QuestionnaireId questionnaireId,
+        private async Task<string[]> CreateAndGetExportDataFiles(TenantInfo tenant, QuestionnaireIdentity questionnaireId,
             Guid? translationId, DataExportFormat format,
             string[] dataFiles, ExportProgress progress, CancellationToken cancellationToken)
         {

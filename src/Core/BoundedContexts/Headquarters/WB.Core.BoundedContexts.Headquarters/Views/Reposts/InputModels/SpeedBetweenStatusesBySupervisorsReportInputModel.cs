@@ -1,4 +1,5 @@
 ﻿using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels
 {

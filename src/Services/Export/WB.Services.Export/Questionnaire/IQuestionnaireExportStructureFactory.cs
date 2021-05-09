@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Questionnaire
 {
@@ -10,7 +11,7 @@ namespace WB.Services.Export.Questionnaire
 
         Task<QuestionnaireExportStructure> GetQuestionnaireExportStructureAsync(
             TenantInfo tenant,
-            QuestionnaireId questionnaireId,
+            QuestionnaireIdentity questionnaireId,
             Guid? translation = null);
     }
 }

@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             var path = Path.GetFullPath(exportFolder);
             var exportHostPath = Path.Combine(path, "WB.Services.Export.Host.dll");
 
-            Serilog.Log.Verbose("Looking for WB.Services.Export.Host.dll at {directory}", path);
+            Serilog.Log.Information("Looking for WB.Services.Export.Host.dll at {directory}", path);
             if (!System.IO.File.Exists(exportHostPath))
             {
                 // looking for export relative to assembly location

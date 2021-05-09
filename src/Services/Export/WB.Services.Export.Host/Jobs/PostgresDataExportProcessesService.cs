@@ -85,7 +85,7 @@ namespace WB.Services.Export.Host.Jobs
         private IEnumerable<DataExportProcessArgs> AsDataExportProcesses(IEnumerable<JobItem> jobItems)
         {
             return jobItems.Select(j => AsDataExportProcessArgs(j))
-                .Where(d => !DeletedQuestionnaires.Contains(d.ExportSettings.QuestionnaireId.Id))
+                .Where(d => !DeletedQuestionnaires.Contains(d.ExportSettings.QuestionnaireId.ToString()))
                 .ToArray();
         }
 

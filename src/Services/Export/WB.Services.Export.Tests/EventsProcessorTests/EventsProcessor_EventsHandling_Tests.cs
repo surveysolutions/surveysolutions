@@ -9,8 +9,9 @@ using Moq;
 using NUnit.Framework;
 using WB.Services.Export.Events;
 using WB.Services.Export.Events.Interview;
-using WB.Services.Export.Services;
 using WB.Services.Infrastructure.EventSourcing;
+using WB.ServicesIntegration.Export;
+using IHeadquartersApi = WB.ServicesIntegration.Export.IHeadquartersApi;
 
 namespace WB.Services.Export.Tests.EventsProcessorTests
 {

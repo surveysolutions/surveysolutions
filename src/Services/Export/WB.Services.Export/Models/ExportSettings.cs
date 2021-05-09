@@ -1,5 +1,4 @@
 ﻿using System;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.Tenant;
 using WB.ServicesIntegration.Export;
 
@@ -10,7 +9,7 @@ namespace WB.Services.Export.Models
         public ExportSettings(
             
             DataExportFormat exportFormat, 
-            QuestionnaireId questionnaireId, 
+            QuestionnaireIdentity questionnaireId, 
             TenantInfo tenant,
             InterviewStatus? status = null,
             DateTime? fromDate = null, 
@@ -32,7 +31,7 @@ namespace WB.Services.Export.Models
 
         public long? JobId { get; set; }
         public DataExportFormat ExportFormat { get; set; }
-        public QuestionnaireId QuestionnaireId { get; set; }
+        public QuestionnaireIdentity QuestionnaireId { get; set; }
         public InterviewStatus? Status { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }

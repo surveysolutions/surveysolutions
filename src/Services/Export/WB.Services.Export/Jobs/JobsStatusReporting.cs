@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
+using WB.Services.Infrastructure;
 using WB.Services.Infrastructure.Tenant;
 using WB.ServicesIntegration.Export;
 
@@ -122,7 +122,7 @@ namespace WB.Services.Export.Jobs
         }
 
         public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
-            QuestionnaireId questionnaireIdentity,
+            QuestionnaireIdentity questionnaireIdentity,
             InterviewStatus? status = null, 
             DateTime? fromDate = null, 
             DateTime? toDate = null)
@@ -160,7 +160,7 @@ namespace WB.Services.Export.Jobs
                         
                     })
                     .ToList(),
-                QuestionnaireId = questionnaireIdentity.Id
+                QuestionnaireId = questionnaireIdentity.Id.FormatGuid()
             };
             // questionnaireId: questionnaireIdentity.Id,
             // dataExports: exports,
@@ -207,7 +207,7 @@ namespace WB.Services.Export.Jobs
         }
 
         private static DataExportStatus GetStatusOfExportProcess(DataExportType dataType, DataExportFormat dataFormat,
-            QuestionnaireId questionnaireIdentity, DataExportProcessView[] allProcesses)
+            QuestionnaireIdentity questionnaireIdentity, DataExportProcessView[] allProcesses)
         {
             var matchingProcess = allProcesses.FirstOrDefault(x =>
                 (x.QuestionnaireId == null || x.QuestionnaireId == questionnaireIdentity.ToString())
@@ -220,13 +220,13 @@ namespace WB.Services.Export.Jobs
         private async Task<DataExportProcessView> ToDataExportProcessView(DataExportProcessArgs process)
         {
             var dataExportProcessView = AsDataProcessView(process);
-            var questionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId);
+            var questionnaireId = dataExportProcessView.QuestionnaireId;
 
             var exportSettings = new ExportSettings
             (
                 jobId: process.ProcessId,
                 tenant : Tenant,
-                questionnaireId : questionnaireId,
+                questionnaireId: new QuestionnaireIdentity(questionnaireId),
                 exportFormat : dataExportProcessView.Format,
                 status : dataExportProcessView.InterviewStatus,
                 fromDate : dataExportProcessView.FromDate,
@@ -254,7 +254,7 @@ namespace WB.Services.Export.Jobs
             var error = status.Error;
             var settings = dataExportProcessDetails.ExportSettings 
                            ?? new ExportSettings(exportFormat:DataExportFormat.Tabular, 
-                               questionnaireId: new QuestionnaireId(Guid.Empty.ToString()), 
+                               questionnaireId: new QuestionnaireIdentity(Guid.Empty.ToString()), 
                                new TenantInfo("",""));
 
             return new DataExportProcessView

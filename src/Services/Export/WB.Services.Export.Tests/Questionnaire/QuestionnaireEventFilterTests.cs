@@ -9,6 +9,7 @@ using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Infrastructure.EventSourcing;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Tests.Questionnaire
 {
@@ -124,7 +125,7 @@ namespace WB.Services.Export.Tests.Questionnaire
         public async Task should_generate_schema_for_questionnaire_once_on_questionnaire_request()
         {
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: Id.gA);
-            questionnaire.QuestionnaireId = new QuestionnaireId($"{Id.gA:N}$1");
+            questionnaire.QuestionnaireId = new QuestionnaireIdentity($"{Id.gA:N}$1");
             questionnaire.Id = questionnaire.QuestionnaireId.ToString();
 
             var eventFeed = CrateEventFeedWith3InterviewCreatedEvents(questionnaire);
@@ -146,7 +147,7 @@ namespace WB.Services.Export.Tests.Questionnaire
         public async Task should_drop_schema_for_questionnaire_once_questionnaire_is_deleted()
         {
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: Id.gA);
-            questionnaire.QuestionnaireId = new QuestionnaireId($"{Id.gA:N}$1");
+            questionnaire.QuestionnaireId = new QuestionnaireIdentity($"{Id.gA:N}$1");
             questionnaire.Id = questionnaire.QuestionnaireId.ToString();
 
             var eventFeed = CrateEventFeedWith3InterviewCreatedEvents(questionnaire);
@@ -185,7 +186,7 @@ namespace WB.Services.Export.Tests.Questionnaire
         public async Task should_generate_schema_for_cached_questionnaire_when_db_do_not_hold_reference_on_questionnaire()
         {
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: Id.gA);
-            questionnaire.QuestionnaireId = new QuestionnaireId($"{Id.gA:N}$1");
+            questionnaire.QuestionnaireId = new QuestionnaireIdentity($"{Id.gA:N}$1");
             questionnaire.Id = questionnaire.QuestionnaireId.ToString();
 
             var eventFeed = CrateEventFeedWith3InterviewCreatedEvents(questionnaire);
@@ -247,7 +248,7 @@ namespace WB.Services.Export.Tests.Questionnaire
         public async Task should_invalidate_questionnaire_storage_when_received_interview_deleted_flag()
         {
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: Id.gA);
-            questionnaire.QuestionnaireId = new QuestionnaireId($"{Id.gA:N}$1");
+            questionnaire.QuestionnaireId = new QuestionnaireIdentity($"{Id.gA:N}$1");
             questionnaire.Id = questionnaire.QuestionnaireId.ToString();
 
             var eventFeed = CrateEventFeedWith3InterviewCreatedEvents(questionnaire);

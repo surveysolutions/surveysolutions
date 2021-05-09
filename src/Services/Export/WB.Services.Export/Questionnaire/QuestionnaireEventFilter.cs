@@ -9,6 +9,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Infrastructure.EventSourcing;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.Questionnaire
 {
@@ -31,7 +32,7 @@ namespace WB.Services.Export.Questionnaire
         {
             var filterWatch = Stopwatch.StartNew();
             List<Event> result = new List<Event>();
-            HashSet<QuestionnaireId> questionnaireIds = new HashSet<QuestionnaireId>();
+            HashSet<QuestionnaireIdentity> questionnaireIds = new HashSet<QuestionnaireIdentity>();
 
             foreach (var @event in feed)
             {
@@ -63,7 +64,7 @@ namespace WB.Services.Export.Questionnaire
                         case InterviewHardDeleted _:
                             reference = await this.dbContext.InterviewReferences.FindAsync(@event.EventSourceId);
                             reference.DeletedAtUtc = @event.EventTimeStamp;
-                            questionnaireStorage.InvalidateQuestionnaire(new QuestionnaireId(reference.QuestionnaireId));
+                            questionnaireStorage.InvalidateQuestionnaire(new QuestionnaireIdentity(reference.QuestionnaireId));
                             break;
                         default:
                             reference = await this.dbContext.InterviewReferences.FindAsync(@event.EventSourceId);
@@ -76,7 +77,7 @@ namespace WB.Services.Export.Questionnaire
                             $"Encountered interview id {@event.EventSourceId} without corresponding InterviewCreated or InterviewOnClientCreated events");
                     }
 
-                    var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(new QuestionnaireId(reference.QuestionnaireId), token: cancellationToken);
+                    var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(new QuestionnaireIdentity(reference.QuestionnaireId), token: cancellationToken);
 
                     if (questionnaire == null)
                         throw new InvalidOperationException("questionnaire must be not null.");

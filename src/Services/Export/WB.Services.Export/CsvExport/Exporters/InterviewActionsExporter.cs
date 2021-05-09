@@ -10,9 +10,9 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Services;
 using WB.Services.Infrastructure;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
@@ -53,7 +53,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             this.tenantApi = tenantApi;
         }
 
-        public async Task ExportAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, List<Guid> interviewIdsToExport,
+        public async Task ExportAsync(TenantInfo tenant, QuestionnaireIdentity questionnaireIdentity, List<Guid> interviewIdsToExport,
             string basePath, ExportProgress progress, CancellationToken cancellationToken = default)
         {
             var actionFilePath = Path.Combine(basePath, Path.ChangeExtension(this.InterviewActionsFileName, this.dataFileExtension));

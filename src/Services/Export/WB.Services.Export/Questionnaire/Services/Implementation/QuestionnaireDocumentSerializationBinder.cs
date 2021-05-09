@@ -9,7 +9,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
     public class QuestionnaireDocumentSerializationBinder : DefaultSerializationBinder
     {
         private static readonly Assembly Assembly = typeof(QuestionnaireDocument).Assembly;
-        private static readonly ConcurrentDictionary<string, Type> ResolvedTypes = new ConcurrentDictionary<string, Type>();
+        private static readonly ConcurrentDictionary<string, Type> ResolvedTypes = new();
 
         public override Type BindToType(string? assemblyName, string typeName)
         {

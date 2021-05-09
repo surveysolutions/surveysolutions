@@ -6,7 +6,6 @@ using Moq;
 using NUnit.Framework;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.ServicesIntegration.Export;
 
@@ -43,7 +42,7 @@ namespace WB.Services.Export.Tests.Services
         [Test]
         public void should_be_able_to_read_empty_db()
         {
-            var interviews = this.interviewsToExportSource.GetInterviewsToExport(new QuestionnaireId("id"), null, null, null);
+            var interviews = this.interviewsToExportSource.GetInterviewsToExport(new QuestionnaireIdentity("id"), null, null, null);
 
             Assert.That(interviews, Is.Empty);
         }
@@ -57,7 +56,7 @@ namespace WB.Services.Export.Tests.Services
             this.dbContext.SaveChanges();
 
             // Act
-            var found = this.interviewsToExportSource.GetInterviewsToExport(new QuestionnaireId(questionnaireId),
+            var found = this.interviewsToExportSource.GetInterviewsToExport(new QuestionnaireIdentity(questionnaireId),
                 InterviewStatus.Completed, null, null);
 
             Assert.That(found, Has.Count.EqualTo(1));
@@ -73,7 +72,7 @@ namespace WB.Services.Export.Tests.Services
             this.dbContext.SaveChanges();
 
             // Act
-            var found = this.interviewsToExportSource.GetInterviewsToExport(new QuestionnaireId(questionnaireId),
+            var found = this.interviewsToExportSource.GetInterviewsToExport(new QuestionnaireIdentity(questionnaireId),
                 null, updateDateUtc.AddDays(-1), updateDateUtc.AddDays(1));
 
             Assert.That(found, Has.Count.EqualTo(1));

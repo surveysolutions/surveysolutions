@@ -1,8 +1,6 @@
-﻿using System.Text.Json.Serialization;
-
+﻿
 namespace WB.ServicesIntegration.Export
 {
-    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum DataExportStatus
     {
         Unknown = 0,

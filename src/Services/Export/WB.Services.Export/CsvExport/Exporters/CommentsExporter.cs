@@ -11,8 +11,8 @@ using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Services;
 using WB.Services.Infrastructure.Tenant;
+using WB.ServicesIntegration.Export;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
@@ -77,7 +77,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             long totalProcessed = 0;
             var stopwatch = Stopwatch.StartNew();
 
-            var headquartersApi = tenantApi.For(tenant);
+            IHeadquartersApi headquartersApi = tenantApi.For(tenant);
 
             foreach (var interviewIds in interviewIdsToExport.Batch(batchSize))
             {

@@ -6,6 +6,8 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.ServicesIntegration.Export;
+using InterviewDiagnosticsInfo = WB.Core.BoundedContexts.Headquarters.Factories.InterviewDiagnosticsInfo;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 {
