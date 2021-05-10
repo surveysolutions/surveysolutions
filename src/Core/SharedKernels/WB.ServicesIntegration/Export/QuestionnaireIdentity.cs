@@ -21,6 +21,12 @@ namespace WB.ServicesIntegration.Export
             this.Version = long.Parse(split[1]);
         }
 
+        public QuestionnaireIdentity(Guid id, long version)
+        {
+            Id = id;
+            Version = version;
+        }
+
         public Guid Id { get; set; }
         
         public long Version { get; set; }

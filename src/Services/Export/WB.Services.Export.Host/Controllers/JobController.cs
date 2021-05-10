@@ -11,6 +11,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
+using WB.Services.Infrastructure.EventSourcing.Json;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Services;
 using WB.ServicesIntegration.Export;
@@ -137,8 +138,17 @@ namespace WB.Services.Export.Host.Controllers
         {
             var job = await this.jobService.GetJobAsync(id);
 
-            var settings = JsonConvert.DeserializeObject<DataExportProcessArgs>(job.Args);
+            var settings = JsonConvert.DeserializeObject<DataExportProcessArgs>(job.Args,
+                new JsonSerializerSettings
+                {
+                    Converters = new List<JsonConverter>
+                    {
+                        new QuestionnaireIdentityConverter()
+                    }
+                });
 
+            if (settings == null) throw new Exception("failed to deserialize DataExportProcessArgs");
+            
             var exportSettings = settings.ExportSettings;
             exportSettings.JobId = job.Id;
             exportSettings.Tenant = tenantContext.Tenant;

@@ -12,6 +12,12 @@
     <Content Remove="ExportProcessHandlers\**" />
     <EmbeddedResource Remove="ExportProcessHandlers\**" />
     <None Remove="ExportProcessHandlers\**" />
+    <Content Remove="Infrastructure\args.json" />
+    <EmbeddedResource Include="Infrastructure\args.json">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

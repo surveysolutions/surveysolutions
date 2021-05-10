@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
+using WB.Services.Infrastructure.EventSourcing.Json;
 using WB.Services.Infrastructure.Logging;
 using WB.Services.Scheduler;
 using WB.Services.Scheduler.Model;
@@ -99,13 +100,21 @@ namespace WB.Services.Export.Host.Jobs
 
         DataExportProcessArgs AsDataExportProcessArgs(JobItem job)
         {
-            var args = JsonConvert.DeserializeObject<DataExportProcessArgs>(job.Args);
+            var args = JsonConvert.DeserializeObject<DataExportProcessArgs>(job.Args, new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter>
+                {
+                    new QuestionnaireIdentityConverter()
+                }
+            });
 
             var eta = job.GetData<string>(EtaField);
             var statusValue = job.GetData<string>(StatusField);
             var status = statusValue == null ? DataExportStatus.Unknown : Enum.Parse<DataExportStatus>(statusValue);
             var hasError = /*job.Status == JobStatus.Canceled ||*/ job.Status == JobStatus.Fail;
 
+            if (args == null) throw new Exception("Failed to deserialize DataExportProcessArgs");
+            
             args.Status = new DataExportProcessStatus
             {
                 TimeEstimation = eta == null ? (TimeSpan?)null : TimeSpan.Parse(eta),

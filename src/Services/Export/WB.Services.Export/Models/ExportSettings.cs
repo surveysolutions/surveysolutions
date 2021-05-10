@@ -7,7 +7,6 @@ namespace WB.Services.Export.Models
     public class ExportSettings
     {
         public ExportSettings(
-            
             DataExportFormat exportFormat, 
             QuestionnaireIdentity questionnaireId, 
             TenantInfo tenant,

@@ -1,0 +1,43 @@
+{
+  "ExportSettings": {
+    "JobId": null,
+    "ExportFormat": 1,
+    "QuestionnaireId": {
+      "Id": "1949c957f8914b93be7837cf41baa0a9$1"
+    },
+    "Status": null,
+    "FromDate": null,
+    "ToDate": null,
+    "Tenant": {
+      "BaseUrl": "http://localhost:5001/primary",
+      "Id": {
+        "Id": "0878b158-65a4-4597-b38a-df330a95aee5"
+      },
+      "Name": "hq",
+      "ShortName": "hq",
+      "Workspace": "primary"
+    },
+    "Translation": null,
+    "IncludeMeta": true,
+    "NaturalId": "0878b158-65a4-4597-b38a-df330a95aee5$All$Tabular$1949c957f8914b93be7837cf41baa0a9$1$EMPTY FROM DATE$EMPTY TO DATE$No translation"
+  },
+  "Status": {
+    "CreatedDate": "0001-01-01T00:00:00",
+    "BeginDate": null,
+    "EndDate": null,
+    "LastUpdateDate": "0001-01-01T00:00:00",
+    "Status": 2,
+    "JobStatus": 0,
+    "ProgressInPercents": 0,
+    "IsRunning": false,
+    "TimeEstimation": null,
+    "Error": null
+  },
+  "ArchivePassword": null,
+  "NaturalId": "NoExternal$0878b158-65a4-4597-b38a-df330a95aee5$All$Tabular$1949c957f8914b93be7837cf41baa0a9$1$EMPTY FROM DATE$EMPTY TO DATE$No translation",
+  "AccessToken": null,
+  "RefreshToken": null,
+  "StorageType": null,
+  "ProcessId": 0,
+  "ShouldDropTenantSchema": false
+}
