@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.workspaceService = workspaceService;
         }
 
-        public void MigrateUp(Assembly[] scanInAssembly)
+        public void MigrateUp(string appName, Assembly[] scanInAssembly)
         {
             using var workspacesLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
             {
@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 new HashSet<string>()
                 {
                     "WB.UI.Shared.Enumerator.Migrations.Workspaces",
-                    "WB.UI.Interviewer.Migrations.Workspaces"   
+                    $"WB.UI.{appName}.Migrations.Workspaces",
                 });
             
 
@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     new HashSet<string>()
                     {
                         "WB.UI.Shared.Enumerator.Migrations.Workspace",
-                        "WB.UI.Interviewer.Migrations.Workspace"
+                        $"WB.UI.{appName}.Migrations.Workspace",
                     });
             }
         }

@@ -87,7 +87,6 @@
     <Compile Include="Migrations\Workspaces\Encrypt_Data.cs" />
     <Compile Include="Migrations\Workspaces\M201912091307_ChangeIdTypeInOptionViewTable.cs" />
     <Compile Include="Migrations\Workspaces\M202001291224_RemoveDuplicatedCategoriesInOptionViewTable.cs" />
-    <Compile Include="Migrations\Workspaces\M202103101642_MoveSqliteTablesInWorkspaceFolder.cs" />
     <Compile Include="Migrations\Workspaces\M202103291222_MoveMapsFiles.cs" />
     <Compile Include="Migrations\Workspaces\M202103101500_UpdateInterviewsMode.cs" />
     <Compile Include="Migrations\Workspaces\UpdateOptionsForMultiComboboxQuestions.cs" />

@@ -1,33 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Linq;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Workspace;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
+namespace WB.UI.Interviewer.Migrations.Workspaces
 {
     [Migration(202103101642)]
     public class M202103101642_MoveSqliteTablesInWorkspaceFolder : IMigration
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IPrincipal principal;
+        private readonly IPlainStorage<InterviewerIdentity> usersStorage;
         private readonly SqliteSettings settings;
 
         public M202103101642_MoveSqliteTablesInWorkspaceFolder(IFileSystemAccessor fileSystemAccessor,
-            IPrincipal principal,
+            IPlainStorage<InterviewerIdentity> usersStorage,
             SqliteSettings settings)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.principal = principal;
+            this.usersStorage = usersStorage;
             this.settings = settings;
         }
 
         public void Up()
         {
-            var workspace = principal.CurrentUserIdentity?.Workspace ?? "primary";
+            var interviewerIdentity = usersStorage.LoadAll().SingleOrDefault();
+            var workspace = interviewerIdentity?.Workspace ?? "primary";
             if (string.IsNullOrWhiteSpace(workspace))
                 return;
 
