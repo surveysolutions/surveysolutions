@@ -27,7 +27,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             this.webInterviewInvoker = webInterviewInvoker;
         }
 
-        public virtual void RefreshEntities(Guid interviewId, params Identity[] questions)
+        public virtual void RefreshEntities(Guid interviewId, params Identity[] entitiesIdentities)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
@@ -36,7 +36,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 return;
             }
 
-            if (questions.Length > InterviewLifecycle.RefreshEntitiesLimit)
+            if (entitiesIdentities.Length > InterviewLifecycle.RefreshEntitiesLimit)
             {
                 this.webInterviewInvoker.RefreshSection(interviewId);
                 return;
@@ -50,24 +50,26 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             if (questionnaire == null) return;
 
-            foreach (var identity in questions)
+            foreach (var identity in entitiesIdentities)
             {
-                if (this.IsQuestionPrefield(identity, interview))
-                {
-                    entitiesToRefresh.Add((WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id), identity));
-                }
-
                 if (questionnaire.IsQuestion(identity.Id) && (
-                        questionnaire.IsRosterSizeQuestion(identity.Id)
-                        || questionnaire.IsRosterTitleQuestion(identity.Id)
-                        || questionnaire.GetSubstitutedQuestions(identity.Id).Any()
-                        || questionnaire.GetSubstitutedGroups(identity.Id).Any()
-                        || questionnaire.GetSubstitutedStaticTexts(identity.Id).Any()
-                        || questionnaire.ShowCascadingAsList(identity.Id)
-                    ))
+                    questionnaire.IsRosterSizeQuestion(identity.Id)
+                    || questionnaire.IsRosterTitleQuestion(identity.Id)
+                    || questionnaire.GetSubstitutedQuestions(identity.Id).Any()
+                    || questionnaire.GetSubstitutedGroups(identity.Id).Any()
+                    || questionnaire.GetSubstitutedStaticTexts(identity.Id).Any()
+                    || questionnaire.ShowCascadingAsList(identity.Id)
+                ))
                 {
                     doesNeedRefreshSectionList = true;
                 }
+
+
+                if ((questionnaire.IsVariable(identity.Id) || questionnaire.IsQuestion(identity.Id) || questionnaire.IsStaticText(identity.Id)) && questionnaire.IsPrefilled(identity.Id))
+                {
+                    entitiesToRefresh.Add((WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id), identity));
+                }
+                
 
                 var currentEntity = identity;
 
@@ -80,30 +82,35 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     }
 
                     var parent = this.GetParentIdentity(currentEntity, interview);
-                   
-                    
+
+
                     if (parent != null)
                     {
                         if (questionnaire.HasVariable(currentEntity.Id))
                         {
                             if (questionnaire.IsPrefilled(currentEntity.Id))
                             {
-                                entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id),
+                                entitiesToRefresh.Add((
+                                    WebInterview.GetConnectedClientSectionKey(parent, interview.Id),
                                     currentEntity));
                             }
-                            
+
                             IEnumerable<Guid> affectedStaticTexts =
                                 questionnaire.GetStaticTextsThatUseVariableAsAttachment(currentEntity.Id);
-                            foreach (var staticTextId in affectedStaticTexts.SelectMany(x => interview.GetAllIdentitiesForEntityId(x)))
-                            { 
+                            foreach (var staticTextId in affectedStaticTexts.SelectMany(x =>
+                                interview.GetAllIdentitiesForEntityId(x)))
+                            {
                                 var parentGroup = interview.GetParentGroup(staticTextId);
-                                entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parentGroup, interview.Id), staticTextId));
+                                entitiesToRefresh.Add((
+                                    WebInterview.GetConnectedClientSectionKey(parentGroup, interview.Id),
+                                    staticTextId));
                             }
                         }
                         else if (questionnaire.IsCustomViewRoster(parent.Id))
                         {
                             var parentGroupIdentity = GetParentIdentity(parent, interview);
-                            var connectedClientSectionKey = WebInterview.GetConnectedClientSectionKey(parentGroupIdentity, interview.Id);
+                            var connectedClientSectionKey =
+                                WebInterview.GetConnectedClientSectionKey(parentGroupIdentity, interview.Id);
                             entitiesToRefresh.Add((connectedClientSectionKey, currentEntity));
                         }
                         else
@@ -115,6 +122,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                     currentEntity = parent;
                 }
+                
             }
 
             if (doesNeedRefreshSectionList)
