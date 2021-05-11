@@ -1,5 +1,6 @@
 ﻿namespace WB.Services.Export.CsvExport.Exporters
 {
+    // must be equal to enum from HQ
     public enum AssignmentExportedAction
     {
         Unknown = 0,
