@@ -97,6 +97,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 case GroupStatus.StartedInvalid:
                 case GroupStatus.CompletedInvalid:
                     return SimpleGroupStatus.Invalid;
+                case GroupStatus.Disabled:
+                    return SimpleGroupStatus.Disabled;
                 default:
                     return SimpleGroupStatus.Other;
             }

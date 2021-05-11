@@ -5,5 +5,6 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         Completed = 1,
         Invalid = -1,
         Other = 0,
+        Disabled = 2,
     }
 }
