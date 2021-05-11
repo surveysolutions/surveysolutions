@@ -49,6 +49,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public DateTimeOffset? CalendarEvent { get; set; }
         public string CalendarEventTimezoneId { get; set; }
         public string CalendarEventComment { get; set; }
-        public InterviewMode Mode { get; set; }
+        public InterviewMode? Mode { get; set; }
     }
 }

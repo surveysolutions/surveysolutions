@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             var interviewerId = this.Principal.CurrentUserIdentity.UserId;
 
             return interview => interview.ResponsibleId == interviewerId &&
-                                interview.Mode == InterviewMode.CAPI && 
+                                (interview.Mode == InterviewMode.CAPI || interview.Mode == null) && 
                 (interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.InterviewerAssigned ||
                  interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.Restarted);
         }
