@@ -55,7 +55,7 @@ namespace WB.UI.Interviewer
 
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
-            migrationRunner.MigrateUp(this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
+            migrationRunner.MigrateUp("Interviewer", this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
             CheckAndProcessAllAuditFiles();
             

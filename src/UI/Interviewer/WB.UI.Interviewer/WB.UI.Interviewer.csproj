@@ -121,6 +121,7 @@
     <Compile Include="InterviewerAppStart.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Migrations\Workspaces\AddTitleToOptionViewForSearching.cs" />
+    <Compile Include="Migrations\Workspaces\M202103101642_MoveSqliteTablesInWorkspaceFolder.cs" />
     <Compile Include="Migrations\Workspaces\UpdateAssignmentsWithInterviewsCount.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="ServiceLocation\InterviewerUIModule.cs" />

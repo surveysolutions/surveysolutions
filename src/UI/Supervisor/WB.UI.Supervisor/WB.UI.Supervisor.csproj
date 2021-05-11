@@ -110,6 +110,7 @@
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\SupervisorSearchActivity.cs" />
     <Compile Include="CustomControls\SupervisorDashboardTemplateSelector.cs" />
+    <Compile Include="Migrations\Workspaces\M202103101642_MoveSqliteTablesInWorkspaceFolder.cs" />
     <Compile Include="MvvmBindings\DrawerLockModeBinding.cs" />
     <Compile Include="MvvmBindings\ImageCompanyLogoBinding.cs" />
     <Compile Include="MvvmBindings\SupervisorLocalizationValueConverter.cs" />
@@ -520,6 +521,9 @@
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
       <Version>1.1.0.6</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Migrations\Workspace" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
