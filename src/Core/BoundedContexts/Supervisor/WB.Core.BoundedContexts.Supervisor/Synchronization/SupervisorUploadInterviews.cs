@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
         protected override bool IsNonPartialSynchedInterview(InterviewView interview)
         {
             return interview.Status == InterviewStatus.ApprovedBySupervisor
-                   || interview.Mode != InterviewMode.CAPI;
+                   || interview.Mode == InterviewMode.CAWI;
         }
 
         protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
