@@ -1038,21 +1038,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .ToReadOnlyCollection());
 
 
-        public bool IsPrefilled(Guid questionId)
+        public bool IsPrefilled(Guid entityId)
         {
-            var entity = GetEntityOrThrow(questionId);
+            var entity = GetEntityOrThrow(entityId);
             if (IsCoverPageSupported)
             {
                 var parent = entity.GetParent();
                 return parent?.PublicKey == CoverPageSectionId;
             }
-            else if (entity is IVariable)
-            {
-                return false;
-            }
-            
-            var question = this.GetQuestionOrThrow(questionId);
-            return question.Featured;
+            else
+                return entity is IQuestion && this.GetQuestionOrThrow(entityId).Featured;
         }
 
         public bool ShouldBeHiddenIfDisabled(Guid entityId)
