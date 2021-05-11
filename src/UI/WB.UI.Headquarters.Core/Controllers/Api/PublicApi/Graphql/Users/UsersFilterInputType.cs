@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             descriptor.Field(x => x.PhoneNumber);
             descriptor.Field(x => x.Id);
             descriptor.Field(x => x.Role).Type<RolesInputFilterType>();
-            descriptor.Field(x => x.Workspaces);
+            //descriptor.Field(x => x.Workspaces);
         }
     }
 }
