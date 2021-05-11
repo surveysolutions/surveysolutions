@@ -40,6 +40,13 @@ namespace WB.UI.Headquarters
                     logger.MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning);
                 })
                 .ConfigureSurveySolutionsAppConfiguration<Startup>("HQ_", args)
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.Configure<HostOptions>(option =>
+                    {
+                        option.ShutdownTimeout = System.TimeSpan.FromSeconds(30);
+                    });
+                })
                 .ConfigureEmbeddedServices()
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory());
     }
