@@ -103,7 +103,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
             if (productVersion != null && productVersion < new Version(21, 5))
             {
-                if (interviews.Any(interview => interview.Mode == InterviewMode.CAWI || interview.Mode == InterviewMode.CAPI))
+                if (interviews.Any(interview => interview.Mode != InterviewMode.Unknown))
                 {
                     return true;
                 }
