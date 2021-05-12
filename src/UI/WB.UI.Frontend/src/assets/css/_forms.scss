@@ -581,9 +581,9 @@ ul.dropdown-menu li, ul.dropdown-menu li *{
 }
 .profile, .contain-input{
 	.form-control, .input-group, .btn-input{
-		margin-left: 10px;
+		margin-left: -10px;
 		& + .btn-clear{
-			right: -10px;
+			right: 10px;
 		}
 	}
 	.input-group, .btn-input{
