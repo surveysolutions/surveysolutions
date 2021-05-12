@@ -1,9 +1,11 @@
 using System;
 using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.Core.BoundedContexts.Supervisor.Views
 {
+    [NonWorkspaced]
     public class SupervisorIdentity : ISupervisorUserIdentity, IPlainStorageEntity
     {
         public string Id { get; set; }

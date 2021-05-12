@@ -371,6 +371,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 items = items.Where(x => !x.Quantity.HasValue || x.Quantity - x.InterviewSummaries.Count > 0);
             }
 
+            if (input.NonCawiOnly)
+            {
+                items = items.Where(x => x.WebMode != true);
+            }
+
             if (input.DateStart.HasValue || input.DateEnd.HasValue)
             {
                 items = items.Where(x => 

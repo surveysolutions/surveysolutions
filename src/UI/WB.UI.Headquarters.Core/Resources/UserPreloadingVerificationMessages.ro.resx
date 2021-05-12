@@ -178,25 +178,25 @@
     <value>Numărul de telefon '{0}' este în format incorect</value>
   </data>
   <data name="PLU0009" xml:space="preserve">
-    <value>Rol nevalid</value>
+    <value>Rol incorect</value>
   </data>
   <data name="PLU0009Description" xml:space="preserve">
     <value>Rolul '{0}' nu este valid</value>
   </data>
   <data name="PLU0009Recomendation" xml:space="preserve">
-    <value>Este permisă crearea doar a utlizatorilor cu rol de “anchetator” sau “controlor”</value>
+    <value>Este permisă crearea doar a utlizatorilor cu rol de “anchetator” sau “supervizor”</value>
   </data>
   <data name="PLU0010" xml:space="preserve">
     <value>Eroare de dependență</value>
   </data>
   <data name="PLU0010Description" xml:space="preserve">
-    <value>Controlorul '{0}' nu există</value>
+    <value>Supervizorul '{0}' nu există</value>
   </data>
   <data name="PLU0011" xml:space="preserve">
     <value>Eroare de dependență</value>
   </data>
   <data name="PLU0011Description" xml:space="preserve">
-    <value>Pentru utilizatorii cu rol de controlor, coloana “supervisor” trebuie să fie necompletată</value>
+    <value>Pentru utilizatorii cu rol de supervizor, coloana “supervisor” trebuie să fie necompletată</value>
   </data>
   <data name="PLU0012" xml:space="preserve">
     <value>Numele complet are lungimea incorectă</value>
@@ -217,12 +217,75 @@
     <value>Nu trebuie să conțină mai mult de 15 caractere</value>
   </data>
   <data name="PLU0014" xml:space="preserve">
-    <value>Numele complet are caractere nevalide</value>
+    <value>Numele complet are caractere incorecte</value>
   </data>
   <data name="PLU0014Description" xml:space="preserve">
-    <value>Numele '{0}' are caractere nevalide</value>
+    <value>Numele '{0}' are caractere incorecte</value>
   </data>
   <data name="PLU0014Recomendation" xml:space="preserve">
     <value>Sunt permise doar litere, puncte, spații și apostrof</value>
+  </data>
+  <data name="PLU0015" xml:space="preserve">
+    <value>Parola prea scurta</value>
+  </data>
+  <data name="PLU0015Description" xml:space="preserve">
+    <value>Parola „{0}” este prea scurtă</value>
+  </data>
+  <data name="PLU0015Recomendation" xml:space="preserve">
+    <value>Parola trebuie să aibă cel puțin 10 caractere</value>
+  </data>
+  <data name="PLU0016" xml:space="preserve">
+    <value>Parolă simplă</value>
+  </data>
+  <data name="PLU0016Description" xml:space="preserve">
+    <value>Parola „{0}” nu conține caractere non-alfanumerice</value>
+  </data>
+  <data name="PLU0016Recomendation" xml:space="preserve">
+    <value>Adăugați cel puțin un caracter nealfanumeric</value>
+  </data>
+  <data name="PLU0017" xml:space="preserve">
+    <value>Parolă simplă</value>
+  </data>
+  <data name="PLU0017Description" xml:space="preserve">
+    <value>Parola „{0}” nu conține cifre</value>
+  </data>
+  <data name="PLU0017Recomendation" xml:space="preserve">
+    <value>Adăugați cel puțin o cifră („0” - „9”).</value>
+  </data>
+  <data name="PLU0018" xml:space="preserve">
+    <value>Parolă simplă</value>
+  </data>
+  <data name="PLU0018Description" xml:space="preserve">
+    <value>Parola „{0}” nu conține litere mici</value>
+  </data>
+  <data name="PLU0018Recomendation" xml:space="preserve">
+    <value>Adăugați cel puțin o literă mică („a” - „z”).</value>
+  </data>
+  <data name="PLU0019" xml:space="preserve">
+    <value>Parolă simplă</value>
+  </data>
+  <data name="PLU0019Description" xml:space="preserve">
+    <value>Parola „{0}” nu conține LITERE MARI</value>
+  </data>
+  <data name="PLU0019Recomendation" xml:space="preserve">
+    <value>Adăugați cel puțin o literă mare („A” - „Z”).</value>
+  </data>
+  <data name="PLU0020" xml:space="preserve">
+    <value>Parolă simplă</value>
+  </data>
+  <data name="PLU0020Description" xml:space="preserve">
+    <value>Parola „{0}” nu conține suficiente caractere unice</value>
+  </data>
+  <data name="PLU0020Recomendation" xml:space="preserve">
+    <value>Adăugați diferite caractere.</value>
+  </data>
+  <data name="PLU0021" xml:space="preserve">
+    <value>Parolă necesară</value>
+  </data>
+  <data name="PLU0021Description" xml:space="preserve">
+    <value>Parola este necesara</value>
+  </data>
+  <data name="PLU0021Recomendation" xml:space="preserve">
+    <value>Adăugați o parolă</value>
   </data>
 </root>

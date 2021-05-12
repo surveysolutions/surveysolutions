@@ -26,9 +26,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             InterviewStatus? status,
             DateTime? from,
             DateTime? to,
-            string archivePassword,
-            string accessToken,
-            string refreshToken,
+            string? archivePassword,
+            string? accessToken,
+            string? refreshToken,
             ExternalStorageType? storageType,
             Guid? translationId,
             bool? includeMeta);
@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         Task DeleteAll();
 
         [Get("/api/v1/ddi")]
-        Task<HttpContent> GetDdiArchive(string questionnaireId, string archivePassword);
+        Task<HttpContent> GetDdiArchive(string questionnaireId, string? archivePassword);
 
         [Get("/.hc")]
         Task<HttpResponseMessage> Health();

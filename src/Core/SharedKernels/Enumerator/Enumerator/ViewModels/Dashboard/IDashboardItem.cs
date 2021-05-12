@@ -39,6 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
     {
         Primary,
         Secondary,
+        Extra,
         Context
     }
 

@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -33,7 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public CompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService,
             ICommandService commandService,
-            IPrincipal principal, 
+            IPrincipal principal,
             IMvxMessenger messenger,
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
             ILastCompletionComments lastCompletionComments,
@@ -93,6 +94,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public string EntitiesWithErrorsDescription { get; private set; }
 
+        public bool CanSwitchToWebMode
+        {
+            get => canSwitchToWebMode;
+            set => this.RaiseAndSetIfChanged(ref this.canSwitchToWebMode, value);
+        }
+
+        public bool RequestWebInterview
+        {
+            get => requestWebInterview;
+            set => this.RaiseAndSetIfChanged(ref this.requestWebInterview, value);
+        }
+
+        public string WebInterviewUrl { get; set; }
+
         public IList<EntityWithErrorsViewModel> EntitiesWithErrors { get; private set; }
 
         private IMvxAsyncCommand completeInterviewCommand;
@@ -100,8 +115,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get
             {
-                return this.completeInterviewCommand ?? 
-                    (this.completeInterviewCommand = new MvxAsyncCommand(async () => await this.CompleteInterviewAsync(), () => !WasThisInterviewCompleted));
+                return this.completeInterviewCommand ??= new MvxAsyncCommand(async () =>
+                    await this.CompleteInterviewAsync(), () => !WasThisInterviewCompleted);
             }
         }
 
@@ -125,6 +140,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         private string comment;
+        private bool requestWebInterview;
+        private bool canSwitchToWebMode;
 
         private async Task CompleteInterviewAsync()
         {
@@ -134,7 +151,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.WasThisInterviewCompleted = true;
             await this.commandService.WaitPendingCommandsAsync();
 
-            var completeInterview = new CompleteInterviewCommand(
+            ICommand completeInterview = this.RequestWebInterview
+            ? new ChangeInterviewModeCommand(
+                interviewId: this.interviewId,
+                userId: this.principal.CurrentUserIdentity.UserId,
+                InterviewMode.CAWI,
+                comment: this.Comment)
+            : new CompleteInterviewCommand(
                 interviewId: this.interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
                 comment: this.Comment);
@@ -149,13 +172,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
 
             this.lastCompletionComments.Remove(interviewId);
-            await this.CloseInterviewAfterComplete();
+            await this.CloseInterviewAfterComplete(this.RequestWebInterview);
         }
 
-        protected virtual async Task CloseInterviewAfterComplete()
+        protected virtual async Task CloseInterviewAfterComplete(bool switchInterviewToCawiMode)
         {
             await this.viewModelNavigationService.NavigateToDashboardAsync(this.interviewId.ToString());
-
             this.messenger.Publish(new InterviewCompletedMessage(this));
         }
 

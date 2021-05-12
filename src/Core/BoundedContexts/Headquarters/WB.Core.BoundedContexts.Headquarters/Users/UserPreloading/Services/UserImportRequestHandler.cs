@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                 throw new PreloadingException(UserPreloadingServiceMessages.HasUsersToImport);
             }
 
-            var importUserErrors = this.userImportService.VerifyAndSaveIfNoErrors(request.FileStream, request.Filename)
+            var importUserErrors = this.userImportService.VerifyAndSaveIfNoErrors(request.FileStream, request.Filename, request.Workspace)
                 .Take(8).ToArray();
 
             if (!importUserErrors.Any())

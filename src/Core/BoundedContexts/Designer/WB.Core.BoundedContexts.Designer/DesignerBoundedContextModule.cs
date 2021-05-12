@@ -91,7 +91,6 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IAttachmentService, AttachmentService>();
 
             registry.Bind<IDesignerEngineVersionService, DesignerEngineVersionService>();
-            registry.Bind<ICodeGenerator, CodeGenerator>();
             registry.Bind<ICodeGeneratorV2, CodeGeneratorV2>();
             registry.Bind<IQuestionTypeToCSharpTypeMapper, QuestionTypeToCSharpTypeMapper>();
             registry.Bind<ICodeGenerationModelsFactory, CodeGenerationModelsFactory>();

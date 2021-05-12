@@ -3,6 +3,7 @@ import TabletLogs from './TabletLogs'
 import Settings from './Settings'
 import Vue from 'vue'
 import AuditLog from './AuditLog'
+import TabletInfos from './TabletInfos'
 
 export default class AdminComponent {
     constructor(rootStore) {
@@ -21,6 +22,10 @@ export default class AdminComponent {
         {
             path: '/Diagnostics/AuditLog',
             component: AuditLog,
+        },
+        {
+            path: '/Diagnostics/TabletInfos',
+            component: TabletInfos,
         },
         {
             path: '/Settings',

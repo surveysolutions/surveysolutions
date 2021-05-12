@@ -4,10 +4,12 @@
     {
         public static readonly int ResolvedCommentsIntroduced = 7100;
         public const int WorkspacesIntroduced = 7200;
+        public const int ResetPasswordIntroduced = 7300;
+        public const int MultiWorkspacesIntroduced = 7400;
 
         //previous values: 5962, 7018, 7034, 7050, 7060, 7070 - where KP-11462 was introduced
         // 7100 before workspaces
-        public int GetProtocolVersion() => 7200;
+        public int GetProtocolVersion() => 7400;
 
         public int GetLastNonUpdatableVersion() => 7000;
         public int[] GetBlackListedBuildNumbers()
@@ -26,8 +28,10 @@
     {
         public static readonly int V1_BeforeResolvedCommentsIntroduced = 1_000;
         public static readonly int V2_ResolvedCommentsIntroduced = 1_010;
+        public static readonly int V3_ResetPasswordIntroduced = 1_030;
+        public static readonly int V4_MultiWorkspacesIntroduced = 1_050;
 
-        public int GetProtocolVersion() => 1_010;
+        public int GetProtocolVersion() => 1_050;
 
         public int GetLastNonUpdatableVersion() => 999;
         public int[] GetBlackListedBuildNumbers()

@@ -7,4 +7,9 @@ namespace WB.UI.Supervisor.Views
         public bool ShowLocationOnMap { get; set; }
         public bool? DownloadUpdatesForInterviewerApp { get; set; }
     }
+
+    public class ApplicationWorkspaceSettingsView : EnumeratorWorkspaceSettingsView
+    {
+        
+    }
 }

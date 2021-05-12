@@ -147,6 +147,15 @@
   <data name="PasswordHint" xml:space="preserve">
     <value>Пароль</value>
   </data>
+  <data name="OldPasswordHint" xml:space="preserve">
+    <value>Текущий пароль</value>
+  </data>
+  <data name="NewPasswordHint" xml:space="preserve">
+    <value>Новый пароль</value>
+  </data>
+  <data name="ConfirmNewPasswordHint" xml:space="preserve">
+    <value>Подтвердите новый пароль</value>
+  </data>
   <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
     <value>Время ожидания ответа от сервера Survey Solutions Designer истекло. Пожалуйста, проверьте Ваше интернет соединение.</value>
   </data>
@@ -349,6 +358,9 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
+  </data>
+  <data name="PasswordMatchError" xml:space="preserve">
+    <value>Пароли должны совпадать</value>
   </data>
   <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
     <value>Сервис Google Play недоступен</value>
@@ -768,5 +780,11 @@
   </data>
   <data name="NoComment" xml:space="preserve">
     <value>Комментарий не указан</value>
+  </data>
+    <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
+    <value>Переключить интервью в Веб режим</value>
+  </data>
+   <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
+    <value>Это интервью будет доступно онлайн после синхронизации. Чтобы получить доступ, респондент должен ввести ссылку на компьютере, планшете или смартфоне, имеющем доступ в интернет. Эта же ссылка может быть отсканирована, используя QR-код</value>
   </data>
 </root>

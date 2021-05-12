@@ -44,7 +44,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var savedInterviewSummary = CreateInterviewSummaryQuestions(new IdentifyEntityValue
             {
-                Entity = new QuestionnaireCompositeItem { EntityId = questionId}
+                Entity = new QuestionnaireCompositeItem { EntityId = questionId},
+                Identifying = true
             });
 
             savedInterviewSummary.QuestionnaireId = questionnaireIdentity.QuestionnaireId;
@@ -97,7 +98,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 CreateInterviewSummaryQuestions(
                     new IdentifyEntityValue()
                     {
-                        Entity = new QuestionnaireCompositeItem { EntityId = questionId }
+                        Entity = new QuestionnaireCompositeItem { EntityId = questionId },
+                        Identifying = true
                     });
 
             savedInterviewSummary.QuestionnaireId = Guid.NewGuid();
@@ -124,7 +126,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 CreateInterviewSummaryQuestions(
                     new IdentifyEntityValue
                     {
-                        Entity = new QuestionnaireCompositeItem { EntityId = questionId }
+                        Entity = new QuestionnaireCompositeItem { EntityId = questionId },
+                        Identifying = true
                     });
 
             savedInterviewSummary.QuestionnaireId = Guid.NewGuid();
@@ -153,7 +156,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 CreateInterviewSummaryQuestions(
                     new IdentifyEntityValue()
                     {
-                        Entity = new QuestionnaireCompositeItem { EntityId = questionId }
+                        Entity = new QuestionnaireCompositeItem { EntityId = questionId },
+                        Identifying = true
                     });
 
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional(
@@ -179,11 +183,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 CreateInterviewSummaryQuestions(
                     new IdentifyEntityValue()
                     {
-                        Entity = new QuestionnaireCompositeItem { Id = 1, EntityId = dateQuestionId }
+                        Entity = new QuestionnaireCompositeItem { Id = 1, EntityId = dateQuestionId },
+                        Identifying = true
                     },
                     new IdentifyEntityValue()
                     {
-                        Entity = new QuestionnaireCompositeItem { Id = 2,EntityId = dateTimeQuestionId }
+                        Entity = new QuestionnaireCompositeItem { Id = 2,EntityId = dateTimeQuestionId },
+                        Identifying = true
                     });
 
             savedInterviewSummary.QuestionnaireId = Guid.NewGuid();
@@ -223,7 +229,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var savedInterviewSummary = CreateInterviewSummaryQuestions(
                     new IdentifyEntityValue()
                     {
-                        Entity = new QuestionnaireCompositeItem { EntityId = questionId }
+                        Entity = new QuestionnaireCompositeItem { EntityId = questionId},
+                        Identifying = true
                     });
 
             savedInterviewSummary.WasCreatedOnClient = true;

@@ -2,9 +2,11 @@ using System;
 using SQLite;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
+    [NonWorkspaced]
     public class InterviewerIdentity : IInterviewerUserIdentity, IPlainStorageEntity
     {
         public string Name { get; set; } = null!;

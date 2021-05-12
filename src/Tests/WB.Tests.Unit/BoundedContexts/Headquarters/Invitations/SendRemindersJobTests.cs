@@ -58,6 +58,32 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
         }
 
         [Test]
+        public async Task when_web_mode_is_turned_off()
+        {
+            var invitationServiceMock = new Mock<IInvitationService>();
+            invitationServiceMock.WithQuestionnaires(Create.Entity.QuestionnaireBrowseItem(Id.g1, 10), Create.Entity.QuestionnaireBrowseItem(Id.g2, 2));
+            var settingsMock = new Mock<IWebInterviewConfigProvider>();
+            var settings = Mock.Of<WebInterviewConfig>(_ => 
+                _.Started == false &&
+                _.ReminderAfterDaysIfPartialResponse == 2 &&
+                _.GetEmailTemplate(EmailTextTemplateType.Reminder_PartialResponse) == Create.Entity.EmailTemplate("Subject: %SURVEYNAME%", "%SURVEYNAME% %PASSWORD% %SURVEYLINK%", "", ""));
+
+            settingsMock.Setup(x => x.Get(It.IsAny<QuestionnaireIdentity>())).Returns(settings);
+
+            //arrange 
+            var job = Create.Service.SendRemindersJob(
+                invitationService: invitationServiceMock.Object, 
+                webInterviewConfigProvider: settingsMock.Object);
+
+            //act
+            await job.Execute(Mock.Of<IJobExecutionContext>());
+
+            //assert
+            invitationServiceMock.Verify(x => x.GetNoResponseInvitations(Create.Entity.QuestionnaireIdentity(Id.g1, 10), It.IsAny<int>()), Times.Never);
+            invitationServiceMock.Verify(x => x.GetPartialResponseInvitations(Create.Entity.QuestionnaireIdentity(Id.g2, 2), It.IsAny<int>()), Times.Never);
+        }
+
+        [Test]
         public async Task when_sending_partial_response_reminders()
         {
             //arrange 
@@ -79,6 +105,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             
             var settingsMock = new Mock<IWebInterviewConfigProvider>();
             var settings = Mock.Of<WebInterviewConfig>(_ => 
+                _.Started == true &&
                 _.ReminderAfterDaysIfPartialResponse == 2 &&
                 _.GetEmailTemplate(EmailTextTemplateType.Reminder_PartialResponse) == Create.Entity.EmailTemplate("Subject: %SURVEYNAME%", "%SURVEYNAME% %PASSWORD% %SURVEYLINK%", "", ""));
 
@@ -141,6 +168,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 
             var settingsMock = new Mock<IWebInterviewConfigProvider>();
             var settings = Mock.Of<WebInterviewConfig>(_ => 
+                _.Started == true &&
                 _.ReminderAfterDaysIfNoResponse == 2 && 
                 _.GetEmailTemplate(EmailTextTemplateType.Reminder_NoResponse) == Create.Entity.EmailTemplate("Subject: %SURVEYNAME%", "%SURVEYNAME% %PASSWORD% %SURVEYLINK%", "", ""));
 
@@ -203,6 +231,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 
             
             var settings = Mock.Of<WebInterviewConfig>(_ => 
+                _.Started == true &&
                 _.GetEmailTemplate(EmailTextTemplateType.RejectEmail) == Create.Entity.EmailTemplate("Subject: %SURVEYNAME%", "%SURVEYNAME% %PASSWORD% %SURVEYLINK%", "", ""));
             var settingsMock = new Mock<IWebInterviewConfigProvider>();
             settingsMock.Setup(x => x.Get(questionnaireIdentity)).Returns(settings);

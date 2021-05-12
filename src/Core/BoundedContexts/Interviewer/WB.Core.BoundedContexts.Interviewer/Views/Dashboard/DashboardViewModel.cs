@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
@@ -19,6 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
@@ -43,6 +45,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public CreateNewViewModel CreateNew { get; }
         public StartedInterviewsViewModel StartedInterviews { get; }
         public CompletedInterviewsViewModel CompletedInterviews { get; }
+        public WebInterviewsViewModel WebInterviews { get; }
         public RejectedInterviewsViewModel RejectedInterviews { get; }
         public IUserInteractionService UserInteractionService { get; }
         public IGoogleApiService GoogleApiService { get; }
@@ -65,7 +68,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IOfflineSyncClient syncClient,
             IGoogleApiService googleApiService,
             IMapInteractionService mapInteractionService,
-            DashboardNotificationsViewModel dashboardNotifications) : base(principal, viewModelNavigationService, permissionsService,
+            DashboardNotificationsViewModel dashboardNotifications,
+            IWorkspaceService workspaceService,
+            IOnlineSynchronizationService onlineSynchronizationService,
+            IWorkspaceMemoryCacheSource memoryCacheSource,
+            WebInterviewsViewModel webInterviews ) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection)
         {
             this.messenger = messenger;
@@ -76,7 +83,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.syncClient = syncClient;
             this.Synchronization = synchronization;
             this.DashboardNotifications = dashboardNotifications;
-
+            
             this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(async r =>
             {
                 await this.RefreshDashboard();
@@ -86,9 +93,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.StartedInterviews = startedInterviewsViewModel;
             this.CompletedInterviews = completedInterviewsViewModel;
             this.RejectedInterviews = rejectedInterviewsViewModel;
+            this.WebInterviews = webInterviews;
+
             UserInteractionService = userInteractionService;
             GoogleApiService = googleApiService;
             this.mapInteractionService = mapInteractionService;
+            this.workspaceService = workspaceService;
+            this.onlineSynchronizationService = onlineSynchronizationService;
+            this.memoryCacheSource = memoryCacheSource;
 
             SubscribeOnMessages();
 
@@ -97,10 +109,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.OnProgressChanged += Synchronization_OnProgressChanged;
             this.StartedInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
             this.CompletedInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
+            this.WebInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
+
             this.StartedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.RejectedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.CompletedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded += this.OnItemsLoaded;
+            this.WebInterviews.OnItemsLoaded += this.OnItemsLoaded;
         }
 
         public DashboardNotificationsViewModel DashboardNotifications { get; set; }
@@ -219,7 +234,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private int NumberOfAssignedInterviews => this.StartedInterviews.ItemsCount
                                                   + this.CompletedInterviews.ItemsCount
-                                                  + this.RejectedInterviews.ItemsCount;
+                                                  + this.RejectedInterviews.ItemsCount
+                                                  + this.WebInterviews.ItemsCount;
 
         public LocalSynchronizationViewModel Synchronization { get; set; }
 
@@ -235,8 +251,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         private void OnItemsLoaded(object sender, EventArgs e) =>
-            this.IsInProgress = !(this.StartedInterviews.IsItemsLoaded && this.RejectedInterviews.IsItemsLoaded &&
-                                  this.CompletedInterviews.IsItemsLoaded && this.CreateNew.IsItemsLoaded);
+            this.IsInProgress = !(this.StartedInterviews.IsItemsLoaded
+                                  && this.RejectedInterviews.IsItemsLoaded
+                                  && this.CompletedInterviews.IsItemsLoaded
+                                  && this.CreateNew.IsItemsLoaded
+                                  && this.WebInterviews.IsItemsLoaded);
 
         private async Task RefreshDashboard(Guid? lastVisitedInterviewId = null)
         {
@@ -245,7 +264,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             await Task.WhenAll(this.CreateNew.LoadAsync(this.Synchronization),
                 this.StartedInterviews.LoadAsync(lastVisitedInterviewId),
                 this.RejectedInterviews.LoadAsync(lastVisitedInterviewId),
-                this.CompletedInterviews.LoadAsync(lastVisitedInterviewId));
+                this.CompletedInterviews.LoadAsync(lastVisitedInterviewId),
+                this.WebInterviews.LoadAsync(lastVisitedInterviewId));
             
             DashboardNotifications.CheckTabletTimeAndWarn();
 
@@ -263,15 +283,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             var interviewView = this.interviewsRepository.GetById(lastVisitedInterviewId.FormatGuid());
             if (interviewView == null) return;
 
-            if (interviewView.Status == InterviewStatus.RejectedBySupervisor)
-                this.TypeOfInterviews = this.RejectedInterviews.InterviewStatus;
-
-            if (interviewView.Status == InterviewStatus.Completed)
-                this.TypeOfInterviews = this.CompletedInterviews.InterviewStatus;
-
-            if (interviewView.Status == InterviewStatus.InterviewerAssigned ||
-                interviewView.Status == InterviewStatus.Restarted)
-                this.TypeOfInterviews = this.StartedInterviews.InterviewStatus;
+            this.TypeOfInterviews = (interviewView.Mode, interviewView.Status) switch
+            {
+                (InterviewMode.CAPI, InterviewStatus.RejectedBySupervisor) => this.RejectedInterviews.InterviewStatus,
+                (InterviewMode.CAPI, InterviewStatus.Completed) => this.CompletedInterviews.InterviewStatus,
+                (InterviewMode.CAPI, InterviewStatus.InterviewerAssigned) => this.StartedInterviews.InterviewStatus,
+                (InterviewMode.CAPI, InterviewStatus.Restarted) => this.StartedInterviews.InterviewStatus,
+                (InterviewMode.CAWI, InterviewStatus.InterviewerAssigned) => this.WebInterviews.InterviewStatus,
+                (InterviewMode.CAWI, InterviewStatus.Completed) => this.WebInterviews.InterviewStatus,
+                (InterviewMode.CAWI, InterviewStatus.RejectedBySupervisor) => this.WebInterviews.InterviewStatus,
+                (InterviewMode.CAWI, InterviewStatus.Restarted) => this.WebInterviews.InterviewStatus,
+                _ => this.TypeOfInterviews
+            };
         }
 
         private void RunSynchronization()
@@ -320,9 +343,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.StartedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
             this.CompletedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
+            this.WebInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
             this.StartedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
             this.RejectedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
             this.CompletedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
+            this.WebInterviews.OnItemsLoaded -= this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded -= this.OnItemsLoaded;
             this.Synchronization.OnCancel -= this.Synchronization_OnCancel;
             this.Synchronization.OnProgressChanged -= this.Synchronization_OnProgressChanged;
@@ -368,6 +393,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public Action? OnOfflineSynchronizationStarted;
         private readonly IMapInteractionService mapInteractionService;
+        private readonly IWorkspaceService workspaceService;
+        private readonly IOnlineSynchronizationService onlineSynchronizationService;
+        private readonly IWorkspaceMemoryCacheSource memoryCacheSource;
 
         private void StartOfflineSynchronization()
         {
@@ -446,7 +474,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private void StopDiscovery() => this.nearbyConnection.StopDiscovery();
 
         protected override string GetDeviceIdentification() =>
-            this.principal.CurrentUserIdentity.SupervisorId.FormatGuid();
+            this.principal.CurrentUserIdentity.SupervisorId.FormatGuid() + this.principal.CurrentUserIdentity.Workspace;
 
         public void ShowSynchronizationError(string error)
         {
@@ -464,6 +492,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async void Synchronization_OnProgressChanged(object sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
         {
+            if (e.Status == SynchronizationStatus.Fail
+                || e.Status == SynchronizationStatus.Canceled
+                || e.Status == SynchronizationStatus.Stopped
+                || e.Status == SynchronizationStatus.Success)
+            {
+                WorkspaceListUpdated?.Invoke(this, EventArgs.Empty);
+            }
+
             if (this.cancellationTokenSource == null || this.cancellationTokenSource.IsCancellationRequested)
             {
                 return;
@@ -481,6 +517,72 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         #endregion
+
+        public string CurrentWorkspace => principal.CurrentUserIdentity.Workspace;
+        public WorkspaceView[] GetWorkspaces()
+        {
+            return workspaceService.GetAll();
+        }
+
+        public void ChangeWorkspace(string workspaceName)
+        {
+            var workspaceView = workspaceService.GetByName(workspaceName);
+            if (workspaceView?.SupervisorId == null)
+                throw new ArgumentException("Can't change workspace. Refresh list from server");
+
+            var interviewerIdentity = (InterviewerIdentity)principal.CurrentUserIdentity;
+            interviewerIdentity.Workspace = workspaceView.Name;
+            interviewerIdentity.SupervisorId = workspaceView.SupervisorId.Value;
+            principal.SaveInterviewer(interviewerIdentity);
+            
+            memoryCacheSource.ClearAll();
+
+            ViewModelNavigationService.NavigateToDashboardAsync();
+        }
+
+        public event EventHandler? WorkspaceListUpdated;
+        
+        public async Task RefreshWorkspaces()
+        {
+            try
+            {
+                this.Synchronization.IsSynchronizationInProgress = true;
+                this.Synchronization.IsSynchronizationInfoShowed = true;
+
+                this.Synchronization.Status = SynchronizationStatus.Started;
+                this.Synchronization.ProcessOperation = EnumeratorUIResources.Dashboard_RefreshWorkspaces;
+                this.Synchronization.ProcessOperationDescription = string.Empty;
+                
+                var interviewerApiView = await onlineSynchronizationService.GetInterviewerAsync();
+                workspaceService.Save(interviewerApiView.Workspaces.Select(w => new WorkspaceView()
+                {
+                    Id = w.Name,
+                    DisplayName = w.DisplayName,
+                    SupervisorId = w.SupervisorId,
+                    Disabled = w.Disabled,
+                }).ToArray());
+
+                this.Synchronization.ProcessOperation = EnumeratorUIResources.Dashboard_RefreshWorkspacesFinished;
+
+                if (interviewerApiView.Workspaces.All(w => CurrentWorkspace != w.Name))
+                {
+                    await ViewModelNavigationService.NavigateToDashboardAsync();
+                    return;
+                }
+                
+                WorkspaceListUpdated?.Invoke(this, EventArgs.Empty);
+            }
+            catch (Exception)
+            {
+                this.Synchronization.Status = SynchronizationStatus.Fail;
+                this.Synchronization.SynchronizationErrorOccured = true;
+                this.Synchronization.ProcessOperation = EnumeratorUIResources.Dashboard_RefreshWorkspacesError;
+            }
+            finally
+            {
+                this.Synchronization.IsSynchronizationInProgress = false;
+            }
+        }
     }
 
     public class DashboardViewModelArgs

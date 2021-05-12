@@ -101,9 +101,11 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View(model);
             }
 
+            HqUser user = null;
+
             if (model.UserName != null)
             {
-                var user = await userManager.FindByNameAsync(model.UserName);
+                user = await userManager.FindByNameAsync(model.UserName);
                 if (user?.IsInRole(UserRoles.ApiUser) == true)
                 {
                     this.ModelState.AddModelError(nameof(model.UserName), ErrorMessages.ApiUserIsNotAllowedToSignIn);
@@ -120,10 +122,22 @@ namespace WB.UI.Headquarters.Controllers
             {
                 this.captchaService.ResetFailedLogin(model.UserName);
 
+                if (user!.PasswordChangeRequired)
+                {
+                    var controllerName = nameof(UsersController);
+                    var actionName = nameof(UsersController.ChangePassword);
+                    return RedirectToAction(actionName, controllerName);
+                }
 
-                if (returnUrl != null && returnUrl != "/")
+                
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
                     return Redirect(returnUrl);
+                }
+
+                if (user.IsInRole(UserRoles.Administrator))
+                {
+                    return Redirect(Url.Content("/administration/Workspaces"));
                 }
 
                 return Redirect(Url.Content("~/"));
@@ -169,7 +183,19 @@ namespace WB.UI.Headquarters.Controllers
 
             if (signInResult.Succeeded)
             {
-                return Redirect(returnUrl ?? Url.Action("Index", "Home"));
+                if (user!.PasswordChangeRequired)
+                {
+                    var controllerName = nameof(UsersController);
+                    var actionName = nameof(UsersController.ChangePassword);
+                    return RedirectToAction(actionName, controllerName);
+                }
+
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+
+                return Redirect(Url.Action("Index", "Home"));
             }
 
             if (signInResult.IsLockedOut)
@@ -206,7 +232,12 @@ namespace WB.UI.Headquarters.Controllers
 
             if (signInResult.Succeeded)
             {
-                return Redirect(returnUrl ?? Url.Action("Index", "Home"));
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+
+                return Redirect(Url.Action("Index", "Home"));
             }
 
             if (signInResult.IsLockedOut)

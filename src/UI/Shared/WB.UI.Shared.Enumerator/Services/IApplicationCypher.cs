@@ -63,7 +63,7 @@ namespace WB.UI.Shared.Enumerator.Services
             settings.SetEncrypted(true);
         }
 
-           private void EncryptMultimedia()
+        private void EncryptMultimedia()
         {
             EncryptPictures();
             EncryptAudio();
@@ -93,7 +93,11 @@ namespace WB.UI.Shared.Enumerator.Services
 
         private void EncryptEvents()
         {
-            foreach (var interviewFile in this.fileSystemAccessor.GetFilesInDirectory(databaseSettings.PathToInterviewsDirectory, "*.sqlite3"))
+            var pathToInterviewsDirectory = fileSystemAccessor.CombinePath(databaseSettings.PathToDatabaseDirectory, databaseSettings.InterviewsDirectoryName);
+            if (!fileSystemAccessor.IsDirectoryExists(pathToInterviewsDirectory))
+                fileSystemAccessor.CreateDirectory(pathToInterviewsDirectory);
+            
+            foreach (var interviewFile in this.fileSystemAccessor.GetFilesInDirectory(pathToInterviewsDirectory, "*.sqlite3"))
             {
                 var sqConnection = new SQLiteConnectionString(interviewFile, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true, null);
                 var connection = new SQLiteConnectionWithLock(sqConnection);

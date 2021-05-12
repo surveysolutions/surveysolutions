@@ -2,35 +2,43 @@
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Workspaces;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
     [Route("api/supervisor/v1/users")]
-    public class UserControllerBase : ControllerBase
+    public class UserControllerBase : UsersApiControllerBase
     {
         protected readonly IAuthorizedUser authorizedUser;
         protected readonly IUserRepository userViewFactory;
         private readonly SignInManager<HqUser> signInManager;
         private readonly IApiTokenProvider apiAuthTokenProvider;
+        private readonly UserManager<HqUser> userManager;
 
         public UserControllerBase(
             IAuthorizedUser authorizedUser,
             IUserRepository userViewFactory,
             SignInManager<HqUser> signInManager, 
-            IApiTokenProvider apiAuthTokenProvider)
+            IApiTokenProvider apiAuthTokenProvider,
+            UserManager<HqUser> userManager)
+            :base(userManager, signInManager, apiAuthTokenProvider)
         {
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
             this.signInManager = signInManager;
             this.apiAuthTokenProvider = apiAuthTokenProvider;
-            
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -38,6 +46,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [Route("current")]
         [AllowPrimaryWorkspaceFallback]
         [IgnoreWorkspacesLimitation]
+        [AllowDisabledWorkspaceAccess]
         public virtual SupervisorApiView Current()
         {
             var user = this.userViewFactory.FindById(this.authorizedUser.Id);
@@ -47,7 +56,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             {
                 Id = user.Id,
                 Email = user.Email,
-                Workspaces = workspaces.Select(x => new WorkspaceApiView
+                Workspaces = workspaces.Select(x => new UserWorkspaceApiView
                 { 
                     Name = x.Name,
                     DisplayName = x.DisplayName
@@ -61,7 +70,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         public virtual async Task<bool> HasDevice()
         {
             var user = await this.userViewFactory.FindByIdAsync(this.authorizedUser.Id);
-            return !string.IsNullOrEmpty(user.Profile?.DeviceId);
+            return !string.IsNullOrEmpty(user.WorkspaceProfile?.DeviceId);
         }
 
         [HttpPost]
@@ -88,5 +97,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             return Unauthorized();
         }
 
+        [HttpPost]
+        [Route("changePassword")]
+        [WriteToSyncLog(SynchronizationLogType.ChangePassword)]
+        public Task<ActionResult<string>> ChangePassword([FromBody] ChangePasswordInfo userChangePassword)
+            => base.ChangePassword(userChangePassword);
     }
 }

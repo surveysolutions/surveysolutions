@@ -47,6 +47,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.FirstAnswerDate);
             Property(x => x.HasResolvedComments);
             Property(x => x.ErrorsCount);
+            Property(x => x.InterviewMode, p => p.Column(cm =>
+            {
+                cm.Name("interview_mode");
+                cm.NotNullable(true);
+                cm.Index("ix_interview_summaries_mode");
+            }));
             Property(x => x.NotAnsweredCount, ptp => ptp.Column("not_answered_count"));
             Property(x => x.CommentedEntitiesCount, clm =>
             {
@@ -180,7 +186,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.Value, col => col.Column("value"));
             Property(x => x.AnswerCode, col => col.Column("answer_code"));
             Property(x => x.ValueLowerCase, col => col.Column("value_lower_case"));
-            
+
+            Property(x => x.ValueBool, col => col.Column("value_bool"));
+            Property(x => x.ValueDate, col => col.Column("value_date"));
+            Property(x => x.ValueDouble, col => col.Column("value_double"));
+            Property(x => x.ValueLong, col => col.Column("value_long"));
+            Property(x => x.IsEnabled, col => col.Column("enabled"));
+
+            Property(x=> x.Identifying, col => col.Column("identifying"));
+
             ManyToOne(x => x.Entity, mtm =>
             {
                 mtm.Lazy(LazyRelation.Proxy);

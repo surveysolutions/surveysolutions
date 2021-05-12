@@ -2,6 +2,7 @@
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -10,6 +11,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation;
@@ -18,6 +21,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc.Storage;
 using WB.Tests.Web;
 using WB.UI.Headquarters.API.WebInterview;
@@ -44,7 +48,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 Mock.Of<IAuditLogService>(),
                 Create.Service.UserManager(),
                 Mock.Of<IUnitOfWork>(),
-                Mock.Of<ISystemLog>());
+                Mock.Of<ISystemLog>(),
+                Mock.Of<IWorkspaceContextAccessor>(),
+                Mock.Of<IPlainStorageAccessor<Workspace>>());
         }
 
         protected static QuestionnairesPublicApiController CreateQuestionnairesController(
@@ -88,8 +94,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 statefullInterviewSearcher: statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>(),
                 diagnosticsFactory: Mock.Of<IInterviewDiagnosticsFactory>(),
                 pdfInterviewGenerator: pdfInterviewGenerator ?? Mock.Of<IPdfInterviewGenerator>(),
-                calendarEventService: calendarEventService ?? Mock.Of<ICalendarEventService>()
-                );
+                calendarEventService: calendarEventService ?? Mock.Of<ICalendarEventService>(),
+                webInterviewLinkProvider : Mock.Of<IWebInterviewLinkProvider>());
 
             return controller;
         }
@@ -106,14 +112,16 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             ISerializer serializer = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter = null)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter = null,
+            IWebInterviewConfigProvider interviewConfigProvider = null)
         {
             var questionnairesApiV2Controller = new QuestionnairesApiV2Controller(
                 questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyAccessor>(),
                 questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 serializer ?? Mock.Of<ISerializer>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                readsideRepositoryWriter ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
+                readsideRepositoryWriter ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
+                interviewConfigProvider ?? Mock.Of<IWebInterviewConfigProvider>());
 
             return questionnairesApiV2Controller;
         }

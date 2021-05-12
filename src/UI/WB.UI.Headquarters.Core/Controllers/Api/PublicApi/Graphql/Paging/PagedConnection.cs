@@ -1,5 +1,8 @@
 using System.Collections;
+using System.Reflection;
 using HotChocolate.Types;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Conventions;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
 {
@@ -26,21 +29,27 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
         {
             descriptor.BindFields(BindingBehavior.Explicit);
 
+            var customAttribute = typeof(T).GetCustomAttribute<PagedTypeNameAttribute>();
+            if(customAttribute != null)
+            {
+                descriptor.Name(customAttribute.Name);
+            }
+
             descriptor.Field("nodes")
                 .Description("A flattened list of the nodes.")
                 .Type<NonNullType<ListType<T>>>()
-                .Resolver(ctx =>
+                .Resolve(ctx =>
                     ctx.Parent<IPagedConnection>().Nodes);
 
             descriptor.Field("totalCount")
                 .Type<NonNullType<IntType>>()
                 .Description("Total count of nodes without filtering applied")
-                .Resolver(x => x.Parent<IPagedConnection>().TotalCount);
+                .Resolve(x => x.Parent<IPagedConnection>().TotalCount);
 
             descriptor.Field("filteredCount")
                 .Type<NonNullType<IntType>>()
                 .Description("Filtered count of nodes without paging")
-                .Resolver(x => x.Parent<IPagedConnection>().FilteredCount);
+                .Resolve(x => x.Parent<IPagedConnection>().FilteredCount);
         }
     }
 }

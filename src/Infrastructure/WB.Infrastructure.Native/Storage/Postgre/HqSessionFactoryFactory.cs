@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -19,6 +20,7 @@ using WB.Core.Infrastructure.Services;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 using WB.Infrastructure.Native.Utils;
 using WB.Infrastructure.Native.Workspaces;
+using Configuration = NHibernate.Cfg.Configuration;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
@@ -47,6 +49,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
             {
+                if (string.IsNullOrWhiteSpace(this.connectionSettings.ConnectionString))
+                {
+                    throw new Exception("Connection string to database is not configured. [ConnectionStrings] DefaultConnection value");
+                }
+
                 var connectionStringBuilder = new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString)
                 {
                     SearchPath = workspaceSchema,
@@ -85,7 +92,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 .Where(x => x.GetCustomAttribute<UsersAttribute>() != null &&
                             x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
 
-            mapper.AfterMapProperty += (inspector, member, customizer) =>
+            mapper.BeforeMapProperty += (inspector, member, customizer) =>
             {
                 var propertyInfo = (PropertyInfo)member.LocalMember;
 

@@ -147,7 +147,8 @@ namespace WB.UI.WebTester
                     new CultureInfo("fr"),
                     new CultureInfo("es"),
                     new CultureInfo("ar"),
-                    new CultureInfo("zh")
+                    new CultureInfo("zh"),
+                    new CultureInfo("ro")
                 };
             });
 

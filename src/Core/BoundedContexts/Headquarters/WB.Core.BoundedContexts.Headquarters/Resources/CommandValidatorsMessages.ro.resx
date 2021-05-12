@@ -118,9 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
-    <value>Ați importat deja un chestionar cu titlul '{0}' din Designer. Dacă doriți totuși să îl importați pe acesta, redenumiți-l în Designer.</value>
+    <value>Chestionarul '{0}' există deja. Alegeți un alt nume.</value>
   </data>
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
-    <value>Doar controlorul responsabil de această alocare poate răspunde acestor întrebări.</value>
+    <value>Numai supervizorul responsabil de această sarcină poate răspunde acestor întrebări.</value>
+  </data>
+  <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
+    <value>Ați importat deja un chestionar cu titlul '{0}' din Designer. Dacă doriți totuși să îl importați pe acesta, redenumiți-l în Designer.</value>
+  </data>
+  <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
+    <value>O sarcină pentru interviul web trebuie să aibă un anchetator responsabil</value>
   </data>
 </root>

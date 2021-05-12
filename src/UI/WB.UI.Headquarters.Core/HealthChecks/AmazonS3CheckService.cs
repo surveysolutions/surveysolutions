@@ -40,12 +40,12 @@ namespace WB.UI.Headquarters.HealthChecks
                 }
                 catch (Exception e)
                 {
-                    throw new ApplicationException("Cannot start application with current Amazon S3 configuration: ",
+                    throw new Exception("Cannot start application with current Amazon S3 configuration: ",
                         e);
                 }
 
                 logger.LogInformation("Amazon S3 file storage configuration check completed.");
-            }, WorkspaceConstants.AdminWorkspaceName);
+            }, WorkspaceConstants.WorkspaceNames.AdminWorkspaceName);
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;

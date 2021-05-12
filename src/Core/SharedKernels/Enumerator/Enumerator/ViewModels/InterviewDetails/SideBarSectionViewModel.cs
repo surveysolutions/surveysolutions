@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
@@ -148,7 +149,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         public int NodeDepth { get; set; }
-        public ICommand NavigateToSectionCommand => new MvxAsyncCommand(this.NavigateToSection);
+        public ICommand NavigateToSectionCommand => new MvxAsyncCommand(this.NavigateToSection, 
+            () => this.SideBarGroupState.SimpleStatus != SimpleGroupStatus.Disabled);
 
         public ICommand ToggleCommand => new MvxCommand(this.Toggle);
 

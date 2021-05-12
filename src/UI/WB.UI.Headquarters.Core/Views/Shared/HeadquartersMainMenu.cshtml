@@ -1,7 +1,9 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.BoundedContexts.Headquarters.Workspaces
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Services
+@using WB.UI.Shared.Web.Extensions
 @inject IAuthorizedUser authorizedUser
 
 @{
@@ -33,17 +35,13 @@
     </li>
     @Html.MainMenuItem("Index", "Interviews", @MainMenu.Interviews, MenuItem.Interviews)
 
-    <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Interviewers || page == MenuItem.UserBatchUpload ? "active" : "")">
+    <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Interviewers ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.TeamsAndRoles">
             @MainMenu.TeamsAndRoles <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Index", "Supervisors", @MainMenu.Supervisors, MenuItem.Teams)
             @Html.MainMenuItem("Interviewers", "Users", @MainMenu.Interviewers, MenuItem.Interviewers)
-            @if (!authorizedUser.IsObserver)
-            {
-                @Html.MainMenuItem("Upload", "Users", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
-            }
         </ul>
     </li>
     <li class="dropdown  @(page == MenuItem.Questionnaires || page == MenuItem.Assignments || page == MenuItem.Maps ? "active" : "")">
@@ -62,13 +60,15 @@
     }
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
+    @Html.MainMenuItem(Workspace.Admin.AsContext(), "Index", "Workspaces", 
+        @MainMenu.ServerAdministration, MenuItem.ServerAdministration)
     <li><a href="http://support.mysurvey.solutions/headquarters" target="_blank" title="Help">@MainMenu.Help</a></li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@User.Identity.Name">
             @User.Identity.Name <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            @Html.MainMenuItem("Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
+            @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(),"Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
             <li>
                 <a href="/Account/LogOff">@Common.Logoff</a>
             </li>

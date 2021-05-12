@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class WebInterviewSetup {
@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attach Pdf with answers to email.
+        ///   Looks up a localized string similar to Attach Pdf transcript.
         /// </summary>
         public static string AttachAnswersToCompleteEmail {
             get {
@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send email after complete web interview.
+        ///   Looks up a localized string similar to Send email after web interview completion.
         /// </summary>
         public static string EmailOnComplete {
             get {
@@ -408,6 +408,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string WebInterviewUserMessages_Invitation_Descr {
             get {
                 return ResourceManager.GetString("WebInterviewUserMessages_Invitation_Descr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text that shown to user when they navigate to link to interview that is not yet synced to server.
+        /// </summary>
+        public static string WebInterviewUserMessages_LinkInvitation_Descr {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_LinkInvitation_Descr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Header welcome text on web interview link landing page.
+        /// </summary>
+        public static string WebInterviewUserMessages_LinkWelcome_Descr {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_LinkWelcome_Descr", resourceCulture);
             }
         }
         

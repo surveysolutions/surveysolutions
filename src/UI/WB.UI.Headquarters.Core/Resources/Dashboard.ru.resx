@@ -223,7 +223,7 @@
     <value>Скачать web ссылки</value>
   </data>
   <data name="WebMode" xml:space="preserve">
-    <value>Веб режим</value>
+    <value>Режим</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>Подробности</value>
@@ -245,5 +245,14 @@
   </data>
   <data name="UsersManagement" xml:space="preserve">
       <value>Управление пользователями</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+      <value>Создать пользователя</value>
+  </data>
+  <data name="ExposedVariables" xml:space="preserve">
+    <value>Открытые переменные</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Редактировать</value>
   </data>
 </root>

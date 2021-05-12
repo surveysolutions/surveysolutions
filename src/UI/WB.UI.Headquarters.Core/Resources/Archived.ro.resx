@@ -121,13 +121,13 @@
     <value>Anchetatori activi </value>
   </data>
   <data name="ActiveSupervisors" xml:space="preserve">
-    <value>Controlori activi</value>
+    <value>Supervizori activi</value>
   </data>
   <data name="ArchivedInterviewers" xml:space="preserve">
     <value>Anchetatori arhivați </value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Controlori arhivați </value>
+    <value>Supervizori arhivați </value>
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Data creării</value>
@@ -145,12 +145,12 @@
     <value>Nume </value>
   </data>
   <data name="Unarchive" xml:space="preserve">
-    <value>Dezarhivat</value>
+    <value>Dezarhivează</value>
   </data>
   <data name="UnarchiveInterviewerWarning" xml:space="preserve">
     <value>Anchetatorii vor fi dezarhivați.</value>
   </data>
   <data name="UnarchiveSupervisorWarning" xml:space="preserve">
-    <value>Controlorii vor fi dezarhivați.</value>
+    <value>Supervizorii vor fi dezarhivați.</value>
   </data>
 </root>

@@ -257,7 +257,7 @@
                         class="text-danger">{{ errors.first('editedQuantity') }}</span>
                 </div>
             </form>
-            <div class="modal-footer">
+            <div slot="actions">
                 <button
                     type="button"
                     class="btn btn-primary"
@@ -269,6 +269,32 @@
                     data-dismiss="modal">{{$t("Common.Cancel")}}</button>
             </div>
         </ModalFrame>
+
+        <!-- <ModalFrame
+            ref="editModeModal"
+            :title="$t('Assignments.ChangeModeModalTitle', {assignmentId: editedRowId} )">
+            <p>{{ $t("Assignments.ModeExplanation")}}</p>
+
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <Checkbox
+                        :label="$t('Assignments.CawiModeEnable')"
+                        name="webModeEnabled"
+                        v-model="mode"/>
+                </div>
+            </form>
+            <div slot="actions">
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    :disabled="!showSelectors"
+                    @click="updateMode">{{$t("Common.Save")}}</button>
+                <button
+                    type="button"
+                    class="btn btn-link"
+                    data-dismiss="modal">{{$t("Common.Cancel")}}</button>
+            </div>
+        </ModalFrame> -->
     </HqLayout>
 </template>
 
@@ -303,6 +329,7 @@ export default {
             editedQuantity: null,
             editedAudioRecordingEnabled: null,
             canEditQuantity: null,
+            mode: null,
         }
     },
 
@@ -337,7 +364,7 @@ export default {
         showWebModeReassignWarning() {
             if(!this.newResponsibleId) return false
 
-            return this.anyWebModeAssignmentSelected && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER
+            return this.anyWebModeAssignmentSelected && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER.toLowerCase()
         },
         quantityValidations() {
             return {
@@ -499,7 +526,7 @@ export default {
                 {
                     data: 'isAudioRecordingEnabled',
                     name: 'AudioRecording',
-                    class: 'pointer editable',
+                    class: this.getClass,
                     title: this.$t('Assignments.IsAudioRecordingEnabled'),
                     tooltip: this.$t('Assignments.Tooltip_Table_IsAudioRecordingEnabled'),
                     searchable: false,
@@ -543,13 +570,14 @@ export default {
                     searchable: false,
                     render(data, type, row) {
                         const isUnfinished = row.quantity === -1 || row.quantity > row.interviewsCount
+
                         if(isUnfinished && data === true && row.webModeEnabledOnQuestionnaire === false) {
-                            const localisedYes = self.$t('Common.Yes')
                             const title = self.$t('Assignments.WebModeEnabledWarning')
-                            return `<span class='text-danger' title='${title}'>${localisedYes}</span>`
+                            const cawiMode = self.$t('Common.Cawi')
+                            return `<span class='text-danger' title='${title}'>${cawiMode}</span>`
                         }
 
-                        return data === false ? self.$t('Common.No') : self.$t('Common.Yes')
+                        return data === false ? self.$t('Common.Capi') : self.$t('Common.Cawi')
                     },
                 },
             ]
@@ -586,6 +614,9 @@ export default {
             }
 
             return tableOptions
+        },
+        getClass(){
+            return this.config.isHeadquarter ? 'pointer editable' : ''
         },
     },
 
@@ -745,7 +776,7 @@ export default {
                     this.$refs.editQuantityModal.modal('show')
                 })
             }
-            if (columnName === 'AudioRecording' && this.config.isHeadquarter && !this.showArchive.key) {
+            else if (columnName === 'AudioRecording' && this.config.isHeadquarter && !this.showArchive.key) {
                 this.editedRowId = parsedRowId
                 this.editedAudioRecordingEnabled = null
                 this.$hq.Assignments.audioSettings(this.editedRowId).then(data => {
@@ -753,7 +784,13 @@ export default {
                     this.$refs.editAudioEnabledModal.modal('show')
                 })
             }
+            // else if (columnName === 'WebMode' && this.config.isHeadquarter && !this.showArchive.key) {
+            //     this.editedRowId = parsedRowId
+            //     this.mode = cellData
+            //     this.$refs.editModeModal.modal('show')
+            // }
         },
+
         async updateQuantity() {
             const validationResult = await this.$validator.validateAll()
 
@@ -790,6 +827,13 @@ export default {
             return false
         },
 
+        // updateMode() {
+        //     this.$hq.Assignments.changeMode(this.editedRowId, this.mode).then(() => {
+        //         this.$refs.editModeModal.hide()
+        //         this.reloadTable()
+        //     })
+        // },
+
         async loadResponsibleIdByName(onDone) {
             if (this.$route.query.responsible != undefined) {
                 const requestParams = assign(
@@ -824,8 +868,8 @@ export default {
                 (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
             return value.toLocaleString(language)
         },
-    },
 
+    },
     mounted() {
         var self = this
 

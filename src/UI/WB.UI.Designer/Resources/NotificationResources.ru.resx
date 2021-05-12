@@ -173,5 +173,11 @@
   </data>
   <data name="TranfserOwnershipNotification" xml:space="preserve">
     <value>Здравствуйте, {0}, &lt;br&gt; Пользователь {1} передал Вам опросник {2}</value>
-    </data>
+  </data>
+  <data name="EmailChange" xml:space="preserve">
+    <value>Здравствуйте, {0}, &lt;br/&gt; &lt;br/&gt; Чтобы завершить процесс смены email адреса, нажмите на эту ссылку:</value>
+  </data>
+  <data name="EmailChangeLink" xml:space="preserve">
+    <value>подтвердить</value>
+  </data>
 </root>

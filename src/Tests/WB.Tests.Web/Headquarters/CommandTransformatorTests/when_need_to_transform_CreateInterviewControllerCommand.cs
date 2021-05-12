@@ -13,7 +13,7 @@ namespace WB.Tests.Web.Headquarters.CommandTransformatorTests
         }
 
         public void BecauseOf() =>
-            command = commandTransformator.TransformCommnadIfNeeded(command);
+            command = commandTransformator.TransformCommandIfNeeded(command);
 
         [NUnit.Framework.Test] public void should_return_command_of_CreateInterviewCommand_type () =>
             command.Should().BeOfType<CreateInterview>();

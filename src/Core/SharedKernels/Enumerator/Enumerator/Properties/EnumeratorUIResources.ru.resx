@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -178,6 +178,15 @@
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} интервью для {1}</value>
   </data>
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>Обновление рабочих областей</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>Список рабочих областей обновлен</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>Ошибка при обновление рабочих областей. Пожалуйста обратитесь к администратору.</value>
+  </data>
   <data name="Login_FinishInstallation_Message" xml:space="preserve">
     <value>Это первый запуск приложения на этом устройстве. Пользователь и домен пока не заданы. &lt;br /&gt;Для продолжения работы необходимо подключение к сети</value>
   </data>
@@ -197,6 +206,9 @@
     <value>Проблемы аутентификации. Мы не можем подтвердить Вашу учетную запись '{0}'. 
 С Вашей учетной записью возможны следующие проблемы: пароль отличается от того что Вы вводили, учетная запись заблокирована или удалена Хедквотером.
 Пожалуйста введите Ваш обновленный пароль. Если проблема не будет решена, пожалуйста, обратитесь к Супервизору или Хедквотеру.</value>
+  </data>
+  <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+    <value>Ваш пароль был сброшен. Вы должны изменить его для получения доступа к сайту.</value>
   </data>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
     <value>Ваша учетная запись заблокирована. Обратитесь к Вашему супервизору.</value>
@@ -238,7 +250,7 @@
     <value>Невозможно подключиться к вашему серверу. Проверьте указанный адрес сайта и(или) настройки подключения к сети</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Произошла ошибка на сервере. Повторите попытку позже. Если ошибка повторяется, обратитесь в службу поддержки по адресу support@mysurvey.solutions</value>
+    <value>Произошла ошибка на сервере. Повторите попытку позже. Если ошибка повторяется, обратитесь к администратору вашего сервера.</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>Адрес сайта Supervisor неверный. Убедитесь, что Вы ввели корректный url-адрес</value>
@@ -337,7 +349,7 @@
   <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
     <value>календарные события</value>
   </data>
-    <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
+  <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} законченных интервью отправлено</value>
   </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
@@ -733,6 +745,12 @@
   <data name="Dashboard_CensusAssignment" xml:space="preserve">
     <value>Цензус</value>
   </data>
+  <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>Вы не можите открыть интервью в CAWI режиме. Оно будет отослано на хедквотер при синхронизации.</value>
+  </data>
+  <data name="Dashboard_CawiLabel" xml:space="preserve">
+    <value>{0} (CAWI)</value>
+  </data>
   <data name="Dashboard_Reopen" xml:space="preserve">
     <value>Переоткрыть</value>
   </data>
@@ -803,6 +821,12 @@
     <value>Поиск</value>
     <comment>Поиск</comment>
   </data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>Рабочии области</value>
+  </data>
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>Обновить рабочие области</value>
+  </data>
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Выйти из поиска</value>
   </data>
@@ -857,6 +881,9 @@
   <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
     <value>Пользователь больше не состоит в команде этого супервизора. Пожалуйста свяжитесь с Вашим Хедквотером.</value>
     <comment>Пользователь больше не состоит в команде супервизора {0}. Пожалуйста свяжитесь с Вашим Хедквотером</comment>
+  </data>
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>Вы изменили ваш текущий пароль. Попробуйте залогинется с новым паролем.</value>
   </data>
   <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
     <value>Отклонено хедквотером {0}</value>
@@ -951,7 +978,7 @@
     <value>{0} интервью было обновлено</value>
   </data>
   <data name="Synchronization_PartialInterviews" xml:space="preserve">
-    <value>изменения по интервью </value>
+    <value>изменения по интервью</value>
   </data>
   <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
     <value>{0} интервью частично отправлено</value>
@@ -982,5 +1009,20 @@
   </data>
   <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
       <value>Ваша учётная запись не активна на данном сервере т.к. рабочее простанство в котром она определена отключено админстратором. Пожалуйста, обратитесь к супервизору.</value>
+  </data>
+  <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+      <value>Ваша учётная запись не активна в текущем рабочем простанстве. Пожалуйста, обратитесь к администратору.</value>
+  </data>
+  <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>Веб Интервью ({0})</value>
+  </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Заполнение: {0}/{1}</value>
+  </data>
+  <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>Интервью в режиме веб интервью. Будут удалены из списка при синхронизации, если веб интервью завершено респондентом</value>
+  </data>
+  <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>Показать QR код</value>
   </data>
 </root>

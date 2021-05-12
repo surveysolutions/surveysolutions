@@ -207,10 +207,13 @@ namespace WB.Infrastructure.Native.Questionnaire
 
         private static IEnumerable<TranslationRow> GetTranslatedOptions(IQuestion question, ITranslation translation)
         {
+            if (question is ICategoricalQuestion {CategoriesId: { }})
+                return Enumerable.Empty<TranslationRow>();
+            
             var singleOptionQuestion = question as SingleQuestion;
 
-            var isLongOptionsList = (singleOptionQuestion?.CascadeFromQuestionId.HasValue ?? false) || (singleOptionQuestion?.IsFilteredCombobox ?? false);
-
+            var isLongOptionsList = (question?.CascadeFromQuestionId.HasValue ?? false) || (singleOptionQuestion?.IsFilteredCombobox ?? false);
+            
             return from option in question.Answers
                 select new TranslationRow
                 {

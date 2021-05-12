@@ -7,6 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         Started = 3,
         StartedInvalid = 4,
         Completed = 5,
-        CompletedInvalid = 6
+        CompletedInvalid = 6,
+        WebInterview = 7
     }
 }

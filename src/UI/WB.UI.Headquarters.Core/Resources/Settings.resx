@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ExportEncryption_Title" xml:space="preserve">
-    <value>Export Encryption</value>
+    <value>Export encryption</value>
   </data>
   <data name="RegeneratePasswordConfirm" xml:space="preserve">
-    <value>Are you sure you want to create a new password? You will need to regenerate exported data in order to open them.</value>
+    <value>Are you sure you want to create a new password? The new password will be applied to all exported data files produced from now on.</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
     <value>Settings</value>
@@ -145,10 +145,10 @@
     <value>Company logo updated</value>
   </data>
   <data name="UserProfileSettings_Title" xml:space="preserve">
-    <value>User Profile settings</value>
+    <value>User profile settings</value>
   </data>
   <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
-    <value>Web interview Settings</value>
+    <value>Web interview settings</value>
   </data>
   <data name="MobileAppSettings_Title" xml:space="preserve">
     <value>Interviewer/Supervisor application settings</value>
@@ -157,16 +157,16 @@
     <value>Some specific settings by android version of Interviewer/Supervisor application</value>
   </data>
   <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
-    <value>Enumerator's Profile editing</value>
+    <value>Enumerator's profile editing</value>
   </data>
   <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
-    <value>Web Interview Email Notifications</value>
+    <value>Web interview email notifications</value>
   </data>
   <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
-    <value>Allow enumerators update their contact information in the profile</value>
+    <value>Allow enumerators to update their contact information in their account profile</value>
   </data>
   <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
-    <value>Allow Web Interview respondent to send emails (effective if mail provider was set up)</value>
+    <value>Allow respondents to web interviews to request emails with links to resume started interviews (effective if bulk email service provider is set up)</value>
   </data>
   <data name="InterviewerAutoUpdate" xml:space="preserve">
     <value>Enable automatic updates</value>
@@ -181,7 +181,10 @@
     <value>Company logo was not updated. Please provide a valid image</value>
   </data>
   <data name="ChangeStateConfirm" xml:space="preserve">
-    <value>Are you sure you want to change the export file security settings? You will need to create regenerate exported data in order to open it.</value>
+    <value>Are you sure you want to change the export file security settings? All export data files will be protected by a password.</value>
+  </data>
+  <data name="ChangeStateDisabledConfirm" xml:space="preserve">
+    <value>Are you sure you want to change the export file security settings? The exported data files will no longer be protected by a password.</value>
   </data>
   <data name="GlobalNoteSettings" xml:space="preserve">
     <value>Global note</value>
@@ -196,13 +199,16 @@
     <value>Note saved</value>
   </data>
   <data name="ExportEncryption_Description" xml:space="preserve">
-    <value>Check Enable encryption box to encrypt export data archives and protect them with the provided password. Change password by pressing the circular error button. After encryption, only people who know the password can open the exported data.</value>
+    <value>Check 'Enable encryption' checkbox to protect the export data archives by encrypting them with the provided password. Change password by pressing the circular arrow button. After encryption, only people who know the password can open the exported data.</value>
   </data>
   <data name="GlobalNoteSettings_Description" xml:space="preserve">
-    <value>Specify text in the Global Note field to be shown on the top of every screen on the server.</value>
+    <value>Specify text in the 'Global note' field to be shown on the top of every screen on the server.</value>
   </data>
   <data name="LogoSettings_Description" xml:space="preserve">
-    <value>Company logo shows a custom image on the server login page and on the login page of the Interviewer app. Click the Choose file button to upload an image from your computer to the server.</value>
+    <value>Company logo is an image that appears on the server login page and on the login page of the Interviewer app.</value>
+  </data>
+  <data name="LogoSettings_Description1" xml:space="preserve">
+    <value>Click the 'Choose file' button to upload an image from your computer to the server to be used as a logo image. Then click 'Save' button.</value>
   </data>
   <data name="CurrentLogo" xml:space="preserve">
     <value>Current logo</value>
@@ -217,7 +223,7 @@
     <value>Enable partial synchronization</value>
   </data>
   <data name="PartialSynchronizationDescription" xml:space="preserve">
-    <value>When enabled, interviewer tablet will send answers from non completed interviews to Headquarters</value>
+    <value>When enabled, interviewer tablets will send answers in noncompleted interviews to Headquarters</value>
   </data>
   <data name="EmailProvider_Amazon" xml:space="preserve">
     <value>Amazon Simple Email Service (SES)</value>

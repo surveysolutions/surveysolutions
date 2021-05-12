@@ -87,7 +87,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("{id:int}")]
         public async Task<IActionResult> Get(Guid questionnaireId, int id)
         {
-            var hasUserAccess = viewFactory.HasUserAccessToQuestionnaire(questionnaireId, User.GetId());
+            var hasUserAccess = User.IsAdmin() || viewFactory.HasUserAccessToQuestionnaire(questionnaireId, User.GetId());
             if (!hasUserAccess)
                 return Forbid();
 

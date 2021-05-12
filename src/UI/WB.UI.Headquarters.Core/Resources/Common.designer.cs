@@ -160,6 +160,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply.
+        /// </summary>
+        public static string Apply {
+            get {
+                return ResourceManager.GetString("Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approve.
         /// </summary>
         public static string Approve {
@@ -228,6 +237,60 @@ namespace WB.UI.Headquarters.Resources {
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CAPI.
+        /// </summary>
+        public static string Capi {
+            get {
+                return ResourceManager.GetString("Capi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CAWI.
+        /// </summary>
+        public static string Cawi {
+            get {
+                return ResourceManager.GetString("Cawi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change to CAPI.
+        /// </summary>
+        public static string ChangeToCAPI {
+            get {
+                return ResourceManager.GetString("ChangeToCAPI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected {{count}} interviews mode will be changed to CAPI.
+        /// </summary>
+        public static string ChangeToCAPIConfirmHQ {
+            get {
+                return ResourceManager.GetString("ChangeToCAPIConfirmHQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change to CAWI.
+        /// </summary>
+        public static string ChangeToCAWI {
+            get {
+                return ResourceManager.GetString("ChangeToCAWI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected {{count}} interviews mode will be changed to CAWI.
+        /// </summary>
+        public static string ChangeToCAWIConfirmHQ {
+            get {
+                return ResourceManager.GetString("ChangeToCAWIConfirmHQ", resourceCulture);
             }
         }
         
@@ -315,9 +378,9 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Equals.
         /// </summary>
-        public static string Equals {
+        public static string EqualValues {
             get {
-                return ResourceManager.GetString("Equals", resourceCulture);
+                return ResourceManager.GetString("EqualValues", resourceCulture);
             }
         }
         
@@ -354,6 +417,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewKey {
             get {
                 return ResourceManager.GetString("InterviewKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview Mode.
+        /// </summary>
+        public static string InterviewMode {
+            get {
+                return ResourceManager.GetString("InterviewMode", resourceCulture);
             }
         }
         
@@ -511,7 +583,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Processing....
+        ///   Looks up a localized string similar to Processing….
         /// </summary>
         public static string Processing {
             get {

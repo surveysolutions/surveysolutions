@@ -130,10 +130,10 @@
     <value>Toate echipele</value>
   </data>
   <data name="AnyHeadquarters" xml:space="preserve">
-    <value>orice RINS</value>
+    <value>oricare coordonator</value>
   </data>
   <data name="Assignments" xml:space="preserve">
-    <value>Interviuri alocate</value>
+    <value>Sarcini</value>
   </data>
   <data name="Average" xml:space="preserve">
     <value>Medie</value>
@@ -145,7 +145,7 @@
     <value>Eroare la analizarea răspunsului</value>
   </data>
   <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
-    <value>Status definit de echipa de suport Survey Solutions</value>
+    <value>stare definit de echipa de suport Survey Solutions</value>
   </data>
   <data name="Days" xml:space="preserve">
     <value>Zile</value>
@@ -172,10 +172,10 @@
     <value>Interviuri</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Aprobate de RINS</value>
+    <value>Aprobate de Coordonatori</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Aprobate de controlor</value>
+    <value>Aprobate de Supervizor</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
     <value>Finalizate</value>
@@ -193,10 +193,10 @@
     <value>Pregătite de interviu</value>
   </data>
   <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
-    <value>Respinse de RINS</value>
+    <value>Respinse de Coordonatori</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>Respinse de controlor</value>
+    <value>Respinse de Supervizor</value>
   </data>
   <data name="InterviewStatus_Restarted" xml:space="preserve">
     <value>Restartate</value>
@@ -208,10 +208,10 @@
     <value>Trimise către Capi</value>
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
-    <value>Interviuri alocate controlorului </value>
+    <value>Interviuri alocate supervizorului</value>
   </data>
   <data name="ObserverNotAllowed" xml:space="preserve">
-    <value>Responsabilul DTS nu poate realiza această acțiune</value>
+    <value>Observatorul nu poate realiza această acțiune</value>
   </data>
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
     <value>Gestionarea contului</value>
@@ -223,9 +223,63 @@
     <value>Eroare</value>
   </data>
   <data name="ViewHelpers_Invalid_property" xml:space="preserve">
-    <value>Acțiune nevalidă</value>
+    <value>Acțiune incorectă</value>
   </data>
   <data name="WithErrors" xml:space="preserve">
     <value>Cu erori</value>
+  </data>
+  <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+    <value>Neaprobat de HQ</value>
+  </data>
+  <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
+    <value>Dezactivați autentificarea cu doi factori</value>
+  </data>
+  <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
+    <value>Configurați aplicația de autentificare</value>
+  </data>
+  <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
+    <value>Resetați cheia de autentificare</value>
+  </data>
+  <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
+    <value>Resetați codurile de recuperare</value>
+  </data>
+  <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
+    <value>Coduri de recuperare</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
+    <value>Autentificarea în doi factori este o caracteristică de securitate avansată care face mai greu pentru un hacker să se conecteze la contul dvs. cu o parolă furată.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
+    <value>Dezactivați autentificarea cu doi factori, lăsând contul protejat numai de parolă.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
+    <value>dezactivat</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
+    <value>activat</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
+    <value>Resetați la un nou cod secret dacă vreunul dintre dispozitivele dvs. utilizate pentru autentificarea cu doi factori este pierdut sau furat.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
+    <value>Invalidați orice coduri de recuperare neutilizate și generați 10 coduri noi.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
+    <value>Configurați un dispozitiv nou pentru autentificarea cu doi factori. Puteți configura mai multe dispozitive simultan.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
+    <value>Autentificare cu doi factori</value>
+  </data>
+  <data name="NoPermissionsToExecute" xml:space="preserve">
+    <value>Utilizatorul nu este autorizat să execute acțiunea aceasta</value>
+  </data>
+  <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+    <value>Schimbă parola</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Echipe</value>
+  </data>
+  <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+    <value>Nealocat Anchetatorului</value>
   </data>
 </root>

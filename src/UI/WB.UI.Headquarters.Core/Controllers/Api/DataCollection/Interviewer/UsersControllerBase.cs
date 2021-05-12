@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -10,16 +12,20 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 {
-    public abstract class UsersControllerBase : ControllerBase
+    public abstract class UsersControllerBase : UsersApiControllerBase
     {
         protected readonly IAuthorizedUser authorizedUser;
-        protected readonly IUserViewFactory userViewFactory;
+        protected readonly IUserRepository userViewFactory;
         private readonly IUserToDeviceService userToDeviceService;
 
         protected UsersControllerBase(
             IAuthorizedUser authorizedUser,
-            IUserViewFactory userViewFactory,
-            IUserToDeviceService userToDeviceService)
+            IUserRepository userViewFactory,
+            IUserToDeviceService userToDeviceService,
+            UserManager<HqUser> userManager,
+            SignInManager<HqUser> signInManager,
+            IApiTokenProvider apiAuthTokenProvider)
+            :base(userManager, signInManager, apiAuthTokenProvider)
         {
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
@@ -29,19 +35,22 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         [WriteToSyncLog(SynchronizationLogType.GetInterviewer)]
         public virtual ActionResult<InterviewerApiView> Current()
         {
-            var user = this.userViewFactory.GetUser(new UserViewInputModel(this.authorizedUser.Id));
+            var user = this.userViewFactory.FindById(this.authorizedUser.Id);
 
-            var userWorkspaces = this.authorizedUser.GetEnabledWorkspaces();
-            var apiViewsForWorkspaces = userWorkspaces.Select(x => new WorkspaceApiView
+            var userWorkspaces = user.Workspaces
+                .Where(w => w.Workspace.DisabledAtUtc == null);
+            
+            var apiViewsForWorkspaces = userWorkspaces.Select(x => new UserWorkspaceApiView
             {
-                Name = x.Name,
-                DisplayName = x.DisplayName,
-            });
+                Name = x.Workspace.Name,
+                DisplayName = x.Workspace.DisplayName,
+                SupervisorId = x.Supervisor.Id,
+            }).ToList();
 
             return new InterviewerApiView
             {
-                Id = user.PublicKey,
-                SupervisorId = user.Supervisor.Id,
+                Id = user.Id,
+                SupervisorId = apiViewsForWorkspaces.FirstOrDefault()?.SupervisorId,
                 SecurityStamp = user.SecurityStamp,
                 Workspaces = apiViewsForWorkspaces.ToList() 
             };

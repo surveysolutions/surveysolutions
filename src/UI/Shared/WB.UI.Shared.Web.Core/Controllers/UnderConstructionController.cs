@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.Modularity;
 using WB.UI.Shared.Web.Attributes;
@@ -7,6 +6,8 @@ using WB.UI.Shared.Web.Attributes;
 namespace WB.UI.Shared.Web.Controllers
 {
     [NoTransaction]
+    [AllowDisabledWorkspaceAccess]
+    [AllowAnonymous]
     public class UnderConstructionController : Controller
     {
         private readonly UnderConstructionInfo underConstructionInfo;
@@ -39,7 +40,7 @@ namespace WB.UI.Shared.Web.Controllers
             {
                 Title = Resources.UnderConstruction.UnderConstructionTitle, 
                 MainMessage = isError ? status.Message : Resources.UnderConstruction.ServerInitializing,
-                SubMessage = isError ? null : status.Message
+                SubMessage = isError ? status.Exception?.Message : status.Message
             };
 
             return View(model);

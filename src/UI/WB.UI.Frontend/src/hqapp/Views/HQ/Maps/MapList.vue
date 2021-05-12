@@ -63,7 +63,7 @@ const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip
     filteredCount
     nodes {
       fileName
-      importDate
+      importDateUtc
       size
     }
   }
@@ -210,8 +210,8 @@ export default {
                         },
                     },
                     {
-                        data: 'importDate',
-                        name: 'ImportDate',
+                        data: 'importDateUtc',
+                        name: 'ImportDateUtc',
                         class: 'date',
                         title: this.$t('Pages.MapList_Updated'),
                         render(data) {
@@ -245,7 +245,7 @@ export default {
 
                     if(search && search != '') {
                         where.and.push({ or: [
-                            { fileName : {startsWith : search.toLowerCase() }}],
+                            { fileName : {startsWith : search }}],
                         })
                     }
 

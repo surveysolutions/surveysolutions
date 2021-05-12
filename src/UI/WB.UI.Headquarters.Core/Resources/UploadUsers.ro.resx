@@ -121,10 +121,10 @@
     <value>Toate cele {{total}} conturi au fost create cu succes:</value>
   </data>
   <data name="AssignedTo" xml:space="preserve">
-    <value>Controlor</value>
+    <value>Supervizor</value>
   </data>
   <data name="AssignedToDescription" xml:space="preserve">
-    <value>necesar pentru anchetatori, conține numele de utilizator al controlorului care va coordona acestă persoană</value>
+    <value>necesar pentru anchetatori, conține numele de utilizator al supervizorului care va coordona acestă persoană</value>
   </data>
   <data name="BackToImport" xml:space="preserve">
     <value>Înapoi la importul utilizatorilor</value>
@@ -139,7 +139,7 @@
     <value>Puteți aloca interviuri pentru aceste echipe din secțiunea 'Chestionare', interviurile pot fi alocate și automat</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Creați un set de utilizatori încărcând fișierul cu toate informațiile necesare. Setul poate conține atât controlori, cât și anchetatori, sau puteți crea</value>
+    <value>Creați un set de utilizatori încărcând fișierul cu toate informațiile necesare. Setul poate conține atât supervizori, cât și anchetatori, sau puteți crea</value>
   </data>
   <data name="DownloadTemplateLink" xml:space="preserve">
     <value>Descărcați template-ul .tab pentru încărcarea de către utilizator</value>
@@ -157,7 +157,7 @@
     <value>Importă informații despre utilizator din</value>
   </data>
   <data name="InterviewersAndSupervisorsCount" xml:space="preserve">
-    <value>{{supervisorsCount}} controlori și {{interviewersCount}} anchetatori</value>
+    <value>{{supervisorsCount}} supervizori și {{interviewersCount}} anchetatori</value>
   </data>
   <data name="Line" xml:space="preserve">
     <value>linie</value>
@@ -166,7 +166,7 @@
     <value>anchetator</value>
   </data>
   <data name="ManualSupervisorCreateLink" xml:space="preserve">
-    <value>controlor</value>
+    <value>supervizor</value>
   </data>
   <data name="NoCreatedUsers" xml:space="preserve">
     <value>Nu s-a creat niciun cont de utilizator</value>
@@ -193,7 +193,7 @@
     <value>Chestionare</value>
   </data>
   <data name="RequiredData" xml:space="preserve">
-    <value>Datele necesare pentru crearea conturilor de anchetator și controlor</value>
+    <value>Datele necesare pentru crearea conturilor de anchetator și supervizor</value>
   </data>
   <data name="ReUploadTabFile" xml:space="preserve">
     <value>Încarcaƫi din nou fişierul .tab</value>

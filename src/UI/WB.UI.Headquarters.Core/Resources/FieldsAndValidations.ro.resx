@@ -160,10 +160,10 @@
     <value>Utilizator incorect</value>
   </data>
   <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
-    <value>Blocat de controlor</value>
+    <value>Blocat de Supervizor</value>
   </data>
   <data name="IsLockedFieldName" xml:space="preserve">
-    <value>Blocat de administrator sau de RINS</value>
+    <value>Blocat de Administrator sau de HQ</value>
   </data>
   <data name="LogOnModel_Password" xml:space="preserve">
     <value>Parolă</value>
@@ -193,7 +193,7 @@
     <value>Parola trebuie să aibă cel puțin {2} caractere</value>
   </data>
   <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
-    <value>Numele persoanei are caractere nevalide. Numai litere, punct, spațiu și apostrof sunt permise</value>
+    <value>Numele persoanei are caractere incorecte. Numai litere, punct, spațiu și apostrof sunt permise</value>
   </data>
   <data name="PersonNameErrorMessage" xml:space="preserve">
     <value>Numele persoanei nu poate conține mai mult de {1} caractere</value>
@@ -205,7 +205,7 @@
     <value>Numărul de telefon nu poate conține mai mult de {1} caractere</value>
   </data>
   <data name="PhoneErrorMessage" xml:space="preserve">
-    <value>Număr de telefon nevalid</value>
+    <value>Număr de telefon incorect</value>
   </data>
   <data name="PhoneNumberFieldName" xml:space="preserve">
     <value>Număr de telefon</value>
@@ -217,13 +217,13 @@
     <value>Se solicită parola</value>
   </data>
   <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
-    <value>Se solicită cont controlor</value>
+    <value>Se solicită cont supervizor</value>
   </data>
   <data name="RequiredUserNameErrorMessage" xml:space="preserve">
     <value>Se solicită numele de utilizator</value>
   </data>
   <data name="SupervisorFieldName" xml:space="preserve">
-    <value>Controlor</value>
+    <value>Supervizor</value>
   </data>
   <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
     <value>Vă rugăm introduceți un GUID valid în formatul următor xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</value>
@@ -238,7 +238,7 @@
     <value>Vă rugăm selectați fișierul</value>
   </data>
   <data name="UserIsLockedByHq" xml:space="preserve">
-    <value>Utilizatorul este blocat de RINS</value>
+    <value>Utilizatorul este blocat de Coorodnator</value>
   </data>
   <data name="UserName_Taken" xml:space="preserve">
     <value>Vă rugăm alegeți un alt nume de utilizator</value>
@@ -248,5 +248,26 @@
   </data>
   <data name="UserNameFieldName" xml:space="preserve">
     <value>Nume utilizator</value>
+  </data>
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+    <value>Parolele trebuie să aibă cel puțin o cifră („0” - „9”).</value>
+  </data>
+  <data name="PasswordRequiresLower" xml:space="preserve">
+    <value>Parolele trebuie să aibă cel puțin o literă minusculă („a” - „z”).</value>
+  </data>
+  <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+    <value>Parolele trebuie să aibă cel puțin un caracter non-alfanumeric.</value>
+  </data>
+  <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+    <value>Parolele trebuie să utilizeze cel puțin {0} caractere diferite.</value>
+  </data>
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+    <value>Parolele trebuie să aibă cel puțin o literă majusculă („A” - „Z”).</value>
+  </data>
+  <data name="PasswordTooShort" xml:space="preserve">
+    <value>Parolele trebuie să aibă cel puțin {0} caractere.</value>
+  </data>
+  <data name="VerificationCodeFieldName" xml:space="preserve">
+    <value>CODUL DE VERIFICARE</value>
   </data>
 </root>

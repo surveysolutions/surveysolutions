@@ -141,6 +141,12 @@
   <data name="ChangeSizeModalTitle" xml:space="preserve">
     <value>Edit size for assignment {{assignmentId}}</value>
   </data>
+  <data name="ChangeModeModalTitle" xml:space="preserve">
+    <value>Change mode for assignment {{assignmentId}}</value>
+  </data>
+  <data name="ModeExplanation" xml:space="preserve">
+    <value>CAWI mode allows collect data from respondents directly</value>
+  </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>Created on</value>
   </data>
@@ -171,7 +177,7 @@
   <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
     <value>You are reassigning web assignment to a user who is not an INTERVIEWER. If you've already sent out the link for this assignment, the respondents will not be able to respond to your survey until the assignment is returned to a user in the role INTERVIEWER.</value>
   </data>
-    <data name="WebModeReassignToNonInterviewer_plural" xml:space="preserve">
+  <data name="WebModeReassignToNonInterviewer_plural" xml:space="preserve">
     <value>You are reassigning web assignments to a user who is not an INTERVIEWER. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignments are returned to a user in the role INTERVIEWER.</value>
   </data>
   <data name="ShowArchived" xml:space="preserve">
@@ -258,6 +264,9 @@
   <data name="UpgradeProgressNumbers" xml:space="preserve">
     <value>Upgrading {{processed}} of {{totalCount}}</value>
   </data>
+  <data name="UpgradeProgressErrors" xml:space="preserve">
+    <value>With errors {{errorCount}}</value>
+  </data>
   <data name="Stop" xml:space="preserve">
     <value>Stop</value>
   </data>
@@ -266,6 +275,9 @@
   </data>
   <data name="UpgradeCancelled" xml:space="preserve">
     <value>Upgrade stopped</value>
+  </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>Error occurred. Try again later.</value>
   </data>
   <data name="UpgradeProgressDone" xml:space="preserve">
     <value>Done</value>
@@ -321,6 +333,9 @@
   <data name="AudioRecordingEnable" xml:space="preserve">
     <value>Enable audio recording</value>
   </data>
+  <data name="CawiModeEnable" xml:space="preserve">
+    <value>Enable CAWI mode</value>
+  </data>
   <data name="AudioRecordingExplanation" xml:space="preserve">
     <value>The Interviewer application will record the audio of the interview when audio audit is enabled. Note that the amount of synchronization data would be significantly larger.</value>
   </data>
@@ -340,16 +355,19 @@
     <value>Password will be used to protect assignment</value>
   </data>
   <data name="WebMode" xml:space="preserve">
-    <value>Web Mode</value>
+    <value>Mode</value>
   </data>
   <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
     <value>This Assignment will be used with Web Mode</value>
   </data>
   <data name="Activated" xml:space="preserve">
     <value>Activated</value>
+  </data> 
+  <data name="CawiActivated" xml:space="preserve">
+    <value>CAWI Activated</value>
   </data>
   <data name="Tooltip_Table_WebMode" xml:space="preserve">
-    <value>Assignment was created in Web Mode</value>
+    <value>Assignment Mode</value>
   </data>
   <data name="PasswordInstructions" xml:space="preserve">
     <value>At least 6 numbers and upper case letters or single symbol '?' to generate password</value>
@@ -491,9 +509,12 @@
     <value>Start web interview</value>
   </data>
   <data name="WebModeEnabledWarning" xml:space="preserve">
-      <value>Assignment cannot be finished. It has web mode enabled, while questionnaire has web collection mode disabled</value>
+    <value>Assignment cannot be finished. It has web mode enabled, while questionnaire has web collection mode disabled</value>
   </data>
   <data name="NoComment" xml:space="preserve">
-      <value>(no comment)</value>
-  </data>    
+    <value>(no comment)</value>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+      <value>Swich to Web Interview link sample</value>
+  </data>
 </root>

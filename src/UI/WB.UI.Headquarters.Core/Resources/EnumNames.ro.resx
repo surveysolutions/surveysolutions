@@ -121,10 +121,10 @@
     <value>Niciunul</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Aprobat de către RINS</value>
+    <value>Aprobate de Coordonatori</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Aprobat de controlor</value>
+    <value>Aprobat de Supervizor</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
     <value>Finalizat</value>
@@ -151,16 +151,16 @@
     <value>Utilizator Api</value>
   </data>
   <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>RINS</value>
+    <value>Coordonatori</value>
   </data>
   <data name="UserRoles_Interviewer" xml:space="preserve">
     <value>Anchetator</value>
   </data>
   <data name="UserRoles_Observer" xml:space="preserve">
-    <value>Responsabil DTS</value>
+    <value>Observator</value>
   </data>
   <data name="UserRoles_Supervisor" xml:space="preserve">
-    <value>Controlor</value>
+    <value>Supervizor</value>
   </data>
   <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
     <value>Mesaj de final</value>
@@ -182,5 +182,17 @@
   </data>
   <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
     <value>Antetul de întâmpinare</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
+    <value>Complet</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Notă pentru Supervizor</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
+    <value>Rezumat</value>
+  </data>
+  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
+    <value>Începeți un interviu nou</value>
   </data>
 </root>

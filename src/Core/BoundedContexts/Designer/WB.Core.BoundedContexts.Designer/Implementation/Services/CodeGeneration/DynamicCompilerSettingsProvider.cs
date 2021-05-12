@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
@@ -8,8 +9,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class DynamicCompilerSettingsProvider : IDynamicCompilerSettingsProvider
     {
-        private readonly List<string> assemblies = new List<string>
+        private readonly string[] assemblies =
         {
+            "System.Globalization",
+            "System.Reflection",
+            "System.IO",
             "System.Collections",
             "System.Linq",
             "System.Linq.Expressions",
@@ -22,17 +26,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<MetadataReference> GetAssembliesToReference()
         {
             var references = new List<MetadataReference>();
+            var designerContextModule = Assembly.GetAssembly(typeof(DesignerBoundedContextModule));
 
             foreach (var assembly in assemblies)
             {
-                var assemblyMetadata =
-                    AssemblyMetadata.CreateFromStream(Assembly.GetAssembly(typeof(DesignerBoundedContextModule))
-                        .GetManifestResourceStream($"WB.Core.BoundedContexts.Designer.ReferencedAssemblies.{assembly}.dll"));
+                var stream = designerContextModule.GetManifestResourceStream($"WB.Core.BoundedContexts.Designer.{assembly}.dll");
+                if (stream == null)
+                {
+                    throw new Exception($"Cannot find {assembly} in WB.Core.BoundedContexts.Designer.ReferencedAssemblies");
+                }
 
+                var assemblyMetadata = AssemblyMetadata.CreateFromStream(stream);
                 PortableExecutableReference reference = assemblyMetadata.GetReference();
                 references.Add(reference);
             }
-            
+
             references.Add(AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference());
             return references;
         }

@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.AspNetCore;
-using HotChocolate.Data.Filters;
 using HotChocolate.Execution;
 using HotChocolate.Execution.Configuration;
 using HotChocolate.Types.Descriptors;
@@ -30,13 +29,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             }
             
             return GetExecutorBuilder(services)
-                .AddErrorFilter<GraphQLErrorFilter>()
+                .AddErrorFilter(x => new GraphQLErrorFilter(x.GetApplicationService<ILogger<GraphQLErrorFilter>>()))
                 .AddDiagnosticEventListener(x => 
                     new GraphqlDiagnosticEventListener(x.GetApplicationService<ILogger<GraphqlDiagnosticEventListener>>()));
         }
 
         private static IRequestExecutorBuilder GetExecutorBuilder(IServiceCollection services)
         {
+            services.AddHttpResultSerializer<CompositeSerializer>();
+
             return services
                 .AddGraphQLServer()
                 .ConfigureSchema(x=>x.Use<WorkspaceGraphQlMiddleware>())
@@ -50,10 +51,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .AddType<QuestionsQueryExtension>()
                 .AddType<QuestionnaireItemsQueryExtension>()
                 .AddType<UsersQueryExtension>()
+                .AddType<MapReportQueryExtension>()
                 .AddMutationType(x => x.Name("HeadquartersMutation"))
                 .AddType<CalendarEventsMutationExtension>()
                 .AddType<MapsMutationExtension>()
-                .AddFiltering()
+                .AddFiltering<HqFilteringConventions>()
                 .AddConvention<INamingConventions>(new CompatibilityNamingConvention())
                 .BindRuntimeType<string, CustomStringOperationFilterInput>()
                 .BindRuntimeType<IdentifyEntityValue, IdentifyEntityValueFilterInput>()

@@ -369,4 +369,7 @@ Thank you for your cooperation!</value>
     <value>Complete</value>
     <comment>Complete interview button text</comment>
   </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Link to web interview landing page example</value>
+  </data>
 </root>

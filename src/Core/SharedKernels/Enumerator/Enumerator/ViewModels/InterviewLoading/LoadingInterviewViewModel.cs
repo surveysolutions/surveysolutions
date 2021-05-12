@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Commands;
-using MvvmCross.Core;
 using MvvmCross.ViewModels;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
@@ -13,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -30,6 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
         private readonly ILogger logger;
         private readonly IUserInteractionService interactionService;
         private CancellationTokenSource loadingCancellationTokenSource;
+        protected IAuditLogService auditLogService;
 
         public LoadingInterviewViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -38,7 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             ILogger logger,
             IUserInteractionService interactionService,
             IPlainStorage<InterviewView> interviewsRepository,
-            IJsonAllTypesSerializer serializer)
+            IJsonAllTypesSerializer serializer,
+            IAuditLogService auditLogService)
             : base(principal, viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;
@@ -47,6 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             this.interactionService = interactionService;
             this.interviewsRepository = interviewsRepository;
             this.serializer = serializer;
+            this.auditLogService = auditLogService;
         }
 
         protected Guid InterviewId { get; set; }
@@ -93,6 +95,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                     this.Principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
                 await this.commandService.ExecuteAsync(restartInterviewCommand)
                     .ConfigureAwait(false);
+
+                auditLogService.Write(new RestartInterviewAuditLogEntity(interviewId, interview.GetInterviewKey().ToString()));
+            }
+
+            else if (interview.Mode == InterviewMode.CAWI && this.ShouldReopen)
+            {
+                this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
+                var requestCapimodeCommand = new ChangeInterviewModeCommand(interviewId,
+                    this.Principal.CurrentUserIdentity.UserId, InterviewMode.CAPI);
+                
+                await this.commandService.ExecuteAsync(requestCapimodeCommand)
+                    .ConfigureAwait(false);
+
+                auditLogService.Write(new SwitchInterviewModeAuditLogEntity(interviewId, interview.GetInterviewKey().ToString(), InterviewMode.CAPI));
             }
 
             var interviewView = this.interviewsRepository.GetById(interviewId.FormatGuid());

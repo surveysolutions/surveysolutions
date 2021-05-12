@@ -10,14 +10,43 @@
         </div>
         <div class="extra-margin-bottom">
             <div class="profile">
-                <div class="col-sm-7"
-                    v-if="isInterviewer || isSupervisor">
-                    <p v-if="isSupervisor"
-                        v-html="$t('Pages.Supervisor_CreateText', {link: uploadUri})"></p>
-                    <p v-if="isInterviewer"
-                        v-html="$t('Pages.Interviewer_CreateText', {link: uploadUri})"></p>
+                <div class="col-sm-7">
+                    <p>
+                        <span v-html="$t('Pages.User_CreateText1')"></span>
+                        <br />
+                        <span v-html="$t('Pages.User_CreateText2', {link: uploadUri})"></span>
+                    </p>
                 </div>
                 <div class="col-sm-12">
+                    <form-group
+                        :label="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
+                        :error="modelState['Workspace']"
+                        :mandatory="true">
+                        <div class="field form-control"
+                            :class="{answered: workspace != null}"
+                            style="padding:0 10px">
+                            <Typeahead
+                                control-id="workspace"
+                                :value="workspace"
+                                :ajax-params="{ }"
+                                :fetch-url="model.api.workspacesUrl"
+                                @selected="workspaceSelected"></Typeahead>
+                        </div>
+                    </form-group>
+                    <form-group
+                        :label="$t('Pages.UsersManage_RoleFilterPlaceholder')"
+                        :error="modelState['Role']"
+                        :mandatory="true">
+                        <div class="field form-control"
+                            :class="{answered: role != null}"
+                            style="padding:0 10px">
+                            <Typeahead
+                                control-id="role"
+                                :value="role"
+                                :values="model.roles"
+                                @selected="roleSelected"></Typeahead>
+                        </div>
+                    </form-group>
                     <form-group
                         :label="$t('FieldsAndValidations.UserNameFieldName')"
                         :error="modelState['UserName']"
@@ -37,8 +66,8 @@
                             <Typeahead
                                 control-id="supervisor"
                                 :value="supervisor"
-                                :ajax-params="{ }"
-                                :fetch-url="model.api.responsiblesUrl"
+                                :ajax-params="{ workspace: (this.workspace || {}).key }"
+                                :fetch-url="$config.model.api.supervisorWorkspaceUrl"
                                 @selected="supervisorSelected"></Typeahead>
                         </div>
                     </form-group>
@@ -62,34 +91,16 @@
                             :haserror="modelState['ConfirmPassword'] !== undefined"
                             id="ConfirmPassword"/>
                     </form-group>
-                    <p v-if="lockMessage != null">{{lockMessage}}</p>
-                    <form-group>
+                    <div class="block-filter">
                         <input
-                            class="checkbox-filter single-checkbox"
-                            id="IsLocked"
-                            name="IsLocked"
+                            id="ShowPassword"
                             type="checkbox"
-                            v-model="isLockedByHeadquarters"/>
-                        <label for="IsLocked"
-                            style="font-weight: bold">
-                            <span class="tick"></span>
-                            {{$t('FieldsAndValidations.IsLockedFieldName')}}
+                            style="margin-right:5px"
+                            onclick="var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');var confirm = document.getElementById('ConfirmPassword');confirm.type = (confirm.type === 'text' ? 'password' : 'text');">
+                        <label for="ShowPassword"                    >
+                            <span></span>{{$t('Pages.ShowPassword')}}
                         </label>
-                    </form-group>
-                    <form-group v-if="isInterviewer">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            data-val="true"
-                            id="IsLockedBySupervisor"
-                            name="IsLockedBySupervisor"
-                            type="checkbox"
-                            v-model="isLockedBySupervisor"/>
-                        <label for="IsLockedBySupervisor"
-                            style="font-weight: bold">
-                            <span class="tick"></span>
-                            {{$t('FieldsAndValidations.IsLockedBySupervisorFieldName')}}
-                        </label>
-                    </form-group>
+                    </div>
                 </div>
                 <div class="col-sm-12">
                     <div class="separate-line"></div>
@@ -147,6 +158,7 @@
 import Vue from 'vue'
 import {each} from 'lodash'
 import VuePageTitle from 'vue-page-title'
+import {RoleNames} from '~/shared/constants'
 
 Vue.use(VuePageTitle, {})
 
@@ -166,6 +178,8 @@ export default {
             isLockedBySupervisor: false,
             successMessage: null,
             supervisor: null,
+            workspace: null,
+            role: null,
         }
     },
     computed: {
@@ -173,34 +187,27 @@ export default {
             return this.$config.model
         },
         uploadUri() {
-            return this.$hq.basePath + 'Users/Upload'
+            const url = this.$hq.basePath + 'Upload'
+            const link = '<a href="' + url + '" target="_blank">' + this.$t('Pages.User_CreateText_UserBatchUploadLinkText') + '</a>'
+            return link
         },
         userInfo() {
             return this.model.userInfo
         },
-        isAdmin() {
-            return this.userInfo.role == 'Administrator'
-        },
         isHeadquarters() {
-            return this.userInfo.role == 'Headquarter'
+            return this.role && this.role.key == RoleNames.HQ
         },
         isSupervisor() {
-            return this.userInfo.role == 'Supervisor'
+            return this.role && this.role.key == RoleNames.SUPERVISOR
         },
         isInterviewer() {
-            return this.userInfo.role == 'Interviewer'
+            return this.role && this.role.key == RoleNames.INTERVIEWER
         },
         isObserver() {
-            return this.userInfo.role == 'Observer'
+            return this.role && this.role.key == RoleNames.OBSERVER
         },
         isApiUser() {
-            return this.userInfo.role == 'ApiUser'
-        },
-        lockMessage() {
-            if (this.isHeadquarters) return this.$t('Pages.HQ_LockWarning')
-            if (this.isSupervisor) return this.$t('Pages.Supervisor_LockWarning')
-            if (this.isInterviewer) return this.$t('Pages.Interviewer_LockWarning')
-            return null
+            return this.role && this.role.key == RoleNames.API
         },
         referrerTitle() {
             if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
@@ -212,16 +219,12 @@ export default {
             return this.$t('Pages.Home')
         },
         referrerUrl() {
-            if (this.isHeadquarters) return '../../Headquarters'
-            if (this.isSupervisor) return '../../Supervisors'
-            if (this.isInterviewer) return '../../Interviewers'
-            if (this.isObserver) return '../../Observers'
-            if (this.isApiUser) return '../../ApiUsers'
-
-            return '/'
+            return '/users/UsersManagement'
         },
         title(){
-            return `${this.$t('Pages.Create')} ${this.$t(`Roles.${this.userInfo.role}`)}`
+            if (this.role)
+                return `${this.$t('Pages.Create')} ${this.$t(`Roles.${this.role.key}`)}`
+            return this.$t('Pages.Create')
         },
     },
     watch: {
@@ -246,10 +249,25 @@ export default {
         supervisor: function(val) {
             delete this.modelState['SupervisorId']
         },
+        workspace: function(val) {
+            delete this.modelState['Workspace']
+        },
+        role: function(val) {
+            delete this.modelState['Role']
+        },
+        title : function(val) {
+            this.$title = val
+        },
     },
     methods: {
         supervisorSelected(newValue) {
             this.supervisor = newValue
+        },
+        workspaceSelected(newValue) {
+            this.workspace = newValue
+        },
+        roleSelected(newValue) {
+            this.role = newValue
         },
         createAccount: function(event) {
             this.successMessage = null
@@ -262,7 +280,7 @@ export default {
                 method: 'post',
                 url: this.model.api.createUserUrl,
                 data: {
-                    supervisorId: self.supervisor != null ? self.supervisor.key : null,
+                    supervisorId: (self.supervisor || {}).key,
                     userName: self.userName,
                     personName: self.personName,
                     email: self.email,
@@ -271,7 +289,8 @@ export default {
                     isLockedBySupervisor: self.isLockedBySupervisor,
                     password: self.password,
                     confirmPassword: self.confirmPassword,
-                    role: self.userInfo.role,
+                    role: (self.role || {}).key,
+                    workspace: (self.workspace || {}).key,
                 },
                 headers: {
                     'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),

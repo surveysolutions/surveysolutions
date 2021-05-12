@@ -1,0 +1,1481 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add" xml:space="preserve">
+    <value>Adaugă</value>
+  </data>
+  <data name="AddNewSection" xml:space="preserve">
+    <value>Adăugați o secțiune nouă</value>
+  </data>
+  <data name="AddQuestion" xml:space="preserve">
+    <value>Adăugați o întrebare</value>
+  </data>
+  <data name="AddRoster" xml:space="preserve">
+    <value>Adăugați lista</value>
+  </data>
+  <data name="AddStaticText" xml:space="preserve">
+    <value>Adăugați text static</value>
+  </data>
+  <data name="AddSubsection" xml:space="preserve">
+    <value>Adăugați o subsecțiune</value>
+  </data>
+  <data name="AddValidationRule" xml:space="preserve">
+    <value>Adăugați o nouă regulă de validare</value>
+  </data>
+  <data name="AddVariable" xml:space="preserve">
+    <value>Adăugați o variabilă</value>
+  </data>
+  <data name="AllClassifications" xml:space="preserve">
+    <value>Toate clasificările</value>
+  </data>
+  <data name="AllFolders" xml:space="preserve">
+    <value>Toate folderele</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Sunteți sigur?</value>
+  </data>
+  <data name="AttachmentPreview" xml:space="preserve">
+    <value>Previzualizare atașament</value>
+  </data>
+  <data name="Backup" xml:space="preserve">
+    <value>Copie de siguranță</value>
+  </data>
+  <data name="BindToReusableCategories" xml:space="preserve">
+    <value>Legați-le de categoriile reutilizabile</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="CascadingOptionsWindowTitle" xml:space="preserve">
+    <value>Editați variante de răspuns în cascadă</value>
+  </data>
+  <data name="CategoriesObtained" xml:space="preserve">
+    <value>S-a obținut {0} rând din fișierul de categorii</value>
+  </data>
+  <data name="CategoriesObtained_plural" xml:space="preserve">
+    <value>S-au obținut {0} rânduri din fișierul de categorii</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Schimbați parola</value>
+  </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>Vă rugăm să alegeți traducerea</value>
+  </data>
+  <data name="ClassificationAdd" xml:space="preserve">
+    <value>Adăugați clasificare</value>
+  </data>
+  <data name="ClassificationAddGroup" xml:space="preserve">
+    <value>Adăugare grup</value>
+  </data>
+  <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
+    <value>Grupuri</value>
+  </data>
+  <data name="ClassificationGroupTitle" xml:space="preserve">
+    <value>Titlul grupului</value>
+  </data>
+  <data name="ClassificationShowCategories" xml:space="preserve">
+    <value>Afișați variantele de răspuns</value>
+  </data>
+  <data name="ClassificationsSearchEntities" xml:space="preserve">
+    <value>clasificări</value>
+  </data>
+  <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
+    <value>Introduceți variante de răspuns</value>
+  </data>
+  <data name="ClassificationsTitle" xml:space="preserve">
+    <value>Lista de înterbări. Clasificări</value>
+  </data>
+  <data name="ClassificationTitle" xml:space="preserve">
+    <value>Titlul clasificării</value>
+  </data>
+  <data name="ClickHere" xml:space="preserve">
+    <value>Click aici</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Închide</value>
+  </data>
+  <data name="CollaboratorsSettings" xml:space="preserve">
+    <value>Colaboratori</value>
+  </data>
+  <data name="CommentEditorResolve" xml:space="preserve">
+    <value>Rezolvă</value>
+  </data>
+  <data name="CompilationErrorsCounter" xml:space="preserve">
+    <value>S-a găsit o eroare {{count}}</value>
+  </data>
+  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+    <value>S-au găsit {{count}} erori</value>
+  </data>
+  <data name="CompilationLabel" xml:space="preserve">
+    <value>Compilare:</value>
+  </data>
+  <data name="CompilationWarningsCounter" xml:space="preserve">
+    <value>A fost găsit un avertisment {{count}}</value>
+  </data>
+  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} avertismente găsite</value>
+  </data>
+  <data name="Compile" xml:space="preserve">
+    <value>Compilează</value>
+  </data>
+  <data name="ConditionMightBeBroken" xml:space="preserve">
+    <value>Varianta de răspuns sau elementele dependente de aceasta pot avea erori de legătură</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copie</value>
+  </data>
+  <data name="CustomRosterTitle" xml:space="preserve">
+    <value>Titlu personalizat</value>
+  </data>
+  <data name="DefaultNewRoster" xml:space="preserve">
+    <value>Listă nouă</value>
+  </data>
+  <data name="DefaultNewSection" xml:space="preserve">
+    <value>Secțiune nouă</value>
+  </data>
+  <data name="DefaultNewStaticText" xml:space="preserve">
+    <value>Text static nou</value>
+  </data>
+  <data name="DefaultNewSubsection" xml:space="preserve">
+    <value>Subsecțiune nouă</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Șterge</value>
+  </data>
+  <data name="DeleteCommentConfirm" xml:space="preserve">
+    <value>Sigur doriți să ștergeți comentariul?</value>
+  </data>
+  <data name="DeleteConfirmCategories" xml:space="preserve">
+    <value>Sigur doriți să ștergeți setul de variante de răspuns "{{trimmedTitle}}"? Sursa variantelor de răspuns pentru întrebări categoriale dependente de aceasta va fi schimbată în variante de răspuns definite de utilizator</value>
+  </data>
+  <data name="DeleteConfirmQuestion" xml:space="preserve">
+    <value>Sigur doriți să ștergeți "{{trimmedTitle}}"?</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Descarcă</value>
+  </data>
+  <data name="DownloadPdf" xml:space="preserve">
+    <value>Descărcați PDF</value>
+  </data>
+  <data name="EditorAddComment" xml:space="preserve">
+    <value>Adaugare comentariu</value>
+  </data>
+  <data name="EditorHideComment" xml:space="preserve">
+    <value>Ascundere comentarii</value>
+  </data>
+  <data name="EmptySectionLine1" xml:space="preserve">
+    <value>Această secțiune este goală.</value>
+  </data>
+  <data name="EmptySectionLine2" xml:space="preserve">
+    <value>Puteți începe utilizând butoanele {{-addQuestionBtn}} și {{-addSubsectionBtn}}</value>
+  </data>
+  <data name="EmptySectionLine3" xml:space="preserve">
+    <value>deasupra acestui bloc sau gestionați secțiunile cu panoul din stânga {{-panel}}</value>
+  </data>
+  <data name="EmptySectionLine4" xml:space="preserve">
+    <value>Numele chestionarului, variabila, colaborarea și alte opțiuni</value>
+  </data>
+  <data name="EmptySectionLine5" xml:space="preserve">
+    <value>poate fi găsit la panoul {{-settingsBtn}} (colțul din dreapta sus)</value>
+  </data>
+  <data name="EnablingCondition" xml:space="preserve">
+    <value>Condiția de activare</value>
+  </data>
+  <data name="EnteredMoreThanAllowed" xml:space="preserve">
+    <value>Ați introdus mai mult decât maximul permis {{max}}</value>
+  </data>
+  <data name="EntityComment" xml:space="preserve">
+    <value>Comentariu nou</value>
+  </data>
+  <data name="EntryWasNotFound" xml:space="preserve">
+    <value>Elementul nu a fost găsit în chestionar, vă rugăm să selectați altul.</value>
+  </data>
+  <data name="ErrorMessage" xml:space="preserve">
+    <value>Mesaj de eroare sau de avertizare</value>
+  </data>
+  <data name="ErrorsCounter" xml:space="preserve">
+    <value>Eroare {{count}}</value>
+  </data>
+  <data name="ErrorsCounter_plural" xml:space="preserve">
+    <value>{{count}} erori</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="FindReplaceBackToSearch" xml:space="preserve">
+    <value>Înapoi la căutare</value>
+  </data>
+  <data name="FindReplaceDone" xml:space="preserve">
+    <value>Terminat</value>
+  </data>
+  <data name="FindReplaceFindAll" xml:space="preserve">
+    <value>Caută toate</value>
+  </data>
+  <data name="FindReplaceFindWhat" xml:space="preserve">
+    <value>Caută anume:</value>
+  </data>
+  <data name="FindReplaceInAll" xml:space="preserve">
+    <value>Tot</value>
+  </data>
+  <data name="FindReplaceInAllFound" xml:space="preserve">
+    <value>în {{count}} valoare găsită ?</value>
+  </data>
+  <data name="FindReplaceInAllFound_plural" xml:space="preserve">
+    <value>în {{count}} valori găsite ?</value>
+  </data>
+  <data name="FindReplaceMatchCase" xml:space="preserve">
+    <value>Potrivește capitalizarea</value>
+  </data>
+  <data name="FindReplaceMatchingLines" xml:space="preserve">
+    <value>Au fost găsite {{count}} linii</value>
+  </data>
+  <data name="FindReplaceMatchWord" xml:space="preserve">
+    <value>Potrivește cuvântul întreg</value>
+  </data>
+  <data name="FindReplaceNext" xml:space="preserve">
+    <value>Următorul</value>
+  </data>
+  <data name="FindReplacePrevious" xml:space="preserve">
+    <value>Anterior</value>
+  </data>
+  <data name="FindReplaceReplaceAll" xml:space="preserve">
+    <value>Înlocuiește toate ({{count}})</value>
+  </data>
+  <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
+    <value>Înlocuiește toate</value>
+  </data>
+  <data name="FindReplaceReplaceAllConfirmWith" xml:space="preserve">
+    <value>cu</value>
+  </data>
+  <data name="FindReplaceReplaceWith" xml:space="preserve">
+    <value>Înlocuiește cu:</value>
+  </data>
+  <data name="FindReplaceTitle" xml:space="preserve">
+    <value>Caută și înlocuiește</value>
+  </data>
+  <data name="FindReplaceUseRegex" xml:space="preserve">
+    <value>Folosește expresie regulată</value>
+  </data>
+  <data name="FindReplaceWereReplaced" xml:space="preserve">
+    <value>au fost înlocuite cu</value>
+  </data>
+  <data name="FindReplaceСonfirm" xml:space="preserve">
+    <value>Vă rugăm să confirmați acțiunea</value>
+  </data>
+  <data name="FlatRoster" xml:space="preserve">
+    <value>Mod plat</value>
+  </data>
+  <data name="Forum" xml:space="preserve">
+    <value>Forum</value>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+    <value>Generează PDF</value>
+  </data>
+  <data name="GeometryType" xml:space="preserve">
+    <value>Tipul de geometrie</value>
+  </data>
+  <data name="GroupTitle" xml:space="preserve">
+    <value>Titlu</value>
+  </data>
+  <data name="HellowMessageBtn" xml:space="preserve">
+    <value>Bună ziua, {{currentUserName}}</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Ajutor</value>
+  </data>
+  <data name="HelpAttachmentName" xml:space="preserve">
+    <value>Numele fișiereului atașat care va fi prezentat</value>
+  </data>
+  <data name="HelpCombobox" xml:space="preserve">
+    <value>"Combo-box" este o combinație între o listă derulantă și o casetă text editabilă cu o singură linie. Categoriile pot fi selectate fie prin tastarea unei valori sau a unei părți din valoare, fie prin selectarea unei valori din listă</value>
+  </data>
+  <data name="HelpConditionExpression" xml:space="preserve">
+    <value>O expresie logică care activează (dezactivează) elementul curent în funcție de răspunsurile la celelalte întrebări.</value>
+  </data>
+  <data name="HelpCoverPage" xml:space="preserve">
+    <value>Prima secțiune a fiecărui chestionar conține întrebări de identificare care sunt afișate și în tablourile de bord ale anchetatorilor și ale supervizorilor.</value>
+  </data>
+  <data name="HelpCustomTitle" xml:space="preserve">
+    <value>Permite suprascrierea șablonului pentru butonul listei și furnizarea de text personalizat pentru% rostertitle%</value>
+  </data>
+  <data name="HelpDefaultDate" xml:space="preserve">
+    <value>Această dată va fi afișată ca data de început pentru selectare pe o tabletă</value>
+  </data>
+  <data name="HelpDoNotExport" xml:space="preserve">
+    <value>Marcați această variabilă pentru a o exclude de la exportare</value>
+  </data>
+  <data name="HelpExpression" xml:space="preserve">
+    <value>O expresie logică care se calculează în funcție de răspunsurile de la celelalte întrebări.</value>
+  </data>
+  <data name="HelpFixedTitles" xml:space="preserve">
+    <value>Numărul de articole determină dimensiunea listei. Fiecare element al listei corespunde unui titlu al rândului listei. Fiecare element al listei trebuie plasat pe o linie separată.</value>
+  </data>
+  <data name="HelpHideIfDisabled" xml:space="preserve">
+    <value>În mod implicit, un element dezactivat este gri. Selectând această opțiune se va ascunde o întrebare sau o secțiune dezactivată pe o tabletă.</value>
+  </data>
+  <data name="HelpHideInstructions" xml:space="preserve">
+    <value>În mod implicit pe tabletă este afișat un text de instrucțiuni. Seelctând această opțiune se va afișa doar prima linie de instrucțiuni. Dacă atingeți linia respectivă, se va afișa textul complet.</value>
+  </data>
+  <data name="HelpInstruction" xml:space="preserve">
+    <value>Textul instrucțiunii care va fi atașat la întrebare.</value>
+  </data>
+  <data name="HelpIsTimestamp" xml:space="preserve">
+    <value>Această opțiune permite utilizatorului să înregistreze ora curentă pe tabletă</value>
+  </data>
+  <data name="HelpMask" xml:space="preserve">
+    <value>Câmp formatat pentru valori alfanumerice: numere de telefon, coduri de identificare etc. Exemple: "~" - Reprezintă un caracter alfa (AZ, az), "#" - Reprezintă un caracter numeric (0-9), "*" - Reprezintă un caracter alfanumeric (AZ, az, 0-9). "## / ## / ####" - Reprezintă o dată, "(###) ### - ####" - Reprezintă un număr de telefon</value>
+  </data>
+  <data name="HelpNewComment" xml:space="preserve">
+    <value>Adăugați un comentariu</value>
+  </data>
+  <data name="HelpOptionTitle" xml:space="preserve">
+    <value>Etichetă text pentru varianta de răspuns (vizibilă pentru anchetator)</value>
+  </data>
+  <data name="HelpOptionValue" xml:space="preserve">
+    <value>Codul numeric al variantei de răspuns (vizibil pentru anchetator)</value>
+  </data>
+  <data name="HelpQuestionnaireVarible" xml:space="preserve">
+    <value>Variabila chestionarului este utilizată ca prefix în formarea numelor pentru fișierele de export. Numele variabilelor și ID-urile listei pot avea de la {{minLength}} la {{maxLength}} caractere și trebuie să conțină numai următoarele caractere: a-z, A-Z, _ sau 0-9. Primul caracter nu poate fi 0-9 sau _ și ultimul nu poate fi _.</value>
+  </data>
+  <data name="HelpRosterDisplayMode" xml:space="preserve">
+    <value>Sub-secțiune - întrebările listei sunt afișate în spatele butoanelor corespunzătoare instanțelor listei.
+Plat - întrebările listei sunt afișate la același nivel separat de antetele corespunzătoare instanțelor listei.
+Tabel - întrebările din listă sunt afișate la același nivel cu rândurile și coloanele tabelului.
+Matrice - o întrebare categorică a listei este afișată ca matrice.
+Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru celelalte vizualizări, tableta folosește modul „Sub-secțiune”</value>
+  </data>
+  <data name="HelpSourceQuestion" xml:space="preserve">
+    <value>Întrebarea sursă (răspunsul generează numărul de rânduri)</value>
+  </data>
+  <data name="HelpTitles" xml:space="preserve">
+    <value>Titlurile rândurilor.</value>
+  </data>
+  <data name="HelpUseFormatting" xml:space="preserve">
+    <value>Când este acestă opțiune este selectată, câmpul numeric de pe tabletă va fi formatat astfel: d,ddd,ddd.dd, „d” reprezintă cifre (0-9), „,” (virgula) este un separatorul miilor iar „.” (punctul) este separatorul zecimal. Separatorul de mii și simbolul zecimal pot fi diferite pe tablete setate pentru alte limbi.</value>
+  </data>
+  <data name="HelpValidationExpression" xml:space="preserve">
+    <value>O expresie logică care validează un răspuns la întrebarea curentă. Ar putea include valori ale altor întrebări.</value>
+  </data>
+  <data name="HelpValidationMessage" xml:space="preserve">
+    <value>Mesajul de eroare sau de avertizare este afișat atunci când condiția de validare este „False” sau a apărut o eroare în timpul evaluării expresiei.</value>
+  </data>
+  <data name="HelpVariableDescription" xml:space="preserve">
+    <value>Text care va fi afișat lângă o variabilă în scopul testării</value>
+  </data>
+  <data name="HelpVariableLabel" xml:space="preserve">
+    <value>Un text de maximum {{maxLength}} caractere care va fi atașat variabilei exportate.</value>
+  </data>
+  <data name="HelpVariableName" xml:space="preserve">
+    <value>Numele variabilelor și ID-urile listei pot avea de la {{minLength}} la {{maxLength}} caractere și trebuie să conțină numai următoarele caractere: a-z, A-Z, _ sau 0-9. Primul caracter nu poate fi 0-9 sau _ și ultimul nu poate fi _.</value>
+  </data>
+  <data name="HelpVirtualCoverPage" xml:space="preserve">
+    <value>Coperta este o secțiune virtuală care arată toate întrebările de identificare.
+     Întrebările nu pot fi modificate în această secțiune</value>
+  </data>
+  <data name="HideIfDisabled" xml:space="preserve">
+    <value>Ascunde dacă este dezactivat</value>
+  </data>
+  <data name="HideIfDisabledNested" xml:space="preserve">
+    <value>Nivel ierarhic inferior din chestionar</value>
+  </data>
+  <data name="HideResolvedComments" xml:space="preserve">
+    <value>Ascundere comentarii rezolvate</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>Istoric</value>
+  </data>
+  <data name="HotkeysCloseCategories" xml:space="preserve">
+    <value>Închideți panoul de categorii</value>
+  </data>
+  <data name="HotkeysCloseLookup" xml:space="preserve">
+    <value>Închideți panoul tabelelor de căutare</value>
+  </data>
+  <data name="HotkeysCloseMacros" xml:space="preserve">
+    <value>Închideți panoul funcțiilor 'macromandă'</value>
+  </data>
+  <data name="HotkeysCloseMetadata" xml:space="preserve">
+    <value>Închideți panoul de metadate</value>
+  </data>
+  <data name="HotkeysCloseTranslations" xml:space="preserve">
+    <value>Închideți panoul de traduceri</value>
+  </data>
+  <data name="HotkeysFocusTitle" xml:space="preserve">
+    <value>Focalizați câmpul de titlu în editor</value>
+  </data>
+  <data name="HotkeysFocusTree" xml:space="preserve">
+    <value>Focalizați arborele chestionarului</value>
+  </data>
+  <data name="HotkeysHideAttachments" xml:space="preserve">
+    <value>Închideți panoul de atașamente</value>
+  </data>
+  <data name="HotkeysHideSections" xml:space="preserve">
+    <value>Închideți secțiunile</value>
+  </data>
+  <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
+    <value>Navigați la fratele anterior</value>
+  </data>
+  <data name="HotkeysNavigateToSibling" xml:space="preserve">
+    <value>Navigați la următorul frate</value>
+  </data>
+  <data name="HotkeysOpenItem" xml:space="preserve">
+    <value>Deschideți elementul în editor</value>
+  </data>
+  <data name="HotkeysOpenSection" xml:space="preserve">
+    <value>Deschideți secțiunea</value>
+  </data>
+  <data name="HotkeysPrint" xml:space="preserve">
+    <value>Imprimare</value>
+  </data>
+  <data name="HotkeysSearch" xml:space="preserve">
+    <value>Căutați sub-secțiuni și întrebări din secțiune</value>
+  </data>
+  <data name="HotkeysShortcuts" xml:space="preserve">
+    <value>Comenzi rapide de la tastatură</value>
+  </data>
+  <data name="HotkeysShowHideHelp" xml:space="preserve">
+    <value>Afișați / ascundeți acest meniu de ajutor</value>
+  </data>
+  <data name="IncorrectRosterTitle" xml:space="preserve">
+    <value>Întrebare incorectă pentru titlul listei</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+    <value>Inițializare</value>
+  </data>
+  <data name="IsSignature" xml:space="preserve">
+    <value>Folosiți blocul de semnături</value>
+  </data>
+  <data name="IsWarning" xml:space="preserve">
+    <value>Avertizare</value>
+  </data>
+  <data name="JumpToEdit" xml:space="preserve">
+    <value>Salt la editare</value>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Deconectare</value>
+  </data>
+  <data name="MakeOwnerConfirmationMessage" xml:space="preserve">
+    <value>Dacă transferați chestionarul, noul proprietar va primi o informare. Este posibil să nu mai puteți modifica setările de proprietate, iar noul proprietar vă poate elimina accesul.</value>
+  </data>
+  <data name="MarkAsDefault" xml:space="preserve">
+    <value>Marcați ca limbă implicită</value>
+  </data>
+  <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+    <value>Comentariul nu poate conține mai mult de {1} caractere</value>
+  </data>
+  <data name="MigrateToNewCover" xml:space="preserve">
+    <value>Generare copertă</value>
+  </data>
+  <data name="ModalConfirm" xml:space="preserve">
+    <value>Confirmare</value>
+  </data>
+  <data name="ModalInfo" xml:space="preserve">
+    <value>Informații</value>
+  </data>
+  <data name="MoveTo" xml:space="preserve">
+    <value>Treceți la</value>
+  </data>
+  <data name="MoveToAnotherSubSection" xml:space="preserve">
+    <value>Treceți la o altă secțiune:</value>
+  </data>
+  <data name="MultipleDependencies" xml:space="preserve">
+    <value>Una sau mai multe întrebări / subsecțiuni depind de</value>
+  </data>
+  <data name="MyClassifications" xml:space="preserve">
+    <value>Clasificările mele</value>
+  </data>
+  <data name="NoPermissions" xml:space="preserve">
+    <value>Nu aveți permisiuni pentru modificarea acestui chestionar</value>
+  </data>
+  <data name="NotAnImage" xml:space="preserve">
+    <value>Fișierul ales nu este imagine</value>
+  </data>
+  <data name="NothingFound" xml:space="preserve">
+    <value>Nimic gasit</value>
+  </data>
+  <data name="NotSupportedAttachment" xml:space="preserve">
+    <value>Fișierul selectat nu este acceptat ca atașament</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>In regulă</value>
+  </data>
+  <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
+    <value>Doar primele {{count}} categorii vor fi folosite pentru întrebarea „{{trimmedTitle}}”?</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Deschis</value>
+  </data>
+  <data name="OptionsCloseWindow" xml:space="preserve">
+    <value>Închideți fereastra?</value>
+  </data>
+  <data name="OptionsListError" xml:space="preserve">
+    <value>Ați introdus date incorecte. Fiecare linie trebuie să urmeze formatul: „Titlu ... Valoare”. „Valoare” trebuie să fie un număr întreg. "Titlu" trebuie să fie un șir alfa-numeric. Nu sunt permise linii goale.</value>
+  </data>
+  <data name="OptionsUploadApply" xml:space="preserve">
+    <value>Aplică schimbările</value>
+  </data>
+  <data name="OptionsUploadLimit" xml:space="preserve">
+    <value>Nu există variante de răspuns. Folosiți un fișier text cu separator "Tab". Fișierul poate conține maximum {limit} variante de răspuns.</value>
+  </data>
+  <data name="OptionsUploadParent" xml:space="preserve">
+    <value>Valoare de la nivelul ierarhic superior</value>
+  </data>
+  <data name="OptionsUploadTitle" xml:space="preserve">
+    <value>Titlul</value>
+  </data>
+  <data name="OptionsUploadValue" xml:space="preserve">
+    <value>Valoarea</value>
+  </data>
+  <data name="OptionsWindowTitle" xml:space="preserve">
+    <value>Editați variantele de răspuns</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>Lipește</value>
+  </data>
+  <data name="PasteAfter" xml:space="preserve">
+    <value>Lipește după</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>vă rugăm să asteaptați ...</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Previzualizați versiunea nr. {{revision}}</value>
+  </data>
+  <data name="PublicAccessSettings" xml:space="preserve">
+    <value>Acces public</value>
+  </data>
+  <data name="QuestionAddClassification" xml:space="preserve">
+    <value>Căutați clasificare</value>
+  </data>
+  <data name="QuestionAddInstruction" xml:space="preserve">
+    <value>Adăugați instrucțiuni pentru anchetator</value>
+  </data>
+  <data name="QuestionAddOption" xml:space="preserve">
+    <value>Adăugați o variantă de răspuns</value>
+  </data>
+  <data name="QuestionAddSpecialValues" xml:space="preserve">
+    <value>Adăugați o valoare specială</value>
+  </data>
+  <data name="QuestionCascading" xml:space="preserve">
+    <value>Casetă combo-box legată de o întrebare la un nivel ierarhic superior</value>
+  </data>
+  <data name="QuestionCheckboxes" xml:space="preserve">
+    <value>Casetă de selecție</value>
+  </data>
+  <data name="QuestionClickReload" xml:space="preserve">
+    <value>Faceți clic pe Reîncărcare</value>
+  </data>
+  <data name="QuestionComboBox" xml:space="preserve">
+    <value>Combo-box</value>
+  </data>
+  <data name="QuestionCurrentTime" xml:space="preserve">
+    <value>Data și ora curentă</value>
+  </data>
+  <data name="QuestionDecimalPlaces" xml:space="preserve">
+    <value>Numărul de zecimale</value>
+  </data>
+  <data name="QuestionDefaultDate" xml:space="preserve">
+    <value>Data implicită</value>
+  </data>
+  <data name="QuestionDisplayMode" xml:space="preserve">
+    <value>Modul de afișare</value>
+  </data>
+  <data name="QuestionFilter" xml:space="preserve">
+    <value>Filtru</value>
+  </data>
+  <data name="QuestionGpsNavigation" xml:space="preserve">
+    <value>Această întrebare va fi tratată ca întrebare de navigare GPS pentru anchetator</value>
+  </data>
+  <data name="QuestionHideInstruction" xml:space="preserve">
+    <value>Ascundeți instrucțiunile</value>
+  </data>
+  <data name="QuestionInstruction" xml:space="preserve">
+    <value>Instrucțiuni</value>
+  </data>
+  <data name="QuestionInteger" xml:space="preserve">
+    <value>Întreg</value>
+  </data>
+  <data name="QuestionIsLinked" xml:space="preserve">
+    <value>Este legat</value>
+  </data>
+  <data name="QuestionLinkedDescr" xml:space="preserve">
+    <value>Legați de o întrebare de tip listă sau de o întrebare dintr-o listă</value>
+  </data>
+  <data name="QuestionMaxListCount" xml:space="preserve">
+    <value>Numărul maxim de elemente ale listei</value>
+  </data>
+  <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
+    <value>Numărul maxim de răspunsuri</value>
+  </data>
+  <data name="QuestionMustBeBound" xml:space="preserve">
+    <value>Trebuie să legați această întrebare</value>
+  </data>
+  <data name="QuestionnaireSettings" xml:space="preserve">
+    <value>Setări chestionar</value>
+  </data>
+  <data name="QuestionnaireSummary" xml:space="preserve">
+    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+  </data>
+  <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
+    <value>Sunt permise numere întregi între 1 și 50</value>
+  </data>
+  <data name="QuestionOnlyInts" xml:space="preserve">
+    <value>Sunt permise numai numere întregi</value>
+  </data>
+  <data name="QuestionOpenEditorConfirm" xml:space="preserve">
+    <value>Pentru a deschide editorul, toate modificările trebuie salvate. Le salvăm acum?</value>
+  </data>
+  <data name="QuestionOpenEditorSaved" xml:space="preserve">
+    <value>A fost salvat cu succes. Se va deschide fereastra pentru încărcarea fișierelor.</value>
+  </data>
+  <data name="QuestionOptionsCut" xml:space="preserve">
+    <value>Întrebarea a fost marcată ca „Combo-box” sau „Combo-box legată” în timpul încărcării detaliilor întrebării și conținea prea multe variante de răspuns, numărul acestora a fost redus până la {{count}}</value>
+  </data>
+  <data name="QuestionOrdered" xml:space="preserve">
+    <value>Înregistrați ordinea de răspuns</value>
+  </data>
+  <data name="QuestionPattern" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="QuestionQuestionType" xml:space="preserve">
+    <value>Tip de întrebare</value>
+  </data>
+  <data name="QuestionRadioButtonList" xml:space="preserve">
+    <value>Listă cu butoane</value>
+  </data>
+  <data name="QuestionScope" xml:space="preserve">
+    <value>Domeniul întrebării</value>
+  </data>
+  <data name="QuestionShowListLimit" xml:space="preserve">
+    <value>Dacă nu mai mult de</value>
+  </data>
+  <data name="QuestionShowStrings" xml:space="preserve">
+    <value>Afișați datele</value>
+  </data>
+  <data name="QuestionsSearchEntities" xml:space="preserve">
+    <value>rezultatele cautarii</value>
+  </data>
+  <data name="QuestionsSearchTitle" xml:space="preserve">
+    <value>Banca de întrebări</value>
+  </data>
+  <data name="QuestionText" xml:space="preserve">
+    <value>Textul întrebării</value>
+  </data>
+  <data name="QuestionToUpdateOptions" xml:space="preserve">
+    <value>Pentru a actualiza categoriile</value>
+  </data>
+  <data name="QuestionUploadOptions" xml:space="preserve">
+    <value>Încărcați noi categorii</value>
+  </data>
+  <data name="QuestionUseSeparator" xml:space="preserve">
+    <value>Folosiți separatorul miilor</value>
+  </data>
+  <data name="QuestionVariableLabel" xml:space="preserve">
+    <value>Eticheta variabilei</value>
+  </data>
+  <data name="QuestionVariableName" xml:space="preserve">
+    <value>Numele variabilei</value>
+  </data>
+  <data name="QuestionYesNoMode" xml:space="preserve">
+    <value>Butoane Da / Nu</value>
+  </data>
+  <data name="ReadOnly" xml:space="preserve">
+    <value>Numai citire</value>
+  </data>
+  <data name="ReadOnlyQuestion" xml:space="preserve">
+    <value>Această întrebare este marcată "Numai citire". Nu o puteți edita.</value>
+  </data>
+  <data name="Recompile" xml:space="preserve">
+    <value>Recompilare</value>
+  </data>
+  <data name="ReplaceOptionsConfirmation" xml:space="preserve">
+    <value>Sigur doriți să înlocuiți variante de răspuns existente pentru întrebarea „{{trimmedTitle}}”?</value>
+  </data>
+  <data name="RequestFailedUnexpectedly" xml:space="preserve">
+    <value>Solicitarea a eșuat în mod neașteptat.</value>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+    <value>Reîncercați exportul în format PDF</value>
+  </data>
+  <data name="ReusableCategories" xml:space="preserve">
+    <value>Variante de răspuns reutilizabile</value>
+  </data>
+  <data name="RosterAddItem" xml:space="preserve">
+    <value>Adăugare element</value>
+  </data>
+  <data name="RosterDisplayMode" xml:space="preserve">
+    <value>Modul de afișare:</value>
+  </data>
+  <data name="RosterDisplayMode_Flat" xml:space="preserve">
+    <value>Plat</value>
+  </data>
+  <data name="RosterDisplayMode_Matrix" xml:space="preserve">
+    <value>Matrice</value>
+  </data>
+  <data name="RosterDisplayMode_SubSection" xml:space="preserve">
+    <value>Sub-secțiune</value>
+  </data>
+  <data name="RosterDisplayMode_Table" xml:space="preserve">
+    <value>Tabel</value>
+  </data>
+  <data name="RosterName" xml:space="preserve">
+    <value>Numele listei</value>
+  </data>
+  <data name="RosterShowStrings" xml:space="preserve">
+    <value>Afișați datele</value>
+  </data>
+  <data name="RosterSource" xml:space="preserve">
+    <value>Sursa listei</value>
+  </data>
+  <data name="RosterSourceFixed" xml:space="preserve">
+    <value>Set fix de elemente:</value>
+  </data>
+  <data name="RosterSourceNumericQuestion" xml:space="preserve">
+    <value>Întrebare sursă pentru numărul de rânduri:</value>
+  </data>
+  <data name="RosterSourceNumericTitles" xml:space="preserve">
+    <value>Întrebare sursă pentru numele rândurilor:</value>
+  </data>
+  <data name="RosterSourceQuestion" xml:space="preserve">
+    <value>Întrebare sursă (răspunsul determină atât numărul, cât și numele rândurilor de listă):</value>
+  </data>
+  <data name="RostersQuestion" xml:space="preserve">
+    <value>Listați întrebarea (dintr-o listă dacă este cazul)</value>
+  </data>
+  <data name="RosterVariableName" xml:space="preserve">
+    <value>ID-ul listei</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Execută</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvează</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Salvează ca</value>
+  </data>
+  <data name="SavedAtTimestamp" xml:space="preserve">
+    <value>salvat la {{dateTime, H: mm}}</value>
+  </data>
+  <data name="ScenarioDetails" xml:space="preserve">
+    <value>Scenariu</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Căutare</value>
+  </data>
+  <data name="SearchClassification" xml:space="preserve">
+    <value>Căutare clasificare</value>
+  </data>
+  <data name="SearchForQuestion" xml:space="preserve">
+    <value>Căutare întrebare</value>
+  </data>
+  <data name="SearchQuestionPlaceholder" xml:space="preserve">
+    <value>Căutați o întrebare</value>
+  </data>
+  <data name="SectionVariableName" xml:space="preserve">
+    <value>Numele variabilei</value>
+  </data>
+  <data name="SelectCategories" xml:space="preserve">
+    <value>Selectează categoria</value>
+  </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>Selecteaza tara</value>
+  </data>
+  <data name="SelectedInvalidItem" xml:space="preserve">
+    <value>A fost selectat un element nepotrivit. Corectați.</value>
+  </data>
+  <data name="SelectItemFromTheList" xml:space="preserve">
+    <value>Selectează elementul din listă</value>
+  </data>
+  <data name="SelectKindOfData" xml:space="preserve">
+    <value>Selectează un tip de date</value>
+  </data>
+  <data name="SelectModeOfDataCollection" xml:space="preserve">
+    <value>Selectează un mod de colectare a datelor</value>
+  </data>
+  <data name="SelectParentQuestion" xml:space="preserve">
+    <value>Selectează întrebarea de la nivelul ierarhic superior</value>
+  </data>
+  <data name="SelectParentQuestionError" xml:space="preserve">
+    <value>Trebuie selectată întrebarea de la nivelul ierarhic superior</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>Selectează întrebarea</value>
+  </data>
+  <data name="SelectStudyType" xml:space="preserve">
+    <value>Selectează un tip de studiu</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Setări</value>
+  </data>
+  <data name="SettingsCan" xml:space="preserve">
+    <value>Se poate</value>
+  </data>
+  <data name="SettingsHideIfDisabled" xml:space="preserve">
+    <value>Ascunde elementul când este dezactivat</value>
+  </data>
+  <data name="SettingsInvite" xml:space="preserve">
+    <value>Invitație</value>
+  </data>
+  <data name="SettingsInviteCollaborators" xml:space="preserve">
+    <value>Invitați colaboratorii prin e-mail sau autentificare</value>
+  </data>
+  <data name="SettingsMakeOwner" xml:space="preserve">
+    <value>Faceți proprietar</value>
+  </data>
+  <data name="SettingsOwner" xml:space="preserve">
+    <value>proprietar</value>
+  </data>
+  <data name="SettingsPrivate" xml:space="preserve">
+    <value>Privat</value>
+  </data>
+  <data name="SettingsProvideExistingEmail" xml:space="preserve">
+    <value>Furnizați e-mailul sau autentificarea unui utilizator existent</value>
+  </data>
+  <data name="SettingsProvideValidEmail" xml:space="preserve">
+    <value>Furnizați un e-mail valid</value>
+  </data>
+  <data name="SettingsPublic" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="SettingsQuestionnaireName" xml:space="preserve">
+    <value>Numele chestionarului</value>
+  </data>
+  <data name="SettingsQuestionnaireSharing" xml:space="preserve">
+    <value>Realizați acest chestionar</value>
+  </data>
+  <data name="SettingsQuestionnaireVariable" xml:space="preserve">
+    <value>Variabila chestionarului</value>
+  </data>
+  <data name="SettingsRevokeAccess" xml:space="preserve">
+    <value>Revocați accesul</value>
+  </data>
+  <data name="SettingsShareEdit" xml:space="preserve">
+    <value>Editare</value>
+  </data>
+  <data name="SettingsShareView" xml:space="preserve">
+    <value>Vedere</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Setări</value>
+  </data>
+  <data name="SettingsVisibleToEveryone" xml:space="preserve">
+    <value>vizibil pentru toată lumea în mod citire</value>
+  </data>
+  <data name="SettingsVisibleToOwner" xml:space="preserve">
+    <value>vizibil numai pentru proprietar</value>
+  </data>
+  <data name="SettingsWhoHasAccess" xml:space="preserve">
+    <value>cine are acces</value>
+  </data>
+  <data name="ShowAsList" xml:space="preserve">
+    <value>Afișează ca listă de categorii</value>
+  </data>
+  <data name="ShowList" xml:space="preserve">
+    <value>Afișează lista</value>
+  </data>
+  <data name="SideBarAddMacro" xml:space="preserve">
+    <value>adăugați o funcție de tip macrocomandă nouă</value>
+  </data>
+  <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
+    <value>format: {{- type}}</value>
+  </data>
+  <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
+    <value>{{width}} × {{height}} px</value>
+  </data>
+  <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
+    <value>dimensiune: {{size}}</value>
+  </data>
+  <data name="SideBarAttachmentName" xml:space="preserve">
+    <value>numele atașamentului</value>
+  </data>
+  <data name="SideBarAttachmentNoName" xml:space="preserve">
+    <value>atașament fără nume</value>
+  </data>
+  <data name="SideBarAttachmentsCounter" xml:space="preserve">
+    <value>{{count}} Fișier atașat ({{bytes}} în total)</value>
+  </data>
+  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+    <value>{{count}} Fișiere atașate ({{bytes}} în total)</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
+    <value>Utilizează această filă pentru a încărca fișiere multimedia la care se poate face referire în chestionar.</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
+    <value>Pentru a evita sincronizarea lentă, vă recomandăm ca dimensiunea combinată a tuturor fișierelor atașate să nu depășească 2 MB. Pentru tipurile, formatele și dimensiunile de fișiere acceptate</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
+    <value>Pentru a face referire la un atașament din chestionar, adăugați un element de text static și specificați atașamentul {{-name}} în proprietatea sa de atașament.</value>
+  </data>
+  <data name="SideBarAttachmentsEstimate" xml:space="preserve">
+    <value>Timpul de încărcare estimat: {{timeString}} la {{downloadSpeed}} Kb/s (EDGE)</value>
+  </data>
+  <data name="SideBarAttachmentsTitle" xml:space="preserve">
+    <value>Atașamente</value>
+  </data>
+  <data name="SideBarAttachmentsUpload" xml:space="preserve">
+    <value>Încarcă</value>
+  </data>
+  <data name="SideBarAttachmentUploaded" xml:space="preserve">
+    <value>încărcat: {{-lastUpdate, MMMM DD [,] YYYY [la] k:mm}}</value>
+  </data>
+  <data name="SideBarCategoriesCounter" xml:space="preserve">
+    <value>{{count}} Variante de răspuns</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
+    <value>Utilizați această filă pentru a gestiona variantele de răspuns reutilizabile.</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
+    <value>Puteți descărca și încărca variante de răspuns.</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
+    <value>va fi afișat în lista variantelor de răspuns reutilizabile pentru orice tip de întrebări categorice.</value>
+  </data>
+  <data name="SideBarCategoriesName" xml:space="preserve">
+    <value>numele variantelor de răspuns</value>
+  </data>
+  <data name="SideBarCategoriesNoName" xml:space="preserve">
+    <value>variante de răspuns fără nume</value>
+  </data>
+  <data name="SideBarCategoriesTitle" xml:space="preserve">
+    <value>Variante de răspuns</value>
+  </data>
+  <data name="SideBarCategoriesUploadNew" xml:space="preserve">
+    <value>Încărcați variante de răspuns noi</value>
+  </data>
+  <data name="SideBarCommentsCounter" xml:space="preserve">
+    <value>{{count}} Flux de comentarii:</value>
+  </data>
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+    <value>{{count}} Fluxuri de comentarii:</value>
+  </data>
+  <data name="SideBarCommentsTitle" xml:space="preserve">
+    <value>Comentarii</value>
+  </data>
+  <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+    <value>Aici se vor vedea comentariile</value>
+  </data>
+  <data name="SideBarLookupEmptyLine1" xml:space="preserve">
+    <value>Utilizați această filă pentru a defini tabele de căutare.</value>
+  </data>
+  <data name="SideBarLookupEmptyLine2" xml:space="preserve">
+    <value>Un tabel de căutare oferă informații de referință care pot fi interogate folosind o cheie de căutare și utilizate în condiții de activare și expresii de validare.</value>
+  </data>
+  <data name="SideBarLookupEmptyLine3" xml:space="preserve">
+    <value>Un tabel de căutare constă dintr-un nume și un fișier de căutare, care poate conține mai multe coloane cu valori numerice separate prin caracterul TAB.</value>
+  </data>
+  <data name="SideBarLookupTableAdd" xml:space="preserve">
+    <value>ADAUGĂ O NOUĂ listă de căutare</value>
+  </data>
+  <data name="SideBarLookupTableDropFile" xml:space="preserve">
+    <value>Atașați fișierul aici</value>
+  </data>
+  <data name="SideBarLookupTableFileName" xml:space="preserve">
+    <value>nume de fișier</value>
+  </data>
+  <data name="SideBarLookupTableName" xml:space="preserve">
+    <value>numele tabelului</value>
+  </data>
+  <data name="SideBarLookupTableNoName" xml:space="preserve">
+    <value>tabel de căutare fără nume</value>
+  </data>
+  <data name="SideBarLookupTablesCounter" xml:space="preserve">
+    <value>{{count}} Tabel de căutare:</value>
+  </data>
+  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+    <value>{{count}} Tabelele de căutare:</value>
+  </data>
+  <data name="SideBarLookupTableSelectFile" xml:space="preserve">
+    <value>Selectați fișierul</value>
+  </data>
+  <data name="SideBarLookupTableUpdateFile" xml:space="preserve">
+    <value>Actualizați fișierul</value>
+  </data>
+  <data name="SideBarLookupTitle" xml:space="preserve">
+    <value>Căutați tabele</value>
+  </data>
+  <data name="SideBarMacroContent" xml:space="preserve">
+    <value>conţinut</value>
+  </data>
+  <data name="SideBarMacroCounter" xml:space="preserve">
+    <value>{{count}} Macrocomandă:</value>
+  </data>
+  <data name="SideBarMacroCounter_plural" xml:space="preserve">
+    <value>{{count}} Macrocomenzi:</value>
+  </data>
+  <data name="SideBarMacroDescription" xml:space="preserve">
+    <value>descriere</value>
+  </data>
+  <data name="SideBarMacroEmptyLine1" xml:space="preserve">
+    <value>Utilizați această filă pentru a defini substituțiile de tip macrocomandă.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine2" xml:space="preserve">
+    <value>O macrocomandă este o expresie numită care poate fi utilizată în condiții de activare și expresii de validare. O macrocomandă constă din nume și conținut.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine3" xml:space="preserve">
+    <value>poate fi folosit într-o expresie, pentru a face referire la macrocomandă.</value>
+  </data>
+  <data name="SideBarMacroHideDescription" xml:space="preserve">
+    <value>ascunde descrierea</value>
+  </data>
+  <data name="SideBarMacroName" xml:space="preserve">
+    <value>nume macrocomandă</value>
+  </data>
+  <data name="SideBarMacroNoName" xml:space="preserve">
+    <value>macrocomandă fără nume</value>
+  </data>
+  <data name="SideBarMacroShowDescription" xml:space="preserve">
+    <value>Adauga descriere</value>
+  </data>
+  <data name="SideBarMacroTitle" xml:space="preserve">
+    <value>Macrocomenzi</value>
+  </data>
+  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+    <value>Informații suplimentare</value>
+  </data>
+  <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+    <value>Sunteți de acord să faceți public acest chestionar</value>
+  </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>Informații de bază</value>
+  </data>
+  <data name="SideBarMetadataConsultants" xml:space="preserve">
+    <value>Consultanți:</value>
+  </data>
+  <data name="SideBarMetadataCountry" xml:space="preserve">
+    <value>Țară:</value>
+  </data>
+  <data name="SideBarMetadataCoverage" xml:space="preserve">
+    <value>Acoperire:</value>
+  </data>
+  <data name="SideBarMetadataFunding" xml:space="preserve">
+    <value>Finanțare:</value>
+  </data>
+  <data name="SideBarMetadataHeader" xml:space="preserve">
+    <value>Descrierea chestionarului și informații despre sondaj/anchetă</value>
+  </data>
+  <data name="SideBarMetadataKeywords" xml:space="preserve">
+    <value>Cuvinte cheie:</value>
+  </data>
+  <data name="SideBarMetadataKindOfData" xml:space="preserve">
+    <value>Tip de date:</value>
+  </data>
+  <data name="SideBarMetadataLanguages" xml:space="preserve">
+    <value>Limbi:</value>
+  </data>
+  <data name="SideBarMetadataModeOfDataCollection" xml:space="preserve">
+    <value>Mod de culegere a datelor:</value>
+  </data>
+  <data name="SideBarMetadataNotes" xml:space="preserve">
+    <value>Note:</value>
+  </data>
+  <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
+    <value>Investigator primar:</value>
+  </data>
+  <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
+    <value>Acces la chestionar</value>
+  </data>
+  <data name="SideBarMetadataStudyTypes" xml:space="preserve">
+    <value>Tipuri de studiu:</value>
+  </data>
+  <data name="SideBarMetadataSubtitle" xml:space="preserve">
+    <value>Subtitlu:</value>
+  </data>
+  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+    <value>Informații privind datele sondajului sau ale anchetei</value>
+  </data>
+  <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+    <value>Informații despre sondaj/anchetă</value>
+  </data>
+  <data name="SideBarMetadataTitle" xml:space="preserve">
+    <value>Descrierea chestionarului</value>
+  </data>
+  <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
+    <value>Unitate de analiză:</value>
+  </data>
+  <data name="SideBarMetadataUniverse" xml:space="preserve">
+    <value>Univers:</value>
+  </data>
+  <data name="SideBarMetadataVersionIdentificator" xml:space="preserve">
+    <value>Identificator de versiune:</value>
+  </data>
+  <data name="SideBarMetadataVersionNotes" xml:space="preserve">
+    <value>Note de versiune:</value>
+  </data>
+  <data name="SideBarMetadataYear" xml:space="preserve">
+    <value>An:</value>
+  </data>
+  <data name="SideBarScenarioCounter" xml:space="preserve">
+    <value>{{count}} Scenariu:</value>
+  </data>
+  <data name="SideBarScenarioCounter_plural" xml:space="preserve">
+    <value>{{count}} Scenarii:</value>
+  </data>
+  <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
+    <value>Utilizați această filă pentru a vizualiza scenariile dvs.</value>
+  </data>
+  <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
+    <value>Un scenariu este un instantaneu al stării testerului, îl puteți salva pe tester făcând clic pe butonul „Salvare scenariu”.</value>
+  </data>
+  <data name="SideBarScenarioName" xml:space="preserve">
+    <value>titlul scenariului</value>
+  </data>
+  <data name="SideBarScenarioTitle" xml:space="preserve">
+    <value>Scenarii</value>
+  </data>
+  <data name="SideBarSectionsCounter" xml:space="preserve">
+    <value>{{count}} Secțiune:</value>
+  </data>
+  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+    <value>{{count}} Secțiuni:</value>
+  </data>
+  <data name="SideBarSectionsTitle" xml:space="preserve">
+    <value>Secțiuni</value>
+  </data>
+  <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
+    <value>Descărcați în format xlsx</value>
+  </data>
+  <data name="SideBarTranslationGetTemplate" xml:space="preserve">
+    <value>Obțineți șablonul pentru</value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
+    <value>Excel (xlsx)</value>
+  </data>
+  <data name="SideBarTranslationName" xml:space="preserve">
+    <value>numele traducerii</value>
+  </data>
+  <data name="SideBarTranslationNoName" xml:space="preserve">
+    <value>traducere fără nume</value>
+  </data>
+  <data name="SideBarTranslationsCounter" xml:space="preserve">
+    <value>{{count}} Traducere</value>
+  </data>
+  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+    <value>{{count}} Traduceri</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
+    <value>Utilizați această filă pentru a gestiona traducerile chestionarului.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
+    <value>Puteți descărca și actualiza traduceri în diferite limbi.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
+    <value>Traducerea va fi aplicată textelor originale și va suprascrie valorile. Puteți lăsa unele texte goale pentru a utiliza traducerile originale implicite.</value>
+  </data>
+  <data name="SideBarTranslationsTitle" xml:space="preserve">
+    <value>Traduceri</value>
+  </data>
+  <data name="SideBarTranslationsUploadNew" xml:space="preserve">
+    <value>Încărcați o traducere nouă</value>
+  </data>
+  <data name="SourceOfCategories" xml:space="preserve">
+    <value>Sursa variantelor de răspuns</value>
+  </data>
+  <data name="StaticText" xml:space="preserve">
+    <value>Text static</value>
+  </data>
+  <data name="StaticTextAttachmentName" xml:space="preserve">
+    <value>Numele atașamentului</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="ToggleDropdown" xml:space="preserve">
+    <value>Comutați meniul derulant</value>
+  </data>
+  <data name="ToggleSearch" xml:space="preserve">
+    <value>Comutați căutarea</value>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="TranslationsObtained" xml:space="preserve">
+    <value>S-a obținut {0} rând din fișierul de traducere</value>
+  </data>
+  <data name="TranslationsObtained_plural" xml:space="preserve">
+    <value>S-au obținut {0} rânduri din fișierul de traducere</value>
+  </data>
+  <data name="TreeAddQuestion" xml:space="preserve">
+    <value>Adăugați o întrebare</value>
+  </data>
+  <data name="TreeAddQuestionAfter" xml:space="preserve">
+    <value>Adăugați o întrebare după</value>
+  </data>
+  <data name="TreeAddRoster" xml:space="preserve">
+    <value>Adăugați o listă</value>
+  </data>
+  <data name="TreeAddRosterAfter" xml:space="preserve">
+    <value>Adăugați o listă după</value>
+  </data>
+  <data name="TreeAddSection" xml:space="preserve">
+    <value>Adăugați o subsecțiune</value>
+  </data>
+  <data name="TreeAddSectionAfter" xml:space="preserve">
+    <value>Adăugați o subsecțiune după</value>
+  </data>
+  <data name="TreeAddStaticText" xml:space="preserve">
+    <value>Adăugați un text static</value>
+  </data>
+  <data name="TreeAddStaticTextAfter" xml:space="preserve">
+    <value>Adăugați un text static după</value>
+  </data>
+  <data name="TreeAddVariable" xml:space="preserve">
+    <value>Adăugați o variabilă</value>
+  </data>
+  <data name="TreeAddVariableAfter" xml:space="preserve">
+    <value>Adăugați o variabilă după</value>
+  </data>
+  <data name="TreeRoster" xml:space="preserve">
+    <value>listă:</value>
+  </data>
+  <data name="UnMarkAsDefault" xml:space="preserve">
+    <value>Nu utilizați ca implicit</value>
+  </data>
+  <data name="UnsavedChangesLeave" xml:space="preserve">
+    <value>Veți pierde modificările nesalvate dacă părăsiți această pagină</value>
+  </data>
+  <data name="UnsavedChangesReload" xml:space="preserve">
+    <value>Veți pierde modificările nesalvate dacă reîncărcați această pagină</value>
+  </data>
+  <data name="UntitledGroupOrRoster" xml:space="preserve">
+    <value>Subsecțiune sau listă fără titlu</value>
+  </data>
+  <data name="UntitledQuestion" xml:space="preserve">
+    <value>Intrebare fără titlu</value>
+  </data>
+  <data name="UntitledRoster" xml:space="preserve">
+    <value>Listă fără titlu</value>
+  </data>
+  <data name="UntitledSection" xml:space="preserve">
+    <value>Secțiune fără titlu</value>
+  </data>
+  <data name="UntitledStaticText" xml:space="preserve">
+    <value>Text static fără titlu</value>
+  </data>
+  <data name="UntitledVariable" xml:space="preserve">
+    <value>Variabilă fără titlu</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Actualizați</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Încărcare</value>
+  </data>
+  <data name="UserDefinedCategories" xml:space="preserve">
+    <value>Categorii definite de utilizator</value>
+  </data>
+  <data name="ValidationCondition" xml:space="preserve">
+    <value>Condiție de validare</value>
+  </data>
+  <data name="VariableExpression" xml:space="preserve">
+    <value>Expresie</value>
+  </data>
+  <data name="VariableLabel" xml:space="preserve">
+    <value>Etichetă variabilă</value>
+  </data>
+  <data name="VariableName" xml:space="preserve">
+    <value>nume</value>
+  </data>
+  <data name="VariableNoExport" xml:space="preserve">
+    <value>Nu se va exporta</value>
+  </data>
+  <data name="VariableType" xml:space="preserve">
+    <value>Tipul variabilei</value>
+  </data>
+  <data name="VariableVariableName" xml:space="preserve">
+    <value>Numele variabilei</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Vizualizare</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter" xml:space="preserve">
+    <value>Vizualizați toate {{count}} comentariile rezolvate</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
+    <value>Vizualizați toate {{count}} comentariile rezolvate</value>
+  </data>
+  <data name="VirtualCoverPage" xml:space="preserve">
+    <value>Pagina de copertă virtuală</value>
+  </data>
+  <data name="WarningsCounter" xml:space="preserve">
+    <value>{{count}} avertisment</value>
+  </data>
+  <data name="WarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} avertismente</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Da</value>
+  </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Eroare de rețea</value>
+  </data>
+  <data name="DataChangesReverted" xml:space="preserve">
+    <value>Schimbările de date au fost anulate</value>
+  </data>
+  <data name="DeleteItemCofirm" xml:space="preserve">
+    <value>Sigur doriți să ștergeți acest element?</value>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Editare element</value>
+  </data>
+  <data name="FileUploaded" xml:space="preserve">
+    <value>Fișier încărcat</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filtru</value>
+  </data>
+  <data name="HideParentValues" xml:space="preserve">
+    <value>Ascundere valori parent</value>
+  </data>
+  <data name="NewItem" xml:space="preserve">
+    <value>Element nou</value>
+  </data>
+  <data name="OptionsCascadingListError" xml:space="preserve">
+    <value>Ați introdus ceva nevalid. Fiecare linie trebuie să urmeze formatul: "Title...ParentValue/Value". "Value" și "ParentValue" trebuie să fie un număr întreg. Titlul trebuie să fie un șir alfa-numeric. Nu sunt permise linii goale.</value>
+  </data>
+  <data name="OptionsSizeLimit" xml:space="preserve">
+    <value>Maxim {{ max }} rânduri permise</value>
+  </data>
+  <data name="OptionsUploadRevert" xml:space="preserve">
+    <value>Reveniți la modificări</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Câmp necesar</value>
+  </data>
+  <data name="RowAdded" xml:space="preserve">
+    <value>Rând adăugat</value>
+  </data>
+  <data name="ShowParentValues" xml:space="preserve">
+    <value>Afișare valori Parent</value>
+  </data>
+  <data name="SideBarCategoriesAddNew" xml:space="preserve">
+    <value>Adăugare nouă categorie</value>
+  </data>
+  <data name="SideBarEditCategories" xml:space="preserve">
+    <value>Editare Variante de răspuns</value>
+  </data>
+  <data name="StringsView" xml:space="preserve">
+    <value>Vizualizare text</value>
+  </data>
+  <data name="TableView" xml:space="preserve">
+    <value>Vizualizare în tabel</value>
+  </data>
+  <data name="ValidationIntValue" xml:space="preserve">
+    <value>Valoarea este prea mare</value>
+  </data>
+</root>

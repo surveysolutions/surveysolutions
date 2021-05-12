@@ -41,6 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
             this.Property(x => x.PasswordHashSha1);
             this.Property(x => x.IsArchived);
             this.Property(x => x.FullName);
+            this.Property(x => x.PasswordChangeRequired, c => c.Column("password_change_required"));
 
             this.Property(x => x.TwoFactorEnabled);
 
@@ -101,6 +102,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
             }, rel => rel.ManyToMany(p => p.Column("\"RoleId\"")));
 
 
+            ManyToOne(x => x.WorkspaceProfile, oto =>
+            {
+                oto.Cascade(Cascade.None);
+                oto.Insert(false);
+                oto.Update(false);
+                oto.Lazy(LazyRelation.Proxy);
+                oto.Column("\"UserProfileId\"");
+            });
             ManyToOne(x => x.Profile, oto =>
             {
                 oto.Cascade(Cascade.All);

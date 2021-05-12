@@ -46,11 +46,9 @@ using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.AspNetCore;
 using WB.Infrastructure.AspNetCore.DataProtection;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.Infrastructure.Native.Workspaces;
 using WB.Persistence.Headquarters.Migrations.Logs;
 using WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
@@ -60,6 +58,7 @@ using WB.Persistence.Headquarters.Migrations.Users;
 using WB.Persistence.Headquarters.Migrations.Workspaces;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
+using WB.UI.Headquarters.Code.ResetPassword;
 using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers;
@@ -107,7 +106,7 @@ namespace WB.UI.Headquarters
             });
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            var unitOfWorkConnectionSettings = BuildUnitOfWorkSettings(connectionString);
+            var unitOfWorkConnectionSettings = BuildUnitOfWorkSettings(connectionString, Configuration);
 
             builder.RegisterAssemblyTypes(typeof(Startup).Assembly)
                 .Where(x => x?.Namespace?.Contains("Services.Impl") == true)
@@ -132,7 +131,8 @@ namespace WB.UI.Headquarters
                 );
         }
 
-        public static UnitOfWorkConnectionSettings BuildUnitOfWorkSettings(string connectionString)
+        public static UnitOfWorkConnectionSettings BuildUnitOfWorkSettings(string connectionString, 
+            IConfiguration configuration = null)
         {
             var mappingAssemblies = new List<Assembly>
             {
@@ -142,6 +142,7 @@ namespace WB.UI.Headquarters
 
             var unitOfWorkConnectionSettings = new UnitOfWorkConnectionSettings
             {
+                Configuration = configuration,
                 ConnectionString = connectionString,
                 ReadSideMappingAssemblies = mappingAssemblies,
                 PlainMappingAssemblies = new List<Assembly>
@@ -222,6 +223,7 @@ namespace WB.UI.Headquarters
                 {
                     options.AddPolicy("export", b => b
                         .WithOrigins(redirectUri)
+                        .AllowAnyHeader()
                         .WithMethods("POST")
                     );
                 }
@@ -282,9 +284,12 @@ namespace WB.UI.Headquarters
             services.AddTransient<ExportServiceApiConfigurator>();
             
             services.AddHttpClient();
-            services.AddWorkspaceAwareHttpClient<IExportServiceApi, 
-                ExportServiceApiConfigurator, 
-                ExportServiceApiHttpHandler>();
+            services.AddWorkspaceAwareHttpClient<IExportServiceApi,
+                ExportServiceApiConfigurator,
+                ExportServiceApiHttpHandler>(new RefitSettings
+            {
+                ContentSerializer = new NewtonsoftJsonContentSerializer()
+            });
 
             services.AddWorkspaceAwareHttpClient<IDesignerApi, 
                 DesignerApiConfigurator,
@@ -422,7 +427,8 @@ namespace WB.UI.Headquarters
                     new CultureInfo("ar"),
                     new CultureInfo("id"),
                     new CultureInfo("pt"),
-                    new CultureInfo("zh")
+                    new CultureInfo("zh"),
+                    new CultureInfo("ro")
                 };
             });
 
@@ -447,6 +453,7 @@ namespace WB.UI.Headquarters
             app.UseCors();
             app.UseAuthentication();
 
+            app.UseResetPasswordRedirect();
             app.UseRedirectIntoWorkspace();
 
             app.UseAuthorization();

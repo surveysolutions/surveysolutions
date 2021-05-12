@@ -1,10 +1,13 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -61,54 +64,70 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
         /// </summary>
         /// 
         /// <response code="201">Export started</response>
-        /// <response code="400">Questionnaire id is malformed</response>
-        /// <response code="404">Questionnaire was not found</response>
+        /// <response code="400">Request is malformed</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<ExportProcess>> PostExports([FromBody]CreateExportProcess request)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ExportProcess))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
+        public async Task<ActionResult<ExportProcess>> PostExports([FromBody, BindRequired]CreateExportProcess requestBody)
         {
-            if (!QuestionnaireIdentity.TryParse(request.QuestionnaireId, out var questionnaireIdentity))
-                return StatusCode(StatusCodes.Status400BadRequest, @"Invalid questionnaire identity");
+            if (!ModelState.IsValid)
+                return ValidationProblem();
+
+            if (!QuestionnaireIdentity.TryParse(requestBody.QuestionnaireId, out var questionnaireIdentity))
+            {
+                ModelState.AddModelError(nameof(requestBody.QuestionnaireId), "Invalid questionnaire identity");
+                return ValidationProblem();
+            }
 
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
             if (questionnaireBrowseItem == null)
-                return StatusCode(StatusCodes.Status404NotFound, @"Questionnaire not found");
+            {
+                ModelState.AddModelError(nameof(requestBody.QuestionnaireId), "Questionnaire not found");
+                return ValidationProblem();
+            }
 
             var password = this.exportSettings.EncryptionEnforced()
                 ? this.exportSettings.GetPassword()
                 : null;
 
-            if (request.TranslationId != null)
+            if (requestBody.TranslationId != null)
             {
                 var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
                 if (questionnaire == null)
                 {
-                    return StatusCode(StatusCodes.Status404NotFound, @"Questionnaire not found");
+                    ModelState.AddModelError(nameof(requestBody.QuestionnaireId), "Questionnaire not found");
+                    return ValidationProblem();
                 }
 
-                if (questionnaire.Translations.All(t => t.Id != request.TranslationId))
+                if (questionnaire.Translations.All(t => t.Id != requestBody.TranslationId))
                 {
-                    return StatusCode(StatusCodes.Status404NotFound, @"Translation not found");
+                    ModelState.AddModelError(nameof(requestBody.TranslationId), "Translation not found");
+                    return ValidationProblem();
                 }
             }
 
-            var interviewStatus = request.InterviewStatus == ExportInterviewType.All
-                ? (InterviewStatus?) null
-                : (InterviewStatus) request.InterviewStatus;
+            var interviewStatus = requestBody.InterviewStatus == ExportInterviewType.All
+                ? null
+                : (InterviewStatus?) requestBody.InterviewStatus;
+
+            var exportFormat = (DataExportFormat) requestBody.ExportType!;
             
             var result = await this.exportServiceApi.RequestUpdate(questionnaireIdentity.ToString(),
-                (DataExportFormat) request.ExportType, interviewStatus, request.From, request.To, password,
-                request.AccessToken, request.RefreshToken, 
-                (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) request.StorageType,
-                request.TranslationId,
-                request.IncludeMeta);
+                exportFormat, interviewStatus, 
+                requestBody.From, requestBody.To, password,
+                requestBody.AccessToken, requestBody.RefreshToken, 
+                (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) requestBody.StorageType,
+                requestBody.TranslationId,
+                requestBody.IncludeMeta);
 
             this.auditLog.ExportStared(
-                $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {request.InterviewStatus.ToString() ?? ""}",
-                (DataExportFormat) request.ExportType);
+                $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {requestBody.InterviewStatus.ToString() ?? ""}",
+                exportFormat);
 
             var createdExportProcess = await this.dataExportStatusReader.GetProcessStatus(result.JobId);
+            if (createdExportProcess == null)
+                throw new InvalidOperationException(@"Failed to create export process");
 
             return CreatedAtAction(nameof(GetExports), new {id = result.JobId}, ToExportProcess(createdExportProcess));
         }
@@ -123,6 +142,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
         [HttpGet("{id}")]
         public async Task<ActionResult<ExportProcess>> GetExports(long id)
         {
+            if (!ModelState.IsValid)
+                return StatusCode(StatusCodes.Status400BadRequest, 
+                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
+            
             var exportProcess = await this.dataExportStatusReader.GetProcessStatus(id);
             if (exportProcess == null) return NotFound();
 
@@ -144,9 +167,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             ExportInterviewType? interviewStatus, string questionnaireIdentity, ExportStatus? exportStatus,
             bool? hasFile, int? limit, int? offset)
         {
+            if (!ModelState.IsValid)
+                return StatusCode(StatusCodes.Status400BadRequest, 
+                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
+            
             var status = interviewStatus == ExportInterviewType.All ? null : (InterviewStatus?) interviewStatus;
 
-            string questionnaireId = null;
+            string? questionnaireId = null;
             if (!string.IsNullOrEmpty(questionnaireIdentity))
             {
                 questionnaireId = QuestionnaireIdentity.Parse(questionnaireIdentity).ToString();
@@ -167,12 +194,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
         [HttpDelete("{id}")]
         public async Task<ActionResult<ExportProcess>> CancelExports(long id)
         {
+            if (!ModelState.IsValid)
+                return StatusCode(StatusCodes.Status400BadRequest, 
+                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
+            
             var exportProcess = await this.dataExportStatusReader.GetProcessStatus(id);
             if (exportProcess == null) return NotFound();
 
             await this.exportServiceApi.DeleteProcess(id);
 
             exportProcess = await this.dataExportStatusReader.GetProcessStatus(id);
+            if (exportProcess == null) return NotFound();
 
             return this.Ok(ToExportProcess(exportProcess));
         }
@@ -190,6 +222,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
         [Route(@"{id}/file")]
         public async Task<ActionResult> GetExportFile(long id)
         {
+            if (!ModelState.IsValid)
+                return StatusCode(StatusCodes.Status400BadRequest, 
+                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
+            
             var exportProcess = await this.dataExportStatusReader.GetProcessStatus(id);
             if (exportProcess == null) return NotFound();
 
@@ -233,7 +269,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 Progress = exportProcess.Progress,
                 ExportType = (ExportType) exportProcess.Format,
                 ETA = exportProcess.TimeEstimation,
-                Error = exportProcess.Error?.Message,
+                Error = exportProcess.Error?.Message ?? String.Empty,
                 HasExportFile = exportProcess.HasFile,
                 InterviewStatus = exportProcess.InterviewStatus == null
                     ? ExportInterviewType.All
@@ -258,15 +294,18 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             /// <summary>
             /// Format of export data to download
             /// </summary>
-            public ExportType ExportType { get; set; }
+            [Required]
+            public ExportType? ExportType { get; set; } //nullable to avoid default value if not set in request
             /// <summary>
             /// Questionnaire id in format [QuestionnaireGuid$Version]
             /// </summary>
-            public string QuestionnaireId { get; set; }
+            [Required]
+            public string QuestionnaireId { get; set; } = String.Empty;
             /// <summary>
             /// Status of exported interviews
             /// </summary>
-            public ExportInterviewType InterviewStatus { get; set; }
+            [Required]
+            public ExportInterviewType? InterviewStatus { get; set; }
             /// <summary>
             /// Started date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date
             /// </summary>
@@ -278,11 +317,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             /// <summary>
             /// Access token to external storage
             /// </summary>
-            public string AccessToken { get; set; }
+            public string? AccessToken { get; set; } 
             /// <summary>
             /// Refresh token to external storage
             /// </summary>
-            public string RefreshToken { get; set; }
+            public string? RefreshToken { get; set; }
             /// <summary>
             /// External storage type
             /// </summary>
@@ -325,11 +364,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             /// <summary>
             /// 
             /// </summary>
-            public string Error { get; set; }
+            public string Error { get; set; } = String.Empty;
+
             /// <summary>
             /// Links for cancelling export process and downloading data file
             /// </summary>
-            public ExportJobLinks Links { get; set; }
+            public ExportJobLinks Links { get; set; } = new ExportJobLinks();
             /// <summary>
             /// True, if export process is finished and exported file ready for download, otherwise false 
             /// </summary>
@@ -341,11 +381,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             /// <summary>
             /// Link for cancelling export process
             /// </summary>
-            public string Cancel { get; set; }
+            public string Cancel { get; set; } = String.Empty;
             /// <summary>
             /// Link for downloading file with data
             /// </summary>
-            public string Download { get; set; }
+            public string Download { get; set; } = String.Empty;
         }
 
         public enum ExportType

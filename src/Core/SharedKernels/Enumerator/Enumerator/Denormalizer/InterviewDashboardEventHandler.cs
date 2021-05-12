@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -28,6 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<SynchronizationMetadataApplied>,
                                          IEventHandler<InterviewSynchronized>,
                                          IEventHandler<InterviewStatusChanged>,
+                                         IEventHandler<InterviewModeChanged>,
                                          IEventHandler<InterviewHardDeleted>,
                                          IEventHandler<InterviewerAssigned>,
                                          IEventHandler<SupervisorAssigned>,
@@ -58,26 +60,18 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<AreaQuestionAnswered>,
                                          IEventHandler<InterviewKeyAssigned>
     {
-        private readonly IPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
-        private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly IAnswerToStringConverter answerToStringConverter;
-        private readonly IAssignmentDocumentsStorage assignmentStorage;
-        private readonly ICalendarEventStorage calendarEventStorage;
+        private readonly IServiceLocator serviceLocator;
 
-        public InterviewDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository, 
-            IPlainStorage<PrefilledQuestionView> prefilledQuestions,
-            IQuestionnaireStorage questionnaireRepository,
-            IAnswerToStringConverter answerToStringConverter,
-            IAssignmentDocumentsStorage assignmentStorage,
-            ICalendarEventStorage calendarEventStorage)
+        private IPlainStorage<InterviewView> interviewViewRepository => serviceLocator.GetInstance<IPlainStorage<InterviewView>>();
+        private IPlainStorage<PrefilledQuestionView> prefilledQuestions => serviceLocator.GetInstance<IPlainStorage<PrefilledQuestionView>>();
+        private IQuestionnaireStorage questionnaireRepository => serviceLocator.GetInstance<IQuestionnaireStorage>();
+        private IAnswerToStringConverter answerToStringConverter => serviceLocator.GetInstance<IAnswerToStringConverter>();
+        private IAssignmentDocumentsStorage assignmentStorage => serviceLocator.GetInstance<IAssignmentDocumentsStorage>();
+        private ICalendarEventStorage calendarEventStorage => serviceLocator.GetInstance<ICalendarEventStorage>();
+
+        public InterviewDashboardEventHandler(IServiceLocator serviceLocator)
         {
-            this.interviewViewRepository = interviewViewRepository;
-            this.prefilledQuestions = prefilledQuestions;
-            this.questionnaireRepository = questionnaireRepository;
-            this.answerToStringConverter = answerToStringConverter;
-            this.assignmentStorage = assignmentStorage;
-            this.calendarEventStorage = calendarEventStorage;
+            this.serviceLocator = serviceLocator;
         }
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
@@ -669,6 +663,16 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 Answer = stringValue,
             };
             return prefilledView;
+        }
+
+        public void Handle(IPublishedEvent<InterviewModeChanged> evnt)
+        {
+            InterviewView interviewView = this.interviewViewRepository.GetById(evnt.EventSourceId.FormatGuid());
+            if (interviewView == null)
+                return;
+
+            interviewView.Mode = evnt.Payload.Mode;
+            this.interviewViewRepository.Store(interviewView);
         }
     }
 }

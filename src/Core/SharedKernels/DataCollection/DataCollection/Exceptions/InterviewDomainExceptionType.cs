@@ -2,8 +2,8 @@
 {
     public enum InterviewDomainExceptionType
     {
-        Undefined,
-        InterviewLimitReached,
+        Undefined = 0,
+        InterviewLimitReached = 1,
         QuestionnaireIsMissing,
         InterviewHardDeleted,
         OtherUserIsResponsible,
@@ -16,6 +16,8 @@
         PackageIsOudated,
         QuestionIsMissing,
         InterviewSizeLimitReached,
-        DuplicateCreationCommand
+        DuplicateCreationCommand,
+        QuestionnaireOutdated,
+        InterviewHasIncompatibleMode
     }
 }

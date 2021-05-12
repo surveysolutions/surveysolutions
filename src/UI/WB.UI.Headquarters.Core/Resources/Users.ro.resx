@@ -121,19 +121,19 @@
     <value>Data la care a fost creat contul</value>
   </data>
   <data name="AddAPIUser" xml:space="preserve">
-    <value>Adaugă utilizator API</value>
+    <value>Adaugare utilizator API</value>
   </data>
   <data name="AddHeadquarters" xml:space="preserve">
-    <value>Adaugă RINS</value>
+    <value>Adaugare coordonatori</value>
   </data>
   <data name="AddInterviewer" xml:space="preserve">
-    <value>Adaugă anchetator</value>
+    <value>Adaugare anchetator</value>
   </data>
   <data name="AddObserver" xml:space="preserve">
-    <value>Adaugă responsabil DTS</value>
+    <value>Adaugare observator</value>
   </data>
   <data name="AddSupervisor" xml:space="preserve">
-    <value>Adaugă controlor</value>
+    <value>Adaugare supervizor</value>
   </data>
   <data name="Admin" xml:space="preserve">
     <value>Administrator</value>
@@ -145,10 +145,10 @@
       <value>Utilizatori API  ({{count}})</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Arhiva controlorilor</value>
+    <value>Supervizori arhivați</value>
   </data>
   <data name="ArchivingStatusTitle" xml:space="preserve">
-    <value>Status arhivare</value>
+    <value>Stare Arhivare</value>
   </data>
   <data name="ClickToReturn" xml:space="preserve">
     <value>Faceți clic pentru a reveni la contul dvs.</value>
@@ -157,19 +157,19 @@
     <value>Creati un nou cont de Administrator pentru a încheia instalarea</value>
   </data>
   <data name="CreateAndTryLogin" xml:space="preserve">
-    <value>Creați și încercați să vă conectați</value>
+    <value>Creare și încercare de conectare</value>
   </data>
   <data name="CreateAPIUser" xml:space="preserve">
-    <value>Creați cont utilizator API</value>
+    <value>Creare utilizator API</value>
   </data>
   <data name="CreateHeadquarters" xml:space="preserve">
-    <value>Creați cont RINS</value>
+    <value>Creare Coordonatori</value>
   </data>
   <data name="CreateObserver" xml:space="preserve">
-    <value>Creați cont reponsabil DTS</value>
+    <value>Creare observator</value>
   </data>
   <data name="CreateSupervisor" xml:space="preserve">
-    <value>Creați cont controlor</value>
+    <value>Creare supervizor</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Cont creat pe</value>
@@ -187,16 +187,16 @@
     <value>Încheierea instalării</value>
   </data>
   <data name="HeadquarterAccountCreationDate" xml:space="preserve">
-    <value>Data la care a fost creat contul de RINS</value>
+    <value>Data la care a fost creat contul de coordonator</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
-    <value>RINS</value>
+    <value>Coordonatori</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
-      <value>RINS ({{count}})</value>
+      <value>Coordonatori ({{count}})</value>
   </data>
   <data name="HeadquartersEmail" xml:space="preserve">
-    <value>Email-ul  RINS</value>
+    <value>Email coordonatori</value>
   </data>
   <data name="ImpersonateAsUser" xml:space="preserve">
     <value>Permiteți utilizatorului accesul doar în mod citire</value>
@@ -226,43 +226,43 @@
     <value>Numărul de anchetatori în echipa </value>
   </data>
   <data name="Observer" xml:space="preserve">
-    <value>Responsabil DTS </value>
+    <value>Observator</value>
   </data>
   <data name="ObserverDisclaimerFormat" xml:space="preserve">
     <value>Acesta este conținutul pe care îl vede &lt;b&gt; {0} &lt;/ b&gt;.</value>
   </data>
   <data name="Observers" xml:space="preserve">
-    <value>Responsabili DTS </value>
+    <value>Observatori</value>
   </data>
   <data name="ObserversCountDescription" xml:space="preserve">
-      <value>Responsabil DTS ({{count}})</value>
+      <value>Observatori ({{count}})</value>
   </data>
   <data name="ObserversEmail" xml:space="preserve">
-    <value>E-mail responsabil DTS</value>
+    <value>E-mail Observator</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Elimină</value>
+    <value>Eliminare</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
-    <value>Controlor</value>
+    <value>Supervizor</value>
   </data>
   <data name="SupervisorAccountCreationDate" xml:space="preserve">
-    <value>Data la care a fost creat contul de controlor</value>
+    <value>Data la care a fost creat contul de supervizor</value>
   </data>
   <data name="SupervisorEmail" xml:space="preserve">
-    <value>E-mail controlor</value>
+    <value>E-mail supervizor</value>
   </data>
   <data name="Supervisors" xml:space="preserve">
-    <value>Responsabili</value>
+    <value>Supervizori</value>
   </data>
   <data name="Supervisors_Edit" xml:space="preserve">
-    <value>Editați controlori</value>
+    <value>Editare Supervizor</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
-      <value>Controlori ({{count}})</value>
+      <value>Supervizori ({{count}})</value>
   </data>
   <data name="SupervisorsInTeam" xml:space="preserve">
-    <value>controlorii din echipa dvs</value>
+    <value>supervizorii din echipa dvs</value>
   </data>
   <data name="TotalInterviewers" xml:space="preserve">
     <value>Total anchetatori</value>
@@ -272,5 +272,35 @@
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Nume de utilizator</value>
+  </data>
+  <data name="CreateAdministrator" xml:space="preserve">
+    <value>Creaare administrator</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Parola pentru utilizatorul {0} a fost schimbată</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Resetare parolă</value>
+  </data>
+  <data name="ResetPasswordTitle" xml:space="preserve">
+    <value>Resetare parolă utilizator</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Utilizatorul nu a fost găsit</value>
+  </data>
+  <data name="Filter_AllUsers" xml:space="preserve">
+    <value>Toți utilizatorii</value>
+  </data>
+  <data name="Filter_Archived" xml:space="preserve">
+    <value>Utilizatori arhivați</value>
+  </data>
+  <data name="Filter_Locked" xml:space="preserve">
+    <value>Utilizatori blocați</value>
+  </data>
+  <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
+    <value>Numai cu spații de lucru dezactivate</value>
+  </data>
+  <data name="Filter_WithMissingWorkspace" xml:space="preserve">
+    <value>Spațiile de lucru lipsesc</value>
   </data>
 </root>

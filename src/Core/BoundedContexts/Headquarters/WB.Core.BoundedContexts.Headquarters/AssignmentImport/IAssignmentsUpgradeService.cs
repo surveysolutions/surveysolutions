@@ -33,7 +33,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             MigrateTo = migrateTo;
             TotalAssignmentsToMigrate = totalAssignmentsToMigrate;
             AssignmentsMigratedSuccessfully = assignmentsMigratedSuccessfully;
-            AssignmentsMigratedWithError = assignmentsMigratedWithError ?? new List<AssignmentUpgradeError>();
+            this.assignmentsMigratedWithError = assignmentsMigratedWithError ?? new List<AssignmentUpgradeError>();
+            AssignmentsMigratedWithErrorCount = assignmentsMigratedWithError?.Count ?? 0;
+
             Status = status;
         }
 
@@ -42,8 +44,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         public int TotalAssignmentsToMigrate { get; }
         public int AssignmentsMigratedSuccessfully { get; }
-        public List<AssignmentUpgradeError> AssignmentsMigratedWithError { get; }
+        public int AssignmentsMigratedWithErrorCount { get; }
+        private List<AssignmentUpgradeError> assignmentsMigratedWithError { get; }
         public AssignmentUpgradeStatus Status { get; }
+
+        public List<AssignmentUpgradeError> GetAssignmentUpgradeErrors() => assignmentsMigratedWithError;
     }
 
     public enum AssignmentUpgradeStatus
@@ -51,7 +56,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         Queued = 1,
         InProgress = 2,
         Done = 3,
-        Cancelled = 4
+        Cancelled = 4,
+        Error = 5
     }
 
     public class AssignmentUpgradeError

@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -219,7 +220,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 interviewerId: Guid.NewGuid(),
                 interviewKey: null,
                 assignmentId: null,
-                isAudioRecordingEnabled:false));
+                isAudioRecordingEnabled:false,
+                mode: InterviewMode.CAPI));
 
             return interviewId;
         }

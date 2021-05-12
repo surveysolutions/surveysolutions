@@ -245,7 +245,7 @@
 
     </HqLayout>
 </template>
-<style>
+<style scoped>
 .progress {
     margin: 15px;
 }

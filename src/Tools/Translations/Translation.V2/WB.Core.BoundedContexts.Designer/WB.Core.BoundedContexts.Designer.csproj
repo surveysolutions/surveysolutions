@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{750DBA55-A3A4-43B1-987E-5ABF10CC7933}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.Core.BoundedContexts.Designer</RootNamespace>
+    <AssemblyName>WB.Core.BoundedContexts.Designer</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.Designer.cs">
+      <Link>Resources\Common.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Country.Designer.cs">
+      <Link>Resources\Country.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.Designer.cs">
+      <Link>Resources\ExceptionMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.ru.Designer.cs">
+      <Link>Resources\ExceptionMessages.ru.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.Designer.cs">
+      <Link>Resources\KindOfData.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ModeOfDataCollection.Designer.cs">
+      <Link>Resources\ModeOfDataCollection.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.Designer.cs">
+      <Link>Resources\PdfStrings.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.Designer.cs">
+      <Link>Resources\QuestionnaireEditor.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.Designer.cs">
+      <Link>Resources\Roster.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.Designer.cs">
+      <Link>Resources\StudyType.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.Designer.cs">
+      <Link>Resources\VerificationMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.ar.resx">
+      <Link>Resources\Common.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.fr.resx">
+      <Link>Resources\Common.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.resx">
+      <Link>Resources\Common.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.ro.resx">
+      <Link>Resources\Common.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.ru.resx">
+      <Link>Resources\Common.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.sq.resx">
+      <Link>Resources\Common.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.zh.resx">
+      <Link>Resources\Common.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Country.ar.resx">
+      <Link>Resources\Country.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Country.resx">
+      <Link>Resources\Country.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Country.ro.resx">
+      <Link>Resources\Country.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Country.ru.resx">
+      <Link>Resources\Country.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Country.zh.resx">
+      <Link>Resources\Country.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.ar.resx">
+      <Link>Resources\ExceptionMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.es.resx">
+      <Link>Resources\ExceptionMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.fr.resx">
+      <Link>Resources\ExceptionMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx">
+      <Link>Resources\ExceptionMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.ro.resx">
+      <Link>Resources\ExceptionMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.ru.resx">
+      <Link>Resources\ExceptionMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.sq.resx">
+      <Link>Resources\ExceptionMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.zh.resx">
+      <Link>Resources\ExceptionMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.ar.resx">
+      <Link>Resources\KindOfData.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.resx">
+      <Link>Resources\KindOfData.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.ro.resx">
+      <Link>Resources\KindOfData.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.ru.resx">
+      <Link>Resources\KindOfData.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.sq.resx">
+      <Link>Resources\KindOfData.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.zh.resx">
+      <Link>Resources\KindOfData.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ModeOfDataCollection.ar.resx">
+      <Link>Resources\ModeOfDataCollection.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ModeOfDataCollection.resx">
+      <Link>Resources\ModeOfDataCollection.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ModeOfDataCollection.ro.resx">
+      <Link>Resources\ModeOfDataCollection.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ModeOfDataCollection.ru.resx">
+      <Link>Resources\ModeOfDataCollection.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.ar.resx">
+      <Link>Resources\PdfStrings.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.es.resx">
+      <Link>Resources\PdfStrings.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.fr.resx">
+      <Link>Resources\PdfStrings.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx">
+      <Link>Resources\PdfStrings.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.ro.resx">
+      <Link>Resources\PdfStrings.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.ru.resx">
+      <Link>Resources\PdfStrings.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.sq.resx">
+      <Link>Resources\PdfStrings.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.zh.resx">
+      <Link>Resources\PdfStrings.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.ar.resx">
+      <Link>Resources\QuestionnaireEditor.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.es.resx">
+      <Link>Resources\QuestionnaireEditor.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.fr.resx">
+      <Link>Resources\QuestionnaireEditor.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.resx">
+      <Link>Resources\QuestionnaireEditor.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.ro.resx">
+      <Link>Resources\QuestionnaireEditor.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.ru.resx">
+      <Link>Resources\QuestionnaireEditor.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.sq.resx">
+      <Link>Resources\QuestionnaireEditor.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.zh.resx">
+      <Link>Resources\QuestionnaireEditor.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.ar.resx">
+      <Link>Resources\Roster.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.es.resx">
+      <Link>Resources\Roster.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.fr.resx">
+      <Link>Resources\Roster.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.resx">
+      <Link>Resources\Roster.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.ro.resx">
+      <Link>Resources\Roster.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.ru.resx">
+      <Link>Resources\Roster.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.sq.resx">
+      <Link>Resources\Roster.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.zh.resx">
+      <Link>Resources\Roster.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.ar.resx">
+      <Link>Resources\StudyType.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.resx">
+      <Link>Resources\StudyType.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.ro.resx">
+      <Link>Resources\StudyType.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.ru.resx">
+      <Link>Resources\StudyType.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.sq.resx">
+      <Link>Resources\StudyType.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.zh.resx">
+      <Link>Resources\StudyType.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.ar.resx">
+      <Link>Resources\VerificationMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.es.resx">
+      <Link>Resources\VerificationMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.fr.resx">
+      <Link>Resources\VerificationMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx">
+      <Link>Resources\VerificationMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.ro.resx">
+      <Link>Resources\VerificationMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.ru.resx">
+      <Link>Resources\VerificationMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.sq.resx">
+      <Link>Resources\VerificationMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.zh.resx">
+      <Link>Resources\VerificationMessages.zh.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

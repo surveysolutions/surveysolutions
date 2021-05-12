@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarter.
+        ///   Looks up a localized string similar to Headquarters.
         /// </summary>
         public static string UserRoles_Headquarter {
             get {
@@ -232,6 +232,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invitation.
+        /// </summary>
+        public static string WebInterviewUserMessages_LinkInvitation {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_LinkInvitation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome Header.
+        /// </summary>
+        public static string WebInterviewUserMessages_LinkWelcome {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_LinkWelcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resume.
+        /// </summary>
+        public static string WebInterviewUserMessages_ResumeButton {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_ResumeButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resume Invitation.
         /// </summary>
         public static string WebInterviewUserMessages_ResumeInvitation {
@@ -246,6 +273,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string WebInterviewUserMessages_ResumeWelcome {
             get {
                 return ResourceManager.GetString("WebInterviewUserMessages_ResumeWelcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start new interview.
+        /// </summary>
+        public static string WebInterviewUserMessages_StartNewButton {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_StartNewButton", resourceCulture);
             }
         }
         

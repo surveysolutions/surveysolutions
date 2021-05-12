@@ -256,4 +256,13 @@
   <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
     <value>Вложить в письмо Pdf с ответами</value>
   </data>
+  <data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
+    <value>Разрешить Интервьюверу переключать CAWI режим</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
+    <value>Текст показанный пользователям, что пришли на ещё не синхронизированное интервью по ссылке</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
+    <value>Заголовок страницы </value>
+  </data>
 </root>

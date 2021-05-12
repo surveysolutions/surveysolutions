@@ -133,9 +133,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
         }
 
-        public T Execute<T>(Func<IServiceLocator, T> func)
+        public T Execute<T>(Func<IServiceLocator, T> func, string workspace = null)
         {
-            using var scope = CreateChildContainer();
+            using var scope = CreateChildContainer(workspace);
             var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
 
             var result = func(serviceLocatorLocal);

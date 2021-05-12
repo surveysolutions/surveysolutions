@@ -77,7 +77,7 @@ namespace WB.Core.Infrastructure.Domain
             action(lifetimeScope);
         }
 
-        public T Execute<T>(Func<IServiceLocator, T> func)
+        public T Execute<T>(Func<IServiceLocator, T> func, string workspace = null)
         {
             return func(lifetimeScope);
         }

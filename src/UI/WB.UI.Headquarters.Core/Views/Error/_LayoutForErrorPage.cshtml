@@ -365,7 +365,7 @@
         <a href="/Account/LogOff">@Common.Logoff</a>
     }
 
-    @if (!string.IsNullOrWhiteSpace(returnUrl))
+    @if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
     {
         <a href="@returnUrl" style="float: right">@Common.Return</a>
     }

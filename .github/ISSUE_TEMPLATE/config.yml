@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Feature Suggestions
+    url: https://forum.mysurvey.solutions/c/feature-suggestions
+    about: Suggest a feature
+  - name: Documentation
+    url: https://docs.mysurvey.solutions
+    about: Check out our docs
+  - name: User Forum
+    url: https://forum.mysurvey.solutions
+    about: Join the community

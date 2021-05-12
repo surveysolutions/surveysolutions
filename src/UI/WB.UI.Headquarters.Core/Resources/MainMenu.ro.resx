@@ -139,7 +139,7 @@
     <value>Dispozitive/anchetatori</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
-    <value>RINS</value>
+    <value>Coordonatori</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Ajutor</value>
@@ -157,7 +157,7 @@
     <value>Hărți</value>
   </data>
   <data name="Observers" xml:space="preserve">
-    <value>Responsabili DTS</value>
+    <value>Observatori</value>
   </data>
   <data name="Quantity" xml:space="preserve">
     <value>Cantitate</value>
@@ -169,7 +169,7 @@
     <value>Numărul de interviuri sincronizate dar care nu au fost încă procesate</value>
   </data>
   <data name="Rejected" xml:space="preserve">
-    <value>Respins</value>
+    <value>Respinse</value>
   </data>
   <data name="Reports" xml:space="preserve">
     <value>Rapoarte</value>
@@ -178,16 +178,16 @@
     <value>Viteză</value>
   </data>
   <data name="Started" xml:space="preserve">
-    <value>Început</value>
+    <value>Începute</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
-    <value>Durată status</value>
+    <value>Durată stare</value>
   </data>
   <data name="Supervisors" xml:space="preserve">
-    <value>Controlori</value>
+    <value>Supervizori</value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Anchete și statusuri</value>
+    <value>Anchete și stări</value>
   </data>
   <data name="SurveySetup" xml:space="preserve">
     <value>Setarea anchetei</value>
@@ -199,13 +199,13 @@
     <value>Echipa și rolurile</value>
   </data>
   <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>Membrii echipei și statusurile</value>
+    <value>Membrii echipei și stările</value>
   </data>
   <data name="TeamsAndRoles" xml:space="preserve">
     <value>Echipe și roluri</value>
   </data>
   <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>Echipe și statusuri</value>
+    <value>Echipe și stări</value>
   </data>
   <data name="Troubleshooting" xml:space="preserve">
     <value>Rezolvarea problemelor</value>
@@ -215,5 +215,17 @@
   </data>
   <data name="Users" xml:space="preserve">
     <value>Utilizatori</value>
+  </data>
+  <data name="Administration" xml:space="preserve">
+    <value>Administrare</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Tabou de bord hartă</value>
+  </data>
+  <data name="ServerAdministration" xml:space="preserve">
+    <value>Administrare server</value>
+  </data>
+  <data name="Workspaces" xml:space="preserve">
+    <value>Spații de lucru</value>
   </data>
 </root>

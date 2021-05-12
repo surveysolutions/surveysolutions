@@ -184,7 +184,7 @@
     <value>Aucune connexion au serveur. Vérifier l'adresse du serveur et (ou) la connexion.</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Erreur de serveur. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions.</value>
+    <value>Erreur de serveur. Veuillez contacter votre administrateur de serveur.</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>L'adresse web de l'application Supervisor n'est pas valide. Assurez-vous d'avoir composé la bonne adresse.</value>

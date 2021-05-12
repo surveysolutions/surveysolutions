@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -34,6 +35,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         QuestionType GetQuestionType(Guid questionId);
 
+        VariableType GetVariableVariableType(Guid questionId);
+
         QuestionScope GetQuestionScope(Guid questionId);
 
         AnswerType GetAnswerType(Guid questionId);
@@ -41,7 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsQuestionLinked(Guid questionId);
 
         bool IsLinkedToListQuestion(Guid questionId);
-
+        bool IsUsingExpressionStorage();
         Guid[] GetQuestionsLinkedToRoster();
 
         Guid[] GetQuestionsLinkedToQuestion();
@@ -108,6 +111,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         ReadOnlyCollection<Guid> GetPrefilledQuestions();
         
         ReadOnlyCollection<Guid> GetPrefilledEntities();
+
+        HashSet<int> GetIdentifyingMappedEntities();
 
         ReadOnlyCollection<Guid> GetHiddenQuestions();
 
@@ -286,7 +291,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasStaticText(Guid entityId);
         Guid GetFirstSectionId();
         IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId);
-        bool IsUsingExpressionStorage();
 
         List<Guid> GetExpressionsPlayOrder();
         bool SupportsExpressionsGraph();

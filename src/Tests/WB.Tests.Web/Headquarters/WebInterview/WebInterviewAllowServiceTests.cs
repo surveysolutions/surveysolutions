@@ -86,12 +86,17 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             if (interviewStatus.HasValue)
             {
                 interview = Create.AggregateRoot.StatefulInterview(interviewId, userId: responsibleId, supervisorId: teamLeadId);
-                var @event = Create.PublishedEvent.SynchronizationMetadataApplied(userId: responsibleId.FormatGuid(),
+                var @event = Create.PublishedEvent.SynchronizationMetadataApplied(
+                    userId: responsibleId.FormatGuid(),
                     status: interviewStatus.Value);
                 interview.Apply(@event.Payload);
                 this.statefulInterviewRepo.Setup(r => r.Get(interviewId.FormatGuid())).Returns(interview);
                 
                 webInterviewConfig.Started = webInterviewEnabled;
+                if (webInterviewEnabled)
+                {
+                    interview.Apply(Create.PublishedEvent.InterviewModeChanged(userId: responsibleId.FormatGuid()).Payload);
+                }
             }
         }
 

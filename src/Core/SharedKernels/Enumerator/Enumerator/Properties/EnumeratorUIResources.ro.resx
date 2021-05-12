@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
-    <value>Contul dvs. Este blocat. Contactați supervizorul.</value>
+    <value>Contul dvs. este blocat. Contactați supervizorul.</value>
   </data>
   <data name="AccountIsNotAnInterviewer" xml:space="preserve">
     <value>Contul dvs nu are rol de anchetator.</value>
@@ -166,7 +166,7 @@
     <value>De colectat: nelimitat</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
-    <value>Chetionar unic</value>
+    <value>Chestionar unic</value>
   </data>
   <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
     <value>Creare Nou</value>
@@ -178,7 +178,7 @@
     <value>Finalizate ({0})</value>
   </data>
   <data name="Dashboard_CompletedTabText" xml:space="preserve">
-    <value>Chetionarele finalizate vor fi încărcate în timpul următoarei sincronizări</value>
+    <value>Chestionarele finalizate vor fi încărcate în timpul următoarei sincronizări</value>
   </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
     <value>Creare chestionar nou utilizând șabloane</value>
@@ -208,7 +208,7 @@
     <value>Nu aveți sarcini noi</value>
   </data>
   <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
-    <value>Niciun item nou</value>
+    <value>Nimic nou</value>
   </data>
   <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
     <value>Nimic găsit</value>
@@ -242,7 +242,7 @@ Trebuie să rezolvați problemele menționate pe copertă</value>
     <value>{0} elemente găsite</value>
   </data>
   <data name="Dashboard_SearchWatermark" xml:space="preserve">
-    <value>Introduceți text pentru căutare</value>
+    <value>Introducere text pentru căutare</value>
   </data>
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Ieșire din Căutare</value>
@@ -264,7 +264,7 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Începere chestionar nou</value>
   </data>
   <data name="Dashboard_Title" xml:space="preserve">
-    <value>{0} sarcini pentru {1}</value>
+    <value>{0} chestionare pentru {1}</value>
   </data>
   <data name="Dashboard_ViewIssues" xml:space="preserve">
     <value>Vizualizare Probleme</value>
@@ -387,7 +387,7 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Nu aveți acces prin Internet la serverul dvs. Verificați adresa serverului și (sau) setările de rețea</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Eroare de server.  Vă rugăm să contactați echipa de suport la support@mysurvey.solutions</value>
+    <value>Eroare de server. Vă rugăm să contactați administratorul serverului.</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>Încărcare</value>
@@ -642,7 +642,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Contul dvs. a fost realocat pe o altă tabletă</value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Problemă de autentificare. Datele de logare nu pot fi confirmate ('{0}'). Contul dvs. poate avea o altă parolă; poate fi șters sau blocat. Reintroduceți parola. Dacă problema persistă, contactați supervizorul</value>
+    <value>Problemă de autentificare. Datele de logare nu pot fi confirmate ('{0}'). Contul dvs. poate avea o altă parolă; poate fi șters sau blocat. Reintroduceți parola. Dacă problema persistă, contactați Supervizorul</value>
   </data>
   <data name="Troubleshooting_Backup" xml:space="preserve">
     <value>Creare copie de siguranță</value>
@@ -734,4 +734,222 @@ pentru instrucțiuni suplimentare</value>
   <data name="Warning" xml:space="preserve">
     <value>Atenționare</value>
   </data>
-</root>
+  <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>Sincronizarea sarcinilor</value>
+  </data>
+  <data name="Dashboard_Assign" xml:space="preserve">
+    <value>Alocă</value>
+  </data>
+  <data name="Dashboard_Searching" xml:space="preserve">
+    <value>Căutare ...</value>
+  </data>
+  <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
+    <value>Aprobat de Supervizor la {0}</value>
+  </data>
+  <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
+    <value>Respinse de Coordonatori la {0}</value>
+  </data>
+  <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>Responsabil: {0}</value>
+  </data>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>Salvați toate informațiile relevante în fișierul de pe acest dispozitiv.</value>
+  </data>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>Generați pachetul de asistență</value>
+  </data>
+  <data name="Diagnostics_SendLogs" xml:space="preserve">
+    <value>Trimiteți jurnale de urmărire</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Description" xml:space="preserve">
+    <value>Trimiteți jurnale detaliate la coordonatori pentru investigarea problemelor</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
+    <value>Jurnalele sunt trimise la HQ</value>
+  </data>
+  <data name="FailedToLoadInterviewDescription" xml:space="preserve">
+    <value>Cazul interviului este incorect și nu poate fi deschis. Contactați asistența sau încercați să sincronizați pentru a reîmprospăta cazurile.</value>
+  </data>
+  <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
+    <value>A apărut o eroare la scanare</value>
+  </data>
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>Versiunea aplicației acceptată de Coorodnatori: {0}</value>
+  </data>
+  <data name="Interview_Creating" xml:space="preserve">
+    <value>Crearea interviului</value>
+  </data>
+  <data name="Interview_Creating_Description" xml:space="preserve">
+    <value>„Acest lucru poate dura câteva minute, 
+nu închideți această aplicație”</value>
+  </data>
+  <data name="Interview_Loading_Description" xml:space="preserve">
+    <value>Interviul va începe imediat</value>
+  </data>
+  <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>Anchetatorul face parte dintr-o altă echipă. Vă rugăm să vă sincronizați cu Coordonatorii.</value>
+  </data>
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>Versiunea aplicației Anchetator: {0}</value>
+  </data>
+  <data name="InvalidEndpointShort" xml:space="preserve">
+    <value>Adresa este incorectă</value>
+  </data>
+  <data name="LocationPermissionRequired" xml:space="preserve">
+    <value>Pentru sincronizarea offline este necesară permisiunea de localizare</value>
+  </data>
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>Tablou de bord hartă</value>
+  </data>
+  <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>Sincronizarea hărților</value>
+  </data>
+  <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
+    <value>Ați finalizat {0} interviuri care trebuie sincronizate</value>
+  </data>
+  <data name="Notifications_InterviewsTitle" xml:space="preserve">
+    <value>Interviuri</value>
+  </data>
+  <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
+    <value>Aveți foarte multe interviuri finalizate. Vă rugăm să le sincronizați.</value>
+  </data>
+  <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
+    <value>Ați început prea multe interviuri. Vă rugăm să le completați.</value>
+  </data>
+  <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
+    <value>Aveți {0} interviuri respinse care nu au fost revăzute</value>
+  </data>
+  <data name="Notifications_StaleAssignments" xml:space="preserve">
+    <value>Unele sarcini nu au fost actualizate în ultimele 3 zile.</value>
+  </data>
+  <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
+    <value>Nu a existat nicio reîncercare după sincronizarea eșuată. Vă rugăm să încercați din nou</value>
+  </data>
+  <data name="Notifications_SyncTitle" xml:space="preserve">
+    <value>Sincronizare</value>
+  </data>
+  <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
+    <value>Sincronizarea nu a fost efectuată în ultima vreme. Vă rugăm să sincronizați</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
+    <value>Permiteți sincronizarea cu Coordonatorii</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
+    <value>Dezactivați această setare dacă doriți să sincronizați numai cu aplicația mobilă de Supervizor. După prima sincronizare reușită cu aplicația Supervizor, nu va fi posibilă reactivarea acestei setări</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>Nu este posibilă sincronizarea cu Coordonatorii odată ce a existat cel puțin o sincronizare reușită cu aplicația de Supervizor</value>
+  </data>
+  <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="SelectResponsible_Reassign" xml:space="preserve">
+    <value>Reatribuiți</value>
+  </data>
+  <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+    <value>Reatribuiți</value>
+  </data>
+  <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+    <value>Selectați noul responsabil pentru interviu.
+Va apărea pe dispozitivul Anchetator după următoarea sincronizare </value>
+  </data>
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>Versiune aplicație Supervizor: {0}</value>
+  </data>
+  <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+    <value>Verificați dacă există interviuri învechite</value>
+  </data>
+  <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} din {1} chestionare descărcate parțial</value>
+  </data>
+  <data name="Synchronization_LinkToErrors" xml:space="preserve">
+    <value>Mai multe informații despre erorile de sincronizare pot fi găsite pe &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt; site-ul de asistență &lt;/a&gt;</value>
+  </data>
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>Sincronizarea anchetatorilor</value>
+  </data>
+  <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>Sincronizarea anchetatorului {0} din {1} anchetatori</value>
+  </data>
+  <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
+    <value>Sincronizarea detaliilor Supervizorului</value>
+  </data>
+  <data name="Synchronization_PartialInterviews" xml:space="preserve">
+    <value>schimbările de interviu</value>
+  </data>
+  <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
+    <value>Primirea a {0}</value>
+  </data>
+  <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
+    <value>Primirea informațiilor de audit</value>
+  </data>
+  <data name="Synchronization_SendingApplication_Description" xml:space="preserve">
+    <value>Se trimite {0} din {1} la {2} ({3}%)</value>
+  </data>
+  <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} chestionare actualizate</value>
+  </data>
+  <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
+    <value>{0} chestionare încărcate parțial</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>Supervizorul ar trebui să aibă întotdeauna cele mai recente modificări de la Coordonatori, deci ar trebui sincronizat ultima dată în echipă înainte ca sincronizarea offline să fie disponibilă</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>Aplicația de supraveghere trebuie sincronizată.</value>
+  </data>
+  <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
+    <value>Actualizarea interviurilor locale cu modificări de la server</value>
+  </data>
+  <data name="Synchronization_UploadingApplication" xml:space="preserve">
+    <value>Trimiterea actualizărilor aplicației</value>
+  </data>
+  <data name="Synchronization_UploadingLogo" xml:space="preserve">
+    <value>Se încarcă sigla</value>
+  </data>
+  <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
+    <value>Utilizatorul nu mai aparține acestei echipe de Supervizori. Vă rugăm să contactați Coordonatorii pentru detalii.</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
+    <value>Utilizatorul actual a fost creat pe o altă instanță a aplicației Coordonator. Schimbați adresa URL a punctului final de sincronizare pe serverul original</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
+    <value>Utilizator conectat la alt server</value>
+  </data>
+  <data name="TransferringAssignments" xml:space="preserve">
+    <value>Transferarea sarcinilor</value>
+  </data>
+  <data name="UpdatingQuestionnaires" xml:space="preserve">
+    <value>Actualizarea chestionarului</value>
+  </data>
+  <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+    <value>Adăugați un eveniment din calendar</value>
+  </data>
+  <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+    <value>Adăugați un eveniment calendar</value>
+  </data>
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>Data selectată este în trecut</value>
+  </data>
+  <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>Timpul selectat este în trecut</value>
+  </data>
+  <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>Ștergeți evenimentul calendar</value>
+  </data>
+  <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>Următorul contact: {0}</value>
+  </data>
+  <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>Actualizare evenimente calendar</value>
+  </data>
+  <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>evenimente calendar</value>
+  </data>
+  <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+    <value>Contul dvs. nu mai este activ pe acest server, deoarece spațiul de lucru în care este definit a fost dezactivat de administrator. Vă rugăm să contactați supervizorul.</value>
+  </data>
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>Transferarea evenimentelor calendar</value>
+  </data>
+  </root>

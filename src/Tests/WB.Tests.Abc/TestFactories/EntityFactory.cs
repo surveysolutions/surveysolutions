@@ -551,7 +551,8 @@ namespace WB.Tests.Abc.TestFactories
                 CanBeDeleted = canBeDeleted ?? true,
                 ResponsibleId = responsibleId.GetValueOrDefault(),
                 ReceivedByInterviewerAtUtc = receivedByInterviewerAt,
-                FromHqSyncDateTime = fromHqSyncDateTime
+                FromHqSyncDateTime = fromHqSyncDateTime,
+                Mode = InterviewMode.CAPI
             };
         }
 
@@ -1305,9 +1306,9 @@ namespace WB.Tests.Abc.TestFactories
                 IsLockedByHeadquaters = isLockedByHQ,
                 FullName = string.Empty,
                 IsLockedBySupervisor = lockedBySupervisor,
+                WorkspaceProfile = new WorkspaceUserProfile(),
                 Profile = new HqUserProfile
                 {
-                    SupervisorId = supervisorId,
                     DeviceId = deviceId,
                     DeviceAppBuildVersion = interviewerBuild,
                     DeviceAppVersion = interviewerVersion
@@ -1319,12 +1320,18 @@ namespace WB.Tests.Abc.TestFactories
                 SecurityStamp = securityStamp ?? Guid.NewGuid().ToString()
             };
 
+            var userProfile = user.WorkspaceProfile.AsDynamic();
+            userProfile.SupervisorId = supervisorId;
+            userProfile.DeviceId = deviceId;
+            userProfile.DeviceAppBuildVersion = interviewerBuild;
+            userProfile.DeviceAppVersion = interviewerVersion;
+
             workspaces ??= new[] {WorkspaceConstants.DefaultWorkspaceName};
 
             foreach (var workspace in workspaces)
             {
                 var ws = new Workspace(workspace, workspace);
-                user.Workspaces.Add(new WorkspacesUsers(ws, user));
+                user.Workspaces.Add(new WorkspacesUsers(ws, user, supervisorId != null ? new HqUser{Id = supervisorId.Value}: null));
             }
             
             return user;
@@ -1352,8 +1359,8 @@ namespace WB.Tests.Abc.TestFactories
             => new UserLight(userId ?? Guid.NewGuid(), "test");
 
         public UserToImport UserToImport(
-            string login = "test", string supervisor = "", string password = "P@$$w0rd$", string email = "", string phoneNumber = "",
-            string role = null, string fullName = null)
+            string login = "test", string supervisor = "", string password = "P@$$w0rd$less", string email = "", string phoneNumber = "",
+            string role = null, string fullName = null, string workspace = null)
             => new UserToImport
             {
                 Login = login,
@@ -1362,7 +1369,8 @@ namespace WB.Tests.Abc.TestFactories
                 Password = password,
                 Email = email,
                 PhoneNumber = phoneNumber,
-                FullName = fullName 
+                FullName = fullName,
+                Workspace = workspace,
             };
 
         public UserPreloadingSettings UserPreloadingSettings()
@@ -1781,7 +1789,7 @@ namespace WB.Tests.Abc.TestFactories
             int? quantity = null,
             Guid? assigneeSupervisorId = null,
             string responsibleName = null,
-            ISet<InterviewSummary> interviewSummary = null,
+            IEnumerable<InterviewSummary> interviewSummary = null,
             string questionnaireTitle = null, 
             DateTime? updatedAt = null,
             Guid? responsibleId = null,
@@ -1809,7 +1817,7 @@ namespace WB.Tests.Abc.TestFactories
             };
             readonlyUser.RoleIds.Add(UserRoles.Interviewer.ToUserId());
 
-            var readonlyProfile = new HqUserProfile();
+            var readonlyProfile = new WorkspaceUserProfile();
             readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
             result.AsDynamic().Responsible = readonlyUser;
 
@@ -1835,7 +1843,7 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             if(interviewSummary != null)
-                result.AsDynamic().InterviewSummaries = interviewSummary;
+                result.AsDynamic().InterviewSummaries =  new HashSet<InterviewSummary>(interviewSummary);
             if (responsibleId.HasValue)
             {
                 result.ResponsibleId = responsibleId.Value;

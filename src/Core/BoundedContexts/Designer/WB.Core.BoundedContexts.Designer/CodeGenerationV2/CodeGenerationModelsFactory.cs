@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Mo
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2

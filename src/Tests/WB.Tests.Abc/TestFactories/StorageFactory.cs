@@ -4,6 +4,7 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using Main.Core.Documents;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 
 using Moq;
@@ -101,10 +102,9 @@ namespace WB.Tests.Abc.TestFactories
         public AmazonS3ExternalFileStorage AmazonS3ExternalFileStorage(
             IAmazonS3Configuration s3Settings, 
             IAmazonS3 client, 
-            ITransferUtility transferUtility, 
-            ILoggerProvider loggerProvider)
+            ITransferUtility transferUtility)
         { 
-            return new AmazonS3ExternalFileStorage(s3Settings, client, transferUtility, loggerProvider);
+            return new AmazonS3ExternalFileStorage(s3Settings, client, transferUtility, new NullLogger<AmazonS3ExternalFileStorage>());
         }
 
         public IPlainStorage<TEntity> SqliteInmemoryStorage<TEntity>(params TEntity[] items)
@@ -167,7 +167,7 @@ namespace WB.Tests.Abc.TestFactories
             IQuestionnaireTranslator translator = null,
             IQuestionOptionsRepository questionOptionsRepository = null,
             ISubstitutionService substitutionService = null,
-            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider = null,
+            IInterviewExpressionStorageProvider expressionStorageProvider = null,
             IMemoryCache memoryCache = null)
         {
             return new QuestionnaireStorage(
@@ -176,7 +176,7 @@ namespace WB.Tests.Abc.TestFactories
                 translator ?? Create.Service.QuestionnaireTranslator(),
                 questionOptionsRepository ?? QuestionOptionsRepository(new SqliteInmemoryStorage<OptionView, int?>()),
                 substitutionService ?? Create.Service.SubstitutionService(),
-                expressionStatePrototypeProvider ?? Create.Service.ExpressionStatePrototypeProvider(),
+                expressionStorageProvider ?? Mock.Of<IInterviewExpressionStorageProvider>(),
                 memoryCache ?? new MemoryCache(Options.Create(new MemoryCacheOptions()))
                 );            
         }

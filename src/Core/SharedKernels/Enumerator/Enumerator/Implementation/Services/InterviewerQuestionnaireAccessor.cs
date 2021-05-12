@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -134,6 +133,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.translationsStorage.Store(translationInstances);
         }
 
+        public void UpdateQuestionnaireWebModeSwitch(List<QuestionnaireIdentity> enabledQuestionnaires)
+        {
+            var questionnaires = this.questionnaireViewRepository.LoadAll();
+            foreach (var questionnaire in questionnaires)
+            {
+                questionnaire.WebModeAllowed = enabledQuestionnaires.Contains(questionnaire.GetIdentity());
+            }
+            this.questionnaireViewRepository.Store(questionnaires);
+        }
+
         private void RemoveTranslations(QuestionnaireIdentity questionnaireIdentity)
         {
             string questionnaireId = questionnaireIdentity.ToString();
@@ -142,13 +151,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 this.translationsStorage.Where(x => x.QuestionnaireId == questionnaireId);
 
             this.translationsStorage.Remove(storedTranslations);
-        }
-
-        public List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities()
-        {
-            return this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census)
-                    .Select(questionnaire => QuestionnaireIdentity.Parse(questionnaire.Id))
-                    .ToList();
         }
 
         public List<QuestionnaireIdentity> GetAllQuestionnaireIdentities()

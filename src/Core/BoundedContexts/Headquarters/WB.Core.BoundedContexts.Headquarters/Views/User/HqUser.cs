@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
@@ -37,6 +39,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
     public class HqUserClaim : IdentityUserClaim<Guid>
     {
+        public static HqUserClaim FromClaim(Claim claim)
+        {
+            var hqClaim = new HqUserClaim();
+            hqClaim.InitializeFromClaim(claim);
+            return hqClaim;
+        }
     }
 
     public class HqRole : IdentityRole<Guid>
@@ -62,6 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         }
 
         public virtual HqUserProfile Profile { get; set; }
+        public virtual WorkspaceUserProfile WorkspaceProfile { get; set; }
 
         public virtual string FullName { get; set; }
 
@@ -69,6 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual bool IsLockedBySupervisor{get; set; }
         public virtual bool IsLockedByHeadquaters { get; set; }
 
+        public virtual bool IsLocked => IsLockedByHeadquaters || IsLockedBySupervisor;
         public virtual bool IsArchivedOrLocked => IsArchived || IsLockedByHeadquaters || IsLockedBySupervisor;
 
         public virtual DateTime CreationDate { get; set; }
@@ -95,6 +105,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual ICollection<DeviceSyncInfo> DeviceSyncInfos { get; set; }
         
         public virtual ISet<WorkspacesUsers> Workspaces { get; protected set; }
+        
+        public virtual bool PasswordChangeRequired { get; set; }
+
+        public virtual UserRoles Role => this.Roles.First().Id.ToUserRole();
     }
 
     public class HqUserToken : IdentityUserToken<Guid>
@@ -112,7 +126,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual int Id { get; set; }
         public virtual string DeviceId { get; set; }
         public virtual DateTime? DeviceRegistrationDate { get; set; }
-        public virtual Guid? SupervisorId { get; set; }
         public virtual string DeviceAppVersion { get; set; }
         public virtual int? DeviceAppBuildVersion { get; set; }
         public virtual long? StorageFreeInBytes { get; set; }

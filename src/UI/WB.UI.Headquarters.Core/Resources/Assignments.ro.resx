@@ -163,10 +163,10 @@
     <value>Câmpul Mărime trebuie să fie de -1 sau mai mult.</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
-    <value>{{count}} Interviu alocat va fi schimbat</value>
+    <value>{{count}} sarcină va fi schimbată</value>
   </data>
   <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
-    <value>{{count}} Interviuri alocate vor fi schimbate</value>
+    <value>{{count}} sarcini vor fi schimbate</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Chestionar</value>
@@ -181,7 +181,7 @@
     <value>Selectați responsabil</value>
   </data>
   <data name="ShowArchived" xml:space="preserve">
-    <value>Status arhivat</value>
+    <value>Starea arhivării</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Mărime </value>
@@ -263,5 +263,245 @@
   </data>
   <data name="UpgradeProgressTitle" xml:space="preserve">
     <value>Actualizarea interviurilor alocate de la {{from}} la {{to}}</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Acțiune</value>
+  </data>
+  <data name="Action_Archived" xml:space="preserve">
+    <value>Arhivat</value>
+  </data>
+  <data name="Action_AudioRecordingChanged" xml:space="preserve">
+    <value>Înregistrarea audio s-a schimbat</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+    <value>Înregistrarea audio este dezactivată</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+    <value>Înregistrarea audio este activată</value>
+  </data>
+  <data name="Action_Created" xml:space="preserve">
+    <value>Creat</value>
+  </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>Comentariu: {{comment}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>Atribuit către {{responsible}}</value>
+  </data>
+  <data name="Action_Deleted" xml:space="preserve">
+    <value>Șters</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Dimensiunea s-a schimbat</value>
+  </data>
+  <data name="Action_QuantityChanged_To" xml:space="preserve">
+    <value>Dimensiunea s-a schimbat în {{quantity}}</value>
+  </data>
+  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
+    <value>Dimensiunea a devenit nelimitată</value>
+  </data>
+  <data name="Action_Reassigned" xml:space="preserve">
+    <value>Reatribuit</value>
+  </data>
+  <data name="Action_Reassigned_To" xml:space="preserve">
+    <value>Reatribuit la {{newResponsible}}</value>
+  </data>
+  <data name="Action_ReceivedByTablet" xml:space="preserve">
+    <value>Primit de tabletă</value>
+  </data>
+  <data name="Action_UnArchived" xml:space="preserve">
+    <value>Dezarhivat</value>
+  </data>
+  <data name="Action_WebModeChanged" xml:space="preserve">
+    <value>Modul Web s-a schimbat</value>
+  </data>
+  <data name="Action_WebModeChanged_False" xml:space="preserve">
+    <value>Modul Web este dezactivat</value>
+  </data>
+  <data name="Action_WebModeChanged_True" xml:space="preserve">
+    <value>Modul Web este activat</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>Activat</value>
+  </data>
+  <data name="CawiActivated" xml:space="preserve">
+    <value>CAWI Activat</value>
+  </data>
+  <data name="Actor" xml:space="preserve">
+    <value>De către </value>
+  </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>Sarcina nr. {{id}} nu poate fi închisă deoarece are modul web activat</value>
+  </data>
+  <data name="AssignmentHistory" xml:space="preserve">
+    <value>Istorie</value>
+  </data>
+  <data name="AssignmentId" xml:space="preserve">
+    <value>Numărul sarcinii</value>
+  </data>
+  <data name="AssignmentInfo" xml:space="preserve">
+    <value>Informații detaliate despre alocarea interviului</value>
+  </data>
+  <data name="AssignmentSizeInWebMode" xml:space="preserve">
+    <value>Dimensiunea nu poate fi modificată pentru sarcinile în mod web</value>
+  </data>
+  <data name="AssignTo" xml:space="preserve">
+    <value>Se atribuie lui</value>
+  </data>
+  <data name="AudioRecordingEnable" xml:space="preserve">
+    <value>Activați înregistrarea audio</value>
+  </data>
+  <data name="AudioRecordingExplanation" xml:space="preserve">
+    <value>Aplicația Interviewer va înregistra sunetul interviului atunci când auditul audio este activat. Cantitatea de date de sincronizare ar fi semnificativ mai mare.</value>
+  </data>
+  <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+    <value>Setări de înregistrare audio pentru atribuire {{id}}</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Închide</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Comentariu</value>
+  </data>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>Selectați responsabilul (coordonatorii sau supervizorul sau anchetatorul) pentru această sarcină</value>
+  </data>
+  <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+    <value>Această sarcină va fi utilizată în modul Web</value>
+  </data>
+  <data name="CreatingNewAssignment" xml:space="preserve">
+    <value>Creați o nouă sarcină pentru chestionarul {{questionnaire}}</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="Details_Column" xml:space="preserve">
+    <value>Detalii</value>
+  </data>
+  <data name="DetailsComments" xml:space="preserve">
+    <value>Comentariu</value>
+  </data>
+  <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+    <value>Parola prin atribuire pentru modul web cu cantitatea 1 ar trebui să fie unică</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="EmailExplanation" xml:space="preserve">
+    <value>E-mailul va fi utilizat în comunicarea cu destinatarul sarcinii</value>
+  </data>
+  <data name="EnterComments" xml:space="preserve">
+    <value>Introduceți comentariul dvs. aici</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>Introduceți adresa de email</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Introduceți parola</value>
+  </data>
+  <data name="ErrorToCreateAssignment" xml:space="preserve">
+    <value>Sarcina nu poate fi creată.</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Adresa de e-mail este incorectă</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Parola este incorectă</value>
+  </data>
+  <data name="InvalidSizeMessage" xml:space="preserve">
+    <value>Mărimea este incorectă</value>
+  </data>
+  <data name="InvalidSizeWithEmail" xml:space="preserve">
+    <value>Pentru sarcini cu e-mail furnizat, dimensiunea permisă este 1</value>
+  </data>
+  <data name="IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Înregistrare audio</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>Cele {{count}} sarcini selectate vor fi închise. Dimensiunea va fi setată la numărul de interviuri colectate în prezent.</value>
+  </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>Sarcină nouă</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="PasswordExplanation" xml:space="preserve">
+    <value>Parola va fi utilizată pentru a proteja sarcina</value>
+  </data>
+  <data name="PasswordInstructions" xml:space="preserve">
+    <value>Cel puțin 6 cifre și litere mari sau un singur simbol „?” pentru a genera parola</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>ver. {{version}}</value>
+  </data>
+  <data name="ReceivedByTablet" xml:space="preserve">
+    <value>Primit de tabletă</value>
+  </data>
+  <data name="ReceivedByTablet_All" xml:space="preserve">
+    <value>Arata tot</value>
+  </data>
+  <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+    <value>Nu a fost primit de tabletă</value>
+  </data>
+  <data name="ReceivedByTablet_Received" xml:space="preserve">
+    <value>Primit de tabletă</value>
+  </data>
+  <data name="ResponsibleRequired" xml:space="preserve">
+    <value>Este necesară desemnarea unui responsabil</value>
+  </data>
+  <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>Dimensiunea sarcinii {{id}} selectate va fi modificată din {{quantity}} în {{collected}} (numărul de interviuri colectate în prezent)</value>
+  </data>
+  <data name="SizeForWebMode" xml:space="preserve">
+    <value>Sarcina cu dimensiunea 1 pentru modul web ar trebui să conțină e-mail sau parolă</value>
+  </data>
+  <data name="SizeInstructions" xml:space="preserve">
+    <value>Trebuie să fie un număr, -1 pentru nelimitat, 1 dacă este specificat un e-mail</value>
+  </data>
+  <data name="StartWebInterview" xml:space="preserve">
+    <value>Începeți interviul web</value>
+  </data>
+  <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+    <value>Selectați o versiune a chestionarului pentru a vedea sarcinile asociate. Selectați „Toate versiunile” pentru a vedea sarcinile asociate cu orice versiune a chestionarului selectat.</value>
+  </data>
+  <data name="Tooltip_Filter_Received" xml:space="preserve">
+    <value>Indicator dacă sarcina a fost primită sau nu</value>
+  </data>
+  <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Înregistrați procesul de interviu</value>
+  </data>
+  <data name="Tooltip_Table_WebMode" xml:space="preserve">
+    <value>Sarcina a fost creată în modul Web</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Modul</value>
+  </data>
+  <data name="WebModeNonInterviewer" xml:space="preserve">
+    <value>Toate sarcinile pentru interviuri web trebuie alocate unor anchetatori</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+    <value>Reatribuiți sarcina web unui utilizator care nu este ANCHETATOR. Dacă ați trimis deja linkul pentru această sarcină, respondenții nu vor putea răspunde la sondajul dvs. până când sarcina nu va fi returnată unui utilizator în rolul ANCHETATOR.</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer_plural" xml:space="preserve">
+    <value>Reatribuiți sarcini web unui utilizator care nu este ANCHETATOR. Dacă ați trimis deja linkurile pentru aceste sarcini, respondenții nu vor putea răspunde la sondajul dvs. până când sarcinile nu vor fi returnate unui utilizator în rolul ANCHETATOR.</value>
+  </data>
+  <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+    <value>Comentariu: {{comment}}</value>
+  </data>
+  <data name="DateFromPast" xml:space="preserve">
+    <value>Data selectată este în trecut</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>(fără comentarii)</value>
+  </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>A apărut o eroare. Încercați mai târziu.</value>
+  </data>
+  <data name="UpgradeProgressErrors" xml:space="preserve">
+    <value>Cu erori {{errorCount}}</value>
+  </data>
+  <data name="WebModeEnabledWarning" xml:space="preserve">
+    <value>Sarcina nu poate fi terminată. Are modul web activat, în timp ce chestionarul are modul de colectare web dezactivat</value>
   </data>
 </root>

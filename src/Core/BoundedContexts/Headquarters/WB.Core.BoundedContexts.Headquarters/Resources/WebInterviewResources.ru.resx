@@ -154,4 +154,13 @@
   <data name="ResumeInterview" xml:space="preserve">
     <value>Продолжить интевью</value>
   </data>
+  <data name="LinkInvitation" xml:space="preserve">
+    <value>Вы были приглашены для участия в следующем опросе: "%QUESTIONNAIRE%". Ваше интервью ещё не готово.</value>
+  </data>
+  <data name="LinkToInterviewPage" xml:space="preserve">
+    <value>Веб Интервью</value>
+  </data>
+  <data name="LinkWelcome" xml:space="preserve">
+    <value>Здравствуйте и Добро пожаловать в Survey Solutions Web Survey</value>
+  </data>
 </root>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -166,7 +166,7 @@
     <value>Принимать все SSL сертификаты</value>
   </data>
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>Невозможно открыть опросник {0}. Ваша учетная запись не авторизирована. Пожалуйста, проверьте ваши логин и пароль</value>
+    <value>Невозможно открыть опросник "{0}". Ваша учетная запись не авторизирована. Пожалуйста, проверьте ваши логин и пароль.</value>
   </data>
   <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
     <value>Скачиваем опросник - {0}%</value>
@@ -187,7 +187,7 @@
     <value>Невозможно открыть опросник {0}. Опросник не найден. Обновите список опросников, пожалуйста.</value>
   </data>
   <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
-    <value>Версия:  {0}</value>
+    <value>Версия: {0}</value>
   </data>
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
     <value>Невозможно открыть опросник {0}. Опросник содержит ошибки. Исправьте, пожалуйста, их в Survey Solutions Designer.</value>
@@ -222,5 +222,4 @@
   <data name="Login_Error_EmptyName" xml:space="preserve">
     <value>Введите имя</value>
   </data>
-
 </root>

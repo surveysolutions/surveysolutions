@@ -1,0 +1,1205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{ED549250-8C3B-400B-8C69-A204DCF9E807}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.UI.Headquarters</RootNamespace>
+    <AssemblyName>WB.UI.Headquarters</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.Designer.cs">
+      <Link>Resources\Archived.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.Designer.cs">
+      <Link>Resources\Assignments.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\AuditLog.Designer.cs">
+      <Link>Resources\AuditLog.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\BatchUpload.Designer.cs">
+      <Link>Resources\BatchUpload.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.designer.cs">
+      <Link>Resources\Common.designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.designer.cs">
+      <Link>Resources\Dashboard.designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DataTables.Designer.cs">
+      <Link>Resources\DataTables.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Details.Designer.cs">
+      <Link>Resources\Details.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.Designer.cs">
+      <Link>Resources\DevicesInterviewers.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Diagnostics.Designer.cs">
+      <Link>Resources\Diagnostics.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.Designer.cs">
+      <Link>Resources\EnumNames.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.Designer.cs">
+      <Link>Resources\FieldsAndValidations.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.designer.cs">
+      <Link>Resources\HQ.designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ImportQuestionnaire.Designer.cs">
+      <Link>Resources\ImportQuestionnaire.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.ar.Designer.cs">
+      <Link>Resources\Interviews.ar.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.Designer.cs">
+      <Link>Resources\Interviews.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.es.Designer.cs">
+      <Link>Resources\Interviews.es.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.fr.Designer.cs">
+      <Link>Resources\Interviews.fr.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.ka.Designer.cs">
+      <Link>Resources\Interviews.ka.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.pt.Designer.cs">
+      <Link>Resources\Interviews.pt.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.ro.Designer.cs">
+      <Link>Resources\Interviews.ro.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.ru.Designer.cs">
+      <Link>Resources\Interviews.ru.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.sq.Designer.cs">
+      <Link>Resources\Interviews.sq.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.zh.Designer.cs">
+      <Link>Resources\Interviews.zh.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.Designer.cs">
+      <Link>Resources\LoginToDesigner.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.Designer.cs">
+      <Link>Resources\MainMenu.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.Designer.cs">
+      <Link>Resources\MapReport.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Maps.designer.cs">
+      <Link>Resources\Maps.designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\OutdatedBrowser.Designer.cs">
+      <Link>Resources\OutdatedBrowser.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.Designer.cs">
+      <Link>Resources\Pages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.Designer.cs">
+      <Link>Resources\PeriodicStatusReport.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireClonning.designer.cs">
+      <Link>Resources\QuestionnaireClonning.designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireImport.Designer.cs">
+      <Link>Resources\QuestionnaireImport.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.designer.cs">
+      <Link>Resources\Reports.designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ReviewInterview.Designer.cs">
+      <Link>Resources\ReviewInterview.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Roles.Designer.cs">
+      <Link>Resources\Roles.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.Designer.cs">
+      <Link>Resources\Settings.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.Designer.cs">
+      <Link>Resources\SyncLogMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletLogs.Designer.cs">
+      <Link>Resources\TabletLogs.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.Designer.cs">
+      <Link>Resources\TabletSyncMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.Designer.cs">
+      <Link>Resources\Troubleshooting.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UnderConstruction.Designer.cs">
+      <Link>Resources\UnderConstruction.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UploadUsers.Designer.cs">
+      <Link>Resources\UploadUsers.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UserPreloadingVerificationMessages.Designer.cs">
+      <Link>Resources\UserPreloadingVerificationMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.Designer.cs">
+      <Link>Resources\Users.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSettings.Designer.cs">
+      <Link>Resources\WebInterviewSettings.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSetup.Designer.cs">
+      <Link>Resources\WebInterviewSetup.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.Designer.cs">
+      <Link>Resources\WebInterviewUI.Designer.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.ar.resx">
+      <Link>Resources\Archived.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.es.resx">
+      <Link>Resources\Archived.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.fr.resx">
+      <Link>Resources\Archived.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.ka.resx">
+      <Link>Resources\Archived.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.pt.resx">
+      <Link>Resources\Archived.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.resx">
+      <Link>Resources\Archived.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.ro.resx">
+      <Link>Resources\Archived.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.ru.resx">
+      <Link>Resources\Archived.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.sq.resx">
+      <Link>Resources\Archived.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.zh.resx">
+      <Link>Resources\Archived.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.ar.resx">
+      <Link>Resources\Assignments.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.es.resx">
+      <Link>Resources\Assignments.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.fr.resx">
+      <Link>Resources\Assignments.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.ka.resx">
+      <Link>Resources\Assignments.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.pt.resx">
+      <Link>Resources\Assignments.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.resx">
+      <Link>Resources\Assignments.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.ro.resx">
+      <Link>Resources\Assignments.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.ru.resx">
+      <Link>Resources\Assignments.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.sq.resx">
+      <Link>Resources\Assignments.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.zh.resx">
+      <Link>Resources\Assignments.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\AuditLog.ar.resx">
+      <Link>Resources\AuditLog.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\AuditLog.es.resx">
+      <Link>Resources\AuditLog.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\AuditLog.fr.resx">
+      <Link>Resources\AuditLog.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\AuditLog.resx">
+      <Link>Resources\AuditLog.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\AuditLog.ro.resx">
+      <Link>Resources\AuditLog.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\AuditLog.ru.resx">
+      <Link>Resources\AuditLog.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\AuditLog.sq.resx">
+      <Link>Resources\AuditLog.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\AuditLog.zh.resx">
+      <Link>Resources\AuditLog.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\BatchUpload.ar.resx">
+      <Link>Resources\BatchUpload.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\BatchUpload.es.resx">
+      <Link>Resources\BatchUpload.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\BatchUpload.fr.resx">
+      <Link>Resources\BatchUpload.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\BatchUpload.ka.resx">
+      <Link>Resources\BatchUpload.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\BatchUpload.pt.resx">
+      <Link>Resources\BatchUpload.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\BatchUpload.resx">
+      <Link>Resources\BatchUpload.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\BatchUpload.ro.resx">
+      <Link>Resources\BatchUpload.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\BatchUpload.ru.resx">
+      <Link>Resources\BatchUpload.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\BatchUpload.zh.resx">
+      <Link>Resources\BatchUpload.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.ar.resx">
+      <Link>Resources\Common.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.es.resx">
+      <Link>Resources\Common.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.fr.resx">
+      <Link>Resources\Common.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.ka.resx">
+      <Link>Resources\Common.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.pt.resx">
+      <Link>Resources\Common.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.resx">
+      <Link>Resources\Common.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.ro.resx">
+      <Link>Resources\Common.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.ru.resx">
+      <Link>Resources\Common.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.sq.resx">
+      <Link>Resources\Common.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.zh.resx">
+      <Link>Resources\Common.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.ar.resx">
+      <Link>Resources\Dashboard.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.es.resx">
+      <Link>Resources\Dashboard.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.fr.resx">
+      <Link>Resources\Dashboard.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.ka.resx">
+      <Link>Resources\Dashboard.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.pt.resx">
+      <Link>Resources\Dashboard.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.resx">
+      <Link>Resources\Dashboard.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.ro.resx">
+      <Link>Resources\Dashboard.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.ru.resx">
+      <Link>Resources\Dashboard.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.sq.resx">
+      <Link>Resources\Dashboard.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.zh.resx">
+      <Link>Resources\Dashboard.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DataTables.ar.resx">
+      <Link>Resources\DataTables.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DataTables.es.resx">
+      <Link>Resources\DataTables.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DataTables.fr.resx">
+      <Link>Resources\DataTables.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DataTables.ka.resx">
+      <Link>Resources\DataTables.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DataTables.resx">
+      <Link>Resources\DataTables.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DataTables.ro.resx">
+      <Link>Resources\DataTables.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DataTables.ru.resx">
+      <Link>Resources\DataTables.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DataTables.sq.resx">
+      <Link>Resources\DataTables.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DataTables.zh.resx">
+      <Link>Resources\DataTables.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Details.ar.resx">
+      <Link>Resources\Details.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Details.es.resx">
+      <Link>Resources\Details.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Details.fr.resx">
+      <Link>Resources\Details.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Details.ka.resx">
+      <Link>Resources\Details.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Details.resx">
+      <Link>Resources\Details.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Details.ro.resx">
+      <Link>Resources\Details.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Details.ru.resx">
+      <Link>Resources\Details.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Details.sq.resx">
+      <Link>Resources\Details.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Details.zh.resx">
+      <Link>Resources\Details.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.ar.resx">
+      <Link>Resources\DevicesInterviewers.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.es.resx">
+      <Link>Resources\DevicesInterviewers.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.fr.resx">
+      <Link>Resources\DevicesInterviewers.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.ka.resx">
+      <Link>Resources\DevicesInterviewers.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.resx">
+      <Link>Resources\DevicesInterviewers.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.ro.resx">
+      <Link>Resources\DevicesInterviewers.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.ru.resx">
+      <Link>Resources\DevicesInterviewers.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.sq.resx">
+      <Link>Resources\DevicesInterviewers.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.zh.resx">
+      <Link>Resources\DevicesInterviewers.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Diagnostics.resx">
+      <Link>Resources\Diagnostics.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Diagnostics.ro.resx">
+      <Link>Resources\Diagnostics.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Diagnostics.ru.resx">
+      <Link>Resources\Diagnostics.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.ar.resx">
+      <Link>Resources\EnumNames.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.es.resx">
+      <Link>Resources\EnumNames.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.fr.resx">
+      <Link>Resources\EnumNames.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.ka.resx">
+      <Link>Resources\EnumNames.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.pt.resx">
+      <Link>Resources\EnumNames.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.resx">
+      <Link>Resources\EnumNames.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.ro.resx">
+      <Link>Resources\EnumNames.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.ru.resx">
+      <Link>Resources\EnumNames.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.sq.resx">
+      <Link>Resources\EnumNames.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.zh.resx">
+      <Link>Resources\EnumNames.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.ar.resx">
+      <Link>Resources\FieldsAndValidations.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.es.resx">
+      <Link>Resources\FieldsAndValidations.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.fr.resx">
+      <Link>Resources\FieldsAndValidations.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.ka.resx">
+      <Link>Resources\FieldsAndValidations.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.pt.resx">
+      <Link>Resources\FieldsAndValidations.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.resx">
+      <Link>Resources\FieldsAndValidations.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.ro.resx">
+      <Link>Resources\FieldsAndValidations.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.ru.resx">
+      <Link>Resources\FieldsAndValidations.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.sq.resx">
+      <Link>Resources\FieldsAndValidations.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.zh.resx">
+      <Link>Resources\FieldsAndValidations.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.ar.resx">
+      <Link>Resources\HQ.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.es.resx">
+      <Link>Resources\HQ.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.fr.resx">
+      <Link>Resources\HQ.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.ka.resx">
+      <Link>Resources\HQ.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.pt.resx">
+      <Link>Resources\HQ.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.resx">
+      <Link>Resources\HQ.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.ro.resx">
+      <Link>Resources\HQ.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.ru.resx">
+      <Link>Resources\HQ.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.sq.resx">
+      <Link>Resources\HQ.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.zh.resx">
+      <Link>Resources\HQ.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ImportQuestionnaire.ar.resx">
+      <Link>Resources\ImportQuestionnaire.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ImportQuestionnaire.es.resx">
+      <Link>Resources\ImportQuestionnaire.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ImportQuestionnaire.fr.resx">
+      <Link>Resources\ImportQuestionnaire.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ImportQuestionnaire.ka.resx">
+      <Link>Resources\ImportQuestionnaire.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ImportQuestionnaire.resx">
+      <Link>Resources\ImportQuestionnaire.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ImportQuestionnaire.ro.resx">
+      <Link>Resources\ImportQuestionnaire.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ImportQuestionnaire.ru.resx">
+      <Link>Resources\ImportQuestionnaire.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ImportQuestionnaire.sq.resx">
+      <Link>Resources\ImportQuestionnaire.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ImportQuestionnaire.zh.resx">
+      <Link>Resources\ImportQuestionnaire.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.ar.resx">
+      <Link>Resources\Interviews.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.es.resx">
+      <Link>Resources\Interviews.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.fr.resx">
+      <Link>Resources\Interviews.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.ka.resx">
+      <Link>Resources\Interviews.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.pt.resx">
+      <Link>Resources\Interviews.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.resx">
+      <Link>Resources\Interviews.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.ro.resx">
+      <Link>Resources\Interviews.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.ru.resx">
+      <Link>Resources\Interviews.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.sq.resx">
+      <Link>Resources\Interviews.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.zh.resx">
+      <Link>Resources\Interviews.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.ar.resx">
+      <Link>Resources\LoginToDesigner.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.es.resx">
+      <Link>Resources\LoginToDesigner.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.fr.resx">
+      <Link>Resources\LoginToDesigner.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.ka.resx">
+      <Link>Resources\LoginToDesigner.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.pt.resx">
+      <Link>Resources\LoginToDesigner.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.resx">
+      <Link>Resources\LoginToDesigner.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.ro.resx">
+      <Link>Resources\LoginToDesigner.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.ru.resx">
+      <Link>Resources\LoginToDesigner.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.sq.resx">
+      <Link>Resources\LoginToDesigner.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.zh.resx">
+      <Link>Resources\LoginToDesigner.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.ar.resx">
+      <Link>Resources\MainMenu.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.es.resx">
+      <Link>Resources\MainMenu.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.fr.resx">
+      <Link>Resources\MainMenu.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.ka.resx">
+      <Link>Resources\MainMenu.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.pt.resx">
+      <Link>Resources\MainMenu.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.resx">
+      <Link>Resources\MainMenu.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.ro.resx">
+      <Link>Resources\MainMenu.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.ru.resx">
+      <Link>Resources\MainMenu.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.sq.resx">
+      <Link>Resources\MainMenu.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.zh.resx">
+      <Link>Resources\MainMenu.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.ar.resx">
+      <Link>Resources\MapReport.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.es.resx">
+      <Link>Resources\MapReport.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.fr.resx">
+      <Link>Resources\MapReport.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.ka.resx">
+      <Link>Resources\MapReport.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.pt.resx">
+      <Link>Resources\MapReport.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.resx">
+      <Link>Resources\MapReport.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.ro.resx">
+      <Link>Resources\MapReport.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.ru.resx">
+      <Link>Resources\MapReport.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.sq.resx">
+      <Link>Resources\MapReport.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.zh.resx">
+      <Link>Resources\MapReport.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Maps.ar.resx">
+      <Link>Resources\Maps.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Maps.es.resx">
+      <Link>Resources\Maps.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Maps.fr.resx">
+      <Link>Resources\Maps.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Maps.resx">
+      <Link>Resources\Maps.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Maps.ro.resx">
+      <Link>Resources\Maps.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Maps.ru.resx">
+      <Link>Resources\Maps.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Maps.sq.resx">
+      <Link>Resources\Maps.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Maps.zh.resx">
+      <Link>Resources\Maps.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\OutdatedBrowser.ar.resx">
+      <Link>Resources\OutdatedBrowser.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\OutdatedBrowser.es.resx">
+      <Link>Resources\OutdatedBrowser.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\OutdatedBrowser.fr.resx">
+      <Link>Resources\OutdatedBrowser.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\OutdatedBrowser.ka.resx">
+      <Link>Resources\OutdatedBrowser.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\OutdatedBrowser.resx">
+      <Link>Resources\OutdatedBrowser.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\OutdatedBrowser.ro.resx">
+      <Link>Resources\OutdatedBrowser.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\OutdatedBrowser.ru.resx">
+      <Link>Resources\OutdatedBrowser.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\OutdatedBrowser.sq.resx">
+      <Link>Resources\OutdatedBrowser.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\OutdatedBrowser.zh.resx">
+      <Link>Resources\OutdatedBrowser.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.ar.resx">
+      <Link>Resources\Pages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.es.resx">
+      <Link>Resources\Pages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.fr.resx">
+      <Link>Resources\Pages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.ka.resx">
+      <Link>Resources\Pages.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.pt.resx">
+      <Link>Resources\Pages.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.resx">
+      <Link>Resources\Pages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.ro.resx">
+      <Link>Resources\Pages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.ru.resx">
+      <Link>Resources\Pages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.sq.resx">
+      <Link>Resources\Pages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.zh.resx">
+      <Link>Resources\Pages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.ar.resx">
+      <Link>Resources\PeriodicStatusReport.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.es.resx">
+      <Link>Resources\PeriodicStatusReport.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.fr.resx">
+      <Link>Resources\PeriodicStatusReport.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.ka.resx">
+      <Link>Resources\PeriodicStatusReport.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.pt.resx">
+      <Link>Resources\PeriodicStatusReport.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.resx">
+      <Link>Resources\PeriodicStatusReport.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.ro.resx">
+      <Link>Resources\PeriodicStatusReport.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.ru.resx">
+      <Link>Resources\PeriodicStatusReport.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.sq.resx">
+      <Link>Resources\PeriodicStatusReport.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.zh.resx">
+      <Link>Resources\PeriodicStatusReport.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireClonning.ar.resx">
+      <Link>Resources\QuestionnaireClonning.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireClonning.es.resx">
+      <Link>Resources\QuestionnaireClonning.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireClonning.fr.resx">
+      <Link>Resources\QuestionnaireClonning.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireClonning.ka.resx">
+      <Link>Resources\QuestionnaireClonning.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireClonning.pt.resx">
+      <Link>Resources\QuestionnaireClonning.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireClonning.resx">
+      <Link>Resources\QuestionnaireClonning.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireClonning.ro.resx">
+      <Link>Resources\QuestionnaireClonning.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireClonning.ru.resx">
+      <Link>Resources\QuestionnaireClonning.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireClonning.zh.resx">
+      <Link>Resources\QuestionnaireClonning.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireImport.ar.resx">
+      <Link>Resources\QuestionnaireImport.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireImport.es.resx">
+      <Link>Resources\QuestionnaireImport.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireImport.fr.resx">
+      <Link>Resources\QuestionnaireImport.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireImport.ka.resx">
+      <Link>Resources\QuestionnaireImport.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireImport.pt.resx">
+      <Link>Resources\QuestionnaireImport.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireImport.resx">
+      <Link>Resources\QuestionnaireImport.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireImport.ro.resx">
+      <Link>Resources\QuestionnaireImport.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireImport.ru.resx">
+      <Link>Resources\QuestionnaireImport.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireImport.zh.resx">
+      <Link>Resources\QuestionnaireImport.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.ar.resx">
+      <Link>Resources\Reports.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.es.resx">
+      <Link>Resources\Reports.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.fr.resx">
+      <Link>Resources\Reports.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.ka.resx">
+      <Link>Resources\Reports.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.pt.resx">
+      <Link>Resources\Reports.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.resx">
+      <Link>Resources\Reports.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.ro.resx">
+      <Link>Resources\Reports.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.ru.resx">
+      <Link>Resources\Reports.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.sq.resx">
+      <Link>Resources\Reports.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.zh.resx">
+      <Link>Resources\Reports.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ReviewInterview.ar.resx">
+      <Link>Resources\ReviewInterview.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ReviewInterview.es.resx">
+      <Link>Resources\ReviewInterview.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ReviewInterview.fr.resx">
+      <Link>Resources\ReviewInterview.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ReviewInterview.resx">
+      <Link>Resources\ReviewInterview.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ReviewInterview.ro.resx">
+      <Link>Resources\ReviewInterview.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ReviewInterview.ru.resx">
+      <Link>Resources\ReviewInterview.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ReviewInterview.sq.resx">
+      <Link>Resources\ReviewInterview.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ReviewInterview.zh.resx">
+      <Link>Resources\ReviewInterview.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Roles.resx">
+      <Link>Resources\Roles.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Roles.ro.resx">
+      <Link>Resources\Roles.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Roles.ru.resx">
+      <Link>Resources\Roles.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.ar.resx">
+      <Link>Resources\Settings.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.es.resx">
+      <Link>Resources\Settings.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.fr.resx">
+      <Link>Resources\Settings.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.ka.resx">
+      <Link>Resources\Settings.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.pt.resx">
+      <Link>Resources\Settings.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.resx">
+      <Link>Resources\Settings.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.ro.resx">
+      <Link>Resources\Settings.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.ru.resx">
+      <Link>Resources\Settings.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.sq.resx">
+      <Link>Resources\Settings.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.zh.resx">
+      <Link>Resources\Settings.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.ar.resx">
+      <Link>Resources\SyncLogMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.es.resx">
+      <Link>Resources\SyncLogMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.fr.resx">
+      <Link>Resources\SyncLogMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.ka.resx">
+      <Link>Resources\SyncLogMessages.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.pt.resx">
+      <Link>Resources\SyncLogMessages.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.resx">
+      <Link>Resources\SyncLogMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.ro.resx">
+      <Link>Resources\SyncLogMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.ru.resx">
+      <Link>Resources\SyncLogMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.sq.resx">
+      <Link>Resources\SyncLogMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.zh.resx">
+      <Link>Resources\SyncLogMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletLogs.resx">
+      <Link>Resources\TabletLogs.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletLogs.ro.resx">
+      <Link>Resources\TabletLogs.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletLogs.ru.resx">
+      <Link>Resources\TabletLogs.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.ar.resx">
+      <Link>Resources\TabletSyncMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.es.resx">
+      <Link>Resources\TabletSyncMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.fr.resx">
+      <Link>Resources\TabletSyncMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.ka.resx">
+      <Link>Resources\TabletSyncMessages.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.pt.resx">
+      <Link>Resources\TabletSyncMessages.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.resx">
+      <Link>Resources\TabletSyncMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.ro.resx">
+      <Link>Resources\TabletSyncMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.ru.resx">
+      <Link>Resources\TabletSyncMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.sq.resx">
+      <Link>Resources\TabletSyncMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.zh.resx">
+      <Link>Resources\TabletSyncMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.ar.resx">
+      <Link>Resources\Troubleshooting.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.es.resx">
+      <Link>Resources\Troubleshooting.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.fr.resx">
+      <Link>Resources\Troubleshooting.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.ka.resx">
+      <Link>Resources\Troubleshooting.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.resx">
+      <Link>Resources\Troubleshooting.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.ro.resx">
+      <Link>Resources\Troubleshooting.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.ru.resx">
+      <Link>Resources\Troubleshooting.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.sq.resx">
+      <Link>Resources\Troubleshooting.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.zh.resx">
+      <Link>Resources\Troubleshooting.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UnderConstruction.resx">
+      <Link>Resources\UnderConstruction.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UnderConstruction.ro.resx">
+      <Link>Resources\UnderConstruction.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UnderConstruction.ru.resx">
+      <Link>Resources\UnderConstruction.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UnderConstruction.sq.resx">
+      <Link>Resources\UnderConstruction.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UnderConstruction.zh.resx">
+      <Link>Resources\UnderConstruction.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UploadUsers.fr.resx">
+      <Link>Resources\UploadUsers.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UploadUsers.resx">
+      <Link>Resources\UploadUsers.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UploadUsers.ro.resx">
+      <Link>Resources\UploadUsers.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UploadUsers.ru.resx">
+      <Link>Resources\UploadUsers.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UploadUsers.sq.resx">
+      <Link>Resources\UploadUsers.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UploadUsers.zh.resx">
+      <Link>Resources\UploadUsers.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UserPreloadingVerificationMessages.ar.resx">
+      <Link>Resources\UserPreloadingVerificationMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UserPreloadingVerificationMessages.es.resx">
+      <Link>Resources\UserPreloadingVerificationMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UserPreloadingVerificationMessages.fr.resx">
+      <Link>Resources\UserPreloadingVerificationMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UserPreloadingVerificationMessages.resx">
+      <Link>Resources\UserPreloadingVerificationMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UserPreloadingVerificationMessages.ro.resx">
+      <Link>Resources\UserPreloadingVerificationMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UserPreloadingVerificationMessages.ru.resx">
+      <Link>Resources\UserPreloadingVerificationMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UserPreloadingVerificationMessages.sq.resx">
+      <Link>Resources\UserPreloadingVerificationMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UserPreloadingVerificationMessages.zh.resx">
+      <Link>Resources\UserPreloadingVerificationMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.ar.resx">
+      <Link>Resources\Users.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.es.resx">
+      <Link>Resources\Users.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.fr.resx">
+      <Link>Resources\Users.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.ka.resx">
+      <Link>Resources\Users.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.pt.resx">
+      <Link>Resources\Users.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.resx">
+      <Link>Resources\Users.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.ro.resx">
+      <Link>Resources\Users.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.ru.resx">
+      <Link>Resources\Users.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.sq.resx">
+      <Link>Resources\Users.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.zh.resx">
+      <Link>Resources\Users.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSettings.resx">
+      <Link>Resources\WebInterviewSettings.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSettings.ru.resx">
+      <Link>Resources\WebInterviewSettings.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSettings.sq.resx">
+      <Link>Resources\WebInterviewSettings.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSetup.ar.resx">
+      <Link>Resources\WebInterviewSetup.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSetup.es.resx">
+      <Link>Resources\WebInterviewSetup.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSetup.fr.resx">
+      <Link>Resources\WebInterviewSetup.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSetup.ka.resx">
+      <Link>Resources\WebInterviewSetup.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSetup.resx">
+      <Link>Resources\WebInterviewSetup.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSetup.ro.resx">
+      <Link>Resources\WebInterviewSetup.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSetup.ru.resx">
+      <Link>Resources\WebInterviewSetup.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSetup.sq.resx">
+      <Link>Resources\WebInterviewSetup.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSetup.zh.resx">
+      <Link>Resources\WebInterviewSetup.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.ar.resx">
+      <Link>Resources\WebInterviewUI.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.es.resx">
+      <Link>Resources\WebInterviewUI.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.fr.resx">
+      <Link>Resources\WebInterviewUI.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.ka.resx">
+      <Link>Resources\WebInterviewUI.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.resx">
+      <Link>Resources\WebInterviewUI.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.ro.resx">
+      <Link>Resources\WebInterviewUI.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.ru.resx">
+      <Link>Resources\WebInterviewUI.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.sq.resx">
+      <Link>Resources\WebInterviewUI.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.uk.resx">
+      <Link>Resources\WebInterviewUI.uk.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.zh.resx">
+      <Link>Resources\WebInterviewUI.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Workspaces.resx">
+      <Link>Resources\Workspaces.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Workspaces.ru.resx">
+      <Link>Resources\Workspaces.ru.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -164,4 +164,7 @@
   <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
     <value>Вы можете изменить ответственного. Для этого выберите его в списке ниже.</value>
   </data>
+  <data name="InterviewMode" xml:space="preserve">
+    <value>Режим</value>
+  </data>
 </root>

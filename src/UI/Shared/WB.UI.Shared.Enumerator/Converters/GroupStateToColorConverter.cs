@@ -15,6 +15,8 @@ namespace WB.UI.Shared.Enumerator.Converters
                     return Resource.Color.group_completed;
                 case SimpleGroupStatus.Invalid:
                     return Resource.Color.group_with_invalid_answers;
+                case SimpleGroupStatus.Disabled:
+                    return Resource.Color.group_disabled;
                 default:
                     return Resource.Color.group_started;
             }

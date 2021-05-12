@@ -56,6 +56,7 @@
     <Compile Include="Activities\ActivityExtensions.cs" />
     <Compile Include="Activities\CalendarEventDialog.cs" />
     <Compile Include="Activities\Dashboard\ExpandableViewHolder.cs" />
+    <Compile Include="Activities\Dashboard\MenuItemOnMenuItemClickListener.cs" />
     <Compile Include="Activities\EnumeratorSplashScreenAppCompatActivity.cs" />
     <Compile Include="Activities\SearchActivity.cs" />
     <Compile Include="Activities\SelectResponsibleForInterviewFragment.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
     <Compile Include="CustomBindings\ButtonGroupStyleBinding.cs" />
     <Compile Include="CustomBindings\EditTextMaxLengthBinding.cs" />
+    <Compile Include="CustomBindings\ImageViewQRCodeBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewDisableDefaultSearchBinding.cs" />
     <Compile Include="CustomBindings\MaterialButtonToQuestionStateBinding.cs" />
     <Compile Include="CustomBindings\TextInputLayoutHintBinding.cs" />
@@ -82,10 +84,13 @@
     <Compile Include="CustomServices\GoogleApiService.cs" />
     <Compile Include="CustomServices\StringFormat.cs" />
     <Compile Include="EnumeratorLoggingModule.cs" />
-    <Compile Include="Migrations\Encrypt_Data.cs" />
-    <Compile Include="Migrations\M201912091307_ChangeIdTypeInOptionViewTable.cs" />
-    <Compile Include="Migrations\M202001291224_RemoveDuplicatedCategoriesInOptionViewTable.cs" />
-    <Compile Include="Migrations\UpdateOptionsForMultiComboboxQuestions.cs" />
+    <Compile Include="Migrations\Workspaces\Encrypt_Data.cs" />
+    <Compile Include="Migrations\Workspaces\M201912091307_ChangeIdTypeInOptionViewTable.cs" />
+    <Compile Include="Migrations\Workspaces\M202001291224_RemoveDuplicatedCategoriesInOptionViewTable.cs" />
+    <Compile Include="Migrations\Workspaces\M202103291222_MoveMapsFiles.cs" />
+    <Compile Include="Migrations\Workspaces\M202103101500_UpdateInterviewsMode.cs" />
+    <Compile Include="Migrations\Workspaces\UpdateOptionsForMultiComboboxQuestions.cs" />
+    <Compile Include="Migrations\Workspace\M20211539_Init.cs" />
     <Compile Include="OfflineSync\Activities\BluetoothReceiver.cs" />
     <Compile Include="OfflineSync\Activities\GoogleApiConnectedActivity.cs" />
     <Compile Include="Activities\Dashboard\RecyclerViewAdapter.cs" />
@@ -206,6 +211,7 @@
     <Compile Include="Services\Internals\FileSystem\FileSystemService.cs" />
     <Compile Include="Services\Internals\GpsLocationService.cs" />
     <Compile Include="Services\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
+    <Compile Include="Services\IQRCodeRenderer.cs" />
     <Compile Include="Services\Logging\NLogLogger.cs" />
     <Compile Include="Services\Logging\NLogLoggerProvider.cs" />
     <Compile Include="Services\Internals\PictureChooser.cs" />
@@ -219,6 +225,7 @@
     <Compile Include="OfflineSync\Entities\OnDiscoveryCallback.cs" />
     <Compile Include="OfflineSync\Entities\OnPayloadCallback.cs" />
     <Compile Include="Services\Notifications\IEnumeratorWorkerManager.cs" />
+    <Compile Include="Services\Notifications\IInAppNotificationsCollector.cs" />
     <Compile Include="Services\Notifications\INotificationsCollector.cs" />
     <Compile Include="Services\Notifications\NotificationModel.cs" />
     <Compile Include="Services\Notifications\NotificationPublisher.cs" />
@@ -277,6 +284,10 @@
     <AndroidResource Include="Resources\drawable\sidebar_row_selected.xml" />
     <AndroidResource Include="Resources\drawable\sidebar_row_unpressed.xml" />
     <AndroidResource Include="Resources\drawable\to_parent_icon.xml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\confirmation_password.axml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
@@ -1944,7 +1955,7 @@
       <Version>12.0.3</Version>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>4.7.6</Version>
+      <Version>4.7.8</Version>
     </PackageReference>
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>
@@ -1977,13 +1988,13 @@
       <Version>2.1.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.ConstraintLayout">
-      <Version>2.0.4</Version>
+      <Version>2.0.4.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.MediaRouter">
-      <Version>1.2.0</Version>
+      <Version>1.2.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Work.Runtime">
-      <Version>2.4.0</Version>
+      <Version>2.4.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Build.Download">
       <Version>0.10.0</Version>
@@ -2006,17 +2017,14 @@
     <PackageReference Include="ZXing.Net.Mobile">
       <Version>3.0.0-beta5</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.AndroidX.Migration">
-      <Version>1.0.8</Version>
-    </PackageReference>
     <PackageReference Include="MvvmCross.DroidX.RecyclerView">
       <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
-      <Version>1.0.0.5</Version>
+      <Version>1.0.0.6</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
-      <Version>1.1.0.5</Version>
+      <Version>1.1.0.6</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -2033,6 +2041,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\calendar_event_dialog.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\qr_code_popup.axml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Extensions.Caching.Memory;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -30,6 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
         IUpdateHandler<InterviewSummary, InterviewOnClientCreated>,
         IUpdateHandler<InterviewSummary, InterviewStatusChanged>,
+        IUpdateHandler<InterviewSummary, InterviewModeChanged>,
         IUpdateHandler<InterviewSummary, SupervisorAssigned>,
         IUpdateHandler<InterviewSummary, TextQuestionAnswered>,
         IUpdateHandler<InterviewSummary, MultipleOptionsQuestionAnswered>,
@@ -97,9 +96,60 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
                 var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
-                if (interview.CanAnswerFeaturedQuestion(questionCompositeId))
+                if (interview.IsEntityIdentifying(questionCompositeId))
                 {
                     interview.AnswerFeaturedQuestion(questionCompositeId, AnswerUtils.AnswerToString(answer));
+                }
+                
+                RecordFirstAnswer(interview, answerDate);
+            });
+        }
+
+        private InterviewSummary AnswerDateTimeQuestion(InterviewSummary interviewSummary, Guid questionId, DateTime answer, DateTime updateDate, DateTime answerDate)
+        {
+            var questionnaire = GetQuestionnaire(interviewSummary);
+            var answerString = questionnaire.IsTimestampQuestion(questionId)
+                    ? answer.ToString(DateTimeFormat.DateWithTimeFormat)
+                    : answer.ToString(DateTimeFormat.DateFormat);
+            
+            return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
+            {
+                var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
+                if (interview.IsEntityIdentifying(questionCompositeId))
+                {
+                    interview.AnswerDateTimeFeaturedQuestion(questionCompositeId, answer, answerString);
+                }
+                
+                RecordFirstAnswer(interview, answerDate);
+            });
+        }
+
+        private InterviewSummary AnswerIntegerQuestion(InterviewSummary interviewSummary, Guid questionId, int answer, DateTime updateDate, DateTime answerDate)
+        {
+            var questionnaire = GetQuestionnaire(interviewSummary);
+
+            return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
+            {
+                var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
+                if (interview.IsEntityIdentifying(questionCompositeId))
+                {
+                    interview.AnswerIntegerFeaturedQuestion(questionCompositeId, answer);
+                }
+                
+                RecordFirstAnswer(interview, answerDate);
+            });
+        }
+
+        private InterviewSummary AnswerRealQuestion(InterviewSummary interviewSummary, Guid questionId, decimal answer, DateTime updateDate, DateTime answerDate)
+        {
+            var questionnaire = GetQuestionnaire(interviewSummary);
+
+            return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
+            {
+                var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
+                if (interview.IsEntityIdentifying(questionCompositeId))
+                {
+                    interview.AnswerRealFeaturedQuestion(questionCompositeId, answer);
                 }
                 
                 RecordFirstAnswer(interview, answerDate);
@@ -115,7 +165,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
                 var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
-                if (interview.CanAnswerFeaturedQuestion(questionCompositeId))
+                if (interview.IsEntityIdentifying(questionCompositeId))
                 {
                     var optionStrings = questionnaire.GetOptionsForQuestion(questionId, null, null, null)
                         .Where(x => answers.Contains(x.Value)).Select(x => x.Title);
@@ -270,24 +320,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericRealQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
+            return this.AnswerRealQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericIntegerQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
+            return this.AnswerIntegerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
-            var questionnaire = GetQuestionnaire(state);
-            string answerString = @event.Payload.Answer.ToString(DateTimeFormat.DateFormat);
-            if (questionnaire.IsTimestampQuestion(@event.Payload.QuestionId))
-            {
-                answerString = @event.Payload.Answer.ToString(DateTimeFormat.DateWithTimeFormat);
-            }
-
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, answerString, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
+            return this.AnswerDateTimeQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<GeoLocationQuestionAnswered> @event)
@@ -309,9 +352,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 foreach (var question in @event.Payload.Questions)
                 {
                     var questionId = questionnaire.GetEntityIdMapValue(question.Id);
-                    if (interview.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId))
+                    if (interview.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId && x.Identifying == true))
                     {
-                        interview.AnswerFeaturedQuestion(questionId, string.Empty);
+                        interview.RemoveAnswerFeaturedQuestion(questionId);
                     }
                 }
             });
@@ -388,7 +431,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                         foreach (var questionFromDto in @event.Payload.FeaturedQuestionsMeta)
                         {
                             var questionId = questionnaire.GetEntityIdMapValue(questionFromDto.Id);
-                            if (interview.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId))
+                            if (interview.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId && x.Identifying == true))
                             {
                                 var questionnaire = GetQuestionnaire(interview);
                                 var questionType = questionnaire.GetQuestionType(questionFromDto.Id);
@@ -545,11 +588,21 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 foreach (var changedVariable in @event.Payload.ChangedVariables)
                 {
                     var variableId = questionnaire.GetEntityIdMapValue(changedVariable.Identity.Id);
-                    if (interview.CanAnswerFeaturedQuestion(variableId))
+                    var varType = questionnaire.GetVariableVariableType(changedVariable.Identity.Id);
+                    if (interview.IsEntityIdentifying(variableId))
                     {
-                        interview.AnswerFeaturedQuestion(variableId, AnswerUtils.AnswerToString(changedVariable.NewValue));
+                        interview.AnswerFeaturedVariable(variableId, changedVariable.NewValue, varType);
                     }
                 }
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewModeChanged> @event)
+        {
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
+            {
+                interview.InterviewMode = @event.Payload.Mode;
+                interview.ReceivedByInterviewerAtUtc = null;
             });
         }
     }

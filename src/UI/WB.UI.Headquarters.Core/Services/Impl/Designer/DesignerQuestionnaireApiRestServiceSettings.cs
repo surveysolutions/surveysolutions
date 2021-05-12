@@ -5,8 +5,6 @@ using Microsoft.Extensions.Options;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
 using WB.UI.Headquarters.Configs;
-using WB.UI.Shared.Web.Configuration;
-using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Services.Impl
 {

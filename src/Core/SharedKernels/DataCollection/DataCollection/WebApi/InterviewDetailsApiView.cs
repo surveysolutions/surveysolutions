@@ -75,6 +75,13 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public string Username { get; set; }
         public string Password { get; set; }
     }
+    
+    public class ChangePasswordInfo
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string NewPassword { get; set; }
+    }
 
     public class InterviewAnswerApiView
     {
@@ -88,6 +95,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
     public class AuditLogEntitiesApiView
     {
+        public bool IsWorkspaceSupported { get; set; } 
         public AuditLogEntityApiView[] Entities { get; set; }
     }
 
@@ -105,5 +113,6 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
         public string PayloadType { get; set; }
         public string Payload { get; set; }
+        public string Workspace { get; set; }
     }
 }

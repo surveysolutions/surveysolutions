@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class UIResources {
@@ -345,6 +345,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Comment {
             get {
                 return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm new password.
+        /// </summary>
+        public static string ConfirmNewPasswordHint {
+            get {
+                return ResourceManager.GetString("ConfirmNewPasswordHint", resourceCulture);
             }
         }
         
@@ -716,6 +725,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Complete_Screen_Title {
             get {
                 return ResourceManager.GetString("Interview_Complete_Screen_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch interview to Web Mode?.
+        /// </summary>
+        public static string Interview_Complete_SwitchTo_WebMode_Checkbox {
+            get {
+                return ResourceManager.GetString("Interview_Complete_SwitchTo_WebMode_Checkbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is a text with instruction on what to do with QR Code. And what will happen to interivew after sync.
+        /// </summary>
+        public static string Interview_Complete_SwitchTo_WebMode_Instruction {
+            get {
+                return ResourceManager.GetString("Interview_Complete_SwitchTo_WebMode_Instruction", resourceCulture);
             }
         }
         
@@ -1593,6 +1620,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New password.
+        /// </summary>
+        public static string NewPasswordHint {
+            get {
+                return ResourceManager.GetString("NewPasswordHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
@@ -1701,11 +1737,29 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current password.
+        /// </summary>
+        public static string OldPasswordHint {
+            get {
+                return ResourceManager.GetString("OldPasswordHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string PasswordHint {
             get {
                 return ResourceManager.GetString("PasswordHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be the same.
+        /// </summary>
+        public static string PasswordMatchError {
+            get {
+                return ResourceManager.GetString("PasswordMatchError", resourceCulture);
             }
         }
         

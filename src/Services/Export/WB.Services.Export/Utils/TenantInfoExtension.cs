@@ -16,7 +16,7 @@ namespace WB.Services.Export
         {
             var nameLength = tenantInfo.ShortName.Length;
 
-            if (tenantInfo.Workspace == TenantInfo.DefaultWorkspace)
+            if (tenantInfo.Workspace == null || tenantInfo.Workspace == TenantInfo.DefaultWorkspace)
             {
                 return tenantInfo.ShortName.Substring(0, Math.Min(nameLength, 8)) + "_" + DebugTag + tenantInfo.Id;
             }

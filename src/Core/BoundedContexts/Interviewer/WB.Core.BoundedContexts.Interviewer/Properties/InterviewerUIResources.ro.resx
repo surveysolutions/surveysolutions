@@ -117,5 +117,62 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  
+  <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>Aplicația Anchetator nu poate determina starea Bluetooth (de exemplu, pornit / oprit, conectat / deconectat). Mai întâi, reporniți atât dispozitivele Anchetator, cât și dispozitivele Supervizor. Apoi încercați din nou sincronizarea.</value>
+  </data>
+  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>Verificați dacă dispozitivul supervizorului este activat WiFi și Bluetooth și vă aflați în imediata apropiere a acestuia</value>
+  </data>
+  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>Asigurați-vă că ambele dispozitive sunt în imediata apropiere; WIFI și Bluetooth ar trebui să fie activate pe ambele dispozitive; Cererea de supervizor trebuie deschisă pe dispozitivul supervizorului</value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>Conectat la dispozitivul supervizorului</value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>Se așteaptă aprobarea conexiunii de la supervizor</value>
+  </data>
+  <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>Dispozitivul supervizorului a fost găsit. Se solicită conexiunea</value>
+  </data>
+  <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>Căutați dispozitivul supervizorului</value>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>Mutarea tuturor interviurilor finalizate pe dispozitivul supervizorului</value>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>Mutarea tuturor interviurilor finalizate în „{0}”</value>
+  </data>
+  <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>Notă: Această acțiune va dura mai mult decât de obicei, nu închideți acest dispozitiv</value>
+  </data>
+  <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>Reîncercați</value>
+  </data>
+  <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>Unele interviuri sunt acum pe un alt dispozitiv</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>Transferul nu a fost început.
+Dispozitivul supervizorului nu poate fi localizat</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>Transferul a fost întrerupt pe al doilea dispozitiv.</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>Transferul este terminat. Toate interviurile finalizate sunt acum pe un alt dispozitiv</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>Transferul este terminat. {0} interviu (e) nu s-a sincronizat</value>
+  </data>
+  <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>Transfer în curs</value>
+  </data>
+  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>Transferul a fost întrerupt</value>
+  </data>
+  <data name="Synchronization_UpdateApp" xml:space="preserve">
+    <value>Actualizați</value>
+  </data>
 </root>

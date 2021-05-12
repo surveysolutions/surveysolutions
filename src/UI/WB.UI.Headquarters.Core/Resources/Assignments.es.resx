@@ -276,6 +276,9 @@
   <data name="Activated" xml:space="preserve">
     <value>Activado</value>
   </data>
+  <data name="CawiActivated" xml:space="preserve">
+    <value>CAWI Activado</value>
+  </data>
   <data name="Actor" xml:space="preserve">
     <value>Por</value>
   </data>
@@ -475,7 +478,7 @@
     <value>Actualización de asignaciones de {{from}} a {{to}}</value>
   </data>
   <data name="WebMode" xml:space="preserve">
-    <value>Modo web</value>
+    <value>Modo</value>
   </data>
   <data name="WebModeNonInterviewer" xml:space="preserve">
     <value>Todas las asignaciones para entrevistas web deben hacerse a un entrevistador</value>

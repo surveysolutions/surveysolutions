@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using NHibernate.Cfg.MappingSchema;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -31,6 +33,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         private readonly IClientApkProvider clientApkProvider;
         private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IUserToDeviceService userToDeviceService;
+        private readonly IOptions<HeadquartersConfig> hqConfig;
 
         public enum ClientVersionFromUserAgent
         {
@@ -47,7 +50,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
             IPlainStorageAccessor<ServerSettings> tenantSettings,
             IInterviewerVersionReader interviewerVersionReader,
-            IUserToDeviceService userToDeviceService)
+            IUserToDeviceService userToDeviceService,
+            IOptions<HeadquartersConfig> hqConfig)
             : base(interviewerSettingsStorage, tenantSettings, userViewFactory, tabletInformationService)
         {
             this.syncVersionProvider = syncVersionProvider;
@@ -55,6 +59,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             this.clientApkProvider = clientApkProvider;
             this.interviewerVersionReader = interviewerVersionReader;
             this.userToDeviceService = userToDeviceService;
+            this.hqConfig = hqConfig;
         }
 
         [HttpGet]
@@ -141,6 +146,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         public virtual async Task<IActionResult> CheckCompatibility(string deviceId, int deviceSyncProtocolVersion,
             string tenantId = null)
         {
+            
             int serverSyncProtocolVersion = this.syncVersionProvider.GetProtocolVersion();
             int lastNonUpdatableSyncProtocolVersion = this.syncVersionProvider.GetLastNonUpdatableVersion();
 
@@ -151,10 +157,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             {
                 return StatusCode(StatusCodes.Status409Conflict);
             }
-            
+
             var serverApkBuildNumber = await interviewerVersionReader.InterviewerBuildNumber();
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
-            
+
             if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable);
@@ -182,13 +188,23 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
                     return StatusCode(StatusCodes.Status426UpgradeRequired);
                 }   
             }
-            else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
+            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResetPasswordIntroduced)
+            {
+                if (authorizedUser.PasswordChangeRequired)
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }          
+            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.MultiWorkspacesIntroduced)
+            {
+                if (authorizedUser.Workspaces.Count() > 1)
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }
+            if (deviceSyncProtocolVersion > serverSyncProtocolVersion)
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable);
             }
-
+            
             return this.userToDeviceService.GetLinkedDeviceId(this.authorizedUser.Id) != deviceId
-                ? (IActionResult)StatusCode(StatusCodes.Status403Forbidden, new {Message = "relinked"})
+                ? (IActionResult)StatusCode(StatusCodes.Status403Forbidden, new { Message = "relinked" })
                 : new JsonResult("449634775");
         }
 
@@ -198,7 +214,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             {
                 foreach (var product in request.Headers[HeaderNames.UserAgent])
                 {
-                    if(product.Contains("maps",StringComparison.OrdinalIgnoreCase))
+                    if (product.Contains("maps", StringComparison.OrdinalIgnoreCase))
                     {
                         return ClientVersionFromUserAgent.WithMaps;
                     }

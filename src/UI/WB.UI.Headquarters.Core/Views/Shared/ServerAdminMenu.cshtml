@@ -11,18 +11,19 @@
         @*<li class="@(workspace.Name == w.Name ? "active" : "")">
                 <a href="@Url.Content(w.PathBase + "/" + w.Name)">@w.DisplayName</a>
             </li>*@
-        @Html.MainMenuItem("Index", "Workspaces", @MainMenu.Workspaces, MenuItem.Workspaces)
-        @Html.MainMenuItem("Index", "UsersManagement", Dashboard.UsersManagement, MenuItem.UsersManagement)
+        @Html.MainMenuItem(Workspace.Admin.AsContext(), "Index", "Workspaces", @MainMenu.Workspaces, MenuItem.Workspaces)
+        @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Index", "UsersManagement", MainMenu.Users, MenuItem.UsersManagement)
+        @Html.MainMenuItem(Workspace.Admin.AsContext(), "AuditLog", "Diagnostics", AuditLog.PageTitle, MenuItem.AuditLog)
+        @Html.MainMenuItem(Workspace.Admin.AsContext(), "Diagnostics", "Administration", Pages.Diagnostics, MenuItem.Administration_Config)
+        @Html.MainMenuItem(Workspace.Admin.AsContext(), "TabletInfos", "Diagnostics", Pages.PackagesInfo_Header, MenuItem.Administration_TabletInfo)
     }
 </ul>
 <ul class="nav navbar-nav navbar-right">
     <li><a href="http://support.mysurvey.solutions/admin" target="_blank" title="Help">@MainMenu.Help</a></li>
-    @Html.MainMenuItem("AuditLog", "Diagnostics", AuditLog.PageTitle, MenuItem.AuditLog)
-    @Html.MainMenuItem("Diagnostics", "Administration", Pages.Diagnostics, MenuItem.Administration_Config)
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
-            @Html.MainMenuItem("Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
+            @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(),"Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
             <li>
                 <a href="/Account/LogOff">@Common.Logoff</a>
             </li>

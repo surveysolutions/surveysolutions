@@ -17,7 +17,7 @@ export default class UploadComponent {
         var self = this
         return [
             {
-                path: '/Users/Upload', component: Layout,
+                path: '/Upload', component: Layout,
                 children: [
                     {
                         name: 'upload', path: '', component: Upload,

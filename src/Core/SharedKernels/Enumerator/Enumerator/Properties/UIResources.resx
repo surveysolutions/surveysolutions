@@ -159,6 +159,15 @@
   <data name="PasswordHint" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="OldPasswordHint" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="NewPasswordHint" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="ConfirmNewPasswordHint" xml:space="preserve">
+    <value>Confirm new password</value>
+  </data>
   <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
     <value>Timeout when connecting to the Survey Solutions Designer website. Check your internet connection.</value>
   </data>
@@ -424,6 +433,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="PasswordMatchError" xml:space="preserve">
+    <value>Password must be the same</value>
   </data>
   <data name="Interviewer_Diagnostics" xml:space="preserve">
     <value>Diagnostics</value>
@@ -764,5 +776,11 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="NoComment" xml:space="preserve">
     <value>No comment specified</value>
+  </data>
+  <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
+    <value>Switch interview to Web Mode</value>
+  </data>
+   <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
+    <value>This interview will be accessible online after synchronization. To access the interview the respondent should enter the link below in the browser on an internet-connected computer, tablet, or smartphone. The same link can be scanned using the QR-code shown below.</value>
   </data>
 </root>

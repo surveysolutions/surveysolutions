@@ -126,6 +126,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             public bool SingleResponse { get; set; }
             public bool EmailOnComplete { get; set; }
             public bool AttachAnswersInEmail { get; set; }
+            public bool AllowSwitchToCawiForInterviewer { get;set; }
         }
 
         [Route(@"{id}/additionalSettings")]
@@ -146,6 +147,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             config.SingleResponse = updateModel.SingleResponse;
             config.EmailOnComplete = updateModel.EmailOnComplete;
             config.AttachAnswersInEmail = updateModel.AttachAnswersInEmail;
+            config.AllowSwitchToCawiForInterviewer = updateModel.AllowSwitchToCawiForInterviewer;
 
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 

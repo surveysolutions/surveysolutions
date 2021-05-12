@@ -28,16 +28,26 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         {
             var response = await this.GetAccessTokenByRefreshTokenAsync(type, refreshToken);
 
-            return this.Ok(response.AccessToken);
+            if(response.IsSuccessStatusCode)
+                return this.Ok(response.Content?.AccessToken);
+            else
+            {
+                return BadRequest($"Could not get access token");
+            }
         }
         
-        private async Task<ExternalStorageTokenResponse> GetAccessTokenByRefreshTokenAsync(ExternalStorageType type, string refreshToken)
+        private async Task<ApiResponse<ExternalStorageTokenResponse>> GetAccessTokenByRefreshTokenAsync(ExternalStorageType type, string refreshToken)
         {
             var storageSettings = this.GetExternalStorageSettings(type);
-            var client =  RestService.For<IOAuth2Api>(new HttpClient()
-            {
-                BaseAddress = new Uri(storageSettings.TokenUri)
-            });
+            var client =  RestService.For<IOAuth2Api>(
+                new HttpClient()
+                {
+                    BaseAddress = new Uri(storageSettings.TokenUri)
+                },
+                new RefitSettings
+                {
+                    ContentSerializer = new NewtonsoftJsonContentSerializer()
+                });
             var request = new ExternalStorageRefreshTokenRequest
             {
                 RefreshToken = refreshToken,

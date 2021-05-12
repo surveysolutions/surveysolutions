@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -133,7 +133,7 @@
     <value>Pyetësori po shkarkohet -  {0}%</value>
   </data>
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>Pyetësori "{0}" nuk mund të hapet. Llogaria juaj e përdoruesit në Designer nuk është e autorizuar. Ju lutemi, kontrolloni emrin e regjistrimit dhe fjalëkalimin</value>
+    <value>Pyetësori "{0}" nuk mund të hapet. Llogaria juaj e përdoruesit në Designer nuk është e autorizuar. Ju lutemi, kontrolloni emrin e regjistrimit dhe fjalëkalimin.</value>
   </data>
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
     <value>Pyetësori "{0}" nuk mund të hapet. Pyetësori nuk mund të gjendet. Ju lutemi, rifreskoni listën e pyetësorëve.</value>
@@ -142,7 +142,7 @@
     <value>Pyetësori "{0}" nuk mund të hapet. Pyetësori ka gabime. Ju lutemi, korrigjojeni këtë në Designer.</value>
   </data>
   <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Pyetësori po ruhet në memorien lokale </value>
+    <value>Pyetësori po ruhet në memorien lokale</value>
   </data>
   <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
     <value>Bashkëlidhjet e pyetësorit po shkarkohen -  {0}%</value>
@@ -160,7 +160,7 @@
     <value>Fillestar</value>
   </data>
   <data name="MenuItem_Title_Reload" xml:space="preserve">
-    <value>Ngarko edhe njëherë pyetësorin </value>
+    <value>Ngarko edhe njëherë pyetësorin</value>
   </data>
   <data name="MenuItem_Title_Settings" xml:space="preserve">
     <value>Cilësimet</value>
@@ -169,7 +169,7 @@
     <value>Dil</value>
   </data>
   <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
-    <value>Çaktivizo validimin e certifikatës SSL  </value>
+    <value>Çaktivizo validimin e certifikatës SSL</value>
   </data>
   <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
     <value>Prano të gjitha certifikatat SSL</value>
@@ -178,10 +178,10 @@
     <value>Cilësimet e lidhjes me internetin</value>
   </data>
   <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
-    <value>URL-ja që përdoret për të komunikuar me aplikacionin designer </value>
+    <value>URL-ja që përdoret për të komunikuar me aplikacionin designer</value>
   </data>
   <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
-    <value>URL-ja Designer </value>
+    <value>URL-ja Designer</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
     <value>Numri i sekondave që duhet pritur për koordinatat</value>
