@@ -290,7 +290,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 (x.Status == InterviewStatus.RejectedBySupervisor || 
                  x.Status == InterviewStatus.InterviewerAssigned || 
                  x.Status == InterviewStatus.Restarted)
-                && x.Mode != InterviewMode.CAWI
+                && (x.Mode == null || x.Mode != InterviewMode.CAWI)
                 && x.ResponsibleId == arg.UserId);
 
             List<InterviewApiView> response = interviewsForUser.Select(x => new InterviewApiView
