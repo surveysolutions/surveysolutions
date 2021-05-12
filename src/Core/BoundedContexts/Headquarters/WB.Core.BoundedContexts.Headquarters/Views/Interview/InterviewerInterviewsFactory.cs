@@ -47,7 +47,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         x.QuestionnaireIdentity, 
                         x.WasRejectedBySupervisor, 
                         ReceivedByInterviewer = x.ReceivedByInterviewerAtUtc.HasValue,
-                        x.ResponsibleId})
+                        x.ResponsibleId,
+                        x.InterviewMode
+                    })
                     .ToList());
 
             var deletedQuestionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
@@ -68,6 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     IsReceivedByInterviewer = interview.ReceivedByInterviewer,
                     LastEventSequence = eventStore.GetMaxEventSequenceWithAnyOfSpecifiedTypes(interview.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames()),
                     LastEventId = eventStore.GetLastEventId(interview.InterviewId),
+                    Mode = interview.InterviewMode
                 }).ToList();
             
             return filteredInterviews;
