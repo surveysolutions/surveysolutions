@@ -47,7 +47,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         x.QuestionnaireIdentity, 
                         x.WasRejectedBySupervisor, 
                         ReceivedByInterviewer = x.ReceivedByInterviewerAtUtc.HasValue,
-                        x.ResponsibleId})
+                        x.ResponsibleId,
+                        x.InterviewMode
+                    })
                     .ToList());
 
             var deletedQuestionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
@@ -68,6 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     IsReceivedByInterviewer = interview.ReceivedByInterviewer,
                     LastEventSequence = eventStore.GetMaxEventSequenceWithAnyOfSpecifiedTypes(interview.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames()),
                     LastEventId = eventStore.GetLastEventId(interview.InterviewId),
+                    Mode = interview.InterviewMode
                 }).ToList();
             
             return filteredInterviews;
@@ -116,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public List<InterviewInformation> GetInProgressInterviewsForSupervisor(Guid supervisorId)
         {
-            var processigPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
+            var processingPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
 
             var inProgressInterviews = this.reader.Query(interviews =>
                 interviews
@@ -138,7 +141,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         x.QuestionnaireVersion,
                         x.WasRejectedBySupervisor,
                         x.ResponsibleId,
-                        ReceivedByInterviewer = x.ReceivedByInterviewerAtUtc.HasValue
+                        ReceivedByInterviewer = x.ReceivedByInterviewerAtUtc.HasValue,
+                        Mode = x.InterviewMode,
                     })
                     .ToList());
 
@@ -151,7 +155,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             List<InterviewInformation> filteredInterviews = inProgressInterviews.Where(
                     interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId 
                                                                                     && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
-                                 && !processigPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))
+                                 && !processingPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))
                 .Select(interview => new InterviewInformation
                 {
                     Id = interview.InterviewId,
@@ -161,6 +165,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     IsReceivedByInterviewer = interview.ReceivedByInterviewer,
                     LastEventSequence = eventStore.GetMaxEventSequenceWithAnyOfSpecifiedTypes(interview.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames()),
                     LastEventId = eventStore.GetLastEventId(interview.InterviewId),
+                    Mode = interview.Mode,
                 }).ToList();
 
             return filteredInterviews;

@@ -583,7 +583,7 @@ ul.dropdown-menu li, ul.dropdown-menu li *{
 	.form-control, .input-group, .btn-input{
 		margin-left: -10px;
 		& + .btn-clear{
-			right: -10px;
+			right: 10px;
 		}
 	}
 	.input-group, .btn-input{
@@ -635,6 +635,9 @@ ul.dropdown-menu li, ul.dropdown-menu li *{
 	h2{
 		margin-bottom: 15px;
 	}
+}
+.profile .form-control .combo-box .btn-clear {
+    right: -10px;
 }
 .contain-input .block-filter .form-group .single-checkbox + label{
 	margin-top: 10px;
