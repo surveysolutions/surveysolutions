@@ -150,4 +150,7 @@
   <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
     <value>În momentul de față se importă un alt chestionar</value>
   </data>
+  <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
+    <value>Utilizatorul Api nu are voie să se conecteze cu interfața utilizatorului</value>
+  </data>
 </root>

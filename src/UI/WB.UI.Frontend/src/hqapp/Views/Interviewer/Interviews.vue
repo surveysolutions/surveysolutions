@@ -123,7 +123,7 @@
 <script>
 import {DateFormats, convertToLocal} from '~/shared/helpers'
 import moment from 'moment-timezone'
-import {addOrUpdateCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
+import {updateCalendarEvent, addInterviewCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
 import {map, join, toNumber, filter, escape} from 'lodash'
 import gql from 'graphql-tag'
 import _sanitizeHtml from 'sanitize-html'
@@ -315,6 +315,9 @@ export default {
         dateInPast(){
             return moment(this.selectedDate) < moment()
         },
+        saveDisabled(){
+            return !this.newCalendarStart
+        },
     },
 
     methods: {
@@ -337,7 +340,7 @@ export default {
             this.calendarAssinmentId = assignmentId
             this.calendarEventId = calendarEvent?.publicKey
             this.editCalendarComment = calendarEvent?.comment
-            this.newCalendarStart = calendarEvent?.startUtc
+            this.newCalendarStart = calendarEvent?.startUtc ?? moment().add(1, 'days').hours(10).startOf('hour').format(DateFormats.dateTime)
             this.newCalendarStarTimezone = calendarEvent?.startTimezone
             this.$refs.editCalendarModal.modal({keyboard: false})
         },
@@ -350,18 +353,20 @@ export default {
             const startDate = moment(self.newCalendarStart).format('YYYY-MM-DD[T]HH:mm:ss.SSSZ')
 
             const variables = {
-                interviewId : self.calendarInterviewId,
-                interviewKey: self.calendarInterviewKey,
-                assignmentId : self.calendarAssinmentId,
-                publicKey : self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-',''),
                 newStart : startDate,
                 comment : self.editCalendarComment,
                 startTimezone: moment.tz.guess(),
                 workspace: self.$store.getters.workspace,
             }
 
-            addOrUpdateCalendarEvent(self.$apollo, variables, self.reload)
-
+            if(self.calendarEventId != null){
+                variables.publicKey = self.calendarEventId.replaceAll('-',''),
+                updateCalendarEvent(self.$apollo, variables, self.reload)
+            }
+            else{
+                variables.interviewId = self.calendarInterviewId,
+                addInterviewCalendarEvent(self.$apollo, variables, self.reload)
+            }
         },
         deleteCalendarEvent() {
             const self = this
@@ -505,6 +510,23 @@ export default {
                             .format(DateFormats.dateTimeInList)
                     },
                     width: '180px',
+                },
+                {
+                    data: 'receivedByInterviewerAtUtc',
+                    name: 'ReceivedByInterviewerAtUtc',
+                    title: this.$t('Common.ReceivedByInterviewer'),
+                    render(data) {
+                        if (data)
+                            return moment
+                                .utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
+                        return self.$t('Common.No')
+                    },
+                    createdCell(td, cellData, rowData, row, col) {
+                        $(td).attr('role', 'received')
+                    },
+                    width: '50px',
                 },
                 {
                     data: 'calendarEvent',

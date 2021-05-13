@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -268,7 +268,7 @@
     <value>Numéro d'entretien</value>
   </data>
   <data name="NewVersionAvailable" xml:space="preserve">
-    <value>Nouvelle version disponible:</value>
+    <value>Nouvelle version disponible :</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>Non</value>
@@ -295,10 +295,70 @@
     <value>Toutes les questions GPS</value>
   </data>
   <data name="Processing" xml:space="preserve">
-    <value>En cours de traitement...</value>
+    <value>En cours de traitement…</value>
   </data>
   <data name="SelectQuestionnaire" xml:space="preserve">
       <value>Sélectionner un questionnaire</value>
-      <comment>Sélectionner un questionnaire</comment>
+    <comment>Sélectionner un questionnaire</comment>
+  </data>
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+    <value>Afficher les détails de l'affectation</value>
+  </data>
+  <data name="SelectOption" xml:space="preserve">
+    <value>Sélectionner l'option</value>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Fournisseurs de messagerie</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Affectation</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Tableau de bord Carte</value>
+  </data>
+  <data name="OpenAssignment" xml:space="preserve">
+    <value>Ouvrir l'affectation</value>
+  </data>
+  <data name="NothingSelected" xml:space="preserve">
+    <value>Rien sélectionné</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>Version du questionnaire</value>
+  </data>
+  <data name="AllVersions" xml:space="preserve">
+    <value>Toutes les versions</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Réinitialiser</value>
+  </data>
+  <data name="EqualValues" xml:space="preserve">
+    <value>Égale</value>
+  </data>
+  <data name="NotEquals" xml:space="preserve">
+    <value>Pas égal à</value>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Commence par</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Inconnu</value>
+  </data>
+  <data name="EditCalendarEvent" xml:space="preserve">
+    <value>Modifier l'événement de calendrier</value>
+  </data>
+  <data name="CalendarEvent" xml:space="preserve">
+    <value>Événement Calendrier</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Ajouter</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="DownloadSupervisor" xml:space="preserve">
+    <value>Télécharger l'application Supervisor</value>
   </data>
 </root>

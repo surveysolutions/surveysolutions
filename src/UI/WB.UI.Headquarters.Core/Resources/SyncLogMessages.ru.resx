@@ -226,6 +226,12 @@
     <value>Интервьюер залогинелся и ему выделен AuthToken</value>
     <comment>Интервьюер залогинелся и ему выделен AuthToken</comment>
   </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Пароль изменен и ему выделен AuthToken</value>
+  </data>
+  <data name="FailToChangePassword" xml:space="preserve">
+    <value>Пользователю не удалось изменить пароль</value>
+  </data>
   <data name="NoMapsForUser" xml:space="preserve">
     <value>Нет карт для скачивания</value>
     <comment>Нет карт для скачивания</comment>

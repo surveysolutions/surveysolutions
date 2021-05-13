@@ -11,6 +11,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
             var questionsCount = interview.CountEnabledQuestions(groupIdentity);
             var answeredQuestionsCount = interview.CountEnabledAnsweredQuestions(groupIdentity);
 
+            if (!interview.IsEnabled(groupIdentity))
+                return GroupStatus.Disabled;
+            
             if (interview.HasEnabledInvalidQuestionsAndStaticTexts(groupIdentity))
                 return questionsCount == answeredQuestionsCount ? GroupStatus.CompletedInvalid : GroupStatus.StartedInvalid;
 

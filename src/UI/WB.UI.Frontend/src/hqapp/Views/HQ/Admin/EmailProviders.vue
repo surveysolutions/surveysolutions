@@ -36,7 +36,7 @@
                                 :class="{ 'answered': senderAddress }">
                                 <input
                                     data-vv-as="email address"
-                                    v-validate="'required|email'"
+                                    v-validate="'required_if:provider,amazon,sendgrid|email'"
                                     name="senderAddress"
                                     id="senderAddress"
                                     v-model="senderAddress"
@@ -94,7 +94,7 @@
                             :class="{ 'answered': senderName }">
                             <input
                                 data-vv-as="sender name"
-                                v-validate="'required'"
+                                v-validate="'required_if:provider,amazon,sendgrid'"
                                 name="senderName"
                                 id="senderName"
                                 v-model="senderName"
@@ -122,7 +122,7 @@
                             :class="{ 'answered': address }">
                             <input
                                 data-vv-as="address"
-                                v-validate="'required'"
+                                v-validate="'required_if:provider,amazon,sendgrid'"
                                 name="address"
                                 id="address"
                                 v-model="address"
@@ -149,6 +149,7 @@
                                 class="wb-radio"
                                 type="radio"
                                 v-model="provider"
+                                ref="provider"
                                 id="provider_none"
                                 value="none"/>
                             <label for="provider_none">
@@ -167,6 +168,7 @@
                                 v-validate="'required'"
                                 class="wb-radio"
                                 name="provider"
+                                ref="provider"
                                 type="radio"
                                 v-model="provider"
                                 id="provider_amazon"
@@ -276,6 +278,7 @@
                                 v-validate="'required'"
                                 class="wb-radio"
                                 name="provider"
+                                ref="provider"
                                 type="radio"
                                 v-model="provider"
                                 id="provider_sendgrid"
@@ -480,6 +483,11 @@ export default {
         isEmailFormDirty: function(val) {
             if (val) {
                 this.sendEmailResult = null
+            }
+        },
+        provider: function(val) {
+            if(val === 'none') {
+                this.$validator.validateAll('settings')
             }
         },
     },

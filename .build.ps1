@@ -43,6 +43,9 @@ if($null -eq $gitBranch) {
 }
 $EscapedBranchName = $gitBranch -replace '([Kk][Pp]-?[\d]+)|_|\+'
 $EscapedBranchName = $EscapedBranchName -replace '/|\\','-'
+$EscapedBranchName = $EscapedBranchName -replace '^[^\d\w]+' # tab should not start with non numeric non word character
+$EscapedBranchName =  $EscapedBranchName.Substring(0, [System.Math]::Min($EscapedBranchName.Length, 128))
+
 $isRelease = $gitBranch -eq $releaseBranch
 $version = Get-Content ./src/.version
 if ($version.Split('.').Length -eq 2) {
@@ -203,7 +206,7 @@ task frontend {
 task PackageHq frontend, {
     exec {
         dotnet publish ./src/UI/WB.UI.Headquarters.Core `
-            --no-self-contained `
+            --self-contained  `
             -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/hq
     }
     Compress $tmp/hq $output/WB.UI.Headquarters.zip

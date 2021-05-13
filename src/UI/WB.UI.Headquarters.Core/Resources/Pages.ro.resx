@@ -145,10 +145,10 @@
     <value>Oricare</value>
   </data>
   <data name="ApprovedByHeadquarters" xml:space="preserve">
-    <value>Aprobat de RINS</value>
+    <value>Aprobat de coordonatori</value>
   </data>
   <data name="ApprovedByupervisor" xml:space="preserve">
-    <value>Aprobat de controlor</value>
+    <value>Aprobat de supervizor</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Aprobă</value>
@@ -343,7 +343,7 @@
     <value>Vizualizați interviul</value>
   </data>
   <data name="HQ_LockWarning" xml:space="preserve">
-    <value>RINS blocați (casetă bifată) nu se pot conecta și nu pot efectua nicio acțiune pe server.</value>
+    <value>Coordonatori blocați (casetă bifată) nu se pot conecta și nu pot efectua nicio acțiune pe server.</value>
   </data>
   <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
     <value>Doriți să continuați?</value>
@@ -409,7 +409,7 @@
     <value>Stare</value>
   </data>
   <data name="InterviewDetails_SupervisorsButtonLabel" xml:space="preserve">
-    <value>a controlorului</value>
+    <value>a supervizorului</value>
   </data>
   <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
     <value>Limba</value>
@@ -475,10 +475,10 @@
     <value>Versiunea Android</value>
   </data>
   <data name="InterviewerProfile_Approved" xml:space="preserve">
-    <value>interviuri realizate (finalizate și aprobate de RINS)</value>
+    <value>interviuri realizate (finalizate și aprobate de hq)</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-      <value>{{interviewer}} (controlor: {{supervisor}})</value>
+      <value>{{interviewer}} (supervizor: {{supervisor}})</value>
   </data>
   <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
     <value>Viteza medie de sincronizare</value>
@@ -694,10 +694,10 @@
     <value>Niciodată conectat</value>
   </data>
   <data name="Interviewers_InterviewersToMove" xml:space="preserve">
-      <value>Anchetatorul(i) {{interviewers}} va fi mutat într-o echipă a controlorului {{supervisor}}.</value>
+      <value>Anchetatorul(i) {{interviewers}} va fi mutat într-o echipă a supervizorului {{supervisor}}.</value>
   </data>
   <data name="Interviewers_InterviewersToStay" xml:space="preserve">
-      <value>Anchetatorul(i) {{interviewers}} se află în echipa controlorului {{supervisor}} și nu se vor efectua acțiuni.</value>
+      <value>Anchetatorul(i) {{interviewers}} se află în echipa supervizorului {{supervisor}} și nu se vor efectua acțiuni.</value>
   </data>
   <data name="Interviewers_InterviewerVersion" xml:space="preserve">
     <value>Versiunea aplicației</value>
@@ -706,7 +706,7 @@
     <value>Versiunea aplicației Interviewer raportată în timpul ultimei sincronizări a tabletei sale cu serverul</value>
   </data>
   <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
-      <value>Mutați anchetatorul(i) cu sarcinile și interviurile lui la echipa controlorului {{supervisor}}.</value>
+      <value>Mutați anchetatorul(i) cu sarcinile și interviurile lui la echipa supervizorului {{supervisor}}.</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
       <value>Selectați o echipă unde să mutați {{names}}</value>
@@ -736,16 +736,16 @@
     <value>Neactualizat</value>
   </data>
   <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
-    <value>Controlorul devine responsabil pentru sarcinile și interviurile anchetatorului mutat.</value>
+    <value>Supervizorul devine responsabil pentru sarcinile și interviurile anchetatorului mutat.</value>
   </data>
   <data name="Interviewers_Selected" xml:space="preserve">
     <value>Anchetator(i) selectat(i)</value>
   </data>
   <data name="Interviewers_SupervisorTitle" xml:space="preserve">
-    <value>Controlor</value>
+    <value>Supervizor</value>
   </data>
   <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
-    <value>Numele de utilizator al controlorului anchetatorului</value>
+    <value>Numele de utilizator al supervizorului anchetatorului</value>
   </data>
   <data name="Interviewers_Title" xml:space="preserve">
     <value>Anchetatori</value>
@@ -967,10 +967,10 @@
     <value>Utilizatorul API &lt;b&gt;{0}&lt;/b&gt; a fost creat cu succes</value>
   </data>
   <data name="Profile_HeadquartersCreate" xml:space="preserve">
-    <value>Creați RINS</value>
+    <value>Creare coordonatori</value>
   </data>
   <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
-    <value>Editați profilul RINS: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <value>Editați profilul coordonator: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Profile_HeadquartersList" xml:space="preserve">
     <value>RINS</value>
@@ -988,25 +988,25 @@
     <value>Anchetatori</value>
   </data>
   <data name="Profile_ObserverCreate" xml:space="preserve">
-    <value>Creați responsabil DTS</value>
+    <value>Creare observator</value>
   </data>
   <data name="Profile_ObserverEditFormat" xml:space="preserve">
-    <value>Editați profilul responsabilului DTS: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <value>Editați profilul observator: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Profile_ObserversList" xml:space="preserve">
-    <value>Responsabili DTS</value>
+    <value>Observatori</value>
   </data>
   <data name="Profile_SupervisorCreate" xml:space="preserve">
-    <value>Creați profil de controlor</value>
+    <value>Creare supervizor</value>
   </data>
   <data name="Profile_SupervisorEditFormat" xml:space="preserve">
-    <value>Editați profilul controlorului: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <value>Editați profilul supervizor: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Profile_SupervisorsList" xml:space="preserve">
-    <value>Controlori</value>
+    <value>Supervizori</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Detaliile cu informații personale (opțional) &lt;br&gt; vor fi vizibile numai pentru RINS</value>
+    <value>Detaliile cu informații personale (opțional) &lt;br&gt; vor fi vizibile numai pentru HQ</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
       <value>{{name}} (ver. {{version}})</value>
@@ -1015,10 +1015,10 @@
     <value>(ver. {1}) {0} </value>
   </data>
   <data name="RejectedByHeadquarters" xml:space="preserve">
-    <value>Respins de RINS</value>
+    <value>Respins de coordonatori</value>
   </data>
   <data name="RejectedBySupervisor" xml:space="preserve">
-    <value>Respins de controlor</value>
+    <value>Respins de supervizor</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Căutare</value>
@@ -1040,19 +1040,19 @@
         &lt;br&gt;pentru a crea mai mulți utilizatori puteți utiliza &lt;a href='{{link}}' target='_blank'&gt;crearea de grupuri de utilizatori&lt;/a&gt;.</value>
   </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
-    <value>Controlorul blocat (caseta bifată) nu se poate conecta și nu poate efectua nicio acțiune pe server.</value>
+    <value>Supervizorul blocat (caseta bifată) nu se poate conecta și nu poate efectua nicio acțiune pe server.</value>
   </data>
   <data name="SupervisorAssigned" xml:space="preserve">
-    <value>Controlor atribuit</value>
+    <value>Supervizor atribuit</value>
   </data>
   <data name="Supervisors_ActiveUsers" xml:space="preserve">
-    <value>Controlori activi</value>
+    <value>Supervizori activi</value>
   </data>
   <data name="Supervisors_Archive" xml:space="preserve">
     <value>Arhivă</value>
   </data>
   <data name="Supervisors_ArchivedUsers" xml:space="preserve">
-    <value>Arhiva controlorilor</value>
+    <value>Arhiva supervizorilor</value>
   </data>
   <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
     <value>Starea arhivei</value>
@@ -1061,7 +1061,7 @@
     <value>Dacă anchetatorul a completat interviuri pe tableta sa, atunci datele vor fi pierdute.</value>
   </data>
   <data name="Supervisors_Selected" xml:space="preserve">
-    <value>Controlor(i) selectat(i)</value>
+    <value>Supervizor(i) selectat(i)</value>
   </data>
   <data name="Supervisors_Unarchive" xml:space="preserve">
     <value>Dezarhivare</value>
@@ -1106,13 +1106,13 @@
     <value>Anchete și stări</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
-    <value>Controlor (echipe)</value>
+    <value>Supervizor (echipe)</value>
   </data>
   <data name="SurveysStatuses_ApprovedByHQ" xml:space="preserve">
-    <value>Aprobat de RINS</value>
+    <value>Aprobat de HQ</value>
   </data>
   <data name="SurveysStatuses_ApprovedBySupervisor" xml:space="preserve">
-    <value>Aprobat de controlor</value>
+    <value>Aprobat de supervizor</value>
   </data>
   <data name="SurveysStatuses_Completed" xml:space="preserve">
     <value>Finalizat</value>
@@ -1121,13 +1121,13 @@
     <value>Anchetator alocat</value>
   </data>
   <data name="SurveysStatuses_RejectedByHQ" xml:space="preserve">
-    <value>Respins de RINS</value>
+    <value>Respins de HQ</value>
   </data>
   <data name="SurveysStatuses_RejectedBySupervisor" xml:space="preserve">
-    <value>Respins de controlor</value>
+    <value>Respins de supervizor</value>
   </data>
   <data name="SurveysStatuses_SupervisorAssigned" xml:space="preserve">
-    <value>Controlor alocat</value>
+    <value>Supervizor alocat</value>
   </data>
   <data name="SurveysStatuses_SurveyName" xml:space="preserve">
     <value>Numele anchetei</value>
@@ -1172,28 +1172,28 @@
     <value>Faceți clic pe un nume de utilizator pentru a modifica profilul unui utilizator API existent.</value>
   </data>
   <data name="Users_Headquarters_Instruction1" xml:space="preserve">
-    <value>Apăsați butonul Adăugați RINS pentru a crea un nou utilizator RINS.</value>
+    <value>Apăsați butonul Adăugare Coordonatori pentru a crea un nou utilizator HQ.</value>
   </data>
   <data name="Users_Headquarters_Instruction2" xml:space="preserve">
-    <value>Faceți clic pe un nume de utilizator pentru a modifica profilul unui utilizator RINS existent.</value>
+    <value>Faceți clic pe un nume de utilizator pentru a modifica profilul unui utilizator HQ existent.</value>
   </data>
   <data name="Users_Interviewers_Instruction1" xml:space="preserve">
-    <value>Apăsați butonul Adăugați Anchetator pentru a crea un nou utilizator Anchetator.</value>
+    <value>Apăsați butonul Adăugare Anchetator pentru a crea un nou utilizator Anchetator.</value>
   </data>
   <data name="Users_Interviewers_Instruction2" xml:space="preserve">
     <value>Faceți clic pe un nume de utilizator pentru a vedea informații despre un Anchetator și pentru a modifica profilul unui Anchetator.</value>
   </data>
   <data name="Users_Observers_Instruction1" xml:space="preserve">
-    <value>Apăsați butonul Adăugați /Responsabil DTS pentru a crea un nou utilizator Responsabil DTS.</value>
+    <value>Apăsați butonul Adăugare Observator pentru a crea un nou utilizator Observator.</value>
   </data>
   <data name="Users_Observers_Instruction2" xml:space="preserve">
-    <value>Faceți clic pe un nume de utilizator pentru a modifica profilul unui utilizator Responsabil DTS existent.</value>
+    <value>Faceți clic pe un nume de utilizator pentru a modifica profilul unui utilizator Observator existent.</value>
   </data>
   <data name="Users_Supervisors_Instruction1" xml:space="preserve">
-    <value>Apăsați butonul Adăugați Controlor pentru a crea un nou utilizator Controlor.</value>
+    <value>Apăsați butonul Adăugați Supervizor pentru a crea un nou utilizator Supervizor.</value>
   </data>
   <data name="Users_Supervisors_Instruction2" xml:space="preserve">
-    <value>Faceți clic pe un nume de utilizator pentru a modifica profilul unui Controlor existent.</value>
+    <value>Faceți clic pe un nume de utilizator pentru a modifica profilul unui Supervizor existent.</value>
   </data>
   <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
     <value>Dosarul care conține site-ul web are un nume de cale prea lung. Vă rog mutați site-ul web într-un alt dosar cu un nume mai scurt.</value>
@@ -1433,7 +1433,7 @@
     <value>Data la care anchetatorul s-a autentificat ultima oară pe site.</value>
   </data>
   <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
-    <value>Mutati la o alta echipa un anchetator care are asignate chestionare. Aceste chestionare vor fi re-atribuite controlorului initial. Daca aceste link-uri ale chestionarelor au fost transmise, respondentii nu vor mai putea raspunde la ele pana acand acestea nu vor fi re-atribuite unui utilizator de tip anchetator.</value>
+    <value>Mutati la o alta echipa un anchetator care are asignate chestionare. Aceste chestionare vor fi re-atribuite supervizorului initial. Daca aceste link-uri ale chestionarelor au fost transmise, respondentii nu vor mai putea raspunde la ele pana acand acestea nu vor fi re-atribuite unui utilizator de tip anchetator.</value>
   </data>
   <data name="InterviewersAndDevicesSubtitle" xml:space="preserve">
     <value>Probleme pentru fiecare anchetator</value>
@@ -1532,12 +1532,54 @@
     <value>Afișează numărul de anchete din fiecare stare (coloane) pentru fiecare instrument de sondaj (rânduri)</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorDescription" xml:space="preserve">
-    <value>Anchete și stări arată numărul de anchete defalcate pe stări pentru anchetele în care este implicat acest controlor</value>
+    <value>Anchete și stări arată numărul de anchete defalcate pe stări pentru anchetele în care este implicat acest supervizor</value>
   </data>
   <data name="SurveyStatisticsDescription" xml:space="preserve">
     <value>Raportul prezintă stastici de bază și tabele calculate din datele colectate</value>
   </data>
   <data name="Verify" xml:space="preserve">
-    <value>Verifică</value>
+    <value>Verificare</value>
+  </data>
+  <data name="AccountManage_ShowUsers" xml:space="preserve">
+    <value>Arată utilizatorii</value>
+  </data>
+  <data name="ApproveRejectPartialView_ApproveReceivedConfirm" xml:space="preserve">
+    <value>Aplică fiecărui chestionar pe care Anchetatorul l-a primit deja</value>
+  </data>
+  <data name="ApproveRejectPartialView_ApproveReceivedWarning" xml:space="preserve">
+    <value>Actualul anchetator responsabil nu va fi informat despre aprobarea chestionarului până la următoarea sincronizare. Dacă anchetatorul a început deja să lucreze pe chestionar, toate datele pe care le-a introdus acesta înainte de următoarea sincronizare vor fi PIERDUTE!</value>
+  </data>
+  <data name="Interviewer_CreateText" xml:space="preserve">
+    <value>Această acțiune va crea utilizator individual cu drepturi de anchetator, &lt;br&gt; pentru a crea mai mulți utilizatori, puteți utiliza &lt;a href="{{link}}" target="_blank"&gt;crearea lotului utilizatorului&lt;/a&gt;.</value>
+  </data>
+  <data name="UserManagement_AddToWorkspace" xml:space="preserve">
+    <value>Adăugare la spațiile de lucru</value>
+  </data>
+  <data name="UserManagement_ManageWorkspacesTitle" xml:space="preserve">
+    <value>Gestionare spații de lucru</value>
+  </data>
+  <data name="UserManagement_RemoveFromWorkspace" xml:space="preserve">
+    <value>Eliminare din spațiile de lucru</value>
+  </data>
+  <data name="UserManagement_SubtitleAdd" xml:space="preserve">
+    <value>Selectare spații de lucru care trebuie adăugate utilizatorilor selectați</value>
+  </data>
+  <data name="UserManagement_SubtitleRemove" xml:space="preserve">
+    <value>Selectare spații de lucru care trebuie eliminate de la utilizatorii selectați</value>
+  </data>
+  <data name="UserManagement_UsersSelected" xml:space="preserve">
+    <value>Utilizator(i) selectat(i)</value>
+  </data>
+  <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
+    <value>Toate rolurile</value>
+  </data>
+  <data name="UsersManage_ShowUsersFilterPlaceholder" xml:space="preserve">
+    <value>Toți utilizatorii</value>
+  </data>
+  <data name="UsersManage_WorkspacesFilterPlaceholder" xml:space="preserve">
+    <value>Toate spațiile de lucru</value>
+  </data>
+  <data name="UsersManage_WorkspacesFilterTitle" xml:space="preserve">
+    <value>Spațiu de lucru</value>
   </data>
 </root>

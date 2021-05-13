@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
@@ -33,17 +32,21 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             this.logger = logger;
         }
 
-        public void Upgrade(Guid processId, Guid userId, QuestionnaireIdentity migrateFrom,
-            QuestionnaireIdentity migrateTo, CancellationToken cancellation)
+        public void Upgrade(AssignmentsUpgradeProcess upgradeProcess, CancellationToken cancellation)
         {
+            var migrateFrom = upgradeProcess.From;
+            var migrateTo = upgradeProcess.To;
+            var userId = upgradeProcess.UserId;
+            var processId = upgradeProcess.ProcessId;
+
             logger.LogInformation($"Upgrade assignments requested. From {migrateFrom} to {migrateTo}. Process: {processId}.");
+            
             int migratedSuccessfully = 0;
             List<AssignmentUpgradeError> upgradeErrors = new List<AssignmentUpgradeError>();
 
             this.upgradeService.ReportProgress(processId,
                 new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, 0,
                     migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.InProgress));
-
             try
             {
                 var idsToMigrate = assignments.GetAllAssignmentIdsForMigrateToNewVersion(migrateFrom);

@@ -148,6 +148,7 @@ export default {
     },
     mounted() {
         this.loadData()
+        window.ajustDetailsPanelHeight()
     },
     watch: {
         responsible: function (value) {

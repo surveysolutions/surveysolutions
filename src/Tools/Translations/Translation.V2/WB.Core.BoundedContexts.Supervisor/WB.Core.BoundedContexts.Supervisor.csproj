@@ -62,6 +62,9 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewDetails.resx">
       <Link>InterviewDetails.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewDetails.ro.resx">
+      <Link>InterviewDetails.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewDetails.ru.resx">
       <Link>InterviewDetails.ru.resx</Link>
     </EmbeddedResource>
@@ -70,6 +73,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewMessages.resx">
       <Link>InterviewMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewMessages.ro.resx">
+      <Link>InterviewMessages.ro.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewMessages.ru.resx">
       <Link>InterviewMessages.ru.resx</Link>
@@ -80,6 +86,9 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorDashboard.resx">
       <Link>SupervisorDashboard.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorDashboard.ro.resx">
+      <Link>SupervisorDashboard.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorDashboard.ru.resx">
       <Link>SupervisorDashboard.ru.resx</Link>
     </EmbeddedResource>
@@ -88,6 +97,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorUIResources.resx">
       <Link>SupervisorUIResources.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorUIResources.ro.resx">
+      <Link>SupervisorUIResources.ro.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorUIResources.ru.resx">
       <Link>SupervisorUIResources.ru.resx</Link>

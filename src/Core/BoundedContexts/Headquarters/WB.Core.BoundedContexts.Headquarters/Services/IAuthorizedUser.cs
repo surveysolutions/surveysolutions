@@ -10,12 +10,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         bool IsAdministrator { get; }
         bool IsHeadquarter { get; }
         bool IsSupervisor { get; }
+        bool IsApiUser { get; }
         bool IsObserver { get; }
         bool IsObserving { get; }
         bool IsAuthenticated { get; }
 
         Guid Id { get; }
         string UserName { get; }
+        bool PasswordChangeRequired { get; }
         bool HasNonDefaultWorkspace { get; }
         IEnumerable<string> Workspaces { get; }
 
@@ -26,6 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         /// <returns>Return true if user assigned to workspace, even for disabled one</returns>
         bool HasAccessToWorkspace(string workspace);
         IEnumerable<WorkspaceContext> GetEnabledWorkspaces();
+        void ResetPasswordChangeRequiredFlag();
     }
 
     public static class AuthorizedUserHelpers

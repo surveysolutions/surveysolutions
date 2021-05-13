@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         {
         }
 
-        public void Execute(Action<TService> action, string workspace)
+        public void Execute(Action<TService> action, string workspace = null)
         {
             using var scope = this.CreateChildContainer(workspace);
             var service = scope.Resolve<TService>();
@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             scope.Resolve<IUnitOfWork>().AcceptChanges();
         }
 
-        public TResult Execute<TResult>(Func<TService, TResult> action, string workspace)
+        public TResult Execute<TResult>(Func<TService, TResult> action, string workspace = null)
         {
             using var scope = this.CreateChildContainer(workspace);
             var service = scope.Resolve<TService>();
@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             return result;
         }
 
-        public async Task ExecuteAsync(Func<TService, Task> action, string workspace)
+        public async Task ExecuteAsync(Func<TService, Task> action, string workspace = null)
         {
             using var scope = this.CreateChildContainer(workspace);
             var service = scope.Resolve<TService>();
@@ -88,17 +88,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
     public class UnitOfWorkInScopeExecutor : IInScopeExecutor
     {
         private readonly ILifetimeScope lifetimeScope;
+        private long Depth = 0;
 
         public UnitOfWorkInScopeExecutor(ILifetimeScope rootScope)
         {
             lifetimeScope = rootScope;
+
+            if (rootScope.Tag is long depth)
+            {
+                Depth = depth;
+            }
         }
         
         protected ILifetimeScope CreateChildContainer(string workspace = null)
         {
             if (lifetimeScope == null) throw new Exception($"Class was not initialized");
             
-            var scope = lifetimeScope.BeginLifetimeScope();
+            var scope = lifetimeScope.BeginLifetimeScope(Depth + 1);
 
             if (workspace == null)
             {
@@ -127,9 +133,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
         }
 
-        public T Execute<T>(Func<IServiceLocator, T> func)
+        public T Execute<T>(Func<IServiceLocator, T> func, string workspace = null)
         {
-            using var scope = CreateChildContainer();
+            using var scope = CreateChildContainer(workspace);
             var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
 
             var result = func(serviceLocatorLocal);

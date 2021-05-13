@@ -1,0 +1,9 @@
+﻿@using WB.UI.Headquarters.Code
+@model WB.UI.Headquarters.Models.QuestionnaireExposedVariablesModel
+@{
+    ViewBag.Title = string.Format(Pages.QuestionnaireNameVersionFirst, Model.Title, Model.Version);
+}
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>

@@ -2,17 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Amazon.Runtime.Internal;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.Services.DynamicReporting;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Infrastructure.Native.Utils;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Models.ComponentModels;
@@ -29,19 +37,29 @@ namespace WB.UI.Headquarters.Controllers.Api
         private const int DEFAULTPAGESIZE = 12;
         private const string DEFAULTEMPTYQUERY = "";
 
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
+        private readonly IExposedVariablesService exposedVariablesService;
+        private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
+
         public QuestionnairesApiController(IAuthorizedUser authorizedUser, 
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDeleteQuestionnaireService deleteQuestionnaireService,
-            IWebInterviewConfigProvider webInterviewConfigProvider)
+            IWebInterviewConfigProvider webInterviewConfigProvider,
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems,
+            IExposedVariablesService exposedVariablesService,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.authorizedUser = authorizedUser;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.deleteQuestionnaireService = deleteQuestionnaireService;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
+            this.questionnaireItems = questionnaireItems;
+            this.exposedVariablesService = exposedVariablesService;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         [HttpGet]
@@ -102,6 +120,19 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             await deleteQuestionnaireService.DisableQuestionnaire(request.QuestionnaireId, request.Version, this.authorizedUser.Id);
             
+            return Ok();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public async Task<IActionResult> ChangeVariableExposeStatus([FromBody] UpdateExposedVariablesRequestModel request)
+        {
+            if (!QuestionnaireIdentity.TryParse(request.QuestionnaireIdentity, out QuestionnaireIdentity questionnaireIdentity))
+            {
+                return this.BadRequest();
+            }
+
+            await exposedVariablesService.UpdateExposedVariables(questionnaireIdentity, request.Variables, this.authorizedUser.Id);
             return Ok();
         }
 
@@ -171,5 +202,148 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             return NotFound();
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public List<QuestionnaireExposableEntity> GetQuestionnaireExposedVariables([FromQuery] string id)
+        {
+            if (!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
+            {
+                return null;
+            }
+
+            return this.questionnaireItems.Query(_ => _
+                    .Where(x => x.QuestionnaireIdentity == questionnaireIdentity.ToString() && x.IncludedInReportingAtUtc != null)
+                    .OrderUsingSortExpression("Id Asc")
+                    .Select(x => new QuestionnaireExposableEntity
+                    {
+                        Id = x.Id,
+                        Title = x.QuestionText,
+                        Variable = x.StataExportCaption,
+                        Label = x.VariableLabel ?? "",
+                        IsExposed = x.IncludedInReportingAtUtc != null,
+                        EntityType = x.EntityType
+                    }))
+                .ToList();
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public DataTableResponse<QuestionnaireExposableEntity> GetQuestionnaireVariables([Models.Api.DataTable.DataTablesRequest] DataTableRequest request,
+            [FromQuery] string id)
+        {
+            if (!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
+            {
+                return null;
+            }
+
+            var document = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+
+            var variablesNotInRostersIds = document.Children
+                .Where(y=>(y as Group)?.IsRoster != true)
+                .TreeToEnumerable(x => x.Children.Where(y=>(y as Group)?.IsRoster != true))
+                .Where(x =>x is IVariable)
+                .Select(x => x.PublicKey);
+
+            var questionsNotInRosters = document.Children
+                .Where(y => (y as Group)?.IsRoster != true)
+                .TreeToEnumerable(x =>x.Children.Where(y=>(y as Group)?.IsRoster != true))
+                .OfType<IQuestion>()
+                .Where(x=>x.QuestionType == QuestionType.DateTime ||
+                          x.QuestionType == QuestionType.Numeric ||
+                          x.QuestionType == QuestionType.Text ||
+                          (x.QuestionType == QuestionType.SingleOption 
+                           && !x.LinkedToQuestionId.HasValue 
+                           && !x.LinkedToRosterId.HasValue))
+                .Select(x => x.PublicKey);
+
+            var permittedEntities = questionsNotInRosters.Union(variablesNotInRostersIds).Except(questionnaire.GetPrefilledEntities()).ToList();
+
+            var variables = this.questionnaireItems.Query(q =>
+            {
+                q = q.Where(i => i.QuestionnaireIdentity == questionnaireIdentity.ToString());
+                q = q.Where(i => permittedEntities.Contains(i.EntityId));
+
+                if (request.Search?.Value != null)
+                {
+                    var search = request.Search.Value.ToLower();
+                    q = q.Where(i => i.QuestionText.Contains(search)
+                                     || i.StataExportCaption.ToLower().Contains(search)
+                                     || i.VariableLabel.Contains(search));
+                }
+
+                q = q.OrderUsingSortExpression("Id Asc");
+
+                IQueryable<QuestionnaireCompositeItem> pagedResults = q;
+                
+                if (request.PageSize > 0)
+                {
+                    pagedResults = q.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize);
+                }
+
+                return new QuestionnaireExposableEntities()
+                {
+                    TotalCount = q.Count(),
+                    Items = pagedResults.Select(x=> new QuestionnaireEntityItem()
+                    {
+                        Title = x.QuestionText,
+                        Id = x.Id,
+                        VariableName = x.StataExportCaption,
+                        IsExposed = x.IncludedInReportingAtUtc != null,
+                        Label = x.VariableLabel,
+                        EntityType = x.EntityType
+                        
+                    }).ToList()
+                };
+            });
+
+            
+            return new DataTableResponse<QuestionnaireExposableEntity>
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = variables.TotalCount,
+                RecordsFiltered = variables.TotalCount,
+                Data = variables.Items.Select(x => new QuestionnaireExposableEntity
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Variable = x.VariableName,
+                    IsExposed = x.IsExposed ?? false,
+                    EntityType = x.EntityType,
+                    Label = x.Label ?? ""
+                })
+            };
+        }
+    }
+
+    public class QuestionnaireExposableEntities
+    {
+        public QuestionnaireExposableEntities()
+        {
+            Items = new List<QuestionnaireEntityItem>();
+        }
+        public IEnumerable<QuestionnaireEntityItem> Items { get; set; }
+        public int TotalCount { get; set; }
+    }
+
+    public class QuestionnaireExposableEntity
+    {
+        public int Id { get; set; }
+        public string Title { set; get; }
+        public string Label { set; get; }
+        public bool IsExposed { set; get; }
+        public string Variable { get; set; }
+        public EntityType EntityType { get; set; }
+    }
+
+    public class QuestionnaireEntityItem
+    {
+        public int Id { get; set; }
+        public string Title { set; get; }
+        public string Label { set; get; }
+        public bool? IsExposed { set; get; }
+        public string VariableName { get; set; }
+        public EntityType EntityType { get; set; }
     }
 }

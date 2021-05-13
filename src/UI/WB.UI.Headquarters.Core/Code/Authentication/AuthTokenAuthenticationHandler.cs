@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Shared.Web.Authentication;
 
@@ -21,6 +22,7 @@ namespace WB.UI.Headquarters.Code.Authentication
         private readonly IApiTokenProvider authTokenProvider;
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
         private bool isUserLocked;
+        private bool passwordChangeRequired;
 
         public AuthTokenAuthenticationHandler(IOptionsMonitor<AuthTokenAuthenticationSchemeOptions> options, 
             ILoggerFactory logger,
@@ -61,6 +63,26 @@ namespace WB.UI.Headquarters.Code.Authentication
                 this.isUserLocked = true;
                 return AuthenticateResult.Fail("User is locked");
             }
+            
+            if (user.PasswordChangeRequired)
+            {
+                var allowedUrlToAccess = Request.Path.HasValue 
+                    && Request.Path.Value != null
+                    && (
+                        Request.Path.Value.EndsWith("/users/changePassword")
+                        || Request.Path.Value.StartsWith("/api/interviewer/compatibility")
+                        || Request.Path.Value.StartsWith("/api/supervisor/compatibility")
+                        || Request.Path.Value.EndsWith("/users/current")
+                        || Request.Path.Value.EndsWith("/users/hasdevice")
+                        || Request.Path.Value.EndsWith("/autoupdate")
+                        //|| Request.Path.Value.EndsWith("/latestversion")
+                    );
+                if (!allowedUrlToAccess)
+                {
+                    this.passwordChangeRequired = true;
+                    return AuthenticateResult.Fail("User must change password");
+                }
+            }
 
             var verificationResult = await authTokenProvider.ValidateTokenAsync(user.Id, creds.Password);
             if (verificationResult)
@@ -81,6 +103,14 @@ namespace WB.UI.Headquarters.Code.Authentication
                 await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
                 await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "Workspace is disabled"}));
             }
+            else if (properties.TryGetForbidReason(out var reason))
+            {
+                if (reason == ForbidReason.WorkspaceAccessDisabledReason)
+                {
+                    await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
+                    await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "WorkspaceAccessDisabledReason"}));
+                }
+            }
         }
 
         protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
@@ -90,6 +120,17 @@ namespace WB.UI.Headquarters.Code.Authentication
             {
                 await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
                 await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "User is locked"}));
+            }
+            if (this.passwordChangeRequired)
+            {
+                await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
+                var serverError = new ServerError()
+                {
+                    Code = ServerErrorCodes.PasswordChangeRequired,
+                    Message = "Your must change your password to get server access"
+                };
+                await bodyWriter.WriteAsync(JsonConvert.SerializeObject(serverError));
+                //await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "Force change password"}));
             }
         }
     }

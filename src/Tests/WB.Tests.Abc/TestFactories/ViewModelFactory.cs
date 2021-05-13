@@ -30,6 +30,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -496,7 +497,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAuditLogService>(),
                 Mock.Of<IViewModelNavigationService>(),
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null, null)),
-                interviewers ?? new InMemoryPlainStorage<InterviewerDocument>(Mock.Of<ILogger>()));
+                interviewers ?? new InMemoryPlainStorage<InterviewerDocument>(Mock.Of<ILogger>()),
+                Mock.Of<IUserInteractionService>());
 
             if (interviewId.HasValue)
             {
@@ -530,7 +532,8 @@ namespace WB.Tests.Abc.TestFactories
                 serializer?? Mock.Of <ISerializer>(),
                 userInteractionService?? Mock.Of<IUserInteractionService>(),
                 auditLogService ?? Mock.Of<IAuditLogService>(),
-                Mock.Of<IDeviceInformationService>());
+                Mock.Of<IDeviceInformationService>(),
+                Mock.Of<IWorkspaceService>());
 
         public ConnectedDeviceSynchronizationViewModel ConnectedDeviceSynchronizationViewModel()
             => new ConnectedDeviceSynchronizationViewModel();

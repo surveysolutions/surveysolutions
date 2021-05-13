@@ -93,7 +93,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     url: string.Concat(this.UsersController, "/login"),
                     request: logonInfo,
                     credentials: credentials,
-                    token: token)).ConfigureAwait(false); ;
+                    token: token)).ConfigureAwait(false);
+
+                return authToken;
+            }
+            catch (RestException ex)
+            {
+                throw ex.ToSynchronizationException();
+            }
+        }
+        
+        public async Task<string> ChangePasswordAsync(ChangePasswordInfo info, CancellationToken token = default)
+        {
+            try
+            {
+                var authToken = await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<string>(
+                    url: string.Concat(this.UsersController, "/changePassword"),
+                    request: info,
+                    token: token)).ConfigureAwait(false);
 
                 return authToken;
             }
@@ -270,6 +287,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
                 url: string.Concat(this.QuestionnairesController, "/list"), credentials: this.restCredentials, token: cancellationToken));
+        }
+
+        public Task<List<QuestionnaireIdentity>> GetServerQuestionnairesPermittedToSwitchToWebModeAsync(CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
+                url: string.Concat(this.QuestionnairesController, "/switchabletoweb"), credentials: this.restCredentials, token: cancellationToken));
         }
       
         public Task<List<MapView>> GetMapList(CancellationToken cancellationToken)

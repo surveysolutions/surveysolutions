@@ -34,7 +34,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V10.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions;
@@ -176,45 +175,6 @@ namespace WB.Tests.Unit.Designer
                 title: title,
                 groupId: sectionId,
                 children: children);
-
-        public static CodeGenerationSettings CodeGenerationSettings()
-        {
-
-
-            return new CodeGenerationSettings(
-                        additionInterfaces: new[] { "IInterviewExpressionStateV10" },
-                        namespaces: new[]
-                        {
-                            "WB.Core.SharedKernels.DataCollection.V2",
-                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
-                            "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
-                            "WB.Core.SharedKernels.DataCollection.V4",
-                            "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
-                            "WB.Core.SharedKernels.DataCollection.V5",
-                            "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
-                            "WB.Core.SharedKernels.DataCollection.V6",
-                            "WB.Core.SharedKernels.DataCollection.V7",
-                            "WB.Core.SharedKernels.DataCollection.V8",
-                            "WB.Core.SharedKernels.DataCollection.V9",
-                            "WB.Core.SharedKernels.DataCollection.V10",
-                        },
-                        isLookupTablesFeatureSupported: true,
-                        expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV10(expressionStateModel).TransformText(),
-                        linkedFilterMethodGenerator: model => new LinkedFilterMethodTemplateV10(model).TransformText());
-        }
-
-        public static CodeGenerator CodeGenerator(
-            IMacrosSubstitutionService macrosSubstitutionService = null,
-            IExpressionProcessor expressionProcessor = null,
-            ILookupTableService lookupTableService = null)
-        {
-            return new CodeGenerator(
-                macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
-                expressionProcessor ?? Create.RoslynExpressionProcessor(),
-                lookupTableService ?? Create.LookupTableService(),
-                Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<IOptions<CompilerSettings>>(x => x.Value == new CompilerSettings()));
-        }
 
         public static CodeGeneratorV2 CodeGeneratorV2()
         {
@@ -762,18 +722,7 @@ namespace WB.Tests.Unit.Designer
             document.CoverPageSectionId = coverId;
             return document;
         }
-
-        public static QuestionnaireExpressionStateModelFactory QuestionnaireExecutorTemplateModelFactory(
-            IMacrosSubstitutionService macrosSubstitutionService = null,
-            IExpressionProcessor expressionProcessor = null,
-            ILookupTableService lookupTableService = null)
-        {
-            return new QuestionnaireExpressionStateModelFactory(
-                macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
-                expressionProcessor ?? Create.RoslynExpressionProcessor(),
-                lookupTableService ?? Create.LookupTableService());
-        }
-
+        
         public static QuestionnaireStateTracker QuestionnaireStateTacker()
         {
             return new QuestionnaireStateTracker();
@@ -1440,11 +1389,6 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<ICategoriesService>()
             );
 
-
-        public static DeskAuthenticationService DeskAuthenticationService(string multipassKey, string returnUrlFormat, string siteKey)
-        {
-            return new DeskAuthenticationService(Mock.Of<IOptions<DeskSettings>>(x => x.Value == new DeskSettings(multipassKey, returnUrlFormat, siteKey)));
-        }
 
         public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false, string variable = "questionnaire", string defaultLanguageName = "Original")
             => new UpdateQuestionnaire(Guid.NewGuid(), title, variable, false, isPublic, defaultLanguageName, responsibleId, isResponsibleAdmin);

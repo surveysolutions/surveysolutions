@@ -180,6 +180,9 @@
   <data name="Activated" xml:space="preserve">
     <value>Aktivizuar</value>
   </data>
+  <data name="CawiActivated" xml:space="preserve">
+    <value>CAWI Aktivizuar</value>
+  </data>
   <data name="Active" xml:space="preserve">
     <value>Aktiv</value>
   </data>
@@ -469,6 +472,6 @@
     <value>Kalimi i detyrave nga niveli {{from}} në {{to}}</value>
   </data>
   <data name="WebMode" xml:space="preserve">
-    <value>Modaliteti Ueb</value>
+    <value>Modaliteti</value>
   </data>
 </root>

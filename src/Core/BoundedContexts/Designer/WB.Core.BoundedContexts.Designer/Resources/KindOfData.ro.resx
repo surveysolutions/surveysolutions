@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="adm" xml:space="preserve">
-    <value>Date administrative [adm]</value>
+    <value>Date înregistrări administrative [adm]</value>
   </data>
   <data name="agg" xml:space="preserve">
     <value>Date agregate [agg]</value>
   </data>
   <data name="cen" xml:space="preserve">
-    <value>Date de recensământ [cen]</value>
+    <value>Date de recensământ/recenzare [cen]</value>
   </data>
   <data name="cli" xml:space="preserve">
     <value>Date clinice [cli]</value>
@@ -136,7 +136,7 @@
     <value>Date de observare / evaluări [evn]</value>
   </data>
   <data name="pro" xml:space="preserve">
-    <value>Date de proces [pro]</value>
+    <value>Date produse de proces [pro]</value>
   </data>
   <data name="ssd" xml:space="preserve">
     <value>Date de anchete selective (prin eșantion) [ssd]</value>

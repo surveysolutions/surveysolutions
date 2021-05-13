@@ -76,6 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
                 var fileStorageConfig = configuration.GetSection("FileStorage").Get<FileStorageConfig>();
                 fileStorageConfig.AppData = fileStorageConfig.AppData.Replace("~", Directory.GetCurrentDirectory());
                 fileStorageConfig.TempData = fileStorageConfig.TempData.Replace("~", Directory.GetCurrentDirectory());
+                fileStorageConfig.GlobalTempData = fileStorageConfig.TempData;
 
                 var workspace = workspaceAccessor.CurrentWorkspace();
 
@@ -111,6 +112,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
                 }
 
                 EnsureFolderExists(fileStorageConfig.TempData);
+                EnsureFolderExists(fileStorageConfig.GlobalTempData);
 
                 return Options.Create(fileStorageConfig);
             });

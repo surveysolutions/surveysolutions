@@ -94,6 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
                 .Where(HasEmail())
+                .Where(InWebMode())
                 .Where(NotArchived())
                 .Count());
         }
@@ -103,6 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
                 .Where(HasEmail())
+                .Where(InWebMode())
                 .Where(NotArchived())
                 .Count(x => x.SentOnUtc == null));
         }
@@ -112,6 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
                 .Where(HasEmail())
+                .Where(InWebMode())
                 .Where(NotArchived())
                 .Count(x => x.SentOnUtc != null));
         }
@@ -121,7 +124,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
                 .Where(HasEmail())
+                .Where(InWebMode())
                 .Where(NotArchived())
+                .Where(NotCompletedAssignment())
                 .Where(x => x.SentOnUtc == null)
                 .Select(x => x.Id)
                 .ToList());
@@ -156,6 +161,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             DateTime thresholdDate = DateTime.UtcNow.AddDays(-thresholdDays);
             var noResponseInvitationsWithoutReminders = invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
+                .Where(NotCompletedAssignment())
                 .Where(HasNoInterview())
                 .Where(NoReminderAndInvitationIsExpired(thresholdDate))
                 .Select(x => x.Id)
@@ -163,6 +169,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             var noResponseInvitationsWithReminders = invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
+                .Where(NotCompletedAssignment())
                 .Where(HasNoInterview())
                 .Where(LastReminderIsExpired(thresholdDate))
                 .Select(x => x.Id)
@@ -214,10 +221,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         {
             return invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
+                .Where(InWebMode())
                 .Where(NotArchived())
                 .Where(HasNoInterview())
-                .Where(x => (x.Assignment.Quantity ?? int.MaxValue) - x.Assignment.InterviewSummaries.Count > 0)
+                .Where(NotCompletedAssignment())
                 .ToList());
+        }
+
+        private static Expression<Func<Invitation, bool>> HasNoInterview()
+        {
+            return x => x.InterviewId == null;
+        }
+
+        private static Expression<Func<Invitation, bool>> NotCompletedAssignment()
+        {
+            return x => (x.Assignment.Quantity ?? int.MaxValue) - x.Assignment.InterviewSummaries.Count > 0;
         }
 
         public InvitationDistributionStatus GetEmailDistributionStatus()
@@ -316,7 +334,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public Invitation GetInvitationByAssignmentId(int assignmentId)
         {
-            return invitationStorage.Query(_ => _.SingleOrDefault(x => x.AssignmentId == assignmentId && x.InterviewId == null));
+            return invitationStorage.Query(_ => _.SingleOrDefault(x => x.AssignmentId == assignmentId));
         }
 
         public void InterviewWasCreated(int invitationId, string interviewId)
@@ -387,15 +405,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         {
             return x => x.InterviewId != null;
         }
-        
-        private static Expression<Func<Invitation, bool>> HasNoInterview()
-        {
-            return x => x.InterviewId == null;
-        }
 
         private static Expression<Func<Invitation, bool>> NotArchived()
         {
             return x => x.Assignment.Archived == false;
+        }
+
+        private static Expression<Func<Invitation, bool>> InWebMode()
+        {
+            return x => x.Assignment.WebMode == true;
         }
 
         private static Expression<Func<Invitation, bool>> HasEmail()

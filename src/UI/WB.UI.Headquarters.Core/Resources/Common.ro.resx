@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -136,7 +136,7 @@
     <value>Toate stările</value>
   </data>
   <data name="AllSupervisors" xml:space="preserve">
-    <value>Toți controlorii</value>
+    <value>Toți supervizorii</value>
   </data>
   <data name="AlRightsReserved" xml:space="preserve">
     <value>Toate drepturile rezervate</value>
@@ -151,10 +151,10 @@
     <value>Arhivat</value>
   </data>
   <data name="Assign" xml:space="preserve">
-    <value>Alocat</value>
+    <value>Alocare</value>
   </data>
   <data name="Assignment" xml:space="preserve">
-    <value>Alocare</value>
+    <value>Sarcină</value>
   </data>
   <data name="AuditLog" xml:space="preserve">
     <value>Jurnal de audit</value>
@@ -253,7 +253,7 @@
     <value>Actualizare</value>
   </data>
   <data name="Reject" xml:space="preserve">
-    <value>Respinse</value>
+    <value>Respingere</value>
   </data>
   <data name="Responsible" xml:space="preserve">
     <value>Responsabil</value>
@@ -304,8 +304,8 @@
     <value>Cu erori</value>
   </data>
   <data name="SelectQuestionnaire" xml:space="preserve">
-      <value>Selectează chestionarul</value>
-      <comment>Selectează chestionarul</comment>
+      <value>Selectare chestionar</value>
+    <comment>Selectează chestionarul</comment>
   </data>
   <data name="AllVersions" xml:space="preserve">
     <value>Toate versiunile</value>
@@ -313,7 +313,7 @@
   <data name="EmailProviders" xml:space="preserve">
     <value>Furnizori de servicii email</value>
   </data>
-  <data name="Equals" xml:space="preserve">
+  <data name="EqualValues" xml:space="preserve">
     <value>Egal</value>
   </data>
   <data name="NotEquals" xml:space="preserve">
@@ -329,12 +329,36 @@
     <value>Restabilire</value>
   </data>
   <data name="SelectOption" xml:space="preserve">
-    <value>Selectează o opțiune</value>
+    <value>Selectare opțiune</value>
   </data>
   <data name="StartsWith" xml:space="preserve">
     <value>Începe cu</value>
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>Necunoscut</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Adăugare</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Sarcini</value>
+  </data>
+  <data name="CalendarEvent" xml:space="preserve">
+    <value>Eveniment Calentar</value>
+  </data>
+  <data name="EditCalendarEvent" xml:space="preserve">
+    <value>Editare Eveniment Calendar</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Tablou de bord hartă</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Eliminare</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>Întoarcere</value>
+  </data>
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+    <value>Vizualizare detalii sarcină</value>
   </data>
 </root>

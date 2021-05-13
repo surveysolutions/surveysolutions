@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Code.CommandTransformation;
 
 namespace WB.UI.Headquarters.Services.Impl
@@ -35,53 +36,24 @@ namespace WB.UI.Headquarters.Services.Impl
             this.userViewFactory = userViewFactory;
         }
 
-        public ICommand TransformCommnadIfNeeded(ICommand command, Guid? responsibleId = null)
+        public ICommand TransformCommandIfNeeded(ICommand command, Guid? responsibleId = null)
         {
-            if (command is CreateInterviewControllerCommand)
+            if (command is CreateInterviewControllerCommand createInterviewControllerCommand)
             {
-                command = this.GetCreateInterviewCommand((CreateInterviewControllerCommand) command);
+                command = this.GetCreateInterviewCommand(createInterviewControllerCommand);
             }
 
-            var interviewCommand = command as InterviewCommand;
-            if (interviewCommand != null)
+            if (command is InterviewCommand interviewCommand)
             {
                 interviewCommand.UserId = authorizedUser.Id;
+                interviewCommand.OriginDate = DateTimeOffset.UtcNow;
             }
-
-            var rejectCommand = command as RejectInterviewCommand;
-            if (rejectCommand != null)
-            {
-                rejectCommand.OriginDate = DateTimeOffset.Now;
-            }
-
-            var rejectToInterviewerCommand = command as RejectInterviewToInterviewerCommand;
-            if (rejectToInterviewerCommand != null)
-            {
-                rejectToInterviewerCommand.OriginDate = DateTimeOffset.Now;
-            }
-
-            if (command is HqRejectInterviewToSupervisorCommand hqRejectInterviewToSupervisorCommand)
-            {
-                hqRejectInterviewToSupervisorCommand.OriginDate = DateTimeOffset.UtcNow;
-            }
-
+            
             if (command is HqRejectInterviewToInterviewerCommand hqRejectInterviewToInterviewerCommand)
             {
                 hqRejectInterviewToInterviewerCommand.OriginDate = DateTimeOffset.UtcNow;
                 var interviewer = userViewFactory.GetUser(hqRejectInterviewToInterviewerCommand.InterviewerId);
                 hqRejectInterviewToInterviewerCommand.SupervisorId = interviewer.Supervisor.Id;
-            }
-
-            var assignCommand = command as AssignInterviewerCommand;
-            if (assignCommand != null)
-            {
-                assignCommand.OriginDate = DateTimeOffset.Now;
-            }
-
-            var approveCommand = command as ApproveInterviewCommand;
-            if (approveCommand != null)
-            {
-                approveCommand.OriginDate = DateTimeOffset.Now;
             }
 
             return command;
@@ -113,7 +85,8 @@ namespace WB.UI.Headquarters.Services.Impl
                 null,
                 interviewKey,
                 null,
-                isAudioRecordingEnabled:false);
+                isAudioRecordingEnabled:false,
+                InterviewMode.CAPI);
 
             return resultCommand;
         }

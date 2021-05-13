@@ -45,7 +45,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 TotalCount = totalCount,
                 Items = interviews.Select(x => new AllInterviewsViewItem
                 {
-                    FeaturedQuestions = x.IdentifyEntitiesValues.Select(a => new InterviewFeaturedQuestion
+                    FeaturedQuestions = x.IdentifyEntitiesValues
+                        .Where(a=>a.Identifying)
+                        .Select(a => new InterviewFeaturedQuestion
                         {
                             Id = a.Id,
                             Answer = a.Value,
@@ -97,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 var searchLowerCase = input.SearchBy.ToLower();
                 items = items.Where(x => x.Key.StartsWith(searchLowerCase) || 
                                          x.ClientKey.StartsWith(searchLowerCase) || 
-                                         x.IdentifyEntitiesValues.Any(a => a.Value.ToLower().StartsWith(searchLowerCase)) ||
+                                         x.IdentifyEntitiesValues.Any(a => a.Value.ToLower().StartsWith(searchLowerCase) && a.Identifying) ||
                                          x.ResponsibleName.ToLower().StartsWith(searchLowerCase)
                                          );
             }

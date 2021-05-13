@@ -114,6 +114,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\UnderConstruction.resx">
       <Link>Resources\UnderConstruction.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\UnderConstruction.ro.resx">
+      <Link>Resources\UnderConstruction.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\UnderConstruction.ru.resx">
       <Link>Resources\UnderConstruction.ru.resx</Link>
     </EmbeddedResource>

@@ -1,8 +1,5 @@
 #nullable enable
 using HotChocolate.Types;
-using WB.Core.BoundedContexts.Headquarters.Views.Maps;
-using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps;
-using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
@@ -13,7 +10,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
         {
             descriptor.Name("HeadquartersQuery");
             
-            descriptor.Field<QuestionnaireItemResolver>(x => x.QuestionnaireItems(default, default, default!, default!, default!))
+            descriptor.Field<QuestionnaireItemResolver>(x => x.QuestionnaireItems(default, default, default!, default!, default!, default!))
                 .Authorize()
                 .HasWorkspace()
                 .Type<ListType<QuestionnaireItemObjectType>>()

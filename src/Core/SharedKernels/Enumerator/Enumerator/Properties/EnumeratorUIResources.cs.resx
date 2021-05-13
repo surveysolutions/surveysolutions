@@ -430,7 +430,7 @@ Chcete-li je synchronizovat, musíte je dokončit</value>
     <value>Server není přístupný. Zkontrolujte serverovou adresu nebo nastavení internetového připojení</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Chyba serveru. Kontaktujte administrátora na martin.baca@czso.cz</value>
+    <value>Chyba serveru. Kontaktujte administrátora.</value>
   </data>
   <data name="Interview_Creating" xml:space="preserve">
     <value>Vytváření rozhovoru</value>

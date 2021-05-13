@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
@@ -28,12 +29,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<ValidationExpressionModel> ValidationExpressions { get; set; }
 
         public string TypeName { set; get; }
-        public string ConditionMethodName => CodeGenerator.EnablementPrefix + this.VariableName;
-        public string OptionsFilterMethodName => CodeGenerator.OptionsFilterPrefix + this.VariableName;
+        public string ConditionMethodName => CodeGeneratorV2.EnablementPrefix + this.VariableName;
+        public string OptionsFilterMethodName => CodeGeneratorV2.OptionsFilterPrefix + this.VariableName;
 
-        public string MemberName => CodeGenerator.PrivateFieldsPrefix + VariableName;
-        public string StateName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.StateSuffix;
-        public string IdName => CodeGenerator.GetQuestionIdName(VariableName);
+        public string MemberName => CodeGeneratorV2.PrivateFieldsPrefix + VariableName;
+        public string StateName => CodeGeneratorV2.PrivateFieldsPrefix + VariableName + CodeGeneratorV2.StateSuffix;
+        public string IdName => CodeGeneratorV2.GetQuestionIdName(VariableName);
 
         public bool IsMultiOptionYesNoQuestion { get; set; }
         public List<string> AllMultioptionYesNoCodes { get; set; }

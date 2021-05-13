@@ -159,9 +159,6 @@
   <data name="LogoSettings" xml:space="preserve">
     <value>Logo de compañía</value>
   </data>
-  <data name="LogoSettings_Description" xml:space="preserve">
-    <value>El logotipo de la empresa muestra una imagen personalizada en la página de inicio de sesión del servidor y en la página de inicio de sesión de la aplicación Interviewer. Haga clic en el botón Elegir archivo para cargar una imagen de su computadora al servidor</value>
-  </data>
   <data name="LogoUpdated" xml:space="preserve">
     <value>Logo de compañía actualizado</value>
   </data>

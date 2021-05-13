@@ -160,7 +160,7 @@
     <value>ID-ul chestionarului nu a fost furnizat pentru validarea permisiunilor</value>
   </data>
   <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
-    <value>Importarea chestionarului nu a reușit. Chestionarul dvs. „{0}” are {1} versiune. Aplicația RINS acceptă doar până la versiunea {2}.</value>
+    <value>Importarea chestionarului nu a reușit. Chestionarul dvs. „{0}” are {1} versiune. Aplicația Coordonator acceptă doar până la versiunea {2}.</value>
   </data>
   <data name="OldClientPleaseUpdate" xml:space="preserve">
     <value>Aveți o versiune învechită a aplicației pentru sediu. Vă rugăm să contactați support@mysurvey.solutions pentru a solicita o actualizare.</value>

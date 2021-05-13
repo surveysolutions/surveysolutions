@@ -211,7 +211,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
             else
             {
-                throw new ApplicationException("Receive payload transfer update before ReceivePayload call");
+                throw new Exception("Receive payload transfer update before ReceivePayload call");
             }
 
             PayloadHeader header;

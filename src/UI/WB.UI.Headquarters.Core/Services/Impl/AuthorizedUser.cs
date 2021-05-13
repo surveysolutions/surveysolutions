@@ -14,6 +14,7 @@ namespace WB.UI.Headquarters.Services.Impl
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IWorkspacesCache workspacesCache;
         public const string ObserverClaimType = "observer";
+        public const string PasswordChangeRequiredType = "forse-change-password";
 
         public AuthorizedUser(IHttpContextAccessor httpContextAccessor, IWorkspacesCache workspacesCache)
         {
@@ -31,6 +32,7 @@ namespace WB.UI.Headquarters.Services.Impl
         public bool IsInterviewer => this.IsCurrentUserInRole(UserRoles.Interviewer);
         public bool IsAdministrator => this.IsCurrentUserInRole(UserRoles.Administrator);
         public bool IsHeadquarter => this.IsCurrentUserInRole(UserRoles.Headquarter);
+        public bool IsApiUser => this.IsCurrentUserInRole(UserRoles.ApiUser);
 
         private bool IsCurrentUserInRole(UserRoles role) => this.User.IsInRole(role.ToString());
         
@@ -44,6 +46,9 @@ namespace WB.UI.Headquarters.Services.Impl
         }
 
         public string UserName => this.User?.Identity?.Name;
+
+        public bool PasswordChangeRequired => User.HasClaim(claim => 
+            claim.Type == PasswordChangeRequiredType && claim.Value == "true");
 
         public bool HasNonDefaultWorkspace => User.Claims.Any(x =>
             x.Type == WorkspaceConstants.ClaimType && x.Value != WorkspaceConstants.DefaultWorkspaceName);
@@ -62,6 +67,16 @@ namespace WB.UI.Headquarters.Services.Impl
             var workspaces = workspacesCache.AllEnabledWorkspaces();
             var userWorkspaces = workspaces.Where(w => workspaceNames.Contains(w.Name));
             return userWorkspaces;
+        }
+
+        public void ResetPasswordChangeRequiredFlag()
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var claim = claimsIdentity?.FindFirst(c => c.Type == PasswordChangeRequiredType);
+            if (claim != null)
+            {
+                claimsIdentity.TryRemoveClaim(claim);
+            }
         }
     }
 }

@@ -21,6 +21,7 @@ using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator;
@@ -39,7 +40,6 @@ namespace WB.UI.Tester
     {
         public Setup()
         {
-            CrashReporting.Init("e77a488d-d76b-4300-9a37-8716f5b2faa7");
         }
 
         protected override IMvxIoCProvider CreateIocProvider()
@@ -50,6 +50,18 @@ namespace WB.UI.Tester
         protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
         {
             base.InitializeApp(pluginManager, app);
+
+            string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
+            if (!string.IsNullOrEmpty(appcenterKey))
+            {
+                CrashReporting.Init(appcenterKey);
+            }
+            
+            string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key);
+            if (!string.IsNullOrEmpty(arcgisruntimeKey))
+            {
+                ServiceLocator.Current.GetInstance<IMapInteractionService>().Init(arcgisruntimeKey);
+            }
 
             var status = new UnderConstructionInfo();
             status.Run();

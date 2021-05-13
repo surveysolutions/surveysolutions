@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class WebInterviewUI {
@@ -891,6 +891,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Progress.
+        /// </summary>
+        public static string Progress {
+            get {
+                return ResourceManager.GetString("Progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{progress}}% Complete.
         /// </summary>
         public static string ProgressText {
@@ -1085,6 +1094,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string SwitchingLanguage {
             get {
                 return ResourceManager.GetString("SwitchingLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch interview to Web Mode.
+        /// </summary>
+        public static string SwitchToWebMode {
+            get {
+                return ResourceManager.GetString("SwitchToWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following link could be used to continue this interview.
+        /// </summary>
+        public static string SwitchToWebMode_LinkDescription {
+            get {
+                return ResourceManager.GetString("SwitchToWebMode_LinkDescription", resourceCulture);
             }
         }
         

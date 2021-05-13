@@ -99,6 +99,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         continue;
                     }
 
+                    if (isPartialSynchedInterview && uploadState.Mode == InterviewMode.CAWI)
+                    {
+                        // don't upload if interview mode was changed
+                        continue;
+                    }
+
                     await this.UploadImagesByInterviewAsync(interview, uploadState, Context.Progress, Context.CancellationToken);
                     await this.UploadAudioByInterviewAsync(interview, uploadState, Context.Progress, Context.CancellationToken);
                     await this.UploadAudioAuditByInterviewAsync(interview, uploadState, Context.Progress, Context.CancellationToken);

@@ -123,6 +123,9 @@
   <data name="CompleteInterview" xml:space="preserve">
     <value>Interview {0} completed</value>
   </data>
+  <data name="RestartInterview" xml:space="preserve">
+    <value>Interview {0} restarted</value>
+  </data>
   <data name="ApproveInterview" xml:space="preserve">
     <value>Interview {0} approved</value>
   </data>
@@ -217,5 +220,8 @@
   </data>
   <data name="SynchronizationStarted" xml:space="preserve">
     <value>Sync started ({0})</value>
+  </data>
+  <data name="SwitchInterviewMode" xml:space="preserve">
+    <value>Interview {0} switched to {1} mode</value>
   </data>
 </root>

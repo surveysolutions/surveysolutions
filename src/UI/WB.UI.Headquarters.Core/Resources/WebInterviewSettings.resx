@@ -183,6 +183,9 @@
   <data name="FinishPage" xml:space="preserve">
     <value>Finish Page</value>
   </data>
+  <data name="LinkToInterviewPage" xml:space="preserve">
+    <value>Web Interview Landing</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>save</value>
   </data>

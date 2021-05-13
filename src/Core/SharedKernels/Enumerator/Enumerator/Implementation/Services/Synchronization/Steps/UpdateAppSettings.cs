@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         {
             var notificationsSetting = await this.synchronizationService.AreNotificationsEnabledAsync(Context.CancellationToken);
             UpdateNotificationsSetting(notificationsSetting);
+
         }
 
         protected abstract void UpdateNotificationsSetting(bool notificationsEnabled);

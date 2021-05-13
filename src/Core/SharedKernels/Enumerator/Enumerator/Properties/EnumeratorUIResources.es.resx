@@ -181,7 +181,7 @@
     <value>{0} (v{1})</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Error del servidor. Por favor, póngase en contacto con el equipo de soporte escribiendo a  support@mysurvey.solutions.</value>
+    <value>Error del servidor. Por favor, Comuníquese con el administrador de su servidor.</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>La dirección del sitio web del supervisor no es válida. Asegúrese de que ha introducido la dirección url correcta.</value>

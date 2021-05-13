@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
+    // must be equal to enum from ExportService
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum AssignmentHistoryAction
     {

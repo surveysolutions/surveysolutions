@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_return_404_when_assignment_not_found()
         {
-            var httpResponseMessage = this.controller.Close(14);
+            var httpResponseMessage = this.controller.ClosePost(14);
             Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(StatusCodes.Status404NotFound));
         }
 
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             var assignment = Create.Entity.Assignment(id: 4, quantity: 5, webMode: true);
             this.SetupAssignment(assignment);
 
-            var httpResponseMessage = this.controller.Close(assignment.Id);
+            var httpResponseMessage = this.controller.ClosePost(assignment.Id);
             Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(StatusCodes.Status409Conflict));
         }
 
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             assignment.Archived = true;
             this.SetupAssignment(assignment);
 
-            var httpResponseMessage = this.controller.Close(assignment.Id);
+            var httpResponseMessage = this.controller.ClosePost(assignment.Id);
             Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(StatusCodes.Status409Conflict));
         }
 
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary());
             this.SetupAssignment(assignment);
             
-            var httpResponseMessage = this.controller.Close(assignment.Id);
+            var httpResponseMessage = this.controller.ClosePost(assignment.Id);
 
             commandService.Verify(x => 
                 x.Execute(It.Is<UpdateAssignmentQuantity>(c => c.Quantity == 1 && c.PublicKey == assignment.PublicKey), null),

@@ -167,7 +167,7 @@ namespace WB.Tests.Abc.TestFactories
             IQuestionnaireTranslator translator = null,
             IQuestionOptionsRepository questionOptionsRepository = null,
             ISubstitutionService substitutionService = null,
-            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider = null,
+            IInterviewExpressionStorageProvider expressionStorageProvider = null,
             IMemoryCache memoryCache = null)
         {
             return new QuestionnaireStorage(
@@ -176,7 +176,7 @@ namespace WB.Tests.Abc.TestFactories
                 translator ?? Create.Service.QuestionnaireTranslator(),
                 questionOptionsRepository ?? QuestionOptionsRepository(new SqliteInmemoryStorage<OptionView, int?>()),
                 substitutionService ?? Create.Service.SubstitutionService(),
-                expressionStatePrototypeProvider ?? Create.Service.ExpressionStatePrototypeProvider(),
+                expressionStorageProvider ?? Mock.Of<IInterviewExpressionStorageProvider>(),
                 memoryCache ?? new MemoryCache(Options.Create(new MemoryCacheOptions()))
                 );            
         }

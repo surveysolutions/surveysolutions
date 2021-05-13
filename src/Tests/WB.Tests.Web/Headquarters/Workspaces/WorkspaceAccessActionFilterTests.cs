@@ -71,20 +71,6 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         }
 
         [Test]
-        public void non_admin_should_not_be_allowed_access_to_admin_workspace()
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            Role = UserRoles.Headquarter;
-
-            // act
-            var context = Act();
-
-            // assert
-            Assert.NotNull(context.Result);
-            Assert.That(GetForbidReason(context.Result), Is.EqualTo(ForbidReason.WorkspaceAccessDisabledReason));
-        }
-
-        [Test]
         public void admin_should_not_be_allowed_to_disabled_workspace()
         {
             CurrentWorkspace = new WorkspaceContext("wspc", "Some", DateTime.Now);
@@ -294,6 +280,20 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             Assert.That(context.Result, Is.InstanceOf<ForbidResult>());
             Assert.That(GetForbidReason(context.Result), Is.EqualTo(ForbidReason.WorkspaceDisabledReason));
         }
+        
+        [Test]
+        public void user_should_be_allowed_access_to_users_workspace()
+        {
+            CurrentWorkspace = Workspace.UsersWorkspace.AsContext();
+            Role = UserRoles.Headquarter;
+
+            // act
+            var context = Act();
+
+            // assert
+            Assert.Null(context.Result);
+        }
+
 
         private AuthorizationFilterContext Act()
         {

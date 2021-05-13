@@ -100,9 +100,12 @@
         <div class="row flex-row">
             <div class="col-sm-6">
                 <div class="flex-block selection-box">
-                    <div class="block">
+                    <div class="block prefilled-data-info">
                         <h3>{{$t('BatchUpload.SimpleTitle')}}</h3>
-                        <p v-html="$t('BatchUpload.SimpleDescription')"></p>
+                        <p> {{$t('BatchUpload.SimpleDescription')}}</p>
+                        <h5>{{$t('BatchUpload.SimpleColumnsTitle')}}</h5>
+                        <p v-html="$t('BatchUpload.ColumnsDescription')"
+                            style="margin-left:30px;"></p>
                     </div>
                     <div>
                         <a v-bind:href="api.simpleTemplateDownloadUrl">
@@ -150,6 +153,9 @@
                     <div class="block">
                         <h3>{{$t('BatchUpload.BatchTitle')}}</h3>
                         <p v-html="$t('BatchUpload.BatchDescription')"></p>
+                        <h5>{{$t('BatchUpload.BatchColumnsTitle')}}</h5>
+                        <p v-html="$t('BatchUpload.ColumnsDescription')"
+                            style="margin-left:30px;"></p>
                     </div>
                     <div>
                         <a v-bind:href="api.templateDownloadUrl">

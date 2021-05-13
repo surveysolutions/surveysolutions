@@ -27,5 +27,6 @@
 **/secrets.dev.yaml
 **/values.dev.yaml
 /tools/**
-LICENSE
+CONTRIBUTING.md
+LICENSE.md
 README.md

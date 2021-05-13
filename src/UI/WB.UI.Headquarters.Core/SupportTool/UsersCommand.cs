@@ -1,5 +1,6 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Workspaces;
 using Option = System.CommandLine.Option;
 
@@ -55,10 +57,15 @@ namespace WB.UI.Headquarters.SupportTool
                 {
                     Required = false,
                     Argument = new Argument<string>()
+                },
+                new Option("--supervisor")
+                {
+                    Required = false,
+                    Argument = new Argument<string>()
                 }
             };
 
-            cmd.Handler = CommandHandler.Create<UserRoles, string, string, string, string>(async (role, password, login, workspace, email) =>
+            cmd.Handler = CommandHandler.Create<UserRoles, string, string, string, string, string>(async (role, password, login, workspace, email, supervisor) =>
             {
                 var inScopeExecutor = this.host.Services.GetRequiredService<IInScopeExecutor>();
                 await inScopeExecutor.ExecuteAsync(async (locator, unitOfWork) =>
@@ -66,7 +73,8 @@ namespace WB.UI.Headquarters.SupportTool
                     var loggerProvider = locator.GetInstance<ILoggerProvider>();
                     var logger = loggerProvider.CreateLogger(nameof(UsersCreateCommand));
                     var workspaceService = locator.GetInstance<IWorkspaceContextSetter>();
-                    workspaceService.Set(workspace ?? WorkspaceConstants.DefaultWorkspaceName);
+                    var workspaceName = workspace ?? WorkspaceConstants.DefaultWorkspaceName;
+                    workspaceService.Set(workspaceName);
 
                     var userManager = locator.GetInstance<HqUserManager>();
                     var user = new HqUser
@@ -75,10 +83,38 @@ namespace WB.UI.Headquarters.SupportTool
                         Email = email
                     };
 
+                    HqUser supervisorUser = null;
+
+                    if (!string.IsNullOrWhiteSpace(supervisor) && role == UserRoles.Interviewer)
+                        supervisorUser = await userManager.FindByNameAsync(supervisor);
+
+                    if (role == UserRoles.Interviewer && supervisorUser == null)
+                    {
+                        logger.LogError("Supervisor name is required for interviewer creation");
+                        return;
+                    }
+
+                    if (supervisorUser != null && supervisorUser.Workspaces.All(w => w.Workspace.Name != workspaceName))
+                    {
+                        logger.LogError("Supervisor must exists in workspace of interviewer");
+                        return;
+                    }
+                    
+                    var workspaces = locator.GetInstance<IPlainStorageAccessor<Workspace>>();
+                    var workspaceObj = await workspaces.GetByIdAsync(workspaceName);
+                    user.Workspaces.Add(new WorkspacesUsers(workspaceObj, user, supervisorUser));
+
                     var creationResult = await userManager.CreateAsync(user, password);
                     if (creationResult.Succeeded)
                     {
                         await userManager.AddToRoleAsync(user, role.ToString());
+                        
+                        bool disableForcePassword = role == UserRoles.Administrator || role == UserRoles.ApiUser;
+                        if (disableForcePassword)
+                        {
+                            user.PasswordChangeRequired = false;
+                            await userManager.UpdateAsync(user);
+                        }
                         
                         logger.LogInformation("Created user {user} as {role}", login, role);
                     }
@@ -129,6 +165,10 @@ namespace WB.UI.Headquarters.SupportTool
                         unitOfWork.DiscardChanges();
                         return;
                     }
+
+                    bool disableForcePassword = user.IsInRole(UserRoles.Administrator) || user.IsInRole(UserRoles.ApiUser);
+                    if (!disableForcePassword)
+                        user.PasswordChangeRequired = true;
 
                     var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
                     var result = await userManager.ResetPasswordAsync(user, resetToken, password);

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
-    <value>თქვენი მომხმარებლის ანგარიში დაბლოკილია. გთხოვთ, დაუკავშირდეთ ზედამხედველს</value>
+    <value>თქვენი მომხმარებლის ანგარიში დაბლოკილია. გთხოვთ, დაუკავშირდეთ ზედამხედველს.</value>
   </data>
   <data name="AccountIsNotAnInterviewer" xml:space="preserve">
     <value>თქვენს ანგარიშს არ აქვს ინტერვიუერის ფუნქცია</value>
   </data>
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>თქვენი მომხმარებლის ანგარიში არ არის დადასტურებული. გთხოვთ, დაუკავშირდეთ ზედამხედველს</value>
+    <value>თქვენი მომხმარებლის ანგარიში არ არის დადასტურებული. გთხოვთ, დაუკავშირდეთ ზედამხედველს.</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
     <value>თქვენი აპლიკაცია არ არის თავსებადი სერვერთან. განაახლეთ ინტერვიუერის აპლიკაციის ვერსია</value>
@@ -339,7 +339,7 @@
     <value>ინტერნეტზე წვდომა არ არის თქვენს სერვერთან. შეამოწმეთ სერვერის მისამართი და (ან) ქსელის პარამეტრები</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>სერვერის შეცდომა. გთხოვთ დაუკავშირდეთ მხარდაჭერის ჯგუფს მისამართზე support@mysurvey.solutions</value>
+    <value>Სერვერის შეცდომა. გთხოვთ, დაუკავშირდეთ სერვერის ადმინისტრატორს.</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>იტვირთება...</value>

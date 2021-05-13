@@ -148,6 +148,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Questionnaires;
         }
 
+        public async Task<List<QuestionnaireIdentity>> GetServerQuestionnairesPermittedToSwitchToWebModeAsync(CancellationToken cancellationToken)
+        {
+            var response = await this.syncClient.SendAsync<GetQuestionnairesWebModeRequest, GetQuestionnairesWebModeResponse>(
+                new GetQuestionnairesWebModeRequest { }, cancellationToken);
+
+            return response.Questionnaires;
+        }
+
         public async Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(
             QuestionnaireIdentity questionnaireIdentity, CancellationToken token = default)
         {
@@ -323,6 +331,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken token = default)
         {
             return Task.FromResult("offline sync token");
+        }
+
+        public Task<string> ChangePasswordAsync(ChangePasswordInfo info, CancellationToken token = default)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<bool> HasCurrentUserDeviceAsync(RestCredentials? credentials = null, CancellationToken token = default)

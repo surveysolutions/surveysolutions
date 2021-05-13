@@ -159,9 +159,6 @@
   <data name="LogoSettings" xml:space="preserve">
     <value>شعار الشركة</value>
   </data>
-  <data name="LogoSettings_Description" xml:space="preserve">
-    <value>شعار الشركة يظهر صورة مخصصة على صفحة تسجيل دخول الخادم و على صفحة تسجيل الدخول على تطبيق الباحث. انقر على زر اختيار ملف لتحميل صورة من جهاز الحاسوب الى الخادم</value>
-  </data>
   <data name="LogoUpdated" xml:space="preserve">
     <value>تم تحديث شعار الشركة</value>
   </data>

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
@@ -7,12 +8,17 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
+using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Migrations;
+using WB.UI.Shared.Enumerator.Migrations.Workspaces;
+using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Notifications;
 
 namespace WB.UI.Interviewer
@@ -21,6 +27,8 @@ namespace WB.UI.Interviewer
     {
         private readonly ILogger logger;
         private readonly IMigrationRunner migrationRunner;
+        private readonly ILifetimeScope lifetimeScope;
+        private readonly IWorkspaceService workspaceService;
         private readonly IAuditLogService auditLogService;
         private readonly IEnumeratorSettings enumeratorSettings;
         
@@ -29,23 +37,27 @@ namespace WB.UI.Interviewer
             IAuditLogService auditLogService,
             IEnumeratorSettings enumeratorSettings, 
             ILogger logger,
-            IMigrationRunner migrationRunner) : base(application, navigationService)
+            IMigrationRunner migrationRunner,
+            ILifetimeScope lifetimeScope,
+            IWorkspaceService workspaceService) : base(application, navigationService)
         {
             this.auditLogService = auditLogService;
             this.logger = logger;
             this.migrationRunner = migrationRunner;
+            this.lifetimeScope = lifetimeScope;
+            this.workspaceService = workspaceService;
             this.enumeratorSettings = enumeratorSettings;
         }
 
         protected override Task<object> ApplicationStartup(object hint = null)
         {
-            auditLogService.Write(new OpenApplicationAuditLogEntity());
+            auditLogService.WriteApplicationLevelRecord(new OpenApplicationAuditLogEntity());
 
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
-            migrationRunner.MigrateUp(this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
+            migrationRunner.MigrateUp("Interviewer", this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
-            Mvx.IoCProvider.Resolve<IAudioAuditService>().CheckAndProcessAllAuditFiles();
+            CheckAndProcessAllAuditFiles();
             
             this.UpdateNotificationsWorker();
 
@@ -54,6 +66,22 @@ namespace WB.UI.Interviewer
             this.CheckAndProcessUserLogins();
 
             return base.ApplicationStartup(hint);
+        }
+
+        private void CheckAndProcessAllAuditFiles()
+        {
+            var workspaces = workspaceService.GetAll();
+            foreach (var workspace in workspaces)
+            {
+                var workspaceAccessor = new SingleWorkspaceAccessor(workspace.Name);
+                using var workspaceLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
+                {
+                    cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();
+                    cb.RegisterType<AudioService>().As<IAudioService>()
+                        .WithParameter("audioDirectory", "audio");
+                });
+                workspaceLifetimeScope.Resolve<IAudioAuditService>().CheckAndProcessAllAuditFiles();
+            }
         }
 
         private void CheckAndProcessUserLogins()
@@ -87,13 +115,23 @@ namespace WB.UI.Interviewer
 
         private void CheckAndProcessInterviewsWithoutViews()
         {
-            var settings = Mvx.IoCProvider.Resolve<IEnumeratorSettings>();
-            if (settings.DashboardViewsUpdated) return;
+            var workspaces = workspaceService.GetAll();
+            foreach (var workspace in workspaces)
+            {
+                var workspaceAccessor = new SingleWorkspaceAccessor(workspace.Name);
+                using var workspaceLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
+                {
+                    cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();
+                });
 
-            var interviewsAccessor = Mvx.IoCProvider.Resolve<IInterviewerInterviewAccessor>();
-            interviewsAccessor.CheckAndProcessInterviewsToFixViews();
-            
-            settings.SetDashboardViewsUpdated(true);
+                var settings = workspaceLifetimeScope.Resolve<IEnumeratorSettings>();
+                if (settings.DashboardViewsUpdated) return;
+
+                var interviewsAccessor = workspaceLifetimeScope.Resolve<IInterviewerInterviewAccessor>();
+                interviewsAccessor.CheckAndProcessInterviewsToFixViews();
+
+                settings.SetDashboardViewsUpdated(true);
+            }
         }
 
         private void UpdateNotificationsWorker()

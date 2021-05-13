@@ -2,6 +2,8 @@
     <ProfileLayout ref="profile"
         :role="userInfo.role"
         :isOwnProfile="userInfo.isOwnProfile"
+        :forceChangePassword="userInfo.forceChangePassword"
+        :canChangePassword="userInfo.canChangePassword"
         :userName="userInfo.userName"
         :userId="userInfo.userId"
         :currentTab="currentTab">
@@ -124,19 +126,20 @@ export default {
             return this.userInfo.role == 'Interviewer'
         },
         canLockBySupervisor() {
-            return this.isInterviewer
+            return this.userInfo.canBeLockedAsSupervisor
         },
-        canBeLockedAsHeadquarters(){
+        canBeLockedAsHeadquarters() {
             return this.userInfo.canBeLockedAsHeadquarters
         },
         lockMessage() {
+            if (!this.canBeLockedAsHeadquarters && !this.canLockBySupervisor) return null
             if (this.isHeadquarters) return this.$t('Pages.HQ_LockWarning')
             if (this.isSupervisor) return this.$t('Pages.Supervisor_LockWarning')
             if (this.isInterviewer) return this.$t('Pages.Interviewer_LockWarning')
             return null
         },
         referrerUrl() {
-            return '/'
+            return '/users/UsersManagement'
         },
     },
     mounted() {

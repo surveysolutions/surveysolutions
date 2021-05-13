@@ -150,11 +150,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return questionnaireImportSteps;
         }
 
-        private void MigrateAssignmentsIfNeed(Guid userId, bool shouldMigrateAssignments, QuestionnaireIdentity migrateFrom, QuestionnaireImportResult result)
+        private async Task MigrateAssignmentsIfNeed(Guid userId, bool shouldMigrateAssignments, QuestionnaireIdentity migrateFrom, QuestionnaireImportResult result)
         {
             if (shouldMigrateAssignments && migrateFrom != null)
             {
-                assignmentsUpgradeService.EnqueueUpgrade(result.ProcessId, userId, migrateFrom, result.Identity);
+                await assignmentsUpgradeService.EnqueueUpgrade(result.ProcessId, userId, migrateFrom, result.Identity);
             }
         }
 
@@ -282,7 +282,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 questionnaireImportResult.ProgressPercent = 100;
 
-                MigrateAssignmentsIfNeed(userId, shouldMigrateAssignments, migrateFrom, questionnaireImportResult);
+                await MigrateAssignmentsIfNeed(userId, shouldMigrateAssignments, migrateFrom, questionnaireImportResult);
 
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Finished;
 

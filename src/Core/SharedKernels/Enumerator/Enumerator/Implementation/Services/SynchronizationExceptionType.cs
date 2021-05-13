@@ -22,6 +22,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         InterviewerFromDifferentTeam,
         SupervisorRequireOnlineSync,
         UserLinkedToAnotherServer,
-        WorkspaceDisabled
+        WorkspaceDisabled,
+        ShouldChangePassword,
+        WorkspaceAccessDisabledReason,
     }
 }

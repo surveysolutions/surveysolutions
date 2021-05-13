@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using HotChocolate.Data.Filters;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 {
@@ -14,6 +11,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Name("InterviewsFilter");
             
             descriptor.Field(x => x.Status);
+            descriptor.Field(x => x.InterviewMode);
             descriptor.Field(x => x.QuestionnaireId);
             descriptor.Field(x => x.QuestionnaireVariable);
             descriptor.Field(x => x.QuestionnaireVersion);

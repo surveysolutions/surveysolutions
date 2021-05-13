@@ -17,6 +17,11 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             File.Move(pathToFile, newPathToFile);
         }
 
+        public void MoveDirectory(string pathToDir, string newPathToDir)
+        {
+            Directory.Move(pathToDir, newPathToDir);
+        }
+
 
         public long GetFileSize(string filePath) => this.IsFileExists(filePath) ? new FileInfo(filePath).Length : -1;
 
@@ -31,6 +36,10 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         public void DeleteDirectory(string path) => Directory.Delete(path, true);
 
         public string GetDirectory(string path) => Path.GetDirectoryName(path);
+        public string GetDirectoryName(string path)
+        {
+            return new DirectoryInfo(path).Name;
+        }
 
         public bool IsFileExists(string pathToFile) => File.Exists(pathToFile);
 

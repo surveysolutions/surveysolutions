@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Mime;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.Infrastructure.Versions;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 
@@ -42,6 +44,23 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                     exceptionMessage = EnumeratorUIResources.UnacceptableSSLCertificate;
                     exceptionType = SynchronizationExceptionType.UnacceptableSSLCertificate;
                     break;
+                case RestExceptionType.ServerErrorResponse:
+                    switch (restException.ServerErrorCode)
+                    {
+                        case ServerErrorCodes.PasswordChangeRequired: 
+                            exceptionType = SynchronizationExceptionType.ShouldChangePassword;
+                            exceptionMessage = EnumeratorUIResources.Synchronization_PasswordChangeRequired;
+                            break;        
+                        case ServerErrorCodes.ChangePasswordError: 
+                            exceptionType = SynchronizationExceptionType.ShouldChangePassword;
+                            exceptionMessage = restException.Message;
+                            break;
+                        default:
+                            exceptionType = SynchronizationExceptionType.UpgradeRequired;
+                            exceptionMessage = restException.Message;
+                            break;
+                    }
+                    break;
                 case RestExceptionType.Unexpected:
                     switch (restException.StatusCode)
                     {
@@ -60,6 +79,11 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             {
                                 exceptionMessage = EnumeratorUIResources.AccountIsNotAnInterviewer;
                                 exceptionType = SynchronizationExceptionType.UserIsNotInterviewer;
+                            }
+                            else if(restException.Message.Contains("Force change password"))
+                            {
+                                exceptionType = SynchronizationExceptionType.ShouldChangePassword;
+                                exceptionMessage = EnumeratorUIResources.Synchronization_PasswordChangeRequired;
                             }
                             else
                             {
@@ -116,13 +140,16 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             if (restException.Message.Contains("relinked"))
                             {
                                 exceptionType = SynchronizationExceptionType.UserLinkedToAnotherDevice;
-                                exceptionMessage =
-                                    EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Title;
-                            }else if(restException.Message.Contains("Workspace is disabled"))
+                                exceptionMessage = EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Title;
+                            }
+                            else if(restException.Message.Contains("Workspace is disabled"))
                             {
                                 exceptionType = SynchronizationExceptionType.WorkspaceDisabled;
-                                exceptionMessage =
-                                    EnumeratorUIResources.Synchronization_WorkspaceDisabled;
+                                exceptionMessage = EnumeratorUIResources.Synchronization_WorkspaceDisabled;
+                            }else if(restException.Message.Contains("WorkspaceAccessDisabledReason"))
+                            {
+                                exceptionType = SynchronizationExceptionType.WorkspaceAccessDisabledReason;
+                                exceptionMessage = EnumeratorUIResources.Synchronization_WorkspaceAccessDisabledReason;
                             }
                             else
                             {

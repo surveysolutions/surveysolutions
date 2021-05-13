@@ -12,5 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
     {
         Task<MoveInterviewerToAnotherTeamResult> Move(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId,
             MoveUserToAnotherTeamMode moveRequestMode);
+
+        MoveInterviewsToSupervisorResult MoveInterviewsToSupervisor(Guid userId, Guid interviewerId, Guid supervisorId);
     }
 }

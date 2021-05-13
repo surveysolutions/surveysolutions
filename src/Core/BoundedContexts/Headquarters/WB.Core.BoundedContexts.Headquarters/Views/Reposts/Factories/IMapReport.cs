@@ -10,6 +10,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
     {
         MapReportView Load(MapReportInputModel input);
 
+        public MapReportView GetReport(List<PositionPoint> gpsAnswers, int zoom, int clientMapWidth, double south,
+            double north, double east, double west);
+
         List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithGpsQuestions();
         List<string> GetGpsQuestionsByQuestionnaire(Guid questionnaireId, long? version);
     }

@@ -7,6 +7,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     public interface IAuditLogService
     {
         void Write(IAuditLogEntity payload);
+        void WriteApplicationLevelRecord(IAuditLogEntity payload);
         void UpdateLastSyncIndex(int id);
         IEnumerable<AuditLogEntityView> GetAuditLogEntitiesForSync();
         void WriteAuditLogRecord(AuditLogEntityView auditLogEntityView);

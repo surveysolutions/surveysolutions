@@ -359,7 +359,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (this.authorizedUser.IsSupervisor)
             {
                 bool isTeamInterviewer = this.userStorage.Users
-                    .Any(x => x.UserName.ToLower() == lowerCasedUserName && x.Profile.SupervisorId == this.authorizedUser.Id);
+                    .Any(x => x.UserName.ToLower() == lowerCasedUserName && x.WorkspaceProfile.SupervisorId == this.authorizedUser.Id);
                 if (!isTeamInterviewer)
                 {
                     throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer.");
@@ -463,7 +463,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public string[] GetAllMapsForSupervisor(Guid supervisorId)
         {
             var interviewerNames = this.userStorage.Users
-                .Where(x => supervisorId == x.Profile.SupervisorId && x.IsArchived == false)
+                .Where(x => supervisorId == x.WorkspaceProfile.SupervisorId && x.IsArchived == false)
                 .Select(x => x.UserName)
                 .ToArray();
 
@@ -505,7 +505,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             x.Roles.Any(role => role.Id == interviewerRoleId));
             if (authorizedUser.IsSupervisor)
             {
-                userQuery = userQuery.Where(x => x.Profile.SupervisorId == this.authorizedUser.Id);
+                userQuery = userQuery.Where(x => x.WorkspaceProfile.SupervisorId == this.authorizedUser.Id);
             }
 
             var interviewer = userQuery.FirstOrDefault();

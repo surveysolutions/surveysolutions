@@ -32,7 +32,7 @@ namespace WB.UI.Supervisor.Activities
         {
             if (this.ViewModel.IsInProgress)
             {
-                this.ViewModel.CancellInProgressTask();
+                this.ViewModel.CancelInProgressTask();
             }
         }
 

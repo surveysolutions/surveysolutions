@@ -20,16 +20,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 
             descriptor.Field("defaultLanguageName")
                 .Type<StringType>()
-                .Resolver(ctx =>
+                .Resolve(ctx =>
                 {
                     var questionnaireStorage = ctx.Service<IQuestionnaireStorage>();
                     var browseItem = ctx.Parent<QuestionnaireBrowseItem>();
                     var questionnaire = questionnaireStorage.GetQuestionnaire(browseItem.Identity(), null);
-                    return questionnaire.DefaultLanguageName;
+                    return questionnaire?.DefaultLanguageName;
                 });
             descriptor.Field("translations")
                 .Type<NonNullType<ListType<NonNullType<Translation>>>>()
-                .Resolver(ctx =>
+                .Resolve(ctx =>
                 {
                     var questionnaireStorage = ctx.Service<IQuestionnaireStorage>();
                     var browseItem = ctx.Parent<QuestionnaireBrowseItem>();

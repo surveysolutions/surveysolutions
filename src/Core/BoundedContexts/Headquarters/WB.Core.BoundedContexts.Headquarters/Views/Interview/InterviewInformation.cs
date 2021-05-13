@@ -1,5 +1,6 @@
 using System;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
@@ -12,5 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public int? LastEventSequence { get; set; }
         public bool IsReceivedByInterviewer { get; set; }
         public Guid? LastEventId { get; set; }
+        public InterviewMode Mode { get;set; } 
     }
 }

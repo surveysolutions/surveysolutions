@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { map } from 'lodash'
 
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
@@ -45,6 +46,24 @@ class QuestionnaireApi {
             enabled: enabled,
         })
     }
+
+    async ExposedVariables(id) {
+        const response = await this.http.get(`api/QuestionnairesApi/GetQuestionnaireExposedVariables?id=${id}`,
+            {
+                params: {
+                    limit: 100,
+                },
+            })
+        return response.data
+    }
+
+    ChangeVariableExposeStatus(questionnaireIdentity, variables){
+        return this.http.post('api/QuestionnairesApi/changeVariableExposeStatus', {
+            questionnaireIdentity: questionnaireIdentity,
+            variables: variables,
+        })
+    }
+
 }
 
 class SurveyStatistics {
@@ -108,16 +127,36 @@ class Workspaces {
                 params: {
                     userId,
                     includeDisabled,
-                    limit: 1000,
+                    length: 1000,
                 },
             })
         return response.data
     }
 
     Assign(userIds, workspaces, mode = 'Assign') {
+        var assignWorkspaces = map(workspaces, w => {
+            return {
+                workspace: w,
+                supervisorId: null,
+            }
+        })
+
         return this.http.post('api/v1/workspaces/assign',
             {
-                userIds, workspaces, mode,
+                userIds, workspaces: assignWorkspaces, mode,
+            }
+        )
+    }
+
+    AssignInterviewer(userIds, workspace, supervisor, mode = 'Add') {
+        var assignWorkspaces = [{
+            workspace: workspace,
+            supervisorId: supervisor,
+        }]
+
+        return this.http.post('api/v1/workspaces/assign',
+            {
+                userIds, workspaces: assignWorkspaces, mode,
             }
         )
     }
@@ -342,6 +381,14 @@ class AssignmentsApi {
             },
         })
     }
+
+    changeMode(assignmentId, isEnabled) {
+        var url = `${this.base}/${assignmentId}/changeMode`
+
+        return this.http.patch(url, {
+            enabled: isEnabled,
+        })
+    }
 }
 
 class WebInterviewSettingsApi {
@@ -398,7 +445,8 @@ class WebInterviewSettingsApi {
         reminderAfterDaysIfPartialResponse,
         singleResponse,
         emailOnComplete,
-        attachAnswersInEmail) {
+        attachAnswersInEmail,
+        allowSwitchToCawiForInterviewer) {
         var url = `${this.base}/${questionnaireId}/additionalSettings`
         return this.http.post(url, {
             spamProtection: isEnabledSpamProtection,
@@ -407,6 +455,7 @@ class WebInterviewSettingsApi {
             singleResponse: singleResponse,
             emailOnComplete: emailOnComplete,
             attachAnswersInEmail: attachAnswersInEmail,
+            allowSwitchToCawiForInterviewer: allowSwitchToCawiForInterviewer,
         })
     }
 

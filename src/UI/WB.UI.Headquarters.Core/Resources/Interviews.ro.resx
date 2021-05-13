@@ -139,13 +139,13 @@
 &lt;b&gt;Notă!&lt;/b&gt; Numai interviurile care nu au stareul &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt; pot fi realocate.</value>
   </data>
   <data name="ChooseResponsible" xml:space="preserve">
-    <value>Nu s-a ales niciun responsabil pentru unele interviuri. Vă rugăm să alegeți un controlor sau anchetator responsabil.</value>
+    <value>Nu s-a ales niciun responsabil pentru unele interviuri. Vă rugăm să alegeți un supervizor sau anchetator responsabil.</value>
   </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
     <value>Nu s-a ales niciun responsabil pentru unele interviuri. Vă rugăm să alegeți un anchetator responsabil.</value>
   </data>
   <data name="ChooseResponsibleSupervisor" xml:space="preserve">
-    <value>Nu s-a ales niciun responsabil pentru unele interviuri. Vă rugăm să alegeți un controlor responsabil.</value>
+    <value>Nu s-a ales niciun responsabil pentru unele interviuri. Vă rugăm să alegeți un supervizor responsabil.</value>
   </data>
   <data name="ClientKeyTitle" xml:space="preserve">
     <value>Cheia care a fost generată pe tabletă, dar a fost modificată din cauza interacțiunii cu interviul existent pe server</value>
@@ -196,7 +196,7 @@
     <value>Informații pentru a identifica fiecare alocare. Acestea sunt răspunsurile la întrebările marcate ca fiind de identificare în Designer.</value>
   </data>
   <data name="Tooltip_Table_InterviewKey" xml:space="preserve">
-    <value>Identificator prescurtat care apare în întregul sistem - la RINS, controlor și anchetator. Luați în considerare utilizarea acestui ID atunci când comunicați cu echipa din teren, mai degrabă decât un set mare de întrebări de identificare.</value>
+    <value>Identificator prescurtat care apare în întregul sistem - la coordonator, supervizor și anchetator. Luați în considerare utilizarea acestui ID atunci când comunicați cu echipa din teren, mai degrabă decât un set mare de întrebări de identificare.</value>
   </data>
   <data name="Tooltip_Table_LastUpdate" xml:space="preserve">
     <value>Când a fost postată pe server ultima modificare a interviului. Dați click pe pictograma de sortare pentru a sorta după dată.</value>
@@ -249,5 +249,8 @@
   </data>
   <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
     <value>Număr de întrebări fără răspuns. Include întrebări despre supervizor, identificare și anchetator. Poate conține valori nule pentru interviurile care au fost finalizate înainte de lansarea 20.09.</value>
+  </data>
+  <data name="ApproveReceivedWarning" xml:space="preserve">
+    <value>Actualii anchetatori responsabili nu vor fi informați despre aprobarea chestionarelor până la următoarea sincronizare. Dacă anchetatorul a început deja să lucreze pe chestionar, toate datele pe care le-a introdus acesta înainte de următoarea sincronizare vor fi PIERDUTE!</value>
   </data>
 </root>

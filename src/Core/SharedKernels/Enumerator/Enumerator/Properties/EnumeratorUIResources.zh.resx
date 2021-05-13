@@ -372,7 +372,7 @@
     <value>没有到服务器的互联网连接。请检查服务器网址和（或）网络设置</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>服务器错误。请联系支持团队support@mysurvey.solutions</value>
+    <value>服务器错误。请与您的服务器管理员联系。</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>正在加载</value>

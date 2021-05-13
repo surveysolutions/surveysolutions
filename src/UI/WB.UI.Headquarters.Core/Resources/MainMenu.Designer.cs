@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server Administration.
+        ///   Looks up a localized string similar to Administration.
         /// </summary>
         public static string ServerAdministration {
             get {

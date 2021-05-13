@@ -31,7 +31,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 
             if (user.IsInterviewer)
             {
-                interviewSummaries = interviewSummaries.Where(x => x.ResponsibleId == user.Id);
+                interviewSummaries = interviewSummaries.Where(x => x.ResponsibleId == user.Id 
+                    && x.InterviewMode != InterviewMode.CAWI);
             }
             
             return interviewSummaries;

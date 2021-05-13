@@ -12,6 +12,8 @@
         CompleteNoteToSupervisor =7,
         CompleteButton = 8,
         StartNewButton = 9,
-        ResumeButton = 10
+        ResumeButton = 10,
+        LinkWelcome = 11,
+        LinkInvitation = 12
     }
 }

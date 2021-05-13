@@ -63,7 +63,8 @@ namespace WB.Enumerator.Native.WebInterview
         IUpdateHandler<InterviewLifecycle, AnswerCommentResolved>,
         IUpdateHandler<InterviewLifecycle, VariablesChanged>,
         IUpdateHandler<InterviewLifecycle, VariablesEnabled>,
-        IUpdateHandler<InterviewLifecycle, VariablesDisabled>
+        IUpdateHandler<InterviewLifecycle, VariablesDisabled>,
+        IUpdateHandler<InterviewLifecycle, InterviewModeChanged>
 
     {
         private readonly IAggregateRootCache aggregateRootCache;
@@ -387,6 +388,16 @@ namespace WB.Enumerator.Native.WebInterview
         public InterviewLifecycle Update(InterviewLifecycle cycle, IPublishedEvent<VariablesDisabled> evnt)
         {
             return cycle.RefreshEntities(evnt.EventSourceId, evnt.Payload.Variables);
+        }
+
+        public InterviewLifecycle Update(InterviewLifecycle cycle, IPublishedEvent<InterviewModeChanged> @event)
+        {
+            if (!@event.IsPrototype())
+            {
+                return cycle.FinishInterview(@event.EventSourceId);
+            }
+
+            return cycle;
         }
     }
 }

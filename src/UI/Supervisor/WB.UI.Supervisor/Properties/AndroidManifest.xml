@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" package="org.worldbank.solutions.supervisor" android:versionCode="25532" android:versionName="20.05 (build 25532)">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" package="org.worldbank.solutions.supervisor" android:versionCode="26988" android:versionName="21.04 (build 26988)">
 	<application android:label="Supervisor" 
                  android:icon="@drawable/icon" 
                  android:theme="@android:style/Theme.DeviceDefault.Light" 

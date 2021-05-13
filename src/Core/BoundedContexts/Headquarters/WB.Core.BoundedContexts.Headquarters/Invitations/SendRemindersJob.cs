@@ -234,6 +234,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
     public class SendRemindersTask : BaseTask
     {
-        public SendRemindersTask(IScheduler scheduler) : base(scheduler, "Send reminders", typeof(SendRemindersJob)) { }
+        public SendRemindersTask(ISchedulerFactory schedulerFactory) : base(schedulerFactory, "Send reminders", typeof(SendRemindersJob)) { }
     }
 }

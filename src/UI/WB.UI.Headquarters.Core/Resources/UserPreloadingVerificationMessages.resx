@@ -145,7 +145,7 @@
     <value>Role '{0}' is invalid</value>
   </data>
   <data name="PLU0010Description" xml:space="preserve">
-    <value>Supervisor '{0}' is not found</value>
+    <value>Supervisor '{0}' is not found in workspace</value>
   </data>
   <data name="PLU0011Description" xml:space="preserve">
     <value>Supervisor column should be empty for supervisor role</value>
@@ -305,5 +305,16 @@
   </data>
   <data name="PLU0021Recomendation" xml:space="preserve">
     <value>Add password</value>
+  </data>
+  <data name="PLU0022" xml:space="preserve">
+    <value>Workspace not found</value>
+
+  </data>
+  <data name="PLU0022Description" xml:space="preserve">
+    <value>Workspace must exist and be enabled</value>
+
+  </data>
+  <data name="PLU0022Recomendation" xml:space="preserve">
+    <value>Check workspace name</value>
   </data>
 </root>

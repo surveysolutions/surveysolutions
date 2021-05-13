@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
@@ -17,6 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         QuestionnaireIdentity QuestionnaireIdentity { get; }
         string QuestionnaireId { get; }
         InterviewStatus Status { get; }
+        InterviewMode Mode { get; }
         bool IsDeleted { get; }
         bool WasCompleted { get; }
         bool WasRejected { get; }
@@ -190,6 +189,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Identity> FindEntity(Guid id);
 
         bool AcceptsInterviewerAnswers();
+        bool AcceptsCAWIAnswers();
 
         IReadOnlyCollection<IInterviewTreeNode> GetAllSections();
 
@@ -206,5 +206,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool? GetIsAudioRecordingEnabled();
 
         Guid? GetAttachmentForEntity(Identity entityId);
+
+        InterviewSimpleStatus GetInterviewSimpleStatus(bool includingSupervisorEntities);
     }
 }

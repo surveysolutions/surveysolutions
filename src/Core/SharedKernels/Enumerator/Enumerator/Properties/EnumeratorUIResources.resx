@@ -153,6 +153,9 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>Completed ({0})</value>
   </data>
+  <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>Web Interviews ({0})</value>
+  </data>
   <data name="Dashboard_Start" xml:space="preserve">
     <value>Start</value>
   </data>
@@ -199,6 +202,15 @@ for further instructions</value>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} interviews for {1}</value>
   </data>
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>Refreshing workspaces</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>Workspaces list updated</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>Error getting list of workspaces. Please contact your system administrator. </value>
+  </data>
   <data name="Maps_Title" xml:space="preserve">
     <value>Maps</value>
   </data>
@@ -206,7 +218,7 @@ for further instructions</value>
     <value>No internet access to your server. Check server address and(or) network settings</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Server error. Please contact the support team at support@mysurvey.solutions</value>
+    <value>Server error. Please contact your server administrator.</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
     <value>Your application is not compatible with server one. Update your Interviewer application.</value>
@@ -297,7 +309,7 @@ for further instructions</value>
   </data>
   <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
     <value>Updating calendar events</value>
-  </data>  
+  </data>
   <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
     <value>Updating local interviews with changes from server</value>
   </data>
@@ -329,7 +341,7 @@ for further instructions</value>
     <value>Assignments are locked until synchronization is complete</value>
   </data>
   <data name="Synchronization_LinkToErrors" xml:space="preserve">
-      <value>More information on the synchronization errors may be found at the &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;support site&lt;/a&gt;</value>
+    <value>More information on the synchronization errors may be found at the &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;support site&lt;/a&gt;</value>
   </data>
   <data name="Synchronization_Questionnaires" xml:space="preserve">
     <value>questionnaires</value>
@@ -342,7 +354,7 @@ for further instructions</value>
   </data>
   <data name="TransferringCalendarEvents" xml:space="preserve">
     <value>Transferring calendar events</value>
-  </data>  
+  </data>
   <data name="Synchronization_Success_Description" xml:space="preserve">
     <value>All assignments were updated</value>
   </data>
@@ -375,7 +387,7 @@ for further instructions</value>
   </data>
   <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
     <value>calendar events</value>
-  </data>  
+  </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} of {1} {2} done</value>
   </data>
@@ -395,10 +407,16 @@ for further instructions</value>
     <value>User authentication</value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Authentication problem. We were unable to confirm your credentials '{0}'. Your account may have a different password, be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor or Headquarters.</value>
+    <value>Authentication problem. We were unable to confirm your credentials '{0}'. Your account may have a different password, be locked. Please re-enter your password. If the problem persists, contact your Supervisor or Headquarters.</value>
+  </data>
+  <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+    <value>Your password has been reset. You must change it to get access to site.</value>
   </data>
   <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
     <value>User no longer belongs to this Supervisor team. Please contact your Headquarters for details.</value>
+  </data>
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>You changed your current password. Try to login again with new password.</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Your login or password is incorrect</value>
@@ -514,6 +532,12 @@ You need internet connection to proceed with setting up the user and domain.</va
   </data>
   <data name="MenuItem_Title_Search" xml:space="preserve">
     <value>Search</value>
+  </data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>Workspaces</value>
+  </data>
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>Refresh workspaces</value>
   </data>
   <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
     <value>All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</value>
@@ -771,6 +795,9 @@ Please resolve issues noted on the cover page and send them back to the supervis
     <value>Completed interviews, will be uploaded during 
 your next synchronization</value>
   </data>
+  <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>Interviews in Web interview mode. Will be removed during synchronization when web interview is completed by respondent</value>
+  </data>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
     <value>You can create new interviews using assignments</value>
   </data>
@@ -834,6 +861,12 @@ your next synchronization</value>
   </data>
   <data name="Dashboard_CensusAssignment" xml:space="preserve">
     <value>Census</value>
+  </data>
+  <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>You can't open interview in CAWI mode. It will be send to headquarters after synchronization.</value>
+  </data>  
+  <data name="Dashboard_CawiLabel" xml:space="preserve">
+    <value>{0} (CAWI)</value>
   </data>
   <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
     <value>Checking maps on server</value>
@@ -958,6 +991,15 @@ It will appear on interviewer device after next synchronization</value>
     <value>Logs are sent to HQ</value>
   </data>
   <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
-      <value>Your account is no longer active on this server, because the workspace in which it is defined was disabled by the administrator. Please contact your supervisor.</value>
+    <value>Your account is no longer active on this server, because the workspace in which it is defined was disabled by the administrator. Please contact your supervisor.</value>
+  </data>
+  <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>Show QR Code</value>
+  </data>
+  <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+      <value>Your account is no longer active in the workspace. Please contact your system administrator.</value>
+  </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Progress: {0}/{1}</value>
   </data>
 </root>

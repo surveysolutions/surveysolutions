@@ -78,7 +78,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
 
-            registry.BindAsSingleton<IInterviewViewModelFactory, InterviewerInterviewViewModelFactory>();
+            registry.Bind<IInterviewViewModelFactory, InterviewerInterviewViewModelFactory>();
 
             registry.BindAsSingleton<ICommandService, SequentialCommandService>();
 #if EXCLUDEEXTENSIONS
@@ -107,10 +107,6 @@ namespace WB.UI.Interviewer.ServiceLocation
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-#if !EXCLUDEEXTENSIONS
-            WB.UI.Shared.Extensions.CustomServices.MapInteractionService.RegisterLicense();
-#endif
-
             return Task.CompletedTask;
         }
     }

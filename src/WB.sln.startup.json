@@ -1,0 +1,66 @@
+/*
+    This is a configuration file for the SwitchStartupProject Visual Studio Extension
+    See https://bitbucket.org/thirteen/switchstartupproject/src/tip/Configuration.md
+*/
+{
+    "$schema": "https://bitbucket.org/thirteen/switchstartupproject/raw/85bd45bb849a73baaf43a8157cd523f65ffb7e9c/SwitchStartupProject/Configuration/ConfigurationSchema.json",
+    /*  Configuration File Version  */
+    "Version": 3,
+
+    /*  Create an item in the dropdown list for each project in the solution?  */
+    "ListAllProjects": false,
+
+  "MultiProjectConfigurations": {
+    "HQ": {
+      "Projects": {
+        "WB.UI.Headquarters": {}
+      }
+    },
+    "Designer": {
+      "Projects": {
+        "WB.UI.Designer": { "ProfileName": "WB.UI.Designer" }
+      }
+    },
+    "Designer+WebTester": {
+      "Projects": {
+        "WB.UI.Designer": { "ProfileName": "WB.UI.Designer" },
+        "WB.UI.WebTester": { "ProfileName": "WB.UI.WebTester" }
+      }
+    },
+
+    "HQ+Designer+WebTester": {
+      "Projects": {
+        "WB.UI.Designer": { "ProfileName": "WB.UI.Designer" },
+        "WB.UI.Headquarters": {},
+        "WB.UI.WebTester": { "ProfileName": "WB.UI.WebTester" }
+      }
+    },
+    "HQ+Designer": {
+      "Projects": {
+        "WB.UI.Headquarters": {
+
+        },
+        "WB.UI.Designer": {
+
+        }
+      }
+    },
+    "Services.Export": {
+      "Projects": {
+        "WB.Services.Export.Host": {
+          "StartProject": true
+        }
+      }
+    },
+    "WebTester": {
+      "Projects": {
+        "WB.UI.Designer": {
+
+        },
+        "WB.UI.WebTester": {
+
+        }
+      }
+    }
+  }
+}

@@ -58,6 +58,7 @@ using WB.Persistence.Headquarters.Migrations.Users;
 using WB.Persistence.Headquarters.Migrations.Workspaces;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
+using WB.UI.Headquarters.Code.ResetPassword;
 using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers;
@@ -222,6 +223,7 @@ namespace WB.UI.Headquarters
                 {
                     options.AddPolicy("export", b => b
                         .WithOrigins(redirectUri)
+                        .AllowAnyHeader()
                         .WithMethods("POST")
                     );
                 }
@@ -282,9 +284,12 @@ namespace WB.UI.Headquarters
             services.AddTransient<ExportServiceApiConfigurator>();
             
             services.AddHttpClient();
-            services.AddWorkspaceAwareHttpClient<IExportServiceApi, 
-                ExportServiceApiConfigurator, 
-                ExportServiceApiHttpHandler>();
+            services.AddWorkspaceAwareHttpClient<IExportServiceApi,
+                ExportServiceApiConfigurator,
+                ExportServiceApiHttpHandler>(new RefitSettings
+            {
+                ContentSerializer = new NewtonsoftJsonContentSerializer()
+            });
 
             services.AddWorkspaceAwareHttpClient<IDesignerApi, 
                 DesignerApiConfigurator,
@@ -293,6 +298,7 @@ namespace WB.UI.Headquarters
                     ContentSerializer = new DesignerContentSerializer()
                 });
             
+
             services.AddScoped<IDesignerUserCredentials, DesignerUserCredentials>();
 
             services.AddGraphQL();
@@ -353,7 +359,7 @@ namespace WB.UI.Headquarters
                 options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
             });
 
-            services.AddMediatR(typeof(Startup));
+            services.AddMediatR(typeof(Startup), typeof(HeadquartersBoundedContextModule));
         }
 
         private static void AddCompression(IServiceCollection services)
@@ -447,6 +453,7 @@ namespace WB.UI.Headquarters
             app.UseCors();
             app.UseAuthentication();
 
+            app.UseResetPasswordRedirect();
             app.UseRedirectIntoWorkspace();
 
             app.UseAuthorization();

@@ -2,13 +2,21 @@ using System;
 using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 //namespace preserved for compatibility
 // ReSharper disable once CheckNamespace
 namespace WB.UI.Tester.Infrastructure.Internals.Security
 {
+    [NonWorkspaced]
     public class TesterUserIdentity : IUserIdentity, IPlainStorageEntity
     {
+        public TesterUserIdentity()
+        {
+            //compatibility
+            Workspace = string.Empty;
+        }
+
         [PrimaryKey]
         public string Id  { get; set; }
         public string Name { get; set; }

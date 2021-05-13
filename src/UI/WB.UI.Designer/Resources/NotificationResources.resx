@@ -176,4 +176,11 @@ To complete the registration process click on this link:</value>
   <data name="TranfserOwnershipNotification" xml:space="preserve">
     <value>Hello {0}, &lt;br&gt; {1} has transferred ownership of the questionnaire {2} to You</value>
   </data>
+  <data name="EmailChange" xml:space="preserve">
+    <value>Hello {0}, &lt;br/&gt; &lt;br/&gt;
+To confirm email change please use following link: </value>
+  </data>
+  <data name="EmailChangeLink" xml:space="preserve">
+    <value>confirm</value>
+  </data>
 </root>

@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
         public void should_not_include_invitations_with_interviews()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
-            var assignment = Create.Entity.Assignment(questionnaireIdentity: questionnaireIdentity);
+            var assignment = Create.Entity.Assignment(questionnaireIdentity: questionnaireIdentity, webMode:true);
             var invitations = new InMemoryPlainStorageAccessor<Invitation>();
             invitations.Store(Create.Entity.Invitation(1, assignment), 1);
             invitations.Store(Create.Entity.Invitation(2, assignment, interviewId: Id.gA.FormatGuid()), 2);

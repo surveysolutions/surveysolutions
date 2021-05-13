@@ -97,6 +97,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have been invited to take a part in the following survey: &quot;%QUESTIONNAIRE%&quot;. You interview is not ready yet..
+        /// </summary>
+        public static string LinkInvitation {
+            get {
+                return ResourceManager.GetString("LinkInvitation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Interview.
+        /// </summary>
+        public static string LinkToInterviewPage {
+            get {
+                return ResourceManager.GetString("LinkToInterviewPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello and Welcome to the Survey Solutions Web Survey.
+        /// </summary>
+        public static string LinkWelcome {
+            get {
+                return ResourceManager.GetString("LinkWelcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Note for supervisor.
         /// </summary>
         public static string NoteForSupervisor {

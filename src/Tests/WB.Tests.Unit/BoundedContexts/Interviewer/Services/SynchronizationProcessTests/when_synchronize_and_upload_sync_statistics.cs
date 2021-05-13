@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -69,8 +70,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             synchronizationServiceMock.Setup(x => x.CheckObsoleteInterviewsAsync(It.IsAny<List<ObsoletePackageCheck>>(), CancellationToken.None))
                 .ReturnsAsync(new List<Guid>());
             synchronizationServiceMock.Setup(x => x.GetInterviewerAsync(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new InterviewerApiView());
+                .ReturnsAsync(new InterviewerApiView() { Workspaces = new List<UserWorkspaceApiView>() { new UserWorkspaceApiView() { Name = "primary"} }});
 
+            var workspaceService = Mock.Of<IWorkspaceService>(w =>
+                w.GetAll() == new WorkspaceView[] {new WorkspaceView() {Id = "primary"}});
+            
             this.httpStatistician = new Mock<IHttpStatistician>();
 
             this.httpStatistician.Setup(s => s.GetStats()).Returns(new HttpStats
@@ -81,12 +85,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 });
 
             IPlainStorage<InterviewerIdentity> localInterviewers = Create.Storage.InMemorySqlitePlainStorage<InterviewerIdentity>();
-            localInterviewers.Store(Create.Other.InterviewerIdentity());
+            localInterviewers.Store(Create.Other.InterviewerIdentity() );
 
             var viewModel = Create.Service.SynchronizationProcess(principal: principal,
                 interviewViewRepository: interviewViewRepository,
                 httpStatistician: httpStatistician.Object,
-                synchronizationService: synchronizationServiceMock.Object
+                synchronizationService: synchronizationServiceMock.Object,
+                workspaceService: workspaceService
             );
 
             this.sw = new Stopwatch();

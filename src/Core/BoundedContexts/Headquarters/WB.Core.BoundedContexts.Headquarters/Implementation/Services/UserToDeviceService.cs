@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 throw new InvalidOperationException("Only IN or SV can be linked to device");
             }
 
-            if(user.Profile == null)
+            if(user.WorkspaceProfile == null)
                 user.Profile = new HqUserProfile();
 
             user.Profile.DeviceId = deviceId;

@@ -144,4 +144,8 @@
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
     <value>Данные интервью не совместимы с новой версией опросника. Создано новое интервью</value>
   </data>
+  <data name="ReloadPartialInterviewErrorMessage" xml:space="preserve">
+    <value>Данные интервью не совместимы с новой версией опросника. Интервью загружено частично</value>
+  </data>
+
 </root>

@@ -109,12 +109,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return statefulInterview.IsEnabled(Identity.Parse(id));
         }
 
-        public virtual GroupStatus GetInterviewStatus(Guid interviewId)
+        public virtual InterviewSimpleStatus GetInterviewStatus(Guid interviewId)
         {
             var interview = this.GetCallerInterview(interviewId);
-            if (interview == null) return GroupStatus.StartedInvalid;
+            if (interview == null) return new InterviewSimpleStatus(){ Status = GroupStatus.StartedInvalid };
 
-            return this.interviewEntityFactory.GetInterviewSimpleStatus(interview, IsReviewMode());
+            return interview.GetInterviewSimpleStatus(IsReviewMode());
         }
 
         private IdentifyingEntity GetIdentifyingEntity(Guid entityId, IStatefulInterview interview, IQuestionnaire questionnaire)
@@ -205,10 +205,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 .Union(ActionButtonsDefinition)
                 .ToArray();
 
+            var details = GetEntitiesDetails(interviewId, interviewEntityWithTypes.Select(e => e.Identity).ToArray());
+
             var result = new PrefilledPageData
             {
                 FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
                 Entities = interviewEntityWithTypes,
+                Details = details,
                 HasAnyQuestions = interviewEntityWithTypes.Length > 1
             };
 
@@ -293,7 +296,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 button.Id = id;
                 button.Target = target.Identity.ToString();
                 button.Status = button.Type == ButtonType.Complete
-                    ? this.interviewEntityFactory.GetInterviewSimpleStatus(statefulInterview, IsReviewMode())
+                    ? statefulInterview.GetInterviewSimpleStatus(IsReviewMode()).Status
                     : this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode(), statefulInterview, questionnaire);
 
                 this.interviewEntityFactory.ApplyValidity(button.Validity, button.Status);

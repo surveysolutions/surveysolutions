@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Refit;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -40,6 +41,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly ISystemLog auditLog;
         private readonly ISerializer serializer;
         private readonly ExternalStoragesSettings externalStoragesSettings;
+        private readonly ILogger<DataExportApiController> logger;
 
         public DataExportApiController(
             IFileSystemAccessor fileSystemAccessor,
@@ -50,7 +52,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             IExportFileNameService exportFileNameService,
             IExportServiceApi exportServiceApi,
             ISystemLog auditLog, 
-            ExternalStoragesSettings externalStoragesSettings)
+            ExternalStoragesSettings externalStoragesSettings,
+            ILogger<DataExportApiController> logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
@@ -61,6 +64,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.auditLog = auditLog;
             this.externalStoragesSettings = externalStoragesSettings;
             this.serializer = serializer;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -217,7 +221,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             DateTime? @from,
             DateTime? to,
             string accessToken = null,
-            string refresh_token = null,
+            string refreshToken = null,
             ExternalStorageType? externalStorageType = null,
             Guid? translation = null,
             bool? includeMeta = null)
@@ -233,7 +237,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                     to?.ToUniversalTime(),
                     GetPasswordFromSettings(),
                     accessToken,
-                    refresh_token,
+                    refreshToken,
                     externalStorageType,
                     translation,
                     includeMeta);
@@ -291,13 +295,27 @@ namespace WB.UI.Headquarters.Controllers.Api
             try
             {
                 var response = await GetExternalStorageAuthTokenAsync(state, model.Code);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    logger.LogError($"Not successful attempt of tokens retrieving for {state.Type}. Status: {response.StatusCode}");
+                    logger.LogError($"Reason: {response.ReasonPhrase}");
+                    return BadRequest($"Could not get tokens for {state.Type} by code. Result is empty.");
+                }
+
+                if (string.IsNullOrEmpty(response.Content?.AccessToken) || string.IsNullOrEmpty(response.Content?.RefreshToken))
+                {
+                    logger.LogError($"Access and/or refresh tokens for {state.Type} are null or empty.");
+                    return BadRequest($"Could not get tokens for {state.Type} by code. Result is empty.");
+                }
+
                 await RequestExportUpdateAsync(questionnaireBrowseItem,
                     state.Format ?? DataExportFormat.Binary,
                     state.InterviewStatus,
                     state.FromDate?.ToUniversalTime(),
                     state.ToDate?.ToUniversalTime(),
-                    response.AccessToken,
-                    response.RefreshToken,
+                    response.Content.AccessToken,
+                    response.Content.RefreshToken,
                     state.Type,
                     translation: state.TranslationId);
 
@@ -309,13 +327,18 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
         }
 
-        private Task<ExternalStorageTokenResponse> GetExternalStorageAuthTokenAsync(ExternalStorageStateModel state, string code)
+        private Task<ApiResponse<ExternalStorageTokenResponse>> GetExternalStorageAuthTokenAsync(ExternalStorageStateModel state, string code)
         {
             var storageSettings = this.GetExternalStorageSettings(state.Type);
-            var client =  RestService.For<IOAuth2Api>(new HttpClient()
-            {
-                BaseAddress = new Uri(storageSettings.TokenUri)
-            });
+            var client =  RestService.For<IOAuth2Api>(
+                new HttpClient()
+                {
+                    BaseAddress = new Uri(storageSettings.TokenUri)
+                },
+                new RefitSettings
+                {
+                    ContentSerializer = new NewtonsoftJsonContentSerializer()
+                });
             var request = new ExternalStorageAccessTokenRequest
             {
                 Code = code,

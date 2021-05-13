@@ -1,8 +1,20 @@
 ﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Services
 @using WB.Core.BoundedContexts.Headquarters.Resources
+@using WB.Core.BoundedContexts.Headquarters.Workspaces
+@using WB.Infrastructure.Native.Workspaces
+@inject IWorkspaceContextAccessor workspaceContext
+
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
+    
+    var workspace = workspaceContext.CurrentWorkspace();
+    var isSystemWorkspace = workspace?.IsSystemDefinedWorkspace() ?? false;
+    if (isSystemWorkspace)
+    {
+        var workspaces = (IEnumerable<WorkspaceContext>)ViewData["UserWorkspacesList"];
+        workspace = workspaces.FirstOrDefault();
+    }
 }
 <ul class="nav navbar-nav" role="menu">
     <li class="dropdown @(page == MenuItem.SurveyAndStatuses || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
@@ -10,19 +22,19 @@
             @MainMenu.Reports <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            @Html.MainMenuItem("SurveysAndStatusesForSv", "Reports", @MainMenu.SurveysAndStatuses, MenuItem.SurveyAndStatuses)
-            @Html.MainMenuItem("TeamMembersAndStatuses", "Reports", @MainMenu.TeamMembersAndStatuses, MenuItem.Summary)
-            @Html.MainMenuItem("TeamStatusDuration", "Reports", @MainMenu.StatusDuration, MenuItem.StatusDuration)
-            @Html.MainMenuItem("QuantityByInterviewers", "Reports", @MainMenu.Quantity, MenuItem.NumberOfCompletedInterviews)
-            @Html.MainMenuItem("SpeedByInterviewers", "Reports", @MainMenu.Speed, MenuItem.SpeedOfCompletingInterviews)
-            @Html.MainMenuItem("MapReport", "Reports", @MainMenu.MapReport, MenuItem.MapReport)
-            @Html.MainMenuItem("SurveyStatistics", "Reports", @MainMenu.SurveyStatistics, MenuItem.SurveyStatistics)
+            @Html.MainMenuItem(workspace, "SurveysAndStatusesForSv", "Reports", @MainMenu.SurveysAndStatuses, MenuItem.SurveyAndStatuses)
+            @Html.MainMenuItem(workspace, "TeamMembersAndStatuses", "Reports", @MainMenu.TeamMembersAndStatuses, MenuItem.Summary)
+            @Html.MainMenuItem(workspace, "TeamStatusDuration", "Reports", @MainMenu.StatusDuration, MenuItem.StatusDuration)
+            @Html.MainMenuItem(workspace, "QuantityByInterviewers", "Reports", @MainMenu.Quantity, MenuItem.NumberOfCompletedInterviews)
+            @Html.MainMenuItem(workspace, "SpeedByInterviewers", "Reports", @MainMenu.Speed, MenuItem.SpeedOfCompletingInterviews)
+            @Html.MainMenuItem(workspace, "MapReport", "Reports", @MainMenu.MapReport, MenuItem.MapReport)
+            @Html.MainMenuItem(workspace, "SurveyStatistics", "Reports", @MainMenu.SurveyStatistics, MenuItem.SurveyStatistics)
         </ul>
     </li>
 
-    @Html.MainMenuItem("Index", "Interviews", MainMenu.Interviews, MenuItem.Interviews)
-    @Html.MainMenuItem("Interviewers", "Users", MainMenu.TeamAndRoles, MenuItem.Teams)
-    @Html.MainMenuItem("Index", "Assignments", MainMenu.Assignments, MenuItem.Assignments)
+    @Html.MainMenuItem(workspace, "Index", "Interviews", MainMenu.Interviews, MenuItem.Interviews)
+    @Html.MainMenuItem(workspace, "Interviewers", "Users", MainMenu.TeamAndRoles, MenuItem.Interviewers)
+    @Html.MainMenuItem(workspace, "Index", "Assignments", MainMenu.Assignments, MenuItem.Assignments)
 
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
@@ -31,8 +43,8 @@
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
            title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
-            <li>@Html.ActionLink(Common.DownloadSupervisor, "Supervisor", "Download", new { area = string.Empty }, null)</li>
-            @Html.MainMenuItem("Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
+            <li>@Html.ActionLink(Common.DownloadSupervisor, "Supervisor", "Download", new {area = string.Empty}, null)</li>
+            @Html.MainMenuItem(workspace, "Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
             <li>
                 <a href="/Account/LogOff">@Common.Logoff</a>
             </li>

@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApprovedByHQ" xml:space="preserve">
-    <value>Aprobare RINS</value>
+    <value>Aprobaat de HQ</value>
   </data>
   <data name="ApprovedBySupervisor" xml:space="preserve">
-    <value>Aprobare controlor</value>
+    <value>Aprobat de supervizor</value>
   </data>
   <data name="Average" xml:space="preserve">
     <value>Medie</value>
@@ -196,16 +196,16 @@
     <value>Text întrebare</value>
   </data>
   <data name="RejectedByHQ" xml:space="preserve">
-    <value>Respins de RINS</value>
+    <value>Respins de HQ</value>
   </data>
   <data name="RejectedBySupervisor" xml:space="preserve">
-    <value>Respins de controlor</value>
+    <value>Respins de supervizor</value>
   </data>
   <data name="Report_Average_case_assignment_duration" xml:space="preserve">
     <value>Durata medie a interviului alocat</value>
   </data>
   <data name="Report_Average_HQ_processing_time" xml:space="preserve">
-    <value>Durata medie de procesare a RINS</value>
+    <value>Durata medie de procesare a HQ</value>
   </data>
   <data name="Report_Average_Interview_Duration" xml:space="preserve">
     <value>Durata medie a interviului</value>
@@ -214,7 +214,7 @@
     <value>Durata medie de procesare totală a cazului</value>
   </data>
   <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
-    <value>Durata medie de procesare a controlorului</value>
+    <value>Durata medie de procesare a supervizorului</value>
   </data>
   <data name="Report_Days_by_Interview_Status" xml:space="preserve">
     <value>Zile dupa stareul interviului</value>
@@ -226,37 +226,37 @@
     <value>Numărul de interviuri completate</value>
   </data>
   <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
-    <value>Numărul de interviuri completate operate de RINS</value>
+    <value>Numărul de interviuri completate operate de HQ</value>
   </data>
   <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
-    <value>Numărul de interviuri completate operate de controlor</value>
+    <value>Numărul de interviuri completate operate de supervizor</value>
   </data>
   <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
-    <value>Numărul de interviuri aprobate de RINS</value>
+    <value>Numărul de interviuri aprobate de HQ</value>
   </data>
   <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
     <value>Cantitate pe anchetatori</value>
   </data>
   <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
-    <value>Cantitate pe controlori</value>
+    <value>Cantitate pe supervizori</value>
   </data>
   <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
     <value>Durata între stări pe anchetatori</value>
   </data>
   <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
-    <value>Durata între stări pe controlori</value>
+    <value>Durata între stări pe supervizori</value>
   </data>
   <data name="Report_Speed_By_Interviewers" xml:space="preserve">
     <value>Durata pe anchetatori</value>
   </data>
   <data name="Report_Speed_By_Supervisors" xml:space="preserve">
-    <value>Durata pe controlori</value>
+    <value>Durata pe supervizori</value>
   </data>
   <data name="Report_Status_Duration" xml:space="preserve">
     <value>Durată stare</value>
   </data>
   <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
-    <value>Controlori și stări</value>
+    <value>Supervizori și stări</value>
   </data>
   <data name="Report_Surveys_and_Statuses" xml:space="preserve">
     <value>Anchete și stări</value>
@@ -283,10 +283,10 @@
     <value>Suma</value>
   </data>
   <data name="SupervisorAssigned" xml:space="preserve">
-    <value>Controlor desemnat</value>
+    <value>Supervizor desemnat</value>
   </data>
   <data name="SupervisorsAndSurveys" xml:space="preserve">
-    <value>Controlori și Anchete</value>
+    <value>Supervizori și Anchete</value>
   </data>
   <data name="SurveyName" xml:space="preserve">
     <value>Titlul chestionarului </value>
@@ -367,7 +367,7 @@
     <value>Salvează ca imagine</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
-    <value>Controlor</value>
+    <value>Supervizor</value>
   </data>
   <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
     <value>Raportul Echipe și stări arată numărul de anchete în fiecare stare defalcate pe echipe</value>
@@ -383,5 +383,14 @@
   </data>
   <data name="ToAllQuestionnaires" xml:space="preserve">
     <value>Înapi la chestionare</value>
+  </data>
+  <data name="AssignReceivedConfirm" xml:space="preserve">
+    <value>Am înțeles că acest chestionar a fost primit deja pe tabletă</value>
+  </data>
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Actualul anchetator responsabil nu va fi informat despre aprobarea chestionarului până la următoarea sincronizare. Dacă anchetatorul a început deja să lucreze pe chestionar, toate datele pe care le-a introdus acesta înainte de următoarea sincronizare vor fi PIERDUTE!</value>
+  </data>
+  <data name="ClusterInfo" xml:space="preserve">
+    <value>Această zonă conține</value>
   </data>
 </root>

@@ -122,15 +122,18 @@
 Reîncărcați pagina și încercați din nou sau contactați support@mysurvey.solutions </value>
   </data>
   <data name="Generate" xml:space="preserve">
-    <value>Document PDF generat acum {0} minute.
+    <value>Document PDF generat acum {0} minute.
+
 Dimensiune: {1} Kb </value>
   </data>
   <data name="GenerateLessMinute" xml:space="preserve">
-    <value>Document PDF generat acum mai puțin de un minut.
+    <value>Document PDF generat acum mai puțin de un minut.
+
 Dimensiune: {0} Kb </value>
   </data>
   <data name="GeneratingSuccess" xml:space="preserve">
-    <value>PDF-ul dvs. este generat.
+    <value>PDF-ul dvs. este generat.
+
 Dimensiune: {0} Kb </value>
   </data>
   <data name="PreparingToGenerate" xml:space="preserve">

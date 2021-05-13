@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using System;
+using Android.App;
 using Android.Content;
 using Android.Content.Res;
 using Android.OS;
@@ -13,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Dashboard;
 using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Supervisor.Activities
@@ -63,6 +65,15 @@ namespace WB.UI.Supervisor.Activities
                     ViewModel.ShowDefaultListCommand.Execute();
                 ViewModel.ShowMenuViewModelCommand.Execute();
             }
+            
+            this.ViewModel.WorkspaceListUpdated += this.WorkspaceListUpdated;
+        }
+
+        protected override void OnDestroy()
+        {
+            this.ViewModel.WorkspaceListUpdated -= this.WorkspaceListUpdated;
+
+            base.OnDestroy();
         }
 
         protected override void OnPostCreate(Bundle savedInstanceState)
@@ -94,6 +105,10 @@ namespace WB.UI.Supervisor.Activities
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
+            
+            dashboardMenu = menu;
+
+            UpdateWorkspacesMenu();
 
             SetMenuItemIcon(menu, Resource.Id.menu_search, Resource.Drawable.dashboard_search_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_sync_with_hq, Resource.Drawable.synchronize_icon);
@@ -143,5 +158,48 @@ namespace WB.UI.Supervisor.Activities
         void ISyncBgService<SyncProgressDto>.StartSync() => ((ISyncServiceHost<SyncBgService>)this).Binder.GetService().StartSync();
 
         SyncProgressDto ISyncBgService<SyncProgressDto>.CurrentProgress => ((ISyncServiceHost<SyncBgService>)this).Binder.GetService().CurrentProgress;
+        
+        private void WorkspaceListUpdated(object sender, EventArgs e)
+        {
+            UpdateWorkspacesMenu();
+        }
+
+        private IMenu dashboardMenu;
+        
+        private void UpdateWorkspacesMenu()
+        {
+            IMenu menu = dashboardMenu;
+            var workspaces = this.ViewModel.GetWorkspaces();
+            var workspacesMenuItem = menu.FindItem(Resource.Id.menu_workspaces);
+            if (workspacesMenuItem != null)
+            {
+                menu.LocalizeMenuItem(Resource.Id.menu_workspaces, EnumeratorUIResources.MenuItem_Title_Workspaces);
+
+                var sub = workspacesMenuItem.SubMenu;
+                sub.Clear();
+                
+                foreach (var workspace in workspaces)
+                {
+                    var menuItem = sub!.Add(workspace.DisplayName);
+                    menuItem.SetCheckable(true);
+                    menuItem.SetChecked(workspace.Name == ViewModel.CurrentWorkspace);
+                    var workspaceName = workspace.Name;
+                    menuItem.SetOnMenuItemClickListener(new MenuItemOnMenuItemClickListener(() =>
+                    {
+                        ViewModel.ChangeWorkspace(workspaceName);
+                        return true;
+                    }));
+                }
+
+                sub.Add(EnumeratorUIResources.MenuItem_Title_RefreshWorkspaces)
+                    .SetOnMenuItemClickListener(new MenuItemOnMenuItemClickListener(() =>
+                    {
+                        ViewModel.RefreshWorkspaces();
+                        return true;
+                    }));
+            }
+
+            workspacesMenuItem.SetVisible(true);
+        }
     }
 }

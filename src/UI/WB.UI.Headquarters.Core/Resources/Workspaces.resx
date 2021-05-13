@@ -1,110 +1,212 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:element name="root" msdata:IsDataSet="true"></xsd:element>
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
   </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
   <resheader name="version">
-    <value>1.3</value>
+    <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-        <value>Name</value>
-    </data>
+    <value>Name</value>
+  </data>
   <data name="DisplayName" xml:space="preserve">
-        <value>Display name</value>
-    </data>
+    <value>Display name</value>
+  </data>
   <data name="NameRequired" xml:space="preserve">
-        <value>Name is required</value>
-    </data>
+    <value>Name is required</value>
+  </data>
   <data name="DisplayNameRequired" xml:space="preserve">
-        <value>Display name required</value>
-    </data>
+    <value>Display name required</value>
+  </data>
   <data name="InvalidName" xml:space="preserve">
-        <value>Only digits and lower case letters allowed</value>
-    </data>
+    <value>Only digits and lower case letters allowed</value>
+  </data>
   <data name="NameShouldBeUnique" xml:space="preserve">
-        <value>Name should be unique</value>
-    </data>
+    <value>Name should be unique</value>
+  </data>
   <data name="EditWorkspace" xml:space="preserve">
-        <value>Edit workspace "{{name}}"</value>
-    </data>
+    <value>Edit workspace "{{name}}"</value>
+  </data>
   <data name="WorkspacesSubtitle" xml:space="preserve">
-        <value>Each workspace has isolated questionnaires, interviews, assignments and users.</value>
-    </data>
+    <value>Each workspace has isolated questionnaires, interviews and assignments.</value>
+  </data>
   <data name="AddNew" xml:space="preserve">
-        <value>Create new</value>
-    </data>
+    <value>Create new</value>
+  </data>
   <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve">
-        <value>Provided workspace name is not allowed</value>
-    </data>
+    <value>Provided workspace name is not allowed</value>
+  </data>
   <data name="CurrentWorkspace" xml:space="preserve">
-        <value>Current workspace</value>
-    </data>
+    <value>Current workspace</value>
+  </data>
   <data name="CreateWorkspace" xml:space="preserve">
-        <value>Workspace creation</value>
-    </data>
+    <value>Workspace creation</value>
+  </data>
   <data name="CanNotBeChanged" xml:space="preserve">
-        <value>Can not be changed after creation</value>
-    </data>
+    <value>Can not be changed after creation</value>
+  </data>
   <data name="DisplayNameHelpText" xml:space="preserve">
-        <value>Will be used to display workspace in menus. Try to choose shorter names</value>
-    </data>
+    <value>Will be used to display workspace in menus. Try to choose shorter names</value>
+  </data>
   <data name="WorkspaceSettings" xml:space="preserve">
-        <value>Settings</value>
-    </data>
+    <value>Settings</value>
+  </data>
   <data name="Edit" xml:space="preserve">
-        <value>Edit</value>
-    </data>
+    <value>Edit</value>
+  </data>
   <data name="AssignedWorkspaces" xml:space="preserve">
-        <value>Select workspaces that user has access to</value>
-    </data>
+    <value>Select workspaces that user has access to</value>
+  </data>
   <data name="UserWorkspacesTab" xml:space="preserve">
-        <value>Workspaces</value>
-    </data>
+    <value>Workspaces</value>
+  </data>
   <data name="WorkspacesUpdated" xml:space="preserve">
-        <value>List of workspaces updated</value>
-    </data>
+    <value>List of workspaces updated</value>
+  </data>
   <data name="DisableWorkspacePopupTitle" xml:space="preserve">
-        <value>Confirm disabling "{{name}}"</value>
-    </data>
+    <value>Confirm disabling "{{name}}"</value>
+  </data>
   <data name="Disable" xml:space="preserve">
-        <value>Disable</value>
-    </data>
+    <value>Disable</value>
+  </data>
   <data name="DisableExplanation" xml:space="preserve">
-        <value>Disabling workspace will stop access to it for all users. It will stop all data collection that might be in progress.</value>
-    </data>
+    <value>Disabling workspace will stop access to it for all users. It will stop all data collection that might be in progress.</value>
+  </data>
   <data name="Enable" xml:space="preserve">
-        <value>Enable</value>
-    </data>
+    <value>Enable</value>
+  </data>
   <data name="DeleteWorkspacePopupTitle" xml:space="preserve">
-        <value>Delete workspace "{{name}}"</value>
-    </data>
+    <value>Delete workspace "{{name}}"</value>
+  </data>
   <data name="DeleteExplanation" xml:space="preserve">
-        <value>Are you sure that you want to delete workspace &lt;strong&gt;{{name}}&lt;/strong&gt;?
-All interviewer, supervisor, and observer accounts connected to this workspace will also be deleted. The Survey Solutions Interviewer and Supervisor applications installed on the tablets of these users will no longer be able to communicate with this server and require a data reset. 
+    <value>Are you sure that you want to delete workspace &lt;strong&gt;{{name}}&lt;/strong&gt;?
+All user accounts connected to this workspace will be removed from it. The Survey Solutions Interviewer and Supervisor applications installed on the tablets of these users will no longer be able to communicate with this workspace and data collected in this workspace will be lost. 
 
 The following data associated with this workspace will be deleted:</value>
-    </data>
+  </data>
   <data name="CantDeleteExplanation" xml:space="preserve">
-        <value>Workspace cannot be deleted. There is at least one questionnaire associated with this workspace. Only workspaces without questionnaires can be deleted.</value>
-    </data>
+    <value>Workspace cannot be deleted. There is at least one questionnaire associated with this workspace. Only workspaces without questionnaires can be deleted.</value>
+  </data>
   <data name="InterviewersCount" xml:space="preserve">
-        <value>Interviewers: {{count}}</value>
-    </data>
+    <value>Interviewers: {{count}}</value>
+  </data>
   <data name="SupervisorsCount" xml:space="preserve">
-        <value>Supervisors: {{count}}</value>
-    </data>
+    <value>Supervisors: {{count}}</value>
+  </data>
   <data name="MapsCount" xml:space="preserve">
-        <value>Uploaded maps: {{count}}</value>
-    </data>
+    <value>Uploaded maps: {{count}}</value>
+  </data>
   <data name="AgreeToDelete" xml:space="preserve">
     <value>I understand that this operation cannot be reversed</value>
   </data>
@@ -112,6 +214,13 @@ The following data associated with this workspace will be deleted:</value>
     <value>Workspace disabled and cannot be accessed. If you believe that this is an error, please contact your server administrator.</value>
   </data>
   <data name="WorkspaceAccessDisabledReason" xml:space="preserve">
-    <value>Your account in the workspace disabled by the system administrator, and as a result you can't use the functionality of this site. If you believe that this is an error, please contact your server administrator.</value>
+    <value>Your account is in the workspace disabled by the system administrator, and as a result you can't use the functionality of this site. If you believe that this is an error, please contact your server administrator.</value>
+  </data>
+  <data name="WorkspaceCantBeRemoved" xml:space="preserve">
+    <value>Workspace can not be removed because user has assigned work. Reassign all assignments (including archived), not completed interviews and for Supervisor move all team members to another team. Interviews: {0}, Assignments: {1}, Team members: {2}</value>
+    <comment>{0} interviews count, {1} Assignments count, {2} Interviewers count</comment>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
   </data>
 </root>

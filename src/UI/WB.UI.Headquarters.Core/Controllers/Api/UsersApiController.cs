@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IUserImportService userImportService;
         private readonly IMoveUserToAnotherTeamService moveUserToAnotherTeamService;
         private readonly IUserArchiveService userArchiveService;
+        private readonly IMediator mediator;
         private readonly ILogger<UsersApiController> logger;
 
         public UsersApiController(
@@ -56,6 +58,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             IUserImportService userImportService, 
             IMoveUserToAnotherTeamService moveUserToAnotherTeamService,
             IUserArchiveService userArchiveService,
+            IMediator mediator,
             ILogger<UsersApiController> logger)
         {
             this.authorizedUser = authorizedUser;
@@ -68,6 +71,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.userImportService = userImportService;
             this.moveUserToAnotherTeamService = moveUserToAnotherTeamService;
             this.userArchiveService = userArchiveService;
+            this.mediator = mediator;
             this.logger = logger;
         }
 
@@ -237,17 +241,25 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public async Task<MoveInterviewerToAnotherTeamResult> MoveUserToAnotherTeam([FromBody] MoveUserToAnotherTeamRequest moveRequest)
+        public async Task<IActionResult> MoveUserToAnotherTeam([FromBody] MoveUserToAnotherTeamRequest moveRequest)
         {
             var userId = this.authorizedUser.Id;
+
+            var interviewer = userManager.FindById(moveRequest.InterviewerId);
+            if (interviewer == null)
+                return NotFound();
+            
+            if (!interviewer.IsInRole(UserRoles.Interviewer) || !interviewer.WorkspaceProfile.SupervisorId.HasValue)
+                return NotFound();
+
             var result = await this.moveUserToAnotherTeamService.Move(
                 userId,
                 moveRequest.InterviewerId,
                 moveRequest.NewSupervisorId, 
-                moveRequest.OldSupervisorId, 
+                interviewer.WorkspaceProfile.SupervisorId.Value, 
                 moveRequest.Mode);
 
-            return result;
+            return Ok(result);
         }
 
         [HttpPost]
@@ -300,11 +312,14 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             try
             {
-                var importUserErrors = this.userImportService.VerifyAndSaveIfNoErrors(request.File.OpenReadStream(), request.File.FileName)
-                    .Take(8).Select(ToImportError).ToArray();
+                var openReadStream = request.File.OpenReadStream();
 
-                if (!importUserErrors.Any())
-                    await this.userImportService.ScheduleRunUserImportAsync();
+                var importUserErrors = (await this.mediator.Send(new UserImportRequest
+                {
+                    FileStream = openReadStream,
+                    Filename = request.File.FileName,
+                    Workspace = request.Workspace,
+                })).Select(ToImportError).ToArray();
 
                 return this.Ok(importUserErrors);
             }
@@ -375,6 +390,7 @@ namespace WB.UI.Headquarters.Controllers.Api
     public class ImportUsersRequest
     {
         public IFormFile File { get; set; }
+        public string Workspace { get; set; }
     }
 
     public class ArchiveUsersRequest
@@ -386,7 +402,6 @@ namespace WB.UI.Headquarters.Controllers.Api
     public class MoveUserToAnotherTeamRequest
     {
         public Guid InterviewerId { get; set; }
-        public Guid OldSupervisorId { get; set; }
         public Guid NewSupervisorId { get; set; }
         public MoveUserToAnotherTeamMode Mode { get; set; }
     }

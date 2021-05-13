@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -23,10 +25,12 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Users;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -34,10 +38,12 @@ namespace WB.UI.Headquarters.Controllers
     public class UsersController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;
-        private readonly UserManager<HqUser> userManager;
+        private readonly HqUserManager userManager;
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private UrlEncoder urlEncoder;
         private IOptions<HeadquartersConfig> options;
+        private readonly IPlainStorageAccessor<Workspace> workspaces;
+        private readonly SignInManager<HqUser> signInManager;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -45,16 +51,20 @@ namespace WB.UI.Headquarters.Controllers
         public string[] RecoveryCodes { get; set; }
 
         public UsersController(IAuthorizedUser authorizedUser, 
-            UserManager<HqUser> userManager, 
+            HqUserManager userManager, 
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
             UrlEncoder urlEncoder,
-            IOptions<HeadquartersConfig> options)
+            IOptions<HeadquartersConfig> options,
+            IPlainStorageAccessor<Workspace> workspaces,
+            SignInManager<HqUser> signInManager)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
             this.profileSettingsStorage = profileSettingsStorage;
             this.urlEncoder = urlEncoder;
             this.options = options;
+            this.workspaces = workspaces;
+            this.signInManager = signInManager;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -107,6 +117,8 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [Route("/Manage/{id?}")]
+        [ActivePage(MenuItem.ManageAccount)]
         public async Task<ActionResult> Manage(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -120,18 +132,22 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [ActivePage(MenuItem.ManageAccount)]
+        [Route("/ChangePassword/{id?}")]
         public async Task<ActionResult> ChangePassword(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+            if (!HasPermissionsToChangeUserPassword(user)) return this.Forbid();
 
             return View(await GetUserInfo(user));
         }
 
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator)]
+        [ActivePage(MenuItem.ManageAccount)]
+        [Route("/Workspaces/{id?}")]
         public async Task<ActionResult> Workspaces(Guid id)
         {
             var user = await this.userManager.FindByIdAsync(id.FormatGuid());
@@ -145,6 +161,8 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [ActivePage(MenuItem.ManageAccount)]
+        [Route("/TwoFactorAuthentication/{id?}")]
         public async Task<ActionResult> TwoFactorAuthentication(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -175,6 +193,8 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [Route("/ResetAuthenticator/{id?}")]
+        [ActivePage(MenuItem.ManageAccount)]
         public async Task<ActionResult> ResetAuthenticator(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -202,11 +222,14 @@ namespace WB.UI.Headquarters.Controllers
                     UserName = user.UserName,
                     Role = userRole.ToString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
+                    ForceChangePassword = user.Id == this.authorizedUser.Id && user.PasswordChangeRequired,
+                    CanChangePassword = user.Id == this.authorizedUser.Id || authorizedUser.IsAdministrator,
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
-                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
-                    CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser),
+                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
+                    CanBeLockedAsSupervisor = authorizedUser.IsAdministrator && (userRole == UserRoles.Interviewer),
+                    CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
                     RecoveryCodes = ""
                 },
                 Api = new
@@ -229,6 +252,8 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [Route("/ResetRecoveryCodes/{id?}")]
+        [ActivePage(MenuItem.ManageAccount)]
         public async Task<ActionResult> ResetRecoveryCodes(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -243,6 +268,8 @@ namespace WB.UI.Headquarters.Controllers
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [ObservingNotAllowed]
         [AntiForgeryFilter]
+        [Route("/ShowRecoveryCodes/{id?}")]
+        [ActivePage(MenuItem.ManageAccount)]
         public async Task<ActionResult> ShowRecoveryCodes(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -272,7 +299,8 @@ namespace WB.UI.Headquarters.Controllers
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
-                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
+                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
+                    CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
 
                     RecoveryCodes = string.Join(" ", RecoveryCodes)
 
@@ -296,6 +324,8 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [Route("/Disable2fa/{id?}")]
+        [ActivePage(MenuItem.ManageAccount)]
         public async Task<ActionResult> Disable2fa(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -313,6 +343,8 @@ namespace WB.UI.Headquarters.Controllers
         [ObservingNotAllowed]
         [AntiForgeryFilter]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
+        [Route("/SetupAuthenticator/{id?}")]
+        [ActivePage(MenuItem.ManageAccount)]
         public async Task<ActionResult> SetupAuthenticator(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -356,7 +388,8 @@ namespace WB.UI.Headquarters.Controllers
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
-                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
+                    CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
+                    CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
                 },
                 Api = new
                 {
@@ -379,41 +412,63 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [ObservingNotAllowed]
         [AntiForgeryFilter]
-        public ActionResult Create(string id)
+        [Route("/Create")]
+        [ActivePage(MenuItem.UsersManagement)]
+        public ActionResult Create()
         {
-            if (!Enum.TryParse(id, true, out UserRoles role))
-                return BadRequest("Unknown user type");
-
-            if (this.authorizedUser.IsHeadquarter && !new[] {UserRoles.Supervisor, UserRoles.Interviewer}.Contains(role))
-                return Forbid();
-
             return View(new
             {
-                UserInfo = new {Role = role.ToString()},
                 Api = new
                 {
                     CreateUserUrl = Url.Action("CreateUser"),
-                    ResponsiblesUrl = Url.Action("Supervisors", "UsersTypeahead")
-                }
+                    SupervisorWorkspaceUrl = Url.Action("WorkspaceSupervisors", "UsersTypeahead"),
+                    WorkspacesUrl = Url.Action("Workspaces", "WorkspaceTypeahead"),
+                },
+                Roles = GetRolesForCreate(),
             });
         }
 
-        [ActivePage(MenuItem.UserBatchUpload)]
+        private ComboboxViewItem[] GetRolesForCreate()
+        {
+            var items = new List<ComboboxViewItem>();
+            
+            void addUserRole(UserRoles useRole)
+                => items.Add(new ComboboxViewItem()
+                {
+                    Key = useRole.ToString(), 
+                    Value = useRole.ToUiString()
+                });
+
+            addUserRole(UserRoles.Interviewer);
+            addUserRole(UserRoles.Supervisor);
+
+            if (authorizedUser.IsAdministrator)
+            {
+                addUserRole(UserRoles.Headquarter);
+                addUserRole(UserRoles.Observer);
+                addUserRole(UserRoles.ApiUser);
+            }
+
+            return items.ToArray();
+        }
+
+        [ActivePage(MenuItem.UsersManagement)]
         [Authorize(Roles = "Administrator, Headquarter")]
         [ObservingNotAllowed]
+        [Route("/Upload")]
         public ActionResult Upload() => View(new
         {
             Api = new
             {
                 UploadUsersUrl = Url.Action("Upload"),
-                QuestionnairesUrl = Url.Action("Index", "SurveySetup"),
                 ImportUsersTemplateUrl = Url.Action("ImportUsersTemplate", "UsersApi"),
                 ImportUsersUrl = Url.Action("ImportUsers", "UsersApi"),
                 ImportUsersStatusUrl = Url.Action("ImportStatus", "UsersApi"),
                 ImportUsersCompleteStatusUrl = Url.Action("ImportCompleteStatus", "UsersApi"),
                 ImportUsersCancelUrl = Url.Action("CancelToImportUsers", "UsersApi"),
                 SupervisorCreateUrl = Url.Action("Create", new {id = UserRoles.Supervisor}),
-                InterviewerCreateUrl = Url.Action("Create", new {id = UserRoles.Interviewer})
+                InterviewerCreateUrl = Url.Action("Create", new {id = UserRoles.Interviewer}),
+                WorkspacesUrl = Url.Action("Workspaces", "WorkspaceTypeahead"),
             },
             Config = new
             {
@@ -425,6 +480,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
+        [ActivePage(MenuItem.UsersManagement)]
         public async Task<ActionResult> CreateUser([FromBody] CreateUserModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
@@ -432,6 +488,9 @@ namespace WB.UI.Headquarters.Controllers
             if (!Enum.TryParse(model.Role, true, out UserRoles role))
                 return BadRequest("Unknown user type");
 
+            if (string.IsNullOrEmpty(model.Workspace))
+                return BadRequest("Unknown user workspace");
+            
             if (this.authorizedUser.IsHeadquarter && !new[] {UserRoles.Supervisor, UserRoles.Interviewer}.Contains(role))
                 return Forbid();
 
@@ -441,9 +500,14 @@ namespace WB.UI.Headquarters.Controllers
             if(await this.userManager.FindByNameAsync(model.UserName) != null)
                 this.ModelState.AddModelError(nameof(CreateUserModel.UserName), FieldsAndValidations.UserName_Taken);
 
+            var workspace = await workspaces.GetByIdAsync(model.Workspace);
+            if (workspace == null)
+                this.ModelState.AddModelError(nameof(CreateUserModel.Workspace), FieldsAndValidations.WorkspaceMissing);
+
+            HqUser supervisor = null;
             if (model.SupervisorId.HasValue)
             {
-                var supervisor = await this.userManager.FindByIdAsync(model.SupervisorId.FormatGuid());
+                supervisor = await this.userManager.FindByIdAsync(model.SupervisorId.FormatGuid());
                 if (supervisor == null || !supervisor.IsInRole(UserRoles.Supervisor) || supervisor.IsArchivedOrLocked)
                     this.ModelState.AddModelError(nameof(CreateUserModel.SupervisorId), HQ.SupervisorNotFound);
             }
@@ -459,8 +523,9 @@ namespace WB.UI.Headquarters.Controllers
                     Email = model.Email,
                     UserName = model.UserName,
                     PhoneNumber = model.PhoneNumber,
-                    Profile = model.SupervisorId.HasValue ? new HqUserProfile {SupervisorId = model.SupervisorId} : null
                 };
+
+                user.Workspaces.Add(new WorkspacesUsers(workspace!, user, supervisor));
 
                 var identityResult = await this.userManager.CreateAsync(user, model.Password);
                 if (!identityResult.Succeeded)
@@ -491,6 +556,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
+        [Route("/ChangePassword")]
         public async Task<ActionResult> UpdatePassword([FromBody] ChangePasswordModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
@@ -498,7 +564,7 @@ namespace WB.UI.Headquarters.Controllers
             var currentUser = await this.userManager.FindByIdAsync(model.UserId.FormatGuid());
             if (currentUser == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+            if (!HasPermissionsToChangeUserPassword(currentUser)) return this.Forbid();
 
             if (currentUser.IsArchived)
                 this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
@@ -517,6 +583,29 @@ namespace WB.UI.Headquarters.Controllers
                 var passwordResetToken = await this.userManager.GeneratePasswordResetTokenAsync(currentUser);
                 var updateResult = await this.userManager.ResetPasswordAsync(currentUser, passwordResetToken, model.Password);
 
+                if (updateResult.Succeeded)
+                {
+                    var isOwnProfile = model.UserId == this.authorizedUser.Id;
+                    if (!isOwnProfile)
+                    {
+                        currentUser.PasswordChangeRequired = true;
+                        var updateUserResult = await userManager.UpdateAsync(currentUser);
+                        if (!updateUserResult.Succeeded)
+                            this.ModelState.AddModelError(nameof(ChangePasswordModel.Password),
+                                string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
+                    }
+                    else if (model.UserId == this.authorizedUser.Id && currentUser.PasswordChangeRequired)
+                    {
+                        currentUser.PasswordChangeRequired = false;
+                        var updateUserResult = await userManager.UpdateAsync(currentUser);
+                        if (!updateUserResult.Succeeded)
+                            this.ModelState.AddModelError(nameof(ChangePasswordModel.Password),
+                                string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
+                        else
+                            this.authorizedUser.ResetPasswordChangeRequiredFlag();
+                    }
+                }
+
                 if (!updateResult.Succeeded)
                     this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
             }
@@ -528,6 +617,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
+        [Route("/Manage")]
         public async Task<ActionResult> UpdateUser([FromBody] EditUserModel editModel)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
@@ -566,8 +656,12 @@ namespace WB.UI.Headquarters.Controllers
                 currentUser.Email = editModel.Email;
                 currentUser.FullName = editModel.PersonName;
                 currentUser.PhoneNumber = editModel.PhoneNumber;
-                currentUser.IsLockedByHeadquaters = editModel.IsLockedByHeadquarters;
-                currentUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
+
+                if (authorizedUser.IsAdministrator)
+                {
+                    currentUser.IsLockedByHeadquaters = editModel.IsLockedByHeadquarters;
+                    currentUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
+                }
 
                 var updateResult = await this.userManager.UpdateAsync(currentUser);
 
@@ -784,12 +878,33 @@ namespace WB.UI.Headquarters.Controllers
             if (this.authorizedUser.IsHeadquarter && (user.Id == this.authorizedUser.Id  || user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer)))
                 return true;
 
-            if (this.authorizedUser.IsSupervisor && (user.Id == this.authorizedUser.Id || (user.IsInRole(UserRoles.Interviewer) && user.Profile?.SupervisorId == this.authorizedUser.Id)))
+            if (this.authorizedUser.IsSupervisor 
+                && (user.Id == this.authorizedUser.Id || (user.IsInRole(UserRoles.Interviewer) && user.Workspaces.Any(u => u.Supervisor?.Id == this.authorizedUser.Id))))
                 return true;
 
             if (this.authorizedUser.IsInterviewer 
                 && user.Id == this.authorizedUser.Id
                 && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
+                return true;
+
+            if (this.authorizedUser.IsObserver && user.Id == this.authorizedUser.Id)
+                return true;
+
+            return false;
+        }
+
+        private bool HasPermissionsToChangeUserPassword(HqUser user)
+        {
+            if (this.authorizedUser.IsAdministrator)
+                return true;
+
+            if (this.authorizedUser.IsHeadquarter && user.Id == this.authorizedUser.Id)
+                return true;
+
+            if (this.authorizedUser.IsSupervisor && user.Id == this.authorizedUser.Id)
+                return true;
+
+            if (this.authorizedUser.IsInterviewer && user.Id == this.authorizedUser.Id)
                 return true;
 
             if (this.authorizedUser.IsObserver && user.Id == this.authorizedUser.Id)

@@ -87,6 +87,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\AccountResources.resx">
       <Link>Resources\AccountResources.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\AccountResources.ro.resx">
+      <Link>Resources\AccountResources.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\AccountResources.ru.resx">
       <Link>Resources\AccountResources.ru.resx</Link>
     </EmbeddedResource>
@@ -107,6 +110,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.resx">
       <Link>Resources\ErrorMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.ro.resx">
+      <Link>Resources\ErrorMessages.ro.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.ru.resx">
       <Link>Resources\ErrorMessages.ru.resx</Link>
@@ -129,6 +135,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.resx">
       <Link>Resources\FindReplaceResources.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.ro.resx">
+      <Link>Resources\FindReplaceResources.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.ru.resx">
       <Link>Resources\FindReplaceResources.ru.resx</Link>
     </EmbeddedResource>
@@ -149,6 +158,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.resx">
       <Link>Resources\NotificationResources.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.ro.resx">
+      <Link>Resources\NotificationResources.ro.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.ru.resx">
       <Link>Resources\NotificationResources.ru.resx</Link>
@@ -171,6 +183,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\Paging.resx">
       <Link>Resources\Paging.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\Paging.ro.resx">
+      <Link>Resources\Paging.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\Paging.ru.resx">
       <Link>Resources\Paging.ru.resx</Link>
     </EmbeddedResource>
@@ -191,6 +206,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.resx">
       <Link>Resources\PdfMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.ro.resx">
+      <Link>Resources\PdfMessages.ro.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.ru.resx">
       <Link>Resources\PdfMessages.ru.resx</Link>
@@ -213,6 +231,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.resx">
       <Link>Resources\QuestionnaireController.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.ro.resx">
+      <Link>Resources\QuestionnaireController.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.ru.resx">
       <Link>Resources\QuestionnaireController.ru.resx</Link>
     </EmbeddedResource>
@@ -233,6 +254,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.resx">
       <Link>Resources\QuestionnaireEditor.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.ro.resx">
+      <Link>Resources\QuestionnaireEditor.ro.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.ru.resx">
       <Link>Resources\QuestionnaireEditor.ru.resx</Link>
@@ -255,6 +279,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.resx">
       <Link>Resources\QuestionnaireHistoryResources.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.ro.resx">
+      <Link>Resources\QuestionnaireHistoryResources.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.ru.resx">
       <Link>Resources\QuestionnaireHistoryResources.ru.resx</Link>
     </EmbeddedResource>
@@ -266,6 +293,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.resx">
       <Link>Resources\UnderConstruction.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.ro.resx">
+      <Link>Resources\UnderConstruction.ro.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.ru.resx">
       <Link>Resources\UnderConstruction.ru.resx</Link>

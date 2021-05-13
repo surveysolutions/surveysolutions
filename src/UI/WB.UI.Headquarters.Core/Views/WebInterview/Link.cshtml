@@ -1,0 +1,14 @@
+﻿@using WB.Enumerator.Native.Resources
+@using WB.UI.Headquarters.Code
+
+@model WB.UI.Headquarters.Models.WebInterview.LinkToWebInterview
+@{
+    ViewBag.Title = WebInterview.ResumeInterview;
+    Layout = "_WebInterviewLayout.cshtml";
+}
+
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+
+<div id="vueApp"></div>
