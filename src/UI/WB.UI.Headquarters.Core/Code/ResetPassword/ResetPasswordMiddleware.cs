@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.Code.ResetPassword
                 {
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
                     return context.Response.WriteAsync(
-                        JsonConvert.SerializeObject(new {Message = "Set up personal password to get access to recourse."})
+                        JsonConvert.SerializeObject(new {Message = "Set up personal password to get access to this resource."})
                     );
                 }
 
