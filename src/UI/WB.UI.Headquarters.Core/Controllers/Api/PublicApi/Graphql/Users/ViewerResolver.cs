@@ -17,6 +17,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             if(authorizedUser.IsHeadquarter) roles.Add(UserRoles.Headquarter);
             if(authorizedUser.IsInterviewer) roles.Add(UserRoles.Interviewer);
             if(authorizedUser.IsSupervisor) roles.Add(UserRoles.Supervisor);
+            if(authorizedUser.IsApiUser) roles.Add(UserRoles.ApiUser);
+            if(authorizedUser.IsObserver) roles.Add(UserRoles.Observer);
 
             return new UserDto
             {
