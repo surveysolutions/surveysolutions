@@ -525,6 +525,7 @@ namespace WB.UI.Headquarters.Controllers
                     PhoneNumber = model.PhoneNumber,
                 };
 
+                user.Roles.Add(new HqRole() { Id = role.ToUserId() });
                 user.Workspaces.Add(new WorkspacesUsers(workspace!, user, supervisor));
 
                 var identityResult = await this.userManager.CreateAsync(user, model.Password);
@@ -586,7 +587,7 @@ namespace WB.UI.Headquarters.Controllers
                 if (updateResult.Succeeded)
                 {
                     var isOwnProfile = model.UserId == this.authorizedUser.Id;
-                    if (!isOwnProfile)
+                    if (!isOwnProfile && !currentUser.IsInRole(UserRoles.ApiUser))
                     {
                         currentUser.PasswordChangeRequired = true;
                         var updateUserResult = await userManager.UpdateAsync(currentUser);
