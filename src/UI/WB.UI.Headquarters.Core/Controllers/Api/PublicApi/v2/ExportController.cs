@@ -164,7 +164,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
         /// <param name="offset">Skip number of records before beginning to return records</param>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ExportProcess>>> GetExports(ExportType? exportType,
-            ExportInterviewType? interviewStatus, string questionnaireIdentity, ExportStatus? exportStatus,
+            ExportInterviewType? interviewStatus, string? questionnaireIdentity, ExportStatus? exportStatus,
             bool? hasFile, int? limit, int? offset)
         {
             if (!ModelState.IsValid)

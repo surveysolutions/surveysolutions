@@ -1,4 +1,4 @@
-﻿select up."SupervisorId" TeamId, 
+﻿select wu.supervisor_id TeamId, 
        userNames."UserName" TeamName,
        SUM(case when up."DeviceId" IS NULL then 1 else 0 end) NeverSynchedCount, 
        SUM(case when up."DeviceAppBuildVersion" IS NOT NULL AND up."DeviceAppBuildVersion" < @latestAppBuildVersion then 1 else 0 end) OutdatedCount, 
@@ -39,9 +39,9 @@ LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM devicesyncinfo dsi WHERE EXI
 	AS anySyncWithQuestionnaire ON anySyncWithQuestionnaire."InterviewerId" = u."Id"
 
 -- find supervisor name
-INNER JOIN users.users userNames ON up."SupervisorId" = userNames."Id"
+INNER JOIN users.users userNames ON wu.supervisor_id = userNames."Id"
 
-WHERE up."SupervisorId" IS NOT null AND u."IsArchived" = false AND userNames."UserName" ILIKE @filter
-GROUP BY up."SupervisorId", userNames."UserName"
+WHERE wu.supervisor_id IS NOT null AND u."IsArchived" = false AND userNames."UserName" ILIKE @filter
+GROUP BY wu.supervisor_id, userNames."UserName"
 ORDER BY {0}
 LIMIT @limit OFFSET @offset
