@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Code.ResetPassword
@@ -20,6 +21,14 @@ namespace WB.UI.Headquarters.Code.ResetPassword
 
             if (authorizedUser != null && authorizedUser.PasswordChangeRequired)
             {
+                if (context.Request.Path.StartsWithSegments("/graphql"))
+                {
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    return context.Response.WriteAsync(
+                        JsonConvert.SerializeObject(new {Message = "Set up personal password to get access to this resource."})
+                    );
+                }
+
                 if (!context.Request.Path.StartsWithSegments("/ChangePassword")
                     && !context.Request.Path.StartsWithSegments("/Users/UpdatePassword")
                     && !context.Request.Path.StartsWithSegments("/Account/LogOff")

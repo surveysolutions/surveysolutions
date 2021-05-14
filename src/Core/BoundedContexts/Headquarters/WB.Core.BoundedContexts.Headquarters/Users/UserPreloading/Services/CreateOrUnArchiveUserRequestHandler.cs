@@ -2,6 +2,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -88,7 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                 user.Email = userToCreate.Email;
                 user.PhoneNumber = userToCreate.PhoneNumber;
                 user.IsArchived = false;
-                user.PasswordChangeRequired = true;
+                user.PasswordChangeRequired = user.Role != UserRoles.ApiUser;
 
                 await userManager.UpdateAsync(user);
                 string passwordResetToken = await userManager.GeneratePasswordResetTokenAsync(user);
