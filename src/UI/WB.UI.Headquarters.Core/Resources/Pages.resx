@@ -918,6 +918,9 @@
   <data name="GetLatestApp" xml:space="preserve">
     <value>Download latest interviewer app</value>
   </data>
+  <data name="GetInterviewerApp" xml:space="preserve">
+    <value>Download interviewer app</value>
+  </data>
   <data name="GetLatestSupervisorApp" xml:space="preserve">
     <value>Download latest Supervisor app</value>
   </data>

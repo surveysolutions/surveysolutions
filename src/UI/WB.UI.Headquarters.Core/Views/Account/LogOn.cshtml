@@ -1,10 +1,6 @@
 ﻿@using reCAPTCHA.AspNetCore
-@using WB.Core.Infrastructure.Versions
-@using WB.UI.Headquarters.Resources
 @using WB.UI.Headquarters.Services
 @using WB.UI.Shared.Web.Captcha
-@using WB.UI.Shared.Web.Extensions
-@inject IProductVersion productVersion
 @inject ICaptchaProvider captchaProvider;
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.LogOnModel
 @{
@@ -108,8 +104,7 @@
         <div class="row">
             <div class="interviewer-app">
                 <a href="@Url.Action("Index", "Download")" class="get-interviewer-app">
-                    <span>@Pages.GetLatestApp</span>
-                    <span class="version">Version @(productVersion.ToString())</span>
+                    <span>@Pages.GetInterviewerApp</span>
                 </a>
             </div>
         </div>

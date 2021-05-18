@@ -185,18 +185,30 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public List<ShapefileDescription> GetAvailableShapefiles()
         {
-            if (!this.fileSystemAccessor.IsDirectoryExists(this.shapefilesLocation))
-                return new List<ShapefileDescription>();
+            List<ShapefileDescription> GetShapesInFolder(string path)
+            {
+                if (!this.fileSystemAccessor.IsDirectoryExists(path))
+                    return new List<ShapefileDescription>();
 
-            return
-                this.shapefilesToSearch
-                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(this.shapefilesLocation, i))
+                return this.shapefilesToSearch
+                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(path, i))
                     .OrderBy(x => x)
                     .Select(x => new ShapefileDescription()
                     {
                         FullPath = x,
                         ShapefileName = this.fileSystemAccessor.GetFileNameWithoutExtension(x)
                     }).ToList();
+            }
+
+            var shapesInFolder = GetShapesInFolder(this.shapefilesLocation);
+            if (shapesInFolder.Any())
+                return shapesInFolder;
+
+            var shapesInCommonFolder = GetShapesInFolder(this.shapefilesLocationCommmon);
+            if (shapesInCommonFolder.Any())
+                return shapesInCommonFolder;
+
+            return new List<ShapefileDescription>();
         }
 
         private string GetTempFileName(string mapName)

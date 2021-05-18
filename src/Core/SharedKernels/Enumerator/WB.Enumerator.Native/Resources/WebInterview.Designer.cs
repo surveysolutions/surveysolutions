@@ -515,6 +515,15 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview was not found..
+        /// </summary>
+        public static string InterviewNotFound {
+            get {
+                return ResourceManager.GetString("InterviewNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot modify interview that was received by device.
         /// </summary>
         public static string InterviewReceivedByInterviewer {
