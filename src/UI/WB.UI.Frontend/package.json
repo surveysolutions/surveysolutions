@@ -37,7 +37,7 @@
         "jquery-contextmenu": "^2.9.2",
         "jquery-highlight": "^3.4.0",
         "jquery-mask-plugin": "^1.14.16",
-        "lodash": "^4.17.15",
+        "lodash": "^4.17.21",
         "marked": "^1.2.6",
         "moment": "^2.24.0",
         "moment-duration-format": "^2.3.2",
