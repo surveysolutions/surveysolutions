@@ -412,6 +412,7 @@ a.disabled{
 .get-mobile-app{
 	@extend .add-transition;
     width: 248px;
+	height: 85px;
     margin-bottom: 25px;
     @extend %uppercase-font;
     text-decoration: none;
@@ -444,6 +445,10 @@ a.disabled{
     background-size: 55px;
     background-position: 15px 13px;
     @extend .get-mobile-app;
+	
+	span{
+        margin-top: 10px;
+    }
 }
 .get-supervisor-app{
     background:  url("#{$assetsPath}/img/HQ-login-supervisor-get-button-logo.png") no-repeat;
