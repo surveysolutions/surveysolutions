@@ -23,6 +23,7 @@ using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Logging;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
+using PDFViewAndroid;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -170,7 +171,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<View>("SizeByNoiseLevel", (view) => new AudioSizeByNoiseLevelBinding(view));
             registry.RegisterCustomBindingFactory<View>("Tag", (img) => new ViewTagBinding(img));
             registry.RegisterCustomBindingFactory<SignaturePadView>("Signature", (view) => new SignatureBinding(view));
-            registry.RegisterCustomBindingFactory<WebView>("PdfFilePath", (view) => new WebViewPdfFilePathBinding(view));
+            registry.RegisterCustomBindingFactory<PDFView>("PdfFilePath", (view) => new PDFViewPdfFilePathBinding(view));
             registry.RegisterCustomBindingFactory<SignaturePadView>("SignaturePadSettings", (view) => new SignaturePadSettingsBinding(view));
             registry.RegisterCustomBindingFactory<ImageButton>("Playback", (view) => new ImageButtonPlaybackToggleBinding(view));
             registry.RegisterCustomBindingFactory<RecyclerView>("ScrollToPosition", view => new RecyclerViewScrollToPositionBinding(view));
