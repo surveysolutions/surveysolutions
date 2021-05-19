@@ -111,6 +111,7 @@
     <Compile Include="Activities\SupervisorSearchActivity.cs" />
     <Compile Include="CustomControls\SupervisorDashboardTemplateSelector.cs" />
     <Compile Include="Migrations\Workspaces\M202103101642_MoveSqliteTablesInWorkspaceFolder.cs" />
+    <Compile Include="Migrations\Workspaces\M202105191419_SetPrimaryWorkspaceAsDefaultIfNotSet.cs" />
     <Compile Include="MvvmBindings\DrawerLockModeBinding.cs" />
     <Compile Include="MvvmBindings\ImageCompanyLogoBinding.cs" />
     <Compile Include="MvvmBindings\SupervisorLocalizationValueConverter.cs" />
