@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
@@ -18,6 +19,13 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
 {
     public class MakeMarkdownLinksExecutableValueCombiner : BaseValueCombiner<ICharSequence>
     {
+        private readonly IInterviewPdfService pdfService;
+
+        public MakeMarkdownLinksExecutableValueCombiner(IInterviewPdfService pdfService)
+        {
+            this.pdfService = pdfService;
+        }
+
         protected override int ExpectedParamsCount => 2;
 
         protected override ICharSequence GetValue(List<object> values)
@@ -147,7 +155,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             }
         }
 
-        private static void NavigateToAttachment(IInterviewEntity sourceEntity, Guid? attachmentId, IQuestionnaire questionnaire)
+        private void NavigateToAttachment(IInterviewEntity sourceEntity, Guid? attachmentId, IQuestionnaire questionnaire)
         {
             var attachmentContentStorage = ServiceLocator.Current.GetInstance<IAttachmentContentStorage>();
             var attachment = questionnaire.GetAttachmentById(attachmentId.Value);
@@ -155,7 +163,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             var attachmentContentMetadata = attachmentContentStorage.GetMetadata(attachment.ContentId);
             if (!attachmentContentMetadata.ContentType.StartsWith("application/pdf", StringComparison.OrdinalIgnoreCase)) return;
 
-            sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForPdfView(attachmentId.Value));
+            pdfService.OpenAttachment(sourceEntity.InterviewId, attachmentId.Value);
         }
 
         private class NavigateToEntitySpan : ClickableSpan

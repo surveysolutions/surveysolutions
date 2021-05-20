@@ -67,6 +67,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<IMvxViewModelByNameLookup, MvxViewModelByNameLookup>();
             registry.Bind<IMvxNameMapping, MvxViewToViewModelNameMapping>();
             registry.Bind<IApplicationCypher, ApplicationCypher>();
+            registry.Bind<IInterviewPdfService, InterviewPdfService>();
             
             registry.BindAsSingletonWithConstructorArgument<IAudioService, AudioService>("audioDirectory", "audio");
             registry.BindAsSingleton<IAudioDialog, AudioDialog>();

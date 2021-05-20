@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -22,6 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly Func<IMediaAttachment> attachmentFactory;
+        private readonly IInterviewPdfService pdfService;
 
         private AttachmentContentMetadata attachmentContentMetadata;
         private NavigationState navigationState;
@@ -40,13 +42,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IViewModelEventRegistry eventRegistry,
             IAttachmentContentStorage attachmentContentStorage,
-            Func<IMediaAttachment> attachmentFactory)
+            Func<IMediaAttachment> attachmentFactory,
+            IInterviewPdfService pdfService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
             this.attachmentContentStorage = attachmentContentStorage;
             this.attachmentFactory = attachmentFactory;
+            this.pdfService = pdfService;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -142,11 +146,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                              && this.attachmentContentMetadata.ContentType.StartsWith(PdfMimeType,
                                  StringComparison.OrdinalIgnoreCase);
 
-        public IMvxAsyncCommand ShowPdf => new MvxAsyncCommand(NavigateToPdfAsync);
+        public IMvxCommand ShowPdf => new MvxCommand(OpenPdf);
 
-        private async Task NavigateToPdfAsync()
+        private void OpenPdf()
         {
-            await this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfViewByStaticText(this.Identity));
+            var interviewId = this.navigationState.InterviewId;
+            pdfService.Open(interviewId, this.Identity);
         }
 
         public override void ViewDestroy(bool viewFinishing = true)
