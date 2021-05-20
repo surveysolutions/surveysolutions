@@ -80,7 +80,6 @@
     <Compile Include="CustomBindings\ProgressBarIndeterminateModeBinding.cs" />
     <Compile Include="CustomControls\FixedMvxFilteringAdapter.cs" />
     <Compile Include="CustomServices\GoogleApiService.cs" />
-    <Compile Include="CustomServices\InterviewPdfService.cs" />
     <Compile Include="CustomServices\StringFormat.cs" />
     <Compile Include="EnumeratorLoggingModule.cs" />
     <Compile Include="Migrations\Workspaces\Encrypt_Data.cs" />

@@ -1,15 +1,10 @@
 ﻿using System;
-using Android.Content;
-using Android.Widget;
-using MvvmCross.Platforms.Android;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 
-namespace WB.UI.Shared.Enumerator.CustomServices
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class InterviewPdfService : IInterviewPdfService
     {
