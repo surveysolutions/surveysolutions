@@ -18,7 +18,8 @@ namespace WB.UI.Headquarters.Code
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Survey Solutions API"
+                    Title = "Survey Solutions API",
+                    Version = "v1"
                 });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
