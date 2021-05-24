@@ -187,6 +187,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Consumes(MediaTypeNames.Application.Json)]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
         [ObservingNotAllowed]
         public ActionResult RecordAudio(Guid id, long version, [FromBody, BindRequired]RecordAudioRequest requestData)

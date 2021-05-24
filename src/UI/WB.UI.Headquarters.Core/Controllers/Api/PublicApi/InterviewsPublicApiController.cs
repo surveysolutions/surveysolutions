@@ -217,6 +217,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Interview not found or pdf cannot be generated</response>
         [HttpGet]
         [Route("{id:guid}/pdf")]
+        [Produces(MediaTypeNames.Application.Pdf)]
         [AllowAnonymous]
         public IActionResult Pdf(Guid id)
         {

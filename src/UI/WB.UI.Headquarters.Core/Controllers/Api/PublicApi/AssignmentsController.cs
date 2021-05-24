@@ -308,6 +308,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Assignee cannot be assigned to assignment</response>
         [HttpPatch]
         [Route("{id:int}/assign")]
+        [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public async Task<ActionResult<AssignmentDetails>> Assign(int id,
@@ -397,6 +398,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Size cannot be changed</response>
         [HttpPatch]
         [Route("{id:int}/changeQuantity")]
+        [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
         [ObservingNotAllowed]
@@ -472,6 +474,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpGet]
         [Route("{id:int}/recordAudio")]
+        [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
         public ActionResult<AudioRecordingEnabled> AudioRecoding(int id)
