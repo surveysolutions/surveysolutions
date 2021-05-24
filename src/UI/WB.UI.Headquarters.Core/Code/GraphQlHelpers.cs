@@ -6,24 +6,31 @@ namespace WB.UI.Headquarters.Code
 {
     public static class GraphQlHelpers
     {
-        public static string GetWorkspaceNameOrDefault(this IResolverContext ctx)
+        public static bool HasWorkspaceArgument(this IMiddlewareContext ctx, out string workspace)
         {
-            ctx.Variables.TryGetVariable("workspace", out string workspaceArgument);
+            ctx.Variables.TryGetVariable("workspace", out string workspaceValue);
 
-            if (workspaceArgument == null)
+            if (workspaceValue == null)
             {
                 try
                 {
-                    workspaceArgument = ctx.ArgumentValue<string>("workspace");
+                    if (ctx.Field.Arguments.ContainsField("workspace"))
+                        workspaceValue = ctx.ArgumentValue<string>("workspace");
+                    else
+                    {
+                        workspace = null;
+                        return false;
+                    }
                 }
                 catch (GraphQLException)
                 {
-                    // now HotChocolate throws exception instead of null
-                    workspaceArgument = WorkspaceConstants.DefaultWorkspaceName;
+                    workspace = null;
+                    return false;
                 }
             }
-            
-            return workspaceArgument;
+
+            workspace = workspaceValue;
+            return true;
         }
     }
 }
