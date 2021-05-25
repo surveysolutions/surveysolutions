@@ -4,8 +4,14 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Newtonsoft;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using WB.UI.Headquarters.Code.SwaggerCustomization;
 
 namespace WB.UI.Headquarters.Code
@@ -51,7 +57,6 @@ namespace WB.UI.Headquarters.Code
                     }
                 });
 
-                c.SchemaFilter<CapitalizedCaseSchemaFilter>();
                 c.OrderActionsBy(x =>
                 {
                     var sort = new StringBuilder(x.ActionDescriptor.RouteValues["controller"]);
@@ -88,7 +93,9 @@ namespace WB.UI.Headquarters.Code
                     new List<string> {x.ActionDescriptor.RouteValues["controller"].Replace("PublicApi", "")});
             });
 
-            services.AddSwaggerGenNewtonsoftSupport();
+            services.Replace(
+                ServiceDescriptor.Transient<ISerializerDataContractResolver>(s =>
+                    new NewtonsoftDataContractResolver(PublicApiJsonAttribute.PublicApiSerializerSettings)));
         }
 
         public static void UseHqSwaggerUI(this IApplicationBuilder appBuilder)
