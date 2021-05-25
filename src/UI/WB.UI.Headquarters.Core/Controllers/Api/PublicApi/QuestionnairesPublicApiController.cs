@@ -184,7 +184,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="204">Questionnaire setting updated</response>
         /// <response code="404">Questionnaire cannot be found</response>
         [HttpPost]
-        [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
+        [Route("{id:guid}/{version:long}/recordAudio", Name = "SetRecordAudioSetting")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Consumes(MediaTypeNames.Application.Json)]
@@ -221,7 +221,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="version">Questionnaire version</param>
         /// <response code="404">Questionnaire cannot be found</response>
         [HttpGet]
-        [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
+        [Route("{id:guid}/{version:long}/recordAudio", Name = "GetRecordAudioSetting")]
         [Produces(MediaTypeNames.Application.Json)]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
         [ObservingNotAllowed]

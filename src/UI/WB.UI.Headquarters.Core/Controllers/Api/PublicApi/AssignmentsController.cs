@@ -500,6 +500,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/recordAudio")]
+        [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

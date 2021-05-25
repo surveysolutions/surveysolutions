@@ -137,6 +137,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Creates new workspace. Accessible only to administrator 
         /// </summary>
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status201Created, "Workspace created", typeof(WorkspaceApiView))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed", Type = typeof(ValidationProblemDetails))]
         [HttpPost]
@@ -170,6 +172,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="403">User is not authorized to make changes to workspace</response>
         [HttpPatch]
         [Route("{name}")]
+        [Consumes(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Workspace updated")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
         [ObservingNotAllowed]
@@ -292,6 +295,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="400">Validation failed</response>
         [HttpPost]
         [Route("assign")]
+        [Consumes(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Workspaces list updated")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
         [ObservingNotAllowed]
