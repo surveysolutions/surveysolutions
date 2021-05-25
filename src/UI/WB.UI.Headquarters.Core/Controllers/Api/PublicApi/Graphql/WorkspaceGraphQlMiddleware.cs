@@ -38,7 +38,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
                 if (workspace != null)
                 {
-                    workspaceContextSetter.Set(workspace);
+                    try
+                    {
+                        workspaceContextSetter.Set(workspace);
+                    }
+                    catch (MissingWorkspaceException)
+                    {
+                        context.ReportError(Workspaces.WorkspaceAccessDisabledReason);
+                        return;
+                    }
                 }
             }
 
