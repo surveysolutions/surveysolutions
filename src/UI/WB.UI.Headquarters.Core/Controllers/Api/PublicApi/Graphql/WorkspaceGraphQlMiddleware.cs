@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using HotChocolate;
 using HotChocolate.Language;
 using HotChocolate.Resolvers;
 using Main.Core.Entities.SubEntities;
@@ -29,7 +30,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         {
             var currentWorkspace = workspaceContextAccessor.CurrentWorkspace();
             var workspace = currentWorkspace?.Name;
-            var hasWorkspaceParameter = context.HasWorkspaceArgument(out var workspaceValue);
+            var hasWorkspaceParameter = TryGetWorkspaceName(context, out var workspaceValue);
             
             if (currentWorkspace == null)
             {
@@ -40,12 +41,39 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                     workspaceContextSetter.Set(workspace);
                 }
             }
-            
+
             if (hasWorkspaceParameter && workspace != null && !HasUserAccessToWorkspace(context, workspace))
                 context.ReportError(Workspaces.WorkspaceAccessDisabledReason);
             
             if (!context.HasErrors)
                 await next(context);
+        }
+        
+        public bool TryGetWorkspaceName(IMiddlewareContext ctx, out string? workspace)
+        {
+            if (ctx.Variables.TryGetVariable("workspace", out string workspaceValue))
+            {
+                workspace = workspaceValue;
+                return true;
+            }
+
+            workspace = null;
+            bool doesContainField = false;
+            try
+            {
+                doesContainField = ctx.Field.Arguments.ContainsField("workspace");
+                if (!doesContainField)
+                    return false;
+
+                workspace = ctx.ArgumentValue<string>("workspace");
+            }
+            catch (GraphQLException)
+            {
+                // now HotChocolate throws exception instead of null
+                workspace = null;
+            }
+
+            return doesContainField;
         }
 
         private bool HasUserAccessToWorkspace(IMiddlewareContext context, string workspace)
