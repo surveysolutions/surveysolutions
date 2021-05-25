@@ -99,9 +99,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 result = result.Where(x => userWorkspaces.Contains(x.Name));
             }
 
-            if (filter.UserId.HasValue)
+            if (!string.IsNullOrEmpty(filter.UserId))
             {
-                result = result.Where(x => x.Users.Any(u => u.User.Id == filter.UserId));
+                result = result.Where(x => x.Users.Any(u => u.User.Id.ToString() == filter.UserId));
             }
 
             if (!filter.IncludeDisabled)

@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
         /// <summary>
         /// Return only workspaces assigned to specified user
         /// </summary>
-        public Guid? UserId { get; set; }
+        public string UserId { get; set; }
 
         
         /// <summary>
