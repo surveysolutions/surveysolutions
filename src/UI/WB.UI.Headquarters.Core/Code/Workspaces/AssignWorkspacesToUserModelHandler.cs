@@ -40,15 +40,10 @@ namespace WB.UI.Headquarters.Code.Workspaces
             var model = request.AssignModel;
             var ModelState = request.ModelState;
 
-            var accessibleWorkspaces = new List<string>();
-            if (authorizedUser.IsAdministrator)
-                accessibleWorkspaces.AddRange(workspacesService.GetEnabledWorkspaces().Select(w => w.Name));
-            else if (authorizedUser.IsHeadquarter)
-            {
-                var userWorkspaces = await workspacesUsers.GetUserWorkspaces(authorizedUser.Id, cancellationToken);
-                accessibleWorkspaces.AddRange(userWorkspaces);
-            }
-
+            var accessibleWorkspaces = authorizedUser.IsAdministrator
+                ? workspacesService.GetEnabledWorkspaces().Select(w => w.Name).ToList()
+                : await workspacesUsers.GetUserWorkspaces(authorizedUser.Id, cancellationToken);
+            
             List<AssignUserWorkspace> dbWorkspaces = new();
 
             foreach (var modelWorkspace in model.Workspaces)
