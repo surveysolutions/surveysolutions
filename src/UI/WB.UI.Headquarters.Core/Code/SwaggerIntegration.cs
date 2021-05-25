@@ -31,8 +31,10 @@ namespace WB.UI.Headquarters.Code
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
 
-                c.AddSecurityDefinition("basicAuth", new OpenApiSecurityScheme
+                c.AddSecurityDefinition("basic", new OpenApiSecurityScheme
                 {
+                    Name="Authentication",
+                    Description = "Basic Authentication",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
                     Scheme = "basic"
@@ -41,7 +43,6 @@ namespace WB.UI.Headquarters.Code
                 c.OperationFilter<XmsEnumOperationFilter>();
                 c.SchemaFilter<XmsEnumSchemaFilter>();
                 c.DocumentFilter<WorkspaceDocumentFilter>();
-
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -50,12 +51,13 @@ namespace WB.UI.Headquarters.Code
                             Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
-                                Id = "basicAuth"
+                                Id = "basic"
                             }
                         },
                         Array.Empty<string>()
                     }
                 });
+                c.OperationFilter<SecurityRequirementsOperationFilter>();
 
                 c.OrderActionsBy(x =>
                 {
