@@ -431,14 +431,14 @@ export default {
             .then(function(response) {
                 const settings = response.data || {}
                 self.provider = (settings.provider || '').toLocaleLowerCase()
-                self.senderAddress = settings.senderAddress
-                self.awsAccessKeyId = settings.awsAccessKeyId
-                self.awsSecretAccessKey = settings.awsSecretAccessKey
-                self.awsRegion = settings.awsRegion
-                self.sendGridApiKey = settings.sendGridApiKey
-                self.senderName = settings.senderName
-                self.replyAddress = settings.replyAddress
-                self.address = settings.address
+                self.senderAddress = (settings.senderAddress || '').trim()
+                self.awsAccessKeyId = (settings.awsAccessKeyId || '').trim()
+                self.awsSecretAccessKey = (settings.awsSecretAccessKey || '').trim()
+                self.awsRegion = (settings.awsRegion || '').trim()
+                self.sendGridApiKey = (settings.sendGridApiKey || '').trim()
+                self.senderName = (settings.senderName || '').trim()
+                self.replyAddress = (settings.replyAddress || '').trim()
+                self.address = (settings.address || '').trim()
 
                 self.$validator.reset('settings')
             })
