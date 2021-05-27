@@ -2,11 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +12,7 @@ using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Shared.Web.Controllers;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Enumerator
@@ -49,7 +47,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Enumerator
                 var formData = new MemoryStream();
                 await  section.Body.CopyToAsync(formData);
 
-                var deviceId = this.Request.Headers["DeviceId"].Single();
+                var deviceId = this.Request.Headers["DeviceId"].Single().RemoveHtmlTags();
 
                 var tabletLog = new TabletLog();
                 
