@@ -474,7 +474,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                         }
                         else
                         {
-                            bool canCreate = (bool)identifyResults.Graphics[0].Attributes["can_create"];
+                            var assignmentInfo = identifyResults.Graphics[0].Attributes;
+                            bool canCreate = (bool)assignmentInfo["can_create"];
 
                             CalloutDefinition myCalloutDefinition =
                                 new CalloutDefinition("#" + id, $"{title}\r\n{subTitle}");
@@ -483,7 +484,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                                 myCalloutDefinition.ButtonImage =
                                     await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Blue, 25)
                                         .CreateSwatchAsync(96);
-                                myCalloutDefinition.OnButtonClick += OnAssignmentButtonClick;
+                                myCalloutDefinition.OnButtonClick += tag => OnAssignmentButtonClick(assignmentInfo, tag);
                                 myCalloutDefinition.Tag = id;
                             }
                             MapView.ShowCalloutAt(projectedLocation, myCalloutDefinition);
@@ -523,8 +524,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             }
         }
 
-        private void OnAssignmentButtonClick(object calloutTag)
+        private void OnAssignmentButtonClick(IDictionary<string, object> assignmentInfo, object calloutTag)
         {
+            bool isCreating = assignmentInfo.ContainsKey("creating");
+            if (isCreating)
+                return;
+            
+            assignmentInfo["creating"] = true;
             if(calloutTag != null && (Int32.TryParse(calloutTag as string, out int assignmentId)))
             {
                 //create interview from assignment
