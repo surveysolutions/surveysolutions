@@ -12,10 +12,14 @@
     "editor.codeActionsOnSave": {
         "source.fixAll": true
     },
+    "[vue]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+      },
+      "[javascript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+      },
     "editor.detectIndentation": false,
-    "vetur.format.defaultFormatter.js": "prettier-eslint",
+    "vetur.format.defaultFormatter.js": "",
     "vetur.format.defaultFormatter.html": "none",
-    "prettier.disableLanguages": [
-        ""
-    ]
 }
+

@@ -48,7 +48,6 @@
         'ui.bootstrap.tpls',
         'ui.tree',
         'ui.highlight',
-        'jlareau.pnotify',
         'ui.router',
         'ui.router.state.events',
         'angular-loading-bar',
