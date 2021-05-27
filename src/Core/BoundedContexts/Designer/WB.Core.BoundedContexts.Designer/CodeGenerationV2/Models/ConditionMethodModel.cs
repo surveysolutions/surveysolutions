@@ -29,5 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
         public bool GenerateSelf { set; get; }
         public string ReturnType { get; set; }
         public bool UseObjectBoxing { get; set; } = false;
+        
+        public bool ExplicitlyCastToType { get; set; } = false;
     }
 }

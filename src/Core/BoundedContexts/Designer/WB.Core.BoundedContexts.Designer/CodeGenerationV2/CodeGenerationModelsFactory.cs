@@ -152,7 +152,8 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                         variableName,
                         questionTypeMapper.GetVariableType(variable.Type))
                     {
-                        UseObjectBoxing = true
+                        UseObjectBoxing = true,
+                        ExplicitlyCastToType = true
                     };
             }
         }
