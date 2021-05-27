@@ -63,6 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<IWorkspaceService, WorkspaceService>();
             registry.BindAsSingleton<IWorkspaceAccessor, WorkspaceAccessor>();
             registry.Bind<IInScopeExecutor, ExecuteInWorkspaceService>();
+            registry.Bind<IInterviewPdfService, InterviewPdfService>();
 
             registry.Bind<NavigationState>();
             registry.Bind<AnswerNotifier>();

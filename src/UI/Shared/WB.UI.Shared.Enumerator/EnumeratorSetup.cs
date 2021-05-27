@@ -87,7 +87,6 @@ namespace WB.UI.Shared.Enumerator
             lookup.Add<EnumerationStageViewModel, InterviewEntitiesListFragment>();
             lookup.Add<CoverInterviewViewModel, CoverInterviewFragment>();
             lookup.Add<OverviewViewModel, OverviewFragment>();
-            lookup.Add<PdfViewModel, PdfViewFragment>();
             lookup.Add<OverviewNodeDetailsViewModel, OverviewNodeDetailsFragment>();
             lookup.Add<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentFragment>();
             return lookup;
@@ -170,7 +169,6 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<View>("SizeByNoiseLevel", (view) => new AudioSizeByNoiseLevelBinding(view));
             registry.RegisterCustomBindingFactory<View>("Tag", (img) => new ViewTagBinding(img));
             registry.RegisterCustomBindingFactory<SignaturePadView>("Signature", (view) => new SignatureBinding(view));
-            registry.RegisterCustomBindingFactory<WebView>("PdfFilePath", (view) => new WebViewPdfFilePathBinding(view));
             registry.RegisterCustomBindingFactory<SignaturePadView>("SignaturePadSettings", (view) => new SignaturePadSettingsBinding(view));
             registry.RegisterCustomBindingFactory<ImageButton>("Playback", (view) => new ImageButtonPlaybackToggleBinding(view));
             registry.RegisterCustomBindingFactory<RecyclerView>("ScrollToPosition", view => new RecyclerViewScrollToPositionBinding(view));
