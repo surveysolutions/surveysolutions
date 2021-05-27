@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             var ModelState = request.ModelState;
 
             var accessibleWorkspaces = authorizedUser.IsAdministrator
-                ? workspacesService.GetEnabledWorkspaces().Select(w => w.Name).ToList()
+                ? workspacesService.GetAllWorkspaces().Select(w => w.Name).ToList()
                 : await workspacesUsers.GetUserWorkspaces(authorizedUser.Id, cancellationToken);
             
             List<AssignUserWorkspace> dbWorkspaces = new();
@@ -92,8 +92,21 @@ namespace WB.UI.Headquarters.Code.Workspaces
                         switch (request.AssignModel.Mode)
                         {
                             case AssignWorkspacesMode.Assign:
-                                await workspacesService.AssignWorkspacesAsync(user, dbWorkspaces);
+                            {
+                                var hiddenForUserWorkspaces = workspacesService.GetAllWorkspaces()
+                                    .Where(w => !accessibleWorkspaces.Contains(w.Name))
+                                    .Select(w => w.Name).ToList();
+                                var hiddenUserWorkspaces = user.Workspaces
+                                    .Where(w => hiddenForUserWorkspaces.Contains(w.Workspace.Name))
+                                    .Select(u => new AssignUserWorkspace()
+                                    {
+                                        Workspace = u.Workspace,
+                                        SupervisorId = u.Supervisor?.Id
+                                    });
+                                var userWorkspacesWithHidden = dbWorkspaces.Concat(hiddenUserWorkspaces).ToList();
+                                await workspacesService.AssignWorkspacesAsync(user, userWorkspacesWithHidden);
                                 break;
+                            }
                             case AssignWorkspacesMode.Add:
                             {
                                 var userWorkspaces = user.Workspaces.Select(u => u.Workspace);
