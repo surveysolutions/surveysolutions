@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection;
+using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Filters;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries;
@@ -40,7 +41,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
             return services
                 .AddGraphQLServer()
-                .ConfigureSchema(x=>x.Use<WorkspaceGraphQlMiddleware>())
+                .ConfigureSchema(x=>
+                {
+                    x.Use<WorkspaceGraphQlMiddleware>();
+                })
                 .AddAuthorization()
                 .SetPagingOptions(new PagingOptions(){MaxPageSize = 200})
                 .AddQueryType(x => x.Name("HeadquartersQuery"))
