@@ -40,15 +40,10 @@ namespace WB.UI.Headquarters.Code.Workspaces
             var model = request.AssignModel;
             var ModelState = request.ModelState;
 
-            var accessibleWorkspaces = new List<string>();
-            if (authorizedUser.IsAdministrator)
-                accessibleWorkspaces.AddRange(workspacesService.GetEnabledWorkspaces().Select(w => w.Name));
-            else if (authorizedUser.IsHeadquarter)
-            {
-                var userWorkspaces = await workspacesUsers.GetUserWorkspaces(authorizedUser.Id, cancellationToken);
-                accessibleWorkspaces.AddRange(userWorkspaces);
-            }
-
+            var accessibleWorkspaces = authorizedUser.IsAdministrator
+                ? workspacesService.GetAllWorkspaces().Select(w => w.Name).ToList()
+                : await workspacesUsers.GetUserWorkspaces(authorizedUser.Id, cancellationToken);
+            
             List<AssignUserWorkspace> dbWorkspaces = new();
 
             foreach (var modelWorkspace in model.Workspaces)
@@ -97,8 +92,21 @@ namespace WB.UI.Headquarters.Code.Workspaces
                         switch (request.AssignModel.Mode)
                         {
                             case AssignWorkspacesMode.Assign:
-                                await workspacesService.AssignWorkspacesAsync(user, dbWorkspaces);
+                            {
+                                var hiddenForUserWorkspaces = workspacesService.GetAllWorkspaces()
+                                    .Where(w => !accessibleWorkspaces.Contains(w.Name))
+                                    .Select(w => w.Name).ToList();
+                                var hiddenUserWorkspaces = user.Workspaces
+                                    .Where(w => hiddenForUserWorkspaces.Contains(w.Workspace.Name))
+                                    .Select(u => new AssignUserWorkspace()
+                                    {
+                                        Workspace = u.Workspace,
+                                        SupervisorId = u.Supervisor?.Id
+                                    });
+                                var userWorkspacesWithHidden = dbWorkspaces.Concat(hiddenUserWorkspaces).ToList();
+                                await workspacesService.AssignWorkspacesAsync(user, userWorkspacesWithHidden);
                                 break;
+                            }
                             case AssignWorkspacesMode.Add:
                             {
                                 var userWorkspaces = user.Workspaces.Select(u => u.Workspace);
