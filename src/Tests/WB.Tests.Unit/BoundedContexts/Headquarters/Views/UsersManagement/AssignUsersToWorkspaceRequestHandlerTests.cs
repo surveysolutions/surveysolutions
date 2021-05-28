@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             {
                 assignedWorkspaces = workspaces.Select(s => s.Workspace).ToList();
             });
-            workspacesService.Setup(w => w.GetEnabledWorkspaces())
+            workspacesService.Setup(w => w.GetAllWorkspaces())
                 .Returns(() =>
                 {
                     var query = workspaces.Query(q =>

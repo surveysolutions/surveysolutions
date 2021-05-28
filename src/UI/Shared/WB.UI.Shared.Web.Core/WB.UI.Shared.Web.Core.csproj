@@ -4,9 +4,6 @@
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <RootNamespace>WB.UI.Shared.Web</RootNamespace>
-    <AssemblyVersion>5.22.20.0</AssemblyVersion>
-    <FileVersion>5.22.20.0</FileVersion>
-    <Version>0</Version>
   </PropertyGroup>
 
   <ItemGroup>

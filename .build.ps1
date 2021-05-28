@@ -48,18 +48,26 @@ $EscapedBranchName =  $EscapedBranchName.Substring(0, [System.Math]::Min($Escape
 
 $isRelease = $gitBranch -eq $releaseBranch
 $version = Get-Content ./src/.version
+if ($isRelease) {
+    $infoVersion = '{0} (build {1})' -f $version, $buildNumber 
+}
+
 if ($version.Split('.').Length -eq 2) {
     $version += ".0"
 }
 $version += "." + $buildNumber
-$infoVersion = $version + '-' + $EscapedBranchName
+
+if (-not $isRelease) {
+    $infoVersion = $version + '-' + $EscapedBranchName
+}
+
 $output = "./artifacts"
 New-Item -Type Directory $output -ErrorAction SilentlyContinue | Out-Null
 $output = Resolve-Path $output
 
 Enter-Build {
     Write-Build 10 $version 
-    Write-Build 10 $infoversion
+    Write-Build 10 $infoVersion
 }
 
 function Compress($folder, $dest) {
@@ -207,7 +215,7 @@ task PackageHq frontend, {
     exec {
         dotnet publish ./src/UI/WB.UI.Headquarters.Core `
             --self-contained  `
-            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/hq
+            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/hq
     }
     Compress $tmp/hq $output/WB.UI.Headquarters.zip
 }
@@ -220,7 +228,7 @@ task PackageHqOffline frontend, {
     exec {
         dotnet publish ./src/Services/Export/WB.Services.Export.Host `
             -c Release -r win-x64 --no-self-contained  `
-            -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION `
+            -p:Version=$VERSION -p:InformationalVersion=$infoVersion `
             -o ./src/UI/WB.UI.Headquarters.Core/Export.Service
     }
      
@@ -228,7 +236,7 @@ task PackageHqOffline frontend, {
         dotnet publish ./src/UI/WB.UI.Headquarters.Core `
             /p:PublishSingleFile=true /p:SelfContained=False /p:AspNetCoreHostingModel=outofprocess `
             /p:IncludeAllContentForSelfExtract=true `
-            -c Release -r win-x64 --no-self-contained    -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/hq-offline
+            -c Release -r win-x64 --no-self-contained    -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/hq-offline
     }
 
     New-Item -Type Directory $tmp/hq-prepare -ErrorAction SilentlyContinue | Out-Null
@@ -242,7 +250,7 @@ task PackageHqOffline frontend, {
 task PackageExport {
     exec {
         dotnet publish ./src/Services/Export/WB.Services.Export.Host `
-            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/export
+            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/export
     }
     Compress $tmp/export $output/WB.Services.Export.zip
 }
@@ -250,7 +258,7 @@ task PackageExport {
 task PackageWebTester frontend, {
     exec {
         dotnet publish ./src/UI/WB.UI.WebTester `
-            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/webtester
+            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/webtester
     }
     Compress $tmp/webtester $output/WB.UI.WebTester.zip
 }
@@ -266,7 +274,7 @@ task PackageDesigner {
     Set-location $BuildRoot
     dotnet publish ./src/UI/WB.UI.Designer `
         -c Release -r win-x64 `
-        -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION `
+        -p:Version=$VERSION -p:InformationalVersion=$infoVersion `
         -p:SkipSpaBuild=True -o $tmp/Designer
 
     Compress $tmp/Designer $output/WB.UI.Designer.zip
