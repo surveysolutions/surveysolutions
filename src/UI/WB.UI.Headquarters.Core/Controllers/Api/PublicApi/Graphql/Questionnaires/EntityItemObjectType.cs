@@ -78,7 +78,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             
             descriptor.Field(x => x.QuestionType)
                 .Name("type")
-                .Type<NonNullType<QuestionTypeObjectType>>();
+                .Type<QuestionTypeObjectType>();
 
             descriptor.Field(x => x.StataExportCaption)
                 .Name("variable")
@@ -86,7 +86,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 
             descriptor.Field(x => x.VariableType)
                 .Name("variableType")
-                .Type<NonNullType<VariableTypeObjectType>>();
+                .Type<VariableTypeObjectType>();
         }
         
     }
