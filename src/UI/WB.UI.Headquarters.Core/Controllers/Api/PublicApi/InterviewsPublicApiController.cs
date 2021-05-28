@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Mime;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -122,8 +123,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// Gets all the answers for given interview
         /// </summary>
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
+        /// <response code="404">Interview was not found</response>
         [HttpGet]
         [Route("{id:guid}")]
+        [Produces(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<InterviewApiDetails> Get(Guid id)
         {
@@ -138,9 +141,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// Get statistics by interview
         /// </summary>
         /// <param name="id">Interview id</param>
-        /// <returns></returns>
+        /// <response code="404">Interview was not found</response>
         [HttpGet]
         [Route("{id:guid}/stats")]
+        [Produces(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<InterviewApiStatistics> Stats(Guid id)
         {
@@ -184,8 +188,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             };
         }
 
+        /// <summary>
+        /// Get interview history
+        /// </summary>
+        /// <param name="id">Interview id</param>
+        /// <response code="404">Interview was not found</response>
         [HttpGet]
         [Route("{id:guid}/history")]
+        [Produces(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<InterviewHistoryView> InterviewHistory(Guid id)
         {
@@ -207,6 +217,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Interview not found or pdf cannot be generated</response>
         [HttpGet]
         [Route("{id:guid}/pdf")]
+        [Produces(MediaTypeNames.Application.Pdf)]
         [AllowAnonymous]
         public IActionResult Pdf(Guid id)
         {
@@ -251,6 +262,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id:guid}/comment-by-variable/{variable}")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
         [ObservingNotAllowed]
+        [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public ActionResult CommentByVariable(Guid id, [Required]string variable, int[] rosterVector, [Required]string comment)
         {
@@ -290,6 +302,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id:guid}/comment/{questionId}")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
         [ObservingNotAllowed]
+        [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public ActionResult CommentByIdentity(Guid id, [Required]string questionId, [Required]string comment)
         {
@@ -329,6 +342,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
         [HttpPatch]
         [Route("{id:guid}/assign")]
+        [Consumes(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public ActionResult Assign(Guid id, [FromBody, BindRequired] AssignChangeApiModel request)
         {
@@ -512,6 +526,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
         [HttpPatch]
         [Route("{id:guid}/assignsupervisor")]
+        [Consumes(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
         public ActionResult PostAssignSupervisor(Guid id, [FromBody, BindRequired]  AssignChangeApiModel request)
         {

@@ -4,8 +4,14 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Newtonsoft;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using WB.UI.Headquarters.Code.SwaggerCustomization;
 
 namespace WB.UI.Headquarters.Code
@@ -18,14 +24,17 @@ namespace WB.UI.Headquarters.Code
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Survey Solutions API"
+                    Title = "Survey Solutions API",
+                    Version = "v1"
                 });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
 
-                c.AddSecurityDefinition("basicAuth", new OpenApiSecurityScheme
+                c.AddSecurityDefinition("basic", new OpenApiSecurityScheme
                 {
+                    Name="Authentication",
+                    Description = "Basic Authentication",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
                     Scheme = "basic"
@@ -34,7 +43,6 @@ namespace WB.UI.Headquarters.Code
                 c.OperationFilter<XmsEnumOperationFilter>();
                 c.SchemaFilter<XmsEnumSchemaFilter>();
                 c.DocumentFilter<WorkspaceDocumentFilter>();
-
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -43,14 +51,14 @@ namespace WB.UI.Headquarters.Code
                             Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
-                                Id = "basicAuth"
+                                Id = "basic"
                             }
                         },
                         Array.Empty<string>()
                     }
                 });
+                c.OperationFilter<SecurityRequirementsOperationFilter>();
 
-                c.SchemaFilter<CapitalizedCaseSchemaFilter>();
                 c.OrderActionsBy(x =>
                 {
                     var sort = new StringBuilder(x.ActionDescriptor.RouteValues["controller"]);
@@ -87,7 +95,9 @@ namespace WB.UI.Headquarters.Code
                     new List<string> {x.ActionDescriptor.RouteValues["controller"].Replace("PublicApi", "")});
             });
 
-            services.AddSwaggerGenNewtonsoftSupport();
+            services.Replace(
+                ServiceDescriptor.Transient<ISerializerDataContractResolver>(s =>
+                    new NewtonsoftDataContractResolver(PublicApiJsonAttribute.PublicApiSerializerSettings)));
         }
 
         public static void UseHqSwaggerUI(this IApplicationBuilder appBuilder)
