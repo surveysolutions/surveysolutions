@@ -509,6 +509,7 @@ namespace WB.UI.Headquarters.Controllers
 
             Response.Cookies.Append($"InterviewId-{assignment.Id}", interviewId, new CookieOptions
             {
+                HttpOnly = true,
                 Expires = DateTime.Now.AddYears(1)
             });
 
