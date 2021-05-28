@@ -93,6 +93,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 {
                     compositeItem.QuestionText = variable.Label;
                     compositeItem.StataExportCaption = variable.Name;
+                    compositeItem.VariableType = variable.Type;
                 }
 
                 questionnaireItemsWriter.Store(compositeItem);
