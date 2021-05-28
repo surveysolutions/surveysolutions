@@ -431,14 +431,14 @@ export default {
             .then(function(response) {
                 const settings = response.data || {}
                 self.provider = (settings.provider || '').toLocaleLowerCase()
-                self.senderAddress = (settings.senderAddress || '').trim()
-                self.awsAccessKeyId = (settings.awsAccessKeyId || '').trim()
-                self.awsSecretAccessKey = (settings.awsSecretAccessKey || '').trim()
-                self.awsRegion = (settings.awsRegion || '').trim()
-                self.sendGridApiKey = (settings.sendGridApiKey || '').trim()
-                self.senderName = (settings.senderName || '').trim()
-                self.replyAddress = (settings.replyAddress || '').trim()
-                self.address = (settings.address || '').trim()
+                self.senderAddress = settings.senderAddress
+                self.awsAccessKeyId =settings.awsAccessKeyId
+                self.awsSecretAccessKey = settings.awsSecretAccessKey
+                self.awsRegion = settings.awsRegion
+                self.sendGridApiKey = settings.sendGridApiKey
+                self.senderName = settings.senderName
+                self.replyAddress = settings.replyAddress
+                self.address = settings.address
 
                 self.$validator.reset('settings')
             })
@@ -528,13 +528,13 @@ export default {
             if (validationResult) {
                 const settings = {
                     provider: this.provider,
-                    senderAddress: this.senderAddress,
-                    awsAccessKeyId: this.awsAccessKeyId,
-                    awsSecretAccessKey: this.awsSecretAccessKey,
-                    sendGridApiKey: this.sendGridApiKey,
-                    senderName: this.senderName,
-                    replyAddress: this.replyAddress,
-                    address: this.address,
+                    senderAddress: this.senderAddress.trim(),
+                    awsAccessKeyId: this.awsAccessKeyId.trim(),
+                    awsSecretAccessKey: this.awsSecretAccessKey.trim(),
+                    sendGridApiKey: this.sendGridApiKey.trim(),
+                    senderName: this.senderName.trim(),
+                    replyAddress: this.replyAddress.trim(),
+                    address: this.address.trim(),
                 }
                 self.$store.dispatch('showProgress')
 
