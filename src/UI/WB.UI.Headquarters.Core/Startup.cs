@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
@@ -316,6 +317,11 @@ namespace WB.UI.Headquarters
                     mvc.Filters.AddService<GlobalNotificationResultFilter>(200);
                     mvc.Filters.AddService<ObservingNotAllowedActionFilter>(300);
                     mvc.Filters.AddService<UpdateRequiredFilter>(400);
+
+                    mvc.Filters.AddService<NoCacheApiFilter>(500);
+                    
+                    //mvc.Filters.Add(new ResponseCacheAttribute { NoStore = true, Location = ResponseCacheLocation.None });
+
                     mvc.Conventions.Add(new OnlyPublicApiConvention());
                     mvc.ModelBinderProviders.Insert(0, new DataTablesRequestModelBinderProvider());
                     var noContentFormatter = mvc.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();

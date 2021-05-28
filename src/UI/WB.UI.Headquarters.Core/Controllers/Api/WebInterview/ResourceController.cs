@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 {
     [Route("Resource")]
+    [ResponseCacheAttribute(NoStore = true, Location = ResponseCacheLocation.None)]
     public class ResourceController : ControllerBase
     {
         private readonly IImageFileStorage imageFileRepository;
