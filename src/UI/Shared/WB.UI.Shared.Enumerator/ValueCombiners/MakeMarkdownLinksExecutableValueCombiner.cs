@@ -19,13 +19,6 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
 {
     public class MakeMarkdownLinksExecutableValueCombiner : BaseValueCombiner<ICharSequence>
     {
-        private readonly IInterviewPdfService pdfService;
-
-        public MakeMarkdownLinksExecutableValueCombiner(IInterviewPdfService pdfService)
-        {
-            this.pdfService = pdfService;
-        }
-
         protected override int ExpectedParamsCount => 2;
 
         protected override ICharSequence GetValue(List<object> values)
@@ -163,6 +156,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             var attachmentContentMetadata = attachmentContentStorage.GetMetadata(attachment.ContentId);
             if (!attachmentContentMetadata.ContentType.StartsWith("application/pdf", StringComparison.OrdinalIgnoreCase)) return;
 
+            var pdfService = ServiceLocator.Current.GetInstance<IInterviewPdfService>();
             pdfService.OpenAttachment(sourceEntity.InterviewId, attachmentId.Value);
         }
 
