@@ -47,9 +47,9 @@ type Entity {
   "Question text. May contain html tags."
   questionText: String
   scope: QuestionScope
-  type: QuestionType!
+  type: QuestionType
   variable: String
-  variableType: VariableType!
+  variableType: VariableType
 }
 
 type Feature {
