@@ -124,14 +124,8 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
 
                 if (fileStorageConfig.Value.GetStorageProviderType() == StorageProviderType.AmazonS3)
                 {
-                    var bucketInfo = this.amazonS3Config.GetAmazonS3BucketInfo(WorkspaceContext.Default);
-
-                    var folder = bucketInfo.PathPrefix.Replace($"/{headquarterOptions.Value.TenantName}", "").TrimEnd('\\', '/');
-
                     settings["Storage:S3:Enabled"] = true.ToString();
-                    settings["Storage:S3:Prefix"] = "export";
-                    settings["Storage:S3:Folder"] = folder;
-                    settings["Storage:S3:BucketName"] = bucketInfo.BucketName;
+                    settings["Storage:S3:Uri"] = this.fileStorageConfig.Value.AppData;
                     settings["ExportSettings:DirectoryPath"] = this.fileStorageConfig.Value.TempData;
                 }
 
