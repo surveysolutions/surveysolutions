@@ -527,14 +527,14 @@ export default {
             var validationResult = await this.$validator.validateAll('settings')
             if (validationResult) {
                 const settings = {
-                    provider: this.provider,
-                    senderAddress: this.senderAddress.trim(),
-                    awsAccessKeyId: this.awsAccessKeyId.trim(),
-                    awsSecretAccessKey: this.awsSecretAccessKey.trim(),
-                    sendGridApiKey: this.sendGridApiKey.trim(),
-                    senderName: this.senderName.trim(),
-                    replyAddress: this.replyAddress.trim(),
-                    address: this.address.trim(),
+                    provider: self.provider,
+                    senderAddress: (self.senderAddress || '').trim(),
+                    awsAccessKeyId: (self.awsAccessKeyId || '').trim(),
+                    awsSecretAccessKey: (self.awsSecretAccessKey || '').trim(),
+                    sendGridApiKey: (self.sendGridApiKey || '').trim(),
+                    senderName: (self.senderName || '').trim(),
+                    replyAddress: (self.replyAddress || '').trim(),
+                    address: (self.address || '').trim(),
                 }
                 self.$store.dispatch('showProgress')
 
