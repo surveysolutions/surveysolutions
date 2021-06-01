@@ -90,6 +90,7 @@ namespace WB.UI.Shared.Web.Services
                 httpContextAccessor.HttpContext?.Response.Cookies.Append(ShouldShowCaptchaCookieName, "true",
                     new CookieOptions
                     {
+                        HttpOnly = true,
                         Expires = expire
                     });
             }

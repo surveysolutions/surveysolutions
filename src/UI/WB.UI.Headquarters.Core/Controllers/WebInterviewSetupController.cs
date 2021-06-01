@@ -86,6 +86,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.Questionnaires)]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [ActionName("SendInvitations")]
         public async Task<ActionResult> SendInvitationsPost(string id)
         {

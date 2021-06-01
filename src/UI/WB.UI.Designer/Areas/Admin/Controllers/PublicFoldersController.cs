@@ -62,6 +62,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public TreeNode CreateFolder(CreateFolderModel model)
         {
             var id = Guid.NewGuid();
@@ -81,6 +82,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RenameFolder(RenameFolderModel model)
         {
             this.publicFoldersStorage.RenameFolder(model.Id, model.NewTitle ?? "");
@@ -93,6 +95,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RemoveFolder(RemoveFolderModel model)
         {
             this.publicFoldersStorage.RemoveFolder(model.Id);
@@ -106,6 +109,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AssignFolderToQuestionnaire(AssignFolderToQuestionnaireModel model)
         {
             this.publicFoldersStorage.AssignFolderToQuestionnaire(model.QuestionnaireId, model.Id);

@@ -377,7 +377,12 @@ namespace WB.UI.Designer.Controllers
                 return NotFound();
 
             string referer = Request.Headers["Referer"].ToString();
-            return this.Redirect(referer);
+            if (!string.IsNullOrEmpty(referer) && Url.IsLocalUrl(referer))
+            {
+                return this.Redirect(referer);
+            }
+            
+            return Redirect(Url.Content("~/"));
         }
 
         [HttpGet]
