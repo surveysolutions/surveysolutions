@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
         public InterviewAnswer[] Answers { get; }
         public string[] ProtectedVariables { get; }
         public string Comment { get; }
+        public int? UpgradedFromId { get; }
 
         public AssignmentCreated(Guid userId, 
             int id,
@@ -33,7 +34,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
             bool? webMode, 
             InterviewAnswer[] answers, 
             string[] protectedVariables,
-            string comment) 
+            string comment,
+            int? upgradedFromId) 
             : base(userId, originDate)
         {
             Id = id;
@@ -48,6 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
             Answers = answers;
             ProtectedVariables = protectedVariables;
             Comment = comment;
+            UpgradedFromId = upgradedFromId;
         }
     }
 }
