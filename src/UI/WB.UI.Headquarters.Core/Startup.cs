@@ -271,7 +271,7 @@ namespace WB.UI.Headquarters
 
             services.AddRazorPages();
 
-            services.AddHqAuthorization();
+            services.AddHqAuthorization(Configuration);
             services.AddDatabaseStoredExceptional(environment, Configuration);
 
             services.AddScoped<UnitOfWorkActionFilter>();
