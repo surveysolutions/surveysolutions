@@ -59,6 +59,7 @@ namespace WB.UI.Headquarters
 
             registry.Bind<IPipelineModule, PauseResumePipelineModule>();
             registry.Bind<UpdateRequiredFilter>();
+            registry.Bind<NoCacheApiFilter>();
             registry.Bind<IPdfInterviewGenerator, PdfInterviewGenerator>();
             registry.Bind<IWebInterviewTimezoneSetter, WebInterviewTimezoneSetter>();
 

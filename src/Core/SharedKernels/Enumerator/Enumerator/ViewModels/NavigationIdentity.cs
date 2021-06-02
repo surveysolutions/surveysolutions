@@ -10,8 +10,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         Cover = 5000,
         Identifying = 11000,
         Overview  = 100500,
-        PdfViewByStaticText = 100600,
-        PdfView = 100700
     }
 
     public class NavigationIdentity : EventArgs
@@ -48,11 +46,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             return new NavigationIdentity(ScreenType.Group, targetGroup: groupIdentity, anchoredElementIdentity: anchoredElementIdentity);
         }
-
-        public static NavigationIdentity CreateForPdfViewByStaticText(Identity targetStaticText) =>
-            new NavigationIdentity(ScreenType.PdfViewByStaticText, null, targetStaticText);
-        public static NavigationIdentity CreateForPdfView(Guid attachmentId) =>
-            new NavigationIdentity(ScreenType.PdfView, null, Identity.Create(attachmentId, RosterVector.Empty));
 
         private NavigationIdentity(ScreenType targetScreen, Identity targetGroup, Identity anchoredElementIdentity = null)
             : this()

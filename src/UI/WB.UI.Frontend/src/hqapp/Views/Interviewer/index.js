@@ -15,7 +15,9 @@ const store = {
 
             $.post(Vue.$config.model.interviewerHqEndpoint + '/StartNewInterview/' + assignmentId, response => {
                 dispatch('showProgress', true)
-                window.location = response
+                const interviewId = response.interviewId
+                const url = `/WebInterview/${interviewId}/Cover`
+                window.location = url
             })
                 .catch(data => {
                     new PNotify({

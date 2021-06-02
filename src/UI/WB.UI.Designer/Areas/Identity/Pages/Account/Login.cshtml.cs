@@ -69,18 +69,21 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-            returnUrl = returnUrl ?? Url.Content("~/");
             this.ShouldShowCaptcha = this.captchaService.ShouldShowCaptcha(null);
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            ReturnUrl = returnUrl;
+            ReturnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : Url.Content("~/");
         }
 
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : Url.Content("~/");
 
             if (Input != null)
             {

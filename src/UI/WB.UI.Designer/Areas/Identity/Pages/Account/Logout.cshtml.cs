@@ -29,7 +29,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            if (returnUrl != null)
+            if (returnUrl != null && Url.IsLocalUrl(returnUrl))
             {
                 return LocalRedirect(returnUrl);
             }
