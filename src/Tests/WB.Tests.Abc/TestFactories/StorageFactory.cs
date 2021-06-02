@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -183,12 +184,13 @@ namespace WB.Tests.Abc.TestFactories
 
         public IQuestionOptionsRepository QuestionOptionsRepository(IOptionsRepository optionsRepository)
         {
-            return new QuestionOptionsRepository(optionsRepository);
+            var serviceLocator = Mock.Of<IServiceLocator>(s => s.GetInstance<IOptionsRepository>() == optionsRepository);
+            return new QuestionOptionsRepository(serviceLocator);
         }
 
         public IQuestionOptionsRepository QuestionOptionsRepository(IPlainStorage<OptionView, int?> plainStore)
         {
-            return new QuestionOptionsRepository(OptionsRepository(plainStore));
+            return QuestionOptionsRepository(OptionsRepository(plainStore));
         }
 
         public IOptionsRepository OptionsRepository(IPlainStorage<OptionView, int?> plainStore)
