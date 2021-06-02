@@ -130,7 +130,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 {
                     this.Map.Basemap = basemap;
 
-                    if (basemap?.BaseLayers[0]?.FullExtent != null)
+                    if (basemap?.BaseLayers.Count > 0 && basemap?.BaseLayers[0]?.FullExtent != null)
                         await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);
                 }
             }
@@ -273,6 +273,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
             if (e.Position == null) { return; }
 
+            if (this.Map?.Basemap?.BaseLayers.Count <= 0) return;
+            
             var extent = this.MapView.Map.Basemap.BaseLayers[0].FullExtent;
 
             var point = GeometryEngine.Project(e.Position, extent.SpatialReference);
