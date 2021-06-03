@@ -12,9 +12,9 @@ namespace WB.UI.Headquarters.Code
 {
     public class PublicApiJsonAttribute : ActionFilterAttribute
     {
-        public override void OnActionExecuted(ActionExecutedContext ctx)
+        public static JsonSerializerSettings PublicApiSerializerSettings
         {
-            if (ctx.Result is ObjectResult objectResult)
+            get
             {
                 var jsonSerializerSettings = new JsonSerializerSettings
                 {
@@ -24,8 +24,16 @@ namespace WB.UI.Headquarters.Code
                     }
                 };
                 jsonSerializerSettings.Converters.Add(new EnumToStringConverter());
+                return jsonSerializerSettings;
+            }
+        }
+
+        public override void OnActionExecuted(ActionExecutedContext ctx)
+        {
+            if (ctx.Result is ObjectResult objectResult)
+            {
                 objectResult.Formatters.Add(new NewtonsoftJsonOutputFormatter(
-                    jsonSerializerSettings,
+                    PublicApiSerializerSettings,
                     ctx.HttpContext.RequestServices.GetRequiredService<ArrayPool<char>>(),
                     ctx.HttpContext.RequestServices.GetRequiredService<IOptions<MvcOptions>>().Value));
             }

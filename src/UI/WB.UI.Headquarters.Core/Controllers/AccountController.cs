@@ -46,7 +46,9 @@ namespace WB.UI.Headquarters.Controllers
         public IActionResult LogOn(string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
-            this.ViewBag.ReturnUrl = returnUrl;
+            this.ViewBag.ReturnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : null;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
 
             return this.View(new LogOnModel
@@ -59,7 +61,9 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<IActionResult> LogOn2fa(string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
-            this.ViewBag.ReturnUrl = returnUrl;
+            this.ViewBag.ReturnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : null;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
 
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
@@ -75,7 +79,6 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<IActionResult> LoginWithRecoveryCode()
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
-            //this.ViewBag.ReturnUrl = returnUrl;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
 
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
@@ -93,6 +96,9 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
+            returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : null;
             model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
 
             if (model.RequireCaptcha && !await this.captchaProvider.IsCaptchaValid(Request))
@@ -166,6 +172,9 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
+            returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : null;
 
             if (!ModelState.IsValid)
             {
@@ -215,6 +224,9 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
+            returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : null;
 
             if (!ModelState.IsValid)
             {

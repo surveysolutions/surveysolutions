@@ -144,7 +144,7 @@ namespace WB.UI.Headquarters.Controllers
             var interviewId = CreateInterview(assignment);
             TempData["lastCreatedInterviewId"] = interviewId; // todo replace with lastCreatedInterviewId from webinterview controller when its migrated
 
-            return Content(Url.Content(GenerateUrl(@"Cover", interviewId)));
+            return Json(new { InterviewId = interviewId});
         }
 
         [HttpGet]

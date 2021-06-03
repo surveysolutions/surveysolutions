@@ -621,6 +621,9 @@ namespace WB.UI.Headquarters.Controllers
         [Route("Resume/{id:Guid}")]
         public ActionResult Resume(string id, string returnUrl)
         {
+            returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : String.Empty;
             var interview = this.statefulInterviewRepository.Get(id);
             if (interview == null)
             {
@@ -705,6 +708,9 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResumePost(string id, string password, string returnUrl)
         {
+            returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : String.Empty;
             var interview = this.statefulInterviewRepository.Get(id);
             if (interview == null)
             {

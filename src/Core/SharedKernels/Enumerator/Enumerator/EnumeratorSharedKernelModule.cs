@@ -43,8 +43,6 @@ namespace WB.Core.SharedKernels.Enumerator
     {
         public void Load(IIocRegistry registry)
         {
-            registry.Bind<ILiteEventBus, LiteEventBus>();
-
             registry.Bind<IEntitiesListViewModelFactory, EntitiesListViewModelFactory>();
             registry.Bind<IDynamicTextViewModelFactory, DynamicTextViewModelFactory>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();

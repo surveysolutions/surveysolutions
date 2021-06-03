@@ -14,7 +14,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
         private readonly IQueryable<TClrType>? unfilteredQuery;
         private readonly IQueryable<TClrType> source;
         private readonly PageRequestInfo pageRequestInfo;
+        private const int MaxTakeValue = 100;
 
+        
         public PagedConnectionResolver(IQueryable<TClrType>? unfilteredQuery, IQueryable<TClrType> source, PageRequestInfo pageRequestInfo)
         {
             this.unfilteredQuery = unfilteredQuery;
@@ -31,8 +33,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
             
             if (this.pageRequestInfo.Skip.HasValue)
                 query = query.Skip(this.pageRequestInfo.Skip.Value);
-            if (this.pageRequestInfo.Take.HasValue)
-                query = query.Take(this.pageRequestInfo.Take.Value);
+
+            var take = this.pageRequestInfo.Take is <= MaxTakeValue
+                ? this.pageRequestInfo.Take.Value
+                : MaxTakeValue;
+
+            query = query.Take(take);
             
             var data = await query.ToListAsync(cancellationToken);
 

@@ -79,12 +79,16 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
         public void OnGet(string? returnUrl = null)
         {
-            ReturnUrl = returnUrl;
+            ReturnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : null;
         }
 
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : null;
             if (Input != null && ModelState.IsValid)
             {
                 if (this.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.Recaptcha)

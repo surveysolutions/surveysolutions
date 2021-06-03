@@ -22,7 +22,9 @@ const store = {
             )
                 .done(function( data ) {
                     dispatch('showProgress', true)
-                    window.location = data
+                    const interviewId = data.interviewId
+                    const url = `/WebInterview/${interviewId}/Cover`
+                    window.location = url
                 })
                 .catch(data => {
                     new PNotify({
