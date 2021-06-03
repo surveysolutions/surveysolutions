@@ -128,6 +128,7 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
+        [AntiForgeryFilter]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult Settings(string id)
         {

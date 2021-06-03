@@ -41,6 +41,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult<ExportSettingsModel>> ChangeState([FromBody]ChangeSettingsModel changeSettingsState)
         {
             if (await this.IsExistsDataExportInProgress())
@@ -60,6 +61,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult<ExportSettingsModel>> RegeneratePassword()
         {
             if (await this.IsExistsDataExportInProgress())
