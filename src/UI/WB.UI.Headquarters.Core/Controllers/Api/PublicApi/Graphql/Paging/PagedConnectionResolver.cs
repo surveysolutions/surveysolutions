@@ -38,8 +38,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
                 ? this.pageRequestInfo.Take.Value
                 : MaxTakeValue;
 
-            if (this.pageRequestInfo.Take.HasValue)
-                query = query.Take(take);
+            query = query.Take(take);
             
             var data = await query.ToListAsync(cancellationToken);
 
