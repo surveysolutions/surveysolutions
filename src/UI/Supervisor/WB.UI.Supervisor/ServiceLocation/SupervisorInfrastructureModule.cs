@@ -63,10 +63,10 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.Bind<IInterviewerQuestionnaireAccessor, SupervisorQuestionnaireAccessor>();
-            registry.Bind<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
+            registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
             registry.Bind<ITabletInfoService, TabletInfoService>();
             registry.BindAsSingleton<IDeviceSynchronizationProgress, DeviceSynchronizationProgress>();
-            registry.Bind<ICalendarEventStorage, CalendarEventStorage>();
+            registry.BindAsSingleton<ICalendarEventStorage, CalendarEventStorage>();
             registry.Bind<ICalendarEventRemoval, CalendarEventRemoval>();
             
             registry.Bind<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
@@ -80,8 +80,8 @@ namespace WB.UI.Supervisor.ServiceLocation
                 InterviewsDirectoryName = "interviews",
             });
 
-            registry.Bind(typeof(IPlainStorage<,>), typeof(SqlitePlainStorageWithWorkspace<,>));
-            registry.Bind(typeof(IPlainStorage<>), typeof(SqlitePlainStorageWithWorkspace<>));
+            registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorageAutoWorkspaceResolve<,>));
+            registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorageAutoWorkspaceResolve<>));
 
             registry.BindAsSingleton<IPlainStorage<SupervisorIdentity>, SqlitePlainStorage<SupervisorIdentity>>();
             registry.BindAsSingleton<IPlainStorage<WorkspaceView>, SqlitePlainStorage<WorkspaceView>>();

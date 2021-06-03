@@ -43,11 +43,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.settings = settings;
         }
 
-        protected SQLiteConnectionWithLock GetConnection()
+        protected virtual SQLiteConnectionWithLock GetConnection()
         {
             if (this.connection != null)
                 return this.connection;
-            
+
+            this.connection = CreateConnection();
+            return this.connection;
+        }
+        
+        protected virtual SQLiteConnectionWithLock CreateConnection()
+        {
             var pathToDatabase = GetPathToDatabase();
 
             var dbDirectory = fileSystemAccessor.GetDirectory(pathToDatabase);
@@ -56,12 +62,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             var sqliteConnectionString = new SQLiteConnectionString(pathToDatabase,
                 SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true);
-            this.connection = new SQLiteConnectionWithLock(sqliteConnectionString);
+            var newConnection = new SQLiteConnectionWithLock(sqliteConnectionString);
 
-            CreateTable(this.connection);
+            CreateTable(newConnection);
             
-            return this.connection;
+            return newConnection;
         }
+
 
         protected virtual void CreateTable(SQLiteConnectionWithLock connect)
         {
@@ -199,7 +206,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             RunInTransaction(table => table.Connection.DeleteAll<TEntity>());
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             connection?.Dispose();
         }

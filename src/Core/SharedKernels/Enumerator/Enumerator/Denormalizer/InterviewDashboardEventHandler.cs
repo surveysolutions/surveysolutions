@@ -60,18 +60,26 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<AreaQuestionAnswered>,
                                          IEventHandler<InterviewKeyAssigned>
     {
-        private readonly IServiceLocator serviceLocator;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
+        private readonly IQuestionnaireStorage questionnaireRepository;
+        private readonly IAnswerToStringConverter answerToStringConverter;
+        private readonly IAssignmentDocumentsStorage assignmentStorage;
+        private readonly ICalendarEventStorage calendarEventStorage;
 
-        private IPlainStorage<InterviewView> interviewViewRepository => serviceLocator.GetInstance<IPlainStorage<InterviewView>>();
-        private IPlainStorage<PrefilledQuestionView> prefilledQuestions => serviceLocator.GetInstance<IPlainStorage<PrefilledQuestionView>>();
-        private IQuestionnaireStorage questionnaireRepository => serviceLocator.GetInstance<IQuestionnaireStorage>();
-        private IAnswerToStringConverter answerToStringConverter => serviceLocator.GetInstance<IAnswerToStringConverter>();
-        private IAssignmentDocumentsStorage assignmentStorage => serviceLocator.GetInstance<IAssignmentDocumentsStorage>();
-        private ICalendarEventStorage calendarEventStorage => serviceLocator.GetInstance<ICalendarEventStorage>();
-
-        public InterviewDashboardEventHandler(IServiceLocator serviceLocator)
+        public InterviewDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository,
+            IPlainStorage<PrefilledQuestionView> prefilledQuestions,
+            IQuestionnaireStorage questionnaireRepository,
+            IAnswerToStringConverter answerToStringConverter,
+            IAssignmentDocumentsStorage assignmentStorage,
+            ICalendarEventStorage calendarEventStorage)
         {
-            this.serviceLocator = serviceLocator;
+            this.interviewViewRepository = interviewViewRepository;
+            this.prefilledQuestions = prefilledQuestions;
+            this.questionnaireRepository = questionnaireRepository;
+            this.answerToStringConverter = answerToStringConverter;
+            this.assignmentStorage = assignmentStorage;
+            this.calendarEventStorage = calendarEventStorage;
         }
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)

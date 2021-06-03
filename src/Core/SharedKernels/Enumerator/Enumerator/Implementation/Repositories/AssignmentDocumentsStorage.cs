@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     public class AssignmentDocumentsStorage :
-        SqlitePlainStorageWithWorkspace<AssignmentDocument, int>,
+        SqlitePlainStorageAutoWorkspaceResolve<AssignmentDocument, int>,
         IAssignmentDocumentsStorage
     {
         // sql support max 999 parameters in query

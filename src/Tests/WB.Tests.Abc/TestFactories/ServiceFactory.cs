@@ -191,23 +191,30 @@ namespace WB.Tests.Abc.TestFactories
             IAnswerToStringConverter answerToStringConverter = null
         )
         {
-            var serviceLocator = Create.Fake.ServiceLocator()
+            /*var serviceLocator = Create.Fake.ServiceLocator()
                 .With(interviewViewRepository ?? Substitute.For<IPlainStorage<InterviewView>>())
                 .With(questionnaireStorage ?? Substitute.For<IQuestionnaireStorage>())
                 .With(prefilledQuestions ?? Substitute.For<IPlainStorage<PrefilledQuestionView>>())
                 .With(answerToStringConverter ?? Substitute.For<IAnswerToStringConverter>())
                 .Object;
-            return new InterviewDashboardEventHandler(serviceLocator);
+            return new InterviewDashboardEventHandler(serviceLocator);*/
+            return new InterviewDashboardEventHandler(interviewViewRepository,
+                prefilledQuestions, questionnaireStorage, answerToStringConverter,
+                Mock.Of<IAssignmentDocumentsStorage>(),
+                Mock.Of<ICalendarEventStorage>());
         }
         
         CalendarEventEventHandler CalendarEventDenormalizer(ICalendarEventStorage calendarEventStorage = null)
         {
-            var serviceLocator = Create.Fake.ServiceLocator()
+            /*var serviceLocator = Create.Fake.ServiceLocator()
                 .With(calendarEventStorage ?? Substitute.For<ICalendarEventStorage>())
                 .With(Substitute.For<IPlainStorage<InterviewView>>())
                 .With(Substitute.For<IAssignmentDocumentsStorage>())
                 .Object;
-            return new CalendarEventEventHandler(serviceLocator);
+            return new CalendarEventEventHandler(serviceLocator);*/
+            return new CalendarEventEventHandler(calendarEventStorage,
+                Mock.Of<IPlainStorage<InterviewView>>(),
+                Mock.Of<IAssignmentDocumentsStorage>());
         }
 
 

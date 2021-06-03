@@ -63,7 +63,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind<IInterviewEventStreamOptimizer, InterviewEventStreamOptimizer>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<IQuestionnaireStorage, QuestionnaireStorage>();
-            registry.Bind<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
+            registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
             registry.Bind<IAudioAuditService, AudioAuditService>();
             
             registry.Bind<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
@@ -77,18 +77,18 @@ namespace WB.UI.Interviewer.Infrastructure
                 InterviewsDirectoryName = "interviews"
             });
 
-            registry.Bind(typeof(IPlainStorage<,>), typeof(SqlitePlainStorageWithWorkspace<,>));
-            registry.Bind(typeof(IPlainStorage<>), typeof(SqlitePlainStorageWithWorkspace<>));
+            registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorageAutoWorkspaceResolve<,>));
+            registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorageAutoWorkspaceResolve<>));
 
             // this storages need before identity and workspaceaccessor exists 
             registry.BindAsSingleton<IPlainStorage<InterviewerIdentity>, SqlitePlainStorage<InterviewerIdentity>>();
             registry.BindAsSingleton<IPlainStorage<WorkspaceView>, SqlitePlainStorage<WorkspaceView>>();
-            registry.Bind<IPlainStorage<PrefilledQuestionView>, PrefilledQuestionsRepository>();
+            registry.BindAsSingleton<IPlainStorage<PrefilledQuestionView>, PrefilledQuestionsRepository>();
 
             registry.Bind<INotificationsCollector, InterviewerNotificationsCollector>();
             registry.Bind<IInAppNotificationsCollector, InterviewerInAppNotificationsCollector>();
             
-            registry.Bind<ICalendarEventStorage, CalendarEventStorage>();
+            registry.BindAsSingleton<ICalendarEventStorage, CalendarEventStorage>();
             registry.Bind<ICalendarEventRemoval, CalendarEventRemoval>();
         }
     }
