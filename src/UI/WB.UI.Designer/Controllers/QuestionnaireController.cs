@@ -136,6 +136,7 @@ namespace WB.UI.Designer.Controllers
             return this.LackOfPermits();
         }
 
+        [AntiForgeryFilter]
         [Route("questionnaire/details/{id}")]
         [Route("questionnaire/details/{id}/chapter/{chapterId}/{entityType}/{entityId}")]
         public IActionResult Details(QuestionnaireRevision? id, Guid? chapterId, string entityType, Guid? entityid)
