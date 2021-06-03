@@ -60,6 +60,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
             => this.View("CompilationVersionsViews/CompilationVersions", this.questionnaireCompilationVersionService.GetCompilationVersions());
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult RemoveCompilationVersion(Guid questionnaireId)
         {
             this.questionnaireCompilationVersionService.Remove(questionnaireId);

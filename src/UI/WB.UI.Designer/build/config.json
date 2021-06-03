@@ -275,6 +275,12 @@
       "inputFiles": [
         "Content/admin.css"
       ]
+    },
+    {
+      "name": "utils",
+      "inputFiles": [
+        "Scripts/custom/utils.js"
+      ]
     }
   ]
 }
