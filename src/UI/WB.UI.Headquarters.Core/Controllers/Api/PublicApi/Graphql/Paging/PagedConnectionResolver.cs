@@ -34,12 +34,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
             if (this.pageRequestInfo.Skip.HasValue)
                 query = query.Skip(this.pageRequestInfo.Skip.Value);
 
-            var take = (this.pageRequestInfo.Take.HasValue && this.pageRequestInfo.Take.Value <= MaxTakeValue)
+            var take = this.pageRequestInfo.Take is <= MaxTakeValue
                 ? this.pageRequestInfo.Take.Value
                 : MaxTakeValue;
 
-            if (this.pageRequestInfo.Take.HasValue)
-                query = query.Take(take);
+            query = query.Take(take);
             
             var data = await query.ToListAsync(cancellationToken);
 
