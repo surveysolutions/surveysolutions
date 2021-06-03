@@ -18,7 +18,7 @@ namespace WB.UI.Shared.Web.Captcha
 {
     public class CaptchaImageGenerator
     {
-        static readonly string[] fontFamilies = { "Arial", "Verdana", "Times New Roman" };
+        static readonly string[] fontFamilies = { "Noto Sans", "Arial", "Verdana", "Times New Roman" };
         static readonly Color[] colors = { Color.Red, Color.DarkBlue, Color.Chocolate, Color.DarkCyan, Color.Orange };
         private static readonly FontStyle[] fontStyles = {FontStyle.Bold, FontStyle.Italic, FontStyle.Regular};
 
