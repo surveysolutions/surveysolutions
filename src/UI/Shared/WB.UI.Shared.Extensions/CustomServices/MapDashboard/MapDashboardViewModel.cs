@@ -569,7 +569,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                 {
                     this.Map.Basemap = baseMap;
 
-                    if (baseMap?.BaseLayers[0]?.FullExtent != null && this.MapView?.VisibleArea != null)
+                    if (baseMap?.BaseLayers.Count > 0 && baseMap?.BaseLayers[0]?.FullExtent != null && this.MapView?.VisibleArea != null)
                     {
                         var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea,
                             baseMap.BaseLayers[0].SpatialReference);
@@ -647,7 +647,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 
         public IMvxAsyncCommand ShowFullMapCommand => new MvxAsyncCommand(async () =>
         {
-            if (this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
+            if (this.Map?.Basemap?.BaseLayers.Count > 0 && this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
                 await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
         });
 
@@ -698,6 +698,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
 
             if (e.Position == null) { return; }
+            if (this.Map?.Basemap?.BaseLayers.Count <= 0) return;
 
             var extent = this.MapView.Map.Basemap.BaseLayers[0].FullExtent;
 

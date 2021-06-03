@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -18,7 +19,7 @@ namespace WB.UI.Headquarters.Code.Authentication
 
     public static class AuthExtensions
     {
-        public static void AddHqAuthorization(this IServiceCollection services)
+        public static void AddHqAuthorization(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddIdentity<HqUser, HqRole>()
                 .AddErrorDescriber<LocalizedIdentityErrorDescriber>()
@@ -40,7 +41,10 @@ namespace WB.UI.Headquarters.Code.Authentication
             {
                 opt.LoginPath = "/Account/LogOn";
                 opt.AccessDeniedPath = "/Error/401";
-                opt.ExpireTimeSpan = TimeSpan.FromDays(1);
+
+                var expireTimeSpan = configuration.GetValue<TimeSpan>("Authentication:TimeOut");
+                
+                opt.ExpireTimeSpan = expireTimeSpan;
                 opt.Cookie.Path = "/";
 
                 opt.ForwardDefaultSelector = ctx =>

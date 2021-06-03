@@ -47,6 +47,13 @@ $width-right-menu-small: 380px;
 	.navbar-collapse{
 		li{
 			position: relative;
+            
+            .workspace{
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                width: 190px;
+            }
 
 			&.active>a{
 				@extend .add-transition;
@@ -74,7 +81,7 @@ $width-right-menu-small: 380px;
 					& > .caret{
 						border-top-color: $white;
 					}
-				}
+				}                
 				.caret{
 					@include absolute(31px, 10px);
 					margin-left: 0;
@@ -95,7 +102,7 @@ $width-right-menu-small: 380px;
 				}
 			}
 			&.dropdown > a{
-				padding-right: 25px;
+				padding-right: 25px;                
 			}
 			.dropdown-menu{
 				margin-top: 1px;

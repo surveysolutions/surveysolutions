@@ -2,6 +2,7 @@
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -20,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.QuestionOptionsRepositoryTests
             var questionnaire = CreateQuestionnaireWithOneCategoricalQuestion(questionId);
             var optionsRepository = Mock.Of<IOptionsRepository>();
 
-            var storage = new QuestionOptionsRepository(optionsRepository);
+            var storage = CreateQuestionOptionsRepository(optionsRepository);
 
             storage.GetOptionsForQuestion(questionnaire, questionId, null, null, null);
 
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.QuestionOptionsRepositoryTests
             var questionnaire = CreateQuestionnaireWithOneCategoricalQuestion(questionId, categoryId);
             var optionsRepository = Mock.Of<IOptionsRepository>();
 
-            var storage = new QuestionOptionsRepository(optionsRepository);
+            var storage = CreateQuestionOptionsRepository(optionsRepository);
 
             storage.GetOptionsForQuestion(questionnaire, questionId, null, null, null);
 
@@ -51,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.QuestionOptionsRepositoryTests
             var questionnaire = CreateQuestionnaireWithOneCategoricalQuestion(questionId);
             var optionsRepository = Mock.Of<IOptionsRepository>();
 
-            var storage = new QuestionOptionsRepository(optionsRepository);
+            var storage = CreateQuestionOptionsRepository(optionsRepository);
 
             storage.GetOptionForQuestionByOptionText(questionnaire, questionId, null, null, null);
 
@@ -67,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.QuestionOptionsRepositoryTests
             var questionnaire = CreateQuestionnaireWithOneCategoricalQuestion(questionId, categoryId);
             var optionsRepository = Mock.Of<IOptionsRepository>();
 
-            var storage = new QuestionOptionsRepository(optionsRepository);
+            var storage = CreateQuestionOptionsRepository(optionsRepository);
 
             storage.GetOptionForQuestionByOptionText(questionnaire, questionId, null, null, null);
 
@@ -82,7 +83,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.QuestionOptionsRepositoryTests
             var questionnaire = CreateQuestionnaireWithOneCategoricalQuestion(questionId);
             var optionsRepository = Mock.Of<IOptionsRepository>();
 
-            var storage = new QuestionOptionsRepository(optionsRepository);
+            var storage = CreateQuestionOptionsRepository(optionsRepository);
 
             storage.GetOptionForQuestionByOptionValue(questionnaire, questionId, 7, null, null);
 
@@ -98,7 +99,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.QuestionOptionsRepositoryTests
             var questionnaire = CreateQuestionnaireWithOneCategoricalQuestion(questionId, categoryId);
             var optionsRepository = Mock.Of<IOptionsRepository>();
 
-            var storage = new QuestionOptionsRepository(optionsRepository);
+            var storage = CreateQuestionOptionsRepository(optionsRepository);
 
             storage.GetOptionForQuestionByOptionValue(questionnaire, questionId, 7, null, null);
 
@@ -114,7 +115,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.QuestionOptionsRepositoryTests
             var questionnaire = CreateQuestionnaireWithOneCategoricalQuestion(questionId);
             var optionsRepository = Mock.Of<IOptionsRepository>();
 
-            var storage = new QuestionOptionsRepository(optionsRepository);
+            var storage = CreateQuestionOptionsRepository(optionsRepository);
 
             storage.GetOptionsByOptionValues(questionnaire, questionId, optionValues, null);
 
@@ -131,7 +132,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.QuestionOptionsRepositoryTests
             var questionnaire = CreateQuestionnaireWithOneCategoricalQuestion(questionId, categoryId);
             var optionsRepository = Mock.Of<IOptionsRepository>();
 
-            var storage = new QuestionOptionsRepository(optionsRepository);
+            var storage = CreateQuestionOptionsRepository(optionsRepository);
 
             storage.GetOptionsByOptionValues(questionnaire, questionId, optionValues, null);
 
@@ -163,6 +164,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.QuestionOptionsRepositoryTests
             Assert.That(option.Value, Is.EqualTo(1));
             Assert.That(option.ParentValue, Is.EqualTo(2));
             Assert.That(option.Title, Is.EqualTo("opt 2"));
+        }
+
+        private static QuestionOptionsRepository CreateQuestionOptionsRepository(IOptionsRepository optionsRepository)
+        {
+            var serviceLocator = Mock.Of<IServiceLocator>(s => s.GetInstance<IOptionsRepository>() == optionsRepository);
+            return new QuestionOptionsRepository(serviceLocator);
         }
 
 

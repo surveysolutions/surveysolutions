@@ -60,7 +60,9 @@ namespace WB.Tests.Abc.TestFactories
             => new AttachmentViewModel(questionnaireRepository, 
                 interviewRepository, 
                 Create.Service.LiteEventRegistry(),
-                attachmentContentStorage, () => new MediaAttachment());
+                attachmentContentStorage, 
+                () => new MediaAttachment(),
+                Mock.Of<IInterviewPdfService>());
 
         public DynamicTextViewModel DynamicTextViewModel(
             IViewModelEventRegistry eventRegistry = null, 

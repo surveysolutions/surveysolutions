@@ -214,6 +214,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                         item.MaxScale = layer.maxScale ?? 0;
                                         item.MinScale = layer.minScale ?? 0;
                                     }
+                                    else
+                                    {
+                                        throw new Exception(".mmpk file has no base layers");
+                                    }
 
                                 }
                             }

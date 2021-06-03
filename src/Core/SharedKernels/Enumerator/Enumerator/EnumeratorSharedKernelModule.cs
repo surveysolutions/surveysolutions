@@ -43,8 +43,6 @@ namespace WB.Core.SharedKernels.Enumerator
     {
         public void Load(IIocRegistry registry)
         {
-            registry.Bind<ILiteEventBus, LiteEventBus>();
-
             registry.Bind<IEntitiesListViewModelFactory, EntitiesListViewModelFactory>();
             registry.Bind<IDynamicTextViewModelFactory, DynamicTextViewModelFactory>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
@@ -63,6 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<IWorkspaceService, WorkspaceService>();
             registry.BindAsSingleton<IWorkspaceAccessor, WorkspaceAccessor>();
             registry.Bind<IInScopeExecutor, ExecuteInWorkspaceService>();
+            registry.Bind<IInterviewPdfService, InterviewPdfService>();
 
             registry.Bind<NavigationState>();
             registry.Bind<AnswerNotifier>();
