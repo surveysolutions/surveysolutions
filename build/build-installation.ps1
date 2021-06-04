@@ -54,7 +54,7 @@ Rename-Item $HQsitePath\Site\web.config $HQsitePath\Site\Web.config
 
 Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse -Exclude '*.pdb'
 
-$files = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll" -or $_.Name -match "WB.UI.Headquarters.exe"})
+$files = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll" <# -or $_.Name -match "WB.UI.Headquarters.exe" #>})
 
 foreach($file in $files) {
     $versionOfProduct = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName)
