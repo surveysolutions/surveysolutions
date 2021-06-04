@@ -31,6 +31,8 @@ $sitePatha = (Get-ChildItem $HQSourcePath -recurse | Where-Object {$_.PSIsContai
 
 $HQsitePath = Join-path $workdir "HQwork"
 
+Log-Message "HQsitePath : $HQsitePath"
+
 #remove old files
 if (!($noDestCleanup)) {
 	if (Test-Path $HQsitePath){
@@ -55,6 +57,8 @@ Rename-Item $HQsitePath\Site\web.config $HQsitePath\Site\Web.config
 Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse -Exclude '*.pdb'
 
 $files = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll" <# -or $_.Name -match "WB.UI.Headquarters.exe" #>})
+
+Log-Message "files for version check : $files"
 
 foreach($file in $files) {
 	Log-Message "Checking version for: $file.FullName"
