@@ -401,7 +401,7 @@ export default {
     methods: {
 
         openInterview() {
-            window.open('InterviewerHq/OpenInterview/' + this.selectedTooltip.interviewId, '_blank')
+            window.open(this.$hq.basePath + 'InterviewerHq/OpenInterview/' + this.selectedTooltip.interviewId, '_blank')
         },
 
         createInterview() {
@@ -409,8 +409,8 @@ export default {
             const assignmentId = this.selectedTooltip.assignmentId
             $.post('InterviewerHq/StartNewInterview/' + assignmentId, response => {
                 const interviewId = response.interviewId
-                const workspace = Vue.$config.workspace
-                const url = `/${workspace}/WebInterview/${interviewId}/Cover`
+                const workspace = self.$hq.basePath
+                const url = `${workspace}WebInterview/${interviewId}/Cover`
                 window.open(url, '_blank')
                 self.reloadMarkersInBounds()
             })
