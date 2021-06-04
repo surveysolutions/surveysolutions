@@ -56,7 +56,7 @@ Rename-Item $HQsitePath\Site\web.config $HQsitePath\Site\Web.config
 
 Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse -Exclude '*.pdb'
 
-$files = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll" <# -or $_.Name -match "WB.UI.Headquarters.exe" #>})
+$files = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll" -or $_.Name -match "WB.UI.Headquarters.exe" })
 
 Log-Message "files for version check : $files"
 
@@ -72,6 +72,8 @@ foreach($file in $files) {
 }
 # $version = $newVersion = "{0}{1}.{2}.{3}.{4}" -f $versionOfProduct.ProductMajorPart, $versionOfProduct.ProductMinorPart.ToString("00"), $versionOfProduct.ProductBuildPart, $versionOfProduct.ProductPrivatePart, $BuildNumber
 $productFileVersion = $versionOfProduct.FileVersion
+
+Log-Message "Version from file: $productFileVersion"
 
 $installationArgs = @(
     $InstallationProject;
