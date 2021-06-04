@@ -409,7 +409,8 @@ export default {
             const assignmentId = this.selectedTooltip.assignmentId
             $.post('InterviewerHq/StartNewInterview/' + assignmentId, response => {
                 const interviewId = response.interviewId
-                const url = `/WebInterview/${interviewId}/Cover`
+                const workspace = Vue.$config.workspace
+                const url = `/${workspace}/WebInterview/${interviewId}/Cover`
                 window.open(url, '_blank')
                 self.reloadMarkersInBounds()
             })
