@@ -57,6 +57,7 @@ Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse -Exclude 
 $files = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll" <# -or $_.Name -match "WB.UI.Headquarters.exe" #>})
 
 foreach($file in $files) {
+	Log-Message "Checking version for: $file.FullName"
     $versionOfProduct = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName)
     
     if(($versionOfProduct.FileVersion -eq '') -or ($null -eq $versionOfProduct.FileVersion)) {
