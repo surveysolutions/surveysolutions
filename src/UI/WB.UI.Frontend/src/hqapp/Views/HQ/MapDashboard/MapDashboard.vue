@@ -408,8 +408,9 @@ export default {
             const self = this
             const assignmentId = this.selectedTooltip.assignmentId
             $.post('InterviewerHq/StartNewInterview/' + assignmentId, response => {
-                //window.location = response
-                window.open(response, '_blank')
+                const interviewId = response.interviewId
+                const url = `/WebInterview/${interviewId}/Cover`
+                window.open(url, '_blank')
                 self.reloadMarkersInBounds()
             })
         },
