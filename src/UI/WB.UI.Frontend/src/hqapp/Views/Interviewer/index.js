@@ -16,7 +16,8 @@ const store = {
             $.post(Vue.$config.model.interviewerHqEndpoint + '/StartNewInterview/' + assignmentId, response => {
                 dispatch('showProgress', true)
                 const interviewId = response.interviewId
-                const url = `/WebInterview/${interviewId}/Cover`
+                const workspace = Vue.$config.workspace
+                const url = `/${workspace}/WebInterview/${interviewId}/Cover`
                 window.location = url
             })
                 .catch(data => {
