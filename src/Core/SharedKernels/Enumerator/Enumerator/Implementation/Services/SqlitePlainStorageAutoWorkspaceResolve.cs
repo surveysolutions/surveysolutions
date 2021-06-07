@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.Common;
+using System.Reflection;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -25,22 +26,27 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     public class SqlitePlainStorageAutoWorkspaceResolve<TEntity, TKey> : SqlitePlainStorageWithWorkspace<TEntity, TKey>
         where TEntity : class, IPlainStorageEntity<TKey>, new()
     {
+        private bool NonWorkspaced;
+        
         public SqlitePlainStorageAutoWorkspaceResolve(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings, IWorkspaceAccessor workspaceAccessor) 
             : base(logger, fileSystemAccessor, settings, workspaceAccessor)
         {
+            NonWorkspaced = typeof(TEntity).GetCustomAttribute(typeof(NonWorkspacedAttribute)) != null;
         }
 
         public SqlitePlainStorageAutoWorkspaceResolve(SQLiteConnectionWithLock storage, ILogger logger) 
             : base(storage, logger)
         {
+            NonWorkspaced = typeof(TEntity).GetCustomAttribute(typeof(NonWorkspacedAttribute)) != null;
         }
 
-        private readonly Dictionary<string, SQLiteConnectionWithLock> connections =
-            new Dictionary<string, SQLiteConnectionWithLock>();
+        private readonly Dictionary<string, SQLiteConnectionWithLock> connections = new();
 
         protected override SQLiteConnectionWithLock GetConnection()
         {
-            var workspaceName = workspaceAccessor.GetCurrentWorkspaceName() ?? "primary";
+            var workspaceName = NonWorkspaced
+                ? "NonWorkspaced"
+                : workspaceAccessor.GetCurrentWorkspaceName() ?? "primary";
             if (connections.TryGetValue(workspaceName, out var connection))
                 return connection;
 
