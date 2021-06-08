@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     public class SqlitePlainStorageAutoWorkspaceResolve<TEntity, TKey> : SqlitePlainStorageWithWorkspace<TEntity, TKey>
         where TEntity : class, IPlainStorageEntity<TKey>, new()
     {
+        private const string NonWorkspacedName = "NonWorkspaced";
         private bool NonWorkspaced;
         
         public SqlitePlainStorageAutoWorkspaceResolve(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings, IWorkspaceAccessor workspaceAccessor) 
@@ -37,7 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public SqlitePlainStorageAutoWorkspaceResolve(SQLiteConnectionWithLock storage, ILogger logger) 
             : base(storage, logger)
         {
-            NonWorkspaced = typeof(TEntity).GetCustomAttribute(typeof(NonWorkspacedAttribute)) != null;
+            NonWorkspaced = true;
+            connections[NonWorkspacedName] = storage;
         }
 
         private readonly Dictionary<string, SQLiteConnectionWithLock> connections = new();
@@ -45,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected override SQLiteConnectionWithLock GetConnection()
         {
             var workspaceName = NonWorkspaced
-                ? "NonWorkspaced"
+                ? NonWorkspacedName
                 : workspaceAccessor.GetCurrentWorkspaceName() ?? "primary";
             if (connections.TryGetValue(workspaceName, out var connection))
                 return connection;
