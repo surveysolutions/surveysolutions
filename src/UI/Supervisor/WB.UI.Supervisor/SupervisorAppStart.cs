@@ -10,9 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
-using WB.UI.Shared.Enumerator.Migrations;
 using WB.UI.Shared.Enumerator.Migrations.Workspaces;
-using WB.UI.Supervisor.Activities;
 
 namespace WB.UI.Supervisor
 {
@@ -23,13 +21,15 @@ namespace WB.UI.Supervisor
         private readonly IMigrationRunner migrationRunner;
         private readonly IWorkspaceService workspaceService;
         private readonly ILifetimeScope lifetimeScope;
+        private readonly IDeviceSettings deviceSettings;
 
         public SupervisorAppStart(IMvxApplication application, IMvxNavigationService navigationService,
             IViewModelNavigationService viewModelNavigation,
             IPlainStorage<SupervisorIdentity> users,
             IMigrationRunner migrationRunner,
             IWorkspaceService workspaceService,
-            ILifetimeScope lifetimeScope
+            ILifetimeScope lifetimeScope,
+            IDeviceSettings deviceSettings
         ) : base(application, navigationService)
         {
             this.viewModelNavigation = viewModelNavigation;
@@ -37,12 +37,13 @@ namespace WB.UI.Supervisor
             this.migrationRunner = migrationRunner;
             this.workspaceService = workspaceService;
             this.lifetimeScope = lifetimeScope;
+            this.deviceSettings = deviceSettings;
         }
 
         protected override Task<object> ApplicationStartup(object hint = null)
         {
             var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
-            logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
+            logger.Info($"Application started. Version: {this.deviceSettings.GetApplicationVersionName()}");
 
             this.migrationRunner.MigrateUp("Supervisor", this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
