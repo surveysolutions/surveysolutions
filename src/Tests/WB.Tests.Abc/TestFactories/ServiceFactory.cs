@@ -198,8 +198,11 @@ namespace WB.Tests.Abc.TestFactories
                 .With(answerToStringConverter ?? Substitute.For<IAnswerToStringConverter>())
                 .Object;
             return new InterviewDashboardEventHandler(serviceLocator);*/
-            return new InterviewDashboardEventHandler(interviewViewRepository,
-                prefilledQuestions, questionnaireStorage, answerToStringConverter,
+            return new InterviewDashboardEventHandler(
+                interviewViewRepository ?? Substitute.For<IPlainStorage<InterviewView>>(),
+                prefilledQuestions ?? Substitute.For<IPlainStorage<PrefilledQuestionView>>(), 
+                questionnaireStorage ?? Substitute.For<IQuestionnaireStorage>(), 
+                answerToStringConverter ?? Substitute.For<IAnswerToStringConverter>(),
                 Mock.Of<IAssignmentDocumentsStorage>(),
                 Mock.Of<ICalendarEventStorage>());
         }
@@ -212,7 +215,8 @@ namespace WB.Tests.Abc.TestFactories
                 .With(Substitute.For<IAssignmentDocumentsStorage>())
                 .Object;
             return new CalendarEventEventHandler(serviceLocator);*/
-            return new CalendarEventEventHandler(calendarEventStorage,
+            return new CalendarEventEventHandler(
+                calendarEventStorage ?? Substitute.For<ICalendarEventStorage>(),
                 Mock.Of<IPlainStorage<InterviewView>>(),
                 Mock.Of<IAssignmentDocumentsStorage>());
         }
