@@ -140,7 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch (SQLiteException ex)
             {
-                this.logger.Fatal($"Failed to persist {entities.Count()} entities {nameof(TEntity)} as batch", ex);
+                this.logger.Fatal($"Failed to persist {entities.Count()} entities {typeof(TEntity).Name} as batch", ex);
                 throw;
             }
         }

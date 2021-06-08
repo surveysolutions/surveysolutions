@@ -46,14 +46,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         protected override SQLiteConnectionWithLock GetConnection()
         {
+            logger.Trace($"Request on connection for {typeof(TEntity).Name}");
             var workspaceName = NonWorkspaced
                 ? NonWorkspacedName
                 : workspaceAccessor.GetCurrentWorkspaceName() ?? "primary";
             if (connections.TryGetValue(workspaceName, out var connection))
                 return connection;
 
+            logger.Trace($"Create connection for {typeof(TEntity).Name}");
             var newConnection = base.CreateConnection();
             connections[workspaceName] = newConnection;
+            logger.Trace($"Created and store connection for {typeof(TEntity).Name}");
             return newConnection;
         }
 
@@ -62,6 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             foreach (var connectionWithLock in connections)
                 connectionWithLock.Value?.Dispose();
             
+            connections.Clear();
             base.Dispose();
         }
     }
