@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             }
             catch (SQLiteException ex)
             {
-                this.logger.Fatal($"Failed to persist {entities.Count()} entities as batch", ex);
+                this.logger.Fatal($"Failed to persist {entities.Count()} assignments as batch", ex);
                 throw;
             }
         }

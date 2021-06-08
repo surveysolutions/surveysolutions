@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch (SQLiteException ex)
             {
-                this.logger.Fatal($"Failed to persist {entities.Count()} entities as batch", ex);
+                this.logger.Fatal($"Failed to remove {entities.Count()} entities as batch", ex);
                 throw;
             }
         }
@@ -140,7 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch (SQLiteException ex)
             {
-                this.logger.Fatal($"Failed to persist {entities.Count()} entities as batch", ex);
+                this.logger.Fatal($"Failed to persist {entities.Count()} entities {nameof(TEntity)} as batch", ex);
                 throw;
             }
         }
