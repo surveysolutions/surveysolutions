@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.Common;
+﻿using System.Collections.Concurrent;
 using System.Reflection;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -42,25 +41,37 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             connections[NonWorkspacedName] = storage;
         }
 
-        private readonly Dictionary<string, SQLiteConnectionWithLock> connections = new();
+        private static readonly ConcurrentDictionary<string, SQLiteConnectionWithLock> connections = new();
 
         protected override SQLiteConnectionWithLock GetConnection()
         {
-            var workspaceName = NonWorkspaced
+            var workspaceName = GetWorkspaceName();
+
+            //logger.Trace($"Requesting connection for {typeof(TEntity).Name} in {workspaceName}");
+
+            return connections.GetOrAdd(workspaceName, valueFactory: (string ws) =>
+            {
+                //logger.Trace($"Creating connection for {typeof(TEntity).Name} in {workspaceName}");
+                return base.CreateConnection();
+            });
+        }
+
+        private string GetWorkspaceName()
+        {
+            return NonWorkspaced
                 ? NonWorkspacedName
                 : workspaceAccessor.GetCurrentWorkspaceName() ?? "primary";
-            logger.Trace($"Request on connection for {typeof(TEntity).Name} for {workspaceName}");
-            if (connections.TryGetValue(workspaceName, out var connection))
-            {
-                logger.Trace($"Get saved connection for {typeof(TEntity).Name} for {workspaceName}");
-                return connection;
-            }
+        }
 
-            logger.Trace($"Create connection for {typeof(TEntity).Name} for {workspaceName}");
-            var newConnection = base.CreateConnection();
-            connections[workspaceName] = newConnection;
-            logger.Trace($"Created and store connection for {typeof(TEntity).Name} for {workspaceName}");
-            return newConnection;
+        protected override string GetPathToDatabase()
+        {
+            string pathToDatabase = 
+                NonWorkspaced ?
+                settings.PathToDatabaseDirectory:
+                fileSystemAccessor.CombinePath(settings.PathToRootDirectory, GetWorkspaceName(), settings.DataDirectoryName);
+            
+            pathToDatabase = fileSystemAccessor.CombinePath(pathToDatabase, typeof(TEntity).Name + "-data.sqlite3");
+            return pathToDatabase;
         }
 
         public override void Dispose()
