@@ -91,10 +91,10 @@ namespace WB.UI.Headquarters
         {
             this.environment = environment;
             Configuration = configuration;
-            AppDomain.CurrentDomain.AssemblyResolve += ResolveThirdPartyLibrary;
+            AppDomain.CurrentDomain.AssemblyResolve += ResolveDataCollectionFix;
         }
         
-        private static Assembly ResolveThirdPartyLibrary(object sender, ResolveEventArgs args)
+        private static Assembly ResolveDataCollectionFix(object sender, ResolveEventArgs args)
         {
             if (args.Name.StartsWith("WB.Core.SharedKernels.DataCollection.Portable, Version="))
             {
