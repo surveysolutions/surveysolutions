@@ -131,13 +131,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 RunInTransaction(table =>
                 {
-                    logger.Trace($"Store entities {typeof(TEntity).Name} - {DateTime.Now.ToLongTimeString()}");
-
                     foreach (var entity in entities.Where(entity => entity != null))
                     {
-                        logger.Trace($"Store entity {typeof(TEntity).Name} - {DateTime.Now.ToLongTimeString()}");
                         table.Connection.InsertOrReplace(entity);
-                        logger.Trace($"Stored entity {typeof(TEntity).Name} - {DateTime.Now.ToLongTimeString()}");
                         OnStore(table, entity);
                     }
                 });

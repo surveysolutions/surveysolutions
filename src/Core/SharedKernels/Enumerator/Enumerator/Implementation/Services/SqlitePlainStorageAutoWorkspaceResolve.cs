@@ -47,11 +47,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             var workspaceName = GetWorkspaceName();
 
-            logger.Trace($"Requesting connection for {typeof(TEntity).Name} in {workspaceName}");
-
             return connections.GetOrAdd(workspaceName, valueFactory: (string ws) =>
             {
-                logger.Trace($"Creating connection for {typeof(TEntity).Name} in {workspaceName}");
                 return base.CreateConnection();
             });
         }
