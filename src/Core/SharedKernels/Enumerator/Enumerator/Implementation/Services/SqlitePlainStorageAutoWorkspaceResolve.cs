@@ -41,17 +41,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             connections[NonWorkspacedName] = storage;
         }
 
-        private static readonly ConcurrentDictionary<string, SQLiteConnectionWithLock> connections = new();
+        private readonly ConcurrentDictionary<string, SQLiteConnectionWithLock> connections = new();
 
         protected override SQLiteConnectionWithLock GetConnection()
         {
             var workspaceName = GetWorkspaceName();
 
-            //logger.Trace($"Requesting connection for {typeof(TEntity).Name} in {workspaceName}");
+            logger.Trace($"Requesting connection for {typeof(TEntity).Name} in {workspaceName}");
 
             return connections.GetOrAdd(workspaceName, valueFactory: (string ws) =>
             {
-                //logger.Trace($"Creating connection for {typeof(TEntity).Name} in {workspaceName}");
+                logger.Trace($"Creating connection for {typeof(TEntity).Name} in {workspaceName}");
                 return base.CreateConnection();
             });
         }
