@@ -91,7 +91,7 @@ namespace WB.UI.Headquarters
         {
             this.environment = environment;
             Configuration = configuration;
-            AppDomain.CurrentDomain.AssemblyResolve += ResolveDataCollectionFix;
+            //AppDomain.CurrentDomain.AssemblyResolve += ResolveDataCollectionFix;
         }
         
         private static Assembly ResolveDataCollectionFix(object sender, ResolveEventArgs args)
@@ -281,6 +281,14 @@ namespace WB.UI.Headquarters
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
 
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                var securityPolicy = Configuration.GetValue<Boolean?>("Policies:CookiesSecurePolicyAlways");
+                
+                if (securityPolicy.HasValue)
+                    options.Secure = securityPolicy.Value ? CookieSecurePolicy.Always : CookieSecurePolicy.None;
+            });
+
             services.AddRazorPages();
 
             services.AddHqAuthorization(Configuration);
@@ -469,6 +477,8 @@ namespace WB.UI.Headquarters
             app.UseMetrics(Configuration);
             app.UseRouting();
             app.UseCors();
+
+            app.UseCookiePolicy();
             app.UseAuthentication();
 
             app.UseResetPasswordRedirect();
