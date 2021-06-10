@@ -214,6 +214,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
             var connect = GetConnection();
+            this.logger.Info($"connection for Type {typeof(TEntity).Name}; Path: {connect.DatabasePath}");
             TResult result = default(TResult);
             using (connect.Lock())
                 connect.RunInTransaction(() => result = function.Invoke(connect.Table<TEntity>()));
@@ -224,6 +225,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected void RunInTransaction(Action<TableQuery<TEntity>> function)
         {
             var connect = GetConnection();
+            this.logger.Info($"connection for Type {typeof(TEntity).Name}; Path: {connect.DatabasePath}");
             using (connect.Lock())
             {
                 connect.RunInTransaction(
