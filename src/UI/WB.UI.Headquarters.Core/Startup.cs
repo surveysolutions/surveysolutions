@@ -91,7 +91,7 @@ namespace WB.UI.Headquarters
         {
             this.environment = environment;
             Configuration = configuration;
-            //AppDomain.CurrentDomain.AssemblyResolve += ResolveDataCollectionFix;
+            AppDomain.CurrentDomain.AssemblyResolve += ResolveDataCollectionFix;
         }
         
         private static Assembly ResolveDataCollectionFix(object sender, ResolveEventArgs args)
@@ -287,6 +287,8 @@ namespace WB.UI.Headquarters
                 
                 if (securityPolicy.HasValue)
                     options.Secure = securityPolicy.Value ? CookieSecurePolicy.Always : CookieSecurePolicy.None;
+                else
+                    options.Secure = CookieSecurePolicy.SameAsRequest;
             });
 
             services.AddRazorPages();

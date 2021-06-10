@@ -48,10 +48,12 @@ namespace WB.UI.Headquarters.Code.Authentication
                 opt.Cookie.Path = "/";
 
                 var securityPolicy = configuration.GetValue<Boolean?>("Policies:CookiesSecurePolicyAlways");
-                
-                if (securityPolicy.HasValue)
-                    opt.Cookie.SecurePolicy = securityPolicy.Value ? CookieSecurePolicy.Always : CookieSecurePolicy.None;
 
+                if (securityPolicy.HasValue)
+                    opt.Cookie.SecurePolicy =
+                        securityPolicy.Value ? CookieSecurePolicy.Always : CookieSecurePolicy.None;
+                else
+                    opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 
                 opt.ForwardDefaultSelector = ctx =>
                 {
