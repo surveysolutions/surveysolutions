@@ -7,6 +7,8 @@ using Autofac;
 using Microsoft.Extensions.DependencyInjection;
 using MvvmCross.Binding.BindingContext;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
@@ -36,8 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             using var workspacesLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
             {
-                cb.RegisterGeneric(typeof(SqlitePlainStorage<>)).As(typeof(IPlainStorage<,>));
-                cb.RegisterGeneric(typeof(SqlitePlainStorage<>)).As(typeof(IPlainStorage<>));
+                cb.RegisterGeneric(typeof(SqlitePlainStorage<>)).As(typeof(IPlainStorage<,>)).SingleInstance();
+                cb.RegisterGeneric(typeof(SqlitePlainStorage<>)).As(typeof(IPlainStorage<>)).SingleInstance();
             });
             
             workspacesLifetimeScope.Resolve<MigrationRunner>().Migrate(scanInAssembly, 
@@ -56,6 +58,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 using var workspaceLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
                 {
                     cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();
+                    cb.RegisterGeneric(typeof(SqlitePlainStorageWithWorkspace<>)).As(typeof(IPlainStorage<,>)).SingleInstance();
+                    cb.RegisterGeneric(typeof(SqlitePlainStorageWithWorkspace<>)).As(typeof(IPlainStorage<>)).SingleInstance();
+
+                    cb.RegisterType<AssignmentDocumentsStorage>().As<IAssignmentDocumentsStorage>().SingleInstance();
+                    cb.RegisterType<CalendarEventStorage>().As<ICalendarEventStorage>().SingleInstance();
                 });
                 workspaceLifetimeScope.Resolve<MigrationRunner>().Migrate(scanInAssembly,
                     workspace.Name,
