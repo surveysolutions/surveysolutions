@@ -14,11 +14,8 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
-using WB.UI.Interviewer.Activities;
 using WB.UI.Shared.Enumerator.CustomServices;
-using WB.UI.Shared.Enumerator.Migrations;
 using WB.UI.Shared.Enumerator.Migrations.Workspaces;
-using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Notifications;
 
 namespace WB.UI.Interviewer
@@ -31,6 +28,7 @@ namespace WB.UI.Interviewer
         private readonly IWorkspaceService workspaceService;
         private readonly IAuditLogService auditLogService;
         private readonly IEnumeratorSettings enumeratorSettings;
+        private readonly IDeviceSettings deviceSettings;
         
         public InterviewerAppStart(IMvxApplication application, 
             IMvxNavigationService navigationService,
@@ -39,7 +37,8 @@ namespace WB.UI.Interviewer
             ILogger logger,
             IMigrationRunner migrationRunner,
             ILifetimeScope lifetimeScope,
-            IWorkspaceService workspaceService) : base(application, navigationService)
+            IWorkspaceService workspaceService,
+            IDeviceSettings deviceSettings) : base(application, navigationService)
         {
             this.auditLogService = auditLogService;
             this.logger = logger;
@@ -47,13 +46,14 @@ namespace WB.UI.Interviewer
             this.lifetimeScope = lifetimeScope;
             this.workspaceService = workspaceService;
             this.enumeratorSettings = enumeratorSettings;
+            this.deviceSettings = deviceSettings;
         }
 
         protected override Task<object> ApplicationStartup(object hint = null)
         {
             auditLogService.WriteApplicationLevelRecord(new OpenApplicationAuditLogEntity());
 
-            logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
+            logger.Info($"Application started. Version: {this.deviceSettings.GetApplicationVersionName()}");
 
             migrationRunner.MigrateUp("Interviewer", this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 

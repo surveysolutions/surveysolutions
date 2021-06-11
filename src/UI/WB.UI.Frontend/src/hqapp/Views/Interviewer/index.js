@@ -23,7 +23,8 @@ const store = {
                 .done(function( data ) {
                     dispatch('showProgress', true)
                     const interviewId = data.interviewId
-                    const url = `/WebInterview/${interviewId}/Cover`
+                    const workspace = Vue.$config.workspace
+                    const url = `/${workspace}/WebInterview/${interviewId}/Cover
                     window.location = url
                 })
                 .catch(data => {

@@ -55,7 +55,7 @@ export default class AssignmentsComponent {
                                                 else if (isImport)
                                                     next({ name: 'assignments-upload-progress', params: { questionnaireId: response.data.questionnaireIdentity.id } })
                                                 else if (to.params.questionnaireId != response.data.questionnaireIdentity.id && (isVerification || isImport))
-                                                    window.location.href = '/Assignments/Upload/' + response.data.questionnaireIdentity.id
+                                                    window.location.href = '/' + Vue.$config.workspace + '/Assignments/Upload/' + response.data.questionnaireIdentity.id
                                                 else next()
                                             }
                                             else next()
