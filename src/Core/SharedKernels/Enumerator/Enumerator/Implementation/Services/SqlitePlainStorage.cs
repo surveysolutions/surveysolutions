@@ -214,10 +214,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
             var connect = GetConnection();
+
             TResult result = default(TResult);
             using (connect.Lock())
                 connect.RunInTransaction(() => result = function.Invoke(connect.Table<TEntity>()));
-
             return result;
         }
 
