@@ -215,28 +215,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             var connect = GetConnection();
 
-            var actionId =  Guid.NewGuid();
-            this.logger.Info($"connection id {actionId} in {this.GetType().Name} for Type {typeof(TEntity).Name}; Path: {connect.DatabasePath}");
-
             TResult result = default(TResult);
             using (connect.Lock())
                 connect.RunInTransaction(() => result = function.Invoke(connect.Table<TEntity>()));
-            this.logger.Info($"connection lock released id {actionId} ");
             return result;
         }
 
         protected void RunInTransaction(Action<TableQuery<TEntity>> function)
         {
             var connect = GetConnection();
-            var actionId =  Guid.NewGuid();
-            this.logger.Info($"connection id {actionId} in {this.GetType().Name} for Type {typeof(TEntity).Name}; Path: {connect.DatabasePath}");
             using (connect.Lock())
             {
-                this.logger.Info($"connection locked id {actionId} ");
                 connect.RunInTransaction(
                     () => function.Invoke(connect.Table<TEntity>()));
             }
-            this.logger.Info($"connection lock released id {actionId} ");
         }
 
         private IEnumerable<TEntity> ToModifiedCollection(IEnumerable<TEntity> entity)
