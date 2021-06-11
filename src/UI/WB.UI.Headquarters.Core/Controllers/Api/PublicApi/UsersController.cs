@@ -307,7 +307,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 var workspace = await workspaces.GetByIdAsync(workspaceContext.Name);
                 var workspacesUser = new WorkspacesUsers(workspace, createdUser, supervisor);
                 createdUser.Workspaces.Add(workspacesUser);
-                
+                var userRole = Enum.Parse<UserRoles>(model.Role.ToString());
+                createdUser.Roles.Add(new HqRole() { Id = userRole.ToUserId() });
+
                 var creationResult = await this.userManager.CreateAsync(createdUser, model.Password);
 
                 if (creationResult.Succeeded)
