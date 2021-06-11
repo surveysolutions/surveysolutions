@@ -293,6 +293,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     PhoneNumber = model.PhoneNumber,
                     Email = model.Email,
                     NormalizedEmail = model.Email?.Trim().ToUpper(),
+                    PasswordChangeRequired = model.Role != Roles.ApiUser
                 };
 
                 HqUser? supervisor = null;
@@ -307,8 +308,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 var workspace = await workspaces.GetByIdAsync(workspaceContext.Name);
                 var workspacesUser = new WorkspacesUsers(workspace, createdUser, supervisor);
                 createdUser.Workspaces.Add(workspacesUser);
-                var userRole = Enum.Parse<UserRoles>(model.Role.ToString());
-                createdUser.Roles.Add(new HqRole() { Id = userRole.ToUserId() });
 
                 var creationResult = await this.userManager.CreateAsync(createdUser, model.Password);
 

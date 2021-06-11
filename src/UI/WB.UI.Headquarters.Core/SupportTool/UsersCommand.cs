@@ -80,7 +80,8 @@ namespace WB.UI.Headquarters.SupportTool
                     var user = new HqUser
                     {
                         UserName = login,
-                        Email = email
+                        Email = email,
+                        PasswordChangeRequired = !(role is UserRoles.ApiUser or UserRoles.Administrator)
                     };
 
                     HqUser supervisorUser = null;
