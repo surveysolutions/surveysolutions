@@ -110,13 +110,6 @@ namespace WB.UI.Headquarters.SupportTool
                     {
                         await userManager.AddToRoleAsync(user, role.ToString());
                         
-                        bool disableForcePassword = role == UserRoles.Administrator || role == UserRoles.ApiUser;
-                        if (disableForcePassword)
-                        {
-                            user.PasswordChangeRequired = false;
-                            await userManager.UpdateAsync(user);
-                        }
-                        
                         logger.LogInformation("Created user {user} as {role}", login, role);
                     }
                     else

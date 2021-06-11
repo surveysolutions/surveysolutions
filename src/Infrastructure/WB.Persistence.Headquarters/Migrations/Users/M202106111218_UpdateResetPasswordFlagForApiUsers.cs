@@ -3,7 +3,7 @@
 namespace WB.Persistence.Headquarters.Migrations.Users
 {
     [Migration(202106111218)]
-    public class M202106111218_UpdateResetPasswordFlagForApiUsers : Migration
+    public class M202106111218_UpdateResetPasswordFlagForApiUsers : ForwardOnlyMigration
     {
         public override void Up()
         {
@@ -14,11 +14,6 @@ from users.userroles r
 where r.""RoleId"" = '00000000-0000-0000-0000-000000000008' 
     and r.""UserId"" = u.""Id"" 
     and u.password_change_required=true ");
-        }
-
-        public override void Down()
-        {
-            
         }
     }
 }
