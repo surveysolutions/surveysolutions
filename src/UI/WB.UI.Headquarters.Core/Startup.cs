@@ -330,7 +330,7 @@ namespace WB.UI.Headquarters
                     mvc.Filters.AddService<ObservingNotAllowedActionFilter>(300);
                     mvc.Filters.AddService<UpdateRequiredFilter>(400);
 
-                    mvc.Filters.AddService<NoCacheApiFilter>(500);
+                    mvc.Filters.AddService<ExtraHeadersApiFilter>(500);
                     
                     //mvc.Filters.Add(new ResponseCacheAttribute { NoStore = true, Location = ResponseCacheLocation.None });
 
