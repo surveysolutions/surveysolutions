@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             using var workspacesLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
             {
-                cb.RegisterGeneric(typeof(SqlitePlainStorage<>)).As(typeof(IPlainStorage<,>)).SingleInstance();
+                cb.RegisterGeneric(typeof(SqlitePlainStorage<,>)).As(typeof(IPlainStorage<,>)).SingleInstance();
                 cb.RegisterGeneric(typeof(SqlitePlainStorage<>)).As(typeof(IPlainStorage<>)).SingleInstance();
             });
             
@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 using var workspaceLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
                 {
                     cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();
-                    cb.RegisterGeneric(typeof(SqlitePlainStorageWithWorkspace<>)).As(typeof(IPlainStorage<,>)).SingleInstance();
+                    cb.RegisterGeneric(typeof(SqlitePlainStorageWithWorkspace<,>)).As(typeof(IPlainStorage<,>)).SingleInstance();
                     cb.RegisterGeneric(typeof(SqlitePlainStorageWithWorkspace<>)).As(typeof(IPlainStorage<>)).SingleInstance();
 
                     cb.RegisterType<AssignmentDocumentsStorage>().As<IAssignmentDocumentsStorage>().SingleInstance();
