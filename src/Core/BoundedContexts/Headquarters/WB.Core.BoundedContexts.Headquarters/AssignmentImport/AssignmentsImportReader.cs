@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.archiveUtils = archiveUtils;
         }
         
-        private readonly string[] permittedFileExtensions = { TabExportFile.Extention, TextExportFile.Extension };
+        private readonly string[] permittedFileExtensions = { TabExportFile.Extention.ToLower(), TextExportFile.Extension.ToLower() };
 
         private PreloadingRow ToRow(int rowIndex, ExpandoObject record)
         {
@@ -116,8 +116,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             foreach (var file in this.archiveUtils.GetFilesFromArchive(inputStream))
             {
-                var allowedExtension = permittedFileExtensions.Contains(Path.GetExtension(file.Name));
-                var isSystemFile = ServiceFiles.AllSystemFiles.Contains(Path.GetFileNameWithoutExtension(file.Name));
+                var allowedExtension = permittedFileExtensions.Contains(Path.GetExtension(file.Name).ToLower());
+                var isSystemFile = ServiceFiles.AllSystemFiles.Contains(Path.GetFileNameWithoutExtension(file.Name).ToLower());
 
                 if (allowedExtension && !isSystemFile)
                     yield return this.ReadTextFile(new MemoryStream(file.Bytes), file.Name);
@@ -130,8 +130,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             foreach (var file in this.archiveUtils.GetFilesFromArchive(inputStream))
             {
-                var allowedExtension = permittedFileExtensions.Contains(Path.GetExtension(file.Name));
-                var isSystemFile = ServiceFiles.AllSystemFiles.Contains(Path.GetFileNameWithoutExtension(file.Name));
+                var allowedExtension = permittedFileExtensions.Contains(Path.GetExtension(file.Name).ToLower());
+                var isSystemFile = ServiceFiles.AllSystemFiles.Contains(Path.GetFileNameWithoutExtension(file.Name).ToLower());
 
                 if (allowedExtension && !isSystemFile && string.Equals(fileName, file.Name, StringComparison.CurrentCultureIgnoreCase))
                     return this.ReadTextFile(new MemoryStream(file.Bytes), file.Name);
@@ -147,11 +147,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             foreach (var file in this.archiveUtils.GetFilesFromArchive(inputStream))
             {
-                var allowedExtension = permittedFileExtensions.Contains(Path.GetExtension(file.Name));
-                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.Name);
+                var allowedExtension = permittedFileExtensions.Contains(Path.GetExtension(file.Name).ToLower());
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.Name).ToLower();
                 var isSystemFile = ServiceFiles.AllSystemFiles.Contains(fileNameWithoutExtension);
 
-                if (allowedExtension && !isSystemFile && !fileNameWithoutExtension.Equals(ServiceFiles.ProtectedVariables))
+                if (allowedExtension && !isSystemFile && !fileNameWithoutExtension.Equals(ServiceFiles.ProtectedVariables, StringComparison.OrdinalIgnoreCase))
                     yield return this.ReadTextFileInfo(new MemoryStream(file.Bytes), file.Name);
             }
         }
