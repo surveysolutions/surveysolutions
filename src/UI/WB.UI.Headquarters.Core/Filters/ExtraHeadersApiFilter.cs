@@ -12,8 +12,7 @@ namespace WB.UI.Headquarters.Filters
             context.HttpContext.Response.Headers.Add("X-Xss-Protection", "1");
             context.HttpContext.Response.Headers.Add("X-Content-Type-Options", "nosniff");
             context.HttpContext.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
-
-            //context.HttpContext.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");
+            context.HttpContext.Response.Headers.Add("Content-Security-Policy", "font-src 'self' data:; img-src 'self' data:; default-src 'self' 'unsafe-inline' 'unsafe-eval'");
 
             if (context.HttpContext.Request.Path.StartsWithSegments("/api"))
             {
