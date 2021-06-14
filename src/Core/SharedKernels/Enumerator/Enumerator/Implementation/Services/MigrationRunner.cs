@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
@@ -170,7 +171,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 .Where(x => rootMigrationsRepository.Count(y => y.Id == x.Key) == 0)
                 .ToArray();
 
-            var workspaces = workspaceService.GetAll();
+            var workspaces = workspaceService.GetAll().ToList();
+            if (workspaces.All(w => w.Name != "primary"))
+                workspaces.Add(new WorkspaceView() { Id = "primary" });   
+            
             foreach (var workspace in workspaces)
             {
                 var migrationsRepositoryWithPossibleInfo = new SqlitePlainStorageWithWorkspace<Migration, long>(
