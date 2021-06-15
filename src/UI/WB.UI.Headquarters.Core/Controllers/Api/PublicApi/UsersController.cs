@@ -112,6 +112,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     return NotFound();
                 }
             }
+            
+            if (!user.Roles.Contains(UserRoles.Supervisor))
+                return NotFound();
 
             return new UserApiDetails(user);
         }
