@@ -115,6 +115,9 @@ namespace WB.UI.Interviewer
 
         private void CheckAndProcessInterviewsWithoutViews()
         {
+            var settings = lifetimeScope.Resolve<IEnumeratorSettings>();
+            if (settings.DashboardViewsUpdated) return;
+
             var workspaces = workspaceService.GetAll();
             foreach (var workspace in workspaces)
             {
@@ -124,14 +127,11 @@ namespace WB.UI.Interviewer
                     cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();
                 });
 
-                var settings = workspaceLifetimeScope.Resolve<IEnumeratorSettings>();
-                if (settings.DashboardViewsUpdated) return;
-
                 var interviewsAccessor = workspaceLifetimeScope.Resolve<IInterviewerInterviewAccessor>();
                 interviewsAccessor.CheckAndProcessInterviewsToFixViews();
-
-                settings.SetDashboardViewsUpdated(true);
             }
+
+            settings.SetDashboardViewsUpdated(true);
         }
 
         private void UpdateNotificationsWorker()

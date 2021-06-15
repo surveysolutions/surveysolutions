@@ -124,6 +124,7 @@
     <Compile Include="Migrations\Workspaces\M202103101642_MoveSqliteTablesInWorkspaceFolder.cs" />
     <Compile Include="Migrations\Workspaces\M202105191419_SetPrimaryWorkspaceAsDefaultIfNotSet.cs" />
     <Compile Include="Migrations\Workspace\UpdateAssignmentsWithInterviewsCount.cs" />
+    <Compile Include="Migrations\Workspaces\M202106151642_SetFlagToRecoveryInterviews.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="ServiceLocation\InterviewerUIModule.cs" />
     <Compile Include="Services\CheckForExtendedVersionUriProvider.cs" />
