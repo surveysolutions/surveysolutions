@@ -83,6 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             var migrationInfos = scanInAssembly.SelectMany(ass => this.LoadMigrations(ass, migrationNamespaces))
                 .Where(x => this.migrationsRepository.Count(y => y.Id == x.Key) == 0)
+                .OrderBy(x => x.Key)
                 .Select(x => x.Value)
                 .ToArray();
 
