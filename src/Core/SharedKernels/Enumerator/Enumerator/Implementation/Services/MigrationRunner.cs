@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -140,7 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var migrationAttribute = migrationType.GetCustomAttribute<MigrationAttribute>();
 
             return new MigrationInfo(migrationAttribute.Version, migrationAttribute.Description,
-                () => (IMigration) ActivatorUtilities.CreateInstance(this.serviceProvider, migrationType));
+                () => (IMigration) lifetimeScope.Resolve(migrationType));
         }
 
         internal class Migration : IPlainStorageEntity<long>
