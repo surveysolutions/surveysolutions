@@ -30,7 +30,7 @@ namespace WB.UI.Interviewer.Migrations.Workspaces
             if (interviewerIdentity == null)
                 return;
             
-            var workspace = interviewerIdentity.Workspace ?? "primary";
+            var workspace = interviewerIdentity.Workspace;
             
             workspaces.Store(new WorkspaceView()
             {

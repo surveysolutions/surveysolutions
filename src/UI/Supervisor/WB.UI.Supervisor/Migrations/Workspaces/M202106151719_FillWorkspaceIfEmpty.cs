@@ -30,7 +30,7 @@ namespace WB.UI.Supervisor.Migrations.Workspaces
             if (supervisorIdentity == null)
                 return;
             
-            var workspace = supervisorIdentity.Workspace ?? "primary";
+            var workspace = supervisorIdentity.Workspace;
             
             workspaces.Store(new WorkspaceView()
             {
