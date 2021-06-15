@@ -81,12 +81,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             => new UserApiView(this.usersFactory.GetInterviewers(offset, limit, string.Empty, string.Empty, false, null, supervisorId));
 
         /// <summary>
-        /// Gets detailed info about single user
+        /// Gets detailed info about single supervisor
         /// </summary>
         /// <param name="id">User id or user name or user email</param>
         [HttpGet]
         [Route("supervisors/{id:guid}")]
-        [Route("users/{id}")]
         [Produces(MediaTypeNames.Application.Json)]
         public ActionResult<UserApiDetails> Details(string id)
         {
@@ -115,6 +114,39 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             
             if (!user.Roles.Contains(UserRoles.Supervisor))
                 return NotFound();
+
+            return new UserApiDetails(user);
+        }
+        
+        /// <summary>
+        /// Gets detailed info about single user
+        /// </summary>
+        /// <param name="id">User id or user name or user email</param>
+        [HttpGet]
+        [Route("users/{id}")]
+        [Produces(MediaTypeNames.Application.Json)]
+        public ActionResult<UserApiDetails> Details(string id)
+        {
+            var userViewInputModel = new UserViewInputModel();
+            
+            if (Guid.TryParse(id, out Guid userId))
+            {
+                userViewInputModel.PublicKey = userId;
+            }
+            else
+            {
+                userViewInputModel.UserName = id;
+            }
+            
+            var user = this.usersFactory.GetUser(userViewInputModel);
+            if (user == null)
+            {
+                user = this.usersFactory.GetUser(new UserViewInputModel {UserEmail = id});
+                if (user == null)
+                {
+                    return NotFound();
+                }
+            }
 
             return new UserApiDetails(user);
         }
