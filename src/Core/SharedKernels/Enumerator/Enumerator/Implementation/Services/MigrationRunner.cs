@@ -9,6 +9,7 @@ using MvvmCross.Binding.BindingContext;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -69,6 +70,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
                     cb.RegisterType<AssignmentDocumentsStorage>().As<IAssignmentDocumentsStorage>().SingleInstance();
                     cb.RegisterType<CalendarEventStorage>().As<ICalendarEventStorage>().SingleInstance();
+                    cb.RegisterType<EnumeratorDenormalizerRegistry>().As<IDenormalizerRegistry>().SingleInstance();
+                    cb.RegisterType<InterviewDashboardEventHandler>().SingleInstance();
+                    cb.RegisterType<CalendarEventEventHandler>().SingleInstance();
                 });
                 workspaceLifetimeScope.Resolve<MigrationRunner>().Migrate(scanInAssembly,
                     workspace.Name,
