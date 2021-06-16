@@ -72,6 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                     FullName = userToCreate.FullName,
                     Email = userToCreate.Email,
                     PhoneNumber = userToCreate.PhoneNumber,
+                    PasswordChangeRequired = userToCreate.UserRole != UserRoles.ApiUser 
                 };
                 hqUser.Roles.Add(role);
                 
