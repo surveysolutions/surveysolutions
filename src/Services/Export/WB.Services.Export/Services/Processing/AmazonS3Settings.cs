@@ -1,6 +1,4 @@
 ﻿using System;
-using Amazon;
-using Amazon.S3;
 
 namespace WB.Services.Export.Services.Processing
 {
@@ -10,12 +8,7 @@ namespace WB.Services.Export.Services.Processing
         public string Folder { get; set; } = "export";
 
         public string BasePath => $"{Folder}/{Prefix}";
-        public string Prefix { get; set; } = String.Empty;
-    }
-
-    public class AmazonS3Settings
-    {
-        public string? AccessKey { get; set; }
-        public string? SecretKey { get; set; }
+        public string Prefix { get; set; } = "export";
+        public string Uri { get; set; } = string.Empty;
     }
 }

@@ -34,7 +34,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (user == null)
                 return Unauthorized();
             
-            var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userChangePassword.Password, false);
+            var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userChangePassword.Password, true);
             if (signInResult.IsLockedOut)
             {
                 return Unauthorized(new {Message = "User is locked"});

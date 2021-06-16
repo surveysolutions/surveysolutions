@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using Amazon;
+using Amazon.Extensions.NETCore.Setup;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using Microsoft.Extensions.Configuration;
@@ -23,8 +25,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
 
         public static void Setup(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDefaultAWSOptions(configuration.GetAWSOptions());
-            services.AddAWSService<IAmazonS3>();
+            AWSConfigsS3.UseSignatureVersion4 = true;
+            var awsOptions = configuration.GetAWSOptions();
+            services.AddDefaultAWSOptions(awsOptions);
+
+            services.AddTransient<IAmazonS3>(s =>
+            {
+                var client = awsOptions.CreateServiceClient<IAmazonS3>();
+                if(client.Config is AmazonS3Config s3)
+                {
+                    s3.ForcePathStyle = configuration.GetSection("AWS").GetValue("ForcePathStyle", false);
+                }
+                return client;
+            });
         }
 
         public void Load(IIocRegistry registry)

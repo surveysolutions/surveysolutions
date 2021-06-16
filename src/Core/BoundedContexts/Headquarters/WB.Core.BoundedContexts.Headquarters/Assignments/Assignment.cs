@@ -32,7 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             string email,
             string password,
             bool? webMode, 
-            string comments) : this()
+            string comments,
+            int? upgradedFromId = null) : this()
         {
             this.PublicKey = publicKey;
             this.Id = id;
@@ -44,6 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.Password = password;
             this.WebMode = webMode;
             this.Comments = comments;
+            this.UpgradedFromId = upgradedFromId;
         }
 
         public virtual Guid PublicKey { get; set; }
@@ -99,6 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         }
         
         public virtual ISet<AssignmentGps> GpsAnswers { get; protected set; }
+        public virtual int? UpgradedFromId { get; protected set; }
 
         public static List<InterviewAnswer> GetAnswersFromInterview(IStatefulInterview interview, IQuestionnaire questionnaire)
         {

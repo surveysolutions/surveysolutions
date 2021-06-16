@@ -1,15 +1,11 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Workspaces;
-using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
@@ -39,11 +35,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             var result = await base.CreateAsync(user);
             return result;
-        }
-
-        public override Task<bool> CheckPasswordAsync(HqUser user, string password)
-        {
-            return base.CheckPasswordAsync(user, password);
         }
 
         public override async Task<IdentityResult> ResetPasswordAsync(HqUser user, string token, string newPassword)
