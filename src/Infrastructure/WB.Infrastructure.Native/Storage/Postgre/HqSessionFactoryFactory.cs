@@ -66,6 +66,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 db.ConnectionString = workspaceConnectionString;
                 db.Dialect<PostgreSQL91Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.Keywords;
+
+#if DEBUG
+                db.LogSqlInConsole = true;
+                db.LogFormattedSql = true;
+#endif
             });
 
             var maps = this.GetWorkspaceMappings();
