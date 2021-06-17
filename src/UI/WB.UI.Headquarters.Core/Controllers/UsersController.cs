@@ -523,9 +523,9 @@ namespace WB.UI.Headquarters.Controllers
                     Email = model.Email,
                     UserName = model.UserName,
                     PhoneNumber = model.PhoneNumber,
+                    PasswordChangeRequired = role != UserRoles.ApiUser,
                 };
 
-                user.Roles.Add(new HqRole() { Id = role.ToUserId() });
                 user.Workspaces.Add(new WorkspacesUsers(workspace!, user, supervisor));
 
                 var identityResult = await this.userManager.CreateAsync(user, model.Password);

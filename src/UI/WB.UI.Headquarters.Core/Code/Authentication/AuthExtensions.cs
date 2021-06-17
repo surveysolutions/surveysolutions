@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,9 +44,16 @@ namespace WB.UI.Headquarters.Code.Authentication
                 opt.AccessDeniedPath = "/Error/401";
 
                 var expireTimeSpan = configuration.GetValue<TimeSpan>("Authentication:TimeOut");
-                
                 opt.ExpireTimeSpan = expireTimeSpan;
                 opt.Cookie.Path = "/";
+
+                var securityPolicy = configuration.GetValue<Boolean?>("Policies:CookiesSecurePolicyAlways");
+
+                if (securityPolicy.HasValue)
+                    opt.Cookie.SecurePolicy =
+                        securityPolicy.Value ? CookieSecurePolicy.Always : CookieSecurePolicy.None;
+                else
+                    opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 
                 opt.ForwardDefaultSelector = ctx =>
                 {
@@ -73,15 +81,22 @@ namespace WB.UI.Headquarters.Code.Authentication
                 .AddScheme<AuthTokenAuthenticationSchemeOptions, AuthTokenAuthenticationHandler>("AuthToken", _ => { })
                 .AddScheme<AuthenticationSchemeOptions, TenantTokenAuthenticationHandler>(AuthType.TenantToken, _ => { });
 
+            
+            var passwordOptions = configuration.GetSection("PasswordOptions").Get<PasswordOptions>();
+
             services.Configure<IdentityOptions>(options =>
             {
-                    // Default Password settings.
-                    options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 10;
-                options.Password.RequiredUniqueChars = 1;
+                options.Password.RequireDigit = passwordOptions.RequireDigit;
+                options.Password.RequireLowercase = passwordOptions.RequireLowercase;
+                options.Password.RequireNonAlphanumeric = passwordOptions.RequireNonAlphanumeric;
+                options.Password.RequireUppercase = passwordOptions.RequireUppercase;
+                options.Password.RequiredLength = passwordOptions.RequiredLength;
+                options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
+
+                options.Lockout.MaxFailedAccessAttempts =
+                    configuration.GetValue<int>("Authentication:MaxFailedAccessAttemptsBeforeLockout");
+                options.Lockout.DefaultLockoutTimeSpan =
+                    configuration.GetValue<TimeSpan>("Authentication:LockoutDuration");
             });
         }
     }

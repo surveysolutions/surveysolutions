@@ -120,6 +120,7 @@
     <Compile Include="InterviewerApplication.cs" />
     <Compile Include="InterviewerAppStart.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
+    <Compile Include="Migrations\Workspaces\M202106151719_FillWorkspaceIfEmpty.cs" />
     <Compile Include="Migrations\Workspace\AddTitleToOptionViewForSearching.cs" />
     <Compile Include="Migrations\Workspaces\M202103101642_MoveSqliteTablesInWorkspaceFolder.cs" />
     <Compile Include="Migrations\Workspaces\M202105191419_SetPrimaryWorkspaceAsDefaultIfNotSet.cs" />

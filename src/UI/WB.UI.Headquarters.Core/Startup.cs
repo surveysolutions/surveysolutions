@@ -281,6 +281,16 @@ namespace WB.UI.Headquarters
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
 
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                var securityPolicy = Configuration.GetValue<Boolean?>("Policies:CookiesSecurePolicyAlways");
+                
+                if (securityPolicy.HasValue)
+                    options.Secure = securityPolicy.Value ? CookieSecurePolicy.Always : CookieSecurePolicy.None;
+                else
+                    options.Secure = CookieSecurePolicy.SameAsRequest;
+            });
+
             services.AddRazorPages();
 
             services.AddHqAuthorization(Configuration);
@@ -363,19 +373,6 @@ namespace WB.UI.Headquarters
 #endif
             services.AddQuartzIntegration(Configuration,
                 DbUpgradeSettings.FromFirstMigration<M201905151013_AddQuartzTables>());
-
-            var passwordOptions = Configuration.GetSection("PasswordOptions").Get<PasswordOptions>();
-
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Default Password settings.
-                options.Password.RequireDigit = passwordOptions.RequireDigit;
-                options.Password.RequireLowercase = passwordOptions.RequireLowercase;
-                options.Password.RequireNonAlphanumeric = passwordOptions.RequireNonAlphanumeric;
-                options.Password.RequireUppercase = passwordOptions.RequireUppercase;
-                options.Password.RequiredLength = passwordOptions.RequiredLength;
-                options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
-            });
 
             services.AddMediatR(typeof(Startup), typeof(HeadquartersBoundedContextModule));
         }
@@ -469,6 +466,8 @@ namespace WB.UI.Headquarters
             app.UseMetrics(Configuration);
             app.UseRouting();
             app.UseCors();
+
+            app.UseCookiePolicy();
             app.UseAuthentication();
 
             app.UseResetPasswordRedirect();

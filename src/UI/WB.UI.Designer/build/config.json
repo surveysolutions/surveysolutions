@@ -94,7 +94,6 @@
       "questionnaire/external/jquery.validate.unobtrusive.bootstrap.js",
       "node_modules/jquery-validation/dist/jquery.validate.js",
       "questionnaire/scripts/modules/perfect_scrollbar.js",
-      "node_modules/angular-pnotify/src/angular-pnotify.js",
       "node_modules/angular-moment/angular-moment.js",
       "node_modules/xss/dist/xss.js",
       "node_modules/i18next/i18next.min.js",

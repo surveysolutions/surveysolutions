@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.FileSystem;
@@ -88,6 +89,9 @@ namespace WB.UI.Interviewer.Migrations.Workspaces
                     continue;
 
                 var newFilePath = fileSystemAccessor.CombinePath(workspaceDataFolder, fileName);
+                if(fileSystemAccessor.IsFileExists(newFilePath))
+                    throw new InvalidOperationException($"Target file already exists. Entity: {entityTypeName}");
+
                 fileSystemAccessor.MoveFile(file, newFilePath);
             }
 

@@ -82,7 +82,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             if (user == null)
                 return Unauthorized();
 
-            var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, false);
+            var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, true);
             if (signInResult.IsLockedOut)
             {
                 return Unauthorized(new {Message = "User is locked"});
