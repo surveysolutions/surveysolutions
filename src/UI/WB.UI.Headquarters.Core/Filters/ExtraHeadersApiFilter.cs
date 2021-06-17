@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.Filters
                 AddOrUpdateHeader(context,"X-Xss-Protection", "1");
                 AddOrUpdateHeader(context,"X-Content-Type-Options", "nosniff");                
                 AddOrUpdateHeader(context,"X-Frame-Options", "SAMEORIGIN");
-                AddOrUpdateHeader(context,"Content-Security-Policy", "font-src 'self' data:; img-src 'self' data:; default-src 'self' 'unsafe-inline' 'unsafe-eval'");
+                AddOrUpdateHeader(context,"Content-Security-Policy", "font-src 'self' data:; img-src 'self' data:; default-src * data: 'self' 'unsafe-inline' 'unsafe-eval' blob:");
             }
         }
 
