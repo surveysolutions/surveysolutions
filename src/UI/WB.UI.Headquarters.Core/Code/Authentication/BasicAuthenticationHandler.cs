@@ -16,6 +16,7 @@ namespace WB.UI.Headquarters.Code.Authentication
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<BasicAuthenticationSchemeOptions>
     {
+        private const string FailureMessage = "User and password were not found";
         private readonly SignInManager<HqUser> signInManager;
         private readonly IUserClaimsPrincipalFactory<HqUser> claimFactory;
         private readonly IInScopeExecutor executor;
@@ -54,7 +55,8 @@ namespace WB.UI.Headquarters.Code.Authentication
             {
                 var userManager = sl.GetInstance<UserManager<HqUser>>();;
                 var user = await userManager.FindByNameAsync(creds.Username);
-                if (user == null) return AuthenticateResult.Fail("No user found");
+                if (user == null) 
+                    return AuthenticateResult.Fail(FailureMessage);
 
                 if (user.IsArchivedOrLocked)
                 {
@@ -63,9 +65,9 @@ namespace WB.UI.Headquarters.Code.Authentication
                 }
 
                 SignInResult passwordIsValid = await signInManager.CheckPasswordSignInAsync(user, creds.Password, true);
-                if (passwordIsValid.Succeeded)
+                if (!passwordIsValid.Succeeded)
                 {
-                    return AuthenticateResult.Fail("Invalid password");
+                    return AuthenticateResult.Fail(FailureMessage);
                 }
 
                 var principal = await this.claimFactory.CreateAsync(user);
