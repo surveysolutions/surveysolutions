@@ -111,7 +111,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.WebMode,
                 command.Answers.ToArray(),
                 command.ProtectedVariables.ToArray(),
-                command.Comment));
+                command.Comment,
+                command.UpgradedFromId));
         }
 
         public void DeleteAssignment(DeleteAssignment command)

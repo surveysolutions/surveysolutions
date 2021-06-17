@@ -123,7 +123,7 @@ namespace WB.UI.Headquarters.Controllers
                 return View(model);
             }
 
-            var signInResult = await this.signInManager.PasswordSignInAsync(model.UserName, model.Password, true, false);
+            var signInResult = await this.signInManager.PasswordSignInAsync(model.UserName, model.Password, true, true);
             if (signInResult.Succeeded)
             {
                 this.captchaService.ResetFailedLogin(model.UserName);

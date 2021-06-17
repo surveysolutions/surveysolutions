@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((HqUserLogin) obj);
+            return Equals((HqUserLogin)obj);
         }
 
         public override int GetHashCode()
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual string FullName { get; set; }
 
         public virtual bool IsArchived { get; set; }
-        public virtual bool IsLockedBySupervisor{get; set; }
+        public virtual bool IsLockedBySupervisor { get; set; }
         public virtual bool IsLockedByHeadquaters { get; set; }
 
         public virtual bool IsLocked => IsLockedByHeadquaters || IsLockedBySupervisor;
@@ -91,6 +91,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             return this.Roles.Any(r => r.Id.ToUserRole() == role);
         }
 
+        public override DateTimeOffset? LockoutEnd
+        {
+            get
+            {
+                if (LockoutEndDateUtc != null)
+                {
+                    var utcDate = DateTime.SpecifyKind(LockoutEndDateUtc.Value, DateTimeKind.Utc);
+                    return utcDate;
+
+                }
+
+                return null;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    LockoutEndDateUtc = null;
+                }
+                else
+                {
+                    LockoutEndDateUtc = value.Value.UtcDateTime;
+                }
+            }
+        }
+
         /// <summary>
         ///     DateTime in UTC when lockout ends, any time in the past is considered not locked out.
         /// </summary>
@@ -103,9 +129,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual ICollection<HqUserLogin> Logins { get; set; }
 
         public virtual ICollection<DeviceSyncInfo> DeviceSyncInfos { get; set; }
-        
+
         public virtual ISet<WorkspacesUsers> Workspaces { get; protected set; }
-        
+
         public virtual bool PasswordChangeRequired { get; set; }
 
         public virtual UserRoles Role => this.Roles.First().Id.ToUserRole();

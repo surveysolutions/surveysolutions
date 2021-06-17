@@ -81,15 +81,22 @@ namespace WB.UI.Headquarters.Code.Authentication
                 .AddScheme<AuthTokenAuthenticationSchemeOptions, AuthTokenAuthenticationHandler>("AuthToken", _ => { })
                 .AddScheme<AuthenticationSchemeOptions, TenantTokenAuthenticationHandler>(AuthType.TenantToken, _ => { });
 
+            
+            var passwordOptions = configuration.GetSection("PasswordOptions").Get<PasswordOptions>();
+
             services.Configure<IdentityOptions>(options =>
             {
-                    // Default Password settings.
-                    options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 10;
-                options.Password.RequiredUniqueChars = 1;
+                options.Password.RequireDigit = passwordOptions.RequireDigit;
+                options.Password.RequireLowercase = passwordOptions.RequireLowercase;
+                options.Password.RequireNonAlphanumeric = passwordOptions.RequireNonAlphanumeric;
+                options.Password.RequireUppercase = passwordOptions.RequireUppercase;
+                options.Password.RequiredLength = passwordOptions.RequiredLength;
+                options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
+
+                options.Lockout.MaxFailedAccessAttempts =
+                    configuration.GetValue<int>("Authentication:MaxFailedAccessAttemptsBeforeLockout");
+                options.Lockout.DefaultLockoutTimeSpan =
+                    configuration.GetValue<TimeSpan>("Authentication:LockoutDuration");
             });
         }
     }

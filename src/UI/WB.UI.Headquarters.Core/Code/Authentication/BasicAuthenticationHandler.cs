@@ -16,6 +16,8 @@ namespace WB.UI.Headquarters.Code.Authentication
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<BasicAuthenticationSchemeOptions>
     {
+        private const string FailureMessage = "User and password were not found";
+        private readonly SignInManager<HqUser> signInManager;
         private readonly IUserClaimsPrincipalFactory<HqUser> claimFactory;
         private readonly IInScopeExecutor executor;
         private bool isUserLocked;
@@ -25,9 +27,11 @@ namespace WB.UI.Headquarters.Code.Authentication
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
+            SignInManager<HqUser> signInManager,
             IUserClaimsPrincipalFactory<HqUser> claimFactory,
             IInScopeExecutor executor) : base(options, logger, encoder, clock)
         {
+            this.signInManager = signInManager;
             this.claimFactory = claimFactory;
             this.executor = executor;
         }
@@ -51,7 +55,8 @@ namespace WB.UI.Headquarters.Code.Authentication
             {
                 var userManager = sl.GetInstance<UserManager<HqUser>>();;
                 var user = await userManager.FindByNameAsync(creds.Username);
-                if (user == null) return AuthenticateResult.Fail("No user found");
+                if (user == null) 
+                    return AuthenticateResult.Fail(FailureMessage);
 
                 if (user.IsArchivedOrLocked)
                 {
@@ -59,8 +64,11 @@ namespace WB.UI.Headquarters.Code.Authentication
                     return AuthenticateResult.Fail("User is locked");
                 }
 
-                var passwordIsValid = await userManager.CheckPasswordAsync(user, creds.Password);
-                if (!passwordIsValid) return AuthenticateResult.Fail("Invalid password");
+                SignInResult passwordIsValid = await signInManager.CheckPasswordSignInAsync(user, creds.Password, true);
+                if (!passwordIsValid.Succeeded)
+                {
+                    return AuthenticateResult.Fail(FailureMessage);
+                }
 
                 var principal = await this.claimFactory.CreateAsync(user);
                 var ticket = new AuthenticationTicket(principal, Scheme.Name);
