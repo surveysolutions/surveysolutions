@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var assignmentToImports = ConcatRosters(assignmentRows, questionnaire);
 
             if (assignmentToImports.Count == 0)
-                yield return new PanelImportVerificationError(@"PL0000", PreloadingVerificationMessages.PL0024_DataWasNotFound);
+                yield return new PanelImportVerificationError(@"PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound);
             else
                 this.Save(file.FileInfo.FileName, questionnaireIdentity, defaultResponsibleId, assignmentToImports);
         }
@@ -141,7 +141,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var assignmentsToImport = FixRosterSizeAnswers(answersByAssignments, questionnaire).ToList();
 
             if (assignmentsToImport.Count == 0)
-                yield return new PanelImportVerificationError(@"PL0000", PreloadingVerificationMessages.PL0024_DataWasNotFound);
+                yield return new PanelImportVerificationError(@"PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound);
             else
                 this.Save(originalFileName, questionnaireIdentity, defaultResponsibleId, assignmentsToImport);
         }

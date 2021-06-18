@@ -12,7 +12,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         public static readonly string InterviewDiagnostics = "interview__diagnostics";
         public static readonly string ProtectedVariables = "protected__variables";
 
-        public static readonly string[] AllSystemFiles = {Readme, InterviewActions, InterviewComments, InterviewDiagnostics, InterviewErrors};
+        public static readonly string[] AllSystemFiles = {Readme.ToLower(), InterviewActions.ToLower(), InterviewComments.ToLower(), InterviewDiagnostics.ToLower(), InterviewErrors.ToLower()};
     }
 
     public static class ServiceColumns
