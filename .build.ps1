@@ -11,7 +11,7 @@ param(
     [string] $Tasks,    
     [string] $buildNumber = '42',
     [string] $androidKeyStore = $ENV:ANDROID_KEY_STORE,
-    [string] $KeystorePassword = $ENV:ANDROID_SIGNING_KEY_PASS ,
+    [string] $KeystorePassword = $ENV:ANDROID_SIGNING_KEY_PASS,
     [string] $KeystoreAlias = $ENV:ANDROID_KEY_ALIAS,
     [string] $GoogleMapKey = $NULL,
     [string] $ArcGisKey = $NULL,
@@ -86,7 +86,7 @@ function Set-AndroidXmlResourceValue {
         [string] $keyValue
     )    
 
-    $filePath = "$([System.IO.Path]::GetDirectoryName($project))/Resources/values/settings.xml"
+    $filePath = "$([System.IO.Path]::GetDirectoryName((Resolve-Path $project)))/Resources/values/settings.xml"
     "Updating app resource key in $filePath" | Out-Host
 
     $doc = [System.Xml.Linq.XDocument]::Load($filePath);
@@ -146,7 +146,7 @@ function Build-Docker($dockerfile, $tags, $arguments = @()) {
         "."
     )
 
-    $params | Join-String -Separator ', ' | Out-Host
+    $params -join ', ' | Out-Host
     exec { docker $params }
 }
 
@@ -198,7 +198,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
         }
     )
     
-    $params | Join-String -Separator ', ' | Out-Host
+    $params -join ', ' | Out-Host
     exec { msbuild $params }
 }
 
@@ -281,17 +281,32 @@ task PackageDesigner {
 }
 
 task AndroidInterviewerWithMaps {
-    $appCenterKey = $isRelease ? $ENV:APP_CENTER_INTERVIEWER_PROD : $ENV:APP_CENTER_INTERVIEWER_DEV
+    if ($isRelease) {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_PROD
+    }
+    else {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_DEV
+    }
     Invoke-Android "./src/UI/Interviewer/WB.UI.Interviewer/WB.UI.Interviewer.csproj" "WBCapi.Ext.apk" $true $appCenterKey
 }
 
 task AndroidInterviewer {
-    $appCenterKey = $isRelease ? $ENV:APP_CENTER_INTERVIEWER_PROD : $ENV:APP_CENTER_INTERVIEWER_DEV
+    if ($isRelease) {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_PROD
+    }
+    else {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_DEV
+    }
     Invoke-Android "./src/UI/Interviewer/WB.UI.Interviewer/WB.UI.Interviewer.csproj" "WBCapi.apk" $false $appCenterKey
 }
 
 task AndroidSupervisor {
-    $appCenterKey = $isRelease ? $ENV:APP_CENTER_SUPERVISOR_PROD : $ENV:APP_CENTER_SUPERVISOR_DEV
+    if ($isRelease) {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_PROD
+    }
+    else {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_DEV
+    }
     Invoke-Android "./src/UI/Supervisor/WB.UI.Supervisor/WB.UI.Supervisor.csproj" "Supervisor.apk" $true $appCenterKey
 }
 
