@@ -59,24 +59,28 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.CreateNew)]
+        [AntiForgeryFilter]
         public IActionResult CreateNew()
         {
             return View("Index", NewModel(MenuItem.CreateNew));
         }
 
         [ActivePage(MenuItem.Started)]
+        [AntiForgeryFilter]
         public IActionResult Started()
         {
             return View("Interviews", NewModel(MenuItem.Started, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted));
         }
 
         [ActivePage(MenuItem.Rejected)]
+        [AntiForgeryFilter]
         public IActionResult Rejected()
         {
             return View("Interviews", NewModel(MenuItem.Rejected, InterviewStatus.RejectedBySupervisor));
         }
 
         [ActivePage(MenuItem.Completed)]
+        [AntiForgeryFilter]
         public IActionResult Completed()
         {
             return View("Interviews", NewModel(MenuItem.Completed, InterviewStatus.Completed));
