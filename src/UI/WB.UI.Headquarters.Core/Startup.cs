@@ -91,6 +91,18 @@ namespace WB.UI.Headquarters
         {
             this.environment = environment;
             Configuration = configuration;
+            AppDomain.CurrentDomain.AssemblyResolve += ResolveDataCollectionFix;
+        }
+        
+        private static Assembly ResolveDataCollectionFix(object sender, ResolveEventArgs args)
+        {
+            if (args.Name.StartsWith("WB.Core.SharedKernels.DataCollection.Portable, Version="))
+            {
+                var assembly = Assembly.GetAssembly(typeof(Identity));
+                return assembly;
+            }
+
+            return null;
         }
 
         public IConfiguration Configuration { get; }

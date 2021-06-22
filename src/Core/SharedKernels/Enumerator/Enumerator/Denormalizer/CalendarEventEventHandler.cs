@@ -21,14 +21,17 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<CalendarEventDeleted>,
                                          IEventHandler<CalendarEventRestored>
     {
-        private readonly IServiceLocator serviceLocator;
-        private ICalendarEventStorage calendarEventStorage => serviceLocator.GetInstance<ICalendarEventStorage>();
-        private IPlainStorage<InterviewView> interviewViewRepository => serviceLocator.GetInstance<IPlainStorage<InterviewView>>();
-        private IAssignmentDocumentsStorage assignmentStorage => serviceLocator.GetInstance<IAssignmentDocumentsStorage>();
+        private readonly ICalendarEventStorage calendarEventStorage;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IAssignmentDocumentsStorage assignmentStorage;
 
-        public CalendarEventEventHandler(IServiceLocator serviceLocator)
+        public CalendarEventEventHandler(ICalendarEventStorage calendarEventStorage,
+            IPlainStorage<InterviewView> interviewViewRepository,
+            IAssignmentDocumentsStorage assignmentStorage)
         {
-            this.serviceLocator = serviceLocator;
+            this.calendarEventStorage = calendarEventStorage;
+            this.interviewViewRepository = interviewViewRepository;
+            this.assignmentStorage = assignmentStorage;
         }
 
         public void Handle(IPublishedEvent<CalendarEventCreated> evnt)

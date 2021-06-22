@@ -340,8 +340,9 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public List<Guid> GetListOfAllItemsIds()
         {
             var pathToInterviewsDirectory = fileSystemAccessor.CombinePath(
-                this.settings.PathToDatabaseDirectory,
+                this.settings.PathToRootDirectory,
                 workspaceAccessor.GetCurrentWorkspaceName(),
+                this.settings.DataDirectoryName, 
                 this.settings.InterviewsDirectoryName);
             if (!Directory.Exists(pathToInterviewsDirectory))
                 return new List<Guid>();

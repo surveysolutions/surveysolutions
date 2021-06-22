@@ -16,10 +16,11 @@
         {
             return new int[]
             {
+                29676,  //20.05.6 KP-14824 bug with connections on tablets
                 26963,  //20.01.3 //options translations issue : KP-13585
                 26948,  //20.01.2 //options translations issue : KP-13585
                 26886,  //20.01.1 //options translations issue : KP-13585
-                26876   //20.01 //options translations issue : KP-13585
+                26876   //20.01   //options translations issue : KP-13585
             };
         }
     }
@@ -36,7 +37,10 @@
         public int GetLastNonUpdatableVersion() => 999;
         public int[] GetBlackListedBuildNumbers()
         {
-            return new int[0];
+            return new int[]
+            {
+                29676,  // 20.05.6 KP-14824 bug with connections on tablets
+            };
         }
     }
 }

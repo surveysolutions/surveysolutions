@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     public class SqlitePlainStorageWithWorkspace<TEntity, TKey> : SqlitePlainStorage<TEntity, TKey>
         where TEntity : class, IPlainStorageEntity<TKey>, new()
     {
-        private readonly IWorkspaceAccessor workspaceAccessor;
+        protected readonly IWorkspaceAccessor workspaceAccessor;
 
         public SqlitePlainStorageWithWorkspace(ILogger logger,
             IFileSystemAccessor fileSystemAccessor,
