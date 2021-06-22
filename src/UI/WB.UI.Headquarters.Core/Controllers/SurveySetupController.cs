@@ -87,6 +87,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.Questionnaires)]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [ActionName("UpgradeAssignments")]
         public async Task<IActionResult> UpgradeAssignmentsPost(Guid id, long version, CancellationToken token = default)
         {

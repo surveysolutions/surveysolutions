@@ -46,7 +46,6 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
 
             if (this.fileStorage.IsEnabled())
             {
-                
                 var filePath = this.imageFileStorage.GetPath(file.InterviewId, file.FileName);
                 var link = this.fileStorage.GetDirectLink(filePath, TimeSpan.FromMinutes(10));
                 return this.Redirect(link);

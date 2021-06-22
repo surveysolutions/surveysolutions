@@ -62,6 +62,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpPost]
         [Route("entity/addComment")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> PostComment(QuestionnaireRevision id, [FromBody]AddCommentModel commentModel)
         {
             if (!ModelState.IsValid)
@@ -99,6 +100,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpPatch]
         [Route("comment/resolve/{commentId:Guid}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResolveComment(Guid id, Guid commentId)
         {
 
@@ -108,6 +110,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpDelete]
+        [ValidateAntiForgeryToken]
         [Route("comment/{commentId:Guid}")]
         public async Task<IActionResult> DeleteComment(Guid id, Guid commentId)
         {
