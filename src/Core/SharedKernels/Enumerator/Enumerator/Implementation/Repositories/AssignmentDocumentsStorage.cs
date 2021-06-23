@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     public class AssignmentDocumentsStorage :
-        SqlitePlainStorageWithWorkspace<AssignmentDocument, int>,
+        SqlitePlainStorageAutoWorkspaceResolve<AssignmentDocument, int>,
         IAssignmentDocumentsStorage
     {
         // sql support max 999 parameters in query
@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         public override void Store(AssignmentDocument entity)
         {
             entity.LastUpdated = DateTime.Now;
-            RunInTransaction(table => StoreImplementation(table, entity));
+            this.Store(new[]{entity});
         }
 
         public override void Store(IEnumerable<AssignmentDocument> entities)
@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             }
             catch (SQLiteException ex)
             {
-                this.logger.Fatal($"Failed to persist {entities.Count()} entities as batch", ex);
+                this.logger.Fatal($"Failed to persist {entities.Count()} assignments as batch", ex);
                 throw;
             }
         }

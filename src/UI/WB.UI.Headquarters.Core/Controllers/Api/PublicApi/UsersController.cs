@@ -85,7 +85,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <param name="id">User id or user name or user email</param>
         [HttpGet]
-        [Route("supervisors/{id:guid}")]
+        [Route("supervisors/{id}")]
         [Route("users/{id}")]
         [Produces(MediaTypeNames.Application.Json)]
         public ActionResult<UserApiDetails> Details(string id)

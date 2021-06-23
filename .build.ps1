@@ -32,6 +32,11 @@ if ($MyInvocation.ScriptName -notlike '*Invoke-Build.ps1') {
     If (-not(Get-InstalledModule InvokeBuild -ErrorAction silentlycontinue)) {
         Install-Module InvokeBuild -Force
     }
+
+    If (-not(Get-InstalledModule VsSetup -ErrorAction silentlycontinue)) {
+        Install-Module VsSetup -Force
+    }
+
     & "Invoke-Build" $Tasks $MyInvocation.MyCommand.Path @PSBoundParameters
     return
 }
@@ -66,8 +71,14 @@ New-Item -Type Directory $output -ErrorAction SilentlyContinue | Out-Null
 $output = Resolve-Path $output
 
 Enter-Build {
-    Write-Build 10 $version 
-    Write-Build 10 $infoVersion
+    Write-Build 10 "Version: $version"
+    Write-Build 10 "InfoVersion: $infoVersion"
+    
+    try {
+        Write-Build 10 "MsBuild: $(Resolve-MSBuild)"
+    } catch {
+
+    }
 }
 
 function Compress($folder, $dest) {
@@ -342,10 +353,10 @@ task Docker DockerHq, DockerDesigner, DockerWebTester
 
 task . {
     Set-Location $BuildRoot/src/UI/WB.UI.Designer
-    npm i
+    npm ci
     npm run dev
 
     Set-Location $BuildRoot/src/UI/WB.UI.Frontend
-    npm i
+    npm ci
     npm run dev
 }

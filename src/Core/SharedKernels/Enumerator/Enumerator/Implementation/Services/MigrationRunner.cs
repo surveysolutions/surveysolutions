@@ -6,10 +6,17 @@ using System.Reflection;
 using Autofac;
 using Microsoft.Extensions.DependencyInjection;
 using MvvmCross.Binding.BindingContext;
+using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
+using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
@@ -34,10 +41,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public void MigrateUp(string appName, Assembly[] scanInAssembly)
         {
+            FixMigrationRecords(scanInAssembly, appName);
+                
             using var workspacesLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
             {
-                cb.RegisterGeneric(typeof(SqlitePlainStorage<>)).As(typeof(IPlainStorage<,>));
-                cb.RegisterGeneric(typeof(SqlitePlainStorage<>)).As(typeof(IPlainStorage<>));
+                cb.RegisterGeneric(typeof(SqlitePlainStorage<,>)).As(typeof(IPlainStorage<,>)).SingleInstance();
+                cb.RegisterGeneric(typeof(SqlitePlainStorage<>)).As(typeof(IPlainStorage<>)).SingleInstance();
             });
             
             workspacesLifetimeScope.Resolve<MigrationRunner>().Migrate(scanInAssembly, 
@@ -56,6 +65,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 using var workspaceLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
                 {
                     cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();
+                    cb.RegisterGeneric(typeof(SqlitePlainStorageWithWorkspace<,>)).As(typeof(IPlainStorage<,>)).SingleInstance();
+                    cb.RegisterGeneric(typeof(SqlitePlainStorageWithWorkspace<>)).As(typeof(IPlainStorage<>)).SingleInstance();
+
+                    cb.RegisterType<AssignmentDocumentsStorage>().As<IAssignmentDocumentsStorage>().SingleInstance();
+                    cb.RegisterType<CalendarEventStorage>().As<ICalendarEventStorage>().SingleInstance();
+                    cb.RegisterType<EnumeratorDenormalizerRegistry>().As<IDenormalizerRegistry>().SingleInstance();
+                    cb.RegisterType<InterviewDashboardEventHandler>().SingleInstance();
+                    cb.RegisterType<CalendarEventEventHandler>().SingleInstance();
                 });
                 workspaceLifetimeScope.Resolve<MigrationRunner>().Migrate(scanInAssembly,
                     workspace.Name,
@@ -71,6 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             var migrationInfos = scanInAssembly.SelectMany(ass => this.LoadMigrations(ass, migrationNamespaces))
                 .Where(x => this.migrationsRepository.Count(y => y.Id == x.Key) == 0)
+                .OrderBy(x => x.Key)
                 .Select(x => x.Value)
                 .ToArray();
 
@@ -127,13 +145,67 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var migrationAttribute = migrationType.GetCustomAttribute<MigrationAttribute>();
 
             return new MigrationInfo(migrationAttribute.Version, migrationAttribute.Description,
-                () => (IMigration) ActivatorUtilities.CreateInstance(this.serviceProvider, migrationType));
+                () => (IMigration) lifetimeScope.Resolve(migrationType));
         }
 
         internal class Migration : IPlainStorageEntity<long>
         {
+            [PrimaryKey]
             public long Id { get; set; }
             public string Description { get; set; }
+        }
+        
+        public void FixMigrationRecords(Assembly[] scanInAssembly, string appName)
+        {
+            // fix bug in 21.05.6 when migration records were stored in incorrect place
+            var rootMigrationsRepository = new SqlitePlainStorage<Migration, long>(
+                lifetimeScope.Resolve<ILogger>(),
+                lifetimeScope.Resolve<IFileSystemAccessor>(),
+                lifetimeScope.Resolve<SqliteSettings>());
+
+            const long fixMigrationId = 202106141328;
+            
+            if (rootMigrationsRepository.Count(m => m.Id == fixMigrationId) == 1)
+                return;
+            
+            var nonExecutedRootMigrationInfos = scanInAssembly
+                .SelectMany(ass => this.LoadMigrations(ass, new HashSet<string>()
+                {
+                    "WB.UI.Shared.Enumerator.Migrations.Workspaces",
+                    $"WB.UI.{appName}.Migrations.Workspaces",
+                }))
+                .Where(x => rootMigrationsRepository.Count(y => y.Id == x.Key) == 0)
+                .ToArray();
+
+            var workspaces = workspaceService.GetAll().ToList();
+            if (workspaces.All(w => w.Name != "primary"))
+                workspaces.Add(new WorkspaceView() { Id = "primary" });   
+            
+            foreach (var workspace in workspaces)
+            {
+                var migrationsRepositoryWithPossibleInfo = new SqlitePlainStorageWithWorkspace<Migration, long>(
+                    lifetimeScope.Resolve<ILogger>(),
+                    lifetimeScope.Resolve<IFileSystemAccessor>(),
+                    lifetimeScope.Resolve<SqliteSettings>(),
+                    workspaceAccessor: new SingleWorkspaceAccessor(workspace.Name));
+
+                foreach (var migrationInfo in nonExecutedRootMigrationInfos)
+                {
+                    var migration = migrationsRepositoryWithPossibleInfo.Where(y => y.Id == migrationInfo.Key);
+                    if (migration.Count > 0)
+                    {
+                        rootMigrationsRepository.Store(migration);
+                        migrationsRepositoryWithPossibleInfo.Remove(migration);
+                    }
+                }
+            }
+
+            Migration fixMigrationInfo = new Migration()
+            {
+                Id = fixMigrationId, 
+                Description = "Move migration info from inside workspace db"
+            };
+            rootMigrationsRepository.Store(fixMigrationInfo);
         }
     }
 }

@@ -2,7 +2,7 @@
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.UI.Interviewer.Migrations.Workspaces
+namespace WB.UI.Interviewer.Migrations.Workspace
 {
     [Migration(201904081208)]
     public class AddTitleToOptionViewForSearching : IMigration
