@@ -3,6 +3,7 @@ ARG VERSION=21.01
 ARG INFO_VERSION=21.01
 ARG NODE=14
 ARG APK_FILES=build
+ARG FONTS="NotoSans-hinted.zip;NotoSansMyanmar-hinted.zip"
 
 # Building WB.UI.Frontend application
 FROM --platform=amd64 node:$NODE as frontend
@@ -140,11 +141,20 @@ COPY --from=frontend /src/UI/WB.UI.Frontend/dist/package/hq src/UI/WB.UI.Headqua
 RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
-
 # Copy APK files if any
 FROM --platform=amd64 mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION} as apks
 ARG APK_FILES
 COPY ${APK_FILES}/*.apk /apk/
+
+# include noto font into image
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} as fonts
+RUN apt-get update && apt-get install unzip -y --no-install-recommends
+
+ARG FONTS
+ENV FONTS_LIST=$FONTS
+RUN [ "/bin/bash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
+    do wget -P /raw_fonts https://noto-website-2.storage.googleapis.com/pkgs/$FONT \
+    && cd /raw_fonts && unzip -o $FONT ; done"]
 
 # Building runtime 
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}
@@ -158,6 +168,8 @@ RUN apt-get update \
     libgdiplus \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+COPY --from=fonts /raw_fonts /usr/share/fonts
 
 LABEL org.opencontainers.image.title="Headquaters All in One"
 LABEL org.opencontainers.image.description="Survey Solutions Headquarters with Export Service"

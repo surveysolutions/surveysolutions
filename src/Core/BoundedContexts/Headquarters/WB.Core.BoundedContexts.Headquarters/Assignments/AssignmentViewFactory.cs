@@ -207,7 +207,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         historyItem.AdditionalData = new
                         {
                             c.Comment,
-                            Responsible = responsible
+                            Responsible = responsible,
+                            UpgradedFromId = c.UpgradedFromId
                         };
                         break;
                     case AssignmentArchived _:

@@ -111,6 +111,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             {
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
             }
+            
+            if (clientApkBuildNumber != null && this.syncVersionProvider.GetBlackListedBuildNumbers().Contains(clientApkBuildNumber.Value))
+            {
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }
 
             if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)
             {
