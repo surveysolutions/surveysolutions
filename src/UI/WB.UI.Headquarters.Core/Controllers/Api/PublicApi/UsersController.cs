@@ -87,7 +87,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpGet]
         [Route("supervisors/{id}")]
         [Produces(MediaTypeNames.Application.Json)]
-        public ActionResult<UserApiDetails> Details(string id)
+        public ActionResult<UserApiDetails> SupervisorDetails(string id)
         {
             var userViewInputModel = new UserViewInputModel();
             
