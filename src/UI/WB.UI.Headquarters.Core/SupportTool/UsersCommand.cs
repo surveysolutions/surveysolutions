@@ -80,7 +80,8 @@ namespace WB.UI.Headquarters.SupportTool
                     var user = new HqUser
                     {
                         UserName = login,
-                        Email = email
+                        Email = email,
+                        PasswordChangeRequired = !(role is UserRoles.ApiUser or UserRoles.Administrator)
                     };
 
                     HqUser supervisorUser = null;
@@ -108,13 +109,6 @@ namespace WB.UI.Headquarters.SupportTool
                     if (creationResult.Succeeded)
                     {
                         await userManager.AddToRoleAsync(user, role.ToString());
-                        
-                        bool disableForcePassword = role == UserRoles.Administrator || role == UserRoles.ApiUser;
-                        if (disableForcePassword)
-                        {
-                            user.PasswordChangeRequired = false;
-                            await userManager.UpdateAsync(user);
-                        }
                         
                         logger.LogInformation("Created user {user} as {role}", login, role);
                     }

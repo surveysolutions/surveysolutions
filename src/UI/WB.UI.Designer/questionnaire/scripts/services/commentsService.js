@@ -20,7 +20,7 @@
                 method: method,
                 url: url,
                 data: data,
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': getCsrfCookie() }
             }).then(function (response) {
                 blockUI.stop();
                 return response;

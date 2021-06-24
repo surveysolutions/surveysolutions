@@ -51,6 +51,7 @@ namespace WB.UI.Headquarters.Controllers
         public IActionResult TabletInfos() => View();
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> TabletInfos(IFormFile file)
         {
             try

@@ -477,13 +477,6 @@ namespace WB.Tests.Integration
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
         }
 
-        public static AggregateRootEvent AggregateRootEvent(IEvent evnt)
-        {
-            var rnd = new Random();
-            return new AggregateRootEvent(new CommittedEvent(Guid.NewGuid(), "origin", Guid.NewGuid(), Guid.NewGuid(),
-                    rnd.Next(1, 10000000), DateTime.UtcNow, rnd.Next(1, 1000000), evnt));
-        }
-
         public static CumulativeReportStatusChange CumulativeReportStatusChange(Guid? questionnaireId=null, long? questionnaireVersion=null, DateTime? date = null, Guid? interviewId = null, long eventSequence = 1)
         {
             return new CumulativeReportStatusChange(Guid.NewGuid().FormatGuid(), questionnaireId ?? Guid.NewGuid(),

@@ -67,7 +67,8 @@
 	        url: getLanguagesUrl,
 	        cache: false,
 	        method: "POST",
-	        async: false
+	        async: false,
+            headers: {'X-CSRF-TOKEN': getCsrfCookie()}
 	    }).done(function (result) {
             if (result.length && result.length > 1){
 
@@ -170,7 +171,9 @@
         $.ajax({
             url: languagesUrl,
             cache: false,
-            method: "POST"
+            method: "POST",
+            headers: {'X-CSRF-TOKEN': getCsrfCookie()}
+            
         }).done(function (result) {
             if (result.length && result.length > 1) {
 				self.initLanguageComboBox(result);

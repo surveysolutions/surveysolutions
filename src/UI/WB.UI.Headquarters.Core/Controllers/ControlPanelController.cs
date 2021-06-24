@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Headquarters.Filters;
@@ -50,6 +48,7 @@ namespace WB.UI.Headquarters.Controllers
         public IActionResult ReevaluateInterview() => this.View("Index");
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ReevaluateInterview(Guid id)
         {
             try

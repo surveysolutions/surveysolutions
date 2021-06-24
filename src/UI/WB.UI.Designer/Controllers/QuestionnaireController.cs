@@ -22,6 +22,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Filters;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers
@@ -135,6 +136,7 @@ namespace WB.UI.Designer.Controllers
             return this.LackOfPermits();
         }
 
+        [AntiForgeryFilter]
         [Route("questionnaire/details/{id}")]
         [Route("questionnaire/details/{id}/chapter/{chapterId}/{entityType}/{entityId}")]
         public IActionResult Details(QuestionnaireRevision? id, Guid? chapterId, string entityType, Guid? entityid)
@@ -274,6 +276,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Revert(Guid id, Guid commandId)
         {
             var historyReferenceId = commandId;
@@ -293,6 +296,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult<bool>> SaveComment(Guid id, Guid historyItemId, string comment)
         {
             bool hasAccess = this.User.IsAdmin() 
@@ -309,6 +313,7 @@ namespace WB.UI.Designer.Controllers
                 historyItemId.FormatGuid(), comment);
         }
 
+        [AntiForgeryFilter]
         public async Task<IActionResult> QuestionnaireHistory(Guid id, int? p)
         {
             bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.User.GetId());
@@ -349,6 +354,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult GetLanguages(QuestionnaireRevision id)
         {
             QuestionnaireView? questionnaire = this.questionnaireViewFactory.Load(id);
@@ -370,6 +376,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AssignFolder(Guid id, Guid folderId)
         {
             QuestionnaireView? questionnaire = GetQuestionnaireView(id);
@@ -377,7 +384,12 @@ namespace WB.UI.Designer.Controllers
                 return NotFound();
 
             string referer = Request.Headers["Referer"].ToString();
-            return this.Redirect(referer);
+            if (!string.IsNullOrEmpty(referer) && Url.IsLocalUrl(referer))
+            {
+                return this.Redirect(referer);
+            }
+            
+            return Redirect(Url.Content("~/"));
         }
 
         [HttpGet]
