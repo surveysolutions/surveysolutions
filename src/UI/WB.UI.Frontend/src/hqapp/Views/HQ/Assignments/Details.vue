@@ -279,9 +279,14 @@ export default {
                                 let createdText = self.$t('Assignments.Action_Created_Responsible', {
                                     responsible: data.Responsible,
                                 })
-                                if (data.comment) {
+                                if (data.Comment) {
                                     createdText +=
                                         '<br/>' + self.$t('Assignments.Action_Created_Comment', {comment: escape(data.Comment)})
+                                }
+
+                                if(data.UpgradedFromId) {
+                                    createdText += '<br/>' + self.$t('Assignments.Action_UpgradedFrom',
+                                        { id: `<a href='./${data.UpgradedFromId}'>${data.UpgradedFromId}</a>`})
                                 }
                                 return createdText
                             }

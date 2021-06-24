@@ -142,8 +142,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             doFileContent.AppendLine("label values role role");
             doFileContent.AppendLine("label variable role `\"System role of the person who initiated the event\"'");
             
-            doFileContent.AppendLine("label variable timestamp `\"Date and time when the event happened\"'");
-            doFileContent.AppendLine("label variable offset `\"Timezone offset relative to UTC\"'");
+            doFileContent.AppendLine("label variable timestamp_utc `\"Date and time when the event happened\"'");
+            doFileContent.AppendLine("label variable tz_offset `\"Timezone offset relative to UTC\"'");
             doFileContent.AppendLine("label variable parameters `\"Event-specific parameters\"'");
             doFileContent.AppendLine("");
 

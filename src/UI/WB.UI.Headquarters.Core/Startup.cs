@@ -364,19 +364,6 @@ namespace WB.UI.Headquarters
             services.AddQuartzIntegration(Configuration,
                 DbUpgradeSettings.FromFirstMigration<M201905151013_AddQuartzTables>());
 
-            var passwordOptions = Configuration.GetSection("PasswordOptions").Get<PasswordOptions>();
-
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Default Password settings.
-                options.Password.RequireDigit = passwordOptions.RequireDigit;
-                options.Password.RequireLowercase = passwordOptions.RequireLowercase;
-                options.Password.RequireNonAlphanumeric = passwordOptions.RequireNonAlphanumeric;
-                options.Password.RequireUppercase = passwordOptions.RequireUppercase;
-                options.Password.RequiredLength = passwordOptions.RequiredLength;
-                options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
-            });
-
             services.AddMediatR(typeof(Startup), typeof(HeadquartersBoundedContextModule));
         }
 
