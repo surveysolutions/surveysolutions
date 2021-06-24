@@ -246,11 +246,11 @@ export default {
             })
 
         if(this.queryString.role) {
-            this.selectedRole = find(this.this.$config.model.roles, { key: this.queryString.role})
+            this.selectedRole = find(this.$config.model.roles, { key: this.queryString.role})
         }
 
         if(this.queryString.filter) {
-            this.selectedFilter = find(this.this.$config.model.filters, { key: this.queryString.filter})
+            this.selectedFilter = find(this.$config.model.filters, { key: this.queryString.filter})
         } else {
             this.selectedFilter = null
         }
