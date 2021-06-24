@@ -45,36 +45,34 @@ namespace WB.UI.Headquarters.Code.Authentication
             try
             {
                 creds = Request.Headers.ParseBasicCredentials();
+
+                return await executor.ExecuteAsync(async (sl) =>
+                {
+                    var userManager = sl.GetInstance<UserManager<HqUser>>();;
+                    var user = await userManager.FindByNameAsync(creds.Username);
+                    if (user == null) return AuthenticateResult.Fail("No user found");
+
+                    if (user.IsArchivedOrLocked)
+                    {
+                        this.isUserLocked = true;
+                        return AuthenticateResult.Fail("User is locked");
+                    }
+
+                    var passwordIsValid = await userManager.CheckPasswordAsync(user, creds.Password);
+                    if (!passwordIsValid) return AuthenticateResult.Fail("Invalid password");
+
+                    var principal = await this.claimFactory.CreateAsync(user);
+                    var ticket = new AuthenticationTicket(principal, Scheme.Name);
+
+                    return AuthenticateResult.Success(ticket);
+                });
             }
             catch (Exception e)
             {
                 return AuthenticateResult.Fail(e.Message);
             }
 
-            return await executor.ExecuteAsync(async (sl) =>
-            {
-                var userManager = sl.GetInstance<UserManager<HqUser>>();;
-                var user = await userManager.FindByNameAsync(creds.Username);
-                if (user == null) 
-                    return AuthenticateResult.Fail(FailureMessage);
-
-                if (user.IsArchivedOrLocked)
-                {
-                    this.isUserLocked = true;
-                    return AuthenticateResult.Fail("User is locked");
-                }
-
-                SignInResult passwordIsValid = await signInManager.CheckPasswordSignInAsync(user, creds.Password, true);
-                if (!passwordIsValid.Succeeded)
-                {
-                    return AuthenticateResult.Fail(FailureMessage);
-                }
-
-                var principal = await this.claimFactory.CreateAsync(user);
-                var ticket = new AuthenticationTicket(principal, Scheme.Name);
-
-                return AuthenticateResult.Success(ticket);
-            });
+            
         }
 
         protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
