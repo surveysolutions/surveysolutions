@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -26,13 +27,15 @@ namespace WB.UI.Headquarters.Controllers
         private readonly SignInManager<HqUser> signInManager;
         private readonly UserManager<HqUser> userManager;
         protected readonly IAuthorizedUser authorizedUser;
+        private readonly ILogger<AccountController> logger;
 
         public AccountController(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
             ICaptchaService captchaService,
             ICaptchaProvider captchaProvider,
             SignInManager<HqUser> signInManager,
             UserManager<HqUser> userManager,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser,
+            ILogger<AccountController> logger)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.captchaService = captchaService;
@@ -40,11 +43,18 @@ namespace WB.UI.Headquarters.Controllers
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.authorizedUser = authorizedUser;
+            this.logger = logger;
         }
 
         [HttpGet]
         public IActionResult LogOn(string returnUrl)
         {
+            logger.LogInformation($"Headers:");
+            foreach (var item in this.ControllerContext.HttpContext.Request.Headers)
+            {
+                logger.LogInformation($"{item.Key} : {item.Value}");
+            }
+
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.ReturnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
                 ? returnUrl
