@@ -262,7 +262,7 @@
     <value>Export file will be uploaded to Dropbox</value>
   </data>
   <data name="DataExport_Destination_File" xml:space="preserve">
-    <value>Export file will be avalaible for download</value>
+    <value>Export file will be avaliable for download</value>
   </data>
   <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
     <value>Export file will be uploaded to Google Drive</value>
