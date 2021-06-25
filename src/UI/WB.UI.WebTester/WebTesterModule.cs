@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Documents;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -84,6 +86,14 @@ namespace WB.UI.WebTester
 
             registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
             registry.Bind<IWebNavigationService, WebNavigationService>();
+
+            registry.BindToMethod<IOptions<FileStorageConfig>>(sp =>
+            {
+                var configuration = sp.Get<IConfiguration>();
+                var fileStorageConfig = configuration.GetSection("FileStorage").Get<FileStorageConfig>();
+
+                return Options.Create(fileStorageConfig);
+            });
 
             registry.BindToMethodInSingletonScope(context => new MapperConfiguration(cfg =>
             {
