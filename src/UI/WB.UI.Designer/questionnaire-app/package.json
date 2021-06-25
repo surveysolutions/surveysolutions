@@ -56,7 +56,6 @@
   "resolutions": {
     "chokidar": "^3.5.2",
     "css-what": "^5.0.1",
-    "mini-css-extract-plugin": "^1.6.0",
-    "normalize-url": "^4.5.1"
+    "normalize-url": "^6.1.0"
   }
 }
