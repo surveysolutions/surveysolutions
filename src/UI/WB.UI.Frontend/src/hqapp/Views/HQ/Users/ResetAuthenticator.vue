@@ -3,6 +3,7 @@
         :role="userInfo.role"
         :isOwnProfile="userInfo.isOwnProfile"
         :userName="userInfo.userName"
+        :canChangePassword="userInfo.canChangePassword"
         :userId="userInfo.userId"
         :currentTab="currentTab">
 
