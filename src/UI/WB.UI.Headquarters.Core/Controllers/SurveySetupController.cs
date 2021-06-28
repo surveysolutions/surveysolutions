@@ -70,6 +70,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(surveySetupModel);
         }
 
+        [AntiForgeryFilter]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult UpgradeAssignments(Guid id, long version)
         {
