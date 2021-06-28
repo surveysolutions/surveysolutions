@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --modern --mode production",
     "lint": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
+    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
+    "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -36,6 +37,8 @@
     "extra-watch-webpack-plugin": "^1.0.3",
     "glob-parent": "^6.0.0",
     "is-svg": "^4.2.2",
+    "mini-css-extract-plugin": "^1.6.0",
+    "normalize-url": "^4.5.1",
     "postcss": "^8.3.0",
     "postcss-svgo": "5.0.2",
     "prettier": "^1.19.1",
@@ -49,5 +52,10 @@
     "vue-template-compiler": "^2.6.14",
     "vuetify-loader": "^1.7.2",
     "xmldoc": "^1.1.2"
+  },
+  "resolutions": {
+    "chokidar": "^3.5.2",
+    "css-what": "^5.0.1",
+    "normalize-url": "^6.1.0"
   }
 }
