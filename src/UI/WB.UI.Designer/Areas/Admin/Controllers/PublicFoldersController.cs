@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.UI.Designer.Filters;
 
 namespace WB.UI.Designer.Areas.Admin.Controllers
 {
@@ -29,6 +30,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
             public bool folder { get; set; } = true;
         }
 
+        [AntiForgeryFilter]
         public IActionResult Index()
         {
             return View();

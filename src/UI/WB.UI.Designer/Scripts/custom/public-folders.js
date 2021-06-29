@@ -119,7 +119,7 @@
     });
 
     self.postRequest = function(url, params, callback) {
-        $.post(url, params).done(callback);
+        $.post({url: url, data: params, headers: { 'X-CSRF-TOKEN': getCsrfCookie()}}).done(callback);
     };
 }
 
