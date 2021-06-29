@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                 opt.AccessDeniedPath = "/Error/401";
 
                 var expireTimeSpan = configuration.GetValue<TimeSpan>("Authentication:TicketExpirationTimeOut");                
-                opt.ExpireTimeSpan = expireTimeSpan;
+                opt.ExpireTimeSpan = expireTimeSpan == TimeSpan.Zero? TimeSpan.FromDays(1) : expireTimeSpan;
                 opt.Cookie.Path = "/";
 
                 var securityPolicy = configuration.GetValue<Boolean?>("Policies:CookiesSecurePolicyAlways");
