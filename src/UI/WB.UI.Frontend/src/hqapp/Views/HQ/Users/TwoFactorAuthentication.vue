@@ -134,7 +134,7 @@ export default {
                 return baseUrl + '/' + this.model.userInfo.userId
         },
         navigateTo: function(location){
-            window.location.href = this.getPageUrl(location)
+            window.location.href = this.getUrl(location)
             return false
         },
         navigate: function(target){
