@@ -4,7 +4,7 @@
         :class="[{'disabled-question': $me.isDisabled}]"
         :id="hash">
         <div class="question-editor">
-            <div :class="[{'text-danger': !$me.validity.isValid}]">
+            <div>
                 <wb-title />
             </div>
             <wb-attachment :contentId="$me.attachmentContent"

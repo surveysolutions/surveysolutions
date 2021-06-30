@@ -2,8 +2,8 @@
     <ProfileLayout ref="profile"
         :role="userInfo.role"
         :isOwnProfile="userInfo.isOwnProfile"
-        :canChangePassword="userInfo.canChangePassword"
         :userName="userInfo.userName"
+        :canChangePassword="userInfo.canChangePassword"
         :userId="userInfo.userId"
         :currentTab="currentTab">
         <div class="block-filter">

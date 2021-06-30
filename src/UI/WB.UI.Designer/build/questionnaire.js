@@ -9,7 +9,6 @@ const concat = require("gulp-concat");
 const gulpif = require("gulp-if");
 const debug = require("gulp-debug");
 const htmlmin = require("gulp-htmlmin");
-const imagemin = require("gulp-imagemin");
 const less = require("gulp-less");
 const ngAnnotate = require("gulp-ng-annotate");
 const gulpInject = require("gulp-inject");
@@ -20,7 +19,6 @@ const terser = require("gulp-terser");
 const cleanCss = require("gulp-clean-css");
 const manifest = require("./plugins/manifest");
 const resx2json = require("./plugins/resx2json");
-const sourcemaps = require('gulp-sourcemaps');
 
 const questionnaire = require("./config.json").questionnaire;
 const dist = require("./config.json").dist;
@@ -60,7 +58,6 @@ const styles = () =>
 
 const staticContent = () =>
   src(questionnaire.static, { base: "questionnaire/content" })
-    //.pipe(gulpif(f => f.extname == ".png", cache(imagemin())))
     .pipe(dest(dist));
 
 const scripts = () =>

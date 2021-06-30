@@ -60,6 +60,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
             => this.View("CompilationVersionsViews/CompilationVersions", this.questionnaireCompilationVersionService.GetCompilationVersions());
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult RemoveCompilationVersion(Guid questionnaireId)
         {
             this.questionnaireCompilationVersionService.Remove(questionnaireId);
@@ -69,6 +70,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         public ActionResult AddCompilationVersion() => this.View("CompilationVersionsViews/AddCompilationVersion", new CompilationVersionModel());
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AddCompilationVersion(CompilationVersionModel model)
         {
             if (ModelState.IsValid)
@@ -96,6 +98,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult EditCompilationVersion(CompilationVersionModel model)
         {
             if (ModelState.IsValid)
@@ -112,6 +115,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> MakeAdmin(MakeAdminViewModel model)
         {
             if (ModelState.IsValid)

@@ -31,6 +31,9 @@
         </div>
         <form method="post">
             <input type="hidden"
+                :value="this.$hq.Util.getCsrfCookie()"
+                name="__RequestVerificationToken"/>
+            <input type="hidden"
                 :value="questionnaireId ? questionnaireId.key : ''"
                 name="sourceQuestionnaireId"/>
             <div class="col-sm-7 col-xs-12 action-buttons">

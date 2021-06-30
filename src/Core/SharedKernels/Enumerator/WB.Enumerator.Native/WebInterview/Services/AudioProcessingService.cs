@@ -75,6 +75,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     pathToFfmpeg = Path.Combine(this.fileStorageConfig.Value.FFmpegExecutablePath, "ffmpeg.exe");
                 }
 
+                if (!File.Exists(pathToFfmpeg))
+                {
+                    throw new InvalidOperationException("ffmpeg.exe was not found.");
+                }
+
                 var ffmpegOutput = Infrastructure.Native.Utils.ConsoleCommand.Read(pathToFfmpeg
                     , $"-hide_banner -i {fullPathForSourceFile} -y -c:a aac -b:a 64k {fullPathForDestFile}");
                 var match = Regex.Match(ffmpegOutput, @"Duration: (\d\d):(\d\d):((\d\d)(\.\d\d)?)");
@@ -102,7 +107,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 audioResult.MimeType = @"audio/wav";
                 audioResult.Binary = audio;
-                audioResult.Duration = TimeSpan.FromSeconds(1);
+                audioResult.Duration = TimeSpan.FromSeconds(0);
 
                 return audioResult;
             }

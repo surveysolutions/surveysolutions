@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifyPanelAndSaveIfNoErrors_and_preloaded_file_without_answers_should_return_PL0000_error()
+        public void when_VerifyPanelAndSaveIfNoErrors_and_preloaded_file_without_answers_should_return_PL0024_error()
         {
             //arrange 
             var variableOfIntegerQuestion = "num";
@@ -108,7 +108,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             //assert
             Assert.That(errors, Has.One.Items);
-            Assert.That(errors[0].Code, Is.EqualTo("PL0000"));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0024"));
         }
 
         [Test]

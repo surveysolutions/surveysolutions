@@ -86,7 +86,7 @@
                                 <span class="interviewer">
                                     <a
                                         target="_blank"
-                                        :href="$config.model.interviewerProfile + '/' + interviewer.userId"
+                                        :href="$config.basePath + 'Manage/' + interviewer.userId"
                                         :v-text="interviewer.userName"
                                         :class="{'text-danger' : interviewer.inProgress }">{{interviewer.userName}}</a>
                                 </span>

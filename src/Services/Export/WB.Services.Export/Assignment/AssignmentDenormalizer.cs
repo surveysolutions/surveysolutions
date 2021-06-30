@@ -44,10 +44,11 @@ namespace WB.Services.Export.Assignment
                 WebMode = @event.Event.WebMode,
                 AudioRecording = @event.Event.AudioRecording,
                 Comment = @event.Event.Comment,
-                QuestionnaireId = @event.Event.QuestionnaireIdentity
+                QuestionnaireId = @event.Event.QuestionnaireIdentity,
+                UpgradedFromId = @event.Event.UpgradedFromId
             });
 
-            AddRecord(@event, AssignmentExportedAction.Created, null, null, @event.Event.Comment, position: 1);
+            AddRecord(@event, AssignmentExportedAction.Created, ToUpgradedFromString(@event.Event.UpgradedFromId), null, @event.Event.Comment, position: 1);
             AddRecord(@event, AssignmentExportedAction.QuantityChanged, null, ToQuantityString(@event.Event.Quantity), null, position: 2);
             AddRecord(@event, AssignmentExportedAction.WebModeChanged, null, ToWebModeString(@event.Event.WebMode), null, position: 3);
             AddRecord(@event, AssignmentExportedAction.AudioRecordingChanged, null, ToAudioRecordingString(@event.Event.AudioRecording), null, position: 4);
@@ -147,5 +148,6 @@ namespace WB.Services.Export.Assignment
         private string ToQuantityString(int? quantity) => quantity.HasValue ? quantity.Value.ToString(CultureInfo.InvariantCulture) : "-1";
         private string? ToWebModeString(bool? webMode) => webMode == false ? "0" : (webMode == true ? "1" : null);
         private string ToAudioRecordingString(bool audioRecording) => audioRecording == false ? "0" : "1";
+        private string? ToUpgradedFromString(int? upgradedFromId) => upgradedFromId.HasValue ? upgradedFromId.Value.ToString(CultureInfo.InvariantCulture): null; 
     }
 }

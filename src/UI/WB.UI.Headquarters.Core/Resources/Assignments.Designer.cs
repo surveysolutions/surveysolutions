@@ -214,6 +214,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upgraded from assignment {{id}}.
+        /// </summary>
+        public static string Action_UpgradedFrom {
+            get {
+                return ResourceManager.GetString("Action_UpgradedFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Web mode changed.
         /// </summary>
         public static string Action_WebModeChanged {

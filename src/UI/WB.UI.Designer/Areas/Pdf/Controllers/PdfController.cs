@@ -173,6 +173,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("retry/{id}")]
         public ActionResult Retry(Guid id, Guid? translation, int? timezoneOffsetMinutes)
         {

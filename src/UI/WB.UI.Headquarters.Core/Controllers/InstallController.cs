@@ -53,7 +53,8 @@ namespace WB.UI.Headquarters.Controllers
                     Id = Guid.Parse(@"00000000000040000000000000000001"),
                     FullName = @"Administrator",
                     UserName = model.UserName,
-                    Email = model.Email
+                    Email = model.Email,
+                    PasswordChangeRequired = false
                 };
                 var creationResult = await this.userManager.CreateAsync(hqUser, model.Password);
 
