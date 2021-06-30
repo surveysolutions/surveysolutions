@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
@@ -554,7 +555,10 @@ namespace WB.Services.Export.InterviewDataStorage
 
             if (columnType == NpgsqlDbType.Double && !(value is double))
             {
-                value = Convert.ToDouble(value);
+                if (value is BigInteger)
+                    value = double.Parse(value.ToString());
+                else
+                    value = Convert.ToDouble(value);
             }
 
             if (columnType == NpgsqlDbType.Bigint && !(value is long))

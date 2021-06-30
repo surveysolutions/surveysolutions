@@ -1042,7 +1042,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are changing the set of variables. It would take time to update reports.
+        ///   Looks up a localized string similar to You are changing the set of exposed variables. It will take some time to update the reports..
         /// </summary>
         public static string ExposedVariables_ChangeMessage {
             get {
@@ -1164,6 +1164,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string GetEsriExtraDescription {
             get {
                 return ResourceManager.GetString("GetEsriExtraDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download interviewer app.
+        /// </summary>
+        public static string GetInterviewerApp {
+            get {
+                return ResourceManager.GetString("GetInterviewerApp", resourceCulture);
             }
         }
         
@@ -4472,7 +4481,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You will archive supervisors and interviewers within his team. Interviewers assigned to archived supervisor will be also archived in all workspaces. If interviewers have any non synchronized data tablets it will be deleted..
+        ///   Looks up a localized string similar to You will archive supervisors and interviewers within theirs team. Interviewers assigned to archived supervisor will be also archived in all workspaces. If interviewers have any non synchronized data on tablets it will be deleted..
         /// </summary>
         public static string Users_ArchiveUsersConfirmMessage {
             get {

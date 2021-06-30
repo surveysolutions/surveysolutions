@@ -12,5 +12,7 @@ namespace WB.Services.Export.Assignment
         public bool? WebMode { get; set; }
         public string? Comment { get; set; }
         public string? QuestionnaireId { get; set; }
+        
+        public int? UpgradedFromId { get; set;}
     }
 }

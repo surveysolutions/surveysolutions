@@ -119,7 +119,7 @@ export default {
         },
         referrerUrl() {
             const returnUrl = this.$route.query['returnUrl']
-            if(returnUrl != null) {
+            if(returnUrl != null && returnUrl.startsWith('/')) {
                 return returnUrl
             }
 
@@ -130,10 +130,10 @@ export default {
     methods:{
         getUrl: function(baseUrl){
             if(this.isOwnProfile)
-                return './' + baseUrl
+                return '/Users/' + baseUrl
             else{
                 const returnUrl = this.$route.query['returnUrl']
-                if(returnUrl != null) {
+                if(returnUrl != null && returnUrl.startsWith('/')) {
                     return `../${baseUrl}/${this.userId}?returnUrl=${encodeURIComponent(returnUrl)}`
                 }
                 return `../${baseUrl}/${this.userId}`

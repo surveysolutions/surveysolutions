@@ -104,7 +104,6 @@ import * as toastr from 'toastr'
 import moment from 'moment'
 import {formatNumber} from './formatNumber'
 import routeSync from '~/shared/routeSync'
-import InterviewersMoveToOtherTeam from './InterviewersMoveToOtherTeam'
 import {map, find} from 'lodash'
 import { DateFormats } from '~/shared/helpers'
 

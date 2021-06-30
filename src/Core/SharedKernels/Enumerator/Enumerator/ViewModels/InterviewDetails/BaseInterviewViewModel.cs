@@ -294,14 +294,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     var overviewViewModel = this.interviewViewModelFactory.GetNew<OverviewViewModel>();
                     overviewViewModel.Configure(this.InterviewId, this.navigationState);
                     return overviewViewModel;
-                case ScreenType.PdfViewByStaticText:
-                    var pdfViewModel = MvxIoCProvider.Instance.IoCConstruct<PdfViewModel>(); 
-                    pdfViewModel.Configure(this.InterviewId, eventArgs.AnchoredElementIdentity);
-                    return pdfViewModel;
-                case ScreenType.PdfView:
-                    var pdfView = MvxIoCProvider.Instance.IoCConstruct<PdfViewModel>();
-                    pdfView.ConfigureByAttachmentId(this.InterviewId, eventArgs.AnchoredElementIdentity.Id);
-                    return pdfView;
                 default:
                     return null;
             }

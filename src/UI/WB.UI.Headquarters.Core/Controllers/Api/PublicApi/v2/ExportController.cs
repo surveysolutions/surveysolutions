@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -66,6 +67,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
         /// <response code="201">Export started</response>
         /// <response code="400">Request is malformed</response>
         [HttpPost]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ExportProcess))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
         public async Task<ActionResult<ExportProcess>> PostExports([FromBody, BindRequired]CreateExportProcess requestBody)
@@ -140,6 +143,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
         /// <response code="200"></response>
         /// <response code="404">Export process was not found</response>
         [HttpGet("{id}")]
+        [Produces(MediaTypeNames.Application.Json)]
         public async Task<ActionResult<ExportProcess>> GetExports(long id)
         {
             if (!ModelState.IsValid)
@@ -163,8 +167,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
         /// <param name="limit">Select a limited number of records</param>
         /// <param name="offset">Skip number of records before beginning to return records</param>
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
         public async Task<ActionResult<IEnumerable<ExportProcess>>> GetExports(ExportType? exportType,
-            ExportInterviewType? interviewStatus, string questionnaireIdentity, ExportStatus? exportStatus,
+            ExportInterviewType? interviewStatus, string? questionnaireIdentity, ExportStatus? exportStatus,
             bool? hasFile, int? limit, int? offset)
         {
             if (!ModelState.IsValid)

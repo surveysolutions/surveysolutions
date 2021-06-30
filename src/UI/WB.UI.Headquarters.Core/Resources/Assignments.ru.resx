@@ -510,4 +510,7 @@
   <data name="ModeExplanation" xml:space="preserve">
     <value>CAWI режим позволяет собирать данные непосредственно вводом отвечающего</value>
   </data>
+  <data name="Action_UpgradedFrom" xml:space="preserve">
+    <value>Обновлён с задания {{id}}</value>
+  </data>
 </root>

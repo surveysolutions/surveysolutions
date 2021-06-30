@@ -52,7 +52,7 @@ namespace WB.UI.Headquarters.Services.Impl
 
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
             {
-                if (Uri.TryCreate(directory, UriKind.Absolute, out Uri uri))
+                if (Uri.TryCreate(directory, UriKind.Absolute, out Uri uri) && !uri.IsFile)
                 {
                     return await GetApkFromRemoteServer(request, appName, responseFileName, uri);
                 }
@@ -108,12 +108,13 @@ namespace WB.UI.Headquarters.Services.Impl
 
         public async Task<IActionResult> GetPatchFileAsHttpResponse(HttpRequest request, string fileName)
         {
+            var apkClientsFolder = ApkClientsFolder();
             string pathToInterviewerPatch = this.fileSystemAccessor.CombinePath(
-                ApkClientsFolder(), fileName);
+                apkClientsFolder, fileName);
 
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerPatch))
             {
-                if (Uri.TryCreate(ApkClientsFolder(), UriKind.Absolute, out Uri uri))
+                if (Uri.TryCreate(apkClientsFolder, UriKind.Absolute, out Uri uri) && !uri.IsFile)
                 {
                     return await GetApkFromRemoteServer(request, fileName, fileName, uri);
                 }
@@ -131,12 +132,13 @@ namespace WB.UI.Headquarters.Services.Impl
 
         public async Task<int?> GetApplicationBuildNumber(string appName)
         {
+            var apkClientsFolder = ApkClientsFolder();
             string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(
-                ApkClientsFolder(), appName);
+                apkClientsFolder, appName);
 
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
             {
-                if (Uri.TryCreate(ApkClientsFolder(), UriKind.Absolute, out Uri uri))
+                if (Uri.TryCreate(apkClientsFolder, UriKind.Absolute, out Uri uri) && !uri.IsFile)
                 {
                     var version = await GetApplicationVersionFromRemoteServer(uri, appName);
                     return version?.BuildNumber;
@@ -188,12 +190,13 @@ namespace WB.UI.Headquarters.Services.Impl
         
         public async Task<string> GetApplicationVersionString(string appName)
         {
+            var apkClientsFolder = ApkClientsFolder();
             string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(
-                ApkClientsFolder(), appName);
+                apkClientsFolder, appName);
 
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
             {
-                if (Uri.TryCreate(ApkClientsFolder(), UriKind.Absolute, out Uri uri))
+                if (Uri.TryCreate(apkClientsFolder, UriKind.Absolute, out Uri uri) && !uri.IsFile)
                 {
                     var version = await GetApplicationVersionFromRemoteServer(uri, appName);
                     return version?.VersionString;

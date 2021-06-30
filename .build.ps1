@@ -11,7 +11,7 @@ param(
     [string] $Tasks,    
     [string] $buildNumber = '42',
     [string] $androidKeyStore = $ENV:ANDROID_KEY_STORE,
-    [string] $KeystorePassword = $ENV:ANDROID_SIGNING_KEY_PASS ,
+    [string] $KeystorePassword = $ENV:ANDROID_SIGNING_KEY_PASS,
     [string] $KeystoreAlias = $ENV:ANDROID_KEY_ALIAS,
     [string] $GoogleMapKey = $NULL,
     [string] $ArcGisKey = $NULL,
@@ -32,6 +32,11 @@ if ($MyInvocation.ScriptName -notlike '*Invoke-Build.ps1') {
     If (-not(Get-InstalledModule InvokeBuild -ErrorAction silentlycontinue)) {
         Install-Module InvokeBuild -Force
     }
+
+    If (-not(Get-InstalledModule VsSetup -ErrorAction silentlycontinue)) {
+        Install-Module VsSetup -Force
+    }
+
     & "Invoke-Build" $Tasks $MyInvocation.MyCommand.Path @PSBoundParameters
     return
 }
@@ -48,18 +53,32 @@ $EscapedBranchName =  $EscapedBranchName.Substring(0, [System.Math]::Min($Escape
 
 $isRelease = $gitBranch -eq $releaseBranch
 $version = Get-Content ./src/.version
+if ($isRelease) {
+    $infoVersion = '{0} (build {1})' -f $version, $buildNumber 
+}
+
 if ($version.Split('.').Length -eq 2) {
     $version += ".0"
 }
 $version += "." + $buildNumber
-$infoVersion = $version + '-' + $EscapedBranchName
+
+if (-not $isRelease) {
+    $infoVersion = $version + '-' + $EscapedBranchName
+}
+
 $output = "./artifacts"
 New-Item -Type Directory $output -ErrorAction SilentlyContinue | Out-Null
 $output = Resolve-Path $output
 
 Enter-Build {
-    Write-Build 10 $version 
-    Write-Build 10 $infoversion
+    Write-Build 10 "Version: $version"
+    Write-Build 10 "InfoVersion: $infoVersion"
+    
+    try {
+        Write-Build 10 "MsBuild: $(Resolve-MSBuild)"
+    } catch {
+
+    }
 }
 
 function Compress($folder, $dest) {
@@ -78,7 +97,7 @@ function Set-AndroidXmlResourceValue {
         [string] $keyValue
     )    
 
-    $filePath = "$([System.IO.Path]::GetDirectoryName($project))/Resources/values/settings.xml"
+    $filePath = "$([System.IO.Path]::GetDirectoryName((Resolve-Path $project)))/Resources/values/settings.xml"
     "Updating app resource key in $filePath" | Out-Host
 
     $doc = [System.Xml.Linq.XDocument]::Load($filePath);
@@ -138,7 +157,7 @@ function Build-Docker($dockerfile, $tags, $arguments = @()) {
         "."
     )
 
-    $params | Join-String -Separator ', ' | Out-Host
+    $params -join ', ' | Out-Host
     exec { docker $params }
 }
 
@@ -190,7 +209,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
         }
     )
     
-    $params | Join-String -Separator ', ' | Out-Host
+    $params -join ', ' | Out-Host
     exec { msbuild $params }
 }
 
@@ -207,7 +226,7 @@ task PackageHq frontend, {
     exec {
         dotnet publish ./src/UI/WB.UI.Headquarters.Core `
             --self-contained  `
-            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/hq
+            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/hq
     }
     Compress $tmp/hq $output/WB.UI.Headquarters.zip
 }
@@ -220,7 +239,7 @@ task PackageHqOffline frontend, {
     exec {
         dotnet publish ./src/Services/Export/WB.Services.Export.Host `
             -c Release -r win-x64 --no-self-contained  `
-            -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION `
+            -p:Version=$VERSION -p:InformationalVersion=$infoVersion `
             -o ./src/UI/WB.UI.Headquarters.Core/Export.Service
     }
      
@@ -228,7 +247,7 @@ task PackageHqOffline frontend, {
         dotnet publish ./src/UI/WB.UI.Headquarters.Core `
             /p:PublishSingleFile=true /p:SelfContained=False /p:AspNetCoreHostingModel=outofprocess `
             /p:IncludeAllContentForSelfExtract=true `
-            -c Release -r win-x64 --no-self-contained    -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/hq-offline
+            -c Release -r win-x64 --no-self-contained    -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/hq-offline
     }
 
     New-Item -Type Directory $tmp/hq-prepare -ErrorAction SilentlyContinue | Out-Null
@@ -242,7 +261,7 @@ task PackageHqOffline frontend, {
 task PackageExport {
     exec {
         dotnet publish ./src/Services/Export/WB.Services.Export.Host `
-            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/export
+            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/export
     }
     Compress $tmp/export $output/WB.Services.Export.zip
 }
@@ -250,7 +269,7 @@ task PackageExport {
 task PackageWebTester frontend, {
     exec {
         dotnet publish ./src/UI/WB.UI.WebTester `
-            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/webtester
+            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/webtester
     }
     Compress $tmp/webtester $output/WB.UI.WebTester.zip
 }
@@ -266,24 +285,39 @@ task PackageDesigner {
     Set-location $BuildRoot
     dotnet publish ./src/UI/WB.UI.Designer `
         -c Release -r win-x64 `
-        -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION `
+        -p:Version=$VERSION -p:InformationalVersion=$infoVersion `
         -p:SkipSpaBuild=True -o $tmp/Designer
 
     Compress $tmp/Designer $output/WB.UI.Designer.zip
 }
 
 task AndroidInterviewerWithMaps {
-    $appCenterKey = $isRelease ? $ENV:APP_CENTER_INTERVIEWER_PROD : $ENV:APP_CENTER_INTERVIEWER_DEV
+    if ($isRelease) {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_PROD
+    }
+    else {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_DEV
+    }
     Invoke-Android "./src/UI/Interviewer/WB.UI.Interviewer/WB.UI.Interviewer.csproj" "WBCapi.Ext.apk" $true $appCenterKey
 }
 
 task AndroidInterviewer {
-    $appCenterKey = $isRelease ? $ENV:APP_CENTER_INTERVIEWER_PROD : $ENV:APP_CENTER_INTERVIEWER_DEV
+    if ($isRelease) {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_PROD
+    }
+    else {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_DEV
+    }
     Invoke-Android "./src/UI/Interviewer/WB.UI.Interviewer/WB.UI.Interviewer.csproj" "WBCapi.apk" $false $appCenterKey
 }
 
 task AndroidSupervisor {
-    $appCenterKey = $isRelease ? $ENV:APP_CENTER_SUPERVISOR_PROD : $ENV:APP_CENTER_SUPERVISOR_DEV
+    if ($isRelease) {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_PROD
+    }
+    else {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_DEV
+    }
     Invoke-Android "./src/UI/Supervisor/WB.UI.Supervisor/WB.UI.Supervisor.csproj" "Supervisor.apk" $true $appCenterKey
 }
 
@@ -319,10 +353,10 @@ task Docker DockerHq, DockerDesigner, DockerWebTester
 
 task . {
     Set-Location $BuildRoot/src/UI/WB.UI.Designer
-    npm i
+    npm ci
     npm run dev
 
     Set-Location $BuildRoot/src/UI/WB.UI.Frontend
-    npm i
+    npm ci
     npm run dev
 }

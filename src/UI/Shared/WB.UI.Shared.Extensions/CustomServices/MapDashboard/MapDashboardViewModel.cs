@@ -474,7 +474,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                         }
                         else
                         {
-                            bool canCreate = (bool)identifyResults.Graphics[0].Attributes["can_create"];
+                            var assignmentInfo = identifyResults.Graphics[0].Attributes;
+                            bool canCreate = (bool)assignmentInfo["can_create"];
 
                             CalloutDefinition myCalloutDefinition =
                                 new CalloutDefinition("#" + id, $"{title}\r\n{subTitle}");
@@ -483,7 +484,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                                 myCalloutDefinition.ButtonImage =
                                     await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Blue, 25)
                                         .CreateSwatchAsync(96);
-                                myCalloutDefinition.OnButtonClick += OnAssignmentButtonClick;
+                                myCalloutDefinition.OnButtonClick += tag => OnAssignmentButtonClick(assignmentInfo, tag);
                                 myCalloutDefinition.Tag = id;
                             }
                             MapView.ShowCalloutAt(projectedLocation, myCalloutDefinition);
@@ -523,8 +524,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             }
         }
 
-        private void OnAssignmentButtonClick(object calloutTag)
+        private void OnAssignmentButtonClick(IDictionary<string, object> assignmentInfo, object calloutTag)
         {
+            bool isCreating = assignmentInfo.ContainsKey("creating");
+            if (isCreating)
+                return;
+            
+            assignmentInfo["creating"] = true;
             if(calloutTag != null && (Int32.TryParse(calloutTag as string, out int assignmentId)))
             {
                 //create interview from assignment
@@ -563,7 +569,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                 {
                     this.Map.Basemap = baseMap;
 
-                    if (baseMap?.BaseLayers[0]?.FullExtent != null && this.MapView?.VisibleArea != null)
+                    if (baseMap?.BaseLayers.Count > 0 && baseMap?.BaseLayers[0]?.FullExtent != null && this.MapView?.VisibleArea != null)
                     {
                         var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea,
                             baseMap.BaseLayers[0].SpatialReference);
@@ -641,7 +647,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 
         public IMvxAsyncCommand ShowFullMapCommand => new MvxAsyncCommand(async () =>
         {
-            if (this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
+            if (this.Map?.Basemap?.BaseLayers.Count > 0 && this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
                 await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
         });
 
@@ -692,6 +698,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
 
             if (e.Position == null) { return; }
+            if (this.Map?.Basemap?.BaseLayers.Count <= 0) return;
 
             var extent = this.MapView.Map.Basemap.BaseLayers[0].FullExtent;
 

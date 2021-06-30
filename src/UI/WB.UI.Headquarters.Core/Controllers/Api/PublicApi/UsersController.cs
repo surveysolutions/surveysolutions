@@ -1,7 +1,7 @@
 ﻿#nullable enable
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
@@ -64,6 +64,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="offset"></param>
         [HttpGet]
         [Route("supervisors")]
+        [Produces(MediaTypeNames.Application.Json)]
         public UserApiView Supervisors(int limit = 10, int offset = 1)
             => new UserApiView(this.usersFactory.GetUsersByRole(offset, limit, string.Empty, string.Empty, false, UserRoles.Supervisor));
 
@@ -75,17 +76,18 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="offset"></param>
         [HttpGet]
         [Route("supervisors/{supervisorId:guid}/interviewers")]
+        [Produces(MediaTypeNames.Application.Json)]
         public UserApiView Interviewers(Guid supervisorId, int limit = 10, int offset = 1)
             => new UserApiView(this.usersFactory.GetInterviewers(offset, limit, string.Empty, string.Empty, false, null, supervisorId));
 
         /// <summary>
-        /// Gets detailed info about single user
+        /// Gets detailed info about single supervisor
         /// </summary>
         /// <param name="id">User id or user name or user email</param>
         [HttpGet]
-        [Route("supervisors/{id:guid}")]
-        [Route("users/{id}")]
-        public ActionResult<UserApiDetails> Details(string id)
+        [Route("supervisors/{id}")]
+        [Produces(MediaTypeNames.Application.Json)]
+        public ActionResult<UserApiDetails> SupervisorDetails(string id)
         {
             var userViewInputModel = new UserViewInputModel();
             
@@ -109,6 +111,42 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     return NotFound();
                 }
             }
+            
+            if (!user.Roles.Contains(UserRoles.Supervisor))
+                return NotFound();
+
+            return new UserApiDetails(user);
+        }
+        
+        /// <summary>
+        /// Gets detailed info about single user
+        /// </summary>
+        /// <param name="id">User id or user name or user email</param>
+        [HttpGet]
+        [Route("users/{id}")]
+        [Produces(MediaTypeNames.Application.Json)]
+        public ActionResult<UserApiDetails> Details(string id)
+        {
+            var userViewInputModel = new UserViewInputModel();
+            
+            if (Guid.TryParse(id, out Guid userId))
+            {
+                userViewInputModel.PublicKey = userId;
+            }
+            else
+            {
+                userViewInputModel.UserName = id;
+            }
+            
+            var user = this.usersFactory.GetUser(userViewInputModel);
+            if (user == null)
+            {
+                user = this.usersFactory.GetUser(new UserViewInputModel {UserEmail = id});
+                if (user == null)
+                {
+                    return NotFound();
+                }
+            }
 
             return new UserApiDetails(user);
         }
@@ -121,6 +159,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Interviewer was not found</response>
         [HttpGet]
         [Route("interviewers/{id:guid}")]
+        [Produces(MediaTypeNames.Application.Json)]
         public ActionResult<InterviewerUserApiDetails> InterviewerDetails(Guid id)
         {
             var user = this.usersFactory.GetUser(new UserViewInputModel(id));
@@ -143,6 +182,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">User is not an interviewer or supervisor</response>
         [HttpPatch]
         [Route("users/{id}/archive")]
+        [Produces(MediaTypeNames.Application.Json)]
         [ObservingNotAllowed]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public async Task<ActionResult> Archive(string id)
@@ -186,6 +226,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="409">User cannot be unarchived</response>
         [HttpPatch]
         [Route("users/{id}/unarchive")]
+        [Produces(MediaTypeNames.Application.Json)]
         [ObservingNotAllowed]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public async Task<ActionResult> UnArchive(string id)
@@ -228,6 +269,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="end">End datetime. If isn't specified then get data for 7 days from start data.</param>
         [HttpGet]
         [Route("interviewers/{id:guid}/actions-log")]
+        [Produces(MediaTypeNames.Application.Json)]
         public AuditLogRecordApiView[] ActionsLog(Guid id, DateTime? start = null, DateTime? end = null)
         {
             DateTime startDate = start ?? DateTime.UtcNow.AddDays(-7);
@@ -250,6 +292,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPost]
         [Route("users")]
         [ObservingNotAllowed]
+        [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public async Task<ActionResult<UserCreationResult>> Register([FromBody, BindRequired]RegisterUserModel model)
         {
@@ -285,6 +328,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     PhoneNumber = model.PhoneNumber,
                     Email = model.Email,
                     NormalizedEmail = model.Email?.Trim().ToUpper(),
+                    PasswordChangeRequired = model.Role != Roles.ApiUser
                 };
 
                 HqUser? supervisor = null;
@@ -299,7 +343,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 var workspace = await workspaces.GetByIdAsync(workspaceContext.Name);
                 var workspacesUser = new WorkspacesUsers(workspace, createdUser, supervisor);
                 createdUser.Workspaces.Add(workspacesUser);
-                
+
                 var creationResult = await this.userManager.CreateAsync(createdUser, model.Password);
 
                 if (creationResult.Succeeded)

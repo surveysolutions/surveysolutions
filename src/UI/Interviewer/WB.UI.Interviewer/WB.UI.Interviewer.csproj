@@ -120,9 +120,11 @@
     <Compile Include="InterviewerApplication.cs" />
     <Compile Include="InterviewerAppStart.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
-    <Compile Include="Migrations\Workspaces\AddTitleToOptionViewForSearching.cs" />
+    <Compile Include="Migrations\Workspaces\M202106151719_FillWorkspaceIfEmpty.cs" />
+    <Compile Include="Migrations\Workspace\AddTitleToOptionViewForSearching.cs" />
     <Compile Include="Migrations\Workspaces\M202103101642_MoveSqliteTablesInWorkspaceFolder.cs" />
-    <Compile Include="Migrations\Workspaces\UpdateAssignmentsWithInterviewsCount.cs" />
+    <Compile Include="Migrations\Workspaces\M202105191419_SetPrimaryWorkspaceAsDefaultIfNotSet.cs" />
+    <Compile Include="Migrations\Workspace\UpdateAssignmentsWithInterviewsCount.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="ServiceLocation\InterviewerUIModule.cs" />
     <Compile Include="Services\CheckForExtendedVersionUriProvider.cs" />
@@ -382,9 +384,7 @@
       <Version>1.1.0.6</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Migrations\Workspace" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="Extensions.props" Condition=" '$(ExcludeExtensions)' != 'True' " />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

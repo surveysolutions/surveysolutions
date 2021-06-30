@@ -59,24 +59,28 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.CreateNew)]
+        [AntiForgeryFilter]
         public IActionResult CreateNew()
         {
             return View("Index", NewModel(MenuItem.CreateNew));
         }
 
         [ActivePage(MenuItem.Started)]
+        [AntiForgeryFilter]
         public IActionResult Started()
         {
             return View("Interviews", NewModel(MenuItem.Started, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted));
         }
 
         [ActivePage(MenuItem.Rejected)]
+        [AntiForgeryFilter]
         public IActionResult Rejected()
         {
             return View("Interviews", NewModel(MenuItem.Rejected, InterviewStatus.RejectedBySupervisor));
         }
 
         [ActivePage(MenuItem.Completed)]
+        [AntiForgeryFilter]
         public IActionResult Completed()
         {
             return View("Interviews", NewModel(MenuItem.Completed, InterviewStatus.Completed));
@@ -136,6 +140,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult StartNewInterview(int id)
         {
             var assignment = this.assignments.GetAssignment(id);
@@ -143,7 +148,7 @@ namespace WB.UI.Headquarters.Controllers
             var interviewId = CreateInterview(assignment);
             TempData["lastCreatedInterviewId"] = interviewId; // todo replace with lastCreatedInterviewId from webinterview controller when its migrated
 
-            return Content(Url.Content(GenerateUrl(@"Cover", interviewId)));
+            return Json(new { InterviewId = interviewId});
         }
 
         [HttpGet]
@@ -153,6 +158,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpDelete]
+        [ValidateAntiForgeryToken]
         public IActionResult DiscardInterview(Guid id)
         {
             var deleteInterview = new DeleteInterviewCommand(id, this.authorizedUser.Id);
@@ -161,6 +167,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RestartInterview(Guid id, string comment)
         {
             var restartCommand = new RestartInterviewCommand(id, this.authorizedUser.Id, comment, DateTime.UtcNow);

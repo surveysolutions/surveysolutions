@@ -307,6 +307,9 @@
   <data name="InterviewSizeLimitReached" xml:space="preserve">
     <value>Количество ростеров и вопросов в интервью превысило лимиты.</value>
   </data>
+  <data name="InterviewNotFound" xml:space="preserve">
+    <value>Интервью не найдено.</value>
+  </data>  
   <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
     <value>Приглашение на участвие в %SURVEYNAME%</value>
   </data>

@@ -34,6 +34,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.CommonWeb;
+using WB.UI.Designer.Filters;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
@@ -98,7 +99,8 @@ namespace WB.UI.Designer
             services.AddDbContext<DesignerDbContext>(options =>
                 options.UseNpgsql(
                     Configuration.GetConnectionString("DefaultConnection")));
-
+            
+            services.AddScoped<AntiForgeryFilter>();
             services.AddScoped<IPasswordHasher<DesignerIdentityUser>, PasswordHasher>();
             services
                 .AddDefaultIdentity<DesignerIdentityUser>()
@@ -147,6 +149,8 @@ namespace WB.UI.Designer
                 };
             });
 
+            services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
+            
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)

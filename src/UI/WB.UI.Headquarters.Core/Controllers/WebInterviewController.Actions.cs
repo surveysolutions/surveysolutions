@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Audio(Guid id, [FromForm] string questionId, [FromForm] IFormFile file)
+        public async Task<ActionResult> Audio(Guid id, [FromForm] string questionId, [FromForm] string duration, [FromForm] IFormFile file)
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(id.FormatGuid());
 
@@ -75,9 +75,14 @@ namespace WB.UI.Headquarters.Controllers
 
                 audioFileStorage.StoreInterviewBinaryData(id, fileName, audioInfo.Binary, audioInfo.MimeType);
 
+                var audioDuration = audioInfo.Duration == TimeSpan.Zero 
+                    ? (Double.TryParse(duration, out var dur) ? TimeSpan.FromSeconds(dur) : TimeSpan.Zero)
+                    : audioInfo.Duration;
+
                 var command = new AnswerAudioQuestionCommand(interview.Id,
                     interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
-                    fileName, audioInfo.Duration);
+                    fileName, 
+                    audioDuration);
 
                 this.commandService.Execute(command);
             }

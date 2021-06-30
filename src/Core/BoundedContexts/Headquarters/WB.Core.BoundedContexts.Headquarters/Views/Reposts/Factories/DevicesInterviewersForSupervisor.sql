@@ -37,7 +37,7 @@ LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM devicesyncinfo dsi WHERE EXI
 	AS anySyncWithQuestionnaire ON anySyncWithQuestionnaire."InterviewerId" = u."Id"
 
 
-WHERE up."SupervisorId" = @supervisorId AND u."IsArchived" = false 
+WHERE wu.supervisor_id = @supervisorId AND u."IsArchived" = false 
 group by u."UserName", u."Id"
 ORDER BY {0}
 LIMIT @limit OFFSET @offset

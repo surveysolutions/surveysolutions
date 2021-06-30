@@ -7,12 +7,12 @@
 	from Assignments ass
 		left outer join users.userroles ur on ass.ResponsibleId = ur."UserId"
 		left outer join users.users us on us."Id" = ass.ResponsibleId
-		left outer join users.userprofiles up on us."UserProfileId" = up."Id"
+		left outer join user_profiles up on us."UserProfileId" = up.id
 	where ass.Quantity is not null 
 		AND ass.archived = false
 		AND (ass.questionnaireid = @questionnaireid OR @questionnaireid is NULL)
 		AND (ass.questionnaireversion = @questionnaireversion OR @questionnaireversion is NULL)
-		AND (up."SupervisorId" = @supervisorid OR ass.ResponsibleId = @supervisorid OR @supervisorid is NULL)
+		AND (up.supervisor_id = @supervisorid OR ass.ResponsibleId = @supervisorid OR @supervisorid is NULL)
 	) tmp
 	where Quantity > Count
 group by Days, RoleId

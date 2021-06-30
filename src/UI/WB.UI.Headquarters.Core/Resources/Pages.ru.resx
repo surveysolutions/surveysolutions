@@ -667,6 +667,9 @@
   <data name="GetLatestApp" xml:space="preserve">
     <value>Скачать последнюю версию</value>
   </data>
+    <data name="GetInterviewerApp" xml:space="preserve">
+    <value>Скачать приложение Интервьюера</value>
+  </data>
   <data name="GetLatestSupervisorApp" xml:space="preserve">
     <value>Скачать приложение Супервизора</value>
   </data>
@@ -856,8 +859,14 @@
     <value>Обновить</value>
     <comment>Обновить</comment>
   </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Разблокировать</value>
+  </data>
   <data name="Verify" xml:space="preserve">
     <value>Проверить</value>
+  </data>
+    <data name="AutolockDescription" xml:space="preserve">
+    <value>Пользователь автоматически заблокирован</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
     <value>Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей</value>

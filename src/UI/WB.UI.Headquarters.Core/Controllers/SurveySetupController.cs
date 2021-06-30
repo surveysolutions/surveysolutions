@@ -70,6 +70,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(surveySetupModel);
         }
 
+        [AntiForgeryFilter]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult UpgradeAssignments(Guid id, long version)
         {
@@ -87,6 +88,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.Questionnaires)]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [ActionName("UpgradeAssignments")]
         public async Task<IActionResult> UpgradeAssignmentsPost(Guid id, long version, CancellationToken token = default)
         {

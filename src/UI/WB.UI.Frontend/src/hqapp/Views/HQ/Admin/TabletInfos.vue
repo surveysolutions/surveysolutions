@@ -26,6 +26,7 @@
 <script>
 import { DateFormats, humanFileSize } from '~/shared/helpers'
 import moment from 'moment'
+import { escape } from 'lodash'
 
 export default {
     data() {
@@ -39,6 +40,9 @@ export default {
                     data: 'androidId',
                     name: 'AndroidId',
                     title: this.$t('Pages.PackagesInfo_DeviceId'),
+                    render: function(data, type, row){
+                        return escape(data)
+                    },
                 },
                 {
                     data: 'creationDate',

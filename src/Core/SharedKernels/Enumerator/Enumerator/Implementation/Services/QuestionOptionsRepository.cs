@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -11,11 +12,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class QuestionOptionsRepository : IQuestionOptionsRepository
     {
-        private readonly IOptionsRepository optionsRepository;
+        private readonly IServiceLocator serviceLocator;
+        private IOptionsRepository optionsRepository => serviceLocator.GetInstance<IOptionsRepository>();
 
-        public QuestionOptionsRepository(IOptionsRepository optionsRepository)
+        public QuestionOptionsRepository(IServiceLocator serviceLocator)
         {
-            this.optionsRepository = optionsRepository ?? throw new ArgumentException(nameof(optionsRepository));
+            this.serviceLocator = serviceLocator ?? throw new ArgumentException(nameof(optionsRepository));
         }
 
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(IQuestionnaire questionnaire,

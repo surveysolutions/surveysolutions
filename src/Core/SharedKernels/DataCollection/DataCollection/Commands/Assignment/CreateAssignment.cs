@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
         public List<InterviewAnswer> Answers { get; }
         public List<string> ProtectedVariables { get; }
         public string Comment { get; }
+        public int? UpgradedFromId { get; }
 
         public CreateAssignment(Guid publicKey,
             int id,
@@ -31,7 +32,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             bool? webMode,
             List<InterviewAnswer> answers, 
             List<string> protectedVariables,
-            string comment) 
+            string comment,
+            int? upgradedFromId = null) 
             : base(publicKey, userId)
         {
             Id = id;
@@ -45,6 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             Answers = answers ?? new List<InterviewAnswer>();
             ProtectedVariables = protectedVariables ?? new List<string>();
             Comment = comment;
+            UpgradedFromId = upgradedFromId;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -362,7 +362,7 @@
   </data>
   <data name="Activated" xml:space="preserve">
     <value>Activated</value>
-  </data> 
+  </data>
   <data name="CawiActivated" xml:space="preserve">
     <value>CAWI Activated</value>
   </data>
@@ -515,6 +515,9 @@
     <value>(no comment)</value>
   </data>
   <data name="LinkToWebInterviewExample" xml:space="preserve">
-      <value>Swich to Web Interview link sample</value>
+      <value>Switch to Web Interview link sample</value>    
+  </data>
+  <data name="Action_UpgradedFrom" xml:space="preserve">
+    <value>Upgraded from assignment {{id}}</value>
   </data>
 </root>

@@ -46,8 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 @event.Payload.Email,
                 @event.Payload.Password,
                 @event.Payload.WebMode,
-                @event.Payload.Comment);
-
+                @event.Payload.Comment,
+                @event.Payload.UpgradedFromId);
             var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(state.QuestionnaireId, null);
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToImmutableHashSet();
 

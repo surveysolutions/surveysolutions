@@ -2,8 +2,8 @@
     <ProfileLayout ref="profile"
         :role="userInfo.role"
         :isOwnProfile="userInfo.isOwnProfile"
-        :canChangePassword="userInfo.canChangePassword"
         :userName="userInfo.userName"
+        :canChangePassword="userInfo.canChangePassword"
         :userId="userInfo.userId"
         :currentTab="currentTab">
         <div class="block-filter">
@@ -134,7 +134,7 @@ export default {
                 return baseUrl + '/' + this.model.userInfo.userId
         },
         navigateTo: function(location){
-            window.location.href = this.getUrl(location)
+            window.location.href = this.getPageUrl(location)
             return false
         },
         navigate: function(target){

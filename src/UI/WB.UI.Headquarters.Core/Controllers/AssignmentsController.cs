@@ -300,7 +300,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             if (allImportedFileInfos?.Any() != true)
-                return this.Ok(CreateError(PreloadingVerificationMessages.PL0024_DataWasNotFound));
+                return this.Ok(CreateError(PreloadingVerificationMessages.PL0024_DataWasNotFound, "PL0024"));
 
             try
             {
@@ -336,7 +336,7 @@ namespace WB.UI.Headquarters.Controllers
                                 : this.assignmentsImportReader.ReadFileFromZip(model.File.OpenReadStream(), preloadedFileInfo.FileName);
 
                             if (preloadedFile.Rows.Length == 0)
-                                return this.Ok(CreateError(PreloadingVerificationMessages.PL0024_DataWasNotFound));
+                                return this.Ok(CreateError(PreloadingVerificationMessages.PL0024_DataWasNotFound, "PL0024"));
 
                             errors = this.assignmentsImportService
                                 .VerifySimpleAndSaveIfNoErrors(preloadedFile, model.ResponsibleId.Value, questionnaire).Take(10).ToArray();
@@ -393,7 +393,7 @@ namespace WB.UI.Headquarters.Controllers
             return null;
         }
 
-        private PanelImportVerificationError[] CreateError(string error)
-            => new[] {new PanelImportVerificationError(@"PL0000", error)};
+        private PanelImportVerificationError[] CreateError(string error, string code = null)
+            => new[] {new PanelImportVerificationError(code ?? "PL0000", error)};
     }
 }

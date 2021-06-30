@@ -72,7 +72,7 @@ namespace WB.UI.Designer.Code.Attributes
         {
             if (user == null) return false;
 
-            var signInResult = await signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: false);
+            var signInResult = await signInManager.CheckPasswordSignInAsync(user, password, true);
             return signInResult.Succeeded;
         }
     }
