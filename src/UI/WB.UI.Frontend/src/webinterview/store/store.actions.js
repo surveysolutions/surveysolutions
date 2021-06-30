@@ -94,8 +94,8 @@ export default {
         return Vue.$api.interview.upload(Vue.$config.imageUploadUri, identity, file)
     },
 
-    answerAudioQuestion(_, { identity, file }) {
-        return Vue.$api.interview.upload(Vue.$config.audioUploadUri, identity, file)
+    answerAudioQuestion(_, { identity, file, duration }) {
+        return Vue.$api.interview.upload(Vue.$config.audioUploadUri, identity, file, duration)
     },
 
     answerQRBarcodeQuestion(_, { identity, text }) {
