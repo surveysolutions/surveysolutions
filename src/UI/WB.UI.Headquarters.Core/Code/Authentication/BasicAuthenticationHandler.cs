@@ -48,16 +48,17 @@ namespace WB.UI.Headquarters.Code.Authentication
 
                 return await executor.ExecuteAsync(async (sl) =>
                 {
-                    var signinManager = sl.GetInstance<SignInManager<HqUser>>();;
-                    var result = await signinManager.PasswordSignInAsync(creds.Username, creds.Password, false, true);
+                    var signinManager = sl.GetInstance<SignInManager<HqUser>>();
+                    
+                    var user = await signinManager.UserManager.FindByNameAsync(creds.Username);
+                    if (user == null) return AuthenticateResult.Fail(FailureMessage);                    
+                    
+                    var result = await signinManager.CheckPasswordSignInAsync(user, creds.Password, true);
 
                     if (result.IsLockedOut)
                         return AuthenticateResult.Fail("User is locked");
                     if (result.Succeeded)
-                    { 
-                        var user = await signinManager.UserManager.FindByNameAsync(creds.Username);
-                        if (user == null) return AuthenticateResult.Fail("No user found");
-
+                    {                         
                         if (user.IsArchivedOrLocked)
                         {
                             this.isUserLocked = true;
@@ -76,8 +77,6 @@ namespace WB.UI.Headquarters.Code.Authentication
             {
                 return AuthenticateResult.Fail(e.Message);
             }
-
-            
         }
 
         protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
