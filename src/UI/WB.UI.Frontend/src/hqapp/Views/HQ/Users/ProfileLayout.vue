@@ -130,7 +130,7 @@ export default {
     methods:{
         getUrl: function(baseUrl){
             if(this.isOwnProfile)
-                return '/Users/' + baseUrl
+                return `./${baseUrl}`
             else{
                 const returnUrl = this.$route.query['returnUrl']
                 if(returnUrl != null && returnUrl.startsWith('/')) {
