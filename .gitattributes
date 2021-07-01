@@ -1,4 +1,6 @@
 * text=auto
+* linguist-vendored
+*.bsl -linguist-detectable
 
 # Windows forced line-endings
 *.sln crlf
