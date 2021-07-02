@@ -2,10 +2,9 @@
 
 In order to be able to buld Survey Solutions locally, you will need to install several prerequesties fist:
 
-- Install PostgreSQL.
-- Install LTS version of node JS (we currently use version 12).
-- Install yarn package manager.
-- Install latest version of asp.net core SDK.
+- Install PostgreSQL 12 or newer.
+- Install LTS version of node JS (we currently use version 14) - https://nodejs.org/en/
+- Install latest version of .Net SDK https://dotnet.microsoft.com/download
 - Install Xamarin build tools for your platform.
 
 ## Running locally
@@ -41,11 +40,16 @@ dotnet run --project src/Services/Export/WB.Services.Export.Host/WB.Services.Exp
 
 In order to build android applications you can use following command:
 
-``` sh
+``` pwsh
+# All apps
+.\.build.ps1 Android
+
 # interviewer
-msbuild src/UI/Interviewer/WB.UI.Interviewer/WB.UI.Interviewer.csproj /restore /p:XamarinBuildDownloadAllowUnsecure=true /t:SignAndroidPackage
+.\.build.ps1 AndroidInterviewer
+
 # supervisor
-msbuild src/UI/Supervisor/WB.UI.Supervisor/WB.UI.Supervisor.csproj /restore /p:XamarinBuildDownloadAllowUnsecure=true /t:SignAndroidPackage
+.\.build.ps1 AndroidSupervisor
+
 # tester
 msbuild src/UI/Tester/WB.UI.Tester/WB.UI.Tester.csproj /restore /p:XamarinBuildDownloadAllowUnsecure=true /t:SignAndroidPackage
 ```
