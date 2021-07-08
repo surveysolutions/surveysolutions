@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers
@@ -72,6 +73,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.RedirectToAction("TakeNewAssignment", new {id = newInterviewId.FormatGuid()});
         }
 
+        [ExtraHeaderPermissions(HeaderPermissionType.Esri,HeaderPermissionType.Google)]
         public IActionResult TakeNewAssignment(string id)
         {
             if (this.prototypeService.GetPrototypeType(Guid.Parse(id)) != PrototypeType.Permanent)

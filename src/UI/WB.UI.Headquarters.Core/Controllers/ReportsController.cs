@@ -112,6 +112,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [Authorize(Roles = "Administrator, Supervisor, Headquarter")]
         [ActivePage(MenuItem.MapReport)]
+        [ExtraHeaderPermissions(HeaderPermissionType.Google)]
         public ActionResult MapReport()
         {
             var questionnaires = this.mapReport.GetQuestionnaireIdentitiesWithGpsQuestions();
