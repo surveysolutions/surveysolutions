@@ -82,6 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [ActivePage(MenuItem.Docs)]
         [Route("Interview/Review/{id}")]
         [Route("Interview/Review/{id}/Cover")]
+        [ExtraHeaderPermissions(HeaderPermissionType.Google)]
         public ActionResult Cover(Guid id)
         {
             var interviewId = id.FormatGuid();
@@ -105,6 +106,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [ActivePage(MenuItem.Docs)]
         [Route("Interview/Review/{id}/Section/{url}")]
+        [ExtraHeaderPermissions(HeaderPermissionType.Google)]
         public ActionResult Review(Guid id, string url)
         {
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
@@ -199,6 +201,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(interviewHistoryViewFactory.Load(id));
         }
 
+        [ExtraHeaderPermissions(HeaderPermissionType.Esri)]
         public ActionResult InterviewAreaFrame(Guid id, string questionId)
         {
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);

@@ -107,6 +107,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [ActivePage(MenuItem.Maps)]
+        [ExtraHeaderPermissions(HeaderPermissionType.Esri)]
         public ActionResult MapPreview(string mapName)
         {
             MapBrowseItem map = mapPlainStorageAccessor.GetById(mapName);
