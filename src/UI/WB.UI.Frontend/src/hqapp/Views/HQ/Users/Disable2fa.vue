@@ -17,7 +17,7 @@
                     <strong>{{$t('Pages.Disable2faLine1')}}</strong>
                 </p>
                 <p>
-                    {{$t('Pages.ChandgeKeyLine1')}} <a v-bind:href="getUrl('../../Users/ResetAuthenticator')">{{$t('Pages.ChandgeKeyLine2')}}</a>
+                    {{$t('Pages.ChandgeKeyLine1')}} <a v-bind:href="getUrl('ResetAuthenticator')">{{$t('Pages.ChandgeKeyLine2')}}</a>
                 </p>
             </div>
         </div>
@@ -88,10 +88,9 @@ export default {
         },
         getUrl: function(baseUrl){
             if(this.isOwnProfile)
-                return baseUrl
+                return `./${baseUrl}`
             else
-                return baseUrl + '/' + this.model.userInfo.userId
-
+                return `../${baseUrl}/` + this.model.userInfo.userId
         },
     },
 }
