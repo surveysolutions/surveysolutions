@@ -224,6 +224,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             {
                 var newFeatureLayer = await MapUtilityService.GetShapefileAsFeatureLayer(AvailableShapefiles.First().FullPath);
                 
+                this.MapView.Map.OperationalLayers.Clear();
+
                 // Add the feature layer to the map
                 this.MapView.Map.OperationalLayers.Add(newFeatureLayer);
 
