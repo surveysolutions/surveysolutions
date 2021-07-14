@@ -69,6 +69,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             else if (!string.IsNullOrEmpty(input.DeviceId))
                 query = query.Where(x => x.Profile.DeviceId == input.DeviceId);
 
+            var currentWorkspace = workspaceContextAccessor.CurrentWorkspace()?.Name ?? 
+                                   throw new MissingWorkspaceException();
+
+            query = query.Where(u => u.Workspaces.Any(w => w.Workspace.Name == currentWorkspace));
+
             var dbUser =
                 (from user in query
                 select new
