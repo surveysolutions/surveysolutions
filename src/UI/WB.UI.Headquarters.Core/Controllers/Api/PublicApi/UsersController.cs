@@ -38,6 +38,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
         private readonly IPlainStorageAccessor<Workspace> workspaces;
 
+        private const int MaxPageSize = 100;
+
         public UsersController(IUserViewFactory usersFactory,
             IUserArchiveService archiveService,
             IAuditLogService auditLogService,
@@ -66,7 +68,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("supervisors")]
         [Produces(MediaTypeNames.Application.Json)]
         public UserApiView Supervisors(int limit = 10, int offset = 1)
-            => new UserApiView(this.usersFactory.GetUsersByRole(offset, limit, string.Empty, string.Empty, false, UserRoles.Supervisor));
+        {
+            if(limit > MaxPageSize)
+                limit = MaxPageSize;
+
+            var users = this.usersFactory.GetUsersByRole(offset, limit, string.Empty, string.Empty, false, UserRoles.Supervisor);
+            return new UserApiView(users);
+        }
+            
 
         /// <summary>
         /// Gets list of interviewers in the specific supervisor team
@@ -78,7 +87,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("supervisors/{supervisorId:guid}/interviewers")]
         [Produces(MediaTypeNames.Application.Json)]
         public UserApiView Interviewers(Guid supervisorId, int limit = 10, int offset = 1)
-            => new UserApiView(this.usersFactory.GetInterviewers(offset, limit, string.Empty, string.Empty, false, null, supervisorId));
+        {
+            if(limit > MaxPageSize)
+                limit = MaxPageSize;
+
+            var users = this.usersFactory.GetInterviewers(offset, limit, string.Empty, string.Empty, false, null, supervisorId);
+            return new UserApiView(users);
+        }
 
         /// <summary>
         /// Gets detailed info about single supervisor
