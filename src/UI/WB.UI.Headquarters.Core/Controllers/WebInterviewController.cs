@@ -172,6 +172,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [WebInterviewAuthorize]
         [Route("{id:Guid}/Section/{sectionId}")]
+        [ExtraHeaderPermissions(HeaderPermissionType.Google)]
         public ActionResult Section(string id, string sectionId)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -353,6 +354,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     Response.Cookies.Append(AskForEmail, "true", new CookieOptions
                     {
+                        HttpOnly = true,
                         Expires = DateTime.UtcNow.AddDays(7)
                     });
                 }
@@ -366,6 +368,7 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         Response.Cookies.Append($"InterviewId-{assignment.Id}", interviewId, new CookieOptions
                         {
+                            HttpOnly = true,
                             Expires = DateTime.Now.AddYears(1)
                         });
 
@@ -509,6 +512,7 @@ namespace WB.UI.Headquarters.Controllers
 
             Response.Cookies.Append($"InterviewId-{assignment.Id}", interviewId, new CookieOptions
             {
+                HttpOnly = true,
                 Expires = DateTime.Now.AddYears(1)
             });
 
@@ -544,6 +548,7 @@ namespace WB.UI.Headquarters.Controllers
         [WebInterviewAuthorize]
         [Route("{id}/Cover")]
         [AntiForgeryFilter]
+        [ExtraHeaderPermissions(HeaderPermissionType.Google)]
         public IActionResult Cover(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);

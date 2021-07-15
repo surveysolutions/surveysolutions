@@ -1,9 +1,9 @@
 <template>
     <ProfileLayout ref="profile"
         :role="userInfo.role"
-        :isOwnProfile="userInfo.isOwnProfile"
-        :canChangePassword="userInfo.canChangePassword"
+        :isOwnProfile="isOwnProfile"
         :userName="userInfo.userName"
+        :canChangePassword="userInfo.canChangePassword"
         :userId="userInfo.userId"
         :currentTab="currentTab">
         <div class="block-filter">
@@ -24,7 +24,7 @@
         <div class="alert alert-warning"
             v-if="is2faEnabled && recoveryCodesLeft <= 3">
             <strong>{{$t('Pages.RecoveryCodesLeft')}} {{recoveryCodesLeft}}.</strong>
-            <p>{{$t('Pages.RecoveryCodesYouCan')}} <a :href="getUrl('../../Users/GenerateRecoveryCodes')">{{$t('Pages.GenerateRecoveryCodesLink')}}</a>.</p>
+            <p>{{$t('Pages.RecoveryCodesYouCan')}} <a :href="getUrl('GenerateRecoveryCodes')">{{$t('Pages.GenerateRecoveryCodesLink')}}</a>.</p>
         </div>
 
         <div class="row flex-row">
@@ -39,7 +39,7 @@
                         <div >
                             <button id="enable-authenticator"
                                 type="submit"
-                                @click="navigateTo('../../Users/SetupAuthenticator')"
+                                @click="navigateTo('SetupAuthenticator')"
                                 style="display: inline-block;"
                                 v-bind:disabled="userInfo.isObserving"
                                 class="btn btn-success">{{$t('Pages.SetupAuthenticator')}}</button>
@@ -57,7 +57,7 @@
                         <div>
                             <button id="reset-authenticator"
                                 type="submit"
-                                @click="navigateTo('../../Users/ResetAuthenticator')"
+                                @click="navigateTo('ResetAuthenticator')"
                                 style="display: inline-block;"
                                 v-bind:disabled="userInfo.isObserving"
                                 class="btn btn-success">{{$t('Pages.ResetAuthenticator')}}
@@ -77,7 +77,7 @@
                         <div >
                             <button id="reset-codes"
                                 type="submit"
-                                @click="navigateTo('../../Users/ResetRecoveryCodes')"
+                                @click="navigateTo('ResetRecoveryCodes')"
                                 style="display: inline-block;"
                                 v-bind:disabled="userInfo.isObserving"
                                 class="btn btn-success">{{$t('Pages.ResetRecoveryCodes')}} </button>
@@ -92,7 +92,7 @@
             <button
                 id="disable-2fa"
                 type="submit"
-                @click="navigateTo('../../Users/Disable2fa')"
+                @click="navigateTo('Disable2fa')"
                 class="btn btn-danger"
                 v-bind:disabled="userInfo.isObserving">{{$t('Pages.Disable2fa')}}</button>
         </div >
@@ -125,13 +125,16 @@ export default {
         userInfo() {
             return this.model.userInfo
         },
+        isOwnProfile(){
+            return this.userInfo.isOwnProfile
+        },
     },
     methods: {
         getUrl: function(baseUrl){
             if(this.isOwnProfile)
-                return baseUrl
+                return `./${baseUrl}`
             else
-                return baseUrl + '/' + this.model.userInfo.userId
+                return `../${baseUrl}/` + this.model.userInfo.userId
         },
         navigateTo: function(location){
             window.location.href = this.getUrl(location)

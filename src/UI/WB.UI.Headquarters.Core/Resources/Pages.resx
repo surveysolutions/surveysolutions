@@ -856,8 +856,14 @@
   <data name="Update" xml:space="preserve">
     <value>Update</value>
   </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Unlock</value>
+  </data>
   <data name="Verify" xml:space="preserve">
     <value>Verify</value>
+  </data>
+  <data name="AutolockDescription" xml:space="preserve">
+    <value>Account is autolocked</value>
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
     <value>This action will create individual user with supervisor rights,

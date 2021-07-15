@@ -1,6 +1,5 @@
 ﻿@using WB.Core.GenericSubdomains.Portable
 @using WB.UI.Designer.BootstrapSupport.HtmlHelpers
-@using WB.UI.Designer.Resources
 @using WB.UI.Designer.Utils
 @using WB.UI.Designer.Code
 @model WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory.QuestionnaireChangeHistory
@@ -158,10 +157,9 @@
         window.showComment = function (historyItemId) {
             $("#comment").val(comments[historyItemId])
             $('#saveCommentBtn').click(function () {                    
-                $.post("@Url.Action("SaveComment", "Questionnaire")",
-                    {
-                        id: '@Model?.Id', historyItemId: historyItemId, comment: $('#comment').val()
-                    })
+                $.post({url:"@Url.Action("SaveComment", "Questionnaire")",
+                        data:{id: '@Model?.Id', historyItemId: historyItemId, comment: $('#comment').val()},
+                        headers: {'X-CSRF-TOKEN': getCsrfCookie()} })
                 .done(function (data) { if(data) location.reload();});
             });
             $('#commentModal').modal('show');

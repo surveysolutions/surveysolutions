@@ -195,6 +195,9 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         public IActionResult Download(string id)
         {
+            if (id.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+                return this.BadRequest();
+            
             var hostName = this.Request.Host.ToString().Split('.').FirstOrDefault() ?? @"unknownhost";
             var fullPathToContentFile = this.tabletInformationService.GetFullPathToContentFile(id);
 

@@ -278,7 +278,12 @@ if (!window.AudioRecorder) {
         }
 
         function doneEncoding(blob) {
-            config.doneCallback(blob)
+            var audioURL = window.URL.createObjectURL(blob)
+            var audio = new Audio(audioURL)
+            audio.onloadedmetadata = function(){
+                var duration = audio.duration
+                config.doneCallback(blob, duration)
+            }
         }
 
         function cancelAnalyserUpdates() {

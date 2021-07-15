@@ -180,10 +180,11 @@ export default {
                         self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.AudioInitializationFailed'))
                         this.closeModal()
                     },
-                    doneCallback: (blob) => {
+                    doneCallback: (blob, duration) => {
                         self.$store.dispatch('answerAudioQuestion', {
                             identity: self.id,
                             file: blob,
+                            duration : duration,
                         })
                     },
                 })

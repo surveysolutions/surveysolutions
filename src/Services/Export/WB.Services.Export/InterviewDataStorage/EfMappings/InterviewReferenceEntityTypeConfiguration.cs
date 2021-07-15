@@ -73,6 +73,7 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
             builder.Property(a => a.AudioRecording).IsRequired(true);
             builder.Property(a => a.Quantity).IsRequired(false);
             builder.Property(a => a.Comment).IsRequired(false);
+            builder.Property(a => a.UpgradedFromId).IsRequired(false);
         }
     }
 

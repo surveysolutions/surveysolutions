@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,10 +43,17 @@ namespace WB.UI.Headquarters.Code.Authentication
                 opt.LoginPath = "/Account/LogOn";
                 opt.AccessDeniedPath = "/Error/401";
 
-                var expireTimeSpan = configuration.GetValue<TimeSpan>("Authentication:TimeOut");
-                
-                opt.ExpireTimeSpan = expireTimeSpan;
+                var expireTimeSpan = configuration.GetValue<TimeSpan>("Authentication:TicketExpirationTimeOut");                
+                opt.ExpireTimeSpan = expireTimeSpan == TimeSpan.Zero? TimeSpan.FromDays(1) : expireTimeSpan;
                 opt.Cookie.Path = "/";
+
+                var securityPolicy = configuration.GetValue<Boolean?>("Policies:CookiesSecurePolicyAlways");
+
+                if (securityPolicy.HasValue)
+                    opt.Cookie.SecurePolicy =
+                        securityPolicy.Value ? CookieSecurePolicy.Always : CookieSecurePolicy.None;
+                else
+                    opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 
                 opt.ForwardDefaultSelector = ctx =>
                 {

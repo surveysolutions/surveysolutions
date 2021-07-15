@@ -67,10 +67,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 db.Dialect<PostgreSQL91Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.Keywords;
 
-#if DEBUG
-                db.LogSqlInConsole = true;
-                db.LogFormattedSql = true;
-#endif
+//#if DEBUG
+//                db.LogSqlInConsole = true;
+//                db.LogFormattedSql = true;
+//#endif
             });
 
             var maps = this.GetWorkspaceMappings();
