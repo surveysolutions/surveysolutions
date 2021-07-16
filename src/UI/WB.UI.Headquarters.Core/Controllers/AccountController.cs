@@ -49,12 +49,6 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         public IActionResult LogOn(string returnUrl)
         {
-            logger.LogInformation($"Headers:");
-            foreach (var item in this.ControllerContext.HttpContext.Request.Headers)
-            {
-                logger.LogInformation($"{item.Key} : {item.Value}");
-            }
-
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.ReturnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
                 ? returnUrl
