@@ -56,6 +56,15 @@ namespace WB.UI.Headquarters.Services.Impl
                 hqRejectInterviewToInterviewerCommand.SupervisorId = interviewer.Supervisor.Id;
             }
 
+            if(command is AssignResponsibleCommand assignResponsibleCommand)
+            {
+                if(assignResponsibleCommand.InterviewerId.HasValue)
+                { 
+                    var interviewer = userViewFactory.GetUser(assignResponsibleCommand.InterviewerId.Value);
+                    assignResponsibleCommand.SupervisorId = interviewer.Supervisor.Id;
+                }
+            }
+
             return command;
         }
 

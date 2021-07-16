@@ -1377,44 +1377,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var interviewerId = command.InterviewerId;
             var supervisorId = command.SupervisorId;
 
-            if (!interviewerId.HasValue && !supervisorId.HasValue)
+            if (!supervisorId.HasValue)
             {
                 throw new InterviewException(
-                    $"Can't assign interview {this.properties.Id} to empty interviewer or supervisor.",
+                    $"Cannot assign interview {this.properties.Id}. Supervisor was not set.",
                     InterviewDomainExceptionType.OtherUserIsResponsible);
             }
 
-            var moveWithInTheSameTeam = interviewerId.HasValue && !supervisorId.HasValue;
-            if (moveWithInTheSameTeam)
-            {
-                AssignInterviewer(command.UserId, interviewerId.Value, command.OriginDate);
-                return;
-            }
-
-            var moveToANewTeamNoInterviewerSpecified = !interviewerId.HasValue;
-            if (moveToANewTeamNoInterviewerSpecified)
+            //reset supervisor to current if it changed for interviewer or direct assign to supervisor 
+            if (this.properties.SupervisorId != supervisorId || !interviewerId.HasValue)
             {
                 AssignSupervisor(command.UserId, supervisorId.Value, command.OriginDate);
-                return;
             }
 
-            if (this.properties.SupervisorId != supervisorId && this.properties.InterviewerId == interviewerId)
-                throw new InterviewException(
-                    $"To change a team, provide new id of supervisor and empty (null) or nor interviewer id (and make sure it belongs to the same team). Currently, you specified a new supervisor {supervisorId} and the same interviewer {interviewerId}.",
-                    InterviewDomainExceptionType.OtherUserIsResponsible);
-
-            //within the same team
-            if (this.properties.SupervisorId == supervisorId)
-            {
+            if(interviewerId.HasValue)
+            { 
                 AssignInterviewer(command.UserId, interviewerId.Value, command.OriginDate);
-                return;
             }
-
-            // move to other team
-            AssignSupervisor(command.UserId, supervisorId.Value, command.OriginDate);
-            AssignInterviewer(command.UserId, interviewerId.Value, command.OriginDate);
-
-            //AssignResponsible(command.UserId, interviewerId, supervisorId, command.AssignTime);
         }
 
         public void MoveInterviewToTeam(MoveInterviewToTeam command)
