@@ -228,7 +228,7 @@ namespace WB.UI.Headquarters
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;                    
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto;                    
                 options.ForwardLimit = 2;
                 options.KnownNetworks.Clear();
                 options.KnownProxies.Clear();
