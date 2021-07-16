@@ -16,9 +16,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
@@ -231,7 +229,7 @@ namespace WB.UI.Headquarters
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;                    
-                
+                options.ForwardLimit = 2;
                 options.KnownNetworks.Clear();
                 options.KnownProxies.Clear();
             });
@@ -485,8 +483,6 @@ namespace WB.UI.Headquarters
             app.UseHqSwaggerUI();
 
             app.UseGraphQLApi();
-
-         
 
             app.UseEndpoints(endpoints =>
             {
