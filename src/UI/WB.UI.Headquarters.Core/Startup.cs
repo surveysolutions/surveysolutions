@@ -259,6 +259,9 @@ namespace WB.UI.Headquarters
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+				options.ForwardLimit = 2;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
             });
 
             services.AddDistributedMemoryCache();
