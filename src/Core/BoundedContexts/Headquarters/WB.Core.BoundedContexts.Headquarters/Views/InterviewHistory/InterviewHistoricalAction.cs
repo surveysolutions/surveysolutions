@@ -34,6 +34,7 @@
         TranslationSwitched = 28,
         OpenedBySupervisor = 29,
         ClosedBySupervisor = 30,
-        InterviewModeChanged = 31
+        InterviewModeChanged = 31,
+        InterviewCreated = 32
     }
 }
