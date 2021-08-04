@@ -30,3 +30,7 @@ All contributions, bug reports, documentation improvements, helping with transla
 If you are interested in making modifications to the code, please take a look at local building and development environment description in the [contributing](https://github.com/surveysolutions/surveysolutions/blob/master/CONTRIBUTING.md) file.
 
 Please reach out to the team first to discuss your ideas if you think that you'd like to contribute your changes and/or additions to the product.
+
+# Security
+
+Please read our [security guide](https://github.com/surveysolutions/surveysolutions/blob/master/SECURITY.md) on how we protect your survey data, or if you wish to report a security issue.
