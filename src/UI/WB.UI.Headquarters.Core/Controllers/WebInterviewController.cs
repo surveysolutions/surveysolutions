@@ -424,6 +424,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Route("{invitationId}/Start")]
+        [TypeFilter(typeof(RedirectAntiforgeryValidationFailedResultFilter))]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> StartPost(string invitationId, [FromForm] string password)
         {

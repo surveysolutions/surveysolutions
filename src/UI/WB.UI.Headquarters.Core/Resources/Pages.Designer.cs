@@ -466,6 +466,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid request data..
+        /// </summary>
+        public static string AntiForgeryError_Title {
+            get {
+                return ResourceManager.GetString("AntiForgeryError_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Any.
         /// </summary>
         public static string AnyOption {
@@ -651,6 +660,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string AuthenticatorCode {
             get {
                 return ResourceManager.GetString("AuthenticatorCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account is autolocked.
+        /// </summary>
+        public static string AutolockDescription {
+            get {
+                return ResourceManager.GetString("AutolockDescription", resourceCulture);
             }
         }
         
@@ -4324,6 +4342,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Unarchive {
             get {
                 return ResourceManager.GetString("Unarchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlock.
+        /// </summary>
+        public static string Unlock {
+            get {
+                return ResourceManager.GetString("Unlock", resourceCulture);
             }
         }
         
