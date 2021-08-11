@@ -1734,4 +1734,7 @@
   <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
     <value>Открытые переменные по опроснику</value>
   </data>
+  <data name="AntiForgeryError_Title" xml:space="preserve">
+      <value>Ошибка данных</value>
+  </data>
 </root>
