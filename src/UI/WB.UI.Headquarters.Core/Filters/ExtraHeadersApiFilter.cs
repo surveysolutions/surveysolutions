@@ -12,7 +12,7 @@ namespace WB.UI.Headquarters.Filters
         private string[] EsriImagesLocations = { "http://*.arcgis.com", "https://*.arcgisonline.com" };
 
         private string[] GoogleMapsFontsLocations = { "https://fonts.gstatic.com" };
-        private string[] GoogleMapsImagesLocations  = { "https://*.googleapis.com", "https://*.gstatic.com", "https://*.google.com"};
+        private string[] GoogleMapsImagesLocations  = { "https://google.com", "https://*.googleapis.com", "https://*.gstatic.com", "https://*.google.com"};
 
         public void OnActionExecuting(ActionExecutingContext context)
         {         
