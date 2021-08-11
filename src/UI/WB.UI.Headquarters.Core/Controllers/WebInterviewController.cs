@@ -284,7 +284,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var assignment = invitation.Assignment;
 
-            if (assignment.Archived)
+            if (!invitation.IsWithAssignmentResolvedByPassword() && assignment.Archived)
             {
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
@@ -292,7 +292,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (assignment.WebMode == false)
             {
-                // Compatibility issue. Every time users will use link,   they will create a new interview. All links will be bounced back
+                // Compatibility issue. Every time users will use link, they will create a new interview. All links will be bounced back
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound,
                     Enumerator.Native.Resources.WebInterview.Error_NotFound);
             }
@@ -424,6 +424,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Route("{invitationId}/Start")]
+        [TypeFilter(typeof(RedirectAntiforgeryValidationFailedResultFilter))]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> StartPost(string invitationId, [FromForm] string password)
         {
@@ -469,6 +470,12 @@ namespace WB.UI.Headquarters.Controllers
             {
                 invitation = invitationService.GetInvitationByTokenAndPassword(invitationId, password);
                 assignment = invitation.Assignment;
+            }
+            
+            if (assignment.Archived)
+            {
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                    Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
 
             if (invitation.InterviewId != null)

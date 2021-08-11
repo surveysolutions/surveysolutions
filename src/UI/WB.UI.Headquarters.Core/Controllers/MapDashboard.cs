@@ -37,6 +37,7 @@ namespace WB.UI.Headquarters.Controllers
             public string UserRole { get; set; }
         }
 
+        [ExtraHeaderPermissions(HeaderPermissionType.Google)]
         public ActionResult Index()
         {
             ViewBag.ActivePage = authorizedUser.IsInterviewer
