@@ -9,10 +9,10 @@ namespace WB.UI.Headquarters.Filters
     public class ExtraHeadersApiFilter : IActionFilter
     {
         private string[] EsriFontsLocations = { "https://js.arcgis.com" };
-        private string[] EsriImagesLocations = { "http://js.arcgis.com", "https://server.arcgisonline.com", "https://services.arcgisonline.com" };
+        private string[] EsriImagesLocations = { "http://*.arcgis.com", "https://*.arcgisonline.com" };
 
         private string[] GoogleMapsFontsLocations = { "https://fonts.gstatic.com" };
-        private string[] GoogleMapsImagesLocations  = { "https://maps.googleapis.com", "https://maps.gstatic.com", "https://google.com"};
+        private string[] GoogleMapsImagesLocations  = { "https://google.com", "https://*.googleapis.com", "https://*.gstatic.com", "https://*.google.com"};
 
         public void OnActionExecuting(ActionExecutingContext context)
         {         

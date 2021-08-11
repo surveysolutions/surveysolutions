@@ -38,5 +38,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
             return UnhandledException();
         }
+        
+        [Route("AntiForgery")]
+        public IActionResult AntiForgery() => this.View("AntiForgery");
     }
 }

@@ -226,14 +226,6 @@ namespace WB.UI.Headquarters
         {
             services.AddUnderConstruction();
 
-            services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto;                    
-                options.ForwardLimit = 2;
-                options.KnownNetworks.Clear();
-                options.KnownProxies.Clear();
-            });
-
             services.AddOptions();
             services.AddCors(options =>
             {
@@ -260,6 +252,14 @@ namespace WB.UI.Headquarters
                 //j.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
                 j.SerializerSettings.Converters.Add(new StringEnumConverter());
                 j.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            });
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+				options.ForwardLimit = 2;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
             });
 
             services.AddDistributedMemoryCache();

@@ -384,6 +384,9 @@
   <data name="Forbidden_Title" xml:space="preserve">
     <value>Forbidden</value>
   </data>
+  <data name="AntiForgeryError_Title" xml:space="preserve">
+      <value>Invalid request data.</value>
+  </data>
   <data name="ErrorIndex_Title" xml:space="preserve">
     <value>Error</value>
   </data>
