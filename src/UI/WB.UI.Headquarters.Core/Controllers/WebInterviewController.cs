@@ -471,6 +471,12 @@ namespace WB.UI.Headquarters.Controllers
                 invitation = invitationService.GetInvitationByTokenAndPassword(invitationId, password);
                 assignment = invitation.Assignment;
             }
+            
+            if (assignment.Archived)
+            {
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                    Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
+            }
 
             if (invitation.InterviewId != null)
             {
