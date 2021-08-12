@@ -117,62 +117,131 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
-    <value>Aplikace Tazatel nemůže určit stav Bluetooth (např. zapnuto / vypnuto, připojeno / odpojeno). Restartujte tazatelské i garantské zařízení. Potom zkuste synchronizaci znovu.</value>
+  <data name="AdvancedMode" xml:space="preserve">
+    <value>Pokročilý režim nahrávání dat</value>
   </data>
-  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
-    <value>Zkontrolujte, zda je v zařízení garanta zapnut WiFi a Bluetooth a zda jste v těsné blízkosti</value>
+  <data name="AdvancedModeDescription" xml:space="preserve">
+    <value>Chcete-li předem načíst data do více sekcí i více proměnných, je třeba si připravit sadu souborů .tab, které odpovídají struktuře vašeho dotazníku, a uložit do archivu .zip. Použijte níže uvedený archiv šablon. Můžete vložit pouze ty soubory se sloupci, které chcete nahrát. Názvy sloupců, které neodpovídají existující proměnné v dotazníku, budou ignorovány.</value>
   </data>
-  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
-    <value>Jsou tazatelské a garantské zařízení v těsné blízkosti; WiFi a Bluetooth by měly být povoleny na obou zařízeních; Aplikace Garant by měla být otevřena na garantském zařízení</value>
+  <data name="All" xml:space="preserve">
+    <value>Vše</value>
   </data>
-  <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
-    <value>Připojeno ke garantskému zařízení</value>
+  <data name="BatchFileVerificationFailed" xml:space="preserve">
+    <value>Ověření nahraného souboru se nezdařilo</value>
   </data>
-  <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
-    <value>Počkejte na schválení připojení garantem</value>
+  <data name="BatchUpload_Title" xml:space="preserve">
+    <value>Dávkové nahrávání</value>
   </data>
-  <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
-    <value>Bylo nalezeno garantské zařízení. Žádost o připojení</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Smazat</value>
   </data>
-  <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
-    <value>Hledá se garantské zařízení</value>
+  <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
+    <value>Proměnné označené jako Identifikace v Designer. Stáhnout</value>
   </data>
-  <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků garantovi</value>
+  <data name="DownloadInvalidAssignments" xml:space="preserve">
+    <value>Stažení neplatných přiřazení</value>
   </data>
-  <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků '{0}'</value>
+  <data name="DownloadInvalidInterviews" xml:space="preserve">
+    <value>Stažení neplatných dotazníků</value>
   </data>
-  <data name="SendToSupervisor_Note" xml:space="preserve">
-    <value>Poznámka: Tato akce bude trvat déle než obvykle, nevypínejte toto zařízení</value>
+  <data name="DownloadTabTemplate" xml:space="preserve">
+    <value>Stáhněte si šablonu .tab pro tento dotazník</value>
   </data>
-  <data name="SendToSupervisor_Retry" xml:space="preserve">
-    <value>Opakovat</value>
+  <data name="DownloadTemplateArchive" xml:space="preserve">
+    <value>Stáhněte si šablonu .zip pro tento dotazník</value>
   </data>
-  <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
-    <value>Některé dotazníky jsou nyní na jiném zařízení</value>
+  <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
+    <value>{{count}} přiřazení položek se podařilo úspěšně</value>
   </data>
-  <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
-    <value>Přenos dat nebyl zahájen.
-Garantské zařízení nelze nalézt"</value>
+  <data name="Import_Verification_Errors" xml:space="preserve">
+    <value>{{count}} chyb</value>
   </data>
-  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
-    <value>Přenos dat byl přerušen na druhém zařízení.</value>
+  <data name="ImportAssignments_PageTitle" xml:space="preserve">
+    <value>Vytvoření přirazení více požadavků pomocí dávkového nahrávání</value>
   </data>
-  <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
-    <value>Přenos dat je dokončen. Všechny dokončené rozhovory jsou přesunuty na jiné zařízení</value>
+  <data name="ImportInProgress" xml:space="preserve">
+    <value>Právě probíhá přiřazení požadavků. Není možné další přiřazení. Počkejte, až se proces dokončí, a poté nahrajte nový soubor. Chcete-li získat podrobnější informace o průběhu dalšího přiřazení, klikněte na odkaz.</value>
   </data>
-  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
-    <value>Přenos dat je dokončen. Nepodařilo se synchronizovat {0} rozhovorů</value>
+  <data name="ImportInterviews_ChooseFile" xml:space="preserve">
+    <value>Vyberte soubor k nahrání</value>
   </data>
-  <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
-    <value>Probíhá přenos dat</value>
+  <data name="ImportInterviews_PageTitle" xml:space="preserve">
+    <value>Vytvoření více dotazníků pomocí dávkového nahrávání</value>
   </data>
-  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
-    <value>Přenos dat byl přerušen</value>
+  <data name="IsInvalid" xml:space="preserve">
+    <value>Je neplatný. Opravte prosím níže uvedené chyby a nahrání opakujte.</value>
   </data>
-  <data name="Synchronization_UpdateApp" xml:space="preserve">
-    <value>Aktualizace</value>
+  <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>{{count}} přiřazení položek se nepodařilo vytvořit</value>
+  </data>
+  <data name="MultipleAssignmentsCreated" xml:space="preserve">
+    <value>{{count}} vytvořených položek k přiřazení</value>
+  </data>
+  <data name="MultipleErrorsWereFound" xml:space="preserve">
+    <value>{{count}} nalezeno chyb</value>
+  </data>
+  <data name="Prerequisite_FileOpen" xml:space="preserve">
+    <value>Nahraný soubor nelze otevřít. Zkontrolujte prosím, zda je ve správném formátu.</value>
+  </data>
+  <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
+    <value>Lze nahrávat pouze soubory .tab a .txt.</value>
+  </data>
+  <data name="Prerequisite_ZipFile" xml:space="preserve">
+    <value>Lze nahrávat pouze soubory .zip.</value>
+  </data>
+  <data name="RefreshActionOnUserUpload" xml:space="preserve">
+    <value>Obnovit</value>
+  </data>
+  <data name="SampleCreationCompleted" xml:space="preserve">
+    <value>Vytvoření bylo úspěšně dokončeno.</value>
+  </data>
+  <data name="SampleImportWithErrors" xml:space="preserve">
+    <value>Import byl dokončen s chybami.</value>
+  </data>
+  <data name="SampleSuccess" xml:space="preserve">
+    <value>Import byl úspěšně dokončen.</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Nahrát</value>
+  </data>
+  <data name="UploadDate" xml:space="preserve">
+    <value>Nahrát datum</value>
+  </data>
+  <data name="UploadDescription" xml:space="preserve">
+    <value>Nahrajte soubor s identifikačními údaji a vytvořte nové přiřazení.
+Zadejte uživatelská jména pro ústředí, garanty nebo tazatele, kteří budou dávkově přiřazovat.</value>
+  </data>
+  <data name="Uploaded" xml:space="preserve">
+    <value>Nahráno</value>
+  </data>
+  <data name="UploadNewData" xml:space="preserve">
+    <value>Nahrát nové data</value>
+  </data>
+  <data name="UploadNewFile" xml:space="preserve">
+    <value>Nahrát nový soubor</value>
+  </data>
+  <data name="UploadSample" xml:space="preserve">
+    <value>Nahrát výběr</value>
+  </data>
+  <data name="UploadSampleDescription" xml:space="preserve">
+    <value>Chcete-li nahrát výběr, připravte si soubor (velikosti až 300 MB) s hodnotami oddělenými tabulátory (soubor .tab) odpovídající níže uvedené šabloně. Musí obsahovat identifikační údaje (primární klíče).</value>
+  </data>
+  <data name="UploadTabFile" xml:space="preserve">
+    <value>Nahrát soubor .tab</value>
+  </data>
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Dávkové nahrání uživatelů</value>
+  </data>
+  <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
+    <value>Lze nahrávat pouze soubory s {0} a {1} příponami.</value>
+  </data>
+  <data name="UploadZipFile" xml:space="preserve">
+    <value>Nahrát soubor .zip</value>
+  </data>
+  <data name="UserBatchUploads" xml:space="preserve">
+    <value>Dávkové nahrání uživatelů</value>
+  </data>
+  <data name="VerificationCompleted" xml:space="preserve">
+    <value>Verifikace dokončena</value>
   </data>
 </root>

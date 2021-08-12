@@ -117,62 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
-    <value>Aplikace Tazatel nemůže určit stav Bluetooth (např. zapnuto / vypnuto, připojeno / odpojeno). Restartujte tazatelské i garantské zařízení. Potom zkuste synchronizaci znovu.</value>
+  <data name="LogoSettings_Description" xml:space="preserve">
+    <value>Logo společnosti zobrazuje vlastní obrázek na přihlašovací stránce serveru a na přihlašovací stránce aplikace Tazatel. Kliknutím na tlačítko Vybrat soubor nahrajete obrázek z počítače na server.</value>
   </data>
-  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
-    <value>Zkontrolujte, zda je v zařízení garanta zapnut WiFi a Bluetooth a zda jste v těsné blízkosti</value>
+  <data name="PartialSynchronizationDescription" xml:space="preserve">
+    <value>Je-li povoleno, bude tazatelský tablet odesílat i rozšetřené dotazníky do ústředí</value>
   </data>
-  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
-    <value>Jsou tazatelské a garantské zařízení v těsné blízkosti; WiFi a Bluetooth by měly být povoleny na obou zařízeních; Aplikace Garant by měla být otevřena na garantském zařízení</value>
+  <data name="Password" xml:space="preserve">
+    <value>Helo</value>
   </data>
-  <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
-    <value>Připojeno ke garantskému zařízení</value>
-  </data>
-  <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
-    <value>Počkejte na schválení připojení garantem</value>
-  </data>
-  <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
-    <value>Bylo nalezeno garantské zařízení. Žádost o připojení</value>
-  </data>
-  <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
-    <value>Hledá se garantské zařízení</value>
-  </data>
-  <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků garantovi</value>
-  </data>
-  <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků '{0}'</value>
-  </data>
-  <data name="SendToSupervisor_Note" xml:space="preserve">
-    <value>Poznámka: Tato akce bude trvat déle než obvykle, nevypínejte toto zařízení</value>
-  </data>
-  <data name="SendToSupervisor_Retry" xml:space="preserve">
-    <value>Opakovat</value>
-  </data>
-  <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
-    <value>Některé dotazníky jsou nyní na jiném zařízení</value>
-  </data>
-  <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
-    <value>Přenos dat nebyl zahájen.
-Garantské zařízení nelze nalézt"</value>
-  </data>
-  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
-    <value>Přenos dat byl přerušen na druhém zařízení.</value>
-  </data>
-  <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
-    <value>Přenos dat je dokončen. Všechny dokončené rozhovory jsou přesunuty na jiné zařízení</value>
-  </data>
-  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
-    <value>Přenos dat je dokončen. Nepodařilo se synchronizovat {0} rozhovorů</value>
-  </data>
-  <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
-    <value>Probíhá přenos dat</value>
-  </data>
-  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
-    <value>Přenos dat byl přerušen</value>
-  </data>
-  <data name="Synchronization_UpdateApp" xml:space="preserve">
-    <value>Aktualizace</value>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Nastavení</value>
   </data>
 </root>

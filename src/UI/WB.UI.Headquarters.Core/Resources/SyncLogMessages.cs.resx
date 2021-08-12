@@ -117,62 +117,70 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
-    <value>Aplikace Tazatel nemůže určit stav Bluetooth (např. zapnuto / vypnuto, připojeno / odpojeno). Restartujte tazatelské i garantské zařízení. Potom zkuste synchronizaci znovu.</value>
+  <data name="DownloadReusableCategories" xml:space="preserve">
+    <value>Probíhá stahování opakovaně použitelné kategorie {0}</value>
   </data>
-  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
-    <value>Zkontrolujte, zda je v zařízení garanta zapnut WiFi a Bluetooth a zda jste v těsné blízkosti</value>
+  <data name="GetAssignmentFormat" xml:space="preserve">
+    <value>Stáhnout přidělení ({0})&lt;/br&gt;</value>
   </data>
-  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
-    <value>Jsou tazatelské a garantské zařízení v těsné blízkosti; WiFi a Bluetooth by měly být povoleny na obou zařízeních; Aplikace Garant by měla být otevřena na garantském zařízení</value>
+  <data name="GetAssignmentsFormat" xml:space="preserve">
+    <value>Seznam přiřazení ke stažení ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
   </data>
-  <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
-    <value>Připojeno ke garantskému zařízení</value>
+  <data name="GetAttachmentContent" xml:space="preserve">
+    <value>Stáhněte si obsah přílohy: {0}</value>
   </data>
-  <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
-    <value>Počkejte na schválení připojení garantem</value>
+  <data name="GetCensusQuestionnaires" xml:space="preserve">
+    <value>Seznam úplných dotazníků ke stažení: &lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
   </data>
-  <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
-    <value>Bylo nalezeno garantské zařízení. Žádost o připojení</value>
+  <data name="GetInterview" xml:space="preserve">
+    <value>Stáhněte si dotazník: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
-  <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
-    <value>Hledá se garantské zařízení</value>
+  <data name="GetInterviewer" xml:space="preserve">
+    <value>Stáhněte si informace od tazatele. &lt;br/&gt;Garant: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
-  <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků garantovi</value>
+  <data name="GetInterviewPackage" xml:space="preserve">
+    <value>Stáhněte si balíček s dotazníky: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
-  <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků '{0}'</value>
+  <data name="GetInterviewPackages" xml:space="preserve">
+    <value>Balíček dotazníků ke stažení. &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;Balíček z poslední synchronizace: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
-  <data name="SendToSupervisor_Note" xml:space="preserve">
-    <value>Poznámka: Tato akce bude trvat déle než obvykle, nevypínejte toto zařízení</value>
+  <data name="GetInterviewPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; Stažen balíček s dotazníky: {0}</value>
   </data>
-  <data name="SendToSupervisor_Retry" xml:space="preserve">
-    <value>Opakovat</value>
+  <data name="GetInterviewPatch" xml:space="preserve">
+    <value>Stáhněte si změny dotazníku z ústředí: {0}</value>
   </data>
-  <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
-    <value>Některé dotazníky jsou nyní na jiném zařízení</value>
+  <data name="GetInterviews" xml:space="preserve">
+    <value>Seznam dotazníků ke stažení. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
   </data>
-  <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
-    <value>Přenos dat nebyl zahájen.
-Garantské zařízení nelze nalézt"</value>
+  <data name="GetMap" xml:space="preserve">
+    <value>Staženo map: {0}</value>
   </data>
-  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
-    <value>Přenos dat byl přerušen na druhém zařízení.</value>
+  <data name="GetMaps" xml:space="preserve">
+    <value>Mapy ke stažení. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
   </data>
-  <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
-    <value>Přenos dat je dokončen. Všechny dokončené rozhovory jsou přesunuty na jiné zařízení</value>
+  <data name="GetQuestionnaire" xml:space="preserve">
+    <value>Dotazník ke stažení: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
-  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
-    <value>Přenos dat je dokončen. Nepodařilo se synchronizovat {0} rozhovorů</value>
+  <data name="GetQuestionnaireAssembly" xml:space="preserve">
+    <value>Dotazníkové sestavy ke stažení: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
-  <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
-    <value>Probíhá přenos dat</value>
+  <data name="GetQuestionnaireAttachments" xml:space="preserve">
+    <value>Přílohy dotazníku ke stažení: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
-  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
-    <value>Přenos dat byl přerušen</value>
+  <data name="GetTranslations" xml:space="preserve">
+    <value>Stáhněte si překlad dotazníku &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
-  <data name="Synchronization_UpdateApp" xml:space="preserve">
-    <value>Aktualizace</value>
+  <data name="NoMapsForUser" xml:space="preserve">
+    <value>Žádné mapy ke stažení</value>
+  </data>
+  <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
+    <value>Žádné nové balíčky dotazníků ke stažení</value>
+  </data>
+  <data name="PostPackage" xml:space="preserve">
+    <value>Nahrát dotazník: {0}</value>
+  </data>
+  <data name="PostPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; Nahrajte dotazník: {0}</value>
   </data>
 </root>

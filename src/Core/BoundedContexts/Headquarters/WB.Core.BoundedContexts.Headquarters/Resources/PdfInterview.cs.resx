@@ -117,62 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
-    <value>Aplikace Tazatel nemůže určit stav Bluetooth (např. zapnuto / vypnuto, připojeno / odpojeno). Restartujte tazatelské i garantské zařízení. Potom zkuste synchronizaci znovu.</value>
+  <data name="Comments" xml:space="preserve">
+    <value>Poznámky</value>
   </data>
-  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
-    <value>Zkontrolujte, zda je v zařízení garanta zapnut WiFi a Bluetooth a zda jste v těsné blízkosti</value>
+  <data name="Completed" xml:space="preserve">
+    <value>Rozhovor byl dokončen</value>
   </data>
-  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
-    <value>Jsou tazatelské a garantské zařízení v těsné blízkosti; WiFi a Bluetooth by měly být povoleny na obou zařízeních; Aplikace Garant by měla být otevřena na garantském zařízení</value>
+  <data name="Error" xml:space="preserve">
+    <value>Chyba</value>
   </data>
-  <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
-    <value>Připojeno ke garantskému zařízení</value>
+  <data name="No" xml:space="preserve">
+    <value>Ne</value>
   </data>
-  <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
-    <value>Počkejte na schválení připojení garantem</value>
+  <data name="UserRoles_Administrator" xml:space="preserve">
+    <value>Administrátor</value>
   </data>
-  <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
-    <value>Bylo nalezeno garantské zařízení. Žádost o připojení</value>
+  <data name="UserRoles_Headquarter" xml:space="preserve">
+    <value>Ústředí</value>
   </data>
-  <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
-    <value>Hledá se garantské zařízení</value>
+  <data name="UserRoles_Interviewer" xml:space="preserve">
+    <value>Tazatel </value>
   </data>
-  <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků garantovi</value>
+  <data name="UserRoles_Supervisor" xml:space="preserve">
+    <value>Garant</value>
   </data>
-  <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků '{0}'</value>
+  <data name="Version" xml:space="preserve">
+    <value>verze {0}</value>
   </data>
-  <data name="SendToSupervisor_Note" xml:space="preserve">
-    <value>Poznámka: Tato akce bude trvat déle než obvykle, nevypínejte toto zařízení</value>
+  <data name="Warning" xml:space="preserve">
+    <value>Upozornění</value>
   </data>
-  <data name="SendToSupervisor_Retry" xml:space="preserve">
-    <value>Opakovat</value>
+  <data name="Yes" xml:space="preserve">
+    <value>Ano</value>
   </data>
-  <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
-    <value>Některé dotazníky jsou nyní na jiném zařízení</value>
-  </data>
-  <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
-    <value>Přenos dat nebyl zahájen.
-Garantské zařízení nelze nalézt"</value>
-  </data>
-  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
-    <value>Přenos dat byl přerušen na druhém zařízení.</value>
-  </data>
-  <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
-    <value>Přenos dat je dokončen. Všechny dokončené rozhovory jsou přesunuty na jiné zařízení</value>
-  </data>
-  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
-    <value>Přenos dat je dokončen. Nepodařilo se synchronizovat {0} rozhovorů</value>
-  </data>
-  <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
-    <value>Probíhá přenos dat</value>
-  </data>
-  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
-    <value>Přenos dat byl přerušen</value>
-  </data>
-  <data name="Synchronization_UpdateApp" xml:space="preserve">
-    <value>Aktualizace</value>
+  <data name="YesNo" xml:space="preserve">
+    <value>Ano / Ne</value>
   </data>
 </root>
