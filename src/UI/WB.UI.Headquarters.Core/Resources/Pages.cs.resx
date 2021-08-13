@@ -237,9 +237,6 @@
   <data name="MaintenanceRebuild_Header" xml:space="preserve">
     <value>Načítání</value>
   </data>
-  <data name="Map_Status" xml:space="preserve">
-      <value>     </value>
-  </data>
   <data name="Map_Uploaded" xml:space="preserve">
     <value>Soubor byl nahrán. Zpracovává se.</value>
   </data>

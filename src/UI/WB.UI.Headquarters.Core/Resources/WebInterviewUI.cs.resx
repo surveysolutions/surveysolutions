@@ -144,9 +144,6 @@
   <data name="No" xml:space="preserve">
     <value>Ne</value>
   </data>
-  <data name="NotCalculated" xml:space="preserve">
-      <value> </value>
-  </data>
   <data name="PhotoIsNotImage" xml:space="preserve">
     <value>Je povoleno nahrávat pouze obrázky</value>
   </data>
