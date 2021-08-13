@@ -117,62 +117,94 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
-    <value>Aplikace Tazatel nemůže určit stav Bluetooth (např. zapnuto / vypnuto, připojeno / odpojeno). Restartujte tazatelské i garantské zařízení. Potom zkuste synchronizaci znovu.</value>
+  <data name="Completed" xml:space="preserve">
+    <value>Dokončeno</value>
   </data>
-  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
-    <value>Zkontrolujte, zda je v zařízení garanta zapnut WiFi a Bluetooth a zda jste v těsné blízkosti</value>
+  <data name="DataDestination_Dropbox" xml:space="preserve">
+    <value>Nahráno na Dropbox</value>
   </data>
-  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
-    <value>Jsou tazatelské a garantské zařízení v těsné blízkosti; WiFi a Bluetooth by měly být povoleny na obou zařízeních; Aplikace Garant by měla být otevřena na garantském zařízení</value>
+  <data name="DataDestination_GoogleDrive" xml:space="preserve">
+    <value>Nahráno na Google Drive</value>
   </data>
-  <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
-    <value>Připojeno ke garantskému zařízení</value>
+  <data name="DataDestination_OneDrive" xml:space="preserve">
+    <value>Nahráno na OneDrive</value>
   </data>
-  <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
-    <value>Počkejte na schválení připojení garantem</value>
+  <data name="DataDestination_Zip" xml:space="preserve">
+    <value>Stažení</value>
   </data>
-  <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
-    <value>Bylo nalezeno garantské zařízení. Žádost o připojení</value>
+  <data name="DataExport_CompletedOn" xml:space="preserve">
+    <value>Dokončeno {{date}}</value>
   </data>
-  <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
-    <value>Hledá se garantské zařízení</value>
+  <data name="DataExport_Destination" xml:space="preserve">
+    <value>Oblast: {{dest}}</value>
   </data>
-  <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků garantovi</value>
+  <data name="DataExport_Destination_Dropbox" xml:space="preserve">
+    <value>Exportovaný soubor se nahraje na Dropbox</value>
   </data>
-  <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků '{0}'</value>
+  <data name="DataExport_Destination_File" xml:space="preserve">
+    <value>Exportovaný soubor je připraven ke stažení</value>
   </data>
-  <data name="SendToSupervisor_Note" xml:space="preserve">
-    <value>Poznámka: Tato akce bude trvat déle než obvykle, nevypínejte toto zařízení</value>
+  <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
+    <value>Exportovaný soubor se nahraje na Google Drive</value>
   </data>
-  <data name="SendToSupervisor_Retry" xml:space="preserve">
-    <value>Opakovat</value>
+  <data name="DataExport_Destination_OneDrive" xml:space="preserve">
+    <value>Exportovaný soubor se nahraje na OneDrive</value>
   </data>
-  <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
-    <value>Některé dotazníky jsou nyní na jiném zařízení</value>
+  <data name="DataExport_FileLastUpdate" xml:space="preserve">
+    <value>Poslední aktualizace: {{date}}</value>
   </data>
-  <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
-    <value>Přenos dat nebyl zahájen.
-Garantské zařízení nelze nalézt"</value>
+  <data name="DataExport_FileSize" xml:space="preserve">
+    <value>Velikost souboru: {{size}} MB</value>
   </data>
-  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
-    <value>Přenos dat byl přerušen na druhém zařízení.</value>
+  <data name="DataExport_RegenerateDesc" xml:space="preserve">
+    <value>Export dat</value>
   </data>
-  <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
-    <value>Přenos dat je dokončen. Všechny dokončené rozhovory jsou přesunuty na jiné zařízení</value>
+  <data name="DataExport_Title" xml:space="preserve">
+    <value>Export dat</value>
   </data>
-  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
-    <value>Přenos dat je dokončen. Nepodařilo se synchronizovat {0} rozhovorů</value>
+  <data name="DataExportApi" xml:space="preserve">
+    <value>Export dat API</value>
   </data>
-  <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
-    <value>Probíhá přenos dat</value>
+  <data name="DataFormat" xml:space="preserve">
+    <value>Formát dat</value>
   </data>
-  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
-    <value>Přenos dat byl přerušen</value>
+  <data name="DataFormat_Spss" xml:space="preserve">
+    <value>Formát SPSS</value>
   </data>
-  <data name="Synchronization_UpdateApp" xml:space="preserve">
-    <value>Aktualizace</value>
+  <data name="DataFormat_Stata" xml:space="preserve">
+    <value>Formát Stata 14 </value>
+  </data>
+  <data name="DataType" xml:space="preserve">
+    <value>Datový typ</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Stažení</value>
+  </data>
+  <data name="ExportExplanation" xml:space="preserve">
+    <value>Stisknutím tlačítka Generovat vytvoříte datový archiv dotazníků dostupných na serveru. Čas vytvoření a velikost archivu jsou uvedeny v tabulce. Poslední vygenerovaný archiv dat lze stáhnout stisknutím tlačítka Stáhnout. Opětovným stisknutím tlačítka Generovat vytvoříte nový archiv.</value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>Formát</value>
+  </data>
+  <data name="FormatTitle" xml:space="preserve">
+    <value>formát</value>
+  </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>z</value>
+  </data>
+  <data name="GeneratedDataSets_Desc" xml:space="preserve">
+    <value>Počkejte prosím, dokud nebude dokončen předchozí import od uživatelů</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Jméno</value>
+  </data>
+  <data name="StatusOfExportTitle" xml:space="preserve">
+    <value>(verze) dotazníku</value>
+  </data>
+  <data name="XMLFileDescription" xml:space="preserve">
+    <value>XML formát</value>
+  </data>
+  <data name="ZipFile" xml:space="preserve">
+    <value>Soubor Zip</value>
   </data>
 </root>

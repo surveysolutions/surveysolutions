@@ -127,7 +127,7 @@
     <value>Váš uživatelský účet není schválen. Obraťte se na svého garanta.</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
-    <value>Vaše aplikace Tazatel není kompatibilní se serverem. Aktualizujte si aplikaci Tazatel.</value>
+    <value>Aplikace Tazatel není kompatibilní se serverem. Aktualizujte si aplikaci Tazatel.</value>
   </data>
   <data name="AssignmentsSynchronization" xml:space="preserve">
     <value>Synchronizujte přiřazené dotazníky</value>
@@ -147,17 +147,14 @@
   <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
     <value>Nové rozhovory</value>
   </data>
-  <data name="Dashboard_CensusAssignment" xml:space="preserve">
-    <value>Census</value>
-  </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>Dokončeno ({0})</value>
   </data>
   <data name="Dashboard_CompletedTabText" xml:space="preserve">
-    <value>Dokončené rozhovory budou nahrány během další synchronizace</value>
+    <value>Uzamčené dotazníky budou nahrány během další synchronizace</value>
   </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
-    <value>Vyberte z nabídky nových rozhovorů</value>
+    <value>Vyberte z nabídky nových dotazníků</value>
   </data>
   <data name="Dashboard_Discard" xml:space="preserve">
     <value>Vyřadit</value>
@@ -197,17 +194,17 @@ nebo se obraťte na svého garanta pro další pokyny</value>
     <value>Otevřít</value>
   </data>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
-    <value>Nové rozhovory začněte do přiřazených dotazníků</value>
+    <value>Nové rozhovory zahájíte v přiřazených dotaznících</value>
   </data>
   <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
-    <value>Tento rozhovor je dokončený. Chcete znovu otevřít tento dotazník?</value>
+    <value>Dotazník je uzamčen. Opravdu ho chcete znovu otevřít?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
     <value>Zamítnuto ({0})</value>
   </data>
   <data name="Dashboard_RejectedTabText" xml:space="preserve">
-    <value>Dotazníky byly zamítnuty garantem
-Upravte dotazník dle poznámek na titulní stránce a znovu je odešlete zpět garantovi.</value>
+    <value>Dotazníky byly zamítnuty garantem.
+Upravte dotazník dle poznámek na titulní stránce a poté je odešlete zpět garantovi.</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>Opravdu chcete tento dotazník smazat {0}?</value>
@@ -234,11 +231,11 @@ Upravte dotazník dle poznámek na titulní stránce a znovu je odešlete zpět 
     <value>Zahájení</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>Rozšetřené ({0})</value>
+    <value>Rozpracované ({0})</value>
   </data>
   <data name="Dashboard_StartedTabText" xml:space="preserve">
-    <value>Zahájené rozhovory nebyly dokončeny
-Chcete-li je synchronizovat, musíte je dokončit</value>
+    <value>Rozpracované dotazníky nejsou uzamčeny.
+Chcete-li je odeslat garantovi, musíte je uzamknout.</value>
   </data>
   <data name="Dashboard_StartNewInterview" xml:space="preserve">
     <value>Zahájení nového rozhovoru</value>
@@ -250,28 +247,28 @@ Chcete-li je synchronizovat, musíte je dokončit</value>
     <value>Zobrazit upozornění</value>
   </data>
   <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
-    <value>Schváleno garantem {0}</value>
+    <value>Schváleno garantem: {0}</value>
   </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>Přiřazeno {0}</value>
   </data>
   <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
-    <value>Vytvořené rozhovory: {0}</value>
+    <value>Vytvořeno dotazníků: {0}</value>
   </data>
   <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
     <value>{0} rozhovor(ů)</value>
   </data>
   <data name="DashboardItem_CensusModeComment" xml:space="preserve">
-    <value>Režim census, Vytvořené rozhovory: {0}</value>
+    <value>Režim census, Vytvořeno dotazníků: {0}</value>
   </data>
   <data name="DashboardItem_CompletedOn" xml:space="preserve">
-    <value>Dokončeno {0}</value>
+    <value>Na odeslání {0}</value>
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
     <value>Vytvořeno {0}</value>
   </data>
   <data name="DashboardItem_NotStarted" xml:space="preserve">
-    <value>Nezahájené</value>
+    <value>Nezačaté</value>
   </data>
   <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
     <value>Zamítnuto ústředím {0}</value>
@@ -284,9 +281,6 @@ Chcete-li je synchronizovat, musíte je dokončit</value>
   </data>
   <data name="DashboardItem_StartedOn" xml:space="preserve">
     <value>Zahájené {0}</value>
-  </data>
-  <data name="DashboardItem_Title" xml:space="preserve">
-    <value>{0} (v{1})</value>
   </data>
   <data name="Diagnostics_Backup_Description" xml:space="preserve">
     <value>Uložte všechny relevantní data do souboru v tomto zařízení. </value>
@@ -409,13 +403,13 @@ Chcete-li je synchronizovat, musíte je dokončit</value>
     <value>Máte nejnovější verzi aplikace.</value>
   </data>
   <data name="FailedToCreateInterview" xml:space="preserve">
-    <value>Nepodařilo se založit rozhovor. Důvod: {0}</value>
+    <value>Nepodařilo se založit dotazník. Důvod: {0}</value>
   </data>
   <data name="FailedToLoadInterview" xml:space="preserve">
-    <value>Nepodařilo se otevřít rozhovor</value>
+    <value>Nepodařilo se otevřít dotazník</value>
   </data>
   <data name="FailedToLoadInterviewDescription" xml:space="preserve">
-    <value>Tento rozhovor je neplatný a nelze jej otevřít. Zkuste synchronizovat pro obnovení rozhovorů, pokud problém přetrvává obraťte se na svého garanta.</value>
+    <value>Tento dotazník je neplatný a nelze jej otevřít. Zkuste znovu synchronizovat, pokud problém přetrvává obraťte se na svého garanta.</value>
   </data>
   <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
     <value>Koncový bod synchronizace „{0}“ se liší od uvedeného v Nastavení („{1}“). Načíst adresu URL z nastavení?</value>
@@ -430,10 +424,10 @@ Chcete-li je synchronizovat, musíte je dokončit</value>
     <value>Server není přístupný. Zkontrolujte serverovou adresu nebo nastavení internetového připojení</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Chyba serveru. Kontaktujte administrátora.</value>
+    <value>Chyba serveru. Kontaktujte administrátora na martin.baca@czso.cz</value>
   </data>
   <data name="Interview_Creating" xml:space="preserve">
-    <value>Vytváření rozhovoru</value>
+    <value>Vytváření dotazníku</value>
   </data>
   <data name="Interview_Creating_Description" xml:space="preserve">
     <value>Toto může trvat několik minut,
@@ -515,7 +509,7 @@ Staženo {3}%</value>
     <value>Původní</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
-    <value>Přihlásit se</value>
+    <value>Přihlášení</value>
   </data>
   <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
     <value>Hlavní obrazovka map</value>
@@ -539,7 +533,7 @@ Staženo {3}%</value>
     <value>Internetové připojení je nedostupné. Zkontrolujte nastavení internetového připojení</value>
   </data>
   <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
-    <value>Máte dokončené rozhovory {0}, které by měly být synchronizovány</value>
+    <value>Máte dotazníky na odeslání {0}, měla být provedena synchronizace</value>
   </data>
   <data name="Notifications_InterviewsTitle" xml:space="preserve">
     <value>Rozhovory</value>
@@ -548,10 +542,10 @@ Staženo {3}%</value>
     <value>Máte mnoho dokončených rozhovorů. Prosím synchronizujte.</value>
   </data>
   <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
-    <value>Máte mnoho nedokončených rozhovorů. Prosím dokončete je.</value>
+    <value>Máte hodně rozšetřených dotazníků. Prosím dokončete je.</value>
   </data>
   <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
-    <value>Máte {0} zamítnutých rozhovorů, které nebyly zapracovány</value>
+    <value>Máte {0} zamítnutých rozhovorů, které nebyly upraveny</value>
   </data>
   <data name="Notifications_StaleAssignments" xml:space="preserve">
     <value>Některé přiřazené dotazníky nebyly za poslední 3 dny aktualizovány.</value>
@@ -598,12 +592,6 @@ Staženo {3}%</value>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
     <value>Server URL</value>
   </data>
-  <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
-    <value>How many events can be read with one query</value>
-  </data>
-  <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
-    <value>Event chunk size</value>
-  </data>
   <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
     <value>Několik vteřin vyčkejte na souřadnice</value>
   </data>
@@ -617,7 +605,7 @@ Staženo {3}%</value>
     <value>Časový limit odezvy na serveru vypršel</value>
   </data>
   <data name="Prefs_InterviewSettings" xml:space="preserve">
-    <value>Nastavení rozhovoru</value>
+    <value>Nastavení dotazníku</value>
   </data>
   <data name="Prefs_Title" xml:space="preserve">
     <value>Nastavení</value>
@@ -690,22 +678,22 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>Stahování loga</value>
   </data>
   <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
-    <value>{0} z {1} rozhovorů vymazáno</value>
+    <value>{0} z {1} dotazníků vymazáno</value>
   </data>
   <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
-    <value>{0} rozhovor(ů) se nepodařilo synchronizovat</value>
+    <value>{0} dotazník(ů) se nepodařilo synchronizovat</value>
   </data>
   <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
-    <value>{0} z {1} rozhovorů částečně staženo</value>
+    <value>{0} z {1} dotazníků částečně staženo</value>
   </data>
   <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
-    <value>{0} z {1} rozhovorů nově staženo</value>
+    <value>{0} z {1} dotazníků nově staženo</value>
   </data>
   <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0} z {1} zamítnutých rozhovorů se vrátilo</value>
+    <value>{0} z {1} zamítnutých dotazníků se vrátilo</value>
   </data>
   <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
-    <value>{0} z {1} dokončených rozhovorů bylo načteno</value>
+    <value>{0} z {1} dokončených dotazníků bylo načteno</value>
   </data>
   <data name="Synchronization_Fail_Title" xml:space="preserve">
     <value>Synchronizace byla přerušena, zkuste to znovu</value>
@@ -753,25 +741,25 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>Všechny přiřazené dotazníky byly aktualizovány</value>
   </data>
   <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
-    <value>{0} rozhovorů vymazáno</value>
+    <value>{0} dotazníků vymazáno</value>
   </data>
   <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
-    <value>{0} rozhovorů bylo načteno</value>
+    <value>{0} dotazníků bylo načteno</value>
   </data>
   <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
-    <value>{0} rozhovorů nově staženo</value>
+    <value>{0} stažených nových dotazníků</value>
   </data>
   <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
-    <value>{0} rozhovorů částečně nahráno</value>
+    <value>{0} dotazníků částečně nahráno</value>
   </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0} zamítnutých rozhovorů se vrátilo</value>
+    <value>{0} zamítnutých dotazníků se vrátilo</value>
   </data>
   <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
-    <value>{0} nahraných dokončených rozhovorů</value>
+    <value>{0} nahraných uzamčených dotazníků</value>
   </data>
   <data name="Synchronization_Success_Title" xml:space="preserve">
-    <value>Synchronizace byla v pořádku dokončena </value>
+    <value>Synchronizace byla dokončena v pořádku </value>
   </data>
   <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
     <value>Garant by měl mít vždy poslední změny z ústředí, proto musí synchronizovat, jako poslední, než bude k dispozici offline synchronizace</value>
@@ -922,5 +910,74 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Upozornění</value>
+  </data>
+  <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+    <value>Zadat schůzku na jindy</value>
+  </data>
+  <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>Dotazník nelze otevřít v režimu CAWI. Po synchronizaci bude odeslán na ústředí.</value>
+  </data>
+  <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+    <value>Upravit schůzku na jindy</value>
+  </data>
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>Vybrané datum je v minulosti</value>
+  </data>
+  <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>Vybraný čas je v minulosti</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>Obnovení úloh</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>Při načítání seznamu úloh došlo k chybě. Obraťte se na svého garanta.</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>Úlohy byly obnoveny</value>
+  </data>
+  <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>Smazat schůzku na jindy</value>
+  </data>
+  <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>Další kontakt: {0}</value>
+  </data>
+  <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>Webové dotazníky ({0})</value>
+  </data>
+  <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>Režim webových dotazníků. Po dokončení webového dotazníku respondentem. Dotazník bude odeslán během synchronizace.</value>
+  </data>
+  <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>Ukázat QR kód</value>
+  </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Vývoj: {0}/{1}</value>
+  </data>
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>Obnovit úlohy</value>
+  </data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>Úloha</value>
+  </data>
+  <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>Aktualizovat schůzku na jindy</value>
+  </data>
+  <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+    <value>Vaše heslo bylo resetováno. Změňte si ho pro přístup k internetové aplikaci.</value>
+  </data>
+  <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>Schůzka na jindy</value>
+  </data>
+  <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+    <value>Váš účet je pro tuto úlohu neaktivní. Obraťte se na svého garanta.</value>
+  </data>
+  <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+    <value>Váš účet je pro tuto úlohu deaktivován garantem. Obraťte se na svého garanta.</value>
+  </data>
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>Přenést schůzky na jindy</value>
+  </data>
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>Vaše heslo bylo změněno. Přihlašte se pod novým heslem.</value>
   </data>
 </root>

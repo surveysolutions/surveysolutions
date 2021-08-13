@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -58,4 +58,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+    <data name="Approve" xml:space="preserve">
+    <value>Schválit</value>
+  </data>
+    <data name="Cancel" xml:space="preserve">
+    <value>Zrušit</value>
+  </data>
+    <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+    <data name="Delete" xml:space="preserve">
+    <value>Smazat</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Stažení</value>
+  </data>
+  <data name="DownloadSupervisor" xml:space="preserve">
+    <value>Stáhnout aplikaci Garant</value>
+  </data>
+    <data name="Name" xml:space="preserve">
+    <value>Jméno</value>
+  </data>
+    <data name="No" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+    <data name="Open" xml:space="preserve">
+    <value>Otevřít</value>
+  </data>
+    <data name="Refresh" xml:space="preserve">
+    <value>Obnovit</value>
+  </data>
+    <data name="Save" xml:space="preserve">
+    <value>Uložit</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>Uložit změny</value>
+  </data>
+    <data name="Settings" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+    <data name="Yes" xml:space="preserve">
+    <value>Ano</value>
+  </data>
 </root>
