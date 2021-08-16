@@ -60,7 +60,7 @@ namespace WB.UI.Designer.Code.Attributes
         
         private bool IsAccountLockedOut(DesignerIdentityUser user)
         {
-            return user.LockoutEnabled && user.LockoutEnd.HasValue;
+            return user.LockoutEnabled && user.LockoutEnd.HasValue && user.LockoutEnd.Value >= DateTimeOffset.UtcNow;
         }
 
         private bool IsAccountNotApproved(DesignerIdentityUser user)

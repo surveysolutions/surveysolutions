@@ -72,7 +72,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                     Email = identityUser.Email,
                     CreationDate = identityUser.CreatedAtUtc,
                     IsApproved = identityUser.EmailConfirmed,
-                    IsLockedOut = identityUser.LockoutEnabled && (identityUser.LockoutEnd.HasValue),
+                    IsLockedOut = identityUser.LockoutEnabled && identityUser.LockoutEnd.HasValue && identityUser.LockoutEnd.Value>= DateTimeOffset.UtcNow,
                     CanEdit = canEdit,
                     CanOpen = false,
                     CanDelete = false,
