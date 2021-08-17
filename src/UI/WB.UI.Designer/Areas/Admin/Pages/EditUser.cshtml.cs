@@ -70,7 +70,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 Id = id,
                 Email = user.Email,
                 IsApproved = user.EmailConfirmed,
-                IsLockedOut = user.LockoutEnabled && user.LockoutEnd.HasValue,
+                IsLockedOut = user.LockoutEnabled && user.LockoutEnd.HasValue && user.LockoutEnd.Value >= DateTimeOffset.UtcNow,
                 CanImportOnHq = user.CanImportOnHq,
                 UserName = user.UserName,
                 FullName = await userManager.GetFullName(id)
