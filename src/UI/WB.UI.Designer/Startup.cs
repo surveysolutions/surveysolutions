@@ -22,6 +22,7 @@ using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
 using VueCliMiddleware;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;

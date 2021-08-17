@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
