@@ -78,6 +78,10 @@
         } 
     }
 }
+.spacer {
+    display:block;
+    height:530px;
+}
 .centered-box-table{
     display: table;
     @include size(100%, 100%);
@@ -112,6 +116,9 @@
         .centered-box-table{
             text-align: center;
         }
+        .spacer {
+            display:none;
+        }
     } 
 }
 .login{
@@ -142,6 +149,9 @@
         top: 0;
         left:0; 
         @include translate(0,0);
+    }
+    .spacer {
+        display:none;
     }
 }
 @media (max-width: $screen-sm-min){
