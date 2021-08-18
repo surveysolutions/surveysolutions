@@ -39,6 +39,7 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
     [ActivePage(MenuItem.Assignments)]
     [Localizable(false)]
+    [Route("{controller}")]
     public class AssignmentsController : Controller
     {
         private readonly IAuthorizedUser currentUser;
@@ -95,11 +96,11 @@ namespace WB.UI.Headquarters.Controllers
             this.calendarEventService = calendarEventService;
             this.webInterviewLinkProvider = webInterviewLinkProvider;
         }
-        
+
         [ActivePage(MenuItem.Assignments)]
         [HttpGet]
-        [Route("{controller}/{id}")]
-        [Route("{controller}/{action=Index}")]
+        [Route("{id:int?}")]
+        [Route("{action}")]
         public IActionResult Index(int? id = null)
         {
             if (id.HasValue) return GetAssignmentDetails(id.Value);
@@ -195,7 +196,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [Route("{controller}/{action}")]
+        [Route("{action}")]
         [ObservingNotAllowed]
         public IActionResult ImportStatus() => this.Ok(this.assignmentsImportService.GetImportStatus());
 
@@ -203,8 +204,8 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [ActivePage(MenuItem.Questionnaires)]
         [AntiForgeryFilter]
-        [Route("{controller}/{action}/{id}")]
-        [Route("{controller}/{action}/{id}/{step}")]
+        [Route("{action}/{id}")]
+        [Route("{action}/{id}/{step}")]
         public ActionResult Upload(string id, string step)
         {
             if(!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
@@ -362,7 +363,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [HttpGet]
         [ObservingNotAllowed]
-        [Route("{controller}/{action=Index}")]
+        [Route("{action=Index}")]
         public IActionResult GetInvalidAssignmentsByLastImport()
         {
             var sb = new StringBuilder();
