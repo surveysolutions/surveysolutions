@@ -9,7 +9,9 @@ In order to be able to buld Survey Solutions locally, you will need to install s
 
 ## Running locally
 
-First you need to build javascript UI. It Can be done by running either `.build.ps1`, `build.all.deps.bat` or `build_deps.sh` scripts. This will build frontend components for Designer, Headquarters and Web Tester applications.
+First you need to build javascript UI. It Can be done by running either `.build.ps1`, `build.all.deps.bat` or `build_deps.sh` scripts.
+This will build frontend components for Designer, Headquarters and Web Tester applications. You can see more details editing and building the frontend
+[here](docs/development/frontend.md).
 
 By default web applications use a locally installed PostgreSQL database. Review connection strings in `appsettings.ini` files to be able to run applications properly.
 Each web application supports configuration override for development purposes. Add `appsettings.DEV_DEFAULTS.ini` with required configuration.
