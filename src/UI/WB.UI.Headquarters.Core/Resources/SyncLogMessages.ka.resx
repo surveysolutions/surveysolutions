@@ -187,10 +187,10 @@
     <value>ინტერვიუერი შემოვიდა და აქვს AuthToken</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color = "green" 'ინტერვიუს პაკეტი &lt;b&gt; {0} &lt;/ b&gt; წარმატებით დამუშავდა &lt;/ font&gt;</value>
+      <value>&lt;font color="green"&gt; ინტერვიუს პაკეტი &lt;b&gt; {0} &lt;/ b&gt; წარმატებით დამუშავდა &lt;/ font&gt;</value>
   </data>
   <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color = "green" 'ინტერვიუ &lt;b&gt; {0} &lt;/ b&gt; წარმატებით დამუშავდა &lt;/ font&gt;</value>
+      <value>&lt;font color="green"&gt; ინტერვიუ &lt;b&gt; {0} &lt;/ b&gt; წარმატებით დამუშავდა &lt;/ font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
     <value>დალინკეთ ინტერვიუერი მოწყობილობაზე</value>

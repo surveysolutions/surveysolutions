@@ -208,10 +208,10 @@
     <value>Anchetatorul este conectat și a obținut AuthToken</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color='green''&gt;Interviul &lt;b&gt;{0}&lt;/b&gt; a fost prelucrat cu succes&lt;/font&gt;</value>
+      <value>&lt;font color="green''&gt;Interviul &lt;b&gt;{0}&lt;/b&gt; a fost prelucrat cu succes&lt;/font&gt;</value>
   </data>
   <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color = 'green' '&gt; Chestionarul &lt;b&gt; {0} &lt;/ b&gt; a fost prelucrat cu succes &lt;/ font&gt;</value>
+      <value>&lt;font color="green"&gt; Chestionarul &lt;b&gt; {0} &lt;/ b&gt; a fost prelucrat cu succes &lt;/ font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
     <value>Conectarea anchetatorului la tabletă</value>

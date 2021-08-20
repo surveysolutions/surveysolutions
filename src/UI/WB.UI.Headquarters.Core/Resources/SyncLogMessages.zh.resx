@@ -172,10 +172,10 @@
     <value>调查员已经有了设备</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了访谈包&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;成功处理了访谈包&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
   </data>
   <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了访谈&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;成功处理了访谈&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
     <value>将调查员与设备关联</value>

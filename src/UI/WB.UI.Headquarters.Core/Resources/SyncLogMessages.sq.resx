@@ -211,10 +211,10 @@
     <value>Intervistuesi hyri dhe mori kodin e verifikimit </value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;Paketa e intervistës &lt;b&gt;{0}&lt;/b&gt; u përpunua me sukses &lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Paketa e intervistës &lt;b&gt;{0}&lt;/b&gt; u përpunua me sukses &lt;/font&gt;</value>
   </data>
   <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;Intervista &lt;b&gt;{0}&lt;/b&gt; u përpunua me sukses &lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Intervista &lt;b&gt;{0}&lt;/b&gt; u përpunua me sukses &lt;/font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
     <value>Lidh intervistuesin me pajisjen </value>
@@ -235,10 +235,10 @@
     <value>&lt;b&gt;V3&lt;/b&gt; Ngarko intervistën: {0}</value>
   </data>
   <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;Bashkimi i pyetësorit &lt;b&gt;{0}&lt;/b&gt; [{1}] u përpunua me sukses &lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Bashkimi i pyetësorit &lt;b&gt;{0}&lt;/b&gt; [{1}] u përpunua me sukses &lt;/font&gt;</value>
   </data>
   <data name="QuestionnaireProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;Pyetësori &lt;b&gt;{0}&lt;/b&gt; [{1}] u përpunua me sukses&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Pyetësori &lt;b&gt;{0}&lt;/b&gt; [{1}] u përpunua me sukses&lt;/font&gt;</value>
   </data>
   <data name="SupervisorApkRequested" xml:space="preserve">
     <value>Kërkohet skedari i ri i aplikacionit të Supervizorit  </value>
