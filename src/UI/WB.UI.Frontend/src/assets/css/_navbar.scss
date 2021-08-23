@@ -256,7 +256,7 @@ $width-right-menu-small: 380px;
 	white-space: nowrap;
 	margin-bottom: 0;
 	margin-top: 0;
-    max-width: calc(100% - 1000px);
+    max-width: 55%;
     overflow: hidden;
     text-overflow: ellipsis;
 	display: block;
@@ -290,7 +290,7 @@ $width-right-menu-small: 380px;
 @media screen and (max-width: 1350px){
 	.navbar-web-interview{
 		.navbar-text{
-			max-width: calc(100% - 85%);
+			max-width: 55%;
 		}
 		.nav.navbar-right{
 			//max-width: $width-right-menu-small;
