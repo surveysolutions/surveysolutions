@@ -64,6 +64,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     : calendarEventService.GetActiveCalendarEventForAssignmentId(calendarEventPackage.AssignmentId);
 
                 var assignment = assignmentsLocal.GetAssignment(calendarEventPackage.AssignmentId);
+                if (assignment == null)
+                    throw new InvalidOperationException("Assignment for calendar event was not found");
 
                 //check responsible
                 //ignore calendar event event if responsible is another person

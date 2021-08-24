@@ -1273,6 +1273,12 @@ namespace WB.Tests.Abc.TestFactories
             return new ResponsibleAssignmentValidator(userViewFactory ?? Create.Storage.UserViewFactory());
         }
 
+        public QuestionnaireStateForAssignmentValidator QuestionnaireStateForAssignmentValidator(IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
+        {
+            return new QuestionnaireStateForAssignmentValidator(questionnaireBrowseItemStorage ?? 
+                                                                Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
+        }
+
         public QuestionnaireTranslator QuestionnaireTranslator()
             => new QuestionnaireTranslator();
 
