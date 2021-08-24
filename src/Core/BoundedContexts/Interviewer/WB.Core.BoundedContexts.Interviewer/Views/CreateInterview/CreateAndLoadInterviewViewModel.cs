@@ -129,7 +129,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                 var interviewKey = keyGenerator.Get();
                 ICommand createInterviewCommand = new SharedKernels.DataCollection.Commands.Interview.CreateInterview(interviewId,
                     interviewerIdentity.UserId,
-                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version),
+                    questionnaireIdentity,
                     answers,
                     protectedVariables,
                     interviewerIdentity.SupervisorId,
@@ -154,7 +154,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                         interviewId,
                         interviewKey.ToString(),
                         assignment.Id,
-                        calendarEvent.Comment);
+                        calendarEvent.Comment,
+                        questionnaireIdentity);
+                    
                     commandService.Execute(createCalendarEvent);
                 }
                 

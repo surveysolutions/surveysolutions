@@ -8,6 +8,7 @@ using MvvmCross.ViewModels;
 using NodaTime;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -181,8 +182,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         timezone, 
                         initValues.InterviewId, 
                         initValues.InterviewKey,
-                        initValues.AssignmentId, Comment)
-                    : new UpdateCalendarEventCommand(calendarEvent.Id, userId, DateTimeValue, timezone,Comment);
+                        initValues.AssignmentId, 
+                        Comment,
+                        new QuestionnaireIdentity() //dummy one, no validation on tablet
+                        )
+                    : new UpdateCalendarEventCommand(calendarEvent.Id, userId, 
+                        DateTimeValue, timezone,
+                        Comment,
+                        new QuestionnaireIdentity() //dummy one, no validation on tablet
+                        );
 
                 commandService.Execute(command);
                 

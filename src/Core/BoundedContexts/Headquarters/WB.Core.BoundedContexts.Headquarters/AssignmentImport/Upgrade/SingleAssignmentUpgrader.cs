@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                         assignmentId);
 
                     invitationService.MigrateInvitationToNewAssignment(assignmentId, newAssignment.Id);
-                    commandService.Execute(new UpgradeAssignmentCommand(oldAssignment.PublicKey, userId));
+                    commandService.Execute(new UpgradeAssignmentCommand(oldAssignment.PublicKey, userId, oldAssignment.QuestionnaireId));
                 }
                 else
                 {

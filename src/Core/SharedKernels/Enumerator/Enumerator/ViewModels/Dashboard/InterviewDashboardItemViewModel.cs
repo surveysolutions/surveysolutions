@@ -365,7 +365,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             if (interview.Assignment.HasValue && calendarEvent != null)
             {
                 var command = new DeleteCalendarEventCommand(calendarEvent.Id,
-                    Principal.CurrentUserIdentity.UserId);
+                    Principal.CurrentUserIdentity.UserId,
+                    new QuestionnaireIdentity() //dummy
+                    );
                 CommandService.Execute(command);
                 
                 RaiseOnItemUpdated();    
