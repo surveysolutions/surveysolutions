@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Interview.Validators
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage ?? throw new ArgumentNullException(nameof(questionnaireBrowseItemStorage));
         }
 
-        public void Validate(StatefulInterview? aggregate, InterviewCommand command)
+        public void Validate(StatefulInterview aggregate, InterviewCommand command)
         {
             if (aggregate == null)
             {
@@ -47,22 +47,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Interview.Validators
             }
         }
 
-        public void Validate(StatefulInterview aggregate, CreateInterview command)
+        public void Validate(StatefulInterview? aggregate, CreateInterview command)
         {
             CheckQuestionnaireAndThrow(command.QuestionnaireId);
         }
 
-        public void Validate(StatefulInterview aggregate, CreateInterviewFromSynchronizationMetadata command)
+        public void Validate(StatefulInterview? aggregate, CreateInterviewFromSynchronizationMetadata command)
         {
             CheckQuestionnaireAndThrow(new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion));
         }
 
-        public void Validate(StatefulInterview aggregate, SynchronizeInterviewEventsCommand command)
+        public void Validate(StatefulInterview? aggregate, SynchronizeInterviewEventsCommand command)
         {
             CheckQuestionnaireAndThrow(new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion));
         }
 
-        public void Validate(StatefulInterview aggregate, CreateTemporaryInterviewCommand command)
+        public void Validate(StatefulInterview? aggregate, CreateTemporaryInterviewCommand command)
         {
             CheckQuestionnaireAndThrow(command.QuestionnaireId);
         }

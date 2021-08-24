@@ -6,15 +6,14 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
-using WB.UI.Headquarters.API.PublicApi.Models;
 
-namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
+namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
 {
     [TestOf(typeof(QuestionnaireStateForAssignmentValidator))]
-    public class QuestionnaireStateForAssignmentValidatorTests 
+    public class QuestionnaireStateForCalendarEventValidatorTests 
     {
         [Test]
-        public void should_not_allow_creating_assignment_if_questionnaire_is_deleted()
+        public void should_not_allow_calendar_event_creation_if_questionnaire_is_deleted()
         {
             QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1); 
             var questionnaireBrowseItemRepository =
@@ -25,19 +24,19 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                     IsDeleted = true
                 }});
 
-            var validator = Create.Service.QuestionnaireStateForAssignmentValidator(questionnaireBrowseItemRepository);
+            var validator = Create.Service.QuestionnaireStateForCalendarEventValidator(questionnaireBrowseItemRepository);
 
             TestDelegate act = () =>
-                validator.Validate(null, Create.Command.CreateAssignment(questionnaireId:questionnaireIdentity,responsibleId: Id.gA, webMode: true));
+                validator.Validate(null, Create.Command.CreateCalendarEventCommand(questionnaireIdentity:questionnaireIdentity, userId: Id.gA));
 
-            Assert.That(act, Throws.Exception.InstanceOf<AssignmentException>()
+            Assert.That(act, Throws.Exception.InstanceOf<CalendarEventException>()
                 .With.Message.EqualTo(CommandValidatorsMessages.QuestionnaireWasDeleted)
-                .And.Property(nameof(AssignmentException.ExceptionType))
-                .EqualTo(AssignmentDomainExceptionType.QuestionnaireDeleted));
+                .And.Property(nameof(CalendarEventException.ExceptionType))
+                .EqualTo(CalendarEventDomainExceptionType.QuestionnaireDeleted));
         }
         
         [Test]
-        public void should_not_allow_creating_assignment_if_questionnaire_is_disabled()
+        public void should_not_allow_calendar_event_creation_if_questionnaire_is_disabled()
         {
             QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 13); 
             var questionnaireBrowseItemRepository =
@@ -48,18 +47,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                     Disabled = true
                 }});
 
-            var validator = Create.Service.QuestionnaireStateForAssignmentValidator(questionnaireBrowseItemRepository);
+            var validator = Create.Service.QuestionnaireStateForCalendarEventValidator(questionnaireBrowseItemRepository);
 
             TestDelegate act = () =>
-                validator.Validate(null, Create.Command.CreateAssignment(questionnaireId:questionnaireIdentity, responsibleId: Id.gA, webMode: true));
+                validator.Validate(null, Create.Command.CreateCalendarEventCommand(questionnaireIdentity:questionnaireIdentity, userId: Id.gA));
 
-            Assert.That(act, Throws.Exception.InstanceOf<AssignmentException>().With.Message.EqualTo(CommandValidatorsMessages.QuestionnaireWasDeleted)
-                .And.Property(nameof(AssignmentException.ExceptionType)).EqualTo(AssignmentDomainExceptionType.QuestionnaireDeleted));
+            Assert.That(act, Throws.Exception.InstanceOf<CalendarEventException>()
+                .With.Message.EqualTo(CommandValidatorsMessages.QuestionnaireWasDeleted)
+                .And.Property(nameof(CalendarEventException.ExceptionType))
+                .EqualTo(CalendarEventDomainExceptionType.QuestionnaireDeleted));
         }
         
         
         [Test]
-        public void should_not_allow_assignment_archiving_if_questionnaire_is_disabled()
+        public void should_not_allow_calendar_event_update_if_questionnaire_is_disabled()
         {
             QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 13); 
             var questionnaireBrowseItemRepository =
@@ -70,13 +71,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                     Disabled = true
                 }});
 
-            var validator = Create.Service.QuestionnaireStateForAssignmentValidator(questionnaireBrowseItemRepository);
+            var validator = Create.Service.QuestionnaireStateForCalendarEventValidator(questionnaireBrowseItemRepository);
 
             TestDelegate act = () =>
-                validator.Validate(null, Create.Command.ArchiveAssignment(questionnaireIdentity:questionnaireIdentity, userId: Id.gA, assignmentId:Id.g1));
+                validator.Validate(null, Create.Command.UpdateCalendarEventCommand(questionnaireIdentity:questionnaireIdentity, userId: Id.gA));
 
-            Assert.That(act, Throws.Exception.InstanceOf<AssignmentException>().With.Message.EqualTo(CommandValidatorsMessages.QuestionnaireWasDeleted)
-                .And.Property(nameof(AssignmentException.ExceptionType)).EqualTo(AssignmentDomainExceptionType.QuestionnaireDeleted));
+            Assert.That(act, Throws.Exception.InstanceOf<CalendarEventException>()
+                .With.Message.EqualTo(CommandValidatorsMessages.QuestionnaireWasDeleted)
+                .And.Property(nameof(CalendarEventException.ExceptionType))
+                .EqualTo(CalendarEventDomainExceptionType.QuestionnaireDeleted));
         }
     }
 }

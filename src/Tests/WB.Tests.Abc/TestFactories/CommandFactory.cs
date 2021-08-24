@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -426,6 +427,45 @@ namespace WB.Tests.Abc.TestFactories
         public UpgradeAssignmentCommand UpgradeAssignment()
         {
             return new UpgradeAssignmentCommand(Id.g1, Id.g2, new QuestionnaireIdentity());
+        }
+
+        public CreateCalendarEventCommand CreateCalendarEventCommand(
+            Guid? calendarEventId = null,
+            Guid? userId = null,
+            Guid? interviewId = null,
+            string interviewKey = "",
+            int assignmentId = 0,
+            QuestionnaireIdentity questionnaireIdentity = null)
+        {
+            return new CreateCalendarEventCommand(
+                calendarEventId ?? Guid.NewGuid(),
+                userId?? Guid.NewGuid(),
+                DateTimeOffset.Now, 
+                "America/New_York",
+                interviewId,
+                interviewKey,
+                assignmentId,
+                "",
+                questionnaireIdentity ?? new QuestionnaireIdentity()
+                );
+        }
+        
+        public UpdateCalendarEventCommand UpdateCalendarEventCommand(
+            Guid? publicKey = null,
+            Guid? userId = null,
+            Guid? interviewId = null,
+            string interviewKey = "",
+            int assignmentId = 0,
+            QuestionnaireIdentity questionnaireIdentity = null)
+        {
+            return new UpdateCalendarEventCommand(
+                publicKey ?? Guid.NewGuid(),
+                userId?? Guid.NewGuid(),
+                DateTimeOffset.Now, 
+                "America/New_York",
+                "",
+                questionnaireIdentity ?? new QuestionnaireIdentity()
+            );
         }
     }
 }

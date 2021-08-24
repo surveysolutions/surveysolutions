@@ -616,7 +616,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public string Language { get; private set; }
 
-        public QuestionnaireIdentity QuestionnaireIdentity { get; protected set; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; protected internal set; }
 
         public bool WasCompleted => this.properties.WasCompleted;
         public bool WasRejected => this.properties.WasRejected;
