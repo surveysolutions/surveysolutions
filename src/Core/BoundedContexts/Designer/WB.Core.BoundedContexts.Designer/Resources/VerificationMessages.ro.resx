@@ -718,7 +718,7 @@
     <value>Titlul chestionarului nu ar trebui să aibă două sau mai multe caractere underscore _ consecutive.</value>
   </data>
   <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-    <value>Modul simplu este permis numai pentru listele cu cel mult {0} elemente.</value>
+      <value>Modul simplu este permis numai pentru listele cu cel mult {0} întrebări sau texte statice.</value>
   </data>
   <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
     <value>Modul simplu nu permite utilizarea listelor cu niveluri ierarhice inferioare.</value>

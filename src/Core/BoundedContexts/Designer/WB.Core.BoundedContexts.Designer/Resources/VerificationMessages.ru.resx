@@ -718,8 +718,8 @@
     <value>Имя опросника не должно содержать двух и более последовательных символов подчеркивания.</value>
   </data>
   <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-    <value>Плоский режим разрешен для ростеров с не больше чем {0} элементами.</value>
-    <comment>Плоский режим разрешен для ростеров с не больше чем {0} элементами.</comment>
+      <value>Плоский режим разрешен для ростеров с не больше чем {0} вопросов или статических текстов.</value>
+      <comment>Плоский режим разрешен для ростеров с не больше чем {0} элементами.</comment>
   </data>
   <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
     <value>Плоский режим запрещает использовать внутри ростеры.</value>
