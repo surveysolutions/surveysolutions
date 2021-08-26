@@ -172,10 +172,10 @@
     <value>Интервьюер уже привязан к планшету</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Интервью пакет &lt;b&gt;{0}&lt;/b&gt; успешно обработан&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Интервью пакет &lt;b&gt;{0}&lt;/b&gt; успешно обработан&lt;/font&gt;</value>
   </data>
   <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Интервью &lt;b&gt;{0}&lt;/b&gt; успешно обработано&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Интервью &lt;b&gt;{0}&lt;/b&gt; успешно обработано&lt;/font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
     <value>Привязать интервьюера к планшету</value>
@@ -187,10 +187,10 @@
     <value>Загружено интервью: {0}</value>
   </data>
   <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Сборка вопросника &lt;b&gt;{0}&lt;/b&gt; [{1}] успешно обработана&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Сборка вопросника &lt;b&gt;{0}&lt;/b&gt; [{1}] успешно обработана&lt;/font&gt;</value>
   </data>
   <data name="QuestionnaireProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Вопросник &lt;b&gt;{0}&lt;/b&gt; [{1}] успешно обработан&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Вопросник &lt;b&gt;{0}&lt;/b&gt; [{1}] успешно обработан&lt;/font&gt;</value>
   </data>
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt;Обновление интервью: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, пакет: {1}, индекс сортировки: {2}&lt;/li&gt;</value>

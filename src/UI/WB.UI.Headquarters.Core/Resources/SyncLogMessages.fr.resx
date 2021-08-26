@@ -172,10 +172,10 @@
     <value>L’enquêteur a un appareil déjà</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Paquet de l'entretien&lt;b&gt;{0}&lt;/b&gt; traité avec succès&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Paquet de l'entretien&lt;b&gt;{0}&lt;/b&gt; traité avec succès&lt;/font&gt;</value>
   </data>
   <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Entretien de &lt;b&gt;{0}&lt;/b&gt; traités avec succès&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Entretien de &lt;b&gt;{0}&lt;/b&gt; traités avec succès&lt;/font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
     <value>Lier l'enquêteur à l'appareil</value>
@@ -184,10 +184,10 @@
     <value>Pas de nouveaux paquets d'entretiens à télécharger</value>
   </data>
   <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-    <value>&lt;font color = "green" '&gt; L'assemblage du questionnaire &lt;b&gt; {0} &lt;/ b&gt; [{1}] a bien été traité &lt;/ font&gt;</value>
+      <value>&lt;font color = "green"&gt; L'assemblage du questionnaire &lt;b&gt; {0} &lt;/ b&gt; [{1}] a bien été traité &lt;/ font&gt;</value>
   </data>
   <data name="QuestionnaireProcessed" xml:space="preserve">
-    <value>&lt;font color = "green" '&gt; Questionnaire &lt;b&gt; {0} &lt;/ b&gt; [{1}] traité avec succès &lt;/ font&gt;</value>
+      <value>&lt;font color = "green"&gt; Questionnaire &lt;b&gt; {0} &lt;/ b&gt; [{1}] traité avec succès &lt;/ font&gt;</value>
   </data>
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt; Mettre à jour l'entretien: &lt;a href="{3}"&gt; {0} &lt;/a&gt;, package: {1}, index de tri: {2} &lt;/ li&gt;</value>
