@@ -271,7 +271,7 @@ export default {
                         data: 'title',
                         title: this.$t('Dashboard.Title'),
                         name: 'Title',
-                        className: 'without-break changed-recently',
+                        className: 'changed-recently',
                     },
                     {
                         data: 'version',
