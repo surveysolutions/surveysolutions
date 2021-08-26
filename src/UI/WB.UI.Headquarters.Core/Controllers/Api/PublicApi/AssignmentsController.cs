@@ -344,7 +344,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
 
             commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, responsibleUser.Id,
-                assignment.Comments));
+                assignment.Comments, assignment.QuestionnaireId));
 
             return GetUpdatedAssignment(id);
         }
@@ -413,7 +413,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (assignment.WebMode == true)
                 return StatusCode(StatusCodes.Status406NotAcceptable, Assignments.WebMode);
 
-            commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey, authorizedUser.Id, quantity));
+            commandService.Execute(
+                new UpdateAssignmentQuantity(assignment.PublicKey, authorizedUser.Id, quantity, assignment.QuestionnaireId));
             this.auditLog.AssignmentSizeChanged(id, quantity);
 
             return GetUpdatedAssignment(id);
@@ -439,7 +440,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
             }
 
-            commandService.Execute(new ArchiveAssignment(assignment.PublicKey, authorizedUser.Id));
+            commandService.Execute(new ArchiveAssignment(assignment.PublicKey, authorizedUser.Id, assignment.QuestionnaireId));
 
             return GetUpdatedAssignment(id);
         }
@@ -461,7 +462,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (assignment == null)
                 return NotFound();
 
-            commandService.Execute(new UnarchiveAssignment(assignment.PublicKey, authorizedUser.Id));
+            commandService.Execute(
+                new UnarchiveAssignment(assignment.PublicKey, authorizedUser.Id, assignment.QuestionnaireId));
 
             return GetUpdatedAssignment(id);
         }
@@ -517,7 +519,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
 
             commandService.Execute(
-                new UpdateAssignmentAudioRecording(assignment.PublicKey, authorizedUser.Id, request.Enabled));
+                new UpdateAssignmentAudioRecording(assignment.PublicKey, authorizedUser.Id, 
+                    request.Enabled, assignment.QuestionnaireId));
 
             return NoContent();
         }
@@ -604,7 +607,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             this.commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey,
                 this.authorizedUser.Id,
-                assignment.InterviewSummaries.Count));
+                assignment.InterviewSummaries.Count,
+                assignment.QuestionnaireId));
 
             return Ok();
         }
@@ -631,7 +635,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             this.commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey,
                 this.authorizedUser.Id,
-                assignment.InterviewSummaries.Count));
+                assignment.InterviewSummaries.Count,
+                assignment.QuestionnaireId));
 
             return GetUpdatedAssignment(id);
         }

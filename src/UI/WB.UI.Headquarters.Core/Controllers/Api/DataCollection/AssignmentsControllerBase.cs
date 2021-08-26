@@ -81,7 +81,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 return NotFound("Assignment was reassigned");
             }
 
-            commandService.Execute(new MarkAssignmentAsReceivedByTablet(assignment.PublicKey, authorizedUserId));
+            commandService.Execute(
+                new MarkAssignmentAsReceivedByTablet(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId));
 
             return Ok();
         }

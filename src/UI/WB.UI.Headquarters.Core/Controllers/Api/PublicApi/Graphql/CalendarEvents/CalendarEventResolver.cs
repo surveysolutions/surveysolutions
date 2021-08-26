@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents
 {
@@ -30,10 +31,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents
                             .SetCode(GraphQLErrorCodes.EntityNotFound)
                             .Build()});
 
+            QuestionnaireIdentity questionnaireIdentity;
             //check permissions
             if (calendarEventToDelete.InterviewId != null)
             {
                 var interview = interviewSummaries.GetById(calendarEventToDelete.InterviewId.Value);
+                questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireIdentity);
                 if (authorizedUser.IsInterviewer && interview.ResponsibleId != authorizedUser.Id)
                     throw new GraphQLException(new []{ 
                         ErrorBuilder.New()
@@ -44,6 +47,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents
             else
             {
                 var assignment = assignments.GetAssignment(calendarEventToDelete.AssignmentId);
+                questionnaireIdentity = assignment.QuestionnaireId;
                 if (authorizedUser.IsInterviewer && assignment.ResponsibleId != authorizedUser.Id)
                     throw new GraphQLException(new []{ 
                         ErrorBuilder.New()
@@ -53,7 +57,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents
             }
             
             commandService.Execute(new DeleteCalendarEventCommand(
-                publicKey, authorizedUser.Id));
+                publicKey, authorizedUser.Id, questionnaireIdentity));
 
             return calendarEventToDelete;
         }
@@ -104,7 +108,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents
                 null,
                 null,
                 assignmentId,
-                comment));
+                comment,
+                assignment.QuestionnaireId));
 
             return calendarEventService.GetCalendarEventById(publicKey);
         }
@@ -158,7 +163,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents
                     interviewId,
                     interview.Key,
                     interview.AssignmentId ?? 0,
-                    comment));
+                    comment,
+                    QuestionnaireIdentity.Parse(interview.QuestionnaireIdentity)));
             return calendarEventService.GetCalendarEventById(newId);
         }
 
@@ -185,10 +191,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents
                         .SetCode(GraphQLErrorCodes.InvalidFormat)
                         .Build()});
 
+            QuestionnaireIdentity questionnaireIdentity; 
             //check permissions
             if (calendarEventToUpdate.InterviewId != null)
             {
                 var interview = interviewSummaries.GetById(calendarEventToUpdate.InterviewId.Value);
+                questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireIdentity);
                 if (authorizedUser.IsInterviewer && interview.ResponsibleId != authorizedUser.Id)
                     throw new GraphQLException(new []{ 
                         ErrorBuilder.New()
@@ -199,6 +207,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents
             else
             {
                 var assignment = assignments.GetAssignment(calendarEventToUpdate.AssignmentId);
+                questionnaireIdentity = assignment.QuestionnaireId;
                 if (authorizedUser.IsInterviewer && assignment.ResponsibleId != authorizedUser.Id)
                     throw new GraphQLException(new []{ 
                         ErrorBuilder.New()
@@ -212,7 +221,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents
                     authorizedUser.Id, 
                     newStart,
                     startTimezone,
-                    comment));
+                    comment,
+                    questionnaireIdentity));
                 
             return calendarEventService.GetCalendarEventById(publicKey);
         }

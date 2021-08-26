@@ -132,4 +132,7 @@
   <data name="AssignmentResponsibleNotFound" xml:space="preserve">
     <value>Responsible was not found</value>
   </data>
+ <data name="QuestionnaireWasDeleted" xml:space="preserve">
+    <value>Questionnaire was deleted</value>
+  </data>
 </root>

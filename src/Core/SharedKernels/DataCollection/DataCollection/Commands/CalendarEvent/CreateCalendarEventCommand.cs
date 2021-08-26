@@ -1,5 +1,6 @@
 ﻿using System;
 using Ncqrs.Commanding;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent
 {
@@ -19,7 +20,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent
             Guid? interviewId,
             string interviewKey,
             int assignmentId,
-            string comment):base(publicKey, userId)
+            string comment,
+            QuestionnaireIdentity questionnaireIdentity):base(publicKey, userId, questionnaireIdentity)
         {
             this.Start = start;
             this.StartTimezone = startTimezone; 

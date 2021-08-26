@@ -136,7 +136,8 @@ namespace WB.UI.Headquarters.Controllers
                     interviewId,
                     interviewKey.ToString(),
                     assignment.Id,
-                    calendarEvent.Comment);
+                    calendarEvent.Comment,
+                    assignment.QuestionnaireId);
                 commandService.Execute(createCalendarEvent);
             }
             
