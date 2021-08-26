@@ -30,6 +30,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
         [ActionName("Profile")]
         [ActivePage(MenuItem.Interviewers)]
+        [ExtraHeaderPermissions(HeaderPermissionType.Google)]
         public async Task<ActionResult> InterviewerProfile(string? id)
         {
             if (id == null || !Guid.TryParse(id, out var userId))
