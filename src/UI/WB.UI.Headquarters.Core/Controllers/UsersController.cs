@@ -113,9 +113,9 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
-        [Route("/Manage/{id?}")]
+        [Route("/Manage/{id:guid?}")]
         [ActivePage(MenuItem.ManageAccount)]
-        public async Task<ActionResult> Manage(Guid? id)
+        public async Task<ActionResult> Manage(Guid? id = null)
         {
             if(id == this.authorizedUser.Id)
                 return RedirectToAction("Manage", new {id = (Guid?)null});
@@ -132,8 +132,8 @@ namespace WB.UI.Headquarters.Controllers
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         [ActivePage(MenuItem.ManageAccount)]
-        [Route("/ChangePassword/{id?}")]
-        public async Task<ActionResult> ChangePassword(Guid? id)
+        [Route("/ChangePassword/{id:guid?}")]
+        public async Task<ActionResult> ChangePassword(Guid? id = null)
         {                        
             if(id == this.authorizedUser.Id)
                 return RedirectToAction("ChangePassword", new {id = (Guid?)null});
@@ -149,8 +149,8 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator)]
         [ActivePage(MenuItem.ManageAccount)]
-        [Route("/Workspaces/{id?}")]
-        public async Task<ActionResult> Workspaces(Guid id)
+        [Route("/Workspaces/{id:guid?}")]
+        public async Task<ActionResult> Workspaces(Guid? id)
         {                        
             if(id == this.authorizedUser.Id)
                 return RedirectToAction("Workspaces", new {id = (Guid?)null});
@@ -167,7 +167,7 @@ namespace WB.UI.Headquarters.Controllers
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         [ActivePage(MenuItem.ManageAccount)]
-        [Route("/TwoFactorAuthentication/{id?}")]
+        [Route("/TwoFactorAuthentication/{id:guid?}")]
         public async Task<ActionResult> TwoFactorAuthentication(Guid? id)
         {
             if(id == this.authorizedUser.Id)
