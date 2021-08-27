@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Designer.DataAccess;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -30,6 +32,7 @@ namespace WB.UI.Designer.Code
         private readonly ICategoriesService categoriesService;
         private readonly ILogger<QuestionnaireHelper> logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly DesignerDbContext questionnaireChangeItemStorage;
 
         public QuestionnaireHelper(
             IQuestionnaireListViewFactory viewFactory,
@@ -40,7 +43,8 @@ namespace WB.UI.Designer.Code
             ITranslationsService translationsService, 
             ICategoriesService categoriesService, 
             ILogger<QuestionnaireHelper> logger, 
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor,
+            DesignerDbContext questionnaireChangeItemStorage)
         {
             this.viewFactory = viewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -51,6 +55,7 @@ namespace WB.UI.Designer.Code
             this.categoriesService = categoriesService;
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.questionnaireChangeItemStorage = questionnaireChangeItemStorage;
         }
 
         public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(Guid viewerId, bool isAdmin, QuestionnairesType type, Guid? folderId,
@@ -170,6 +175,13 @@ namespace WB.UI.Designer.Code
             questionnaireFileName = fileSystemAccessor.MakeValidFileName(questionnaireView.Title);
             
             var questionnaireDocument = questionnaireView.Source;
+            
+            var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.QuestionnaireChangeRecords
+                .Where(y => y.QuestionnaireId == id.FormatGuid())
+                .Select(y => (int?)y.Sequence)
+                .Max();
+            
+            questionnaireDocument.Revision = maxSequenceByQuestionnaire ?? 0;
             string questionnaireJson = this.serializer.Serialize(questionnaireDocument);
 
             var output = new MemoryStream();
