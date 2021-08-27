@@ -68,31 +68,15 @@
                     }
                 </a>
             </th>
-            <th class="@(Model.SortBy =="LockoutEnabled" ? "ordered" : "")">
-                <a asp-route-p="@Model.PageIndex"
-                   asp-route-sb="LockoutEnabled"
-                   asp-route-so="@Model.SortOrder.InvertBooleableInt(Model.SortBy == "LockoutEnabled")"
-                   asp-route-f="@Model.Filter">
-                    LOCKED
-
-                    @if (Model.SortBy =="LockoutEnabled")
-                    {
-                    <span class="glyphicon glyphicon-triangle-@((Model.SortOrder).ToBool() ? "top" : "bottom")"></span>
-                    }
-                </a>
+            <th >
+                <span>
+                    MANUALLY LOCKED
+                </span>
             </th>
-            <th class="@(Model.SortBy =="CanImportOnHq" ? "ordered" : "")">
-                <a asp-route-p="@Model.PageIndex"
-                   asp-route-sb="CanImportOnHq"
-                   asp-route-so="@Model.SortOrder.InvertBooleableInt(Model.SortBy == "CanImportOnHq")"
-                   asp-route-f="@Model.Filter">
-                    Can Import On HQ
-
-                    @if (Model.SortBy =="CanImportOnHq")
-                    {
-                    <span class="glyphicon glyphicon-triangle-@((Model.SortOrder).ToBool() ? "top" : "bottom")"></span>
-                    }
-                </a>
+            <th>
+                <span>
+                    AUTOLOCK END
+                </span>
             </th>
             <th>
             </th>
@@ -133,7 +117,7 @@
                                 @(user.IsLockedOut ? "Yes" : "No")
                             </td>
                             <td>
-                                @(user.CanImportOnHq ? "Yes" : "No")
+                                @user.LockoutEnd?.ToLocalTime().ToString("MMM dd, yyy HH:mm")
                             </td>
                             <td>
                                 <div class="btn-group pull-right">

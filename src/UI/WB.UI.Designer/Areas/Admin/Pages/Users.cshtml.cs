@@ -72,7 +72,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                     Email = identityUser.Email,
                     CreationDate = identityUser.CreatedAtUtc,
                     IsApproved = identityUser.EmailConfirmed,
-                    IsLockedOut = identityUser.LockoutEnabled && identityUser.LockoutEnd.HasValue && identityUser.LockoutEnd.Value>= DateTimeOffset.UtcNow,
+                    IsLockedOut = identityUser.LockoutEnabled && identityUser.LockoutEnd.HasValue && identityUser.LockoutEnd.Value >= DateTimeOffset.UtcNow,
+                    LockoutEnd = (!identityUser.LockoutEnabled && identityUser.LockoutEnd.HasValue && identityUser.LockoutEnd.Value >= DateTimeOffset.UtcNow) ? identityUser.LockoutEnd : null,
                     CanEdit = canEdit,
                     CanOpen = false,
                     CanDelete = false,
@@ -115,9 +116,12 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         [Display(Name = "Approved?", Order = 5)]
         public bool IsApproved { get; set; }
 
-        [Display(Name = "Locked?", Order = 5)]
+        [Display(Name = "Manually Locked?", Order = 5)]
         public bool IsLockedOut { get; set; }
 
+        [Display(Name = "Lockout end")]
+        public DateTimeOffset? LockoutEnd { get; set; }
+        
         [Display(Name = "Can import on HQ")]
         public bool CanImportOnHq { get; set; }
 
