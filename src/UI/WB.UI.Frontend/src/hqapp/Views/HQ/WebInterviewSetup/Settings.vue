@@ -447,17 +447,6 @@
                     <div class="form-group mb-20">
                         <input class="checkbox-filter"
                             v-validate="''"
-                            data-vv-name="allowSwitchToCawiForInterviewer"
-                            id="allowSwitchToCawiForInterviewer"
-                            type="checkbox"
-                            v-model="allowSwitchToCawiForInterviewerEnabled">
-                        <label for="allowSwitchToCawiForInterviewer">
-                            <span class="tick"></span>{{$t('WebInterviewSetup.AllowSwitchToCawiForInterviewer')}}
-                        </label>
-                    </div>
-                    <div class="form-group mb-20">
-                        <input class="checkbox-filter"
-                            v-validate="''"
                             data-vv-name="attachAnswersInEmail"
                             id="attachAnswersInEmail"
                             type="checkbox"
@@ -465,6 +454,17 @@
                             v-model="attachAnswersInEmailIsEnabled">
                         <label for="attachAnswersInEmail">
                             <span class="tick"></span>{{$t('WebInterviewSetup.AttachAnswersToCompleteEmail')}}
+                        </label>
+                    </div>
+                    <div class="form-group mb-20">
+                        <input class="checkbox-filter"
+                            v-validate="''"
+                            data-vv-name="allowSwitchToCawiForInterviewer"
+                            id="allowSwitchToCawiForInterviewer"
+                            type="checkbox"
+                            v-model="allowSwitchToCawiForInterviewerEnabled">
+                        <label for="allowSwitchToCawiForInterviewer">
+                            <span class="tick"></span>{{$t('WebInterviewSetup.AllowSwitchToCawiForInterviewer')}}
                         </label>
                     </div>
                     <div class="notification-block mb-20">
