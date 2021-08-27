@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Schema.Generation;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
@@ -55,6 +58,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         public ActionResult HttpStatusCode(int? statusCode, string message = "Use query argument 'statusCode' and 'message' to display custom response") =>
             this.StatusCode(statusCode ?? 404, message);
 
+        public ActionResult DocumentSchema() => this.View();
 
         public ActionResult CompilationVersions() 
             => this.View("CompilationVersionsViews/CompilationVersions", this.questionnaireCompilationVersionService.GetCompilationVersions());
@@ -159,6 +163,14 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
                 this.productVersionHistory.GetHistory().ToDictionary(
                     change => change.UpdateTimeUtc,
                     change => change.ProductVersion)));
+
+        private static JSchema? questionnaireDocumentSchema = null;
+        
+        public JsonResult GetSchema()
+        {
+            questionnaireDocumentSchema ??= new JSchemaGenerator().Generate(typeof(QuestionnaireDocument));
+            return this.Json(questionnaireDocumentSchema.ToString());
+        }
 
         public class VersionsInfo
         {
