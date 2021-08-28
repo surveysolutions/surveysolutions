@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -114,13 +115,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase));
                 }
 
-                var listItems = query
-                    .OrderBy(x => x.Title)
-                    .Select(x => new QuestionnaireListItem
+                var ids = query.Select(x => x.QuestionnaireId).Distinct().ToList();
+
+                if (ids.Count == 0)
+                    return new QuestionnairesList() { Items = new List<QuestionnaireListItem>(), TotalCount = 0};
+                
+                var queryItems = queryable.Where(x => !x.IsDeleted);
+                
+                var groupedItems = queryItems
+                    .Where(x => ids.Contains(x.QuestionnaireId))
+                    .GroupBy(x => new {x.QuestionnaireId})
+                    .ToList();
+                    
+                var listItems =
+                    groupedItems
+                    .Select(g => new QuestionnaireListItem
                     {
-                        Id = x.QuestionnaireId,
-                        Title = x.Title
-                    }).Distinct().ToList();
+                        Id = g.Key.QuestionnaireId,
+                        Title = g.OrderByDescending(v => v.Version).First().Title
+                    })
+                    .OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
                 return new QuestionnairesList
                 {
                     Items = listItems,

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -19,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
                         .Select(v => new ComboboxViewItem { Key = v.Version.ToString(), Value = $"ver. {v.Version}" })
                         .ToList(),
                 })
-                .OrderBy(q => q.Value)
+                .OrderBy(q => q.Value, StringComparer.OrdinalIgnoreCase)
                 .ToList();
         }
     }
