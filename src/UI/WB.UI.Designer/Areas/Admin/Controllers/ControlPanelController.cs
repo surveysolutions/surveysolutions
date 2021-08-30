@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Net;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -166,12 +169,49 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
 
         private static JSchema? questionnaireDocumentSchema = null;
         
-        public JsonResult GetSchema()
+        public IActionResult GetSchema([FromQuery]bool? getFile = null)
         {
-            questionnaireDocumentSchema ??= new JSchemaGenerator().Generate(typeof(QuestionnaireDocument));
-            return this.Json(questionnaireDocumentSchema.ToString());
+            JSchemaGenerator generator = new JSchemaGenerator()
+            {
+                SchemaReferenceHandling = SchemaReferenceHandling.All,
+                GenerationProviders = { new MyJSchemaGenerationProvider() }
+            };
+            
+            questionnaireDocumentSchema ??= generator.Generate(typeof(QuestionnaireDocument));
+
+            if (getFile == true)
+                return new FileStreamResult(new MemoryStream(
+                    Encoding.UTF8.GetBytes(questionnaireDocumentSchema.ToString())), "application/schema+json")
+                {
+                    FileDownloadName = "questionnaire.schema.json"
+                };
+            else
+                return this.Json(questionnaireDocumentSchema.ToString());
         }
 
+        internal class MyJSchemaGenerationProvider : JSchemaGenerationProvider
+        {
+            public override JSchema GetSchema(JSchemaTypeGenerationContext context)
+            {
+                var schema = new JSchema();
+                var descendants = typeof(IComposite).Assembly.GetTypes().Where(item => !item.IsAbstract && typeof(IComposite).IsAssignableFrom(item)).ToList();
+                foreach (var descendant in descendants)
+                {
+                    // The line below never exits, because it's calling MySchemaGenerator.GetSchema again with the same parameter
+                    var descendantSchema = context.Generator.Generate(descendant);
+                    schema.PatternProperties.Add(descendant.Name + ".*", descendantSchema);
+                }
+                schema.AllowAdditionalProperties = false;
+                schema.Type = JSchemaType.Object;
+                return schema;
+            }
+
+            public override bool CanGenerateSchema(JSchemaTypeGenerationContext context)
+            {
+                return context.ObjectType == typeof(IComposite);
+            }
+        }
+        
         public class VersionsInfo
         {
             public VersionsInfo(string product, Dictionary<DateTime, string> history)
