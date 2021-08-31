@@ -52,9 +52,9 @@ namespace WB.UI.Supervisor
         {
         }
 
-        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
+        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, IMvxIoCProvider iocProvider)
         {
-            var lookup = base.InitializeViewLookup(viewModelViewLookup);
+            var lookup = base.InitializeViewLookup(viewModelViewLookup, iocProvider);
 
             var our = new Dictionary<Type, Type>()
             {

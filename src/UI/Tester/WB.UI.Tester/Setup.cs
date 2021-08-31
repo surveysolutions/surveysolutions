@@ -110,9 +110,9 @@ namespace WB.UI.Tester
             return new AutofacMvxIocProvider(container);
         }
 
-        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
+        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, IMvxIoCProvider iocProvider)
         {
-            var result = base.InitializeViewLookup(viewModelViewLookup);
+            var lookup = base.InitializeViewLookup(viewModelViewLookup, iocProvider);
 
             var viewModelViewLookup1 = new Dictionary<Type, Type>()
             {
@@ -126,8 +126,8 @@ namespace WB.UI.Tester
 #endif
             };
 
-            result.AddAll(viewModelViewLookup1);
-            return result;
+            lookup.AddAll(viewModelViewLookup1);
+            return lookup;
         }
 
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)

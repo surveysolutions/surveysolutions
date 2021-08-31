@@ -57,10 +57,10 @@ namespace WB.UI.Interviewer
             
          
         }
-
-        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
+        
+        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, IMvxIoCProvider iocProvider)
         {
-            var lookup = base.InitializeViewLookup(viewModelViewLookup);
+            var lookup = base.InitializeViewLookup(viewModelViewLookup, iocProvider);
             lookup.AddAll(new Dictionary<Type, Type>()
             {
                 {typeof(LoginViewModel), typeof(LoginActivity)},
