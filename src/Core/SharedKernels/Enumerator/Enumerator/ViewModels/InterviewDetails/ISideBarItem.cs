@@ -1,5 +1,5 @@
 using System;
-using System.Windows.Input;
+using MvvmCross.Commands;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         bool HasChildren { get; }
         GroupStateViewModel SideBarGroupState { get; }
         DynamicTextViewModel Title { get; }
-        ICommand NavigateToSectionCommand { get; }
-        ICommand ToggleCommand { get; }
+        IMvxCommand NavigateToSectionCommand { get; }
+        IMvxCommand ToggleCommand { get; }
     }
 }
