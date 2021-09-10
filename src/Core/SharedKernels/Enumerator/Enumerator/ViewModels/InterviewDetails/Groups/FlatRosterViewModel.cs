@@ -97,7 +97,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {
             var interviewEntityViewModel = this.viewModelFactory.GetNew<FlatRosterTitleViewModel>();
             interviewEntityViewModel.Init(interviewId, interviewRosterInstance, navigationState);
-            var titleCollection = new CovariantObservableCollection<ICompositeEntity>(interviewEntityViewModel.ToEnumerable());
+            var titleCollection = new CompositeCollection<ICompositeEntity>();
+            titleCollection.Add(interviewEntityViewModel);
 
             var underlyingInterviewerEntities = statefulInterview.GetUnderlyingInterviewerEntities(interviewRosterInstance)
                 .Select(x => this.viewModelFactory.GetEntity(x, interviewId, navigationState));

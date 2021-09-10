@@ -207,7 +207,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return optionViewModel;
         }
 
-        public void Dispose() => this.questionState.Dispose();
+        public void Dispose()
+        {
+            this.questionState.Dispose();
+            this.InstructionViewModel.Dispose();
+        }
 
         public IObservableCollection<ICompositeEntity> Children
         {

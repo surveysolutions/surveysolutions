@@ -165,6 +165,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
+            this.InstructionViewModel.Dispose();
         }
 
         public void Handle(AnswersRemoved @event)
