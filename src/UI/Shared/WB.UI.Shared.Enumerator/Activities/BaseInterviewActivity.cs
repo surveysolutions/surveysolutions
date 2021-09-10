@@ -7,7 +7,6 @@ using AndroidX.AppCompat.App;
 using AndroidX.DrawerLayout.Widget;
 using AndroidX.RecyclerView.Widget;
 using MvvmCross;
-using MvvmCross.Platforms.Android.Views;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.WeakSubscription;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -68,6 +67,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             try
             {
+                this.ViewModel.Dispose();
                 this.Finish();
             }
             catch (ObjectDisposedException e)
