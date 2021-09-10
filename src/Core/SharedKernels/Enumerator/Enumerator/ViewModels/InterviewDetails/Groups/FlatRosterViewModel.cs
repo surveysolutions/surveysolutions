@@ -27,7 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
         private string interviewId;
         private NavigationState navigationState;
-        private readonly CompositeCollection<ICompositeEntity> rosterInstances;
         private readonly Dictionary<Identity, CompositeCollection<ICompositeEntity>> shownRosterInstances;
 
         public FlatRosterViewModel(IStatefulInterviewRepository interviewRepository,
@@ -39,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.viewModelFactory = viewModelFactory;
             this.eventRegistry = eventRegistry;
             this.compositeCollectionInflationService = compositeCollectionInflationService;
-            this.rosterInstances = new CompositeCollection<ICompositeEntity>();
+            this.RosterInstances = new CompositeCollection<ICompositeEntity>();
             this.shownRosterInstances = new Dictionary<Identity, CompositeCollection<ICompositeEntity>>();
         }
 
@@ -57,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private void UpdateFromInterview()
         {
-            var statefulInterview = this.interviewRepository.Get(this.interviewId);
+            var statefulInterview = this.interviewRepository.GetOrThrow(this.interviewId);
             var interviewRosterInstances = statefulInterview
                 .GetRosterInstances(this.navigationState.CurrentGroup, this.Identity.Id)
                 .ToList();
@@ -78,10 +77,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 var collection = this.shownRosterInstances[removedRosterInstance];
                 collection.ForEach(viewModel => viewModel.DisposeIfDisposable());
 
+                if (this.isDisposed) return;
+                
                 this.shownRosterInstances.Remove(removedRosterInstance);
                 InvokeOnMainThread(() =>
                 {
-                    rosterInstances.RemoveCollection(collection);
+                    RosterInstances.RemoveCollection(collection);
                 });
             }
 
@@ -107,15 +108,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 this.compositeCollectionInflationService.GetInflatedCompositeCollection(underlyingInterviewerEntities);
             inflatedChildren.InsertCollection(0, titleCollection);
 
+            if (this.isDisposed) return;
+            
             InvokeOnMainThread(() =>
             {
-                rosterInstances.InsertCollection(rosterIndex, inflatedChildren);
+                RosterInstances.InsertCollection(rosterIndex, inflatedChildren);
             });
 
             shownRosterInstances[interviewRosterInstance] = inflatedChildren;
         }
 
-        public CompositeCollection<ICompositeEntity> RosterInstances => rosterInstances;
+        public CompositeCollection<ICompositeEntity> RosterInstances { get; }
 
         public void Handle(RosterInstancesAdded @event)
         {
