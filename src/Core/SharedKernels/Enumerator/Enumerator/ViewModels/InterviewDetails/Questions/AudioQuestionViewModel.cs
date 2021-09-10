@@ -289,6 +289,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
+            this.InstructionViewModel.Dispose();
         }
     }
 }
