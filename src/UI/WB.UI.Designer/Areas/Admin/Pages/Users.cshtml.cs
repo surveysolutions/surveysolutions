@@ -57,14 +57,14 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 return await this.userManager.IsInRoleAsync(user, SimpleRoleEnum.Administrator.ToString());
             }
 
-            
-
             List<AccountListViewItemModel> retVal = new List<AccountListViewItemModel>();
 
             foreach (var identityUser in users.Items)
             {
                 var canEdit = await EditAction(identityUser);
                 var fullName = await this.userManager.GetFullName(identityUser.Id);
+                var isLockedOut = identityUser.LockoutEnabled && identityUser.LockoutEnd.HasValue &&
+                                  identityUser.LockoutEnd.Value >= DateTimeOffset.UtcNow;
                 var uiItem = new AccountListViewItemModel
                 {
                     Id = identityUser.Id,
@@ -72,8 +72,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                     Email = identityUser.Email,
                     CreationDate = identityUser.CreatedAtUtc,
                     IsApproved = identityUser.EmailConfirmed,
-                    IsLockedOut = identityUser.LockoutEnabled && identityUser.LockoutEnd.HasValue && identityUser.LockoutEnd.Value >= DateTimeOffset.UtcNow,
-                    LockoutEnd = (!identityUser.LockoutEnabled && identityUser.LockoutEnd.HasValue && identityUser.LockoutEnd.Value >= DateTimeOffset.UtcNow) ? identityUser.LockoutEnd : null,
+                    IsLockedOut = isLockedOut,
+                    LockoutEnd = isLockedOut ? (identityUser.LockoutEnd - DateTimeOffset.UtcNow) : null,
                     CanEdit = canEdit,
                     CanOpen = false,
                     CanDelete = false,
@@ -83,7 +83,6 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 };
                 retVal.Add(uiItem);
             }
-
 
             this.List = retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.TotalCount);
         }
@@ -116,11 +115,11 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         [Display(Name = "Approved?", Order = 5)]
         public bool IsApproved { get; set; }
 
-        [Display(Name = "Manually Locked?", Order = 5)]
+        [Display(Name = "Locked?", Order = 5)]
         public bool IsLockedOut { get; set; }
 
         [Display(Name = "Lockout end")]
-        public DateTimeOffset? LockoutEnd { get; set; }
+        public TimeSpan? LockoutEnd { get; set; }
         
         [Display(Name = "Can import on HQ")]
         public bool CanImportOnHq { get; set; }

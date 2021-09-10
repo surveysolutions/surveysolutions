@@ -70,12 +70,12 @@
             </th>
             <th >
                 <span>
-                    MANUALLY LOCKED
+                    LOCKED
                 </span>
             </th>
             <th>
                 <span>
-                    AUTOLOCK END
+                    LOCK LEFT
                 </span>
             </th>
             <th>
@@ -117,7 +117,7 @@
                                 @(user.IsLockedOut ? "Yes" : "No")
                             </td>
                             <td>
-                                @user.LockoutEnd?.ToLocalTime().ToString("MMM dd, yyy HH:mm")
+                                @user.LockoutEnd?.ToString(@"d\.hh\:mm\:ss")
                             </td>
                             <td>
                                 <div class="btn-group pull-right">

@@ -98,7 +98,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
                 user.EmailConfirmed = Input.IsApproved;
 
-                user.LockoutEnabled = Input.IsLockedOut;
+                //user.LockoutEnabled = Input.IsLockedOut;
                 user.LockoutEnd = Input.IsLockedOut ? DateTimeOffset.MaxValue : (DateTimeOffset?)null;
                 user.CanImportOnHq = Input.CanImportOnHq;
 
