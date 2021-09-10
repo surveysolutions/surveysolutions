@@ -323,6 +323,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                 {
                     case InterviewStatus.Created:
                     case InterviewStatus.InterviewerAssigned:
+                    case InterviewStatus.Restarted:    
                         markerColor = Color.FromArgb(0x2a, 0x81, 0xcb);
                         break;
                     case InterviewStatus.Completed:
