@@ -276,24 +276,27 @@ export default {
                     {
                         data: 'version',
                         name: 'Version',
+                        class: 'type-numeric',
                         title: this.$t('Dashboard.Version'),
+                        width: '45px',
                     },
                     {
                         data: 'importDate',
                         name: 'ImportDate',
                         title: this.$t('Dashboard.ImportDate'),
                         render: function(data, type, row) {
-                            return new moment.utc(data).local().format(DateFormats.dateTime)
+                            return new moment.utc(data).local().format(DateFormats.dateTimeInList)
                         },
+                        width: '120px',
                     },
                     {
                         data: 'lastEntryDate',
                         name: 'LastEntryDate',
-                        class: 'date',
                         title: this.$t('Dashboard.LastEntryDate'),
                         render: function(data, type, row) {
-                            return new moment.utc(data).local().format(DateFormats.dateTime)
+                            return new moment.utc(data).local().format(DateFormats.dateTimeInList)
                         },
+                        width: '120px',
                     },
                     {
                         data: 'creationDate',
@@ -301,8 +304,9 @@ export default {
                         class: 'date',
                         title: this.$t('Dashboard.CreationDate'),
                         render: function(data, type, row) {
-                            return new moment.utc(data).local().format(DateFormats.dateTime)
+                            return new moment.utc(data).local().format(DateFormats.dateTimeInList)
                         },
+                        width: '120px',
                     },
                     {
                         data: 'webModeEnabled',
@@ -313,6 +317,7 @@ export default {
                         render: function(data, type, row) {
                             return data === true ? self.$t('Common.Cawi') : self.$t('Common.Capi')
                         },
+                        width: '60px',
                     },
                 ],
                 ajax: {
