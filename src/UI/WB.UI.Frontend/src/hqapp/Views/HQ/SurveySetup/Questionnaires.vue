@@ -283,6 +283,7 @@ export default {
                     {
                         data: 'importDate',
                         name: 'ImportDate',
+                        class: 'date',
                         title: this.$t('Dashboard.ImportDate'),
                         render: function(data, type, row) {
                             return new moment.utc(data).local().format(DateFormats.dateTimeInList)
@@ -292,6 +293,7 @@ export default {
                     {
                         data: 'lastEntryDate',
                         name: 'LastEntryDate',
+                        class: 'date',
                         title: this.$t('Dashboard.LastEntryDate'),
                         render: function(data, type, row) {
                             return new moment.utc(data).local().format(DateFormats.dateTimeInList)
