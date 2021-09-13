@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             }
 
             var listItem = this.dbContext.Questionnaires.Where(x => x.QuestionnaireId == questionnaireId).Include(x => x.SharedPersons).First();
-            var sharedPersons =  listItem.SharedPersons;
+            var sharedPersons =  listItem.SharedPersons.Distinct();
 
             var modificationStatisticsByUsers = this.dbContext.QuestionnaireChangeRecords
                 .Where(x => x.QuestionnaireId == questionnaireId)
