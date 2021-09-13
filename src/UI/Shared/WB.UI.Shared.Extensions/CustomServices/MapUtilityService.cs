@@ -132,7 +132,7 @@ namespace WB.UI.Shared.Extensions.CustomServices
             // Make sure labeling is enabled for the layer
             newFeatureLayer.LabelsEnabled = true;
 
-            SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Dash, Color.Red, 2.0);
+            SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Red, 2.0);
             SimpleFillSymbol fillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Null, Color.White, lineSymbol);
             
             var alternateRenderer = new SimpleRenderer(fillSymbol);
