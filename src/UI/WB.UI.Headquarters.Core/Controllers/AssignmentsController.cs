@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.Assignments)]
         [HttpGet]
         [Route("{id:int?}")]
-        [Route("{action}")]
+        [Route("{action=Index}")]
         public IActionResult Index(int? id = null)
         {
             if (id.HasValue) return GetAssignmentDetails(id.Value);
