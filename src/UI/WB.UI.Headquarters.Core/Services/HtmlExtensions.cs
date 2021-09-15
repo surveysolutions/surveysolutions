@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Services
         {
             var urlFactory = html.ViewContext.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>();
             var urlHelper = urlFactory.GetUrlHelper(html.ViewContext);
-            var actionLinkUrl = urlHelper.Action(actionName, controllerName);
+            var actionLinkUrl = urlHelper.Action(actionName, controllerName, new { id = "" });
 
             var context = html.ViewContext.HttpContext.RequestServices.GetWorkspaceContext();
             

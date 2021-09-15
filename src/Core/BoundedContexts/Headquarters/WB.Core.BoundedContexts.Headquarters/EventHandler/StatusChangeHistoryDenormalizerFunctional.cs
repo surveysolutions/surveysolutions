@@ -51,7 +51,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, InterviewClosedBySupervisor>,
         IUpdateHandler<InterviewSummary, TranslationSwitched>,
         IUpdateHandler<InterviewSummary, InterviewModeChanged>
-        
+        //IUpdateHandler<InterviewSummary, InterviewReceivedByInterviewer>,
+        //IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>        
     {
         private readonly IUserViewFactory users;
         private readonly string unknown = "Unknown";
@@ -484,5 +485,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 @event.EventTimeStamp,
                 @event.Payload.Comment);
         }
+
+        //public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewReceivedByInterviewer> @event)
+        //{
+        //    //passive event, has no user
+        //    return state;
+        //}
+
+        //public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewReceivedBySupervisor> @event)
+        //{
+        //    //passive event, has no user
+        //    return state;
+        //}
     }
 }

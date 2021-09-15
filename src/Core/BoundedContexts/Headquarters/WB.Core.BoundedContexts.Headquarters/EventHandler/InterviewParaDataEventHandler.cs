@@ -26,6 +26,8 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     public class InterviewParaDataEventHandler :
+        IUpdateHandler<InterviewHistoryView, InterviewCreated>,
+        IUpdateHandler<InterviewHistoryView, InterviewOnClientCreated>,
         IUpdateHandler<InterviewHistoryView, SupervisorAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewHistoryView, InterviewerAssigned>,
@@ -865,6 +867,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     { "comment", @event.Payload.Comment }
                 });
 
+            return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewCreated> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.InterviewCreated, @event.Payload.UserId,
+                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.Offset);
+
+            return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewOnClientCreated> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.InterviewCreated, @event.Payload.UserId,
+                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.Offset);
 
             return state;
         }

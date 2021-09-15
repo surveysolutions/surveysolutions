@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Enumerator.Native.WebInterview;
@@ -124,13 +125,20 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             if (ids == null) return this.BadRequest();
 
-            foreach (var id in ids)
+            try
             {
-                Assignment assignment = this.assignmentsStorage.GetAssignment(id);
-                commandService.Execute(new ArchiveAssignment(assignment.PublicKey, authorizedUser.Id));
+                foreach (var id in ids)
+                {
+                    Assignment assignment = this.assignmentsStorage.GetAssignment(id);
+                    commandService.Execute(new ArchiveAssignment(assignment.PublicKey, authorizedUser.Id, assignment.QuestionnaireId));
+                }
+                
+                return this.Ok();
             }
-
-            return this.Ok();
+            catch (AssignmentException e)
+            {
+                return this.BadRequest(new {Message = e.Message});
+            }
         }
 
         [HttpPost]
@@ -140,13 +148,20 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             if (ids == null) return this.BadRequest();
             
-            foreach (var id in ids)
+            try
             {
-                Assignment assignment = this.assignmentsStorage.GetAssignment(id);
-                commandService.Execute(new UnarchiveAssignment(assignment.PublicKey, authorizedUser.Id));
-            }
+                foreach (var id in ids)
+                {
+                    Assignment assignment = this.assignmentsStorage.GetAssignment(id);
+                    commandService.Execute(new UnarchiveAssignment(assignment.PublicKey, authorizedUser.Id, assignment.QuestionnaireId));
+                }
 
-            return this.Ok();
+                return this.Ok();
+            }
+            catch (AssignmentException e)
+            {
+                return this.BadRequest(new {Message = e.Message});
+            }
         }
 
         [HttpPost]
@@ -154,16 +169,25 @@ namespace WB.UI.Headquarters.Controllers.Api
         public IActionResult Assign([FromBody] AssignRequest request)
         {
             if (request?.Ids == null) return this.BadRequest();
-            foreach (var idToAssign in request.Ids)
+            try
             {
-                Assignment assignment = this.assignmentsStorage.GetAssignment(idToAssign);
-                commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, request.ResponsibleId, request.Comments));
+                foreach (var idToAssign in request.Ids)
+                {
+                    Assignment assignment = this.assignmentsStorage.GetAssignment(idToAssign);
+                    commandService.Execute(
+                    new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, 
+                        request.ResponsibleId, request.Comments, assignment.QuestionnaireId));
 
-                if (!string.IsNullOrEmpty(request.Comments))
-                    assignment.SetComments(request.Comments);
+                    if (!string.IsNullOrEmpty(request.Comments))
+                        assignment.SetComments(request.Comments);
+                }
+
+                return this.Ok();
             }
-
-            return this.Ok();
+            catch (AssignmentException e)
+            {
+                return this.BadRequest(new {Message = e.Message});
+            }
         }
 
         [HttpPost]
@@ -225,12 +249,16 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+            
             var answers = Assignment.GetAnswersFromInterview(interview, questionnaire);
             bool isAudioRecordingEnabled = request.IsAudioRecordingEnabled ?? this.questionnaires.Query(_ => _
                                                .Where(q => q.Id == interview.QuestionnaireIdentity.ToString())
                                                .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
 
-            var assignment = assignmentFactory.CreateAssignment(authorizedUser.Id,
+            try
+            {
+
+                var assignment = assignmentFactory.CreateAssignment(authorizedUser.Id,
                 interview.QuestionnaireIdentity,
                 request.ResponsibleId,
                 request.Quantity,
@@ -240,12 +268,16 @@ namespace WB.UI.Headquarters.Controllers.Api
                 isAudioRecordingEnabled,
                 answers,
                 null,
-                request.Comments
-            );
-
-            this.invitationService.CreateInvitationForWebInterview(assignment);
-
-            return this.Ok();
+                request.Comments);
+                
+                this.invitationService.CreateInvitationForWebInterview(assignment);
+                
+                return this.Ok();
+            }
+            catch (AssignmentException e)
+            {
+                return this.BadRequest(new {Message = e.Message});
+            }
         }
 
         public class CreateAssignmentRequest

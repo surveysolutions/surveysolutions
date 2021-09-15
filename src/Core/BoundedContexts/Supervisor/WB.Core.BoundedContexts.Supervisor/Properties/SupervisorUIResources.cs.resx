@@ -134,10 +134,10 @@
     <value>Čekání na činnost tazatelského zařízení</value>
   </data>
   <data name="Synchronization_Download_Interviewer_Apps" xml:space="preserve">
-    <value>Stahování aktualizací pro aplikaci Tazatel</value>
+    <value>Probíhá stahování aktualizace pro aplikaci Tazatel</value>
   </data>
   <data name="Synchronization_Download_Interviewer_Apps_Format" xml:space="preserve">
-    <value>Stahování aktualizací. {0} z {1} staženo</value>
+    <value>Probíhá stahování aktualizace. {0} z {1} staženo</value>
   </data>
   <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
     <value>Synchronizace s ústředím</value>
@@ -146,15 +146,15 @@
     <value>Synchronizace s tazateli</value>
   </data>
   <data name="Synchronization_UploadBrokenInterviewPackages" xml:space="preserve">
-    <value>Odesílání chybného tazatelského souboru</value>
+    <value>Nahrání chybného tazatelského souboru</value>
   </data>
   <data name="Synchronization_UploadExceptions" xml:space="preserve">
-    <value>Odesílání chybových hlášek</value>
+    <value>Nahrání chybových hlášek</value>
   </data>
   <data name="Synchronization_UploadStatistics" xml:space="preserve">
-    <value>Odesílání přehledu o synchronizaci</value>
+    <value>Nahrání přehledu o synchronizaci</value>
   </data>
   <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
-    <value>Odesláno {0} z {1}</value>
+    <value>Nahráno {0} z {1}</value>
   </data>
 </root>

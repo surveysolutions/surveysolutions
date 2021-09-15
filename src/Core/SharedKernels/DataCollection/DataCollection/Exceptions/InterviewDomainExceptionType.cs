@@ -18,6 +18,7 @@
         InterviewSizeLimitReached,
         DuplicateCreationCommand,
         QuestionnaireOutdated,
-        InterviewHasIncompatibleMode
+        InterviewHasIncompatibleMode,
+        QuestionnaireDeleted
     }
 }

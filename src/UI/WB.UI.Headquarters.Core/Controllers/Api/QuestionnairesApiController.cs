@@ -182,21 +182,21 @@ namespace WB.UI.Headquarters.Controllers.Api
             var questionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel
             {
                 QuestionnaireId = identity.QuestionnaireId,
-                Version = identity.Version,
+                Version = 0,
                 IsAdminMode = true,
                 OnlyCensus = censusOnly
             });
 
-            var questionnaireItems = questionnaires.Items.ToList();
-            if (questionnaireItems.Count > 0)
+            var questionnaireList = questionnaires.Items.OrderByDescending(x=> x.Version).ToList();
+            if (questionnaireList.Count > 0 && (identity.Version == 0 || questionnaireList.Any(x=>x.Version == identity.Version)))
             {
-                var firstHit = questionnaireItems[0];
+                var firstHit = questionnaireList.First();
                 return Ok(
                     new
                     {
                         Id = firstHit.Id,
                         Title = firstHit.Title,
-                        Version = firstHit.Version
+                        Version = identity.Version == 0 ? firstHit.Version : identity.Version
                     });
             }
 

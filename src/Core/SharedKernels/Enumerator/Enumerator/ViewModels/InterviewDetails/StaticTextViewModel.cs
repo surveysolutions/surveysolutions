@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
         public DynamicTextViewModel Text { get; }
         public AttachmentViewModel Attachment { get; }
-        public StaticTextStateViewModel QuestionState { get; }
+        public StaticTextStateViewModel StaticTextState { get; }
 
         public StaticTextViewModel(
             DynamicTextViewModel dynamicTextViewModel,
@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.Text = dynamicTextViewModel;
             this.Attachment = attachmentViewModel;
-            this.QuestionState = questionState;
+            this.StaticTextState = questionState;
         }
 
         public string InterviewId { get; private set; }
@@ -38,13 +38,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.Text.Init(interviewId, entityIdentity);
             this.Attachment.Init(interviewId, entityIdentity, navigationState);
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.StaticTextState.Init(interviewId, entityIdentity, navigationState);
         }
 
         public void Dispose()
         {
             this.Attachment.ViewDestroy();
-            this.QuestionState.Dispose();
+            this.StaticTextState.Dispose();
             this.Text.Dispose();
         }
     }

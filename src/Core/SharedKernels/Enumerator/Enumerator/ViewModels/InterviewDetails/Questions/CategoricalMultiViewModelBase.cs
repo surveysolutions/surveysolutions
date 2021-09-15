@@ -281,6 +281,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.throttlingModel.Dispose();
             this.QuestionState.Dispose();
+            this.InstructionViewModel.Dispose();
         }
     }
 }

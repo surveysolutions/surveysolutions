@@ -28,6 +28,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Assignments.Validators;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents.Validators;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
@@ -36,6 +37,7 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.Interview.Validators;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -1271,6 +1273,27 @@ namespace WB.Tests.Abc.TestFactories
         public ResponsibleAssignmentValidator WebModeResponsibleAssignmentValidator(IUserViewFactory userViewFactory = null)
         {
             return new ResponsibleAssignmentValidator(userViewFactory ?? Create.Storage.UserViewFactory());
+        }
+
+        public QuestionnaireStateForAssignmentValidator QuestionnaireStateForAssignmentValidator(
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
+        {
+            return new QuestionnaireStateForAssignmentValidator(questionnaireBrowseItemStorage ?? 
+                                                                Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
+        }
+        
+        public QuestionnaireStateForCalendarEventValidator QuestionnaireStateForCalendarEventValidator(
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
+        {
+            return new QuestionnaireStateForCalendarEventValidator(questionnaireBrowseItemStorage ?? 
+                                                                   Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
+        }
+        
+        public QuestionnaireStateForInterviewValidator QuestionnaireStateForInterviewValidator(
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
+        {
+            return new QuestionnaireStateForInterviewValidator(questionnaireBrowseItemStorage ?? 
+                                                               Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
         }
 
         public QuestionnaireTranslator QuestionnaireTranslator()

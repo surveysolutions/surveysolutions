@@ -88,6 +88,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire was deleted.
+        /// </summary>
+        public static string QuestionnaireWasDeleted {
+            get {
+                return ResourceManager.GetString("QuestionnaireWasDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only the supervisor responsible for this assignment can answer the supervisor questions.
         /// </summary>
         public static string UserDontHavePermissionsToAnswer {

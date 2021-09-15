@@ -2,15 +2,16 @@
 
 In order to be able to buld Survey Solutions locally, you will need to install several prerequesties fist:
 
-- Install PostgreSQL.
-- Install LTS version of node JS (we currently use version 12).
-- Install yarn package manager.
-- Install latest version of asp.net core SDK.
+- Install PostgreSQL 12 or newer.
+- Install LTS version of node JS (we currently use version 14) - https://nodejs.org/en/
+- Install latest version of .Net SDK https://dotnet.microsoft.com/download
 - Install Xamarin build tools for your platform.
 
 ## Running locally
 
-First you need to build javascript UI. It Can be done by running either `.build.ps1`, `build.all.deps.bat` or `build_deps.sh` scripts. This will build frontend components for Designer, Headquarters and Web Tester applications.
+First you need to build javascript UI. It Can be done by running either `.build.ps1`, `build.all.deps.bat` or `build_deps.sh` scripts.
+This will build frontend components for Designer, Headquarters and Web Tester applications. You can see more details editing and building the frontend
+[here](docs/development/frontend.md).
 
 By default web applications use a locally installed PostgreSQL database. Review connection strings in `appsettings.ini` files to be able to run applications properly.
 Each web application supports configuration override for development purposes. Add `appsettings.DEV_DEFAULTS.ini` with required configuration.
@@ -41,11 +42,16 @@ dotnet run --project src/Services/Export/WB.Services.Export.Host/WB.Services.Exp
 
 In order to build android applications you can use following command:
 
-``` sh
+``` pwsh
+# All apps
+.\.build.ps1 Android
+
 # interviewer
-msbuild src/UI/Interviewer/WB.UI.Interviewer/WB.UI.Interviewer.csproj /restore /p:XamarinBuildDownloadAllowUnsecure=true /t:SignAndroidPackage
+.\.build.ps1 AndroidInterviewer
+
 # supervisor
-msbuild src/UI/Supervisor/WB.UI.Supervisor/WB.UI.Supervisor.csproj /restore /p:XamarinBuildDownloadAllowUnsecure=true /t:SignAndroidPackage
+.\.build.ps1 AndroidSupervisor
+
 # tester
 msbuild src/UI/Tester/WB.UI.Tester/WB.UI.Tester.csproj /restore /p:XamarinBuildDownloadAllowUnsecure=true /t:SignAndroidPackage
 ```

@@ -189,6 +189,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.comboboxViewModel.Dispose();
 
             this.QuestionState.Dispose();
+            this.InstructionViewModel.Dispose();
         }
 
         protected OptionBorderViewModel optionsTopBorderViewModel;

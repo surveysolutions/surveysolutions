@@ -8,7 +8,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
     public class CreateAssignment : AssignmentCommand
     {
         public int Id { get; }
-        public QuestionnaireIdentity QuestionnaireId { get; }
         public Guid ResponsibleId { get; }
         public int? Quantity { get; }
         public bool AudioRecording { get; }
@@ -34,10 +33,9 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             List<string> protectedVariables,
             string comment,
             int? upgradedFromId = null) 
-            : base(publicKey, userId)
+            : base(publicKey, userId, questionnaireId)
         {
             Id = id;
-            QuestionnaireId = questionnaireId;
             ResponsibleId = responsibleId;
             Quantity = quantity;
             AudioRecording = audioRecording;

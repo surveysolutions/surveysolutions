@@ -92,7 +92,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             try
             {
-                log.Error($"{message} RAM: {AndroidInformationUtils.GetRAMInformation()} Disk: {AndroidInformationUtils.GetDiskInformation()}");
+                log.Info($"{message} RAM: {AndroidInformationUtils.GetRAMInformation()} Disk: {AndroidInformationUtils.GetDiskInformation()}");
             }
             catch
             {

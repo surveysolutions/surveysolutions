@@ -70,7 +70,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 Id = id,
                 Email = user.Email,
                 IsApproved = user.EmailConfirmed,
-                IsLockedOut = user.LockoutEnabled && user.LockoutEnd.HasValue,
+                IsLockedOut = user.LockoutEnd.HasValue && user.LockoutEnd.Value >= DateTimeOffset.UtcNow,
                 CanImportOnHq = user.CanImportOnHq,
                 UserName = user.UserName,
                 FullName = await userManager.GetFullName(id)
@@ -98,7 +98,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
                 user.EmailConfirmed = Input.IsApproved;
 
-                user.LockoutEnabled = Input.IsLockedOut;
+                //user.LockoutEnabled = Input.IsLockedOut;
                 user.LockoutEnd = Input.IsLockedOut ? DateTimeOffset.MaxValue : (DateTimeOffset?)null;
                 user.CanImportOnHq = Input.CanImportOnHq;
 

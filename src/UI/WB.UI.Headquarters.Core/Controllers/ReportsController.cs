@@ -112,6 +112,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [Authorize(Roles = "Administrator, Supervisor, Headquarter")]
         [ActivePage(MenuItem.MapReport)]
+        [ExtraHeaderPermissions(HeaderPermissionType.Google)]
         public ActionResult MapReport()
         {
             var questionnaires = this.mapReport.GetQuestionnaireIdentitiesWithGpsQuestions();
@@ -409,11 +410,11 @@ namespace WB.UI.Headquarters.Controllers
         private QuestionnaireVersionsComboboxViewItem[] ToComboboxItems(IEnumerable<TemplateViewItem> questionnaires)
         {
             return questionnaires
-                .GroupBy(x => new { x.TemplateId, x.TemplateName })
+                .GroupBy(x => new { x.TemplateId })
                 .Select(x => new QuestionnaireVersionsComboboxViewItem()
                 {
                     Key = x.Key.TemplateId.FormatGuid(),
-                    Value = x.Key.TemplateName,
+                    Value = x.OrderByDescending(v => v.TemplateVersion).First().TemplateName,
                     Versions = x.Select(y => new ComboboxViewItem()
                     {
                         Key = y.TemplateVersion.ToString(),

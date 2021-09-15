@@ -187,10 +187,10 @@
     <value>Entrevistador ya se cuenta de alta en el sistema y adquirió un AuthToken</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;Paquete de entrevista &lt;b&gt;{0}&lt;/b&gt; satisfactoriamente procesado&lt;/Font&gt;</value>
+      <value>&lt;font color="green"&gt;Paquete de entrevista &lt;b&gt;{0}&lt;/b&gt; satisfactoriamente procesado&lt;/Font&gt;</value>
   </data>
   <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;Entrevista &lt;b&gt;{0}&lt;/b&gt; satisfactoriamente procesada&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Entrevista &lt;b&gt;{0}&lt;/b&gt; satisfactoriamente procesada&lt;/font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
     <value>Asocie un entrevistador al dispositivo</value>
@@ -202,10 +202,10 @@
     <value>Cargar entrevista: {0}</value>
   </data>
   <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;Ensamblaje del cuestionario &lt;b&gt;{0}&lt;/b&gt; [{1}] correctamente procesado&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Ensamblaje del cuestionario &lt;b&gt;{0}&lt;/b&gt; [{1}] correctamente procesado&lt;/font&gt;</value>
   </data>
   <data name="QuestionnaireProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;Cuestionario &lt;b&gt;{0}&lt;/b&gt; [{1}] procesado correctamente&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Cuestionario &lt;b&gt;{0}&lt;/b&gt; [{1}] procesado correctamente&lt;/font&gt;</value>
   </data>
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt;Actualizar entrevista: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, paquete: {1}, índice de ordenamiento: {2}&lt;/li&gt;</value>

@@ -139,10 +139,10 @@
     <value>Hledá se garantské zařízení</value>
   </data>
   <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
-    <value>Poslání všech dokončených dotazníků garantovi</value>
+    <value>Poslání všech uzamčených dotazníků garantovi</value>
   </data>
   <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
-    <value>Poslání všech dokončených dotazníků '{0}'</value>
+    <value>Poslání všech uzamčených dotazníků '{0}'</value>
   </data>
   <data name="SendToSupervisor_Note" xml:space="preserve">
     <value>Poznámka: Tato akce bude trvat déle než obvykle, nevypínejte toto zařízení</value>
@@ -161,7 +161,7 @@ Garantské zařízení nelze nalézt"</value>
     <value>Přenos dat byl přerušen na druhém zařízení.</value>
   </data>
   <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
-    <value>Přenos dat je dokončen. Všechny dokončené rozhovory jsou nyní na jiném zařízení</value>
+    <value>Přenos dat je dokončen. Všechny dokončené rozhovory jsou přesunuty na jiné zařízení</value>
   </data>
   <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
     <value>Přenos dat je dokončen. Nepodařilo se synchronizovat {0} rozhovorů</value>

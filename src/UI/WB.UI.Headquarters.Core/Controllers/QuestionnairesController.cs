@@ -74,6 +74,9 @@ namespace WB.UI.Headquarters.Controllers
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+            if (questionnaire == null)
+                return NotFound(string.Format(HQ.QuestionnaireNotFoundFormat, questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
+            
             var browseItem = browseViewFactory.GetById(questionnaireIdentity);
 
             var model = new QuestionnaireDetailsModel

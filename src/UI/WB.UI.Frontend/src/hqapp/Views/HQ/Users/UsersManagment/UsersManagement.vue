@@ -243,6 +243,9 @@ export default {
                     this.selectedWorkspace = find(this.workspaces, { key: this.queryString.workspace })
                 }
 
+                if(this.queryString.team) {
+                    this.selectedTeam = { key: this.queryString.team, value: this.queryString.teamName}
+                }
             })
 
         if(this.queryString.role) {
@@ -380,6 +383,8 @@ export default {
                 role: this.query.role,
                 filter: this.query.filter,
                 archive: this.query.archive,
+                team: this.query.team,
+                teamName: this.query.teamName,
             }
         },
 
@@ -519,6 +524,7 @@ export default {
             this.selectedTeam = team
             this.onChange(query => {
                 query.team = team == null ? null : team.key
+                query.teamName = team == null ? null : team.value
             })
         },
 

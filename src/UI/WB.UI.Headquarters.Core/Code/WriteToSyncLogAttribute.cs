@@ -313,7 +313,7 @@ namespace WB.UI.Headquarters.Code
                 };
             }
 
-            return SyncLogMessages.GetInterviewer.FormatString(supervisorInfo.UserName, supervisorInfo.PublicKey.FormatGuid());
+            return SyncLogMessages.GetInterviewer.FormatString(supervisorInfo?.UserName, supervisorInfo?.PublicKey.FormatGuid());
         }
 
         private string GetQuestionnairesLogMessage(ActionExecutedContext context, IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory)
