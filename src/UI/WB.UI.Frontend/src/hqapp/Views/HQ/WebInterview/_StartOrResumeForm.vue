@@ -49,16 +49,15 @@
                 <span
                     v-if="model.isPasswordInvalid"
                     class="help-block">{{$t('WebInterview.InvalidPassword')}}</span>
-                <div >
-                    <input
-                        id="ShowPassword"
-                        type="checkbox"
-                        onclick="var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');">
-                    <label for="ShowPassword"
-                        style="padding-left:5px;">
-                        <span></span>{{$t('Pages.ShowPassword')}}
-                    </label>
-                </div>
+                <input
+                    id="ShowPassword"
+                    type="checkbox"
+                    onclick="var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');">
+                <label for="ShowPassword"
+                    style="padding-left:5px; margin-top: 10px; font-size: 13px; font-weight: normal;">
+                    <span></span>{{$t('Pages.ShowPassword')}}
+                </label>
+
             </div>
             <div v-if="model.serverUnderLoad"
                 class="row-element">
