@@ -473,8 +473,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
             //act
+            TestDelegate act = () => service.Store(questionnaireId, translationId, fileStream);
             //assert
-            Assert.That(() => service.Store(questionnaireId, translationId, fileStream), Throws.Nothing);
+            Assert.That(act, Throws.Nothing);
         }
 
         [Test]
@@ -526,8 +527,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
             //act
+            TestDelegate act = () => service.Store(questionnaireId, translationId, fileStream);
             //assert
-            Assert.That(() => service.Store(questionnaireId, translationId, fileStream), Throws.Nothing);
+            Assert.That(act, Throws.Nothing);
         }
 
         private byte[] GetEmbendedFileContent(string fileName)
