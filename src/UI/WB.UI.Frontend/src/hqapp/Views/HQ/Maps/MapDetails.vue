@@ -9,21 +9,21 @@
             <h1>{{$config.model.fileName}}</h1>
         </div>
         <div class="row">
-            <div class="col-md-7 col-sm-12">
+            <div class="col-md-9 col-sm-9">
                 <div class="row">
-                    <div class="col-md-4 col-sm-3 questionnaire-statistics">
+                    <div class="col-md-4 col-sm-4 questionnaire-statistics">
                         <ul class="list-unstyled">
                             <li><b>{{ $t("Pages.MapDetails_MaxScale") }}:</b> <span>{{$config.model.maxScale}}</span></li>
                             <li><b>{{ $t("Pages.MapDetails_MinScale") }}:</b> <span>{{$config.model.minScale}}</span></li>
                         </ul>
                     </div>
-                    <div class="col-md-4 col-sm-3 questionnaire-statistics">
+                    <div class="col-md-4 col-sm-4 questionnaire-statistics">
                         <ul class="list-unstyled">
                             <li><b>{{ $t("Pages.MapDetails_Size") }} :</b> <span>{{$config.model.size}}</span></li>
                             <li><b>Wkid:</b> <span>{{$config.model.wkid}}</span></li>
                         </ul>
                     </div>
-                    <div class="col-md-4 col-sm-3 questionnaire-statistics">
+                    <div class="col-md-4 col-sm-4 questionnaire-statistics">
                         <ul class="list-unstyled">
                             <li><b>{{ $t("Pages.MapDetails_ImportedOn") }}:</b> <span>{{$config.model.importDate}}</span></li>
                         </ul>
@@ -36,7 +36,7 @@
             </div>
 
             <div id="list"
-                class="col-md-5 col-sm-6">
+                class="col-md-3 col-sm-3">
                 <DataTables ref="table"
                     :tableOptions="tableOptions"
                     :addParamsToRequest="addParamsToRequest"
