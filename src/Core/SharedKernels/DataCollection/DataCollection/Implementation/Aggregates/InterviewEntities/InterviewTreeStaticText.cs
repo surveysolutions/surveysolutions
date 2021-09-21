@@ -87,9 +87,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions(Tree);
-            foreach (var messagesWithSubstition in this.ValidationMessages)
+            foreach (var messagesWithSubstitution in this.ValidationMessages)
             {
-                messagesWithSubstition.ReplaceSubstitutions(Tree);
+                messagesWithSubstitution.ReplaceSubstitutions(Tree);
             }
         }
     }

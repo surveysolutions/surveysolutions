@@ -207,11 +207,11 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             if (other == null) return false;
 
-            if (this.Length == 0 && other.Length == 0 || ReferenceEquals(this, other))
-                return true;
-
-            if (this.Length != other.Length)
+            if (this.coordinates.Length != other.coordinates.Length)
                 return false;
+
+            if (this.coordinates.Length == 0 && other.coordinates.Length == 0 || ReferenceEquals(this, other))
+                return true;
 
             return this.coordinates.SequenceEqual(other.coordinates);
         }
@@ -220,7 +220,7 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             if (other == null) return false;
 
-            if (this.Length == 0 && otherLength == 0 || ReferenceEquals(this, other))
+            if (this.coordinates.Length == 0 && otherLength == 0 || ReferenceEquals(this, other))
                 return true;
             
             return ArrayExtensions.SequenceEqual(this.coordinates, other.coordinates, otherLength);

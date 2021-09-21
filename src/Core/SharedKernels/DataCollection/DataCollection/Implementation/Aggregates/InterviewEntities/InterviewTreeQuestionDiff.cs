@@ -41,6 +41,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool NodeIsMarkedAsReadonly { get; }
 
+        public override bool DidSubstitutableChange()
+        {
+            return this.IsTitleChanged ||
+                   this.AreValidationMessagesChanged ||
+                   this.WereInstructionsChanged;
+        }
+
         public bool IsTitleChangedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)
         {
             if (IsNodeRemoved) return false;

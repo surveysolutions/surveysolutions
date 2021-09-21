@@ -167,28 +167,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private bool WereSubstitutableChanged(InterviewTreeNodeDiff interviewTreeNodeDiff)
         {
-            if (interviewTreeNodeDiff.IsNodeRemoved)
-                return false;
+            if (interviewTreeNodeDiff.IsNodeRemoved) return false;
 
-            var diffByQuestion = interviewTreeNodeDiff as InterviewTreeQuestionDiff;
-            if (diffByQuestion != null)
-            {
-                return diffByQuestion.IsTitleChanged || diffByQuestion.AreValidationMessagesChanged || diffByQuestion.WereInstructionsChanged;
-            }
-
-            var diffByRoster = interviewTreeNodeDiff as InterviewTreeGroupDiff;
-            if (diffByRoster != null)
-            {
-                return diffByRoster.IsTitleChanged;
-            }
-
-            var diffByStaticText = interviewTreeNodeDiff as InterviewTreeStaticTextDiff;
-            if (diffByStaticText != null)
-            {
-                return diffByStaticText.IsTitleChanged || diffByStaticText.AreValidationMessagesChanged;
-            }
-
-            return false;
+            return interviewTreeNodeDiff.DidSubstitutableChange();
         }
 
         private static bool IsOptionsSetChanged(InterviewTreeQuestionDiff diffByQuestion)
@@ -372,14 +353,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public static InterviewTreeSubSection CreateSubSection(IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity subSectionIdentity)
         {
-            var childrenReferences = questionnaire.GetChidrenReferences(subSectionIdentity.Id);
+            var childrenReferences = questionnaire.GetChildrenReferences(subSectionIdentity.Id);
             SubstitutionText title = textFactory.CreateText(subSectionIdentity, questionnaire.GetGroupTitle(subSectionIdentity.Id), questionnaire);
             return new InterviewTreeSubSection(subSectionIdentity, title, childrenReferences);
         }
 
         public static InterviewTreeSection CreateSection(IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity sectionIdentity)
         {
-            var childrenReferences = questionnaire.GetChidrenReferences(sectionIdentity.Id);
+            var childrenReferences = questionnaire.GetChildrenReferences(sectionIdentity.Id);
             SubstitutionText title = textFactory.CreateText(sectionIdentity, questionnaire.GetGroupTitle(sectionIdentity.Id), questionnaire);
             return new InterviewTreeSection(sectionIdentity, title, childrenReferences);
         }

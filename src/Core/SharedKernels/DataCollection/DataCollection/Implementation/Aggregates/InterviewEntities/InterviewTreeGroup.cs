@@ -88,7 +88,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             var expectedRosterIdentities = rosterManager.CalcuateExpectedIdentities(this.Identity);
 
-            var actualRosterIdentities = this.children.Where(x => x.Identity.Id == rosterId).Select(x => x.Identity).ToHashSet();
+            var actualRosterIdentities = this.children
+                .Where(x => x.Identity.Id == rosterId)
+                .Select(x => x.Identity)
+                .ToHashSet();
 
             HashSet<Identity> rostersToRemove = new HashSet<Identity>(actualRosterIdentities);
 
@@ -127,7 +130,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     var sortIndex = rosterIndexMap[rosterToAdd]; //expectedRosterIdentities.IndexOf(rosterToAdd);
                     rosterManager.UpdateRoster(expectedRoster, this.Identity, rosterToAdd, sortIndex);
 
-                    baseIndex = baseIndex ?? this.IndexOfFirstRosterInstance(expectedRoster);
+                    baseIndex ??= this.IndexOfFirstRosterInstance(expectedRoster);
                     int indexOfRosterInstance = baseIndex.Value + sortIndex;
                     
                     this.AddOrInsertChild(expectedRoster, indexOfRosterInstance);
@@ -141,13 +144,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
 
             var expectedRosters = this.children
-                .OfType<InterviewTreeRoster>()
                 .Where(roster => roster.Identity.Id == rosterId);
 
             foreach (var expectedRoster in expectedRosters)
             {
-                expectedRoster.ActualizeChildren();
-                expectedRoster.ReplaceSubstitutions();
+                var roster = expectedRoster as InterviewTreeRoster;
+                roster?.ActualizeChildren();
+                roster?.ReplaceSubstitutions();
             }
         }
 

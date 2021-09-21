@@ -306,7 +306,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private void UpdateValidationsForEntity(InterviewTreeLeafNode entity)
         {
-            if (!(entity is IInterviewTreeValidateable interviewTreeValidatable))
+            if (entity is not IInterviewTreeValidateable interviewTreeValidatable)
                 return;
 
             var level = this.GetLevelOrThrow(entity);
