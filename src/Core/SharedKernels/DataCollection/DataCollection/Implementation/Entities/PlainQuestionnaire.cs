@@ -1210,7 +1210,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool HasRoster(string variableName) => this.RosterVariableNamesCache.Contains(variableName?.ToLower());
 
-        public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestion(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
+        public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestionOrThrow(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
         public bool IsSupportFilteringForOptions(Guid questionId)
         {
             return !this.GetQuestion(questionId).Properties.OptionsFilterExpression?.Trim().IsNullOrEmpty() ?? false;
@@ -1811,7 +1811,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private IVariable GetVariable(Guid variableId) => GetVariable(this.VariablesCache, variableId);
         private IVariable GetVariableOrThrow(Guid variableId) => GetVariableOrThrow(this.VariablesCache, variableId);
 
-        private IStaticText GetStaticTextImpl(Guid staticTextId) => GetEntity(this.EntityCache, staticTextId) as IStaticText;
+        private IStaticText GetStaticTextImpl(Guid staticTextId) => GetStaticText(this.StaticTextCache, staticTextId);
 
         private static string FormatQuestionForException(IQuestion question)
         {
@@ -1867,6 +1867,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private static IComposite GetEntity(Dictionary<Guid, IComposite> entities, Guid entityId) => entities.GetOrNull(entityId);
 
         private static IGroup GetGroup(Dictionary<Guid, IGroup> groups, Guid groupId) => groups.GetOrNull(groupId);
+        
+        private static IStaticText GetStaticText(Dictionary<Guid, IStaticText> staticTexts, Guid staticTextsId) => staticTexts.GetOrNull(staticTextsId);
 
         public Guid GetFirstSectionId()
         {

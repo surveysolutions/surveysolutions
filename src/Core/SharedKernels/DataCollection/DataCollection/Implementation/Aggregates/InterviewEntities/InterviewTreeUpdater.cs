@@ -311,12 +311,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             var level = this.GetLevelOrThrow(entity);
             var validationExpressions = level.GetValidationExpressions(entity.Identity) ?? Array.Empty<Func<bool>>();
-            var validationResult = validationExpressions.Select(RunConditionExpression)
-                .Select((x, i) => !x ? new FailedValidationCondition(i) : null)
+            var validationResult = validationExpressions
+                .Select((x, i) => !RunConditionExpression(x) ? new FailedValidationCondition(i) : null)
                 .Where(x => x != null)
                 .ToArray();
 
-            var warningIndexes = questionnaire.GetValidationWarningsIndexes(entity.Identity.Id).ToHashSet();
+            var warningIndexes = questionnaire.GetValidationWarningsIndexes(entity.Identity.Id);
 
             if (validationResult.Any(v => warningIndexes.Contains(v!.FailedConditionIndex)))
                 interviewTreeValidatable.MarkImplausible(validationResult.Where(v => warningIndexes.Contains(v!.FailedConditionIndex)));
