@@ -8,8 +8,6 @@ namespace WB.Infrastructure.Native.Storage
 {
     public class CamelCasePropertyNamesContractResolverWithConverters : CamelCasePropertyNamesContractResolver
     {
-        public new static readonly CamelCasePropertyNamesContractResolverWithConverters Instance = new CamelCasePropertyNamesContractResolverWithConverters();
-        
         protected override JsonContract CreateContract(Type objectType)
         {
             JsonContract contract = base.CreateContract(objectType);
