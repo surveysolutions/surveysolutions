@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Services
 {
     public static class HtmlExtensions
     {
-        private static readonly JsonSerializerSettings asJsonValueSettings = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Services
 
         public static IHtmlContent AsJsonValue(this object obj)
         {
-            return new HtmlString(JsonConvert.SerializeObject(obj, asJsonValueSettings));
+            return new HtmlString(JsonConvert.SerializeObject(obj, SerializerSettings));
         }
     }
 }

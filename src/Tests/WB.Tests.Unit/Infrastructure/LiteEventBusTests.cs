@@ -138,7 +138,9 @@ namespace WB.Tests.Unit.Infrastructure
             var denormalizerRegistry = Create.Service.DenormalizerRegistry();
             var eventBus = Create.Service.LiteEventBus(denormalizerRegistry: denormalizerRegistry);
 
-            Assert.That(() => eventBus.PublishCommittedEvents(eventsToPublish), Throws.Nothing);
+            TestDelegate act = () => eventBus.PublishCommittedEvents(eventsToPublish);
+            
+            Assert.That(act, Throws.Nothing);
         }
 
         [Test]

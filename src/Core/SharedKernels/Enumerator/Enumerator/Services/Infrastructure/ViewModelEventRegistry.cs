@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
     public class ViewModelEventRegistry : IViewModelEventRegistry
     {
-        private readonly Dictionary<Type, Dictionary<string, HashSet<IViewModelEventHandler>>> eventTypes =
+        private Dictionary<Type, Dictionary<string, HashSet<IViewModelEventHandler>>> eventTypes =
             new Dictionary<Type, Dictionary<string, HashSet<IViewModelEventHandler>>>();
 
         private readonly ConcurrentDictionary<(Type, Type), MethodInfo> asyncViewModelHandleMethods =
@@ -75,6 +75,14 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 
                 return viewModelType.GetRuntimeMethod(methodName, new[] { eventType });
             });
+
+        public void Reset()
+        {
+            lock (this.eventTypes)
+            {
+                this.eventTypes = new Dictionary<Type, Dictionary<string, HashSet<IViewModelEventHandler>>>();
+            }
+        }
 
         public void RemoveAggregateRoot(string aggregateRootId)
         {

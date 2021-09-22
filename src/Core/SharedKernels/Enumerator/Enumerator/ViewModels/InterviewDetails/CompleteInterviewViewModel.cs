@@ -185,6 +185,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.Name.Dispose();
+            var entitiesWithErrors = this.EntitiesWithErrors;
+            foreach (var entityWithErrorsViewModel in entitiesWithErrors)
+            {
+                entityWithErrorsViewModel.DisposeIfDisposable();
+            }
             this.InterviewState.DisposeIfDisposable();
         }
     }

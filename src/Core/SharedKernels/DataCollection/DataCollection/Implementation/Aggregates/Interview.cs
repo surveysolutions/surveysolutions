@@ -846,9 +846,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, int[] selectedValues)
         {
-            new InterviewPropertiesInvariants(this.properties)
-                .RequireAnswerCanBeChanged();
-
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
             var questionIdentity = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -1212,7 +1210,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey, command.OriginDate));
             }
 
-            var defaultTranslation = questionnaire.GetDefaultTransation();
+            var defaultTranslation = questionnaire.GetDefaultTranslation();
             if (defaultTranslation != null)
             {
                 this.SwitchTranslation(new SwitchTranslation(this.EventSourceId, defaultTranslation, command.UserId));
@@ -2246,7 +2244,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<IInterviewTreeNode> result = sectionId != null && questionnaire.IsCoverPage(sectionId.Id)
                 ? targetList
                 : targetList.Except(x =>
-                (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id))
+                (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewerQuestion(x.Identity.Id))
                 || questionnaire.IsVariable(x.Identity.Id)
             );
 

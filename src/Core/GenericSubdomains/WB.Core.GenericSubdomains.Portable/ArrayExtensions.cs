@@ -8,109 +8,97 @@ namespace WB.Core.GenericSubdomains.Portable
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool SequenceEqual(this decimal[] source, decimal[] target)
         {
-            if (source.Length == target.Length)
+            if (source.Length != target.Length) return false;
+            
+            switch (source.Length)
             {
-                switch (source.Length)
-                {
-                    case 1:
-                        return source[0] == target[0];
-                    case 2:
-                        return source[0] == target[0] && source[1] == target[1];
-                    case 3:
-                        return source[0] == target[0] && source[1] == target[1] && source[2] == target[2];
-                    default:
-                        for (var i = 0; i < source.Length; i++)
-                        {
-                            if (target[i] == source[i]) continue;
+                case 1:
+                    return source[0] == target[0];
+                case 2:
+                    return source[0] == target[0] && source[1] == target[1];
+                case 3:
+                    return source[0] == target[0] && source[1] == target[1] && source[2] == target[2];
+                default:
+                    for (var i = 0; i < source.Length; i++)
+                    {
+                        if (target[i] == source[i]) continue;
 
-                            return false;
-                        }
-                        return true;
-                }
+                        return false;
+                    }
+                    return true;
             }
-
-            return false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool SequenceEqual(this int[] source, int[] target)
         {
-            if (source.Length == target.Length)
+            if (source.Length != target.Length) return false;
+            
+            switch (source.Length)
             {
-                switch (source.Length)
-                {
-                    case 1:
-                        return source[0] == target[0];
-                    case 2:
-                        return source[0] == target[0] && source[1] == target[1];
-                    case 3:
-                        return source[0] == target[0] && source[1] == target[1] && source[2] == target[2];
-                    default:
-                        for (var i = 0; i < source.Length; i++)
-                        {
-                            if (target[i] == source[i]) continue;
+                case 1:
+                    return source[0] == target[0];
+                case 2:
+                    return source[0] == target[0] && source[1] == target[1];
+                case 3:
+                    return source[0] == target[0] && source[1] == target[1] && source[2] == target[2];
+                default:
+                    for (var i = 0; i < source.Length; i++)
+                    {
+                        if (target[i] == source[i]) continue;
 
-                            return false;
-                        }
-                        return true;
-                }
+                        return false;
+                    }
+                    return true;
             }
-
-            return false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool SequenceEqual(this int[] source, int[] target, int targetLength)
         {
-            if (source.Length == targetLength)
+            if (source.Length != targetLength) return false;
+            
+            switch (targetLength)
             {
-                switch (targetLength)
-                {
-                    case 1:
-                        return source[0] == target[0];
-                    case 2:
-                        return source[0] == target[0] && source[1] == target[1];
-                    case 3:
-                        return source[0] == target[0] && source[1] == target[1] && source[2] == target[2];
-                    default:
-                        for (var i = 0; i < targetLength; i++)
-                        {
-                            if (target[i] == source[i]) continue;
+                case 1:
+                    return source[0] == target[0];
+                case 2:
+                    return source[0] == target[0] && source[1] == target[1];
+                case 3:
+                    return source[0] == target[0] && source[1] == target[1] && source[2] == target[2];
+                default:
+                    for (var i = 0; i < targetLength; i++)
+                    {
+                        if (target[i] == source[i]) continue;
 
-                            return false;
-                        }
-                        return true;
-                }
+                        return false;
+                    }
+                    return true;
             }
-
-            return false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool SequenceEqual(int[] source, int sourceLength, int[] target, int targetLength)
         {
-            if (sourceLength == targetLength)
+            if (sourceLength != targetLength) return false;
+            
+            switch (sourceLength)
             {
-                switch (sourceLength)
-                {
-                    case 1:
-                        return source[0] == target[0];
-                    case 2:
-                        return source[0] == target[0] && source[1] == target[1];
-                    case 3:
-                        return source[0] == target[0] && source[1] == target[1] && source[2] == target[2];
-                    default:
-                        for (var i = 0; i < sourceLength; i++)
-                        {
-                            if (target[i] == source[i]) continue;
+                case 1:
+                    return source[0] == target[0];
+                case 2:
+                    return source[0] == target[0] && source[1] == target[1];
+                case 3:
+                    return source[0] == target[0] && source[1] == target[1] && source[2] == target[2];
+                default:
+                    for (var i = 0; i < sourceLength; i++)
+                    {
+                        if (target[i] == source[i]) continue;
 
-                            return false;
-                        }
-                        return true;
-                }
+                        return false;
+                    }
+                    return true;
             }
-
-            return false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

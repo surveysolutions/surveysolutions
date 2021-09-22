@@ -140,5 +140,33 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Assert.That(question!.Featured, Is.False);
             Assert.That(question!.GetParent()!.PublicKey, Is.EqualTo(groupId));
         }
+        
+        [Test]
+        public void When_moving_group_having_question_and_static_text_with_enablement_to_cover_Then_both_Enabling_condition_are_empty()
+        {
+            // Arrange
+            var groupId = Guid.NewGuid();
+            var staticTextId = Guid.NewGuid();
+            var questionId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            
+            var questionnaire = CreateQuestionnaireWithOneGroup(
+                groupId: groupId,
+                responsibleId: responsibleId);
+            questionnaire.AddTextQuestion(questionId, groupId, responsibleId, enablementCondition:"1==1");
+            questionnaire.AddStaticText(staticTextId, groupId, responsibleId, "text","1==1");
+            
+            // act
+            questionnaire.MoveGroup(groupId, questionnaire.QuestionnaireDocument.CoverPageSectionId, 0, responsibleId: responsibleId);
+
+            // assert
+            var question = questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId);
+            Assert.That(question!.ConditionExpression, Is.Empty);
+            Assert.That(question!.GetParent()!.PublicKey, Is.EqualTo(questionnaire.QuestionnaireDocument.CoverPageSectionId));
+
+            var staticText = questionnaire.QuestionnaireDocument.Find<IStaticText>(staticTextId);
+            Assert.That(staticText!.ConditionExpression, Is.Empty);
+            Assert.That(staticText!.GetParent()!.PublicKey, Is.EqualTo(questionnaire.QuestionnaireDocument.CoverPageSectionId));
+        }
     }
 }

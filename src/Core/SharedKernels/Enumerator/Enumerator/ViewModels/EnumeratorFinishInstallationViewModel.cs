@@ -254,8 +254,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         this.PasswordError = EnumeratorUIResources.Login_WrongPassword;
                         break;
                     case SynchronizationExceptionType.UserLinkedToAnotherDevice:
-                        await this.RelinkUserToAnotherDeviceAsync(restCredentials, userPassword, cancellationTokenSource.Token);
+                    {
+                        try
+                        {
+                            await this.RelinkUserToAnotherDeviceAsync(restCredentials, userPassword,
+                                cancellationTokenSource.Token);
+                        }
+                        catch (NoWorkspaceFoundException we)
+                        {
+                            this.ErrorMessage = EnumeratorUIResources.Synchronization_WorkspaceAccessDisabledReason;
+                            this.logger.Error($"Any one workspace found.", we);
+                        }
+                        catch (SynchronizationException se1)
+                        {
+                            this.ErrorMessage = se1.Message;
+                            if (se1.Type == SynchronizationExceptionType.ShouldChangePassword)
+                            {
+                                await ChangePasswordAsync();
+                            }
+                        }
+                        catch (Exception ex11)
+                        {
+                            this.ErrorMessage = EnumeratorUIResources.UnexpectedException;
+                            this.logger.Error("Finish installation view model. Unexpected exception", ex11);
+                        }
+
                         break;
+                    }
                     case SynchronizationExceptionType.ShouldChangePassword:
                         await ChangePasswordAsync();
                         break;

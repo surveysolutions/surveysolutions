@@ -67,9 +67,9 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 {
                     switch (reader.Value)
                     {
+                        case int val: vector.Add(val); break;
                         case Double val: vector.Add((int)val); break;
                         case long val: vector.Add((int)val); break;
-                        case int val: vector.Add(val); break;
                         case decimal val: vector.Add((int)val); break;
                         default:
                             vector.Add((int) Convert.ToDecimal(reader.Value)); break;

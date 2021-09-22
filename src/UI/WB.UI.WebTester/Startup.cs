@@ -33,6 +33,16 @@ namespace WB.UI.WebTester
 {
     public class Startup
     {
+        private static readonly NewtonsoftJsonContentSerializer ContentSerializer =
+            new NewtonsoftJsonContentSerializer(new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                NullValueHandling = NullValueHandling.Ignore,
+                FloatParseHandling = FloatParseHandling.Decimal,
+                Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() },
+                SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
+            });
+        
         private AutofacKernel? autofacKernel;
 
         public Startup(IConfiguration configuration)
@@ -65,14 +75,7 @@ namespace WB.UI.WebTester
             services.AddHttpClientWithConfigurator<IDesignerWebTesterApi, DesignerApiConfigurator>(
                     new RefitSettings
                     {
-                        ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings
-                        {
-                            TypeNameHandling = TypeNameHandling.All,
-                            NullValueHandling = NullValueHandling.Ignore,
-                            FloatParseHandling = FloatParseHandling.Decimal,
-                            Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() },
-                            SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
-                        })
+                        ContentSerializer = ContentSerializer
                     })
 #if DEBUG
            .ConfigurePrimaryHttpMessageHandler(() =>

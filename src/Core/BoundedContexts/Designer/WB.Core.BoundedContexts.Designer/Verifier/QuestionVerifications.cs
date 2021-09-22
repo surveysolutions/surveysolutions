@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorForTranslation<INumericQuestion>("WB0137", SpecialValueTitlesMustBeUnique, VerificationMessages.WB0137_SpecialValuesTitlesMustBeUnique),
             Error<SingleQuestion, SingleQuestion>("WB0087", CascadingHasCircularReference, VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
             ErrorForTranslation<IComposite, ValidationCondition>("WB0105", GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index, MaxValidationMessageLength)),
-            ErrorForTranslation<IComposite>("WB0287", TableRosterDoesntContainsQuestionWithSubstitutions, VerificationMessages.WB0287_TableRosterDoesntContainsQuestionWithSubstitutions),
+            ErrorForTranslation<IComposite>("WB0287", DoesTableRosterContainQuestionWithSubstitutions, VerificationMessages.WB0287_TableRosterDoesntContainsQuestionWithSubstitutions),
             ErrorsByQuestionsFromMatrixRostersThatHaveSubstitutionsToRosterQuestionsFromSelfOrDeeperRosterLevel,
             Error<IQuestion>("WB0309", IdentityQuestionsMustHaveVariableLabel, VerificationMessages.WB0309_IdentityQuestionsMustHaveVariableLabel),
             Error<IQuestion>("WB0308", IdentifyingQuestionsMustHaveOnlyAllowQuestionTypes, VerificationMessages.WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes),
@@ -1132,7 +1132,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return verificationMessagesByQuestionnaire;
         }
 
-        private bool TableRosterDoesntContainsQuestionWithSubstitutions(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool DoesTableRosterContainQuestionWithSubstitutions(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!(entity.GetParent() is IGroup parent))
                 throw new InvalidOperationException("Parent group was not found.");

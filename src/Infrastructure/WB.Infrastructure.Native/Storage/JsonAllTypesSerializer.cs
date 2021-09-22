@@ -10,23 +10,18 @@ namespace WB.Infrastructure.Native.Storage
 {
     public class JsonAllTypesSerializer : IJsonAllTypesSerializer
     {
-        private readonly JsonSerializerSettings jsonSerializerSettings;
-
-        public JsonAllTypesSerializer()
-        {
 #pragma warning disable 612, 618
-            this.jsonSerializerSettings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                DateParseHandling = DateParseHandling.DateTimeOffset,
-                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal,
-                Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() },
-                SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
-            };
+        private static readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.All,
+            DateParseHandling = DateParseHandling.DateTimeOffset,
+            DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+            NullValueHandling = NullValueHandling.Ignore,
+            FloatParseHandling = FloatParseHandling.Decimal,
+            Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() },
+            SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
+        };
 #pragma warning restore 612, 618
-        }
 
         public string Serialize(object item)
         {

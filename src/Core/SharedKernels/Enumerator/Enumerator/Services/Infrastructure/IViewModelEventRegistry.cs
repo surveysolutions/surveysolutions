@@ -18,5 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         void RemoveAggregateRoot(string aggregateRootId);
 
         MethodInfo GetViewModelHandleMethod(Type viewModelType, Type eventType);
+
+        void Reset();
     }
 }

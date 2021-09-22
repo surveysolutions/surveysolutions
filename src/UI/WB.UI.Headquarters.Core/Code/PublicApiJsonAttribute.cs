@@ -12,21 +12,17 @@ namespace WB.UI.Headquarters.Code
 {
     public class PublicApiJsonAttribute : ActionFilterAttribute
     {
-        public static JsonSerializerSettings PublicApiSerializerSettings
-        {
-            get
-            {
-                var jsonSerializerSettings = new JsonSerializerSettings
+        public static readonly JsonSerializerSettings PublicApiSerializerSettings =
+            new JsonSerializerSettings
                 {
                     ContractResolver = new DefaultContractResolver
                     {
                         NamingStrategy = new DefaultNamingStrategy()
-                    }
+                    },
+                    Converters = {new EnumToStringConverter()}
                 };
-                jsonSerializerSettings.Converters.Add(new EnumToStringConverter());
-                return jsonSerializerSettings;
-            }
-        }
+                
+        
 
         public override void OnActionExecuted(ActionExecutedContext ctx)
         {

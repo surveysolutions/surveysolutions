@@ -525,7 +525,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var allCommentedQuestions = this.GetCommentedBySupervisorNonResolvedQuestions();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            return allCommentedQuestions.Where(identity => questionnaire.IsInterviewierQuestion(identity.Id));
+            return allCommentedQuestions.Where(identity => questionnaire.IsInterviewerQuestion(identity.Id));
         }
 
         public IEnumerable<Identity> GetCommentedBySupervisorNonResolvedQuestions()

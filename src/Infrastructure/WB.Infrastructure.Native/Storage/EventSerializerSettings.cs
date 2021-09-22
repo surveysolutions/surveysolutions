@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
-using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Infrastructure.Native.Storage
 {
@@ -13,8 +10,7 @@ namespace WB.Infrastructure.Native.Storage
             DefaultValueHandling = DefaultValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore,
             TypeNameHandling = TypeNameHandling.Auto,
-            ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConverter() },
+            ContractResolver = new CamelCasePropertyNamesContractResolverWithConverters(),
             SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder(),
             DateParseHandling = DateParseHandling.DateTimeOffset,
             MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead // TextListAnswerRow for some reason has $type at the end of json. This property needed to deserialize it

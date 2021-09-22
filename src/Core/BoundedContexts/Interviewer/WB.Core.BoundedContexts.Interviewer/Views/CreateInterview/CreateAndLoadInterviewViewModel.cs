@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -36,6 +37,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
         private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly IUserInteractionService userInteractionService;
         private readonly ICalendarEventStorage calendarEventStorage;
+        private readonly IViewModelEventRegistry viewModelEventRegistry;
 
         public CreateAndLoadInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService, 
@@ -51,7 +53,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             IInterviewAnswerSerializer answerSerializer, 
             IUserInteractionService userInteractionService,
             IJsonAllTypesSerializer serializer,
-            ICalendarEventStorage calendarEventStorage) 
+            ICalendarEventStorage calendarEventStorage,
+            IViewModelEventRegistry viewModelEventRegistry) 
             : base(interviewerPrincipal, viewModelNavigationService, interviewRepository, commandService, logger,
                 userInteractionService, interviewsRepository, serializer, auditLogService)
         {
@@ -64,6 +67,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             this.answerSerializer = answerSerializer;
             this.userInteractionService = userInteractionService;
             this.calendarEventStorage = calendarEventStorage;
+            this.viewModelEventRegistry = viewModelEventRegistry;
         }
 
         protected int AssignmentId { get; set; }
@@ -92,6 +96,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 
         private async Task CreateAndNavigateToInterviewAsync()
         {
+            this.viewModelEventRegistry.Reset();
             var interviewId = await CreateInterviewAsync(this.AssignmentId, this.InterviewId);
             if (!interviewId.HasValue)
             {

@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
@@ -317,6 +318,34 @@ namespace WB.Tests.Unit.Designer
                  null,
                  null);
         }
-
+        
+        public static void AddStaticText(
+            this Questionnaire questionnaire,
+            Guid staticTextId,
+            Guid parentGroupId,
+            Guid responsibleId,
+            string text = null,
+            string enablingCondition = null,
+            int? index = null)
+        {
+            questionnaire.AddStaticTextAndMoveIfNeeded(
+                new AddStaticText(questionnaire.Id, 
+                    staticTextId,
+                    text, 
+                    responsibleId,
+                    parentGroupId,
+                    index));
+            
+            questionnaire.UpdateStaticText(
+                new UpdateStaticText(
+                    questionnaire.Id,
+                    staticTextId,
+                    text,
+                    String.Empty, 
+                    responsibleId,
+                    enablingCondition,
+                    false,
+                    new List<ValidationCondition>()));
+        }
     }
 }
