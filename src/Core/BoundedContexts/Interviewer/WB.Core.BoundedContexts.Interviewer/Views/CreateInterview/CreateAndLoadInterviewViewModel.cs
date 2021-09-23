@@ -9,7 +9,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -123,7 +122,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                     return null;
                 }
 
-                var interviewerIdentity = this.interviewerPrincipal.CurrentUserIdentity;
+                var interviewerIdentity = (InterviewerIdentity)this.interviewerPrincipal.CurrentUserIdentity;
 
                 this.assignmentsRepository.FetchPreloadedData(assignment);
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);

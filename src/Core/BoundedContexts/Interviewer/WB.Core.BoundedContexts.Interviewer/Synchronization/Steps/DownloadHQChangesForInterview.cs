@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -152,7 +153,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
                     if (interview.IsCompleted && DoNewEventsHaveComments(events))
                     {
-                        var supervisorId = principal.CurrentUserIdentity.SupervisorId;
+                        var supervisorId = ((InterviewerIdentity)principal.CurrentUserIdentity).SupervisorId;
                         var command = new RestartInterviewCommand(interview.InterviewId, supervisorId, "[system: Reopened after getting new comments]", DateTime.Now);
                         commandService.Execute(command);
                         statistics.ReopenedInterviewsAfterReceivedCommentsCount++;

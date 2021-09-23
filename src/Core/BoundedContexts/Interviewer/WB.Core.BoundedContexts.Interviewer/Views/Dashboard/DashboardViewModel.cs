@@ -474,7 +474,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private void StopDiscovery() => this.nearbyConnection.StopDiscovery();
 
         protected override string GetDeviceIdentification() =>
-            this.principal.CurrentUserIdentity.SupervisorId.FormatGuid() + this.principal.CurrentUserIdentity.Workspace;
+            ((InterviewerIdentity)this.principal.CurrentUserIdentity).SupervisorId.FormatGuid() + this.principal.CurrentUserIdentity.Workspace;
 
         public void ShowSynchronizationError(string error)
         {
