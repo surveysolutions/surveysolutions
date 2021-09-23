@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             command = Create.Command.CreateInterviewFromSnapshot(userId, synchronizationDto);
 
-            Assert.That(() => interview.CreateInterviewFromSnapshot(command), Throws.Exception);
+            Assert.That((TestDelegate)(() => interview.CreateInterviewFromSnapshot(command)), Throws.Exception);
         }
 
         static InterviewSynchronizationDto synchronizationDto;

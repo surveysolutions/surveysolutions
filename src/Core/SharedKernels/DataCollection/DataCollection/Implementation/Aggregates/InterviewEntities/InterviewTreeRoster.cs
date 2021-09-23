@@ -77,6 +77,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             updater.UpdateRoster(this); 
         }
 
+        public override NodeType NodeType => NodeType.Roster;
+
 
         private string GetTypeAsText()
         {

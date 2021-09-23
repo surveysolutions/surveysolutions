@@ -568,11 +568,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
             => this.GetAllChildrenOrEmptyList(groupIdentity)
-                .OfType<InterviewTreeQuestion>()
+                .Where(x=> x.NodeType == NodeType.Question)
                 .Select(question => question.Identity);
 
         private IEnumerable<IInterviewTreeNode> GetAllChildrenOrEmptyList(Identity groupIdentity)
-            => this.Tree.GetGroup(groupIdentity)?.Children ?? new List<IInterviewTreeNode>();
+            => this.Tree.GetGroup(groupIdentity)?.Children ?? Array.Empty<IInterviewTreeNode>();
 
         public List<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
             => this.GetAllChildrenOrEmptyList(parentIdentity)
@@ -588,7 +588,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(x => x.Identity);
 
         private IEnumerable<InterviewTreeGroup> GetGroupsAndRostersInGroup(Identity group)
-            => this.Tree.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
+            => this.Tree.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? Array.Empty<InterviewTreeGroup>();
 
         public IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>();

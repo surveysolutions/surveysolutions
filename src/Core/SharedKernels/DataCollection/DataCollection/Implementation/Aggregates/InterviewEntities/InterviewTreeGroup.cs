@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Main.Core.Entities.Composite;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
@@ -27,7 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 ((IInternalInterviewTreeNode)child).SetParent(this);
             }
         }
-
+        
         public Identity Identity { get; private set; }
         public SubstitutionText Title { get; private set; }
         public InterviewTree Tree { get; private set; }
@@ -306,6 +305,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             updater.UpdateEnablement(this); 
         }
 
+        public abstract NodeType NodeType { get; }
+
         public void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions(this.Tree);
@@ -391,6 +392,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSubSection : InterviewTreeGroup
     {
+        public override NodeType NodeType => NodeType.Group;
+        
         public InterviewTreeSubSection(Identity identity, SubstitutionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, title, childrenReferences)
         {
         }
@@ -401,6 +404,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSection : InterviewTreeGroup
     {
+        public override NodeType NodeType => NodeType.Group;
+        
         public InterviewTreeSection(Identity identity, SubstitutionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, title, childrenReferences)
         {
         }

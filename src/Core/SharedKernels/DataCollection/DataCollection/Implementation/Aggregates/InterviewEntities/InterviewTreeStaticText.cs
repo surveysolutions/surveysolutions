@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             : base(identity)
         {
             this.Title = title;
-            this.ValidationMessages = validationMessages ?? new SubstitutionText[0];
+            this.ValidationMessages = validationMessages ?? Array.Empty<SubstitutionText>();
             this.FailedErrors = new List<FailedValidationCondition>();
             this.FailedWarnings = new List<FailedValidationCondition>();
         }
@@ -78,6 +78,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             updater.UpdateEnablement(this);
         }
+
+        public override NodeType NodeType => NodeType.StaticText;
 
         public void AcceptValidity(IInterviewTreeUpdater updater)
         {

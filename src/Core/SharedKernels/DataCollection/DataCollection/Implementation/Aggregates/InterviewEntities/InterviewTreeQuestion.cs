@@ -774,6 +774,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
+        public override NodeType NodeType => NodeType.Question;
+
         public void AcceptValidity(IInterviewTreeUpdater updater)
         {
             updater.UpdateValidations(this);
