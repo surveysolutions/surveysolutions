@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                     return null;
                 }
 
-                var interviewerIdentity = (InterviewerIdentity)this.interviewerPrincipal.CurrentUserIdentity;
+                var interviewerIdentity = (IInterviewerUserIdentity)this.interviewerPrincipal.CurrentUserIdentity;
 
                 this.assignmentsRepository.FetchPreloadedData(assignment);
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);

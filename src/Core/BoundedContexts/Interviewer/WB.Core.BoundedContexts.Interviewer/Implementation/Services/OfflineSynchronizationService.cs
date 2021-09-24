@@ -353,7 +353,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task CanSynchronizeAsync(RestCredentials? credentials = null, string? tenantId = null, CancellationToken token = default)
         {
-            var interviewerIdentity = (InterviewerIdentity)this.principal.CurrentUserIdentity;
+            var interviewerIdentity = (IInterviewerUserIdentity)this.principal.CurrentUserIdentity;
             
             var request = new CanSynchronizeRequest(this.deviceSettings.GetApplicationVersionCode(), 
                 interviewerIdentity.UserId,
