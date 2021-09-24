@@ -24,7 +24,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             this.apiClientFactory = apiClientFactory;
         }
 
-        private ConnectionsClient Api => apiClientFactory?.ConnectionsClient
+        private IConnectionsClient Api => apiClientFactory?.ConnectionsClient
                                        ?? throw new NearbyConnectionException("Not connected to Google API", ConnectionStatusCode.StatusError);
 
         public event EventHandler<string> LostEndpoint;
