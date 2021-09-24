@@ -59,6 +59,7 @@
     "css-what": "^5.0.1",
     "normalize-url": "^6.1.0",
     "nth-check": "^2.0.1",
-    "set-value": "^4.1.0"
+    "set-value": "^4.1.0",
+    "webpack-dev-server": "^4.2.1"
   }
 }
