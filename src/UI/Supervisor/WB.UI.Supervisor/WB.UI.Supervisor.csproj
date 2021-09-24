@@ -502,6 +502,9 @@
     <PackageReference Include="Xamarin.AndroidX.MediaRouter">
       <Version>1.2.5</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.AndroidX.Preference">
+      <Version>1.1.1.9</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Work.Runtime">
       <Version>2.6.0</Version>
     </PackageReference>

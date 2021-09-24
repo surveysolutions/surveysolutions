@@ -235,6 +235,9 @@
     <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
       <Version>1.0.0.8</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.AndroidX.Preference">
+      <Version>1.1.1.9</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
       <Version>1.1.0.8</Version>
     </PackageReference>
