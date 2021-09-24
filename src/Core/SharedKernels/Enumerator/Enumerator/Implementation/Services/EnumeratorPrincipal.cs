@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             get => identity;
         }
-        IUserIdentity IPrincipal.CurrentUserIdentity => this.currentUserIdentity;
+        public IUserIdentity CurrentUserIdentity => this.currentUserIdentity;
 
         private IUserIdentity FindIdentityByUsername(string userName) 
             => userName == null ? null : this.GetUserByName(userName.ToLower());
