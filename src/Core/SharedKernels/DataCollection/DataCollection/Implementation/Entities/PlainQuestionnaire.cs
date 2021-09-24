@@ -1393,7 +1393,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var group = this.GetGroup(groupId);
             if (group == null || !group.IsRoster || group.RosterSizeSource != RosterSizeSourceType.FixedTitles)
             {
-                return new FixedRosterTitle[0];
+                return Array.Empty<FixedRosterTitle>();
             }
             return group.FixedRosterTitles;
         }

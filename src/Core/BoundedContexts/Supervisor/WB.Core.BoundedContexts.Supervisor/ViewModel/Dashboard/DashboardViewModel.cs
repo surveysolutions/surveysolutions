@@ -150,6 +150,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public override void ViewAppeared()
         {
+            if (!Principal.IsAuthenticated)
+            {
+                this.ViewModelNavigationService.NavigateToLoginAsync().ConfigureAwait(false);
+                return;
+            }
+            
             base.ViewAppeared();
             DashboardNotifications.CheckTabletTimeAndWarn();
         }

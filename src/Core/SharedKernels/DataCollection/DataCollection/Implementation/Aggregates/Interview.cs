@@ -1235,10 +1235,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (protectedAnswers?.Count > 0)
             {
-                foreach (var treeQuestion in changedInterviewTree.AllNodes.OfType<InterviewTreeQuestion>())
+                foreach (var treeNode in changedInterviewTree.AllNodes.Where(x=> x.NodeType == NodeType.Question))
                 {
-                    if (protectedAnswers.Any(x =>
-                        treeQuestion.VariableName.Equals(x, StringComparison.OrdinalIgnoreCase)))
+                    var treeQuestion = (InterviewTreeQuestion)treeNode;
+                    if (protectedAnswers.Any(x => treeQuestion.VariableName.Equals(x, StringComparison.OrdinalIgnoreCase)))
                     {
                         treeQuestion.ProtectAnswer();
                     }

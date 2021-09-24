@@ -77,16 +77,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => this.GetNodeByIdentity(identity) as InterviewTreeVariable;
 
         public IEnumerable<InterviewTreeQuestion> FindQuestions(Guid questionId)
-            => this.FindEntity(questionId).OfType<InterviewTreeQuestion>();
+            => this.FindEntity(questionId)
+                .Where(x=>x.NodeType == NodeType.Question)
+                .Select(x => x as InterviewTreeQuestion);
 
         public IEnumerable<InterviewTreeStaticText> FindStaticTexts()
-            => this.nodesCache.Values.OfType<InterviewTreeStaticText>();
+            => this.nodesCache.Values
+                .Where(x=>x.NodeType == NodeType.StaticText)
+                .Select(x => x as InterviewTreeStaticText);
+                
 
         public IEnumerable<InterviewTreeQuestion> FindQuestions()
-            => this.nodesCache.Values.OfType<InterviewTreeQuestion>();
+            => this.nodesCache.Values
+                .Where(x=>x.NodeType == NodeType.Question)
+                .Select(x => x as InterviewTreeQuestion);
 
         public IEnumerable<InterviewTreeRoster> FindRosters()
-            => this.nodesCache.Values.OfType<InterviewTreeRoster>();
+            => this.nodesCache.Values
+                .Where(x=>x.NodeType == NodeType.Roster)
+                .Select(x => x as InterviewTreeRoster);
 
         public IEnumerable<IInterviewTreeNode> FindEntity(Guid nodeId)
         {
@@ -593,6 +602,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         IInterviewTreeNode Clone();
         void Accept(IInterviewTreeUpdater updater);
+
+        NodeType NodeType { get; }
+    }
+
+    public enum NodeType
+    {
+        Unknown = 0,
+        Question = 1,
+        Roster = 2,
+        StaticText = 3,
+        Group = 4,
+        Variable = 5
     }
 
     public interface ISubstitutable
@@ -627,6 +648,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         IReadOnlyCollection<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
 
         public abstract SubstitutionText Title { get; protected set; }
+        
+        public abstract NodeType NodeType { get; }
 
         public virtual void SetTree(InterviewTree tree)
         {

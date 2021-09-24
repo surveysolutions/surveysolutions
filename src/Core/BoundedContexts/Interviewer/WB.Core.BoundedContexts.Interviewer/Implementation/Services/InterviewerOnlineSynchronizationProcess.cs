@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
 
             var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.RestCredentials);
-            if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)
+            if (currentSupervisorId != ((IInterviewerUserIdentity)this.principal.CurrentUserIdentity).SupervisorId)
             {
                 this.UpdateSupervisorOfInterviewer(currentSupervisorId, this.RestCredentials.Login);
             }

@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         protected override IUserIdentity GetUserById(string userId)
             => this.usersStorage.GetById(userId);
 
-        public IInterviewerUserIdentity CurrentUserIdentity => (IInterviewerUserIdentity)base.currentUserIdentity;
+        //public IInterviewerUserIdentity CurrentUserIdentity => (IInterviewerUserIdentity)base.currentUserIdentity;
         
         private InterviewerIdentity GetInterviewerIdentity()
         {

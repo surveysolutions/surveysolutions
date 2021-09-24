@@ -666,7 +666,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             question.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(new List<CheckedYesNoAnswerOption>()), new DateTime(2018, 9, 30, 0, 0, 0, DateTimeKind.Utc));
 
             //assert
-            Assert.That(question.IsAnswered, Is.False);
+            Assert.That(question.IsAnswered(), Is.False);
             Assert.That(question.AnswerTimeUtc, Is.EqualTo(new DateTime(2018, 9, 30)));
         }
 
@@ -686,7 +686,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             question.SetAnswer(TextListAnswer.FromTupleArray(new Tuple<decimal, string>[] {}), new DateTime(2018, 10, 31, 0, 0, 0, DateTimeKind.Utc));
 
             //assert
-            Assert.That(question.IsAnswered, Is.False);
+            Assert.That(question.IsAnswered(), Is.False);
             Assert.That(question.AnswerTimeUtc, Is.EqualTo(new DateTime(2018, 10, 31)));
         }
 

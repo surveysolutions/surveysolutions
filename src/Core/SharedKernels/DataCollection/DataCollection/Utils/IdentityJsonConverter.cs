@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             writer.WritePropertyName("id");
             writer.WriteValue(identity.Id);
 
-            if (!identity.RosterVector.Identical(RosterVector.Empty))
+            if (identity.RosterVector.Length != 0)
             {
                 writer.WritePropertyName("rosterVector");
                 serializer.Serialize(writer, identity.RosterVector, typeof(RosterVector));
