@@ -39,7 +39,6 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
     [ActivePage(MenuItem.Assignments)]
     [Localizable(false)]
-    [Route("{controller}")]
     public class AssignmentsController : Controller
     {
         private readonly IAuthorizedUser currentUser;
@@ -99,8 +98,8 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.Assignments)]
         [HttpGet]
-        [Route("{id:int?}")]
-        [Route("{action=Index}")]
+        [Route("{controller}/{id:int?}")]
+        [Route("{controller}/{action=Index}")]
         public IActionResult Index(int? id = null)
         {
             if (id.HasValue) return GetAssignmentDetails(id.Value);
@@ -196,7 +195,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [Route("{action}")]
+        [Route("{controller}/{action}")]
         [ObservingNotAllowed]
         public IActionResult ImportStatus() => this.Ok(this.assignmentsImportService.GetImportStatus());
 
@@ -204,8 +203,8 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [ActivePage(MenuItem.Questionnaires)]
         [AntiForgeryFilter]
-        [Route("{action}/{id}")]
-        [Route("{action}/{id}/{step}")]
+        [Route("{controller}/{action}/{id}")]
+        [Route("{controller}/{action}/{id}/{step}")]
         public ActionResult Upload(string id, string step)
         {
             if(!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
@@ -363,7 +362,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [HttpGet]
         [ObservingNotAllowed]
-        [Route("{action=Index}")]
+        [Route("{controller}/{action=Index}")]
         public IActionResult GetInvalidAssignmentsByLastImport()
         {
             var sb = new StringBuilder();
