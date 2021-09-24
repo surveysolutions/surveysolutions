@@ -54,6 +54,7 @@
     "xmldoc": "^1.1.2"
   },
   "resolutions": {
+    "ansi-regex": "^5.0.1",
     "chokidar": "^3.5.2",
     "css-what": "^5.0.1",
     "normalize-url": "^6.1.0",
