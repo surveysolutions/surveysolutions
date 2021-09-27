@@ -127,7 +127,7 @@ namespace Main.Core.Documents
 
         public string[] RosterFixedTitles { set {} }
 
-        public FixedRosterTitle[] FixedRosterTitles => new FixedRosterTitle[0];
+        public FixedRosterTitle[] FixedRosterTitles => Array.Empty<FixedRosterTitle>();
 
         public Guid? RosterTitleQuestionId => null;
 
@@ -254,7 +254,7 @@ namespace Main.Core.Documents
                 .Find<T>()
                 .Where(condition.Invoke);
 
-        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        public T? FirstOrDefault<T>(Func<T, bool> condition) where T : class
             => this.Find(condition).FirstOrDefault();
 
         public void ReplaceEntity(IComposite? oldEntity, IComposite newEntity)
@@ -297,13 +297,13 @@ namespace Main.Core.Documents
             if (children.Any(child => child.PublicKey == entityId))
                 this.RemoveChild(entityId);
 
-            IComposite entityParent = this.GetParentById(entityId);
+            IComposite? entityParent = this.GetParentById(entityId);
 
             entityParent?.RemoveChild(entityId);
             this.LastEntryDate = DateTime.UtcNow;
         }
         
-        private IComposite GetParentOfItem(IComposite item)
+        private IComposite? GetParentOfItem(IComposite item)
         {
             if (ContainsChildItem(this, item))
                 return this;
@@ -313,7 +313,7 @@ namespace Main.Core.Documents
                 .SingleOrDefault();
         }
 
-        public IGroup GetParentById(Guid entityId)
+        public IGroup? GetParentById(Guid entityId)
         {
             return this
                 .Find<IGroup>(group => ContainsEntityWithSpecifiedId(group, entityId))
@@ -472,23 +472,30 @@ namespace Main.Core.Documents
             if (item == null)
                 return;
 
-            IComposite sourceContainer = this.GetParentOfItemOrLogWarning(item);
+            IComposite? sourceContainer = this.GetParentOfItemOrLogWarning(item);
             if (sourceContainer == null)
                 return;
 
-            IComposite targetContainer = this.GetGroupOrRootOrLogWarning(targetGroupId);
+            IComposite? targetContainer = this.GetGroupOrRootOrLogWarning(targetGroupId);
             if (targetContainer == null)
                 return;
 
             sourceContainer.RemoveChild(itemId);
             if (IsCoverPageSupported && targetGroupId.HasValue)
             {
-                var questions = item.TreeToEnumerable(c => c.Children)
-                    .Where(c => c is IQuestion)
-                    .Cast<IQuestion>();
-                foreach (var question in questions)
+                var isTargetGroupCoverPage = IsCoverPage(targetGroupId.Value);
+                
+                var conditionals = item.TreeToEnumerable(c => c.Children)
+                    .Where(c => c is IConditional)
+                    .Cast<IConditional>();
+                
+                foreach (var conditional in conditionals)
                 {
-                    question.Featured = IsCoverPage(targetGroupId.Value);
+                    if(conditional is IQuestion question)
+                        question.Featured = isTargetGroupCoverPage;
+                    
+                    if (isTargetGroupCoverPage)
+                        conditional.ConditionExpression = string.Empty;
                 }
             }
             targetContainer.Insert(targetIndex, item, targetGroupId);
@@ -502,20 +509,18 @@ namespace Main.Core.Documents
             return itemToMove;
         }
 
-        private IComposite GetParentOfItemOrLogWarning(IComposite item)
+        private IComposite? GetParentOfItemOrLogWarning(IComposite item)
         {
-            IComposite foundParent = this.GetParentOfItem(item);
+            IComposite? foundParent = this.GetParentOfItem(item);
 
             return foundParent;
         }
 
-        private IComposite GetGroupOrRootOrLogWarning(Guid? groupId)
+        private IComposite? GetGroupOrRootOrLogWarning(Guid? groupId)
         {
-            if (groupId == null)
-                return this;
+            if (groupId == null) return this;
 
-            IComposite foundGroup = this.Find<IGroup>(group => group.PublicKey == groupId).FirstOrDefault();
-
+            IComposite? foundGroup = this.Find<IGroup>(group => group.PublicKey == groupId).FirstOrDefault();
             return foundGroup;
         }
 
@@ -556,7 +561,7 @@ namespace Main.Core.Documents
             this.Categories.ForEach(x => doc.Categories.Add(x.Clone()));
 
             if(this.EntitiesIdMap != null)
-            doc.EntitiesIdMap = new Dictionary<Guid, int>(this.EntitiesIdMap);
+                doc.EntitiesIdMap = new Dictionary<Guid, int>(this.EntitiesIdMap);
 
             return doc;
         }

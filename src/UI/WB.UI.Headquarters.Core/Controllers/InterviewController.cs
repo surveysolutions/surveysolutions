@@ -80,8 +80,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
 
         [ActivePage(MenuItem.Docs)]
-        [Route("Interview/Review/{id}")]
-        [Route("Interview/Review/{id}/Cover")]
+        [Route("Interview/Review/{id:guid}")]
+        [Route("Interview/Review/{id:guid}/Cover")]
         [ExtraHeaderPermissions(HeaderPermissionType.Google)]
         public ActionResult Cover(Guid id)
         {
@@ -142,7 +142,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 PdfUrl = Url.Action("Pdf", "InterviewsPublicApi", new{ id = id }),
                 CalendarEvent = GetCalendarEventOrNull(id),
                 InterviewMode = interviewSummary.InterviewMode,
-                WebInterviewUrl = webInterviewLinkProvider.WebInterviewRequestLink((interviewSummary.AssignmentId ?? 0).ToString(), id.ToString())
+                WebInterviewUrl = webInterviewLinkProvider.WebInterviewRequestLink((interviewSummary.AssignmentId ?? 0).ToString(), id.ToString()),
+                AssignmentDetailsUrl = interviewSummary.AssignmentId.HasValue 
+                    ? Url.Action("Index", "Assignments", new { id = interviewSummary.AssignmentId.Value })
+                    : "javascript:void(0);"
             });
         }
 
@@ -267,6 +270,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public CalendarEventView CalendarEvent { get; set; }
         public InterviewMode InterviewMode { get; set; }
         public string WebInterviewUrl { get; set; }
+        public string AssignmentDetailsUrl { get; set; }
     }
 
     public class CalendarEventView

@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Identity = entityIdentity;
 
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
-            this.questionState.Init(interviewId, entityIdentity, navigationState);
+            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             this.interview = this.interviewRepository.GetOrThrow(interviewId);
             var questionnaire =
@@ -214,7 +214,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
-            questionState.Dispose();
+            QuestionState.Dispose();
             InstructionViewModel.Dispose();
             liteEventRegistry.Unsubscribe(this);
         }

@@ -48,6 +48,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             updater.UpdateVariable(this); 
         }
 
+        public override NodeType NodeType => NodeType.Variable;
+
         public string GetValueAsString()
         {
             if (!HasValue)

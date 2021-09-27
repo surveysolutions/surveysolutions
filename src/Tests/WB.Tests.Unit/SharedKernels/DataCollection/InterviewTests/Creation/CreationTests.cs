@@ -52,10 +52,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Creation
 
             // Act
             interview.CreateInterview(Create.Command.CreateInterview(interviewId: Id.gA));
-            void Act() => interview.CreateInterview(Create.Command.CreateInterview(interviewId: Id.gA));
+            TestDelegate act = () => interview.CreateInterview(Create.Command.CreateInterview(interviewId: Id.gA));
 
             // Assert
-            Assert.That(Act, Throws.Exception.InstanceOf<InterviewException>()
+            Assert.That(act, Throws.Exception.InstanceOf<InterviewException>()
                                              .With.Property(nameof(InterviewException.ExceptionType)).EqualTo(InterviewDomainExceptionType.DuplicateCreationCommand));
         }
 

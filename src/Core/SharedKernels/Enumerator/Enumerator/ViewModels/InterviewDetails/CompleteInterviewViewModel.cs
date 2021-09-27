@@ -178,12 +178,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected virtual async Task CloseInterviewAfterComplete(bool switchInterviewToCawiMode)
         {
             await this.viewModelNavigationService.NavigateToDashboardAsync(this.interviewId.ToString());
+            Dispose();
             this.messenger.Publish(new InterviewCompletedMessage(this));
         }
 
         public void Dispose()
         {
             this.Name.Dispose();
+            var entitiesWithErrors = this.EntitiesWithErrors;
+            foreach (var entityWithErrorsViewModel in entitiesWithErrors)
+            {
+                entityWithErrorsViewModel.DisposeIfDisposable();
+            }
             this.InterviewState.DisposeIfDisposable();
         }
     }

@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
-            this.instructionViewModel.Init(interviewId, entityIdentity, navigationState);
+            this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
@@ -249,6 +249,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.eventRegistry.Unsubscribe(this);
             this.questionState.Dispose();
+            this.InstructionViewModel.Dispose();
 
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
             this.filteredOptionsViewModel.Dispose();

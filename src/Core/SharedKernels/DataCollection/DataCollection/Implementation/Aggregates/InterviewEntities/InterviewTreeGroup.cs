@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Main.Core.Entities.Composite;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
@@ -27,7 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 ((IInternalInterviewTreeNode)child).SetParent(this);
             }
         }
-
+        
         public Identity Identity { get; private set; }
         public SubstitutionText Title { get; private set; }
         public InterviewTree Tree { get; private set; }
@@ -88,7 +87,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             var expectedRosterIdentities = rosterManager.CalcuateExpectedIdentities(this.Identity);
 
-            var actualRosterIdentities = this.children.Where(x => x.Identity.Id == rosterId).Select(x => x.Identity).ToHashSet();
+            var actualRosterIdentities = this.children
+                .Where(x => x.Identity.Id == rosterId)
+                .Select(x => x.Identity)
+                .ToHashSet();
 
             HashSet<Identity> rostersToRemove = new HashSet<Identity>(actualRosterIdentities);
 
@@ -127,7 +129,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     var sortIndex = rosterIndexMap[rosterToAdd]; //expectedRosterIdentities.IndexOf(rosterToAdd);
                     rosterManager.UpdateRoster(expectedRoster, this.Identity, rosterToAdd, sortIndex);
 
-                    baseIndex = baseIndex ?? this.IndexOfFirstRosterInstance(expectedRoster);
+                    baseIndex ??= this.IndexOfFirstRosterInstance(expectedRoster);
                     int indexOfRosterInstance = baseIndex.Value + sortIndex;
                     
                     this.AddOrInsertChild(expectedRoster, indexOfRosterInstance);
@@ -141,13 +143,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
 
             var expectedRosters = this.children
-                .OfType<InterviewTreeRoster>()
                 .Where(roster => roster.Identity.Id == rosterId);
 
             foreach (var expectedRoster in expectedRosters)
             {
-                expectedRoster.ActualizeChildren();
-                expectedRoster.ReplaceSubstitutions();
+                var roster = expectedRoster as InterviewTreeRoster;
+                roster?.ActualizeChildren();
+                roster?.ReplaceSubstitutions();
             }
         }
 
@@ -303,6 +305,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             updater.UpdateEnablement(this); 
         }
 
+        public abstract NodeType NodeType { get; }
+
         public void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions(this.Tree);
@@ -388,6 +392,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSubSection : InterviewTreeGroup
     {
+        public override NodeType NodeType => NodeType.Group;
+        
         public InterviewTreeSubSection(Identity identity, SubstitutionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, title, childrenReferences)
         {
         }
@@ -398,6 +404,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSection : InterviewTreeGroup
     {
+        public override NodeType NodeType => NodeType.Group;
+        
         public InterviewTreeSection(Identity identity, SubstitutionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, title, childrenReferences)
         {
         }

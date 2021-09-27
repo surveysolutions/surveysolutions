@@ -16,6 +16,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public bool IsTitleChanged {get; }
+        
+        public override bool DidSubstitutableChange()
+        {
+            return this.IsTitleChanged;
+        }
 
         public override string ToString()
         {

@@ -531,6 +531,7 @@ export default {
                     senderAddress: (self.senderAddress || '').trim(),
                     awsAccessKeyId: (self.awsAccessKeyId || '').trim(),
                     awsSecretAccessKey: (self.awsSecretAccessKey || '').trim(),
+                    awsRegion: self.awsRegion,
                     sendGridApiKey: (self.sendGridApiKey || '').trim(),
                     senderName: (self.senderName || '').trim(),
                     replyAddress: (self.replyAddress || '').trim(),

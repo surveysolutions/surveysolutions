@@ -137,7 +137,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            this.questionState.Init(interviewId, entityIdentity, navigationState);
+            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
 
             this.questionIdentity = entityIdentity;
@@ -289,6 +289,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
+            this.InstructionViewModel.Dispose();
         }
     }
 }

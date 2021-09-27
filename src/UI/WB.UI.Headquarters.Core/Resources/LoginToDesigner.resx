@@ -124,7 +124,7 @@
     <value>This is free tool for creating questionnaires for The World Bank’s CAPI platform. It can be found at</value>
   </data>
   <data name="InvalidCredentials" xml:space="preserve">
-    <value>User is not authorized. Please check your login and password.</value>
+    <value>User is not authorized. Please check your login and password and your account is not locked.</value>
   </data>
   <data name="LoginWatermark" xml:space="preserve">
     <value>Login or email</value>

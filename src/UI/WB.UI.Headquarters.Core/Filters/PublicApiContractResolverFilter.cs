@@ -10,6 +10,8 @@ namespace WB.UI.Headquarters.Filters
 {
     public class PublicApiContractResolverFilter : IActionFilter
     {
+        private static readonly IContractResolver Resolver = new DefaultContractResolver(); 
+        
         public void OnActionExecuted(ActionExecutedContext ctx)
         {
             if (ctx.Controller?.GetType().Namespace?.EndsWith("PublicApi", StringComparison.Ordinal) == false)
@@ -20,7 +22,7 @@ namespace WB.UI.Headquarters.Filters
             var newtonsoftJsonOutputFormatter = new NewtonsoftJsonOutputFormatter(
                 new JsonSerializerSettings
                 {
-                    ContractResolver = new DefaultContractResolver()
+                    ContractResolver = Resolver
                 },
                 ArrayPool<char>.Shared, new MvcOptions());
             if (ctx.Result is ObjectResult objectResult)

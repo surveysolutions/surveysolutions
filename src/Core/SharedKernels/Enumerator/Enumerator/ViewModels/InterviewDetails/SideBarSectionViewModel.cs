@@ -149,10 +149,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         public int NodeDepth { get; set; }
-        public ICommand NavigateToSectionCommand => new MvxAsyncCommand(this.NavigateToSection, 
-            () => this.SideBarGroupState.SimpleStatus != SimpleGroupStatus.Disabled);
+        public IMvxCommand NavigateToSectionCommand => new MvxAsyncCommand(this.NavigateToSection);
 
-        public ICommand ToggleCommand => new MvxCommand(this.Toggle);
+        public IMvxCommand ToggleCommand => new MvxCommand(this.Toggle);
 
         private void Toggle()
         {
@@ -162,6 +161,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private Task NavigateToSection()
         {
+            if (this.SideBarGroupState.SimpleStatus == SimpleGroupStatus.Disabled)
+                return Task.CompletedTask;
+                
             this.messenger.Publish(new SectionChangeMessage(this));
             return this.NavigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.SectionIdentity));
         }

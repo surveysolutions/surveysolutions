@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override InterviewTreeRoster CreateRoster(Guid id) => new InterviewTreeRoster(
             rosterType: RosterType.Fixed,
-            childrenReferences: this.questionnaire.GetChidrenReferences(id));
+            childrenReferences: this.questionnaire.GetChildrenReferences(id));
 
         public override void UpdateRoster(InterviewTreeRoster roster, Identity parentIdentity, Identity rosterIdentity, int sortIndex)
         {
@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override InterviewTreeRoster CreateRoster(Guid id) => new InterviewTreeRoster(
             rosterType: RosterType.Numeric,
             rosterSizeQuestion: this.rosterSizeQuestionId,
-            childrenReferences: this.questionnaire.GetChidrenReferences(id));
+            childrenReferences: this.questionnaire.GetChildrenReferences(id));
 
         public override void UpdateRoster(InterviewTreeRoster roster, Identity parentIdentity, Identity rosterIdentity, int sortIndex)
         {
@@ -156,7 +156,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override InterviewTreeRoster CreateRoster(Guid id) => new InterviewTreeRoster(
             rosterType: RosterType.List,
             rosterSizeQuestion: this.rosterSizeQuestionId,
-            childrenReferences: this.questionnaire.GetChidrenReferences(id));
+            childrenReferences: this.questionnaire.GetChildrenReferences(id));
 
         public override void UpdateRoster(InterviewTreeRoster roster, Identity parentIdentity, Identity rosterIdentity, int sortIndex)
         {
@@ -221,7 +221,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override InterviewTreeRoster CreateRoster(Guid id) => new InterviewTreeRoster(
             rosterType: RosterType.Multi,
             rosterSizeQuestion: this.rosterSizeQuestionId,
-            childrenReferences: this.questionnaire.GetChidrenReferences(id));
+            childrenReferences: this.questionnaire.GetChildrenReferences(id));
 
         public override void UpdateRoster(InterviewTreeRoster roster, Identity parentIdentity, Identity rosterIdentity, int sortIndex)
         {
@@ -280,7 +280,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override InterviewTreeRoster CreateRoster(Guid id) => new InterviewTreeRoster(
             rosterType: RosterType.YesNo,
             rosterSizeQuestion: this.rosterSizeQuestionId,
-            childrenReferences: this.questionnaire.GetChidrenReferences(id));
+            childrenReferences: this.questionnaire.GetChildrenReferences(id));
 
         public override void UpdateRoster(InterviewTreeRoster roster, Identity parentIdentity, Identity rosterIdentity, int sortIndex)
         {

@@ -774,6 +774,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
+        public override NodeType NodeType => NodeType.Question;
+
         public void AcceptValidity(IInterviewTreeUpdater updater)
         {
             updater.UpdateValidations(this);
@@ -784,9 +786,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Title.ReplaceSubstitutions(Tree);
             this.Instructions.ReplaceSubstitutions(Tree);
 
-            foreach (var messagesWithSubstition in this.ValidationMessages)
+            foreach (var messagesWithSubstitution in this.ValidationMessages)
             {
-                messagesWithSubstition.ReplaceSubstitutions(Tree);
+                messagesWithSubstitution.ReplaceSubstitutions(Tree);
             }
         }
 

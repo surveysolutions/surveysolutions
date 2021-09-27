@@ -77,16 +77,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => this.GetNodeByIdentity(identity) as InterviewTreeVariable;
 
         public IEnumerable<InterviewTreeQuestion> FindQuestions(Guid questionId)
-            => this.FindEntity(questionId).OfType<InterviewTreeQuestion>();
+            => this.FindEntity(questionId)
+                .Where(x=>x.NodeType == NodeType.Question)
+                .Select(x => x as InterviewTreeQuestion);
 
         public IEnumerable<InterviewTreeStaticText> FindStaticTexts()
-            => this.nodesCache.Values.OfType<InterviewTreeStaticText>();
+            => this.nodesCache.Values
+                .Where(x=>x.NodeType == NodeType.StaticText)
+                .Select(x => x as InterviewTreeStaticText);
+                
 
         public IEnumerable<InterviewTreeQuestion> FindQuestions()
-            => this.nodesCache.Values.OfType<InterviewTreeQuestion>();
+            => this.nodesCache.Values
+                .Where(x=>x.NodeType == NodeType.Question)
+                .Select(x => x as InterviewTreeQuestion);
 
         public IEnumerable<InterviewTreeRoster> FindRosters()
-            => this.nodesCache.Values.OfType<InterviewTreeRoster>();
+            => this.nodesCache.Values
+                .Where(x=>x.NodeType == NodeType.Roster)
+                .Select(x => x as InterviewTreeRoster);
 
         public IEnumerable<IInterviewTreeNode> FindEntity(Guid nodeId)
         {
@@ -167,28 +176,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private bool WereSubstitutableChanged(InterviewTreeNodeDiff interviewTreeNodeDiff)
         {
-            if (interviewTreeNodeDiff.IsNodeRemoved)
-                return false;
+            if (interviewTreeNodeDiff.IsNodeRemoved) return false;
 
-            var diffByQuestion = interviewTreeNodeDiff as InterviewTreeQuestionDiff;
-            if (diffByQuestion != null)
-            {
-                return diffByQuestion.IsTitleChanged || diffByQuestion.AreValidationMessagesChanged || diffByQuestion.WereInstructionsChanged;
-            }
-
-            var diffByRoster = interviewTreeNodeDiff as InterviewTreeGroupDiff;
-            if (diffByRoster != null)
-            {
-                return diffByRoster.IsTitleChanged;
-            }
-
-            var diffByStaticText = interviewTreeNodeDiff as InterviewTreeStaticTextDiff;
-            if (diffByStaticText != null)
-            {
-                return diffByStaticText.IsTitleChanged || diffByStaticText.AreValidationMessagesChanged;
-            }
-
-            return false;
+            return interviewTreeNodeDiff.DidSubstitutableChange();
         }
 
         private static bool IsOptionsSetChanged(InterviewTreeQuestionDiff diffByQuestion)
@@ -372,14 +362,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public static InterviewTreeSubSection CreateSubSection(IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity subSectionIdentity)
         {
-            var childrenReferences = questionnaire.GetChidrenReferences(subSectionIdentity.Id);
+            var childrenReferences = questionnaire.GetChildrenReferences(subSectionIdentity.Id);
             SubstitutionText title = textFactory.CreateText(subSectionIdentity, questionnaire.GetGroupTitle(subSectionIdentity.Id), questionnaire);
             return new InterviewTreeSubSection(subSectionIdentity, title, childrenReferences);
         }
 
         public static InterviewTreeSection CreateSection(IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity sectionIdentity)
         {
-            var childrenReferences = questionnaire.GetChidrenReferences(sectionIdentity.Id);
+            var childrenReferences = questionnaire.GetChildrenReferences(sectionIdentity.Id);
             SubstitutionText title = textFactory.CreateText(sectionIdentity, questionnaire.GetGroupTitle(sectionIdentity.Id), questionnaire);
             return new InterviewTreeSection(sectionIdentity, title, childrenReferences);
         }
@@ -612,6 +602,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         IInterviewTreeNode Clone();
         void Accept(IInterviewTreeUpdater updater);
+
+        NodeType NodeType { get; }
+    }
+
+    public enum NodeType
+    {
+        Unknown = 0,
+        Question = 1,
+        Roster = 2,
+        StaticText = 3,
+        Group = 4,
+        Variable = 5
     }
 
     public interface ISubstitutable
@@ -646,6 +648,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         IReadOnlyCollection<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
 
         public abstract SubstitutionText Title { get; protected set; }
+        
+        public abstract NodeType NodeType { get; }
 
         public virtual void SetTree(InterviewTree tree)
         {

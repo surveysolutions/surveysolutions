@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "Layout.ControlPanel";
+    ViewBag.Title = "Control Panel: Versions";
+}
+
+<h1 class="page-header">Questionnaire document schema</h1>
+
+
+<pre class="raw" style="height: 300px; overflow-y: scroll;">
+Please wait while data is being loaded from server...
+</pre>
+
+<a href="@Url.Action("GetSchema","ControlPanel", new {getFile = true})" class="btn btn-default" target="_blank">Download</a>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function() {
+            var schemaUrl = '@Url.Action("GetSchema","ControlPanel")';
+            $.getJSON(schemaUrl, function(data) {
+                $(".raw").text(data);                
+            });
+        });
+    </script>
+}

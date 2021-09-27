@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 else if (interviewEntityViewModel is StaticTextViewModel staticText)
                 {
                     allVisibleGroupItems.Add(staticText);
-                    staticText.QuestionState.Enablement.PropertyChanged += (sender, e) =>
+                    staticText.StaticTextState.Enablement.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
                         allVisibleGroupItems.NotifyItemChanged(staticText);

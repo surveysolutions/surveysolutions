@@ -12,6 +12,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public new InterviewTreeStaticText ChangedNode => base.ChangedNode as InterviewTreeStaticText;
 
         public bool IsTitleChanged { get; }
+        
+        public override bool DidSubstitutableChange()
+        {
+            return this.IsTitleChanged ||
+                   this.AreValidationMessagesChanged;
+        }
 
         public bool IsTitleChangedImp(InterviewTreeStaticText sourceNode, InterviewTreeStaticText changedNode)
         {

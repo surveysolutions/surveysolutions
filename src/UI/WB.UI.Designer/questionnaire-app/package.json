@@ -10,7 +10,7 @@
     "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "core-js": "^3.14.0",
     "vue": "^2.6.14",
     "vue-i18n": "^8.24.4",
@@ -54,8 +54,12 @@
     "xmldoc": "^1.1.2"
   },
   "resolutions": {
+    "ansi-regex": "^5.0.1",
     "chokidar": "^3.5.2",
     "css-what": "^5.0.1",
-    "normalize-url": "^6.1.0"
+    "normalize-url": "^6.1.0",
+    "nth-check": "^2.0.1",
+    "set-value": "^4.1.0",
+    "webpack-dev-server": "^4.2.1"
   }
 }

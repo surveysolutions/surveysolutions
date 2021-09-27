@@ -129,7 +129,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 case GroupViewModel groupViewModel:
                     return groupViewModel.Enablement;
                 case StaticTextViewModel staticTextViewModel:
-                    return staticTextViewModel.QuestionState.Enablement;
+                    return staticTextViewModel.StaticTextState.Enablement;
                 case FlatRosterTitleViewModel rosterTitleViewModel:
                     return rosterTitleViewModel.Enablement;
             }
