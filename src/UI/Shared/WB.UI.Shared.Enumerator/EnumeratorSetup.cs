@@ -98,23 +98,23 @@ namespace WB.UI.Shared.Enumerator
 
         protected override ILoggerProvider CreateLogProvider()
         {
-            //return new NLogLoggerProvider();
+            return null;// new NLogLoggerProvider();
 
-            return new SerilogLoggerProvider();
+            //return new SerilogLoggerProvider();
         }
 
         protected override ILoggerFactory CreateLogFactory()
         {
             //configure it
-            //return new NLogLoggerFactory();
-            
-            // // serilog configuration
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.AndroidLog()
-                .CreateLogger();
+            return null; // new NLogLoggerFactory();
 
-            return new SerilogLoggerFactory();
+            // // serilog configuration
+            //Log.Logger = new LoggerConfiguration()
+            //    .MinimumLevel.Debug()
+            //    .WriteTo.AndroidLog()
+            //    .CreateLogger();
+
+            //return new SerilogLoggerFactory();
         }
         
         
