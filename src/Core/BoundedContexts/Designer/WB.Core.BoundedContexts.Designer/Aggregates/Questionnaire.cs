@@ -724,13 +724,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var variableName = command.VariableName;
 
             PrepareGeneralProperties(ref title, ref variableName);
-
-            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
-
             this.GetQuestionOrThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
+            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             if (parentGroup != null)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
@@ -771,12 +769,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             PrepareGeneralProperties(ref title, ref variableName);
 
-            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
-
             var question = this.GetQuestionOrThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
+            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             if (parentGroup != null)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
@@ -791,7 +788,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         command.VariableLabel,
                         command.EnablementCondition,
                         command.HideIfDisabled,
-                        Order.AZ,
+                        null,
                         command.IsPreFilled,
                         command.Instructions,
                         command.Properties,
@@ -815,7 +812,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             PrepareGeneralProperties(ref title, ref variableName);
 
-            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
             var question = this.GetQuestionOrThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
@@ -856,12 +853,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var variableName = command.VariableName;
 
             PrepareGeneralProperties(ref title, ref variableName);
-            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
             this.GetQuestionOrThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-        
+            
+            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             if (parentGroup != null)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
@@ -873,7 +870,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ExtractLinkedQuestionValues(command.LinkedToEntityId, out linkedQuestionId, out linkedRosterId);
 
             var answers = command.Options == null && command.IsFilteredCombobox
-                ? this.GetQuestion(command.QuestionId).Answers.ToArray()
+                ? this.GetQuestion(command.QuestionId)?.Answers.ToArray()
                 : ConvertOptionsToAnswers(command.Options);
 
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
@@ -923,7 +920,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             if (parentGroup != null)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
@@ -936,8 +933,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if ((command.IsFilteredCombobox || command.CascadeFromQuestionId.HasValue) && command.CategoriesId == null)
             {
-                IQuestion originalQuestion = this.GetQuestion(command.QuestionId);
-                answers = originalQuestion.Answers.ToArray();                
+                IQuestion? originalQuestion = this.GetQuestion(command.QuestionId);
+                answers = originalQuestion?.Answers.ToArray();                
             }
             else
             {
@@ -1116,7 +1113,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var question = this.GetQuestionOrThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
 
-            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             if (parentGroup != null)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
@@ -1135,7 +1132,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.VariableLabel,
                 command.EnablementCondition,
                 command.HideIfDisabled,
-                Order.AZ,
+                null,
                 command.IsPreFilled,
                 command.Instructions,
                 command.Properties,
@@ -1170,7 +1167,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.GetQuestionOrThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
-            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
@@ -1188,7 +1185,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     command.VariableLabel,
                     command.EnablementCondition,
                     command.HideIfDisabled,
-                    Order.AZ,
+                    null,
                     false,
                     command.Instructions,
                     command.Properties,
@@ -1226,7 +1223,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.GetQuestionOrThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
 
-            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
@@ -1244,7 +1241,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     command.VariableLabel,
                     command.EnablementCondition,
                     command.HideIfDisabled,
-                    Order.AZ,
+                    null,
                     false,
                     command.Instructions,
                     command.Properties,
@@ -1283,7 +1280,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.GetQuestionOrThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
-            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
@@ -1301,7 +1298,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.VariableLabel,
                 command.EnablementCondition,
                 command.HideIfDisabled,
-                Order.AZ,
+                null,
                 false,
                 command.Instructions,
                 command.Properties,
@@ -1341,7 +1338,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
             if (parentGroup != null)
             {
@@ -1358,7 +1355,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.VariableLabel,
                 command.EnablementCondition,
                 command.HideIfDisabled,
-                Order.AZ,
+                null,
                 false,
                 command.Instructions,
                 command.Properties,
@@ -1395,7 +1392,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.GetQuestionOrThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
-            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
@@ -1413,7 +1410,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     command.VariableLabel,
                     command.EnablementCondition,
                     command.HideIfDisabled,
-                    Order.AZ,
+                    null,
                     false,
                     command.Instructions,
                     command.Properties,
@@ -2174,7 +2171,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ParentValue = option.ParentValue
         };
 
-        private IQuestion GetQuestion(Guid questionId)
+        private IQuestion? GetQuestion(Guid questionId)
         {
             return this.innerDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == questionId);
         }

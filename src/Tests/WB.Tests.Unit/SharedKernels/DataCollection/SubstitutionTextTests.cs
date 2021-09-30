@@ -261,12 +261,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         [Test]
         public void when_create_substitution_text_with_markdown_syntax_then_any_exceptions_should_not_be_throwing()
         {
-            Assert.That(() =>
-                    CreateSubstitutionText(Id.Identity1,
-                        "2. Mira este dibujo aquí arriba (SEÑALE ARRIBA). \n" +
-                        "<br>A este dibujo le falta un tuquito. \n\n<br>" +
-                        "Aquí abajo tenemos 6 tuquitos diferentes (SEÑALE ABAJO)\n" +
-                        "<br>Solo uno de estos tuquitos es el que completa a este dibujo."),
+            TestDelegate testDelegate = () =>
+                CreateSubstitutionText(Id.Identity1,
+                    "2. Mira este dibujo aquí arriba (SEÑALE ARRIBA). \n" +
+                    "<br>A este dibujo le falta un tuquito. \n\n<br>" +
+                    "Aquí abajo tenemos 6 tuquitos diferentes (SEÑALE ABAJO)\n" +
+                    "<br>Solo uno de estos tuquitos es el que completa a este dibujo.");
+            
+            Assert.That(testDelegate,
                 Throws.Nothing);
         }
 

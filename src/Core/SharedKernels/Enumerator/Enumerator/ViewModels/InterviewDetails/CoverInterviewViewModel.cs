@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
@@ -235,6 +236,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             foreach (var prefilledQuestion in prefilledQuestionsLocal)
             {
                 prefilledQuestion.Dispose();
+            }
+
+            var prefilledEditable = PrefilledEditableEntities;
+            foreach (var prefilledEditableEntity in prefilledEditable)
+            {
+                prefilledEditableEntity.DisposeIfDisposable();
+            }
+            
+            var commentedEntities = CommentedEntities;
+            foreach (var commentedEntity in commentedEntities)
+            {
+                commentedEntity.DisposeIfDisposable();
             }
 
             Name?.Dispose();

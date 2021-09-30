@@ -36,17 +36,21 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Factories
             var itemIdentity = Create.Entity.QuestionnaireIdentity(Id.gA, 1);
             var item1Identity = Create.Entity.QuestionnaireIdentity(Id.gA, 2);
             var item2Identity = Create.Entity.QuestionnaireIdentity(Id.gB, 3);
+            var item3Identity = Create.Entity.QuestionnaireIdentity(Id.gB, 4);
 
-            var item = Create.Entity.QuestionnaireBrowseItem(questionnaireId: itemIdentity.QuestionnaireId, itemIdentity.Version, questionnaireIdentity: itemIdentity, title: "questionnaire1");
+            var item = Create.Entity.QuestionnaireBrowseItem(questionnaireId: itemIdentity.QuestionnaireId, itemIdentity.Version, questionnaireIdentity: itemIdentity, title: "a questionnaire1");
 
             var item1 = Create.Entity.QuestionnaireBrowseItem(questionnaireId: item1Identity.QuestionnaireId, item1Identity.Version, questionnaireIdentity: item1Identity, title: "Questionnaire1");
 
-            var item2 = Create.Entity.QuestionnaireBrowseItem(questionnaireId: item2Identity.QuestionnaireId, item2Identity.Version, questionnaireIdentity: item2Identity, title: "no words");
+            var item2 = Create.Entity.QuestionnaireBrowseItem(questionnaireId: item2Identity.QuestionnaireId, item2Identity.Version, questionnaireIdentity: item2Identity, title: "questionnaire to be renamed");
+            
+            var item3 = Create.Entity.QuestionnaireBrowseItem(questionnaireId: item3Identity.QuestionnaireId, item3Identity.Version, questionnaireIdentity: item3Identity, title: "title new");
 
             var storage = new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>();
             storage.Store(item, itemIdentity.ToString());
             storage.Store(item1, item1Identity.ToString());
             storage.Store(item2, item2Identity.ToString());
+            storage.Store(item3, item3Identity.ToString());
 
             var viewFactory = CreateViewFactory(storage);
             
@@ -56,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Factories
             // assert
             Assert.That(uniqueQuestionnaireIds.Items, Has.Count.EqualTo(2));
             Assert.That(uniqueQuestionnaireIds.Items[0].Id, Is.EqualTo(itemIdentity.QuestionnaireId));
-            Assert.That(uniqueQuestionnaireIds.Items[1].Id, Is.EqualTo(item1Identity.QuestionnaireId));
+            Assert.That(uniqueQuestionnaireIds.Items[1].Id, Is.EqualTo(item2Identity.QuestionnaireId));
         }
 
         private QuestionnaireBrowseViewFactory CreateViewFactory(

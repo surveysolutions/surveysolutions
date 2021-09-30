@@ -1,6 +1,7 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.CommandBus;
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
             };
             CalendarEvent local = null;
             
-            var commandService = ProcessPackage(package, local);
+            var commandService = SetupServiceAndProcessPackage(package, local);
             
             Verify(commandService, package);
         }
@@ -46,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 updateDateUtc: DateTime.UtcNow
             );
             
-            var commandService = ProcessPackage(package, local);
+            var commandService = SetupServiceAndProcessPackage(package, local);
             
             Verify(commandService, package);
         }
@@ -69,7 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 updateDateUtc: DateTime.UtcNow.AddMinutes(5)
             );
             
-            var commandService = ProcessPackage(package, local);
+            var commandService = SetupServiceAndProcessPackage(package, local);
             
             Verify(commandService, package);
         }
@@ -91,7 +92,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 updateDateUtc: DateTime.UtcNow
             );
             
-            var commandService = ProcessPackage(package, local);
+            var commandService = SetupServiceAndProcessPackage(package, local);
             
             Verify(commandService, package);
         }
@@ -114,7 +115,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 updateDateUtc: DateTime.UtcNow.AddMinutes(5)
             );
             
-            var commandService = ProcessPackage(package, local);
+            var commandService = SetupServiceAndProcessPackage(package, local);
             
             Verify(commandService, package, restoreCalendarEventAfter: true);
         }
@@ -137,7 +138,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 updateDateUtc: DateTime.UtcNow
             );
             
-            var commandService = ProcessPackage(package, local);
+            var commandService = SetupServiceAndProcessPackage(package, local);
             
             Verify(commandService, package, restoreCalendarEventBefore: true);
         }
@@ -159,8 +160,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 deletedAtUtc: DateTime.UtcNow.AddMinutes(5),
                 updateDateUtc: DateTime.UtcNow.AddMinutes(5)
             );
-            
-            var commandService = ProcessPackage(package, local);
+
+            var commandService = SetupServiceAndProcessPackage(package, local);
             
             Verify(commandService, package, restoreCalendarEventBefore: false);
         }
@@ -183,7 +184,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 updateDateUtc: DateTime.UtcNow.AddMinutes(5)
             );
             
-            var commandService = ProcessPackage(package, local);
+            var commandService = SetupServiceAndProcessPackage(package, local);
             
             Verify(commandService, package, shouldRestorePreviousStateAfterApplying: true);
         }

@@ -131,7 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             });
 
             var result = row.FirstOrDefault() ?? new DeviceInterviewersReportLine();
-            result.TeamName = supervisorId.HasValue ? this.userViewFactory.GetUser(new UserViewInputModel(supervisorId.Value)).UserName : Strings.AllTeams;
+            result.TeamName = supervisorId.HasValue ? this.userViewFactory.GetUser(new UserViewInputModel(supervisorId.Value))?.UserName : Strings.AllTeams;
             return result;
         }
 

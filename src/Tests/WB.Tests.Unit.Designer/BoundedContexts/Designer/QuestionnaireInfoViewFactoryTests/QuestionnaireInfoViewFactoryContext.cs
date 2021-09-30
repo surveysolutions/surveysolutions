@@ -1,6 +1,7 @@
 ﻿using System;
 using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;

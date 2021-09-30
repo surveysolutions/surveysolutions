@@ -27,7 +27,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 id : User.GetId(),
                 login : User.Identity!.Name,
                 roles : User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).ToArray(),
-                email : User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+                email : User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                fullName : User.Claims.LastOrDefault(x => x.Type == ClaimTypes.Name)?.Value
             ));
         }
     }

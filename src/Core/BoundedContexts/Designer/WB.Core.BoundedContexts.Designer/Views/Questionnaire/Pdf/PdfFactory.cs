@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -74,7 +75,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             }
 
             var listItem = this.dbContext.Questionnaires.Where(x => x.QuestionnaireId == questionnaireId).Include(x => x.SharedPersons).First();
-            var sharedPersons =  listItem.SharedPersons;
+            var sharedPersons =  listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First());
 
             var modificationStatisticsByUsers = this.dbContext.QuestionnaireChangeRecords
                 .Where(x => x.QuestionnaireId == questionnaireId)

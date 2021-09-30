@@ -113,7 +113,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         [Test]
-        public void should_allow_only_10_elements_in_plain_roster()
+        public void should_allow_only_10_ui_elements_in_plain_roster()
         {
             Create.QuestionnaireDocumentWithOneChapter(
                 Create.NumericIntegerQuestion(id: Id.g1),
@@ -130,10 +130,59 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         Create.Question(),
                         Create.Question(),
                         Create.Question(),
+                        Create.StaticText(),
                         Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.StaticText(),
                     })
             ) 
             .ExpectError("WB0278");
+        }
+        
+        [Test]
+        public void should_allow_more_than_10_non_ui_elements_in_plain_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Flat, 
+                        children: new IComposite[]
+                        {
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.StaticText(),
+                            Create.Variable(),
+                            Create.Variable(),
+                            
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.StaticText(),
+                            Create.Variable(),
+                            Create.Variable(),
+                        })
+                ) 
+                .ExpectNoError("WB0278");
         }
 
         [Test]

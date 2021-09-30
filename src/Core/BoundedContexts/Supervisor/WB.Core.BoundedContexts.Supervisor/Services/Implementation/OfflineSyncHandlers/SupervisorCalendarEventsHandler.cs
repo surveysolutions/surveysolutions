@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
@@ -159,7 +160,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     && activeCalendarEvent.LastUpdateDateUtc < request.CalendarEvent.MetaInfo.LastUpdateDateTime
                     && !deleteCalendarEventAfterApplying)
                 {
-                    commandService.Execute(new DeleteCalendarEventCommand(activeCalendarEvent.Id, responsibleId));
+                    commandService.Execute(new DeleteCalendarEventCommand(activeCalendarEvent.Id, 
+                        responsibleId,
+                        new QuestionnaireIdentity( ) //dummy
+                        ));
                 }
                 
                 var calendarEvent = calendarEventStorage.GetById(request.CalendarEvent.CalendarEventId);
@@ -190,7 +194,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                             restoreCalendarEventBefore: restoreCalendarEventBefore,
                             restoreCalendarEventAfter: restoreCalendarEventAfter, 
                             deleteCalendarEventAfter: deleteCalendarEventAfterApplying,
-                            shouldRestorePreviousStateAfterApplying));
+                            shouldRestorePreviousStateAfterApplying,
+                            new QuestionnaireIdentity() //dummy
+                            ));
             
                 RecordProcessedPackageInfo(calendarEventStream);
             }

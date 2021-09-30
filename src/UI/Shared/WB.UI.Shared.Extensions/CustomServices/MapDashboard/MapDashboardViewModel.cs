@@ -323,6 +323,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                 {
                     case InterviewStatus.Created:
                     case InterviewStatus.InterviewerAssigned:
+                    case InterviewStatus.Restarted:    
                         markerColor = Color.FromArgb(0x2a, 0x81, 0xcb);
                         break;
                     case InterviewStatus.Completed:
@@ -603,12 +604,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             {
                 var newFeatureLayer = await MapUtilityService.GetShapefileAsFeatureLayer(AvailableShapefiles.First().FullPath);
 
+                this.MapView.Map.OperationalLayers.Clear();
+
                 // Add the feature layer to the map
                 this.MapView.Map.OperationalLayers.Add(newFeatureLayer);
 
                 // Zoom the map to the extent of the shapefile
                 await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
-
             }
             catch (Exception e)
             {

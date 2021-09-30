@@ -12,35 +12,30 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 {
     public class NewtonInterviewAnswerJsonSerializer : IInterviewAnswerSerializer
     {
-        private readonly JsonSerializerSettings jsonSerializerSettings;
-
-        public NewtonInterviewAnswerJsonSerializer()
+        private static readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
         {
-            this.jsonSerializerSettings = new JsonSerializerSettings
+            TypeNameHandling = TypeNameHandling.Objects,
+            NullValueHandling = NullValueHandling.Include,
+            FloatParseHandling = FloatParseHandling.Decimal,
+            Formatting = Formatting.Indented,
+            SerializationBinder = new InterviewAnswerSerializationBinder(),
+            MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
+            Converters = new List<JsonConverter>
             {
-                TypeNameHandling = TypeNameHandling.Objects,
-                NullValueHandling = NullValueHandling.Include,
-                FloatParseHandling = FloatParseHandling.Decimal,
-                Formatting = Formatting.Indented,
-                SerializationBinder = new InterviewAnswerSerializationBinder(),
-                MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
-                Converters = new List<JsonConverter>
-                {
-                    new IdentityJsonConverter(),
-                    new RosterVectorConverter()
-                },
-                ContractResolver = new NewtonInterviewAnswerContractResolver()
-            };
-        }
+                new IdentityJsonConverter(),
+                new RosterVectorConverter()
+            },
+            ContractResolver = new NewtonInterviewAnswerContractResolver()
+        };
 
         public string Serialize(object item)
         {
-            return JsonConvert.SerializeObject(item, this.jsonSerializerSettings);
+            return JsonConvert.SerializeObject(item, jsonSerializerSettings);
         }
 
         public T Deserialize<T>(string payload)
         {
-            return JsonConvert.DeserializeObject<T>(payload, this.jsonSerializerSettings);
+            return JsonConvert.DeserializeObject<T>(payload, jsonSerializerSettings);
         }
         
         public class InterviewAnswerSerializationBinder : DefaultSerializationBinder

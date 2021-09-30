@@ -15,6 +15,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
@@ -62,6 +63,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     ? calendarEventService.GetActiveCalendarEventForInterviewId(calendarEventPackage.InterviewId.Value)
                     : calendarEventService.GetActiveCalendarEventForAssignmentId(calendarEventPackage.AssignmentId);
 
+                var assignment = assignmentsLocal.GetAssignment(calendarEventPackage.AssignmentId);
+                if (assignment == null)
+                    throw new InvalidOperationException("Assignment for calendar event was not found");
+
                 //check responsible
                 //ignore calendar event event if responsible is another person
                 var currentResponsibleId = GetResponsibleForCalendarEventEntity(calendarEventPackage);
@@ -73,13 +78,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     {
                         throw new InvalidOperationException("Current responsible user was not found");
                     }
+
                     var packageUser = userViewFactory.GetUser(responsibleId);
                     if (packageUser == null)
                     {
                         throw new InvalidOperationException("Target responsible user was not found");
                     }
-                    if (packageUser.IsSupervisor() 
-                        && currentUser.IsInterviewer() 
+
+                    if (packageUser.IsSupervisor()
+                        && currentUser.IsInterviewer()
                         && currentUser.Supervisor.Id == packageUser.PublicKey)
                     {
                         shouldIgnorePackage = false;
@@ -87,20 +94,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                     if (shouldIgnorePackage)
                     {
-                        logger.LogError($"Ignored events by calendar event {calendarEventPackage.Id} from {calendarEventPackage.ResponsibleId} because current responsible {currentUser.PublicKey}");
+                        logger.LogError(
+                            $"Ignored events by calendar event {calendarEventPackage.Id} from {calendarEventPackage.ResponsibleId} because current responsible {currentUser.PublicKey}");
                         return;
                     }
                 }
 
                 //remove other older CE 
-                if (activeCalendarEventByInterviewOrAssignmentId != null 
+                if (activeCalendarEventByInterviewOrAssignmentId != null
                     && activeCalendarEventByInterviewOrAssignmentId.PublicKey != calendarEventPackage.CalendarEventId
-                    && activeCalendarEventByInterviewOrAssignmentId.UpdateDateUtc < calendarEventPackage.LastUpdateDateUtc
+                    && activeCalendarEventByInterviewOrAssignmentId.UpdateDateUtc <
+                    calendarEventPackage.LastUpdateDateUtc
                     && !deleteCalendarEventAfterApplying)
                 {
                     commandService.Execute(new DeleteCalendarEventCommand(
-                            activeCalendarEventByInterviewOrAssignmentId.PublicKey,
-                            responsibleId));
+                        activeCalendarEventByInterviewOrAssignmentId.PublicKey,
+                        responsibleId,
+                        assignment.QuestionnaireId));
                 }
 
                 var calendarEvent = calendarEventService.GetCalendarEventById(calendarEventPackage.CalendarEventId);
@@ -108,17 +118,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 //if CE was deleted on server before last change on tablet - restore it
                 //if it was deleted after - leave it deleted
                 //could be deleted again later
-                if(calendarEvent != null 
-                   && !calendarEventPackage.IsDeleted 
-                   && calendarEvent.DeletedAtUtc.HasValue 
-                   && calendarEvent.UpdateDateUtc < calendarEventPackage.LastUpdateDateUtc)
-                        restoreCalendarEventBefore = true;
+                if (calendarEvent != null
+                    && !calendarEventPackage.IsDeleted
+                    && calendarEvent.DeletedAtUtc.HasValue
+                    && calendarEvent.UpdateDateUtc < calendarEventPackage.LastUpdateDateUtc)
+                    restoreCalendarEventBefore = true;
 
-                if(calendarEvent != null 
-                   && calendarEventPackage.IsDeleted 
-                   && calendarEvent.DeletedAtUtc == null 
-                   && calendarEvent.UpdateDateUtc > calendarEventPackage.LastUpdateDateUtc)
-                        restoreCalendarEventAfter = true;
+                if (calendarEvent != null
+                    && calendarEventPackage.IsDeleted
+                    && calendarEvent.DeletedAtUtc == null
+                    && calendarEvent.UpdateDateUtc > calendarEventPackage.LastUpdateDateUtc)
+                    restoreCalendarEventAfter = true;
 
                 if (calendarEvent != null
                     && calendarEvent.UpdateDateUtc > calendarEventPackage.LastUpdateDateUtc)
@@ -127,14 +137,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 var calendarEventStream = serializer.Deserialize<CommittedEvent[]>(calendarEventPackage.Events);
                 var aggregateRootEvents = calendarEventStream
                     .Select(c => new AggregateRootEvent(c)).ToArray();
-                
+
                 commandService.Execute(
-                        new SyncCalendarEventEventsCommand(aggregateRootEvents,
-                            calendarEventPackage.CalendarEventId, responsibleId,
-                            restoreCalendarEventBefore: restoreCalendarEventBefore,
-                            restoreCalendarEventAfter: restoreCalendarEventAfter, 
-                            deleteCalendarEventAfter: deleteCalendarEventAfterApplying,
-                            shouldRestorePreviousStateAfterApplying));
+                    new SyncCalendarEventEventsCommand(aggregateRootEvents,
+                        calendarEventPackage.CalendarEventId, responsibleId,
+                        restoreCalendarEventBefore: restoreCalendarEventBefore,
+                        restoreCalendarEventAfter: restoreCalendarEventAfter,
+                        deleteCalendarEventAfter: deleteCalendarEventAfterApplying,
+                        shouldRestorePreviousStateAfterApplying,
+                        assignment.QuestionnaireId));
+            }
+            catch (CalendarEventException cee)
+            {
+                this.logger.LogError(cee,
+                    $"Calendar event events by {calendarEventPackage.CalendarEventId} processing failed. Reason: '{cee.Message}'");
+                if (cee.ExceptionType == CalendarEventDomainExceptionType.QuestionnaireDeleted)
+                    return;
+                
+                throw;
             }
             catch (Exception exception)
             {

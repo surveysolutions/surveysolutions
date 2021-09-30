@@ -528,11 +528,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_left_side_panel_item_group.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_left_side_panel_item_section.axml">
       <SubType>Designer</SubType>
     </AndroidResource>

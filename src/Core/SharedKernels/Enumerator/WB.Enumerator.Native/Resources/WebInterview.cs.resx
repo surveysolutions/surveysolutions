@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Complete" xml:space="preserve">
-    <value>Dokončeno</value>
+    <value>Uzamknuté (Odeslané)</value>
   </data>
   <data name="CompleteInterview" xml:space="preserve">
-    <value>Dokončený rozhovor</value>
+    <value>Uzamknutý dotazník</value>
   </data>
   <data name="CompletionText" xml:space="preserve">
-    <value>Tento rozhovor byl dokončen</value>
+    <value>Dotazník byl dokončen</value>
   </data>
   <data name="DiscardAndStart" xml:space="preserve">
     <value>Znovu otevřít</value>
@@ -156,11 +156,11 @@ Děkujeme za spolupráci!</value>
     <value>Připomínáme, nezapomeňte se zúčastnit %SURVEYNAME%</value>
   </data>
   <data name="Email_PartialResponse_Message" xml:space="preserve">
-    <value>Začali jste odpovídat na %SURVEYNAME%, ale nedokončili, proto posíláme toto upozornění.
+    <value>Pozor nedokončili jste začatý rozhovor %SURVEYNAME%.
 
 Pro pokračování v šetření klikněte na následující odkaz: %SURVEYLINK% a zadejte Vaše heslo: %PASSWORD%.
 
-Prosím odpovězte na všechny příslušné otázky a odešlete své odpovědi kliknutím na tlačítko ‘DOKONČIT’.
+Prosím odpovězte na všechny příslušné otázky a odešlete své odpovědi kliknutím na tlačítko ‘UZAMKNOUT’.
 
 Děkujeme za spolupráci!</value>
   </data>
@@ -174,7 +174,7 @@ Při zpracování Vašich odpovědí našel tazatel několik nesrovnalostí. Ž�
 
 Pro pokračování v šetření klikněte na následující odkaz: %SURVEYLINK% a zadejte Vaše heslo: %PASSWORD%.
 
-Budeme rádi, pokud se pokusíte vyřešit všechny nesrovnalosti označené v dotazníku a kliknutím na tlačítko ‘DOKONČIT’ odešlete své odpovědi.
+Budeme rádi, pokud se pokusíte vyřešit všechny nesrovnalosti označené v dotazníku a kliknutím na tlačítko ‘UZAMKNOUT’ odešlete své odpovědi.
 
 Děkujeme za spolupráci!</value>
   </data>
@@ -319,12 +319,6 @@ Děkujeme za spolupráci!</value>
   <data name="PleaseFillCaptcha" xml:space="preserve">
     <value>Vyplňte prosím pole captcha </value>
   </data>
-  <data name="PoweredBy" xml:space="preserve">
-    <value>Powered by</value>
-  </data>
-  <data name="QuestionnaireNameFormat" xml:space="preserve">
-    <value>{0} (ver. {1})</value>
-  </data>
   <data name="RefreshPage" xml:space="preserve">
     <value>Obnovit stránku</value>
   </data>
@@ -347,7 +341,7 @@ Děkujeme za spolupráci!</value>
     <value>Začít nový rozhovor</value>
   </data>
   <data name="StartedInterviewText" xml:space="preserve">
-    <value>Tento rozhovor není hotový</value>
+    <value>Dotazník není hotový</value>
   </data>
   <data name="StartPageTitle" xml:space="preserve">
     <value>Webové šetření</value>
@@ -366,5 +360,11 @@ Děkujeme za spolupráci!</value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
     <value>Vítejte v Survey Solutions webovém šetření</value>
+  </data>
+  <data name="InterviewNotFound" xml:space="preserve">
+    <value>Dotazník nebyl nalezen.</value>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Odkaz na vstupní stránku webového dotazníku</value>
   </data>
 </root>

@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
 {
@@ -7,7 +8,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
         public Guid ResponsibleId { get; }
         public string Comment { get; }
 
-        public ReassignAssignment(Guid publicKey, Guid userId, Guid responsibleId, string comment) : base(publicKey, userId)
+        public ReassignAssignment(Guid publicKey, Guid userId, Guid responsibleId, string comment, QuestionnaireIdentity questionnaireIdentity) 
+            : base(publicKey, userId, questionnaireIdentity)
         {
             ResponsibleId = responsibleId;
             Comment = comment;

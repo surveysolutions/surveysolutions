@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using NUnit.Framework;
 using System.Linq;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHistoryFactoryTests
 {

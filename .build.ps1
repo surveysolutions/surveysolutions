@@ -313,10 +313,10 @@ task AndroidInterviewer {
 
 task AndroidSupervisor {
     if ($isRelease) {
-        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_PROD
+        $appCenterKey = $ENV:APP_CENTER_SUPERVISOR_PROD
     }
     else {
-        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_DEV
+        $appCenterKey = $ENV:APP_CENTER_SUPERVISOR_DEV
     }
     Invoke-Android "./src/UI/Supervisor/WB.UI.Supervisor/WB.UI.Supervisor.csproj" "Supervisor.apk" $true $appCenterKey
 }

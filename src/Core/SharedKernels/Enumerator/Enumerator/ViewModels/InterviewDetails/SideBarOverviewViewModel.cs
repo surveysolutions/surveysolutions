@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
@@ -79,9 +78,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public GroupStateViewModel SideBarGroupState { get; private set; }
         public DynamicTextViewModel Title { get; }
 
-        public ICommand ToggleCommand => new MvxCommand(() => { });
+        public IMvxCommand ToggleCommand => new MvxCommand(() => { });
 
-        public ICommand NavigateToSectionCommand => new MvxAsyncCommand(this.NavigateToSection);
+        public IMvxCommand NavigateToSectionCommand => new MvxAsyncCommand(this.NavigateToSection);
 
         private async Task NavigateToSection()
         {

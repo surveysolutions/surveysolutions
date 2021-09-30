@@ -377,23 +377,24 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public ActionResult Approve(Guid id, string? comment = null)
         {
-            var q = this.GetQuestionnaireIdForInterview(id);
-            if (q == null) return NotFound();
+            var questionnaireIdentity = this.GetQuestionnaireIdForInterview(id);
+            if (questionnaireIdentity == null) return NotFound();
             
             var result = this.TryExecuteCommand(new ApproveInterviewCommand(id, this.authorizedUser.Id, comment));
             if (result is OkObjectResult)
             {
-                CompleteCalendarEventIfExists(id);
+                CompleteCalendarEventIfExists(id, questionnaireIdentity);
             }
 
             return result;
         }
 
-        private void CompleteCalendarEventIfExists(Guid interviewId)
+        private void CompleteCalendarEventIfExists(Guid interviewId, QuestionnaireIdentity questionnaireIdentity)
         {
             var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
             if (calendarEvent != null && !calendarEvent.IsCompleted())
-                this.commandService.Execute(new CompleteCalendarEventCommand(calendarEvent.PublicKey, this.authorizedUser.Id));
+                this.commandService.Execute(new CompleteCalendarEventCommand(calendarEvent.PublicKey, 
+                    this.authorizedUser.Id, questionnaireIdentity));
         }
         
         /// <summary>
@@ -411,15 +412,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public ActionResult Reject(Guid id, string? comment = null, Guid? responsibleId = null)
         {
-            var q = this.GetQuestionnaireIdForInterview(id);
-            if (q == null) return NotFound();
+            var questionnaireIdentity = this.GetQuestionnaireIdForInterview(id);
+            if (questionnaireIdentity == null) return NotFound();
 
             if (!responsibleId.HasValue)
             {
                 var result = this.TryExecuteCommand(new RejectInterviewCommand(id, this.authorizedUser.Id, comment));
                 if (result is OkResult)
                 {
-                    CompleteCalendarEventIfExists(id);
+                    CompleteCalendarEventIfExists(id, questionnaireIdentity);
                 }
 
                 return result;
@@ -437,7 +438,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 id, userInfo.PublicKey, comment));
             if (resultToInter is OkResult)
             {
-                CompleteCalendarEventIfExists(id);
+                CompleteCalendarEventIfExists(id, questionnaireIdentity);
             }
             
             return resultToInter;
@@ -595,7 +596,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return Ok();
         }
 
-        private QuestionnaireIdentity GetQuestionnaireIdForInterview(Guid id)
+        private QuestionnaireIdentity? GetQuestionnaireIdForInterview(Guid id)
         {
             var interviewRefs = this.interviewReferences.GetQuestionnaireIdentity(id);
             return interviewRefs;

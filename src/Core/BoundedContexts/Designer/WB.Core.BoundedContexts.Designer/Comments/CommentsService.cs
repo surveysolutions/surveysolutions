@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Microsoft.EntityFrameworkCore;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.ValueObjects;

@@ -22,6 +22,7 @@
         OpenedBySupervisor = 17,
         ClosedBySupervisor = 18,
         InterviewSwitchedToCawiMode = 19,
-        InterviewSwitchedToCapiMode = 20
+        InterviewSwitchedToCapiMode = 20,
+        InterviewReceivedBySupervisor = 21
     }
 }

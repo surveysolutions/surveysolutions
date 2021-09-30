@@ -9,7 +9,7 @@
                     :ajax-params="{ }"
                     :fetch-url="model.questionnaires"
                     :value="selectedQuestionnaireId"
-                    :selectedValue="this.query.questionnaire"
+                    :selectedKey="this.query.questionnaireId"
                     v-on:selected="selectQuestionnaire"/>
             </FilterBlock>
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -370,6 +370,7 @@ export default {
         queryString() {
             return {
                 questionnaire: this.query.questionnaire,
+                questionnaireId: this.query.questionnaireId,
                 version: this.query.version,
                 responsible: this.query.responsible,
                 assignmentId: this.query.assignmentId,
@@ -499,13 +500,13 @@ export default {
         selectQuestionnaire(value) {
             this.selectedQuestionnaireId = value
 
-            if (value == null || this.$route.query.questionnaire !== value.value)
+            if (value == null || this.$route.query.questionnaireId !== value.key)
                 this.selectQuestionnaireVersion(null)
             else
                 this.selectQuestionnaireVersion(this.$route.query.version ? {key: this.$route.query.version} : null)
 
             this.onChange(q => {
-                q.questionnaire = value == null ? null : value.value
+                q.questionnaireId = value == null ? null : value.key
             })
         },
 

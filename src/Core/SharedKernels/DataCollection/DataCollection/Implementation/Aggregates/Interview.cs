@@ -616,7 +616,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public string Language { get; private set; }
 
-        public QuestionnaireIdentity QuestionnaireIdentity { get; protected set; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; protected internal set; }
 
         public bool WasCompleted => this.properties.WasCompleted;
         public bool WasRejected => this.properties.WasRejected;
@@ -846,9 +846,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, int[] selectedValues)
         {
-            new InterviewPropertiesInvariants(this.properties)
-                .RequireAnswerCanBeChanged();
-
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
             var questionIdentity = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -1212,7 +1210,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey, command.OriginDate));
             }
 
-            var defaultTranslation = questionnaire.GetDefaultTransation();
+            var defaultTranslation = questionnaire.GetDefaultTranslation();
             if (defaultTranslation != null)
             {
                 this.SwitchTranslation(new SwitchTranslation(this.EventSourceId, defaultTranslation, command.UserId));
@@ -1237,10 +1235,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (protectedAnswers?.Count > 0)
             {
-                foreach (var treeQuestion in changedInterviewTree.AllNodes.OfType<InterviewTreeQuestion>())
+                foreach (var treeNode in changedInterviewTree.AllNodes.Where(x=> x.NodeType == NodeType.Question))
                 {
-                    if (protectedAnswers.Any(x =>
-                        treeQuestion.VariableName.Equals(x, StringComparison.OrdinalIgnoreCase)))
+                    var treeQuestion = (InterviewTreeQuestion)treeNode;
+                    if (protectedAnswers.Any(x => treeQuestion.VariableName.Equals(x, StringComparison.OrdinalIgnoreCase)))
                     {
                         treeQuestion.ProtectAnswer();
                     }
@@ -1377,44 +1375,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var interviewerId = command.InterviewerId;
             var supervisorId = command.SupervisorId;
 
-            if (!interviewerId.HasValue && !supervisorId.HasValue)
+            if (!supervisorId.HasValue)
             {
                 throw new InterviewException(
-                    $"Can't assign interview {this.properties.Id} to empty interviewer or supervisor.",
+                    $"Cannot assign interview {this.properties.Id}. Supervisor was not set.",
                     InterviewDomainExceptionType.OtherUserIsResponsible);
             }
 
-            var moveWithInTheSameTeam = interviewerId.HasValue && !supervisorId.HasValue;
-            if (moveWithInTheSameTeam)
-            {
-                AssignInterviewer(command.UserId, interviewerId.Value, command.OriginDate);
-                return;
-            }
-
-            var moveToANewTeamNoInterviewerSpecified = !interviewerId.HasValue;
-            if (moveToANewTeamNoInterviewerSpecified)
+            //reset supervisor to current if it changed for interviewer or direct assign to supervisor 
+            if (this.properties.SupervisorId != supervisorId || !interviewerId.HasValue)
             {
                 AssignSupervisor(command.UserId, supervisorId.Value, command.OriginDate);
-                return;
             }
 
-            if (this.properties.SupervisorId != supervisorId && this.properties.InterviewerId == interviewerId)
-                throw new InterviewException(
-                    $"To change a team, provide new id of supervisor and empty (null) or nor interviewer id (and make sure it belongs to the same team). Currently, you specified a new supervisor {supervisorId} and the same interviewer {interviewerId}.",
-                    InterviewDomainExceptionType.OtherUserIsResponsible);
-
-            //within the same team
-            if (this.properties.SupervisorId == supervisorId)
-            {
+            if(interviewerId.HasValue)
+            { 
                 AssignInterviewer(command.UserId, interviewerId.Value, command.OriginDate);
-                return;
             }
-
-            // move to other team
-            AssignSupervisor(command.UserId, supervisorId.Value, command.OriginDate);
-            AssignInterviewer(command.UserId, interviewerId.Value, command.OriginDate);
-
-            //AssignResponsible(command.UserId, interviewerId, supervisorId, command.AssignTime);
         }
 
         public void MoveInterviewToTeam(MoveInterviewToTeam command)
@@ -2267,7 +2244,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<IInterviewTreeNode> result = sectionId != null && questionnaire.IsCoverPage(sectionId.Id)
                 ? targetList
                 : targetList.Except(x =>
-                (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id))
+                (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewerQuestion(x.Identity.Id))
                 || questionnaire.IsVariable(x.Identity.Id)
             );
 

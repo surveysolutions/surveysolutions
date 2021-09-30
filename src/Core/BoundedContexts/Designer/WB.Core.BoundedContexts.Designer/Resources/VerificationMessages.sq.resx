@@ -718,7 +718,7 @@
     <value>Titulli i pyetësorit nuk duhet të ketë dy ose më shumë karaktere të njëpasnjëshme të nënvizuara.</value>
   </data>
   <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-    <value>Modaliteti i thjeshtë lejohet vetëm për rosterat me jo më shumë se {0} elemente.</value>
+      <value>Modaliteti i thjeshtë lejohet vetëm për rosterat me jo më shumë se {0} pyetje ose tekste statike.</value>
   </data>
   <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
     <value>Modaliteti i thjeshtë nuk lejon përdorimin e rosterave fole.</value>

@@ -120,7 +120,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 using (Image image = Image.Load(source, out var format))
                 {
-                    image.Mutate(ctx => ctx.Resize(sizeToScale.Value, sizeToScale.Value)); 
+                    var opt = new ResizeOptions()
+                    {
+                       Mode = ResizeMode.Max,
+                       Size = new Size(sizeToScale.Value)
+                    };
+                    image.Mutate(ctx => ctx.Resize(opt)); 
                     image.Save(outputStream, format); 
                 } 
 

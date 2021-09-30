@@ -172,10 +172,10 @@
     <value>Entrevistador tem dispositivo já</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Pacote de entrevista &lt;b&gt;{0}&lt;/b&gt; processado com sucesso&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Pacote de entrevista &lt;b&gt;{0}&lt;/b&gt; processado com sucesso&lt;/font&gt;</value>
   </data>
   <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Entrevista &lt;b&gt;{0}&lt;/b&gt; processado com sucesso&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Entrevista &lt;b&gt;{0}&lt;/b&gt; processado com sucesso&lt;/font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
     <value>Entrevistador de ligação ao dispositivo</value>
@@ -184,10 +184,10 @@
     <value>Não há novos pacotes de entrevista para baixar</value>
   </data>
   <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Montagem do questionário &lt;b&gt;{0}&lt;/b&gt; [{1}] processado com sucesso&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Montagem do questionário &lt;b&gt;{0}&lt;/b&gt; [{1}] processado com sucesso&lt;/font&gt;</value>
   </data>
   <data name="QuestionnaireProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Questionário &lt;b&gt;{0}&lt;/b&gt; [{1}] processado com sucesso&lt;/font&gt;</value>
+      <value>&lt;font color="green"&gt;Questionário &lt;b&gt;{0}&lt;/b&gt; [{1}] processado com sucesso&lt;/font&gt;</value>
   </data>
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt;Entrevista de atualização: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, pacote: {1}, índice de classificação: {2}&lt;/li&gt;</value>

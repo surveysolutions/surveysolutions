@@ -22,5 +22,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         public DynamicTextViewModel GroupTitle { get; set; }
 
         public string RosterInstanceTitle { get; set; }
+
+        public override void Dispose()
+        {
+            this.GroupTitle.Dispose();            
+        }
     }
 }

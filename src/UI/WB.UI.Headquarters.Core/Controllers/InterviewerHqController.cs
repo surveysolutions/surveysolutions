@@ -101,6 +101,10 @@ namespace WB.UI.Headquarters.Controllers
         private string CreateInterview(Assignment assignment)
         {
             var interviewer = this.usersRepository.GetUser(new UserViewInputModel(assignment.ResponsibleId));
+            
+            if (interviewer == null)
+                throw new InvalidOperationException($"User was not found");
+            
             if (!interviewer.IsInterviewer())
                 throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
 
@@ -132,7 +136,8 @@ namespace WB.UI.Headquarters.Controllers
                     interviewId,
                     interviewKey.ToString(),
                     assignment.Id,
-                    calendarEvent.Comment);
+                    calendarEvent.Comment,
+                    assignment.QuestionnaireId);
                 commandService.Execute(createCalendarEvent);
             }
             

@@ -141,6 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 auditLogService.WriteApplicationLevelRecord(new LoginAuditLogEntity(userName));
             }
 
+            this.Password = string.Empty;
             await this.ViewModelNavigationService.NavigateToDashboardAsync();
             await this.ViewModelNavigationService.Close(this);
         }

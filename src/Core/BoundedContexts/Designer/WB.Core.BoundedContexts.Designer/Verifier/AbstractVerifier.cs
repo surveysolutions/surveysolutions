@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         protected const int MaxRosterPropagationLimit = 10000;
         protected const int QuestionnaireTotalEntitiesLimit = Constants.MaxTotalRosterPropagationLimit;
         protected const int MaxQuestionsCountInSection = 400;
-        protected const int MaxEntitiesInPlainModeGroup = 10;
+        protected const int MaxUIEntitiesInPlainModeGroup = 20;
         protected const int MaxEntitiesInTableRoster = 10;
         protected const int MaxEntitiesInMatrixRoster = 1;
 

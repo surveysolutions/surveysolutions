@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Net;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Schema.Generation;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
@@ -55,6 +61,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         public ActionResult HttpStatusCode(int? statusCode, string message = "Use query argument 'statusCode' and 'message' to display custom response") =>
             this.StatusCode(statusCode ?? 404, message);
 
+        public ActionResult DocumentSchema() => this.View();
 
         public ActionResult CompilationVersions() 
             => this.View("CompilationVersionsViews/CompilationVersions", this.questionnaireCompilationVersionService.GetCompilationVersions());
@@ -160,6 +167,51 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
                     change => change.UpdateTimeUtc,
                     change => change.ProductVersion)));
 
+        private static JSchema? questionnaireDocumentSchema = null;
+        
+        public IActionResult GetSchema([FromQuery]bool? getFile = null)
+        {
+            JSchemaGenerator generator = new JSchemaGenerator()
+            {
+                SchemaReferenceHandling = SchemaReferenceHandling.All,
+                GenerationProviders = { new MyJSchemaGenerationProvider() }
+            };
+            
+            questionnaireDocumentSchema ??= generator.Generate(typeof(QuestionnaireDocument));
+
+            if (getFile == true)
+                return new FileStreamResult(new MemoryStream(
+                    Encoding.UTF8.GetBytes(questionnaireDocumentSchema.ToString())), "application/schema+json")
+                {
+                    FileDownloadName = "questionnaire.schema.json"
+                };
+            else
+                return this.Json(questionnaireDocumentSchema.ToString());
+        }
+
+        internal class MyJSchemaGenerationProvider : JSchemaGenerationProvider
+        {
+            public override JSchema GetSchema(JSchemaTypeGenerationContext context)
+            {
+                var schema = new JSchema();
+                var descendants = typeof(IComposite).Assembly.GetTypes().Where(item => !item.IsAbstract && typeof(IComposite).IsAssignableFrom(item)).ToList();
+                foreach (var descendant in descendants)
+                {
+                    // The line below never exits, because it's calling MySchemaGenerator.GetSchema again with the same parameter
+                    var descendantSchema = context.Generator.Generate(descendant);
+                    schema.PatternProperties.Add(descendant.Name + ".*", descendantSchema);
+                }
+                schema.AllowAdditionalProperties = false;
+                schema.Type = JSchemaType.Object;
+                return schema;
+            }
+
+            public override bool CanGenerateSchema(JSchemaTypeGenerationContext context)
+            {
+                return context.ObjectType == typeof(IComposite);
+            }
+        }
+        
         public class VersionsInfo
         {
             public VersionsInfo(string product, Dictionary<DateTime, string> history)

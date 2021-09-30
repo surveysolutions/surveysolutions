@@ -23,7 +23,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
             var mapIntent = new Intent(Intent.ActionView, geoUri);
 
-            this.currentTopActivity.Activity.StartActivity(mapIntent);
+            if(this.currentTopActivity.Activity.PackageManager != null && mapIntent.ResolveActivity(this.currentTopActivity.Activity.PackageManager) != null)
+                this.currentTopActivity.Activity.StartActivity(mapIntent);
         }
 
         public void OpenPdf(string pathToPdfFile)
@@ -38,7 +39,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 .SetFlags(ActivityFlags.ClearWhenTaskReset | ActivityFlags.NewTask)
                 .SetFlags(ActivityFlags.GrantReadUriPermission);
 
-            this.currentTopActivity.Activity.StartActivity(pdfIntent);
+            if(this.currentTopActivity.Activity.PackageManager != null && pdfIntent.ResolveActivity(this.currentTopActivity.Activity.PackageManager) != null)
+                this.currentTopActivity.Activity.StartActivity(pdfIntent);
         }
     }
 }

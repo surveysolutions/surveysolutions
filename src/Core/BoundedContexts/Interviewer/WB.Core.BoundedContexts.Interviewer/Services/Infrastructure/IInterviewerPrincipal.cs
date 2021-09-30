@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 {
     public interface IInterviewerPrincipal : IPrincipal
     {
-        new IInterviewerUserIdentity CurrentUserIdentity { get; }
+        //new IInterviewerUserIdentity CurrentUserIdentity { get; }
         
         bool DoesIdentityExist();
 

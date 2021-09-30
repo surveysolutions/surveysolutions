@@ -662,17 +662,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         private InterviewQuestionInvariants RequireQuestionInstanceExists()
         {
-            var questions = this.InterviewTree.FindQuestions(this.QuestionIdentity.Id);
-            var rosterVectors = questions.Select(question => question.Identity.RosterVector).ToList();
-
-            if (!rosterVectors.Contains(this.QuestionIdentity.RosterVector))
+            if (this.InterviewTree.GetQuestion(this.QuestionIdentity) == null)
                 throw new InterviewException("Roster information for question is incorrect. No questions found for roster vector", InterviewDomainExceptionType.QuestionIsMissing)
                 {
                     Data =
                     {
                         {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
                         {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
-                        {ExceptionKeys.AvailableRosterVectors, string.Join(", ", rosterVectors)}
                     }
                 };
 

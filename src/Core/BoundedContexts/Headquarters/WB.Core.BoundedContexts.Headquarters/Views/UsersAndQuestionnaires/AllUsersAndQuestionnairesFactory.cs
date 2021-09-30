@@ -118,7 +118,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
                     .Where(x => x.QuestionnaireId.QuestionnaireId == questionnaireId &&
                                 x.QuestionnaireId.Version < version
                                 && !x.Archived
-                          //&& (x.InterviewSummaries.Count - x.Quantity > 0 || x.Quantity == null) // do not work for some reason
+                          //&& (x.InterviewSummaries.Count - x.Quantity > 0 || x.Quantity == null) // does not work for some reason
                           )
                     .Select(x => new { x.QuestionnaireId.QuestionnaireId, x.QuestionnaireId.Version })
                     .Distinct()

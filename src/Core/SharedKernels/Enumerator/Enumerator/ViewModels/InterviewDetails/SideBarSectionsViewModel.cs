@@ -285,6 +285,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     else
                         viewModel.Dispose();
                 });
+                var itemsToDispose = this.items;
+                foreach (var sideBarSectionItem in itemsToDispose)
+                {
+                    sideBarSectionItem.DisposeIfDisposable();
+                }
             }
         }
 

@@ -8,6 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;

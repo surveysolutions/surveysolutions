@@ -54,6 +54,7 @@ namespace WB.UI.Headquarters.Controllers
 
         
         [ActivePage(MenuItem.Questionnaires)]
+        [AntiForgeryFilter]
         public ActionResult SendInvitations(string id)
         {
             var status = this.invitationService.GetEmailDistributionStatus();

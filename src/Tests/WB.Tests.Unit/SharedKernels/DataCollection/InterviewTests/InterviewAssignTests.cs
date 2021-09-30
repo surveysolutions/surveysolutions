@@ -99,6 +99,28 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.AssertThatDoesNotContainEvent<InterviewStatusChanged>();
         }
 
+        [Test]
+        public void Interview_in_status_RejectedBySupervisor_And_interview_being_reassigned_to_another_team_interviewer()
+        {
+            // arrange
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
+            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewApproved(supervisorId));
+            interview.Apply(Create.Event.InterviewRejectedByHQ(headquarterId));
+            interview.Apply(Create.Event.InterviewRejected(supervisorId));
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.RejectedBySupervisor));
+            SetupEventContext();
+
+            // act
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId2, interviewerId: interviewerId2));
+
+            // assert
+            eventContext.AssertThatContainsEvent<InterviewerAssigned>();
+            eventContext.AssertThatContainsEvent<SupervisorAssigned>();
+            eventContext.AssertThatDoesNotContainEvent<InterviewStatusChanged>();
+        }
 
         [Test]
         public void Interview_in_status_Completed_And_interview_being_moved_to_other_team_As_result_supervisor_should_be_changed_and_interviewer_set_to_null()

@@ -302,6 +302,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.ApiUser)]
         public async Task<ActionResult> AssignWorkspaces([FromBody] AssignWorkspacesToUserModel model, CancellationToken cancellationToken)
         {
+            if(model == null)
+                return BadRequest();
+
             await this.mediator.Send(new AssignWorkspacesToUserModelRequest(ModelState, model), cancellationToken);
 
             if (ModelState.IsValid)

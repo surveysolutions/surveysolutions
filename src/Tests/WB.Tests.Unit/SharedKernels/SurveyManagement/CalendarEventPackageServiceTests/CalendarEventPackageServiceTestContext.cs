@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -7,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -18,8 +22,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
     [NUnit.Framework.TestOf(typeof(CalendarEventPackageService))]
     public class CalendarEventPackageServiceTestContext
     {
-        protected Mock<ICommandService> ProcessPackage(CalendarEventPackage calendarEventPackage,
-            CalendarEvent localCalendarEvent)
+        protected Mock<ICommandService> SetupServiceAndProcessPackage(CalendarEventPackage calendarEventPackage,
+            CalendarEvent localCalendarEvent,
+            IAssignmentsService assignmentsService = null
+            )
         {
             var commandService = new Mock<ICommandService>();
             var calendarEventService = new Mock<ICalendarEventService>();
@@ -46,8 +52,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 calendarEventService.Object,
                 commandService.Object,
                 Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                Mock.Of<IAssignmentsService>(),
-                serializer);
+                assignmentsService ?? Mock.Of<IAssignmentsService>(x => x.GetAssignment(It.IsAny<int>()) == new Assignment()),
+                serializer,
+                Mock.Of<IUserViewFactory>(x=>x.GetUser(It.IsAny<Guid>()) == new UserViewLite(){
+                    PublicKey = Id.g10,
+                    Supervisor = new UserLight(Id.g10, "sup"),
+                    Roles = new HashSet<UserRoles>()
+                    {
+                        UserRoles.Interviewer, UserRoles.Supervisor
+                    }})
+                );
             
             service.ProcessPackage(calendarEventPackage);
 

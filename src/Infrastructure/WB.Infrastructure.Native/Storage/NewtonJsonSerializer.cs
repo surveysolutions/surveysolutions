@@ -5,19 +5,15 @@ namespace WB.Infrastructure.Native.Storage
 {
     public class NewtonJsonSerializer : ISerializer
     {
-        private readonly JsonSerializerSettings jsonSerializerSettings;
-
-        public NewtonJsonSerializer()
+        private static readonly JsonSerializerSettings jsonSerializerSettings = 
+            new JsonSerializerSettings
         {
-            this.jsonSerializerSettings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Auto,
-                NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal,
-                Formatting = Formatting.Indented,
-                SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
-            };
-        }
+            TypeNameHandling = TypeNameHandling.Auto,
+            NullValueHandling = NullValueHandling.Ignore,
+            FloatParseHandling = FloatParseHandling.Decimal,
+            Formatting = Formatting.Indented,
+            SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
+        };
 
         public string Serialize(object item)
         {

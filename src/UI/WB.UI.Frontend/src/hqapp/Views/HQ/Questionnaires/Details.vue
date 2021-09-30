@@ -42,7 +42,7 @@
                         </tr>
                         <tr>
                             <td>{{$t('Dashboard.WebMode')}}</td>
-                            <td>{{model.webMode ? $t('Common.Yes') : $t('Common.No')}}</td>
+                            <td>{{model.webMode ? $t('Common.Cawi') : $t('Common.Capi')}}</td>
                         </tr>
                         <tr>
                             <td>{{$t('Dashboard.RecordAudio')}}</td>
