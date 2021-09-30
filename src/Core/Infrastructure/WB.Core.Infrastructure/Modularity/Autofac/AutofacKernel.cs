@@ -23,7 +23,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
         }
 
-        public AutofacKernel(ContainerBuilder containerBuilder, Action<ILifetimeScope> onBuildAction = null)
+        public AutofacKernel(ContainerBuilder containerBuilder, Action<IContainer> onBuildAction = null)
         {
             this.containerBuilder = containerBuilder;
 
