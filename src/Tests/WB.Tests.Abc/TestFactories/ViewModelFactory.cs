@@ -274,8 +274,7 @@ namespace WB.Tests.Abc.TestFactories
             var warningsViewModel = new WarningsViewModel(
                 liteEventRegistry: liteEventRegistry,
                 interviewRepository: interviewRepository,
-                errorMessagesViewModel: ErrorMessagesViewModel(questionnaireRepository, interviewRepository),
-                mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher());
+                errorMessagesViewModel: ErrorMessagesViewModel(questionnaireRepository, interviewRepository));
 
             var commentsViewModel = new CommentsViewModel(interviewRepository: interviewRepository,
                                     commandService: Stub<ICommandService>.WithNotEmptyValues,

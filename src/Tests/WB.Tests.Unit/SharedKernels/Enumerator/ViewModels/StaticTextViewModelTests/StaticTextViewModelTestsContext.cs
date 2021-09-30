@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
                                new StaticTextStateViewModel(
                                    new EnablementViewModel(statefulInterviewRepository, liteEventRegistry, plainQuestionnaireRepository),
                                    new ValidityViewModel(liteEventRegistry, statefulInterviewRepository, Create.ViewModel.ErrorMessagesViewModel()),
-                                   new WarningsViewModel(liteEventRegistry, statefulInterviewRepository, Create.Fake.MvxMainThreadDispatcher(), Create.ViewModel.ErrorMessagesViewModel())),
+                                   new WarningsViewModel(liteEventRegistry, statefulInterviewRepository, Create.ViewModel.ErrorMessagesViewModel())),
                 attachmentViewModel: attachmentViewModel ??
                             Create.ViewModel.AttachmentViewModel(plainQuestionnaireRepository, statefulInterviewRepository),
                 dynamicTextViewModel: Create.ViewModel.DynamicTextViewModel(
