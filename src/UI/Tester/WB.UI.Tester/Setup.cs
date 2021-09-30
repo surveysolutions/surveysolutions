@@ -107,7 +107,7 @@ namespace WB.UI.Tester
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
 
-            return new AutofacMvxIocProvider(container);
+            return new MvxIoCProviderWithParent(CreateIocOptions(),container);
         }
 
         protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, IMvxIoCProvider iocProvider)

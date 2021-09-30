@@ -97,7 +97,7 @@ namespace WB.UI.Supervisor
 
         protected override IMvxIoCProvider CreateIocProvider()
         {
-            return new AutofacMvxIocProvider(this.CreateAndInitializeIoc());
+            return new MvxIoCProviderWithParent(CreateIocOptions(),this.CreateAndInitializeIoc());
         }
 
         protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
