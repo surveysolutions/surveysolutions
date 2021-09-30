@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Autofac;
 using Autofac.Core;
+using Autofac.Core.Registration;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Shared.Enumerator.Services.Logging;
 

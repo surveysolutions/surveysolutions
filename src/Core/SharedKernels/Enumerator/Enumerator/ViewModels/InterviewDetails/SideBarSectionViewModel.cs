@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
@@ -48,14 +49,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireStorage,
-            IMvxMessenger messenger,
+            
             IViewModelEventRegistry eventRegistry,
             DynamicTextViewModel dynamicTextViewModel,
             AnswerNotifier answerNotifier)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.questionnaireStorage = questionnaireStorage;
-            this.messenger = messenger;
+            this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             this.eventRegistry = eventRegistry;
             this.answerNotifier = answerNotifier;
 

@@ -19,7 +19,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
                 questionnaireRepository ?? Substitute.For<IQuestionnaireStorage>(),
                 interviewRepository ?? Substitute.For<IStatefulInterviewRepository>(),
                 Create.Service.LiteEventRegistry(),
-                Stub.MvxMainThreadAsyncDispatcher(),
                 Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
                 Substitute.For<QuestionInstructionViewModel>(),
                 Substitute.For<AnsweringViewModel>(),

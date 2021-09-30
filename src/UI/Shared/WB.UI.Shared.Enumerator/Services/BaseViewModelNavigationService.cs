@@ -6,6 +6,7 @@ using Android.OS;
 using AndroidX.Core.App;
 using AndroidX.Core.Content;
 using Java.Lang;
+using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using MvvmCross.ViewModels;
@@ -23,24 +24,25 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly ICommandService commandService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IUserInterfaceStateService userInterfaceStateService;
-        private readonly IMvxAndroidCurrentTopActivity topActivity;
-        private readonly IMvxNavigationService navigationService;
+        
+
         private readonly IPrincipal principal;
         private readonly ILogger logger;
+
+        protected IMvxAndroidCurrentTopActivity TopActivity { get; }
+        protected IMvxNavigationService NavigationService { get; }
 
         protected BaseViewModelNavigationService(ICommandService commandService,
             IUserInteractionService userInteractionService,
             IUserInterfaceStateService userInterfaceStateService,
-            IMvxAndroidCurrentTopActivity topActivity,
-            IMvxNavigationService navigationService,
             IPrincipal principal, 
             ILogger logger)
         {
             this.commandService = commandService;
             this.userInteractionService = userInteractionService;
             this.userInterfaceStateService = userInterfaceStateService;
-            this.topActivity = topActivity;
-            this.navigationService = navigationService;
+            TopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
+            NavigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
             this.principal = principal;
             this.logger = logger;
         }
@@ -54,7 +56,7 @@ namespace WB.UI.Shared.Enumerator.Services
         public Task Close(IMvxViewModel viewModel)
         {
             this.logger.Trace($"Closing viewmodel {viewModel.GetType()}");
-            return this.navigationService.Close(viewModel);
+            return this.NavigationService.Close(viewModel);
         }
         
         public void InstallNewApp(string pathToApk)
@@ -70,13 +72,15 @@ namespace WB.UI.Shared.Enumerator.Services
                         .AddFlags(ActivityFlags.NewTask)
                         .AddFlags(ActivityFlags.GrantReadUriPermission);
             }
-            else 
+            else
             {
-                var uriForFile = FileProvider.GetUriForFile(this.topActivity.Activity.BaseContext,
-                    this.topActivity.Activity.ApplicationContext.PackageName + ".fileprovider",
+                var topActivity = TopActivity;
+                
+                var uriForFile = FileProvider.GetUriForFile(topActivity.Activity.BaseContext,
+                    topActivity.Activity.ApplicationContext.PackageName + ".fileprovider",
                     new Java.IO.File(pathToApk));
 
-                promptInstall = ShareCompat.IntentBuilder.From(this.topActivity.Activity)
+                promptInstall = ShareCompat.IntentBuilder.From(topActivity.Activity)
                     .SetStream(uriForFile)
                     .Intent
                     .SetAction(Intent.ActionView)
@@ -114,7 +118,7 @@ namespace WB.UI.Shared.Enumerator.Services
             }
 
             this.logger.Trace($"Navigate to new {typeof(TViewModel)} with {typeof(TParam)}");
-            return this.navigationService.Navigate<TViewModel, TParam>(param);
+            return this.NavigationService.Navigate<TViewModel, TParam>(param);
         }
 
         public Task NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel
@@ -125,7 +129,7 @@ namespace WB.UI.Shared.Enumerator.Services
                 return Task.CompletedTask;
             }
 
-            return this.navigationService.Navigate<TViewModel>();
+            return this.NavigationService.Navigate<TViewModel>();
         }
 
         public abstract Task<bool> NavigateToDashboardAsync(string interviewId = null);
@@ -156,7 +160,7 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             this.logger.Trace("RestartApp");
 
-            var currentActivity = topActivity.Activity;
+            var currentActivity = TopActivity.Activity;
             var intent = new Intent(currentActivity, splashScreenType);
             intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);
             currentActivity.StartActivity(intent);
@@ -165,7 +169,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public virtual void NavigateToSystemDateSettings()
         {
-            var currentActivity = topActivity.Activity;
+            var currentActivity = TopActivity.Activity;
             var intent = new Intent(Android.Provider.Settings.ActionDateSettings);
             currentActivity.StartActivity(intent);
         }

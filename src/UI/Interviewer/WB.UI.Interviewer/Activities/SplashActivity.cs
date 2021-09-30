@@ -1,6 +1,7 @@
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using MvvmCross.Platforms.Android.Views;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
@@ -9,7 +10,7 @@ namespace WB.UI.Interviewer.Activities
         MainLauncher = true, 
         ScreenOrientation = ScreenOrientation.Portrait, 
         Theme = "@style/AppTheme")]
-    public class SplashActivity : EnumeratorSplashScreenAppCompatActivity<Setup, InterviewerMvxApplication>
+    public class SplashActivity : MvxSplashScreenActivity//EnumeratorSplashScreenAppCompatActivity<Setup, InterviewerMvxApplication>
     {
         public SplashActivity() : base(Resource.Layout.splash)
         {

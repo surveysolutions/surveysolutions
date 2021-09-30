@@ -23,6 +23,7 @@ using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.IoC;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
+using NLog;
 using NLog.Extensions.Logging;
 using Serilog;
 using Serilog.Extensions.Logging;
@@ -98,15 +99,14 @@ namespace WB.UI.Shared.Enumerator
 
         protected override ILoggerProvider CreateLogProvider()
         {
-            return null;// new NLogLoggerProvider();
-
+            return new NLogLoggerProvider();
             //return new SerilogLoggerProvider();
         }
 
         protected override ILoggerFactory CreateLogFactory()
         {
             //configure it
-            return null; // new NLogLoggerFactory();
+            return new NLogLoggerFactory();
 
             // // serilog configuration
             //Log.Logger = new LoggerConfiguration()

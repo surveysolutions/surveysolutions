@@ -36,8 +36,7 @@ namespace WB.UI.Shared.Enumerator.Services
             IDeviceSettings deviceSettings,
             IArchivePatcherService archivePatcherService,
             ILogger logger,
-            IViewModelNavigationService navigationService,
-            IMvxAndroidCurrentTopActivity topActivity)
+            IViewModelNavigationService navigationService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.permissions = permissions;
@@ -46,7 +45,7 @@ namespace WB.UI.Shared.Enumerator.Services
             this.archivePatcherService = archivePatcherService;
             this.logger = logger;
             this.navigationService = navigationService;
-            this.topActivity = topActivity;
+            this.topActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
         }
 
         private Activity CurrentActivity => topActivity.Activity;

@@ -14,6 +14,7 @@ using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
@@ -44,15 +45,14 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             IMapService mapService,
             IUserInteractionService userInteractionService,
             ILogger logger,
-            IFileSystemAccessor fileSystemAccessor,
-            IMvxNavigationService navigationService)
+            IFileSystemAccessor fileSystemAccessor)
             : base(principal, viewModelNavigationService)
         {
             this.userInteractionService = userInteractionService;
             this.mapService = mapService;
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.navigationService = navigationService;
+            this.navigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
         }
 
         public override async Task Initialize()

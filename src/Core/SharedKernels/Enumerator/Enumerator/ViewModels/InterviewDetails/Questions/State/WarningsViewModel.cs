@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -25,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
+        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
         protected WarningsViewModel() { }
 
@@ -36,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.liteEventRegistry = liteEventRegistry;
             this.interviewRepository = interviewRepository;
-            this.mainThreadDispatcher = mainThreadDispatcher;
+            this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
             this.Warning = errorMessagesViewModel;
         }
 
@@ -72,7 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             bool isInvalidEntity = !interview.IsEntityPlausible(this.Identity);
 
-            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 if (isInvalidEntity)
                 {

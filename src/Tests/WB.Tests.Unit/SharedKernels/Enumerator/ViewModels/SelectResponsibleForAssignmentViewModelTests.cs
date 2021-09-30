@@ -283,7 +283,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             Assert.That(assignment.ResponsibleName, Is.EqualTo(newResponsibleName));
             Assert.That(assignment.ReceivedByInterviewerAt, Is.EqualTo(null));
 
-            mockOfMvxMessenger.Verify(x => x.Publish(It.Is<DashboardChangedMsg>(y => y.Sender == viewModel)), Times.Once);
+            mockOfMvxMessenger.Verify(x => x.Publish(It.Is<DashboardChangedMsg>(y => y.Sender == viewModel), false), Times.Once);
         }
 
         [Test]
@@ -358,13 +358,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             IPlainStorage<AssignmentDocument, int> assignmentsStorage = null)
         {
             return new SelectResponsibleForAssignmentViewModel(
-                mvxNavigationService: mvxNavigationService ?? Mock.Of<IMvxNavigationService>(),
                 usersRepository: usersRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>(),
                 principal: principal ?? Create.Service.Principal(Guid.NewGuid()),
                 auditLogService: auditLogService ?? Mock.Of<IAuditLogService>(),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 navigationService: navigationService ?? Mock.Of<IViewModelNavigationService>(),
-                mvxMessenger: mvxMessenger ?? Mock.Of<IMvxMessenger>(),
                 statefulInterviewRepository: statefullInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewStorage: interviewStorage ?? Create.Storage.SqliteInmemoryStorage<InterviewView>(),
                 assignmentsStorage: assignmentsStorage ?? Create.Storage.SqliteInmemoryStorage<AssignmentDocument, int>());

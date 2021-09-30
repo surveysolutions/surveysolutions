@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.Telephony;
+using MvvmCross;
 using MvvmCross.Plugin.Network.Reachability;
 using WB.Core.GenericSubdomains.Portable.Services;
 
@@ -13,9 +14,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private readonly IMvxReachability mvxReachability;
         private readonly string unknown = "UNKNOWN";
 
-       public AndroidNetworkService(IMvxReachability mvxReachability)
+       public AndroidNetworkService()
         {
-           this.mvxReachability = mvxReachability;
+           this.mvxReachability = Mvx.IoCProvider.Resolve<IMvxReachability>();
         }
 
         public bool IsNetworkEnabled()

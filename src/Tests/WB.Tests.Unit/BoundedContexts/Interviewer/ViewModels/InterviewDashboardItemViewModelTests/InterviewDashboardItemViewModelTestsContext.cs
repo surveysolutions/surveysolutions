@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
                     .With(questionnaireViewRepository ?? Substitute.For<IPlainStorage<QuestionnaireView>>())
                     .With(prefilledQuestions ?? Substitute.For<IPlainStorage<PrefilledQuestionView>>())
                     .With(Substitute.For<IInterviewerInterviewAccessor>())
-                    .With(Substitute.For<IMvxLog>())
+                    //.With(Substitute.For<IMvxLog>())
                 .Object;
 
 

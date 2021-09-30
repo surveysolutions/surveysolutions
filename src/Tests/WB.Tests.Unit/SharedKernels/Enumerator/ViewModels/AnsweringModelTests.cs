@@ -26,7 +26,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var answering = new AnsweringViewModel(
                 commandServiceMock.Object, 
                 Mock.Of<IUserInterfaceStateService>(),
-                Mock.Of<IMvxMessenger>(),
                 Mock.Of<ILogger>());
 
             try

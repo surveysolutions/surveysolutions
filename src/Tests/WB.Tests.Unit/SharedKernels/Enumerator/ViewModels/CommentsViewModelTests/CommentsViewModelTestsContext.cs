@@ -19,8 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CommentsViewModelTes
             var viewModel = new CommentsViewModel(interviewRepository, 
                 principal ?? Create.Other.SupervisorPrincipal(),
                 commandService ?? Create.Service.CommandService(),
-                eventRegistry ?? Create.Service.LiteEventRegistry(),
-                mvxMainThreadDispatcher: Stub.MvxMainThreadAsyncDispatcher());
+                eventRegistry ?? Create.Service.LiteEventRegistry());
             return viewModel;
         }
     }

@@ -17,15 +17,13 @@ namespace WB.UI.Interviewer.Implementations.Services
             IDeviceSettings deviceSettings,
             IArchivePatcherService archivePatcherService,
             ILogger logger,
-            IViewModelNavigationService navigationService,
-            IMvxAndroidCurrentTopActivity topActivity) : base(fileSystemAccessor,
+            IViewModelNavigationService navigationService) : base(fileSystemAccessor,
             permissions,
             synchronizationService,
             deviceSettings,
             archivePatcherService,
             logger,
-            navigationService,
-            topActivity)
+            navigationService)
         {
         }
 

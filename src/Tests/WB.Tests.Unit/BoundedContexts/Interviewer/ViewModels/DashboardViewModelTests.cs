@@ -73,7 +73,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     viewModelNavigationService: viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                     principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
                     synchronization: synchronization ?? Create.ViewModel.LocalSynchronizationViewModel(),
-                    messenger: messenger ?? Mock.Of<IMvxMessenger>(),
                     interviewerSettings: Mock.Of<IInterviewerSettings>(),
                     createNewViewModel: DashboardQuestionnairesViewModel(),
                     startedInterviewsViewModel: DashboardStartedInterviewsViewModel(),
