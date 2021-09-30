@@ -32,7 +32,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public WarningsViewModel(IViewModelEventRegistry liteEventRegistry,
             IStatefulInterviewRepository interviewRepository,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             ErrorMessagesViewModel errorMessagesViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;

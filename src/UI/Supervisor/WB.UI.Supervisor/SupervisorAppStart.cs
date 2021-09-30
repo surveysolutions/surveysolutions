@@ -23,14 +23,14 @@ namespace WB.UI.Supervisor
         private readonly ILifetimeScope lifetimeScope;
         private readonly IDeviceSettings deviceSettings;
 
-        public SupervisorAppStart(IMvxApplication application, IMvxNavigationService navigationService,
+        public SupervisorAppStart(IMvxApplication application,
             IViewModelNavigationService viewModelNavigation,
             IPlainStorage<SupervisorIdentity> users,
             IMigrationRunner migrationRunner,
             IWorkspaceService workspaceService,
             ILifetimeScope lifetimeScope,
             IDeviceSettings deviceSettings
-        ) : base(application, navigationService)
+        ) : base(application, Mvx.IoCProvider.Resolve<IMvxNavigationService>())
         {
             this.viewModelNavigation = viewModelNavigation;
             this.users = users;

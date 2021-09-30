@@ -1435,9 +1435,6 @@
     <PackageReference Include="MvvmCross.Plugin.Messenger">
       <Version>8.0.2</Version>
     </PackageReference>
-    <PackageReference Include="MvvmCross.Plugin.Network">
-      <Version>7.0.1</Version>
-    </PackageReference>
     <PackageReference Include="NETStandard.Library">
       <Version>2.0.3</Version>
     </PackageReference>
