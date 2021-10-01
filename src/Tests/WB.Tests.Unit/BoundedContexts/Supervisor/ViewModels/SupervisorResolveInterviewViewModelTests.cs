@@ -34,8 +34,13 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
     [TestOf(typeof(SupervisorResolveInterviewViewModel))]
     public class SupervisorResolveInterviewViewModelTests : MvxIoCSupportingTest
     {
-        public SupervisorResolveInterviewViewModelTests() => base.Setup();
-
+        public SupervisorResolveInterviewViewModelTests()
+        {
+            base.Setup();
+            Ioc.RegisterSingleton(Stub.MvxMainThreadAsyncDispatcher());
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
+        }
+        
         private readonly Guid InterviewId = Id.g1;
 
         [Test]

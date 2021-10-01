@@ -5,6 +5,8 @@ using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Moq;
+using MvvmCross.Plugin.Messenger;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -19,7 +21,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         public void context () {
 
             base.Setup();
-
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
             appDomainContext = AppDomainContext.Create();
 
             BecauseOf();

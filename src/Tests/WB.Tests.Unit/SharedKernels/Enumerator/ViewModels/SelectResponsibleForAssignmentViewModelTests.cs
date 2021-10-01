@@ -2,8 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
+using MvvmCross.Base;
 using MvvmCross.Navigation;
 using MvvmCross.Plugin.Messenger;
+using MvvmCross.Tests;
+using MvvmCross.Views;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
@@ -14,14 +17,27 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 {
     [TestOf(typeof(SelectResponsibleForAssignmentViewModel))]
-    internal class SelectResponsibleForAssignmentViewModelTests
+    internal class SelectResponsibleForAssignmentViewModelTests: MvxIoCSupportingTest
     {
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            base.Setup();
+            
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
+            Ioc.RegisterType<ThrottlingViewModel>(() => Create.ViewModel.ThrottlingViewModel());
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
+        }
+    
         [Test]
         public void when_prepare_and_reassign_for_interview_should_list_of_interviewers_does_not_exist_responsible_of_interview()
         {

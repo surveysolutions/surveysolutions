@@ -28,6 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
         public DashboardViewModelTests()
         {
             base.Setup();
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
         }
 
         [Test]
@@ -38,7 +39,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             mockOfViewModelNavigationService.SetupGet(x => x.HasPendingOperations).Returns(true);
 
             var mockOfSynchronizationViewModel = new Mock<LocalSynchronizationViewModel>(
-                Mock.Of<IMvxMessenger>(),
                 new SynchronizationCompleteSource(),
                 Mock.Of<ITabletDiagnosticService>(),
                 Mock.Of<ILogger>());

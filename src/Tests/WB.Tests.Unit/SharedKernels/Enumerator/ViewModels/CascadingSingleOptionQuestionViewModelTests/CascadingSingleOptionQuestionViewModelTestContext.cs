@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
             Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
             Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
-
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
             Ioc.RegisterType<ThrottlingViewModel>(() => Create.ViewModel.ThrottlingViewModel());
         }
 
@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var userInterfaceStateService = Mock.Of<IUserInterfaceStateService>(
                 x => x.WaitWhileUserInterfaceIsRefreshingAsync() == Task.FromResult(true));
             
-            AnsweringViewModelMock = new Mock<AnsweringViewModel>(Mock.Of<ICommandService>(), userInterfaceStateService, Mock.Of<IMvxMessenger>(), Mock.Of<ILogger>());
+            AnsweringViewModelMock = new Mock<AnsweringViewModel>(Mock.Of<ICommandService>(), userInterfaceStateService, Mock.Of<ILogger>());
             
             EventRegistry = new Mock<IViewModelEventRegistry>();
         }

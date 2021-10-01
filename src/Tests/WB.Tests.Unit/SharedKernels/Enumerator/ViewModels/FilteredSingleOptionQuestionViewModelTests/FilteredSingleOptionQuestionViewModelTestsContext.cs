@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Moq;
 using MvvmCross.Base;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -30,6 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
             Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
             Ioc.RegisterType<ThrottlingViewModel>(() => Create.ViewModel.ThrottlingViewModel());
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
         }
 
         protected static FilteredSingleOptionQuestionViewModel CreateFilteredSingleOptionQuestionViewModel(
