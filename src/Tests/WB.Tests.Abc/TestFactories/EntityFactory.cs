@@ -235,7 +235,6 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 QuestionText = text,
-                QuestionType = QuestionType.DateTime,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 Featured = preFilled,
@@ -315,7 +314,6 @@ namespace WB.Tests.Abc.TestFactories
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = variable,
-                QuestionType = QuestionType.GpsCoordinates,
                 QuestionScope = scope,
                 Featured = isPrefilled,
                 QuestionText = title,
@@ -588,7 +586,6 @@ namespace WB.Tests.Abc.TestFactories
             => new MultimediaQuestion("Question T")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
-                QuestionType = QuestionType.Multimedia,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
@@ -618,7 +615,6 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationExpression = validationExpression,
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
-                QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 LinkedFilterExpression = linkedFilterExpression,
@@ -643,7 +639,6 @@ namespace WB.Tests.Abc.TestFactories
             Guid? categoryId = null)
             => new MultyOptionsQuestion
             {
-                QuestionType = QuestionType.MultyOption,
                 PublicKey = id ?? Guid.NewGuid(),
                 Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(options ?? new Answer[] { }),
                 LinkedToQuestionId = linkedToQuestionId,
@@ -674,7 +669,6 @@ namespace WB.Tests.Abc.TestFactories
             => new NumericQuestion
             {
                 QuestionText = questionText ?? "text",
-                QuestionType = QuestionType.Numeric,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 IsInteger = true,
@@ -699,7 +693,6 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationExpression = validationExpression,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces,
-                QuestionType = QuestionType.Numeric,
                 StataExportCaption = variableName,
                 Featured = prefilled,
                 QuestionText = title,
@@ -716,7 +709,6 @@ namespace WB.Tests.Abc.TestFactories
             IEnumerable<Answer> specialValues = null)
             => new NumericQuestion
             {
-                QuestionType = QuestionType.Numeric,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 IsInteger = false,
@@ -797,7 +789,6 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 QuestionText = text,
-                QuestionType = QuestionType.QRBarcode,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 Featured = preFilled
@@ -817,7 +808,6 @@ namespace WB.Tests.Abc.TestFactories
             => new AreaQuestion
             {
                 QuestionText = questionText ?? "text",
-                QuestionType = QuestionType.Area,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
@@ -841,7 +831,6 @@ namespace WB.Tests.Abc.TestFactories
             => new TextQuestion(title ?? "Question X")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
-                QuestionType = questionType,
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
@@ -1129,7 +1118,6 @@ namespace WB.Tests.Abc.TestFactories
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
-                QuestionType = QuestionType.SingleOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
@@ -1161,7 +1149,6 @@ namespace WB.Tests.Abc.TestFactories
             Guid? categoryId = null)
             => new SingleQuestion
             {
-                QuestionType = QuestionType.SingleOption,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
@@ -1212,7 +1199,6 @@ namespace WB.Tests.Abc.TestFactories
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 MaxAnswerCount = maxAnswerCount,
-                QuestionType = QuestionType.TextList,
                 StataExportCaption = variable,
                 QuestionText = questionText
             };
@@ -1237,7 +1223,6 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationMessage = validationMessage,
                 Mask = mask,
                 QuestionText = text,
-                QuestionType = QuestionType.Text,
                 StataExportCaption = variable ?? "vv" + Guid.NewGuid().ToString("N"),
                 QuestionScope = scope,
                 Featured = preFilled,
@@ -1973,7 +1958,6 @@ namespace WB.Tests.Abc.TestFactories
                 PublicKey = qId?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 QuestionScope = QuestionScope.Interviewer,
-                QuestionType = QuestionType.Audio
             };
         }
 

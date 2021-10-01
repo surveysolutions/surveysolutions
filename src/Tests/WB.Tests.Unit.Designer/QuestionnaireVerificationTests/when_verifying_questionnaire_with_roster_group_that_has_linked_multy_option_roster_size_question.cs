@@ -25,7 +25,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     PublicKey = rosterSizeQuestionId,
                     StataExportCaption = "var1",
                     LinkedToQuestionId = referencedQuestionId,
-                    QuestionType = QuestionType.MultyOption,
                     Answers =
                     {
                         new Answer() {AnswerValue = "1", AnswerText = "opt 1"},
@@ -44,7 +43,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         new NumericQuestion("test")
                         {
                             PublicKey = referencedQuestionId,
-                            QuestionType = QuestionType.Numeric,
                             StataExportCaption = "var2"
                         }
                     }.ToReadOnlyCollection()

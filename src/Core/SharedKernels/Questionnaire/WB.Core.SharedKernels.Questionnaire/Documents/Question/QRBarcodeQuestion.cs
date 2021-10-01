@@ -8,16 +8,7 @@ namespace Main.Core.Entities.SubEntities.Question
 
         public QRBarcodeQuestion(string? questionText = null, List<IComposite>? children = null):base(questionText, children){ }
 
-        public override QuestionType QuestionType
-        {
-            get
-            {
-                return QuestionType.QRBarcode;
-            }
-            set
-            {
-            }
-        }
+        public override QuestionType QuestionType => QuestionType.QRBarcode;
 
         public override void AddAnswer(Answer answer)
         {

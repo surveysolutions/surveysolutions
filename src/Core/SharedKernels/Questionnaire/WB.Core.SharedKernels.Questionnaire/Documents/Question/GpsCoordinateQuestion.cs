@@ -7,5 +7,6 @@ namespace Main.Core.Entities.SubEntities.Question
 {
     public class GpsCoordinateQuestion : ExternalServiceQuestion
     {
+        public override QuestionType QuestionType => QuestionType.GpsCoordinates;
     }
 }

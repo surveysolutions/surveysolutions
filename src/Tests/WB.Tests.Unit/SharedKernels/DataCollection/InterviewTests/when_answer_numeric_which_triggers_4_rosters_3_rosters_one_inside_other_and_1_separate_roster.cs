@@ -26,7 +26,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 new NumericQuestion("roster size question")
                 {
                     PublicKey = rosterSizeQuestionId,
-                    QuestionType = QuestionType.Numeric,
                     IsInteger = true
                 },
                 new Group("top level roster")

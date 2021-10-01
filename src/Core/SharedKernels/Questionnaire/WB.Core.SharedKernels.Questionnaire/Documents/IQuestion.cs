@@ -14,7 +14,7 @@ namespace Main.Core.Entities.SubEntities
         string? Instructions { get; set; }
         QuestionProperties? Properties { get; set; }
         string? QuestionText { get; set; }
-        QuestionType QuestionType { get; set; }
+        QuestionType QuestionType { get; }
         QuestionScope QuestionScope { get; set; }
         string StataExportCaption { get; set; }
         string? VariableLabel { get; set; }

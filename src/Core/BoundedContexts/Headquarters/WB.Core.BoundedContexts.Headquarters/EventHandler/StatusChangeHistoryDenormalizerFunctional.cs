@@ -235,7 +235,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             var expectedStatus = InterviewExportedAction.InterviewerAssigned;
 
-            var lastStatusInfo = state?.InterviewCommentedStatuses?.LastOrDefault();
+            var lastStatusInfo = state.InterviewCommentedStatuses?.LastOrDefault();
             if(lastStatusInfo?.Status == InterviewExportedAction.Completed)
                 expectedStatus = InterviewExportedAction.Completed;
 

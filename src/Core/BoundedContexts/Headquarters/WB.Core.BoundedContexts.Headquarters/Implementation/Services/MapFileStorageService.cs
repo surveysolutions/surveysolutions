@@ -191,7 +191,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             {
                                 var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
 
-                                if (jsonObject?.maps?.Count > 0)
+                                if (jsonObject != null && jsonObject?.maps?.Count > 0)
                                 {
                                     var mapName = jsonObject.maps[0];
                                     unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{mapName}.mmap");
@@ -207,7 +207,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                     item.YMaxVal = extent[1][1];
 
                                     var layers = jsonObject.map.baseMap.baseMapLayers;
-                                    if (layers?.Count > 0)
+                                    if (layers != null && layers?.Count > 0)
                                     {
                                         var layer = layers[0];
 

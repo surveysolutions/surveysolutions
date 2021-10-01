@@ -202,7 +202,6 @@ namespace WB.Tests.Unit.Designer
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 QuestionText = text,
-                QuestionType = QuestionType.DateTime,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 Featured = preFilled,
@@ -267,7 +266,6 @@ namespace WB.Tests.Unit.Designer
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = variable,
-                QuestionType = QuestionType.GpsCoordinates,
                 Featured = isPrefilled,
                 QuestionText = title,
                 ValidationExpression = validationExpression,
@@ -358,7 +356,6 @@ namespace WB.Tests.Unit.Designer
             return new MultimediaQuestion("Question T")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
-                QuestionType = QuestionType.Multimedia,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
@@ -387,7 +384,6 @@ namespace WB.Tests.Unit.Designer
                 ValidationExpression = validationExpression,
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
-                QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 YesNoView = isYesNo,
                 Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList(),
@@ -410,7 +406,6 @@ namespace WB.Tests.Unit.Designer
         {
             return new MultyOptionsQuestion
             {
-                QuestionType = QuestionType.MultyOption,
                 PublicKey = id ?? Guid.NewGuid(),
                 Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(options ?? new Answer[] { }),
                 LinkedToQuestionId = linkedToQuestionId,
@@ -441,7 +436,6 @@ namespace WB.Tests.Unit.Designer
             var stataExportCaption = variable ?? "numeric_question"+publicKey;
             return new NumericQuestion
             {
-                QuestionType = QuestionType.Numeric,
                 PublicKey = publicKey,
                 StataExportCaption = stataExportCaption,
                 IsInteger = true,
@@ -463,7 +457,6 @@ namespace WB.Tests.Unit.Designer
         {
             return new NumericQuestion
             {
-                QuestionType = QuestionType.Numeric,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 IsInteger = false,
@@ -526,7 +519,6 @@ namespace WB.Tests.Unit.Designer
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 QuestionText = text,
-                QuestionType = QuestionType.QRBarcode,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 Featured = preFilled
@@ -555,7 +547,6 @@ namespace WB.Tests.Unit.Designer
             return new TextQuestion(title)
             {
                 PublicKey = publicKey,
-                QuestionType = questionType,
                 StataExportCaption = stataExportCaption,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
@@ -887,7 +878,6 @@ namespace WB.Tests.Unit.Designer
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
-                QuestionType = QuestionType.SingleOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
@@ -910,7 +900,6 @@ namespace WB.Tests.Unit.Designer
         {
             return new SingleQuestion
             {
-                QuestionType = QuestionType.SingleOption,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
@@ -961,7 +950,6 @@ namespace WB.Tests.Unit.Designer
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 MaxAnswerCount = maxAnswerCount,
-                QuestionType = QuestionType.TextList,
                 StataExportCaption = variable,
                 QuestionText = title,
                 QuestionScope = scope,
@@ -993,7 +981,6 @@ namespace WB.Tests.Unit.Designer
                 ValidationMessage = validationMessage,
                 Mask = mask,
                 QuestionText = text,
-                QuestionType = QuestionType.Text,
                 StataExportCaption = stataExportCaption,
                 QuestionScope = scope,
                 Featured = preFilled,

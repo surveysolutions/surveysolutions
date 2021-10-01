@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
             rosterScopes.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_specify_fixed_roster_id_as_id_of_roster_scope () =>
-            rosterScopes.Single().Key.SequenceEqual(new[] { fixedRosterGroupId });
+            rosterScopes.Single().Key.SequenceEqual(new[] { fixedRosterGroupId }).Should().BeTrue();
 
         [NUnit.Framework.Test] public void should_be_null_roster_title_question_for_fixed_roster_in_roster_scope () =>
             rosterScopes.Single().Value

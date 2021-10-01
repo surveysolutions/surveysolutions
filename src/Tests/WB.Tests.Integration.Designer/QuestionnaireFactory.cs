@@ -64,7 +64,6 @@ namespace WB.Tests.Integration.Core
                 ValidationMessage = validationMessage,
                 Mask = mask,
                 QuestionText = text,
-                QuestionType = QuestionType.Text,
                 StataExportCaption = variable ?? "vv" + Guid.NewGuid().ToString("N"),
                 QuestionScope = scope,
                 Featured = preFilled,

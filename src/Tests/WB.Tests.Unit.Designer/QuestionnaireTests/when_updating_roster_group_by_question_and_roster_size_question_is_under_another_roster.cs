@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat, false);
 
         [NUnit.Framework.Test] public void should_raise_GroupBecameARoster_event () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_raise_GroupBecameARoster_event_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)

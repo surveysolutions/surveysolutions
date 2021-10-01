@@ -1,4 +1,5 @@
 using System;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -16,12 +17,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                         variableName: "old_variable_name",
                         instructions: "old instructions",
                         enablementCondition: "old condition");
-            questionnaire.UpdateMultiOptionQuestion(
-                Create.Command.UpdateMultiOptionQuestion(
+            
+            Assert.DoesNotThrow(() =>
+                questionnaire.UpdateMultiOptionQuestion(Create.Command.UpdateMultiOptionQuestion(
                     questionId,
                     responsibleId,
                     title,
-                    variableName));
+                    variableName)));
         }
 
         private static Questionnaire questionnaire;

@@ -24,7 +24,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                             {
                                 PublicKey = linkedQuestionId,
                                 StataExportCaption = "var2",
-                                QuestionType = QuestionType.Text
                             }
                         }),
 
@@ -43,6 +42,10 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verifier = CreateQuestionnaireVerifier();
             BecauseOf();
+            foreach (char ch in "dfdf")
+            {
+                
+            }
         }
 
         private void BecauseOf() => 

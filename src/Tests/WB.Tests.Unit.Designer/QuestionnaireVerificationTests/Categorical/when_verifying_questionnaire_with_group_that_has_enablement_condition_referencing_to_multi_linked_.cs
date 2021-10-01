@@ -26,7 +26,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Categorical
                         new TextQuestion("test")
                         {
                             PublicKey = linkedSourceQuestionId,
-                            QuestionType = QuestionType.Text,
                             StataExportCaption = "var"
                         }
                     }),

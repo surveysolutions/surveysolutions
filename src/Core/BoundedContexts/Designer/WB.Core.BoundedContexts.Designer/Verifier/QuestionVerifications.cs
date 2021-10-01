@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             List<int> diffsByPrevNextOptionValues = new List<int>();
 
-            existingOptions.Aggregate((prev, next) =>
+            var result = existingOptions.Aggregate((prev, next) =>
             {
                 diffsByPrevNextOptionValues.Add(next - prev);
                 return next;

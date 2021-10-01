@@ -2322,7 +2322,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         IsInteger = questionType == QuestionType.AutoPropagate ? true : isInteger ?? false,
                         CountOfDecimalPlaces = countOfDecimalPlaces,
-                        QuestionType = QuestionType.Numeric,
                         UseFormatting = questionProperties?.UseFormatting ?? false
                     };
                     UpdateAnswerList(answers, question, linkedToQuestionId);
@@ -2358,7 +2357,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             question.PublicKey = publicKey;
-            question.QuestionType = questionType;
             question.QuestionScope = questionScope;
             question.QuestionText = System.Web.HttpUtility.HtmlDecode(questionText);
             question.StataExportCaption = stataExportCaption ?? String.Empty;

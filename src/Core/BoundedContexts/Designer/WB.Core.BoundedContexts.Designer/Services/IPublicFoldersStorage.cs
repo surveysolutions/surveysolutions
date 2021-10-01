@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         IEnumerable<QuestionnaireListViewFolder> GetRootFolders();
 
-        QuestionnaireListViewFolder CreateFolder(Guid id, string? title, Guid? parentId, Guid userId);
+        QuestionnaireListViewFolder CreateFolder(Guid folderId, string? title, Guid? parentId, Guid userId);
 
         void RenameFolder(Guid id, string newName);
 

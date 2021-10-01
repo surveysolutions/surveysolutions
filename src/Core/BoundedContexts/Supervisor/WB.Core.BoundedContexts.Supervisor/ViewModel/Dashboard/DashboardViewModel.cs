@@ -220,8 +220,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             messengerSubscribtion.Dispose();
             this.mvxNavigationService.AfterNavigate -= OnAfterNavigate;
             this.Synchronization.OnProgressChanged -= SynchronizationOnProgressChanged;

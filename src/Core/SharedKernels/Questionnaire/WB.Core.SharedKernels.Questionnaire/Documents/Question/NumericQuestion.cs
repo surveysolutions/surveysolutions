@@ -9,6 +9,8 @@ namespace Main.Core.Entities.SubEntities.Question
     {
         public NumericQuestion(string? questionText = null, List<IComposite>? children = null):base(questionText, children){ }
 
+        public override QuestionType QuestionType => QuestionType.Numeric;
+
         public override void AddAnswer(Answer answer)
         {
             if (answer == null)
@@ -26,7 +28,7 @@ namespace Main.Core.Entities.SubEntities.Question
 
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
-            return new T[0];
+            return Array.Empty<T>();
         }
 
         public override T? FirstOrDefault<T>(Func<T, bool> condition) where T: class

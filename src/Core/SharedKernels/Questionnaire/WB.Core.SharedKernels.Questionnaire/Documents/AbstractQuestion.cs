@@ -26,18 +26,12 @@ namespace Main.Core.Entities.SubEntities
 
         public List<Answer> Answers { get; set; } = new List<Answer>();
 
-        private ReadOnlyCollection<IComposite> children = new ReadOnlyCollection<IComposite>(new List<IComposite>(0));
+        private readonly ReadOnlyCollection<IComposite> children = new ReadOnlyCollection<IComposite>(new List<IComposite>(0));
 
         public ReadOnlyCollection<IComposite> Children
         {
-            get
-            {
-                return children;
-            }
-            set
-            {
-                // do nothing
-            }
+            get => children;
+            set { }
         }
 
         public string? Comments { get; set; }
@@ -71,7 +65,7 @@ namespace Main.Core.Entities.SubEntities
 
         public string? QuestionText { get; set; }
 
-        public virtual QuestionType QuestionType { get; set; }
+        public abstract QuestionType QuestionType { get; }
 
         public string StataExportCaption { get; set; }
 
@@ -98,10 +92,7 @@ namespace Main.Core.Entities.SubEntities
 
         public IList<ValidationCondition> ValidationConditions
         {
-            get
-            {
-                return this.validationConditions.ConcatWithOldConditionIfNotEmpty(ValidationExpression, ValidationMessage);
-            }
+            get => this.validationConditions.ConcatWithOldConditionIfNotEmpty(ValidationExpression, ValidationMessage);
             set
             {
                 if (value != null)

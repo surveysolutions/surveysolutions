@@ -281,7 +281,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        private class CsvReaderException : Exception
+        public class CsvReaderException : Exception
         {
             public readonly int? RowIndex;
             public readonly int? ColumnIndex;

@@ -9,6 +9,8 @@ namespace Main.Core.Entities.SubEntities.Question
     {
         public MultyOptionsQuestion(string? questionText = null, List<IComposite>? children = null):base(questionText, children){ }
 
+        public override QuestionType QuestionType => QuestionType.MultyOption;
+
         public override void AddAnswer(Answer answer)
         {
             if (answer == null)

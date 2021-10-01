@@ -21,7 +21,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 new SingleQuestion("test")
                 {
                     PublicKey = questionId,
-                    QuestionType = QuestionType.YesNo,
                     StataExportCaption = "var1",
                     Answers =
                         new List<Answer>

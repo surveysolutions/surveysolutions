@@ -27,15 +27,15 @@ namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
         public static bool operator <(QuestionnaireVersion? left, QuestionnaireVersion? right)
         {
             if (left == null)
-                throw new ArgumentNullException("left");
+                return false;
 
             return left.CompareTo(right) < 0;
         }
 
-        public static bool operator <=(QuestionnaireVersion left, QuestionnaireVersion right)
+        public static bool operator <=(QuestionnaireVersion? left, QuestionnaireVersion? right)
         {
-            if ((object) left == null)
-                throw new ArgumentNullException("left");
+            if (left == null)
+                return false;
 
             return left.CompareTo(right) <= 0;
         }
@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 
         public override string ToString()
         {
-            return string.Format("{0}.{1}.{2}", this.Major, this.Minor, this.Patch);
+            return $"{this.Major}.{this.Minor}.{this.Patch}";
         }
 
         public override int GetHashCode()

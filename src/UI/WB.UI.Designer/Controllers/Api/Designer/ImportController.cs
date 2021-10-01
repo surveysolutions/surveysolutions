@@ -102,7 +102,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                                  item = new TextQuestion(title)
                                  {
                                      PublicKey = Guid.NewGuid(),
-                                     QuestionType = QuestionType.Text,
                                      QuestionScope = QuestionScope.Interviewer,
                                      StataExportCaption = variable,
                                      VariableLabel = variableLabel,
@@ -112,7 +111,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                              case 1:
                                  item = new NumericQuestion(title){
                                      PublicKey = Guid.NewGuid(),
-                                     QuestionType = QuestionType.Numeric,
                                      QuestionScope = QuestionScope.Interviewer,
                                      StataExportCaption = variable,
                                      VariableLabel = variableLabel,
@@ -139,7 +137,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                                      item = new SingleQuestion(title)
                                      {
                                          PublicKey = Guid.NewGuid(),
-                                         QuestionType = QuestionType.SingleOption,
                                          QuestionScope = QuestionScope.Interviewer, 
                                          StataExportCaption = variable,
                                          VariableLabel = variableLabel,
@@ -152,7 +149,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                                      item = new TextQuestion(title)
                                      {
                                          PublicKey = Guid.NewGuid(),
-                                         QuestionType = QuestionType.Text,
                                          QuestionScope = QuestionScope.Interviewer,
                                          StataExportCaption = variable,
                                          VariableLabel = variableLabel,

@@ -94,7 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await InvokeAllHandlers<int>(this.OnItemSelected, selectedOption.Value).ConfigureAwait(false);
                 if (displaySelectedValue)
                 {
-                    await this.UpdateFilter(displaySelectedValue ? selectedOption.Title : null).ConfigureAwait(false);
+                    await this.UpdateFilter(selectedOption.Title).ConfigureAwait(false);
                 }
                 else
                 {

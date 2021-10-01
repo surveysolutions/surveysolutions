@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () 
-            => await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
+            => await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.NavigationState.CurrentNavigationIdentity));
 
 
         public override async Task NavigateBack()
@@ -38,11 +38,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
-            switch (this.navigationState.CurrentScreenType)
+            switch (this.NavigationState.CurrentScreenType)
             {
                 case ScreenType.Complete:
                     var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<SupervisorResolveInterviewViewModel>();
-                    completeInterviewViewModel.Configure(this.InterviewId, this.navigationState);
+                    completeInterviewViewModel.Configure(this.InterviewId, this.NavigationState);
                     return completeInterviewViewModel;
                 default:
                     return base.UpdateCurrentScreenViewModel(eventArgs);

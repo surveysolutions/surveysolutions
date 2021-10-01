@@ -13,6 +13,8 @@ namespace Main.Core.Entities.SubEntities.Question
     {
         public SingleQuestion(string? questionText = null, List<IComposite>? children = null):base(questionText, children){ }
 
+        public override QuestionType QuestionType => QuestionType.SingleOption;
+
         public override void AddAnswer(Answer answer)
         {
             if (answer == null)

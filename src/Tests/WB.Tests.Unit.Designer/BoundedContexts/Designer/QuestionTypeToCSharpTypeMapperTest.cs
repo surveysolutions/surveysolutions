@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 {
-    public class QuestionTypeToCSharpTypeMapperTest
+    /*public class QuestionTypeToCSharpTypeMapperTest
     {
         [Test]
         public void should_not_change_method_names_without_a_reason()
@@ -20,5 +20,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             //Assert.That(nameof(IInterviewStateForExpressions.GetIntAnswer), Is.EqualTo("GetIntAnswer"), message);
             //Assert.That(nameof(IInterviewStateForExpressions.GetStringAnswer), Is.EqualTo("GetStringAnswer"), message);
         }
-    }
+    }*/
 }

@@ -21,7 +21,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
             {
                 PublicKey = parentSingleOptionQuestionId,
                 StataExportCaption = "var",
-                QuestionType = QuestionType.SingleOption,
                 CascadeFromQuestionId = grandChildCascadingQuestion,
                 Answers = new List<Answer>
                     {
@@ -32,7 +31,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
                 new SingleQuestion
                 {
                     PublicKey = childCascadedComboboxId,
-                    QuestionType = QuestionType.SingleOption,
                     StataExportCaption = "var1",
                     CascadeFromQuestionId = parentSingleOptionQuestionId,
                     Answers = new List<Answer>
@@ -44,7 +42,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
                 new SingleQuestion
                 {
                     PublicKey = grandChildCascadingQuestion,
-                    QuestionType = QuestionType.SingleOption,
                     StataExportCaption = "var3",
                     CascadeFromQuestionId = childCascadedComboboxId,
                     Answers = new List<Answer>

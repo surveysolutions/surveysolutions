@@ -30,7 +30,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                new NumericQuestion("roster size question")
                {
                    PublicKey = numericQuestionId,
-                   QuestionType = QuestionType.Numeric,
                    IsInteger = true
                },
                new Group("top level roster")
@@ -43,8 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                    {
                         new TextListQuestion("nested roster size question")
                         {
-                            PublicKey = nestedTextListQuestionId,
-                            QuestionType = QuestionType.TextList
+                            PublicKey = nestedTextListQuestionId
                         },
                         new Group("nested roster")
                         {

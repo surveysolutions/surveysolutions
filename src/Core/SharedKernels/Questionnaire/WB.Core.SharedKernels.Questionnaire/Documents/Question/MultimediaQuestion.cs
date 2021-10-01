@@ -20,7 +20,7 @@ namespace Main.Core.Entities.SubEntities.Question
 
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
-            return new T[0];
+            return Array.Empty<T>();
         }
 
         public override T? FirstOrDefault<T>(Func<T, bool> condition) where T:class
@@ -28,11 +28,7 @@ namespace Main.Core.Entities.SubEntities.Question
             return null;
         }
 
-        public override QuestionType QuestionType
-        {
-            get => QuestionType.Multimedia;
-            set { }
-        }
+        public override QuestionType QuestionType => QuestionType.Multimedia;
 
         public bool IsSignature { get; set; }
     }

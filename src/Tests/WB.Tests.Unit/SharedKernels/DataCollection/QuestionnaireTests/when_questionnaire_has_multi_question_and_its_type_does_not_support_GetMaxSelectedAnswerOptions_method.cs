@@ -20,8 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 new MultyOptionsQuestion()
                 {
                     PublicKey = validatedQuestionId,
-                    MaxAllowedAnswers = proposedSelectedAnswerOptions,
-                    QuestionType = QuestionType.SingleOption
+                    MaxAllowedAnswers = proposedSelectedAnswerOptions
                 }
             });
             

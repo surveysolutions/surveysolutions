@@ -9,6 +9,8 @@ namespace Main.Core.Entities.SubEntities.Question
     {
         public TextListQuestion(string? questionText = null, List<IComposite>? children = null):base(questionText, children){ }
 
+        public override QuestionType QuestionType => QuestionType.TextList;
+
         public override void AddAnswer(Answer answer)
         {
             throw new NotImplementedException();

@@ -38,7 +38,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                             new TextQuestion("TextQuestion")
                             {
                                 StataExportCaption = "var2",
-                                QuestionType = QuestionType.Text,
                                 PublicKey = linkedQuestionId
                             }
                         }.ToReadOnlyCollection()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
@@ -26,6 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                 enablementCondition: "old condition",
                 responsibleId: responsibleId);
 
+            Assert.DoesNotThrow(()=>
             questionnaire.UpdateGpsCoordinatesQuestion(
                 new UpdateGpsCoordinatesQuestion(
                     questionnaire.Id,
@@ -42,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                     isPreFilled: false,
                     scope: scope,
                     responsibleId: responsibleId,
-                    validationConditions: new List<ValidationCondition>()));
+                    validationConditions: new List<ValidationCondition>())));
         }
 
         private static Questionnaire questionnaire;

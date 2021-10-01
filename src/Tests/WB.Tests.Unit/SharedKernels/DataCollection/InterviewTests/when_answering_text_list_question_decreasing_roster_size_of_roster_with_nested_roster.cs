@@ -29,8 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                new TextListQuestion("roster size question")
                {
-                   PublicKey = textListQuestionId,
-                   QuestionType = QuestionType.TextList
+                   PublicKey = textListQuestionId
                },
                new Group("top level roster")
                {
@@ -42,8 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                    {
                         new TextListQuestion("nested roster size question")
                         {
-                            PublicKey = nestedTextListQuestionId,
-                            QuestionType = QuestionType.TextList
+                            PublicKey = nestedTextListQuestionId
                         },
                         new Group("nested roster")
                         {
