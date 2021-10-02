@@ -36,6 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
             Ioc.RegisterType<ThrottlingViewModel>(() => Create.ViewModel.ThrottlingViewModel());
             Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
+            Ioc.RegisterSingleton<IMvxNavigationService>(Mock.Of<IMvxNavigationService>());
+            
         }
     
         [Test]
@@ -48,11 +50,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var usersRepository = Create.Storage.SqliteInmemoryStorage(
                 Create.Entity.InterviewerDocument(Guid.NewGuid()),
                 Create.Entity.InterviewerDocument(responsibleOfInterviewId));
-            var statefullInterviewRepository = SetUp.StatefulInterviewRepository(
+            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(
                 Create.AggregateRoot.StatefulInterview(interviewId, userId: responsibleOfInterviewId));
 
             var viewModel = CreateSelectResponsibleForAssignmentViewModel(usersRepository: usersRepository,
-                statefullInterviewRepository: statefullInterviewRepository);
+                statefulInterviewRepository: statefulInterviewRepository);
             // act
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(interviewId));
             // assert
@@ -72,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 Create.AggregateRoot.StatefulInterview(interviewId));
 
             var viewModel = CreateSelectResponsibleForAssignmentViewModel(usersRepository: usersRepository,
-                statefullInterviewRepository: statefulInterviewRepository);
+                statefulInterviewRepository: statefulInterviewRepository);
             // act
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(interviewId));
             // assert
@@ -251,7 +253,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var viewModel = CreateSelectResponsibleForAssignmentViewModel(
                 usersRepository: usersRepository,
-                statefullInterviewRepository: statefullInterviewRepository,
+                statefulInterviewRepository: statefullInterviewRepository,
                 commandService: mockOfCommandService.Object,
                 navigationService: mockOfNavigationViewModelService.Object);
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(interviewId));
@@ -283,10 +285,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 Create.Entity.AssignmentDocument(assignmentId, responsibleId: responsibleOfAssignmentId, quantity: 1).Build());
             var mockOfMvxMessenger = new Mock<IMvxMessenger>();
 
+            Ioc.RegisterSingleton<IMvxMessenger>(mockOfMvxMessenger.Object);
+            
             var viewModel = CreateSelectResponsibleForAssignmentViewModel(
                 usersRepository: usersRepository,
-                assignmentsStorage: assignmentsRepository,
-                mvxMessenger: mockOfMvxMessenger.Object);
+                assignmentsStorage: assignmentsRepository);
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(assignmentId));
             viewModel.UiItems[0].IsSelected = true;
             viewModel.UiItems[0].SelectCommand.Execute();
@@ -368,8 +371,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             IAuditLogService auditLogService = null,
             ICommandService commandService = null,
             IViewModelNavigationService navigationService = null,
-            IMvxMessenger mvxMessenger = null,
-            IStatefulInterviewRepository statefullInterviewRepository = null,
+            IStatefulInterviewRepository statefulInterviewRepository = null,
             IPlainStorage<InterviewView> interviewStorage = null,
             IPlainStorage<AssignmentDocument, int> assignmentsStorage = null)
         {
@@ -379,7 +381,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 auditLogService: auditLogService ?? Mock.Of<IAuditLogService>(),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 navigationService: navigationService ?? Mock.Of<IViewModelNavigationService>(),
-                statefulInterviewRepository: statefullInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                statefulInterviewRepository: statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewStorage: interviewStorage ?? Create.Storage.SqliteInmemoryStorage<InterviewView>(),
                 assignmentsStorage: assignmentsStorage ?? Create.Storage.SqliteInmemoryStorage<AssignmentDocument, int>());
         }
