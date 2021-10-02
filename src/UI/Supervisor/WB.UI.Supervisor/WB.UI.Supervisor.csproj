@@ -473,7 +473,7 @@
       <Version>6.0.1</Version>
     </PackageReference>
     <PackageReference Include="sqlite-net-pcl">
-      <Version>1.7.335</Version>
+      <Version>1.8.116</Version>
     </PackageReference>
     <PackageReference Include="System.Collections.Immutable">
       <Version>5.0.0</Version>
