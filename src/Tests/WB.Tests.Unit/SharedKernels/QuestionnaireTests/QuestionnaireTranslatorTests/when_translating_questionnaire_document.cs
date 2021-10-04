@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.QuestionnaireTests.QuestionnaireTranslator
                         Create.Entity.Answer(value: checkOption1, answer: "check 1"),
                         Create.Entity.Answer(value: checkOption2, answer: "check 2"),
                     }),
-                    Create.Entity.Question(questionId: questionWithValidations, validationConditions: new[]
+                    Create.Entity.TextQuestion(questionId: questionWithValidations, validationConditions: new[]
                     {
                         Create.Entity.ValidationCondition(message: "question validation 1"),
                         Create.Entity.ValidationCondition(message: "question validation 2"),

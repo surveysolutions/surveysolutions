@@ -818,27 +818,6 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>()
             };
 
-        public IQuestion Question(
-            Guid? questionId = null,
-            string variable = "question",
-            string enablementCondition = null,
-            string validationExpression = null,
-            string validationMessage = null,
-            string title = null,
-            QuestionType questionType = QuestionType.Text,
-            IList<ValidationCondition> validationConditions = null,
-            params Answer[] answers)
-            => new TextQuestion(title ?? "Question X")
-            {
-                PublicKey = questionId ?? Guid.NewGuid(),
-                StataExportCaption = variable,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
-                Answers = answers.ToList(),
-                ValidationConditions = validationConditions ?? new List<ValidationCondition>()
-            };
-
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(
             Guid? questionnaireId = null, long? version = null, QuestionnaireIdentity questionnaireIdentity = null,
             string title = "Questionnaire Browse Item X", bool disabled = false, bool deleted = false, bool allowExportVariables = true, 

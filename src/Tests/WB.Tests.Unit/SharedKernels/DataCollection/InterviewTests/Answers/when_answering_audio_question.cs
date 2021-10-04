@@ -16,8 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         {
             var audioQuestionid = Id.g1;
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.Question(audioQuestionid, questionType: QuestionType.Audio));
-
+                Create.Entity.AudioQuestion(audioQuestionid));
             var interview = CreateInterview(questionnaire);
 
             using (EventContext eventContext = new EventContext())
