@@ -26,6 +26,8 @@
                         
                         $scope.activeComment = createNewComment();
 
+                        $rootScope.$broadcast("commentsCount", $scope.comments.length);
+                        
                         utilityService.scrollToElement("#comments-editor .form-holder","#edit-entity-comment-row");
                     });
             };
@@ -50,6 +52,7 @@
                     if (confirmResult === 'ok') {
                         commentsService.deleteComment($state.params.questionnaireId, itemId).then(function() {
                                 $rootScope.$broadcast("commentDeleted", { id: itemId });
+                                $rootScope.$broadcast("commentsCount", $scope.comments.length);
                             }
                         );
                     }
@@ -72,6 +75,8 @@
                             $scope.comments.push(comment);
                             $rootScope.$broadcast("newCommentPosted", comment);
                             $scope.activeComment = createNewComment();
+
+                            $rootScope.$broadcast("commentsCount", $scope.comments.length);
                         }
                     });
             }
