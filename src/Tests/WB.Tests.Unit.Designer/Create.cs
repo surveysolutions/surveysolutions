@@ -544,22 +544,201 @@ namespace WB.Tests.Unit.Designer
         {
             var publicKey = questionId ?? Guid.NewGuid();
             var stataExportCaption = variable ?? GetNameForEntity("question", publicKey);
-            return new TextQuestion(title)
+
+            switch (questionType)
             {
-                PublicKey = publicKey,
-                StataExportCaption = stataExportCaption,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
-                VariableLabel = variableLabel,
-                Instructions = instructions,
-                Answers = answers.ToList(),
-                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
-                Featured = isPrefilled,
-                QuestionScope = scope,
-                LinkedToRosterId = linkedToRoster,
-                LinkedToQuestionId = linkedToQuestion,
-            };
+                case QuestionType.Area:
+                    return new AreaQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.Audio:
+                    return new AudioQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.Multimedia:
+                    return new MultimediaQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.Numeric:
+                    return new NumericQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.DateTime:
+                    return new DateTimeQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.GpsCoordinates:
+                    return new GpsCoordinateQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.MultyOption:
+                    return new MultyOptionsQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.SingleOption:
+                    return new SingleQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.TextList:
+                    return new TextListQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.QRBarcode:
+                    return new QRBarcodeQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.Text:
+                    default:
+                    return new TextQuestion(title)
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+            }
+            
+            
+            
         }
 
         public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnaireHistoryVersionsService historyVersionsService = null,

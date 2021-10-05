@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             correctGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new TextQuestion("text 1")
+                new NumericQuestion("text 1")
                 {
                     PublicKey = firstIncorrectQuestionId,
                     ConditionExpression = InvalidExpression,

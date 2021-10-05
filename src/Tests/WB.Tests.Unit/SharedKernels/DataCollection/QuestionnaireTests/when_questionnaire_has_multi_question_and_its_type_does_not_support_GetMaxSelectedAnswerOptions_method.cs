@@ -11,16 +11,15 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
-    internal class when_questionnaire_has_multi_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method
+    internal class when_questionnaire_has_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method
         : QuestionnaireTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
-                new MultyOptionsQuestion()
+                new TextQuestion()
                 {
                     PublicKey = validatedQuestionId,
-                    MaxAllowedAnswers = proposedSelectedAnswerOptions
                 }
             });
             
