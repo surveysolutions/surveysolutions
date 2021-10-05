@@ -546,20 +546,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     rowsByInterviewsAndParentRoster = rowsByNumericRoster.GroupBy(x => new
                     {
                         x.InterviewIdValue.Value,
-                        x.RosterInstanceCodes.FirstOrDefault(y => y.VariableName == parentRosterColumnId)?.Code
+                        x.RosterInstanceCodes.FirstOrDefault(y => string.Compare(y.VariableName, parentRosterColumnId,StringComparison.OrdinalIgnoreCase) == 0)?.Code
                     }).Select(x => x.ToArray());
                 }
 
                 foreach (var rowsByInterviewAndParentRoster in rowsByInterviewsAndParentRoster)
                 {
                     var orderedRosterInstanceRows = rowsByInterviewAndParentRoster
-                        .OrderBy(x => x.RosterInstanceCodes.First(y => y.VariableName == rosterColumnId).Code)
+                        .OrderBy(x => x.RosterInstanceCodes.First(y => string.Compare(y.VariableName, rosterColumnId,StringComparison.OrdinalIgnoreCase) == 0).Code)
                         .Select((x, i) => (row: x, expectedCode: i));
 
                     foreach (var rosterInstanceRow in orderedRosterInstanceRows)
                     {
                         var rosterInstanceCode =
-                            rosterInstanceRow.row.RosterInstanceCodes.First(y => y.VariableName == rosterColumnId);
+                            rosterInstanceRow.row.RosterInstanceCodes.First(y => string.Compare(y.VariableName, rosterColumnId,StringComparison.OrdinalIgnoreCase) == 0);
                         if (rosterInstanceCode.Code != rosterInstanceRow.expectedCode)
                         {
                             yield return new InterviewImportReference(rosterInstanceCode.Column,
