@@ -1132,6 +1132,9 @@
   <data name="EditorAddComment" xml:space="preserve">
     <value>Добавить комментарий</value>
   </data>
+  <data name="EditorShowComments" xml:space="preserve">
+    <value>Показать комментарии ({{count}})</value>
+  </data>
   <data name="JumpToEdit" xml:space="preserve">
     <value>Перейти к редактированию</value>
   </data>
