@@ -7,14 +7,14 @@
   <TextView
     style="@style/Interview_Question_Title"
     local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(Text.HtmlText, .); 
-                   Visible Not(QuestionState.Validity.IsInvalid);
+                   Visible Not(StaticTextState.Validity.IsInvalid);
                    Tag Format('Static_Valid_Title{0}', Identity)" />
 
   <TextView
     style="@style/Interview_Question_Title"
     android:textColor="@color/errorTextColor"
     local:MvxBind="Text Text.PlainText; 
-                   Visible QuestionState.Validity.IsInvalid;
+                   Visible StaticTextState.Validity.IsInvalid;
                    Tag Format('Static_Invalid_Title{0}', Identity)" />
 
   <include layout="@layout/interview__attachment" />
@@ -24,16 +24,16 @@
       android:orientation="vertical"
       style="@style/Interview_Question_Errors"
       android:layout_marginBottom="@dimen/Interview_Entity_Title_margin_top"
-      local:MvxBind="Visible QuestionState.Validity.IsInvalid">
+      local:MvxBind="Visible StaticTextState.Validity.IsInvalid">
     <TextView
         style="@style/Interview_Question_Errors_Title"
-        local:MvxBind="Text QuestionState.Validity.Error.Caption;
+        local:MvxBind="Text StaticTextState.Validity.Error.Caption;
                        Tag Format('Static_Error_Caption_{0}', Identity)" />
     <MvxLinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical"
-          local:MvxBind="ItemsSource QuestionState.Validity.Error.ValidationErrors"
+          local:MvxBind="ItemsSource StaticTextState.Validity.Error.ValidationErrors"
           local:MvxItemTemplate="@layout/interview_question__validation_item"/>
   </LinearLayout>
   <LinearLayout
@@ -42,16 +42,16 @@
     android:orientation="vertical"
     style="@style/Interview_Question_Errors"
     android:layout_marginBottom="@dimen/Interview_Entity_Title_margin_top"
-    local:MvxBind="Visible QuestionState.Warnings.IsImplausible">
+    local:MvxBind="Visible StaticTextState.Warnings.IsImplausible">
     <TextView
       style="@style/Interview_Question_Warning_Title"
-      local:MvxBind="Text QuestionState.Warnings.Warning.Caption;
+      local:MvxBind="Text StaticTextState.Warnings.Warning.Caption;
                      Tag Format('Static_Warnings_Caption_{0}', Identity)" />
     <MvxLinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
-      local:MvxBind="ItemsSource QuestionState.Warnings.Warning.ValidationErrors"
+      local:MvxBind="ItemsSource StaticTextState.Warnings.Warning.ValidationErrors"
       local:MvxItemTemplate="@layout/interview_question__warning"/>
   </LinearLayout>
   <View style="@style/Interview_Entity_Divider" />
