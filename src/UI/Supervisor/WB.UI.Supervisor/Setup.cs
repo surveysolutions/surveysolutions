@@ -134,6 +134,7 @@ namespace WB.UI.Supervisor
                 new NcqrsModule(),
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
+                new EnumeratorIocRegistrationModule(),
                 new EnumeratorUIModule(),
                 new EnumeratorSharedKernelModule(),
                 new SupervisorInfrastructureModule(),

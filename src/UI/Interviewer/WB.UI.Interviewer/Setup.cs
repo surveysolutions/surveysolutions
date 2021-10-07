@@ -140,6 +140,7 @@ namespace WB.UI.Interviewer
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
                 new InterviewerInfrastructureModule(),
+                new EnumeratorIocRegistrationModule(),
                 new EnumeratorUIModule(),
                 new EnumeratorSharedKernelModule(),
                 new InterviewerBoundedContextModule(),

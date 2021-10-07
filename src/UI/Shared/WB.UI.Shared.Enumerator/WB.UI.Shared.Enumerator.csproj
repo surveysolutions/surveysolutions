@@ -82,6 +82,7 @@
     <Compile Include="CustomControls\FixedMvxFilteringAdapter.cs" />
     <Compile Include="CustomServices\GoogleApiService.cs" />
     <Compile Include="CustomServices\StringFormat.cs" />
+    <Compile Include="EnumeratorIocRegistrationModule.cs" />
     <Compile Include="EnumeratorLoggingModule.cs" />
     <Compile Include="Migrations\Workspaces\Encrypt_Data.cs" />
     <Compile Include="Migrations\Workspaces\M201912091307_ChangeIdTypeInOptionViewTable.cs" />

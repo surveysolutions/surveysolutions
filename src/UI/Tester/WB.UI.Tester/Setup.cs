@@ -89,6 +89,7 @@ namespace WB.UI.Tester
                 new DataCollectionSharedKernelModule(),
                 new TesterBoundedContextModule(),
                 new TesterInfrastructureModule(basePath),
+                new EnumeratorIocRegistrationModule(),
                 new EnumeratorUIModule(),
                 new EnumeratorSharedKernelModule(),
                 new TesterUIModule(),
