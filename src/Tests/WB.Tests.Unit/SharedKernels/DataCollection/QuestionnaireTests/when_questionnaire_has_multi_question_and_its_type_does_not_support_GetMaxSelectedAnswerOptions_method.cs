@@ -35,7 +35,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         [NUnit.Framework.Test] public void should_throw_exception_with_message_containing__custom_validation__ () =>
             exception.Message.Should().Contain("Cannot return maximum for selected answers");
 
-        private static int? proposedSelectedAnswerOptions = 5;
         private static Exception exception;
         private static QuestionnaireDocument questionnaireDocument;
         private static Guid validatedQuestionId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

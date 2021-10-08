@@ -13,8 +13,8 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly IServiceLocator serviceLocator;
 
         private static int executingCommandsCount = 0;
-        private static readonly object executionCountLock = new object();
-        private TaskCompletionSource<object> executionAwaiter = null;
+        private static readonly object ExecutionCountLock = new object();
+        private static TaskCompletionSource<object> executionAwaiter = null;
 
         public CommandService(IServiceLocator serviceLocator,
             IAggregateLock aggregateLock)
@@ -35,7 +35,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
         private void Execute(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            this.RegisterCommandExecution();
+            RegisterCommandExecution();
 
             try
             {
@@ -43,48 +43,45 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             }
             finally
             {
-                this.UnregisterCommandExecution();
+                UnregisterCommandExecution();
             }
         }
 
-        private void RegisterCommandExecution()
+        private static void RegisterCommandExecution()
         {
-            lock (executionCountLock)
+            lock (ExecutionCountLock)
             {
                 executingCommandsCount++;
             }
         }
 
-        private void UnregisterCommandExecution()
+        private static void UnregisterCommandExecution()
         {
-            lock (executionCountLock)
+            lock (ExecutionCountLock)
             {
                 executingCommandsCount--;
 
                 if (executingCommandsCount > 0)
                     return;
 
-                if (this.executionAwaiter != null)
+                if (executionAwaiter != null)
                 {
-                    this.executionAwaiter.SetResult(new object());
-                    this.executionAwaiter = null;
+                    executionAwaiter.SetResult(new object());
+                    executionAwaiter = null;
                 }
             }
         }
 
         public Task WaitPendingCommandsAsync()
         {
-            lock (executionCountLock)
+            lock (ExecutionCountLock)
             {
                 if (executingCommandsCount == 0)
                     return Task.FromResult(null as object);
 
-                if (this.executionAwaiter == null)
-                {
-                    this.executionAwaiter = new TaskCompletionSource<object>();
-                }
+                executionAwaiter ??= new TaskCompletionSource<object>();
 
-                return this.executionAwaiter.Task;
+                return executionAwaiter.Task;
             }
         }
 

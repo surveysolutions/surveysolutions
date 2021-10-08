@@ -4,6 +4,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public interface IChapterInfoViewFactory
     {
-        NewChapterView? Load(QuestionnaireRevision questionnaireId, string groupId);
+        NewChapterView? Load(QuestionnaireRevision questionnaireId, string chapterId);
     }
 }

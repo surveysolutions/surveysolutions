@@ -101,7 +101,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
                 return CreationResult.DataRestored;
             }
-            catch (InterviewException ie)
+            catch (InterviewException)
             {
                 return CreationResult.DataPartialRestored;
             }
@@ -149,7 +149,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
                 return CreationResult.DataRestored;
             }
-            catch (InterviewException ie)
+            catch (InterviewException)
             {
                 if (existingInterviewCommands != null && existingInterviewCommands.Count > 0 && lastCommandIndex > 0)
                 {
@@ -163,7 +163,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 await this.ImportQuestionnaireAndCreateInterview(designerToken);
                 return CreationResult.EmptyCreated;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Evict(designerToken);
                 await this.ImportQuestionnaireAndCreateInterview(designerToken);

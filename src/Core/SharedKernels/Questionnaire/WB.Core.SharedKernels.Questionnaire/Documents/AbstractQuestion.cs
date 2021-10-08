@@ -102,6 +102,13 @@ namespace Main.Core.Entities.SubEntities
             }
         }
 
+        public void MigrateValidationConditions()
+        {
+            ValidationConditions = this.validationConditions.ConcatWithOldConditionIfNotEmpty(ValidationExpression, ValidationMessage);
+            ValidationExpression = null;
+            ValidationMessage = null;
+        }
+
         public abstract void AddAnswer(Answer answer);
 
         public virtual IComposite Clone()

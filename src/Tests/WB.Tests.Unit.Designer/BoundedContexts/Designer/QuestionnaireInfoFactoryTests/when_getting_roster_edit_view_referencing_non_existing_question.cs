@@ -44,7 +44,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         private static NewEditRosterView result;
         private static QuestionnaireDocument questionnaireView;
         private static Mock<IDesignerQuestionnaireStorage> questionDetailsReaderMock;
-        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("11111111111111111111111111111111");
 
         private static Guid rosterId = g2Id;
     }

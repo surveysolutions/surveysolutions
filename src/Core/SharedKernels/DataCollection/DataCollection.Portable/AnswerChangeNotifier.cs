@@ -18,10 +18,5 @@
         {
             this.structuralChanges.AddChangedMultiQuestion(questionIdentity, newAnswer);
         }
-
-        public void NotifyMultiYesNoAnswerChange(Identity questionIdentity, YesNoAnswersOnly newAnswer)
-        {
-            this.structuralChanges.AddChangedYesNoQuestion(questionIdentity, newAnswer);
-        }
     }
 }

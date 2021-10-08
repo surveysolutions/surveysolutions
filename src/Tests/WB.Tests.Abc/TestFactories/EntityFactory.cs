@@ -483,7 +483,6 @@ namespace WB.Tests.Abc.TestFactories
             Guid? interviewId = null,
             Dictionary<Identity, IList<FailedValidationCondition>> failedValidationConditions = null,
             InterviewStatus status = InterviewStatus.InterviewerAssigned,
-            Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances = null,
             bool? wasCompleted = false,
             List<Identity> disabledStaticTexts = null,
             List<Identity> validStaticTexts = null,
@@ -503,7 +502,7 @@ namespace WB.Tests.Abc.TestFactories
                 supervisorId ?? Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 1,
-                answers ?? new AnsweredQuestionSynchronizationDto[0],
+                answers ?? Array.Empty<AnsweredQuestionSynchronizationDto>(),
                 disabledGroups ?? new HashSet<InterviewItemId>(),
                 disabledQuestions ?? new HashSet<InterviewItemId>(),
                 disabledStaticTexts ?? new List<Identity>(),
@@ -512,10 +511,7 @@ namespace WB.Tests.Abc.TestFactories
                 readonlyQuestions ?? new HashSet<InterviewItemId>(),
                 validStaticTexts ?? new List<Identity>(),
                 invalidStaticTexts ?? new List<KeyValuePair<Identity, List<FailedValidationCondition>>>(),
-                rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
-                failedValidationConditions?.ToList() ??
-                new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
-                new Dictionary<InterviewItemId, RosterVector[]>(),
+                failedValidationConditions?.ToList() ?? new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
                 variables ?? new Dictionary<InterviewItemId, object>(),
                 disabledVariables ?? new HashSet<InterviewItemId>(),
                 wasCompleted ?? false)
@@ -1361,8 +1357,6 @@ namespace WB.Tests.Abc.TestFactories
         public VariableValueLabel VariableValueLabel(string value = "1", string label = "l1")
             => new VariableValueLabel(value, label);
 
-        public YesNoAnswers YesNoAnswers(decimal[] allOptionCodes, YesNoAnswersOnly yesNoAnswersOnly = null)
-            => new YesNoAnswers(allOptionCodes, yesNoAnswersOnly);
         public InterviewTreeYesNoQuestion InterviewTreeYesNoQuestion(AnsweredYesNoOption[] answer)
             => new InterviewTreeYesNoQuestion(answer);
 

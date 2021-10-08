@@ -404,7 +404,7 @@ namespace WB.Tests.Abc.TestFactories
         public RosterInstancesRemoved RosterInstancesRemoved(Guid? rosterGroupId = null, DateTimeOffset? originDate = null)
             => new RosterInstancesRemoved(new[]
             {
-                new RosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m),
+                new RosterInstance(rosterGroupId ?? Guid.NewGuid(), Array.Empty<decimal>(), 0.0m),
             }, originDate ?? DateTimeOffset.Now);
 
         public RosterInstancesRemoved RosterInstancesRemoved(Guid rosterGroupId, RosterVector[] rosterVectors, DateTimeOffset? originDate = null)

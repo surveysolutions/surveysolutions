@@ -8,10 +8,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
 {
     internal class when_saving_lookup_table_without_data
     {
-        [NUnit.Framework.Test] public void should_throw_ArgumentException () {
-            fileContent = $"no{_}row{_}code{_}column{_end}";
 
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
+        {
             lookupTableService = Create.LookupTableService();
+        }
+
+        
+        [TestCase("no\trow\tcode\tcolumn\n")]
+        [TestCase("a\n")]
+        [TestCase("a\tb")]
+        [TestCase("a\n\n\n")]
+        [NUnit.Framework.Test] public void should_throw_ArgumentException (string content) {
+            fileContent = content;
+
             exception = Assert.Throws<ArgumentException>(() =>
                 lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent));
 
@@ -24,8 +35,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
         private static readonly Guid lookupTableId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static string fileContent;
         private static LookupTableService lookupTableService;
-
-        private static string _ = "\t";
-        private static string _end = "\n";
     }
 }

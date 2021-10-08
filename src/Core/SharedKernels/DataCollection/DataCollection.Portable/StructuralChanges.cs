@@ -8,13 +8,11 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             ChangedSingleQuestions.Clear();
             ChangedMultiQuestions.Clear();
-            ChangedYesNoQuestions.Clear();
             RemovedRosters.Clear();
         }
 
         public Dictionary<Identity, int?> ChangedSingleQuestions { get; } = new Dictionary<Identity, int?>();
         public Dictionary<Identity, int[]> ChangedMultiQuestions { get; } = new Dictionary<Identity, int[]>();
-        public Dictionary<Identity, YesNoAnswersOnly> ChangedYesNoQuestions { get; } = new Dictionary<Identity, YesNoAnswersOnly>();
         public List<Identity> RemovedRosters { get; } = new List<Identity>();
 
         public void AddChangedSingleQuestion(Identity questionIdentity, int? newAnswer)
@@ -25,11 +23,6 @@ namespace WB.Core.SharedKernels.DataCollection
         public void AddChangedMultiQuestion(Identity questionIdentity, int[] newAnswer)
         {
             ChangedMultiQuestions.Add(questionIdentity, newAnswer);
-        }
-
-        public void AddChangedYesNoQuestion(Identity questionIdentity, YesNoAnswersOnly newAnswer)
-        {
-            ChangedYesNoQuestions.Add(questionIdentity, newAnswer);
         }
 
         public void AddRemovedRoster(Identity rosterIdentity)

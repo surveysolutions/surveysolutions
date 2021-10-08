@@ -264,7 +264,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (!question.IsFilteredCombobox ?? false) return false;
 
             return question.CategoriesId.HasValue
-                ? GetCategoriesItem(questionnaire.PublicKey, question.CategoriesId.Value).Count() < 10
+                ? GetCategoriesItem(questionnaire.PublicKey, question.CategoriesId.Value).Count < 10
                 : question.Answers.Count < 10;
         }
 

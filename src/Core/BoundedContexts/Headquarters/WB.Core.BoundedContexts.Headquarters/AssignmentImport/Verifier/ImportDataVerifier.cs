@@ -248,8 +248,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
 
             foreach (var file in files)
-            foreach (var error in this.FileVerifiers.SelectMany(x => x.Invoke(originalFileName, file, questionnaire)))
-                if (error != null) yield return error;
+                foreach (var error in this.FileVerifiers.SelectMany(x => x.Invoke(originalFileName, file, questionnaire)))
+                    if (error != null) yield return error;
 
         }
 

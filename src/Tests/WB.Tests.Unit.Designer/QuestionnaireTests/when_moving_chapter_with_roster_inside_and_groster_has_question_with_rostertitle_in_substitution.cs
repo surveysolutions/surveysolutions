@@ -25,7 +25,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 => questionnaire.MoveGroup(chapterAId, null, 1, responsibleId));
         }
 
-        private static Exception exception;
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid chapterAId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

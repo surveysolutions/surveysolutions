@@ -6,23 +6,23 @@ using WB.Core.SharedKernels.DataCollection;
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     [DebuggerDisplay("{ToString()}")]
-    public class InterviewStateIdentity
+    public class InterviewStateIdentity: IEquatable<InterviewStateIdentity>
     {
         public Guid Id { get; set; }
-        public int[] RosterVector { get; set; }
+        public int[] RosterVector { get; }
 
-        private int? hashCode;
+        private readonly int hashCode;
 
-        private bool Equals(InterviewStateIdentity other) => 
-            this.Id == other.Id && this.RosterVector.SequenceEqual(other.RosterVector);
-
-        public override int GetHashCode()
+        public InterviewStateIdentity()
         {
-            if (this.hashCode.HasValue)
-                return this.hashCode.Value;
+        }
 
+        public InterviewStateIdentity(Guid id, int[] rosterVector)
+        {
+            Id = id;
+            RosterVector = rosterVector;
+            
             var rosterVectorHashCode = RosterVector.Length;
-
             unchecked
             {
                 for (var index = 0; index < RosterVector.Length; index++)
@@ -32,8 +32,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
                 hashCode = (Id.GetHashCode() * 397) ^ rosterVectorHashCode;
             }
+        }
 
-            return this.hashCode.Value;
+        public bool Equals(InterviewStateIdentity other)
+        {
+            if (other == null)
+                return false;
+            return this.Id == other.Id && this.RosterVector.SequenceEqual(other.RosterVector);
+        }
+        
+
+        public override int GetHashCode()
+        {
+            return this.hashCode;
         }
 
         public override bool Equals(object obj)
@@ -59,13 +70,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public override string ToString() => $"{this.Id}{(this.RosterVector.Length > 0 ? "_" + string.Join("-", this.RosterVector) : string.Empty)}";
 
-        public static InterviewStateIdentity Create(Identity identity) => Create(identity.Id, identity.RosterVector);
-        public static InterviewStateIdentity Create(Guid id, RosterVector rosterVector) => new InterviewStateIdentity
-        {
-            Id = id,
-            RosterVector = rosterVector
-        };
+        public static InterviewStateIdentity Create(Identity identity) => 
+            new InterviewStateIdentity(id: identity.Id, rosterVector: identity.RosterVector);
+        public static InterviewStateIdentity Create(Guid id, RosterVector rosterVector) =>
+            new InterviewStateIdentity(id: id, rosterVector: rosterVector);
 
-        public static InterviewStateIdentity Create(Guid id, params int[] rosterVector) => Create(id, (RosterVector) rosterVector);
+        public static InterviewStateIdentity Create(Guid id, params int[] rosterVector) => 
+            new InterviewStateIdentity(id: id, rosterVector: rosterVector);
     }
 }

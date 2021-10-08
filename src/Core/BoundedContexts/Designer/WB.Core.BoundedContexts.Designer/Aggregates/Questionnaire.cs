@@ -56,11 +56,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.sharedPersons = sharedPersons?.ToList() ?? new List<SharedPerson>();
 
             // Migrate single validation conditions to multiple
-            foreach (var question in this.innerDocument.Children.TreeToEnumerable(x => x.Children).OfType<IQuestion>())
+            foreach (var question in this.innerDocument.Children.TreeToEnumerable(x => x.Children).OfType<AbstractQuestion>())
             {
-                question.ValidationConditions = question.ValidationConditions;
-                question.ValidationExpression = null;
-                question.ValidationMessage = null;
+                question.MigrateValidationConditions();
             }
         }
         
@@ -1850,7 +1848,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 string.Format(ExceptionMessages.CantMoveSubsectionInWrongPosition, FormatGroupForException(targetGroup.PublicKey, this.innerDocument), targetIndex));
 
             var maxAcceptableIndex = targetGroup.Children.Count;
-            if (parentGroup != null && targetGroup.PublicKey == parentGroup.PublicKey)
+            if (targetGroup.PublicKey == parentGroup.PublicKey)
                 maxAcceptableIndex--;
 
             if (targetIndex < 0 || maxAcceptableIndex < targetIndex)

@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             {
                 var rows = new List<LookupTableRow>();
 
-                if (!csvReader.Read() | !csvReader.ReadHeader() | !csvReader.Read()) // | - because we need execute all Reads
+                if (!csvReader.Read() || !csvReader.ReadHeader() || !csvReader.Read())
                 {
                     throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
                 }

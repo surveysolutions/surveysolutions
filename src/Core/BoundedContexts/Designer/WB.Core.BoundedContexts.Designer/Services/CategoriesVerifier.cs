@@ -10,41 +10,41 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     internal class CategoriesVerifier : ICategoriesVerifier
     {
-        public ImportValidationError? Verify(CategoriesRow categories, CategoriesHeaderMap headers)
+        public ImportValidationError? Verify(CategoriesRow categoriesRow, CategoriesHeaderMap headers)
         {
-            if (categories == null) throw new ArgumentNullException(nameof(categories));
+            if (categoriesRow == null) throw new ArgumentNullException(nameof(categoriesRow));
 
-            if(string.IsNullOrEmpty(categories.Id) && string.IsNullOrEmpty(categories.ParentId) && string.IsNullOrEmpty(categories.Text))
-                throw new ArgumentException("Categories should not be empty", nameof(categories));
+            if(string.IsNullOrEmpty(categoriesRow.Id) && string.IsNullOrEmpty(categoriesRow.ParentId) && string.IsNullOrEmpty(categoriesRow.Text))
+                throw new ArgumentException("Categories should not be empty", nameof(categoriesRow));
 
-            var messageFormat = $"{ExceptionMessages.Column}: {{0}}, {ExceptionMessages.Row}: {categories.RowId}";
+            var messageFormat = $"{ExceptionMessages.Column}: {{0}}, {ExceptionMessages.Row}: {categoriesRow.RowId}";
 
             var idAddress = string.Format(messageFormat, headers.IdIndex);
             var parentIdAddress = string.Format(messageFormat, headers.ParentIdIndex);
             var textAddress = string.Format(messageFormat, headers.TextIndex);
 
-            if (string.IsNullOrEmpty(categories.Id))
+            if (string.IsNullOrEmpty(categoriesRow.Id))
                 return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.Excel_Categories_Empty_Value, idAddress),
                     ErrorAddress = idAddress
                 };
 
-            if (!string.IsNullOrEmpty(categories.Id) && !int.TryParse(categories.Id, out _))
+            if (!string.IsNullOrEmpty(categoriesRow.Id) && !int.TryParse(categoriesRow.Id, out _))
                 return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.Excel_Categories_Int_Invalid, idAddress),
                     ErrorAddress = idAddress
                 };
 
-            if (!string.IsNullOrEmpty(categories.ParentId) && !int.TryParse(categories.ParentId, out _))
+            if (!string.IsNullOrEmpty(categoriesRow.ParentId) && !int.TryParse(categoriesRow.ParentId, out _))
                 return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.Excel_Categories_Int_Invalid, parentIdAddress),
                     ErrorAddress = parentIdAddress
                 };
 
-            if (string.IsNullOrEmpty(categories.Text))
+            if (string.IsNullOrEmpty(categoriesRow.Text))
                 return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.Excel_Categories_Empty_Text, textAddress),

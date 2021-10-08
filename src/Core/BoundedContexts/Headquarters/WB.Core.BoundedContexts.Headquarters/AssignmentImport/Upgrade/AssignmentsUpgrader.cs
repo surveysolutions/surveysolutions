@@ -32,12 +32,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             this.logger = logger;
         }
 
-        public void Upgrade(AssignmentsUpgradeProcess upgradeProcess, CancellationToken cancellation)
+        public void Upgrade(AssignmentsUpgradeProcess assignmentsUpgradeProcess, CancellationToken cancellationToken = default)
         {
-            var migrateFrom = upgradeProcess.From;
-            var migrateTo = upgradeProcess.To;
-            var userId = upgradeProcess.UserId;
-            var processId = upgradeProcess.ProcessId;
+            var migrateFrom = assignmentsUpgradeProcess.From;
+            var migrateTo = assignmentsUpgradeProcess.To;
+            var userId = assignmentsUpgradeProcess.UserId;
+            var processId = assignmentsUpgradeProcess.ProcessId;
 
             logger.LogInformation($"Upgrade assignments requested. From {migrateFrom} to {migrateTo}. Process: {processId}.");
             
@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 
                 foreach (var assignmentId in idsToMigrate)
                 {
-                    cancellation.ThrowIfCancellationRequested();
+                    cancellationToken.ThrowIfCancellationRequested();
 
                     try
                     {

@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
                     status: InterviewStatus.RejectedBySupervisor, eventId: Id.g4),
             };
 
-            var interviewReferences = Create.Entity.InterviewSummary(interviewId, questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion);
+            var interviewReferences = Create.Entity.InterviewSummary(interviewId, questionnaireId: QuestionnaireId, questionnaireVersion: QuestionnaireVersion);
             var interviewReferencesStorage = new TestInMemoryWriter<InterviewSummary>(interviewId.FormatGuid(), interviewReferences);
             
             denormalizer = Create.Service.CumulativeChartDenormalizer(
@@ -73,9 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
 
         private static CumulativeChartDenormalizer denormalizer;
         private static TestInMemoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
-        private static InterviewStatus newStatus = InterviewStatus.ApprovedBySupervisor;
-        private static readonly Guid questionnaireId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        private static string questionnaireIdentity = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$7112";
-        private static long questionnaireVersion = 7112;
+        private static readonly Guid QuestionnaireId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        private const long QuestionnaireVersion = 7112;
     }
 }
