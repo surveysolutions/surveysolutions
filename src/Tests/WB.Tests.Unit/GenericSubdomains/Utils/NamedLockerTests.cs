@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -54,21 +55,12 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
         [Test]
         public void ensure_that_without_lock_test_will_fail()
         {
-            Assert.ThrowsAsync<Exception>(async () =>
+            const int iterations = 10000;
+            var counter = new CounterHolder();
+
+            Task NotLockedRunner()
             {
-                var iterations = 10000;
-                var counter = new CounterHolder();
-
-                var tasks = new[]
-                {
-                    Task.Run(() => NotLockedRunner()),
-                    Task.Run(() => NotLockedRunner()),
-                    Task.Run(() => NotLockedRunner())
-                };
-
-                await Task.WhenAll(tasks);
-
-                void NotLockedRunner()
+                return Task.Run(() =>
                 {
                     while (counter.Value < iterations)
                     {
@@ -77,11 +69,15 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
 
                         if (counter.Value - 1 != result)
                         {
-                            throw new Exception();
+                            throw new InvalidOperationException();
                         }
                     }
-                }
-            });
+                });            
+            }
+            
+            var tasks = Enumerable.Range(0, 3).Select(t => NotLockedRunner());
+            
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await Task.WhenAll(tasks));
         }
     }
 }
