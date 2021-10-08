@@ -1472,16 +1472,16 @@
       <Version>2.1.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.ConstraintLayout">
-      <Version>2.1.0</Version>
+      <Version>2.1.1.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.MediaRouter">
-      <Version>1.2.5</Version>
+      <Version>1.2.5.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Preference">
-      <Version>1.1.1.9</Version>
+      <Version>1.1.1.11</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Work.Runtime">
-      <Version>2.6.0</Version>
+      <Version>2.6.0.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Build.Download">
       <Version>0.10.0</Version>
@@ -1493,7 +1493,7 @@
       <Version>2.4.11.982</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Google.Android.Material">
-      <Version>1.4.0.2</Version>
+      <Version>1.4.0.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Maps">
       <Version>117.0.1</Version>
@@ -1508,10 +1508,10 @@
       <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
-      <Version>1.0.0.8</Version>
+      <Version>1.0.0.10</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
-      <Version>1.1.0.8</Version>
+      <Version>1.1.0.10</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
