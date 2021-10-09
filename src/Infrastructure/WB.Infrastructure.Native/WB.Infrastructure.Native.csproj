@@ -26,7 +26,7 @@
     <PackageReference Include="FluentMigrator" Version="3.2.15" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.15" />
     <PackageReference Include="FluentMigrator.Runner.Core" Version="3.2.15" />
-    <PackageReference Include="HtmlSanitizer" Version="5.0.376" />
+    <PackageReference Include="HtmlSanitizer" Version="6.0.441" />
     <PackageReference Include="Humanizer.Core" Version="2.8.26" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
