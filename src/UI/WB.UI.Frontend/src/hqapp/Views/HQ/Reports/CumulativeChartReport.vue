@@ -64,7 +64,7 @@
         <div v-if="base64Encoded != null && hasData">
             <a
                 id="link"
-                :download="chartTitle  +'.png'"
+                :download="$t('Reports.CumulativeInterviewChart') + ' (' + chartTitle  + ').png'"
                 @click="downloadAsImage()">{{$t("Reports.SaveAsImage")}}</a>
         </div>
     </HqLayout>
@@ -347,7 +347,7 @@ export default {
                 .finally(() => self.$store.dispatch('hideProgress'))
         },
         downloadAsImage() {
-            this.download(this.base64Encoded, this.chartTitle + '.png', 'image/png')
+            this.download(this.base64Encoded, this.$t('Reports.CumulativeInterviewChart') + ' (' + this.chartTitle  + ').png', 'image/png')
         },
         download(data, strFileName, strMimeType) {
             var self = window, // this script is only for browsers anyway...

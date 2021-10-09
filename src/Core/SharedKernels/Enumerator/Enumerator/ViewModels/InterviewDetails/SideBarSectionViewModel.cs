@@ -66,11 +66,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             NavigationState navigationState)
         {
             this.interviewId = interviewId;
-            var interview = this.statefulInterviewRepository.Get(this.interviewId);
+            var interview = this.statefulInterviewRepository.GetOrThrow(this.interviewId);
 
             this.SectionIdentity = sectionIdentity;
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
             this.rostersInGroup = questionnaire.GetAllUnderlyingChildRosters(this.SectionIdentity.Id).ToArray();
             this.subSectionsWithEnablement = questionnaire.GetSubSectionsWithEnablementCondition(this.SectionIdentity.Id).ToArray();
 
@@ -170,26 +170,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void UpdateSelection(Identity targetGroup)
         {
-            var interview = this.statefulInterviewRepository.Get(this.interviewId);
-
-            var isParentSelected = targetGroup != null && (interview.GetGroup(targetGroup)
-                .Parents?.Any(x => x.Identity == this.SectionIdentity) ?? false);
-
             this.IsCurrent = this.SectionIdentity.Equals(targetGroup);
-            this.IsSelected = this.IsCurrent || isParentSelected;
+            this.IsSelected = this.IsCurrent 
+                              || (targetGroup != null 
+                                 && (this.statefulInterviewRepository.GetOrThrow(this.interviewId).GetGroup(targetGroup)
+                                     .Parents?.Any(x => x.Identity == this.SectionIdentity) ?? false));
             this.Expanded = this.IsSelected;
         }
 
         private void UpdateHasChildren()
         {
-            var interview = this.statefulInterviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var interview = this.statefulInterviewRepository.GetOrThrow(this.interviewId);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
             this.HasChildren = interview.GetEnabledSubgroupsAndRosters(this.SectionIdentity).Any(x => !questionnaire.IsFlatRoster(x.Id));
         }
 
         private void UpdateSubGroups(Identity[] addedSubGroups)
         {
-            var interview = this.statefulInterviewRepository.Get(this.interviewId);
+            var interview = this.statefulInterviewRepository.GetOrThrow(this.interviewId);
 
             if (addedSubGroups.Any(x => interview.GetGroup(x)?.Parent?.Identity == this.SectionIdentity))
                 this.OnSectionUpdated?.Invoke(this, EventArgs.Empty);
