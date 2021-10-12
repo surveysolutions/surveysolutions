@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -44,13 +45,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         }
 
         private readonly IViewModelEventRegistry eventRegistry;
-        
+        private readonly ICommandService commandService;
+
         private GroupStatus status;
         public GroupStatus Status
         {
             get => this.status;
             protected set => this.RaiseAndSetIfChanged(ref this.status, value);
         }
+        
+        private bool isEnabled = true;
+        public bool IsEnabled
+        {
+            get => isEnabled;
+            protected set => this.RaiseAndSetIfChanged(ref this.isEnabled, value);
+        }
+
+
 
         public Identity Identity => this.groupIdentity;
 
@@ -67,7 +78,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             AnswerNotifier answerNotifier,
             IGroupStateCalculationStrategy groupStateCalculationStrategy,
             DynamicTextViewModel dynamicTextViewModel,
-            IViewModelEventRegistry eventRegistry)
+            IViewModelEventRegistry eventRegistry,
+            ICommandService commandService)
         {
             this.Enablement = enablement;
             this.interviewRepository = interviewRepository;
@@ -76,6 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.groupStateCalculationStrategy = groupStateCalculationStrategy;
             this.GroupTitle = dynamicTextViewModel;
             this.eventRegistry = eventRegistry;
+            this.commandService = commandService;
         }
 
         public virtual void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -121,9 +134,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             var statefulInterview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(statefulInterview.QuestionnaireIdentity, statefulInterview.Language);
             this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview, questionnaire);
+            this.IsEnabled = true;
         }
 
-        private async Task NavigateToGroup() => await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.groupIdentity));
+        private async Task NavigateToGroup()
+        {
+            var waitOnCommand = this.commandService.WaitOnCommandAsync();
+            var isCommandReceived = await Task.WhenAny(waitOnCommand, Task.Delay(100)) == waitOnCommand;
+
+            if (isCommandReceived || this.commandService.HasPendingCommands)
+            {
+                IsEnabled = false;
+                return;
+            }
+            
+            await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.groupIdentity));
+        }
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
