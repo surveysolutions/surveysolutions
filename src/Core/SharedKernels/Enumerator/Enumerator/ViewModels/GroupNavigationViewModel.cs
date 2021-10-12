@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public bool IsEnabled
         {
             get => isEnabled;
-            set => this.RaiseAndSetIfChanged(ref this.isEnabled, value);
+            protected set => this.RaiseAndSetIfChanged(ref this.isEnabled, value);
         }
         
         public DynamicTextViewModel Title { get; }
