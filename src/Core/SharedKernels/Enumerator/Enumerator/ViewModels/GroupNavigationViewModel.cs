@@ -221,13 +221,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private async Task NavigateAsync()
         {
-            var hasPendingCommands = this.commandService.HasPendingCommands;
-            
             // focus out event is fired after navigation button click event, so we cannot accept answer before leaving a section. This delay should force command to be put into the queue before navigation
-            await Task.Delay(10);
+            var waitOnCommand = this.commandService.WaitOnCommandAsync();
+            var isCommandReceived = await Task.WhenAny(waitOnCommand, Task.Delay(100)) == waitOnCommand;
 
-            hasPendingCommands = hasPendingCommands || this.commandService.HasPendingCommands;
-            if (hasPendingCommands)
+            if (isCommandReceived || this.commandService.HasPendingCommands)
             {
                 IsEnabled = false;
                 return;
