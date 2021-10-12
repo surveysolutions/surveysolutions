@@ -7,11 +7,12 @@
         noComments="true"
         noFlag="true">
         <div class="options-group">
-            <router-link :to="navigateTo"
-                class="btn btn-roster-section"
-                :class="btnStatusClass">
+            <a class="btn btn-roster-section"
+                :class="btnStatusClass"
+                :disabled="shouldDisable"
+                @click="navigate">
                 <span v-html="$me.title"></span><span v-if="this.$me.isRoster && !this.$me.hasCustomRosterTitle"> - <i>{{rosterTitle}}</i></span>
-            </router-link>
+            </a>
         </div>
     </wb-question>
 </template>
@@ -29,12 +30,22 @@ export default {
         ['$store.getters.scrollState']() {
             this.scroll()
         },
+        ['$store.getters.loadingProgress'](newValue) {
+            if (newValue == false && this.clicked) {
+                this.clicked = false
+            }
+        },
     },
 
     mounted() {
         this.scroll()
     },
 
+    data: function() {
+        return {
+            clicked : false,
+        }
+    },
     computed: {
         navigateTo() {
             return {
@@ -77,6 +88,9 @@ export default {
                 'answered': this.isCompleted,
             }]
         },
+        shouldDisable() {
+            return this.clicked == true && this.$store.getters.loadingProgress === true
+        },
     },
     methods : {
         doScroll: debounce(function() {
@@ -90,6 +104,16 @@ export default {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
                 this.doScroll()
             }
+        },
+
+        navigate() {
+            var needWait = this.$store.getters.loadingProgress === true
+            if (needWait) {
+                this.clicked = true
+                return
+            }
+
+            this.$router.push(this.navigateTo)
         },
     },
 }
