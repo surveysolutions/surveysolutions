@@ -8,7 +8,7 @@ namespace WB.Tests.Integration
         
         static TestsConfigurationManager()
         {
-            Config = new ConfigurationBuilder().AddIniFile("appsettings.test.designer.ini").Build();
+            Config = new ConfigurationBuilder().AddIniFile("appsettings.ini").Build();
         }
 
         public static string TestConnectionStringFormat => Config["ConnectionSettings:TestConnectionStringFormat"];

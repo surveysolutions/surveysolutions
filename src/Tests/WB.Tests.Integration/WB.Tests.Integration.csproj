@@ -17,7 +17,7 @@
     <EmbeddedResource Remove="QuestionnaireSearchStorageTests\**" />
     <None Remove="ClassificationsTests\**" />
     <None Remove="QuestionnaireSearchStorageTests\**" />
-    <None Update="appsettings.tests.integration.ini">
+    <None Update="appsettings.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
