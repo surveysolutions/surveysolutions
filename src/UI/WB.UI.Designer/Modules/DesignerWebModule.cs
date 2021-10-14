@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AutoMapper;
 using Serilog.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
@@ -11,6 +12,7 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Api.WebTester;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Controllers.Api.WebTester;
 using WB.UI.Designer.Services;
 using ILoggerProvider = Microsoft.Extensions.Logging.ILoggerProvider;
@@ -35,7 +37,15 @@ namespace WB.UI.Designer.Modules
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();
             registry.Bind<IClassificationsStorage, ClassificationsStorage>();
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();          
-            registry.BindAsSingleton<ILoggerProvider, SerilogLoggerProvider>();          
+            registry.BindAsSingleton<ILoggerProvider, SerilogLoggerProvider>();   
+            
+            registry.Bind<IImportExportQuestionnaireService, ImportExportQuestionnaireService>();   
+            
+            registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new QuestionnaireAutoMapperProfile());
+                cfg.ConstructServicesUsing(_.GetService);
+            }).CreateMapper());
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)

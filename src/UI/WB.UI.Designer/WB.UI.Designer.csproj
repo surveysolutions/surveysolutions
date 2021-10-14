@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="FluentMigrator" Version="3.2.15" />
     <PackageReference Include="FluentMigrator.Runner.Core" Version="3.2.15" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
