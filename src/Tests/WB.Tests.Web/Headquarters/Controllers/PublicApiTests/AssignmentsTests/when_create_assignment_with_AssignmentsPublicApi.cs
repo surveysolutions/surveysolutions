@@ -19,10 +19,10 @@ using WB.UI.Headquarters.API.PublicApi.Models;
 
 namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
 {
-    public class when_create_assignment_with_AssignmentsPublicApi : BaseAssignmentsControllerTest
+    public class AssignmentsPublicApi : BaseAssignmentsControllerTest
     {
         [Test]
-        public void should_return_400_for_non_existing_responsibleUser()
+        public void when_creating_assignment_should_return_400_for_non_existing_responsibleUser()
         {
             var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
             
@@ -44,7 +44,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
         [TestCase(UserRoles.Administrator)]
         [TestCase(UserRoles.Observer)]
         [TestCase(UserRoles.ApiUser)]
-        public void should_return_400_for_non_interviewer_or_supervisor_or_headquarters_assignee(UserRoles role)
+        public void when_creating_assignment_should_return_400_for_non_interviewer_or_supervisor_or_headquarters_assignee(UserRoles role)
         {
             var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
             
@@ -68,7 +68,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
 
         [TestCase("bad_crafted_questionnaire_id")]
         [TestCase("f2250674-42e6-4756-b394-b86caa62225e$1")]
-        public void should_return_404_for_non_existing_questionnaire(string questionnaireId)
+        public void when_creating_assignment_should_return_404_for_non_existing_questionnaire(string questionnaireId)
         {
             this.SetupResponsibleUser(Abc.Create.Entity.HqUser());
             var result = this.controller.Create(new CreateAssignmentApiRequest
@@ -81,7 +81,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
         }
 
         [Test]
-        public void when_invalid_in_interview_tree_then_should_return_failed_verification_results_with_400_code()
+        public void when_creating_assignment_with_invalid_in_interview_tree_then_should_return_failed_verification_results_with_400_code()
         {
             var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
             var rosterQuestionId = Id.g1;
@@ -122,7 +122,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
         }
 
         [Test]
-        public void should_store_new_assignment()
+        public void when_creating_assignment_should_store_new_assignment()
         {
             var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
 
@@ -150,7 +150,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
         }
 
         [Test]
-        public void and_quantity_minus_1_should_stored_new_assignment_has_null_quantity()
+        public void when_creating_assignment_and_quantity_minus_1_should_stored_new_assignment_has_null_quantity()
         {
             var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
 
@@ -180,7 +180,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
         }
         
         [Test]
-        public void when_assignment_has_invalid_identifying_data_then_should_return_verification_errors()
+        public void when_creating_assignment_having_invalid_identifying_data_then_should_return_verification_errors()
         {
             var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
 
@@ -230,7 +230,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
         [TestCase(QuestionType.Area, "test")]
         [TestCase(QuestionType.SingleOption, "test", true)]
         [TestCase(QuestionType.MultyOption, "['test']", true)]
-        public void when_assignment_has_not_supported_question_in_identifying_data_then_should_return_verification_errors(QuestionType questionType, string preloadingValue, bool linked = false)
+        
+        public void when_creating_assignment_having_not_supported_question_in_identifying_data_then_should_return_verification_errors(QuestionType questionType, string preloadingValue, bool linked = false)
         {
             var variableName = "testQuestion";
             var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
@@ -262,6 +263,78 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
             Assert.That(verificationErrors, Is.Not.Null);
             Assert.That(verificationErrors.Select(x => x.Code),
                 Is.EquivalentTo(new[] { "PL0063" }));
+        }
+        
+        [Test]
+        public void when_creating_assignment_with_two_numeric_roster_rows()
+        {
+            var qid = QuestionnaireIdentity.Parse("a2250674-42e6-4756-b394-b86caa62225a$1");
+            var rosterQuestionId1 = Id.g1;
+            var rosterQuestionId2 = Id.g2;
+
+            var hqUser = Abc.Create.Entity.HqUser();
+            
+            this.SetupResponsibleUser(hqUser);
+            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, string.Empty,
+                children: new IComposite[]
+                {
+                    Abc.Create.Entity.Group(children: new IComposite[]{
+                    
+                        Abc.Create.Entity.NumericIntegerQuestion(Id.g8),
+                        Abc.Create.Entity.NumericRoster(rosterSizeQuestionId:Id.g8, children: new []
+                        {
+                            Abc.Create.Entity.TextQuestion(rosterQuestionId1)
+                        }),
+                        Abc.Create.Entity.NumericIntegerQuestion(Id.g9),
+                        Abc.Create.Entity.NumericRoster(rosterSizeQuestionId:Id.g9, children: new []
+                        {
+                            Abc.Create.Entity.TextQuestion(rosterQuestionId2)
+                        })
+                    })
+                }));
+            
+            this.mapper
+                .Setup(m => m.Map<AssignmentDetails>(It.IsAny<Assignment>()))
+                .Returns(new AssignmentDetails());
+
+            var result = this.controller.Create(new CreateAssignmentApiRequest
+            {
+                QuestionnaireId = qid.ToString(),
+                Responsible = hqUser.UserName,
+                IdentifyingData = new List<AssignmentIdentifyingDataItem>
+                {
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g8:N}",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{rosterQuestionId1:N}_0",
+                        Answer = "text 1 in roster1"
+                    }
+                    ,
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g9:N}",
+                        Answer = "2"
+                    },
+
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{rosterQuestionId2:N}_0",
+                        Answer = "text 1 in roster2"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{rosterQuestionId2:N}_1",
+                        Answer = "text 2 in roster2"
+                    }
+                }
+            });
+            
+            this.commandService.Verify(ass => ass.Execute(It.IsAny<CreateAssignment>(), null), Times.Once);
+            Assert.That(result.Result, Has.Property(nameof(StatusCodeResult.StatusCode)).EqualTo(StatusCodes.Status201Created));
         }
 
         private IQuestion GetQuestionByType(QuestionType questionType, string variableName, Guid? linked = null)
