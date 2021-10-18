@@ -2,6 +2,7 @@
 
 using System;
 using System.Globalization;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
@@ -47,14 +48,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private string? comment;
         private CalendarEvent? calendarEvent;
 
-        public CalendarEventDialogViewModel(IMvxNavigationService navigationService,
+        public CalendarEventDialogViewModel(
             ICommandService commandService,
             IPrincipal principal,
             ICalendarEventStorage calendarEventStorage,
             IUserInteractionService userInteractionService,
             IStringFormat stringFormat)
         {
-            this.navigationService = navigationService;
+            this.navigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
             this.commandService = commandService;
             this.principal = principal;
             this.calendarEventStorage = calendarEventStorage;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
@@ -21,12 +22,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     public class CompleteInterviewViewModel : MvxViewModel, IDisposable
     {
         protected readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IMvxMessenger messenger;
+        
         private readonly ICommandService commandService;
         private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
         private readonly ILastCompletionComments lastCompletionComments;
         protected readonly IPrincipal principal;
 
+        
+        protected readonly IMvxMessenger Messenger;
+        
         public InterviewStateViewModel InterviewState { get; set; }
         public DynamicTextViewModel Name { get; }
         public string CompleteScreenTitle { get; set; }
@@ -35,17 +39,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IViewModelNavigationService viewModelNavigationService,
             ICommandService commandService,
             IPrincipal principal,
-            IMvxMessenger messenger,
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
             ILastCompletionComments lastCompletionComments,
             InterviewStateViewModel interviewState,
             DynamicTextViewModel dynamicTextViewModel,
             ILogger logger)
         {
+            Messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
             this.principal = principal;
-            this.messenger = messenger;
             this.entitiesListViewModelFactory = entitiesListViewModelFactory;
             this.lastCompletionComments = lastCompletionComments;
 
@@ -179,7 +182,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             await this.viewModelNavigationService.NavigateToDashboardAsync(this.interviewId.ToString());
             Dispose();
-            this.messenger.Publish(new InterviewCompletedMessage(this));
+            Messenger.Publish(new InterviewCompletedMessage(this));
         }
 
         public void Dispose()

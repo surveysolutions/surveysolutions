@@ -54,7 +54,7 @@ namespace WB.Tests.Integration.Designer
                     action(serviceLocator);
                     transaction.Commit();
                 }
-                catch(Exception e)
+                catch
                 {
                     transaction.Rollback();
                 }

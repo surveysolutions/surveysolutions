@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -19,12 +20,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly ITabletDiagnosticService diagnosticService;
         private readonly ILogger logger;
 
-        public LocalSynchronizationViewModel(IMvxMessenger messenger, 
+        public LocalSynchronizationViewModel( 
             ISynchronizationCompleteSource synchronizationCompleteSource,
             ITabletDiagnosticService diagnosticService,
             ILogger logger)
         {
-            this.messenger = messenger;
+            this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             this.synchronizationCompleteSource = synchronizationCompleteSource;
             this.diagnosticService = diagnosticService;
             this.logger = logger;

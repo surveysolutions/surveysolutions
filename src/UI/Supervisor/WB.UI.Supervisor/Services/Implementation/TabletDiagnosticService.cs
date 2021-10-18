@@ -18,8 +18,8 @@ namespace WB.UI.Supervisor.Services.Implementation
             IDeviceSettings deviceSettings,
             IArchivePatcherService archivePatcherService,
             ILogger logger,
-            IViewModelNavigationService navigationService,
-            IMvxAndroidCurrentTopActivity topActivity)
+            IViewModelNavigationService navigationService
+            )
             : base(
                 fileSystemAccessor,
                 permissions,
@@ -27,8 +27,7 @@ namespace WB.UI.Supervisor.Services.Implementation
                 deviceSettings,
                 archivePatcherService,
                 logger,
-                navigationService,
-                topActivity)
+                navigationService)
         {
         }
 

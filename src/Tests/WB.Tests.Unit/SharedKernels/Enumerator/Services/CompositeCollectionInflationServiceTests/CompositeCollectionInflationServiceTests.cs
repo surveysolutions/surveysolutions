@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
+using Moq;
 using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Core;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
@@ -24,6 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             base.Setup();
             Mvx.Resolve<IMvxSettings>().AlwaysRaiseInpcOnUserInterfaceThread = false;
             Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(Stub.MvxMainThreadAsyncDispatcher());
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
         }
 
         [Test]

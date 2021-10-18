@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
@@ -41,11 +42,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public IMvxCommand NavigateToSectionCommand => new MvxAsyncCommand(this.NavigateToSection);
 
         public SideBarCoverSectionViewModel(
-            IMvxMessenger messenger,
             DynamicTextViewModel dynamicTextViewModel,
             CoverStateViewModel coverStateViewModel)
         {
-            this.messenger = messenger;
+            this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             this.Title = dynamicTextViewModel;
             this.SideBarGroupState = coverStateViewModel;
         }

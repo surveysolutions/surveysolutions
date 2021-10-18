@@ -30,7 +30,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IViewModelNavigationService viewModelNavigationService, 
             ICommandService commandService,
             IPrincipal principal,
-            IMvxMessenger messenger, 
             IStatefulInterviewRepository interviewRepository,
             InterviewStateViewModel interviewState,
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
@@ -40,7 +39,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IInterviewerSettings interviewerSettings,
             ILogger logger,
             IPlainStorage<QuestionnaireView> interviewViewRepository)
-            : base(viewModelNavigationService, commandService, principal, messenger, 
+            : base(viewModelNavigationService, commandService, principal, 
                 entitiesListViewModelFactory, lastCompletionComments,interviewState, dynamicTextViewModel, logger)
         {
             this.interviewRepository = interviewRepository;
