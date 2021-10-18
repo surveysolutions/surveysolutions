@@ -753,7 +753,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     roster = questionnaire.GetRosterVariableName(questionnaire
                         .GetRostersFromTopToSpecifiedQuestion(x.QuestionIdentity.Id).Last())
                 })
-                .GroupBy(x => x.answer.QuestionIdentity.RosterVector)
+                .GroupBy(x => new{x.roster, x.answer.QuestionIdentity.RosterVector})
                 .Where(x => x.Any())
                 .Select(x => new PreloadingAssignmentRow
                 {
