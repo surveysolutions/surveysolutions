@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -49,39 +50,6 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
                     });
                 }
             }
-        }
-
-        [Test]
-        public void ensure_that_without_lock_test_will_fail()
-        {
-            Assert.ThrowsAsync<Exception>(async () =>
-            {
-                var iterations = 10000;
-                var counter = new CounterHolder();
-
-                var tasks = new[]
-                {
-                    Task.Run(() => NotLockedRunner()),
-                    Task.Run(() => NotLockedRunner()),
-                    Task.Run(() => NotLockedRunner())
-                };
-
-                await Task.WhenAll(tasks);
-
-                void NotLockedRunner()
-                {
-                    while (counter.Value < iterations)
-                    {
-                        var result = counter.Value++;
-                        Thread.SpinWait(iterations / 2);
-
-                        if (counter.Value - 1 != result)
-                        {
-                            throw new Exception();
-                        }
-                    }
-                }
-            });
         }
     }
 }

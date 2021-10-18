@@ -118,7 +118,11 @@ angular.module('designerApp')
                 $scope.isCommentsBlockVisible = true;
                 $rootScope.$broadcast("commentsOpened", {});
             });
-
+            
+            $scope.commentsCount = 0;
+            $rootScope.$on('commentsCount', function (event, data) {
+                $scope.commentsCount = data;
+            });
 
             var searchBoxOpened = false;
             $scope.showFindReplaceDialog = function() {

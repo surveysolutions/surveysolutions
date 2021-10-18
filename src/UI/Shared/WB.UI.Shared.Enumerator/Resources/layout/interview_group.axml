@@ -15,7 +15,7 @@
                 Click NavigateToGroupCommand; 
                 Html SpannableGroupTitle(GroupTitle.PlainText, RosterInstanceTitle);
                 ButtonGroupStyle Status; 
-                Enabled Enablement.Enabled;
+                Enabled And(Enablement.Enabled, IsEnabled);
                 Tag Format('Group_{0}', Identity)
               "/>
     </LinearLayout>
