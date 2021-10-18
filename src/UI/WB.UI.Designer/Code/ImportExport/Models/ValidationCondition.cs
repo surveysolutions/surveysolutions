@@ -20,13 +20,5 @@ namespace WB.UI.Designer.Code.ImportExport.Models
         public string Message { get; set; } = String.Empty;
 
         public ValidationSeverity Severity { set; get; }
-
-        public ValidationCondition Clone()
-        {
-            return new ValidationCondition(this.Expression, this.Message)
-            {
-                Severity = this.Severity
-            };
-        }
     }
 }
