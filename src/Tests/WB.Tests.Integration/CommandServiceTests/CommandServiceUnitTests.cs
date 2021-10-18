@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 namespace WB.Tests.Integration.CommandServiceTests
 {
     [TestFixture]
+    [NonParallelizable]
     public class CommandServiceUnitTests
     {
         private class AnyCommand : ICommand
@@ -31,8 +32,9 @@ namespace WB.Tests.Integration.CommandServiceTests
         {
             public void AnyCommand(AnyCommand command)
             {
-                Task.Delay(500).Wait();
+                Task.Delay(200).Wait();
                 command.Log.Add("command executed");
+                Task.Delay(200).Wait();
             }
         }
 
@@ -80,18 +82,20 @@ namespace WB.Tests.Integration.CommandServiceTests
             var commandService = Abc.Create.Service.CommandService(repository: repository, aggregateLock: new AggregateLock());
 
             var t1 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
-            var t2 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
-            var t3 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
 
             log.Add("wait started");
             await commandService.WaitOnCommandAsync();
             log.Add("wait finished");
 
             log.Should().BeEquivalentTo("wait started", "wait finished");
+
             t1.Wait(5000);
+            log.Should().BeEquivalentTo("wait started", "wait finished", "command executed");
+
+            var t2 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
+
             t2.Wait(5000);
-            t3.Wait(5000);
-            log.Should().BeEquivalentTo("wait started", "wait finished", "command executed", "command executed", "command executed");
+            log.Should().BeEquivalentTo("wait started", "wait finished", "command executed", "command executed");
         }
     }
 }
