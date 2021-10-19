@@ -223,6 +223,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Api Tokens.
+        /// </summary>
+        public static string HQ_Views_ApiTokens_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_ApiTokens_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disable two-factor authentication.
         /// </summary>
         public static string HQ_Views_DisableTwoFactorAuth_Title {

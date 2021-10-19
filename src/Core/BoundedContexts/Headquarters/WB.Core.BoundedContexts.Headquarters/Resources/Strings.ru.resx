@@ -293,4 +293,7 @@
   <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
     <value>Не назначенные на интервьюера</value>
   </data>
+  <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
+      <value>API ключи</value>
+  </data>
 </root>

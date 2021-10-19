@@ -1737,4 +1737,7 @@
   <data name="AntiForgeryError_Title" xml:space="preserve">
       <value>Ошибка данных</value>
   </data>
+  <data name="AccountManage_ApiTokens" xml:space="preserve">
+      <value>API ключи</value>
+  </data>
 </root>

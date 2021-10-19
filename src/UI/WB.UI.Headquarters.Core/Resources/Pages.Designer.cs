@@ -70,6 +70,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Api tokens.
+        /// </summary>
+        public static string AccountManage_ApiTokens {
+            get {
+                return ResourceManager.GetString("AccountManage_ApiTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Authenticator app.
         /// </summary>
         public static string AccountManage_AuthenticatorApp {

@@ -1676,4 +1676,7 @@
   <data name="Filters_InterviewModePlaceHolder" xml:space="preserve">
     <value>All interview modes</value>
   </data>
+  <data name="AccountManage_ApiTokens" xml:space="preserve">
+      <value>Api tokens</value>
+  </data>
 </root>
