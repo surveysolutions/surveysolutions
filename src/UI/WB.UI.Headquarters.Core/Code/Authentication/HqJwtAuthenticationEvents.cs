@@ -18,6 +18,8 @@ namespace WB.UI.Headquarters.Code.Authentication
     {
         private readonly IInScopeExecutor<IUserRepository> userRepository;
         private readonly IUserClaimsPrincipalFactory<HqUser> claimFactory;
+        private bool isUserLocked;
+        private const string FailureMessage = "Invalid user";
 
         public HqJwtAuthenticationEvents(IInScopeExecutor<IUserRepository> userRepository, IUserClaimsPrincipalFactory<HqUser> claimFactory)
         {
@@ -30,40 +32,59 @@ namespace WB.UI.Headquarters.Code.Authentication
             var userPrincipal = context.Principal;
             var userIdentity = userPrincipal?.Identity as ClaimsIdentity;
 
-            if (userIdentity == null) return;
-
-            Claim? GetFirstClaim(string type) => userIdentity.Claims.FirstOrDefault(c => c.Type == type);
-            var id = GetFirstClaim(ClaimTypes.NameIdentifier)?.Value;
-
-            if (id == null || !Guid.TryParse(id, out var userId))
+            if (userIdentity == null)
             {
+                context.Fail(FailureMessage);
                 return;
             }
-            
-            var newPrincipal = await this.userRepository.ExecuteAsync(async u =>
+
+            try
             {
-                var hqUser = await u.FindByIdAsync(userId);
-                    
-                var observerClaim = GetFirstClaim(AuthorizedUser.ObserverClaimType);
+                Claim? GetFirstClaim(string type) => userIdentity.Claims.FirstOrDefault(c => c.Type == type);
+                var id = GetFirstClaim(ClaimTypes.NameIdentifier)?.Value;
 
-                if (observerClaim != null)
+                if (id == null || !Guid.TryParse(id, out var userId))
                 {
-                    hqUser.Claims.Add(HqUserClaim.FromClaim(observerClaim));
-
-                    hqUser.Claims.Add(new HqUserClaim
-                    {
-                        ClaimType = ClaimTypes.Role,
-                        ClaimValue = Enum.GetName(typeof(UserRoles), UserRoles.Observer)
-                    });
-
-                    foreach (var claimedWorkspace in userIdentity.Claims.Where(c => c.Type == WorkspaceConstants.ClaimType))
-                        hqUser.Claims.Add(HqUserClaim.FromClaim(claimedWorkspace));
+                    context.Fail(FailureMessage);
+                    return;
                 }
+            
+                await this.userRepository.ExecuteAsync(async u =>
+                {
+                    var hqUser = await u.FindByIdAsync(userId);
+                
+                    if (hqUser.IsArchivedOrLocked)
+                    {
+                        this.isUserLocked = true;
+                        context.Fail("User is locked");
+                        return Task.CompletedTask;
+                    }
+                    
+                    var observerClaim = GetFirstClaim(AuthorizedUser.ObserverClaimType);
 
-                return await claimFactory.CreateAsync(hqUser);
-            });
+                    if (observerClaim != null)
+                    {
+                        hqUser.Claims.Add(HqUserClaim.FromClaim(observerClaim));
 
-            context.Principal = newPrincipal;
+                        hqUser.Claims.Add(new HqUserClaim
+                        {
+                            ClaimType = ClaimTypes.Role,
+                            ClaimValue = Enum.GetName(typeof(UserRoles), UserRoles.Observer)
+                        });
+
+                        foreach (var claimedWorkspace in userIdentity.Claims.Where(c => c.Type == WorkspaceConstants.ClaimType))
+                            hqUser.Claims.Add(HqUserClaim.FromClaim(claimedWorkspace));
+                    }
+                    context.Principal = await claimFactory.CreateAsync(hqUser);
+                    return Task.CompletedTask;
+                });
+
+            }
+            catch (Exception e)
+            {
+                context.Fail(FailureMessage);
+            }
+            
         }
     }
 }
