@@ -1,12 +1,16 @@
-﻿using AutoMapper;
+﻿using System.Globalization;
+using AutoMapper;
+using DocumentFormat.OpenXml.EMMA;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.UI.Designer.Code.ImportExport.Models;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using Answer = Main.Core.Entities.SubEntities.Answer;
 using Group = Main.Core.Entities.SubEntities.Group;
 using QuestionProperties = WB.Core.SharedKernels.QuestionnaireEntities.QuestionProperties;
+using Documents = WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.UI.Designer.Code.ImportExport
 {
@@ -15,20 +19,39 @@ namespace WB.UI.Designer.Code.ImportExport
         public QuestionnaireAutoMapperProfile()
         {
             this.CreateMap<QuestionnaireDocument, Questionnaire>();
-                //.ForMember(x => x.Children, opts => opts.Ignore());
+            //.ForMember(x => x.Children, opts => opts.Ignore());
+            this.CreateMap<Questionnaire, QuestionnaireDocument>();
+            
+            this.CreateMap<WB.Core.SharedKernels.Questionnaire.Documents.QuestionnaireMetaInfo, Models.QuestionnaireMetaInfo>();
+            this.CreateMap<Models.QuestionnaireMetaInfo, WB.Core.SharedKernels.Questionnaire.Documents.QuestionnaireMetaInfo>();
+
+            this.CreateMap<IComposite, QuestionnaireEntity>();
+            this.CreateMap<IQuestionnaireEntity, IComposite>();
 
             this.CreateMap<Group, Models.Group>()
-                .IncludeBase<IComposite, IQuestionnaireEntity>();
+                .IncludeBase<IComposite, QuestionnaireEntity>();
+            this.CreateMap<Group, QuestionnaireEntity>().As<Models.Group>();
+
+            this.CreateMap<Documents.FixedRosterTitle, Models.FixedRosterTitle>();
+            this.CreateMap<Models.FixedRosterTitle, Documents.FixedRosterTitle>()
+                .ConstructUsing(c => new Documents.FixedRosterTitle(c.Value, c.Title));
+                
+            this.CreateMap<Models.Group, Group>()
+                .IncludeBase<IQuestionnaireEntity, IComposite>();
+            this.CreateMap<Models.Group, IComposite>().As<Group>();
             
             this.CreateMap<QuestionProperties, Models.QuestionProperties>();
-            
-            this.CreateMap<IComposite, IQuestionnaireEntity>();
+            this.CreateMap<Models.QuestionProperties, QuestionProperties>();
             
             this.CreateMap<AbstractQuestion, Models.Question.AbstractQuestion>()
-                .IncludeBase<IComposite, IQuestionnaireEntity>();
+                /*.IncludeBase<IComposite, IQuestionnaireEntity>()*/;
+            this.CreateMap<Models.Question.AbstractQuestion, AbstractQuestion>()
+                .IncludeBase<IQuestionnaireEntity, IComposite>();
 
             this.CreateMap<TextQuestion, Models.Question.TextQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
+            this.CreateMap<Models.Question.TextQuestion, TextQuestion>()
+                .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>();
 
             this.CreateMap<NumericQuestion, Models.Question.NumericQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
@@ -45,7 +68,7 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<MultimediaQuestion, Models.Question.MultimediaQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
 
-            this.CreateMap<MultyOptionsQuestion, Models.Question.MultyOptionsQuestion>()
+            this.CreateMap<MultyOptionsQuestion, Models.Question.MultiOptionsQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
 
             this.CreateMap<TextListQuestion, Models.Question.TextListQuestion>()
@@ -59,6 +82,12 @@ namespace WB.UI.Designer.Code.ImportExport
 
             this.CreateMap<QRBarcodeQuestion, Models.Question.QRBarcodeQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
+            
+            this.CreateMap<Answer, Models.Answer>()
+                .ForMember(a => a.Code, opt => 
+                    opt.MapFrom(x => x.AnswerCode ?? decimal.Parse(x.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture)))
+                .ForMember(a => a.ParentCode, opt => 
+                    opt.MapFrom((answer, mAnswer) => answer.ParentCode ?? (decimal.TryParse(answer.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal parentValue) ? parentValue : (decimal?)null)));
         }
     }
 }

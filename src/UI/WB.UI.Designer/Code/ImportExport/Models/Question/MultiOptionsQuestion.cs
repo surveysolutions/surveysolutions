@@ -5,7 +5,7 @@ using Main.Core.Entities.Composite;
 
 namespace WB.UI.Designer.Code.ImportExport.Models.Question
 {
-    public class MultyOptionsQuestion : AbstractQuestion
+    public class MultiOptionsQuestion : AbstractQuestion
     {
         public bool AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.Serialization;
+using WB.UI.Designer.Code.ImportExport.Models.Question;
 
 namespace WB.UI.Designer.Code.ImportExport.Models
 {
     [DebuggerDisplay("Group {PublicKey}")]
-    public class Group : IQuestionnaireEntity
+    public class Group : QuestionnaireEntity
     {
         public Group()
         {
@@ -13,7 +15,6 @@ namespace WB.UI.Designer.Code.ImportExport.Models
             this.ConditionExpression = string.Empty;
             this.Description = string.Empty;
             this.Enabled = true;
-            this.FixedRosterTitles = new FixedRosterTitle[0];
             this.Children = new List<IQuestionnaireEntity>();
         }
         
@@ -29,8 +30,6 @@ namespace WB.UI.Designer.Code.ImportExport.Models
 
         public string Description { get; set; }
 
-        public string VariableName { get; set; } = String.Empty;
-
         public bool IsRoster { get; set; }
 
         public bool CustomRosterTitle { get; set; }
@@ -39,11 +38,9 @@ namespace WB.UI.Designer.Code.ImportExport.Models
 
         public RosterSizeSourceType RosterSizeSource { get; set; }
 
-        public FixedRosterTitle[] FixedRosterTitles { get; set; }
+        public FixedRosterTitle[]? FixedRosterTitles { get; set; }
 
         public Guid? RosterTitleQuestionId { get; set; }
-
-        public Guid PublicKey { get; set; }
 
         public string Title { get; set; }
     }

@@ -187,7 +187,7 @@ namespace WB.UI.Designer.Code
             
             questionnaireDocument.Revision = maxSequenceByQuestionnaire ?? 0;
             //string questionnaireJson = this.serializer.Serialize(questionnaireDocument);
-            var questionnaireJson = importExportQuestionnaireService.Export(id);
+            var questionnaireJson = importExportQuestionnaireService.Export(questionnaireDocument);
 
             var output = new MemoryStream();
 

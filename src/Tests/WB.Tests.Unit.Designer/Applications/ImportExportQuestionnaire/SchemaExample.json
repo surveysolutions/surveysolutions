@@ -1,0 +1,568 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://docs.mysurvey.solutions/schemas/questionnaire.schema.json",
+  "title": "Questionnaire Document",
+  "description": "Survey Solutions questionnaire document",
+  "type": "object",
+
+  "properties": {
+    "CoverPageSectionId": { "$ref": "#/definitions/GUID" },
+    "DefaultTranslation": { "type": "string" },
+    "CreationDate": { "type": "string", "format": "date-time" },
+    "CreatedBy": { "type": "string" },
+    "PublicKey": { "$ref": "#/definitions/GUID" },
+    "Title": { "type": "string" },
+    "VariableName": { "$ref": "#/definitions/VariableName" },
+    "DefaultLanguageName": { "type": "string" },
+
+    "Children": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Group"
+      },
+      "minItems": 1
+    },
+    "Macros": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Macro"
+      }
+    },
+    "LookupTables": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/LookupTable"
+      }
+    },
+    "Attachments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Attachment"
+      }
+    },
+    "Translations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Translation"
+      }
+    },
+    "Categories": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Categories"
+      }
+    }
+  },
+
+  "required": ["CoverPageSectionId", "Children", "Title"],
+
+  "definitions": {
+    "Answer": {
+      "type": "object",
+      "properties": {
+        "AnswerText": { "type": "string" },
+        "AnswerCode": { "type": "number" },
+        "AnswerValue": { "type": "string" },
+        "ParentCode": { "type": "number" },
+        "ParentValue": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": ["AnswerText", "AnswerValue"]
+    },
+  
+    "Answers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Answer"
+      }
+    },
+
+    "AreaQuestion": {
+      "type": "object",
+      "properties": {
+        "QuestionType": { "const": 12 },
+        "ConditionExpression": { "type": "string" },
+        "HideIfDisabled": { "type": "boolean" },
+        "Instructions": { "type": "string" },
+        "Properties": {
+          "type": "object",
+          "properties": {
+            "HideInstructions": { "type": "boolean", "default": false },
+            "GeometryType": {
+              "type": "integer",
+              "oneOf": [
+                { "const": 0, "description": "Polygon" },
+                { "const": 1, "description": "Polyline" },
+                { "const": 2, "description": "Point" },
+                { "const": 3, "description": "Multipoint" }
+              ],
+              "default": 0
+            }
+          }
+        },
+        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
+        "QuestionText": { "type": "string" },
+        "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
+        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
+        "VariableName": { "$ref": "#/definitions/VariableName" }
+      },
+      "required": ["QuestionType", "VariableName"]
+    },
+
+    "Attachment": {
+      "type": "object",
+      "properties": {
+        "AttachmentId": { "type": "string" },
+        "Name": { "type": "string" },
+        "ContentId": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": ["AttachmentId", "Name", "ContentId"]
+    },
+
+    "AudioQuestion": {
+      "type": "object",
+      "properties": {
+        "ConditionExpression": { "type": "string" },
+        "HideIfDisabled": { "type": "boolean" },
+        "Instructions": { "type": "string" },
+        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
+        "QuestionText": { "type": "string" },
+        "QuestionType": { "const": 13 },
+        "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
+        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
+        "VariableName": { "$ref": "#/definitions/VariableName" }
+      },
+      "required": ["QuestionType", "VariableName"]
+    },
+
+    "Categories": {
+      "type": "object",
+      "properties": {
+        "Id": { "type": "string" },
+        "Name": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": ["Id", "Name"]
+    },
+
+    "DateTimeQuestion": {
+      "type": "object",
+      "properties": {
+        "QuestionType": { "const": 5 },
+        "ConditionExpression": { "type": "string" },
+        "HideIfDisabled": { "type": "boolean" },
+        "Instructions": { "type": "string" },
+        "IsTimestamp": { "type": "boolean", "default": false },
+        "Properties": {
+          "type": "object",
+          "properties": {
+            "HideInstructions": { "type": "boolean", "default": false },
+            "DefaultDate": { "type": "string", "format": "date" }
+          }
+        },
+        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
+        "QuestionText": { "type": "string" },
+        "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
+        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
+        "VariableName": { "$ref": "#/definitions/VariableName" }
+      },
+      "required": ["QuestionType"]
+    },
+
+    "FixedRosterTitle": {
+      "type": "object",
+      "properties": {
+        "Value": { "type": "number" },
+        "Title": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": ["Value", "Title"]
+    },
+
+    "GpsCoordinateQuestion": {
+      "type": "object",
+      "properties": {
+        "ConditionExpression": { "type": "string" },
+        "HideIfDisabled": { "type": "boolean" },
+        "Instructions": { "type": "string" },
+        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
+        "QuestionText": { "type": "string" },
+        "QuestionType": { "const": 6 },
+        "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
+        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
+        "VariableName": { "$ref": "#/definitions/VariableName" }
+      },
+      "required": ["QuestionType", "VariableName"]
+    },
+
+    "Group": {
+      "type": "object",
+      "properties": {
+        "type": {"const": "Group"},
+        "Children": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {"$ref": "#/definitions/Group"},
+              {"$ref": "#/definitions/StaticText"},
+              {"$ref": "#/definitions/AreaQuestion"},
+              {"$ref": "#/definitions/AudioQuestion"},
+              {"$ref": "#/definitions/DateTimeQuestion"},
+              {"$ref": "#/definitions/GpsCoordinateQuestion"},
+              {"$ref": "#/definitions/MultimediaQuestion"},
+              {"$ref": "#/definitions/MultiOptionsQuestion"},
+              {"$ref": "#/definitions/NumericQuestion"},
+              {"$ref": "#/definitions/QRBarcodeQuestion"},
+              {"$ref": "#/definitions/SingleQuestion"},
+              {"$ref": "#/definitions/TextListQuestion"},
+              {"$ref": "#/definitions/TextQuestion"},
+              {"$ref": "#/definitions/Variable"}
+            ]
+          }
+        },
+        "ConditionExpression": { "type": "string" },
+        "HideIfDisabled": { "type": "boolean" },
+        "IsRoster": { "type": "boolean" },
+        "PublicKey": { "type": "string", "format": "uuid"},
+        "Title": { "type": "string" },
+        "VariableName": { "$ref": "#/definitions/VariableName" }
+      },
+
+      "if" : {
+        "propertys" : { "IsRoster": { "const": true } }
+      },
+      "then": {
+        "propertys": {
+          "CustomRosterTitle": { "type": "boolean" },
+          "DisplayMode": {
+            "type": "integer",
+            "oneOf": [
+              { "const": 0, "description": "Sub-Section" },
+              { "const": 1, "description": "Flat" },
+              { "const": 2, "description": "Table" },
+              { "const": 3, "description": "Matrix" }
+            ],
+            "default": 0
+          },
+          "RosterSizeQuestionId": { "type": "string", "format": "uuid" },
+          "RosterTitleQuestionId": { "type": "string", "format": "uuid" },
+          "RosterSizeSource": {
+            "type": "integer",
+            "oneOf": [
+              { "const": 0, "description": "Fixed roster" },
+              { "const": 1, "description": "Variable" }
+            ],
+            "default": 0
+          },
+          "FixedRosterTitles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/FixedRosterTitle"
+            }
+          }
+        }
+      },
+
+      "required": ["type", "PublicKey"]
+    },
+
+    "GUID": { "type": "string", "format": "uuid" },
+
+    "ValidationConditions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/ValidationCondition"
+      },
+      "maxItems": 10
+    },
+
+    "LookupTable": {
+      "type": "object",
+      "properties": {
+        "TableName": {"type": "string"},
+        "FileName": {"type": "string"}
+      },
+      "additionalProperties": false,
+      "required": ["TableName", "FileName"]
+    },
+
+    "Macro": {
+      "type": "object",
+      "properties": {
+        "Name": { "type": "string" },
+        "Content": { "type": "string" },
+        "Description": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": ["Name", "Content"]
+    },
+
+    "MultimediaQuestion": {
+      "type": "object",
+      "properties": {
+        "QuestionType": { "const": 11 },
+        "IsSignature": { "type": "boolean" },
+        "ConditionExpression": { "type": "string" },
+        "HideIfDisabled": { "type": "boolean" },
+        "Instructions": { "type": "string" },
+        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
+        "QuestionText": { "type": "string" },
+        "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
+        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
+        "VariableName": { "$ref": "#/definitions/VariableName" }
+      },
+      "required": ["PublicKey", "QuestionType"]
+    },
+
+    "MultiOptionsQuestion": {
+      "type": "object",
+      "properties": {
+        "QuestionType": { "const": 3 },
+        "ConditionExpression": { "type": "string" },
+        "HideIfDisabled": { "type": "boolean" },
+        "Instructions": { "type": "string" },
+        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
+        "QuestionText": { "type": "string" },
+        "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
+        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
+        "VariableName": { "$ref": "#/definitions/VariableName" },
+
+        "AreAnswersOrdered": { "type": "boolean" },
+        "MaxAllowedAnswers": { "type": "integer" },
+        "YesNoView": { "type": "boolean" },
+
+        "CategoriesId": { "$ref": "#/definitions/GUID" },
+        "Answers": { "$ref": "#/definitions/Answers" },
+        "CascadeFromQuestionId": { "$ref": "#/definitions/GUID" },
+
+        "IsFilteredCombobox": { "type": "boolean" },
+        "LinkedToRosterId": { "$ref": "#/definitions/GUID" },
+        "LinkedToQuestionId": { "$ref": "#/definitions/GUID" }
+      },
+      "required": ["PublicKey", "QuestionType"]
+    },
+
+    "NumericQuestion": {
+      "type": "object",
+      "properties": {
+        "QuestionType": { "const": 4 },
+        "ConditionExpression": { "type": "string" },
+        "HideIfDisabled": { "type": "boolean" },
+        "Instructions": { "type": "string" },
+        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
+        "QuestionText": { "type": "string" },
+        "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
+        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
+        "VariableName": { "$ref": "#/definitions/VariableName" },
+
+        "Answers": { "$ref": "#/definitions/Answers" },
+        "CountOfDecimalPlaces": { "type": "integer", "minimum": 0 },
+        "IsInteger": { "type": "boolean", "default": true },
+        "UseFormatting": { "type": "boolean", "default": false }
+        
+      },
+      "required": ["PublicKey", "QuestionType"]
+    },
+
+    "QRBarcodeQuestion": {
+      "type": "object",
+      "properties": {
+        "QuestionType": { "const": 10 },
+        "ConditionExpression": { "type": "string" },
+        "HideIfDisabled": { "type": "boolean" },
+        "Instructions": { "type": "string" },
+        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
+        "QuestionText": { "type": "string" },
+        "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
+        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
+        "VariableName": { "$ref": "#/definitions/VariableName" }
+      },
+      "required": ["PublicKey", "QuestionType"]
+    },
+
+    "QuestionProperties": {
+      "type": "object",
+      "properties": {
+        "HideInstructions": { "type": "boolean" },
+        "OptionsFilterExpression": { "type": "string" }
+        
+      },
+      "required": []
+    },
+
+    "QuestionScope": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Interviewer",
+        "Supervisor",
+        "Headquarter",
+        "Hidden"
+      ],
+      "enum": [
+        "Interviewer",
+        "Supervisor",
+        "Headquarter",
+        "Hidden"
+      ]
+    },
+
+    "SingleQuestion": {
+      "type": "object",
+      "properties": {
+        "QuestionType": { "const": 0 },
+        "ConditionExpression": { "type": "string" },
+        "HideIfDisabled": { "type": "boolean", "default": false },
+        "Instructions": { "type": "string" },
+        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
+        "QuestionText": { "type": "string" },
+        "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
+        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
+        "VariableName": { "$ref": "#/definitions/VariableName" },
+
+        "ShowAsList": { "type": "boolean" },
+        "ShowAsListThreshold": { "type": "integer" },
+
+        "CategoriesId": { "$ref": "#/definitions/GUID" },
+        "Answers": { "$ref": "#/definitions/Answers" },
+
+        "CascadeFromQuestionId": { "$ref": "#/definitions/GUID" },
+
+        "IsFilteredCombobox": { "type": "boolean", "default": false },
+        "LinkedToRosterId": { "$ref": "#/definitions/GUID" },
+        "LinkedToQuestionId": { "$ref": "#/definitions/GUID" },
+        "LinkedFilterExpression": { "type": "string" }
+      },
+      "required": ["QuestionType"]
+    },
+
+    "StaticText": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "StaticText" },
+        "VariableName": { "$ref": "#/definitions/VariableName" },
+        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Text": { "type": "string" },
+        "AttachmentName": { "type": "string" },
+        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
+        "ConditionExpression": { "type": "string" },
+        "HideIfDisabled": { "type": "boolean", "default": false }
+      },
+      "required": ["type", "PublicKey"]
+    },
+
+    "TextListQuestion": {
+      "type": "object",
+      "properties": {
+        "QuestionType": {"const": 9},
+        "ConditionExpression": { "type": "string" },
+        "HideIfDisabled": { "type": "boolean" },
+        "Instructions": { "type": "string" },
+        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
+        "QuestionText": { "type": "string" },
+        "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
+        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
+        "VariableName": { "$ref": "#/definitions/VariableName" },
+  
+        "MaxAnswerCount": { "type": "integer" }
+      },
+      "required": ["PublicKey", "QuestionType"]
+    },
+
+    "TextQuestion": {
+      "type": "object",
+      "properties": {
+        "QuestionType": { "const" : "Text2" },
+        "ConditionExpression": { "type": "string" },
+        "HideIfDisabled": { "type": "boolean" },
+        "Instructions": { "type": "string" },
+        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
+        "QuestionText": { "type": "string" },
+        "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
+        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
+        "VariableName": { "$ref": "#/definitions/VariableName" },
+
+        "Mask": { "type": "string" }
+      },
+      "required": ["PublicKey", "QuestionType"]
+    },
+
+    "Translation": {
+      "type": "object",
+      "properties": {
+        "Id": { "type": "string" },
+        "Name": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": ["Id", "Name"]
+    },
+
+    "ValidationCondition": {
+      "type": "object",
+      "properties": {
+        "Expression": { "type": "string" },
+        "Message": { "type": "string" },
+        "Severity": {
+          "type": "integer",
+          "oneOf": [
+            { "const": 0, "description": "Error" },
+            { "const": 1, "description": "Warning" }
+          ],
+          "default": 0
+        }
+      },
+      "additionalProperties": false,
+      "required": ["Expression", "Message"]
+    },
+
+    "Variable": {
+      "type": "object",
+      "properties": {
+        "Label": { "$ref": "#/definitions/VariableLabel" },
+        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Type": {
+          "type": "integer",
+          "oneOf": [
+            { "const": 1, "description": "Long Integer" },
+            { "const": 2, "description": "Double" },
+            { "const": 3, "description": "Boolean" },
+            { "const": 4, "description": "Date/Time" },
+            { "const": 5, "description": "String" }
+          ],
+          "default": 3
+        },
+        "Name": { "type": "string" },
+        "Expression": { "type": "string" },
+        "DoNotExport": { "type": "boolean", "default": false },
+        "VariableName": { "$ref": "#/definitions/VariableName" }
+      },
+      "additionalOptions": false,
+      "required": ["PublicKey", "Name", "Expression"]
+    },
+
+    "VariableLabel": { "type": "string", "maxLength": 80 },
+
+    "VariableName": { "type": "string", "maxLength": 32 }
+  }
+}

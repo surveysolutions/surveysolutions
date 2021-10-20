@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 
 namespace WB.UI.Designer.Code.ImportExport.Models
@@ -8,7 +10,7 @@ namespace WB.UI.Designer.Code.ImportExport.Models
         public Questionnaire()
         {
             Id = String.Empty;
-            ConditionExpression = String.Empty;
+            //ConditionExpression = String.Empty;
             Title = String.Empty;
             Description = String.Empty;
             VariableName = String.Empty;
@@ -34,7 +36,7 @@ namespace WB.UI.Designer.Code.ImportExport.Models
         public Guid? DefaultTranslation { get; set; }
         public string? DefaultLanguageName { get; set; }
         public DateTime? CloseDate { get; set; }
-        public string ConditionExpression { get; set; }
+        //public string ConditionExpression { get; set; }
         public bool HideIfDisabled { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate { get; set; }
@@ -58,7 +60,8 @@ namespace WB.UI.Designer.Code.ImportExport.Models
         
         // fill in before export to HQ or Tester
         //public List<Guid>? ExpressionsPlayOrder { get; set; }
-        public Dictionary<Guid, Guid[]>? DependencyGraph { get; set; }
-        public Dictionary<Guid, Guid[]>? ValidationDependencyGraph { get; set; }
+        
+        //public Dictionary<Guid, Guid[]>? DependencyGraph { get; set; }
+        //public Dictionary<Guid, Guid[]>? ValidationDependencyGraph { get; set; }
     }
 }

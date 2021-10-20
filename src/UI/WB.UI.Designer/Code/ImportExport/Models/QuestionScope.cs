@@ -1,8 +1,9 @@
-﻿namespace WB.UI.Designer.Code.ImportExport.Models
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace WB.UI.Designer.Code.ImportExport.Models
 {
-    /// <summary>
-    /// The question type.
-    /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum QuestionScope
     {
         Interviewer = 0, 

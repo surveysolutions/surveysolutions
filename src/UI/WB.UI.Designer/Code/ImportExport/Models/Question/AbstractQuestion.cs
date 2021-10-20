@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using NJsonSchema.Annotations;
 
 
 namespace WB.UI.Designer.Code.ImportExport.Models.Question
 {
     [DebuggerDisplay("{GetType().Name} {VariableName} {PublicKey}")]
-    public abstract class AbstractQuestion : IQuestion
+    public abstract class AbstractQuestion : QuestionnaireEntity, IQuestion
     {
         public Order? AnswerOrder { get; set; }
 
         public List<Answer> Answers { get; set; } = new List<Answer>();
-
-        public ReadOnlyCollection<IQuestionnaireEntity>? Children { get; set; }
 
         public string? Comments { get; set; }
 
@@ -27,15 +29,11 @@ namespace WB.UI.Designer.Code.ImportExport.Models.Question
 
         public QuestionProperties? Properties { get; set; }
 
-        public Guid PublicKey { get; set; }
-
         public QuestionScope QuestionScope { get; set; }
 
         public string? QuestionText { get; set; }
 
         public virtual QuestionType QuestionType { get; set; }
-
-        public string? VariableName { get; set; }
 
         public string? VariableLabel { get; set; }
 
@@ -45,9 +43,6 @@ namespace WB.UI.Designer.Code.ImportExport.Models.Question
 
         public Guid? LinkedToRosterId { get; set; }
 
-        /// <summary>
-        /// Id of parent question to cascade from 
-        /// </summary>
         public Guid? CascadeFromQuestionId { get; set; }
 
         public Guid? LinkedToQuestionId { get; set; }
