@@ -10,6 +10,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
@@ -134,12 +135,42 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         }
 
         [Test]
-        public void when_export_text_question_should_be_equals_after_import()
+        public void when_export_empty_text_question_should_be_equals_after_import()
         {
             var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
                  Create.Chapter(
                      children: new []{Create.TextQuestion() }
                  )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+        }
+        
+        [Test]
+        public void when_export_text_question_should_be_equals_after_import()
+        {
+            var textQuestion = Create.TextQuestion(
+                questionId: Guid.NewGuid(),
+                text: "Title",
+                enablementCondition: "enablementCondition",
+                validationExpression: "validationExpression",
+                mask: "mask",
+                variable: "variable",
+                validationMessage: "validationMessage",
+                scope: QuestionScope.Supervisor,
+                preFilled: true,
+                label: "label",
+                instruction: "instruction",
+                validationConditions: new ValidationCondition[] { Create.ValidationCondition() },
+                hideIfDisabled: true
+                );
+            
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new [] { textQuestion }
+                )
             );
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument);

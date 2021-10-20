@@ -6,16 +6,6 @@ namespace WB.UI.Designer.Code.ImportExport.Models
 {
     public class ValidationCondition
     {
-        public ValidationCondition()
-        {
-        }
-
-        public ValidationCondition(string expression, string message)
-        {
-            this.Expression = expression;
-            this.Message = message;
-        }
-
         public string Expression { get; set; } = String.Empty; 
         public string Message { get; set; } = String.Empty;
 

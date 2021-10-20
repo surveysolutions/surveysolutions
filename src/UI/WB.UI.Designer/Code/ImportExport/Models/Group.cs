@@ -15,10 +15,10 @@ namespace WB.UI.Designer.Code.ImportExport.Models
             this.ConditionExpression = string.Empty;
             this.Description = string.Empty;
             this.Enabled = true;
-            this.Children = new List<IQuestionnaireEntity>();
+            this.Children = new List<QuestionnaireEntity>();
         }
         
-        public List<IQuestionnaireEntity> Children { get; set; }
+        public List<QuestionnaireEntity> Children { get; set; }
 
         public string ConditionExpression { get; set; }
 

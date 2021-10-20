@@ -11,6 +11,7 @@ using Answer = Main.Core.Entities.SubEntities.Answer;
 using Group = Main.Core.Entities.SubEntities.Group;
 using QuestionProperties = WB.Core.SharedKernels.QuestionnaireEntities.QuestionProperties;
 using Documents = WB.Core.SharedKernels.SurveySolutions.Documents;
+using QuestionnaireEntities = WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.UI.Designer.Code.ImportExport
 {
@@ -30,7 +31,7 @@ namespace WB.UI.Designer.Code.ImportExport
 
             this.CreateMap<Group, Models.Group>()
                 .IncludeBase<IComposite, QuestionnaireEntity>();
-            this.CreateMap<Group, QuestionnaireEntity>().As<Models.Group>();
+            //this.CreateMap<Group, QuestionnaireEntity>().As<Models.Group>();
 
             this.CreateMap<Documents.FixedRosterTitle, Models.FixedRosterTitle>();
             this.CreateMap<Models.FixedRosterTitle, Documents.FixedRosterTitle>()
@@ -38,18 +39,23 @@ namespace WB.UI.Designer.Code.ImportExport
                 
             this.CreateMap<Models.Group, Group>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>();
-            this.CreateMap<Models.Group, IComposite>().As<Group>();
+            //this.CreateMap<Models.Group, IComposite>().As<Group>();
             
             this.CreateMap<QuestionProperties, Models.QuestionProperties>();
             this.CreateMap<Models.QuestionProperties, QuestionProperties>();
             
+            this.CreateMap<QuestionnaireEntities.ValidationCondition, Models.ValidationCondition>();
+            this.CreateMap<Models.ValidationCondition, QuestionnaireEntities.ValidationCondition>();
+            
             this.CreateMap<AbstractQuestion, Models.Question.AbstractQuestion>()
-                /*.IncludeBase<IComposite, IQuestionnaireEntity>()*/;
+                .IncludeBase<IComposite, QuestionnaireEntity>();
             this.CreateMap<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .IncludeBase<IQuestionnaireEntity, IComposite>();
+                .IncludeBase<IQuestionnaireEntity, IComposite>()
+                .ForMember(aq => aq.StataExportCaption, aq=> aq.MapFrom(x => x.VariableName));
 
             this.CreateMap<TextQuestion, Models.Question.TextQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
+            //this.CreateMap<TextQuestion, QuestionnaireEntity>().As<Models.Question.TextQuestion>();
             this.CreateMap<Models.Question.TextQuestion, TextQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>();
 
