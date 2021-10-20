@@ -69,16 +69,19 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                     var multimediaQuestion = question.GetAsInterviewTreeMultimediaQuestion();
                     var fileName = multimediaQuestion.GetAnswer().FileName;
                     var binaryData = imageFileStorage.GetInterviewBinaryData(interview.Id, fileName);
-                    ImageSource.IImageSource imageSource = ImageSource.FromBinary(fileName, 
-                        () => binaryData);
-                    var image = paragraph.AddImage(imageSource);
-                    image.Width = Unit.FromPoint(300);
-                    image.Height = Unit.FromPoint(300);
+                    if (binaryData != null)
+                    {
+                        ImageSource.IImageSource imageSource = ImageSource.FromBinary(fileName, () => binaryData);
+                        var image = paragraph.AddImage(imageSource);
+                        image.Width = Unit.FromPoint(300);
+                        image.Height = Unit.FromPoint(300);
+                    }
+
                     paragraph.AddLineBreak();
                     var imageName = paragraph.AddFormattedText($"{fileName}", answerStyle);
                     imageName.Color = textColor;
                     imageName.Italic = true;
-                    var imageSize = paragraph.AddFormattedText($" - ({SizeInKb(binaryData.Length)})", answerStyle);
+                    var imageSize = paragraph.AddFormattedText($" - ({SizeInKb(binaryData?.Length ?? 0)})", answerStyle);
                     imageSize.Color = textColor;
                     imageSize.Italic = true;
                     imageSize.Bold = false;
