@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using AutoMapper;
@@ -8,6 +9,9 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using NUnit.Framework;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -27,9 +31,10 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             var questionnaireDocument = Create.QuestionnaireDocument(Id.g1);
             questionnaireDocument.Title = "test";
 
-            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument);
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
 
             questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
         }   
         
         [Test]
@@ -77,9 +82,10 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 AgreeToMakeThisQuestionnairePublic = true,
             };
 
-            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument);
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
 
             questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
         }
        
         [Test]
@@ -89,9 +95,10 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 Create.Chapter()
             );
 
-            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument);
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
             questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
         }
         
         [Test]
@@ -123,7 +130,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 chapter
             );
 
-            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument);
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
 
             questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
                 opt => opt.AllowingInfiniteRecursion()
@@ -132,6 +139,97 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                     .IncludingNestedObjects()
                     );
             questionnaireDocument.Children[0].Should().BeEquivalentTo(newQuestionnaire.Children[0]);
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void when_export_questionnaire_with_attachment_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter()
+            );
+            questionnaireDocument.Attachments = new List<Attachment>()
+            {
+                new Attachment() { Name = "attach #1", AttachmentId = Guid.NewGuid(), ContentId = "content1"},
+                new Attachment() { Name = "attach #2", AttachmentId = Guid.NewGuid(), ContentId = "content2"},
+            };
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void when_export_questionnaire_with_categories_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter()
+            );
+            questionnaireDocument.Categories = new List<Categories>()
+            {
+                new Categories() { Name = "Categories #1", Id = Guid.NewGuid() },
+                new Categories() { Name = "Categories #2", Id = Guid.NewGuid() },
+            };
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+        
+        [Test]
+        public void when_export_questionnaire_with_macroses_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter()
+            );
+            questionnaireDocument.Macros = new Dictionary<Guid, Macro>()
+            {
+                { Guid.NewGuid(), new Macro() { Name = "Macro #1", Description = "Description 1", Content = "content1"} },
+                { Guid.NewGuid(), new Macro() { Name = "Macro #2", Description = "Description 2", Content = "content2"} },
+            };
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+        
+        [Test]
+        public void when_export_questionnaire_with_translations_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter()
+            );
+            questionnaireDocument.Translations = new List<Translation>()
+            {
+                new Translation() { Name = "Translation #1", Id = Guid.NewGuid() },
+                new Translation() { Name = "Translation #2", Id = Guid.NewGuid() },
+            };
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+        
+        [Test]
+        public void when_export_questionnaire_with_lookup_tables_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter()
+            );
+            questionnaireDocument.LookupTables = new Dictionary<Guid, LookupTable>()
+            {
+                { Guid.NewGuid(), new LookupTable() { FileName = "FileName #1", TableName = "TableName 1", } },
+                { Guid.NewGuid(), new LookupTable() { FileName = "FileName #2", TableName = "TableName 2", } },
+            };
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
         }
 
         [Test]
@@ -143,7 +241,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                  )
             );
 
-            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument);
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
             questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
         }
@@ -173,12 +271,641 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 )
             );
 
-            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument);
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
+                opt => opt.AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+            );
+            errors.Count.Should().Be(0);
         }
 
-        private QuestionnaireDocument DoImportExportQuestionnaire(QuestionnaireDocument questionnaireDocument)
+        [Test]
+        public void when_export_empty_numeric_question_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                 Create.Chapter(
+                     children: new []
+                     {
+                         Create.NumericIntegerQuestion(variable: "int"), 
+                         Create.NumericRealQuestion(variable: "real")
+                     }
+                 )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+        
+        [Test]
+        public void when_export_numeric_question_should_be_equals_after_import()
+        {
+            var numericQuestion = Create.NumericIntegerQuestion(
+                id: Guid.NewGuid(), 
+                variable: "variable", 
+                enablementCondition: "enablementCondition",
+                validationExpression: "validationExpression", 
+                scope: QuestionScope.Supervisor,
+                isPrefilled: true,
+                hideIfDisabled: true,
+                validationConditions: new []{ Create.ValidationCondition() }, 
+                linkedToRosterId: Guid.NewGuid(),
+                title: "numeric", 
+                variableLabel: "label", 
+                options: new []{ new Option("1", "option1", "1") }
+                );
+            numericQuestion.CountOfDecimalPlaces = 7;
+            numericQuestion.UseFormatting = true;
+            
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new [] { numericQuestion }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
+                opt => opt.AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+            );
+            errors.Count.Should().Be(0);
+        }
+        
+        [Test]
+        public void when_export_empty_audio_question_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new []
+                    {
+                        Create.Question(questionType: QuestionType.Audio), 
+                    }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+        
+        [Test]
+        public void when_export_audio_question_should_be_equals_after_import()
+        {
+            var question = new AudioQuestion()
+            {
+                PublicKey = Guid.NewGuid(),
+                QuestionText = "question title",
+                VariableLabel = "variable",
+                ConditionExpression = "enablementCondition",
+                ValidationConditions = new[] { Create.ValidationCondition() },
+                QuestionScope = QuestionScope.Supervisor,
+                Featured = true,
+                HideIfDisabled = true,
+            };
+            
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new [] { question }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
+                opt => opt.AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+            );
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void when_export_empty_area_question_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new []
+                    {
+                        Create.Question(questionType: QuestionType.Area), 
+                    }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+        
+        [Test]
+        public void when_export_area_question_should_be_equals_after_import()
+        {
+            var question = new AreaQuestion()
+            {
+                PublicKey = Guid.NewGuid(),
+                QuestionText = "question title",
+                VariableLabel = "variable",
+                ConditionExpression = "enablementCondition",
+                ValidationConditions = new[] { Create.ValidationCondition() },
+                QuestionScope = QuestionScope.Supervisor,
+                Featured = true,
+                HideIfDisabled = true,
+            };
+            
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new [] { question }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
+                opt => opt.AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+            );
+            errors.Count.Should().Be(0);
+        }
+        
+        [Test]
+        public void when_export_empty_datetime_question_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new []
+                    {
+                        Create.Question(questionType: QuestionType.DateTime), 
+                    }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+           
+        [Test]
+        public void when_export_datetime_question_should_be_equals_after_import()
+        {
+            var question = new DateTimeQuestion()
+            {
+                PublicKey = Guid.NewGuid(),
+                QuestionText = "question title",
+                VariableLabel = "variable",
+                ConditionExpression = "enablementCondition",
+                ValidationConditions = new[] { Create.ValidationCondition() },
+                QuestionScope = QuestionScope.Supervisor,
+                Featured = true,
+                HideIfDisabled = true,
+                IsTimestamp = true
+            };
+            
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new [] { question }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
+                opt => opt.AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+            );
+            errors.Count.Should().Be(0);
+        }
+        
+        [Test]
+        public void when_export_empty_gps_question_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new []
+                    {
+                        Create.Question(questionType: QuestionType.GpsCoordinates), 
+                    }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+                   
+        [Test]
+        public void when_export_gps_question_should_be_equals_after_import()
+        {
+            var question = new GpsCoordinateQuestion()
+            {
+                PublicKey = Guid.NewGuid(),
+                QuestionText = "question title",
+                VariableLabel = "variable",
+                ConditionExpression = "enablementCondition",
+                ValidationConditions = new[] { Create.ValidationCondition() },
+                QuestionScope = QuestionScope.Supervisor,
+                Featured = true,
+                HideIfDisabled = true,
+            };
+            
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new [] { question }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
+                opt => opt.AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+            );
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void when_export_empty_multimedia_question_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new []
+                    {
+                        Create.Question(questionType: QuestionType.Multimedia), 
+                    }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+                   
+        [Test]
+        public void when_export_multimedia_question_should_be_equals_after_import()
+        {
+            var question = new MultimediaQuestion()
+            {
+                PublicKey = Guid.NewGuid(),
+                QuestionText = "question title",
+                VariableLabel = "variable",
+                ConditionExpression = "enablementCondition",
+                ValidationConditions = new[] { Create.ValidationCondition() },
+                QuestionScope = QuestionScope.Supervisor,
+                Featured = true,
+                HideIfDisabled = true,
+                IsSignature = true
+            };
+            
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new [] { question }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
+                opt => opt.AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+            );
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void when_export_empty_multi_options_question_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new []
+                    {
+                        Create.Question(questionType: QuestionType.MultyOption), 
+                    }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+                   
+        [Test]
+        public void when_export_mutioptions_question_should_be_equals_after_import()
+        {
+            var question = new MultyOptionsQuestion()
+            {
+                PublicKey = Guid.NewGuid(),
+                QuestionText = "question title",
+                VariableLabel = "variable",
+                ConditionExpression = "enablementCondition",
+                ValidationConditions = new[] { Create.ValidationCondition() },
+                QuestionScope = QuestionScope.Supervisor,
+                Featured = true,
+                HideIfDisabled = true,
+                AreAnswersOrdered = true,
+                MaxAllowedAnswers = 7,
+                YesNoView = true,
+                CategoriesId = Guid.NewGuid(),
+                Answers = new List<Answer>()
+                {
+                    new Answer() { AnswerText = "text1", AnswerValue = "111", },
+                    new Answer() { AnswerText = "text2", AnswerValue = "222", ParentValue = "111"},
+                }
+            };
+            
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new [] { question }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
+                opt => opt.AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+            );
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void when_export_empty_qr_barcode_question_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new []
+                    {
+                        Create.Question(questionType: QuestionType.QRBarcode), 
+                    }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+                   
+        [Test]
+        public void when_export_qr_barcode_question_should_be_equals_after_import()
+        {
+            var question = new QRBarcodeQuestion()
+            {
+                PublicKey = Guid.NewGuid(),
+                QuestionText = "question title",
+                VariableLabel = "variable",
+                ConditionExpression = "enablementCondition",
+                ValidationConditions = new[] { Create.ValidationCondition() },
+                QuestionScope = QuestionScope.Supervisor,
+                Featured = true,
+                HideIfDisabled = true,
+                IsTimestamp = true
+            };
+            
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new [] { question }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
+                opt => opt.AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+            );
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void when_export_empty_single_option_question_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new []
+                    {
+                        Create.Question(questionType: QuestionType.SingleOption), 
+                    }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+                   
+        [Test]
+        public void when_export_single_option_question_should_be_equals_after_import()
+        {
+            var question = new SingleQuestion()
+            {
+                PublicKey = Guid.NewGuid(),
+                QuestionText = "question title",
+                VariableLabel = "variable",
+                ConditionExpression = "enablementCondition",
+                ValidationConditions = new[] { Create.ValidationCondition() },
+                QuestionScope = QuestionScope.Supervisor,
+                Featured = true,
+                HideIfDisabled = true,
+                ShowAsList = true,
+                ShowAsListThreshold = 77,
+                CategoriesId = Guid.NewGuid(),
+                Answers = new List<Answer>()
+                {
+                    new Answer() { AnswerText = "text1", AnswerValue = "111", },
+                    new Answer() { AnswerText = "text2", AnswerValue = "222", ParentValue = "111"},
+                },
+            };
+            
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new [] { question }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
+                opt => opt.AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+            );
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void when_export_empty_text_list_question_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new []
+                    {
+                        Create.Question(questionType: QuestionType.TextList), 
+                    }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+                   
+        [Test]
+        public void when_export_text_list_question_should_be_equals_after_import()
+        {
+            var question = new TextListQuestion()
+            {
+                PublicKey = Guid.NewGuid(),
+                QuestionText = "question title",
+                VariableLabel = "variable",
+                ConditionExpression = "enablementCondition",
+                ValidationConditions = new[] { Create.ValidationCondition() },
+                QuestionScope = QuestionScope.Supervisor,
+                Featured = true,
+                HideIfDisabled = true,
+                MaxAnswerCount = 77,
+            };
+            
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new [] { question }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
+                opt => opt.AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+            );
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void when_export_empty_variable_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new []
+                    {
+                        Create.Variable(), 
+                    }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+                   
+        [Test]
+        public void when_export_variable_should_be_equals_after_import()
+        {
+            var variable = new Variable(publicKey: Guid.NewGuid(), null)
+            {
+                Expression = "expression",
+                Label = "Label",
+                Name = "Name",
+                DoNotExport = true,
+                Type = VariableType.DateTime,
+            };
+            
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new [] { variable }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
+                opt => opt.AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+            );
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void when_export_empty_static_text_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new []
+                    {
+                        Create.StaticText(), 
+                    }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            errors.Count.Should().Be(0);
+        }
+                          
+        [Test]
+        public void when_export_static_text_should_be_equals_after_import()
+        {
+            var staticText = new StaticText(
+                publicKey: Guid.NewGuid(), 
+                text: "text",
+                conditionExpression: "",
+                hideIfDisabled: true,
+                attachmentName: "attachment #1",
+                validationConditions: new List<ValidationCondition>()
+                {
+                    new ValidationCondition("val exp", "val message")
+                });
+            
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                Create.Chapter(
+                    children: new [] { staticText }
+                )
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
+                opt => opt.AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+            );
+            errors.Count.Should().Be(0);
+        }
+
+        private QuestionnaireDocument DoImportExportQuestionnaire(QuestionnaireDocument questionnaireDocument, out IList<string> errors)
         {
             var mapper = new MapperConfiguration(cfg =>
             {
@@ -187,8 +914,27 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var service = new ImportExportQuestionnaireService(mapper, new NewtonJsonSerializer());
             var json = service.Export(questionnaireDocument);
+
+            errors = ValidateBySchema(json);
+            
             var newDocument = service.Import(json);
             return newDocument;
+        }
+
+        private IList<string> ValidateBySchema(string json)
+        {
+            var testType = typeof(ImportExportTests);
+            var readResourceFile = $"{testType.Namespace}.SchemaExample.json";
+
+            using Stream stream = testType.Assembly.GetManifestResourceStream(readResourceFile);
+            using StreamReader reader = new StreamReader(stream);
+            string schemaText = reader.ReadToEnd();
+
+            var schema = JSchema.Parse(schemaText);
+
+            JToken jToken = JToken.Parse(json);
+            jToken.IsValid(schema, out IList<ValidationError> errors);
+            return errors.Select(e => e.Message).ToList();
         }
     }
 }

@@ -5,7 +5,7 @@ using WB.UI.Designer.Code.ImportExport.Models.Question;
 
 namespace WB.UI.Designer.Code.ImportExport.Models
 {
-    //[JsonConverter(typeof(QuestionnaireEntityJsonConverter), "type")]
+    [JsonConverter(typeof(QuestionnaireEntityJsonConverter), "type")]
     [KnownType(typeof(TextQuestion))]
     [KnownType(typeof(NumericQuestion))]
     [KnownType(typeof(AreaQuestion))]
@@ -18,10 +18,10 @@ namespace WB.UI.Designer.Code.ImportExport.Models
     [KnownType(typeof(SingleQuestion))]
     [KnownType(typeof(TextListQuestion))]
     [KnownType(typeof(Group))]
+    [KnownType(typeof(StaticText))]
+    [KnownType(typeof(Variable))]
     public abstract class QuestionnaireEntity : IQuestionnaireEntity
     {
         public Guid PublicKey { get; set; }
-
-        public string? VariableName { get; set; } 
     }
 }

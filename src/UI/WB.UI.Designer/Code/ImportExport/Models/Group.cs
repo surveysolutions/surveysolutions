@@ -9,26 +9,19 @@ namespace WB.UI.Designer.Code.ImportExport.Models
     [DebuggerDisplay("Group {PublicKey}")]
     public class Group : QuestionnaireEntity
     {
-        public Group()
-        {
-            this.Title = string.Empty;
-            this.ConditionExpression = string.Empty;
-            this.Description = string.Empty;
-            this.Enabled = true;
-            this.Children = new List<QuestionnaireEntity>();
-        }
+        public string? VariableName { get; set; } 
         
-        public List<QuestionnaireEntity> Children { get; set; }
+        public List<QuestionnaireEntity> Children { get; set; } = new List<QuestionnaireEntity>();
 
-        public string ConditionExpression { get; set; }
+        public string ConditionExpression { get; set; } = string.Empty;
 
         public bool HideIfDisabled { get; set; }
 
         public RosterDisplayMode DisplayMode { get; set; }
 
-        public bool Enabled { get; set; }
+        public bool Enabled { get; set; } = true;
 
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         public bool IsRoster { get; set; }
 
@@ -42,6 +35,6 @@ namespace WB.UI.Designer.Code.ImportExport.Models
 
         public Guid? RosterTitleQuestionId { get; set; }
 
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
     }
 }

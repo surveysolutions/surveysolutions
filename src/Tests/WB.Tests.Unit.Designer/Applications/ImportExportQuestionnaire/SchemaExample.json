@@ -20,7 +20,7 @@
       "items": {
         "$ref": "#/definitions/Group"
       },
-      "minItems": 1
+      "minItems": 0
     },
     "Macros": {
       "type": "object",
@@ -60,14 +60,12 @@
     "Answer": {
       "type": "object",
       "properties": {
-        "AnswerText": { "type": "string" },
-        "AnswerCode": { "type": "number" },
-        "AnswerValue": { "type": "string" },
+        "Text": { "type": "string" },
+        "Code": { "type": "number" },
         "ParentCode": { "type": "number" },
-        "ParentValue": { "type": "string" }
       },
       "additionalProperties": false,
-      "required": ["AnswerText", "AnswerValue"]
+      "required": ["Text", "Code"]
     },
   
     "Answers": {
@@ -80,7 +78,7 @@
     "AreaQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": 12 },
+        "QuestionType": { "const": "Area" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -131,7 +129,7 @@
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
-        "QuestionType": { "const": 13 },
+        "QuestionType": { "const": "Audio" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" }
@@ -152,7 +150,7 @@
     "DateTimeQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": 5 },
+        "QuestionType": { "const": "DateTime" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -194,7 +192,7 @@
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
-        "QuestionType": { "const": 6 },
+        "QuestionType": { "const": "GpsCoordinates" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" }
@@ -307,7 +305,7 @@
     "MultimediaQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": 11 },
+        "QuestionType": { "const": "Multimedia" },
         "IsSignature": { "type": "boolean" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
@@ -326,7 +324,7 @@
     "MultiOptionsQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": 3 },
+        "QuestionType": { "const": "MultiOptions" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -356,7 +354,7 @@
     "NumericQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": 4 },
+        "QuestionType": { "const": "Numeric" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -372,7 +370,6 @@
         "CountOfDecimalPlaces": { "type": "integer", "minimum": 0 },
         "IsInteger": { "type": "boolean", "default": true },
         "UseFormatting": { "type": "boolean", "default": false }
-        
       },
       "required": ["PublicKey", "QuestionType"]
     },
@@ -380,7 +377,7 @@
     "QRBarcodeQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": 10 },
+        "QuestionType": { "const": "QRBarcode" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -425,7 +422,7 @@
     "SingleQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": 0 },
+        "QuestionType": { "const": "SingleOption" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -471,7 +468,7 @@
     "TextListQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": {"const": 9},
+        "QuestionType": {"const": "TextList"},
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -491,7 +488,7 @@
     "TextQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const" : "Text2" },
+        "QuestionType": { "const" : "Text" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },

@@ -8,8 +8,8 @@ namespace WB.UI.Designer.Code.ImportExport.Models
     {
         public string Text { get; set; } = String.Empty;
 
-        public decimal? Code { get; set; }
+        public int Code { get; set; }
 
-        public decimal? ParentCode { get; set; }
+        public int? ParentCode { get; set; }
     }
 }

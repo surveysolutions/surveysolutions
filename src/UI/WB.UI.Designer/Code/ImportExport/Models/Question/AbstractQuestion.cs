@@ -13,6 +13,8 @@ namespace WB.UI.Designer.Code.ImportExport.Models.Question
     [DebuggerDisplay("{GetType().Name} {VariableName} {PublicKey}")]
     public abstract class AbstractQuestion : QuestionnaireEntity, IQuestion
     {
+        public string? VariableName { get; set; } 
+
         public Order? AnswerOrder { get; set; }
 
         public List<Answer> Answers { get; set; } = new List<Answer>();

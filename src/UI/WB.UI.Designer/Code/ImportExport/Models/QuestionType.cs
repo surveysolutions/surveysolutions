@@ -9,10 +9,7 @@ namespace WB.UI.Designer.Code.ImportExport.Models
     {
         SingleOption = 0,
 
-        [Obsolete("db contains at least one questionnaire")]
-        YesNo = 1,
-
-        MultyOption = 3,
+        MultiOptions = 3,
 
         Numeric = 4,
 
@@ -21,9 +18,6 @@ namespace WB.UI.Designer.Code.ImportExport.Models
         GpsCoordinates = 6,
 
         Text = 7,
-
-        [Obsolete("db contains a bunch of them")]
-        AutoPropagate = 8,
 
         TextList = 9,
 
