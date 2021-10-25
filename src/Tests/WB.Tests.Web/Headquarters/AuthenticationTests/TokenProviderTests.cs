@@ -156,7 +156,7 @@ namespace WB.Tests.Web.Headquarters.AuthenticationTests
         [Test]
         public static async Task when_generating_token()
         {
-            
+            var testToken = "test_token";
             var userId = Guid.NewGuid();
             var user = Mock.Of<HqUser>();
             
@@ -164,6 +164,10 @@ namespace WB.Tests.Web.Headquarters.AuthenticationTests
             userStore.Setup(u => u.FindByIdAsync(userId.FormatGuid(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(user));
 
+            var asIUserAuthenticationTokenStore = userStore.As<IUserAuthenticationTokenStore<HqUser>>();
+            asIUserAuthenticationTokenStore.Setup(u => u.GetTokenAsync(user, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(testToken));
+            
             var provider = TokenProvider(userStore.Object,
                 Mock.Of<IOptions<TokenProviderOptions>>(c => c.Value == new TokenProviderOptions()
                 {
