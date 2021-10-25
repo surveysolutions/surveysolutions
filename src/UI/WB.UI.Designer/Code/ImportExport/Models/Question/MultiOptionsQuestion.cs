@@ -5,11 +5,16 @@ using Main.Core.Entities.Composite;
 
 namespace WB.UI.Designer.Code.ImportExport.Models.Question
 {
-    public class MultiOptionsQuestion : AbstractQuestion
+    public class MultiOptionsQuestion : AbstractQuestion, ICategoricalQuestion, ILinkedQuestion
     {
         public bool AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }
         public bool YesNoView { get; set; }
         public Guid? CategoriesId { get; set; }
+        public List<Answer>? Answers { get; set; }
+        public string? OptionsFilterExpression { get; set; }
+        public Guid? LinkedToRosterId { get; set; }
+        public Guid? LinkedToQuestionId { get; set; }
+        public string? LinkedFilterExpression { get; set; }
     }
 }

@@ -12,5 +12,7 @@ namespace WB.UI.Designer.Code.ImportExport.Models.Question
         public int? CountOfDecimalPlaces { get; set; }
 
         public bool UseFormatting { get; set; }
+    
+        public List<Answer>? Answers { get; set; }
     }
 }

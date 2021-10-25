@@ -6,12 +6,14 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using FluentAssertions;
+using FluentAssertions.Equivalency;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
+using NSubstitute;
 using NUnit.Framework;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -97,7 +99,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
         
@@ -132,12 +135,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
 
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-                    );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             questionnaireDocument.Children[0].Should().BeEquivalentTo(newQuestionnaire.Children[0]);
             errors.Count.Should().Be(0);
         }
@@ -156,7 +155,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
 
@@ -174,7 +174,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
         
@@ -192,7 +193,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
         
@@ -210,7 +212,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
         
@@ -228,7 +231,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
 
@@ -243,7 +247,9 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
+            errors.Count.Should().Be(0);
         }
         
         [Test]
@@ -253,12 +259,12 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 questionId: Guid.NewGuid(),
                 text: "Title",
                 enablementCondition: "enablementCondition",
-                validationExpression: "validationExpression",
+                //validationExpression: "validationExpression",
                 mask: "mask",
                 variable: "variable",
-                validationMessage: "validationMessage",
+                //validationMessage: "validationMessage",
                 scope: QuestionScope.Supervisor,
-                preFilled: true,
+                //preFilled: true,
                 label: "label",
                 instruction: "instruction",
                 validationConditions: new ValidationCondition[] { Create.ValidationCondition() },
@@ -273,12 +279,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-            );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
 
@@ -297,7 +299,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
         
@@ -308,18 +311,19 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 id: Guid.NewGuid(), 
                 variable: "variable", 
                 enablementCondition: "enablementCondition",
-                validationExpression: "validationExpression", 
+                //validationExpression: "validationExpression", 
                 scope: QuestionScope.Supervisor,
-                isPrefilled: true,
+                isPrefilled: false,
                 hideIfDisabled: true,
                 validationConditions: new []{ Create.ValidationCondition() }, 
-                linkedToRosterId: Guid.NewGuid(),
+                //linkedToRosterId: Guid.NewGuid(),
                 title: "numeric", 
                 variableLabel: "label", 
                 options: new []{ new Option("1", "option1", "1") }
                 );
             numericQuestion.CountOfDecimalPlaces = 7;
             numericQuestion.UseFormatting = true;
+            numericQuestion.Properties = new QuestionProperties(hideInstructions: true, useFormatting: true);
             
             var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
                 Create.Chapter(
@@ -329,15 +333,13 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-            );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
-        
+
+
+
         [Test]
         public void when_export_empty_audio_question_should_be_equals_after_import()
         {
@@ -352,7 +354,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
         
@@ -367,7 +370,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                Featured = true,
+                //Featured = true,
                 HideIfDisabled = true,
             };
             
@@ -379,12 +382,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-            );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
 
@@ -402,7 +401,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
         
@@ -417,8 +417,12 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                Featured = true,
+                //Featured = true,
                 HideIfDisabled = true,
+                Properties = new QuestionProperties(hideInstructions: true, useFormatting: false)
+                {
+                    GeometryType = GeometryType.Polygon,
+                }
             };
             
             var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
@@ -429,12 +433,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-            );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
         
@@ -452,7 +452,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
            
@@ -467,9 +468,13 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                Featured = true,
+                //Featured = true,
                 HideIfDisabled = true,
-                IsTimestamp = true
+                IsTimestamp = true,
+                Properties = new QuestionProperties(hideInstructions: true, useFormatting: false)
+                {
+                    DefaultDate = DateTime.Now
+                }
             };
             
             var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
@@ -480,12 +485,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-            );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
         
@@ -503,7 +504,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
                    
@@ -518,7 +520,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                Featured = true,
+                //Featured = true,
                 HideIfDisabled = true,
             };
             
@@ -530,12 +532,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-            );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
 
@@ -553,7 +551,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
                    
@@ -568,7 +567,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                Featured = true,
+                //Featured = true,
                 HideIfDisabled = true,
                 IsSignature = true
             };
@@ -581,12 +580,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-            );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
 
@@ -604,7 +599,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
                    
@@ -619,7 +615,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                Featured = true,
+                //Featured = true,
                 HideIfDisabled = true,
                 AreAnswersOrdered = true,
                 MaxAllowedAnswers = 7,
@@ -629,6 +625,13 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 {
                     new Answer() { AnswerText = "text1", AnswerValue = "111", },
                     new Answer() { AnswerText = "text2", AnswerValue = "222", ParentValue = "111"},
+                },
+                LinkedToRosterId = Guid.NewGuid(),
+                LinkedToQuestionId = Guid.NewGuid(),
+                LinkedFilterExpression = "filter expression",
+                Properties = new QuestionProperties(hideInstructions: true, useFormatting: false)
+                {
+                    OptionsFilterExpression = "OptionsFilterExpression"
                 }
             };
             
@@ -640,12 +643,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-            );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
 
@@ -663,7 +662,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
                    
@@ -678,9 +678,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                Featured = true,
+                //Featured = true,
                 HideIfDisabled = true,
-                IsTimestamp = true
             };
             
             var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
@@ -691,12 +690,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-            );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
 
@@ -714,7 +709,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
                    
@@ -729,7 +725,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                Featured = true,
+                //Featured = true,
                 HideIfDisabled = true,
                 ShowAsList = true,
                 ShowAsListThreshold = 77,
@@ -739,6 +735,15 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                     new Answer() { AnswerText = "text1", AnswerValue = "111", },
                     new Answer() { AnswerText = "text2", AnswerValue = "222", ParentValue = "111"},
                 },
+                LinkedToRosterId = Guid.NewGuid(),
+                LinkedToQuestionId = Guid.NewGuid(),
+                LinkedFilterExpression = "filter expression",
+                Properties = new QuestionProperties(hideInstructions: true, useFormatting: false)
+                {
+                    OptionsFilterExpression = "OptionsFilterExpression",
+                },
+                CascadeFromQuestionId = Guid.NewGuid(),
+                IsFilteredCombobox = true,
             };
             
             var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
@@ -749,12 +754,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-            );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
 
@@ -772,7 +773,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
                    
@@ -787,7 +789,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                Featured = true,
+                //Featured = true,
                 HideIfDisabled = true,
                 MaxAnswerCount = 77,
             };
@@ -800,12 +802,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-            );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
 
@@ -823,7 +821,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
                    
@@ -847,12 +846,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-            );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
 
@@ -870,7 +865,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
                           
@@ -896,12 +892,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, 
-                opt => opt.AllowingInfiniteRecursion()
-                    .WithStrictOrdering()
-                    .ThrowingOnMissingMembers()
-                    .IncludingNestedObjects()
-            );
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
             errors.Count.Should().Be(0);
         }
 
@@ -935,6 +927,23 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             JToken jToken = JToken.Parse(json);
             jToken.IsValid(schema, out IList<ValidationError> errors);
             return errors.Select(e => e.Message).ToList();
+        }
+        
+        private static Func<EquivalencyAssertionOptions<QuestionnaireDocument>, EquivalencyAssertionOptions<QuestionnaireDocument>> CompareOptions()
+        {
+            return opt => opt
+                    .AllowingInfiniteRecursion()
+                    .WithStrictOrdering()
+                    .ThrowingOnMissingMembers()
+                    .IncludingNestedObjects()
+                    .IncludingProperties()
+                    //.WithTracing()
+                    .IgnoringCyclicReferences()
+                    .ComparingEnumsByName()
+                    .ComparingRecordsByMembers()
+                    .IncludingAllDeclaredProperties()
+                    .IncludingAllRuntimeProperties()
+                ;
         }
     }
 }

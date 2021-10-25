@@ -13,7 +13,7 @@ namespace WB.UI.Designer.Code.ImportExport.Models
         
         public List<QuestionnaireEntity> Children { get; set; } = new List<QuestionnaireEntity>();
 
-        public string ConditionExpression { get; set; } = string.Empty;
+        public string? ConditionExpression { get; set; }
 
         public bool HideIfDisabled { get; set; }
 

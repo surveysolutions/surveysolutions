@@ -15,21 +15,15 @@ namespace WB.UI.Designer.Code.ImportExport.Models.Question
     {
         public string? VariableName { get; set; } 
 
-        public Order? AnswerOrder { get; set; }
-
-        public List<Answer> Answers { get; set; } = new List<Answer>();
-
         public string? Comments { get; set; }
 
         public string? ConditionExpression { get; set; }
 
         public bool HideIfDisabled { get; set; }
 
-        public bool Featured { get; set; }
-
         public string? Instructions { get; set; }
 
-        public QuestionProperties? Properties { get; set; }
+        public bool? HideInstructions { get; set; }
 
         public QuestionScope QuestionScope { get; set; }
 
@@ -38,22 +32,6 @@ namespace WB.UI.Designer.Code.ImportExport.Models.Question
         public virtual QuestionType QuestionType { get; set; }
 
         public string? VariableLabel { get; set; }
-
-        public string? ValidationExpression { get; set; }
-
-        public string? ValidationMessage { get; set; }
-
-        public Guid? LinkedToRosterId { get; set; }
-
-        public Guid? CascadeFromQuestionId { get; set; }
-
-        public Guid? LinkedToQuestionId { get; set; }
-
-        public string? LinkedFilterExpression { get; set; }
-
-        public bool? IsFilteredCombobox { get; set; }
-
-        public bool IsTimestamp { get; set; }
 
         public IList<ValidationCondition>? ValidationConditions { get; set; } 
     }
