@@ -134,9 +134,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
             await unitOfWork.Session.SaveAsync(token);
         }
 
-        protected override Task RemoveUserTokenAsync(HqUserToken token)
+        protected override async Task RemoveUserTokenAsync(HqUserToken token)
         {
-            throw new NotImplementedException();
+            await unitOfWork.Session.DeleteAsync(token);
         }
 
         public override Task AddLoginAsync(HqUser user, UserLoginInfo login, CancellationToken cancellationToken = new CancellationToken())

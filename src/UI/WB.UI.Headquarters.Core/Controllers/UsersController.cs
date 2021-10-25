@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters;
@@ -264,7 +262,8 @@ namespace WB.UI.Headquarters.Controllers
                     CanBeLockedAsSupervisor = authorizedUser.IsAdministrator && (userRole == UserRoles.Interviewer),
                     CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
                     RecoveryCodes = "",
-                    CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate
+                    CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
+                    TokenIssued = await this.tokenProvider.DoesTokenExist(user)
                 },
                 Api = new
                 {
@@ -280,7 +279,8 @@ namespace WB.UI.Headquarters.Controllers
                     ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes", new { id = user.Id }),
                     TwoFactorAuthenticationUrl = Url.Action("TwoFactorAuthentication", new { id = user.Id }),
                     CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = user.Id }),
-                    GenerateApiKeyUrl = Url.Action("GenerateApiKey")
+                    GenerateApiKeyUrl = Url.Action("GenerateApiKey"),
+                    DeleteApiKeyUrl = Url.Action("DeleteApiKey")
                 }
             };
         }
@@ -364,7 +364,8 @@ namespace WB.UI.Headquarters.Controllers
                     ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes", new { id = user.Id }),
                     TwoFactorAuthenticationUrl = Url.Action("TwoFactorAuthentication", new { id = user.Id }),
                     CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = user.Id }),
-                    GenerateApiKeyUrl = Url.Action("GenerateApiKey")
+                    GenerateApiKeyUrl = Url.Action("GenerateApiKey"),
+                    DeleteApiKeyUrl = Url.Action("DeleteApiKey")
                 }
             });
         }
@@ -461,11 +462,11 @@ namespace WB.UI.Headquarters.Controllers
                     ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes", new { id = user.Id }),
                     TwoFactorAuthenticationUrl = Url.Action("TwoFactorAuthentication", new { id = user.Id }),
                     CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = user.Id }),
-                    GenerateApiKeyUrl = Url.Action("GenerateApiKey")
+                    GenerateApiKeyUrl = Url.Action("GenerateApiKey"),
+                    DeleteApiKEyUrl = Url.Action("DeleteApiKey")
                 }
             });
         }
-
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
@@ -902,9 +903,27 @@ namespace WB.UI.Headquarters.Controllers
             }
             else if (this.ModelState.IsValid)
             {
-                string encodedJwt = this.tokenProvider.GetBearerToken(currentUser);
+                string encodedJwt = await this.tokenProvider.GetOrCreateBearerTokenAsync(currentUser);
                 return Content(encodedJwt);
             }
+
+            return this.ModelState.ErrorsToJsonResult();
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObservingNotAllowed]
+        [AuthorizeByRole(UserRoles.Administrator)]
+        public async Task<ActionResult> DeleteApiKey([FromBody] UserModel editModel)
+        {
+            if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
+
+            var currentUser = await this.userManager.FindByIdAsync(editModel.UserId.FormatGuid());
+            if (currentUser == null) return NotFound("User not found");
+
+            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+
+            await this.tokenProvider.InvalidateBearerTokenAsync(currentUser);
 
             return this.ModelState.ErrorsToJsonResult();
         }

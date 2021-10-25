@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Headquarters.Views.User;
+﻿using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.UI.Headquarters.Code.Authentication
 {
@@ -6,7 +7,12 @@ namespace WB.UI.Headquarters.Code.Authentication
     {
         bool CanGenerate { get; }
 
-        //TokenProviderOptions TokenProviderOptions { get; }
-        string GetBearerToken(HqUser user);
+        Task<string> GetOrCreateBearerTokenAsync(HqUser user);
+        
+        Task InvalidateBearerTokenAsync(HqUser user);
+        
+        Task<bool> DoesTokenExist(HqUser user);
+        
+        Task<bool> ValidateJtiAsync(HqUser user, string jti);
     }
 }

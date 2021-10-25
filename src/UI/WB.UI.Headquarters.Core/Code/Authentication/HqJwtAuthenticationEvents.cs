@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.JsonWebTokens;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.Domain;
@@ -19,12 +20,16 @@ namespace WB.UI.Headquarters.Code.Authentication
         private readonly IInScopeExecutor<IUserRepository> userRepository;
         private readonly IUserClaimsPrincipalFactory<HqUser> claimFactory;
         private bool isUserLocked;
+        private readonly ITokenProvider tokenProvider;
         private const string FailureMessage = "Invalid user";
 
-        public HqJwtAuthenticationEvents(IInScopeExecutor<IUserRepository> userRepository, IUserClaimsPrincipalFactory<HqUser> claimFactory)
+        public HqJwtAuthenticationEvents(IInScopeExecutor<IUserRepository> userRepository, 
+            IUserClaimsPrincipalFactory<HqUser> claimFactory,
+            ITokenProvider tokenProvider)
         {
             this.userRepository = userRepository;
             this.claimFactory = claimFactory;
+            this.tokenProvider = tokenProvider;
         }
 
         public override async Task TokenValidated(TokenValidatedContext context)
@@ -48,7 +53,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                     context.Fail(FailureMessage);
                     return;
                 }
-            
+                
                 await this.userRepository.ExecuteAsync(async u =>
                 {
                     var hqUser = await u.FindByIdAsync(userId);
@@ -59,7 +64,13 @@ namespace WB.UI.Headquarters.Code.Authentication
                         context.Fail("User is locked");
                         return Task.CompletedTask;
                     }
-                    
+
+                    if (!await this.tokenProvider.ValidateJtiAsync(hqUser, GetFirstClaim(JwtRegisteredClaimNames.Jti)?.Value))
+                    {
+                        context.Fail("Invalid token");
+                        return Task.CompletedTask;
+                    }
+
                     var observerClaim = GetFirstClaim(AuthorizedUser.ObserverClaimType);
 
                     if (observerClaim != null)
@@ -78,13 +89,11 @@ namespace WB.UI.Headquarters.Code.Authentication
                     context.Principal = await claimFactory.CreateAsync(hqUser);
                     return Task.CompletedTask;
                 });
-
             }
             catch (Exception e)
             {
                 context.Fail(FailureMessage);
             }
-            
         }
     }
 }

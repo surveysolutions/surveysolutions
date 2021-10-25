@@ -169,6 +169,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to API token is:.
+        /// </summary>
+        public static string AccountManage_StatusApiToken {
+            get {
+                return ResourceManager.GetString("AccountManage_StatusApiToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit {0} profile.
         /// </summary>
         public static string AccountManage_Title {
