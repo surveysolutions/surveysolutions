@@ -29,8 +29,9 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         {
             JsonSchemaGeneratorSettings settings = new JsonSchemaGeneratorSettings()
             {
-                FlattenInheritanceHierarchy = false
+                FlattenInheritanceHierarchy = false,
             };
+            settings.DefaultEnumHandling = EnumHandling.String;
             var jsonSchema = JsonSchema.FromType<Questionnaire>(settings);
             var json = jsonSchema.ToJson();
             

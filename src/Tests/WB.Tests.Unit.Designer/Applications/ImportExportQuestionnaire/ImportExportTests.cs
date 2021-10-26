@@ -15,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using NSubstitute;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -45,23 +46,23 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             var questionnaireDocument = Create.QuestionnaireDocument(Id.g1);
             questionnaireDocument.Title = "test";
             questionnaireDocument.Description = "desc";
-            questionnaireDocument.Id = "id";
-            questionnaireDocument.Revision = 17;
-            questionnaireDocument.CloseDate = DateTime.Now;
+            var documentPublicKey = Guid.NewGuid();
+            questionnaireDocument.Id = documentPublicKey.FormatGuid();
+            questionnaireDocument.PublicKey = documentPublicKey;
+            //questionnaireDocument.Revision = 17;
+            //questionnaireDocument.CloseDate = DateTime.Now;
             //questionnaireDocument.ConditionExpression = "ConditionExpression";
             questionnaireDocument.CreatedBy = Guid.NewGuid();
             questionnaireDocument.CreationDate = DateTime.Now;
             questionnaireDocument.DefaultTranslation = Guid.NewGuid();
             questionnaireDocument.IsDeleted = true;
             questionnaireDocument.IsPublic = true;
-            questionnaireDocument.OpenDate = DateTime.Now;
-            questionnaireDocument.PublicKey = Guid.NewGuid();
+            //questionnaireDocument.OpenDate = DateTime.Now;
             questionnaireDocument.VariableName = "VariableName";
             questionnaireDocument.DefaultLanguageName = "DefaultLanguageName";
             questionnaireDocument.HideIfDisabled = true;
             questionnaireDocument.LastEntryDate = DateTime.Now;
             //questionnaireDocument.LastEventSequence = 777;
-            questionnaireDocument.CoverPageSectionId = Guid.NewGuid();
             questionnaireDocument.Metadata = new QuestionnaireMetaInfo()
             {
                 Consultant = "Consultant",
@@ -83,6 +84,12 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ModeOfDataCollection = ModeOfDataCollection.Mail,
                 AgreeToMakeThisQuestionnairePublic = true,
             };
+            var coverPageSectionId = Guid.NewGuid();
+            questionnaireDocument.CoverPageSectionId = coverPageSectionId;
+            questionnaireDocument.Children = new List<IComposite>()
+            {
+                new Group() { PublicKey = coverPageSectionId }
+            }.ToReadOnlyCollection();
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
 

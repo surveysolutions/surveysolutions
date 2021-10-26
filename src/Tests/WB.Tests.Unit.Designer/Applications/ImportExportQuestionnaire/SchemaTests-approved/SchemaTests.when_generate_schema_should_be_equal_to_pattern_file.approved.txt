@@ -4,20 +4,9 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "PublicKey": {
-      "type": "string",
-      "format": "guid"
-    },
-    "CoverPageSectionId": {
-      "type": "string",
-      "format": "guid"
-    },
     "Id": {
-      "type": "string"
-    },
-    "Revision": {
-      "type": "integer",
-      "format": "int32"
+      "type": "string",
+      "format": "guid"
     },
     "Children": {
       "type": "array",
@@ -74,6 +63,9 @@
         "string"
       ],
       "format": "date-time"
+    },
+    "HideIfDisabled": {
+      "type": "boolean"
     },
     "CreationDate": {
       "type": "string",
@@ -133,6 +125,12 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "VariableName": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
             "Children": {
               "type": "array",
               "items": {
@@ -140,7 +138,10 @@
               }
             },
             "ConditionExpression": {
-              "type": "string"
+              "type": [
+                "null",
+                "string"
+              ]
             },
             "HideIfDisabled": {
               "type": "boolean"
@@ -171,7 +172,10 @@
               "$ref": "#/definitions/RosterSizeSourceType"
             },
             "FixedRosterTitles": {
-              "type": "array",
+              "type": [
+                "array",
+                "null"
+              ],
               "items": {
                 "$ref": "#/definitions/FixedRosterTitle"
               }
@@ -207,6 +211,8 @@
           "QRBarcodeQuestion": "#/definitions/QRBarcodeQuestion",
           "SingleQuestion": "#/definitions/SingleQuestion",
           "TextListQuestion": "#/definitions/TextListQuestion",
+          "StaticText": "#/definitions/StaticText",
+          "Variable": "#/definitions/Variable",
           "Group": "#/definitions/Group"
         }
       },
@@ -219,9 +225,6 @@
         "PublicKey": {
           "type": "string",
           "format": "guid"
-        },
-        "VariableName": {
-          "type": "string"
         },
         "type": {
           "type": "string"
@@ -257,21 +260,11 @@
           "x-abstract": true,
           "additionalProperties": false,
           "properties": {
-            "AnswerOrder": {
-              "oneOf": [
-                {
-                  "type": "null"
-                },
-                {
-                  "$ref": "#/definitions/Order"
-                }
+            "VariableName": {
+              "type": [
+                "null",
+                "string"
               ]
-            },
-            "Answers": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Answer"
-              }
             },
             "Comments": {
               "type": [
@@ -288,23 +281,16 @@
             "HideIfDisabled": {
               "type": "boolean"
             },
-            "Featured": {
-              "type": "boolean"
-            },
             "Instructions": {
               "type": [
                 "null",
                 "string"
               ]
             },
-            "Properties": {
-              "oneOf": [
-                {
-                  "type": "null"
-                },
-                {
-                  "$ref": "#/definitions/QuestionProperties"
-                }
+            "HideInstructions": {
+              "type": [
+                "boolean",
+                "null"
               ]
             },
             "QuestionScope": {
@@ -325,54 +311,6 @@
                 "string"
               ]
             },
-            "ValidationExpression": {
-              "type": [
-                "null",
-                "string"
-              ]
-            },
-            "ValidationMessage": {
-              "type": [
-                "null",
-                "string"
-              ]
-            },
-            "LinkedToRosterId": {
-              "type": [
-                "null",
-                "string"
-              ],
-              "format": "guid"
-            },
-            "CascadeFromQuestionId": {
-              "type": [
-                "null",
-                "string"
-              ],
-              "format": "guid"
-            },
-            "LinkedToQuestionId": {
-              "type": [
-                "null",
-                "string"
-              ],
-              "format": "guid"
-            },
-            "LinkedFilterExpression": {
-              "type": [
-                "null",
-                "string"
-              ]
-            },
-            "IsFilteredCombobox": {
-              "type": [
-                "boolean",
-                "null"
-              ]
-            },
-            "IsTimestamp": {
-              "type": "boolean"
-            },
             "ValidationConditions": {
               "type": [
                 "array",
@@ -384,100 +322,6 @@
             }
           }
         }
-      ]
-    },
-    "Order": {
-      "type": "string",
-      "description": "",
-      "x-enumNames": [
-        "AsIs",
-        "Random",
-        "AZ",
-        "ZA",
-        "MinMax",
-        "MaxMin"
-      ],
-      "enum": [
-        "AsIs",
-        "Random",
-        "AZ",
-        "ZA",
-        "MinMax",
-        "MaxMin"
-      ]
-    },
-    "Answer": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Text": {
-          "type": "string"
-        },
-        "Code": {
-          "type": [
-            "null",
-            "number"
-          ],
-          "format": "decimal"
-        },
-        "ParentCode": {
-          "type": [
-            "null",
-            "number"
-          ],
-          "format": "decimal"
-        }
-      }
-    },
-    "QuestionProperties": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "HideInstructions": {
-          "type": "boolean"
-        },
-        "UseFormatting": {
-          "type": "boolean"
-        },
-        "OptionsFilterExpression": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "GeometryType": {
-          "oneOf": [
-            {
-              "type": "null"
-            },
-            {
-              "$ref": "#/definitions/GeometryType"
-            }
-          ]
-        },
-        "DefaultDate": {
-          "type": [
-            "null",
-            "string"
-          ],
-          "format": "date-time"
-        }
-      }
-    },
-    "GeometryType": {
-      "type": "integer",
-      "description": "",
-      "x-enumNames": [
-        "Polygon",
-        "Polyline",
-        "Point",
-        "Multipoint"
-      ],
-      "enum": [
-        0,
-        1,
-        2,
-        3
       ]
     },
     "QuestionScope": {
@@ -501,13 +345,11 @@
       "description": "",
       "x-enumNames": [
         "SingleOption",
-        "YesNo",
-        "MultyOption",
+        "MultiOptions",
         "Numeric",
         "DateTime",
         "GpsCoordinates",
         "Text",
-        "AutoPropagate",
         "TextList",
         "QRBarcode",
         "Multimedia",
@@ -516,13 +358,11 @@
       ],
       "enum": [
         "SingleOption",
-        "YesNo",
-        "MultyOption",
+        "MultiOptions",
         "Numeric",
         "DateTime",
         "GpsCoordinates",
         "Text",
-        "AutoPropagate",
         "TextList",
         "QRBarcode",
         "Multimedia",
@@ -546,15 +386,15 @@
       }
     },
     "ValidationSeverity": {
-      "type": "integer",
+      "type": "string",
       "description": "",
       "x-enumNames": [
         "Error",
         "Warning"
       ],
       "enum": [
-        0,
-        1
+        "Error",
+        "Warning"
       ]
     },
     "NumericQuestion": {
@@ -578,10 +418,39 @@
             },
             "UseFormatting": {
               "type": "boolean"
+            },
+            "Answers": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
             }
           }
         }
       ]
+    },
+    "Answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Text": {
+          "type": "string"
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ParentCode": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "int32"
+        }
+      }
     },
     "AreaQuestion": {
       "allOf": [
@@ -590,8 +459,36 @@
         },
         {
           "type": "object",
-          "additionalProperties": false
+          "additionalProperties": false,
+          "properties": {
+            "GeometryType": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/definitions/GeometryType"
+                }
+              ]
+            }
+          }
         }
+      ]
+    },
+    "GeometryType": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Polygon",
+        "Polyline",
+        "Point",
+        "Multipoint"
+      ],
+      "enum": [
+        "Polygon",
+        "Polyline",
+        "Point",
+        "Multipoint"
       ]
     },
     "AudioQuestion": {
@@ -612,7 +509,19 @@
         },
         {
           "type": "object",
-          "additionalProperties": false
+          "additionalProperties": false,
+          "properties": {
+            "DefaultDate": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "date-time"
+            },
+            "IsTimestamp": {
+              "type": "boolean"
+            }
+          }
         }
       ]
     },
@@ -674,6 +583,41 @@
                 "string"
               ],
               "format": "guid"
+            },
+            "Answers": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            },
+            "OptionsFilterExpression": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "LinkedToRosterId": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "guid"
+            },
+            "LinkedToQuestionId": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "guid"
+            },
+            "LinkedFilterExpression": {
+              "type": [
+                "null",
+                "string"
+              ]
             }
           }
         }
@@ -720,6 +664,54 @@
                 "string"
               ],
               "format": "guid"
+            },
+            "Answers": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            },
+            "IsFilteredCombobox": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "OptionsFilterExpression": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "CascadeFromQuestionId": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "guid"
+            },
+            "LinkedToRosterId": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "guid"
+            },
+            "LinkedToQuestionId": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "guid"
+            },
+            "LinkedFilterExpression": {
+              "type": [
+                "null",
+                "string"
+              ]
             }
           }
         }
@@ -743,6 +735,101 @@
             }
           }
         }
+      ]
+    },
+    "StaticText": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/QuestionnaireEntity"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "Text": {
+              "type": "string"
+            },
+            "AttachmentName": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "ValidationConditions": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/definitions/ValidationCondition"
+              }
+            },
+            "ConditionExpression": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "HideIfDisabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "Variable": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/QuestionnaireEntity"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "Label": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "Type": {
+              "$ref": "#/definitions/VariableType"
+            },
+            "Name": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "Expression": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "DoNotExport": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "VariableType": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "LongInteger",
+        "Double",
+        "Boolean",
+        "DateTime",
+        "String"
+      ],
+      "enum": [
+        "LongInteger",
+        "Double",
+        "Boolean",
+        "DateTime",
+        "String"
       ]
     },
     "RosterDisplayMode": {
@@ -979,7 +1066,7 @@
       }
     },
     "StudyType": {
-      "type": "integer",
+      "type": "string",
       "description": "",
       "x-enumNames": [
         "AdministrativeRecords",
@@ -1008,34 +1095,34 @@
         "WorldHealthSurvey"
       ],
       "enum": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
-        23,
-        24
+        "AdministrativeRecords",
+        "AgriculturalCensus",
+        "AgriculturalSurvey",
+        "ChildLaborSurvey",
+        "CoreWelfareIndicatorsQuestionnaire",
+        "DemographicAndHealthSurvey",
+        "EnterpriseSurvey",
+        "EnterpriseCensus",
+        "InformalSectorSurvey",
+        "IntegratedSurvey",
+        "MultipleIndicatorClusterSurvey",
+        "LaborForceSurvey",
+        "LivingStandardsMeasurementStudy",
+        "HouseholdHealthSurvey",
+        "HouseholdSurvey",
+        "PriceSurvey",
+        "PrioritySurvey",
+        "PopulationAndHousingCensus",
+        "SampleFrame",
+        "ServiceProvisionAssessments",
+        "SocioEconomicMonitoringSurvey",
+        "StatisticalInfoAndMonitoringProg",
+        "WorldFertilitySurvey",
+        "WorldHealthSurvey"
       ]
     },
     "ModeOfDataCollection": {
-      "type": "integer",
+      "type": "string",
       "description": "",
       "x-enumNames": [
         "Capi",
@@ -1047,13 +1134,13 @@
         "Other"
       ],
       "enum": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7
+        "Capi",
+        "Cati",
+        "FaceToFace",
+        "Mail",
+        "FocusGroup",
+        "Internet",
+        "Other"
       ]
     }
   }

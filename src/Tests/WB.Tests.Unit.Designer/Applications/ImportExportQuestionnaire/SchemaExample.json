@@ -4,17 +4,23 @@
   "title": "Questionnaire Document",
   "description": "Survey Solutions questionnaire document",
   "type": "object",
-
+  "additionalProperties": false,
+  
   "properties": {
     "CoverPageSectionId": { "$ref": "#/definitions/GUID" },
     "DefaultTranslation": { "type": "string" },
     "CreationDate": { "type": "string", "format": "date-time" },
+    "LastEntryDate": { "type": "string", "format": "date-time" },
     "CreatedBy": { "type": "string" },
-    "PublicKey": { "$ref": "#/definitions/GUID" },
+    "Id": { "$ref": "#/definitions/GUID" },
     "Title": { "type": "string" },
+    "Description": { "type": "string" },
     "VariableName": { "$ref": "#/definitions/VariableName" },
     "DefaultLanguageName": { "type": "string" },
-
+    "HideIfDisabled": { "type": "boolean", "default": false },
+    "IsPublic": { "type": "boolean" },
+    "IsDeleted": { "type": "boolean" },
+    
     "Children": {
       "type": "array",
       "items": {
@@ -51,10 +57,11 @@
       "items": {
         "$ref": "#/definitions/Categories"
       }
-    }
+    },
+    "Metadata": { "$ref": "#/definitions/QuestionnaireMetaInfo" }
   },
 
-  "required": ["CoverPageSectionId", "Children", "Title"],
+  "required": ["Id", "Children", "Title"],
 
   "definitions": {
     "Answer": {
@@ -87,14 +94,14 @@
           "properties": {
             "HideInstructions": { "type": "boolean", "default": false },
             "GeometryType": {
-              "type": "integer",
+              "type": "string",
               "oneOf": [
-                { "const": 0, "description": "Polygon" },
-                { "const": 1, "description": "Polyline" },
-                { "const": 2, "description": "Point" },
-                { "const": 3, "description": "Multipoint" }
+                { "const": "Polygon",    "description": "Polygon" },
+                { "const": "Polyline",   "description": "Polyline" },
+                { "const": "Point",      "description": "Point" },
+                { "const": "Multipoint", "description": "Multipoint" }
               ],
-              "default": 0
+              "default": "Polygon"
             }
           }
         },
@@ -521,12 +528,12 @@
         "Expression": { "type": "string" },
         "Message": { "type": "string" },
         "Severity": {
-          "type": "integer",
+          "type": "string",
           "oneOf": [
-            { "const": 0, "description": "Error" },
-            { "const": 1, "description": "Warning" }
+            { "const": "Error", "description": "Error" },
+            { "const": "Warning", "description": "Warning" }
           ],
-          "default": 0
+          "default": "Error"
         }
       },
       "additionalProperties": false,
@@ -539,15 +546,15 @@
         "Label": { "$ref": "#/definitions/VariableLabel" },
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "Type": {
-          "type": "integer",
+          "type": "string",
           "oneOf": [
-            { "const": 1, "description": "Long Integer" },
-            { "const": 2, "description": "Double" },
-            { "const": 3, "description": "Boolean" },
-            { "const": 4, "description": "Date/Time" },
-            { "const": 5, "description": "String" }
+            { "const": "LongInteger", "description": "Long Integer" },
+            { "const": "Double", "description": "Double" },
+            { "const": "Boolean", "description": "Boolean" },
+            { "const": "DateTime", "description": "Date/Time" },
+            { "const": "String", "description": "String" }
           ],
-          "default": 3
+          "default": "Boolean"
         },
         "Name": { "type": "string" },
         "Expression": { "type": "string" },
@@ -560,6 +567,145 @@
 
     "VariableLabel": { "type": "string", "maxLength": 80 },
 
-    "VariableName": { "type": "string", "maxLength": 32 }
+    "VariableName": { "type": "string", "maxLength": 32 },
+
+    "QuestionnaireMetaInfo": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "SubTitle": { "type": [ "null", "string" ] },
+        "StudyType": {
+          "type": "string",
+          "oneOf": [
+            { "const": "AdministrativeRecords", "description": "AdministrativeRecords" },
+            { "const": "AgriculturalCensus", "description": "AgriculturalCensus" },
+            { "const": "AgriculturalSurvey", "description": "AgriculturalSurvey" },
+            { "const": "ChildLaborSurvey", "description": "ChildLaborSurvey" },
+            { "const": "CoreWelfareIndicatorsQuestionnaire", "description": "CoreWelfareIndicatorsQuestionnaire" },
+            { "const": "DemographicAndHealthSurvey", "description": "DemographicAndHealthSurvey" },
+            { "const": "EnterpriseSurvey", "description": "EnterpriseSurvey" },
+            { "const": "EnterpriseCensus", "description": "EnterpriseCensus" },
+            { "const": "InformalSectorSurvey", "description": "InformalSectorSurvey" },
+            { "const": "IntegratedSurvey", "description": "IntegratedSurvey" },
+            { "const": "MultipleIndicatorClusterSurvey", "description": "MultipleIndicatorClusterSurvey" },
+            { "const": "LaborForceSurvey", "description": "LaborForceSurvey" },
+            { "const": "LivingStandardsMeasurementStudy", "description": "LivingStandardsMeasurementStudy" },
+            { "const": "HouseholdHealthSurvey", "description": "HouseholdHealthSurvey" },
+            { "const": "HouseholdSurvey", "description": "HouseholdSurvey" },
+            { "const": "PriceSurvey", "description": "PriceSurvey" },
+            { "const": "PrioritySurvey", "description": "PrioritySurvey" },
+            { "const": "PopulationAndHousingCensus", "description": "PopulationAndHousingCensus" },
+            { "const": "SampleFrame", "description": "SampleFrame" },
+            { "const": "ServiceProvisionAssessments", "description": "ServiceProvisionAssessments" },
+            { "const": "SocioEconomicMonitoringSurvey", "description": "SocioEconomicMonitoringSurvey" },
+            { "const": "StatisticalInfoAndMonitoringProg", "description": "StatisticalInfoAndMonitoringProg" },
+            { "const": "WorldFertilitySurvey", "description": "WorldFertilitySurvey" },
+            { "const": "WorldHealthSurvey", "description": "WorldHealthSurvey" },
+          ],
+          "default": "AdministrativeRecords"
+        }, 
+        "Version": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "VersionNotes": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "KindOfData": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Country": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Year": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "int32"
+        },
+        "Language": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Coverage": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Universe": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "UnitOfAnalysis": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "PrimaryInvestigator": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Funding": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Consultant": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "ModeOfDataCollection": {
+          "type": "string",
+          "oneOf": [
+            { "const": "Capi", "description": "Capi" },
+            { "const": "Cati", "description": "Cati" },
+            { "const": "FaceToFace", "description": "Face To Face" },
+            { "const": "Mail", "description": "Mail" },
+            { "const": "FocusGroup", "description": "Focus Group" },
+            { "const": "Internet", "description": "Internet" },
+            { "const": "Other", "description": "Other" }
+          ],
+          "default": "Error"
+        },
+        "Notes": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Keywords": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "AgreeToMakeThisQuestionnairePublic": {
+          "type": "boolean"
+        }
+      }
+    }
   }
 }

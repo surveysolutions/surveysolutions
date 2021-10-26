@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             generator.SchemaReferenceHandling = SchemaReferenceHandling.All;
             generator.GenerationProviders.Add(new StringEnumGenerationProvider());
             generator.GenerationProviders.Add(new MyJSchemaGenerationProvider());
-
+            
             JSchema jsonSchema = generator.Generate(typeof(Questionnaire));
             var json = jsonSchema.ToString();
             
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             public override JSchema GetSchema(JSchemaTypeGenerationContext context)
             {
                 var schema = new JSchema();
-                var descendants = typeof(QuestionnaireEntity).Assembly.GetTypes().Where(item => !item.IsAbstract && typeof(QuestionnaireEntity).IsAssignableFrom(item)).ToList();
+                var descendants = typeof(IQuestionnaireEntity).Assembly.GetTypes().Where(item => !item.IsAbstract && typeof(IQuestionnaireEntity).IsAssignableFrom(item)).ToList();
                 foreach (var descendant in descendants)
                 {
                     // The line below never exits, because it's calling MySchemaGenerator.GetSchema again with the same parameter
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             public override bool CanGenerateSchema(JSchemaTypeGenerationContext context)
             {
-                return context.ObjectType == typeof(QuestionnaireEntity);
+                return context.ObjectType == typeof(IQuestionnaireEntity);
             }
         }
 

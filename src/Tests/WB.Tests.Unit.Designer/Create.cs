@@ -652,9 +652,11 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocument(
             string variable, Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null, Categories[] categories = null)
         {
+            var publicKey = id ?? Guid.NewGuid();
             return new QuestionnaireDocument
             {
-                PublicKey = id ?? Guid.NewGuid(),
+                PublicKey = publicKey,
+                Id = publicKey.FormatGuid(),
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
                 Title = title,
                 VariableName = variable,

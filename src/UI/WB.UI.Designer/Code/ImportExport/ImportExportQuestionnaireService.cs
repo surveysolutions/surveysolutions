@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Main.Core.Documents;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Schema;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -44,13 +46,28 @@ namespace WB.UI.Designer.Code.ImportExport
                 throw;
             }
         }*/
+        
+        private static readonly JsonSerializerSettings jsonSerializerSettings = 
+            new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                NullValueHandling = NullValueHandling.Ignore,
+                FloatParseHandling = FloatParseHandling.Decimal,
+                Formatting = Formatting.Indented,
+                Converters = new List<JsonConverter>()
+                {
+                    new Newtonsoft.Json.Converters.StringEnumConverter()
+                }
+
+            };
+        
         public string Export(QuestionnaireDocument questionnaireDocument)
         {
             try
             {
                 var map = mapper.Map<Models.Questionnaire>(questionnaireDocument);
-
-                var json = serializer.Serialize(map);
+                var json = JsonConvert.SerializeObject(map, jsonSerializerSettings);
+                //var json = serializer.Serialize(map);
                 return json;
             }
             catch (Exception e)

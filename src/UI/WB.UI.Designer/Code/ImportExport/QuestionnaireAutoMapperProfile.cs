@@ -1,10 +1,12 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using AutoMapper;
 using DocumentFormat.OpenXml.EMMA;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.UI.Designer.Code.ImportExport.Models;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -23,9 +25,13 @@ namespace WB.UI.Designer.Code.ImportExport
     {
         public QuestionnaireAutoMapperProfile()
         {
-            this.CreateMap<QuestionnaireDocument, Questionnaire>();
-            //.ForMember(x => x.Children, opts => opts.Ignore());
-            this.CreateMap<Questionnaire, QuestionnaireDocument>();
+            this.CreateMap<QuestionnaireDocument, Questionnaire>()
+                .ForMember(x => x.Id, opts => opts.MapFrom(t => t.PublicKey));
+            this.CreateMap<Questionnaire, QuestionnaireDocument>()
+                .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
+                .ForMember(s => s.Id, opt => opt.MapFrom(t => t.Id.FormatGuid()))
+                /*.ForMember(s => s.CoverPageSectionId, opt => opt.MapFrom(t => 
+                    t.Children != null && t.Children.Count > 0 ? t.Children[0].PublicKey : Guid.NewGuid()))*/;
             
             this.CreateMap<WB.Core.SharedKernels.Questionnaire.Documents.QuestionnaireMetaInfo, Models.QuestionnaireMetaInfo>();
             this.CreateMap<Models.QuestionnaireMetaInfo, WB.Core.SharedKernels.Questionnaire.Documents.QuestionnaireMetaInfo>();
@@ -110,7 +116,7 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<Models.Question.AreaQuestion, AreaQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
                 //.ForMember(s => s.Properties!.GeometryType, d => d.MapFrom(t => t.GeometryType));
-                .AfterMap((s, d) => d.Properties!.GeometryType = (GeometryType)(s.GeometryType ?? Models.Question.GeometryType.Point));
+                .AfterMap((s, d) => d.Properties!.GeometryType = (GeometryType)(s.GeometryType ?? Models.Question.GeometryType.Polygon));
 
             this.CreateMap<AudioQuestion, Models.Question.AudioQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();

@@ -353,20 +353,8 @@
   },
   "type": "object",
   "properties": {
-    "PublicKey": {
-      "type": "string"
-    },
-    "CoverPageSectionId": {
-      "type": "string"
-    },
     "Id": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "Revision": {
-      "type": "integer"
+      "type": "string"
     },
     "Children": {
       "$ref": "#/definitions/List<Group>"
@@ -404,6 +392,9 @@
         "null"
       ],
       "format": "date-time"
+    },
+    "HideIfDisabled": {
+      "type": "boolean"
     },
     "CreationDate": {
       "type": "string",
@@ -455,10 +446,7 @@
     }
   },
   "required": [
-    "PublicKey",
-    "CoverPageSectionId",
     "Id",
-    "Revision",
     "Children",
     "Macros",
     "LookupTables",
@@ -468,6 +456,7 @@
     "DefaultTranslation",
     "DefaultLanguageName",
     "CloseDate",
+    "HideIfDisabled",
     "CreationDate",
     "LastEntryDate",
     "OpenDate",
