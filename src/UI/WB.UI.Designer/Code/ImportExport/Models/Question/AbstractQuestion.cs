@@ -29,7 +29,7 @@ namespace WB.UI.Designer.Code.ImportExport.Models.Question
 
         public string? QuestionText { get; set; }
 
-        public virtual QuestionType QuestionType { get; set; }
+        // public virtual QuestionType QuestionType { get; set; }
 
         public string? VariableLabel { get; set; }
 

@@ -9,7 +9,7 @@ namespace WB.UI.Designer.Code.ImportExport.Models
         string? Instructions { get; set; }
         bool? HideInstructions { get; set; }
         string? QuestionText { get; set; }
-        QuestionType QuestionType { get; set; }
+        //QuestionType QuestionType { get; set; }
         QuestionScope QuestionScope { get; set; }
         string? VariableLabel { get; set; }
     }

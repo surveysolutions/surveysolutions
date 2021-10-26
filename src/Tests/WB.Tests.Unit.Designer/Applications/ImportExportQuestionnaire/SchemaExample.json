@@ -85,7 +85,7 @@
     "AreaQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": "Area" },
+        "type": { "const": "AreaQuestion" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -108,7 +108,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["QuestionType", "VariableName"]
+      "required": ["type", "VariableName"]
     },
 
     "Attachment": {
@@ -125,6 +125,7 @@
     "AudioQuestion": {
       "type": "object",
       "properties": {
+        "type": { "const": "AudioQuestion" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -132,13 +133,12 @@
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
-        "QuestionType": { "const": "Audio" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["QuestionType", "VariableName"]
+      "required": ["type", "VariableName"]
     },
 
     "Categories": {
@@ -154,7 +154,7 @@
     "DateTimeQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": "DateTime" },
+        "type": { "const": "DateTimeQuestion" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -169,7 +169,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["QuestionType"]
+      "required": ["type"]
     },
 
     "FixedRosterTitle": {
@@ -185,6 +185,7 @@
     "GpsCoordinateQuestion": {
       "type": "object",
       "properties": {
+        "type": { "const": "GpsCoordinateQuestion" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -192,13 +193,12 @@
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
-        "QuestionType": { "const": "GpsCoordinates" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["QuestionType", "VariableName"]
+      "required": ["type", "VariableName"]
     },
 
     "Group": {
@@ -310,7 +310,7 @@
     "MultimediaQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": "Multimedia" },
+        "type": { "const": "MultimediaQuestion" },
         "IsSignature": { "type": "boolean" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
@@ -324,13 +324,13 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["PublicKey", "QuestionType"]
+      "required": ["PublicKey", "type"]
     },
 
     "MultiOptionsQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": "MultiOptions" },
+        "type": { "const": "MultiOptionsQuestion" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -355,13 +355,13 @@
         "LinkedToQuestionId": { "$ref": "#/definitions/GUID" }
       },
       "additionalProperties": false,
-      "required": ["PublicKey", "QuestionType"]
+      "required": ["PublicKey", "type"]
     },
 
     "NumericQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": "Numeric" },
+        "type": { "const": "NumericQuestion" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -379,13 +379,13 @@
         "UseFormatting": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
-      "required": ["PublicKey", "QuestionType"]
+      "required": ["PublicKey", "type"]
     },
 
     "QRBarcodeQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": "QRBarcode" },
+        "type": { "const": "QRBarcodeQuestion" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -398,7 +398,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["PublicKey", "QuestionType"]
+      "required": ["PublicKey", "type"]
     },
 
     "QuestionScope": {
@@ -421,7 +421,7 @@
     "SingleQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const": "SingleOption" },
+        "type": { "const": "SingleQuestion" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -447,7 +447,7 @@
         "LinkedFilterExpression": { "type": "string" }
       },
       "additionalProperties": false,
-      "required": ["QuestionType"]
+      "required": ["type"]
     },
 
     "StaticText": {
@@ -469,7 +469,7 @@
     "TextListQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": {"const": "TextList"},
+        "type": {"const": "TextListQuestion"},
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -484,13 +484,13 @@
         "MaxAnswerCount": { "type": "integer" }
       },
       "additionalProperties": false,
-      "required": ["PublicKey", "QuestionType"]
+      "required": ["PublicKey", "type"]
     },
 
     "TextQuestion": {
       "type": "object",
       "properties": {
-        "QuestionType": { "const" : "Text" },
+        "type": { "const" : "TextQuestion" },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
@@ -505,7 +505,7 @@
         "Mask": { "type": "string" }
       },
       "additionalProperties": false,
-      "required": ["PublicKey", "QuestionType"]
+      "required": ["PublicKey", "type"]
     },
 
     "Translation": {

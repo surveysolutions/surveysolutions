@@ -4,8 +4,10 @@ using AutoMapper;
 using Main.Core.Documents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Serialization;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.UI.Designer.Code.ImportExport.Models;
 
 namespace WB.UI.Designer.Code.ImportExport
@@ -16,50 +18,32 @@ namespace WB.UI.Designer.Code.ImportExport
         private readonly IMapper mapper;
         private readonly ISerializer serializer;
 
-        public ImportExportQuestionnaireService(//IQuestionnaireViewFactory questionnaireStorage,
+        public ImportExportQuestionnaireService(
             IMapper mapper,
             ISerializer serializer)
         {
-            //this.questionnaireStorage = questionnaireStorage;
             this.mapper = mapper;
             this.serializer = serializer;
         }
 
-        /*public string Export(Guid questionnaireId)
-        {
-            var questionnaireView = questionnaireStorage.Load(new QuestionnaireViewInputModel(questionnaireId));
-            if (questionnaireView == null)
-                throw new ArgumentException();
-            
-            var questionnaireDocument = questionnaireView.Source;
-
-            try
-            {
-                var map = mapper.Map<Models.Questionnaire>(questionnaireDocument);
-
-                var json = serializer.Serialize(map);
-                return json;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }*/
-        
         private static readonly JsonSerializerSettings jsonSerializerSettings = 
             new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.Auto,
+                TypeNameHandling = TypeNameHandling.None,
                 NullValueHandling = NullValueHandling.Ignore,
                 FloatParseHandling = FloatParseHandling.Decimal,
                 Formatting = Formatting.Indented,
                 Converters = new List<JsonConverter>()
                 {
                     new Newtonsoft.Json.Converters.StringEnumConverter()
-                }
-
+                },
+                //ContractResolver = new NewtonInterviewAnswerContractResolver()
             };
+        
+        // private class QuestionsContactResolver : DefaultContractResolver
+        // {
+        //     override 
+        // }
         
         public string Export(QuestionnaireDocument questionnaireDocument)
         {
