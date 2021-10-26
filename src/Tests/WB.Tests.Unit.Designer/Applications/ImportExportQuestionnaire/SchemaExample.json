@@ -444,6 +444,7 @@
         "CascadeFromQuestionId": { "$ref": "#/definitions/GUID" },
 
         "IsFilteredCombobox": { "type": "boolean", "default": false },
+        "OptionsFilterExpression": { "type": "string" },
         "LinkedToRosterId": { "$ref": "#/definitions/GUID" },
         "LinkedToQuestionId": { "$ref": "#/definitions/GUID" },
         "LinkedFilterExpression": { "type": "string" }
