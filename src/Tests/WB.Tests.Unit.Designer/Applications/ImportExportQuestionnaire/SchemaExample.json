@@ -351,6 +351,8 @@
         "CascadeFromQuestionId": { "$ref": "#/definitions/GUID" },
 
         "IsFilteredCombobox": { "type": "boolean" },
+        "OptionsFilterExpression": { "type": "string" },
+        "LinkedFilterExpression": { "type": "string" },
         "LinkedToRosterId": { "$ref": "#/definitions/GUID" },
         "LinkedToQuestionId": { "$ref": "#/definitions/GUID" }
       },
