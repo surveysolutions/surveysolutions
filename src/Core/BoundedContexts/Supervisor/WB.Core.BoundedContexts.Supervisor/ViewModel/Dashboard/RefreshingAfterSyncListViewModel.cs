@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public override void ViewDisappeared()
         {
             base.ViewDisappeared();
-            messengerSubscription.Dispose();
+            messengerSubscription?.Dispose();
         }
     }
 }
