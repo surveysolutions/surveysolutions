@@ -14,9 +14,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
             
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
-            for (int i = 0; i < 399; i++)
+            for (int i = 0; i < 400; i++)
             {
-                questionnaire.AddTextQuestion(Guid.NewGuid(),chapterId, responsibleId:responsibleId);
+                questionnaire.AddTextQuestion(Guid.NewGuid(),chapterId, title: $"q{i}", responsibleId:responsibleId);
             }
             
             exception = Assert.Throws<QuestionnaireException>(() =>

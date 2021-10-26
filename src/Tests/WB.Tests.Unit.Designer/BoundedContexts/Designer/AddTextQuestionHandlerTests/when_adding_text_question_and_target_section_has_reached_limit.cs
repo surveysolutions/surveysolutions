@@ -18,17 +18,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
             questionnaire.AddGroup(Id.g10, responsibleId:responsibleId, parentGroupId:chapterId);
             questionnaire.AddGroup(Id.g9, responsibleId:responsibleId, parentGroupId:chapterId);
             
-
-            
-            for (int i = 0; i < 399; i++)
+            for (int i = 0; i < 400; i++)
             {
                 questionnaire.AddTextQuestion(Guid.NewGuid(),Id.g10, responsibleId:responsibleId);
-            }
-            for (int i = 0; i < 399; i++)
-            {
                 questionnaire.AddTextQuestion(Guid.NewGuid(),Id.g9, responsibleId:responsibleId);
             }
-            for (int i = 0; i < 199; i++)
+            
+            for (int i = 0; i < 198; i++)
             {
                 questionnaire.AddTextQuestion(Guid.NewGuid(),chapterId, responsibleId:responsibleId);
             }
