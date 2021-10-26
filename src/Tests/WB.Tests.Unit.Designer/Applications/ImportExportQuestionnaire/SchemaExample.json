@@ -603,79 +603,18 @@
           ],
           "default": "AdministrativeRecords"
         }, 
-        "Version": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "VersionNotes": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "KindOfData": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Country": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Year": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "int32"
-        },
-        "Language": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Coverage": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Universe": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "UnitOfAnalysis": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "PrimaryInvestigator": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Funding": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Consultant": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
+        "Version": { "type": [ "string", "null" ] },
+        "VersionNotes": { "type": [ "string", "null" ] },
+        "KindOfData": { "type": [ "string", "null" ] },
+        "Country": { "type": [ "string", "null" ] },
+        "Year": { "type": [ "integer", "null" ], "format": "int32" },
+        "Language": { "type": [ "string", "null" ] },
+        "Coverage": { "type": [ "string", "null" ] },
+        "Universe": { "type": [ "string", "null" ] },
+        "UnitOfAnalysis": { "type": [ "string", "null" ] },
+        "PrimaryInvestigator": { "type": [ "string", "null" ] },
+        "Funding": { "type": [ "string", "null" ] },
+        "Consultant": { "type": [ "string", "null" ] },
         "ModeOfDataCollection": {
           "type": "string",
           "oneOf": [
@@ -689,21 +628,9 @@
           ],
           "default": "Error"
         },
-        "Notes": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Keywords": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "AgreeToMakeThisQuestionnairePublic": {
-          "type": "boolean"
-        }
+        "Notes": { "type": [ "string", "null" ] },
+        "Keywords": { "type": [ "string", "null" ] },
+        "AgreeToMakeThisQuestionnairePublic": { "type": "boolean" }
       }
     }
   }

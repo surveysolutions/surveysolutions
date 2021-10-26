@@ -8,6 +8,10 @@
       "type": "string",
       "format": "guid"
     },
+    "CoverPageSectionId": {
+      "type": "string",
+      "format": "guid"
+    },
     "Children": {
       "type": "array",
       "items": {
@@ -148,9 +152,6 @@
             },
             "DisplayMode": {
               "$ref": "#/definitions/RosterDisplayMode"
-            },
-            "Enabled": {
-              "type": "boolean"
             },
             "Description": {
               "type": "string"
@@ -302,9 +303,6 @@
                 "string"
               ]
             },
-            "QuestionType": {
-              "$ref": "#/definitions/QuestionType"
-            },
             "VariableLabel": {
               "type": [
                 "null",
@@ -338,36 +336,6 @@
         "Supervisor",
         "Headquarter",
         "Hidden"
-      ]
-    },
-    "QuestionType": {
-      "type": "string",
-      "description": "",
-      "x-enumNames": [
-        "SingleOption",
-        "MultiOptions",
-        "Numeric",
-        "DateTime",
-        "GpsCoordinates",
-        "Text",
-        "TextList",
-        "QRBarcode",
-        "Multimedia",
-        "Area",
-        "Audio"
-      ],
-      "enum": [
-        "SingleOption",
-        "MultiOptions",
-        "Numeric",
-        "DateTime",
-        "GpsCoordinates",
-        "Text",
-        "TextList",
-        "QRBarcode",
-        "Multimedia",
-        "Area",
-        "Audio"
       ]
     },
     "ValidationCondition": {
@@ -545,9 +513,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "QuestionType": {
-              "$ref": "#/definitions/QuestionType"
-            },
             "IsSignature": {
               "type": "boolean"
             }
@@ -630,12 +595,7 @@
         },
         {
           "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "QuestionType": {
-              "$ref": "#/definitions/QuestionType"
-            }
-          }
+          "additionalProperties": false
         }
       ]
     },

@@ -356,6 +356,9 @@
     "Id": {
       "type": "string"
     },
+    "CoverPageSectionId": {
+      "type": "string"
+    },
     "Children": {
       "$ref": "#/definitions/List<Group>"
     },
@@ -447,6 +450,7 @@
   },
   "required": [
     "Id",
+    "CoverPageSectionId",
     "Children",
     "Macros",
     "LookupTables",
