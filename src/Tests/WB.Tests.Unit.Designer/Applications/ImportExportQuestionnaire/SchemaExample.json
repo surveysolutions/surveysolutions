@@ -89,21 +89,16 @@
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
-        "Properties": {
-          "type": "object",
-          "properties": {
-            "HideInstructions": { "type": "boolean", "default": false },
-            "GeometryType": {
-              "type": "string",
-              "oneOf": [
-                { "const": "Polygon",    "description": "Polygon" },
-                { "const": "Polyline",   "description": "Polyline" },
-                { "const": "Point",      "description": "Point" },
-                { "const": "Multipoint", "description": "Multipoint" }
-              ],
-              "default": "Polygon"
-            }
-          }
+        "HideInstructions": { "type": "boolean", "default": false },
+        "GeometryType": {
+          "type": "string",
+          "oneOf": [
+            { "const": "Polygon",    "description": "Polygon" },
+            { "const": "Polyline",   "description": "Polyline" },
+            { "const": "Point",      "description": "Point" },
+            { "const": "Multipoint", "description": "Multipoint" }
+          ],
+          "default": "Polygon"
         },
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
@@ -112,6 +107,7 @@
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
+      "additionalProperties": false,
       "required": ["QuestionType", "VariableName"]
     },
 
@@ -132,7 +128,7 @@
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
-        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "HideInstructions": { "type": "boolean", "default": false },
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
@@ -141,6 +137,7 @@
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
+      "additionalProperties": false,
       "required": ["QuestionType", "VariableName"]
     },
 
@@ -161,14 +158,9 @@
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
+        "HideInstructions": { "type": "boolean", "default": false },
         "IsTimestamp": { "type": "boolean", "default": false },
-        "Properties": {
-          "type": "object",
-          "properties": {
-            "HideInstructions": { "type": "boolean", "default": false },
-            "DefaultDate": { "type": "string", "format": "date" }
-          }
-        },
+        "DefaultDate": { "type": "string", "format": "date-time" },
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
@@ -176,6 +168,7 @@
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
+      "additionalProperties": false,
       "required": ["QuestionType"]
     },
 
@@ -195,7 +188,7 @@
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
-        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "HideInstructions": { "type": "boolean", "default": false },
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
@@ -204,6 +197,7 @@
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
+      "additionalProperties": false,
       "required": ["QuestionType", "VariableName"]
     },
 
@@ -237,44 +231,48 @@
         "IsRoster": { "type": "boolean" },
         "PublicKey": { "type": "string", "format": "uuid"},
         "Title": { "type": "string" },
-        "VariableName": { "$ref": "#/definitions/VariableName" }
-      },
+        "Description": { "type": "string" },
+        "VariableName": { "$ref": "#/definitions/VariableName" },
 
-      "if" : {
-        "propertys" : { "IsRoster": { "const": true } }
-      },
-      "then": {
-        "propertys": {
-          "CustomRosterTitle": { "type": "boolean" },
-          "DisplayMode": {
-            "type": "integer",
-            "oneOf": [
-              { "const": 0, "description": "Sub-Section" },
-              { "const": 1, "description": "Flat" },
-              { "const": 2, "description": "Table" },
-              { "const": 3, "description": "Matrix" }
-            ],
-            "default": 0
-          },
-          "RosterSizeQuestionId": { "type": "string", "format": "uuid" },
-          "RosterTitleQuestionId": { "type": "string", "format": "uuid" },
-          "RosterSizeSource": {
-            "type": "integer",
-            "oneOf": [
-              { "const": 0, "description": "Fixed roster" },
-              { "const": 1, "description": "Variable" }
-            ],
-            "default": 0
-          },
-          "FixedRosterTitles": {
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/FixedRosterTitle"
-            }
+
+        "CustomRosterTitle": { "type": "boolean" },
+        "DisplayMode": {
+          "type": "string",
+          "oneOf": [
+            { "const": "SubSection", "description": "Sub Section" },
+            { "const": "Flat", "description": "Flat" },
+            { "const": "Table", "description": "Table" },
+            { "const": "Matrix", "description": "Matrix" }
+          ],
+          "default": "SubSection"
+        },
+        "RosterSizeQuestionId": { "type": "string", "format": "uuid" },
+        "RosterTitleQuestionId": { "type": "string", "format": "uuid" },
+        "RosterSizeSource": {
+          "type": "string",
+          "oneOf": [
+            { "const": "FixedTitles", "description": "Fixed Titles" },
+            { "const": "Question", "description": "Question" },
+          ],
+          "default": "FixedTitles"
+        },
+        "FixedRosterTitles": {
+          "type": [ "array", "null" ],
+          "items": {
+            "$ref": "#/definitions/FixedRosterTitle"
           }
         }
       },
 
+      "if" : {
+        "properties" : { "IsRoster": { "const": true } }
+      },
+      "then": {
+        "properties": {
+          
+        }
+      },
+      "additionalProperties": false,
       "required": ["type", "PublicKey"]
     },
 
@@ -317,7 +315,7 @@
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
-        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "HideInstructions": { "type": "boolean", "default": false },
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
@@ -325,6 +323,7 @@
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
+      "additionalProperties": false,
       "required": ["PublicKey", "QuestionType"]
     },
 
@@ -335,7 +334,7 @@
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
-        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "HideInstructions": { "type": "boolean", "default": false },
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
@@ -355,6 +354,7 @@
         "LinkedToRosterId": { "$ref": "#/definitions/GUID" },
         "LinkedToQuestionId": { "$ref": "#/definitions/GUID" }
       },
+      "additionalProperties": false,
       "required": ["PublicKey", "QuestionType"]
     },
 
@@ -365,7 +365,7 @@
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
-        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "HideInstructions": { "type": "boolean", "default": false },
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
@@ -378,6 +378,7 @@
         "IsInteger": { "type": "boolean", "default": true },
         "UseFormatting": { "type": "boolean", "default": false }
       },
+      "additionalProperties": false,
       "required": ["PublicKey", "QuestionType"]
     },
 
@@ -388,7 +389,7 @@
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
-        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "HideInstructions": { "type": "boolean", "default": false },
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
@@ -396,17 +397,8 @@
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
+      "additionalProperties": false,
       "required": ["PublicKey", "QuestionType"]
-    },
-
-    "QuestionProperties": {
-      "type": "object",
-      "properties": {
-        "HideInstructions": { "type": "boolean" },
-        "OptionsFilterExpression": { "type": "string" }
-        
-      },
-      "required": []
     },
 
     "QuestionScope": {
@@ -433,7 +425,7 @@
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
-        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "HideInstructions": { "type": "boolean", "default": false },
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
@@ -454,6 +446,7 @@
         "LinkedToQuestionId": { "$ref": "#/definitions/GUID" },
         "LinkedFilterExpression": { "type": "string" }
       },
+      "additionalProperties": false,
       "required": ["QuestionType"]
     },
 
@@ -469,6 +462,7 @@
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false }
       },
+      "additionalProperties": false,
       "required": ["type", "PublicKey"]
     },
 
@@ -479,7 +473,7 @@
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
-        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "HideInstructions": { "type": "boolean", "default": false },
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
@@ -489,6 +483,7 @@
   
         "MaxAnswerCount": { "type": "integer" }
       },
+      "additionalProperties": false,
       "required": ["PublicKey", "QuestionType"]
     },
 
@@ -499,7 +494,7 @@
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
-        "Properties": { "$ref": "#/definitions/QuestionProperties" },
+        "HideInstructions": { "type": "boolean", "default": false },
         "PublicKey": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
@@ -509,6 +504,7 @@
 
         "Mask": { "type": "string" }
       },
+      "additionalProperties": false,
       "required": ["PublicKey", "QuestionType"]
     },
 

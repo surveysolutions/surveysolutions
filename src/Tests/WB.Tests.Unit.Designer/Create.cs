@@ -454,7 +454,9 @@ namespace WB.Tests.Unit.Designer
                 LinkedToRosterId = linkedToRosterId,
                 QuestionText = title,
                 VariableLabel = variableLabel,
-                Answers = options?.Select(x => new Answer{ AnswerValue = x.Value, AnswerText = x.Title, ParentValue = x.ParentValue}).ToList()
+                Answers = options != null
+                    ? options.Select(x => new Answer{ AnswerValue = x.Value, AnswerText = x.Title, ParentValue = x.ParentValue}).ToList()
+                    : Enumerable.Empty<Answer>().ToList()
             };
         }
 

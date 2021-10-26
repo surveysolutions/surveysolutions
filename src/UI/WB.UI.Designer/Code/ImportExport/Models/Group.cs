@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Code.ImportExport.Models
 
         public RosterDisplayMode DisplayMode { get; set; }
 
-        public bool Enabled { get; set; } = true;
+        //public bool Enabled { get; set; } = true;
 
         public string Description { get; set; } = string.Empty;
 
