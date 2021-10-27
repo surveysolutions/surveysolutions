@@ -4,7 +4,7 @@ using Main.Core.Entities.Composite;
 
 namespace WB.UI.Designer.Code.ImportExport.Models.Question
 {
-    public class MultimediaQuestion : AbstractQuestion
+    public class PictureQuestion : AbstractQuestion
     {
         public bool IsSignature { get; set; }
     }

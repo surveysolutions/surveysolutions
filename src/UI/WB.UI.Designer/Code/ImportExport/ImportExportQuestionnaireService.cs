@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using Main.Core.Documents;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Serialization;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.UI.Designer.Code.ImportExport.Models;
 
 namespace WB.UI.Designer.Code.ImportExport

@@ -21,7 +21,7 @@ namespace WB.UI.Designer.Code.ImportExport.Models
 
         //public bool Enabled { get; set; } = true;
 
-        public string Description { get; set; } = string.Empty;
+        //public string Description { get; set; } = string.Empty;
 
         public bool IsRoster { get; set; }
 

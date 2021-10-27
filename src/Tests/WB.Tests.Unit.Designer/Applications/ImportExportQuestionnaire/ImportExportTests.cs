@@ -31,12 +31,15 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         [Test]
         public void when_export_empty_questionnaire_should_be_equals_after_import()
         {
-            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1);
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1, children: new[]
+            {
+                Create.Group()
+            });
             questionnaireDocument.Title = "test";
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
 
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
             errors.Count.Should().Be(0);
         }   
         
@@ -55,11 +58,11 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             questionnaireDocument.CreatedBy = Guid.NewGuid();
             questionnaireDocument.CreationDate = DateTime.Now;
             questionnaireDocument.DefaultTranslation = Guid.NewGuid();
-            questionnaireDocument.IsDeleted = true;
-            questionnaireDocument.IsPublic = true;
+            //questionnaireDocument.IsDeleted = true;
+            //questionnaireDocument.IsPublic = true;
             //questionnaireDocument.OpenDate = DateTime.Now;
             questionnaireDocument.VariableName = "VariableName";
-            questionnaireDocument.DefaultLanguageName = "DefaultLanguageName";
+            //questionnaireDocument.DefaultLanguageName = "DefaultLanguageName";
             questionnaireDocument.HideIfDisabled = true;
             questionnaireDocument.LastEntryDate = DateTime.Now;
             //questionnaireDocument.LastEventSequence = 777;
@@ -93,7 +96,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
 
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire);
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
             errors.Count.Should().Be(0);
         }
        
@@ -119,7 +122,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 chapterId: Guid.NewGuid(),
                 hideIfDisabled: true
             );
-            chapter.Description = "Description";
+            //chapter.Description = "Description";
             chapter.Enabled = true;
             chapter.ConditionExpression = "ConditionExpression";
             chapter.DisplayMode = RosterDisplayMode.Table;
@@ -959,6 +962,9 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                     .ComparingRecordsByMembers()
                     .IncludingAllDeclaredProperties()
                     .IncludingAllRuntimeProperties()
+                    .Excluding(q => q.CreatedBy)
+                    .Excluding(q => q.CreationDate)
+                    .Excluding(q => q.LastEntryDate)
                 ;
         }
     }

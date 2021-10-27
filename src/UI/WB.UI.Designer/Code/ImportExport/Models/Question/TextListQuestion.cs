@@ -2,6 +2,6 @@
 {
     public class TextListQuestion : AbstractQuestion
     {
-        public int? MaxAnswerCount { get; set; }
+        public int? MaxItemsCount { get; set; }
     }
 }

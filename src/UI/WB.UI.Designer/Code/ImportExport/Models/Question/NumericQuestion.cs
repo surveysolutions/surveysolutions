@@ -9,9 +9,9 @@ namespace WB.UI.Designer.Code.ImportExport.Models.Question
     {
         public bool IsInteger { get; set; }
         
-        public int? CountOfDecimalPlaces { get; set; }
+        public int? DecimalPlaces { get; set; }
 
-        public bool UseFormatting { get; set; }
+        public bool UseThousandsSeparator { get; set; }
     
         public List<Answer>? Answers { get; set; }
     }

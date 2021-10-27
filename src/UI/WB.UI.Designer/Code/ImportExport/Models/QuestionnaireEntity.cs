@@ -5,14 +5,14 @@ using WB.UI.Designer.Code.ImportExport.Models.Question;
 
 namespace WB.UI.Designer.Code.ImportExport.Models
 {
-    [JsonConverter(typeof(QuestionnaireEntityJsonConverter), "type")]
+    [JsonConverter(typeof(QuestionnaireEntityJsonConverter), "Type")]
     [KnownType(typeof(TextQuestion))]
     [KnownType(typeof(NumericQuestion))]
     [KnownType(typeof(AreaQuestion))]
     [KnownType(typeof(AudioQuestion))]
     [KnownType(typeof(DateTimeQuestion))]
     [KnownType(typeof(GpsCoordinateQuestion))]
-    [KnownType(typeof(MultimediaQuestion))]
+    [KnownType(typeof(PictureQuestion))]
     [KnownType(typeof(MultiOptionsQuestion))]
     [KnownType(typeof(QRBarcodeQuestion))]
     [KnownType(typeof(SingleQuestion))]

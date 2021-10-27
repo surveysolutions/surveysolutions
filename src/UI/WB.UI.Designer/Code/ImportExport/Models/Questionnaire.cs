@@ -35,16 +35,17 @@ namespace WB.UI.Designer.Code.ImportExport.Models
         public List<Translation> Translations { get; set; }
         public List<Categories> Categories { get; set; }
         public Guid? DefaultTranslation { get; set; }
-        public string? DefaultLanguageName { get; set; }
-        public DateTime? CloseDate { get; set; }
+        //public string? DefaultLanguageName { get; set; }
+        
+        //public DateTime? CloseDate { get; set; }
         //public string ConditionExpression { get; set; }
         public bool HideIfDisabled { get; set; }
-        public DateTime CreationDate { get; set; }
-        public DateTime LastEntryDate { get; set; }
-        public DateTime? OpenDate { get; set; }
-        public bool IsDeleted { get; set; }
-        public Guid? CreatedBy { get; set; }
-        public bool IsPublic { get; set; }
+        //public DateTime CreationDate { get; set; }
+        //public DateTime LastEntryDate { get; set; }
+        //public DateTime? OpenDate { get; set; }
+        //public bool IsDeleted { get; set; }
+        //public Guid? CreatedBy { get; set; }
+        //public bool IsPublic { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public QuestionnaireMetaInfo? Metadata { get; set; }
