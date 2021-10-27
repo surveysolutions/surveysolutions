@@ -52,8 +52,12 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<Documents.Macro, Models.Macro>();
             this.CreateMap<Models.Macro, Documents.Macro>();
 
-            this.CreateMap<IComposite, QuestionnaireEntity>();
-            this.CreateMap<IQuestionnaireEntity, IComposite>();
+            this.CreateMap<IComposite, QuestionnaireEntity>()
+                .ForMember(d => d.Id, opt => 
+                    opt.MapFrom(t => t.PublicKey));
+            this.CreateMap<IQuestionnaireEntity, IComposite>()
+                .ForMember(s => s.PublicKey, opt =>
+                    opt.MapFrom(t => t.Id));
 
             this.CreateMap<Group, Models.Group>()
                 .IncludeBase<IComposite, QuestionnaireEntity>();
@@ -70,22 +74,22 @@ namespace WB.UI.Designer.Code.ImportExport
                 .IncludeBase<IComposite, QuestionnaireEntity>();
             this.CreateMap<Models.StaticText, StaticText>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>();
-            
+
             this.CreateMap<QuestionnaireEntities.Variable, Models.Variable>()
                 .IncludeBase<IComposite, QuestionnaireEntity>();
             this.CreateMap<Models.Variable, QuestionnaireEntities.Variable>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
-                .ConstructUsing(v => new QuestionnaireEntities.Variable(v.PublicKey, null, null));
+                .ConstructUsing(v => new QuestionnaireEntities.Variable(v.Id, null, null));
             
             //this.CreateMap<QuestionProperties, Models.QuestionProperties>();
             //this.CreateMap<Models.QuestionProperties, QuestionProperties>();
             
             this.CreateMap<QuestionnaireEntities.ValidationCondition, Models.ValidationCondition>();
             this.CreateMap<Models.ValidationCondition, QuestionnaireEntities.ValidationCondition>();
-            
+
             this.CreateMap<AbstractQuestion, Models.Question.AbstractQuestion>()
                 .IncludeBase<IComposite, QuestionnaireEntity>()
-                .ForMember(d => d.HideInstructions, t => 
+                .ForMember(d => d.HideInstructions, t =>
                     t.MapFrom(p => p.Properties == null ? false : p.Properties.HideInstructions));
             this.CreateMap<Models.Question.AbstractQuestion, AbstractQuestion>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()

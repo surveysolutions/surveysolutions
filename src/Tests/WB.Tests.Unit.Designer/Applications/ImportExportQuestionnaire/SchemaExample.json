@@ -100,7 +100,7 @@
           ],
           "default": "Polygon"
         },
-        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -130,7 +130,7 @@
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -161,7 +161,7 @@
         "HideInstructions": { "type": "boolean", "default": false },
         "IsTimestamp": { "type": "boolean", "default": false },
         "DefaultDate": { "type": "string", "format": "date-time" },
-        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -190,7 +190,7 @@
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -229,7 +229,7 @@
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean" },
         "IsRoster": { "type": "boolean" },
-        "PublicKey": { "type": "string", "format": "uuid"},
+        "Id": { "type": "string", "format": "uuid"},
         "Title": { "type": "string" },
         "Description": { "type": "string" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
@@ -273,7 +273,7 @@
         }
       },
       "additionalProperties": false,
-      "required": ["type", "PublicKey"]
+      "required": ["type", "Id"]
     },
 
     "GUID": { "type": "string", "format": "uuid" },
@@ -316,7 +316,7 @@
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -324,7 +324,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["PublicKey", "type"]
+      "required": ["Id", "type"]
     },
 
     "MultiOptionsQuestion": {
@@ -335,7 +335,7 @@
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -357,7 +357,7 @@
         "LinkedToQuestionId": { "$ref": "#/definitions/GUID" }
       },
       "additionalProperties": false,
-      "required": ["PublicKey", "type"]
+      "required": ["Id", "type"]
     },
 
     "NumericQuestion": {
@@ -368,7 +368,7 @@
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -381,7 +381,7 @@
         "UseFormatting": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
-      "required": ["PublicKey", "type"]
+      "required": ["Id", "type"]
     },
 
     "QRBarcodeQuestion": {
@@ -392,7 +392,7 @@
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -400,7 +400,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["PublicKey", "type"]
+      "required": ["Id", "type"]
     },
 
     "QuestionScope": {
@@ -428,7 +428,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -458,7 +458,7 @@
       "properties": {
         "type": { "const": "StaticText" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
-        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Id": { "$ref": "#/definitions/GUID" },
         "Text": { "type": "string" },
         "AttachmentName": { "type": "string" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
@@ -466,7 +466,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
-      "required": ["type", "PublicKey"]
+      "required": ["type", "Id"]
     },
 
     "TextListQuestion": {
@@ -477,7 +477,7 @@
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -487,7 +487,7 @@
         "MaxAnswerCount": { "type": "integer" }
       },
       "additionalProperties": false,
-      "required": ["PublicKey", "type"]
+      "required": ["Id", "type"]
     },
 
     "TextQuestion": {
@@ -498,7 +498,7 @@
         "HideIfDisabled": { "type": "boolean" },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -508,7 +508,7 @@
         "Mask": { "type": "string" }
       },
       "additionalProperties": false,
-      "required": ["PublicKey", "type"]
+      "required": ["Id", "type"]
     },
 
     "Translation": {
@@ -543,7 +543,7 @@
       "type": "object",
       "properties": {
         "Label": { "$ref": "#/definitions/VariableLabel" },
-        "PublicKey": { "$ref": "#/definitions/GUID" },
+        "Id": { "$ref": "#/definitions/GUID" },
         "Type": {
           "type": "string",
           "oneOf": [
@@ -561,7 +561,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalOptions": false,
-      "required": ["PublicKey", "Name", "Expression"]
+      "required": ["Id", "Name", "Expression"]
     },
 
     "VariableLabel": { "type": "string", "maxLength": 80 },

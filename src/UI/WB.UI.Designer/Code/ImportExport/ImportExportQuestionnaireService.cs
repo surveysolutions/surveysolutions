@@ -29,7 +29,7 @@ namespace WB.UI.Designer.Code.ImportExport
         private static readonly JsonSerializerSettings jsonSerializerSettings = 
             new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.None,
+                TypeNameHandling = TypeNameHandling.Auto,
                 NullValueHandling = NullValueHandling.Ignore,
                 FloatParseHandling = FloatParseHandling.Decimal,
                 Formatting = Formatting.Indented,
@@ -37,13 +37,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 {
                     new Newtonsoft.Json.Converters.StringEnumConverter()
                 },
-                //ContractResolver = new NewtonInterviewAnswerContractResolver()
             };
-        
-        // private class QuestionsContactResolver : DefaultContractResolver
-        // {
-        //     override 
-        // }
         
         public string Export(QuestionnaireDocument questionnaireDocument)
         {
@@ -65,7 +59,8 @@ namespace WB.UI.Designer.Code.ImportExport
         {
             try
             {
-                var questionnaire = serializer.Deserialize<Questionnaire>(json);
+                //var questionnaire = serializer.Deserialize<Questionnaire>(json);
+                var questionnaire = JsonConvert.DeserializeObject<Questionnaire>(json);
                 var questionnaireDocument = mapper.Map<QuestionnaireDocument>(questionnaire);
 
                 return questionnaireDocument;
