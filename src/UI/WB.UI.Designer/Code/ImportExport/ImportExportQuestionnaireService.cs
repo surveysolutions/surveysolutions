@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using AutoMapper;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Code.ImportExport.Models;
 
@@ -58,6 +60,23 @@ namespace WB.UI.Designer.Code.ImportExport
                 //var questionnaire = serializer.Deserialize<Questionnaire>(json);
                 var questionnaire = JsonConvert.DeserializeObject<Questionnaire>(json);
                 var questionnaireDocument = mapper.Map<QuestionnaireDocument>(questionnaire);
+
+                questionnaireDocument.ForEachTreeElement<IComposite>(c => c.Children, (parent, child) =>
+                {
+                    if (child is Main.Core.Entities.SubEntities.IQuestion question)
+                    {
+                        if (question.LinkedToQuestionId.HasValue &&
+                            question.LinkedToQuestionId == question.LinkedToRosterId)
+                        {
+                            var linkedToQuestion = questionnaireDocument.Find<Main.Core.Entities.SubEntities.IQuestion>(
+                                question.LinkedToQuestionId.Value);
+                            question.LinkedToQuestionId = linkedToQuestion?.PublicKey;
+                            var linkedToRoster = questionnaireDocument.Find<Main.Core.Entities.SubEntities.IGroup>(
+                                question.LinkedToRosterId.Value);
+                            question.LinkedToRosterId = linkedToRoster?.PublicKey;
+                        }
+                    }
+                });
 
                 return questionnaireDocument;
             }

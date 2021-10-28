@@ -345,10 +345,8 @@
         "CascadeFromQuestionId": { "$ref": "#/definitions/GUID" },
 
         "IsFilteredCombobox": { "type": "boolean", "default": false },
-        "OptionsFilterExpression": { "type": "string" },
-        "LinkedFilterExpression": { "type": "string" },
-        "LinkedToRosterId": { "$ref": "#/definitions/GUID" },
-        "LinkedToQuestionId": { "$ref": "#/definitions/GUID" }
+        "FilterExpression": { "type": "string" },
+        "LinkedToId": { "$ref": "#/definitions/GUID" },
       },
       "additionalProperties": false,
       "required": ["Id", "Type"]
@@ -431,10 +429,8 @@
         "CascadeFromQuestionId": { "$ref": "#/definitions/GUID" },
 
         "IsFilteredCombobox": { "type": "boolean", "default": false },
-        "OptionsFilterExpression": { "type": "string" },
-        "LinkedToRosterId": { "$ref": "#/definitions/GUID" },
-        "LinkedToQuestionId": { "$ref": "#/definitions/GUID" },
-        "LinkedFilterExpression": { "type": "string" }
+        "LinkedToId": { "$ref": "#/definitions/GUID" },
+        "FilterExpression": { "type": "string" }
       },
       "additionalProperties": false,
       "required": [ "Id", "Type"]

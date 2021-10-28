@@ -88,9 +88,6 @@ namespace WB.UI.Designer.Code.ImportExport
                 .ForMember(s => s.Type, o => o.MapFrom(d => d.VariableType))
                 .ConstructUsing(v => new QuestionnaireEntities.Variable(v.Id, null, null));
             
-            //this.CreateMap<QuestionProperties, Models.QuestionProperties>();
-            //this.CreateMap<Models.QuestionProperties, QuestionProperties>();
-            
             this.CreateMap<QuestionnaireEntities.ValidationCondition, Models.ValidationCondition>();
             this.CreateMap<Models.ValidationCondition, QuestionnaireEntities.ValidationCondition>();
 
@@ -103,14 +100,10 @@ namespace WB.UI.Designer.Code.ImportExport
                 .ForMember(aq => aq.StataExportCaption, aq=> 
                     aq.MapFrom(x => x.VariableName))
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
-                // .ForMember(d => d.Properties!.HideInstructions, s =>
-                //     s.MapFrom(p => p.HideInstructions))
-                //.BeforeMap((s, d) => d.Properties = new QuestionProperties(false, false))
                 .AfterMap((s, d) => d.Properties!.HideInstructions = s.HideInstructions ?? false);
 
             this.CreateMap<TextQuestion, Models.Question.TextQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
-            //this.CreateMap<TextQuestion, QuestionnaireEntity>().As<Models.Question.TextQuestion>();
             this.CreateMap<Models.Question.TextQuestion, TextQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
                 .AfterMap((s, d) => d.QuestionType = QuestionType.Text);
@@ -141,8 +134,16 @@ namespace WB.UI.Designer.Code.ImportExport
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
                 .AfterMap((s, d) => d.QuestionType = QuestionType.Audio);
 
+            this.CreateMap<MultimediaQuestion, Models.Question.PictureQuestion>()
+                .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
+            this.CreateMap<Models.Question.PictureQuestion, MultimediaQuestion>()
+                .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
+                .AfterMap((s, d) => d.QuestionType = QuestionType.Multimedia);
+
             this.CreateMap<SingleQuestion, Models.Question.SingleQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
+                .ForMember(s => s.LinkedToId, t => t.MapFrom(o =>
+                    o.LinkedToQuestionId ?? o.LinkedToRosterId))
                 .AfterMap((s, t) => 
                     {
                         if (s.LinkedToQuestionId.HasValue || s.LinkedToRosterId.HasValue)
@@ -152,23 +153,21 @@ namespace WB.UI.Designer.Code.ImportExport
                     });
             this.CreateMap<Models.Question.SingleQuestion, SingleQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
+                .ForMember(s => s.LinkedToQuestionId, o => o.MapFrom(t => t.LinkedToId))
+                .ForMember(s => s.LinkedToRosterId, o => o.MapFrom(t => t.LinkedToId))
                 .AfterMap((s, d) =>
                 {
-                    if (s.LinkedToQuestionId.HasValue || s.LinkedToRosterId.HasValue)
+                    if (s.LinkedToId.HasValue)
                         d.LinkedFilterExpression = s.FilterExpression;
                     else
                         d.Properties!.OptionsFilterExpression = s.FilterExpression;
                 })
                 .AfterMap((s, d) => d.QuestionType = QuestionType.SingleOption);
 
-            this.CreateMap<MultimediaQuestion, Models.Question.PictureQuestion>()
-                .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
-            this.CreateMap<Models.Question.PictureQuestion, MultimediaQuestion>()
-                .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .AfterMap((s, d) => d.QuestionType = QuestionType.Multimedia);
-
             this.CreateMap<MultyOptionsQuestion, Models.Question.MultiOptionsQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
+                .ForMember(s => s.LinkedToId, t => t.MapFrom(o =>
+                    o.LinkedToQuestionId ?? o.LinkedToRosterId))
                 .AfterMap((s, t) => 
                 {
                     if (s.LinkedToQuestionId.HasValue || s.LinkedToRosterId.HasValue)
@@ -178,13 +177,8 @@ namespace WB.UI.Designer.Code.ImportExport
                 });
             this.CreateMap<Models.Question.MultiOptionsQuestion, MultyOptionsQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .AfterMap((s, d) =>
-                {
-                    if (s.LinkedToQuestionId.HasValue || s.LinkedToRosterId.HasValue)
-                        d.LinkedFilterExpression = s.FilterExpression;
-                    else
-                        d.Properties!.OptionsFilterExpression = s.FilterExpression;
-                })
+                .ForMember(s => s.LinkedToQuestionId, o => o.MapFrom(t => t.LinkedToId))
+                .ForMember(s => s.LinkedToRosterId, o => o.MapFrom(t => t.LinkedToId))
                 .AfterMap((s, d) => d.QuestionType = QuestionType.MultyOption);
 
             this.CreateMap<TextListQuestion, Models.Question.TextListQuestion>()
@@ -201,8 +195,6 @@ namespace WB.UI.Designer.Code.ImportExport
                     d.MapFrom(t => t.Properties != null ? t.Properties.DefaultDate : null));
             this.CreateMap<Models.Question.DateTimeQuestion, DateTimeQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                //.ForMember(s => s.Properties!.DefaultDate, d =>
-                //    d.MapFrom(t => t.DefaultDate));
                 .AfterMap((s, d) => d.Properties!.DefaultDate = s.DefaultDate)
                 .AfterMap((s, d) => d.QuestionType = QuestionType.DateTime);
 
