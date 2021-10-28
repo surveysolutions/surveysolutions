@@ -38,6 +38,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             Approvals.Verify(json);
         }
 
+        [Ignore("Temp")]
         [Test]
         public async Task when_validate_questionnaire_should_be_valid_by_schema()
         {

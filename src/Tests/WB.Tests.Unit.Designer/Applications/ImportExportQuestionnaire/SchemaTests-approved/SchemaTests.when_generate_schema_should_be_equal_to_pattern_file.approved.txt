@@ -514,12 +514,6 @@
                 "$ref": "#/definitions/Answer"
               }
             },
-            "OptionsFilterExpression": {
-              "type": [
-                "null",
-                "string"
-              ]
-            },
             "LinkedToRosterId": {
               "type": [
                 "null",
@@ -534,7 +528,7 @@
               ],
               "format": "guid"
             },
-            "LinkedFilterExpression": {
+            "FilterExpression": {
               "type": [
                 "null",
                 "string"
@@ -596,7 +590,7 @@
                 "null"
               ]
             },
-            "OptionsFilterExpression": {
+            "FilterExpression": {
               "type": [
                 "null",
                 "string"
@@ -622,12 +616,6 @@
                 "string"
               ],
               "format": "guid"
-            },
-            "LinkedFilterExpression": {
-              "type": [
-                "null",
-                "string"
-              ]
             }
           }
         }

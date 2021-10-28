@@ -6,6 +6,6 @@ namespace WB.UI.Designer.Code.ImportExport.Models
     {
         Guid? LinkedToRosterId { get; set; }
         Guid? LinkedToQuestionId { get; set; }
-        string? LinkedFilterExpression { get; set; }
+        string? FilterExpression { get; set; }
     }
 }
