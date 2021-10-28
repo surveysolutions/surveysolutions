@@ -55,48 +55,7 @@
       ],
       "format": "guid"
     },
-    "DefaultLanguageName": {
-      "type": [
-        "null",
-        "string"
-      ]
-    },
-    "CloseDate": {
-      "type": [
-        "null",
-        "string"
-      ],
-      "format": "date-time"
-    },
     "HideIfDisabled": {
-      "type": "boolean"
-    },
-    "CreationDate": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "LastEntryDate": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "OpenDate": {
-      "type": [
-        "null",
-        "string"
-      ],
-      "format": "date-time"
-    },
-    "IsDeleted": {
-      "type": "boolean"
-    },
-    "CreatedBy": {
-      "type": [
-        "null",
-        "string"
-      ],
-      "format": "guid"
-    },
-    "IsPublic": {
       "type": "boolean"
     },
     "Title": {
@@ -153,9 +112,6 @@
             "DisplayMode": {
               "$ref": "#/definitions/RosterDisplayMode"
             },
-            "Description": {
-              "type": "string"
-            },
             "IsRoster": {
               "type": "boolean"
             },
@@ -198,7 +154,7 @@
     "QuestionnaireEntity": {
       "type": "object",
       "discriminator": {
-        "propertyName": "type",
+        "propertyName": "Type",
         "mapping": {
           "AbstractQuestion": "#/definitions/AbstractQuestion",
           "TextQuestion": "#/definitions/TextQuestion",
@@ -207,7 +163,7 @@
           "AudioQuestion": "#/definitions/AudioQuestion",
           "DateTimeQuestion": "#/definitions/DateTimeQuestion",
           "GpsCoordinateQuestion": "#/definitions/GpsCoordinateQuestion",
-          "MultimediaQuestion": "#/definitions/MultimediaQuestion",
+          "PictureQuestion": "#/definitions/PictureQuestion",
           "MultiOptionsQuestion": "#/definitions/MultiOptionsQuestion",
           "QRBarcodeQuestion": "#/definitions/QRBarcodeQuestion",
           "SingleQuestion": "#/definitions/SingleQuestion",
@@ -220,14 +176,14 @@
       "x-abstract": true,
       "additionalProperties": false,
       "required": [
-        "type"
+        "Type"
       ],
       "properties": {
-        "PublicKey": {
+        "Id": {
           "type": "string",
           "format": "guid"
         },
-        "type": {
+        "Type": {
           "type": "string"
         }
       }
@@ -377,14 +333,14 @@
             "IsInteger": {
               "type": "boolean"
             },
-            "CountOfDecimalPlaces": {
+            "DecimalPlaces": {
               "type": [
                 "integer",
                 "null"
               ],
               "format": "int32"
             },
-            "UseFormatting": {
+            "UseThousandsSeparator": {
               "type": "boolean"
             },
             "Answers": {
@@ -504,7 +460,7 @@
         }
       ]
     },
-    "MultimediaQuestion": {
+    "PictureQuestion": {
       "allOf": [
         {
           "$ref": "#/definitions/AbstractQuestion"
@@ -686,7 +642,7 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "MaxAnswerCount": {
+            "MaxItemsCount": {
               "type": [
                 "integer",
                 "null"
@@ -752,10 +708,10 @@
                 "string"
               ]
             },
-            "Type": {
+            "VariableType": {
               "$ref": "#/definitions/VariableType"
             },
-            "Name": {
+            "VariableName": {
               "type": [
                 "null",
                 "string"

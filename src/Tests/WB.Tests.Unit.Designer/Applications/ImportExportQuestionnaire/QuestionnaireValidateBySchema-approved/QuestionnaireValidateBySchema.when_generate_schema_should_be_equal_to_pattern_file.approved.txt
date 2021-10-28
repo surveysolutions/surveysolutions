@@ -383,47 +383,7 @@
         "null"
       ]
     },
-    "DefaultLanguageName": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "CloseDate": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "format": "date-time"
-    },
     "HideIfDisabled": {
-      "type": "boolean"
-    },
-    "CreationDate": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "LastEntryDate": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "OpenDate": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "format": "date-time"
-    },
-    "IsDeleted": {
-      "type": "boolean"
-    },
-    "CreatedBy": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "IsPublic": {
       "type": "boolean"
     },
     "Title": {
@@ -458,15 +418,7 @@
     "Translations",
     "Categories",
     "DefaultTranslation",
-    "DefaultLanguageName",
-    "CloseDate",
     "HideIfDisabled",
-    "CreationDate",
-    "LastEntryDate",
-    "OpenDate",
-    "IsDeleted",
-    "CreatedBy",
-    "IsPublic",
     "Title",
     "Description",
     "Metadata",
