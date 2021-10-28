@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Services.Restore
@@ -26,8 +27,9 @@ namespace WB.UI.Designer.Services.Restore
         private readonly ITranslationsService translationsService;
         private readonly DesignerDbContext dbContext;
         private readonly ICategoriesService categoriesService;
+        private readonly IImportExportQuestionnaireService importExportQuestionnaireService;
 
-        public QuestionnaireRestoreService(ILogger<QuestionnaireRestoreService> logger, ISerializer serializer, ICommandService commandService, ILookupTableService lookupTableService, IAttachmentService attachmentService, ITranslationsService translationsService, DesignerDbContext dbContext, ICategoriesService categoriesService)
+        public QuestionnaireRestoreService(ILogger<QuestionnaireRestoreService> logger, ISerializer serializer, ICommandService commandService, ILookupTableService lookupTableService, IAttachmentService attachmentService, ITranslationsService translationsService, DesignerDbContext dbContext, ICategoriesService categoriesService, IImportExportQuestionnaireService importExportQuestionnaireService)
         {
             this.logger = logger;
             this.serializer = serializer;
@@ -37,6 +39,7 @@ namespace WB.UI.Designer.Services.Restore
             this.translationsService = translationsService;
             this.dbContext = dbContext;
             this.categoriesService = categoriesService;
+            this.importExportQuestionnaireService = importExportQuestionnaireService;
         }
 
         public Guid RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state, bool createNew)
@@ -77,10 +80,23 @@ namespace WB.UI.Designer.Services.Restore
                     if (zipEntryPathChunks.Length == 1 && zipEntryPathChunks[0].ToLower().Equals("document.json"))
                     {
                         string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
-                        var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
-                        
-                        if(createNew)
+                        var questionnaireDocument = importExportQuestionnaireService.Import(textContent);
+                        //var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
+
+                        questionnaireDocument.CoverPageSectionId = questionnaireDocument.Children[0].PublicKey;
+
+                        if (createNew)
+                        {
                             questionnaireDocument.PublicKey = Guid.NewGuid();
+                            questionnaireDocument.CreationDate = DateTime.UtcNow;
+                            questionnaireDocument.CreatedBy = responsibleId;
+                        }
+                        /*
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
+                        */
 
                         var command = new ImportQuestionnaire(responsibleId, questionnaireDocument);
                         this.commandService.Execute(command);
