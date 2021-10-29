@@ -51,33 +51,5 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
                 }
             }
         }
-
-        [Test]
-        public void ensure_that_without_lock_test_will_fail()
-        {
-            const int iterations = 10000;
-            var counter = new CounterHolder();
-
-            Task NotLockedRunner()
-            {
-                return Task.Run(() =>
-                {
-                    while (counter.Value < iterations)
-                    {
-                        var result = counter.Value++;
-                        Thread.SpinWait(iterations / 2);
-
-                        if (counter.Value - 1 != result)
-                        {
-                            throw new InvalidOperationException();
-                        }
-                    }
-                });            
-            }
-            
-            var tasks = Enumerable.Range(0, 3).Select(t => NotLockedRunner());
-            
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await Task.WhenAll(tasks));
-        }
     }
 }

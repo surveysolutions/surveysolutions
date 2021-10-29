@@ -2,11 +2,14 @@
 using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Base;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
+using MvvmCross.Views;
 using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
@@ -15,11 +18,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
     [TestOf(typeof(SearchViewModel))]
     public class SearchViewModelTests : MvxIoCSupportingTest
     {
-        public SearchViewModelTests()
+        [OneTimeSetUp]
+        public void Setup()
         {
             base.Setup();
-
-            base.Ioc.RegisterSingleton(typeof(IMvxMainThreadAsyncDispatcher), Mock.Of<IMvxMainThreadAsyncDispatcher>());
+            
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
+            Ioc.RegisterType<ThrottlingViewModel>(() => Create.ViewModel.ThrottlingViewModel());
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
         }
 
         [Test]

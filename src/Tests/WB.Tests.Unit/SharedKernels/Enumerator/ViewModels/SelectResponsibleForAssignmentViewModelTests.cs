@@ -2,8 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
+using MvvmCross.Base;
 using MvvmCross.Navigation;
 using MvvmCross.Plugin.Messenger;
+using MvvmCross.Tests;
+using MvvmCross.Views;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
@@ -14,14 +17,29 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 {
     [TestOf(typeof(SelectResponsibleForAssignmentViewModel))]
-    internal class SelectResponsibleForAssignmentViewModelTests
+    internal class SelectResponsibleForAssignmentViewModelTests: MvxIoCSupportingTest
     {
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            base.Setup();
+            
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
+            Ioc.RegisterType<ThrottlingViewModel>(() => Create.ViewModel.ThrottlingViewModel());
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
+            Ioc.RegisterSingleton<IMvxNavigationService>(Mock.Of<IMvxNavigationService>());
+            
+        }
+    
         [Test]
         public void when_prepare_and_reassign_for_interview_should_list_of_interviewers_does_not_exist_responsible_of_interview()
         {
@@ -32,11 +50,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var usersRepository = Create.Storage.SqliteInmemoryStorage(
                 Create.Entity.InterviewerDocument(Guid.NewGuid()),
                 Create.Entity.InterviewerDocument(responsibleOfInterviewId));
-            var statefullInterviewRepository = SetUp.StatefulInterviewRepository(
+            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(
                 Create.AggregateRoot.StatefulInterview(interviewId, userId: responsibleOfInterviewId));
 
             var viewModel = CreateSelectResponsibleForAssignmentViewModel(usersRepository: usersRepository,
-                statefullInterviewRepository: statefullInterviewRepository);
+                statefulInterviewRepository: statefulInterviewRepository);
             // act
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(interviewId));
             // assert
@@ -56,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 Create.AggregateRoot.StatefulInterview(interviewId));
 
             var viewModel = CreateSelectResponsibleForAssignmentViewModel(usersRepository: usersRepository,
-                statefullInterviewRepository: statefulInterviewRepository);
+                statefulInterviewRepository: statefulInterviewRepository);
             // act
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(interviewId));
             // assert
@@ -235,7 +253,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var viewModel = CreateSelectResponsibleForAssignmentViewModel(
                 usersRepository: usersRepository,
-                statefullInterviewRepository: statefullInterviewRepository,
+                statefulInterviewRepository: statefullInterviewRepository,
                 commandService: mockOfCommandService.Object,
                 navigationService: mockOfNavigationViewModelService.Object);
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(interviewId));
@@ -267,10 +285,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 Create.Entity.AssignmentDocument(assignmentId, responsibleId: responsibleOfAssignmentId, quantity: 1).Build());
             var mockOfMvxMessenger = new Mock<IMvxMessenger>();
 
+            Ioc.RegisterSingleton<IMvxMessenger>(mockOfMvxMessenger.Object);
+            
             var viewModel = CreateSelectResponsibleForAssignmentViewModel(
                 usersRepository: usersRepository,
-                assignmentsStorage: assignmentsRepository,
-                mvxMessenger: mockOfMvxMessenger.Object);
+                assignmentsStorage: assignmentsRepository);
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(assignmentId));
             viewModel.UiItems[0].IsSelected = true;
             viewModel.UiItems[0].SelectCommand.Execute();
@@ -283,7 +302,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             Assert.That(assignment.ResponsibleName, Is.EqualTo(newResponsibleName));
             Assert.That(assignment.ReceivedByInterviewerAt, Is.EqualTo(null));
 
-            mockOfMvxMessenger.Verify(x => x.Publish(It.Is<DashboardChangedMsg>(y => y.Sender == viewModel)), Times.Once);
+            mockOfMvxMessenger.Verify(x => x.Publish(It.Is<DashboardChangedMsg>(y => y.Sender == viewModel), false), Times.Once);
         }
 
         [Test]
@@ -352,20 +371,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             IAuditLogService auditLogService = null,
             ICommandService commandService = null,
             IViewModelNavigationService navigationService = null,
-            IMvxMessenger mvxMessenger = null,
-            IStatefulInterviewRepository statefullInterviewRepository = null,
+            IStatefulInterviewRepository statefulInterviewRepository = null,
             IPlainStorage<InterviewView> interviewStorage = null,
             IPlainStorage<AssignmentDocument, int> assignmentsStorage = null)
         {
             return new SelectResponsibleForAssignmentViewModel(
-                mvxNavigationService: mvxNavigationService ?? Mock.Of<IMvxNavigationService>(),
                 usersRepository: usersRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>(),
                 principal: principal ?? Create.Service.Principal(Guid.NewGuid()),
                 auditLogService: auditLogService ?? Mock.Of<IAuditLogService>(),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 navigationService: navigationService ?? Mock.Of<IViewModelNavigationService>(),
-                mvxMessenger: mvxMessenger ?? Mock.Of<IMvxMessenger>(),
-                statefulInterviewRepository: statefullInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                statefulInterviewRepository: statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewStorage: interviewStorage ?? Create.Storage.SqliteInmemoryStorage<InterviewView>(),
                 assignmentsStorage: assignmentsStorage ?? Create.Storage.SqliteInmemoryStorage<AssignmentDocument, int>());
         }

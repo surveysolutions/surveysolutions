@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
@@ -53,7 +54,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
             IInterviewerPrincipal principal,
             LocalSynchronizationViewModel synchronization,
-            IMvxMessenger messenger,
             IInterviewerSettings interviewerSettings,
             CreateNewViewModel createNewViewModel,
             StartedInterviewsViewModel startedInterviewsViewModel,
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             WebInterviewsViewModel webInterviews ) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection)
         {
-            this.messenger = messenger;
+            this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
             this.interviewsRepository = interviewsRepository;

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -8,11 +9,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
     public abstract class RefreshingAfterSyncListViewModel : ListViewModel
     {
-        private readonly IMvxMessenger messenger;
+        protected readonly IMvxMessenger Messenger;
 
-        protected RefreshingAfterSyncListViewModel(IMvxMessenger messenger)
+        protected RefreshingAfterSyncListViewModel()
         {
-            this.messenger = messenger;
+            Messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
         }
 
         private MvxSubscriptionToken messengerSubscription;
@@ -26,13 +27,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg => await this.UpdateUiItemsAsync(), MvxReference.Strong);
+            messengerSubscription = Messenger.Subscribe<DashboardChangedMsg>(async msg => await this.UpdateUiItemsAsync(), MvxReference.Strong);
         }
 
         public override void ViewDisappeared()
         {
             base.ViewDisappeared();
-            messengerSubscription.Dispose();
+            messengerSubscription?.Dispose();
         }
     }
 }

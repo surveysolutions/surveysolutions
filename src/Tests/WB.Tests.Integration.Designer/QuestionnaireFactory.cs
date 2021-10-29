@@ -8,7 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
-namespace WB.Tests.Integration.Core
+namespace WB.Tests.Integration.Designer
 {
     internal class QuestionnaireFactory
     {

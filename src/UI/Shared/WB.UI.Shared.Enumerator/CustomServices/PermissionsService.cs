@@ -3,6 +3,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using AndroidX.Core.App;
+using MvvmCross;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Plugin.Messenger;
 using Plugin.Permissions;
@@ -16,16 +17,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
     public class PermissionsService : IPermissionsService
     {
         private readonly IPermissions permissions;
-        private readonly IMvxAndroidCurrentTopActivity topActivity;
-        private readonly IMvxMessenger messenger;
-
         private MvxSubscriptionToken token;
 
-        public PermissionsService(IPermissions permissions, IMvxAndroidCurrentTopActivity topActivity, IMvxMessenger messenger)
+        public PermissionsService(IPermissions permissions)
         {
             this.permissions = permissions;
-            this.topActivity = topActivity;
-            this.messenger = messenger;
         }
 
         public async Task AssureHasPermissionOrThrow<T>() where T : BasePermission, new() 
@@ -36,8 +32,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             // Check if application has permission to do package installations
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O && !Application.Context.PackageManager.CanRequestPackageInstalls())
             {
+                IMvxAndroidCurrentTopActivity topActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
                 // if not - open settings menu for current application
-                var addFlags = ShareCompat.IntentBuilder.From(this.topActivity.Activity)
+                var addFlags = ShareCompat.IntentBuilder.From(topActivity.Activity)
                     .Intent
                     .SetAction(Android.Provider.Settings.ActionManageUnknownAppSources)
                     .SetData(Android.Net.Uri.Parse("package:" + Application.Context.PackageName))
@@ -47,7 +44,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
                 // prepare async action, there is no <void> version for TaskCompletionSource, using bool
                 var tcs = new TaskCompletionSource<bool>();
-
+                
+                var messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
                 // subscribing on Application resume event
                 this.token = messenger.Subscribe<ApplicationResumeMessage>(m =>
                 {

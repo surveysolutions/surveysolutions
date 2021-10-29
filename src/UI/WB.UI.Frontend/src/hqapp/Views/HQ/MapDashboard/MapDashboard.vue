@@ -119,11 +119,11 @@
                         click="assignInterview">{{ $t("Common.Assign") }}</button>
                     <button
                         class="btn btn-sm btn-success"
-                        v-if="model.userRole == 'Supervisor' && selectedTooltip.status == 'Completed'"
+                        v-if="model.userRole == 'Supervisor' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'RejectedByHeadquarters')"
                         click="approveSvInterview">{{ $t("Common.Approve")}}</button>
                     <button
                         class="btn btn-sm reject"
-                        v-if="model.userRole == 'Supervisor' && selectedTooltip.status == 'Completed'"
+                        v-if="model.userRole == 'Supervisor' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'RejectedByHeadquarters')"
                         click="rejectSvInterview">{{ $t("Common.Reject")}}</button>
                     <button
                         class="btn btn-sm btn-success"

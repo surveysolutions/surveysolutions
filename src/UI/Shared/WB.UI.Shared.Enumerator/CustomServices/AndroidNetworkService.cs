@@ -3,30 +3,22 @@ using Android.Content;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.Telephony;
-using MvvmCross.Plugin.Network.Reachability;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class AndroidNetworkService : INetworkService
     {
-        private readonly IMvxReachability mvxReachability;
         private readonly string unknown = "UNKNOWN";
 
-       public AndroidNetworkService(IMvxReachability mvxReachability)
-        {
-           this.mvxReachability = mvxReachability;
-        }
+       public AndroidNetworkService()
+       {
+       }
 
         public bool IsNetworkEnabled()
         {
             var cm = (ConnectivityManager)Application.Context.GetSystemService(Context.ConnectivityService);
             return cm.ActiveNetworkInfo?.IsConnectedOrConnecting ?? false;
-        }
-
-        public bool IsHostReachable(string host)
-        {
-            return this.mvxReachability.IsHostReachable(host);
         }
 
         private NetworkInfo GetNetworkInfo()

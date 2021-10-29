@@ -1072,7 +1072,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new RestService(
                 restServiceSettings ?? Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost"),
-                networkService ?? Mock.Of<INetworkService>(x => x.IsHostReachable(It.IsAny<string>()) == true && x.IsNetworkEnabled() == true),
+                networkService ?? Mock.Of<INetworkService>(x => x.IsNetworkEnabled() == true),
                 synchronizationSerializer ?? new JsonAllTypesSerializer(),
                 stringCompressor ?? Mock.Of<IStringCompressor>(),
                 restServicePointManager ?? Mock.Of<IRestServicePointManager>(),

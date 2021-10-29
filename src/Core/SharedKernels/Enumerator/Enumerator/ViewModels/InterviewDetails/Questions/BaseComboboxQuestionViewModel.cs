@@ -39,8 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionInstructionViewModel instructionViewModel,
             IStatefulInterviewRepository interviewRepository,
             IViewModelEventRegistry eventRegistry,
-            FilteredOptionsViewModel filteredOptionsViewModel,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
+            FilteredOptionsViewModel filteredOptionsViewModel)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -56,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             this.comboboxViewModel = 
                 new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, 
-                    true, mainThreadDispatcher);
+                    true);
         }
 
         protected Guid interviewId;

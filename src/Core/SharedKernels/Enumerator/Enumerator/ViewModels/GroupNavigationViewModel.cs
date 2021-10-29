@@ -60,6 +60,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             get { return this.navigateToGroupState; }
             set { this.RaiseAndSetIfChanged(ref this.navigateToGroupState, value); }
         }
+
+        private bool isEnabled = true;
+
+        public bool IsEnabled
+        {
+            get => isEnabled;
+            protected set => this.RaiseAndSetIfChanged(ref this.isEnabled, value);
+        }
         
         public DynamicTextViewModel Title { get; }
 
@@ -139,6 +147,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             this.NavigateToGroupState?.UpdateFromGroupModel();
             this.RaisePropertyChanged(() => this.NavigateToGroupState);
+            this.IsEnabled = true;
         }
 
         private void SetGroupsStates()
@@ -213,7 +222,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private async Task NavigateAsync()
         {
             // focus out event is fired after navigation button click event, so we cannot accept answer before leaving a section. This delay should force command to be put into the queue before navigation
-            await Task.Delay(100); 
+            var waitOnCommand = this.commandService.WaitOnCommandAsync();
+            var isCommandReceived = await Task.WhenAny(waitOnCommand, Task.Delay(100)) == waitOnCommand;
+
+            if (isCommandReceived || this.commandService.HasPendingCommands)
+            {
+                IsEnabled = false;
+                return;
+            }
+                
             await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
             switch (this.NavigationGroupType)
             {

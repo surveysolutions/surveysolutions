@@ -10,6 +10,8 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using AndroidX.RecyclerView.Widget;
 using MvvmCross.DroidX.RecyclerView;
+using MvvmCross.IoC;
+using MvvmCross.Views;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
@@ -139,9 +141,10 @@ namespace WB.UI.LinkerInclusion
             context2.Dispose();
         }
 
-        public void Include(MvxNavigationService service, IMvxViewModelLoader loader)
+        public void Include(MvxNavigationService service, IMvxViewModelLoader loader,
+            IMvxViewDispatcher viewDispatcher,IMvxIoCProvider iocProvider)
         {
-            service = new MvxNavigationService(null, loader);
+            service = new MvxNavigationService( loader, viewDispatcher,iocProvider);
         }
 
         public void Include(ConsoleColor color)
