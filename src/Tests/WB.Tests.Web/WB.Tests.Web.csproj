@@ -7,6 +7,10 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="coverlet.collector" Version="3.1.0">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
         <PackageReference Include="ApprovalTests" Version="5.4.6" />
         <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
