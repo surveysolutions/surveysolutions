@@ -1862,7 +1862,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Плоский режим разрешен для ростеров с не больше чем {0} элементами..
+        ///   Looks up a localized string similar to Плоский режим разрешен для ростеров с не больше чем {0} вопросов или статических текстов..
         /// </summary>
         public static string WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements {
             get {
@@ -2161,11 +2161,29 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Переменные на обложке должны иметь описание.
+        /// </summary>
+        public static string WB0311_IdentityVariablesMustHaveLabel {
+            get {
+                return ResourceManager.GetString("WB0311_IdentityVariablesMustHaveLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Категория должна иметь минимум 2 опции.
         /// </summary>
         public static string WB0312 {
             get {
                 return ResourceManager.GetString("WB0312", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Подстановка не может ссылаться на элементы внутри матричного или табличного ростера.
+        /// </summary>
+        public static string WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope {
+            get {
+                return ResourceManager.GetString("WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope", resourceCulture);
             }
         }
         

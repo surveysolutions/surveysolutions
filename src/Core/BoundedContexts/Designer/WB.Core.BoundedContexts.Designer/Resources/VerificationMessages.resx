@@ -831,4 +831,7 @@
   <data name="WB0312" xml:space="preserve">
       <value>Categories must have at least two options</value>
   </data>
+  <data name="WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope" xml:space="preserve">
+    <value>Substitution cannot reference items from a deeper roster level in matrix and table rosters</value>
+  </data>
 </root>

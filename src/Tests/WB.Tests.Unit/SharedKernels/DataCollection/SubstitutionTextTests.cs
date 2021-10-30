@@ -345,5 +345,47 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             // assert
             Assert.That(substitutionText.Text, Is.EqualTo(markdownText + HttpUtility.HtmlEncode(specSymbolsForMarkdownEngine)));
         }
+        
+         [Test]
+        public void When_ReplaceSubstitutions_for_()
+        {
+            //arrange
+            var rosterId1 = Guid.Parse("22222222222222222222222222222222");
+            var rosterId2 = Guid.Parse("33333333333333333333333333333333");
+            var questionId = Guid.Parse("44444444444444444444444444444444");
+
+            var questionnireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.Roster(rosterId1,displayMode: RosterDisplayMode.Table, variable: "r1", title:"test %age%", children: new IComposite[]
+                {
+                    Create.Entity.NumericQuestion(questionId, variableName:"age")
+                })
+            });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnireDocument);
+
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[]
+            {
+                Create.Entity.InterviewTreeRoster(Create.Entity.Identity(rosterId1, new decimal[] { 0 }), rosterTitle: "test %age%", children: new IInterviewTreeNode[]
+                {
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(questionId, new decimal[] { 0 }), variableName:"age", questionType: QuestionType.Numeric, answer: 5),
+                }),
+            });
+            var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
+
+
+            var substitionTextFactory = Create.Service.SubstitutionTextFactory();
+            var rosterIdentity = Create.Entity.Identity(rosterId1, new decimal[] { 2 });
+            var substitionText = substitionTextFactory.CreateText(rosterIdentity, "title: %age%", questionnaire);
+
+
+            //act
+            substitionText.ReplaceSubstitutions(tree);
+
+            //assert
+            Assert.That(substitionText.HasSubstitutions, Is.True);
+            Assert.That(substitionText.Text, Is.EqualTo("title: 5"));
+        }
+
     }
 }

@@ -849,4 +849,7 @@
   <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
     <value>Переменные на обложке должны иметь описание</value>
   </data>
+  <data name="WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope" xml:space="preserve">
+    <value>Подстановка не может ссылаться на элементы внутри матричного или табличного ростера</value>
+  </data>
 </root>
