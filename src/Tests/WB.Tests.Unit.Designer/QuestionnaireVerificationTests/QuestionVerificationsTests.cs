@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using NHibernate.Collection.Generic;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Verifier;
@@ -581,6 +582,47 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.GetError("WB0302").References.First().Id.Should().Be(questionWithSubstitutionsId);
             verificationMessages.GetError("WB0302").References.Last().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
             verificationMessages.GetError("WB0302").References.Last().Id.Should().Be(sameRosterLevelQuestionId);
+        }
+        
+        [Test]
+        public void when_questionnaire_contains_first_chapter_with_enabling_condition_no_cover_should_return_verification_error()
+        {
+            var groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var questionnaire = CreateQuestionnaireDocument(
+                Create.Group(enablementCondition: "test", groupId: groupId));
+            var verifier = CreateQuestionnaireVerifier();
+
+            // act
+            var errors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+
+            // assert
+            var expectedError = errors.GetError("WB0263");
+            Assert.That(expectedError, Is.Not.Null, "WB0263 should be raised");
+            Assert.That(expectedError.Message, Is.EqualTo(VerificationMessages.WB0263_FirstChapterHasEnablingCondition));
+
+            Assert.That(expectedError.References.Count, Is.EqualTo(1));
+            Assert.That(expectedError.References.First().Id, Is.EqualTo(groupId));
+        }
+        
+        [Test]
+        public void when_questionnaire_contains_first_chapter_with_enabling_condition_with_cover_should_return_verification_error()
+        {
+            var groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var questionnaire = QuestionnaireDocumentWithCoverPage();
+            questionnaire.Add(Create.Group(enablementCondition: "test", groupId: groupId), null);
+                
+            var verifier = CreateQuestionnaireVerifier();
+
+            // act
+            var errors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+
+            // assert
+            var expectedError = errors.GetError("WB0263");
+            Assert.That(expectedError, Is.Not.Null, "WB0263 should be raised");
+            Assert.That(expectedError.Message, Is.EqualTo(VerificationMessages.WB0263_FirstChapterHasEnablingCondition));
+
+            Assert.That(expectedError.References.Count, Is.EqualTo(1));
+            Assert.That(expectedError.References.First().Id, Is.EqualTo(groupId));
         }
 
         [Test]

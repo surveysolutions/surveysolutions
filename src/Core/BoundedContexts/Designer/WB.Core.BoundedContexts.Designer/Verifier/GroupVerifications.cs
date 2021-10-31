@@ -209,8 +209,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var parentComposite = group.GetParent();
             if (parentComposite?.PublicKey != questionnaire.PublicKey) return false;
 
-            if (parentComposite.Children.IndexOf(group) != 0) return false;
-
+            var indexToCheck = questionnaire.Questionnaire.IsCoverPageSupported ? 1 : 0;
+            
+            if (parentComposite.Children.IndexOf(group) != indexToCheck) return false;
             return !string.IsNullOrEmpty(group.ConditionExpression);
         }
 
