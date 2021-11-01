@@ -99,6 +99,23 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
             errors.Count.Should().Be(0);
         }
+        
+        [Test]
+        public void when_export_questionnaire_with_cover_page_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1, title: "Test");
+            var coverPageSectionId = Id.g7;
+            questionnaireDocument.CoverPageSectionId = coverPageSectionId;
+            questionnaireDocument.Children = new List<IComposite>()
+            {
+                new Group() { PublicKey = coverPageSectionId }
+            }.ToReadOnlyCollection();
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            errors.Count.Should().Be(0);
+        }
        
         [Test]
         public void when_export_empty_chapter_should_be_equals_after_import()
@@ -187,8 +204,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             );
             questionnaireDocument.Attachments = new List<Attachment>()
             {
-                new Attachment() { Name = "attach #1", AttachmentId = Guid.NewGuid(), ContentId = "content1"},
-                new Attachment() { Name = "attach #2", AttachmentId = Guid.NewGuid(), ContentId = "content2"},
+                new Attachment() { Name = "attach #1", AttachmentId = Guid.NewGuid()/*, ContentId = "content1"*/},
+                new Attachment() { Name = "attach #2", AttachmentId = Guid.NewGuid()/*, ContentId = "content2"*/},
             };
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
@@ -988,6 +1005,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                     .Excluding(q => q.CreatedBy)
                     .Excluding(q => q.CreationDate)
                     .Excluding(q => q.LastEntryDate)
+                    .Excluding(q => q.CoverPageSectionId)
                 ;
         }
     }

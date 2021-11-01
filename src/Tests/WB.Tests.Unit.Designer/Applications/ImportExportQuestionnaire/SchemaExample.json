@@ -7,21 +7,19 @@
   "additionalProperties": false,
   
   "properties": {
-    "CoverPageSectionId": { "$ref": "#/definitions/GUID" },
-    "DefaultTranslation": { "type": "string" },
+    "CoverPage": { "$ref": "#/definitions/CoverPage" },
+    "DefaultTranslation": { "$ref": "#/definitions/GUID" },
     "Id": { "$ref": "#/definitions/GUID" },
     "Title": { "type": "string" },
     "Description": { "type": "string" },
     "VariableName": { "$ref": "#/definitions/VariableName" },
-    "DefaultLanguageName": { "type": "string" },
     "HideIfDisabled": { "type": "boolean", "default": false },
-    
     "Children": {
       "type": "array",
       "items": {
         "$ref": "#/definitions/Group"
       },
-      "minItems": 1
+      "minItems": 0
     },
     "Macros": {
       "type": "object",
@@ -194,6 +192,33 @@
       },
       "additionalProperties": false,
       "required": ["Type", "Id"]
+    },
+    
+    "CoverPage": {
+      "type": "object",
+      "properties": {
+        "Type": {"const": "CoverPage"},
+        "Children": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {"$ref": "#/definitions/StaticText"},
+              {"$ref": "#/definitions/DateTimeQuestion"},
+              {"$ref": "#/definitions/GpsCoordinateQuestion"},
+              {"$ref": "#/definitions/NumericQuestion"},
+              {"$ref": "#/definitions/SingleQuestion"},
+              {"$ref": "#/definitions/TextQuestion"},
+              {"$ref": "#/definitions/Variable"}
+            ]
+          }
+        },
+        "Id": { "$ref": "#/definitions/GUID" },
+        "Title": { "type": "string" },
+        "VariableName": { "$ref": "#/definitions/VariableName" }
+      },
+
+      "additionalProperties": false,
+      "required": [ "Id"]
     },
 
     "Group": {

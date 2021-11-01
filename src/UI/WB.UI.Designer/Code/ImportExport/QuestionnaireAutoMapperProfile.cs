@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
 using AutoMapper.Extensions.EnumMapping;
@@ -31,12 +32,23 @@ namespace WB.UI.Designer.Code.ImportExport
         public QuestionnaireAutoMapperProfile()
         {
             this.CreateMap<QuestionnaireDocument, Questionnaire>()
-                .ForMember(x => x.Id, opts => opts.MapFrom(t => t.PublicKey));
+                .ForMember(x => x.Id, opts => opts.MapFrom(t => t.PublicKey))
+                .ForMember(x => x.CoverPage, x => x.MapFrom(s =>
+                    s.Children.Count > 0 && s.Children[0].PublicKey == s.CoverPageSectionId
+                        ? (Group)s.Children[0]
+                        : null
+                ))
+                .ForMember(x => x.Children, x => x.MapFrom(s =>
+                    s.Children.Count > 0 && s.Children[0].PublicKey == s.CoverPageSectionId
+                        ? s.Children.Skip(1)
+                        : s.Children));
             this.CreateMap<Questionnaire, QuestionnaireDocument>()
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
                 .ForMember(s => s.Id, opt => opt.MapFrom(t => t.Id.FormatGuid()))
-                /*.ForMember(s => s.CoverPageSectionId, opt => opt.MapFrom(t => 
-                    t.Children != null && t.Children.Count > 0 ? t.Children[0].PublicKey : Guid.NewGuid()))*/;
+                .ForMember(s => s.CoverPageSectionId, opt => opt.MapFrom(t => 
+                    t.CoverPage != null ? t.CoverPage.Id : Guid.NewGuid()))
+                .ForMember(s => s.Children, opt => opt.MapFrom(t =>
+                    t.CoverPage != null ? Enumerable.Concat<QuestionnaireEntity>(t.CoverPage.ToEnumerable(), t.Children) : t.Children));
             
             this.CreateMap<WB.Core.SharedKernels.Questionnaire.Documents.QuestionnaireMetaInfo, Models.QuestionnaireMetaInfo>();
             this.CreateMap<Models.QuestionnaireMetaInfo, WB.Core.SharedKernels.Questionnaire.Documents.QuestionnaireMetaInfo>();
@@ -76,6 +88,12 @@ namespace WB.UI.Designer.Code.ImportExport
                 .IncludeBase<Models.Group, Group>()
                 .ForMember(s => s.IsRoster, opt => opt.MapFrom(t => true))
                 .ForMember(x => x.CustomRosterTitle, x => x.MapFrom(s => true));
+
+            this.CreateMap<Group, Models.CoverPage>()
+                .IncludeBase<IComposite, QuestionnaireEntity>();
+            this.CreateMap<Models.CoverPage, Group>()
+                .IncludeBase<IQuestionnaireEntity, IComposite>()
+                .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id));
 
             this.CreateMap<Documents.FixedRosterTitle, Models.FixedRosterTitle>();
             this.CreateMap<Models.FixedRosterTitle, Documents.FixedRosterTitle>()
