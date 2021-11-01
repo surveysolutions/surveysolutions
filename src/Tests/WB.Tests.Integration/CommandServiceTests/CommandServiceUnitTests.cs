@@ -62,7 +62,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             var t1 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
             log.Add("wait started");
-            await commandService.WaitOnCommandAsync();
+            await commandService.WaitOnCommandAsync().ConfigureAwait(false);
             log.Add("wait finished");
 
             log.Should().BeEquivalentTo("wait started", "wait finished");
@@ -84,7 +84,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             var t1 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
 
             log.Add("wait started");
-            await commandService.WaitOnCommandAsync();
+            await commandService.WaitOnCommandAsync().ConfigureAwait(false);
             log.Add("wait finished");
 
             log.Should().BeEquivalentTo("wait started", "wait finished");
