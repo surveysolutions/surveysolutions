@@ -122,23 +122,51 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 chapterId: Guid.NewGuid(),
                 hideIfDisabled: true
             );
-            //chapter.Description = "Description";
             chapter.Enabled = true;
             chapter.ConditionExpression = "ConditionExpression";
-            chapter.DisplayMode = RosterDisplayMode.Table;
-            chapter.IsRoster = true;
+            chapter.IsRoster = false;
             chapter.VariableName = "VariableName";
-            chapter.CustomRosterTitle = true;
             chapter.HideIfDisabled = true;
-            chapter.FixedRosterTitles = new FixedRosterTitle[]
+
+            var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
+                chapter
+            );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
+            questionnaireDocument.Children[0].Should().BeEquivalentTo(newQuestionnaire.Children[0]);
+            errors.Count.Should().Be(0);
+        }
+        
+        [Test]
+        public void when_export_one_chapter_with_roster_should_be_equals_after_import()
+        {
+            var roster = Create.Roster(title: "Roster");
+            roster.Enabled = true;
+            roster.ConditionExpression = "ConditionExpression";
+            roster.DisplayMode = RosterDisplayMode.Table;
+            roster.IsRoster = true;
+            roster.VariableName = "VariableName";
+            roster.CustomRosterTitle = true;
+            roster.HideIfDisabled = true;
+            roster.FixedRosterTitles = new FixedRosterTitle[]
             {
                 new FixedRosterTitle(11, "rTitle11"),
                 new FixedRosterTitle(22, "rTitle22"),
             };
-            chapter.RosterSizeSource = RosterSizeSourceType.FixedTitles;
-            chapter.RosterSizeQuestionId = Guid.NewGuid();
-            chapter.RosterTitleQuestionId = Guid.NewGuid();
-
+            roster.RosterSizeSource = RosterSizeSourceType.FixedTitles;
+            roster.RosterSizeQuestionId = Guid.NewGuid();
+            roster.RosterTitleQuestionId = Guid.NewGuid();
+            
+            var chapter = Create.Chapter(
+                title: " Chapter",
+                chapterId: Guid.NewGuid(),
+                hideIfDisabled: true,
+                children: new []{ roster }
+            );
+            
             var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
                 chapter
             );
@@ -625,7 +653,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             var question = new MultyOptionsQuestion()
             {
                 QuestionType = QuestionType.MultyOption,
-                PublicKey = Guid.NewGuid(),
+                PublicKey = Id.g7,
                 QuestionText = "question title",
                 VariableLabel = "variable",
                 ConditionExpression = "enablementCondition",
@@ -642,13 +670,13 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                     new Answer() { AnswerText = "text1", AnswerValue = "111", },
                     new Answer() { AnswerText = "text2", AnswerValue = "222", ParentValue = "111"},
                 },
-                LinkedToRosterId = Guid.NewGuid(),
-                LinkedToQuestionId = Guid.NewGuid(),
+                //LinkedToRosterId = Guid.NewGuid(),
+                LinkedToQuestionId = Id.g7,
                 LinkedFilterExpression = "filter expression",
-                Properties = new QuestionProperties(hideInstructions: true, useFormatting: false)
-                {
-                    OptionsFilterExpression = "OptionsFilterExpression"
-                }
+                // Properties = new QuestionProperties(hideInstructions: true, useFormatting: false)
+                // {
+                //     OptionsFilterExpression = "OptionsFilterExpression"
+                // }
             };
             
             var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
@@ -737,7 +765,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             var question = new SingleQuestion()
             {
                 QuestionType = QuestionType.SingleOption,
-                PublicKey = Guid.NewGuid(),
+                PublicKey = Id.g7,
                 QuestionText = "question title",
                 VariableLabel = "variable",
                 ConditionExpression = "enablementCondition",
@@ -753,13 +781,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                     new Answer() { AnswerText = "text1", AnswerValue = "111", },
                     new Answer() { AnswerText = "text2", AnswerValue = "222", ParentValue = "111"},
                 },
-                LinkedToRosterId = Guid.NewGuid(),
-                LinkedToQuestionId = Guid.NewGuid(),
+                LinkedToQuestionId = Id.g7,
                 LinkedFilterExpression = "filter expression",
-                Properties = new QuestionProperties(hideInstructions: true, useFormatting: false)
-                {
-                    OptionsFilterExpression = "OptionsFilterExpression",
-                },
                 CascadeFromQuestionId = Guid.NewGuid(),
                 IsFilteredCombobox = true,
             };

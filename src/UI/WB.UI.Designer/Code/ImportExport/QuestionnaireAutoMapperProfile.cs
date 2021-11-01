@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq.Expressions;
 using AutoMapper;
+using AutoMapper.Extensions.EnumMapping;
 using DocumentFormat.OpenXml.EMMA;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -62,20 +63,27 @@ namespace WB.UI.Designer.Code.ImportExport
 
             this.CreateMap<Group, Models.Group>()
                 .IncludeBase<IComposite, QuestionnaireEntity>()
-                .ConstructUsing(g => g.IsRoster ? new Roster() : new Models.Group());
+                .ConstructUsing((g, context) => g.IsRoster ? context.Mapper.Map<Roster>(g) : new Models.Group());
             this.CreateMap<Models.Group, Group>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id));
 
             this.CreateMap<Group, Models.Roster>()
-                .IncludeBase<Group, Models.Group>();
+                .IncludeBase<Group, Models.Group>()
+                .ForMember(x => x.Title, x => x.MapFrom(s =>
+                    s.CustomRosterTitle ? s.Title : s.Title + @" - %rostertitle%"));
             this.CreateMap<Models.Roster, Group>()
                 .IncludeBase<Models.Group, Group>()
-                .ForMember(s => s.IsRoster, opt => opt.MapFrom(t => true));
+                .ForMember(s => s.IsRoster, opt => opt.MapFrom(t => true))
+                .ForMember(x => x.CustomRosterTitle, x => x.MapFrom(s => true));
 
             this.CreateMap<Documents.FixedRosterTitle, Models.FixedRosterTitle>();
             this.CreateMap<Models.FixedRosterTitle, Documents.FixedRosterTitle>()
                 .ConstructUsing(c => new Documents.FixedRosterTitle(c.Value, c.Title));
+            
+            //this.CreateMap<Main.Core.Entities.SubEntities.RosterDisplayMode, Models.RosterDisplayMode>()
+                //.ConvertUsingEnumMapping(o => o.MapByName())
+                //.ReverseMap();
                 
             this.CreateMap<StaticText, Models.StaticText>()
                 .IncludeBase<IComposite, QuestionnaireEntity>();
@@ -185,6 +193,13 @@ namespace WB.UI.Designer.Code.ImportExport
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
                 .ForMember(s => s.LinkedToQuestionId, o => o.MapFrom(t => t.LinkedToId))
                 .ForMember(s => s.LinkedToRosterId, o => o.MapFrom(t => t.LinkedToId))
+                .AfterMap((s, d) =>
+                {
+                    if (s.LinkedToId.HasValue)
+                        d.LinkedFilterExpression = s.FilterExpression;
+                    else
+                        d.Properties!.OptionsFilterExpression = s.FilterExpression;
+                })
                 .AfterMap((s, d) => d.QuestionType = QuestionType.MultyOption);
 
             this.CreateMap<TextListQuestion, Models.Question.TextListQuestion>()

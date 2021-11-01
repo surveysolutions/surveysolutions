@@ -11,8 +11,6 @@ namespace WB.UI.Designer.Code.ImportExport.Models
     {
         public RosterDisplayMode DisplayMode { get; set; }
 
-        public bool CustomRosterTitle { get; set; }
-
         public Guid? RosterSizeQuestionId { get; set; }
 
         public RosterSizeSourceType RosterSizeSource { get; set; }

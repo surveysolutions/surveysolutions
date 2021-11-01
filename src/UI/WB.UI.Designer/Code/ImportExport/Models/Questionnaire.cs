@@ -9,8 +9,6 @@ namespace WB.UI.Designer.Code.ImportExport.Models
     {
         public Questionnaire()
         {
-            //Id = String.Empty;
-            //ConditionExpression = String.Empty;
             Title = String.Empty;
             Description = String.Empty;
             VariableName = String.Empty;
@@ -24,10 +22,8 @@ namespace WB.UI.Designer.Code.ImportExport.Models
         }
 
         public Guid Id { get; set; }
-        //public string Id { get; set; }
-        //public Guid PublicKey { get; set; }
+
         public Guid CoverPageSectionId { get; set; }
-        //public int Revision { get; set; }
         public List<Group> Children { get; set; }
         public Dictionary<Guid, Macro> Macros { get; set; }
         public Dictionary<Guid, LookupTable> LookupTables { get; set; }
