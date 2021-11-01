@@ -96,7 +96,11 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             log.Should().BeEquivalentTo("wait started", "wait finished");
 
-            t1.Wait(5000);
+            var round1 = 0;
+            while (t1.Wait(3000) && round1 < 5)
+            {
+                round1++;
+            }
             log.Should().BeEquivalentTo("wait started", "wait finished", "command executed");
 
             var t2 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
