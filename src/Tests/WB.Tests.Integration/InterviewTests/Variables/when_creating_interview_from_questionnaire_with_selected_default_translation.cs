@@ -21,7 +21,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
         private EventContext eventContext;
 
         [OneTimeSetUp]
-        public void Setup()
+        public void OneSetup()
         {
             var translationId = Id.gC;
 

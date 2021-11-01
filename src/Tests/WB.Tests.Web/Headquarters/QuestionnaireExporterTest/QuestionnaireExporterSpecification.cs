@@ -227,7 +227,7 @@ namespace WB.Tests.Web.Headquarters.QuestionnaireExporterTest
         public void Establish()
         {
             this.fixture = new Fixture();
-            fixture.Customize(new AutoConfiguredMoqCustomization());
+            fixture.Customize(new AutoMoqCustomization(){ConfigureMembers = true});
 
             this.questionnaireIdentity = Abc.Create.Entity.QuestionnaireIdentity(Id.gA, 1);
             this.questionnaireDocument = Abc.Create.Entity.QuestionnaireDocument(id: Id.gA);
