@@ -18,6 +18,7 @@ namespace WB.UI.Designer.Code.ImportExport.Models
     [KnownType(typeof(SingleQuestion))]
     [KnownType(typeof(TextListQuestion))]
     [KnownType(typeof(Group))]
+    [KnownType(typeof(Roster))]
     [KnownType(typeof(StaticText))]
     [KnownType(typeof(Variable))]
     public abstract class QuestionnaireEntity : IQuestionnaireEntity

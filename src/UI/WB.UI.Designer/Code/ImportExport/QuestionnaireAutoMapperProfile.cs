@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq.Expressions;
 using AutoMapper;
 using DocumentFormat.OpenXml.EMMA;
 using Main.Core.Documents;
@@ -60,12 +61,17 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<IQuestionnaireEntity, IComposite>();
 
             this.CreateMap<Group, Models.Group>()
-                .IncludeBase<IComposite, QuestionnaireEntity>();
-            //this.CreateMap<Group, QuestionnaireEntity>().As<Models.Group>();
+                .IncludeBase<IComposite, QuestionnaireEntity>()
+                .ConstructUsing(g => g.IsRoster ? new Roster() : new Models.Group());
             this.CreateMap<Models.Group, Group>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id));
-            //this.CreateMap<Models.Group, IComposite>().As<Group>();
+
+            this.CreateMap<Group, Models.Roster>()
+                .IncludeBase<Group, Models.Group>();
+            this.CreateMap<Models.Roster, Group>()
+                .IncludeBase<Models.Group, Group>()
+                .ForMember(s => s.IsRoster, opt => opt.MapFrom(t => true));
 
             this.CreateMap<Documents.FixedRosterTitle, Models.FixedRosterTitle>();
             this.CreateMap<Models.FixedRosterTitle, Documents.FixedRosterTitle>()

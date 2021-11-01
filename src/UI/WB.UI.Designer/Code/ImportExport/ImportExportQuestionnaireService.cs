@@ -61,22 +61,45 @@ namespace WB.UI.Designer.Code.ImportExport
                 var questionnaire = JsonConvert.DeserializeObject<Questionnaire>(json);
                 var questionnaireDocument = mapper.Map<QuestionnaireDocument>(questionnaire);
 
-                questionnaireDocument.ForEachTreeElement<IComposite>(c => c.Children, (parent, child) =>
+                FixAfterMapping(questionnaireDocument);
+
+                return questionnaireDocument;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        private static void FixAfterMapping(QuestionnaireDocument questionnaireDocument)
+        {
+            questionnaireDocument.ForEachTreeElement<IComposite>(c => c.Children, (parent, child) =>
+            {
+                if (child is Main.Core.Entities.SubEntities.IQuestion question)
                 {
-                    if (child is Main.Core.Entities.SubEntities.IQuestion question)
+                    if (question.LinkedToQuestionId.HasValue &&
+                        question.LinkedToQuestionId == question.LinkedToRosterId)
                     {
-                        if (question.LinkedToQuestionId.HasValue &&
-                            question.LinkedToQuestionId == question.LinkedToRosterId)
-                        {
-                            var linkedToQuestion = questionnaireDocument.Find<Main.Core.Entities.SubEntities.IQuestion>(
-                                question.LinkedToQuestionId.Value);
-                            question.LinkedToQuestionId = linkedToQuestion?.PublicKey;
-                            var linkedToRoster = questionnaireDocument.Find<Main.Core.Entities.SubEntities.IGroup>(
-                                question.LinkedToRosterId.Value);
-                            question.LinkedToRosterId = linkedToRoster?.PublicKey;
-                        }
+                        var linkedToQuestion = questionnaireDocument.Find<Main.Core.Entities.SubEntities.IQuestion>(
+                            question.LinkedToQuestionId.Value);
+                        question.LinkedToQuestionId = linkedToQuestion?.PublicKey;
+                        var linkedToRoster = questionnaireDocument.Find<Main.Core.Entities.SubEntities.IGroup>(
+                            question.LinkedToRosterId.Value);
+                        question.LinkedToRosterId = linkedToRoster?.PublicKey;
                     }
-                });
+                }
+            });
+        }
+
+        public QuestionnaireDocument Append(string json, QuestionnaireDocument destination)
+        {
+            try
+            {
+                var questionnaire = JsonConvert.DeserializeObject<Questionnaire>(json);
+                var questionnaireDocument = mapper.Map(questionnaire, destination);
+
+                FixAfterMapping(questionnaireDocument);
 
                 return questionnaireDocument;
             }
