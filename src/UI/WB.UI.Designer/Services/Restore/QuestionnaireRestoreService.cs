@@ -83,8 +83,6 @@ namespace WB.UI.Designer.Services.Restore
                         var questionnaireDocument = importExportQuestionnaireService.Import(textContent);
                         //var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
 
-                        questionnaireDocument.CoverPageSectionId = questionnaireDocument.Children[0].PublicKey;
-
                         if (createNew)
                         {
                             questionnaireDocument.PublicKey = Guid.NewGuid();

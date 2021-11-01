@@ -108,11 +108,10 @@
       "type": "object",
       "properties": {
         "AttachmentId": { "type": "string" },
-        "Name": { "type": "string" },
-        "ContentId": { "type": "string" }
+        "Name": { "type": "string" }
       },
       "additionalProperties": false,
-      "required": ["AttachmentId", "Name", "ContentId"]
+      "required": ["AttachmentId", "Name" ]
     },
 
     "AudioQuestion": {
