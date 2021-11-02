@@ -82,9 +82,7 @@ jobs:
           echo "[ConnectionStrings]\nTestConnection=\"${{ env.DB_CONN }}Database=postgres;CommandTimeout=60;\"" >> appsettings.ini
           dotnet test src/Tests/WB.Tests.Integration \
             --collect:"XPlat Code Coverage" \
-            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-            --filter Name!=when_waiting_for_command_execution_should_finish_waiting_after_first_command_received
-      # temporary excluding when_waiting_for_command_execution_should_finish_waiting_after_first_command_received
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover           
       - name: Designer tests
         run: |
           echo "[ConnectionSettings]\nTestConnectionStringFormat=\"${{ env.DB_CONN }}Database=testdb_{0};CommandTimeout=60;\"" > appsettings.ini
