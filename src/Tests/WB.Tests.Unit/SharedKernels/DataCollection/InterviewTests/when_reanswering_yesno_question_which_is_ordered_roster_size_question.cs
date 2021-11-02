@@ -2,7 +2,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;

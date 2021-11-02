@@ -28,13 +28,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         }
 
         private void BecauseOf() =>
-            result = factory.GetRosterEditView(questionnaireId, rosterId);
+            result = factory.GetRosterEditView(questionnaireId, RosterId);
 
         [NUnit.Framework.Test] public void should_return_not_null_view () =>
             result.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_return_roster_with_ItemId_equals_groupId () =>
-            result.ItemId.Should().Be(rosterId.FormatGuid());
+            result.ItemId.Should().Be(RosterId.FormatGuid());
         
         [NUnit.Framework.Test] public void should_return_roster_with_RosterSizeSourceType_equals_g3_RosterSizeSourceType () =>
             result.Type.Should().Be(RosterType.Numeric);
@@ -45,6 +45,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         private static QuestionnaireDocument questionnaireView;
         private static Mock<IDesignerQuestionnaireStorage> questionDetailsReaderMock;
 
-        private static Guid rosterId = g2Id;
+        private static readonly Guid RosterId = g2Id;
     }
 }

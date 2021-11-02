@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
 using NUnit.Framework;
+using SQLite;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
@@ -62,11 +63,13 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             var t1 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
             log.Add("wait started");
-            await commandService.WaitOnCommandAsync();
+            await commandService.WaitOnCommandAsync().ConfigureAwait(false);
             log.Add("wait finished");
 
             log.Should().BeEquivalentTo("wait started", "wait finished");
-            t1.Wait(5000);
+            
+            await t1.ConfigureAwait(false);
+            
             log.Should().BeEquivalentTo("wait started", "wait finished", "command executed");
         }
         
@@ -84,17 +87,19 @@ namespace WB.Tests.Integration.CommandServiceTests
             var t1 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
 
             log.Add("wait started");
-            await commandService.WaitOnCommandAsync();
+            await commandService.WaitOnCommandAsync().ConfigureAwait(false);
             log.Add("wait finished");
 
             log.Should().BeEquivalentTo("wait started", "wait finished");
 
-            t1.Wait(5000);
+            await t1.ConfigureAwait(false);
+            
             log.Should().BeEquivalentTo("wait started", "wait finished", "command executed");
 
             var t2 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
 
-            t2.Wait(5000);
+            await t2.ConfigureAwait(false);            
+            
             log.Should().BeEquivalentTo("wait started", "wait finished", "command executed", "command executed");
         }
     }

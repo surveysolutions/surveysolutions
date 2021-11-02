@@ -124,7 +124,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
         }
 
         [OneTimeTearDown]
-        public void TearDown()
+        public void OneTimeTearDown()
         {
             npgsqlConnection.Close();
         }
