@@ -9,10 +9,17 @@ namespace WB.UI.Designer.Code.ImportExport.Models.Question
     {
         public bool AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }
-        public bool YesNoView { get; set; }
+        public MultiOptionsDisplayMode DisplayMode { get; set; }
         public Guid? CategoriesId { get; set; }
         public List<Answer>? Answers { get; set; }
         public Guid? LinkedToId { get; set; }
         public string? FilterExpression { get; set; }
+    }
+
+    public enum MultiOptionsDisplayMode
+    {
+        Checkboxes,
+        YesNo,
+        Combobox,
     }
 }

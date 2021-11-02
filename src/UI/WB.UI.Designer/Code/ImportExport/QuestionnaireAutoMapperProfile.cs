@@ -8,20 +8,30 @@ using AutoMapper.Extensions.EnumMapping;
 using DocumentFormat.OpenXml.EMMA;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.UI.Designer.Code.ImportExport.Models;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.UI.Designer.Code.ImportExport.Models.Question;
+using AbstractQuestion = Main.Core.Entities.SubEntities.AbstractQuestion;
 using Answer = Main.Core.Entities.SubEntities.Answer;
+using AreaQuestion = Main.Core.Entities.SubEntities.Question.AreaQuestion;
+using AudioQuestion = Main.Core.Entities.SubEntities.Question.AudioQuestion;
+using DateTimeQuestion = Main.Core.Entities.SubEntities.Question.DateTimeQuestion;
 using Group = Main.Core.Entities.SubEntities.Group;
 using QuestionProperties = WB.Core.SharedKernels.QuestionnaireEntities.QuestionProperties;
 using Documents = WB.Core.SharedKernels.SurveySolutions.Documents;
+using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
+using GpsCoordinateQuestion = Main.Core.Entities.SubEntities.Question.GpsCoordinateQuestion;
 using IQuestionnaireEntity = WB.UI.Designer.Code.ImportExport.Models.IQuestionnaireEntity;
+using NumericQuestion = Main.Core.Entities.SubEntities.Question.NumericQuestion;
+using QRBarcodeQuestion = Main.Core.Entities.SubEntities.Question.QRBarcodeQuestion;
 using QuestionnaireEntities = WB.Core.SharedKernels.QuestionnaireEntities;
 using QuestionType = Main.Core.Entities.SubEntities.QuestionType;
+using SingleQuestion = Main.Core.Entities.SubEntities.Question.SingleQuestion;
 using StaticText = Main.Core.Entities.SubEntities.StaticText;
+using TextListQuestion = Main.Core.Entities.SubEntities.Question.TextListQuestion;
+using TextQuestion = Main.Core.Entities.SubEntities.Question.TextQuestion;
 using ValidationCondition = WB.UI.Designer.Code.ImportExport.Models.ValidationCondition;
 
 
@@ -174,6 +184,9 @@ namespace WB.UI.Designer.Code.ImportExport
 
             this.CreateMap<SingleQuestion, Models.Question.SingleQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
+                .ForMember(x => x.DisplayMode, x => x.MapFrom(s =>
+                    s.CascadeFromQuestionId.HasValue ? SingleOptionDisplayMode.Cascading : 
+                        (s.IsFilteredCombobox == true ? SingleOptionDisplayMode.Combobox : SingleOptionDisplayMode.Radio)))
                 .ForMember(s => s.LinkedToId, t => t.MapFrom(o =>
                     o.LinkedToQuestionId ?? o.LinkedToRosterId))
                 .AfterMap((s, t) => 
@@ -185,6 +198,8 @@ namespace WB.UI.Designer.Code.ImportExport
                     });
             this.CreateMap<Models.Question.SingleQuestion, SingleQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
+                .ForMember(x => x.IsFilteredCombobox, x => x.MapFrom(s => 
+                    s.DisplayMode == SingleOptionDisplayMode.Combobox ? true : (bool?)null))
                 .ForMember(s => s.LinkedToQuestionId, o => o.MapFrom(t => t.LinkedToId))
                 .ForMember(s => s.LinkedToRosterId, o => o.MapFrom(t => t.LinkedToId))
                 .AfterMap((s, d) =>
@@ -198,6 +213,9 @@ namespace WB.UI.Designer.Code.ImportExport
 
             this.CreateMap<MultyOptionsQuestion, Models.Question.MultiOptionsQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
+                .ForMember(x => x.DisplayMode, x => x.MapFrom(s =>
+                    s.YesNoView ? MultiOptionsDisplayMode.YesNo : 
+                        (s.IsFilteredCombobox == true ? MultiOptionsDisplayMode.Combobox : MultiOptionsDisplayMode.Checkboxes)))
                 .ForMember(s => s.LinkedToId, t => t.MapFrom(o =>
                     o.LinkedToQuestionId ?? o.LinkedToRosterId))
                 .AfterMap((s, t) => 
@@ -209,6 +227,9 @@ namespace WB.UI.Designer.Code.ImportExport
                 });
             this.CreateMap<Models.Question.MultiOptionsQuestion, MultyOptionsQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
+                .ForMember(x => x.YesNoView, x => x.MapFrom(s => s.DisplayMode == MultiOptionsDisplayMode.YesNo))
+                .ForMember(x => x.IsFilteredCombobox, x => x.MapFrom(s => 
+                    s.DisplayMode == MultiOptionsDisplayMode.Combobox ? true : (bool?)null))
                 .ForMember(s => s.LinkedToQuestionId, o => o.MapFrom(t => t.LinkedToId))
                 .ForMember(s => s.LinkedToRosterId, o => o.MapFrom(t => t.LinkedToId))
                 .AfterMap((s, d) =>

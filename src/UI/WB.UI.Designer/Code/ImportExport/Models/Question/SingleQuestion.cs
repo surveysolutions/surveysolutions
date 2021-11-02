@@ -12,9 +12,16 @@ namespace WB.UI.Designer.Code.ImportExport.Models.Question
         public int? ShowAsListThreshold { get; set; }
         public Guid? CategoriesId { get; set; }
         public List<Answer>? Answers { get; set; }
-        public bool? IsFilteredCombobox { get; set; }
+        public SingleOptionDisplayMode DisplayMode { get; set; }
         public Guid? CascadeFromQuestionId { get; set; }
         public Guid? LinkedToId { get; set; }
         public string? FilterExpression { get; set; }
+    }
+    
+    public enum SingleOptionDisplayMode
+    {
+        Radio,
+        Combobox,
+        Cascading,
     }
 }

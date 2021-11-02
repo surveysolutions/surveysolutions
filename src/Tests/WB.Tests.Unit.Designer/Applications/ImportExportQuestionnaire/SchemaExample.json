@@ -396,10 +396,18 @@
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
+        "DisplayMode": {
+          "type": "string",
+          "oneOf": [
+            { "const": "Checkboxes", "description": "Checkboxes" },
+            { "const": "YesNo", "description": "Yes/No buttons" },
+            { "const": "Combobox", "description": "Combo box" }
+          ],
+          "default": "Checkboxes"
+        },
 
         "AreAnswersOrdered": { "type": "boolean", "default": false },
         "MaxAllowedAnswers": { "type": "integer", "minimum": 2 },
-        "YesNoView": { "type": "boolean", "default": false },
 
         "CategoriesId": { "$ref": "#/definitions/GUID" },
         "Answers": { "$ref": "#/definitions/Answers" },
@@ -481,6 +489,15 @@
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
 
+        "DisplayMode": {
+          "type": "string",
+          "oneOf": [
+            { "const": "Radio", "description": "Radio button list" },
+            { "const": "Combobox", "description": "Combo box" },
+            { "const": "Cascading", "description": "Cascading combo box" }
+          ],
+          "default": "Radio"
+        },
         "ShowAsList": { "type": "boolean", "default": false },
         "ShowAsListThreshold": { "type": "integer" },
 
@@ -489,7 +506,6 @@
 
         "CascadeFromQuestionId": { "$ref": "#/definitions/GUID" },
 
-        "IsFilteredCombobox": { "type": "boolean", "default": false },
         "LinkedToId": { "$ref": "#/definitions/GUID" },
         "FilterExpression": { "type": "string" }
       },
