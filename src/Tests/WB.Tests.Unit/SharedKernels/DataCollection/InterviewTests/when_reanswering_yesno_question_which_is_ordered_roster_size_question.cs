@@ -12,6 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         [OneTimeSetUp] 
         public void SetUp () {
+            base.context();
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(Id.gA, children: new IComposite[]
             {
                 Create.Entity.YesNoQuestion(questionId: Id.g1, answers: new[]{ option_1, option_2, option_3 }, ordered: true),
