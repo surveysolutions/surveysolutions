@@ -268,7 +268,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Api Tokens.
+        ///   Looks up a localized string similar to API Tokens.
         /// </summary>
         public static string HQ_Views_ApiTokens_Title {
             get {

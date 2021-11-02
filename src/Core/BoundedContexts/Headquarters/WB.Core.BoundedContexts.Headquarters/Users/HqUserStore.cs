@@ -129,14 +129,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
                 .SingleOrDefaultAsync(cancellationToken: cancellationToken);
         }
 
-        protected override async Task AddUserTokenAsync(HqUserToken token)
+        protected override Task AddUserTokenAsync(HqUserToken token)
         {
-            await unitOfWork.Session.SaveAsync(token);
+            return  unitOfWork.Session.SaveAsync(token);
         }
 
-        protected override async Task RemoveUserTokenAsync(HqUserToken token)
+        protected override Task RemoveUserTokenAsync(HqUserToken token)
         {
-            await unitOfWork.Session.DeleteAsync(token);
+            return unitOfWork.Session.DeleteAsync(token);
         }
 
         public override Task AddLoginAsync(HqUser user, UserLoginInfo login, CancellationToken cancellationToken = new CancellationToken())

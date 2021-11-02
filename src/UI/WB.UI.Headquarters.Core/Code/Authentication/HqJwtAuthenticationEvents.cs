@@ -58,16 +58,16 @@ namespace WB.UI.Headquarters.Code.Authentication
                 {
                     var hqUser = await u.FindByIdAsync(userId);
                 
+                    if (!await this.tokenProvider.ValidateJtiAsync(hqUser, GetFirstClaim(JwtRegisteredClaimNames.Jti)?.Value))
+                    {
+                        context.Fail("Invalid token");
+                        return Task.CompletedTask;
+                    }
+                    
                     if (hqUser.IsArchivedOrLocked)
                     {
                         this.isUserLocked = true;
                         context.Fail("User is locked");
-                        return Task.CompletedTask;
-                    }
-
-                    if (!await this.tokenProvider.ValidateJtiAsync(hqUser, GetFirstClaim(JwtRegisteredClaimNames.Jti)?.Value))
-                    {
-                        context.Fail("Invalid token");
                         return Task.CompletedTask;
                     }
 

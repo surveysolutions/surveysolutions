@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Api tokens.
+        ///   Looks up a localized string similar to API tokens.
         /// </summary>
         public static string AccountManage_ApiTokens {
             get {

@@ -84,11 +84,8 @@ namespace WB.UI.Headquarters.Code.Authentication
                     opts.Realm = "WB.Headquarters";
                 })
                 .AddScheme<AuthTokenAuthenticationSchemeOptions, AuthTokenAuthenticationHandler>(AuthType.AuthToken, _ => { })
-                .AddScheme<AuthenticationSchemeOptions, TenantTokenAuthenticationHandler>(AuthType.TenantToken, _ => { })
-                //.AddScheme<ApiKeyAuthenticationOptions, ApiKeyAuthenticationHandler>(AuthType.ApiKey, _ => { })
-                ;
+                .AddScheme<AuthenticationSchemeOptions, TenantTokenAuthenticationHandler>(AuthType.TenantToken, _ => { });
 
-            
             var isJwtBearerEnabled = configuration.GetValue<bool>("JwtBearer:Enabled");
             
             services.Configure<TokenProviderOptions>(options =>

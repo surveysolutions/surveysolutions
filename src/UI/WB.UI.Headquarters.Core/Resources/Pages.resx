@@ -1680,6 +1680,6 @@
     <value>All interview modes</value>
   </data>
   <data name="AccountManage_ApiTokens" xml:space="preserve">
-      <value>Api tokens</value>
+      <value>API tokens</value>
   </data>
 </root>

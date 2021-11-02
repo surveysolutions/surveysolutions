@@ -189,7 +189,7 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> ApiTokens(Guid? id)
         {
             if(id == this.authorizedUser.Id)
-                return RedirectToAction("TwoFactorAuthentication", new {id = (Guid?)null});
+                return RedirectToAction("ApiTokens", new {id = (Guid?)null});
 
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
@@ -607,15 +607,8 @@ namespace WB.UI.Headquarters.Controllers
                 else
                 {
                     await this.userManager.AddToRoleAsync(user, model.Role);
-
-                    /*if (role == UserRoles.ApiUser)
-                    {
-                        var token = await this.userManager.GenerateUserTokenAsync(user, "Default", "api-auth");
-                        await this.userManager.SetAuthenticationTokenAsync(user, "HQ", "ApiKey", token);
-                    }*/
                 }
             }
-
 
             return this.ModelState.ErrorsToJsonResult();
         }
