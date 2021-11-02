@@ -13,8 +13,8 @@ namespace WB.UI.Designer.Code.ImportExport.Models.Question
         public Guid? CategoriesId { get; set; }
         public List<Answer>? Answers { get; set; }
         public SingleOptionDisplayMode DisplayMode { get; set; }
-        public Guid? CascadeFromQuestionId { get; set; }
-        public Guid? LinkedToId { get; set; }
+        public string? CascadeFromQuestion { get; set; }
+        public string? LinkedTo { get; set; }
         public string? FilterExpression { get; set; }
     }
     

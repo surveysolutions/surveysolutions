@@ -11,12 +11,12 @@ namespace WB.UI.Designer.Code.ImportExport.Models
     {
         public RosterDisplayMode DisplayMode { get; set; }
 
-        public Guid? RosterSizeQuestionId { get; set; }
+        public string? RosterSizeQuestion { get; set; }
+
+        public string? RosterTitleQuestion { get; set; }
 
         public RosterSizeSourceType RosterSizeSource { get; set; }
 
         public FixedRosterTitle[]? FixedRosterTitles { get; set; }
-
-        public Guid? RosterTitleQuestionId { get; set; }
     }
 }

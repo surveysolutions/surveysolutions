@@ -14,7 +14,7 @@ namespace WB.UI.Designer.Code.ImportExport
 
         public override string GetDiscriminatorValue(Type type)
         {
-            return type.Name; //.Replace("Dto", string.Empty);
+            return type.Name;
         }
 
         protected override Type GetDiscriminatorType(JObject jObject, Type objectType, string discriminatorValue)

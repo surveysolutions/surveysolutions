@@ -153,7 +153,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
             newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
-            questionnaireDocument.Children[0].Should().BeEquivalentTo(newQuestionnaire.Children[0]);
             errors.Count.Should().Be(0);
         }
         
@@ -181,7 +180,12 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 title: " Chapter",
                 chapterId: Guid.NewGuid(),
                 hideIfDisabled: true,
-                children: new []{ roster }
+                children: new IComposite[]
+                {
+                    roster,
+                    Create.NumericIntegerQuestion(id: roster.RosterSizeQuestionId, variable: "num-trigger"),
+                    Create.TextQuestion(questionId: roster.RosterTitleQuestionId, variable: "title-question"),
+                }
             );
             
             var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
@@ -192,7 +196,10 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
             newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
-            questionnaireDocument.Children[0].Should().BeEquivalentTo(newQuestionnaire.Children[0]);
+            ((Group)newQuestionnaire.Children[0].Children[0]).RosterSizeQuestionId.Should()
+                .Be(newQuestionnaire.Children[0].Children[1].PublicKey);
+            ((Group)newQuestionnaire.Children[0].Children[0]).RosterTitleQuestionId.Should()
+                .Be(newQuestionnaire.Children[0].Children[2].PublicKey);
             errors.Count.Should().Be(0);
         }
 
@@ -673,6 +680,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 PublicKey = Id.g7,
                 QuestionText = "question title",
                 VariableLabel = "variable",
+                StataExportCaption = "variable-name",
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
@@ -785,6 +793,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 PublicKey = Id.g7,
                 QuestionText = "question title",
                 VariableLabel = "variable",
+                StataExportCaption = "varName",
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
@@ -801,12 +810,16 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 LinkedToQuestionId = Id.g7,
                 LinkedFilterExpression = "filter expression",
                 CascadeFromQuestionId = Guid.NewGuid(),
-                IsFilteredCombobox = true,
+                //IsFilteredCombobox = true,
             };
             
             var questionnaireDocument = Create.QuestionnaireDocument(Id.g1,
                 Create.Chapter(
-                    children: new [] { question }
+                    children: new []
+                    {
+                        question,
+                        Create.SingleQuestion(id: question.CascadeFromQuestionId, variable: "cascade-parent", isFilteredCombobox: true),
+                    }
                 )
             );
 
@@ -1006,6 +1019,12 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                     .Excluding(q => q.CreationDate)
                     .Excluding(q => q.LastEntryDate)
                     .Excluding(q => q.CoverPageSectionId)
+                    .Excluding((IMemberInfo mi) => mi.Name == nameof(IComposite.PublicKey))
+                    .Excluding((IMemberInfo mi) => mi.Name == nameof(Group.RosterSizeQuestionId))
+                    .Excluding((IMemberInfo mi) => mi.Name == nameof(Group.RosterTitleQuestionId))
+                    .Excluding((IMemberInfo mi) => mi.Name == nameof(ICategoricalQuestion.CascadeFromQuestionId))
+                    .Excluding((IMemberInfo mi) => mi.Name == nameof(ICategoricalQuestion.LinkedToQuestionId))
+                    .Excluding((IMemberInfo mi) => mi.Name == nameof(ICategoricalQuestion.LinkedToRosterId))
                 ;
         }
     }

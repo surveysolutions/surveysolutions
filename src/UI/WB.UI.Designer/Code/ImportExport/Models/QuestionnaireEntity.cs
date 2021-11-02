@@ -23,6 +23,6 @@ namespace WB.UI.Designer.Code.ImportExport.Models
     [KnownType(typeof(Variable))]
     public abstract class QuestionnaireEntity : IQuestionnaireEntity
     {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
     }
 }

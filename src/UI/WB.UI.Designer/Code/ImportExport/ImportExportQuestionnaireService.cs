@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -12,16 +13,13 @@ namespace WB.UI.Designer.Code.ImportExport
 {
     public class ImportExportQuestionnaireService : IImportExportQuestionnaireService
     {
-        //private readonly IQuestionnaireViewFactory questionnaireStorage;
         private readonly IMapper mapper;
-        private readonly ISerializer serializer;
 
         public ImportExportQuestionnaireService(
             IMapper mapper,
             ISerializer serializer)
         {
             this.mapper = mapper;
-            this.serializer = serializer;
         }
 
         private static readonly JsonSerializerSettings jsonSerializerSettings = 
@@ -35,15 +33,17 @@ namespace WB.UI.Designer.Code.ImportExport
                 {
                     new Newtonsoft.Json.Converters.StringEnumConverter()
                 },
+                
             };
         
         public string Export(QuestionnaireDocument questionnaireDocument)
         {
             try
             {
-                var map = mapper.Map<Models.Questionnaire>(questionnaireDocument);
+                var idToVariableNameMap = GetIdToVariableNameMap(questionnaireDocument);
+                var map = mapper.Map<Models.Questionnaire>(questionnaireDocument, opt => 
+                    opt.Items[ImportExportQuestionnaireConstants.MapCollectionName] = idToVariableNameMap);
                 var json = JsonConvert.SerializeObject(map, jsonSerializerSettings);
-                //var json = serializer.Serialize(map);
                 return json;
             }
             catch (Exception e)
@@ -53,13 +53,25 @@ namespace WB.UI.Designer.Code.ImportExport
             }
         }
 
+        private Dictionary<Guid, string> GetIdToVariableNameMap(QuestionnaireDocument questionnaireDocument)
+        {
+            var map = new Dictionary<Guid, string>();
+            questionnaireDocument.ForEachTreeElement<IComposite>(c => c.Children, (parent, child) =>
+            {
+                map[child.PublicKey] = child.VariableName;
+            });
+            return map;
+        }
+
         public QuestionnaireDocument Import(string json)
         {
             try
             {
-                //var questionnaire = serializer.Deserialize<Questionnaire>(json);
                 var questionnaire = JsonConvert.DeserializeObject<Questionnaire>(json);
-                var questionnaireDocument = mapper.Map<QuestionnaireDocument>(questionnaire);
+                var variableNameToIdMap = GenerateVariableNameToIdMap(questionnaire);
+
+                var questionnaireDocument = mapper.Map<QuestionnaireDocument>(questionnaire, opt => 
+                    opt.Items[ImportExportQuestionnaireConstants.MapCollectionName] = variableNameToIdMap);
 
                 FixAfterMapping(questionnaireDocument);
 
@@ -70,6 +82,35 @@ namespace WB.UI.Designer.Code.ImportExport
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        private Dictionary<string, Guid> GenerateVariableNameToIdMap(Questionnaire questionnaire)
+        {
+            var map = new Dictionary<string, Guid>();
+
+            var coverPageEntities = questionnaire.CoverPage?.TreeToEnumerable<QuestionnaireEntity>(x =>
+            {
+                if (x is CoverPage coverPage)
+                    return coverPage.Children;
+                return Enumerable.Empty<QuestionnaireEntity>();
+            }) ?? Enumerable.Empty<QuestionnaireEntity>();
+            var questionnaireEntities = questionnaire.Children.TreeToEnumerable<QuestionnaireEntity>(x =>
+            {
+                if (x is Group @group)
+                    return @group.Children;
+                return Enumerable.Empty<QuestionnaireEntity>();
+            });
+            var allEntries = coverPageEntities.Concat(questionnaireEntities);
+            foreach (var entity in allEntries)
+            {
+                if (entity is IQuestion question && question.VariableName != null && !question.VariableName.IsNullOrEmpty())
+                    map[question.VariableName] = Guid.NewGuid();
+                else if (entity is Group group && group.VariableName != null && !group.VariableName.IsNullOrEmpty())
+                    map[group.VariableName] = Guid.NewGuid();
+                else if (entity is Variable variable && variable.VariableName != null && !variable.VariableName.IsNullOrEmpty())
+                    map[variable.VariableName] = Guid.NewGuid();
+            }
+            return map;
         }
 
         private static void FixAfterMapping(QuestionnaireDocument questionnaireDocument)

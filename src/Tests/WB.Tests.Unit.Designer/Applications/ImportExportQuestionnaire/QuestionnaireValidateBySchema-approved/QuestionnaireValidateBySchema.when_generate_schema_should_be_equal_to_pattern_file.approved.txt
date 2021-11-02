@@ -14,18 +14,11 @@
             "string",
             "null"
           ]
-        },
-        "ContentId": {
-          "type": [
-            "string",
-            "null"
-          ]
         }
       },
       "required": [
         "AttachmentId",
-        "Name",
-        "ContentId"
+        "Name"
       ]
     },
     "Categories": {
@@ -49,6 +42,7 @@
         "Name"
       ]
     },
+    "CoverPage": {},
     "Dictionary<Guid, LookupTable>": {
       "type": [
         "object",
@@ -356,8 +350,8 @@
     "Id": {
       "type": "string"
     },
-    "CoverPageSectionId": {
-      "type": "string"
+    "CoverPage": {
+      "$ref": "#/definitions/CoverPage"
     },
     "Children": {
       "$ref": "#/definitions/List<Group>"
@@ -410,7 +404,7 @@
   },
   "required": [
     "Id",
-    "CoverPageSectionId",
+    "CoverPage",
     "Children",
     "Macros",
     "LookupTables",

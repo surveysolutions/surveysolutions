@@ -55,10 +55,17 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<Questionnaire, QuestionnaireDocument>()
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
                 .ForMember(s => s.Id, opt => opt.MapFrom(t => t.Id.FormatGuid()))
-                .ForMember(s => s.CoverPageSectionId, opt => opt.MapFrom(t => 
-                    t.CoverPage != null ? t.CoverPage.Id : Guid.NewGuid()))
+                //.ForMember(s => s.CoverPageSectionId, opt => opt.MapFrom(t => 
+                //    t.CoverPage != null ? t.CoverPage.Id : Guid.NewGuid()))
                 .ForMember(s => s.Children, opt => opt.MapFrom(t =>
-                    t.CoverPage != null ? Enumerable.Concat<QuestionnaireEntity>(t.CoverPage.ToEnumerable(), t.Children) : t.Children));
+                    t.CoverPage != null ? Enumerable.Concat<QuestionnaireEntity>(t.CoverPage.ToEnumerable(), t.Children) : t.Children))
+                .AfterMap((s, d, context) =>
+                {
+                    if (s.CoverPage != null)
+                        d.CoverPageSectionId = d.Children[0].PublicKey;
+                    else
+                        d.CoverPageSectionId = Guid.NewGuid();
+                });
             
             this.CreateMap<WB.Core.SharedKernels.Questionnaire.Documents.QuestionnaireMetaInfo, Models.QuestionnaireMetaInfo>();
             this.CreateMap<Models.QuestionnaireMetaInfo, WB.Core.SharedKernels.Questionnaire.Documents.QuestionnaireMetaInfo>();
@@ -78,32 +85,50 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<Documents.Macro, Models.Macro>();
             this.CreateMap<Models.Macro, Documents.Macro>();
 
-            this.CreateMap<IComposite, QuestionnaireEntity>()
-                .ForMember(d => d.Id, opt => 
-                    opt.MapFrom(t => t.PublicKey));
+            this.CreateMap<IComposite, QuestionnaireEntity>();
+                // .ForMember(d => d.Id, opt => 
+                //     opt.MapFrom(t => t.PublicKey))
+                // .ForMember(x => x., x => x.MapFrom((s, t, value, context) =>
+                //     ((Dictionary<Guid, string>)context.Items[ImportExportQuestionnaireConstants.MapCollectionName])[value]));
             this.CreateMap<IQuestionnaireEntity, IComposite>();
 
             this.CreateMap<Group, Models.Group>()
                 .IncludeBase<IComposite, QuestionnaireEntity>()
+                // .ForMember(x => x.VariableName, x => x.MapFrom((s, t, value, context) =>
+                //     GetVarName(s.PublicKey, context)))
                 .ConstructUsing((g, context) => g.IsRoster ? context.Mapper.Map<Roster>(g) : new Models.Group());
             this.CreateMap<Models.Group, Group>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
-                .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id));
+                // .ForMember(s => s.PublicKey, opt => 
+                //     opt.MapFrom(t => t.Id))
+                .ForMember(x => x.PublicKey, x => x.MapFrom((s, t, value, context) =>
+                    GetId(s.VariableName, context)));
+                
 
             this.CreateMap<Group, Models.Roster>()
                 .IncludeBase<Group, Models.Group>()
                 .ForMember(x => x.Title, x => x.MapFrom(s =>
-                    s.CustomRosterTitle ? s.Title : s.Title + @" - %rostertitle%"));
+                    s.CustomRosterTitle ? s.Title : s.Title + @" - %rostertitle%"))
+                .ForMember(x => x.RosterSizeQuestion, x => x.MapFrom((s, t, value, context) =>
+                    GetVarName(s.RosterSizeQuestionId, context)))
+                .ForMember(x => x.RosterTitleQuestion, x => x.MapFrom((s, t, value, context) =>
+                    GetVarName(s.RosterTitleQuestionId, context)));
             this.CreateMap<Models.Roster, Group>()
                 .IncludeBase<Models.Group, Group>()
                 .ForMember(s => s.IsRoster, opt => opt.MapFrom(t => true))
-                .ForMember(x => x.CustomRosterTitle, x => x.MapFrom(s => true));
+                .ForMember(x => x.CustomRosterTitle, x => x.MapFrom(s => true))
+                .ForMember(x => x.RosterSizeQuestionId, x => x.MapFrom((s, t, value, context) =>
+                    GetId(s.RosterSizeQuestion, context)))
+                .ForMember(x => x.RosterTitleQuestionId, x => x.MapFrom((s, t, value, context) =>
+                    GetId(s.RosterTitleQuestion, context)));
 
             this.CreateMap<Group, Models.CoverPage>()
                 .IncludeBase<IComposite, QuestionnaireEntity>();
             this.CreateMap<Models.CoverPage, Group>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
-                .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id));
+                //.ForMember(x => x.PublicKey, x => x.MapFrom((s, t, value, context) =>
+                //    GetId(s.VariableName, context)))
+                .ForMember(s => s.PublicKey, opt => opt.MapFrom((s, d, value, context) => GetId(s.VariableName, context)));
 
             this.CreateMap<Documents.FixedRosterTitle, Models.FixedRosterTitle>();
             this.CreateMap<Models.FixedRosterTitle, Documents.FixedRosterTitle>()
@@ -117,18 +142,18 @@ namespace WB.UI.Designer.Code.ImportExport
                 .IncludeBase<IComposite, QuestionnaireEntity>();
             this.CreateMap<Models.StaticText, StaticText>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
-                .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
-                .ConstructUsing(s => new StaticText(s.Id, s.Text, s.ConditionExpression ?? String.Empty, s.HideIfDisabled, null, s.AttachmentName, null));
+                //.ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
+                .ConstructUsing(s => new StaticText(Guid.NewGuid(), s.Text, s.ConditionExpression ?? String.Empty, s.HideIfDisabled, null, s.AttachmentName, null));
 
             this.CreateMap<QuestionnaireEntities.Variable, Models.Variable>()
                 .IncludeBase<IComposite, QuestionnaireEntity>()
                 .ForMember(s => s.VariableType, o => o.MapFrom(d => d.Type));
             this.CreateMap<Models.Variable, QuestionnaireEntities.Variable>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
-                .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
+                .ForMember(s => s.PublicKey, opt => opt.MapFrom((s, d, value, context) => GetId(s.VariableName, context)))
                 .ForMember(s => s.Name, opt => opt.MapFrom(t => t.VariableName))
                 .ForMember(s => s.Type, o => o.MapFrom(d => d.VariableType))
-                .ConstructUsing(v => new QuestionnaireEntities.Variable(v.Id, null, null));
+                .ConstructUsing((v, context) => new QuestionnaireEntities.Variable(GetId(v.VariableName, context), null, null));
             
             this.CreateMap<QuestionnaireEntities.ValidationCondition, Models.ValidationCondition>();
             this.CreateMap<Models.ValidationCondition, QuestionnaireEntities.ValidationCondition>();
@@ -141,7 +166,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
                 .ForMember(aq => aq.StataExportCaption, aq=> 
                     aq.MapFrom(x => x.VariableName))
-                .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
+                .ForMember(s => s.PublicKey, opt => opt.MapFrom((s, d, value, context) => GetId(s.VariableName, context)))
                 .AfterMap((s, d) => d.Properties!.HideInstructions = s.HideInstructions ?? false);
 
             this.CreateMap<TextQuestion, Models.Question.TextQuestion>()
@@ -187,8 +212,10 @@ namespace WB.UI.Designer.Code.ImportExport
                 .ForMember(x => x.DisplayMode, x => x.MapFrom(s =>
                     s.CascadeFromQuestionId.HasValue ? SingleOptionDisplayMode.Cascading : 
                         (s.IsFilteredCombobox == true ? SingleOptionDisplayMode.Combobox : SingleOptionDisplayMode.Radio)))
-                .ForMember(s => s.LinkedToId, t => t.MapFrom(o =>
-                    o.LinkedToQuestionId ?? o.LinkedToRosterId))
+                .ForMember(s => s.LinkedTo, t => t.MapFrom((s, d, value, context) => 
+                    GetVarName(s.LinkedToQuestionId ?? s.LinkedToRosterId, context)))
+                .ForMember(s => s.CascadeFromQuestion, t => t.MapFrom((s, d, value, context) => 
+                    GetVarName(s.CascadeFromQuestionId, context)))
                 .AfterMap((s, t) => 
                     {
                         if (s.LinkedToQuestionId.HasValue || s.LinkedToRosterId.HasValue)
@@ -200,11 +227,15 @@ namespace WB.UI.Designer.Code.ImportExport
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
                 .ForMember(x => x.IsFilteredCombobox, x => x.MapFrom(s => 
                     s.DisplayMode == SingleOptionDisplayMode.Combobox ? true : (bool?)null))
-                .ForMember(s => s.LinkedToQuestionId, o => o.MapFrom(t => t.LinkedToId))
-                .ForMember(s => s.LinkedToRosterId, o => o.MapFrom(t => t.LinkedToId))
+                .ForMember(s => s.LinkedToQuestionId, o => o.MapFrom((s, d, value, context) 
+                    => GetId(s.LinkedTo, context)))
+                .ForMember(s => s.LinkedToRosterId, o => o.MapFrom((s, d, value, context) 
+                    => GetId(s.LinkedTo, context)))
+                .ForMember(s => s.CascadeFromQuestionId, o => o.MapFrom((s, d, value, context) 
+                    => GetId(s.CascadeFromQuestion, context)))
                 .AfterMap((s, d) =>
                 {
-                    if (s.LinkedToId.HasValue)
+                    if (!s.LinkedTo.IsNullOrEmpty())
                         d.LinkedFilterExpression = s.FilterExpression;
                     else
                         d.Properties!.OptionsFilterExpression = s.FilterExpression;
@@ -216,8 +247,8 @@ namespace WB.UI.Designer.Code.ImportExport
                 .ForMember(x => x.DisplayMode, x => x.MapFrom(s =>
                     s.YesNoView ? MultiOptionsDisplayMode.YesNo : 
                         (s.IsFilteredCombobox == true ? MultiOptionsDisplayMode.Combobox : MultiOptionsDisplayMode.Checkboxes)))
-                .ForMember(s => s.LinkedToId, t => t.MapFrom(o =>
-                    o.LinkedToQuestionId ?? o.LinkedToRosterId))
+                .ForMember(s => s.LinkedTo, t => t.MapFrom((s, d, value, context) => 
+                    GetVarName(s.LinkedToQuestionId ?? s.LinkedToRosterId, context)))
                 .AfterMap((s, t) => 
                 {
                     if (s.LinkedToQuestionId.HasValue || s.LinkedToRosterId.HasValue)
@@ -230,11 +261,13 @@ namespace WB.UI.Designer.Code.ImportExport
                 .ForMember(x => x.YesNoView, x => x.MapFrom(s => s.DisplayMode == MultiOptionsDisplayMode.YesNo))
                 .ForMember(x => x.IsFilteredCombobox, x => x.MapFrom(s => 
                     s.DisplayMode == MultiOptionsDisplayMode.Combobox ? true : (bool?)null))
-                .ForMember(s => s.LinkedToQuestionId, o => o.MapFrom(t => t.LinkedToId))
-                .ForMember(s => s.LinkedToRosterId, o => o.MapFrom(t => t.LinkedToId))
+                .ForMember(s => s.LinkedToQuestionId, o => o.MapFrom((s, d, value, context) 
+                    => GetId(s.LinkedTo, context)))
+                .ForMember(s => s.LinkedToRosterId, o => o.MapFrom((s, d, value, context) 
+                    => GetId(s.LinkedTo, context)))
                 .AfterMap((s, d) =>
                 {
-                    if (s.LinkedToId.HasValue)
+                    if (!s.LinkedTo.IsNullOrEmpty())
                         d.LinkedFilterExpression = s.FilterExpression;
                     else
                         d.Properties!.OptionsFilterExpression = s.FilterExpression;
@@ -284,6 +317,23 @@ namespace WB.UI.Designer.Code.ImportExport
                     opt.MapFrom(answer => answer.ParentCode.ToString()))
                 .ForMember(a => a.AnswerText, opt => 
                     opt.MapFrom(answer => answer.Text));
+        }
+        
+        private string? GetVarName(Guid? id, ResolutionContext context)
+        {
+            if (!id.HasValue)
+                return null;
+            var varName = ((Dictionary<Guid, string>)context.Items[ImportExportQuestionnaireConstants.MapCollectionName])[id.Value];
+            if (varName?.Trim().IsNullOrEmpty() ?? true)
+                return null;
+            return varName;
+        }
+
+        private Guid GetId(string? variableName, ResolutionContext context)
+        {
+            if (variableName == null || variableName.Trim().IsNullOrEmpty())
+                return Guid.NewGuid();
+            return ((Dictionary<string, Guid>)context.Items[ImportExportQuestionnaireConstants.MapCollectionName])[variableName];
         }
     }
 }

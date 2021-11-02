@@ -8,9 +8,15 @@
       "type": "string",
       "format": "guid"
     },
-    "CoverPageSectionId": {
-      "type": "string",
-      "format": "guid"
+    "CoverPage": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/definitions/CoverPage"
+        }
+      ]
     },
     "Children": {
       "type": "array",
@@ -59,7 +65,10 @@
       "type": "boolean"
     },
     "Title": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "Description": {
       "type": "string"
@@ -79,7 +88,7 @@
     }
   },
   "definitions": {
-    "Group": {
+    "CoverPage": {
       "allOf": [
         {
           "$ref": "#/definitions/QuestionnaireEntity"
@@ -88,6 +97,9 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "Title": {
+              "type": "string"
+            },
             "VariableName": {
               "type": [
                 "null",
@@ -99,53 +111,6 @@
               "items": {
                 "$ref": "#/definitions/QuestionnaireEntity"
               }
-            },
-            "ConditionExpression": {
-              "type": [
-                "null",
-                "string"
-              ]
-            },
-            "HideIfDisabled": {
-              "type": "boolean"
-            },
-            "DisplayMode": {
-              "$ref": "#/definitions/RosterDisplayMode"
-            },
-            "IsRoster": {
-              "type": "boolean"
-            },
-            "CustomRosterTitle": {
-              "type": "boolean"
-            },
-            "RosterSizeQuestionId": {
-              "type": [
-                "null",
-                "string"
-              ],
-              "format": "guid"
-            },
-            "RosterSizeSource": {
-              "$ref": "#/definitions/RosterSizeSourceType"
-            },
-            "FixedRosterTitles": {
-              "type": [
-                "array",
-                "null"
-              ],
-              "items": {
-                "$ref": "#/definitions/FixedRosterTitle"
-              }
-            },
-            "RosterTitleQuestionId": {
-              "type": [
-                "null",
-                "string"
-              ],
-              "format": "guid"
-            },
-            "Title": {
-              "type": "string"
             }
           }
         }
@@ -168,9 +133,11 @@
           "QRBarcodeQuestion": "#/definitions/QRBarcodeQuestion",
           "SingleQuestion": "#/definitions/SingleQuestion",
           "TextListQuestion": "#/definitions/TextListQuestion",
+          "Group": "#/definitions/Group",
+          "Roster": "#/definitions/Roster",
           "StaticText": "#/definitions/StaticText",
           "Variable": "#/definitions/Variable",
-          "Group": "#/definitions/Group"
+          "CoverPage": "#/definitions/CoverPage"
         }
       },
       "x-abstract": true,
@@ -179,10 +146,6 @@
         "Type"
       ],
       "properties": {
-        "Id": {
-          "type": "string",
-          "format": "guid"
-        },
         "Type": {
           "type": "string"
         }
@@ -284,13 +247,11 @@
       "x-enumNames": [
         "Interviewer",
         "Supervisor",
-        "Headquarter",
         "Hidden"
       ],
       "enum": [
         "Interviewer",
         "Supervisor",
-        "Headquarter",
         "Hidden"
       ]
     },
@@ -495,8 +456,8 @@
               ],
               "format": "int32"
             },
-            "YesNoView": {
-              "type": "boolean"
+            "DisplayMode": {
+              "$ref": "#/definitions/MultiOptionsDisplayMode"
             },
             "CategoriesId": {
               "type": [
@@ -514,19 +475,11 @@
                 "$ref": "#/definitions/Answer"
               }
             },
-            "LinkedToRosterId": {
+            "LinkedTo": {
               "type": [
                 "null",
                 "string"
-              ],
-              "format": "guid"
-            },
-            "LinkedToQuestionId": {
-              "type": [
-                "null",
-                "string"
-              ],
-              "format": "guid"
+              ]
             },
             "FilterExpression": {
               "type": [
@@ -536,6 +489,20 @@
             }
           }
         }
+      ]
+    },
+    "MultiOptionsDisplayMode": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Checkboxes",
+        "YesNo",
+        "Combobox"
+      ],
+      "enum": [
+        "Checkboxes",
+        "YesNo",
+        "Combobox"
       ]
     },
     "QRBarcodeQuestion": {
@@ -584,10 +551,19 @@
                 "$ref": "#/definitions/Answer"
               }
             },
-            "IsFilteredCombobox": {
+            "DisplayMode": {
+              "$ref": "#/definitions/SingleOptionDisplayMode"
+            },
+            "CascadeFromQuestion": {
               "type": [
-                "boolean",
-                "null"
+                "null",
+                "string"
+              ]
+            },
+            "LinkedTo": {
+              "type": [
+                "null",
+                "string"
               ]
             },
             "FilterExpression": {
@@ -595,30 +571,23 @@
                 "null",
                 "string"
               ]
-            },
-            "CascadeFromQuestionId": {
-              "type": [
-                "null",
-                "string"
-              ],
-              "format": "guid"
-            },
-            "LinkedToRosterId": {
-              "type": [
-                "null",
-                "string"
-              ],
-              "format": "guid"
-            },
-            "LinkedToQuestionId": {
-              "type": [
-                "null",
-                "string"
-              ],
-              "format": "guid"
             }
           }
         }
+      ]
+    },
+    "SingleOptionDisplayMode": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Radio",
+        "Combobox",
+        "Cascading"
+      ],
+      "enum": [
+        "Radio",
+        "Combobox",
+        "Cascading"
       ]
     },
     "TextListQuestion": {
@@ -640,6 +609,127 @@
           }
         }
       ]
+    },
+    "Group": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/QuestionnaireEntity"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "VariableName": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "Children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/QuestionnaireEntity"
+              }
+            },
+            "ConditionExpression": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "HideIfDisabled": {
+              "type": "boolean"
+            },
+            "Title": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "Roster": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Group"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "DisplayMode": {
+              "$ref": "#/definitions/RosterDisplayMode"
+            },
+            "RosterSizeQuestion": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "RosterTitleQuestion": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "RosterSizeSource": {
+              "$ref": "#/definitions/RosterSizeSourceType"
+            },
+            "FixedRosterTitles": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/definitions/FixedRosterTitle"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "RosterDisplayMode": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "SubSection",
+        "Flat",
+        "Table",
+        "Matrix"
+      ],
+      "enum": [
+        "SubSection",
+        "Flat",
+        "Table",
+        "Matrix"
+      ]
+    },
+    "RosterSizeSourceType": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Question",
+        "FixedTitles"
+      ],
+      "enum": [
+        "Question",
+        "FixedTitles"
+      ]
+    },
+    "FixedRosterTitle": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Value": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "Title": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
     },
     "StaticText": {
       "allOf": [
@@ -736,50 +826,6 @@
         "String"
       ]
     },
-    "RosterDisplayMode": {
-      "type": "string",
-      "description": "",
-      "x-enumNames": [
-        "SubSection",
-        "Flat",
-        "Table",
-        "Matrix"
-      ],
-      "enum": [
-        "SubSection",
-        "Flat",
-        "Table",
-        "Matrix"
-      ]
-    },
-    "RosterSizeSourceType": {
-      "type": "string",
-      "description": "",
-      "x-enumNames": [
-        "Question",
-        "FixedTitles"
-      ],
-      "enum": [
-        "Question",
-        "FixedTitles"
-      ]
-    },
-    "FixedRosterTitle": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Value": {
-          "type": "number",
-          "format": "decimal"
-        },
-        "Title": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
-    },
     "Macro": {
       "type": "object",
       "additionalProperties": false,
@@ -816,9 +862,6 @@
           "format": "guid"
         },
         "Name": {
-          "type": "string"
-        },
-        "ContentId": {
           "type": "string"
         }
       }

@@ -93,7 +93,6 @@
           ],
           "default": "Polygon"
         },
-        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -101,7 +100,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["Type", "Id"]
+      "required": ["Type"]
     },
 
     "Attachment": {
@@ -122,7 +121,6 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -130,7 +128,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["Type", "Id"]
+      "required": ["Type"]
     },
 
     "Categories": {
@@ -153,7 +151,6 @@
         "HideInstructions": { "type": "boolean", "default": false },
         "IsTimestamp": { "type": "boolean", "default": false },
         "DefaultDate": { "type": "string", "format": "date-time" },
-        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -161,7 +158,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["Type" , "Id"]
+      "required": ["Type"]
     },
 
     "FixedRosterTitle": {
@@ -182,7 +179,6 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -190,7 +186,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["Type", "Id"]
+      "required": ["Type"]
     },
     
     "CoverPage": {
@@ -211,13 +207,12 @@
             ]
           }
         },
-        "Id": { "$ref": "#/definitions/GUID" },
         "Title": { "type": "string" },
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
 
       "additionalProperties": false,
-      "required": [ "Id"]
+      "required": ["Type"]
     },
 
     "Group": {
@@ -248,14 +243,12 @@
         },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
-        "IsRoster": { "type": "boolean", "default": false },
-        "Id": { "$ref": "#/definitions/GUID" },
         "Title": { "type": "string" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
       },
 
       "additionalProperties": false,
-      "required": ["Type", "Id"]
+      "required": ["Type"]
     },
 
     "Roster": {
@@ -286,8 +279,6 @@
         },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
-        "IsRoster": { "type": "boolean", "default": false },
-        "Id": { "$ref": "#/definitions/GUID" },
         "Title": { "type": "string" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
 
@@ -301,8 +292,8 @@
           ],
           "default": "SubSection"
         },
-        "RosterSizeQuestionId": { "$ref": "#/definitions/GUID" },
-        "RosterTitleQuestionId": { "$ref": "#/definitions/GUID" },
+        "RosterSizeQuestion": { "$ref": "#/definitions/VariableName" },
+        "RosterTitleQuestion": { "$ref": "#/definitions/VariableName" },
         "RosterSizeSource": {
           "type": "string",
           "oneOf": [
@@ -319,16 +310,8 @@
         }
       },
 
-      "if" : {
-        "properties" : { "IsRoster": { "const": true } }
-      },
-      "then": {
-        "properties": {
-
-        }
-      },
       "additionalProperties": false,
-      "required": ["Type", "Id"]
+      "required": ["Type"]
     },
 
     "GUID": { "type": "string", "format": "uuid" },
@@ -371,7 +354,6 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -379,7 +361,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["Id", "Type"]
+      "required": ["Type"]
     },
 
     "MultiOptionsQuestion": {
@@ -390,7 +372,6 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -411,14 +392,13 @@
 
         "CategoriesId": { "$ref": "#/definitions/GUID" },
         "Answers": { "$ref": "#/definitions/Answers" },
-        "CascadeFromQuestionId": { "$ref": "#/definitions/GUID" },
+        "CascadeFromQuestion": { "$ref": "#/definitions/VariableName" },
 
-        "IsFilteredCombobox": { "type": "boolean", "default": false },
         "FilterExpression": { "type": "string" },
-        "LinkedToId": { "$ref": "#/definitions/GUID" },
+        "LinkedTo": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["Id", "Type"]
+      "required": ["Type"]
     },
 
     "NumericQuestion": {
@@ -429,7 +409,6 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -442,7 +421,7 @@
         "UseThousandsSeparator": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
-      "required": ["Id", "Type"]
+      "required": ["Type"]
     },
 
     "QRBarcodeQuestion": {
@@ -453,7 +432,6 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -461,7 +439,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalProperties": false,
-      "required": ["Id", "Type"]
+      "required": ["Type"]
     },
 
     "QuestionScope": {
@@ -482,7 +460,6 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -504,13 +481,13 @@
         "CategoriesId": { "$ref": "#/definitions/GUID" },
         "Answers": { "$ref": "#/definitions/Answers" },
 
-        "CascadeFromQuestionId": { "$ref": "#/definitions/GUID" },
+        "CascadeFromQuestion": { "$ref": "#/definitions/VariableName" },
 
-        "LinkedToId": { "$ref": "#/definitions/GUID" },
+        "LinkedTo": { "$ref": "#/definitions/VariableName" },
         "FilterExpression": { "type": "string" }
       },
       "additionalProperties": false,
-      "required": [ "Id", "Type"]
+      "required": ["Type"]
     },
 
     "StaticText": {
@@ -518,7 +495,6 @@
       "properties": {
         "Type": { "const": "StaticText" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
-        "Id": { "$ref": "#/definitions/GUID" },
         "Text": { "type": "string" },
         "AttachmentName": { "type": "string" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
@@ -526,7 +502,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
-      "required": ["Type", "Id"]
+      "required": ["Type"]
     },
 
     "TextListQuestion": {
@@ -537,7 +513,6 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -547,7 +522,7 @@
         "MaxItemsCount": { "type": "integer" }
       },
       "additionalProperties": false,
-      "required": ["Id", "Type"]
+      "required": ["Type"]
     },
 
     "TextQuestion": {
@@ -558,7 +533,6 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "Id": { "$ref": "#/definitions/GUID" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -568,7 +542,7 @@
         "Mask": { "type": "string" }
       },
       "additionalProperties": false,
-      "required": ["Id", "Type"]
+      "required": ["Type"]
     },
 
     "Translation": {
@@ -603,7 +577,6 @@
       "type": "object",
       "properties": {
         "Label": { "$ref": "#/definitions/VariableLabel" },
-        "Id": { "$ref": "#/definitions/GUID" },
         "VariableType": {
           "type": "string",
           "oneOf": [
@@ -620,7 +593,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" }
       },
       "additionalOptions": false,
-      "required": ["Id", "VariableName", "Expression"]
+      "required": ["VariableName", "Expression"]
     },
 
     "VariableLabel": { "type": "string", "maxLength": 80 },

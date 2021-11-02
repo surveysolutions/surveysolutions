@@ -8,7 +8,7 @@ namespace WB.UI.Designer.Code.ImportExport.Models
     {
         Interviewer = 0, 
         Supervisor = 1, 
-        Headquarter = 2,
+        //Headquarter = 2,
         Hidden = 3, 
     }
 }
