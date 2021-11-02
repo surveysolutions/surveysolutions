@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using NUnit.Framework;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
@@ -30,7 +29,6 @@ namespace WB.Tests.Integration.FileSystemIOAccessorTests
         }
 
         private static FileSystemIOAccessor fileSystemAccessor;
-        private static Exception exception;
 
         private static void DeleteFolderIfExists(string folder, FileSystemIOAccessor fileSystemAccessor)
         {

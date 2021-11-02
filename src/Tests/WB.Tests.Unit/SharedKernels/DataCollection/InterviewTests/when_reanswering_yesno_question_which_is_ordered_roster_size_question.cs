@@ -2,7 +2,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
@@ -13,6 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         [OneTimeSetUp] 
         public void SetUp () {
+            base.context();
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(Id.gA, children: new IComposite[]
             {
                 Create.Entity.YesNoQuestion(questionId: Id.g1, answers: new[]{ option_1, option_2, option_3 }, ordered: true),
@@ -53,7 +53,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
 
-        private static AnswerYesNoQuestion command;
         private static StatefulInterview interview;
         private static int option_1 = 1;
         private static int option_2 = 2;

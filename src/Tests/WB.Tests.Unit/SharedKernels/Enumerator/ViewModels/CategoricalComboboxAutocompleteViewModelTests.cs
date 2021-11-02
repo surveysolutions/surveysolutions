@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
     public class CategoricalComboboxAutocompleteViewModelTests : MvxIoCSupportingTest
     {
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetUp()
         {
             base.Setup();
             

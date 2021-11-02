@@ -19,6 +19,5 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static StatefulInterview interview;
         private static readonly Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static readonly Guid userId = Guid.Parse("99999999999999999999999999999999");
-        private static Exception exception;
     }
 }

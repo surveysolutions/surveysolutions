@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
     public class when_textQuestion_answer_removed_by_roster_changes : MvxIoCSupportingTest
     {
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetUp()
         {
             base.Setup();
             

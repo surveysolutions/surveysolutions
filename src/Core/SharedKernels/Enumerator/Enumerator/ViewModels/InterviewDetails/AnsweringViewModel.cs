@@ -118,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private Task ExecuteCommandAsync(ICommand answerCommand)
         {
-            return ExecuteActionAsync(token => this.commandService.ExecuteAsync(answerCommand, cancellationToken: token));
+            return ExecuteActionAsync(async token => await this.commandService.ExecuteAsync(answerCommand, cancellationToken: token));
         }
 
         private void TryCancelLastExecutedCommand()

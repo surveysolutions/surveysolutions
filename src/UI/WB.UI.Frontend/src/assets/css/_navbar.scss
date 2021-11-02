@@ -48,11 +48,11 @@ $width-right-menu-small: 380px;
 		li{
 			position: relative;
             
-            .workspace{
+            .toggle-sized{
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                width: 190px;
+                max-width: 190px;
             }
 
 			&.active>a{

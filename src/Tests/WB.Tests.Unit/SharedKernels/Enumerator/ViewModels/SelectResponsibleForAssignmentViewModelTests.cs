@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
     internal class SelectResponsibleForAssignmentViewModelTests: MvxIoCSupportingTest
     {
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetUp()
         {
             base.Setup();
             

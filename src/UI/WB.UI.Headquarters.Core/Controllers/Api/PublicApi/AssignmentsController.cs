@@ -300,7 +300,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return CreatedAtAction("Details", new {id = result.Assignment.Id}, result);
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, "Invalid data.");
             }
