@@ -127,6 +127,8 @@ jobs:
           path: test-results
 
       - name: build with scan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           dotnet sonarscanner begin \
             /k:"surveysolutions_surveysolutions" \
