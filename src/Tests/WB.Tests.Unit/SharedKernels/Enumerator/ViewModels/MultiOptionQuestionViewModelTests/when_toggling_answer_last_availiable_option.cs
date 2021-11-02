@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
     internal class when_toggling_answer_last_availiable_option: MultiOptionQuestionViewModelTestsContext
     {
         [OneTimeSetUp] 
-        public async Task context () {
+        public void context () {
             var options = new[]
             {
                 Create.Entity.Option(1, "item1"),
