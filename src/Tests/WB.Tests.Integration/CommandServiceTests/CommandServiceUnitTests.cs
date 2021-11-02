@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
 using NUnit.Framework;
+using SQLite;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
@@ -66,13 +67,8 @@ namespace WB.Tests.Integration.CommandServiceTests
             log.Add("wait finished");
 
             log.Should().BeEquivalentTo("wait started", "wait finished");
-            t1.Wait(5000);
             
-            var round = 0;
-            while (t1.Wait(3000) && round < 5)
-            {
-                round++;
-            }
+            await t1.ConfigureAwait(false);
             
             log.Should().BeEquivalentTo("wait started", "wait finished", "command executed");
         }
@@ -96,20 +92,13 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             log.Should().BeEquivalentTo("wait started", "wait finished");
 
-            var round1 = 0;
-            while (t1.Wait(3000) && round1 < 5)
-            {
-                round1++;
-            }
+            await t1.ConfigureAwait(false);
+            
             log.Should().BeEquivalentTo("wait started", "wait finished", "command executed");
 
             var t2 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
 
-            var round = 0;
-            while (t2.Wait(3000) && round < 5)
-            {
-                round++;
-            }
+            await t2.ConfigureAwait(false);            
             
             log.Should().BeEquivalentTo("wait started", "wait finished", "command executed", "command executed");
         }
