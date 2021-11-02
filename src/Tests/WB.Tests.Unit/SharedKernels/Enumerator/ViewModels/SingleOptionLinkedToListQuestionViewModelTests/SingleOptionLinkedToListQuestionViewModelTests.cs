@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedTo
     public class SingleOptionLinkedToListQuestionViewModelTests : MvxIoCSupportingTest
     {
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetUp()
         {
             base.Setup();
             

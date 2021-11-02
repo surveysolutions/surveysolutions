@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
     public class InterviewerProfileFactoryTests
     {
         [Test]
-        public async Task When_getting_interviewers_check_in_points()
+        public void When_getting_interviewers_check_in_points()
         {
             var rawPoints = new InterviewGpsAnswerWithTimeStamp[]
             {
@@ -42,7 +42,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
             Assert.That(points.TargetLocations.Count, Is.EqualTo(2));
             CollectionAssert.AreEqual(points.TargetLocations.Select(x => x.Latitude).ToArray(), new double[] { 10.10, 11.11 });
             CollectionAssert.AreEqual(points.TargetLocations.Select(x => x.Longitude).ToArray(), new double[] { 20.20, 21.21 });
-
         }
 
         [Test]
@@ -64,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
 
             var deviceSyncInfoRepository = Mock.Of<IDeviceSyncInfoRepository>(x =>
                 x.GetTrafficUsageForInterviewer(Id.g1) == trafficUsage &&
-                x.GetTotalTrafficUsageForInterviewer(Id.g1) == Task.FromResult(1024 * 48l));
+                x.GetTotalTrafficUsageForInterviewer(Id.g1) == Task.FromResult(1024 * 48L));
 
             var factory = Create.Service.InterviewerProfileFactory(deviceSyncInfoRepository: deviceSyncInfoRepository);
 
@@ -175,7 +174,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
             var deviceSyncInfo = Create.Entity.DeviceSyncInfo(Id.g1, "device1");
             var deviceSyncInfoRepository = Mock.Of<IDeviceSyncInfoRepository>(x
                 => x.GetLastSuccessByInterviewerId(Id.g1) == deviceSyncInfo
-                && x.GetTotalTrafficUsageForInterviewer(Id.g1) == Task.FromResult(2 * 1024l));
+                && x.GetTotalTrafficUsageForInterviewer(Id.g1) == Task.FromResult(2 * 1024L));
 
             var factory = Create.Service.InterviewerProfileFactory(userManager: userManager, deviceSyncInfoRepository: deviceSyncInfoRepository);
 

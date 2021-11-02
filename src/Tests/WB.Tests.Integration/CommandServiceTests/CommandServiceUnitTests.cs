@@ -33,9 +33,9 @@ namespace WB.Tests.Integration.CommandServiceTests
         {
             public void AnyCommand(AnyCommand command)
             {
-                Task.Delay(200).Wait();
+                Task.Delay(500).Wait();
                 command.Log.Add("command executed");
-                Task.Delay(200).Wait();
+                Task.Delay(500).Wait();
             }
         }
 
@@ -51,7 +51,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         }
         
         [Test]
-        public async Task when_waiting_for_command_execution_should_finish_waiting_after_execute_first_command()
+        public async Task when_waiting_for_command_execution_should_finish_waiting_after_execute_first_command() 
         {
             List<string> log = new List<string>();
             Guid aggregateId = Guid.NewGuid();
@@ -68,7 +68,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             log.Should().BeEquivalentTo("wait started", "wait finished");
             
-            await t1.ConfigureAwait(false);
+            t1.Wait(5000);
             
             log.Should().BeEquivalentTo("wait started", "wait finished", "command executed");
         }
@@ -92,13 +92,13 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             log.Should().BeEquivalentTo("wait started", "wait finished");
 
-            await t1.ConfigureAwait(false);
+            t1.Wait(5000);
             
             log.Should().BeEquivalentTo("wait started", "wait finished", "command executed");
 
             var t2 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
 
-            await t2.ConfigureAwait(false);            
+            t2.Wait(5000);            
             
             log.Should().BeEquivalentTo("wait started", "wait finished", "command executed", "command executed");
         }
