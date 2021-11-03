@@ -5,6 +5,8 @@ using AutoMapper;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Code.ImportExport.Models;

@@ -53,6 +53,16 @@
                     return $http.get(url);
                 };
 
+                questionnaireService.export = function (questionnaireId) {
+                    var url = string.format('{0}/../../api/hq/backup/{1}', urlBase, questionnaireId);
+                    return $http.get(url);
+                };
+
+                questionnaireService.verifyExport = function (questionnaireId) {
+                    var url = string.format('{0}/../../api/hq/backup/verify/{1}', urlBase, questionnaireId);
+                    return $http.get(url);
+                };
+
                 questionnaireService.moveGroup = function(groupId, index, destGroupId, questionnaireId) {
                     return commandService.execute('MoveGroup', {
                             targetGroupId: destGroupId,
