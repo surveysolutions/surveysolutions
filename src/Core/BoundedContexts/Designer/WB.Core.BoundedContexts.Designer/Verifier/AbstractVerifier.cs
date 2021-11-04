@@ -150,5 +150,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     .Find<TEntity>(entity => hasError(entity, questionnaire))
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
+        
+        protected static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, IQuestionnaireEntity?> hasEntityWithError, string message)
+            where TEntity : class, IComposite
+        {
+            return questionnaire =>
+                questionnaire
+                    .Questionnaire
+                    .Find<TEntity>()
+                    .Select(entity => hasEntityWithError(entity, questionnaire))
+                    .Where(entity => entity != null)
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity!)));
+        }
     }
 }

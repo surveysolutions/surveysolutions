@@ -840,6 +840,21 @@
     <data name="WB0391" xml:space="preserve">
     <value>Статический текст не может ссылаться на переменную находящуюся глубже нежели он сам</value>
   </data>
+  <data name="WB0392" xml:space="preserve">
+    <value>Вопрос на который ссылаются должен иметь имя переменной</value>
+  </data>
+  <data name="WB0393" xml:space="preserve">
+    <value>Ростер на который ссылаются должен иметь имя переменной</value>
+  </data>
+  <data name="WB0394" xml:space="preserve">
+    <value>Каскадный вопрос на который ссылаются должен иметь имя переменной</value>
+  </data>
+  <data name="WB0395" xml:space="preserve">
+    <value>Вопрос который является источником ростера должен иметь имя переменной</value>
+  </data>
+  <data name="WB0396" xml:space="preserve">
+    <value>Вопрос который является источником имени ростера должен иметь имя переменной</value>
+  </data>
   <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
       <value>Ссылка на скрытую переменную запрещена</value>
   </data>

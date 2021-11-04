@@ -14,66 +14,76 @@ namespace WB.UI.Designer.Code.ImportExport
     {
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
-            Error<IQuestion>("WB0500", LinkedToQuestionMustHaveVariable, VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
-            Error<IQuestion>("WB0501", LinkedToRosterMustHaveVariable, VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
-            Error<IQuestion>("WB0502", CascadeFromQuestionMustHaveVariable, VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
-            Error<IGroup>("WB0503", RosterTriggerMustHaveVariable, VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
-            Error<IGroup>("WB0504", RosterTitleMustHaveVariable, VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
+            Error<IQuestion>("WB0392", LinkedToQuestionMustHaveVariable, VerificationMessages.WB0392),
+            Error<IQuestion>("WB0392", LinkedToRosterMustHaveVariable, VerificationMessages.WB0393),
+            Error<IQuestion>("WB0394", CascadeFromQuestionMustHaveVariable, VerificationMessages.WB0394),
+            Error<IGroup>("WB0395", RosterTriggerMustHaveVariable, VerificationMessages.WB0395),
+            Error<IGroup>("WB0396", RosterTitleMustHaveVariable, VerificationMessages.WB0396),
         };
 
-        private bool RosterTriggerMustHaveVariable(IGroup roster, MultiLanguageQuestionnaireDocument document)
+        private IQuestionnaireEntity? RosterTriggerMustHaveVariable(IGroup roster, MultiLanguageQuestionnaireDocument document)
         {
             if (roster.IsRoster && roster.RosterSizeQuestionId.HasValue)
             {
                 var rosterTrigger = document.Find<IQuestion>(roster.RosterSizeQuestionId.Value);
-                return rosterTrigger?.VariableName?.Trim().IsNullOrEmpty() ?? true;
+                var variableNameIsEmpty = rosterTrigger?.VariableName?.Trim().IsNullOrEmpty() ?? true;
+                if (variableNameIsEmpty)
+                    return rosterTrigger;
             }
 
-            return false;
+            return null;
         }
         
-        private bool RosterTitleMustHaveVariable(IGroup roster, MultiLanguageQuestionnaireDocument document)
+        private IQuestionnaireEntity? RosterTitleMustHaveVariable(IGroup roster, MultiLanguageQuestionnaireDocument document)
         {
             if (roster.IsRoster && roster.RosterTitleQuestionId.HasValue)
             {
                 var rosterTitle = document.Find<IQuestion>(roster.RosterTitleQuestionId.Value);
-                return rosterTitle?.VariableName?.Trim().IsNullOrEmpty() ?? true;
+                var variableNameIsEmpty = rosterTitle?.VariableName?.Trim().IsNullOrEmpty() ?? true;
+                if (variableNameIsEmpty)
+                    return rosterTitle;
             }
 
-            return false;
+            return null;
         }
 
-        private bool LinkedToQuestionMustHaveVariable(IQuestion question, MultiLanguageQuestionnaireDocument document)
+        private IQuestionnaireEntity? LinkedToQuestionMustHaveVariable(IQuestion question, MultiLanguageQuestionnaireDocument document)
         {
             if (question.LinkedToQuestionId.HasValue)
             {
                 var linkedTo = document.Find<IQuestion>(question.LinkedToQuestionId.Value);
-                return linkedTo?.VariableName?.Trim().IsNullOrEmpty() ?? true;
+                var variableNameIsEmpty = linkedTo?.VariableName?.Trim().IsNullOrEmpty() ?? true;
+                if (variableNameIsEmpty)
+                    return linkedTo;
             }
 
-            return false;
+            return null;
         }
 
-        private bool LinkedToRosterMustHaveVariable(IQuestion question, MultiLanguageQuestionnaireDocument document)
+        private IQuestionnaireEntity? LinkedToRosterMustHaveVariable(IQuestion question, MultiLanguageQuestionnaireDocument document)
         {
             if (question.LinkedToRosterId.HasValue)
             {
                 var linkedTo = document.Find<IGroup>(question.LinkedToRosterId.Value);
-                return linkedTo?.VariableName?.Trim().IsNullOrEmpty() ?? true;
+                var variableNameIsEmpty = linkedTo?.VariableName?.Trim().IsNullOrEmpty() ?? true;
+                if (variableNameIsEmpty)
+                    return linkedTo;
             }
 
-            return false;
+            return null;
         }
 
-        private bool CascadeFromQuestionMustHaveVariable(IQuestion question, MultiLanguageQuestionnaireDocument document)
+        private IQuestionnaireEntity? CascadeFromQuestionMustHaveVariable(IQuestion question, MultiLanguageQuestionnaireDocument document)
         {
             if (question.CascadeFromQuestionId.HasValue)
             {
                 var cascadeFrom = document.Find<IQuestion>(question.CascadeFromQuestionId.Value);
-                return cascadeFrom?.VariableName?.Trim().IsNullOrEmpty() ?? true;
+                var variableNameIsEmpty = cascadeFrom?.VariableName?.Trim().IsNullOrEmpty() ?? true;
+                if (variableNameIsEmpty)
+                    return cascadeFrom;
             }
 
-            return false;
+            return null;
         }
         public IEnumerable<QuestionnaireVerificationMessage> Verify(MultiLanguageQuestionnaireDocument multiLanguageQuestionnaireDocument)
         {

@@ -1862,7 +1862,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Плоский режим разрешен для ростеров с не больше чем {0} элементами..
+        ///   Looks up a localized string similar to Плоский режим разрешен для ростеров с не больше чем {0} вопросов или статических текстов..
         /// </summary>
         public static string WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements {
             get {
@@ -2161,6 +2161,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Переменные на обложке должны иметь описание.
+        /// </summary>
+        public static string WB0311_IdentityVariablesMustHaveLabel {
+            get {
+                return ResourceManager.GetString("WB0311_IdentityVariablesMustHaveLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Категория должна иметь минимум 2 опции.
         /// </summary>
         public static string WB0312 {
@@ -2184,6 +2193,51 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0391 {
             get {
                 return ResourceManager.GetString("WB0391", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Вопрос на который ссылаются должен иметь имя переменной.
+        /// </summary>
+        public static string WB0392 {
+            get {
+                return ResourceManager.GetString("WB0392", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ростер на который ссылаются должен иметь имя переменной.
+        /// </summary>
+        public static string WB0393 {
+            get {
+                return ResourceManager.GetString("WB0393", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Каскадный вопрос на который ссылаются должен иметь имя переменной.
+        /// </summary>
+        public static string WB0394 {
+            get {
+                return ResourceManager.GetString("WB0394", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Вопрос который является источником ростера должен иметь имя переменной.
+        /// </summary>
+        public static string WB0395 {
+            get {
+                return ResourceManager.GetString("WB0395", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Вопрос который является источником имени ростера должен иметь имя переменной.
+        /// </summary>
+        public static string WB0396 {
+            get {
+                return ResourceManager.GetString("WB0396", resourceCulture);
             }
         }
         

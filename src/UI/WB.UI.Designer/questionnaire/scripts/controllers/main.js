@@ -191,7 +191,7 @@ angular.module('designerApp')
                 }, 500);
             };
 
-            $scope.canExportQuestionnaire = function () {
+            $scope.exportQuestionnaire = function () {
                 $scope.verificationStatus.errors = null;
                 $scope.verificationStatus.warnings = null;
                 $rootScope.$broadcast("verifing", {});
@@ -204,10 +204,9 @@ angular.module('designerApp')
                         $scope.verificationStatus.time = new Date();
                         $scope.verificationStatus.typeOfMessageToBeShown = ERROR;
                         $scope.showVerificationErrors();
-                        return false;
                     }
                     else{
-                        return true;
+                        window.location = '../../api/hq/backup/' + $state.params.questionnaireId
                     }
                 });
             };
