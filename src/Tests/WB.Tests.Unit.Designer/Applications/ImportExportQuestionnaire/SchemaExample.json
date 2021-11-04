@@ -83,6 +83,12 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
+        "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
+        "QuestionText": { "type": "string" },
+        "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
+        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
+        "VariableName": { "$ref": "#/definitions/VariableName" },
+
         "GeometryType": {
           "type": "string",
           "oneOf": [
@@ -92,12 +98,7 @@
             { "const": "Multipoint", "description": "Multipoint" }
           ],
           "default": "Polygon"
-        },
-        "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
-        "QuestionText": { "type": "string" },
-        "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
-        "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
-        "VariableName": { "$ref": "#/definitions/VariableName" }
+        }
       },
       "additionalProperties": false,
       "required": ["Type"]
@@ -149,13 +150,14 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
-        "IsTimestamp": { "type": "boolean", "default": false },
-        "DefaultDate": { "type": "string", "format": "date-time" },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
-        "VariableName": { "$ref": "#/definitions/VariableName" }
+        "VariableName": { "$ref": "#/definitions/VariableName" },
+
+        "IsTimestamp": { "type": "boolean", "default": false },
+        "DefaultDate": { "type": "string", "format": "date-time" }
       },
       "additionalProperties": false,
       "required": ["Type"]
@@ -349,7 +351,6 @@
       "Type": "object",
       "properties": {
         "Type": { "const": "PictureQuestion" },
-        "IsSignature": { "type": "boolean", "default": false },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -358,7 +359,9 @@
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
-        "VariableName": { "$ref": "#/definitions/VariableName" }
+        "VariableName": { "$ref": "#/definitions/VariableName" },
+
+        "IsSignature": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
       "required": ["Type"]
@@ -377,6 +380,7 @@
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
+        
         "DisplayMode": {
           "type": "string",
           "oneOf": [
@@ -386,14 +390,11 @@
           ],
           "default": "Checkboxes"
         },
-
         "AreAnswersOrdered": { "type": "boolean", "default": false },
         "MaxAllowedAnswers": { "type": "integer", "minimum": 2 },
-
         "CategoriesId": { "$ref": "#/definitions/GUID" },
         "Answers": { "$ref": "#/definitions/Answers" },
         "CascadeFromQuestion": { "$ref": "#/definitions/VariableName" },
-
         "FilterExpression": { "type": "string" },
         "LinkedTo": { "$ref": "#/definitions/VariableName" }
       },
@@ -477,12 +478,9 @@
         },
         "ShowAsList": { "type": "boolean", "default": false },
         "ShowAsListThreshold": { "type": "integer" },
-
         "CategoriesId": { "$ref": "#/definitions/GUID" },
         "Answers": { "$ref": "#/definitions/Answers" },
-
         "CascadeFromQuestion": { "$ref": "#/definitions/VariableName" },
-
         "LinkedTo": { "$ref": "#/definitions/VariableName" },
         "FilterExpression": { "type": "string" }
       },
@@ -519,7 +517,7 @@
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
   
-        "MaxItemsCount": { "type": "integer" }
+        "MaxItemsCount": { "type": "integer", "minimum": 1 }
       },
       "additionalProperties": false,
       "required": ["Type"]
