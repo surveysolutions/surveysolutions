@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Ionic.Zip;
 using Main.Core.Documents;
@@ -11,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Extensions;
@@ -28,8 +30,9 @@ namespace WB.UI.Designer.Services.Restore
         private readonly DesignerDbContext dbContext;
         private readonly ICategoriesService categoriesService;
         private readonly IImportExportQuestionnaireService importExportQuestionnaireService;
+        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
-        public QuestionnaireRestoreService(ILogger<QuestionnaireRestoreService> logger, ISerializer serializer, ICommandService commandService, ILookupTableService lookupTableService, IAttachmentService attachmentService, ITranslationsService translationsService, DesignerDbContext dbContext, ICategoriesService categoriesService, IImportExportQuestionnaireService importExportQuestionnaireService)
+        public QuestionnaireRestoreService(ILogger<QuestionnaireRestoreService> logger, ISerializer serializer, ICommandService commandService, ILookupTableService lookupTableService, IAttachmentService attachmentService, ITranslationsService translationsService, DesignerDbContext dbContext, ICategoriesService categoriesService, IImportExportQuestionnaireService importExportQuestionnaireService, IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
         {
             this.logger = logger;
             this.serializer = serializer;
@@ -40,19 +43,20 @@ namespace WB.UI.Designer.Services.Restore
             this.dbContext = dbContext;
             this.categoriesService = categoriesService;
             this.importExportQuestionnaireService = importExportQuestionnaireService;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public Guid RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state, bool createNew)
         {
             using var zipStream = new ZipInputStream(archive);
 
-            var questionnaireId = RestoreQuestionnaireFromZipFileOrThrow(zipStream, responsibleId, state, createNew);
+            var questionnaire = RestoreQuestionnaireFromZipFileOrThrow(zipStream, responsibleId, state, createNew);
 
             zipStream.Seek(0, SeekOrigin.Begin);
             ZipEntry zipEntry;
             while ((zipEntry = zipStream.GetNextEntry()) != null)
             {
-                this.RestoreDataFromZipFileEntry(zipEntry, zipStream, responsibleId, state, questionnaireId);
+                this.RestoreDataFromZipFileEntry(zipEntry, zipStream, responsibleId, state, questionnaire);
             }
 
             state.Error = "";
@@ -61,10 +65,13 @@ namespace WB.UI.Designer.Services.Restore
                 state.Error += $"Attachment '{attachmentId.FormatGuid()}' was not restored because there are not enough data for it in it's folder." + Environment.NewLine;
             }
 
-            return questionnaireId;
+            questionnaireStorage.Store(questionnaire, questionnaire.Id);
+            dbContext.SaveChanges();
+
+            return questionnaire.PublicKey;
         }
 
-        public Guid RestoreQuestionnaireFromZipFileOrThrow(ZipInputStream zipStream, Guid responsibleId,
+        public QuestionnaireDocument RestoreQuestionnaireFromZipFileOrThrow(ZipInputStream zipStream, Guid responsibleId,
             RestoreState state, bool createNew)
         {
             ZipEntry zipEntry;
@@ -81,23 +88,15 @@ namespace WB.UI.Designer.Services.Restore
                     {
                         string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
                         var questionnaireDocument = importExportQuestionnaireService.Import(textContent);
-                        //var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
 
                         if (createNew)
                         {
-                            questionnaireDocument.PublicKey = Guid.NewGuid();
+                            var publicKey = Guid.NewGuid();
+                            questionnaireDocument.Id = publicKey.FormatGuid();
+                            questionnaireDocument.PublicKey = publicKey;
                             questionnaireDocument.CreationDate = DateTime.UtcNow;
                             questionnaireDocument.CreatedBy = responsibleId;
                         }
-                        /*
-                        else
-                        {
-                            throw new NotImplementedException();
-                        }
-                        */
-
-                        var command = new ImportQuestionnaire(responsibleId, questionnaireDocument);
-                        this.commandService.Execute(command);
 
                         this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
                         this.categoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
@@ -106,9 +105,12 @@ namespace WB.UI.Designer.Services.Restore
                         state.Success.AppendLine($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.");
                         state.RestoredEntitiesCount++;
 
+                        var command = new ImportQuestionnaire(responsibleId, questionnaireDocument);
+                        this.commandService.Execute(command);
+
                         dbContext.SaveChanges();
 
-                        return questionnaireDocument.PublicKey;
+                        return questionnaireDocument;
                     }
                 }
                 catch (Exception exception)
@@ -123,8 +125,9 @@ namespace WB.UI.Designer.Services.Restore
             throw new Exception("Questionnaire document was not found.");
         }
 
-        public void RestoreDataFromZipFileEntry(ZipEntry zipEntry, ZipInputStream zipStream, Guid responsibleId, RestoreState state, Guid questionnaireId)
+        public void RestoreDataFromZipFileEntry(ZipEntry zipEntry, ZipInputStream zipStream, Guid responsibleId, RestoreState state, QuestionnaireDocument questionnaire)
         {
+            var questionnaireId = questionnaire.PublicKey;
             try
             {
                 string[] zipEntryPathChunks = zipEntry.FileName.Split(
@@ -168,7 +171,6 @@ namespace WB.UI.Designer.Services.Restore
                     else
                     {
                         byte[] binaryContent = zipStream.ReadToEnd();
-
                         state.StoreAttachmentFile(attachmentId, fileName, binaryContent);
                         state.Success.AppendLine($"[{zipEntry.FileName}]");
                         state.Success.AppendLine($"    Found file data '{fileName}' for attachment '{attachmentId.FormatGuid()}'.");
@@ -179,7 +181,10 @@ namespace WB.UI.Designer.Services.Restore
                     if (attachment.HasAllDataForRestore())
                     {
                         string attachmentContentId = this.attachmentService.CreateAttachmentContentId(attachment.BinaryContent!);
-
+                        questionnaire.Attachments
+                            .Single(s => s.AttachmentId == attachmentId)
+                            .ContentId = attachmentContentId;
+                        
                         this.attachmentService.SaveContent(attachmentContentId, attachment.ContentType!, attachment.BinaryContent!);
                         this.attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, attachment.FileName!);
 

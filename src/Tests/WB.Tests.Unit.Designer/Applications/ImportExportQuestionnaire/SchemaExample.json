@@ -22,14 +22,14 @@
       "minItems": 0
     },
     "Macros": {
-      "type": "object",
-      "additionalProperties": {
+      "type": "array",
+      "items": {
         "$ref": "#/definitions/Macro"
       }
     },
     "LookupTables": {
-      "type": "object",
-      "additionalProperties": {
+      "type": "array",
+      "items": {
         "$ref": "#/definitions/LookupTable"
       }
     },

@@ -7,33 +7,19 @@ namespace WB.UI.Designer.Code.ImportExport.Models
 {
     public class Questionnaire
     {
-        public Questionnaire()
-        {
-            Description = String.Empty;
-            VariableName = String.Empty;
-
-            Children = new List<Group>();
-            Macros = new Dictionary<Guid, Macro>();
-            LookupTables = new Dictionary<Guid, LookupTable>();
-            Attachments = new List<Attachment>();
-            Translations = new List<Translation>();
-            Categories = new List<Categories>();
-        }
-
         public Guid Id { get; set; }
-
         public CoverPage? CoverPage { get; set; }
-        public List<Group> Children { get; set; }
-        public Dictionary<Guid, Macro> Macros { get; set; }
-        public Dictionary<Guid, LookupTable> LookupTables { get; set; }
-        public List<Attachment> Attachments { get; set; }
-        public List<Translation> Translations { get; set; }
-        public List<Categories> Categories { get; set; }
+        public List<Group> Children { get; set; } = new List<Group>();
+        public List<Macro> Macros { get; set; } = new List<Macro>();
+        public List<LookupTable> LookupTables { get; set; } = new List<LookupTable>();
+        public List<Attachment> Attachments { get; set; } = new List<Attachment>();
+        public List<Translation> Translations { get; set; } = new List<Translation>();
+        public List<Categories> Categories { get; set; } = new List<Categories>();
         public Guid? DefaultTranslation { get; set; }
         public bool HideIfDisabled { get; set; }
         public string? Title { get; set; }
-        public string Description { get; set; }
+        public string Description { get; set; } = String.Empty;
         public QuestionnaireMetaInfo? Metadata { get; set; }
-        public string VariableName { get; set; }
+        public string VariableName { get; set; } = String.Empty;
     }
 }

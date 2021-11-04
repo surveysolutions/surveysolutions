@@ -76,6 +76,11 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<Documents.LookupTable, Models.LookupTable>();
             this.CreateMap<Models.LookupTable, Documents.LookupTable>();
 
+            this.CreateMap<KeyValuePair<Guid, Documents.LookupTable>, Models.LookupTable>()
+                .ConstructUsing((kv, context) => context.Mapper.Map<Documents.LookupTable, Models.LookupTable>(kv.Value));
+            this.CreateMap<Models.LookupTable, KeyValuePair<Guid, Documents.LookupTable>>()
+                .ConstructUsing((v, context) => new KeyValuePair<Guid, Documents.LookupTable>(Guid.NewGuid(), context.Mapper.Map<Models.LookupTable, Documents.LookupTable>(v)));
+
             this.CreateMap<Documents.Translation, Models.Translation>();
             this.CreateMap<Models.Translation, Documents.Translation>();
 
@@ -84,6 +89,11 @@ namespace WB.UI.Designer.Code.ImportExport
 
             this.CreateMap<Documents.Macro, Models.Macro>();
             this.CreateMap<Models.Macro, Documents.Macro>();
+
+            this.CreateMap<KeyValuePair<Guid, Documents.Macro>, Models.Macro>()
+                .ConstructUsing((kv, context) => context.Mapper.Map<Documents.Macro, Models.Macro>(kv.Value));
+            this.CreateMap<Models.Macro, KeyValuePair<Guid, Documents.Macro>>()
+                .ConstructUsing((v, context) => new KeyValuePair<Guid, Documents.Macro>(Guid.NewGuid(), context.Mapper.Map<Models.Macro, Documents.Macro>(v)));
 
             this.CreateMap<IComposite, QuestionnaireEntity>();
             this.CreateMap<IQuestionnaireEntity, IComposite>();

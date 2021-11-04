@@ -255,8 +255,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
-            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
+            questionnaireDocument.Macros.Values.Should().BeEquivalentTo(newQuestionnaire.Macros.Values);
+            newQuestionnaire.Macros.Values.Should().BeEquivalentTo(questionnaireDocument.Macros.Values);
             errors.Count.Should().Be(0);
         }
         
@@ -293,8 +293,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
-            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
+            questionnaireDocument.LookupTables.Values.Should().BeEquivalentTo(newQuestionnaire.LookupTables.Values);
+            newQuestionnaire.LookupTables.Values.Should().BeEquivalentTo(questionnaireDocument.LookupTables.Values);
             errors.Count.Should().Be(0);
         }
 
