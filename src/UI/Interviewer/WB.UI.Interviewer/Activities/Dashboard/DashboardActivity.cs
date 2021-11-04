@@ -222,7 +222,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         private void WorkspaceListUpdated(object sender, EventArgs e)
         {
-            UpdateWorkspacesMenu();
+            UpdateWorkspacesDependentMenu();
         }
 
         private IMenu dashboardMenu;
@@ -232,8 +232,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
 
             dashboardMenu = menu;
-
-            UpdateWorkspacesMenu();
 
             SetMenuItemIcon(menu, Resource.Id.menu_search, Resource.Drawable.dashboard_search_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_synchronization, Resource.Drawable.synchronize_icon);
@@ -249,10 +247,14 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 menu.FindItem(Resource.Id.menu_synchronization).SetVisible(false);
             }
 
+            var mapDashboardMenu = menu.FindItem(Resource.Id.menu_map_dashboard);
+            
             if (!ViewModel.DoesSupportMaps)
             {
-                menu.FindItem(Resource.Id.menu_map_dashboard).SetVisible(false);
+                mapDashboardMenu.SetVisible(false);
             }
+            
+            UpdateWorkspacesDependentMenu();
 
             menu.LocalizeMenuItem(Resource.Id.menu_search, EnumeratorUIResources.MenuItem_Title_Search);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, EnumeratorUIResources.MenuItem_Title_SignOut);
@@ -263,7 +265,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             return base.OnCreateOptionsMenu(menu);
         }
 
-        private void UpdateWorkspacesMenu()
+        private void UpdateWorkspacesDependentMenu()
         {
             IMenu menu = dashboardMenu;
             var workspaces = this.ViewModel.GetWorkspaces();
@@ -297,6 +299,12 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             }
 
             workspacesMenuItem.SetVisible(true);
+            
+            
+            var mapDashboardMenu = menu.FindItem(Resource.Id.menu_map_dashboard);
+            var hasWorkspace = !string.IsNullOrEmpty(ViewModel.CurrentWorkspace);
+            mapDashboardMenu.SetEnabled(hasWorkspace);
+            mapDashboardMenu.Icon.Mutate().Alpha = hasWorkspace ? 255 : 120;
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)
