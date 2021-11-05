@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System.Linq;
+﻿using System.Linq;
 using HotChocolate;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -10,7 +9,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
     public class UsersResolver
     {
         public IQueryable<HqUser> GetUsers(
-            [Service] IUnitOfWork? unitOfWork,
+            [Service] IUnitOfWork unitOfWork,
             [Service] IAuthorizedUser authorizedUser)
         {
             unitOfWork.DiscardChanges();

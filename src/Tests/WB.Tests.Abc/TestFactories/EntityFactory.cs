@@ -227,7 +227,7 @@ namespace WB.Tests.Abc.TestFactories
             Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null,
             QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false, bool hideIfDisabled = false, bool isTimestamp = false)
-            => new DateTimeQuestion("Question DT")
+            => new DateTimeQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
@@ -579,7 +579,7 @@ namespace WB.Tests.Abc.TestFactories
         public MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null,
             string validationExpression = null, string variable = null, string validationMessage = null, string text = null,
             QuestionScope scope = QuestionScope.Interviewer, bool hideIfDisabled = false)
-            => new MultimediaQuestion("Question T")
+            => new MultimediaQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = variable,
@@ -682,7 +682,7 @@ namespace WB.Tests.Abc.TestFactories
         public NumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             bool isInteger = false, int? countOfDecimalPlaces = null, string variableName = "var1", bool prefilled = false, string title = null,
             IEnumerable<Answer> options = null)
-            => new NumericQuestion("Question N")
+            => new NumericQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
@@ -1167,7 +1167,7 @@ namespace WB.Tests.Abc.TestFactories
             string variable = null, 
             bool hideIfDisabled = false,
             string questionText = null)
-            => new TextListQuestion("Question TL")
+            => new TextListQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
@@ -1189,7 +1189,7 @@ namespace WB.Tests.Abc.TestFactories
             string instruction = null,
             IEnumerable<ValidationCondition> validationConditions = null,
             bool hideIfDisabled = false)
-            => new TextQuestion(text)
+            => new TextQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,

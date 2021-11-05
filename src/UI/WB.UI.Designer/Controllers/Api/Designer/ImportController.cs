@@ -99,8 +99,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                         {
                              case 0:
                              case 2:
-                                 item = new TextQuestion(title)
+                                 item = new TextQuestion
                                  {
+                                     QuestionText = title,
                                      PublicKey = Guid.NewGuid(),
                                      QuestionScope = QuestionScope.Interviewer,
                                      StataExportCaption = variable,
@@ -109,7 +110,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                                  };
                                  break;
                              case 1:
-                                 item = new NumericQuestion(title){
+                                 item = new NumericQuestion {
+                                     QuestionText = title,
                                      PublicKey = Guid.NewGuid(),
                                      QuestionScope = QuestionScope.Interviewer,
                                      StataExportCaption = variable,
@@ -146,8 +148,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                                  }
                                  else
                                  {
-                                     item = new TextQuestion(title)
+                                     item = new TextQuestion
                                      {
+                                         QuestionText = title,
                                          PublicKey = Guid.NewGuid(),
                                          QuestionScope = QuestionScope.Interviewer,
                                          StataExportCaption = variable,

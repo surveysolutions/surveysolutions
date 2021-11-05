@@ -109,8 +109,6 @@ namespace Main.Core.Entities.SubEntities
             ValidationMessage = null;
         }
 
-        public abstract void AddAnswer(Answer answer);
-
         public virtual IComposite Clone()
         {
             var question = this.MemberwiseClone() as IQuestion;
@@ -137,7 +135,6 @@ namespace Main.Core.Entities.SubEntities
 
         public void RemoveChild(Guid child)
         {
-            
         }
 
         public string VariableName => this.StataExportCaption;
@@ -146,11 +143,20 @@ namespace Main.Core.Entities.SubEntities
         {
         }
 
-        public abstract T? Find<T>(Guid publicKey) where T : class, IComposite;
+        public T? Find<T>(Guid publicKey) where T: class, IComposite
+        {
+            return null;
+        }
 
-        public abstract IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class;
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
+        {
+            return Enumerable.Empty<T>();
+        }
 
-        public abstract T? FirstOrDefault<T>(Func<T, bool> condition) where T : class;
+        public T? FirstOrDefault<T>(Func<T, bool> condition) where T: class
+        {
+            return null;
+        }
 
         public override string ToString()
         {

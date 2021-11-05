@@ -190,7 +190,7 @@ namespace WB.Tests.Unit.Designer
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer,
             bool preFilled = false, bool hideIfDisabled = false, bool isCurrentTime = false)
         {
-            return new DateTimeQuestion("Question DT")
+            return new DateTimeQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
@@ -340,7 +340,7 @@ namespace WB.Tests.Unit.Designer
             string variable = null, string validationMessage = null, string title = "test", QuestionScope scope = QuestionScope.Interviewer
             , bool hideIfDisabled = false, bool isSignature = false)
         {
-            return new MultimediaQuestion("Question T")
+            return new MultimediaQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = variable,
@@ -706,8 +706,9 @@ namespace WB.Tests.Unit.Designer
                     };
                 case QuestionType.Text:
                     default:
-                    return new TextQuestion(title)
+                    return new TextQuestion()
                     {
+                        QuestionText = title,
                         PublicKey = publicKey,
                         StataExportCaption = stataExportCaption,
                         ConditionExpression = enablementCondition,
@@ -1109,7 +1110,7 @@ namespace WB.Tests.Unit.Designer
         public static ITextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false, string title = "test", QuestionScope scope = QuestionScope.Interviewer, bool featured = false)
         {
-            return new TextListQuestion("Question TL")
+            return new TextListQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
@@ -1138,7 +1139,7 @@ namespace WB.Tests.Unit.Designer
         {
             var publicKey = questionId ?? Guid.NewGuid();
             var stataExportCaption = variable ?? GetNameForEntity("text_question", publicKey);
-            return new TextQuestion(text)
+            return new TextQuestion()
             {
                 PublicKey = publicKey,
                 ConditionExpression = enablementCondition,

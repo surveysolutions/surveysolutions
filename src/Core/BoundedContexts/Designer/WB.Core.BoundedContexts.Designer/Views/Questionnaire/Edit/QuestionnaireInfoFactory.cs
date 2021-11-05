@@ -374,7 +374,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 return null;
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
 
-            var staticText = document?.Find<IStaticText>(staticTextId);
+            var staticText = document.Find<IStaticText>(staticTextId);
             if (staticText == null)
                 return null;
             
@@ -435,7 +435,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 return null;
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
             
-            var variable = document?.Find<IVariable>(variableId);
+            var variable = document.Find<IVariable>(variableId);
             if (variable == null)
                 return null;
             

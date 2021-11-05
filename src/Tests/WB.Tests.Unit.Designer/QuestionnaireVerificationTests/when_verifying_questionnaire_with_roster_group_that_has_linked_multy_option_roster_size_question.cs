@@ -40,8 +40,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
                     Children = new IComposite[]
                     {
-                        new NumericQuestion("test")
+                        new NumericQuestion()
                         {
+                            QuestionText = "test",
                             PublicKey = referencedQuestionId,
                             StataExportCaption = "var2"
                         }

@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit

@@ -55,7 +55,7 @@ namespace WB.Tests.Integration.Designer
             string instruction = null,
             IEnumerable<ValidationCondition> validationConditions = null,
             bool hideIfDisabled = false)
-            => new TextQuestion(text)
+            => new TextQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,

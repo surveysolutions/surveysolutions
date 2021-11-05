@@ -28,8 +28,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 FixedRosterTitles = new[] { Create.FixedRosterTitle(1, "fixed title 1"), Create.FixedRosterTitle(2, "fixed title 2") },
                 Children = new List<IComposite>()
                 {
-                    new NumericQuestion("question 1")
+                    new NumericQuestion()
                     {
+                        QuestionText = "question 1",
                         PublicKey = rosterTitleQuestionId,
                         StataExportCaption = "var",
                         IsInteger = true

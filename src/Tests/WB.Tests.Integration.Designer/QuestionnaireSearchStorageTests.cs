@@ -26,7 +26,8 @@ namespace WB.Tests.Integration.Designer
                 dbContext.SaveChanges();
 
                 var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
-                searchStorage.AddOrUpdateEntity(questionnaireId, new TextQuestion("question text") { PublicKey = questionId });
+                searchStorage.AddOrUpdateEntity(questionnaireId, 
+                    new TextQuestion() { QuestionText = "question text", PublicKey = questionId });
             });
 
             RunActionInScope(sl =>
@@ -58,7 +59,8 @@ namespace WB.Tests.Integration.Designer
                 dbContext.SaveChanges();
 
                 var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
-                searchStorage.AddOrUpdateEntity(questionnaireId, new TextQuestion("question text") { PublicKey = questionId });
+                searchStorage.AddOrUpdateEntity(questionnaireId, 
+                    new TextQuestion() {QuestionText = "question text", PublicKey = questionId });
             });
 
             RunActionInScope(sl =>
@@ -95,7 +97,8 @@ namespace WB.Tests.Integration.Designer
                 dbContext.SaveChanges();
 
                 var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
-                searchStorage.AddOrUpdateEntity(questionnaireId, new TextQuestion("test car dog question text") { PublicKey = questionId });
+                searchStorage.AddOrUpdateEntity(questionnaireId, 
+                    new TextQuestion() {QuestionText = "test car dog question text", PublicKey = questionId });
             });
 
             RunActionInScope(sl =>
@@ -127,7 +130,8 @@ namespace WB.Tests.Integration.Designer
                 dbContext.SaveChanges();
 
                 var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
-                searchStorage.AddOrUpdateEntity(questionnaireId, new TextQuestion("test car dog question text") { PublicKey = questionId });
+                searchStorage.AddOrUpdateEntity(questionnaireId, 
+                    new TextQuestion() {QuestionText = "test car dog question text", PublicKey = questionId });
             });
 
             RunActionInScope(sl =>
@@ -187,8 +191,10 @@ namespace WB.Tests.Integration.Designer
                 dbContext.SaveChanges();
 
                 var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
-                searchStorage.AddOrUpdateEntity(questionnaireId, new TextQuestion("question text") { PublicKey = Guid.NewGuid() });
-                searchStorage.AddOrUpdateEntity(questionnaireId, new TextQuestion("text from tales") { PublicKey = Guid.NewGuid() });
+                searchStorage.AddOrUpdateEntity(questionnaireId, 
+                    new TextQuestion() {QuestionText = "question text", PublicKey = Guid.NewGuid() });
+                searchStorage.AddOrUpdateEntity(questionnaireId, 
+                    new TextQuestion() {QuestionText = "text from tales", PublicKey = Guid.NewGuid() });
             });
 
             SearchResult searchResult = null;

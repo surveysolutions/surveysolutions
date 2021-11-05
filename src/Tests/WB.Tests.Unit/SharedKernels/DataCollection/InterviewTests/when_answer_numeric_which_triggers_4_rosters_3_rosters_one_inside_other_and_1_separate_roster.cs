@@ -23,8 +23,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion("roster size question")
+                new NumericQuestion()
                 {
+                    QuestionText = "roster size question",
                     PublicKey = rosterSizeQuestionId,
                     IsInteger = true
                 },

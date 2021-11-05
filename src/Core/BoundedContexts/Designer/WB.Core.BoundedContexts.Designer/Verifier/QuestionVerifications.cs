@@ -238,18 +238,16 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 .Distinct()
                 .ToArray();
 
-            if (existingOptions.Length == 0)
+            if (existingOptions.Length < 2)
                 return false;
 
-            List<int> diffsByPrevNextOptionValues = new List<int>();
-
-            var result = existingOptions.Aggregate((prev, next) =>
+            for (int i = 1; i < existingOptions.Length; i++)
             {
-                diffsByPrevNextOptionValues.Add(next - prev);
-                return next;
-            });
+                if (existingOptions[i] - existingOptions[i - 1] != 1)
+                    return true;
+            }
 
-            return diffsByPrevNextOptionValues.Contains(2);
+            return false;
         }
 
         private static IEnumerable<QuestionnaireEntityReference[]> SameCascadingParentQuestion(MultiLanguageQuestionnaireDocument questionnaire)

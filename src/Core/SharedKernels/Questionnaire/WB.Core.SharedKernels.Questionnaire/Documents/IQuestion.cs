@@ -28,7 +28,5 @@ namespace Main.Core.Entities.SubEntities
         Guid? CascadeFromQuestionId { get; set; }
         bool? IsFilteredCombobox { get; set; }
         bool IsTimestamp { get; set; }
-
-        void AddAnswer(Answer answer);
     }
 }

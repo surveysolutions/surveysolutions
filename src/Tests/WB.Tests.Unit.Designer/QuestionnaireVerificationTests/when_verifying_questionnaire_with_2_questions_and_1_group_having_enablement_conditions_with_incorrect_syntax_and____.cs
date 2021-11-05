@@ -24,21 +24,24 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             correctGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion("text 1")
+                new NumericQuestion()
                 {
+                    QuestionText = "text 1",
                     PublicKey = firstIncorrectQuestionId,
                     ConditionExpression = InvalidExpression,
                     StataExportCaption = "var1"
                 },
-                new TextQuestion("text 1")
+                new TextQuestion()
                 {
+                    QuestionText = "text 1",
                     PublicKey = secondIncorrectQuestionId,
                     ConditionExpression = InvalidExpression,
                     StataExportCaption = "var2"
                 },
                 new Group("Title") { PublicKey = incorrectGroupId, ConditionExpression = InvalidExpression },
-                new NumericQuestion("text 1")
+                new NumericQuestion()
                 {
+                    QuestionText = "text 1",
                     PublicKey = correctQuestionId,
                     ConditionExpression = ValidExpression,
                     StataExportCaption = "var3"

@@ -2,7 +2,7 @@
 
 namespace Main.Core.Entities.SubEntities.Question
 {
-    public class AreaQuestion : ExternalServiceQuestion
+    public class AreaQuestion : AbstractQuestion
     {
         public override QuestionType QuestionType => QuestionType.Area;
     }
