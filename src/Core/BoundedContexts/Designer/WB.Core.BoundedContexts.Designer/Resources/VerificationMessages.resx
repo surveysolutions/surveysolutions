@@ -835,7 +835,7 @@
     <value>Roster trigger question must have variable name</value>
   </data>
   <data name="WB0396" xml:space="preserve">
-    <value>Roster title question must have variable name</value>
+    <value>Source question for names of rows must have variable name</value>
   </data>
   <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
       <value>Link to hidden question is not allowed</value>

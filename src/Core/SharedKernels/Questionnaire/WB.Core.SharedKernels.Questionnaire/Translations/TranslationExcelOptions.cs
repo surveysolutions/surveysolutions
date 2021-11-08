@@ -3,6 +3,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
     public class TranslationExcelOptions
     {
         public const string EntityIdColumnName = "Entity Id";
+        public const string VariableColumnName = "Variable";
         public const string TranslationTypeColumnName = "Type";
         public const string OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName = "Index";
         public const string TranslationTextColumnName = "Translation";

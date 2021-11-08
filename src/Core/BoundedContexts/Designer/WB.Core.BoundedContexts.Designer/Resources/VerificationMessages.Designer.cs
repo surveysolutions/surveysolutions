@@ -2231,7 +2231,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster title question must have variable name.
+        ///   Looks up a localized string similar to Source question for names of rows must have variable name.
         /// </summary>
         public static string WB0396 {
             get {
