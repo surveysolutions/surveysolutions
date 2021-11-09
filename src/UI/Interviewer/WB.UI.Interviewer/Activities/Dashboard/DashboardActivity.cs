@@ -247,10 +247,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 menu.FindItem(Resource.Id.menu_synchronization).SetVisible(false);
             }
 
-            var mapDashboardMenu = menu.FindItem(Resource.Id.menu_map_dashboard);
-            
             if (!ViewModel.DoesSupportMaps)
             {
+                var mapDashboardMenu = menu.FindItem(Resource.Id.menu_map_dashboard);
                 mapDashboardMenu.SetVisible(false);
             }
             
