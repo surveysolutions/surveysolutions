@@ -672,9 +672,6 @@
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Rosteri ka arritur madhësinë limit. Ulni madhësinë e rosterit ose zvogëloni përsëritjen.</value>
   </data>
-  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>Rubrika e parë nuk mund të ketë kusht aktivizues.</value>
-  </data>
   <data name="WB0264_GpsQuestion" xml:space="preserve">
     <value>Ju keni një pyetje GPS. Tabletat mund ta mbështetin përdorimin e vendndodhjes gjeografike me këtë pyetësor.</value>
   </data>

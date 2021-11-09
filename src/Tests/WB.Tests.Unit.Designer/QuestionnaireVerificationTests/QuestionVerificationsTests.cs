@@ -585,47 +585,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
         
         [Test]
-        public void when_questionnaire_contains_first_chapter_with_enabling_condition_no_cover_should_return_verification_error()
-        {
-            var groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var questionnaire = CreateQuestionnaireDocument(
-                Create.Group(enablementCondition: "test", groupId: groupId));
-            var verifier = CreateQuestionnaireVerifier();
-
-            // act
-            var errors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
-
-            // assert
-            var expectedError = errors.GetError("WB0263");
-            Assert.That(expectedError, Is.Not.Null, "WB0263 should be raised");
-            Assert.That(expectedError.Message, Is.EqualTo(VerificationMessages.WB0263_FirstChapterHasEnablingCondition));
-
-            Assert.That(expectedError.References.Count, Is.EqualTo(1));
-            Assert.That(expectedError.References.First().Id, Is.EqualTo(groupId));
-        }
-        
-        [Test]
-        public void when_questionnaire_contains_first_chapter_with_enabling_condition_with_cover_should_return_verification_error()
-        {
-            var groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var questionnaire = QuestionnaireDocumentWithCoverPage();
-            questionnaire.Add(Create.Group(enablementCondition: "test", groupId: groupId), null);
-                
-            var verifier = CreateQuestionnaireVerifier();
-
-            // act
-            var errors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
-
-            // assert
-            var expectedError = errors.GetError("WB0263");
-            Assert.That(expectedError, Is.Not.Null, "WB0263 should be raised");
-            Assert.That(expectedError.Message, Is.EqualTo(VerificationMessages.WB0263_FirstChapterHasEnablingCondition));
-
-            Assert.That(expectedError.References.Count, Is.EqualTo(1));
-            Assert.That(expectedError.References.First().Id, Is.EqualTo(groupId));
-        }
-
-        [Test]
         public void when_question_on_cover_page_without_variable_label()
             => QuestionnaireDocumentWithCoverPage(new[]
                 {
