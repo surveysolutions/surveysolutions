@@ -397,7 +397,7 @@ namespace WB.UI.Designer.Controllers
             return Redirect(Url.Content("~/"));
         }
 
-        [HttpGet]
+        /*[HttpGet]
         [Authorize(Roles = "Administrator")]
         public FileResult? Backup(Guid id)
         {
@@ -407,6 +407,6 @@ namespace WB.UI.Designer.Controllers
                     ? null
                     : File(stream, "application/zip", $"{questionnaireFileName}.zip");
             
-        }
+        }*/
     }
 }
