@@ -39,7 +39,8 @@ namespace WB.UI.Designer.Modules
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();          
             registry.BindAsSingleton<ILoggerProvider, SerilogLoggerProvider>();   
             
-            registry.Bind<IImportExportQuestionnaireService, ImportExportQuestionnaireService>();   
+            registry.Bind<IImportExportQuestionnaireMapper, ImportExportQuestionnaireMapper>();   
+            registry.Bind<IQuestionnaireSerializer, QuestionnaireSerializer>();   
             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {

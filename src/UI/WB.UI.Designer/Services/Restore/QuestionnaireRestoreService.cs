@@ -29,10 +29,10 @@ namespace WB.UI.Designer.Services.Restore
         private readonly ITranslationsService translationsService;
         private readonly DesignerDbContext dbContext;
         private readonly ICategoriesService categoriesService;
-        private readonly IImportExportQuestionnaireService importExportQuestionnaireService;
+        private readonly IImportExportQuestionnaireMapper importExportQuestionnaireMapper;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
-        public QuestionnaireRestoreService(ILogger<QuestionnaireRestoreService> logger, ISerializer serializer, ICommandService commandService, ILookupTableService lookupTableService, IAttachmentService attachmentService, ITranslationsService translationsService, DesignerDbContext dbContext, ICategoriesService categoriesService, IImportExportQuestionnaireService importExportQuestionnaireService, IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
+        public QuestionnaireRestoreService(ILogger<QuestionnaireRestoreService> logger, ISerializer serializer, ICommandService commandService, ILookupTableService lookupTableService, IAttachmentService attachmentService, ITranslationsService translationsService, DesignerDbContext dbContext, ICategoriesService categoriesService, IImportExportQuestionnaireMapper importExportQuestionnaireMapper, IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
         {
             this.logger = logger;
             this.serializer = serializer;
@@ -42,7 +42,7 @@ namespace WB.UI.Designer.Services.Restore
             this.translationsService = translationsService;
             this.dbContext = dbContext;
             this.categoriesService = categoriesService;
-            this.importExportQuestionnaireService = importExportQuestionnaireService;
+            this.importExportQuestionnaireMapper = importExportQuestionnaireMapper;
             this.questionnaireStorage = questionnaireStorage;
         }
 
@@ -87,16 +87,10 @@ namespace WB.UI.Designer.Services.Restore
                     if (zipEntryPathChunks.Length == 1 && zipEntryPathChunks[0].ToLower().Equals("document.json"))
                     {
                         string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
-                        var questionnaireDocument = importExportQuestionnaireService.Import(textContent);
+                        var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
 
                         if (createNew)
-                        {
-                            var publicKey = Guid.NewGuid();
-                            questionnaireDocument.Id = publicKey.FormatGuid();
-                            questionnaireDocument.PublicKey = publicKey;
-                            questionnaireDocument.CreationDate = DateTime.UtcNow;
-                            questionnaireDocument.CreatedBy = responsibleId;
-                        }
+                            questionnaireDocument.PublicKey = Guid.NewGuid();
 
                         this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
                         this.categoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);

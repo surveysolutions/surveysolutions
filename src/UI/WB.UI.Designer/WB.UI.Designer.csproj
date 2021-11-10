@@ -60,6 +60,7 @@
     <EmbeddedResource Update="**\*.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Code\ImportExport\QuestionnaireSchema.json" />
   </ItemGroup>
 
   <ItemGroup>

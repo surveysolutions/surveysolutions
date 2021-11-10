@@ -25,14 +25,14 @@
       }
     },
     "Macros": {
-      "type": "object",
-      "additionalProperties": {
+      "type": "array",
+      "items": {
         "$ref": "#/definitions/Macro"
       }
     },
     "LookupTables": {
-      "type": "object",
-      "additionalProperties": {
+      "type": "array",
+      "items": {
         "$ref": "#/definitions/LookupTable"
       }
     },
@@ -146,6 +146,13 @@
         "Type"
       ],
       "properties": {
+        "Id": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "guid"
+        },
         "Type": {
           "type": "string"
         }
@@ -208,10 +215,7 @@
               ]
             },
             "HideInstructions": {
-              "type": [
-                "boolean",
-                "null"
-              ]
+              "type": "boolean"
             },
             "QuestionScope": {
               "$ref": "#/definitions/QuestionScope"
@@ -857,11 +861,13 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "AttachmentId": {
-          "type": "string",
-          "format": "guid"
-        },
         "Name": {
+          "type": "string"
+        },
+        "FileName": {
+          "type": "string"
+        },
+        "ContentType": {
           "type": "string"
         }
       }
@@ -870,11 +876,10 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Id": {
-          "type": "string",
-          "format": "guid"
-        },
         "Name": {
+          "type": "string"
+        },
+        "FileName": {
           "type": "string"
         }
       }
@@ -884,10 +889,16 @@
       "additionalProperties": false,
       "properties": {
         "Id": {
-          "type": "string",
+          "type": [
+            "null",
+            "string"
+          ],
           "format": "guid"
         },
         "Name": {
+          "type": "string"
+        },
+        "FileName": {
           "type": "string"
         }
       }

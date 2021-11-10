@@ -19,7 +19,7 @@
       "items": {
         "$ref": "#/definitions/Group"
       },
-      "minItems": 0
+      "minItems": 1
     },
     "Macros": {
       "type": "array",
@@ -62,10 +62,10 @@
       "properties": {
         "Text": { "type": "string" },
         "Code": { "type": "number" },
-        "ParentCode": { "type": "number" },
+        "ParentCode": { "type": "number" }
       },
       "additionalProperties": false,
-      "required": ["Text", "Code"]
+      "required": []
     },
   
     "Answers": {
@@ -88,6 +88,7 @@
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
+        "Id": { "$ref": "#/definitions/GUID" },
 
         "GeometryType": {
           "type": "string",
@@ -107,11 +108,12 @@
     "Attachment": {
       "type": "object",
       "properties": {
-        "AttachmentId": { "type": "string" },
-        "Name": { "type": "string" }
+        "Name": { "type": "string" },
+        "FileName": { "type": "string" },
+        "ContentType": { "type": "string" }
       },
       "additionalProperties": false,
-      "required": ["AttachmentId", "Name" ]
+      "required": [ "Name", "FileName", "ContentType" ]
     },
 
     "AudioQuestion": {
@@ -126,7 +128,8 @@
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
-        "VariableName": { "$ref": "#/definitions/VariableName" }
+        "VariableName": { "$ref": "#/definitions/VariableName" },
+        "Id": { "$ref": "#/definitions/GUID" }
       },
       "additionalProperties": false,
       "required": ["Type"]
@@ -135,11 +138,12 @@
     "Categories": {
       "type": "object",
       "properties": {
-        "Id": { "type": "string" },
-        "Name": { "type": "string" }
+        "Name": { "type": "string" },
+        "FileName": { "type": "string" },
+        "Id": { "$ref": "#/definitions/GUID" }
       },
       "additionalProperties": false,
-      "required": ["Id", "Name"]
+      "required": ["FileName", "Name"]
     },
 
     "DateTimeQuestion": {
@@ -155,6 +159,7 @@
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
+        "Id": { "$ref": "#/definitions/GUID" },
 
         "IsTimestamp": { "type": "boolean", "default": false },
         "DefaultDate": { "type": "string", "format": "date-time" }
@@ -185,7 +190,8 @@
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
-        "VariableName": { "$ref": "#/definitions/VariableName" }
+        "VariableName": { "$ref": "#/definitions/VariableName" },
+        "Id": { "$ref": "#/definitions/GUID" }
       },
       "additionalProperties": false,
       "required": ["Type"]
@@ -210,7 +216,8 @@
           }
         },
         "Title": { "type": "string" },
-        "VariableName": { "$ref": "#/definitions/VariableName" }
+        "VariableName": { "$ref": "#/definitions/VariableName" },
+        "Id": { "$ref": "#/definitions/GUID" }
       },
 
       "additionalProperties": false,
@@ -247,6 +254,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Title": { "type": "string" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
+        "Id": { "$ref": "#/definitions/GUID" }
       },
 
       "additionalProperties": false,
@@ -283,6 +291,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Title": { "type": "string" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
+        "Id": { "$ref": "#/definitions/GUID" },
 
         "DisplayMode": {
           "type": "string",
@@ -300,7 +309,7 @@
           "type": "string",
           "oneOf": [
             { "const": "FixedTitles", "description": "Fixed Titles" },
-            { "const": "Question", "description": "Question" },
+            { "const": "Question", "description": "Question" }
           ],
           "default": "FixedTitles"
         },
@@ -360,6 +369,7 @@
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
+        "Id": { "$ref": "#/definitions/GUID" },
 
         "IsSignature": { "type": "boolean", "default": false }
       },
@@ -380,7 +390,8 @@
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
-        
+        "Id": { "$ref": "#/definitions/GUID" },
+
         "DisplayMode": {
           "type": "string",
           "oneOf": [
@@ -415,6 +426,7 @@
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
+        "Id": { "$ref": "#/definitions/GUID" },
 
         "Answers": { "$ref": "#/definitions/Answers" },
         "DecimalPlaces": { "type": "integer", "minimum": 0 },
@@ -437,7 +449,8 @@
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
-        "VariableName": { "$ref": "#/definitions/VariableName" }
+        "VariableName": { "$ref": "#/definitions/VariableName" },
+        "Id": { "$ref": "#/definitions/GUID" }
       },
       "additionalProperties": false,
       "required": ["Type"]
@@ -466,6 +479,7 @@
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
+        "Id": { "$ref": "#/definitions/GUID" },
 
         "DisplayMode": {
           "type": "string",
@@ -497,7 +511,8 @@
         "AttachmentName": { "type": "string" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "ConditionExpression": { "type": "string" },
-        "HideIfDisabled": { "type": "boolean", "default": false }
+        "HideIfDisabled": { "type": "boolean", "default": false },
+        "Id": { "$ref": "#/definitions/GUID" }
       },
       "additionalProperties": false,
       "required": ["Type"]
@@ -516,7 +531,8 @@
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
-  
+        "Id": { "$ref": "#/definitions/GUID" },
+
         "MaxItemsCount": { "type": "integer", "minimum": 1 }
       },
       "additionalProperties": false,
@@ -536,6 +552,7 @@
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
+        "Id": { "$ref": "#/definitions/GUID" },
 
         "Mask": { "type": "string" }
       },
@@ -546,11 +563,11 @@
     "Translation": {
       "type": "object",
       "properties": {
-        "Id": { "type": "string" },
-        "Name": { "type": "string" }
+        "Name": { "type": "string" },
+        "FileName": { "type": "string" }
       },
       "additionalProperties": false,
-      "required": ["Id", "Name"]
+      "required": ["Name", "FileName"]
     },
 
     "ValidationCondition": {
@@ -629,7 +646,7 @@
             { "const": "SocioEconomicMonitoringSurvey", "description": "SocioE conomic Monitoring Survey" },
             { "const": "StatisticalInfoAndMonitoringProg", "description": "Statistical Info And Monitoring Prog" },
             { "const": "WorldFertilitySurvey", "description": "World Fertility Survey" },
-            { "const": "WorldHealthSurvey", "description": "World Health Survey" },
+            { "const": "WorldHealthSurvey", "description": "World Health Survey" }
           ],
           "default": "AdministrativeRecords"
         }, 

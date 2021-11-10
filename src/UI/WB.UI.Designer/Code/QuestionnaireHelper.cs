@@ -22,7 +22,7 @@ using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Code
 {
-    public class QuestionnaireHelper : IQuestionnaireHelper
+    public class QuestionnaireHelper : IQuestionnaireHelper, IQuestionnaireBackupService
     {
         private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
@@ -34,7 +34,7 @@ namespace WB.UI.Designer.Code
         private readonly ILogger<QuestionnaireHelper> logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly DesignerDbContext questionnaireChangeItemStorage;
-        private readonly IImportExportQuestionnaireService importExportQuestionnaireService;
+        private readonly IImportExportQuestionnaireMapper importExportQuestionnaireMapper;
 
         public QuestionnaireHelper(
             IQuestionnaireListViewFactory viewFactory,
@@ -47,7 +47,7 @@ namespace WB.UI.Designer.Code
             ILogger<QuestionnaireHelper> logger, 
             IFileSystemAccessor fileSystemAccessor,
             DesignerDbContext questionnaireChangeItemStorage,
-            IImportExportQuestionnaireService importExportQuestionnaireService)
+            IImportExportQuestionnaireMapper importExportQuestionnaireMapper)
         {
             this.viewFactory = viewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -59,7 +59,7 @@ namespace WB.UI.Designer.Code
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireChangeItemStorage = questionnaireChangeItemStorage;
-            this.importExportQuestionnaireService = importExportQuestionnaireService;
+            this.importExportQuestionnaireMapper = importExportQuestionnaireMapper;
         }
 
         public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(Guid viewerId, bool isAdmin, QuestionnairesType type, Guid? folderId,
@@ -186,8 +186,7 @@ namespace WB.UI.Designer.Code
                 .Max();
             
             questionnaireDocument.Revision = maxSequenceByQuestionnaire ?? 0;
-            //string questionnaireJson = this.serializer.Serialize(questionnaireDocument);
-            var questionnaireJson = importExportQuestionnaireService.Export(questionnaireDocument);
+            string questionnaireJson = this.serializer.Serialize(questionnaireDocument);
 
             var output = new MemoryStream();
 

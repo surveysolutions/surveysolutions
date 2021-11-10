@@ -22,6 +22,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Resources;
@@ -81,6 +82,7 @@ namespace WB.UI.Designer.Controllers
         private readonly ICategoriesService categoriesService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
         private readonly ISerializer serializer;
+        private readonly IQuestionnaireBackupService questionnaireBackupService;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -99,7 +101,8 @@ namespace WB.UI.Designer.Controllers
             IAttachmentService attachmentService,
             ITranslationsService translationsService,
             ICategoriesService categoriesService,
-            ISerializer serializer)
+            ISerializer serializer,
+            IQuestionnaireBackupService questionnaireBackupService)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -118,6 +121,7 @@ namespace WB.UI.Designer.Controllers
             this.categoriesService = categoriesService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
             this.serializer = serializer;
+            this.questionnaireBackupService = questionnaireBackupService;
         }
 
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]
@@ -397,7 +401,7 @@ namespace WB.UI.Designer.Controllers
         [Authorize(Roles = "Administrator")]
         public FileResult? Backup(Guid id)
         {
-            var stream = this.questionnaireHelper.GetBackupQuestionnaire(id, out string questionnaireFileName);
+            var stream = this.questionnaireBackupService.GetBackupQuestionnaire(id, out string questionnaireFileName);
             
             return stream == null
                     ? null

@@ -5,48 +5,29 @@ using AutoMapper;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Code.ImportExport.Models;
 
 namespace WB.UI.Designer.Code.ImportExport
 {
-    public class ImportExportQuestionnaireService : IImportExportQuestionnaireService
+    public class ImportExportQuestionnaireMapper : IImportExportQuestionnaireMapper
     {
         private readonly IMapper mapper;
 
-        public ImportExportQuestionnaireService(
-            IMapper mapper,
-            ISerializer serializer)
+        public ImportExportQuestionnaireMapper(IMapper mapper)
         {
             this.mapper = mapper;
         }
 
-        private static readonly JsonSerializerSettings jsonSerializerSettings = 
-            new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Auto,
-                NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal,
-                Formatting = Formatting.Indented,
-                Converters = new List<JsonConverter>()
-                {
-                    new Newtonsoft.Json.Converters.StringEnumConverter()
-                },
-                
-            };
-        
-        public string Export(QuestionnaireDocument questionnaireDocument)
+        public Questionnaire Map(QuestionnaireDocument questionnaireDocument)
         {
             try
             {
                 var idToVariableNameMap = GetIdToVariableNameMap(questionnaireDocument);
                 var map = mapper.Map<Models.Questionnaire>(questionnaireDocument, opt => 
                     opt.Items[ImportExportQuestionnaireConstants.MapCollectionName] = idToVariableNameMap);
-                var json = JsonConvert.SerializeObject(map, jsonSerializerSettings);
-                return json;
+                return map;
             }
             catch (Exception e)
             {
@@ -54,6 +35,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 throw;
             }
         }
+
 
         private Dictionary<Guid, string> GetIdToVariableNameMap(QuestionnaireDocument questionnaireDocument)
         {
@@ -65,11 +47,10 @@ namespace WB.UI.Designer.Code.ImportExport
             return map;
         }
 
-        public QuestionnaireDocument Import(string json)
+        public QuestionnaireDocument Map(Questionnaire questionnaire)
         {
             try
             {
-                var questionnaire = JsonConvert.DeserializeObject<Questionnaire>(json);
                 var variableNameToIdMap = GenerateVariableNameToIdMap(questionnaire);
 
                 var questionnaireDocument = mapper.Map<QuestionnaireDocument>(questionnaire, opt => 
@@ -106,11 +87,11 @@ namespace WB.UI.Designer.Code.ImportExport
             foreach (var entity in allEntries)
             {
                 if (entity is IQuestion question && question.VariableName != null && !question.VariableName.IsNullOrEmpty())
-                    map[question.VariableName] = Guid.NewGuid();
+                    map[question.VariableName] = question.Id ?? Guid.NewGuid();
                 else if (entity is Group group && group.VariableName != null && !group.VariableName.IsNullOrEmpty())
-                    map[group.VariableName] = Guid.NewGuid();
+                    map[group.VariableName] = group.Id ?? Guid.NewGuid();
                 else if (entity is Variable variable && variable.VariableName != null && !variable.VariableName.IsNullOrEmpty())
-                    map[variable.VariableName] = Guid.NewGuid();
+                    map[variable.VariableName] = variable.Id ?? Guid.NewGuid();
             }
             return map;
         }

@@ -6,10 +6,19 @@
         "null"
       ],
       "properties": {
-        "AttachmentId": {
-          "type": "string"
-        },
         "Name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "FileName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ContentType": {
           "type": [
             "string",
             "null"
@@ -17,8 +26,9 @@
         }
       },
       "required": [
-        "AttachmentId",
-        "Name"
+        "Name",
+        "FileName",
+        "ContentType"
       ]
     },
     "Categories": {
@@ -28,9 +38,18 @@
       ],
       "properties": {
         "Id": {
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "Name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "FileName": {
           "type": [
             "string",
             "null"
@@ -39,28 +58,11 @@
       },
       "required": [
         "Id",
-        "Name"
+        "Name",
+        "FileName"
       ]
     },
     "CoverPage": {},
-    "Dictionary<Guid, LookupTable>": {
-      "type": [
-        "object",
-        "null"
-      ],
-      "additionalProperties": {
-        "$ref": "#/definitions/LookupTable"
-      }
-    },
-    "Dictionary<Guid, Macro>": {
-      "type": [
-        "object",
-        "null"
-      ],
-      "additionalProperties": {
-        "$ref": "#/definitions/Macro"
-      }
-    },
     "Group": {},
     "List<Attachment>": {
       "type": [
@@ -87,6 +89,24 @@
       ],
       "items": {
         "$ref": "#/definitions/Group"
+      }
+    },
+    "List<LookupTable>": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/LookupTable"
+      }
+    },
+    "List<Macro>": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/Macro"
       }
     },
     "List<Translation>": {
@@ -329,10 +349,13 @@
         "null"
       ],
       "properties": {
-        "Id": {
-          "type": "string"
-        },
         "Name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "FileName": {
           "type": [
             "string",
             "null"
@@ -340,8 +363,8 @@
         }
       },
       "required": [
-        "Id",
-        "Name"
+        "Name",
+        "FileName"
       ]
     }
   },
@@ -357,10 +380,10 @@
       "$ref": "#/definitions/List<Group>"
     },
     "Macros": {
-      "$ref": "#/definitions/Dictionary<Guid, Macro>"
+      "$ref": "#/definitions/List<Macro>"
     },
     "LookupTables": {
-      "$ref": "#/definitions/Dictionary<Guid, LookupTable>"
+      "$ref": "#/definitions/List<LookupTable>"
     },
     "Attachments": {
       "$ref": "#/definitions/List<Attachment>"

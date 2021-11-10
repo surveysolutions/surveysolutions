@@ -72,9 +72,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             catch (Exception exception)
             {
                 this.Success = state.Success.ToString();
-                this.Error = state.Error;
                 this.logger.LogError(exception, "Unexpected error occurred during restore of questionnaire from backup.");
-                this.Error = $"Unexpected error occurred.{Environment.NewLine}{exception}";
+                this.Error = state.Error ?? $"Unexpected error occurred.{Environment.NewLine}{exception}";
                 return Page();
             }
         }

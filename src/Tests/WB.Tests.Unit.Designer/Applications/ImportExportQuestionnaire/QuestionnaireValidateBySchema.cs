@@ -82,11 +82,12 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 cfg.AddProfile(new QuestionnaireAutoMapperProfile());
             }).CreateMapper();
 
-            var importExportQuestionnaireService = new ImportExportQuestionnaireService(mapper, new NewtonJsonSerializer());
-            var json = importExportQuestionnaireService.Export(questionnaireDocument);
+            var importExportQuestionnaireService = new ImportExportQuestionnaireMapper(mapper);
+            var questionnaire = importExportQuestionnaireService.Map(questionnaireDocument);
+            var json = new QuestionnaireSerializer().Serialize(questionnaire);
 
-            var testType = typeof(SchemaTests);
-            var readResourceFile = $"{testType.Namespace}.SchemaExample.json";
+            var testType = typeof(ImportExportQuestionnaireMapper);
+            var readResourceFile = $"{testType.Namespace}.QuestionnaireSchema.json";
 
             await using Stream stream = testType.Assembly.GetManifestResourceStream(readResourceFile);
             using StreamReader reader = new StreamReader(stream);

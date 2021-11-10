@@ -23,7 +23,7 @@ namespace WB.UI.Designer.Code.ImportExport.Models.Question
 
         public string? Instructions { get; set; }
 
-        public bool? HideInstructions { get; set; }
+        public bool HideInstructions { get; set; }
 
         public QuestionScope QuestionScope { get; set; }
 

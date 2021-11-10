@@ -34,6 +34,7 @@ using WB.Infrastructure.Native.Files;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Code.Implementation;
+using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Implementation.Services;
@@ -180,7 +181,8 @@ namespace WB.UI.Designer
 
             services.AddDatabaseStoredExceptional(hostingEnvironment, Configuration);
 
-            services.AddTransient<IQuestionnaireRestoreService, QuestionnaireRestoreService>();
+            services.AddTransient<IQuestionnaireRestoreService, QuestionnaireImportService>();
+            services.AddTransient<IQuestionnaireBackupService, QuestionnaireExportService>();
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
             services.AddSingleton<IProductVersion, ProductVersion>();

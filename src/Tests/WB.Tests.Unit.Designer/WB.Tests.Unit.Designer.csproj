@@ -21,7 +21,6 @@
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutEntityIdColumn.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutVariableColumn.xlsx" />
     <None Remove="Applications\ImportExportQuestionnaire\SchemaExample.json" />
-    <EmbeddedResource Include="Applications\ImportExportQuestionnaire\SchemaExample.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithHtml.xlsx" />

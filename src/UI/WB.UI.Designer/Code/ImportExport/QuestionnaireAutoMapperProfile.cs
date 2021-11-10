@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using AutoMapper;
-using AutoMapper.Extensions.EnumMapping;
-using DocumentFormat.OpenXml.EMMA;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Code.ImportExport.Models;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.UI.Designer.Code.ImportExport.Models.Question;
 using AbstractQuestion = Main.Core.Entities.SubEntities.AbstractQuestion;
 using Answer = Main.Core.Entities.SubEntities.Answer;
@@ -19,7 +15,6 @@ using AreaQuestion = Main.Core.Entities.SubEntities.Question.AreaQuestion;
 using AudioQuestion = Main.Core.Entities.SubEntities.Question.AudioQuestion;
 using DateTimeQuestion = Main.Core.Entities.SubEntities.Question.DateTimeQuestion;
 using Group = Main.Core.Entities.SubEntities.Group;
-using QuestionProperties = WB.Core.SharedKernels.QuestionnaireEntities.QuestionProperties;
 using Documents = WB.Core.SharedKernels.SurveySolutions.Documents;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
 using GpsCoordinateQuestion = Main.Core.Entities.SubEntities.Question.GpsCoordinateQuestion;
@@ -32,7 +27,6 @@ using SingleQuestion = Main.Core.Entities.SubEntities.Question.SingleQuestion;
 using StaticText = Main.Core.Entities.SubEntities.StaticText;
 using TextListQuestion = Main.Core.Entities.SubEntities.Question.TextListQuestion;
 using TextQuestion = Main.Core.Entities.SubEntities.Question.TextQuestion;
-using ValidationCondition = WB.UI.Designer.Code.ImportExport.Models.ValidationCondition;
 
 
 namespace WB.UI.Designer.Code.ImportExport
@@ -42,7 +36,8 @@ namespace WB.UI.Designer.Code.ImportExport
         public QuestionnaireAutoMapperProfile()
         {
             this.CreateMap<QuestionnaireDocument, Questionnaire>()
-                .ForMember(x => x.Id, opts => opts.MapFrom(t => t.PublicKey))
+                .ForMember(x => x.Id, opts => opts.MapFrom(t => 
+                    t.PublicKey))
                 .ForMember(x => x.CoverPage, x => x.MapFrom(s =>
                     s.Children.Count > 0 && s.Children[0].PublicKey == s.CoverPageSectionId
                         ? (Group)s.Children[0]
@@ -71,7 +66,8 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<Models.QuestionnaireMetaInfo, WB.Core.SharedKernels.Questionnaire.Documents.QuestionnaireMetaInfo>();
 
             this.CreateMap<Documents.Attachment, Models.Attachment>();
-            this.CreateMap<Models.Attachment, Documents.Attachment>();
+            this.CreateMap<Models.Attachment, Documents.Attachment>()
+                .ForMember(x => x.AttachmentId, x => x.MapFrom(s => Guid.NewGuid()));
 
             this.CreateMap<Documents.LookupTable, Models.LookupTable>();
             this.CreateMap<Models.LookupTable, Documents.LookupTable>();
@@ -82,10 +78,13 @@ namespace WB.UI.Designer.Code.ImportExport
                 .ConstructUsing((v, context) => new KeyValuePair<Guid, Documents.LookupTable>(Guid.NewGuid(), context.Mapper.Map<Models.LookupTable, Documents.LookupTable>(v)));
 
             this.CreateMap<Documents.Translation, Models.Translation>();
-            this.CreateMap<Models.Translation, Documents.Translation>();
+            this.CreateMap<Models.Translation, Documents.Translation>()
+                .ForMember(x => x.Id, x => x.MapFrom(s => Guid.NewGuid()));
 
             this.CreateMap<Documents.Categories, Models.Categories>();
-            this.CreateMap<Models.Categories, Documents.Categories>();
+            this.CreateMap<Models.Categories, Documents.Categories>()
+                .ForMember(x => x.Id, x => x.MapFrom(s =>
+                     s.Id.HasValue ? s.Id.Value : Guid.NewGuid()));
 
             this.CreateMap<Documents.Macro, Models.Macro>();
             this.CreateMap<Models.Macro, Documents.Macro>();
@@ -95,7 +94,9 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<Models.Macro, KeyValuePair<Guid, Documents.Macro>>()
                 .ConstructUsing((v, context) => new KeyValuePair<Guid, Documents.Macro>(Guid.NewGuid(), context.Mapper.Map<Models.Macro, Documents.Macro>(v)));
 
-            this.CreateMap<IComposite, QuestionnaireEntity>();
+            this.CreateMap<IComposite, QuestionnaireEntity>()
+                .ForMember(s => s.Id, opt => opt.MapFrom(t => 
+                    t.PublicKey));
             this.CreateMap<IQuestionnaireEntity, IComposite>();
 
             this.CreateMap<Group, Models.Group>()
@@ -104,7 +105,7 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<Models.Group, Group>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
                 .ForMember(x => x.PublicKey, x => x.MapFrom((s, t, value, context) =>
-                    GetIdOrGenerate(s.VariableName, context)));
+                    GetIdOrGenerate(s.VariableName, s.Id, context)));
 
             this.CreateMap<Group, Models.Roster>()
                 .IncludeBase<Group, Models.Group>()
@@ -117,7 +118,8 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<Models.Roster, Group>()
                 .IncludeBase<Models.Group, Group>()
                 .ForMember(s => s.IsRoster, opt => opt.MapFrom(t => true))
-                .ForMember(x => x.CustomRosterTitle, x => x.MapFrom(s => true))
+                .ForMember(x => x.CustomRosterTitle, x => x.MapFrom(s => 
+                    s.DisplayMode != RosterDisplayMode.Table && s.DisplayMode != RosterDisplayMode.Matrix))
                 .ForMember(x => x.RosterSizeQuestionId, x => x.MapFrom((s, t, value, context) =>
                     GetId(s.RosterSizeQuestion, context)))
                 .ForMember(x => x.RosterTitleQuestionId, x => x.MapFrom((s, t, value, context) =>
@@ -128,7 +130,7 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<Models.CoverPage, Group>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom((s, d, value, context) => 
-                    GetIdOrGenerate(s.VariableName, context)));
+                    GetIdOrGenerate(s.VariableName, s.Id, context)));
 
             this.CreateMap<Documents.FixedRosterTitle, Models.FixedRosterTitle>();
             this.CreateMap<Models.FixedRosterTitle, Documents.FixedRosterTitle>()
@@ -142,8 +144,9 @@ namespace WB.UI.Designer.Code.ImportExport
                 .IncludeBase<IComposite, QuestionnaireEntity>();
             this.CreateMap<Models.StaticText, StaticText>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
-                //.ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
-                .ConstructUsing(s => new StaticText(Guid.NewGuid(), s.Text, s.ConditionExpression ?? String.Empty, s.HideIfDisabled, null, s.AttachmentName, null));
+                .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => 
+                    t.Id.HasValue ? t.Id.Value : Guid.NewGuid()))
+                .ConstructUsing(s => new StaticText(Guid.Empty, s.Text, s.ConditionExpression ?? String.Empty, s.HideIfDisabled, null, s.AttachmentName, null));
 
             this.CreateMap<QuestionnaireEntities.Variable, Models.Variable>()
                 .IncludeBase<IComposite, QuestionnaireEntity>()
@@ -151,7 +154,7 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<Models.Variable, QuestionnaireEntities.Variable>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom((s, d, value, context) => 
-                    GetIdOrGenerate(s.VariableName, context)))
+                    GetIdOrGenerate(s.VariableName, s.Id, context)))
                 .ForMember(s => s.Name, opt => opt.MapFrom(t => t.VariableName))
                 .ForMember(s => s.Type, o => o.MapFrom(d => d.VariableType))
                 .ConstructUsing((v, context) => new QuestionnaireEntities.Variable(Guid.Empty, null, null));
@@ -168,8 +171,8 @@ namespace WB.UI.Designer.Code.ImportExport
                 .ForMember(aq => aq.StataExportCaption, aq=> 
                     aq.MapFrom(x => x.VariableName))
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom((s, d, value, context) => 
-                    GetIdOrGenerate(s.VariableName, context)))
-                .AfterMap((s, d) => d.Properties!.HideInstructions = s.HideInstructions ?? false);
+                    GetIdOrGenerate(s.VariableName, s.Id, context)))
+                .AfterMap((s, d) => d.Properties!.HideInstructions = s.HideInstructions);
 
             this.CreateMap<TextQuestion, Models.Question.TextQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
@@ -331,8 +334,10 @@ namespace WB.UI.Designer.Code.ImportExport
             return varName;
         }
 
-        private Guid GetIdOrGenerate(string? variableName, ResolutionContext context)
+        private Guid GetIdOrGenerate(string? variableName, Guid? id, ResolutionContext context)
         {
+            if (id.HasValue)
+                return id.Value;
             if (variableName == null || variableName.Trim().IsNullOrEmpty())
                 return Guid.NewGuid();
             return ((Dictionary<string, Guid>)context.Items[ImportExportQuestionnaireConstants.MapCollectionName])[variableName];

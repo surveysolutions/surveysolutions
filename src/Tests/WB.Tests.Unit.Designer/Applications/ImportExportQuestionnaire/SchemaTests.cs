@@ -58,8 +58,9 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 cfg.AddProfile(new QuestionnaireAutoMapperProfile());
             }).CreateMapper();
 
-            var importExportQuestionnaireService = new ImportExportQuestionnaireService(mapper, new NewtonJsonSerializer());
-            var json = importExportQuestionnaireService.Export(questionnaireDocument);
+            var importExportQuestionnaireService = new ImportExportQuestionnaireMapper(mapper);
+            var questionnaire = importExportQuestionnaireService.Map(questionnaireDocument);
+            var json = new QuestionnaireSerializer().Serialize(questionnaire);
 
             var testType = typeof(SchemaTests);
             var readResourceFile = $"{testType.Namespace}.SchemaExample.json";

@@ -8,7 +8,7 @@ namespace WB.UI.Designer.Code.ImportExport.Models
     {
         string? VariableName { get; set; } 
         string? Instructions { get; set; }
-        bool? HideInstructions { get; set; }
+        bool HideInstructions { get; set; }
         string? QuestionText { get; set; }
         QuestionScope QuestionScope { get; set; }
         string? VariableLabel { get; set; }

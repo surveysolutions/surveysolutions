@@ -25,7 +25,7 @@ using WB.UI.Designer.Code.ImportExport;
 
 namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 {
-    [TestOf(typeof(ImportExportQuestionnaireService))]
+    [TestOf(typeof(ImportExportQuestionnaireMapper))]
     public class ImportExportTests
     {
         [Test]
@@ -91,7 +91,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             questionnaireDocument.CoverPageSectionId = coverPageSectionId;
             questionnaireDocument.Children = new List<IComposite>()
             {
-                new Group() { PublicKey = coverPageSectionId }
+                new Group() { PublicKey = coverPageSectionId },
+                new Group()
             }.ToReadOnlyCollection();
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
@@ -108,7 +109,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             questionnaireDocument.CoverPageSectionId = coverPageSectionId;
             questionnaireDocument.Children = new List<IComposite>()
             {
-                new Group() { PublicKey = coverPageSectionId }
+                new Group() { PublicKey = coverPageSectionId },
+                new Group(),
             }.ToReadOnlyCollection();
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
@@ -274,8 +276,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
-            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions(mi => mi.Name == nameof(Translation.Id)));
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions(mi => mi.Name == nameof(Translation.Id)));
             errors.Count.Should().Be(0);
         }
         
@@ -976,19 +978,21 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 cfg.AddProfile(new QuestionnaireAutoMapperProfile());
             }).CreateMapper();
 
-            var service = new ImportExportQuestionnaireService(mapper, new NewtonJsonSerializer());
-            var json = service.Export(questionnaireDocument);
+            var service = new ImportExportQuestionnaireMapper(mapper);
+            var questionnaire = service.Map(questionnaireDocument);
+            var json = new QuestionnaireSerializer().Serialize(questionnaire);
 
             errors = ValidateBySchema(json);
             
-            var newDocument = service.Import(json);
+            var newQuestionnaire = new QuestionnaireSerializer().Deserialize(json);
+            var newDocument = service.Map(newQuestionnaire);
             return newDocument;
         }
 
         private IList<string> ValidateBySchema(string json)
         {
-            var testType = typeof(ImportExportTests);
-            var readResourceFile = $"{testType.Namespace}.SchemaExample.json";
+            var testType = typeof(ImportExportQuestionnaireMapper);
+            var readResourceFile = $"{testType.Namespace}.QuestionnaireSchema.json";
 
             using Stream stream = testType.Assembly.GetManifestResourceStream(readResourceFile);
             using StreamReader reader = new StreamReader(stream);
@@ -1001,7 +1005,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             return errors.Select(e => e.Message).ToList();
         }
         
-        private static Func<EquivalencyAssertionOptions<QuestionnaireDocument>, EquivalencyAssertionOptions<QuestionnaireDocument>> CompareOptions()
+        private static Func<EquivalencyAssertionOptions<QuestionnaireDocument>, EquivalencyAssertionOptions<QuestionnaireDocument>> CompareOptions(
+            Func<IMemberInfo, bool> ignoreFunc = null)
         {
             return opt => opt
                     .AllowingInfiniteRecursion()
@@ -1019,12 +1024,16 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                     .Excluding(q => q.CreationDate)
                     .Excluding(q => q.LastEntryDate)
                     .Excluding(q => q.CoverPageSectionId)
-                    .Excluding((IMemberInfo mi) => mi.Name == nameof(IComposite.PublicKey))
+                    //.Excluding((IMemberInfo mi) => mi.Name == nameof(IComposite.PublicKey))
                     .Excluding((IMemberInfo mi) => mi.Name == nameof(Group.RosterSizeQuestionId))
                     .Excluding((IMemberInfo mi) => mi.Name == nameof(Group.RosterTitleQuestionId))
                     .Excluding((IMemberInfo mi) => mi.Name == nameof(ICategoricalQuestion.CascadeFromQuestionId))
                     .Excluding((IMemberInfo mi) => mi.Name == nameof(ICategoricalQuestion.LinkedToQuestionId))
                     .Excluding((IMemberInfo mi) => mi.Name == nameof(ICategoricalQuestion.LinkedToRosterId))
+                    //.Excluding((IMemberInfo mi) => mi.Name == nameof(Translation.Id))
+                    //.Excluding((IMemberInfo mi) => mi.Name == nameof(Categories.Id))
+                    .Excluding((IMemberInfo mi) => mi.Name == nameof(Attachment.AttachmentId))
+                    .Excluding((IMemberInfo mi) => ignoreFunc != null && ignoreFunc.Invoke(mi))
                 ;
         }
     }

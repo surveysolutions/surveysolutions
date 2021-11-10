@@ -21,12 +21,12 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
-        private readonly IQuestionnaireHelper questionnaireHelper;
-        public HQQuestionnareBackupController(IQuestionnaireHelper questionnaireHelper, 
+        private readonly IQuestionnaireBackupService questionnaireBackupService;
+        public HQQuestionnareBackupController(IQuestionnaireBackupService questionnaireBackupService, 
             IQuestionnaireViewFactory questionnaireViewFactory,
             IVerificationErrorsMapper verificationErrorsMapper)
         {
-            this.questionnaireHelper = questionnaireHelper;
+            this.questionnaireBackupService = questionnaireBackupService;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.verificationErrorsMapper = verificationErrorsMapper;
         }
@@ -106,7 +106,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 return Forbid();
             }
 
-            var stream = this.questionnaireHelper.GetBackupQuestionnaire(questionnaireId, out string questionnaireFileName);
+            var stream = this.questionnaireBackupService.GetBackupQuestionnaire(questionnaireId, out string questionnaireFileName);
             if (stream == null) return NotFound();
 
             return File(stream, "application/zip", $"{questionnaireFileName}.zip");
