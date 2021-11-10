@@ -108,7 +108,7 @@
     "Attachment": {
       "type": "object",
       "properties": {
-        "Name": { "type": "string" },
+        "Name": { "type": "string", "maxLength": 32 },
         "FileName": { "type": "string" },
         "ContentType": { "type": "string" }
       },
@@ -138,7 +138,7 @@
     "Categories": {
       "type": "object",
       "properties": {
-        "Name": { "type": "string" },
+        "Name": { "type": "string", "maxLength": 32 },
         "FileName": { "type": "string" },
         "Id": { "$ref": "#/definitions/GUID" }
       },
@@ -338,7 +338,7 @@
     "LookupTable": {
       "type": "object",
       "properties": {
-        "TableName": {"type": "string"},
+        "TableName": {"type": "string", "maxLength": 32 },
         "FileName": {"type": "string"}
       },
       "additionalProperties": false,
@@ -348,7 +348,7 @@
     "Macro": {
       "type": "object",
       "properties": {
-        "Name": { "type": "string" },
+        "Name": { "type": "string", "maxLength": 32 },
         "Content": { "type": "string" },
         "Description": { "type": "string" }
       },
@@ -563,7 +563,7 @@
     "Translation": {
       "type": "object",
       "properties": {
-        "Name": { "type": "string" },
+        "Name": { "type": "string", "maxLength": 32 },
         "FileName": { "type": "string" }
       },
       "additionalProperties": false,
@@ -654,7 +654,7 @@
         "VersionNotes": { "type": [ "string", "null" ] },
         "KindOfData": { "type": [ "string", "null" ] },
         "Country": { "type": [ "string", "null" ] },
-        "Year": { "type": [ "integer", "null" ], "format": "int32" },
+        "Year": { "type": [ "integer", "null" ], "format": "int32", "maxLength": 4 },
         "Language": { "type": [ "string", "null" ] },
         "Coverage": { "type": [ "string", "null" ] },
         "Universe": { "type": [ "string", "null" ] },
