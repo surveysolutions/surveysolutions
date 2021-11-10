@@ -11,13 +11,14 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.DataAccess;
+using WB.Core.BoundedContexts.Designer.ImportExport;
+using WB.Core.BoundedContexts.Designer.ImportExport.Models;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.UI.Designer.Code.ImportExport.Models;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Services.Restore;
 
@@ -30,6 +31,7 @@ namespace WB.UI.Designer.Code.ImportExport
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
+        private readonly ITranslationImportExportService translationImportExportService;
         private readonly DesignerDbContext dbContext;
         private readonly ICategoriesService categoriesService;
         private readonly IImportExportQuestionnaireMapper importExportQuestionnaireMapper;
@@ -42,6 +44,7 @@ namespace WB.UI.Designer.Code.ImportExport
             ILookupTableService lookupTableService,
             IAttachmentService attachmentService, 
             ITranslationsService translationsService, 
+            ITranslationImportExportService translationImportExportService, 
             DesignerDbContext dbContext,
             ICategoriesService categoriesService, 
             IImportExportQuestionnaireMapper importExportQuestionnaireMapper,
@@ -53,6 +56,7 @@ namespace WB.UI.Designer.Code.ImportExport
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
+            this.translationImportExportService = translationImportExportService;
             this.dbContext = dbContext;
             this.categoriesService = categoriesService;
             this.importExportQuestionnaireMapper = importExportQuestionnaireMapper;
@@ -197,8 +201,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 bool isTranslationEntry =
                     zipEntryPathChunks.Length == 2 &&
                     string.Equals(zipEntryPathChunks[0], "translations", StringComparison.CurrentCultureIgnoreCase) &&
-                    (".xlsx".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase) ||
-                     ".ods".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase));
+                    ".json".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase);
 
                 bool isCollectionsEntry =
                     zipEntryPathChunks.Length == 2 &&
@@ -245,20 +248,14 @@ namespace WB.UI.Designer.Code.ImportExport
                 else if (isTranslationEntry)
                 {
                     var fileName = zipEntryPathChunks[1];
-                    byte[]? excelContent;
-
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        zipStream.CopyTo(memoryStream);
-                        excelContent = memoryStream.ToArray();
-                    }
+                    string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
 
                     var translationInfo = questionnaire.Translations.Single(a => a.FileName == fileName);
                     var translation = questionnaireDocument.Translations.Single(s =>
                         s.Name == translationInfo.Name);
                     var translationId = translation.Id;
 
-                    this.translationsService.Store(questionnaireId, translationId, excelContent);
+                    this.translationImportExportService.StoreTranslationsFromJson(questionnaireDocument, translationId, textContent);
 
                     state.Success.AppendLine($"[{zipEntry.FileName}].");
                     state.Success.AppendLine($"    Restored translation '{translationId}' for questionnaire '{questionnaireId.FormatGuid()}'.");
@@ -286,6 +283,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FileName}' during questionnaire restore from backup.");
                 state.Error = $"Error processing zip file entry '{zipEntry.FileName}'.{Environment.NewLine}{exception}";
                 logger.LogError(state.Error);
+                throw;
             }
         }
     }

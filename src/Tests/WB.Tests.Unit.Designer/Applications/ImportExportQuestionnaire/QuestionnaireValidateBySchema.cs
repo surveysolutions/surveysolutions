@@ -13,9 +13,10 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.ImportExport;
+using WB.Core.BoundedContexts.Designer.ImportExport.Models;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Code.ImportExport;
-using WB.UI.Designer.Code.ImportExport.Models;
 
 namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 {

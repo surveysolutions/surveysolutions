@@ -12,9 +12,10 @@ using NJsonSchema;
 using NJsonSchema.Generation;
 using NJsonSchema.Validation;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.ImportExport;
+using WB.Core.BoundedContexts.Designer.ImportExport.Models;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Code.ImportExport;
-using WB.UI.Designer.Code.ImportExport.Models;
 
 namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 {

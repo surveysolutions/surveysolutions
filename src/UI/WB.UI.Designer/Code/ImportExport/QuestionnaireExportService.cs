@@ -5,6 +5,7 @@ using System.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.DataAccess;
+using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -24,12 +25,10 @@ namespace WB.UI.Designer.Code.ImportExport
 
     public class QuestionnaireExportService : IQuestionnaireBackupService
     {
-        private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
-        private readonly ISerializer serializer;
         private readonly IAttachmentService attachmentService;
         private readonly ILookupTableService lookupTableService;
-        private readonly ITranslationsService translationsService;
+        private readonly ITranslationImportExportService translationsService;
         private readonly ICategoriesService categoriesService;
         private readonly ILogger<QuestionnaireExportService> logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -38,12 +37,10 @@ namespace WB.UI.Designer.Code.ImportExport
         private readonly IQuestionnaireSerializer questionnaireSerializer;
 
         public QuestionnaireExportService(
-            IQuestionnaireListViewFactory viewFactory,
             IQuestionnaireViewFactory questionnaireViewFactory, 
-            ISerializer serializer, 
             IAttachmentService attachmentService, 
             ILookupTableService lookupTableService, 
-            ITranslationsService translationsService, 
+            ITranslationImportExportService translationsService, 
             ICategoriesService categoriesService, 
             ILogger<QuestionnaireExportService> logger, 
             IFileSystemAccessor fileSystemAccessor,
@@ -51,9 +48,7 @@ namespace WB.UI.Designer.Code.ImportExport
             IImportExportQuestionnaireMapper importExportQuestionnaireMapper,
             IQuestionnaireSerializer questionnaireSerializer)
         {
-            this.viewFactory = viewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.serializer = serializer;
             this.attachmentService = attachmentService;
             this.lookupTableService = lookupTableService;
             this.translationsService = translationsService;
@@ -135,9 +130,9 @@ namespace WB.UI.Designer.Code.ImportExport
 
             foreach (var translation in questionnaireDocument.Translations)
             {
-                TranslationFile excelFile = this.translationsService.GetAsExcelFile(id, translation.Id);
-                var fileName = translation.Id.FormatGuid() + ".xlsx";
-                zipStream.PutFileEntry($"Translations/{fileName}", excelFile.ContentAsExcelFile);
+                var json = this.translationsService.GetTranslationsJson(questionnaireDocument, translation.Id);
+                var fileName = translation.Id.FormatGuid() + ".json";
+                zipStream.PutTextFileEntry($"Translations/{fileName}", json);
                 questionnaire.Translations.Single(t => t.Name == translation.Name).FileName = fileName;
             }
 

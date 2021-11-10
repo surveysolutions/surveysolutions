@@ -2,6 +2,7 @@
 using AutoMapper;
 using Serilog.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Classifications;
+using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -41,6 +42,7 @@ namespace WB.UI.Designer.Modules
             
             registry.Bind<IImportExportQuestionnaireMapper, ImportExportQuestionnaireMapper>();   
             registry.Bind<IQuestionnaireSerializer, QuestionnaireSerializer>();   
+            registry.Bind<ITranslationImportExportService, TranslationImportExportService>();   
             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {
