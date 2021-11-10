@@ -18,6 +18,7 @@ using Group = Main.Core.Entities.SubEntities.Group;
 using Documents = WB.Core.SharedKernels.SurveySolutions.Documents;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
 using GpsCoordinateQuestion = Main.Core.Entities.SubEntities.Question.GpsCoordinateQuestion;
+using IQuestion = Main.Core.Entities.SubEntities.IQuestion;
 using IQuestionnaireEntity = WB.UI.Designer.Code.ImportExport.Models.IQuestionnaireEntity;
 using NumericQuestion = Main.Core.Entities.SubEntities.Question.NumericQuestion;
 using QRBarcodeQuestion = Main.Core.Entities.SubEntities.Question.QRBarcodeQuestion;
@@ -41,7 +42,13 @@ namespace WB.UI.Designer.Code.ImportExport
                 .ForMember(x => x.CoverPage, x => x.MapFrom(s =>
                     s.Children.Count > 0 && s.Children[0].PublicKey == s.CoverPageSectionId
                         ? (Group)s.Children[0]
-                        : null
+                        : new Group("Cover", 
+                            ((IComposite)s).TreeToEnumerableDepthFirst(c => c.Children)
+                            .Where(e => IsIdentified(e))
+                            .ToList())
+                        {
+                            PublicKey = s.CoverPageSectionId,
+                        }
                 ))
                 .ForMember(x => x.Children, x => x.MapFrom(s =>
                     s.Children.Count > 0 && s.Children[0].PublicKey == s.CoverPageSectionId
@@ -50,10 +57,8 @@ namespace WB.UI.Designer.Code.ImportExport
             this.CreateMap<Questionnaire, QuestionnaireDocument>()
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
                 .ForMember(s => s.Id, opt => opt.MapFrom(t => t.Id.FormatGuid()))
-                //.ForMember(s => s.CoverPageSectionId, opt => opt.MapFrom(t => 
-                //    t.CoverPage != null ? t.CoverPage.Id : Guid.NewGuid()))
                 .ForMember(s => s.Children, opt => opt.MapFrom(t =>
-                    t.CoverPage != null ? Enumerable.Concat<QuestionnaireEntity>(t.CoverPage.ToEnumerable(), t.Children) : t.Children))
+                    Enumerable.Concat<QuestionnaireEntity>((t.CoverPage != null ? t.CoverPage : new CoverPage() { Id = Guid.NewGuid(), Title = "Cover" }).ToEnumerable(), t.Children)))
                 .AfterMap((s, d, context) =>
                 {
                     if (s.CoverPage != null)
@@ -101,6 +106,8 @@ namespace WB.UI.Designer.Code.ImportExport
 
             this.CreateMap<Group, Models.Group>()
                 .IncludeBase<IComposite, QuestionnaireEntity>()
+                .ForMember(x => x.Children, x => x.MapFrom(s => 
+                    s.Children.Where(e => !IsIdentified(e))))
                 .ConstructUsing((g, context) => g.IsRoster ? context.Mapper.Map<Roster>(g) : new Models.Group());
             this.CreateMap<Models.Group, Group>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
@@ -348,6 +355,13 @@ namespace WB.UI.Designer.Code.ImportExport
             if (variableName == null || variableName.Trim().IsNullOrEmpty())
                 return null;
             return ((Dictionary<string, Guid>)context.Items[ImportExportQuestionnaireConstants.MapCollectionName])[variableName];
+        }
+
+        private bool IsIdentified(IComposite composite)
+        {
+            if (composite is IQuestion question)
+                return question.Featured;
+            return false;
         }
     }
 }
