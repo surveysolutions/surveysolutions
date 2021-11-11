@@ -100,6 +100,12 @@ $width-right-menu-small: 380px;
 				    margin-bottom:-1px;
 				    padding: 0 5px;
 				}
+                .icon{
+                    width: 1em;
+                    height: 1em;
+                    display: inline-block;
+                    vertical-align: -0.125em;
+                }
 			}
 			&.dropdown > a{
 				padding-right: 25px;                
