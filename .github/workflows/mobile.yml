@@ -1,0 +1,33 @@
+name: mobile
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        task: [AndroidInterviewer, AndroidInterviewerWithMaps, AndroidSupervisor]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET Core SDK 5.0.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.3
+
+    - name: Build
+      run: .\.build.ps1 ${{ matrix.task }} -BuildNumber ${{ github.run_number }} `
+        -KeystoreAlias wbcapipublish
+       
+    - name: Publish
+      uses: actions/upload-artifact@v2
+      with:
+        path: ${{ github.workspace }}/artifacts
