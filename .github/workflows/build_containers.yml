@@ -8,14 +8,14 @@ env:
 
 jobs:
   tests:
-    uses: surveysolutions/build/.github/workflows/tests.yml@master
+    uses: surveysolutions/surveysolutions/.github/workflows/tests.yml@master
     with:
       runs_on: 'ubuntu-latest'
       run_analysis: false
 
   build-mobile:
     needs: [tests]
-    uses: surveysolutions/build/.github/workflows/mobile.yml@master
+    uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
 
   build-and-push:
     needs: [build-mobile]
