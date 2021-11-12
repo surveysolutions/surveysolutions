@@ -12,6 +12,7 @@ jobs:
     with:
       runs_on: 'ubuntu-latest'
       run_analysis: false
+    secrets:
       sonar-token: ${{ secrets.SONAR_TOKEN }}
 
   build-mobile:
