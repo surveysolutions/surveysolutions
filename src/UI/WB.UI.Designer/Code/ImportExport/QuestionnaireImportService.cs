@@ -37,6 +37,7 @@ namespace WB.UI.Designer.Code.ImportExport
         private readonly IImportExportQuestionnaireMapper importExportQuestionnaireMapper;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IQuestionnaireSerializer questionnaireSerializer;
+        private readonly ICategoriesImportExportService categoriesImportExportService;
 
 
         public QuestionnaireImportService(ILogger<QuestionnaireImportService> logger,
@@ -49,7 +50,8 @@ namespace WB.UI.Designer.Code.ImportExport
             ICategoriesService categoriesService, 
             IImportExportQuestionnaireMapper importExportQuestionnaireMapper,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IQuestionnaireSerializer questionnaireSerializer)
+            IQuestionnaireSerializer questionnaireSerializer,
+            ICategoriesImportExportService categoriesImportExportService)
         {
             this.logger = logger;
             this.commandService = commandService;
@@ -62,6 +64,7 @@ namespace WB.UI.Designer.Code.ImportExport
             this.importExportQuestionnaireMapper = importExportQuestionnaireMapper;
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireSerializer = questionnaireSerializer;
+            this.categoriesImportExportService = categoriesImportExportService;
         }
 
         public Guid RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state, bool createNew)
@@ -89,9 +92,6 @@ namespace WB.UI.Designer.Code.ImportExport
             var command = new ImportQuestionnaire(responsibleId, questionnaireDocument);
             this.commandService.Execute(command);
 
-            dbContext.SaveChanges();
-
-            
             zipStream.Seek(0, SeekOrigin.Begin);
             ZipEntry zipEntry;
             while ((zipEntry = zipStream.GetNextEntry()) != null)
@@ -100,7 +100,6 @@ namespace WB.UI.Designer.Code.ImportExport
             }
 
             questionnaireStorage.Store(questionnaireDocument, questionnaireDocument.Id);
-            dbContext.SaveChanges();
 
             return questionnaireDocument.PublicKey;
         }
@@ -203,11 +202,10 @@ namespace WB.UI.Designer.Code.ImportExport
                     string.Equals(zipEntryPathChunks[0], "translations", StringComparison.CurrentCultureIgnoreCase) &&
                     ".json".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase);
 
-                bool isCollectionsEntry =
+                bool isCategoriesEntry =
                     zipEntryPathChunks.Length == 2 &&
                     string.Equals(zipEntryPathChunks[0], "categories", StringComparison.CurrentCultureIgnoreCase) &&
-                    (".xlsx".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase) ||
-                     ".ods".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase));
+                    ".json".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase);
 
                 if (isAttachmentEntry)
                 {
@@ -261,22 +259,22 @@ namespace WB.UI.Designer.Code.ImportExport
                     state.Success.AppendLine($"    Restored translation '{translationId}' for questionnaire '{questionnaireId.FormatGuid()}'.");
                     state.RestoredEntitiesCount++;
                 }
-                else if (isCollectionsEntry)
+                else if (isCategoriesEntry)
                 {
                     var fileName = zipEntryPathChunks[1];
+                    string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+
                     var categoriesInfo = questionnaire.Categories.Single(a => a.FileName == fileName);
                     var categories = questionnaireDocument.Categories.Single(s =>
                         s.Name == categoriesInfo.Name);
                     var collectionsId = categories.Id;
 
-                    this.categoriesService.Store(questionnaireId, collectionsId, zipStream, CategoriesFileType.Excel);
+                    this.categoriesImportExportService.StoreCategoriesFromJson(questionnaireDocument, collectionsId, textContent);
 
                     state.Success.AppendLine($"[{zipEntry.FileName}].");
                     state.Success.AppendLine($"    Restored categories '{collectionsId}' for questionnaire '{questionnaireId.FormatGuid()}'.");
                     state.RestoredEntitiesCount++;
                 }
-
-                dbContext.SaveChanges();
             }
             catch (Exception exception)
             {

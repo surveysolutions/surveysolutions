@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
     {
         string Serialize(Questionnaire questionnaire);
         Questionnaire Deserialize(string json);
-        string SerializeTranslations(List<TranslationItem> translationItems);
-        List<TranslationItem> DeserializeTranslations(string json);
+        string Serialize<T>(List<T> items);
+        List<T> Deserialize<T>(string json);
     }
 }

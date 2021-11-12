@@ -21,14 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
 {
     public class TranslationImportExportService : ITranslationImportExportService
     {
-        private readonly TranslationType[] translationTypesWithIndexes =
-        {
-            TranslationType.FixedRosterTitle,
-            TranslationType.OptionTitle,
-            TranslationType.ValidationMessage,
-            TranslationType.SpecialValue
-        };
-        
         private readonly DesignerDbContext dbContext;
         private readonly IMapper mapper;
         private readonly IQuestionnaireSerializer questionnaireSerializer;
@@ -60,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                     TranslationIndex = t.TranslationIndex,
                     EntityVariableName = questionnaire.Find<IComposite>(t.QuestionnaireEntityId)?.GetVariable()
                 }).ToList();
-            var json = questionnaireSerializer.SerializeTranslations(items);
+            var json = questionnaireSerializer.Serialize(items);
             return json;
         }
 
@@ -72,7 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
 
             try
             {
-                var items = questionnaireSerializer.DeserializeTranslations(json);
+                var items = questionnaireSerializer.Deserialize<TranslationItem>(json);
             
                 Dictionary<Guid, bool> idsOfAllQuestionnaireEntities = questionnaire.Children.TreeToEnumerable(x => x.Children)
                     .ToDictionary(composite => composite.PublicKey, x => x is Group);

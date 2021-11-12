@@ -120,8 +120,4 @@
       <AutoGen>True</AutoGen>
     </Compile>
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="ImportExport\QuestionnaireSchema.json" />
-  </ItemGroup>
 </Project>

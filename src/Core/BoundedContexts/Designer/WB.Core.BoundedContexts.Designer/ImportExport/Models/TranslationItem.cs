@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models
 
         public string? Value { get; set; }
     }
-    
+
     public enum TranslationType
     {
         Title = 1,

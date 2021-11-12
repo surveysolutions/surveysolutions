@@ -29,7 +29,7 @@ namespace WB.UI.Designer.Code.ImportExport
         private readonly IAttachmentService attachmentService;
         private readonly ILookupTableService lookupTableService;
         private readonly ITranslationImportExportService translationsService;
-        private readonly ICategoriesService categoriesService;
+        private readonly ICategoriesImportExportService categoriesService;
         private readonly ILogger<QuestionnaireExportService> logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly DesignerDbContext questionnaireChangeItemStorage;
@@ -41,7 +41,7 @@ namespace WB.UI.Designer.Code.ImportExport
             IAttachmentService attachmentService, 
             ILookupTableService lookupTableService, 
             ITranslationImportExportService translationsService, 
-            ICategoriesService categoriesService, 
+            ICategoriesImportExportService categoriesService, 
             ILogger<QuestionnaireExportService> logger, 
             IFileSystemAccessor fileSystemAccessor,
             DesignerDbContext questionnaireChangeItemStorage,
@@ -138,12 +138,9 @@ namespace WB.UI.Designer.Code.ImportExport
 
             foreach (var categories in questionnaireDocument.Categories)
             {
-                var excelFile = this.categoriesService.GetAsExcelFile(id, categories.Id);
-                if (excelFile?.Content == null)
-                    continue;
-                // var fileName = categories.Name;
-                var fileName = categories.Id.FormatGuid() + ".xlsx";
-                zipStream.PutFileEntry($"Categories/{fileName}", excelFile.Content);
+                var json = this.categoriesService.GetCategoriesJson(questionnaireDocument, categories.Id);
+                var fileName = categories.Id.FormatGuid() + ".json";
+                zipStream.PutTextFileEntry($"Categories/{fileName}", json);
                 questionnaire.Categories.Single(c => c.Name == categories.Name).FileName = fileName;
             }
 

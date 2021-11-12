@@ -43,6 +43,7 @@ namespace WB.UI.Designer.Modules
             registry.Bind<IImportExportQuestionnaireMapper, ImportExportQuestionnaireMapper>();   
             registry.Bind<IQuestionnaireSerializer, QuestionnaireSerializer>();   
             registry.Bind<ITranslationImportExportService, TranslationImportExportService>();   
+            registry.Bind<ICategoriesImportExportService, CategoriesImportExportService>();   
             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {

@@ -32,16 +32,16 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             return questionnaire;
         }
 
-        public string SerializeTranslations(List<TranslationItem> translationItems)
+        public string Serialize<T>(List<T> items)
         {
-            var json = JsonConvert.SerializeObject(translationItems, jsonSerializerSettings);
+            var json = JsonConvert.SerializeObject(items, jsonSerializerSettings);
             return json;
         }
         
-        public List<TranslationItem> DeserializeTranslations(string json)
+        public List<T> Deserialize<T>(string json)
         {
-            var questionnaire = JsonConvert.DeserializeObject<List<TranslationItem>>(json);
-            return questionnaire;
+            var list = JsonConvert.DeserializeObject<List<T>>(json);
+            return list;
         }
     }
 }
