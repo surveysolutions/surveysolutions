@@ -16,6 +16,8 @@ jobs:
   build-mobile:
     needs: [tests]
     uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
+    with:
+      sonar-token: ${{ secrets.SONAR_TOKEN }}
 
   build-and-push:
     needs: [build-mobile]
