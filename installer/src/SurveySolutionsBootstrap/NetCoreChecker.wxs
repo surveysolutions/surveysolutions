@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+  <Fragment>
+    <Variable Name="WindowsDotNetHosting501InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\5.0.2" />
+    <util:DirectorySearch Id="WindowsDotNetHosting501Installed" Path="[WindowsDotNetHosting501InstallDir]" Variable="WindowsDotNetHosting501Installed" Result="exists" />
+
+    <WixVariable Id="WindowsDotNetHosting501InstalledDetectCondition" Value="WindowsDotNetHosting501Installed" Overridable="yes" />
+    <WixVariable Id="WindowsDotNetHosting501InstalledInstallCondition" Value="" Overridable="yes" />
+
+    <PackageGroup Id="WindowsDotNetHosting501">
+      <ExePackage
+          Name="dotnet-hosting-5.0.2-win.exe"
+          InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
+          RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
+          UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
+          PerMachine="yes"
+          DetectCondition="!(wix.WindowsDotNetHosting501InstalledDetectCondition)"
+          InstallCondition="!(wix.WindowsDotNetHosting501InstalledInstallCondition)"
+          Vital="yes"
+          Permanent="yes"
+          Protocol="burn"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/43ea9d7a-39c9-467a-83e6-548b3faf832d/5e7d573d9c4f40d0c1192aa2319f07c5/dotnet-hosting-5.0.2-win.exe"
+          LogPathVariable="WindowsDotNetHosting501Log"
+          Compressed="no">
+        <!-- heat.exe payload "dotnet-hosting-3.1.1-win.exe" -o "dotnet-hosting.wxs" -->
+        <RemotePayload CertificatePublicKey="3756E9BBF4461DCD0AA68E0D1FCFFA9CEA47AC18" 
+                       CertificateThumbprint="2485A7AFA98E178CB8F30C9838346B514AEA4769" 
+                       Description="Microsoft .NET Core 5.0.2 - Windows Server Hosting" 
+                       Hash="45F08415DC91EF20080DE770193218FECD5BC27A" 
+                       ProductName="Microsoft .NET Core 5.0.2 - Windows Server Hosting" 
+                       Size="66656416" Version="5.0.2.20613" />
+      </ExePackage>
+    </PackageGroup>
+  </Fragment>
+</Wix>

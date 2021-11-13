@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.11</ProductVersion>
+    <ProjectGuid>c575970b-d09a-4c43-95b8-0867a617ddb8</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>SurveySolutions</OutputName>
+    <OutputType>Package</OutputType>
+    <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">1.1.0.0</SurveySolutionsVersion>
+    <HarvestDir Condition=" '$(HarvestDir)' == '' ">harvest</HarvestDir>
+    <HarvestDirectory Condition=" '$(HarvestDirectory)' == '' ">harvest</HarvestDirectory>
+    <Name>SurveySolutions</Name>
+    <EnableProjectHarvesting>True</EnableProjectHarvesting>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug;HarvestDir=$(HarvestDir);SurveySolutionsVersion=$(SurveySolutionsVersion)</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>HarvestDir=$(HarvestDir);SurveySolutionsVersion=$(SurveySolutionsVersion)</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug;HarvestDir=$(HarvestDir);SurveySolutionsVersion=$(SurveySolutionsVersion)</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>HarvestDir=$(HarvestDir);SurveySolutionsVersion=$(SurveySolutionsVersion)</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="FontFiles.wxs" />
+    <Compile Include="Product.wxs" />
+    <Compile Include="ProductFiles.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appsettings.production.ini" />
+    <Content Include="Configuration.wxi" />
+    <Content Include="FIlter.xsl" />
+    <Content Include="Fonts\NotoSans-Black.ttf" />
+    <Content Include="Fonts\NotoSans-BlackItalic.ttf" />
+    <Content Include="Fonts\NotoSans-Bold.ttf" />
+    <Content Include="Fonts\NotoSans-BoldItalic.ttf" />
+    <Content Include="Fonts\NotoSans-Condensed.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedBlack.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedBlackItalic.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedBold.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedBoldItalic.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedExtraBold.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedExtraBoldItalic.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedExtraLight.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedExtraLightItalic.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedItalic.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedLight.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedLightItalic.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedMedium.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedMediumItalic.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedSemiBold.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedSemiBoldItalic.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedThin.ttf" />
+    <Content Include="Fonts\NotoSans-CondensedThinItalic.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraBold.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraBoldItalic.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensed.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedBlack.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedBlackItalic.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedBold.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedBoldItalic.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedExtraBold.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedExtraBoldItalic.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedExtraLight.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedExtraLightItalic.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedItalic.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedLight.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedLightItalic.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedMedium.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedMediumItalic.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedSemiBold.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedSemiBoldItalic.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedThin.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraCondensedThinItalic.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraLight.ttf" />
+    <Content Include="Fonts\NotoSans-ExtraLightItalic.ttf" />
+    <Content Include="Fonts\NotoSans-Italic.ttf" />
+    <Content Include="Fonts\NotoSans-Light.ttf" />
+    <Content Include="Fonts\NotoSans-LightItalic.ttf" />
+    <Content Include="Fonts\NotoSans-Medium.ttf" />
+    <Content Include="Fonts\NotoSans-MediumItalic.ttf" />
+    <Content Include="Fonts\NotoSans-Regular.ttf" />
+    <Content Include="Fonts\NotoSans-SemiBold.ttf" />
+    <Content Include="Fonts\NotoSans-SemiBoldItalic.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensed.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedBlack.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedBlackItalic.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedBold.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedBoldItalic.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedExtraBold.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedExtraBoldItalic.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedExtraLight.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedExtraLightItalic.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedItalic.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedLight.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedLightItalic.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedMedium.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedMediumItalic.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedSemiBold.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedSemiBoldItalic.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedThin.ttf" />
+    <Content Include="Fonts\NotoSans-SemiCondensedThinItalic.ttf" />
+    <Content Include="Fonts\NotoSans-Thin.ttf" />
+    <Content Include="Fonts\NotoSans-ThinItalic.ttf" />
+    <Content Include="img\icon-32.bmp" />
+    <Content Include="img\left-image.bmp" />
+    <Content Include="img\logo-50.bmp" />
+    <Content Include="img\WixUIBannerBmp.bmp" />
+    <Content Include="img\WixUIDialogBmp.bmp" />
+    <Content Include="img\WixUIExclamationIco.bmp" />
+    <Content Include="img\WixUIInfoIco.bmp" />
+    <Content Include="img\WixUIInfoIco.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixIIsExtension">
+      <HintPath>$(WixExtDir)\WixIIsExtension.dll</HintPath>
+      <Name>WixIIsExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
+      <Name>WixNetFxExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <!--<HeatProject Include="..\..\..\..\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj">
+      <ProjectOutputGroups>Binaries;Content;Satellites</ProjectOutputGroups>
+      <DirectoryId>INSTALLFOLDER</DirectoryId>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+      <GenerateGuidsNow>true</GenerateGuidsNow>
+      <Link>WB.UI.Headquarters.csproj</Link>
+    </HeatProject>-->
+    <EmbeddedResource Include="SurveySolutions_en-us.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Fonts\" />
+    <Folder Include="img\" />
+    <Folder Include="Utils" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SurveySolutionsCustomActions\SurveySolutionsCustomActions.csproj">
+      <Name>SurveySolutionsCustomActions</Name>
+      <Project>{d8b73265-e8ff-45f5-8834-da32d7270c59}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
+  <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
+    <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
+  </Target>
+  <Target Name="BeforeBuild">
+    <HeatDirectory OutputFile="$(ProjectDir)\ProductFiles.wxs" Directory="$(HarvestDirectory)" ComponentGroupName="ProductFilesComponentGroup" DirectoryRefId="INSTALLFILESFOLDER" AutogenerateGuids="true" PreprocessorVariable="var.HarvestDir" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" NoLogo="true" Transforms="Filter.xsl" />
+  </Target>
+  <!--
+	To modify your build process, add your task inside one of the targets below and uncomment it.
+	Other similar extension points exist, see Wix.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+</Project>
