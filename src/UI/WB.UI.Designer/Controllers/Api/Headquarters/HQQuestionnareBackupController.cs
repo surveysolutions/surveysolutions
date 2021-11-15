@@ -81,7 +81,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 Enumerable.Empty<ReadOnlyQuestionnaireDocument>(),
                 questionnaireView.SharedPersons);
 
-            var verifier = new ImportExportQuestionnaireVerifier();
+            var verifier = new ExportQuestionnaireVerifier();
             var result = verifier.Verify(multiLanguageQuestionnaireDocument).ToList();
             return result;
         }

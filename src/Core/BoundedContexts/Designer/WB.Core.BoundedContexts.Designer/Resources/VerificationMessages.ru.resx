@@ -855,6 +855,12 @@
   <data name="WB0396" xml:space="preserve">
     <value>Вопрос который является источником имени ростера должен иметь имя переменной</value>
   </data>
+  <data name="WB0397" xml:space="preserve">
+    <value>Каждый элемент должен иметь уникальный идентификатор, но найдены дубликаты</value>
+  </data>
+  <data name="WB0398" xml:space="preserve">
+    <value>Имя переменной должно быть уникальным, но найдены дубликаты</value>
+  </data>
   <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
       <value>Ссылка на скрытую переменную запрещена</value>
   </data>

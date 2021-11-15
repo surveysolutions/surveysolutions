@@ -162,5 +162,23 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     .Where(entity => entity != null)
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity!)));
         }
+        
+        protected static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(MultiLanguageQuestionnaireDocument questionnaire, Guid id, Type entityType)
+        {
+            if (typeof(IQuestion).IsAssignableFrom(entityType))
+                return QuestionnaireVerificationReferenceType.Question;
+
+            if (entityType.IsAssignableFrom(typeof(StaticText)))
+                return QuestionnaireVerificationReferenceType.StaticText;
+
+            if (entityType.IsAssignableFrom(typeof(Variable)))
+                return QuestionnaireVerificationReferenceType.Variable;
+
+            var group = questionnaire.Find<IGroup>(id);
+
+            return questionnaire.Questionnaire.IsRoster(group)
+                ? QuestionnaireVerificationReferenceType.Roster
+                : QuestionnaireVerificationReferenceType.Group;
+        }
     }
 }

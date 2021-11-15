@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.ImportExport
 {
-    public class ImportExportQuestionnaireVerifier : AbstractVerifier, IPartialVerifier
+    public class ExportQuestionnaireVerifier : AbstractVerifier, IPartialVerifier
     {
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {

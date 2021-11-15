@@ -2242,6 +2242,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Каждый элемент должен иметь уникальный идентификатор, но найдены дубликаты.
+        /// </summary>
+        public static string WB0397 {
+            get {
+                return ResourceManager.GetString("WB0397", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Имя переменной должно быть уникальным, но найдены дубликаты.
+        /// </summary>
+        public static string WB0398 {
+            get {
+                return ResourceManager.GetString("WB0398", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ссылка на скрытую переменную запрещена.
         /// </summary>
         public static string WB3010_LinkToHiddenQuestionNotAllowed {

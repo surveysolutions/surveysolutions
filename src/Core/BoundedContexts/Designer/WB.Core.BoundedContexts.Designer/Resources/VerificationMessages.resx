@@ -837,6 +837,12 @@
   <data name="WB0396" xml:space="preserve">
     <value>Source question for names of rows must have variable name</value>
   </data>
+  <data name="WB0397" xml:space="preserve">
+    <value>Each entity must have unique id, but found duplicates</value>
+  </data>
+  <data name="WB0398" xml:space="preserve">
+    <value>Variable name must be unique, but found duplicates</value>
+  </data>
   <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
       <value>Link to hidden question is not allowed</value>
   </data>
