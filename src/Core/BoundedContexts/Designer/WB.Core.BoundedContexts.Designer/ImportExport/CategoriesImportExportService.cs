@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 {
                     Value = t.Value,
                     Text = t.Text,
-                    ParentId = t.ParentId
+                    ParentValue = t.ParentId
                 }).ToList();
             var json = questionnaireSerializer.Serialize(items);
             return json;
@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                     SortIndex = i,
                     Text = CommandUtils.SanitizeHtml(item.Text, true),
                     Value = item.Value,
-                    ParentId = item.ParentId,
+                    ParentId = item.ParentValue,
                     CategoriesId = categoriesId,
                     QuestionnaireId = questionnaire.PublicKey,
                 }));
