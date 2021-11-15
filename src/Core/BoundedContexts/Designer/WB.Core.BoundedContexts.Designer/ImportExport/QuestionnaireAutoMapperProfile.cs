@@ -117,7 +117,10 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             this.CreateMap<Group, Models.Roster>()
                 .IncludeBase<Group, Models.Group>()
                 .ForMember(x => x.Title, x => x.MapFrom(s =>
-                    s.CustomRosterTitle ? s.Title : s.Title + @" - %rostertitle%"))
+                    s.CustomRosterTitle 
+                    || s.DisplayMode == Main.Core.Entities.SubEntities.RosterDisplayMode.Matrix 
+                    || s.DisplayMode == Main.Core.Entities.SubEntities.RosterDisplayMode.Table  
+                        ? s.Title : s.Title + @" - %rostertitle%"))
                 .ForMember(x => x.RosterSizeQuestion, x => x.MapFrom((s, t, value, context) =>
                     GetVarName(s.RosterSizeQuestionId, context)))
                 .ForMember(x => x.RosterTitleQuestion, x => x.MapFrom((s, t, value, context) =>
