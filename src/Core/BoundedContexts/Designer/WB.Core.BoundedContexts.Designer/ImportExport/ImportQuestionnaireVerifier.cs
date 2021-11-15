@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             foreach (var entity in elements)
             {
                 var variable = entity.GetVariable();
-                if (variable != null && variables.Add(variable))
+                if (!string.IsNullOrWhiteSpace(variable) && !variables.Add(variable))
                     yield return QuestionnaireVerificationMessage.Error(
                         "WB0398",
                         VerificationMessages.WB0398,
@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 .TreeToEnumerable(c => c.Children);
             foreach (var entity in elements)
             {
-                if (guids.Add(entity.PublicKey))
+                if (!guids.Add(entity.PublicKey))
                     yield return QuestionnaireVerificationMessage.Error(
                         "WB0397",
                         VerificationMessages.WB0397,
