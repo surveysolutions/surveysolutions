@@ -159,7 +159,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             errors.Count.Should().Be(0);
         }
         
-        [Ignore("reseaching")]
         [Test]
         public void when_export_one_chapter_with_roster_should_be_equals_after_import()
         {
@@ -169,7 +168,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             roster.DisplayMode = RosterDisplayMode.Table;
             roster.IsRoster = true;
             roster.VariableName = "VariableName";
-            roster.CustomRosterTitle = true;
+            roster.CustomRosterTitle = false;
             roster.HideIfDisabled = true;
             roster.FixedRosterTitles = new FixedRosterTitle[]
             {
@@ -200,10 +199,10 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
             newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
-            ((Group)newQuestionnaire.Children[0].Children[0]).RosterSizeQuestionId.Should()
-                .Be(newQuestionnaire.Children[0].Children[1].PublicKey);
-            ((Group)newQuestionnaire.Children[0].Children[0]).RosterTitleQuestionId.Should()
-                .Be(newQuestionnaire.Children[0].Children[2].PublicKey);
+            ((Group)newQuestionnaire.Children[1].Children[0]).RosterSizeQuestionId.Should()
+                .Be(newQuestionnaire.Children[1].Children[1].PublicKey);
+            ((Group)newQuestionnaire.Children[1].Children[0]).RosterTitleQuestionId.Should()
+                .Be(newQuestionnaire.Children[1].Children[2].PublicKey);
             errors.Count.Should().Be(0);
         }
 
