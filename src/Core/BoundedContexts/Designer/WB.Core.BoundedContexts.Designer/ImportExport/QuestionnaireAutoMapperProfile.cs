@@ -151,7 +151,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             this.CreateMap<Models.CoverPage, Group>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom((s, d, value, context) => 
-                    GetIdOrGenerate(s.VariableName, s.Id, context)));
+                    GetIdOrGenerate(s.VariableName, s.Id, context)))
+                .ForMember(x => x.ConditionExpression, x => x.MapFrom<string?>(y => null));
 
             this.CreateMap<Documents.FixedRosterTitle, Models.FixedRosterTitle>();
             this.CreateMap<Models.FixedRosterTitle, Documents.FixedRosterTitle>()

@@ -636,6 +636,19 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X", variable: "questionnaire");
 
+        public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? id, params IComposite[] children)
+            => Create.QuestionnaireDocumentWithCoverPage(id, null, children: children);
+
+        public static QuestionnaireDocument QuestionnaireDocumentWithEmptyCoverPage(Guid? id, params IComposite[] children)
+        {
+            var coverId = Guid.NewGuid();
+            var cover = Create.Chapter("Cover", coverId) as IComposite;
+            var allChildren = Enumerable.Concat(cover.ToEnumerable(), children).ToArray();
+            var questionnaireDocument = Create.QuestionnaireDocument(id, "Questionnaire with empty cover", children: allChildren);
+            questionnaireDocument.CoverPageSectionId = coverId;
+            return questionnaireDocument;
+        }
+
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = null, string expression = "2*2", 
             string label = null, bool doNotExport = false)
         {

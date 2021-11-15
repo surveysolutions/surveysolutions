@@ -87,7 +87,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             var questionnaire = importExportQuestionnaireService.Map(questionnaireDocument);
             var json = new QuestionnaireSerializer().Serialize(questionnaire);
 
-            var testType = typeof(ImportExportQuestionnaireMapper);
+            var testType = typeof(QuestionnaireImportService);
             var readResourceFile = $"{testType.Namespace}.QuestionnaireSchema.json";
 
             await using Stream stream = testType.Assembly.GetManifestResourceStream(readResourceFile);
