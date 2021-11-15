@@ -11,9 +11,12 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.DataAccess;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.ImportExport.Models;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -21,6 +24,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Services.Restore;
+using Group = WB.Core.BoundedContexts.Designer.ImportExport.Models.Group;
 
 namespace WB.UI.Designer.Code.ImportExport
 {
@@ -32,7 +36,6 @@ namespace WB.UI.Designer.Code.ImportExport
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
         private readonly ITranslationImportExportService translationImportExportService;
-        private readonly DesignerDbContext dbContext;
         private readonly ICategoriesService categoriesService;
         private readonly IImportExportQuestionnaireMapper importExportQuestionnaireMapper;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
@@ -46,7 +49,6 @@ namespace WB.UI.Designer.Code.ImportExport
             IAttachmentService attachmentService, 
             ITranslationsService translationsService, 
             ITranslationImportExportService translationImportExportService, 
-            DesignerDbContext dbContext,
             ICategoriesService categoriesService, 
             IImportExportQuestionnaireMapper importExportQuestionnaireMapper,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
@@ -59,20 +61,37 @@ namespace WB.UI.Designer.Code.ImportExport
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
             this.translationImportExportService = translationImportExportService;
-            this.dbContext = dbContext;
             this.categoriesService = categoriesService;
             this.importExportQuestionnaireMapper = importExportQuestionnaireMapper;
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireSerializer = questionnaireSerializer;
             this.categoriesImportExportService = categoriesImportExportService;
         }
+        
+        private class ImportStructure
+        {
+            public Dictionary<Guid, ZipEntry> Attachments { get; set; } = new Dictionary<Guid, ZipEntry>();
+            public Dictionary<Guid, ZipEntry> LookupTables { get; set; } = new Dictionary<Guid, ZipEntry>();
+            public Dictionary<Guid, ZipEntry> Translations { get; set; } = new Dictionary<Guid, ZipEntry>();
+            public Dictionary<Guid, ZipEntry> Categories { get; set; } = new Dictionary<Guid, ZipEntry>();
+        }
 
         public Guid RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state, bool createNew)
         {
             using var zipStream = new ZipInputStream(archive);
 
-            var questionnaire = RestoreQuestionnaireFromZipFileOrThrow(zipStream, responsibleId, state, createNew);
+            var questionnaire = RestoreQuestionnaireFromZipFileOrThrow(zipStream, state);
             var questionnaireDocument = importExportQuestionnaireMapper.Map(questionnaire);
+
+            var verificationMessages = ValidateQuestionnaireDocument(questionnaireDocument);
+            var verificationErrors = verificationMessages.Where(m => m.MessageLevel >= VerificationMessageLevel.General).ToList();
+            
+            if (verificationErrors.Any())
+            {
+                state.Error = string.Concat("\r\n", verificationErrors.Select(v => $"[{v.Code}] {v.Message}"));
+                throw new Exception("Please fix verification errors");
+            }
+
             if (createNew)
             {
                 var publicKey = Guid.NewGuid();
@@ -82,28 +101,112 @@ namespace WB.UI.Designer.Code.ImportExport
                 questionnaireDocument.CreatedBy = responsibleId;
             }
             
-            this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
-            this.categoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
-
             state.Success.AppendLine($"[document.json]");
             state.Success.AppendLine($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.");
             state.RestoredEntitiesCount++;
 
+            ImportStructure importStructure = GetStructure(zipStream, questionnaire, questionnaireDocument);
+
+            this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
+            this.categoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
+           
             var command = new ImportQuestionnaire(responsibleId, questionnaireDocument);
             this.commandService.Execute(command);
 
-            zipStream.Seek(0, SeekOrigin.Begin);
-            ZipEntry zipEntry;
-            while ((zipEntry = zipStream.GetNextEntry()) != null)
-            {
-                this.RestoreDataFromZipFileEntry(zipEntry, zipStream, responsibleId, state, questionnaire, questionnaireDocument);
-            }
+            this.RestoreDataFromZipFileEntry(importStructure, state, questionnaire, questionnaireDocument);
 
             questionnaireStorage.Store(questionnaireDocument, questionnaireDocument.Id);
 
             return questionnaireDocument.PublicKey;
+        } 
+
+        private List<QuestionnaireVerificationMessage> ValidateQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
+        {
+            var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
+            var multiLanguageQuestionnaireDocument = new MultiLanguageQuestionnaireDocument(
+                readOnlyQuestionnaireDocument,
+                Enumerable.Empty<ReadOnlyQuestionnaireDocument>(),
+                Enumerable.Empty<SharedPersonView>());
+
+            var verifier = new ImportQuestionnaireVerifier();
+            var result = verifier.Verify(multiLanguageQuestionnaireDocument).ToList();
+            return result;
         }
-        
+
+        private ImportStructure GetStructure(ZipInputStream zipStream, Questionnaire questionnaire,
+            QuestionnaireDocument questionnaireDocument)
+        {
+            ImportStructure importStructure = new ImportStructure();
+            
+            foreach (var attachmentInfo in questionnaire.Attachments)
+            {
+                var attachment = questionnaireDocument.Attachments.Single(s =>
+                    s.Name == attachmentInfo.Name);
+                var attachmentId = attachment.AttachmentId;
+                var zipEntity = GetZipEntity(zipStream, "attachments", attachmentInfo.FileName);
+
+                importStructure.Attachments.Add(attachmentId, zipEntity);
+            }
+
+            foreach (var lookupTableInfo in questionnaire.LookupTables)
+            {
+                var lookupTable = questionnaireDocument.LookupTables.Single(s =>
+                    s.Value.TableName == lookupTableInfo.TableName);
+                var lookupTableId = lookupTable.Key;
+                var zipEntity = GetZipEntity(zipStream, "lookup tables", lookupTableInfo.FileName);
+
+                importStructure.LookupTables.Add(lookupTableId, zipEntity);
+            }
+
+            foreach (var translationInfo in questionnaire.Translations)
+            {
+                var translation = questionnaireDocument.Translations.Single(s =>
+                    s.Name == translationInfo.Name);
+                var translationId = translation.Id;
+                var zipEntity = GetZipEntity(zipStream, "translations", translationInfo.FileName);
+
+                importStructure.Translations.Add(translationId, zipEntity);
+            }
+
+            foreach (var categoriesInfo in questionnaire.Categories)
+            {
+                var categories = questionnaireDocument.Categories.Single(s =>
+                    s.Name == categoriesInfo.Name);
+                var categoriesId = categories.Id;
+                var zipEntity = GetZipEntity(zipStream, "categories", categoriesInfo.FileName);
+
+                importStructure.Categories.Add(categoriesId, zipEntity);
+            }
+
+            return importStructure;
+        }
+
+        private ZipEntry GetZipEntity(ZipInputStream zipStream, string folder, string fileName)
+        {
+            zipStream.Seek(0, SeekOrigin.Begin);
+
+            ZipEntry zipEntry;
+            while ((zipEntry = zipStream.GetNextEntry()) != null)
+            {
+                if (zipEntry.IsDirectory) 
+                    continue;
+                
+                string[] zipEntryPathChunks = zipEntry.FileName.Split(
+                    new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
+                    StringSplitOptions.RemoveEmptyEntries);
+
+                bool isFound =
+                    zipEntryPathChunks.Length == 2 &&
+                    string.Equals(zipEntryPathChunks[0], folder, StringComparison.CurrentCultureIgnoreCase) &&
+                    string.Equals(zipEntryPathChunks[1], fileName, StringComparison.CurrentCultureIgnoreCase);
+
+                if (isFound)
+                    return zipEntry;
+            }
+
+            throw new ArgumentException($"File {fileName} in folder {folder} don't found");
+        }
+
         private bool ValidateBySchema(string json, out IList<ValidationError> errors)
         {
             var testType = typeof(QuestionnaireImportService);
@@ -123,8 +226,7 @@ namespace WB.UI.Designer.Code.ImportExport
             return isValid;
         }
 
-        private Questionnaire RestoreQuestionnaireFromZipFileOrThrow(ZipInputStream zipStream, Guid responsibleId,
-            RestoreState state, bool createNew)
+        private Questionnaire RestoreQuestionnaireFromZipFileOrThrow(ZipInputStream zipStream, RestoreState state)
         {
             string? textContent = null;
             ZipEntry zipEntry;
@@ -146,9 +248,9 @@ namespace WB.UI.Designer.Code.ImportExport
                 }
                 catch (Exception exception)
                 {
-                    this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FileName}' during questionnaire restore from backup.");
-                    state.Error = $"Error processing zip file entry '{zipEntry.FileName}'.{Environment.NewLine}{exception}";
-                    logger.LogError(state.Error);
+                    var message = $"Error processing questionnaire document file entry '{zipEntry.FileName}' during questionnaire restore from backup.";
+                    state.Error = message;
+                    logger.LogError(exception, message);
                 }
             }
 
@@ -170,118 +272,110 @@ namespace WB.UI.Designer.Code.ImportExport
             }
             catch (JsonReaderException e)
             {
-                state.Error = "Invalid format. Questionnaire has invalid format.";
+                state.Error = "Questionnaire has invalid format.";
                 throw;
             }
 
-                        
             var questionnaire = questionnaireSerializer.Deserialize(textContent);
             return questionnaire;
         }
 
-        public void RestoreDataFromZipFileEntry(ZipEntry zipEntry, ZipInputStream zipStream, Guid responsibleId, RestoreState state, Questionnaire questionnaire, QuestionnaireDocument questionnaireDocument)
+        private void RestoreDataFromZipFileEntry(ImportStructure importStructure, RestoreState state, Questionnaire questionnaire, QuestionnaireDocument questionnaireDocument)
         {
             var questionnaireId = questionnaireDocument.PublicKey;
-            try
+            
+            foreach (var attachmentRecord in importStructure.Attachments)
             {
-                string[] zipEntryPathChunks = zipEntry.FileName.Split(
-                    new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
-                    StringSplitOptions.RemoveEmptyEntries);
-
-                bool isAttachmentEntry =
-                    zipEntryPathChunks.Length == 2 &&
-                    string.Equals(zipEntryPathChunks[0], "attachments", StringComparison.CurrentCultureIgnoreCase);
-
-                bool isLookupTableEntry =
-                    zipEntryPathChunks.Length == 2 &&
-                    string.Equals(zipEntryPathChunks[0], "lookup tables", StringComparison.CurrentCultureIgnoreCase) &&
-                    zipEntryPathChunks[1].ToLower().EndsWith(".txt");
-
-                bool isTranslationEntry =
-                    zipEntryPathChunks.Length == 2 &&
-                    string.Equals(zipEntryPathChunks[0], "translations", StringComparison.CurrentCultureIgnoreCase) &&
-                    ".json".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase);
-
-                bool isCategoriesEntry =
-                    zipEntryPathChunks.Length == 2 &&
-                    string.Equals(zipEntryPathChunks[0], "categories", StringComparison.CurrentCultureIgnoreCase) &&
-                    ".json".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase);
-
-                if (isAttachmentEntry)
+                try
                 {
-                    var fileName = zipEntryPathChunks[1];
-                    byte[] binaryContent = zipStream.ReadToEnd();
-                    var attachmentInfo = questionnaire.Attachments.Single(a => a.FileName == fileName);
                     var attachment = questionnaireDocument.Attachments.Single(s =>
-                        s.Name == attachmentInfo.Name);
+                        s.AttachmentId == attachmentRecord.Key);
+                    var attachmentInfo = questionnaire.Attachments.Single(a => a.Name == attachment.Name);
                     var attachmentId = attachment.AttachmentId;
-
+                    byte[] binaryContent = attachmentRecord.Value.InputStream.ReadToEnd();
                     string attachmentContentId = this.attachmentService.CreateAttachmentContentId(binaryContent);
                     attachment.ContentId = attachmentContentId;
-  
-                    this.attachmentService.SaveContent(attachmentContentId, attachmentInfo.ContentType!, binaryContent);
-                    this.attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, fileName);
 
-                    state.Success.AppendLine($"[{zipEntry.FileName}]");
-                    state.Success.AppendLine($"    Found file data '{fileName}' for attachment '{attachmentId.FormatGuid()}'.");
+                    this.attachmentService.SaveContent(attachmentContentId, attachmentInfo.ContentType!, binaryContent);
+                    this.attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId,
+                        attachmentInfo.FileName);
+
+                    state.Success.AppendLine($"[{attachmentRecord.Value.FileName}]");
+                    state.Success.AppendLine($"    Found file data '{attachmentInfo.FileName}' for attachment '{attachmentId.FormatGuid()}'.");
                     state.Success.AppendLine($"    Restored attachment '{attachmentId.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}' using file '{attachmentInfo.FileName}' and content-type '{attachmentInfo.ContentType}'.");
                     state.RestoredEntitiesCount++;
                 }
-                else if (isLookupTableEntry)
+                catch (Exception exception)
                 {
-                    var fileName = zipEntryPathChunks[1];
-                    var lookupTableInfo = questionnaire.LookupTables.Single(a => a.FileName == fileName);
-                    var lookupTable = questionnaireDocument.LookupTables.Single(s =>
-                        s.Value.TableName == lookupTableInfo.TableName);
-                    var lookupTableId = lookupTable.Key;
-
-                    string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
-
-                    this.lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, textContent);
-
-                    state.Success.AppendLine($"[{zipEntry.FileName}].");
-                    state.Success.AppendLine($"    Restored lookup table '{lookupTableId.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}'.");
-                    state.RestoredEntitiesCount++;
-                }
-                else if (isTranslationEntry)
-                {
-                    var fileName = zipEntryPathChunks[1];
-                    string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
-
-                    var translationInfo = questionnaire.Translations.Single(a => a.FileName == fileName);
-                    var translation = questionnaireDocument.Translations.Single(s =>
-                        s.Name == translationInfo.Name);
-                    var translationId = translation.Id;
-
-                    this.translationImportExportService.StoreTranslationsFromJson(questionnaireDocument, translationId, textContent);
-
-                    state.Success.AppendLine($"[{zipEntry.FileName}].");
-                    state.Success.AppendLine($"    Restored translation '{translationId}' for questionnaire '{questionnaireId.FormatGuid()}'.");
-                    state.RestoredEntitiesCount++;
-                }
-                else if (isCategoriesEntry)
-                {
-                    var fileName = zipEntryPathChunks[1];
-                    string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
-
-                    var categoriesInfo = questionnaire.Categories.Single(a => a.FileName == fileName);
-                    var categories = questionnaireDocument.Categories.Single(s =>
-                        s.Name == categoriesInfo.Name);
-                    var collectionsId = categories.Id;
-
-                    this.categoriesImportExportService.StoreCategoriesFromJson(questionnaireDocument, collectionsId, textContent);
-
-                    state.Success.AppendLine($"[{zipEntry.FileName}].");
-                    state.Success.AppendLine($"    Restored categories '{collectionsId}' for questionnaire '{questionnaireId.FormatGuid()}'.");
-                    state.RestoredEntitiesCount++;
+                    var error = $"Error processing attachment file entry '{attachmentRecord.Value.FileName}'  during questionnaire restore from backup.";
+                    state.Error = error;
+                    logger.LogError(exception, error);
+                    throw;
                 }
             }
-            catch (Exception exception)
+
+            foreach (var lookupTableRecord in importStructure.LookupTables)
             {
-                this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FileName}' during questionnaire restore from backup.");
-                state.Error = $"Error processing zip file entry '{zipEntry.FileName}'.{Environment.NewLine}{exception}";
-                logger.LogError(state.Error);
-                throw;
+                try
+                {
+                    string textContent = new StreamReader(lookupTableRecord.Value.InputStream, Encoding.UTF8).ReadToEnd();
+
+                    this.lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableRecord.Key, textContent);
+
+                    state.Success.AppendLine($"[{lookupTableRecord.Value.FileName}].");
+                    state.Success.AppendLine($"    Restored lookup table '{lookupTableRecord.Key.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}'.");
+                    state.RestoredEntitiesCount++;
+                }
+                catch (Exception exception)
+                {
+                    var message = $"Error processing lookup table file entry '{lookupTableRecord.Value.FileName}' during questionnaire restore from backup.";
+                    state.Error = message;
+                    logger.LogError(exception, message);
+                    throw;
+                }
+            }
+
+            foreach (var translationRecord in importStructure.Translations)
+            {
+                try
+                {
+                    string jsonContent = new StreamReader(translationRecord.Value.InputStream, Encoding.UTF8).ReadToEnd();
+                    this.translationImportExportService.StoreTranslationsFromJson(questionnaireDocument,
+                        translationRecord.Key, jsonContent);
+
+                    state.Success.AppendLine($"[{translationRecord.Value.FileName}].");
+                    state.Success.AppendLine($"    Restored translation '{translationRecord.Key}' for questionnaire '{questionnaireId.FormatGuid()}'.");
+                    state.RestoredEntitiesCount++;
+                }
+                catch (Exception exception)
+                {
+                    var error = $"Error processing translation file entry '{translationRecord.Value.FileName}'  during questionnaire restore from backup.";
+                    state.Error = error;
+                    logger.LogError(exception, error);
+                    throw;
+                }
+            }
+
+            foreach (var categoryRecord in importStructure.Categories)
+            {
+                try
+                {
+                    string jsonContent = new StreamReader(categoryRecord.Value.InputStream, Encoding.UTF8).ReadToEnd();
+                    this.categoriesImportExportService.StoreCategoriesFromJson(questionnaireDocument,
+                        categoryRecord.Key, jsonContent);
+
+                    state.Success.AppendLine($"[{categoryRecord.Value.FileName}].");
+                    state.Success.AppendLine(
+                        $"    Restored categories '{categoryRecord.Key}' for questionnaire '{questionnaireId.FormatGuid()}'.");
+                    state.RestoredEntitiesCount++;
+                }
+                catch (Exception exception)
+                {
+                    var error = $"Error processing categories file entry '{categoryRecord.Value.FileName}'  during questionnaire restore from backup.";
+                    state.Error = error;
+                    logger.LogError(exception, error);
+                    throw;
+                }
             }
         }
     }
