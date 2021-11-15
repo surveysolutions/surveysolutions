@@ -70,10 +70,10 @@ namespace WB.UI.Designer.Code.ImportExport
         
         private class ImportStructure
         {
-            public Dictionary<Guid, ZipEntry> Attachments { get; set; } = new Dictionary<Guid, ZipEntry>();
-            public Dictionary<Guid, ZipEntry> LookupTables { get; set; } = new Dictionary<Guid, ZipEntry>();
-            public Dictionary<Guid, ZipEntry> Translations { get; set; } = new Dictionary<Guid, ZipEntry>();
-            public Dictionary<Guid, ZipEntry> Categories { get; set; } = new Dictionary<Guid, ZipEntry>();
+            public Dictionary<Guid, byte[]> Attachments { get; set; } = new Dictionary<Guid, byte[]>();
+            public Dictionary<Guid, string> LookupTables { get; set; } = new Dictionary<Guid, string>();
+            public Dictionary<Guid, string> Translations { get; set; } = new Dictionary<Guid, string>();
+            public Dictionary<Guid, string> Categories { get; set; } = new Dictionary<Guid, string>();
         }
 
         public Guid RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state, bool createNew)
@@ -110,12 +110,10 @@ namespace WB.UI.Designer.Code.ImportExport
             this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
             this.categoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
            
-            var command = new ImportQuestionnaire(responsibleId, questionnaireDocument);
-            this.commandService.Execute(command);
-
             this.RestoreDataFromZipFileEntry(importStructure, state, questionnaire, questionnaireDocument);
 
-            questionnaireStorage.Store(questionnaireDocument, questionnaireDocument.Id);
+            var command = new ImportQuestionnaire(responsibleId, questionnaireDocument);
+            this.commandService.Execute(command);
 
             return questionnaireDocument.PublicKey;
         } 
@@ -144,8 +142,8 @@ namespace WB.UI.Designer.Code.ImportExport
                     s.Name == attachmentInfo.Name);
                 var attachmentId = attachment.AttachmentId;
                 var zipEntity = GetZipEntity(zipStream, "attachments", attachmentInfo.FileName);
-
-                importStructure.Attachments.Add(attachmentId, zipEntity);
+                byte[] binaryContent = zipStream.ReadToEnd();
+                importStructure.Attachments.Add(attachmentId, binaryContent);
             }
 
             foreach (var lookupTableInfo in questionnaire.LookupTables)
@@ -154,8 +152,8 @@ namespace WB.UI.Designer.Code.ImportExport
                     s.Value.TableName == lookupTableInfo.TableName);
                 var lookupTableId = lookupTable.Key;
                 var zipEntity = GetZipEntity(zipStream, "lookup tables", lookupTableInfo.FileName);
-
-                importStructure.LookupTables.Add(lookupTableId, zipEntity);
+                string fileContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+                importStructure.LookupTables.Add(lookupTableId, fileContent);
             }
 
             foreach (var translationInfo in questionnaire.Translations)
@@ -164,8 +162,8 @@ namespace WB.UI.Designer.Code.ImportExport
                     s.Name == translationInfo.Name);
                 var translationId = translation.Id;
                 var zipEntity = GetZipEntity(zipStream, "translations", translationInfo.FileName);
-
-                importStructure.Translations.Add(translationId, zipEntity);
+                string fileContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+                importStructure.Translations.Add(translationId, fileContent);
             }
 
             foreach (var categoriesInfo in questionnaire.Categories)
@@ -174,8 +172,8 @@ namespace WB.UI.Designer.Code.ImportExport
                     s.Name == categoriesInfo.Name);
                 var categoriesId = categories.Id;
                 var zipEntity = GetZipEntity(zipStream, "categories", categoriesInfo.FileName);
-
-                importStructure.Categories.Add(categoriesId, zipEntity);
+                string fileContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+                importStructure.Categories.Add(categoriesId, fileContent);
             }
 
             return importStructure;
@@ -292,7 +290,7 @@ namespace WB.UI.Designer.Code.ImportExport
                         s.AttachmentId == attachmentRecord.Key);
                     var attachmentInfo = questionnaire.Attachments.Single(a => a.Name == attachment.Name);
                     var attachmentId = attachment.AttachmentId;
-                    byte[] binaryContent = attachmentRecord.Value.InputStream.ReadToEnd();
+                    byte[] binaryContent = attachmentRecord.Value;
                     string attachmentContentId = this.attachmentService.CreateAttachmentContentId(binaryContent);
                     attachment.ContentId = attachmentContentId;
 
@@ -300,14 +298,14 @@ namespace WB.UI.Designer.Code.ImportExport
                     this.attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId,
                         attachmentInfo.FileName);
 
-                    state.Success.AppendLine($"[{attachmentRecord.Value.FileName}]");
+                    state.Success.AppendLine($"[Attachment {attachmentInfo.FileName}]");
                     state.Success.AppendLine($"    Found file data '{attachmentInfo.FileName}' for attachment '{attachmentId.FormatGuid()}'.");
                     state.Success.AppendLine($"    Restored attachment '{attachmentId.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}' using file '{attachmentInfo.FileName}' and content-type '{attachmentInfo.ContentType}'.");
                     state.RestoredEntitiesCount++;
                 }
                 catch (Exception exception)
                 {
-                    var error = $"Error processing attachment file entry '{attachmentRecord.Value.FileName}'  during questionnaire restore from backup.";
+                    var error = $"Error processing attachment file entry '{attachmentRecord.Key}'  during questionnaire restore from backup.";
                     state.Error = error;
                     logger.LogError(exception, error);
                     throw;
@@ -318,17 +316,17 @@ namespace WB.UI.Designer.Code.ImportExport
             {
                 try
                 {
-                    string textContent = new StreamReader(lookupTableRecord.Value.InputStream, Encoding.UTF8).ReadToEnd();
+                    string textContent = lookupTableRecord.Value;
 
                     this.lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableRecord.Key, textContent);
 
-                    state.Success.AppendLine($"[{lookupTableRecord.Value.FileName}].");
+                    state.Success.AppendLine($"[Lookup table - {lookupTableRecord.Key}].");
                     state.Success.AppendLine($"    Restored lookup table '{lookupTableRecord.Key.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}'.");
                     state.RestoredEntitiesCount++;
                 }
                 catch (Exception exception)
                 {
-                    var message = $"Error processing lookup table file entry '{lookupTableRecord.Value.FileName}' during questionnaire restore from backup.";
+                    var message = $"Error processing lookup table file entry '{lookupTableRecord.Key}' during questionnaire restore from backup.";
                     state.Error = message;
                     logger.LogError(exception, message);
                     throw;
@@ -339,17 +337,17 @@ namespace WB.UI.Designer.Code.ImportExport
             {
                 try
                 {
-                    string jsonContent = new StreamReader(translationRecord.Value.InputStream, Encoding.UTF8).ReadToEnd();
+                    string jsonContent = translationRecord.Value;
                     this.translationImportExportService.StoreTranslationsFromJson(questionnaireDocument,
                         translationRecord.Key, jsonContent);
 
-                    state.Success.AppendLine($"[{translationRecord.Value.FileName}].");
+                    state.Success.AppendLine($"[Translation - {translationRecord.Key}].");
                     state.Success.AppendLine($"    Restored translation '{translationRecord.Key}' for questionnaire '{questionnaireId.FormatGuid()}'.");
                     state.RestoredEntitiesCount++;
                 }
                 catch (Exception exception)
                 {
-                    var error = $"Error processing translation file entry '{translationRecord.Value.FileName}'  during questionnaire restore from backup.";
+                    var error = $"Error processing translation file entry '{translationRecord.Key}'  during questionnaire restore from backup.";
                     state.Error = error;
                     logger.LogError(exception, error);
                     throw;
@@ -360,18 +358,17 @@ namespace WB.UI.Designer.Code.ImportExport
             {
                 try
                 {
-                    string jsonContent = new StreamReader(categoryRecord.Value.InputStream, Encoding.UTF8).ReadToEnd();
+                    string jsonContent = categoryRecord.Value;
                     this.categoriesImportExportService.StoreCategoriesFromJson(questionnaireDocument,
                         categoryRecord.Key, jsonContent);
 
-                    state.Success.AppendLine($"[{categoryRecord.Value.FileName}].");
-                    state.Success.AppendLine(
-                        $"    Restored categories '{categoryRecord.Key}' for questionnaire '{questionnaireId.FormatGuid()}'.");
+                    state.Success.AppendLine($"[Categories - {categoryRecord.Key}].");
+                    state.Success.AppendLine($"    Restored categories '{categoryRecord.Key}' for questionnaire '{questionnaireId.FormatGuid()}'.");
                     state.RestoredEntitiesCount++;
                 }
                 catch (Exception exception)
                 {
-                    var error = $"Error processing categories file entry '{categoryRecord.Value.FileName}'  during questionnaire restore from backup.";
+                    var error = $"Error processing categories file entry '{categoryRecord.Key}'  during questionnaire restore from backup.";
                     state.Error = error;
                     logger.LogError(exception, error);
                     throw;
