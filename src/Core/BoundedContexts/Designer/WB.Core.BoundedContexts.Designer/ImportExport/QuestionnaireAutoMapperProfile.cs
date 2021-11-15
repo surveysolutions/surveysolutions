@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                         : s.Children))
                 .ForMember(x => x.DefaultTranslation, x => x.MapFrom(s => 
                     s.DefaultTranslation.HasValue 
-                        ? s.Translations.FirstOrDefault(t => t.Id == s.DefaultTranslation.Value)?.Name 
+                        ? (s.Translations.FirstOrDefault(t => t.Id == s.DefaultTranslation.Value) != null ? s.Translations.First(t => t.Id == s.DefaultTranslation.Value).Name : null) 
                         : null));
             this.CreateMap<Questionnaire, QuestionnaireDocument>()
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
