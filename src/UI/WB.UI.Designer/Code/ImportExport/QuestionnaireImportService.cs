@@ -88,7 +88,7 @@ namespace WB.UI.Designer.Code.ImportExport
             
             if (verificationErrors.Any())
             {
-                state.Error = string.Concat("\r\n", verificationErrors.Select(v => $"[{v.Code}] {v.Message}"));
+                state.Error = string.Join("\r\n", verificationErrors.Select(v => $"[{v.Code}] {v.Message} - {v.References.FirstOrDefault()?.Id}").Take(20).ToArray());
                 throw new Exception("Please fix verification errors");
             }
 
@@ -105,7 +105,7 @@ namespace WB.UI.Designer.Code.ImportExport
             state.Success.AppendLine($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.");
             state.RestoredEntitiesCount++;
 
-            ImportStructure importStructure = GetStructure(zipStream, questionnaire, questionnaireDocument);
+            ImportStructure importStructure = GetStructure(zipStream, questionnaire, questionnaireDocument, state);
 
             this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
             this.categoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
@@ -132,7 +132,7 @@ namespace WB.UI.Designer.Code.ImportExport
         }
 
         private ImportStructure GetStructure(ZipInputStream zipStream, Questionnaire questionnaire,
-            QuestionnaireDocument questionnaireDocument)
+            QuestionnaireDocument questionnaireDocument, RestoreState state)
         {
             ImportStructure importStructure = new ImportStructure();
             
@@ -141,7 +141,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 var attachment = questionnaireDocument.Attachments.Single(s =>
                     s.Name == attachmentInfo.Name);
                 var attachmentId = attachment.AttachmentId;
-                var zipEntity = GetZipEntity(zipStream, "attachments", attachmentInfo.FileName);
+                var zipEntity = GetZipEntity(zipStream, "attachments", attachmentInfo.FileName, state);
                 byte[] binaryContent = zipStream.ReadToEnd();
                 importStructure.Attachments.Add(attachmentId, binaryContent);
             }
@@ -151,7 +151,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 var lookupTable = questionnaireDocument.LookupTables.Single(s =>
                     s.Value.TableName == lookupTableInfo.TableName);
                 var lookupTableId = lookupTable.Key;
-                var zipEntity = GetZipEntity(zipStream, "lookup tables", lookupTableInfo.FileName);
+                var zipEntity = GetZipEntity(zipStream, "lookup tables", lookupTableInfo.FileName, state);
                 string fileContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
                 importStructure.LookupTables.Add(lookupTableId, fileContent);
             }
@@ -161,7 +161,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 var translation = questionnaireDocument.Translations.Single(s =>
                     s.Name == translationInfo.Name);
                 var translationId = translation.Id;
-                var zipEntity = GetZipEntity(zipStream, "translations", translationInfo.FileName);
+                var zipEntity = GetZipEntity(zipStream, "translations", translationInfo.FileName, state);
                 string fileContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
                 importStructure.Translations.Add(translationId, fileContent);
             }
@@ -171,7 +171,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 var categories = questionnaireDocument.Categories.Single(s =>
                     s.Name == categoriesInfo.Name);
                 var categoriesId = categories.Id;
-                var zipEntity = GetZipEntity(zipStream, "categories", categoriesInfo.FileName);
+                var zipEntity = GetZipEntity(zipStream, "categories", categoriesInfo.FileName, state);
                 string fileContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
                 importStructure.Categories.Add(categoriesId, fileContent);
             }
@@ -179,7 +179,7 @@ namespace WB.UI.Designer.Code.ImportExport
             return importStructure;
         }
 
-        private ZipEntry GetZipEntity(ZipInputStream zipStream, string folder, string fileName)
+        private ZipEntry GetZipEntity(ZipInputStream zipStream, string folder, string fileName, RestoreState state)
         {
             zipStream.Seek(0, SeekOrigin.Begin);
 
@@ -202,7 +202,9 @@ namespace WB.UI.Designer.Code.ImportExport
                     return zipEntry;
             }
 
-            throw new ArgumentException($"File {fileName} in folder {folder} don't found");
+            var message = $"File {fileName} in folder {folder} don't found";
+            state.Error = message;
+            throw new ArgumentException(message);
         }
 
         private bool ValidateBySchema(string json, out IList<ValidationError> errors)
