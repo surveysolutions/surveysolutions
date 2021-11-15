@@ -70,6 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                     else
                         d.CoverPageSectionId = Guid.NewGuid();
                 })
+                .ForMember(x => x.DefaultTranslation, x => x.Ignore()) 
                 .AfterMap((s, d, context) =>
                 {
                     if (!string.IsNullOrWhiteSpace(s.DefaultTranslation))
