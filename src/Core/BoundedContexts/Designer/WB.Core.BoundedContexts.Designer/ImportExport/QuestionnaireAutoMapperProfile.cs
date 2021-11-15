@@ -53,7 +53,11 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 .ForMember(x => x.Children, x => x.MapFrom(s =>
                     s.Children.Count > 0 && s.Children[0].PublicKey == s.CoverPageSectionId
                         ? s.Children.Skip(1)
-                        : s.Children));
+                        : s.Children))
+                .ForMember(x => x.DefaultTranslation, x => x.MapFrom(s => 
+                    s.DefaultTranslation.HasValue 
+                        ? s.Translations.FirstOrDefault(t => t.Id == s.DefaultTranslation.Value)?.Name 
+                        : null));
             this.CreateMap<Questionnaire, QuestionnaireDocument>()
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
                 .ForMember(s => s.Id, opt => opt.MapFrom(t => t.Id.FormatGuid()))
@@ -65,6 +69,13 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                         d.CoverPageSectionId = d.Children[0].PublicKey;
                     else
                         d.CoverPageSectionId = Guid.NewGuid();
+                })
+                .AfterMap((s, d, context) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(s.DefaultTranslation))
+                    {
+                        d.DefaultTranslation = d.Translations.FirstOrDefault(t => t.Name == s.DefaultTranslation)?.Id;
+                    }
                 });
             
             this.CreateMap<WB.Core.SharedKernels.Questionnaire.Documents.QuestionnaireMetaInfo, Models.QuestionnaireMetaInfo>();

@@ -8,7 +8,7 @@
   
   "properties": {
     "CoverPage": { "$ref": "#/definitions/CoverPage" },
-    "DefaultTranslation": { "$ref": "#/definitions/GUID" },
+    "DefaultTranslation": { "type": "string", "maxLength": 32 },
     "Id": { "$ref": "#/definitions/GUID" },
     "Title": { "type": "string" },
     "Description": { "type": "string" },

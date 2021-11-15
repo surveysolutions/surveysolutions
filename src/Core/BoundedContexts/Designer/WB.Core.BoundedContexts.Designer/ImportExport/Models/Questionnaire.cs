@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models
         public List<Attachment> Attachments { get; set; } = new List<Attachment>();
         public List<Translation> Translations { get; set; } = new List<Translation>();
         public List<Categories> Categories { get; set; } = new List<Categories>();
-        public Guid? DefaultTranslation { get; set; }
+        public string? DefaultTranslation { get; set; }
         public bool HideIfDisabled { get; set; }
         public string? Title { get; set; }
         public string Description { get; set; } = String.Empty;
