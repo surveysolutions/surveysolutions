@@ -23,7 +23,7 @@ using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Code
 {
-    public class QuestionnaireHelper : IQuestionnaireHelper, IQuestionnaireExportService
+    public class QuestionnaireHelper : IQuestionnaireHelper
     {
         private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;

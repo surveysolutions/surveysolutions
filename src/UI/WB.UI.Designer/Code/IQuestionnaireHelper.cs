@@ -2,11 +2,12 @@
 using System.IO;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
+using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Code
 {
-    public interface IQuestionnaireHelper
+    public interface IQuestionnaireHelper : IQuestionnaireExportService
     {
         IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
             Guid viewerId,

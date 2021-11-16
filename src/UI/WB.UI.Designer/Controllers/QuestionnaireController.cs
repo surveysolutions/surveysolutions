@@ -77,12 +77,8 @@ namespace WB.UI.Designer.Controllers
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IPublicFoldersStorage publicFoldersStorage;
-        private readonly IAttachmentService attachmentService;
-        private readonly ITranslationsService translationsService;
         private readonly ICategoriesService categoriesService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
-        private readonly ISerializer serializer;
-        private readonly IQuestionnaireExportService questionnaireExportService;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -98,11 +94,7 @@ namespace WB.UI.Designer.Controllers
             DesignerDbContext dbContext,
             IQuestionnaireHelper questionnaireHelper,
             IPublicFoldersStorage publicFoldersStorage,
-            IAttachmentService attachmentService,
-            ITranslationsService translationsService,
-            ICategoriesService categoriesService,
-            ISerializer serializer,
-            IQuestionnaireExportService questionnaireExportService)
+            ICategoriesService categoriesService)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -116,12 +108,8 @@ namespace WB.UI.Designer.Controllers
             this.dbContext = dbContext;
             this.questionnaireHelper = questionnaireHelper;
             this.publicFoldersStorage = publicFoldersStorage;
-            this.attachmentService = attachmentService;
-            this.translationsService = translationsService;
             this.categoriesService = categoriesService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
-            this.serializer = serializer;
-            this.questionnaireExportService = questionnaireExportService;
         }
 
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]

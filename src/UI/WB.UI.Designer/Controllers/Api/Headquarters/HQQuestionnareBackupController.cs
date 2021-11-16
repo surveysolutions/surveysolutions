@@ -22,8 +22,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
-        private readonly IQuestionnaireExportService questionnaireExportService;
-        public HQQuestionnareBackupController(IQuestionnaireExportService questionnaireExportService, 
+        private readonly IQuestionnaireHelper questionnaireExportService;
+        public HQQuestionnareBackupController(IQuestionnaireHelper questionnaireExportService, 
             IQuestionnaireViewFactory questionnaireViewFactory,
             IVerificationErrorsMapper verificationErrorsMapper)
         {
