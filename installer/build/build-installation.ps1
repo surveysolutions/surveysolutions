@@ -1,8 +1,7 @@
 param(
-#      [string]$cmd,
-      [string]$HQSourcePath, 
-	  [switch]$noDestCleanup,
-	  [INT]   $BuildNumber)
+    [string]$HQSourcePath,
+    [string]$ClientPath,
+    [string]$ProductFileVersion)
 
 $ErrorActionPreference = "Stop"
 
@@ -10,70 +9,42 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 . "$scriptFolder\functions.ps1"
 
-Add-Type -AssemblyName System.Web.Extensions
 
-$scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
-. "$scriptFolder\functions.ps1"
-
-$sourceCleanup = $False
-
-$workdir = Get-Location
-if ($HQSourcePath -eq "") {
-	$HQSourcePath = Join-Path $workdir "HQpackage"
-	$sourceCleanup = $True
-}
-
-$InstallationProject = 'src\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
-$MainInstallationSolution = 'src\SurveySolutionsBootstrap.sln'
-
-#Set-Location $HQSourcePath
-$sitePatha = (Get-ChildItem $HQSourcePath -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "dist"}).FullName
-
-$HQsitePath = Join-path $workdir "HQwork"
-
-Log-Message "HQsitePath : $HQsitePath"
-
-#remove old files
-if (!($noDestCleanup)) {
-	if (Test-Path $HQsitePath){
-		Remove-Item $HQsitePath -Force -Recurse
-	}
-}
+$HQsitePath = Join-Path (Get-Location) "Work"
+Log-Message "Working folder : $HQsitePath"
 
 if (!(Test-Path $HQsitePath)) {
 	New-Item $HQsitePath -ItemType Directory
 	New-Item $HQsitePath\Site -ItemType Directory
-#	New-Item (Join-Path $HQsitePath "App_Data") -ItemType Directory
+    New-Item $HQsitePath\Site\Client -ItemType Directory
 }
 
-#$supportPath = Join-path $workdir "SupportPackage"
-#$targetSupportPath = Join-path $HQsitePath "Support"
+Copy-Item $HQSourcePath\* $HQsitePath\Site -Force -Recurse -Exclude '*.pdb'
+Copy-Item $ClientPath\*.apk $HQsitePath\Site\Client -Force
 
-Copy-Item $sitePatha\* $HQsitePath\Site -Force -Recurse -Exclude '*.pdb'
-Rename-Item $HQsitePath\Site\web.config $HQsitePath\Site\Web.config
+if ($null -eq $ProductFileVersion) {
+    $files = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll" -or $_.Name -match "WB.UI.Headquarters.exe" })
 
-#Remove-Item "$HQsitePath\HostMap.config"
+    Log-Message "files for version check : $files"
 
-Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse -Exclude '*.pdb'
+    foreach($file in $files) {
+        Log-Message "Checking version for: $file.FullName"
+        $versionOfProduct = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName)
+        
+        if(($versionOfProduct.FileVersion -eq '') -or ($null -eq $versionOfProduct.FileVersion)) {
+            continue
+        }
 
-$files = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll" -or $_.Name -match "WB.UI.Headquarters.exe" })
-
-Log-Message "files for version check : $files"
-
-foreach($file in $files) {
-	Log-Message "Checking version for: $file.FullName"
-    $versionOfProduct = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName)
-    
-    if(($versionOfProduct.FileVersion -eq '') -or ($null -eq $versionOfProduct.FileVersion)) {
-        continue
+        break;
     }
 
-    break;
+    $productFileVersion = $versionOfProduct.FileVersion
 }
-# $version = $newVersion = "{0}{1}.{2}.{3}.{4}" -f $versionOfProduct.ProductMajorPart, $versionOfProduct.ProductMinorPart.ToString("00"), $versionOfProduct.ProductBuildPart, $versionOfProduct.ProductPrivatePart, $BuildNumber
-$productFileVersion = $versionOfProduct.FileVersion
 
 Log-Message "Version from file: $productFileVersion"
+
+
+$InstallationProject = 'src\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
 
 $installationArgs = @(
     $InstallationProject;
@@ -91,23 +62,3 @@ $pathToMsBuild = GetPathToMSBuild
 Log-Message "Calling build from $pathToMsBuild with params: $installationArgs" 
 
 & (GetPathToMSBuild) $installationArgs | Write-Host
-
-$wasBuildSuccessfull = $LASTEXITCODE -eq 0
-
-if (-not $wasBuildSuccessfull) {
-    Write-Host "##teamcity[message status='ERROR' text='Failed to build installation']"
-    if (-not $MultipleSolutions) {
-        Write-Host "##teamcity[buildProblem description='Failed to build installation']"
-    }
-}
-
-Set-Location $workdir
-
-if (!($noDestCleanup)) {
-	Remove-Item $HQsitePath -Force -Recurse
-}
-if ($sourceCleanup) {
-	Remove-Item $HQSourcePath -Force -Recurse
-}
-
-Write-Host "##teamcity[publishArtifacts 'SurveySolutions.msi']"
