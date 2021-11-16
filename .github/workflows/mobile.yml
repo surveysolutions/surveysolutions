@@ -24,8 +24,13 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.3
 
     - name: Build
-      run: .\.build.ps1 ${{ matrix.task }} -BuildNumber ${{ github.run_number }} `
-        -KeystoreAlias wbcapipublish
+      run: .\.build.ps1 ${{ matrix.task }} `
+        -BuildNumber ${{ github.run_number }} `
+        -signapk -KeystoreAlias wbcapipublish `
+        -androidKeyStore ${{ secrets.INTERVIEWER_KEYSTORE }} `
+        -KeystorePassword ${{ secrets.INTERVIEWER_KEYSTORE_PASSWORD }} `
+        -GoogleMapKey ${{ secrets.GOOGLEMAPS_KEY }} `
+        -ArcGisKey ${{ secrets.ARCGIS_KEY }}
        
     - name: Publish
       uses: actions/upload-artifact@v2
