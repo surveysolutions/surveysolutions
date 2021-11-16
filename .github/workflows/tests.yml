@@ -84,7 +84,7 @@ jobs:
             src/Tests/WB.Tests.Unit.Designer/TestResults/**/*.xml
 
   integration:
-    runs-on: ${{ inputs.runs_on }}${{ github.event.inputs.runs_on }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
 
