@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using ClosedXML.Excel;
 using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.DataAccess;
@@ -15,7 +14,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
-using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -26,7 +24,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private class TranslationRow
         {
             public string? EntityId { get; set; }
-            public string? Variable { get; set; }
             public string? Type { get; set; }
             public string? OptionValueOrValidationIndexOrFixedRosterId { get; set; }
             public string? Translation { get; set; }
@@ -40,7 +37,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
             public IXLWorksheet Worksheet { get; set; }
             public string? EntityIdIndex { get; set; }
-            public string? VariableIndex { get; set; }
             public string? TypeIndex { get; set; }
             public string? OptionValueOrValidationIndexOrFixedRosterIdIndex { get; set; }
             public string? TranslationIndex { get; set; }
@@ -212,7 +208,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                 var translationInstance = categoriesId.HasValue
                     ? GetCategoriesTranslation(questionnaireId, translationId, categoriesId.Value, importedTranslation)
-                    : GetQuestionnaireTranslation(questionnaire, translationId,
+                    : GetQuestionnaireTranslation(questionnaireId, translationId,
                         importedTranslation, idsOfAllQuestionnaireEntities);
 
                 if (translationInstance != null)
@@ -233,33 +229,21 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 Type = TranslationType.Categories
             };
 
-        private TranslationInstance? GetQuestionnaireTranslation(QuestionnaireDocument questionnaire, Guid translationId, TranslationRow importedTranslation,
+        private TranslationInstance? GetQuestionnaireTranslation(Guid questionnaireId, Guid translationId, TranslationRow importedTranslation,
             Dictionary<Guid, bool> idsOfAllQuestionnaireEntities)
         {
             var questionnaireEntityId = Guid.Parse(importedTranslation.EntityId);
-            bool isGroup = false;
-
-            if (idsOfAllQuestionnaireEntities.ContainsKey(questionnaireEntityId))
-            {
-                isGroup = idsOfAllQuestionnaireEntities[questionnaireEntityId];
-            }
-            else
-            {
-                var entity = questionnaire.FirstOrDefault<IComposite>(c => c.VariableName == importedTranslation.Variable);
-                if (entity == null) 
-                    return null;
-                questionnaireEntityId = entity.PublicKey;
-                isGroup = entity is Group;
-            }
+            if (!idsOfAllQuestionnaireEntities.Keys.Contains(questionnaireEntityId)) return null;
 
             var translationType = (TranslationType) Enum.Parse(typeof(TranslationType), importedTranslation.Type);
 
-            var cleanedValue = this.GetCleanedValue(translationType, isGroup, importedTranslation.Translation);
+            var cleanedValue = this.GetCleanedValue(translationType, idsOfAllQuestionnaireEntities[questionnaireEntityId],
+                importedTranslation.Translation);
 
             return new TranslationInstance
             {
                 Id = Guid.NewGuid(),
-                QuestionnaireId = questionnaire.PublicKey,
+                QuestionnaireId = questionnaireId,
                 TranslationId = translationId,
                 QuestionnaireEntityId = questionnaireEntityId,
                 Value = cleanedValue,
@@ -283,7 +267,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             return new TranslationsWithHeaderMap(worksheet)
             {
                 EntityIdIndex = headers.GetOrNull(TranslationExcelOptions.EntityIdColumnName),
-                VariableIndex = headers.GetOrNull(TranslationExcelOptions.VariableColumnName),
                 TypeIndex = headers.GetOrNull(TranslationExcelOptions.TranslationTypeColumnName),
                 OptionValueOrValidationIndexOrFixedRosterIdIndex = headers.GetOrNull(TranslationExcelOptions.OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName),
                 TranslationIndex = headers.GetOrNull(TranslationExcelOptions.TranslationTextColumnName),
@@ -339,15 +322,12 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 ?.GetString();
             var optionValueOrValidationIndexOrFixedRosterId = worksheetWithHeadersMap.Worksheet
                 .Cell($"{worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex}{rowNumber}")
-                ?.GetString(); 
-            var variable = worksheetWithHeadersMap.Worksheet
-                .Cell($"{worksheetWithHeadersMap.VariableIndex}{rowNumber}")?.GetString();
+                ?.GetString();
             var translation = worksheetWithHeadersMap.Worksheet
                 .Cell($"{worksheetWithHeadersMap.TranslationIndex}{rowNumber}")?.GetString();
             return this.AdjustIndexValue(new TranslationRow
             {
                 EntityId = entityId.NullIfEmpty(),
-                Variable = variable,
                 Type = type.NullIfEmpty(),
                 OptionValueOrValidationIndexOrFixedRosterId = optionValueOrValidationIndexOrFixedRosterId.NullIfEmpty(),
                 Translation = translation.NullIfEmpty()
