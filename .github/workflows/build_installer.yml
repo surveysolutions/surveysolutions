@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  # build-mobile:
-  #  uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
+  build-mobile:
+    uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
 
   build:
-  #  needs: [build-mobile]
+    needs: [build-mobile]
     runs-on: windows-latest
 
     steps:
@@ -19,12 +19,12 @@ jobs:
           Invoke-WebRequest -Uri https://wixtoolset.org/downloads/v3.14.0.5722/wix314-binaries.zip -OutFile wix314-binaries.zip
           Expand-Archive -Path wix314-binaries.zip -DestinationPath installer/wix314-binaries
 
-  #    - name: Download mobile artifacts
-  #      id: download
-  #      uses: actions/download-artifact@v2
-  #      with:
-  #        name: artifact
-  #        path: installer/artifacts
+      - name: Download mobile artifacts
+        id: download
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+          path: installer/artifacts
 
       - name: Build Headquarters
         run: ./.build.ps1 PackageHqOffline -BuildNumber ${{ github.run_number }}
