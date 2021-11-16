@@ -22,14 +22,17 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
-        private readonly IQuestionnaireHelper questionnaireExportService;
-        public HQQuestionnareBackupController(IQuestionnaireHelper questionnaireExportService, 
+        private readonly IQuestionnaireHelper questionnaireHelper;
+        private readonly IQuestionnaireExportService questionnaireExportService;
+        public HQQuestionnareBackupController(IQuestionnaireHelper questionnaireHelper, 
             IQuestionnaireViewFactory questionnaireViewFactory,
-            IVerificationErrorsMapper verificationErrorsMapper)
+            IVerificationErrorsMapper verificationErrorsMapper,
+            IQuestionnaireExportService questionnaireExportService)
         {
-            this.questionnaireExportService = questionnaireExportService;
+            this.questionnaireHelper = questionnaireHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.verificationErrorsMapper = verificationErrorsMapper;
+            this.questionnaireExportService = questionnaireExportService;
         }
 
         private const int MaxVerificationErrors = 20;
@@ -89,6 +92,33 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         [HttpGet]
         [Route("{questionnaireId}")]
         public IActionResult Get(Guid questionnaireId)
+        {
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
+            if (questionnaireView == null)
+            {
+                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireId));
+            }
+
+            if (!this.ValidateAccessPermissions(questionnaireView))
+            {
+                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status403Forbidden, ErrorMessages.NoAccessToQuestionnaire);
+            }
+
+            var result = VerifyQuestionnaire(questionnaireView);
+            if (result.Any(v => v.MessageLevel > VerificationMessageLevel.Warning))
+            {
+                return Forbid();
+            }
+
+            var stream = this.questionnaireHelper.GetBackupQuestionnaire(questionnaireId, out string questionnaireFileName);
+            if (stream == null) return NotFound();
+
+            return File(stream, "application/zip", $"{questionnaireFileName}.zip");
+        }
+        
+        [HttpGet]
+        [Route("package/{questionnaireId}")]
+        public IActionResult GetQuestionnairePackage(Guid questionnaireId)
         {
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
             if (questionnaireView == null)

@@ -206,7 +206,7 @@ angular.module('designerApp')
                         $scope.showVerificationErrors();
                     }
                     else{
-                        window.location = '../../api/hq/backup/' + $state.params.questionnaireId
+                        window.location = '../../api/hq/backup/package/' + $state.params.questionnaireId
                     }
                 });
             };
