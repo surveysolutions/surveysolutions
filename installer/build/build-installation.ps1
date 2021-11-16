@@ -44,7 +44,7 @@ if ($null -eq $ProductFileVersion) {
 Log-Message "Version from file: $productFileVersion"
 
 
-$InstallationProject = 'src\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
+$InstallationProject = '$scriptFolder\..\src\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
 
 $installationArgs = @(
     $InstallationProject;

@@ -4,15 +4,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-mobile:
-    uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
+  # build-mobile:
+  #  uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
 
   build:
-    needs: [build-mobile]
+  #  needs: [build-mobile]
     runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: installer
 
     steps:
       - uses: actions/checkout@v2
@@ -20,33 +17,28 @@ jobs:
       - name: Setup WIX
         run: |
           Invoke-WebRequest -Uri https://wixtoolset.org/downloads/v3.14.0.5722/wix314-binaries.zip -OutFile wix314-binaries.zip
-          Expand-Archive -Path wix314-binaries.zip -DestinationPath ./wix314-binaries
+          Expand-Archive -Path wix314-binaries.zip -DestinationPath installer/wix314-binaries
 
-      - name: Download mobile artifacts
-        id: download
-        uses: actions/download-artifact@v2
-        with:
-          name: artifact
-          path: artifacts
+  #    - name: Download mobile artifacts
+  #      id: download
+  #      uses: actions/download-artifact@v2
+  #      with:
+  #        name: artifact
+  #        path: installer/artifacts
 
-      - name: generate temp inputs
+      - name: Build Headquarters
+        run: ./.build.ps1 PackageHqOffline -BuildNumber ${{ github.run_number }}
+
+      - name: Extract HQ Package
         run: |
           New-Item "HQsources" -ItemType Directory
-          "bla bla" | Out-File HQsources/Web.config
-
-      - name: prepare version variables
-        id: versions
-        run: |
-          ver=$(cat ../src/.version | awk -F. '{printf "%s.%02d.%d\n", $1, $2, $3}')
-          echo ::set-output name=version::$ver.${{ github.run_number }}
-          echo "::set-output name=info_version::$ver (build ${{ github.run_number }})"
+          Expand-Archive -Path artifacts/WB.UI.Headquarters.Offline.zip -DestinationPath "HQsources"
 
       - name: Build installer
         run: |
-          ./build/build-installation.ps1
-            -HQSourcePath HQsources
+          ./installer/build/build-installation.ps1
+            -HQSourcePath "HQsources"
             -ClientPath ${{ steps.download.outputs.download-path }} 
-            -ProductFileVersion ${{ steps.versions.outputs.version }}
 
       - name: Publish
         uses: actions/upload-artifact@v2
