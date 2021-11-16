@@ -22,7 +22,7 @@ if (!(Test-Path $HQsitePath)) {
 Copy-Item $HQSourcePath\* $HQsitePath\Site -Force -Recurse -Exclude '*.pdb'
 Copy-Item $ClientPath\*.apk $HQsitePath\Site\Client -Force
 
-if ($null -eq $ProductFileVersion) {
+if (-not $PSBoundParameters.ContainsKey('ProductFileVersion')) {
     $files = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll" -or $_.Name -match "WB.UI.Headquarters.exe" })
 
     Log-Message "files for version check : $files"
@@ -44,7 +44,7 @@ if ($null -eq $ProductFileVersion) {
 Log-Message "Version from file: $productFileVersion"
 
 
-$InstallationProject = '$scriptFolder\..\src\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
+$InstallationProject = "$scriptFolder\..\src\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj"
 
 $installationArgs = @(
     $InstallationProject;
