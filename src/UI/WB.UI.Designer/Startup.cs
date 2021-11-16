@@ -181,8 +181,9 @@ namespace WB.UI.Designer
 
             services.AddDatabaseStoredExceptional(hostingEnvironment, Configuration);
 
-            services.AddTransient<IQuestionnaireRestoreService, QuestionnaireImportService>();
-            services.AddTransient<IQuestionnaireBackupService, QuestionnaireExportService>();
+            services.AddTransient<IQuestionnaireRestoreService, QuestionnaireRestoreService>();
+            services.AddTransient<IQuestionnaireImportService, QuestionnaireImportService>();
+            services.AddTransient<IQuestionnaireExportService, QuestionnaireExportService>();
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
             services.AddSingleton<IProductVersion, ProductVersion>();

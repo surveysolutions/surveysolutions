@@ -82,7 +82,7 @@ namespace WB.UI.Designer.Controllers
         private readonly ICategoriesService categoriesService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
         private readonly ISerializer serializer;
-        private readonly IQuestionnaireBackupService questionnaireBackupService;
+        private readonly IQuestionnaireExportService questionnaireExportService;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -102,7 +102,7 @@ namespace WB.UI.Designer.Controllers
             ITranslationsService translationsService,
             ICategoriesService categoriesService,
             ISerializer serializer,
-            IQuestionnaireBackupService questionnaireBackupService)
+            IQuestionnaireExportService questionnaireExportService)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -121,7 +121,7 @@ namespace WB.UI.Designer.Controllers
             this.categoriesService = categoriesService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
             this.serializer = serializer;
-            this.questionnaireBackupService = questionnaireBackupService;
+            this.questionnaireExportService = questionnaireExportService;
         }
 
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]

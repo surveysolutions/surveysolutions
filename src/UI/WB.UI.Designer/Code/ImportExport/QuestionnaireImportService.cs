@@ -28,7 +28,7 @@ using Group = WB.Core.BoundedContexts.Designer.ImportExport.Models.Group;
 
 namespace WB.UI.Designer.Code.ImportExport
 {
-    public class QuestionnaireImportService : IQuestionnaireRestoreService
+    public class QuestionnaireImportService : IQuestionnaireImportService
     {
         private readonly ILogger<QuestionnaireImportService> logger;
         private readonly ICommandService commandService;

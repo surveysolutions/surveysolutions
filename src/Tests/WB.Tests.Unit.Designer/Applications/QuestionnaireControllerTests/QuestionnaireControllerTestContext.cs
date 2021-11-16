@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 Mock.Of<ITranslationsService>(), 
                 categoriesService: Mock.Of<ICategoriesService>(),
                 serializer: Mock.Of<ISerializer>(),
-                questionnaireBackupService: Mock.Of<IQuestionnaireBackupService>());
+                questionnaireExportService: Mock.Of<IQuestionnaireExportService>());
             questionnaireController.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext

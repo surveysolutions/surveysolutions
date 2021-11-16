@@ -18,12 +18,7 @@ using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Code.ImportExport
 {
-    public interface IQuestionnaireBackupService
-    {
-        Stream? GetBackupQuestionnaire(Guid id, out string questionnaireFileName);
-    }
-
-    public class QuestionnaireExportService : IQuestionnaireBackupService
+    public class QuestionnaireExportService : IQuestionnaireExportService
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IAttachmentService attachmentService;
