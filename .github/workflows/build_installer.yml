@@ -4,12 +4,24 @@ on:
   workflow_dispatch:
 
 jobs:
+  tests:
+    uses: surveysolutions/surveysolutions/.github/workflows/tests.yml@master
+    with:
+      runs_on: 'windows-latest'
+      run_analysis: false
+    secrets:
+      sonar-token: ${{ secrets.SONAR_TOKEN }}
+
+  build-mobile:
+    needs: [tests]
+    uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
+
   build:
+    needs: [build-mobile]
     runs-on: windows-latest
     defaults:
       run:
         working-directory: installer
-
 
     steps:
       - uses: actions/checkout@v2
@@ -19,18 +31,20 @@ jobs:
           Invoke-WebRequest -Uri https://wixtoolset.org/downloads/v3.14.0.5722/wix314-binaries.zip -OutFile wix314-binaries.zip
           Expand-Archive -Path wix314-binaries.zip -DestinationPath ./wix314-binaries
 
+      - name: Download mobile artifacts
+        id: download
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+          path: artifacts
+
       - name: generate temp inputs
         run: |
           New-Item "HQsources" -ItemType Directory
           "bla bla" | Out-File HQsources/Web.config
-          New-Item "client" -ItemType Directory
-          "b" | Out-File client/WBCapi.apk
-          "b" | Out-File client/WBCapi.ext.apk
-          "b" | Out-File client/Supervisor.apk
-
 
       - name: Build installer
-        run: ./build/build-installation.ps1 -HQSourcePath HQsources -ClientPath client -ProductFileVersion 21.11.4.1234
+        run: ./build/build-installation.ps1 -HQSourcePath HQsources -ClientPath ${{ steps.download.outputs.download-path }} -ProductFileVersion 21.11.4.1234
 
       - name: Publish
         uses: actions/upload-artifact@v2
