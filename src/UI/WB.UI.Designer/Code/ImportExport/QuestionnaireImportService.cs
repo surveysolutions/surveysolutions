@@ -270,7 +270,7 @@ namespace WB.UI.Designer.Code.ImportExport
                     throw new ArgumentException("Questionnaire json file has schema errors. Please fix it.");
                 }
             }
-            catch (JsonReaderException e)
+            catch (JsonReaderException)
             {
                 state.Error = "Questionnaire has invalid format.";
                 throw;
