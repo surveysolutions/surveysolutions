@@ -4,16 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  tests:
-    uses: surveysolutions/surveysolutions/.github/workflows/tests.yml@master
-    with:
-      runs_on: 'windows-latest'
-      run_analysis: false
-    secrets:
-      sonar-token: ${{ secrets.SONAR_TOKEN }}
-
   build-mobile:
-    needs: [tests]
     uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
 
   build:
