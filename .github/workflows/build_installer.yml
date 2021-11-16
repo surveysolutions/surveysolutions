@@ -1,4 +1,4 @@
-name: Build installer
+name: Build Installer
 
 on:
   workflow_dispatch:
@@ -6,15 +6,18 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: installer
+
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Setup WIX
         run: |
-          New-Item "TestPathDir" -ItemType Directory
           Invoke-WebRequest -Uri https://wixtoolset.org/downloads/v3.14.0.5722/wix314-binaries.zip -OutFile wix314-binaries.zip
-          Expand-Archive -Path wix314-binaries.zip -DestinationPath ./installer/wix314-binaries
+          Expand-Archive -Path wix314-binaries.zip -DestinationPath ./wix314-binaries
 
       - name: generate temp inputs
         run: |
@@ -25,8 +28,9 @@ jobs:
           "b" | Out-File client/WBCapi.ext.apk
           "b" | Out-File client/Supervisor.apk
 
+
       - name: Build installer
-        run: ./installer/build/build-installation.ps1 -HQSourcePath HQsources -ClientPath client -ProductFileVersion 21.11.4.1234
+        run: ./build/build-installation.ps1 -HQSourcePath HQsources -ClientPath client -ProductFileVersion 21.11.4.1234
 
       - name: Publish
         uses: actions/upload-artifact@v2
