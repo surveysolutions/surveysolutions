@@ -36,9 +36,7 @@ jobs:
 
       - name: Build installer
         run: |
-          ./installer/build/build-installation.ps1
-            -HQSourcePath "HQsources"
-            -ClientPath ${{ steps.download.outputs.download-path }} 
+          ./installer/build/build-installation.ps1 -HQSourcePath "HQsources" -ClientPath ${{ steps.download.outputs.download-path }} 
 
       - name: Publish
         uses: actions/upload-artifact@v2
