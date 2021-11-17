@@ -32,9 +32,9 @@ namespace WB.Tests.Integration.CommandServiceTests
         {
             public void AnyCommand(AnyCommand command)
             {
-                Task.Delay(200).Wait();
+                Task.Delay(500).Wait();
                 command.Log.Add("command executed");
-                Task.Delay(200).Wait();
+                Task.Delay(500).Wait();
             }
         }
 
@@ -50,7 +50,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         }
         
         [Test]
-        public async Task when_waiting_for_command_execution_should_finish_waiting_after_execute_first_command()
+        public async Task when_waiting_for_command_execution_should_finish_waiting_after_execute_first_command() 
         {
             List<string> log = new List<string>();
             Guid aggregateId = Guid.NewGuid();
@@ -62,11 +62,13 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             var t1 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
             log.Add("wait started");
-            await commandService.WaitOnCommandAsync();
+            await commandService.WaitOnCommandAsync().ConfigureAwait(false);
             log.Add("wait finished");
 
             log.Should().BeEquivalentTo("wait started", "wait finished");
-            t1.Wait(5000);
+            
+            await t1.ConfigureAwait(false);
+            
             log.Should().BeEquivalentTo("wait started", "wait finished", "command executed");
         }
         
@@ -84,17 +86,19 @@ namespace WB.Tests.Integration.CommandServiceTests
             var t1 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
 
             log.Add("wait started");
-            await commandService.WaitOnCommandAsync();
+            await commandService.WaitOnCommandAsync().ConfigureAwait(false);
             log.Add("wait finished");
 
             log.Should().BeEquivalentTo("wait started", "wait finished");
 
-            t1.Wait(5000);
+            await t1.ConfigureAwait(false);
+            
             log.Should().BeEquivalentTo("wait started", "wait finished", "command executed");
 
             var t2 = commandService.ExecuteAsync(new AnyCommand(aggregateId, log), null, CancellationToken.None);
 
-            t2.Wait(5000);
+            await t2.ConfigureAwait(false);           
+            
             log.Should().BeEquivalentTo("wait started", "wait finished", "command executed", "command executed");
         }
     }
