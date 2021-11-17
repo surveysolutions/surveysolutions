@@ -36,8 +36,8 @@ jobs:
   mobile:
     needs: [prepare, tests]
     uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
-      with:
-        build_number: ${{ needs.prepare.outputs.build_number }}
+    with:
+      build_number: ${{ needs.prepare.outputs.build_number }}
 
   docker:
     needs: [mobile]
