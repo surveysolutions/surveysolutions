@@ -26,6 +26,7 @@ jobs:
     steps:
       - name: Define Build Number
         id: build_number
+        shell: pwsh
         run: |
           $BuildNumber = "${{ github.event.inputs.build_number }}"
           if ($BuildNumber -eq "auto") {
