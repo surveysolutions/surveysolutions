@@ -63,7 +63,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 new MvxObservableCollection<ShapefileDescription>(this.mapService.GetAvailableShapefiles());
 
             var localMaps = this.mapService.GetAvailableMaps(true);
-            var defaultMap = this.mapService.PrepareAndGetDefaultMap();
+            var defaultMap = this.mapService.PrepareAndGetDefaultMapOrNull();
             localMaps.Add(defaultMap);
 
             this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);

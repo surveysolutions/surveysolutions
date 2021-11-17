@@ -121,6 +121,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpPost]
         [ObservingNotAllowed]
         [RequestSizeLimit(500 * 1024 * 1024)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 500 * 1024 * 1024)]
         public async Task<JsonMapResponse> Upload(IFormFile file)
         {
             var response = new JsonMapResponse();

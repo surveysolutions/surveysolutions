@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -18,12 +19,13 @@ namespace WB.UI.Headquarters.Services.Impl
     {
         private readonly IAssemblyService assemblyService;
         private readonly ILogger logger;
-        private static readonly ConcurrentDictionary<string, AssemblyHolder?> AssemblyCache = new ConcurrentDictionary<string, AssemblyHolder?>();
+        private readonly IMemoryCache cache;
 
-        public QuestionnaireAssemblyAccessor(IAssemblyService assemblyService, ILogger logger)
+        public QuestionnaireAssemblyAccessor(IAssemblyService assemblyService, IMemoryCache cache, ILogger logger)
         {
             this.assemblyService = assemblyService;
             this.logger = logger;
+            this.cache = cache;
         }
 
         [DebuggerDisplay("{FileName} - {Assembly}")]
@@ -61,10 +63,12 @@ namespace WB.UI.Headquarters.Services.Impl
             public byte[] AssemblyContent { get; }
         }
 
+        private string GetAssemblyCacheKey(string assemblyFileName)=> "Assembly-file-" + assemblyFileName;
+        
         private AssemblyHolder? GetAssemblyHolder(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            var assembly = AssemblyCache.GetOrAdd(assemblyFileName, CreateAssemblyHolder);
+            var assembly = cache.GetOrCreate(GetAssemblyCacheKey(assemblyFileName), entry => CreateAssemblyHolder(assemblyFileName));
 
             return assembly;
         }

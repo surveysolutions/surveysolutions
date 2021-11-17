@@ -19,6 +19,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [HttpPost]
         [Route("api/supervisor/v1/brokenInterviews")]
         [RequestSizeLimit(1 * 1024 * 1024 * 1024)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 1 * 1024 * 1024 * 1024)]
         public IActionResult Post([FromBody]BrokenInterviewPackageApiView package)
         {
             if (package == null)
@@ -47,6 +48,5 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 
             return this.Ok();
         }
-
     }
 }
