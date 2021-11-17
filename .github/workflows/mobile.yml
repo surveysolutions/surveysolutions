@@ -2,11 +2,33 @@ name: mobile
 
 on:
   workflow_call:
+    inputs:
+      build_number:
+        description: 'Build Number'
+        default: ${{ github.run_number }}
+        required: false
+        type: string
+      environment:
+        description: 'Is this development or release build?'
+        default: 'development'
+        required: false
+        type: string
   workflow_dispatch:
+    inputs:
+      build_number:
+        description: 'Build Number'
+        default: ${{ github.run_number }}
+        required: false
+        type: string
+      environment:
+        description: 'Is this development or release build?'
+        default: 'development'
+        required: false
+        type: string
 
 jobs:
   build:
-
+    environment: ${{ inputs.environment }}
     runs-on: windows-latest
 
     strategy:
@@ -24,8 +46,14 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.3
 
     - name: Build
+      env:
+        APP_CENTER_INTERVIEWER_DEV: ${{ secrets.APPCENTER_INTERVIEWER_KEY }}
+        APP_CENTER_INTERVIEWER_PROD: ${{ secrets.APPCENTER_INTERVIEWER_KEY }} # will come with the prod value in the release environment
+        APP_CENTER_SUPERVISOR_DEV: ${{ secrets.APPCENTER_SUPERVISOR_KEY }}
+        APP_CENTER_SUPERVISOR_PROD: ${{ secrets.APPCENTER_SUPERVISOR_KEY }} # will come with the prod value in the release environment
+        
       run: .\.build.ps1 ${{ matrix.task }} `
-        -BuildNumber ${{ github.run_number }} `
+        -BuildNumber ${{ inputs.build_number }} `
         -signapk -KeystoreAlias wbcapipublish `
         -androidKeyStore ${{ secrets.INTERVIEWER_KEYSTORE }} `
         -KeystorePassword ${{ secrets.INTERVIEWER_KEYSTORE_PASSWORD }} `

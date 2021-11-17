@@ -1,0 +1,105 @@
+name: Build All
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_number:
+        description: 'Build Number'
+        default: ${{ github.run_number }}
+        required: false
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  tests:
+    uses: surveysolutions/surveysolutions/.github/workflows/tests.yml@master
+    with:
+      runs_on: 'ubuntu-latest'
+      run_analysis: false
+    secrets:
+      sonar-token: ${{ secrets.SONAR_TOKEN }}
+
+  mobile:
+    needs: [tests]
+    uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
+    with:
+      build_number: ${{ inputs.build_number }}
+
+  docker:
+    needs: [mobile]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      BUILD_VCS_NUMBER: ${{ github.sha }}
+
+    strategy:
+      matrix:
+        task: [DockerHq, DockerDesigner, DockerWebTester]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download mobile artifacts
+        if: ${{ matrix.task == 'DockerHq' }}
+        id: download
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+          path: artifacts
+
+      - name: Build and push
+        shell: pwsh
+        run: |
+          ./.build.ps1 ${{ matrix.task }} \
+            -BuildNumber ${{ inputs.build_number }} \
+            -dockerRegistry ${{ env.REGISTRY }}/${{ github.repository }} \
+            -apkFolder "artifacts"
+
+  installer:
+    needs: [mobile]
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup WIX
+        run: |
+          Invoke-WebRequest -Uri https://wixtoolset.org/downloads/v3.14.0.5722/wix314-binaries.zip -OutFile wix314-binaries.zip
+          Expand-Archive -Path wix314-binaries.zip -DestinationPath installer/wix314-binaries
+
+      - name: Download mobile artifacts
+        id: download
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+          path: installer/artifacts
+
+      - name: Build Headquarters
+        run: ./.build.ps1 PackageHqOffline -BuildNumber ${{ inputs.build_number }}
+
+      - name: Extract HQ Package
+        run: |
+          New-Item "HQsources" -ItemType Directory
+          Expand-Archive -Path artifacts/WB.UI.Headquarters.Offline.zip -DestinationPath "HQsources"
+
+      - name: Build installer
+        run: |
+          ./installer/build/build-installation.ps1 -HQSourcePath "HQsources" -ClientPath ${{ steps.download.outputs.download-path }} 
+
+      - name: Publish
+        uses: actions/upload-artifact@v2
+        with:
+          name: WindowsInstaller
+          path: ./installer/src/SurveySolutionsBootstrap/bin/Release/SurveySolutions*.exe

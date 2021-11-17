@@ -18,6 +18,8 @@ jobs:
   build-mobile:
     needs: [tests]
     uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
+    with:
+      build_number: ${{ github.run_number }}
 
   build-and-push:
     needs: [build-mobile]
