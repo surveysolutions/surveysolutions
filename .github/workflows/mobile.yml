@@ -5,7 +5,7 @@ on:
     inputs:
       build_number:
         description: 'Build Number'
-        default: ${{ github.run_number }}
+        default: 'auto'
         required: false
         type: string
       environment:
@@ -17,7 +17,7 @@ on:
     inputs:
       build_number:
         description: 'Build Number'
-        default: ${{ github.run_number }}
+        default: 'auto'
         required: false
         type: string
       environment:
@@ -36,6 +36,19 @@ jobs:
         task: [AndroidInterviewer, AndroidInterviewerWithMaps, AndroidSupervisor]
 
     steps:
+    - name: Define Build Number
+      id: build_number
+      run: |
+        if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+          $BuildNumber = "${{ github.event.inputs.build_number }}"
+        } else {
+          $BuildNumber = "${{ inputs.build_number }}"
+        }
+        if ($BuildNumber -eq "auto") {
+          $BuildNumber = ${{ github.run_number }}
+        }
+        Write-Output "::set-output name=build_number::$BuildNumber"
+
     - uses: actions/checkout@v2
 
     - name: Setup .NET Core SDK 5.0.x
@@ -53,12 +66,12 @@ jobs:
         APP_CENTER_SUPERVISOR_PROD: ${{ secrets.APPCENTER_SUPERVISOR_KEY }} # will come with the prod value in the release environment
         
       run: .\.build.ps1 ${{ matrix.task }} `
-        -BuildNumber ${{ inputs.build_number }} `
+        -BuildNumber ${{ steps.build_number.outputs.build_number }} `
         -signapk -KeystoreAlias wbcapipublish `
-        -androidKeyStore ${{ secrets.INTERVIEWER_KEYSTORE }} `
-        -KeystorePassword ${{ secrets.INTERVIEWER_KEYSTORE_PASSWORD }} `
-        -GoogleMapKey ${{ secrets.GOOGLEMAPS_KEY }} `
-        -ArcGisKey ${{ secrets.ARCGIS_KEY }}
+        -androidKeyStore "${{ secrets.INTERVIEWER_KEYSTORE }}" `
+        -KeystorePassword "${{ secrets.INTERVIEWER_KEYSTORE_PASSWORD }}" `
+        -GoogleMapKey "${{ secrets.GOOGLEMAPS_KEY }}" `
+        -ArcGisKey "${{ secrets.ARCGIS_KEY }}"
        
     - name: Publish
       uses: actions/upload-artifact@v2

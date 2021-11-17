@@ -5,7 +5,7 @@ on:
     inputs:
       build_number:
         description: 'Build Number'
-        default: '1'
+        default: 'auto'
         required: false
         type: string
 
@@ -23,9 +23,19 @@ jobs:
 
   mobile:
     needs: [tests]
-    uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
-    with:
-      build_number: ${{ github.event.inputs.build_number }}
+    steps:
+      - name: Define Build Number
+        id: build_number
+        run: |
+          $BuildNumber = "${{ github.event.inputs.build_number }}"
+          if ($BuildNumber -eq "auto") {
+            $BuildNumber = ${{ github.run_number }}
+          }
+          Write-Output "::set-output name=build_number::$BuildNumber"
+
+      - uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
+        with:
+          build_number: ${{ steps.build_number.outputs.build_number }}
 
   docker:
     needs: [mobile]
