@@ -21,8 +21,8 @@ jobs:
     secrets:
       sonar-token: ${{ secrets.SONAR_TOKEN }}
 
-  mobile:
-    needs: [tests]
+  prepare:
+    runs-on: ubuntu-latest
     steps:
       - name: Define Build Number
         id: build_number
@@ -33,9 +33,11 @@ jobs:
           }
           Write-Output "::set-output name=build_number::$BuildNumber"
 
-      - uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
-        with:
-          build_number: ${{ steps.build_number.outputs.build_number }}
+  mobile:
+    needs: [prepare, tests]
+    uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
+      with:
+        build_number: ${{ needs.prepare.outputs.build_number }}
 
   docker:
     needs: [mobile]
