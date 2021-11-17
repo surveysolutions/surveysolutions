@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Base;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using MvvmCross.Views;
 using WB.Core.SharedKernels.DataCollection;
@@ -21,6 +22,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
     [TestOf(typeof(SideBarSectionsViewModel))]
     public class SidebarSectionsViewModelTests : MvxIoCSupportingTest
     {
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            base.Setup();
+            
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
+            Ioc.RegisterType<ThrottlingViewModel>(() => Create.ViewModel.ThrottlingViewModel());
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
+        }
+    
         private static readonly QuestionnaireDocument QuestionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
         {
             Create.Entity.Group(Id.g10, children: new IComposite[]
@@ -44,12 +57,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         [Test]
         public async Task When_getting_sections_after_closing_section_for_interview_with_nested_rosters_and_nested_roster_open()
         {
-            base.Setup();
-
-            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
-            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
-
             //arrange
             var questionnaire = QuestionnaireDocument;
 
@@ -93,12 +100,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         [Test]
         public async Task When_getting_sections_for_interview_with_fisrt_section_open()
         {
-            base.Setup();
-
-            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
-            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
-
             //arrange
             var questionnaire = QuestionnaireDocument;
 
@@ -133,12 +134,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         [Test]
         public async Task When_getting_sections_for_interview_with_nested_rosters_and_deepest_roster_is_open()
         {
-            base.Setup();
-
-            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
-            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
-
             //arrange
             var questionnaire = QuestionnaireDocument;
 
@@ -181,12 +176,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         [Test]
         public void When_section_enabled_Then_new_view_model_should_be_added_with_specified_index()
         {
-            base.Setup();
-
-            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
-            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
-
             //arrange
             var section1Id = Guid.Parse("11111111111111111111111111111112");
             var disabledSectionId = Guid.Parse("22222222222222222222222222222222");
@@ -220,12 +209,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         [Test]
         public void When_section_disabled_and_hide_if_disabled_Then_view_model_of_that_section_should_not_be_visible()
         {
-            base.Setup();
-
-            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
-            Ioc.RegisterSingleton(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
-
             //arrange
             var section1Id = Guid.Parse("11111111111111111111111111111110");
             var disabledSectionId = Guid.Parse("22222222222222222222222222222222");
@@ -256,12 +239,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         [Test]
         public void When_section_disabled_and_set_hide_if_disabled_for_questionnaire_Then_view_model_of_that_section_should_not_be_visible()
         {
-            base.Setup();
-
-            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
-            Ioc.RegisterSingleton(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
-
             //arrange
             var section1Id = Guid.Parse("11111111111111111111111111111112");
             var disabledSectionId = Guid.Parse("22222222222222222222222222222222");
@@ -292,12 +269,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         [Test]
         public void When_section_disabled_and_hide_if_disabled_for_questionnaire_is_not_set_Then_view_model_of_that_section_should_be_visible()
         {
-            base.Setup();
-
-            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
-            Ioc.RegisterSingleton(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
-
             //arrange
             var section1Id = Guid.Parse("11111111111111111111111111111112");
             var disabledSectionId = Guid.Parse("22222222222222222222222222222222");
@@ -316,7 +287,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             interview.Apply(Create.Event.GroupsDisabled(disabledSectionId, RosterVector.Empty));
 
             var viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry);
-            
 
             //act
             var viewModelsWithDisabled = viewModel.AllVisibleSections.ToList();;
@@ -329,12 +299,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         [Test]
         public async Task when_getting_sections_for_old_questionnaire_should_add_custom_cover_section()
         {
-            base.Setup();
-
-            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
-            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
-
             //arrange
             var questionnaire = QuestionnaireDocument;
 
@@ -356,13 +320,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         [Test]
         public async Task when_getting_sections_for_new_questionnaire_should_not_add_custom_cover_section()
         {
-            base.Setup();
-
-            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
-            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
-
-            //arrange
+           //arrange
             var questionnaire = Create.Entity.QuestionnaireDocument(children:
                 new IComposite[]
                 {
@@ -397,12 +355,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         [Test]
         public async Task when_getting_sections_for_new_questionnaire_with_empty_cover_should_not_add_custom_cover_section_and_hide_cover()
         {
-            base.Setup();
-
-            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
-            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
-
             //arrange
             var questionnaire = Create.Entity.QuestionnaireDocument(children:
                 new IComposite[]

@@ -59,6 +59,7 @@
     <Compile Include="Activities\Dashboard\MenuItemOnMenuItemClickListener.cs" />
     <Compile Include="Activities\EnumeratorSplashScreenAppCompatActivity.cs" />
     <Compile Include="Activities\SearchActivity.cs" />
+    <Compile Include="Activities\SecureStorage.cs" />
     <Compile Include="Activities\SelectResponsibleForInterviewFragment.cs" />
     <Compile Include="Converters\CalendarEventAndStatusToColorConverter.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="CustomControls\FixedMvxFilteringAdapter.cs" />
     <Compile Include="CustomServices\GoogleApiService.cs" />
     <Compile Include="CustomServices\StringFormat.cs" />
+    <Compile Include="EnumeratorIocRegistrationModule.cs" />
     <Compile Include="EnumeratorLoggingModule.cs" />
     <Compile Include="Migrations\Workspaces\Encrypt_Data.cs" />
     <Compile Include="Migrations\Workspaces\M201912091307_ChangeIdTypeInOptionViewTable.cs" />
@@ -198,6 +200,8 @@
     <Compile Include="Services\AndroidPathUtils.cs" />
     <Compile Include="Services\ApplicationResumeMessage.cs" />
     <Compile Include="Services\ArchivePatcherService.cs" />
+    <Compile Include="Services\Autofac.MvvmCross\AutofacMvxIocProvider.cs" />
+    <Compile Include="Services\Autofac.MvvmCross\MvxIoCProviderWithParent.cs" />
     <Compile Include="Services\BackupRestoreService.cs" />
     <Compile Include="Services\BaseViewModelNavigationService.cs" />
     <Compile Include="Services\CurrentViewModelPresenter.cs" />
@@ -1406,10 +1410,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac">
-      <Version>4.9.4</Version>
-    </PackageReference>
-    <PackageReference Include="Autofac.Extras.MvvmCross">
-      <Version>5.1.0</Version>
+      <Version>6.2.0</Version>
     </PackageReference>
     <PackageReference Include="Humanizer.Core">
       <Version>2.8.26</Version>
@@ -1426,11 +1427,14 @@
     <PackageReference Include="Microsoft.Extensions.Caching.Memory">
       <Version>5.0.0</Version>
     </PackageReference>
-    <PackageReference Include="MvvmCross.Plugin.Messenger">
-      <Version>7.1.2</Version>
+    <PackageReference Include="Microsoft.Extensions.Logging">
+      <Version>5.0.0</Version>
     </PackageReference>
-    <PackageReference Include="MvvmCross.Plugin.Network">
-      <Version>7.0.1</Version>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="MvvmCross.Plugin.Messenger">
+      <Version>8.0.2</Version>
     </PackageReference>
     <PackageReference Include="NETStandard.Library">
       <Version>2.0.3</Version>
@@ -1439,10 +1443,22 @@
       <Version>12.0.3</Version>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>4.7.8</Version>
+      <Version>4.7.11</Version>
+    </PackageReference>
+    <PackageReference Include="NLog.Extensions.Logging">
+      <Version>1.7.4</Version>
     </PackageReference>
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="Serilog">
+      <Version>2.10.0</Version>
+    </PackageReference>
+    <PackageReference Include="Serilog.Extensions.Logging">
+      <Version>3.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Serilog.Sinks.Xamarin">
+      <Version>0.2.0.64</Version>
     </PackageReference>
     <PackageReference Include="sqlite-net-pcl">
       <Version>1.8.116</Version>
@@ -1505,7 +1521,7 @@
       <Version>3.0.0-beta5</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.DroidX.RecyclerView">
-      <Version>7.1.2</Version>
+      <Version>8.0.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
       <Version>1.0.0.10</Version>

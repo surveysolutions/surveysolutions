@@ -12,7 +12,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answering_yesno_question_which_is_roster_size_question : with_event_context
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public override void context () {
+            base.context();
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.YesNoQuestion(questionId: questionId, answers: new[]

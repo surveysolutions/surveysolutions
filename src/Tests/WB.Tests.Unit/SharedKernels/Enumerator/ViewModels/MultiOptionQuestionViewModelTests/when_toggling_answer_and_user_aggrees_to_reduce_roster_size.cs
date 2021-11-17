@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
     internal class when_toggling_answer_and_user_agrees_to_reduce_roster_size: MultiOptionQuestionViewModelTestsContext
     {
         [OneTimeSetUp] 
-        public async Task context () {
+        public void context () {
             var options = new[]
             {
                 Create.Entity.Option(1, "item1"),

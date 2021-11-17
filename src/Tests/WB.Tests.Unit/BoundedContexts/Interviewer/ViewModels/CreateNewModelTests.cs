@@ -27,6 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
         {
             base.Setup();
             Ioc.RegisterSingleton(Stub.MvxMainThreadAsyncDispatcher());
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
         }
 
         [Test]
@@ -49,7 +50,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             });
 
             var mockOfSynchronizationViewModel = new Mock<LocalSynchronizationViewModel>(
-                Mock.Of<IMvxMessenger>(), 
                 new SynchronizationCompleteSource(),
                 Mock.Of<ITabletDiagnosticService>(),
                 Mock.Of<ILogger>());
@@ -87,7 +87,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             });
 
             var mockOfSynchronizationViewModel = new Mock<LocalSynchronizationViewModel>(
-                Mock.Of<IMvxMessenger>(),
                 new SynchronizationCompleteSource(),
                 Mock.Of<ITabletDiagnosticService>(),
                 Mock.Of<ILogger>());

@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.SpaServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
@@ -244,7 +245,7 @@ namespace WB.UI.Designer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             app.UseExceptional();
 

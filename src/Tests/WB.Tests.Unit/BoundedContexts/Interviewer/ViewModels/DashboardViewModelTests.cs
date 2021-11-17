@@ -28,6 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
         public DashboardViewModelTests()
         {
             base.Setup();
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
         }
 
         [Test]
@@ -38,7 +39,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             mockOfViewModelNavigationService.SetupGet(x => x.HasPendingOperations).Returns(true);
 
             var mockOfSynchronizationViewModel = new Mock<LocalSynchronizationViewModel>(
-                Mock.Of<IMvxMessenger>(),
                 new SynchronizationCompleteSource(),
                 Mock.Of<ITabletDiagnosticService>(),
                 Mock.Of<ILogger>());
@@ -73,7 +73,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     viewModelNavigationService: viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                     principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
                     synchronization: synchronization ?? Create.ViewModel.LocalSynchronizationViewModel(),
-                    messenger: messenger ?? Mock.Of<IMvxMessenger>(),
                     interviewerSettings: Mock.Of<IInterviewerSettings>(),
                     createNewViewModel: DashboardQuestionnairesViewModel(),
                     startedInterviewsViewModel: DashboardStartedInterviewsViewModel(),

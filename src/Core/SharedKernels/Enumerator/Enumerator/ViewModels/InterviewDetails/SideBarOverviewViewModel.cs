@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
@@ -16,12 +17,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private bool isCurrent;
         private bool isSelected;
 
-        public SideBarOverviewViewModel(IMvxMessenger messenger,
+        public SideBarOverviewViewModel(
             DynamicTextViewModel dynamicTextViewModel,
             InterviewStateViewModel interviewStateViewModel,
             AnswerNotifier answerNotifier)
         {
-            this.messenger = messenger;
+            this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             this.Title = dynamicTextViewModel;
             this.SideBarGroupState = interviewStateViewModel;
             this.answerNotifier = answerNotifier;

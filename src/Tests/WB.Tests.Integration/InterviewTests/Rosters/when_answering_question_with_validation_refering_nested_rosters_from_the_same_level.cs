@@ -14,7 +14,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         private AppDomainContext appDomainContext;
 
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetUp()
         {
             Integration.SetUp.MockedServiceLocator();
 

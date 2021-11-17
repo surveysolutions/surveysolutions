@@ -90,9 +90,6 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             {
                 if (!this.networkService.IsNetworkEnabled())
                     throw new RestException("No network", type: RestExceptionType.NoNetwork);
-
-                if (!this.networkService.IsHostReachable(this.restServiceSettings.Endpoint))
-                    throw new RestException("Host unreachable", type: RestExceptionType.HostUnreachable);
             }
 
             var requestTimeoutToken = new CancellationTokenSource(this.restServiceSettings.Timeout).Token;

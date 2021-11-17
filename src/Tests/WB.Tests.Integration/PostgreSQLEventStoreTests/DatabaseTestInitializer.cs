@@ -56,7 +56,8 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 {
                     DbType.PlainStore => "plainstore",
                     DbType.ReadSide => "readside",
-                    DbType.Users => "users"
+                    DbType.Users => "users",
+                    _ => throw new ArgumentOutOfRangeException(nameof(db))
                 };
 
                 DatabaseManagement.InitDatabase(connectionString, schemaName);

@@ -3,6 +3,7 @@
         v-if="$me && visible">
         <a class="btn btn-lg"
             :class="css"
+            :disabled="shouldDisable"
             @click="navigate">
             <span v-html="buttonTitle"></span>
         </a>
@@ -15,9 +16,17 @@ import { GroupStatus, ButtonType } from '../questions'
 export default {
     mixins: [entityDetails],
     name: 'NavigationButton',
+    data: function() {
+        return {
+            clicked : false,
+        }
+    },
     computed: {
         visible(){
             return !(this.$store.getters.isReviewMode === true) || this.$me.type != ButtonType.Complete
+        },
+        shouldDisable() {
+            return this.clicked == true && this.$store.getters.loadingProgress === true
         },
         css() {
             const status =  this.$me.status
@@ -60,10 +69,21 @@ export default {
         ['$route.params.sectionId']() {
             this.fetch()
         },
+        ['$store.getters.loadingProgress'](newValue) {
+            if (newValue == false && this.clicked) {
+                this.clicked = false
+            }
+        },
     },
 
     methods: {
         navigate() {
+            var needWait = this.$store.getters.loadingProgress === true
+            if (needWait) {
+                this.clicked = true
+                return
+            }
+
             if (this.$me.type == ButtonType.Complete) {
                 this.$router.push({ name: 'complete' })
             }

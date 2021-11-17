@@ -1,5 +1,6 @@
 using Android.App;
 using Android.Content.PM;
+using MvvmCross.Platforms.Android.Views;
 
 namespace WB.UI.Tester.Activities
 {
@@ -7,7 +8,7 @@ namespace WB.UI.Tester.Activities
         MainLauncher = true, 
         ScreenOrientation = ScreenOrientation.Portrait, 
         Theme = "@style/AppTheme")]
-    public class SplashActivity : MvvmCross.Platforms.Android.Views.MvxSplashScreenActivity<Setup, TesterMvxApplication>
+    public class SplashActivity : MvxSplashScreenActivity//MvvmCross.Platforms.Android.Views.MvxSplashScreenActivity<Setup, TesterMvxApplication>
     {
         public SplashActivity() : base(Resource.Layout.splash)
         {
