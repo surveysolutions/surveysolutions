@@ -5,7 +5,7 @@ on:
     inputs:
       build_number:
         description: 'Build Number'
-        default: ${{ github.run_number }}
+        default: '1'
         required: false
         type: string
 
@@ -25,7 +25,7 @@ jobs:
     needs: [tests]
     uses: surveysolutions/surveysolutions/.github/workflows/mobile.yml@master
     with:
-      build_number: ${{ inputs.build_number }}
+      build_number: ${{ github.event.inputs.build_number }}
 
   docker:
     needs: [mobile]
@@ -63,7 +63,7 @@ jobs:
         shell: pwsh
         run: |
           ./.build.ps1 ${{ matrix.task }} \
-            -BuildNumber ${{ inputs.build_number }} \
+            -BuildNumber ${{ github.event.inputs.build_number }} \
             -dockerRegistry ${{ env.REGISTRY }}/${{ github.repository }} \
             -apkFolder "artifacts"
 
@@ -87,7 +87,7 @@ jobs:
           path: installer/artifacts
 
       - name: Build Headquarters
-        run: ./.build.ps1 PackageHqOffline -BuildNumber ${{ inputs.build_number }}
+        run: ./.build.ps1 PackageHqOffline -BuildNumber ${{ github.event.inputs.build_number }}
 
       - name: Extract HQ Package
         run: |
