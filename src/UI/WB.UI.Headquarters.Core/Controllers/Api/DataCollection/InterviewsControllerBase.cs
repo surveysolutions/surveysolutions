@@ -31,6 +31,7 @@ using WB.UI.Headquarters.Code;
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     [RequestSizeLimit(1 * 1024 * 1024 * 1024)]
+    [RequestFormLimits(MultipartBodyLengthLimit = 1 * 1024 * 1024 * 1024)]
     public abstract class InterviewsControllerBase : ControllerBase
     {
         private readonly IImageFileStorage imageFileStorage;
