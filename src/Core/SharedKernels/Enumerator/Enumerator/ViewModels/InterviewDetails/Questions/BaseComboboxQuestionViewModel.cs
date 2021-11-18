@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -39,7 +40,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionInstructionViewModel instructionViewModel,
             IStatefulInterviewRepository interviewRepository,
             IViewModelEventRegistry eventRegistry,
-            FilteredOptionsViewModel filteredOptionsViewModel)
+            FilteredOptionsViewModel filteredOptionsViewModel,
+            IUserInterfaceStateService userInterfaceStateService)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -54,8 +56,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
             
             this.comboboxViewModel = 
-                new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, 
-                    true);
+                new CategoricalComboboxAutocompleteViewModel(questionStateViewModel,
+                    answering, filteredOptionsViewModel, 
+                    userInterfaceStateService, true);
         }
 
         protected IStatefulInterview interview;

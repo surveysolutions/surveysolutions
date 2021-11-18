@@ -9,6 +9,7 @@ using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
@@ -22,16 +23,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public virtual event Func<object, EventArgs, Task> OnAnswerRemoved;
         public virtual event Func<object, EventArgs, Task> OnShowErrorIfNoAnswer;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
+        private readonly IUserInterfaceStateService userInterfaceStateService;
         private readonly bool displaySelectedValue;
         private readonly ThrottlingViewModel throttlingModel;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
         public CategoricalComboboxAutocompleteViewModel(IQuestionStateViewModel questionState,
+            AnsweringViewModel answeringViewModel,
             FilteredOptionsViewModel filteredOptionsViewModel,
+            IUserInterfaceStateService userInterfaceStateService,
             bool displaySelectedValue)
         {
             this.QuestionState = questionState;
+            this.Answering = answeringViewModel;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
+            this.userInterfaceStateService = userInterfaceStateService;
             this.displaySelectedValue = displaySelectedValue;
             this.throttlingModel = Mvx.IoCProvider.Create<ThrottlingViewModel>();
             this.throttlingModel.Init(UpdateFilterThrottled);
@@ -45,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void InitFilter(string initialFilter = null)
         {
-            this.AutoCompleteSuggestions = this.GetSuggestions(initialFilter).ToList();
+            this.AutoCompleteSuggestions = this.GetSuggestions(initialFilter);
             this.FilterText = initialFilter;
             this.RaisePropertyChanged(nameof(FilterText));
         }
@@ -127,7 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string filterToUpdate = null;
         private async Task UpdateFilterThrottled()
         {
-            var suggestions = this.GetSuggestions(filterToUpdate).ToList();
+            var suggestions = this.GetSuggestions(filterToUpdate);
 
             await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
@@ -158,7 +164,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.FilterText = null;
             
-            var suggestions = this.GetSuggestions(null).ToList();
+            var suggestions = this.GetSuggestions(null);
             this.QuestionState.Validity.ExecutedWithoutExceptions();
 
             this.InvokeOnMainThread(() =>
@@ -168,18 +174,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        private IEnumerable<OptionWithSearchTerm> GetSuggestions(string filter)
+        private List<OptionWithSearchTerm> GetSuggestions(string filter)
         {
-            List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20);
+            List<OptionWithSearchTerm> optionWithSearchTerms = new List<OptionWithSearchTerm>();
 
-            foreach (var model in filteredOptions.Count == 1 && displaySelectedValue
-                ? filteredOptions
-                : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value)))
+            try
             {
-                if (model.Title.IsNullOrEmpty())
-                    continue;
+                this.Answering.StartInProgressIndicator();
+                userInterfaceStateService.NotifyRefreshStarted();
 
-                yield return ToOptionWithSearchTerm(filter, model);
+                List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20);
+                var categoricalOptions = filteredOptions.Count == 1 && displaySelectedValue
+                    ? filteredOptions
+                    : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value));
+            
+            
+                foreach (var model in categoricalOptions)
+                {
+                    if (model.Title.IsNullOrEmpty())
+                        continue;
+
+                    var withSearchTerm = ToOptionWithSearchTerm(filter, model);
+                    optionWithSearchTerms.Add(withSearchTerm);
+                }
+
+                return optionWithSearchTerms;
+            }
+            finally
+            {
+                userInterfaceStateService.NotifyRefreshFinished();
+                this.Answering.FinishInProgressIndicator();
             }
         }
 
@@ -199,6 +223,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionInstructionViewModel InstructionViewModel => null;
         public IQuestionStateViewModel QuestionState { get; protected set; }
-        public AnsweringViewModel Answering => null;
+        public AnsweringViewModel Answering { get; protected set; }
     }
 }

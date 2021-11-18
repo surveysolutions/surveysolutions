@@ -29,13 +29,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository, IPrincipal principal,
             IUserInteractionService userInteraction, AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel, QuestionInstructionViewModel instructionViewModel,
-            ThrottlingViewModel throttlingModel) : base(questionStateViewModel, questionnaireRepository, eventRegistry,
+            ThrottlingViewModel throttlingModel,
+            IUserInterfaceStateService userInterfaceStateService) 
+            : base(questionStateViewModel, questionnaireRepository, eventRegistry,
             interviewRepository, principal, userInteraction, answering, filteredOptionsViewModel, instructionViewModel,
             throttlingModel)
         {
             this.comboboxViewModel =
-                new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, 
-                    false);
+                new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, 
+                    answering, filteredOptionsViewModel,
+                    userInterfaceStateService, false);
         }
 
         public override void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
