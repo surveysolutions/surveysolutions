@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class SingleOptionQuestionViewModel : MvxNotifyPropertyChanged,
+    public class SingleOptionQuestionViewModel : InterviewQuestionViewModelBase,
         IInterviewEntityViewModel, 
         IDisposable,
         ICompositeQuestionWithChildren,
@@ -61,10 +61,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.throttlingModel.Init(SaveAnswer);
         }
 
-        private Identity questionIdentity;
-
-        private Guid interviewId;
-
         private readonly QuestionStateViewModel<SingleOptionQuestionAnswered> questionState;
 
         public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> Options { get; private set; }
@@ -77,20 +73,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool HasOptions => true;
 
-        public Identity Identity => this.questionIdentity;
-
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public override void InitFast()
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
+            this.InstructionViewModel.Init(interviewId, questionIdentity, NavigationState);
+            this.questionState.Init(interviewId, questionIdentity, NavigationState);
+            this.filteredOptionsViewModel.Init(interviewId, questionIdentity);
+        }
 
-            this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
-            this.questionState.Init(interviewId, entityIdentity, navigationState);
-            this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
-
-            this.questionIdentity = entityIdentity;
+        public override void InitData()
+        {
             var interview = this.interviewRepository.Get(interviewId);
-            this.interviewId = interview.Id;
 
             var singleOptionQuestion = interview.GetSingleOptionQuestion(this.questionIdentity);
             this.previousOptionToReset = singleOptionQuestion.IsAnswered()
@@ -104,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void UpdateQuestionOptions()
         {
-            var interview = this.interviewRepository.Get(interviewId.FormatGuid());
+            var interview = this.interviewRepository.Get(interviewId);
             var singleOptionQuestion = interview.GetSingleOptionQuestion(this.questionIdentity);
 
             List<SingleOptionQuestionOptionViewModel> singleOptionQuestionOptionViewModels = this.filteredOptionsViewModel.GetOptions()
@@ -140,7 +132,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
 
             var command = new AnswerSingleOptionQuestionCommand(
-                this.interviewId,
+                Guid.Parse(this.interviewId),
                 this.userId,
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
@@ -211,7 +203,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.throttlingModel.CancelPendingAction();
                 await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interviewId,
+                    new RemoveAnswerCommand(
+                        Guid.Parse(this.interviewId),
                         this.userId,
                         this.questionIdentity));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();

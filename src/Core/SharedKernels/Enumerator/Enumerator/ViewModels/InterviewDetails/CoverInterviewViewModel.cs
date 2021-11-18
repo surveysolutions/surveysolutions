@@ -165,7 +165,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private CompositeCollection<ICompositeEntity> GetEditablePrefilledData(string interviewId, NavigationState navigationState)
         {
             var prefilledEntities = this.interviewViewModelFactory.GetPrefilledEntities(interviewId, navigationState).ToList();
-            return this.compositeCollectionInflationService.GetInflatedCompositeCollection(interviewId, prefilledEntities);
+            return this.compositeCollectionInflationService.GetInflatedCompositeCollection(prefilledEntities);
         }
         
         private List<CoverPrefilledEntity> GetReadOnlyPrefilledData(string interviewId, NavigationState navigationState, ReadOnlyCollection<Guid> prefilledEntitiesFromQuestionnaire, IQuestionnaire questionnaire, IStatefulInterview interview)

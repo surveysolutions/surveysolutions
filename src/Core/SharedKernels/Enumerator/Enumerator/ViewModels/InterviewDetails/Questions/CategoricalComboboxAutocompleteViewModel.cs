@@ -45,13 +45,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void InitFilter(string initialFilter = null)
         {
+            this.AutoCompleteSuggestions = this.GetSuggestions(initialFilter).ToList();
             this.FilterText = initialFilter;
             this.RaisePropertyChanged(nameof(FilterText));
-
-            Task.Factory.StartNew(() =>
-            {
-                this.AutoCompleteSuggestions = this.GetSuggestions(initialFilter).ToList();
-            });
         }
 
         private int[] excludedOptions = Array.Empty<int>();

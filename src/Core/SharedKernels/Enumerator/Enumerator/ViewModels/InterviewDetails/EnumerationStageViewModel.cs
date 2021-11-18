@@ -118,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 entities.Add(previousGroupNavigationViewModel);
 
-                var newEntities = this.compositeCollectionInflationService.GetInflatedCompositeCollection(interviewId, entities);
+                var newEntities = this.compositeCollectionInflationService.GetInflatedCompositeCollection(entities);
 
                 InvokeOnMainThread(() =>
                 {

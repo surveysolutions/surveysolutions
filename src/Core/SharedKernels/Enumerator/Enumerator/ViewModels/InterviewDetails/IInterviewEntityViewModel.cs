@@ -1,4 +1,7 @@
-﻿using WB.Core.SharedKernels.DataCollection;
+﻿using MvvmCross.ViewModels;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -10,66 +13,37 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     
     public interface IInterviewEntityLateInitViewModel : IInterviewEntityViewModel
     {
-        //void Setup(string interviewId, Identity entityIdentity, NavigationState navigationState);
-        void InitIfNeed();
-        IInterviewEntityViewModel WrappedEntity { get; }
+        void InitDataIfNeed();
     }
 
-    public class InterviewEntityViewModelWrapper : IInterviewEntityLateInitViewModel, ICompositeEntity
+    public abstract class InterviewQuestionViewModelBase : MvxNotifyPropertyChanged,
+        IInterviewEntityLateInitViewModel
     {
-        private string interviewId;
-        private Identity identity;
-        private NavigationState navigationState;
-        private readonly IInterviewEntityViewModel viewModel;
-        private bool isInitialized;
-
-        public InterviewEntityViewModelWrapper(IInterviewEntityViewModel viewModel)
-        {
-            this.viewModel = viewModel;
-        }
-
-        public Identity Identity => identity;
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
-        {
-            this.interviewId = interviewId;
-            this.identity = entityIdentity;
-            this.navigationState = navigationState;
-        }
-
-        public void InitIfNeed()
-        {
-            if (!isInitialized)
-            {
-                isInitialized = true;
-                viewModel.Init(interviewId, identity, navigationState);
-            }
-        }
-
-        public IInterviewEntityViewModel WrappedEntity => viewModel;
-    }
-    /*public abstract class InterviewEntityViewModelBase : IInterviewEntityLateInitViewModel
-    {
-        public virtual Identity Identity { get; private set; }
-        private string interviewId;
-        private NavigationState navigationState;
+        protected Identity questionIdentity;
+        public Identity Identity => questionIdentity;
+        protected string interviewId;
+        protected NavigationState NavigationState { get; private set; }
         private bool isInitialized = false;
 
-        public virtual void Setup(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            this.Identity = entityIdentity;
+            this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
-            this.navigationState = navigationState;
+            this.NavigationState = navigationState;
+
+            InitFast();
         }
 
-        public void InitIfNeed()
+        public void InitDataIfNeed()
         {
             if (!isInitialized)
             {
                 isInitialized = true;
-                Init(interviewId, Identity, navigationState);
+                InitData();
             }
         }
 
-        public abstract void Init(string interviewId, Identity entityIdentity, NavigationState navigationState);
-    }*/
+        public abstract void InitFast();
+        public abstract void InitData();
+    }
 }

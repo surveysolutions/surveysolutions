@@ -9,7 +9,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     public interface ICompositeCollectionInflationService
     {
         CompositeCollection<ICompositeEntity> GetInflatedCompositeCollection(
-            string interviewId,
             IEnumerable<IInterviewEntityViewModel> newGroupItems);
     }
 }

@@ -15,71 +15,55 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class CompositeCollectionInflationService : ICompositeCollectionInflationService
     {
-        private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IQuestionnaireStorage questionnaireRepository;
-
-        public CompositeCollectionInflationService(IStatefulInterviewRepository interviewRepository,
-            IQuestionnaireStorage questionnaireRepository)
+        public CompositeCollectionInflationService()
         {
-            this.interviewRepository = interviewRepository;
-            this.questionnaireRepository = questionnaireRepository;
         }
 
         public CompositeCollection<ICompositeEntity> GetInflatedCompositeCollection( 
-            string interviewId,
             IEnumerable<IInterviewEntityViewModel> newGroupItems)
         {
-            var interview = interviewRepository.GetOrThrow(interviewId);
-            var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
-
             var allVisibleGroupItems = new CompositeCollection<ICompositeEntity>();
 
             foreach (var interviewEntityViewModel in newGroupItems)
             {
                 var lateInitViewModel = interviewEntityViewModel as IInterviewEntityLateInitViewModel;
 
-                var entity = lateInitViewModel != null 
-                    ? lateInitViewModel.WrappedEntity
-                    : interviewEntityViewModel;
-
-                if (entity is ICompositeQuestion compositeQuestion)
+                if (interviewEntityViewModel is ICompositeQuestion compositeQuestion)
                 {
-                    if (lateInitViewModel != null && 
-                        (interview.IsEnabled(lateInitViewModel.Identity)
-                        || !questionnaire.ShouldBeHiddenIfDisabled(lateInitViewModel.Identity.Id)))
-                        lateInitViewModel?.InitIfNeed();
+                    if (compositeQuestion.QuestionState.Enablement.Enabled
+                         || !compositeQuestion.QuestionState.Enablement.HideIfDisabled)
+                        lateInitViewModel?.InitDataIfNeed();
                     // if (compositeQuestion is ICompositeQuestionWithChildren)
                     //     lateInitViewModel?.InitIfNeed();
                     InflateOneQuestion(lateInitViewModel, compositeQuestion, allVisibleGroupItems);
                 }
-                else if (entity is RosterViewModel rosterViewModel)
+                else if (interviewEntityViewModel is RosterViewModel rosterViewModel)
                 {
-                    lateInitViewModel?.InitIfNeed();
+                    lateInitViewModel?.InitDataIfNeed();
                     allVisibleGroupItems.AddCollection(rosterViewModel.RosterInstances);
                 }
-                else if (entity is FlatRosterViewModel flatRosterViewModel)
+                else if (interviewEntityViewModel is FlatRosterViewModel flatRosterViewModel)
                 {
-                    lateInitViewModel?.InitIfNeed();
+                    lateInitViewModel?.InitDataIfNeed();
                     allVisibleGroupItems.AddCollection(flatRosterViewModel.RosterInstances);
                 }
-                else if (entity is StaticTextViewModel staticText)
+                else if (interviewEntityViewModel is StaticTextViewModel staticText)
                 {
-                    if (lateInitViewModel != null && 
-                        (interview.IsEnabled(lateInitViewModel.Identity)
-                         || !questionnaire.ShouldBeHiddenIfDisabled(lateInitViewModel.Identity.Id)))
-                        lateInitViewModel?.InitIfNeed();
+                    if (staticText.StaticTextState.Enablement.Enabled
+                        || !staticText.StaticTextState.Enablement.HideIfDisabled)
+                        lateInitViewModel?.InitDataIfNeed();
                     allVisibleGroupItems.Add(staticText);
                     staticText.StaticTextState.Enablement.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
-                        if (staticText.StaticTextState.Enablement.Enabled && staticText.StaticTextState.Enablement.HideIfDisabled)
-                            lateInitViewModel?.InitIfNeed();
+                        if (staticText.StaticTextState.Enablement.Enabled || !staticText.StaticTextState.Enablement.HideIfDisabled)
+                            lateInitViewModel?.InitDataIfNeed();
                         allVisibleGroupItems.NotifyItemChanged(staticText);
                     };
                 }
                 else
                 {
-                    lateInitViewModel?.InitIfNeed();
+                    lateInitViewModel?.InitDataIfNeed();
                     allVisibleGroupItems.Add(interviewEntityViewModel);
                 }
             }
@@ -116,8 +100,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             compositeQuestion.QuestionState.Enablement.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
-                if (compositeQuestion.QuestionState.Enablement.Enabled && compositeQuestion.QuestionState.Enablement.HideIfDisabled)
-                    lateInitViewModel?.InitIfNeed();
+                if (compositeQuestion.QuestionState.Enablement.Enabled || !compositeQuestion.QuestionState.Enablement.HideIfDisabled)
+                    lateInitViewModel?.InitDataIfNeed();
                     
                 OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
             };

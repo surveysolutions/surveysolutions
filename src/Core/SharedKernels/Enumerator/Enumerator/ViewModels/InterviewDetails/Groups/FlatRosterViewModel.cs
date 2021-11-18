@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             if (this.isDisposed) return;
             
             CompositeCollection<ICompositeEntity> inflatedChildren =
-                this.compositeCollectionInflationService.GetInflatedCompositeCollection(interviewId, underlyingInterviewerEntities);
+                this.compositeCollectionInflationService.GetInflatedCompositeCollection(underlyingInterviewerEntities);
             inflatedChildren.InsertCollection(0, titleCollection);
             
             shownRosterInstances[interviewRosterInstance] = inflatedChildren;

@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class TextQuestionViewModel : MvxNotifyPropertyChanged,
+    public class TextQuestionViewModel : InterviewQuestionViewModelBase,
         IInterviewEntityViewModel,
         IViewModelEventHandler<TextQuestionAnswered>,
         IViewModelEventHandler<AnswersRemoved>,
@@ -27,9 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPrincipal principal;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-
-        private Identity questionIdentity;
-        private string interviewId;
 
         public IQuestionStateViewModel QuestionState => this.questionState;
 
@@ -54,23 +51,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
         }
 
-        public Identity Identity => this.questionIdentity;
-
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public override void InitFast()
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
-
-            this.questionIdentity = entityIdentity;
-            this.interviewId = interviewId;
-            this.questionState.Init(interviewId, entityIdentity, navigationState);
-            this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
-
+            this.questionState.Init(interviewId, questionIdentity, NavigationState);
+            this.InstructionViewModel.Init(interviewId, questionIdentity, NavigationState);
+        }
+        
+        public override void InitData()
+        {
             this.InitQuestionSettings();
             this.UpdateSelfFromModel();
 
             this.liteEventRegistry.Subscribe(this, interviewId);
         }
+
 
         public void Dispose()
         {
