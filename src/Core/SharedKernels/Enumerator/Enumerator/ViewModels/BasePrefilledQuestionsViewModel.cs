@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             navigationState.Init(InterviewId, questionnaire.QuestionnaireId.FormatGuid());
             var prefilledEntities = this.interviewViewModelFactory.GetPrefilledEntities(this.InterviewId, navigationState).ToList();
 
-            var visibleSectionItems = this.compositeCollectionInflationService.GetInflatedCompositeCollection(prefilledEntities);
+            var visibleSectionItems = this.compositeCollectionInflationService.GetInflatedCompositeCollection(this.InterviewId, prefilledEntities);
             
             this.startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
             startButton.InterviewStarted += (sender, args) => this.Dispose();

@@ -335,8 +335,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             Func<IInterviewEntityViewModel> viewModelActivator = this.EntityTypeToViewModelMap[entityModelType];
 
             IInterviewEntityViewModel viewModel = viewModelActivator.Invoke();
-            viewModel.Init(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
-            return viewModel;
+
+            var wrapper = new InterviewEntityViewModelWrapper(viewModel);
+            wrapper.Init(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
+            //viewModel.Init(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
+            
+            return wrapper;
         }
 
         public T GetNew<T>() where T : class

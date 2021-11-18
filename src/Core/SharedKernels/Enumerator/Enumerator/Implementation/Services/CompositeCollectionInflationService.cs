@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -12,39 +15,71 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class CompositeCollectionInflationService : ICompositeCollectionInflationService
     {
-        public CompositeCollectionInflationService()
+        private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
+
+        public CompositeCollectionInflationService(IStatefulInterviewRepository interviewRepository,
+            IQuestionnaireStorage questionnaireRepository)
         {
+            this.interviewRepository = interviewRepository;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
-        public CompositeCollection<ICompositeEntity> GetInflatedCompositeCollection(IEnumerable<IInterviewEntityViewModel> newGroupItems)
+        public CompositeCollection<ICompositeEntity> GetInflatedCompositeCollection( 
+            string interviewId,
+            IEnumerable<IInterviewEntityViewModel> newGroupItems)
         {
+            var interview = interviewRepository.GetOrThrow(interviewId);
+            var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
+
             var allVisibleGroupItems = new CompositeCollection<ICompositeEntity>();
 
             foreach (var interviewEntityViewModel in newGroupItems)
             {
-                if (interviewEntityViewModel is ICompositeQuestion compositeQuestion)
+                var lateInitViewModel = interviewEntityViewModel as IInterviewEntityLateInitViewModel;
+
+                var entity = lateInitViewModel != null 
+                    ? lateInitViewModel.WrappedEntity
+                    : interviewEntityViewModel;
+
+                if (entity is ICompositeQuestion compositeQuestion)
                 {
-                    InflateOneQuestion(compositeQuestion, allVisibleGroupItems);
+                    if (lateInitViewModel != null && 
+                        (interview.IsEnabled(lateInitViewModel.Identity)
+                        || !questionnaire.ShouldBeHiddenIfDisabled(lateInitViewModel.Identity.Id)))
+                        lateInitViewModel?.InitIfNeed();
+                    // if (compositeQuestion is ICompositeQuestionWithChildren)
+                    //     lateInitViewModel?.InitIfNeed();
+                    InflateOneQuestion(lateInitViewModel, compositeQuestion, allVisibleGroupItems);
                 }
-                else if (interviewEntityViewModel is RosterViewModel rosterViewModel)
+                else if (entity is RosterViewModel rosterViewModel)
                 {
+                    lateInitViewModel?.InitIfNeed();
                     allVisibleGroupItems.AddCollection(rosterViewModel.RosterInstances);
                 }
-                else if (interviewEntityViewModel is FlatRosterViewModel flatRosterViewModel)
+                else if (entity is FlatRosterViewModel flatRosterViewModel)
                 {
+                    lateInitViewModel?.InitIfNeed();
                     allVisibleGroupItems.AddCollection(flatRosterViewModel.RosterInstances);
                 }
-                else if (interviewEntityViewModel is StaticTextViewModel staticText)
+                else if (entity is StaticTextViewModel staticText)
                 {
+                    if (lateInitViewModel != null && 
+                        (interview.IsEnabled(lateInitViewModel.Identity)
+                         || !questionnaire.ShouldBeHiddenIfDisabled(lateInitViewModel.Identity.Id)))
+                        lateInitViewModel?.InitIfNeed();
                     allVisibleGroupItems.Add(staticText);
                     staticText.StaticTextState.Enablement.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
+                        if (staticText.StaticTextState.Enablement.Enabled && staticText.StaticTextState.Enablement.HideIfDisabled)
+                            lateInitViewModel?.InitIfNeed();
                         allVisibleGroupItems.NotifyItemChanged(staticText);
                     };
                 }
                 else
                 {
+                    lateInitViewModel?.InitIfNeed();
                     allVisibleGroupItems.Add(interviewEntityViewModel);
                 }
             }
@@ -52,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return allVisibleGroupItems;
         }
 
-        private void InflateOneQuestion(ICompositeQuestion compositeQuestion, CompositeCollection<ICompositeEntity> allVisibleGroupItems)
+        private void InflateOneQuestion(IInterviewEntityLateInitViewModel lateInitViewModel, ICompositeQuestion compositeQuestion, CompositeCollection<ICompositeEntity> allVisibleGroupItems)
         {
             var compositeQuestionParts = new Dictionary<CompositeItemType, CompositeCollection<ICompositeEntity>>();
 
@@ -81,6 +116,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             compositeQuestion.QuestionState.Enablement.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
+                if (compositeQuestion.QuestionState.Enablement.Enabled && compositeQuestion.QuestionState.Enablement.HideIfDisabled)
+                    lateInitViewModel?.InitIfNeed();
+                    
                 OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
             };
         }
