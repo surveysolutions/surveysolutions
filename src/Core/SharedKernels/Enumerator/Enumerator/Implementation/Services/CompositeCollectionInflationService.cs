@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         lateInitViewModel?.InitDataIfNeed();
                     // if (compositeQuestion is ICompositeQuestionWithChildren)
                     //     lateInitViewModel?.InitIfNeed();
-                    InflateOneQuestion(lateInitViewModel, compositeQuestion, allVisibleGroupItems);
+                    InflateOneQuestion(compositeQuestion, allVisibleGroupItems);
                 }
                 else if (interviewEntityViewModel is RosterViewModel rosterViewModel)
                 {
@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return allVisibleGroupItems;
         }
 
-        private void InflateOneQuestion(IInterviewEntityLateInitViewModel lateInitViewModel, ICompositeQuestion compositeQuestion, CompositeCollection<ICompositeEntity> allVisibleGroupItems)
+        private void InflateOneQuestion(ICompositeQuestion compositeQuestion, CompositeCollection<ICompositeEntity> allVisibleGroupItems)
         {
             var compositeQuestionParts = new Dictionary<CompositeItemType, CompositeCollection<ICompositeEntity>>();
 
@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
                 if (compositeQuestion.QuestionState.Enablement.Enabled || !compositeQuestion.QuestionState.Enablement.HideIfDisabled)
-                    lateInitViewModel?.InitDataIfNeed();
+                    (compositeQuestion as IInterviewEntityLateInitViewModel)?.InitDataIfNeed();
                     
                 OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
             };

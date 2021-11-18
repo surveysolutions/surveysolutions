@@ -52,19 +52,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.throttlingModel.Init(SaveAnswer);
         }
 
-        public override void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public override void InitData()
         {
-            base.Init(interviewId, entityIdentity, navigationState);
+            base.InitData();
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
-            showCascadingAsList = questionnaire.ShowCascadingAsList(entityIdentity.Id);
-            showCascadingAsListThreshold = Math.Min(defaultCascadingAsListThreshold, questionnaire.GetCascadingAsListThreshold(entityIdentity.Id) ?? defaultCascadingAsListThreshold);
+            showCascadingAsList = questionnaire.ShowCascadingAsList(questionIdentity.Id);
+            showCascadingAsListThreshold = Math.Min(defaultCascadingAsListThreshold, questionnaire.GetCascadingAsListThreshold(questionIdentity.Id) ?? defaultCascadingAsListThreshold);
 
-            var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(entityIdentity.Id);
-            if (!cascadingQuestionParentId.HasValue) throw new NullReferenceException($"Parent of cascading question {entityIdentity} is missing");
+            var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(questionIdentity.Id);
+            if (!cascadingQuestionParentId.HasValue) throw new NullReferenceException($"Parent of cascading question {questionIdentity} is missing");
             
-            var parentRosterVector = entityIdentity.RosterVector.Take(questionnaire.GetRosterLevelForEntity(cascadingQuestionParentId.Value)).ToArray();
+            var parentRosterVector = questionIdentity.RosterVector.Take(questionnaire.GetRosterLevelForEntity(cascadingQuestionParentId.Value)).ToArray();
 
             this.parentQuestionIdentity = new Identity(cascadingQuestionParentId.Value, parentRosterVector);
 
@@ -192,7 +192,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.throttlingModel.CancelPendingAction();
                 await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interviewId,
+                    new RemoveAnswerCommand(this.interview.Id,
                         this.principal.CurrentUserIdentity.UserId,
                         this.Identity));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -226,7 +226,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             
             var command = new AnswerSingleOptionQuestionCommand(
-                this.interviewId,
+                this.interview.Id,
                 this.principal.CurrentUserIdentity.UserId,
                 this.Identity.Id,
                 this.Identity.RosterVector,

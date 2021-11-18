@@ -71,14 +71,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool HasOptions => this.Options.Any() || RenderAsCombobox;
 
-        public override void Init(string interviewId, Identity questionIdentity, NavigationState navigationState)
+        public override void InitData()
         {
-            base.Init(interviewId, questionIdentity, navigationState);
+            base.InitData();
+            
             this.interview = this.interviewRepository.GetOrThrow(interviewId);
             var questionnaire =
                 this.questionnaireRepository.GetQuestionnaireOrThrow(this.interview.QuestionnaireIdentity, interview.Language);
-
-            this.interviewId = interview.Id;
 
             this.linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(this.Identity.Id);
             
@@ -133,7 +132,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interviewId,
+                    new RemoveAnswerCommand(this.interview.Id,
                         this.userId,
                         this.Identity));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -166,7 +165,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (selectedOptionValue != null)
             {
                 var command = new AnswerSingleOptionQuestionCommand(
-                    this.interviewId,
+                    this.interview.Id,
                     this.userId,
                     this.Identity.Id,
                     this.Identity.RosterVector,

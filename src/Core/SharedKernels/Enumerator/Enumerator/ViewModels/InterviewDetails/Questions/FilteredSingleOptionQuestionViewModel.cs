@@ -28,11 +28,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
         }
 
-        public override void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public override void InitData()
         {
-            base.Init(interviewId, entityIdentity, navigationState);
+            base.InitData();
 
-            this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
+            this.filteredOptionsViewModel.Init(interviewId, questionIdentity, SuggestionsMaxCount);
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
         }
 

@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public abstract class BaseComboboxQuestionViewModel : MvxNotifyPropertyChanged,
+    public abstract class BaseComboboxQuestionViewModel : InterviewQuestionViewModelBase,
         IInterviewEntityViewModel,
         IViewModelEventHandler<AnswersRemoved>,
         ICompositeQuestionWithChildren,
@@ -58,35 +58,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     true);
         }
 
-        protected Guid interviewId;
         protected IStatefulInterview interview;
         protected int? Answer;
-
-        public Identity Identity { get; private set; }
 
         private readonly QuestionStateViewModel<SingleOptionQuestionAnswered> questionState;
         public IQuestionStateViewModel QuestionState => this.questionState;
         public AnsweringViewModel Answering { get; }
         public QuestionInstructionViewModel InstructionViewModel { get; }
         
-        public virtual void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public override void InitFast()
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
-
-            this.Identity = entityIdentity;
             this.interview = this.interviewRepository.GetOrThrow(interviewId);
-            this.interviewId = this.interview.Id;
 
-            this.questionState.Init(interviewId, entityIdentity, navigationState);
-            this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, questionIdentity, NavigationState);
+            this.InstructionViewModel.Init(interviewId, questionIdentity, NavigationState);
+        }
 
-            this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
+        public override void InitData()
+        {
+            this.filteredOptionsViewModel.Init(interviewId, questionIdentity, SuggestionsMaxCount);
 
             this.Answer = GetCurrentAnswer();
             var initialFilter = this.Answer.HasValue ? this.filteredOptionsViewModel.GetAnsweredOption(this.Answer.Value)?.Title ?? null : null;
 
-            this.comboboxViewModel.Init(interviewId, entityIdentity, navigationState);
+            this.comboboxViewModel.Init(interviewId, questionIdentity, NavigationState);
             this.comboboxViewModel.InitFilter(initialFilter);
             this.comboboxViewModel.OnItemSelected += ComboboxInstantViewModel_OnItemSelected;
             this.comboboxViewModel.OnAnswerRemoved += ComboboxInstantViewModel_OnAnswerRemoved;
@@ -94,8 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             comboboxCollection.Add(comboboxViewModel);
 
-            this.eventRegistry.Subscribe(this, interviewId);
-        }
+            this.eventRegistry.Subscribe(this, interviewId);        }
 
         protected virtual int? GetCurrentAnswer()
         {
@@ -118,7 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(new AnswerSingleOptionQuestionCommand(
-                    this.interviewId,
+                    interview.Id,
                     this.principal.CurrentUserIdentity.UserId,
                     this.Identity.Id,
                     this.Identity.RosterVector,
@@ -157,7 +151,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interviewId,
+                    new RemoveAnswerCommand(this.interview.Id,
                         this.principal.CurrentUserIdentity.UserId,
                         this.Identity));
 
