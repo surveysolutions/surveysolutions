@@ -20,6 +20,7 @@ jobs:
       build_number: ${{ steps.vars.outputs.build_number }}
       version: ${{ steps.vars.outputs.version }}
       info_version: ${{ steps.vars.outputs.info_version }}
+      environment: ${{ steps.vars.outputs.environment }}
 
     steps:
       - uses: actions/checkout@v2
@@ -85,6 +86,7 @@ jobs:
     - name: Publish
       uses: actions/upload-artifact@v2
       with:
+        name: Mobile Apps
         path: ${{ github.workspace }}/artifacts
 
   docker:
@@ -94,11 +96,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    env:
-      BUILD_VCS_NUMBER: ${{ github.sha }}
-      REGISTRY: ghcr.io
-      REGISTRY_USERNAME: ${{ github.actor }}
-      REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
     strategy:
       matrix:
@@ -108,31 +105,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Define registry info
-        run: |
-          if [ "${{ needs.prepare.outputs.environment }}" == "release" ] ; then
-            echo "::set-env name=REGISTRY::"
-            echo "::set-env name=REGISTRY_USERNAME::${{ secrets.DOCKERHUB_USERNAME }}"
-            echo "::set-env name=REGISTRY_PASSWORD::${{ secrets.DOCKERHUB_PASSWORD }}"
-          fi
-      - name: Log in to the Container registry
+      - name: Log in to the GitHub Container Registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ env.REGISTRY_USERNAME }}
-          password: ${{ env.REGISTRY_PASSWORD }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to DockerHub
+        if: ${{ needs.prepare.outputs.environment == 'release' }}
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Download mobile artifacts
         if: ${{ matrix.task == 'DockerHq' }}
         id: download
         uses: actions/download-artifact@v2
         with:
-          name: artifact
+          name: Mobile Apps
           path: artifacts
 
       - name: Build and push
         shell: pwsh
-        # dockerRegistry parameter is ignored inside the script if branch='release'
         run: |
           ./.build.ps1 ${{ matrix.task }} `
             -BuildNumber ${{ needs.prepare.outputs.build_number }} `
@@ -155,7 +151,7 @@ jobs:
         id: download
         uses: actions/download-artifact@v2
         with:
-          name: artifact
+          name: Mobile Apps
           path: installer/artifacts
 
       - name: Build Headquarters
@@ -173,5 +169,5 @@ jobs:
       - name: Publish
         uses: actions/upload-artifact@v2
         with:
-          name: WindowsInstaller
+          name: Windows Installer
           path: ./installer/src/SurveySolutionsBootstrap/bin/Release/SurveySolutions*.exe
