@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross;
@@ -39,9 +40,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.userInterfaceStateService = userInterfaceStateService;
             this.displaySelectedValue = displaySelectedValue;
+
+            isEnabled = questionState.Enablement.Enabled;
+            this.QuestionState.Enablement.PropertyChanged += EnablementOnPropertyChanged;
+            
             this.throttlingModel = Mvx.IoCProvider.Create<ThrottlingViewModel>();
             this.throttlingModel.Init(UpdateFilterThrottled);
             this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
+        }
+
+        private bool isEnabled;
+        private void EnablementOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
+
+            isEnabled = QuestionState.Enablement.Enabled;
+            if (this.Identity != null && isEnabled && AutoCompleteSuggestions.Count == 0)
+                AutoCompleteSuggestions = GetSuggestions(FilterText);
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -165,6 +180,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.FilterText = null;
             
             var suggestions = this.GetSuggestions(null);
+            //var suggestions = new List<OptionWithSearchTerm>();
             this.QuestionState.Validity.ExecutedWithoutExceptions();
 
             this.InvokeOnMainThread(() =>
@@ -176,6 +192,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private List<OptionWithSearchTerm> GetSuggestions(string filter)
         {
+            if (!isEnabled)
+                return new List<OptionWithSearchTerm>();
+            
             List<OptionWithSearchTerm> optionWithSearchTerms = new List<OptionWithSearchTerm>();
 
             try
