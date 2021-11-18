@@ -47,11 +47,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 dbContext ?? Create.InMemoryDbContext(),
                 questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
                 Mock.Of<IPublicFoldersStorage>(),
-                Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>(), 
-                categoriesService: Mock.Of<ICategoriesService>(),
-                serializer: Mock.Of<ISerializer>(),
-                questionnaireExportService: Mock.Of<IQuestionnaireExportService>());
+                categoriesService: Mock.Of<ICategoriesService>());
             questionnaireController.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext
