@@ -1,0 +1,12 @@
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:local="http://schemas.android.com/apk/res-auto"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+  <ProgressBar
+          style="@style/Interview_Question_Answer_FilteredComboBox_LoadingIcon" />
+  <TextView
+          style="@style/Interview_Question_Answer_FilteredComboBox_Item"
+          local:MvxBind="Html Format('&lt;i&gt;{0}&lt;/i&gt;', Localization('Loading'))" />
+</LinearLayout>
+  

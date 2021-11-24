@@ -3,12 +3,14 @@ using System.Collections;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
+using Android.Views;
 using Android.Widget;
 using Java.Lang;
 using MvvmCross.Binding.Extensions;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Binding.Views;
+using WB.Core.SharedKernels.Enumerator.Properties;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
@@ -68,6 +70,10 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             return ItemsSource.Filter(item => FilterPredicate(item, constraint));
         }
 
+        public override bool AreAllItemsEnabled() => false;
+
+        public override bool IsEnabled(int position) => !Loading;
+
         public override IEnumerable ItemsSource
         {
             get => base.ItemsSource;
@@ -82,6 +88,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         }
 
         private IEnumerable FilteredItemsSource { get; set; }
+        private IEnumerable LoadingItemsSource => new[] { new {Title = UIResources.Loading} };
 
         public event EventHandler PartialTextChanged;
 
@@ -93,6 +100,23 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {
                 partialText = value;
                 FireConstraintChanged();
+            }
+        }
+
+        private bool loading;
+        public bool Loading
+        {
+            get => loading;
+            set
+            {
+                if (loading != value)
+                {
+                    loading = value;
+                    ItemsSource = value
+                        ? LoadingItemsSource
+                        : FilteredItemsSource;
+                    NotifyDataSetChanged();
+                }
             }
         }
 
@@ -170,6 +194,14 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     return FilteredItemsSource?.Count() ?? 0;
                 }
             }
+        }
+
+        public override View GetView(int position, View convertView, ViewGroup parent)
+        {
+            if (Loading)
+                return this.GetBindableView(convertView, null, parent,
+                    Resource.Layout.interview_question_filtered_single_option_loading);
+            return base.GetView(position, convertView, parent);
         }
 
         #region Implementation of IFilterable

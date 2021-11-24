@@ -25,6 +25,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly bool displaySelectedValue;
         private readonly ThrottlingViewModel throttlingModel;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
+        
+        private readonly int LoadingOptionValue = int.MinValue;
 
         public CategoricalComboboxAutocompleteViewModel(IQuestionStateViewModel questionState,
             FilteredOptionsViewModel filteredOptionsViewModel,
@@ -45,7 +47,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void InitFilter(string initialFilter = null)
         {
-            this.AutoCompleteSuggestions = this.GetSuggestions(initialFilter).ToList();
+            this.AutoCompleteSuggestions = null;
+            // this.AutoCompleteSuggestions = this.GetSuggestions(initialFilter);
             this.FilterText = initialFilter;
             this.RaisePropertyChanged(nameof(FilterText));
         }
@@ -58,10 +61,43 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private List<OptionWithSearchTerm> autoCompleteSuggestions = new List<OptionWithSearchTerm>();
         public List<OptionWithSearchTerm> AutoCompleteSuggestions
         {
-            get => this.autoCompleteSuggestions;
+            get => this.autoCompleteSuggestions ??= GetLazySuggestions(FilterText);
             set => this.SetProperty(ref this.autoCompleteSuggestions, value);
         }
-        
+
+        private bool loading;
+        public bool Loading
+        {
+            get => loading;
+            set => SetProperty(ref loading, value);
+        }
+        private List<OptionWithSearchTerm> GetLazySuggestions(string filterText)
+        {
+            Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    Loading = true;
+                    var suggestions = GetSuggestions(filterText);
+                
+                    await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                    {
+                        AutoCompleteSuggestions = suggestions;
+                    });
+                }
+                finally
+                {
+                    Loading = false;
+                }
+            });
+
+            return null;
+            /*return new List<OptionWithSearchTerm>()
+            {
+                new OptionWithSearchTerm() { Title = "Loading...", Value = LoadingOptionValue }
+            }*/;
+        }
+
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
         {
             this.ResetFilterAndOptions();
@@ -109,6 +145,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void SaveAnswerBySelectedOption(OptionWithSearchTerm option)
         {
+            if (option.Value == LoadingOptionValue)
+            {
+                return;
+            }
+            
             // When options is selected, FocusOut will be always fired after. 
             // We change filter text and we safe answer on focus out event
             this.FilterText = option.Title;
@@ -127,7 +168,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string filterToUpdate = null;
         private async Task UpdateFilterThrottled()
         {
-            var suggestions = this.GetSuggestions(filterToUpdate).ToList();
+            //List<OptionWithSearchTerm> suggestions = null;
+            var suggestions = this.GetSuggestions(filterToUpdate);
 
             await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
@@ -158,29 +200,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.FilterText = null;
             
-            var suggestions = this.GetSuggestions(null).ToList();
+            //var suggestions = this.GetSuggestions(null);
             this.QuestionState.Validity.ExecutedWithoutExceptions();
 
             this.InvokeOnMainThread(() =>
             {
-                this.AutoCompleteSuggestions = suggestions;
+                //this.AutoCompleteSuggestions = suggestions;
+                this.AutoCompleteSuggestions = null;
+                //this.AutoCompleteSuggestions = null;
                 this.RaisePropertyChanged(nameof(this.FilterText));
             });
         }
 
-        private IEnumerable<OptionWithSearchTerm> GetSuggestions(string filter)
+        private List<OptionWithSearchTerm> GetSuggestions(string filter)
         {
             List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20);
 
-            foreach (var model in filteredOptions.Count == 1 && displaySelectedValue
+            var categoricalOptions = filteredOptions.Count == 1 && displaySelectedValue
                 ? filteredOptions
-                : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value)))
+                : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value));
+
+            var options = new List<OptionWithSearchTerm>();
+            foreach (var model in categoricalOptions)
             {
                 if (model.Title.IsNullOrEmpty())
                     continue;
 
-                yield return ToOptionWithSearchTerm(filter, model);
+                options.Add(ToOptionWithSearchTerm(filter, model));
             }
+
+            return options;
         }
 
         private static OptionWithSearchTerm ToOptionWithSearchTerm(string filter, CategoricalOption model) => new OptionWithSearchTerm
