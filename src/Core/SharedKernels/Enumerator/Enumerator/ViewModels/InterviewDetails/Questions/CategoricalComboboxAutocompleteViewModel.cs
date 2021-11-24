@@ -26,8 +26,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ThrottlingViewModel throttlingModel;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
         
-        private readonly int LoadingOptionValue = int.MinValue;
-
         public CategoricalComboboxAutocompleteViewModel(IQuestionStateViewModel questionState,
             FilteredOptionsViewModel filteredOptionsViewModel,
             bool displaySelectedValue)
@@ -48,7 +46,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void InitFilter(string initialFilter = null)
         {
             this.AutoCompleteSuggestions = null;
-            // this.AutoCompleteSuggestions = this.GetSuggestions(initialFilter);
             this.FilterText = initialFilter;
             this.RaisePropertyChanged(nameof(FilterText));
         }
@@ -71,31 +68,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get => loading;
             set => SetProperty(ref loading, value);
         }
+
         private List<OptionWithSearchTerm> GetLazySuggestions(string filterText)
         {
             Task.Factory.StartNew(async () =>
             {
-                try
+                var suggestions = GetSuggestions(filterText);
+            
+                await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
-                    Loading = true;
-                    var suggestions = GetSuggestions(filterText);
-                
-                    await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-                    {
-                        AutoCompleteSuggestions = suggestions;
-                    });
-                }
-                finally
-                {
-                    Loading = false;
-                }
+                    AutoCompleteSuggestions = suggestions;
+                });
             });
 
             return null;
-            /*return new List<OptionWithSearchTerm>()
-            {
-                new OptionWithSearchTerm() { Title = "Loading...", Value = LoadingOptionValue }
-            }*/;
         }
 
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
@@ -145,11 +131,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void SaveAnswerBySelectedOption(OptionWithSearchTerm option)
         {
-            if (option.Value == LoadingOptionValue)
-            {
-                return;
-            }
-            
             // When options is selected, FocusOut will be always fired after. 
             // We change filter text and we safe answer on focus out event
             this.FilterText = option.Title;
@@ -174,6 +155,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.AutoCompleteSuggestions = suggestions;
+                //this.AutoCompleteSuggestions = null;
             });
         }
 
@@ -200,36 +182,42 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.FilterText = null;
             
-            //var suggestions = this.GetSuggestions(null);
             this.QuestionState.Validity.ExecutedWithoutExceptions();
 
             this.InvokeOnMainThread(() =>
             {
-                //this.AutoCompleteSuggestions = suggestions;
                 this.AutoCompleteSuggestions = null;
-                //this.AutoCompleteSuggestions = null;
                 this.RaisePropertyChanged(nameof(this.FilterText));
             });
         }
 
         private List<OptionWithSearchTerm> GetSuggestions(string filter)
         {
-            List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20);
-
-            var categoricalOptions = filteredOptions.Count == 1 && displaySelectedValue
-                ? filteredOptions
-                : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value));
-
-            var options = new List<OptionWithSearchTerm>();
-            foreach (var model in categoricalOptions)
+            try
             {
-                if (model.Title.IsNullOrEmpty())
-                    continue;
+                Loading = true;
+                
+                List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20);
 
-                options.Add(ToOptionWithSearchTerm(filter, model));
+                var categoricalOptions = filteredOptions.Count == 1 && displaySelectedValue
+                    ? filteredOptions
+                    : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value));
+
+                var options = new List<OptionWithSearchTerm>();
+                foreach (var model in categoricalOptions)
+                {
+                    if (model.Title.IsNullOrEmpty())
+                        continue;
+
+                    options.Add(ToOptionWithSearchTerm(filter, model));
+                }
+
+                return options;
             }
-
-            return options;
+            finally
+            {
+                Loading = false;
+            }
         }
 
         private static OptionWithSearchTerm ToOptionWithSearchTerm(string filter, CategoricalOption model) => new OptionWithSearchTerm
