@@ -10,6 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models.Question
 
         public bool UseThousandsSeparator { get; set; }
     
-        public List<Answer>? Answers { get; set; }
+        public List<SpecialValue>? SpecialValues { get; set; }
     }
 }

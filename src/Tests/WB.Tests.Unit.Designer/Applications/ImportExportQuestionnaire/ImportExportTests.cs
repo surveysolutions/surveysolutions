@@ -385,7 +385,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 //linkedToRosterId: Guid.NewGuid(),
                 title: "numeric", 
                 variableLabel: "label", 
-                options: new []{ new Option("1", "option1", "1") }
+                options: new []{ new Option("1", "option1") }
                 );
             numericQuestion.CountOfDecimalPlaces = 7;
             numericQuestion.UseFormatting = true;

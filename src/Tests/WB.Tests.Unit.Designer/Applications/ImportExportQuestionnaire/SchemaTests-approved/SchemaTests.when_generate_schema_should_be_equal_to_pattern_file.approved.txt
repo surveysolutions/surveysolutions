@@ -307,20 +307,20 @@
             "UseThousandsSeparator": {
               "type": "boolean"
             },
-            "Answers": {
+            "SpecialValues": {
               "type": [
                 "array",
                 "null"
               ],
               "items": {
-                "$ref": "#/definitions/Answer"
+                "$ref": "#/definitions/SpecialValue"
               }
             }
           }
         }
       ]
     },
-    "Answer": {
+    "SpecialValue": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -329,13 +329,6 @@
         },
         "Code": {
           "type": "integer",
-          "format": "int32"
-        },
-        "ParentCode": {
-          "type": [
-            "integer",
-            "null"
-          ],
           "format": "int32"
         }
       }
@@ -507,6 +500,26 @@
         "YesNo",
         "Combobox"
       ]
+    },
+    "Answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Text": {
+          "type": "string"
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ParentCode": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "int32"
+        }
+      }
     },
     "QRBarcodeQuestion": {
       "allOf": [

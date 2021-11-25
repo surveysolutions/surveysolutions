@@ -428,7 +428,7 @@
         "VariableName": { "$ref": "#/definitions/VariableName" },
         "Id": { "$ref": "#/definitions/GUID" },
 
-        "Answers": { "$ref": "#/definitions/Answers" },
+        "SpecialValues": { "$ref": "#/definitions/SpecialValues" },
         "DecimalPlaces": { "type": "integer", "minimum": 0 },
         "IsInteger": { "type": "boolean", "default": true },
         "UseThousandsSeparator": { "type": "boolean", "default": false }
@@ -501,6 +501,24 @@
       "additionalProperties": false,
       "required": ["Type"]
     },
+
+    "SpecialValue": {
+      "type": "object",
+      "properties": {
+        "Text": { "type": "string" },
+        "Code": { "type": "number" },
+      },
+      "additionalProperties": false,
+      "required": []
+    },
+
+    "SpecialValues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/SpecialValue"
+      }
+    },
+
 
     "StaticText": {
       "type": "object",

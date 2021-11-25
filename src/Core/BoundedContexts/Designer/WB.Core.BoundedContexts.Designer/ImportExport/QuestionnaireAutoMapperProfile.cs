@@ -207,11 +207,13 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
                 .ForMember(s => s.UseThousandsSeparator, d => 
                     d.MapFrom(t => t.Properties != null ? t.Properties.UseFormatting : false))
-                .ForMember(s => s.DecimalPlaces, o => o.MapFrom(d => d.CountOfDecimalPlaces));
+                .ForMember(s => s.DecimalPlaces, o => o.MapFrom(d => d.CountOfDecimalPlaces))
+                .ForMember(s => s.SpecialValues, o => o.MapFrom(d => d.Answers));
             this.CreateMap<Models.Question.NumericQuestion, NumericQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
                 .ForMember(s => s.UseFormatting, d => d.MapFrom(t => t.UseThousandsSeparator))
                 .ForMember(s => s.CountOfDecimalPlaces, d => d.MapFrom(t => t.DecimalPlaces))
+                .ForMember(s => s.Answers, d => d.MapFrom(t => t.SpecialValues))
                 .AfterMap((s, d) => d.Properties!.UseFormatting = s.UseThousandsSeparator)
                 .AfterMap((s, d) => d.QuestionType = QuestionType.Numeric);
             
@@ -343,6 +345,17 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                     opt.MapFrom(x => x.Code.ToString()))
                 .ForMember(a => a.ParentValue, opt => 
                     opt.MapFrom(answer => answer.ParentCode.ToString()))
+                .ForMember(a => a.AnswerText, opt => 
+                    opt.MapFrom(answer => answer.Text));
+            
+            this.CreateMap<Answer, Models.SpecialValue>()
+                .ForMember(a => a.Code, opt => 
+                    opt.MapFrom(x => x.AnswerCode ?? decimal.Parse(x.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture)))
+                .ForMember(a => a.Text, opt => 
+                    opt.MapFrom(answer => answer.AnswerText));
+            this.CreateMap<Models.SpecialValue, Answer>()
+                .ForMember(a => a.AnswerValue, opt => 
+                    opt.MapFrom(x => x.Code.ToString()))
                 .ForMember(a => a.AnswerText, opt => 
                     opt.MapFrom(answer => answer.Text));
         }
