@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                     Type = (TranslationType)t.Type,
                     Value = t.Value,
                     EntityId = t.QuestionnaireEntityId,
-                    TranslationIndex = t.TranslationIndex,
+                    OptionIndex = t.TranslationIndex,
                     EntityVariableName = questionnaire.Find<IComposite>(t.QuestionnaireEntityId)?.GetVariable()
                 }).ToList();
             var json = questionnaireSerializer.Serialize(items);
@@ -131,7 +131,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 TranslationId = translationId,
                 QuestionnaireEntityId = questionnaireEntityId,
                 Value = cleanedValue,
-                TranslationIndex = translationItem.TranslationIndex,
+                TranslationIndex = translationItem.OptionIndex,
                 Type = translationType
             };
         }

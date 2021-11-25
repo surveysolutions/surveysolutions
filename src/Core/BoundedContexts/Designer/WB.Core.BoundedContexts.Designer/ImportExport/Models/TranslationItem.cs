@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models
         
         public string? EntityVariableName { get; set; }
 
-        public string? TranslationIndex { get; set; }
+        public string? OptionIndex { get; set; }
 
         public string? Value { get; set; }
     }
