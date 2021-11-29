@@ -642,8 +642,8 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocumentWithEmptyCoverPage(Guid? id, params IComposite[] children)
         {
             var coverId = Guid.NewGuid();
-            var cover = Create.Chapter("Cover", coverId) as IComposite;
-            var allChildren = Enumerable.Concat(cover.ToEnumerable(), children).ToArray();
+            var cover = Create.Chapter("Cover", coverId);
+            var allChildren = Enumerable.Concat((cover as IComposite).ToEnumerable(), children).ToArray();
             var questionnaireDocument = Create.QuestionnaireDocument(id, "Questionnaire with empty cover", children: allChildren);
             questionnaireDocument.CoverPageSectionId = coverId;
             return questionnaireDocument;

@@ -6,11 +6,11 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models.Question
     [DebuggerDisplay("{GetType().Name} {VariableName} {PublicKey}")]
     public abstract class AbstractQuestion : QuestionnaireEntity, IQuestion
     {
-        public string? VariableName { get; set; } 
+        public string? VariableName { get; set; } = string.Empty;
 
         public string? Comments { get; set; }
 
-        public string? ConditionExpression { get; set; }
+        public string? ConditionExpression { get; set; } = string.Empty;
 
         public bool HideIfDisabled { get; set; }
 
@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models.Question
 
         public QuestionScope QuestionScope { get; set; }
 
-        public string? QuestionText { get; set; }
+        public string? QuestionText { get; set; } = string.Empty;
 
         public string? VariableLabel { get; set; }
 

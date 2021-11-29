@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using WB.Core.BoundedContexts.Designer.ImportExport.Models;
 
 namespace WB.Core.BoundedContexts.Designer.ImportExport
@@ -18,7 +22,27 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 {
                     new Newtonsoft.Json.Converters.StringEnumConverter()
                 },
+                ContractResolver = new ShouldSerializeContractResolver()
             };
+        
+        public class ShouldSerializeContractResolver : DefaultContractResolver
+        {
+            protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization) 
+            {
+                JsonProperty property = base.CreateProperty(member, memberSerialization);
+
+                if (property.PropertyType == typeof(string)) 
+                {
+                    property.ShouldSerialize = instance => !string.IsNullOrEmpty(instance.GetType().GetProperty(property.PropertyName).GetValue(instance) as string);
+                }
+                else if (property.PropertyType?.GetInterface(nameof(IEnumerable)) != null)
+                {
+                    property.ShouldSerialize =
+                        instance => (instance?.GetType().GetProperty(property.PropertyName).GetValue(instance) as IEnumerable<object>)?.Count() > 0;
+                }
+                return property;
+            }
+        }
 
         public string Serialize(Questionnaire questionnaire)
         {

@@ -280,7 +280,9 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             
             questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions(mi => mi.Name == nameof(Translation.Id)));
             newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions(mi => mi.Name == nameof(Translation.Id)));
-            errors.Count.Should().Be(0);
+            errors.Count.Should().Be(2);
+            errors.First().Should().Be("Required properties are missing from object: FileName.");
+            errors.Second().Should().Be("Required properties are missing from object: FileName.");
         }
         
         [Test]
@@ -437,7 +439,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                //Featured = true,
+                StataExportCaption = "stata caption",
                 HideIfDisabled = true,
             };
             
@@ -485,7 +487,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                //Featured = true,
+                StataExportCaption = "stata caption",
                 HideIfDisabled = true,
                 Properties = new QuestionProperties(hideInstructions: true, useFormatting: false)
                 {
@@ -537,7 +539,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                //Featured = true,
+                StataExportCaption = "stata caption",
                 HideIfDisabled = true,
                 IsTimestamp = true,
                 Properties = new QuestionProperties(hideInstructions: true, useFormatting: false)
@@ -590,7 +592,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                //Featured = true,
+                StataExportCaption = "stata caption",
                 HideIfDisabled = true,
             };
             
@@ -638,7 +640,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                //Featured = true,
+                StataExportCaption = "stata caption",
                 HideIfDisabled = true,
                 IsSignature = true
             };
@@ -688,7 +690,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                //Featured = true,
                 HideIfDisabled = true,
                 AreAnswersOrdered = true,
                 MaxAllowedAnswers = 7,
@@ -752,7 +753,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                //Featured = true,
+                StataExportCaption = "stata caption",
                 HideIfDisabled = true,
             };
             
@@ -801,7 +802,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                //Featured = true,
                 HideIfDisabled = true,
                 ShowAsList = true,
                 ShowAsListThreshold = 77,
@@ -865,7 +865,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 ConditionExpression = "enablementCondition",
                 ValidationConditions = new[] { Create.ValidationCondition() },
                 QuestionScope = QuestionScope.Supervisor,
-                //Featured = true,
+                StataExportCaption = "stata caption",
                 HideIfDisabled = true,
                 MaxAnswerCount = 77,
             };
