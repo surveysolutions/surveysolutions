@@ -113,6 +113,8 @@
         "ie > 10"
     ],
     "jest": {
+        "verbose": true,
+        "testEnvironment": "JsDom",
         "moduleFileExtensions": [
             "js",
             "jsx",
