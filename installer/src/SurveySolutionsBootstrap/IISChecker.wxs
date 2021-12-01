@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>    
+        <PackageGroup Id='ActivateIisFeatures'>                  
+            <ExePackage Id='IIS_Manage'
+                        DisplayName='Installing IIS'
+                        PerMachine="yes"                        
+                        Name="prepare.iis.bat"
+                        SourceFile='.\prepare.iis.bat'
+                        Vital='yes'>
+            </ExePackage>
+        </PackageGroup>
+    </Fragment>
+</Wix>

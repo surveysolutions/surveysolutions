@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:localization="http://schemas.microsoft.com/wix/2006/localization">
+
+  <Product Id="*"
+           Name="Survey Solutions"
+           Language="1033"
+           Version="$(var.SurveySolutionsVersion)"
+           Manufacturer="World Bank"
+           UpgradeCode="2EBD5061-5E46-4313-A73E-CDAF570512D9">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
+
+    <Property Id="MSIRESTARTMANAGERCONTROL" Value="Disable"/>
+
+    <util:CloseApplication Id="CloseExportService"
+                           CloseMessage="yes"
+                           Timeout="20"
+                           RebootPrompt="no"
+                           TerminateProcess="3"
+                           Target="WB.Services.Export.Host.exe" />
+
+    <util:CloseApplication Id="CloseMainApp"
+                           CloseMessage="yes"
+                           Timeout="20"
+                           RebootPrompt="no"
+                           TerminateProcess="3"
+                           Target="WB.UI.Headquarters.exe" />
+
+    <!--Will override all files-->
+    <Property Id="REINSTALLMODE" Value="emus" />
+
+    <!--old product upgrade code 0C543B8A-9023-4486-89C9-421D875F5AFA-->
+    <Media Id="1" Cabinet="Site.cab" EmbedCab="yes" />
+
+    <!--server OS-->
+    <!--AND MsiNTProductType > 1-->
+    <Condition Message="This application requires server operating system such as Windows Server 2012 R2 or newer.">
+      <![CDATA[Installed OR (VersionNT64 >= 603) AND MsiNTProductType <> 1]]>
+    </Condition>
+
+    <Property Id="NETCOREHOSTVERSION">
+      <RegistrySearch Id="NetCoreHostVersion" Type="raw" Win64="yes" Root="HKLM" Key="SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedhost" Name="Version" />
+    </Property>
+
+    <Condition Message="This setup requires .NET Core 5.0 or higher">
+      <![CDATA[Installed OR (NETCOREHOSTVERSION >= "5.0.0")]]>
+    </Condition>
+
+    <Property Id="SITEPORT" Value="9700"></Property>
+    <Property Id="CONNSERVER" Value="127.0.0.1"></Property>
+    <Property Id="CONNPORT" Value="5432"></Property>
+    <Property Id="CONNUSERNAME" Value="postgres"></Property>
+    <Property Id="CONNPASSWORD" ></Property>
+
+    <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
+    <Property Id="INSTALLFOLDER" Value="C:\Survey Solutions">
+      <RegistrySearch Id="SurveySolutionsPath"
+                      Type="raw"
+                      Root="HKLM"
+                      Key="SOFTWARE\World Bank\Survey Solutions"
+                      Name="Install Path"
+                      Win64='yes'>
+      </RegistrySearch>
+    </Property>
+
+    <UI>
+      <UIRef Id="WixUI_Common" />
+
+      <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+      <DialogRef Id="ConnectionStringDlg" />
+
+      <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+      <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
+      <TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+
+      <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+      <Property Id="WixUI_Mode" Value="InstallDir" />
+
+      <DialogRef Id="BrowseDlg" />
+      <DialogRef Id="DiskCostDlg" />
+      <DialogRef Id="ErrorDlg" />
+      <DialogRef Id="FatalError" />
+      <DialogRef Id="FilesInUse" />
+      <DialogRef Id="MsiRMFilesInUse" />
+      <DialogRef Id="PrepareDlg" />
+      <DialogRef Id="ProgressDlg" />
+      <DialogRef Id="ResumeDlg" />
+      <DialogRef Id="UserExit" />
+
+      <Publish Dialog="BrowseDlg" Control="OK" Event="DoAction" Value="WixUIValidatePath" Order="3">1</Publish>
+      <Publish Dialog="BrowseDlg" Control="OK" Event="SpawnDialog" Value="InvalidDirDlg" Order="4"><![CDATA[NOT WIXUI_DONTVALIDATEPATH AND WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
+
+      <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+
+
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg" >NOT Installed</Publish>
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">Installed AND PATCH</Publish>
+
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="20">
+        ( Installed AND (PATCH OR REINSTALL ) ) OR WIX_UPGRADE_DETECTED
+      </Publish>
+
+
+      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="SetTargetPath" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="DoAction" Value="WixUIValidatePath" Order="2">NOT WIXUI_DONTVALIDATEPATH</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="SpawnDialog" Value="InvalidDirDlg" Order="3"><![CDATA[NOT WIXUI_DONTVALIDATEPATH AND WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="ConnectionStringDlg" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
+
+      <Publish Dialog="InstallDirDlg" Control="ChangeFolder" Property="_BrowseProperty" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="ChangeFolder" Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
+
+
+      <!--Custom step-->
+      <Publish Dialog="ConnectionStringDlg" Control="Back" Event="NewDialog" Value="InstallDirDlg">1</Publish>
+      <Publish Dialog="ConnectionStringDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+
+
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ConnectionStringDlg" Order="1">NOT Installed</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="1">REINSTALL OR WIX_UPGRADE_DETECTED</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="2">Installed AND NOT PATCH</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">Installed AND PATCH</Publish>
+
+      <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
+
+      <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
+
+      <Property Id="ARPNOMODIFY" Value="1" />
+
+      <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Survey Solutions has been successfully installed." />
+
+    </UI>
+
+    <WixVariable Id="WixUIBannerBmp" Value="img/WixUIBannerBmp.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="img/WixUIDialogBmp.bmp" />
+    <WixVariable Id="WixUIExclamationIco" Value="img/WixUIExclamationIco.bmp" />
+    <WixVariable Id="WixUIInfoIco" Value="img/WixUIInfoIco.ico" />
+
+    <!--<Property Id="IISInstallCommandProperty" 
+              Value="/Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-NetFxExtensibility45 /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:IIS-WebSockets /FeatureName:IIS-WindowsAuthentication /FeatureName:IIS-ManagementService /FeatureName:IIS-HttpCompressionDynamic"/>
+    
+    ~1~ Use DISM to setup IIS (see also http://support.microsoft.com/kb/2736284) @1@
+    ~1~ Build path to dism.exe (full path is important, just calling dism.exe without path will fail) @1@
+    <CustomAction Id="InstallIISSetProperty"
+                  Property="InstallIIS"
+                  Execute="immediate"
+                  Value="&quot;[System64Folder]dism.exe&quot; [IISInstallCommandProperty]" />
+
+    ~1~ Call dism.exe quietly (without showing command prompt).
+                 (see also http://wixtoolset.org/documentation/manual/v3/customactions/qtexec.html) @1@
+    <CustomAction Id="InstallIIS"
+                  BinaryKey="WixCA"
+                  DllEntry="CAQuietExec64"
+                  Execute="deferred"
+                  HideTarget="no"
+                  Return="ignore"
+                  Impersonate="no"/>-->
+
+    <Binary Id="CustomActionBinary"
+            SourceFile="..\SurveySolutionsCustomActions\bin\$(var.Configuration)\SurveySolutionsCustomActions.CA.dll" />
+
+ 
+    <CustomAction Id="SetSiteSettingsDataValue"
+                  Return="check"
+                  Property="WriteSiteSettings"
+                  Value="TargetFile=[INSTALLSITEFOLDER]appsettings.production.ini;SitePort=[SITEPORT];SourceFile=[INSTALLFOLDER]\site\Configuration\Headquarters.Web.Config;CONNECTIONSTRING=Persist Security Info=true;;Server=[CONNSERVER];;Port=[CONNPORT];;User Id=[CONNUSERNAME];;Password=[CONNPASSWORD];;Database=SurveySolutions" />
+
+    <CustomAction Id="WriteSiteSettings"
+                  BinaryKey="CustomActionBinary"
+                  DllEntry="WriteSiteIniSettings"
+                  Execute="deferred"
+                  Return="check"
+                  Impersonate="no"/>
+
+    <CustomAction Id="SetUpdateWebConfigDataValue"
+                  Return="check"
+                  Property="UpdateWebConfig"
+                  Value="InstallFolder=[INSTALLSITEFOLDER]" />
+
+    <CustomAction Id="UpdateWebConfig"
+                  BinaryKey="CustomActionBinary"
+                  DllEntry="UpdateWebConfig"
+                  Execute="deferred"
+                  Return="check"
+                  Impersonate="no"/>
+
+    <Property Id="ProductURL"><![CDATA[http://localhost:[SITEPORT]/]]></Property>
+
+    <CustomAction Id="SetOpenURL" Property="WixShellExecTarget" Value="[ProductURL]" />
+    <CustomAction Id="OpenURL" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" Return="ignore" />
+
+    <InstallExecuteSequence>
+      <!--<Custom Action="InstallIISSetProperty" After="CostFinalize">
+        <![CDATA[NOT Installed]]>
+      </Custom>
+      <Custom Action="InstallIIS" Before="WriteRegistryValues">
+        <![CDATA[NOT Installed]]>
+      </Custom>-->
+
+      <Custom Action="SetOpenURL" After="InstallFinalize">
+        <![CDATA[NOT Installed]]>
+      </Custom>
+      <Custom Action="OpenURL" After="SetOpenURL">
+        <![CDATA[NOT Installed]]>
+      </Custom>
+
+      <Custom Action="SetSiteSettingsDataValue" Before="WriteSiteSettings">
+        <![CDATA[NOT Installed]]>
+      </Custom>
+      <Custom Action="WriteSiteSettings" After="InstallFiles" >
+        <![CDATA[NOT Installed]]>
+      </Custom>
+
+      <Custom Action="SetUpdateWebConfigDataValue" Before="UpdateWebConfig">
+          <![CDATA[NOT Installed]]>
+      </Custom>
+
+      <Custom Action="UpdateWebConfig" After="InstallFiles" >
+          <![CDATA[NOT Installed]]>
+      </Custom>
+      <DeleteServices>NOT UPGRADINGPRODUCTCODE</DeleteServices>
+    </InstallExecuteSequence>
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed."
+                  AllowDowngrades="no"
+                  Schedule="afterInstallExecute"/>
+
+    <!--AllowSameVersionUpgrades ="yes"-->
+
+    <!--preserves settings-->
+
+    <Feature Id="ProductFeature" Title="SurveySolutions" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id ="ApplicationShortcut" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <util:ProductSearch Id="OldProductSearch"
+                        UpgradeCode="{0C543B8A-9023-4486-89C9-421D875F5AFA}"
+                        Variable="OldProductInstalled"
+                        Result="state"></util:ProductSearch>
+    <Condition Message="Please uninstsall previous version of Survey Solutions.">
+      <![CDATA[(OldProductInstalled = 2)]]>
+    </Condition>
+  </Fragment>
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="DesktopFolder" Name="Desktop">
+        <Component Id="ApplicationShortcut" Guid="98257A59-3395-41E9-BD95-C8474C8736D9" >
+          <util:InternetShortcut Id="SurveySolutionsShortcut"
+                                 Name="Survey Solutions"
+                                 Target="http://localhost:[SITEPORT]/"
+                                 IconFile="[System32Folder]SHELL32.dll"
+                                 IconIndex="14"/>
+          <RemoveFolder Id="DesktopFolder" On="uninstall"/>
+          <RegistryValue
+              Root="HKCU"
+              Key="Software/World Bank/Survey Solutions"
+              Name="installed"
+              Type="integer"
+              Value="1"
+              KeyPath="yes"/>
+        </Component>
+      </Directory>
+      <Directory Id="INSTALLFOLDER">
+      </Directory>
+      <Directory Id="FontsFolder" />
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" >
+      <!--adding harvested project output-->
+      <ComponentGroupRef Id="ProductFilesComponentGroup"></ComponentGroupRef>
+      <!-- adding fronts reference-->
+      <ComponentGroupRef Id="FontFilesComponentGroup"></ComponentGroupRef>
+      <ComponentRef Id="DIRTOINSTALLPath"/>
+      <ComponentRef Id="cmpAppPool"/>
+      <ComponentRef Id="SiteConfigPreserve"/>
+      <ComponentRef Id="WebConfigComponent"/>
+      <ComponentRef Id="SupervisorTabletAppComponent"/>
+      <ComponentRef Id="InterviewerTabletAppFileComponent"/>
+      <ComponentRef Id="InterviewerExtTabletAppFileComponent"/>
+      <!--<ComponentRef Id="StopService"/>-->
+      <ComponentRef Id="UninstallExportServiceComponent"/>
+    </ComponentGroup>
+
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Directory Id="INSTALLFILESFOLDER" ComponentGuidGenerationSeed='89476A2E-683D-404D-9D97-505222766D04'>
+        <Component Id="DIRTOINSTALLPath" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
+          <RegistryKey Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Action="createAndRemoveOnUninstall">
+            <RegistryValue Type="string" Name="Install Path" Value="[INSTALLFOLDER]"></RegistryValue>
+          </RegistryKey>
+        </Component>
+        <Directory Id="INSTALLSITEFOLDER" Name="Site" ComponentGuidGenerationSeed="AA5F1DD2-13D8-442C-9978-8E8918EA789D">
+          <Component Id="cmpAppPool" Guid="{CBA59BDC-989C-4F77-B0F9-861AAB8E0DEB}" KeyPath="yes" Win64="yes" >
+            <iis:WebAppPool
+                Id="AppSurveySolutions"
+                Name="AppSurveySolutions"
+                ManagedRuntimeVersion="v4.0"
+                ManagedPipelineMode="integrated"
+                Identity="applicationPoolIdentity" />
+            <iis:WebSite Id="webSite" SiteId="*" Description="Survey Solutions" Directory="INSTALLSITEFOLDER" ConfigureIfExists="no">
+              <iis:WebAddress Id="webSite" Port="[SITEPORT]" />
+              <iis:WebDirProperties Id="webSite" AnonymousAccess="yes" WindowsAuthentication="no" />
+              <iis:WebApplication Id="webSite" WebAppPool="AppSurveySolutions" Name="SurveySolutions" />
+              <iis:MimeMap Id="MIME_OTF" Extension=".otf" Type="application/x-font-otf" />
+              <iis:MimeMap Id="MIME_WOFF" Extension=".woff" Type="application/x-font-woff" />
+              <iis:MimeMap Id="MIME_APK" Extension=".apk" Type="application/vnd.android.package-archive" />
+              <iis:MimeMap Id="MIME_TPK" Extension=".tpk" Type="application/octet-stream" />
+            </iis:WebSite>
+          </Component>
+          <!--creating components to track files to delete on uninstall-->
+          <Component Id="SiteConfigPreserve"  Guid="035F0D52-04C7-4DB4-A9C7-C447F405CAAA" NeverOverwrite="yes">
+            <File Id="SiteConfigFile" Source="appsettings.production.ini" PatchIgnore="yes"/>
+          </Component>
+          <!-- File structure has changed-->
+          <!-- To preserve Web.config not to be deleted on update from old file structure-->
+          <!-- Manual component with particular Guid is created-->
+          <!-- Should be excluded from harvested results-->
+          <!--{A8797EB0-B4A6-5793-BAA6-8DDAB4D6616B}-->
+
+          <Component Id="WebConfigComponent" Guid="{A8797EB0-B4A6-5793-BAA6-8DDAB4D6616B}" >
+            <File Id="WebConfigFile" Source="$(var.HarvestDir)\Site\Web.config" />
+          </Component>
+          <Directory Id="ClientDir" Name="Client" >
+            <!--ComponentGuidGenerationSeed="3D5CE555EFCA7A55E056D72F05ACC3EA"-->
+            <Component Id="SupervisorTabletAppComponent" Guid="{6F925AE1-CEC5-5136-AFA1-AABF551E5CB4}" >
+              <File Id="SupervisorTabletAppFile" Source="$(var.HarvestDir)\Site\Client\Supervisor.apk" />
+            </Component>
+            <Component Id="InterviewerTabletAppFileComponent" Guid="{351A10CC-06E0-5206-83DF-A303F81276C6}" >
+              <File Id="InterviewerTabletAppFile" Source="$(var.HarvestDir)\Site\Client\WBCapi.apk" />
+            </Component>
+            <Component Id="InterviewerExtTabletAppFileComponent" Guid="{57CA85FE-D0B4-575D-9626-661C2211EC83}" >
+              <File Id="InterviewerExtTabletAppFile" Source="$(var.HarvestDir)\Site\Client\WBCapi.Ext.apk" />
+            </Component>
+          </Directory>
+
+          <Component Id="UninstallExportServiceComponent" Guid="5AB1B28B-C884-A34B-9275-4095DDD06085" Shared="no" Permanent="no">
+
+            <CreateFolder/>
+
+            <ServiceControl Id="SurveySolutionsExport_Uninstall"
+                            Name="SurveySolutionsExport"
+                            Stop="both"
+                            Remove="both"
+                            Wait="no"/>
+          </Component>
+        </Directory>
+      </Directory>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <UI>
+      <Dialog Id="ConnectionStringDlg" Width="370" Height="270" Title="!(loc.ConnectionStringDlg_Title)">
+
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)" />
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+        </Control>
+
+        <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.ConnectionStringDlgDescription)" />
+
+        <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.ConnectionStringDlgTitle)" />
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.ConnectionStringDlgBannerBitmap)" />
+
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+
+        <Control Id="ConnStringLabel" Type="Text" X="20" Y="60" Width="290" Height="30" NoPrefix="yes" Text="!(loc.ConnectionStringDlgLabel)" />
+
+        <Control Id="CONNSERVERLabel" Type="Text" X="20" Y="102" Width="50" Height="18" NoPrefix="yes" Text="!(loc.ConnectionStringServerDlgLabel)" />
+        <Control Id="CONNSERVERTextbox" Type="Edit" X="90" Y="100"  Height="18" Width="260" Property="CONNSERVER"  />
+
+        <Control Id="CONNPORTLabel" Type="Text" X="20" Y="132" Width="50" Height="18" NoPrefix="yes" Text="!(loc.ConnectionStringPortDlgLabel)" />
+        <Control Id="CONNPORTTextbox" Type="Edit" X="90" Y="130"  Height="18" Width="260" Property="CONNPORT"  />
+
+        <Control Id="CONNUSERNAMELabel" Type="Text" X="20" Y="162" Width="50" Height="18" NoPrefix="yes" Text="!(loc.ConnectionStringUserNameDlgLabel)" />
+        <Control Id="CONNUSERNAMETextbox" Type="Edit" X="90" Y="160"  Height="18" Width="260" Property="CONNUSERNAME"  />
+
+        <Control Id="CONNPASSWORDLabel" Type="Text" X="20" Y="192" Width="50" Height="18" NoPrefix="yes" Text="!(loc.ConnectionStringPasswordDlgLabel)" />
+        <Control Id="CONNPASSWORDTextbox" Type="Edit" X="90" Y="190" Height="18" Width="260" Property="CONNPASSWORD" Password="yes"/>
+
+      </Dialog>
+    </UI>
+  </Fragment>
+</Wix>

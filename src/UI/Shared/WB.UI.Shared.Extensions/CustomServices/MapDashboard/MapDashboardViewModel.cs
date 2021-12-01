@@ -111,7 +111,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                     new MvxObservableCollection<ShapefileDescription>(this.mapService.GetAvailableShapefiles());
 
                 var localMaps = this.mapService.GetAvailableMaps(true);
-                var defaultMap = this.mapService.PrepareAndGetDefaultMap();
+                var defaultMap = this.mapService.PrepareAndGetDefaultMapOrNull();
 
                 this.Map = new Map(await MapUtilityService.GetBaseMap(this.fileSystemAccessor, defaultMap).ConfigureAwait(false));
 
