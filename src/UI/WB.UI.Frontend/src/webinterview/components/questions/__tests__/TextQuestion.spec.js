@@ -1,37 +1,69 @@
-import BaseQuestion from './BaseQuestion'
-import { shallowMount, mount } from '@vue/test-utils'
+import BaseQuestion from './BaseQuestion.base'
+import { shallowMount, mount, createLocalVue  } from '@vue/test-utils'
 import Vue from 'vue'
 import TextQuestion from '../TextQuestion.vue'
+import Question from '../Question.vue'
+import RemoveAnswer from '../parts/RemoveAnswer.vue'
+import Vuex from 'vuex'
+
+const localVue = createLocalVue()
+localVue.use(Vuex)
 
 
 describe('TextQuestion component', () => {
 
+    const webinterview = {}
+    const entityDetails = {}
+    entityDetails['111'] = {
+        isLoading : false,
+        isDisabled: false,
+        isAnswered: true,
+        validity: { isValid: true },
+        hideIfDisabled: false,
+        id: '111',
+        answer: 'same test',
+    }
+    webinterview.fetch = { state: {}}
+    webinterview.entityDetails = entityDetails
+
+    let state = {
+        webinterview: webinterview,
+        route: { hash: '#same' },
+    }
+    let getters = {
+        isReviewMode: () => false,
+    }
+
+    let store = new Vuex.Store({
+        state,
+        getters,
+    })
 
     const wrapper = mount(TextQuestion, {
         propsData: {
-            //id: '1111',
+            id: '111',
         },
+        store,
+        localVue,
     })
 
-    wrapper.$store = {}
-    wrapper.$store.state = {}
-    wrapper.$store.state.webinterview = {}
-    wrapper.$store.state.webinterview.entityDetails = {}
-    wrapper.$store.state.webinterview.entityDetails['1111'] = { isLoading : false }
-    wrapper.setData({id: '1111'})
+    it('is visible', () => {
+        expect(wrapper.isVisible()).toBe(true)
+    })
 
-    var questionHtml = wrapper.html()
-
-
-    it('contains text editor', () => {
-        expect(questionHtml).toContain('<wb-question')
+    it('contains base question behaviour', () => {
+        var comp = wrapper.findComponent(Question)
+        expect(comp.exists()).toBe(true)
+        expect(comp.isVisible()).toBe(true)
     })
 
     it('contains text editor', () => {
-        expect(questionHtml).toContain('<textarea-autosize')
+        expect(wrapper.find('textarea-autosize').exists()).toBe(true)
+        const html = wrapper.html()
+        expect(html.includes('textarea')).toBe(true)
     })
 
     it('contains remove answer button', () => {
-        expect(questionHtml).toContain('<wb-remove-answer')
+        expect(wrapper.findComponent(RemoveAnswer).exists()).toBe(true)
     })
 })
