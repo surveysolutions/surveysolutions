@@ -12,7 +12,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly IMemoryCache memoryCache;
 
         private static readonly string CachePrefix = $"pkvs::{typeof(TEntity).Name}::";
-        private readonly object lockObj = new object();
+        private static readonly object lockObj = new object();
 
         public PostgresKeyValueStorageWithCache(IUnitOfWork unitOfWork,
             IMemoryCache memoryCache,
