@@ -119,8 +119,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             var listItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons)
                 .FirstOrDefault(x => x.QuestionnaireId == questionnaireRevision.QuestionnaireId.FormatGuid());
 
-            var sharedPersons = questionnaireRevision.Revision == null
-                    ? listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First())
+            var sharedPersons = listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First())
                         .Select(x => new SharedPersonView
                         {
                             Email = x.Email,
@@ -129,8 +128,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                             IsOwner = x.IsOwner,
                             ShareType = x.ShareType
                         })
-                        .ToList()
-                    : new List<SharedPersonView>();
+                        .ToList();
 
             if (questionnaireDocument.CreatedBy.HasValue && sharedPersons.All(x => x.UserId != questionnaireDocument.CreatedBy))
             {
