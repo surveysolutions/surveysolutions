@@ -119,6 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Enablement.EntityEnabled -= this.EnablementOnEntityEnabled;
             this.answersRemovedNotifier.AnswerRemoved -= this.AnswerRemoved;
             this.Header.ShowComments -= this.ShowCommentsCommand;
+            Comments.Dispose();
             Header.Dispose();
             Validity.Dispose();
             Warnings.Dispose();
