@@ -276,6 +276,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.isDisposed = true;
 
+                this.navigationState.ScreenChanged -= this.OnScreenChanged;
+
                 this.eventRegistry.Unsubscribe(this);
                 this.AllVisibleSections?.ForEach(viewModel =>
                 {

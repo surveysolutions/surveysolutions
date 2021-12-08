@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected readonly FilteredOptionsViewModel filteredOptionsViewModel;
 
         protected readonly IPrincipal principal;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        protected readonly IStatefulInterviewRepository interviewRepository;
         private readonly IViewModelEventRegistry eventRegistry;
 
         protected readonly CategoricalComboboxAutocompleteViewModel comboboxViewModel;
@@ -59,8 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     true, mainThreadDispatcher);
         }
 
-        protected Guid interviewId;
-        protected IStatefulInterview interview;
+        protected string interviewId;
         protected int? Answer;
 
         public Identity Identity { get; private set; }
@@ -76,8 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.Identity = entityIdentity;
-            this.interview = this.interviewRepository.GetOrThrow(interviewId);
-            this.interviewId = this.interview.Id;
+            this.interviewId = interviewId;
 
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
@@ -100,7 +98,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         protected virtual int? GetCurrentAnswer()
         {
-            return this.interview.GetSingleOptionQuestion(this.Identity).GetAnswer()?.SelectedValue;
+            var interview = this.interviewRepository.GetOrThrow(this.interviewId);
+            return interview.GetSingleOptionQuestion(this.Identity).GetAnswer()?.SelectedValue;
         }
 
         public virtual async Task SaveAnswerAsync(int optionValue)
@@ -119,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(new AnswerSingleOptionQuestionCommand(
-                    this.interviewId,
+                    Guid.Parse(this.interviewId),
                     this.principal.CurrentUserIdentity.UserId,
                     this.Identity.Id,
                     this.Identity.RosterVector,
@@ -158,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interviewId,
+                    new RemoveAnswerCommand(Guid.Parse(this.interviewId),
                         this.principal.CurrentUserIdentity.UserId,
                         this.Identity));
 
@@ -190,6 +189,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState.Dispose();
             this.InstructionViewModel.Dispose();
+            this.filteredOptionsViewModel.Dispose();
         }
 
         protected OptionBorderViewModel optionsTopBorderViewModel;
