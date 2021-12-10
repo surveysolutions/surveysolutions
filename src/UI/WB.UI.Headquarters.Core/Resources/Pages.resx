@@ -1606,6 +1606,9 @@
   <data name="AccountManage_Status2fa" xml:space="preserve">
     <value>Two factor authentication is currently </value>
   </data>
+  <data name="AccountManage_StatusApiToken" xml:space="preserve">
+    <value>API token is:</value>
+  </data>
   <data name="UsersManage_WorkspacesFilterTitle" xml:space="preserve">
     <value>Workspace</value>
   </data>
@@ -1675,5 +1678,8 @@
   </data>
   <data name="Filters_InterviewModePlaceHolder" xml:space="preserve">
     <value>All interview modes</value>
+  </data>
+  <data name="AccountManage_ApiTokens" xml:space="preserve">
+      <value>API tokens</value>
   </data>
 </root>
