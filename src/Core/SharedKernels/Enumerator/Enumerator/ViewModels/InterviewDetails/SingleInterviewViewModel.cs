@@ -76,8 +76,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void SwitchTranslation(string language) => this.commandService.Execute(
             new SwitchTranslation(Guid.Parse(this.InterviewId), language, this.Principal.CurrentUserIdentity.UserId));
 
-        public virtual void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             this.vibrationViewModel.Dispose();
         }
     }

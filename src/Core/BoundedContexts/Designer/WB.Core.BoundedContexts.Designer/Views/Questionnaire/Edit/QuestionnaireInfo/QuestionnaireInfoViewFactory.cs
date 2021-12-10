@@ -38,17 +38,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             this.loggedInUser = loggedInUser;
         }
 
-        public QuestionnaireInfoView? Load(QuestionnaireRevision revision, Guid viewerId)
+        public QuestionnaireInfoView? Load(QuestionnaireRevision questionnaireRevision, Guid viewerId)
         {
-            var questionnaireDocument = this.questionnaireStorage.Get(revision);
+            var questionnaireDocument = this.questionnaireStorage.Get(questionnaireRevision);
 
             if (questionnaireDocument == null) 
                 return null;
 
             var questionnaireInfoView = new QuestionnaireInfoView
             (
-                questionnaireId : revision.QuestionnaireId.FormatGuid(),
-                questionnaireRevision : revision.Revision.FormatGuid(),
+                questionnaireId : questionnaireRevision.QuestionnaireId.FormatGuid(),
+                questionnaireRevision : questionnaireRevision.Revision.FormatGuid(),
                 title : questionnaireDocument.Title,
                 variable : questionnaireDocument.VariableName,
                 isPublic : questionnaireDocument.IsPublic,
@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.RostersCount = rostersCount;
 
             var listItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons)
-                .FirstOrDefault(x => x.QuestionnaireId == revision.QuestionnaireId.FormatGuid());
+                .FirstOrDefault(x => x.QuestionnaireId == questionnaireRevision.QuestionnaireId.FormatGuid());
 
             var sharedPersons = listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First())
                         .Select(x => new SharedPersonView
@@ -149,11 +149,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             questionnaireInfoView.SharedPersons = sharedPersons;
 
-            questionnaireInfoView.PreviewRevision = revision.Version;
-            if (revision.Revision != null)
+            questionnaireInfoView.PreviewRevision = questionnaireRevision.Version;
+            if (questionnaireRevision.Revision != null)
             {
                 questionnaireInfoView.IsReadOnlyForUser = true;
-                questionnaireInfoView.PreviewRevision = revision.Version;
+                questionnaireInfoView.PreviewRevision = questionnaireRevision.Version;
             }
             else
             {

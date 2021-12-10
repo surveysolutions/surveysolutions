@@ -1079,7 +1079,7 @@ namespace WB.UI.Headquarters.Controllers
             if (invitation.Assignment.WebMode == true && invitation.Assignment.Quantity == null)
             {
                 // ReSharper disable once ReturnValueOfPureMethodIsNotUsed - Triggering lazy load
-                invitation.Assignment.Answers.Any();
+                var temp = invitation.Assignment.Answers.Any();
                 this.memoryCache.Set(key, invitation, TimeSpan.FromSeconds(30));
 
                 return invitation;

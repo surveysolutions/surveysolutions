@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -14,37 +13,34 @@ namespace WB.Core.SharedKernels.DataCollection.Scenarios
         {
             List<InterviewCommand> result = new List<InterviewCommand>();
 
-
             var stubInterviewId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             var stubUserId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
             foreach (var interviewCommand in commands)
             {
-                Identity questionId = null;
-                if (interviewCommand is ScenarioAnswerCommand scenarioAnswerCommand)
-                {
-                    questionId = new Identity(questionnaire.GetQuestionIdByVariable(scenarioAnswerCommand.Variable).Value, scenarioAnswerCommand.RosterVector);
-                }
-
+                //var questionId = new Identity(questionnaire.GetQuestionIdByVariable(interviewCommand.Variable).Value, interviewCommand.RosterVector);
                 switch (interviewCommand)
                 {
                     case RemoveAnswer removeAnswer:
-                        result.Add(new RemoveAnswerCommand(stubInterviewId, stubUserId, questionId));
+                        result.Add(new RemoveAnswerCommand(stubInterviewId, stubUserId, 
+                            new Identity(questionnaire.GetQuestionIdByVariable(removeAnswer.Variable).Value, removeAnswer.RosterVector)));
                         break;
                     case AnswerAudio audioAnswer:
-                        result.Add(new AnswerAudioQuestionCommand(stubInterviewId, stubUserId, questionId.Id,
-                            questionId.RosterVector, audioAnswer.FileName, audioAnswer.Length));
+                        result.Add(new AnswerAudioQuestionCommand(stubInterviewId, stubUserId, 
+                            questionnaire.GetQuestionIdByVariable(audioAnswer.Variable).Value,
+                            audioAnswer.RosterVector, audioAnswer.FileName, audioAnswer.Length));
                         break;
                     case AnswerDateTime dateTimeAnswer:
-
-                        result.Add(new AnswerDateTimeQuestionCommand(stubInterviewId, stubUserId, questionId.Id, questionId.RosterVector, dateTimeAnswer.Answer));
+                        result.Add(new AnswerDateTimeQuestionCommand(stubInterviewId, stubUserId, 
+                            questionnaire.GetQuestionIdByVariable(dateTimeAnswer.Variable).Value,
+                            dateTimeAnswer.RosterVector, dateTimeAnswer.Answer));
                         break;
 
                     case AnswerGeoLocation geoAnswer:
                         result.Add(new AnswerGeoLocationQuestionCommand(
                             stubInterviewId,
                             stubUserId,
-                            questionId.Id,
-                            questionId.RosterVector,
+                            questionnaire.GetQuestionIdByVariable(geoAnswer.Variable).Value,
+                            geoAnswer.RosterVector,
                             geoAnswer.Latitude,
                             geoAnswer.Longitude,
                             geoAnswer.Accuracy,
@@ -54,8 +50,8 @@ namespace WB.Core.SharedKernels.DataCollection.Scenarios
                     case AnswerGeography geography:
                         result.Add(new AnswerGeographyQuestionCommand(
                             stubInterviewId, stubUserId,
-                            questionId.Id,
-                            questionId.RosterVector,
+                            questionnaire.GetQuestionIdByVariable(geography.Variable).Value,
+                            geography.RosterVector,
                             geography.Geometry,
                             geography.MapName,
                             geography.Area,
@@ -67,8 +63,8 @@ namespace WB.Core.SharedKernels.DataCollection.Scenarios
                     case AnswerMultipleOptionsLinked linkedMultipleOption:
                         result.Add(new AnswerMultipleOptionsLinkedQuestionCommand(
                             stubInterviewId, stubUserId,
-                            questionId.Id,
-                            questionId.RosterVector,
+                            questionnaire.GetQuestionIdByVariable(linkedMultipleOption.Variable).Value,
+                            linkedMultipleOption.RosterVector,
                             linkedMultipleOption.SelectedRosterVectors
                         ));
                         break;
@@ -76,46 +72,46 @@ namespace WB.Core.SharedKernels.DataCollection.Scenarios
                         result.Add(new AnswerMultipleOptionsQuestionCommand(
                             stubInterviewId,
                             stubUserId,
-                            questionId.Id,
-                            questionId.RosterVector,
+                            questionnaire.GetQuestionIdByVariable(multipleOptions.Variable).Value,
+                            multipleOptions.RosterVector,
                             multipleOptions.SelectedValues));
                         break;
                     case AnswerInteger integerAnswer:
                         result.Add(new AnswerNumericIntegerQuestionCommand(
                             stubInterviewId, stubUserId,
-                            questionId.Id,
-                            questionId.RosterVector,
+                            questionnaire.GetQuestionIdByVariable(integerAnswer.Variable).Value,
+                            integerAnswer.RosterVector,
                             integerAnswer.Answer));
                         break;
                     case AnswerReal realAnswer:
                         result.Add(new AnswerNumericRealQuestionCommand(
                             stubInterviewId, stubUserId,
-                            questionId.Id,
-                            questionId.RosterVector,
+                            questionnaire.GetQuestionIdByVariable(realAnswer.Variable).Value,
+                            realAnswer.RosterVector,
                             realAnswer.Answer));
                         break;
                     case AnswerPicture picture:
                         result.Add(new AnswerPictureQuestionCommand(
                             stubInterviewId,
                             stubUserId,
-                            questionId.Id,
-                            questionId.RosterVector,
+                            questionnaire.GetQuestionIdByVariable(picture.Variable).Value,
+                            picture.RosterVector,
                             picture.PictureFileName));
                         break;
                     case AnswerSingleOptionLinked singleLinkedOption:
                         result.Add(new AnswerSingleOptionLinkedQuestionCommand(
                             stubInterviewId,
                             stubUserId,
-                            questionId.Id,
-                            questionId.RosterVector,
+                            questionnaire.GetQuestionIdByVariable(singleLinkedOption.Variable).Value,
+                            singleLinkedOption.RosterVector,
                             singleLinkedOption.SelectedRosterVector));
                         break;
                     case AnswerSingleOption singleOption:
                         result.Add(new AnswerSingleOptionQuestionCommand(
                             stubInterviewId,
                             stubInterviewId,
-                            questionId.Id,
-                            questionId.RosterVector,
+                            questionnaire.GetQuestionIdByVariable(singleOption.Variable).Value,
+                            singleOption.RosterVector,
                             singleOption.SelectedValue
                         ));
                         break;
@@ -123,24 +119,24 @@ namespace WB.Core.SharedKernels.DataCollection.Scenarios
                         result.Add(new AnswerTextListQuestionCommand(
                             stubInterviewId,
                             stubUserId,
-                            questionId.Id,
-                            questionId.RosterVector,
+                            questionnaire.GetQuestionIdByVariable(textList.Variable).Value,
+                            textList.RosterVector,
                             textList.Answers.Select(x => Tuple.Create((decimal)x.Code, x.Text)).ToArray()));
                         break;
                     case AnswerText answerText:
                         result.Add(new AnswerTextQuestionCommand(
                             stubInterviewId,
                             stubUserId,
-                            questionId.Id,
-                            questionId.RosterVector,
+                            questionnaire.GetQuestionIdByVariable(answerText.Variable).Value,
+                            answerText.RosterVector,
                             answerText.Answer));
                         break;
                     case AnswerYesNo answerYesNo:
                         result.Add(new AnswerYesNoQuestion(
                             stubInterviewId,
                             stubUserId,
-                            questionId.Id,
-                            questionId.RosterVector,
+                            questionnaire.GetQuestionIdByVariable(answerYesNo.Variable).Value,
+                            answerYesNo.RosterVector,
                             answerYesNo.AnsweredOptions.ToList()));
                         break;
                     case SwitchTranslation switchTranslation:
@@ -150,7 +146,6 @@ namespace WB.Core.SharedKernels.DataCollection.Scenarios
             }
 
             return result;
-
         }
 
         public List<IScenarioCommand> ConvertFromInterview(IQuestionnaire questionnaire, IEnumerable<InterviewCommand> commands)

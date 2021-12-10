@@ -16,8 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
 
-
-            questionnaire.AddTextQuestion(
+            Assert.DoesNotThrow(() => questionnaire.AddTextQuestion(
                 questionId: questionId,
                 parentId: chapterId,
                 title: title,
@@ -30,7 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 validationMessage: validationMessage,
                 instructions: instructions,
                 mask: null,
-                responsibleId: responsibleId);
+                responsibleId: responsibleId));
         }
 
         private static Questionnaire questionnaire;

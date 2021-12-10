@@ -14,7 +14,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             [Service] IUnitOfWork viewFactory)
         {
             var objects = viewFactory.Session.Query<QuestionnaireBrowseItem>()
-                .Where(x => !x.IsDeleted && !x.IsDeleted);
+                .Where(x => !x.IsDeleted);
             if (id.HasValue)
             {
                 objects = objects.Where(x => x.QuestionnaireId == id);

@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
 
         [NUnit.Framework.Test] public void should_contains_question () =>
-           questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId);
+           questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_question_with_PublicKey_equal_to_roster_title_question_id () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId)

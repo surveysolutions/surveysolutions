@@ -512,12 +512,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return this.interviewEntityFactory.GetSidebarChildSectionsOf(sectionId, interview, questionnaire, ids, IsReviewMode());
         }
 
-        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @Combobox.vue")]
-        public virtual DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count)
-            => this.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count, null);
-
-
-        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @MultiCombobox.vue")]
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @MultiCombobox.vue and @Combobox.vue")]
         public virtual DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, int[] excludedOptionIds = null)
         {
             var questionIdentity = Identity.Parse(id);

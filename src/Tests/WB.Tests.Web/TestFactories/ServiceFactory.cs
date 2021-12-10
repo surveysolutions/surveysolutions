@@ -58,9 +58,9 @@ namespace WB.Tests.Web.TestFactories
         //                                                }));
         // }
 
-        public StatefullInterviewSearcher StatefullInterviewSearcher()
+        public StatefulInterviewSearcher StatefullInterviewSearcher()
         {
-            return new StatefullInterviewSearcher(Mock.Of<IInterviewFactory>(x =>
+            return new StatefulInterviewSearcher(Mock.Of<IInterviewFactory>(x =>
                 x.GetFlaggedQuestionIds(It.IsAny<Guid>()) == new Identity[] { }));
         }
 

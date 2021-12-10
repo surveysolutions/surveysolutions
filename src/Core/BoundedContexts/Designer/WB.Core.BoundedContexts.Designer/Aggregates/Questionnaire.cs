@@ -56,11 +56,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.sharedPersons = sharedPersons?.ToList() ?? new List<SharedPerson>();
 
             // Migrate single validation conditions to multiple
-            foreach (var question in this.innerDocument.Children.TreeToEnumerable(x => x.Children).OfType<IQuestion>())
+            foreach (var question in this.innerDocument.Children.TreeToEnumerable(x => x.Children).OfType<AbstractQuestion>())
             {
-                question.ValidationConditions = question.ValidationConditions;
-                question.ValidationExpression = null;
-                question.ValidationMessage = null;
+                question.MigrateValidationConditions();
             }
         }
         
@@ -1850,7 +1848,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 string.Format(ExceptionMessages.CantMoveSubsectionInWrongPosition, FormatGroupForException(targetGroup.PublicKey, this.innerDocument), targetIndex));
 
             var maxAcceptableIndex = targetGroup.Children.Count;
-            if (parentGroup != null && targetGroup.PublicKey == parentGroup.PublicKey)
+            if (targetGroup.PublicKey == parentGroup.PublicKey)
                 maxAcceptableIndex--;
 
             if (targetIndex < 0 || maxAcceptableIndex < targetIndex)
@@ -2322,7 +2320,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         IsInteger = questionType == QuestionType.AutoPropagate ? true : isInteger ?? false,
                         CountOfDecimalPlaces = countOfDecimalPlaces,
-                        QuestionType = QuestionType.Numeric,
                         UseFormatting = questionProperties?.UseFormatting ?? false
                     };
                     UpdateAnswerList(answers, question, linkedToQuestionId);
@@ -2358,7 +2355,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             question.PublicKey = publicKey;
-            question.QuestionType = questionType;
             question.QuestionScope = questionScope;
             question.QuestionText = System.Web.HttpUtility.HtmlDecode(questionText);
             question.StataExportCaption = stataExportCaption ?? String.Empty;
@@ -2383,25 +2379,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private static void UpdateAnswerList(IEnumerable<Answer>? answers, IQuestion question, Guid? linkedToQuestionId)
         {
             question.Answers?.Clear();
-
-            if (linkedToQuestionId.HasValue || answers == null || !answers.Any()) return;
-
-            foreach (var answer in answers)
-            {
-                question.AddAnswer(answer);
-            }
+            if (linkedToQuestionId.HasValue || answers == null) return;
+            question.Answers = answers.Where(x=> x != null).Select(x=> x).ToList();
         }
 
         private static IGroup CreateGroup(Guid id, string? title, string variableName, string description, string enablingCondition, bool hideIfDisabled)
         {
-            var group = new Group();
-            group.Title = System.Web.HttpUtility.HtmlDecode(title);
-            group.VariableName = variableName;
-            group.PublicKey = id;
-            group.Description = description;
-            group.ConditionExpression = enablingCondition;
-            group.HideIfDisabled = hideIfDisabled;
-            return group;
+            return new Group
+            {
+                Title = System.Web.HttpUtility.HtmlDecode(title),
+                VariableName = variableName,
+                PublicKey = id,
+                Description = description,
+                ConditionExpression = enablingCondition,
+                HideIfDisabled = hideIfDisabled
+            };
         }
 
         #endregion
@@ -2410,11 +2402,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            var historyReferanceId = command.HistoryReferenceId;
-            var questionnaire = questionnaireHistoryVersionsService.GetByHistoryVersion(historyReferanceId);
+            var historyReferenceId = command.HistoryReferenceId;
+            var questionnaire = questionnaireHistoryVersionsService.GetByHistoryVersion(historyReferenceId);
 
             this.innerDocument = questionnaire 
-                                 ?? throw new ArgumentException(string.Format(ExceptionMessages.QuestionnaireRevisionCantBeFound, Id, historyReferanceId));
+                                 ?? throw new ArgumentException(string.Format(ExceptionMessages.QuestionnaireRevisionCantBeFound, Id, historyReferenceId));
         }
 
         public void UpdateMetaInfo(UpdateMetadata command)

@@ -24,7 +24,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         private static QuestionnaireInfoFactory factory;
         private static NewEditStaticTextView result;
         private static Mock<IDesignerQuestionnaireStorage> questionnaireEntityDetailsReaderMock;
-        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("11111111111111111111111111111111");
         private static Guid entityId = st1Id;
     }
 }

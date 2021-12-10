@@ -24,7 +24,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private readonly IPlainStorage<SupervisorIdentity> supervisorsPlainStorage;
         private readonly ISupervisorSynchronizationService synchronizationService;
 
-
         public FinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,

@@ -7,9 +7,7 @@ using Dapper;
 using Microsoft.Extensions.Logging;
 using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.Views;
-using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Workspaces;
@@ -43,10 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 {
                     var task = Task.Run(() => Update(cts.Token));//you can pass parameters to the method as well
 
-                    if (task.Wait(TimeSpan.FromSeconds(2)))
-                        return; //the method returns elegantly
-                    else
-                        return; //the method timed-out    
+                    task.Wait(TimeSpan.FromSeconds(2));
                 }
                 catch {  /* om om om */}
             }

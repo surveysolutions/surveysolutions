@@ -2,6 +2,6 @@
 {
     public interface IPatchApplier
     {
-        string? Apply(string? left, string? patch);
+        string? Apply(string? document, string? patch);
     }
 }

@@ -49,7 +49,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly ILogger<InterviewsPublicApiController> logger;
-        private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
+        private readonly IStatefulInterviewSearcher statefulInterviewSearcher;
         private readonly IInterviewDiagnosticsFactory diagnosticsFactory;
         private readonly IPdfInterviewGenerator pdfInterviewGenerator;
         private readonly ICalendarEventService calendarEventService;
@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
             ILogger<InterviewsPublicApiController> logger,
-            IStatefullInterviewSearcher statefullInterviewSearcher,
+            IStatefulInterviewSearcher statefulInterviewSearcher,
             IInterviewDiagnosticsFactory diagnosticsFactory,
             IPdfInterviewGenerator pdfInterviewGenerator,
             ICalendarEventService calendarEventService,
@@ -80,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
             this.logger = logger;
-            this.statefullInterviewSearcher = statefullInterviewSearcher;
+            this.statefulInterviewSearcher = statefulInterviewSearcher;
             this.diagnosticsFactory = diagnosticsFactory;
             this.pdfInterviewGenerator = pdfInterviewGenerator;
             this.calendarEventService = calendarEventService;
@@ -154,7 +154,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
             }
 
-            var statistics = this.statefullInterviewSearcher.GetStatistics(interview);
+            var statistics = this.statefulInterviewSearcher.GetStatistics(interview);
             var diagnosticsInfo = diagnosticsFactory.GetById(id);
 
             InterviewSummary interviewSummary = this.allInterviewsViewFactory.Load(id);
