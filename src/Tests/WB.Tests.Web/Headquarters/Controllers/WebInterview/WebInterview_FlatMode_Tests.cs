@@ -124,7 +124,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         }
 
         [Test]
-        public void GetNavigationButtonState_for_group_inside_plain_roster_shoud_return_to_parent_of_plain_roster()
+        public void GetNavigationButtonState_for_group_inside_plain_roster_should_return_to_parent_of_plain_roster()
         {
             var sectionId = Guid.NewGuid();
             var groupId = Guid.NewGuid();
