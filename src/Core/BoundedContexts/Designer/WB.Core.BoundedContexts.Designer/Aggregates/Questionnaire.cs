@@ -4,7 +4,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -22,14 +21,11 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 using Group = Main.Core.Entities.SubEntities.Group;
 
 
@@ -37,7 +33,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
     internal class Questionnaire : IPlainAggregateRoot
     {
-        private const int MaxChapterItemsCount = 400;
+        private const int MaxChapterItemsCount = 1000;
+        private const int MaxSubSectionItemsCount = 400;
         private const int MaxGroupDepth = 10;
 
         #region State
@@ -459,7 +456,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (parentGroupId.HasValue)
             {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroupId.Value);
+                this.ThrowIfChapterHasMoreNestedChildrenThanAllowedLimit(parentGroupId.Value);
+                this.ThrowIfTargetSubsectionHasMoreDirectChildrenThanAllowedLimit(parentGroupId.Value);
                 this.ThrowIfTargetGroupHasReachedAllowedDepthLimit(parentGroupId.Value);
             }
 
@@ -602,6 +600,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         throw new QuestionnaireException(string.Format(ExceptionMessages.SectionCantHaveMoreThan_Items, MaxChapterItemsCount));
                     }
+                    
+                    if (targetGroup.Children.Count >= MaxSubSectionItemsCount)
+                    {
+                        throw new QuestionnaireException(string.Format(ExceptionMessages.SubsectionCantHaveMoreThan_DirectChildren, MaxSubSectionItemsCount));
+                    }
                 }
 
                 var targetGroupDepthLevel = this.GetAllParentGroups(targetGroup).Count();
@@ -640,14 +643,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void AddDefaultTypeQuestionAdnMoveIfNeeded(AddDefaultTypeQuestion command)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(command.QuestionId);
-            var parentGroup = this.GetGroupById(command.ParentGroupId);
-            this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentGroupId);
-
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             
+            var parentGroup = this.GetGroupById(command.ParentGroupId);
             if (parentGroup != null)
             {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+                this.ThrowIfTargetSubsectionHasMoreDirectChildrenThanAllowedLimit(parentGroup.PublicKey);
+                this.ThrowIfChapterHasMoreNestedChildrenThanAllowedLimit(parentGroup.PublicKey);
             }
 
             var featured = IsCoverPage(command.ParentGroupId);
@@ -709,7 +711,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             var targetGroup = this.GetGroupOrThrowDomainExceptionIfGroupDoesNotExist(targetGroupId);
 
-            this.ThrowIfChapterHasMoreThanAllowedLimit(targetGroupId);
+            this.ThrowIfTargetSubsectionHasMoreDirectChildrenThanAllowedLimit(targetGroupId);
+            this.ThrowIfChapterHasMoreNestedChildrenThanAllowedLimit(targetGroupId);
 
             this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, question.GetParent() as IGroup);
 
@@ -726,12 +729,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
-            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
-            if (parentGroup != null)
-            {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
-            }
-
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
                         command.QuestionId,
@@ -771,12 +768,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
-            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
-            if (parentGroup != null)
-            {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
-            }
-
             IQuestion newQuestion = CreateQuestion(
                         question.PublicKey,
                         QuestionType.GpsCoordinates,
@@ -815,11 +806,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var question = this.GetQuestionOrThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-        
-            if (parentGroup != null)
-            {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
-            }
 
             IQuestion newQuestion = CreateQuestion(
                 question.PublicKey,
@@ -856,12 +842,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             
-            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
-            if (parentGroup != null)
-            {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
-            }
-
             Guid? linkedRosterId;
             Guid? linkedQuestionId;
 
@@ -917,12 +897,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.GetQuestionOrThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-
-            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
-            if (parentGroup != null)
-            {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
-            }
 
             var title = command.Title;
             var variableName = command.VariableName;
@@ -1111,12 +1085,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var question = this.GetQuestionOrThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
 
-            IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
-            if (parentGroup != null)
-            {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
-            }
-            
             var title = command.Title;
             var variableName = command.VariableName;
             PrepareGeneralProperties(ref title, ref variableName);
@@ -1168,11 +1136,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
-            if (parentGroup != null)
-            {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
-            }
-
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
                     command.QuestionId,
@@ -1224,11 +1187,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
-            if (parentGroup != null)
-            {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
-            }
-
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
                     command.QuestionId,
@@ -1281,11 +1239,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
-            if (parentGroup != null)
-            {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
-            }
-
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             AudioQuestion newQuestion = (AudioQuestion)CreateQuestion(
                 command.QuestionId,
@@ -1338,11 +1291,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
-            if (parentGroup != null)
-            {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
-            }
-
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             MultimediaQuestion newQuestion = (MultimediaQuestion) CreateQuestion(
                 command.QuestionId,
@@ -1393,11 +1341,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IGroup? parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
-            if (parentGroup != null)
-            {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
-            }
-
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
                     command.QuestionId,
@@ -1435,7 +1378,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
             this.GetGroupOrThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
             
-            this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
+            this.ThrowIfTargetSubsectionHasMoreDirectChildrenThanAllowedLimit(command.ParentId);
+            this.ThrowIfChapterHasMoreNestedChildrenThanAllowedLimit(command.ParentId);
 
             var staticText = new StaticText(publicKey: command.EntityId,
                 text: System.Web.HttpUtility.HtmlDecode(command.Text),
@@ -1482,7 +1426,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             var sourceStaticText = GetEntityOrThrowDomainExceptionIfEntityDoesNotExists(this.innerDocument, entityId);
             var targetGroup = this.GetGroupOrThrowDomainExceptionIfGroupDoesNotExist(targetEntityId);
-            this.ThrowIfChapterHasMoreThanAllowedLimit(targetEntityId);
+            this.ThrowIfTargetSubsectionHasMoreDirectChildrenThanAllowedLimit(targetEntityId);
+            this.ThrowIfChapterHasMoreNestedChildrenThanAllowedLimit(targetEntityId);
             
             this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, sourceStaticText.GetParent() as IGroup);
 
@@ -1499,7 +1444,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
             this.GetGroupOrThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
 
-            this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
+            this.ThrowIfTargetSubsectionHasMoreDirectChildrenThanAllowedLimit(command.ParentId);
+            this.ThrowIfChapterHasMoreNestedChildrenThanAllowedLimit(command.ParentId);
 
             var variable = new Variable(command.EntityId, command.VariableData);
 
@@ -1535,7 +1481,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             GetEntityOrThrowDomainExceptionIfEntityDoesNotExists(this.innerDocument, entityId);
             var targetGroup = this.GetGroupOrThrowDomainExceptionIfGroupDoesNotExist(targetEntityId);
-            this.ThrowIfChapterHasMoreThanAllowedLimit(targetEntityId);
+            
+            this.ThrowIfTargetSubsectionHasMoreDirectChildrenThanAllowedLimit(targetEntityId);
+            this.ThrowIfChapterHasMoreNestedChildrenThanAllowedLimit(targetEntityId);
 
             var sourceVariable = this.innerDocument.Find<IVariable>(entityId);
             this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, sourceVariable != null ? sourceVariable.GetParent() as IGroup : null);
@@ -1651,6 +1599,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if ((numberOfMovedItems + numberOfItemsInChapter) >= MaxChapterItemsCount - 1)
                 {
                     throw new QuestionnaireException(string.Format(ExceptionMessages.SectionCantHaveMoreThan_Items, MaxChapterItemsCount));
+                }
+                
+                if (targetToPasteIn.Children.Count >= MaxSubSectionItemsCount)
+                {
+                    throw new QuestionnaireException(string.Format(ExceptionMessages.SubsectionCantHaveMoreThan_DirectChildren, MaxSubSectionItemsCount));
                 }
 
                 var targetGroupDepthLevel = this.GetAllParentGroups(targetToPasteIn).Count();
@@ -1818,12 +1771,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Questionnaire Invariants
 
-        private void ThrowIfChapterHasMoreThanAllowedLimit(Guid itemId)
+        private void ThrowIfChapterHasMoreNestedChildrenThanAllowedLimit(Guid itemId)
         {
             var chapter = this.innerDocument.GetChapterOfItemByIdOrThrow(itemId);
             if (chapter.Children.TreeToEnumerable(x => x.Children).Count() >= MaxChapterItemsCount)
             {
                 throw new QuestionnaireException(string.Format(ExceptionMessages.SectionCantHaveMoreThan_Items, MaxChapterItemsCount));
+            }
+        }
+        
+        private void ThrowIfTargetSubsectionHasMoreDirectChildrenThanAllowedLimit(Guid groupId)
+        {
+            var targetGroup = this.GetGroupOrThrowDomainExceptionIfGroupDoesNotExist(groupId);
+            if (targetGroup.Children.Count >= MaxSubSectionItemsCount)
+            {
+                throw new QuestionnaireException(string.Format(ExceptionMessages.SubsectionCantHaveMoreThan_DirectChildren, MaxSubSectionItemsCount));
             }
         }
 
@@ -1834,7 +1796,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 var targetGroupDepth = this.GetAllParentGroups(entity).Count();
 
-                if (targetGroupDepth >= MaxGroupDepth)
+                if (targetGroupDepth > MaxGroupDepth)
                 {
                     throw new QuestionnaireException(string.Format(ExceptionMessages.SubSectionDepthLimit, MaxGroupDepth));
                 }
