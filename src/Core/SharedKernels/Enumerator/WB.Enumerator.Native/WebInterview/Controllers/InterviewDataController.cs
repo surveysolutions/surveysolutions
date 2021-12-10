@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -134,7 +133,6 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 };
             }
 
-            
             if (entityType == InterviewEntityType.StaticText)
             {
                 var staticText = interview.GetStaticText(entityIdentity);
