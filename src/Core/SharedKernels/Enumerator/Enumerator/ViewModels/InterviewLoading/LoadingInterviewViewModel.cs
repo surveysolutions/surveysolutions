@@ -84,6 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
         public async Task LoadAndNavigateToInterviewAsync(Guid interviewId)
         {
             viewModelEventRegistry.WriteToLogInfoBySubscribers();
+            viewModelEventRegistry.Reset();
             
             var interview = await LoadInterviewAsync(interviewId);
             if (interview == null)
