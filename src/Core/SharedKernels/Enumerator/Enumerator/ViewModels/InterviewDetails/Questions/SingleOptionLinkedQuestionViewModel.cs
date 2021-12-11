@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
@@ -116,19 +117,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.previousOptionToReset = question.IsAnswered() ? (decimal[])question.GetAnswer()?.SelectedValue : null;
 
             this.Options = new CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(this.CreateOptions());
-            this.Options.CollectionChanged += (sender, args) =>
-            {
-                if (this.optionsTopBorderViewModel != null)
-                {
-                    this.optionsTopBorderViewModel.HasOptions = HasOptions;
-                }
-                if (this.optionsBottomBorderViewModel != null)
-                {
-                    this.optionsBottomBorderViewModel.HasOptions = this.HasOptions;
-                }
-            };
+            this.Options.CollectionChanged += CollectionChanged;
 
             this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (this.optionsTopBorderViewModel != null)
+            {
+                this.optionsTopBorderViewModel.HasOptions = HasOptions;
+            }
+
+            if (this.optionsBottomBorderViewModel != null)
+            {
+                this.optionsBottomBorderViewModel.HasOptions = this.HasOptions;
+            }
         }
 
         public void Dispose()
@@ -142,6 +146,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 option.BeforeSelected -= this.OptionSelected;
                 option.AnswerRemoved -= this.RemoveAnswer;
             }
+            this.Options.CollectionChanged -= CollectionChanged;
+            
             this.throttlingModel.Dispose();
         }
 

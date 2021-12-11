@@ -380,8 +380,10 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+        private bool isDisposed = false;
         public void Dispose()
         {
+            if (isDisposed) return;
             this.itemsLock.EnterWriteLock();
             try
             {
@@ -396,6 +398,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             }
             finally
             {
+                isDisposed = true;
                 this.itemsLock.ExitWriteLock();
             }
 

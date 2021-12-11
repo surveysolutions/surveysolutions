@@ -27,7 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly Guid userId;
         private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private readonly ThrottlingViewModel throttlingModel;
 
@@ -48,7 +47,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (principal == null) throw new ArgumentNullException(nameof(principal));
 
             this.userId = principal.CurrentUserIdentity.UserId;
-            this.eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
             this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
 
             this.throttlingModel = throttlingModel;
@@ -93,8 +91,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options.CollectionChanged += OptionsOnCollectionChanged;
             
             this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
-
-            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private void OptionsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -120,11 +116,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public override void Dispose()
         {
             base.Dispose();
-
-            this.eventRegistry.Unsubscribe(this);
-
+            
             this.Options.CollectionChanged -= OptionsOnCollectionChanged;
-
             foreach (var option in Options)
             {
                 option.BeforeSelected -= this.OptionSelected;

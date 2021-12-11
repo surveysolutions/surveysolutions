@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
-            this.eventRegistry = eventRegistry;
+            this.eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
 
             this.questionState = questionStateViewModel;
             this.Answering = answering;
