@@ -32,10 +32,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState;
-        private IStatefulInterview interview = null!;
         private string? filterText;
         private IEnumerable<Guid> parentRosterIds;
         private List<SingleOptionLinkedQuestionOptionViewModel> autoCompleteSuggestions;
+        private string interviewId = null!;
 
         public AutoCompleteSingleOptionLinkedQuestionViewModel(
             IViewModelEventRegistry liteEventRegistry,
@@ -60,11 +60,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.Identity = entityIdentity;
+            this.interviewId = interviewId;
 
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
-            this.interview = this.interviewRepository.GetOrThrow(interviewId);
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
             var questionnaire =
                 this.questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
@@ -137,7 +138,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             var command = new AnswerSingleOptionLinkedQuestionCommand(
-                this.interview.Id,
+                Guid.Parse(this.interviewId),
                 this.principal.CurrentUserIdentity.UserId,
                 this.Identity.Id,
                 this.Identity.RosterVector,
@@ -162,7 +163,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interview.Id,
+                    new RemoveAnswerCommand(Guid.Parse(this.interviewId),
                         this.principal.CurrentUserIdentity.UserId,
                         this.Identity));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -182,6 +183,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private IEnumerable<SingleOptionLinkedQuestionOptionViewModel> CreateOptions()
         {
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
             var linkedQuestion = interview.GetLinkedSingleOptionQuestion(this.Identity) ??
                                  throw new ArgumentNullException($"interview.GetLinkedSingleOptionQuestion returned null")
                                  {

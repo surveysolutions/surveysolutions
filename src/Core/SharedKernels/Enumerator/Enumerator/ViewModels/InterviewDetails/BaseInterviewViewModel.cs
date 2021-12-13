@@ -24,7 +24,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public abstract class BaseInterviewViewModel : SingleInterviewViewModel
+    public abstract class BaseInterviewViewModel : SingleInterviewViewModel, IDisposable
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         protected readonly IStatefulInterviewRepository interviewRepository;
@@ -134,6 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             
             await this.NavigationState.NavigateTo(this.targetNavigationIdentity ?? this.GetDefaultScreenToNavigate(questionnaire)).ConfigureAwait(false);
 
+            this.answerNotifier.Init(this.InterviewId);
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
 
             this.IsVariablesShowed = this.EnumeratorSettings.ShowVariables;
@@ -204,14 +205,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     this.Status = this.InterviewState.Status;
                     break;
                 case ScreenType.Cover:
-                    this.vibrationViewModel.Disable();
-                    this.answerNotifier.Init(this.InterviewId);
+                    this.vibrationViewModel.Disable();                    
                     this.coverState.Init(this.NavigationState.InterviewId, eventArgs.TargetGroup);
                     this.Status = this.coverState.Status;
                     break;
                 case ScreenType.Group:
                     this.vibrationViewModel.Enable();
-                    this.answerNotifier.Init(this.InterviewId);
                     this.UpdateGroupStatus(eventArgs.TargetGroup);
                 break;
             }

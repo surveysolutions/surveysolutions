@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -56,9 +59,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateSelfFromModel();
         }
 
+        public void AddPropertyChangedHandler(PropertyChangedEventHandler handler)
+        {
+            this.propertyChangedHandlers.Add(handler);
+            this.PropertyChanged += handler;
+        }
+
         public bool HideIfDisabled { get; private set; }
 
         private bool enabled;
+        private List<PropertyChangedEventHandler> propertyChangedHandlers = new List<PropertyChangedEventHandler>();
+
         public bool Enabled
         {
             get { return this.enabled; }
@@ -124,6 +135,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
+            if(propertyChangedHandlers != null)
+                propertyChangedHandlers.ForEach(handler => this.PropertyChanged -= handler);
         }
 
         public void Handle(StaticTextsDisabled @event)

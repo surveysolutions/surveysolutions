@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public abstract class SingleInterviewViewModel : BaseViewModel<InterviewViewModelArgs>
+    public abstract class SingleInterviewViewModel : BaseViewModel<InterviewViewModelArgs>, IDisposable
     {
         public IEnumeratorSettings EnumeratorSettings { get; }
         protected readonly ICommandService commandService;

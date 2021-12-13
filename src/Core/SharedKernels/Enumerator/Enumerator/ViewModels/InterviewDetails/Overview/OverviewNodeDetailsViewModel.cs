@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
@@ -10,7 +11,8 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 {
-    public class OverviewNodeDetailsViewModel : MvxViewModel<OverviewNodeDetailsViewModelArgs> 
+    public class OverviewNodeDetailsViewModel : MvxViewModel<OverviewNodeDetailsViewModelArgs>,
+        IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
@@ -64,6 +66,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         public List<string> Errors { get; set; }
 
         public List<string> Warnings { get; set; }
+        
+        public void Dispose()
+        {
+            Comments.Dispose();
+        }
     }
 
     public class OverviewNodeDetailsViewModelArgs

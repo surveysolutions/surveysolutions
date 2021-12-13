@@ -194,6 +194,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
+            this.QuestionState.Dispose();
+            this.filteredOptionsViewModel.Dispose();
             this.throttlingModel.Dispose();
         }
 

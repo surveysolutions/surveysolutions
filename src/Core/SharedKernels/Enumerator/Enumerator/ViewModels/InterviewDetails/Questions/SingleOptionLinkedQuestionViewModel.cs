@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross;
@@ -33,7 +34,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
-        private IStatefulInterview interview = null!;
         private readonly ThrottlingViewModel throttlingModel;
 
         public SingleOptionLinkedQuestionViewModel(
@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.parentRosterIds = Enumerable.Empty<Guid>();
         }
 
-        private Guid interviewId;
+        private string interviewId = null!;
 
         private Guid linkedToQuestionId;
 
@@ -104,11 +104,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Init(interviewId, questionIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, questionIdentity, navigationState);
 
-            this.interview = this.interviewRepository.GetOrThrow(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(this.interview.QuestionnaireIdentity, interview.Language);
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
             this.Identity = questionIdentity;
-            this.interviewId = interview.Id;
+            this.interviewId = interviewId;
 
             this.linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(this.Identity.Id);
             this.parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedEntity(this.linkedToQuestionId).ToHashSet();
@@ -117,19 +117,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.previousOptionToReset = question.IsAnswered() ? (decimal[])question.GetAnswer()?.SelectedValue : null;
 
             this.Options = new CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(this.CreateOptions());
-            this.Options.CollectionChanged += (sender, args) =>
-            {
-                if (this.optionsTopBorderViewModel != null)
-                {
-                    this.optionsTopBorderViewModel.HasOptions = HasOptions;
-                }
-                if (this.optionsBottomBorderViewModel != null)
-                {
-                    this.optionsBottomBorderViewModel.HasOptions = this.HasOptions;
-                }
-            };
+            this.Options.CollectionChanged += CollectionChanged;
 
             this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (this.optionsTopBorderViewModel != null)
+            {
+                this.optionsTopBorderViewModel.HasOptions = HasOptions;
+            }
+
+            if (this.optionsBottomBorderViewModel != null)
+            {
+                this.optionsBottomBorderViewModel.HasOptions = this.HasOptions;
+            }
         }
 
         public void Dispose()
@@ -143,11 +146,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 option.BeforeSelected -= this.OptionSelected;
                 option.AnswerRemoved -= this.RemoveAnswer;
             }
+            this.Options.CollectionChanged -= CollectionChanged;
+            
             this.throttlingModel.Dispose();
         }
 
         private IEnumerable<SingleOptionLinkedQuestionOptionViewModel> CreateOptions()
         {
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
             var linkedQuestion = interview.GetLinkedSingleOptionQuestion(this.Identity);
             
             foreach (var linkedOption in linkedQuestion.Options)
@@ -168,7 +174,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
 
             var command = new AnswerSingleOptionLinkedQuestionCommand(
-                this.interviewId,
+                Guid.Parse(this.interviewId),
                 this.userId,
                 this.Identity.Id,
                 this.Identity.RosterVector,
@@ -228,7 +234,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.throttlingModel.CancelPendingAction();
                 
                 await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interviewId,
+                    new RemoveAnswerCommand(Guid.Parse(this.interviewId),
                         this.userId,
                         this.Identity));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
