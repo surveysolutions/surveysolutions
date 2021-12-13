@@ -134,6 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             
             await this.navigationState.NavigateTo(this.targetNavigationIdentity ?? this.GetDefaultScreenToNavigate(questionnaire)).ConfigureAwait(false);
 
+            this.answerNotifier.Init(this.InterviewId);
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
 
             this.IsVariablesShowed = this.EnumeratorSettings.ShowVariables;
@@ -205,13 +206,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     break;
                 case ScreenType.Cover:
                     this.vibrationViewModel.Disable();
-                    this.answerNotifier.Init(this.InterviewId);
                     this.coverState.Init(this.navigationState.InterviewId, eventArgs.TargetGroup);
                     this.Status = this.coverState.Status;
                     break;
                 case ScreenType.Group:
                     this.vibrationViewModel.Enable();
-                    this.answerNotifier.Init(this.InterviewId);
                     this.UpdateGroupStatus(eventArgs.TargetGroup);
                 break;
             }
