@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -60,14 +61,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void AddPropertyChangedHandler(PropertyChangedEventHandler handler)
         {
-            this.propertyChangedHandler = handler;
-            this.PropertyChanged += propertyChangedHandler;
+            this.propertyChangedHandlers.Add(handler);
+            this.PropertyChanged += handler;
         }
 
         public bool HideIfDisabled { get; private set; }
 
         private bool enabled;
-        private PropertyChangedEventHandler propertyChangedHandler;
+        private List<PropertyChangedEventHandler> propertyChangedHandlers = new List<PropertyChangedEventHandler>();
 
         public bool Enabled
         {
@@ -134,8 +135,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
-            if(propertyChangedHandler!= null)
-                this.PropertyChanged -= propertyChangedHandler;
+            if(propertyChangedHandlers != null)
+                propertyChangedHandlers.ForEach(handler => this.PropertyChanged -= handler);
         }
 
         public void Handle(StaticTextsDisabled @event)
