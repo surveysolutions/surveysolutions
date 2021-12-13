@@ -320,7 +320,7 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public ViewModelEventRegistry LiteEventRegistry()
-            => new ViewModelEventRegistry();
+            => new ViewModelEventRegistry(Mock.Of<ILogger>());
 
         public EnumeratorDenormalizerRegistry DenormalizerRegistry() =>
             new EnumeratorDenormalizerRegistry(

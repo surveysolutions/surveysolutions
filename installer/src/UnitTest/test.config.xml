@@ -1,0 +1,38 @@
+<configuration>
+  <configSections>
+    <section name="externalStorages" type="WB.UI.Shared.Web.Configuration.ExternalStoragesConfigSection, WB.UI.Shared.Web, Version=5.22.20.0, Culture=neutral" />
+  </configSections>
+  <externalStorages>
+    <oauth2 redirectUri="https://demo.mysurvey.solutions/data-export-storages.html" responseType="token">
+      <dropbox authorizationUri="https://www.dropbox.com/1/oauth2/authorize" clientId="xq0gw1yayz7ko4g">
+      </dropbox>
+      <onedrive authorizationUri="https://login.microsoftonline.com/common/oauth2/v2.0/authorize" clientId="***REMOVED***" scope="files.readwrite.all">
+      </onedrive>
+      <googledrive authorizationUri="https://accounts.google.com/o/oauth2/v2/auth" clientId="***REMOVED***" scope="https://www.googleapis.com/auth/drive.file">
+      </googledrive>
+    </oauth2>
+  </externalStorages>
+  <appSettings>
+    <add key="Export.ServiceUrl" value="http://export1904.services.mysurvey.solutions:5000" />
+    <add key="Metrics.Gateway" value="http://localhost:9091/metrics" />
+    <add key="Google.Map.ApiKey" value="AIzaSyCCjRxNDmcjr8iVl9g-FNIAYqOrTGnqsEA" />
+    <add key="BaseUrl" value="https://armbn.mysurvey.solutions" />
+    <add key="Storage.S3.Prefix" value="armbn" />
+    <add key="DataStorePath" value="D:\Instances\armbn\Data_Site" />
+    <add key="Storage.S3.Enable" value="True" />
+    <add key="IsHttpsRequired" value="true" />
+    <add key="WebInterviewEnabled" value="true" />
+    <add key="Export.EnableInterviewHistory" value="true" />
+    <add key="DesignerAddress" value="https://designer.mysurvey.solutions" />
+    <add key="CaptchaService" value="recaptcha" />
+  </appSettings>
+  <connectionStrings>
+    <add name="Postgres" providerName="Npgsql" connectionString="Persist Security Info=true;Server=prod2.db.mysurvey.solutions;Port=5432;User Id=armbn;Password=aaa;Database=armbn;ApplicationName=armbn" />
+  </connectionStrings>
+  <system.web>
+    <httpCookies httpOnlyCookies="true" requireSSL="true" lockItem="true" />
+    <authentication mode="Forms">
+      <forms loginUrl="~/Account/LogOn" timeout="2880" name=".ASPXAUTHHQ" requireSSL="true" />
+    </authentication>
+  </system.web>
+</configuration>

@@ -72,6 +72,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private void UpdateFromInterview()
         {
+            if (this.isDisposed) return;
+            
             var statefulInterview = this.interviewRepository.Get(this.interviewId);
 
             var interviewRosterInstances = statefulInterview
@@ -79,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 .ToList();
 
             this.UpdateViewModels(interviewRosterInstances);
-            this.UpdateUi();
+            this.InvokeOnMainThread(() => this.RosterInstances.ReplaceWith(this.synchronizedItems));
         }
 
         private void UpdateViewModels(IList<Identity> interviewRosterInstances)
@@ -106,8 +108,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
         }
 
-        private void UpdateUi() => this.InvokeOnMainThread(() => this.RosterInstances.ReplaceWith(this.synchronizedItems));
-
         private GroupViewModel GetGroupViewModel(Identity identity)
         {
             var groupViewModel = this.interviewViewModelFactory.GetNew<GroupViewModel>();
@@ -123,6 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.isDisposed = true;
             this.eventRegistry.Unsubscribe(this);
 
+            this.synchronizedItems?.ForEach(viewModel => viewModel.DisposeIfDisposable());
             this.RosterInstances?.ForEach(viewModel => viewModel.DisposeIfDisposable());
         }
     }

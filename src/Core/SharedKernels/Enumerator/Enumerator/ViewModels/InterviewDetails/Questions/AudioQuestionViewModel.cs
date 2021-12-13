@@ -72,10 +72,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.audioFileStorage = audioFileStorage;
             this.audioService = audioService;
 
-            this.audioService.OnPlaybackCompleted += (sender, args) =>
-            {
-                this.IsPlaying = false;
-            };
+            this.audioService.OnPlaybackCompleted += OnPlaybackCompleted;
+        }
+
+        private void OnPlaybackCompleted(object sender, PlaybackCompletedEventArgs e)
+        {
+            this.IsPlaying = false;
         }
 
         public bool IsPlaying
@@ -287,6 +289,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
+            this.audioService.OnPlaybackCompleted -= OnPlaybackCompleted;
             this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
             this.InstructionViewModel.Dispose();

@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.registry.Subscribe(this, interviewId);
         }
 
-        public virtual void Init(string interviewId, params Identity[] questions)
+        public virtual void Init(string interviewId, Identity[] questions)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (questions == null) throw new ArgumentNullException(nameof(questions));

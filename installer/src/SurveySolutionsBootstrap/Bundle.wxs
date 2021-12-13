@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+
+    <Bundle Name="SurveySolutions"
+            Version="$(var.SurveySolutionsVersion)"
+            Manufacturer="The World Bank"
+            UpgradeCode="D101A3BD-9921-4BBC-8F13-2B496A721317" >
+
+        <!--allow only install to Server OS x64 starting Server 2012 R2 x64 but not on old laptop with consumer OS-->
+        <bal:Condition Message="This application requires server operating system such as Windows Server 2012 R2 or newer.">
+            (VersionNT64 &gt;= v6.3 AND MsiNTProductType &lt;&gt; 1)
+        </bal:Condition>
+
+        <Variable Name="Siteport" bal:Overridable="yes" Value="9700" />
+        <Variable Name="Connserver" bal:Overridable="yes" Value="127.0.0.1" />
+        <Variable Name="Connport" bal:Overridable="yes" Value="5432" />
+        <Variable Name="Connusername" bal:Overridable="yes" Value="postgres" />
+        <Variable Name="Connpassword" bal:Overridable="yes" />
+        <Variable Name="Installfolder" bal:Overridable="yes" Value="C:\Survey Solutions" />
+
+        <!--Search for old product written with InstallSuit? (or something like that) -->
+        <util:ProductSearch 
+            Id="OldProductSearch" 
+            UpgradeCode="0C543B8A-9023-4486-89C9-421D875F5AFA" 
+            Variable="OldProductInstalled" 
+            Result="state"/>
+
+        <bal:Condition Message="Please uninstall previous version of Survey Solutions.">
+            (OldProductInstalled = 2)
+        </bal:Condition>
+
+        <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense" >
+            <bal:WixStandardBootstrapperApplication 
+                LicenseUrl=""
+                LogoFile="img\logo-50.bmp"
+                LogoSideFile="img\logo-50.bmp"
+                ShowVersion="yes"
+                SuppressOptionsUI="yes"/>
+            <!--SuppressRepair="yes"-->
+        </BootstrapperApplicationRef>
+
+        <Chain>
+            <PackageGroupRef Id="ActivateIisFeatures"/>
+            <PackageGroupRef Id="WindowsDotNetHosting501"/>
+            <RollbackBoundary/>
+            <MsiPackage Id="SurveySolutionsPackage"
+                        Cache="yes"
+                        Compressed="yes"
+                        DisplayInternalUI="yes"
+                        Vital="yes"
+                        InstallCondition="VersionNT64"
+                        SourceFile="$(var.SurveySolutions.TargetPath)" >
+
+              <MsiProperty Name="SITEPORT" Value="[Siteport]"/>
+              <MsiProperty Name="CONNSERVER" Value="[Connserver]"/>
+              <MsiProperty Name="CONNPORT" Value="[Connport]"/>
+              <MsiProperty Name="CONNUSERNAME" Value="[Connusername]"/>
+              <MsiProperty Name="CONNPASSWORD" Value="[Connpassword]"/>
+              <MsiProperty Name="INSTALLFOLDER" Value="[Installfolder]"/>
+
+            </MsiPackage>
+        </Chain>
+    </Bundle>
+</Wix>

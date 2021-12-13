@@ -1,0 +1,173 @@
+name: Build All
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_number:
+        description: 'Build Number'
+        default: 'auto'
+        required: false
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+
+    outputs:
+      build_number: ${{ steps.vars.outputs.build_number }}
+      version: ${{ steps.vars.outputs.version }}
+      info_version: ${{ steps.vars.outputs.info_version }}
+      environment: ${{ steps.vars.outputs.environment }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Define build number and version strings
+        id: vars
+        run: |
+          build_number="${{ github.event.inputs.build_number }}"
+          if [[ "${build_number}" == "auto" ]]; then
+            build_number=${{ github.run_number }}
+          fi
+          ver=$(cat ./src/.version | awk -F. '{printf "%s.%02d.%d\n", $1, $2, $3}')
+          environment="development"
+          if [ "${{ github.ref_name }}" == "release" ] ; then
+            environment="release"
+          fi
+          echo ::set-output name=build_number::${build_number}
+          echo ::set-output name=version::$ver.${build_number}
+          echo "::set-output name=info_version::$ver (build ${build_number})"
+          echo "::set-output name=environment::${environment}"
+
+  tests:
+    uses: surveysolutions/surveysolutions/.github/workflows/tests.yml@master
+    with:
+      runs_on: 'ubuntu-latest'
+      run_analysis: false
+    secrets:
+      sonar-token: ${{ secrets.SONAR_TOKEN }}
+
+  mobile:
+    needs: [prepare, tests]
+    runs-on: windows-latest
+    environment: ${{ needs.prepare.outputs.environment }}
+
+    strategy:
+      matrix:
+        task: [AndroidInterviewer, AndroidInterviewerWithMaps, AndroidSupervisor]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET Core SDK 5.0.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.3
+
+    - name: Build
+      env:
+        APP_CENTER_INTERVIEWER_DEV: ${{ secrets.APPCENTER_INTERVIEWER_KEY }}
+        APP_CENTER_INTERVIEWER_PROD: ${{ secrets.APPCENTER_INTERVIEWER_KEY }} # will come with the prod value in the release environment
+        APP_CENTER_SUPERVISOR_DEV: ${{ secrets.APPCENTER_SUPERVISOR_KEY }}
+        APP_CENTER_SUPERVISOR_PROD: ${{ secrets.APPCENTER_SUPERVISOR_KEY }} # will come with the prod value in the release environment
+        
+      run: .\.build.ps1 ${{ matrix.task }} `
+        -BuildNumber ${{ needs.prepare.outputs.build_number }} `
+        -signapk -KeystoreAlias wbcapipublish `
+        -androidKeyStore "${{ secrets.INTERVIEWER_KEYSTORE }}" `
+        -KeystorePassword "${{ secrets.INTERVIEWER_KEYSTORE_PASSWORD }}" `
+        -GoogleMapKey "${{ secrets.GOOGLEMAPS_KEY }}" `
+        -ArcGisKey "${{ secrets.ARCGIS_KEY }}"
+       
+    - name: Publish
+      uses: actions/upload-artifact@v2
+      with:
+        name: Mobile Apps
+        path: ${{ github.workspace }}/artifacts
+
+  docker:
+    needs: [prepare, mobile]
+    runs-on: ubuntu-latest
+    environment: ${{ needs.prepare.outputs.environment }}
+    permissions:
+      contents: read
+      packages: write
+
+    strategy:
+      matrix:
+        task: [DockerHq, DockerDesigner, DockerWebTester]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Log in to the GitHub Container Registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to DockerHub
+        if: ${{ needs.prepare.outputs.environment == 'release' }}
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Download mobile artifacts
+        if: ${{ matrix.task == 'DockerHq' }}
+        id: download
+        uses: actions/download-artifact@v2
+        with:
+          name: Mobile Apps
+          path: artifacts
+
+      - name: Build and push
+        shell: pwsh
+        run: |
+          ./.build.ps1 ${{ matrix.task }} `
+            -BuildNumber ${{ needs.prepare.outputs.build_number }} `
+            -dockerRegistry ${{ env.REGISTRY }}/${{ github.repository }} `
+            -apkFolder "artifacts"
+
+  installer:
+    needs: [prepare, mobile]
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup WIX
+        run: |
+          Invoke-WebRequest -Uri https://wixtoolset.org/downloads/v3.14.0.5722/wix314-binaries.zip -OutFile wix314-binaries.zip
+          Expand-Archive -Path wix314-binaries.zip -DestinationPath installer/wix314-binaries
+
+      - name: Download mobile artifacts
+        id: download
+        uses: actions/download-artifact@v2
+        with:
+          name: Mobile Apps
+          path: installer/artifacts
+
+      - name: Build Headquarters
+        run: ./.build.ps1 PackageHqOffline -BuildNumber ${{ needs.prepare.outputs.build_number }}
+
+      - name: Extract HQ Package
+        run: |
+          New-Item "HQsources" -ItemType Directory
+          Expand-Archive -Path artifacts/WB.UI.Headquarters.Offline.zip -DestinationPath "HQsources"
+
+      - name: Build installer
+        run: |
+          ./installer/build/build-installation.ps1 -HQSourcePath "HQsources" -ClientPath ${{ steps.download.outputs.download-path }} 
+
+      - name: Publish
+        uses: actions/upload-artifact@v2
+        with:
+          name: Windows Installer
+          path: ./installer/src/SurveySolutionsBootstrap/bin/Release/SurveySolutions*.exe

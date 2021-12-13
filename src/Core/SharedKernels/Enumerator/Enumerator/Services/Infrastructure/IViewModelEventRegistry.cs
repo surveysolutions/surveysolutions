@@ -20,5 +20,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         MethodInfo GetViewModelHandleMethod(Type viewModelType, Type eventType);
 
         void Reset();
+        void WriteToLogInfoBySubscribers();
     }
 }
