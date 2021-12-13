@@ -42,7 +42,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText, true);
         }
 
-
         public override void Dispose()
         {
             base.Dispose();

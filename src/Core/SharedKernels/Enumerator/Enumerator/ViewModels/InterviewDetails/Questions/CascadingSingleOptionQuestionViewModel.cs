@@ -56,6 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             base.Init(interviewId, entityIdentity, navigationState);
 
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
             showCascadingAsList = questionnaire.ShowCascadingAsList(entityIdentity.Id);
@@ -89,7 +90,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (!this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector)) return;
 
-            var parentSingleOptionQuestion = this.interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            var parentSingleOptionQuestion = interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
             if (!parentSingleOptionQuestion.IsAnswered()) return;
 
             this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
@@ -110,6 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (!showCascadingAsList || answerOnParentQuestion == null)
                     return true;
                 
+                var interview = this.interviewRepository.GetOrThrow(interviewId);
                 return interview.DoesCascadingQuestionHaveMoreOptionsThanThreshold(this.Identity, showCascadingAsListThreshold);
             }
         }
@@ -192,7 +195,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.throttlingModel.CancelPendingAction();
                 await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interviewId,
+                    new RemoveAnswerCommand(Guid.Parse(this.interviewId),
                         this.principal.CurrentUserIdentity.UserId,
                         this.Identity));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -226,7 +229,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             
             var command = new AnswerSingleOptionQuestionCommand(
-                this.interviewId,
+                Guid.Parse(this.interviewId),
                 this.principal.CurrentUserIdentity.UserId,
                 this.Identity.Id,
                 this.Identity.RosterVector,

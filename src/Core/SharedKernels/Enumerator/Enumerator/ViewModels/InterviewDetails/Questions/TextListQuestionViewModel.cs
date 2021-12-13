@@ -209,6 +209,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
+            Answers.OfType<TextListItemViewModel>().ForEach(x =>
+            {
+                x.ItemDeleted -= this.ListItemDeleted;
+                x.ItemEdited -= ListItemEdited;
+            });
+            
             this.questionState.Dispose();
             this.InstructionViewModel.Dispose();
         }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+
+    <String Id="ConnectionStringDlgDescription" Overridable="yes">Configure connection to Database</String>
+    <String Id="ConnectionStringDlgTitle" Overridable="yes">{\WixUI_Font_Title}Connection string</String>
+    <String Id="ConnectionStringDlgLabel">PostrgeSQL Database Connection Settings:</String>
+    <String Id="ConnectionStringDlg_Title" Overridable="yes">[ProductName] Setup</String>
+    <String Id="ConnectionStringDlgBannerBitmap" Overridable="yes">WixUI_Bmp_Banner</String>
+
+    <String Id="ConnectionStringServerDlgLabel" Overridable="yes">Server:</String>
+    <String Id="ConnectionStringPortDlgLabel" Overridable="yes">Port:</String>
+    <String Id="ConnectionStringUserNameDlgLabel" Overridable="yes">User Name:</String>
+    <String Id="ConnectionStringPasswordDlgLabel" Overridable="yes">Password:</String>
+    
+
+</WixLocalization>
