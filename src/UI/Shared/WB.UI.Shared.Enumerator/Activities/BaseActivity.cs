@@ -2,6 +2,8 @@ using Android.OS;
 using Android.Views;
 using AndroidX.VectorDrawable.Graphics.Drawable;
 using MvvmCross;
+using MvvmCross.Base;
+using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
@@ -79,6 +81,9 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             TryWriteMemoryInformationToLog($"Destroyed Activity {this.GetType().Name}");
             base.OnDestroy();
+            
+            this.BindingContext.ClearAllBindings();
+            this.ViewModel.DisposeIfDisposable();
         }
 
         protected void SetMenuItemIcon(IMenu menu, int itemId, int drawableId)
