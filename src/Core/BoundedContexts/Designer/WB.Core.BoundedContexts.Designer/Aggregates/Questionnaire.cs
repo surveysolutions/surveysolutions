@@ -1796,7 +1796,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 var targetGroupDepth = this.GetAllParentGroups(entity).Count();
 
-                if (targetGroupDepth > MaxGroupDepth)
+                if (targetGroupDepth >= MaxGroupDepth)
                 {
                     throw new QuestionnaireException(string.Format(ExceptionMessages.SubSectionDepthLimit, MaxGroupDepth));
                 }
