@@ -1,9 +1,9 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestion,
         IDisposable
     {
-        private Area answer;
+        private Area? answer;
         private GeometryType? geometryType;
 
         private readonly Guid userId;
@@ -57,6 +57,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
+            this.interviewId = string.Empty;
+            Identity = new  Identity(Guid.Empty, RosterVector.Empty);
+            this.lengthText = string.Empty;
+            this.areaText = string.Empty;
+            this.pointsText = string.Empty;
             this.userInteractionService = userInteractionService;
 
             this.questionnaireRepository = questionnaireRepository;
@@ -120,6 +125,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var questionnaire =
                 this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
+            if (questionnaire == null)
+                throw new InvalidOperationException($"Questionnaire {interview.QuestionnaireIdentity} for language {interview.Language} was not found");
+            
             this.geometryType = questionnaire.GetQuestionGeometryType(entityIdentity.Id);
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
@@ -132,8 +140,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UpdateSelfFromModel()
         {
             var interview = interviewRepository.Get(interviewId);
+            if (interview == null)
+                throw new InvalidOperationException($"Interview {interviewId} was not found");
+            
             var areaQuestion = interview.GetAreaQuestion(this.Identity);
-            Area answerValue = null;
+            Area? answerValue = null;
             if (areaQuestion.IsAnswered())
             {
                 var questionAnswer = areaQuestion.GetAnswer().Value;
@@ -214,16 +225,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private void SetAnswerAndUpdateLabels(Area answerValue)
+        private void SetAnswerAndUpdateLabels(Area? answerValue)
         {
             this.answer = answerValue;
 
-            this.HasArea = this.answer.AreaSize > 0;
-            this.HasLength = this.answer.Length > 0;
+            this.HasArea = this.answer?.AreaSize > 0;
+            this.HasLength = this.answer?.Length > 0;
 
-            this.PointsText = string.Format(UIResources.AreaMap_PointsFormat, this.answer.NumberOfPoints);
-            this.AreaText = string.Format(UIResources.AreaMap_AreaFormat, this.answer.AreaSize?.ToString("#.##"));
-            this.LengthText = string.Format(
+            this.PointsText = this.answer == null ? string.Empty : string.Format(UIResources.AreaMap_PointsFormat, this.answer.NumberOfPoints);
+            this.AreaText = this.answer == null ? string.Empty : string.Format(UIResources.AreaMap_AreaFormat, this.answer.AreaSize?.ToString("#.##"));
+            this.LengthText = this.answer == null ? string.Empty : string.Format(
                 this.geometryType == GeometryType.Polygon
                     ? UIResources.AreaMap_PerimeterFormat
                     : UIResources.AreaMap_LengthFormat, this.answer.Length?.ToString("#.##"));
