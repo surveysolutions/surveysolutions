@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
         {
-            this.ResetFilterAndOptions();
+            await this.ResetFilterAndOptions();
 
             if (this.OnAnswerRemoved == null)
                 return;
@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
                 else
                 {
-                    this.ResetFilterAndOptions();    
+                    await this.ResetFilterAndOptions();    
                 }
             }
             else
@@ -155,12 +155,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
-        public void ResetFilterAndOptions()
+        public async Task ResetFilterAndOptions()
         {
             this.FilterText = null;
             
             var suggestions = this.GetSuggestions(null).ToList();
-            this.QuestionState.Validity.ExecutedWithoutExceptions();
+            await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
             this.InvokeOnMainThread(() =>
             {

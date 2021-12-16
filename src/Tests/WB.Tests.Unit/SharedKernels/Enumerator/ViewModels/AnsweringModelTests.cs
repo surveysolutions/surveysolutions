@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             try
             {
-                await answering.SendAnswerQuestionCommandAsync(
+                await answering.SendQuestionCommandAsync(
                     Create.Command.AnswerNumericRealQuestionCommand(Id.g1, Id.g2, 1));
             }
             catch (InterviewException)

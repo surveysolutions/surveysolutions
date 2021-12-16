@@ -153,11 +153,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     previousOption.Selected = false;
                 }
 
-                await this.Answering.SendAnswerQuestionCommandAsync(command).ConfigureAwait(false);
+                await this.Answering.SendQuestionCommandAsync(command).ConfigureAwait(false);
 
                 this.previousOptionToReset = this.selectedOptionToSave;
 
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
@@ -168,7 +168,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     previousOption.Selected = true;
                 }
 
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
         }
 
@@ -210,11 +210,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 this.throttlingModel.CancelPendingAction();
-                await this.Answering.SendRemoveAnswerCommandAsync(
+                await this.Answering.SendQuestionCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.userId,
                         this.questionIdentity));
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
                 foreach (var option in this.Options.Where(option => option.Selected).ToList())
                 {
@@ -225,7 +225,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (InterviewException exception)
             {
-                this.QuestionState.Validity.ProcessException(exception);
+                await this.QuestionState.Validity.ProcessException(exception);
             }
         }
 

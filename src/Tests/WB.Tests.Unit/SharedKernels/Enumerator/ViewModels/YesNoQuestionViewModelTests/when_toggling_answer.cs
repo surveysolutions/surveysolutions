@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             viewModel.Options.Second().CheckAnswerCommand.Execute();
         }
 
-        [NUnit.Framework.Test] public void should_send_command_to_service () => answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerYesNoQuestion>(c =>
+        [NUnit.Framework.Test] public void should_send_command_to_service () => answeringMock.Verify(x => x.SendQuestionCommandAsync(Moq.It.Is<AnswerYesNoQuestion>(c =>
             c.AnsweredOptions[1].Yes && c.AnsweredOptions[1].OptionValue == 5 &&
             c.AnsweredOptions[0].Yes && c.AnsweredOptions[0].OptionValue == 2
         )));

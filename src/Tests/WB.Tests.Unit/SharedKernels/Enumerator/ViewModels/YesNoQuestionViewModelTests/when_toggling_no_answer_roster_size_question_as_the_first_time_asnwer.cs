@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
             answeringViewModelMock = new Mock<AnsweringViewModel>();
             answeringViewModelMock
-                .Setup(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerQuestionCommand>()))
+                .Setup(x => x.SendQuestionCommandAsync(Moq.It.IsAny<AnswerQuestionCommand>()))
                 .Callback((AnswerQuestionCommand command) => { answerCommand = command; })
                 .Returns(Task.FromResult<bool>(true));
 
@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         }
 
         [NUnit.Framework.Test] public void should_send_answering_command () =>
-            answeringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerQuestionCommand>()), Times.Once);
+            answeringViewModelMock.Verify(x => x.SendQuestionCommandAsync(Moq.It.IsAny<AnswerQuestionCommand>()), Times.Once);
         
         [NUnit.Framework.Test] public void should_send_command_with_toggled_first_option () =>
             ((AnswerYesNoQuestion)answerCommand).AnsweredOptions.Single().OptionValue.Should().Be(1);

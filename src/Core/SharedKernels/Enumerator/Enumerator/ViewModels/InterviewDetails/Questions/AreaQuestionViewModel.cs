@@ -67,6 +67,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionnaireRepository = questionnaireRepository;
         }
 
+        public Guid Id { get; } = Guid.NewGuid();
+        
         public Identity Identity { get; private set; }
         public IQuestionStateViewModel QuestionState => this.questionState;
 
@@ -177,8 +179,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         distanceToEditor: answerArea.DistanceToEditor,
                         numberOfPoints: answerArea.NumberOfPoints);
 
-                    await this.Answering.SendAnswerQuestionCommandAsync(command);
-                    this.QuestionState.Validity.ExecutedWithoutExceptions();
+                    await this.Answering.SendQuestionCommandAsync(command);
+                    await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
                     var answerValue = new Area(answerArea.Geometry, answerArea.MapName, answerArea.NumberOfPoints, answerArea.Area, answerArea.Length,
                         answerArea.DistanceToEditor);
@@ -187,7 +189,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (InterviewException ex)
             {
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
             catch (NotImplementedException)
             {
@@ -211,17 +213,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             try
             {
-                await this.Answering.SendRemoveAnswerCommandAsync(
+                await this.Answering.SendQuestionCommandAsync(
                     new RemoveAnswerCommand(
                         Guid.Parse(this.interviewId),
                         this.userId,
                         this.Identity));
 
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException exception)
             {
-                this.QuestionState.Validity.ProcessException(exception);
+                await this.QuestionState.Validity.ProcessException(exception);
             }
         }
 
@@ -240,8 +242,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     : UIResources.AreaMap_LengthFormat, this.answer.Length?.ToString("#.##"));
         }
 
+        private bool isDisposed = false;
+        
         public void Dispose()
         {
+            if (isDisposed)
+                return;
+            
+            isDisposed = true;
+            
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
             this.InstructionViewModel.Dispose();

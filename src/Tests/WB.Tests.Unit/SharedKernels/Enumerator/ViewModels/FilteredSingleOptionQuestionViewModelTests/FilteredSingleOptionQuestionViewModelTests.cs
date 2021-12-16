@@ -173,7 +173,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             viewModel.Init(interviewId, questionIdentity, navigationState);
             await viewModel.SaveAnswerAsync(4);
 
-            answeringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerSingleOptionQuestionCommand>(y => y.SelectedValue == 4)), Times.Once);
+            answeringViewModelMock.Verify(x => x.SendQuestionCommandAsync(Moq.It.Is<AnswerSingleOptionQuestionCommand>(y => y.SelectedValue == 4)), Times.Once);
         }
 
         [Test]

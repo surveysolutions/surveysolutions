@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -18,7 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public abstract class BaseComboboxQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        IViewModelEventHandler<AnswersRemoved>,
+        IAsyncViewModelEventHandler<AnswersRemoved>,
         ICompositeQuestionWithChildren,
         IDisposable
     {
@@ -111,27 +110,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (this.Answer == optionValue)
             {
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
                 return;
             }
 
             try
             {
-                await this.Answering.SendAnswerQuestionCommandAsync(new AnswerSingleOptionQuestionCommand(
+                await this.Answering.SendQuestionCommandAsync(new AnswerSingleOptionQuestionCommand(
                     Guid.Parse(this.interviewId),
                     this.principal.CurrentUserIdentity.UserId,
                     this.Identity.Id,
                     this.Identity.RosterVector,
                     optionValue)).ConfigureAwait(false);
 
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
                 this.Answer = optionValue;
             }
             catch (InterviewException ex)
             {
                 this.Answer = null;
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
         }
 
@@ -156,26 +155,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             try
             {
-                await this.Answering.SendRemoveAnswerCommandAsync(
+                await this.Answering.SendQuestionCommandAsync(
                     new RemoveAnswerCommand(Guid.Parse(this.interviewId),
                         this.principal.CurrentUserIdentity.UserId,
                         this.Identity));
 
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException exception)
             {
-                this.QuestionState.Validity.ProcessException(exception);
+                await this.QuestionState.Validity.ProcessException(exception);
             }
         }
         
-        public void Handle(AnswersRemoved @event)
+        public async Task HandleAsync(AnswersRemoved @event)
         {
             if (!@event.Questions.Contains(this.Identity)) return;
 
             this.Answer = null;
 
-            comboboxViewModel?.ResetFilterAndOptions();
+            if(comboboxViewModel!= null)
+                await comboboxViewModel.ResetFilterAndOptions();
         }
 
         public virtual void Dispose()

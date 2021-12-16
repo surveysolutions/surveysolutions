@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             answeringMock = new Mock<AnsweringViewModel>();
             answeringMock
-                .Setup<Task>(answeringViewModel => answeringViewModel.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerQuestionCommand>()))
+                .Setup<Task>(answeringViewModel => answeringViewModel.SendQuestionCommandAsync(Moq.It.IsAny<AnswerQuestionCommand>()))
                 .Returns<AnswerQuestionCommand>(x => Task.CompletedTask)
                 .Callback(delegate(AnswerQuestionCommand command)
                 {
