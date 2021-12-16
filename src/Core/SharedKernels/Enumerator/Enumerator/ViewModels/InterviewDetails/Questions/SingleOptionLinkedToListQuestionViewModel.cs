@@ -231,8 +231,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             await this.ClearOptionsAsync();
         }
-
-        public async Task HandleAsync(AnswersRemoved @event)
+        
+        public override async Task HandleAsync(AnswersRemoved @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {

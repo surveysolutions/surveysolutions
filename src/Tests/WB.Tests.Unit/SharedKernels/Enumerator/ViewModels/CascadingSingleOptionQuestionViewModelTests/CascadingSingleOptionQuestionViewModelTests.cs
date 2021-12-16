@@ -628,7 +628,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         [Test]
-        public void when_handling_AnswersRemoved_for_cascading_question()
+        public async Task when_handling_AnswersRemoved_for_cascading_question()
         {
             CascadingSingleOptionQuestionViewModel cascadingModel;
             Mock<IStatefulInterview> StatefulInterviewMock = new Mock<IStatefulInterview>();
@@ -667,7 +667,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             combo.SaveAnswerBySelectedOptionCommand.Execute(Create.Entity.OptionWithSearchTerm(3));
 
-            cascadingModel.Handle(Create.Event.AnswersRemoved(questionIdentity));
+            await cascadingModel.HandleAsync(Create.Event.AnswersRemoved(questionIdentity));
 
             combo.FilterText.Should().BeNullOrEmpty();
         }

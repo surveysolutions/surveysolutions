@@ -168,7 +168,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
         
-        public async Task HandleAsync(AnswersRemoved @event)
+        public virtual async Task HandleAsync(AnswersRemoved @event)
         {
             if (!@event.Questions.Contains(this.Identity)) return;
 
