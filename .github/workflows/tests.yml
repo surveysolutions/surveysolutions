@@ -32,22 +32,6 @@ on:
         type: boolean
 
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-
-    outputs:
-      version: ${{ steps.version.outputs.version }}
-      info_version: ${{ steps.version.outputs.info_version }}
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: prepare version variables
-        id: version
-        run: |
-          ver=$(cat ./src/.version | awk -F. '{printf "%s.%02d.%d\n", $1, $2, $3}')
-          echo ::set-output name=version::$ver.${{ github.run_number }}
-          echo "::set-output name=info_version::$ver (build ${{ github.run_number }})"
-
   unit-web:
     runs-on: ${{ inputs.runs_on }}${{ github.event.inputs.runs_on }}
     strategy:
@@ -190,7 +174,6 @@ jobs:
       github.ref == 'refs/heads/rc' ||
       github.ref == 'refs/heads/release'
       ) && inputs.run_analysis
-    needs: [prepare]
     runs-on: ubuntu-latest
 
     steps:
@@ -204,7 +187,7 @@ jobs:
           args: >
             -Dsonar.organization=surveysolutions
             -Dsonar.projectKey=surveysolutions_frontend
-            -Dsonar.projectVersion="${{ needs.prepare.outputs.version }}"
+            -Dsonar.projectVersion="$(cat ./src/.version | awk -F. '{printf "%s.%02d.%d\n", $1, $2, $3}')"
             -Dsonar.sourceEncoding=UTF-8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
