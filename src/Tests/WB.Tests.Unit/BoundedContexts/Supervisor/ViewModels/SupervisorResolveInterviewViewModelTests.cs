@@ -34,8 +34,13 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
     [TestOf(typeof(SupervisorResolveInterviewViewModel))]
     public class SupervisorResolveInterviewViewModelTests : MvxIoCSupportingTest
     {
-        public SupervisorResolveInterviewViewModelTests() => base.Setup();
-
+        public SupervisorResolveInterviewViewModelTests()
+        {
+            base.Setup();
+            Ioc.RegisterSingleton(Stub.MvxMainThreadAsyncDispatcher());
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
+        }
+        
         private readonly Guid InterviewId = Id.g1;
 
         [Test]
@@ -245,7 +250,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             return new SupervisorResolveInterviewViewModel(
                 commandService ?? Create.Service.CommandService(),
                 principal ?? Mock.Of<IPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Id.gA)),
-                messenger ?? Mock.Of<IMvxMessenger>(),
+                
                 interviewRepository ?? Abc.SetUp.StatefulInterviewRepository(Create.AggregateRoot.StatefulInterview(interviewId: InterviewId)),
                 entitiesListViewModelFactory ?? Mock.Of<IEntitiesListViewModelFactory>(),
                 lastCompletionComments ?? Mock.Of<ILastCompletionComments>(),

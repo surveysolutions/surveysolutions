@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -40,7 +41,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel,
             QuestionInstructionViewModel instructionViewModel,
-            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher, 
             ThrottlingViewModel throttlingModel)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.instructionViewModel = instructionViewModel;
-            this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
+            this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
             this.throttlingModel = throttlingModel;
             this.Options = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
 

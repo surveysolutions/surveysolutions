@@ -22,11 +22,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading
 
         public PreloadedLevelDto[] Data { get; private set; }
 
-        public List<InterviewAnswer> Answers => Data.SelectMany(x => x.Answers.Select(a => new InterviewAnswer
+        public List<InterviewAnswer> GetAnswers()
         {
-            Identity = new Identity(a.Key, x.RosterVector),
-            Answer = a.Value
-        })).ToList();
+            return Data.SelectMany(x => x.Answers.Select(a => new InterviewAnswer
+            {
+                Identity = new Identity(a.Key, x.RosterVector),
+                Answer = a.Value
+            })).ToList();
+        }
     }
 
     public static class InterviewAnswerExtensions

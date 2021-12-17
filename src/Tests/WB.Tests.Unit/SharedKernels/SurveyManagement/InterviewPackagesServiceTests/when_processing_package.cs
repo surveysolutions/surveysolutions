@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
         public void Setup()
         {
             var serializer =
-                Mock.Of<IJsonAllTypesSerializer>(x => x.Deserialize<SyncItem>(It.IsAny<string>()) == new SyncItem() &&
+                Mock.Of<IJsonAllTypesSerializer>(x => 
                                           x.Deserialize<InterviewMetaInfo>(It.IsAny<string>()) == new InterviewMetaInfo(new FeaturedQuestionMeta[0]) { Status = 0 } &&
                                           x.Deserialize<AggregateRootEvent[]>(decompressedEvents) == new AggregateRootEvent[0]);
             var syncSettings = Mock.Of<SyncSettings>();
@@ -70,8 +70,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
 
-            container.Setup(x => x.ResolveComponent(It.IsAny<IComponentRegistration>(), It.IsAny<System.Collections.Generic.IEnumerable<Autofac.Core.Parameter>>()))
-                .Returns((IComponentRegistration compRegistration, IEnumerable<Autofac.Core.Parameter> pars) =>
+            container.Setup(x => x.ResolveComponent(It.IsAny<ResolveRequest>()))
+                .Returns((ResolveRequest request) =>
                 {
                     return serviceLocatorNestedMock.Object;
                 });

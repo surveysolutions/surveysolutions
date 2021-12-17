@@ -40,22 +40,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IViewModelEventRegistry eventRegistry,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering, 
             ThrottlingViewModel throttlingModel)
         {
-            if (principal == null) throw new ArgumentNullException("principal");
-            if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
-            if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
-            if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
-
+            if (principal == null) throw new ArgumentNullException(nameof(principal));
+            this.questionnaireRepository = questionnaireRepository ?? throw new ArgumentNullException(nameof(questionnaireRepository));
+            this.interviewRepository = interviewRepository ?? throw new ArgumentNullException(nameof(interviewRepository));
+            this.eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
+            
             this.userId = principal.CurrentUserIdentity.UserId;
-            this.questionnaireRepository = questionnaireRepository;
-            this.interviewRepository = interviewRepository;
-            this.eventRegistry = eventRegistry;
-            this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
+            this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
 
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;

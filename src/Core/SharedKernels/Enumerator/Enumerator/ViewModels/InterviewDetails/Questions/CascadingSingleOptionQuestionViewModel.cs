@@ -38,12 +38,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel, 
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher,
+            
             FilteredOptionsViewModel filteredOptionsViewModel,
             ThrottlingViewModel throttlingModel) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
-                eventRegistry: eventRegistry, filteredOptionsViewModel, mvxMainThreadDispatcher)
+                eventRegistry: eventRegistry, filteredOptionsViewModel)
         {
             this.questionnaireRepository = questionnaireRepository ??
                                            throw new ArgumentNullException(nameof(questionnaireRepository));

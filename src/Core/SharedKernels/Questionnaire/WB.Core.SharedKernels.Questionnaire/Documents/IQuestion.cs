@@ -14,7 +14,7 @@ namespace Main.Core.Entities.SubEntities
         string? Instructions { get; set; }
         QuestionProperties? Properties { get; set; }
         string? QuestionText { get; set; }
-        QuestionType QuestionType { get; set; }
+        QuestionType QuestionType { get; }
         QuestionScope QuestionScope { get; set; }
         string StataExportCaption { get; set; }
         string? VariableLabel { get; set; }
@@ -28,7 +28,5 @@ namespace Main.Core.Entities.SubEntities
         Guid? CascadeFromQuestionId { get; set; }
         bool? IsFilteredCombobox { get; set; }
         bool IsTimestamp { get; set; }
-
-        void AddAnswer(Answer answer);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -52,8 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<TextListQuestionAnswered> questionStateViewModel,
             IUserInteractionService userInteractionService,
             AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
+            QuestionInstructionViewModel instructionViewModel)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.userInteractionService = userInteractionService;
-            this.mainThreadDispatcher = mainThreadDispatcher;
+            this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
             this.Answering = answering;
             this.Answers = new CovariantObservableCollection<ICompositeEntity>();
         }

@@ -125,7 +125,7 @@ namespace WB.Tests.Unit.Infrastructure
             TypeNameHandling = TypeNameHandling.Auto,
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
             Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConverter() },
-            Binder = new OldToNewAssemblyRedirectSerializationBinder()
+            SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
         };
     }
 }

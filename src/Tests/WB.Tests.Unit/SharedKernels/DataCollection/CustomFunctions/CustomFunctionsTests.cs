@@ -52,8 +52,28 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             Assert.IsTrue(one.InRange(zero, ten));
             Assert.IsFalse(one.InRange(three, ten));
             Assert.IsFalse(thirteen.InRange(three, ten));
-        }
 
+            Assert.IsFalse(((int?)null).InRange(0, 10));
+            Assert.IsFalse(((int?)1).InRange(null, 10));
+            Assert.IsFalse(((int?)1).InRange(2, (int?)null));
+            
+            Assert.IsFalse(((long?)null).InRange(0, 10));
+            Assert.IsFalse(((long?)1).InRange(null, 10));
+            Assert.IsFalse(((long?)1).InRange(2, (int?)null));
+
+            Assert.IsFalse(((double?)null).InRange(0, 10));
+            Assert.IsFalse(((double?)1).InRange(null, 10));
+            Assert.IsFalse(((double?)1).InRange(2, (int?)null));
+            
+            Assert.IsFalse(((decimal?)null).InRange(0, 10));
+            Assert.IsFalse(((decimal?)1).InRange(null, 10));
+            Assert.IsFalse(((decimal?)1).InRange(2, (int?)null));
+            
+            
+            Assert.IsFalse(((long?)11).InRange(0, 10));
+            Assert.IsFalse(((double?)11).InRange(0, 10));
+        }
+        
         [Test]
         public void Test_InRangeDate()
         {
@@ -69,7 +89,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             Assert.IsFalse(date0.InRange(date1, date3));
             Assert.IsFalse(date2.InRange(null, date3));
             Assert.IsFalse(date2.InRange(date1, null));
-
         }
 
 

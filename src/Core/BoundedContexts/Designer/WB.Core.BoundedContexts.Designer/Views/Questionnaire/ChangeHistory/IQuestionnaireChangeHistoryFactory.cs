@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
     public interface IQuestionnaireChangeHistoryFactory
     {
-        Task<QuestionnaireChangeHistory?> LoadAsync(Guid id, int page, int pageSize, IPrincipal user);
+        Task<QuestionnaireChangeHistory?> LoadAsync(Guid questionnaireId, int page, int pageSize, IPrincipal user);
     }
 }

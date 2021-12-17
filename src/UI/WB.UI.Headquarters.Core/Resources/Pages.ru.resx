@@ -1638,6 +1638,9 @@
   <data name="AccountManage_Status2fa" xml:space="preserve">
     <value>Двухфакторная аутентификация </value>
   </data>
+  <data name="AccountManage_StatusApiToken" xml:space="preserve">
+    <value>API ключ:</value>
+  </data>
   <data name="Diagnostics" xml:space="preserve">
     <value>Диагностика</value>
   </data>
@@ -1736,5 +1739,8 @@
   </data>
   <data name="AntiForgeryError_Title" xml:space="preserve">
       <value>Ошибка данных</value>
+  </data>
+  <data name="AccountManage_ApiTokens" xml:space="preserve">
+      <value>API ключи</value>
   </data>
 </root>

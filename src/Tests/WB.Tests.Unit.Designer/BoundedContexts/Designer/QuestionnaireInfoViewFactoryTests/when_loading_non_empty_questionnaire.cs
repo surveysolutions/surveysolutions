@@ -22,10 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
         public void context()
         {
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                new NumericQuestion
-                {
-                    QuestionType = QuestionType.Numeric
-                },
+                new NumericQuestion(),
                 new Group("Roster")
                 {
                     IsRoster = true

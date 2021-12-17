@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
         public async Task BecauseOf()
         {
-            Thread.Sleep(1);
+            await Task.Delay(1000);
             viewModel.Options.Second().Checked = true;
             viewModel.Options.Second().CheckAnswerCommand.Execute();
         }

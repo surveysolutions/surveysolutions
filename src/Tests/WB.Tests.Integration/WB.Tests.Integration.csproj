@@ -17,6 +17,9 @@
     <EmbeddedResource Remove="QuestionnaireSearchStorageTests\**" />
     <None Remove="ClassificationsTests\**" />
     <None Remove="QuestionnaireSearchStorageTests\**" />
+    <None Update="appsettings.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj" />
@@ -51,10 +54,10 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.9.0" />
     <PackageReference Include="Moq" Version="4.16.1" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="7.1.2" />
-    <PackageReference Include="MvvmCross.Tests" Version="7.1.2" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="8.0.2" />
+    <PackageReference Include="MvvmCross.Tests" Version="8.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="NHibernate" Version="5.3.6" />
+    <PackageReference Include="NHibernate" Version="5.3.10" />
     <PackageReference Include="Npgsql" Version="5.0.5" />
     <PackageReference Include="NUnit" Version="3.13.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0">
@@ -63,7 +66,8 @@
     </PackageReference>
     <PackageReference Include="Remotion.Linq" Version="2.2.0" />
     <PackageReference Include="Remotion.Linq.EagerFetching" Version="2.2.0" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.WebBrowser;
 using MvvmCross.ViewModels;
@@ -32,13 +33,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public BandwidthTestViewModel(
             INetworkService networkService,
             IDeviceSettings deviceSettings,
-            IRestService restService,
-            IMvxWebBrowserTask webBrowser)
+            IRestService restService)
         {
             this.networkService = networkService;
             this.deviceSettings = deviceSettings;
             this.restService = restService;
-            this.webBrowser = webBrowser;
+            this.webBrowser = Mvx.IoCProvider.Resolve<IMvxWebBrowserTask>();
         }
 
         public bool IsConnectionAbsent

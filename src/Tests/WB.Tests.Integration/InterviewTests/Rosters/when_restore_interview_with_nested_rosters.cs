@@ -42,24 +42,6 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     userId: userId,
                     questionnaireId: questionnaireId,
                     questionnaireVersion: 1,
-                    rosterGroupInstances:
-                        new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
-                        {
-                            {
-                                new InterviewItemId(nestedRosterGroupId, new decimal[] {1}),
-                                new[]
-                                {
-                                    new RosterSynchronizationDto(nestedRosterGroupId, new decimal[] {1}, 1, null, "level 2"),
-                                }
-                            },
-                            {
-                                new InterviewItemId(rosterGroupId, new decimal[] {}),
-                                new[]
-                                {
-                                    new RosterSynchronizationDto(rosterGroupId, new decimal[] {}, 1, null, "level 1"),
-                                }
-                            }
-                        },
                     wasCompleted: true);
 
             eventContext = new EventContext();

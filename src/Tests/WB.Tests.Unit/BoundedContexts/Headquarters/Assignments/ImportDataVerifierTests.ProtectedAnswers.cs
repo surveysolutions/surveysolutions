@@ -35,18 +35,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_question_is_not_supporting_protection([Values] QuestionType questionType)
+        public void when_audio_question_is_not_supporting_protection()
         {
             QuestionType[] typesThatSupportProtection = new[]
             {
                 QuestionType.MultyOption, QuestionType.Numeric, QuestionType.TextList
             };
 
-            if (typesThatSupportProtection.Contains(questionType)) return;
-
             var variableName = "myVariable";
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.Question(variable: variableName, questionType: questionType));
+                Create.Entity.AudioQuestion(variable: variableName));
 
             var verifier = Create.Service.ImportDataVerifier();
 

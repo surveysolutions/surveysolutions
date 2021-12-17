@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Moq;
+using MvvmCross.Base;
+using MvvmCross.Plugin.Messenger;
+using MvvmCross.Tests;
+using MvvmCross.Views;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -11,8 +15,19 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 {
     [TestFixture]
-    public class SpecialValuesViewModelTests
+    public class SpecialValuesViewModelTests: MvxIoCSupportingTest
     {
+        [OneTimeSetUp]
+        public void TestSetup()
+        {
+            base.Setup();
+
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
+        }
+    
         string interviewId = Id.g1.FormatGuid();
         Identity entityIdentity = Identity.Create(Id.g2, RosterVector.Empty);
 

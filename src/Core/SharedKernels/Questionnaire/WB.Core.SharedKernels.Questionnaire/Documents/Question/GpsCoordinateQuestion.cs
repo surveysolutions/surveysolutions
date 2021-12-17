@@ -5,7 +5,8 @@ using Main.Core.Entities.Composite;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
-    public class GpsCoordinateQuestion : ExternalServiceQuestion
+    public class GpsCoordinateQuestion : AbstractQuestion
     {
+        public override QuestionType QuestionType => QuestionType.GpsCoordinates;
     }
 }

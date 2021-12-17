@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>>
                 {DefaultValue = DefaultValue.Mock};
             var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(),
-                Mock.Of<IUserInterfaceStateService>(), Mock.Of<IMvxMessenger>(), Mock.Of<ILogger>());
+                Mock.Of<IUserInterfaceStateService>(),  Mock.Of<ILogger>());
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId

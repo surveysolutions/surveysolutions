@@ -21,7 +21,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         private InvokeResults results;
 
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetUp()
         {
             appDomainContext = AppDomainContext.Create();
 

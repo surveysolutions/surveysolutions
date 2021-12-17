@@ -196,7 +196,10 @@
     <value>Опросник уже поддерживает обложку.</value>
   </data>
   <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
-    <value>Секция не может содержать более {0} дочерних элементов.</value>
+    <value>Секция не может содержать более {0} вложенных дочерних элементов.</value>
+  </data>
+  <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+    <value>Секция или подсекция не может содержать более {0} непосредственных дочених элементов</value>
   </data>
   <data name="SubSectionCantBeFound" xml:space="preserve">
     <value>Группа с ключом {0} не может быть найдена.</value>

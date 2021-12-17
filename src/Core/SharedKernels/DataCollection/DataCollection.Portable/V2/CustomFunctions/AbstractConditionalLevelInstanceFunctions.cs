@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.DataCollection.V2.CustomFunctions
 
             try
             {
-                new DateTime((int)year.Value, (int)month.Value, (int)day.Value);
+               var test = new DateTime((int)year.Value, (int)month.Value, (int)day.Value);
             }
             catch
             {

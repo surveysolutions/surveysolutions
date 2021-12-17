@@ -13,7 +13,8 @@ namespace WB.UI.Tester
 {
     public class TesterAppStart : MvxAppStart
     {
-        public TesterAppStart(IMvxApplication application, IMvxNavigationService navigationService) : base(application, navigationService)
+        public TesterAppStart(IMvxApplication application) 
+            : base(application, Mvx.IoCProvider.Resolve<IMvxNavigationService>())
         {
         }
 

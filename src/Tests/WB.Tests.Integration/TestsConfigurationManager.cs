@@ -1,7 +1,16 @@
-﻿namespace WB.Tests.Integration
+﻿using Microsoft.Extensions.Configuration;
+
+namespace WB.Tests.Integration
 {
-    public class TestsConfigurationManager
+    public static class TestsConfigurationManager
     {
-        public static string ConnectionString => "Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=postgres;CommandTimeout=60";
+        private static readonly IConfigurationRoot Config;
+        
+        static TestsConfigurationManager()
+        {
+            Config = new ConfigurationBuilder().AddIniFile("appsettings.ini").Build();
+        }
+
+        public static string ConnectionString => Config["ConnectionStrings:TestConnection"];
     }
 }

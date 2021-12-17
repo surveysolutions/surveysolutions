@@ -1,6 +1,6 @@
 # Development environment
 
-In order to be able to buld Survey Solutions locally, you will need to install several prerequesties fist:
+In order to be able to build Survey Solutions locally, you will need to install several prerequisites fist:
 
 - Install PostgreSQL 12 or newer.
 - Install LTS version of node JS (we currently use version 14) - https://nodejs.org/en/
@@ -10,7 +10,7 @@ In order to be able to buld Survey Solutions locally, you will need to install s
 ## Running locally
 
 First you need to build javascript UI. It Can be done by running either `.build.ps1`, `build.all.deps.bat` or `build_deps.sh` scripts.
-This will build frontend components for Designer, Headquarters and Web Tester applications. You can see more details editing and building the frontend
+This will build frontend components for Designer, Headquarters and Web Tester applications. You can see more details regarding editing and building the frontend
 [here](docs/development/frontend.md).
 
 By default web applications use a locally installed PostgreSQL database. Review connection strings in `appsettings.ini` files to be able to run applications properly.
@@ -40,7 +40,7 @@ to **run Export service** execute:
 dotnet run --project src/Services/Export/WB.Services.Export.Host/WB.Services.Export.Host.csproj
 ```
 
-In order to build android applications you can use following command:
+In order to build Android applications you can use following command:
 
 ``` pwsh
 # All apps

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -29,12 +30,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public AnsweringViewModel(ICommandService commandService,
             IUserInterfaceStateService userInterfaceStateService,
-            IMvxMessenger messenger,
             ILogger logger)
         {
             this.commandService = commandService;
             this.userInterfaceStateService = userInterfaceStateService;
-            this.messenger = messenger;
+            this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             this.logger = logger;
         }
 
@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private Task ExecuteCommandAsync(ICommand answerCommand)
         {
-            return ExecuteActionAsync(token => this.commandService.ExecuteAsync(answerCommand, cancellationToken: token));
+            return ExecuteActionAsync(async token => await this.commandService.ExecuteAsync(answerCommand, cancellationToken: token));
         }
 
         private void TryCancelLastExecutedCommand()

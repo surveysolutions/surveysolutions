@@ -83,7 +83,7 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         }
 
         [Test]
-        public async Task When_non_admin_is_updating_public_classification()
+        public void When_non_admin_is_updating_public_classification()
         {
             var storage = Create.ClassificationsAccessor(
                 Entity.Classification.Group(Id.g1, title: "Z"),
@@ -186,7 +186,7 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         }
 
         [Test]
-        public async Task When_non_admin_is_deleting_classification()
+        public void When_non_admin_is_deleting_classification()
         {
             var storage = Create.ClassificationsAccessor(
                 Entity.Classification.Group(Id.g1, title: "Z"),
@@ -200,7 +200,7 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
 
 
         [Test]
-        public async Task When_non_admin_is_creating_classification_group()
+        public void When_non_admin_is_creating_classification_group()
         {
             var classificationStorage = Create.ClassificationStorage(
                  Create.ClassificationsAccessor());

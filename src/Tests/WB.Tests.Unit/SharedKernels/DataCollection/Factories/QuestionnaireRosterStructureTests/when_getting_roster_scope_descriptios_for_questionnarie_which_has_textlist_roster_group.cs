@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
             textlistRosterGroupId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             textlistQuestionId = new Guid("1111BBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
-                new TextListQuestion() { PublicKey = textlistQuestionId, QuestionType = QuestionType.TextList },
+                new TextListQuestion() { PublicKey = textlistQuestionId },
                 new Group("Roster")
                 {
                     PublicKey = textlistRosterGroupId,

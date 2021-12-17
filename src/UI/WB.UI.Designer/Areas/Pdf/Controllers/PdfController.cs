@@ -31,7 +31,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         {
             private DateTime? finishTime;
 
-            public string FilePath { get; } = Path.GetTempFileName();
+            public string FilePath { get; } = Path.GetRandomFileName();
             public bool IsFailed { get; private set; }
             public bool IsFinished => finishTime.HasValue;
             public TimeSpan TimeSinceFinished => this.finishTime.HasValue ? DateTime.Now - this.finishTime.Value : TimeSpan.Zero;

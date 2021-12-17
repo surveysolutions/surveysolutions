@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         
         private class CategoricalOptionMap : ClassMap<QuestionnaireCategoricalOption>
         {
-            public CategoricalOptionMap()
+            protected CategoricalOptionMap()
             {
                 Map(m => m.Value).Index(0).TypeConverter<ConvertToInt32OrThrowConverter>();
                 Map(m => m.Title).Index(1).TypeConverter<ValidateTitleOrThrowConverter>();
@@ -281,7 +281,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        private class CsvReaderException : Exception
+        [Serializable]
+        public class CsvReaderException : Exception
         {
             public readonly int? RowIndex;
             public readonly int? ColumnIndex;

@@ -50,7 +50,7 @@ html {
 			padding-top: 40px;
 			text-align: right;
 			color: $gray_light;
-			@include font(12px, 16px);
+			@include font(14px, 18px);
 			@include transition(padding, 0.3s);
 			a{
 				color: $gray_light;

@@ -8,7 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
-namespace WB.Tests.Integration.Core
+namespace WB.Tests.Integration.Designer
 {
     internal class QuestionnaireFactory
     {
@@ -55,7 +55,7 @@ namespace WB.Tests.Integration.Core
             string instruction = null,
             IEnumerable<ValidationCondition> validationConditions = null,
             bool hideIfDisabled = false)
-            => new TextQuestion(text)
+            => new TextQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
@@ -64,7 +64,6 @@ namespace WB.Tests.Integration.Core
                 ValidationMessage = validationMessage,
                 Mask = mask,
                 QuestionText = text,
-                QuestionType = QuestionType.Text,
                 StataExportCaption = variable ?? "vv" + Guid.NewGuid().ToString("N"),
                 QuestionScope = scope,
                 Featured = preFilled,

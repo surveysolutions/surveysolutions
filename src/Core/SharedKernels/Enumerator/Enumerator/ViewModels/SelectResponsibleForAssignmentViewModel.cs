@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.Plugin.Messenger;
@@ -26,30 +27,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IAuditLogService auditLogService;
         private readonly ICommandService commandService;
         private readonly IViewModelNavigationService navigationService;
-        private readonly IMvxMessenger mvxMessenger;
+        private readonly IMvxMessenger messenger;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IPlainStorage<InterviewView> interviewStorage;
         private readonly IPlainStorage<AssignmentDocument, int> assignmentsStorage;
 
         public SelectResponsibleForAssignmentViewModel(
-            IMvxNavigationService mvxNavigationService,
             IPlainStorage<InterviewerDocument> usersRepository,
             IPrincipal principal,
             IAuditLogService auditLogService,
             ICommandService commandService,
             IViewModelNavigationService navigationService,
-            IMvxMessenger mvxMessenger,
             IStatefulInterviewRepository statefulInterviewRepository,
             IPlainStorage<InterviewView> interviewStorage,
             IPlainStorage<AssignmentDocument, int> assignmentsStorage)
         {
-            this.mvxNavigationService = mvxNavigationService;
+            this.mvxNavigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
             this.usersRepository = usersRepository;
             this.principal = principal;
             this.auditLogService = auditLogService;
             this.commandService = commandService;
             this.navigationService = navigationService;
-            this.mvxMessenger = mvxMessenger;
+            this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.interviewStorage = interviewStorage;
             this.assignmentsStorage = assignmentsStorage;
@@ -115,7 +114,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             this.assignmentsStorage.Store(assignment);
 
-            this.mvxMessenger.Publish(new DashboardChangedMsg(this));
+            this.messenger.Publish(new DashboardChangedMsg(this));
             this.auditLogService.Write(new AssignResponsibleToAssignmentAuditLogEntity(assignmentId, interviewer.Id, interviewer.Login));
         }
 

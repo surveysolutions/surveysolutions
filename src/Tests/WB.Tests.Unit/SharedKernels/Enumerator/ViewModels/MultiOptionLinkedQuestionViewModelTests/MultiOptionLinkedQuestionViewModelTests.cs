@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             CategoricalMultiLinkedToRosterTitleViewModel viewModel = CreateMultiOptionRosterLinkedQuestionViewModel(interviewRepository: interviewRepository, questionnaireStorage: questionnaireRepository);
             viewModel.Init(interview.Id.FormatGuid(), questionId, Create.Other.NavigationState());
 
-            viewModel.HandleAsync(
+            await viewModel.HandleAsync(
                 Create.Event.RosterInstancesTitleChanged(rosterId: rosterId.Id, rosterTitle: "title", outerRosterVector: rosterId.RosterVector, instanceId: 1));
 
             Assert.That(viewModel.Options.Count, Is.EqualTo(1));

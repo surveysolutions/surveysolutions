@@ -35,14 +35,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireStorage,
             IStatefulInterviewRepository interviewRepository,
             IViewModelEventRegistry eventRegistry,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             FilteredOptionsViewModel filteredOptionsViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering, 
             ThrottlingViewModel throttlingModel):  base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
             instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
-            eventRegistry: eventRegistry, filteredOptionsViewModel, mainThreadDispatcher)
+            eventRegistry: eventRegistry, filteredOptionsViewModel)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
 

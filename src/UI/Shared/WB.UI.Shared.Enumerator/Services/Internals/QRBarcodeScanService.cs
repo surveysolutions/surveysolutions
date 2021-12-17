@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Platforms.Android;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
@@ -12,9 +13,9 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
         private readonly IPermissions permissions;
 
-        public QRBarcodeScanService(IMvxAndroidCurrentTopActivity androidCurrentTopActivity, IPermissions permissions)
+        public QRBarcodeScanService( IPermissions permissions)
         {
-            this.androidCurrentTopActivity = androidCurrentTopActivity;
+            this.androidCurrentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
             this.permissions = permissions;
         }
 
