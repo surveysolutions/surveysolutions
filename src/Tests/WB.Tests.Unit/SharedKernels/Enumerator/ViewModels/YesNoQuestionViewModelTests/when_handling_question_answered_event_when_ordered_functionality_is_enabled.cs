@@ -74,12 +74,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
         [Test] public void should_send_answers_to_command_service () 
         {
-            answering.Verify(s => s.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerYesNoQuestion>()), Times.Once());
+            answering.Verify(s => s.SendQuestionCommandAsync(Moq.It.IsAny<AnswerYesNoQuestion>()), Times.Once());
         }
 
         [Test] public void should_send_answers_in_correct_order () 
         {
-            answering.Verify(s => s.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerYesNoQuestion>(
+            answering.Verify(s => s.SendQuestionCommandAsync(Moq.It.Is<AnswerYesNoQuestion>(
                 c =>
                     c.AnsweredOptions.Length == 5
                     && c.AnsweredOptions[0].Yes == false && c.AnsweredOptions[0].OptionValue == 1

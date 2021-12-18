@@ -132,11 +132,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             try
             {
-                await this.Answering.SendRemoveAnswerCommandAsync(
+                await this.Answering.SendQuestionCommandAsync(
                     new RemoveAnswerCommand(Guid.Parse(this.interviewId),
                         this.userId,
                         this.Identity));
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
                 foreach (var option in this.Options.Where(option => option.Selected).ToList())
                 {
@@ -147,7 +147,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (InterviewException exception)
             {
-                this.QuestionState.Validity.ProcessException(exception);
+                await this.QuestionState.Validity.ProcessException(exception);
             }
         }
 
@@ -179,11 +179,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         previousOption.Selected = false;
                     }
 
-                    await this.Answering.SendAnswerQuestionCommandAsync(command);
+                    await this.Answering.SendQuestionCommandAsync(command);
 
                     this.previousOptionToReset = this.selectedOptionToSave;
 
-                    this.QuestionState.Validity.ExecutedWithoutExceptions();
+                    await this.QuestionState.Validity.ExecutedWithoutExceptions();
                 }
                 catch (InterviewException ex)
                 {
@@ -194,7 +194,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         previousOption.Selected = true;
                     }
 
-                    this.QuestionState.Validity.ProcessException(ex);
+                    await this.QuestionState.Validity.ProcessException(ex);
                 }
             }
         }
@@ -230,8 +230,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             await this.ClearOptionsAsync();
         }
-
-        public async Task HandleAsync(AnswersRemoved @event)
+        
+        public override async Task HandleAsync(AnswersRemoved @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {

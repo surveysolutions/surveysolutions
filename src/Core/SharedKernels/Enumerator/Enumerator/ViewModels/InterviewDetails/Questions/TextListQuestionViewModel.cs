@@ -182,13 +182,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                await this.Answering.SendAnswerQuestionCommandAsync(command).ConfigureAwait(false);
-                this.questionState.Validity.ExecutedWithoutExceptions();
+                await this.Answering.SendQuestionCommandAsync(command).ConfigureAwait(false);
+                await this.questionState.Validity.ExecutedWithoutExceptions();
                 await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(this.ShowOrHideAddNewItem).ConfigureAwait(false);
             }
             catch (InterviewException ex)
             {
-                this.questionState.Validity.ProcessException(ex);
+                await this.questionState.Validity.ProcessException(ex);
             }
         }
 

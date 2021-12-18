@@ -33,7 +33,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly GroupStateViewModel groupState;
         private readonly CoverStateViewModel coverState;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
-        //public static BaseInterviewViewModel CurrentInterviewScope;
 
         public InterviewStateViewModel InterviewState { get; private set; }
 
@@ -66,7 +65,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
-            //CurrentInterviewScope = this;
         }
 
         private bool isInProgress;

@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 
         [Test] 
         public void should_execute_RemoveAnswerCommand_command () =>
-            answeringMock.Verify(x => x.SendRemoveAnswerCommandAsync(It.IsAny<RemoveAnswerCommand>()), Times.Once);
+            answeringMock.Verify(x => x.SendQuestionCommandAsync(It.IsAny<RemoveAnswerCommand>()), Times.Once);
 
         [Test] 
         public void should_clear_selection_from_options () =>
