@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             private set => this.RaiseAndSetIfChanged(ref this.inProgress, value);
         }
 
-        public async Task SendQuestionCommandAsync(QuestionCommand answerCommand)
+        public virtual async Task SendQuestionCommandAsync(QuestionCommand answerCommand)
         {
             Stopwatch commandTime = Stopwatch.StartNew();
             try
