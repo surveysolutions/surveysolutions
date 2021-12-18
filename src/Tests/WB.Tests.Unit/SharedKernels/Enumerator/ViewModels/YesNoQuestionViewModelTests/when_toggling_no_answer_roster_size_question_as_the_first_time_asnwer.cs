@@ -41,8 +41,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
             answeringViewModelMock = new Mock<AnsweringViewModel>();
             answeringViewModelMock
-                .Setup(x => x.SendQuestionCommandAsync(Moq.It.IsAny<AnswerQuestionCommand>()))
-                .Callback((AnswerQuestionCommand command) => { answerCommand = command; })
+                .Setup(x => x.SendQuestionCommandAsync(Moq.It.IsAny<QuestionCommand>()))
+                .Callback((QuestionCommand command) =>
+                {
+                    answerCommand = command;
+                })
                 .Returns(Task.FromResult<bool>(true));
 
             eventRegistry = Create.Service.LiteEventRegistry();
@@ -54,7 +57,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 eventRegistry: eventRegistry);
 
             viewModel.Init(interview.Id.FormatGuid(), questionId, Create.Other.NavigationState());
-            
 
             BecauseOf();
         }
@@ -80,7 +82,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         [NUnit.Framework.Test] public void should_send_command_with_toggled_NO_answer () =>
             ((AnswerYesNoQuestion)answerCommand).AnsweredOptions.Single().Yes.Should().BeFalse();
 
-        private static AnswerQuestionCommand answerCommand;
+        private static QuestionCommand answerCommand;
         private static CategoricalYesNoViewModel viewModel;
         private static Identity questionId;
         private static Mock<AnsweringViewModel> answeringViewModelMock;

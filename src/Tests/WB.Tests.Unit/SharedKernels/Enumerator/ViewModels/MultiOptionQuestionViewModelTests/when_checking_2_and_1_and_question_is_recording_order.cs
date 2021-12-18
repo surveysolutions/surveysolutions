@@ -44,10 +44,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             var interviewRepository = Stub<IStatefulInterviewRepository>.Returning(interview);
 
             answeringMock = new Mock<AnsweringViewModel>();
+            
             answeringMock
-                .Setup<Task>(answeringViewModel => answeringViewModel.SendQuestionCommandAsync(Moq.It.IsAny<AnswerQuestionCommand>()))
-                .Returns<AnswerQuestionCommand>(x => Task.CompletedTask)
-                .Callback(delegate(AnswerQuestionCommand command)
+                .Setup(answeringViewModel => answeringViewModel.SendQuestionCommandAsync(Moq.It.IsAny<QuestionCommand>()))
+                .Returns<QuestionCommand>(x => Task.CompletedTask)
+                .Callback(delegate(QuestionCommand command)
                 {
                     executedCommand = command;
                 });
@@ -75,6 +76,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         static Identity questionId;
         static Guid questionGuid;
         static Mock<AnsweringViewModel> answeringMock;
-        private static AnswerQuestionCommand executedCommand;
+        private static QuestionCommand executedCommand;
     }
 }
