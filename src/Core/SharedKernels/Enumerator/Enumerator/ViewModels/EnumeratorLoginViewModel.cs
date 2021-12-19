@@ -70,7 +70,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             get => this.isOnlineLoginButtonVisible;
             set => SetProperty(ref this.isOnlineLoginButtonVisible, value);
-        }  
+        }
+        
+        private bool isBiometricLoginButtonVisible;
+        public bool IsBiometricLoginButtonVisible
+        {
+            get => this.isBiometricLoginButtonVisible;
+            set => SetProperty(ref this.isBiometricLoginButtonVisible, value);
+        }
         
         private string errorMessage;
         public string ErrorMessage
@@ -114,6 +121,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.UserName = this.GetUserName();
         }
 
+        public override async void ViewAppeared()
+        {
+            if (await CanDoBiometricLogin())
+            {
+                IsBiometricLoginButtonVisible = true;
+                await DoBiometricLogin();
+            }
+        }
+
+        public virtual Task<bool> CanDoBiometricLogin() => Task.FromResult(false);
+        public virtual Task<bool> DoBiometricLogin() => Task.FromResult(false);
+
         public override async void ViewCreated()
         {
             if (this.HasUser()) return;
@@ -123,7 +142,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public byte[] CustomLogo { get; private set; }
 
-        private async Task SignIn()
+        protected async Task SignIn()
         {
             var userName = this.UserName;
 
@@ -141,20 +160,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 auditLogService.WriteApplicationLevelRecord(new LoginAuditLogEntity(userName));
             }
 
+            await OnSuccessfulLogin(UserName, Password);
             this.Password = string.Empty;
             await this.ViewModelNavigationService.NavigateToDashboardAsync();
             await this.ViewModelNavigationService.Close(this);
         }
 
+        protected virtual Task OnSuccessfulLogin(string userName, string password) => Task.FromResult(false);
+
         private async Task RemoteSignInAsync()
         {
             this.IsUserValid = true;
-            
-            var restCredentials = new RestCredentials {Login = this.UserName};
+
+            var restCredentials = new RestCredentials { Login = this.UserName };
             this.IsInProgress = true;
             this.ErrorMessage = null;
             this.PasswordError = null;
-            
+
             try
             {
                 var token = await this.synchronizationService.LoginAsync(new LogonInfo
@@ -200,7 +222,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             this.countOfFailedLoginAttempts++;
             IsOnlineLoginButtonVisible = countOfFailedLoginAttempts > 4;
-            if(this.IsOnlineLoginButtonVisible)
+            if (this.IsOnlineLoginButtonVisible)
                 this.ErrorMessage = EnumeratorUIResources.Login_Online_Signin_Explanation_message;
         }
     }

@@ -331,6 +331,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Biometric authentication.
+        /// </summary>
+        public static string BiometricAuthentication {
+            get {
+                return ResourceManager.GetString("BiometricAuthentication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -729,7 +738,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Switch interview to Web Mode?.
+        ///   Looks up a localized string similar to Switch interview to Web Mode.
         /// </summary>
         public static string Interview_Complete_SwitchTo_WebMode_Checkbox {
             get {
@@ -738,7 +747,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is a text with instruction on what to do with QR Code. And what will happen to interivew after sync.
+        ///   Looks up a localized string similar to This interview will be accessible online after synchronization. To access the interview the respondent should enter the link below in the browser on an internet-connected computer, tablet, or smartphone. The same link can be scanned using the QR-code shown below..
         /// </summary>
         public static string Interview_Complete_SwitchTo_WebMode_Instruction {
             get {

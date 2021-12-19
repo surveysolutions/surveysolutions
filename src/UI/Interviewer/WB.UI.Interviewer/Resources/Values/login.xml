@@ -47,7 +47,14 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/Login_Button_padding</item>
     </style>
-
+    
+    <style name="Login_Biometric_Button" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">51dp</item>
+        <item name="android:layout_height">48dp</item>
+        
+        <item name="android:padding">@dimen/Login_Button_padding</item>        
+    </style>
+    
     <style name="Login_Troubleshotting_Button" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

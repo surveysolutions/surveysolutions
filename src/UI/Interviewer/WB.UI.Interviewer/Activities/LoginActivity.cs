@@ -5,6 +5,7 @@ using Android.Views;
 using AndroidX.AppCompat.Widget;
 using Java.Interop;
 using MvvmCross;
+using Plugin.Fingerprint;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
@@ -12,7 +13,7 @@ using WB.UI.Shared.Enumerator.Services.Notifications;
 
 namespace WB.UI.Interviewer.Activities
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden,
         Theme = "@style/GrayAppTheme",
         Exported = false)]
     public class LoginActivity : BaseActivity<LoginViewModel>
@@ -24,9 +25,11 @@ namespace WB.UI.Interviewer.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
+            CrossFingerprint.SetCurrentActivityResolver(() => this);
             base.OnCreate(bundle);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
+
             this.SetSupportActionBar(toolbar);
         }
 
@@ -43,6 +46,7 @@ namespace WB.UI.Interviewer.Activities
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
             return base.OnCreateOptionsMenu(menu);
         }
+
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             switch (item.ItemId)
@@ -61,11 +65,11 @@ namespace WB.UI.Interviewer.Activities
         protected override void OnResume()
         {
             base.OnResume();
-         
+
             var notificationsPublisher = Mvx.IoCProvider.Resolve<INotificationPublisher>();
             notificationsPublisher.CancelAllNotifications(this);
         }
-        
+
         [Export("FastLogin")]
         public void FastLogin(string password)
         {

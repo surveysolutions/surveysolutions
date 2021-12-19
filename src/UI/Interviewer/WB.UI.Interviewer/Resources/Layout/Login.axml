@@ -80,7 +80,10 @@
                                   android:gravity="left">
                         <Button style="@style/Login_Button"
                                 local:MvxBind="Click SignInCommand; Text Localization('LoginText');"/>
-                        <Button style="@style/Login_OnlineSingin_Button"
+                        <Button style="@style/Login_Biometric_Button"
+                                local:icon="@drawable/ic_fingerprint"
+                                local:MvxBind="Click BiometricSignInCommand; Visible IsBiometricLoginButtonVisible;"/>
+                        <Button style="@style/Login_OnlineSingin_Button"                                
                                 local:MvxBind="Click OnlineSignInCommand; Text Localization('Interviewer_TryOnlineLogin'); Visible IsOnlineLoginButtonVisible;"/>
                     </LinearLayout>
                 </LinearLayout>

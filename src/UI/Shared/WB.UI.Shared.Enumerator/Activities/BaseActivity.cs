@@ -17,8 +17,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 {
     [MvxActivityPresentation]
     public abstract class BaseActivity<TViewModel> : MvvmCross.Platforms.Android.Views.MvxActivity<TViewModel> where TViewModel : class, IMvxViewModel
-    {
-        
+    {        
         protected abstract int ViewResourceId { get; }
         private Logger log;
 
