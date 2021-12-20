@@ -45,5 +45,10 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             return false;
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+        }
     }
 }

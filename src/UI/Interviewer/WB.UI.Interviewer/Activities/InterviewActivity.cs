@@ -1,12 +1,14 @@
 using Android.App;
 using Android.Views;
 using Java.Interop;
+using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
 {
+    [MvxActivityPresentation]
     [Activity(Label = "",
         Theme = "@style/BlueAppTheme",
         HardwareAccelerated = true,

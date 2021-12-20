@@ -25,6 +25,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken interviewCompleteActivityToken;
+        private MvxNamedNotifyPropertyChangedEventSubscription<PropertyChangedEventArgs> propertyChangedEventSubscription;
 
         protected override int ViewResourceId => Resource.Layout.interview;
 
@@ -119,7 +120,25 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnViewModelSet()
         {
             base.OnViewModelSet();
-            ViewModel.WeakSubscribe<PropertyChangedEventArgs>(nameof(ViewModel.CurrentStage), OnNavigation);
+            propertyChangedEventSubscription = ViewModel.WeakSubscribe<PropertyChangedEventArgs>(nameof(ViewModel.CurrentStage), OnNavigation);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            
+            drawerToggle = null;
+            drawerLayout = null;
+            sectionChangeSubscriptionToken = null;
+            interviewCompleteActivityToken = null;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            propertyChangedEventSubscription?.Dispose();
+            propertyChangedEventSubscription = null;
+
+            base.Dispose(disposing);
         }
 
         private void OnNavigation(object sender, PropertyChangedEventArgs e)

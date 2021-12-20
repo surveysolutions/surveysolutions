@@ -5,11 +5,13 @@ using Android.Runtime;
 using Android.Views;
 using AndroidX.Core.Widget;
 using Java.Lang;
+using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    [Register("wb.ui.enumerator.activities.interview.CoverInterviewFragment")]
+    [MvxFragmentPresentation]
+    [Register(nameof(CoverInterviewFragment))]
     public class CoverInterviewFragment : BaseFragment<CoverInterviewViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.interview_cover_screen;

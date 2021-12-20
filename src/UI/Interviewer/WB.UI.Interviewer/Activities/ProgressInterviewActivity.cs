@@ -86,5 +86,10 @@ namespace WB.UI.Interviewer.Activities
             this.Finish();
         }
 
+        protected override void OnDestroy()
+        {
+            this.SetSupportActionBar(null);
+            base.OnDestroy();
+        }
     }
 }

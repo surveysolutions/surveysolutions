@@ -7,7 +7,9 @@ using Android.Views.InputMethods;
 using AndroidX.RecyclerView.Widget;
 using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
+using MvvmCross.Platforms.Android.Presenters.Attributes;
 using MvvmCross.Platforms.Android.Views.Fragments;
+using Square.LeakCanary;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -15,7 +17,8 @@ using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    [Register("wb.ui.enumerator.activities.interview.InterviewEntitiesListFragment")]
+    [MvxFragmentPresentation(AddToBackStack = false, IsCacheableFragment = false, PopBackStackImmediateFlag = MvxPopBackStack.None)]
+    [Register(nameof(InterviewEntitiesListFragment))]
     public class InterviewEntitiesListFragment : BaseFragment<EnumerationStageViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.interview_active_group;
@@ -58,9 +61,27 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.ViewModel?.Items.OfType<CommentsViewModel>()
                 .ForEach(x => x.CommentsInputShown -= this.OnCommentsBlockShown);
 
-            base.OnDestroyView();
-        }
+            if (recyclerView != null)
+            {
+                recyclerView.SetItemViewCacheSize(0);
+                recyclerView.ClearOnChildAttachStateChangeListeners();
+                recyclerView.Adapter = null;
+            }
 
+            base.OnDestroyView();
+            
+            adapter?.Dispose();
+
+            recyclerView = null;
+            layoutManager = null;
+            adapter = null;
+        }
+        
+        public override void OnDetach()
+        {
+            base.OnDetach();
+            
+        }
         private void OnCommentsBlockShown(object sender, EventArgs args)
         {
             var compositeEntities = this.ViewModel.Items.ToList();

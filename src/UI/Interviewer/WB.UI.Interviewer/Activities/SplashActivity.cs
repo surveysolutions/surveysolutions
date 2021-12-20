@@ -2,10 +2,12 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using MvvmCross.Platforms.Android.Views;
+using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
 {
+    [MvxActivityPresentation]
     [Activity(NoHistory = true, 
         MainLauncher = true, 
         ScreenOrientation = ScreenOrientation.Portrait, 

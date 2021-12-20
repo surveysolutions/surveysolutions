@@ -82,8 +82,9 @@ namespace WB.UI.Shared.Enumerator.Activities
             TryWriteMemoryInformationToLog($"Destroyed Activity {this.GetType().Name}");
             base.OnDestroy();
             
-            this.BindingContext.ClearAllBindings();
-            this.ViewModel.DisposeIfDisposable();
+            this.BindingContext?.ClearAllBindings();
+            this.ViewModel?.DisposeIfDisposable();
+            this.log = null;
         }
 
         protected void SetMenuItemIcon(IMenu menu, int itemId, int drawableId)
