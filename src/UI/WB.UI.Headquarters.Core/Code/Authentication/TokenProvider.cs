@@ -23,7 +23,7 @@ namespace WB.UI.Headquarters.Code.Authentication
             this.userManager = userManager;
         }
 
-        public bool CanGenerate => TokenProviderOptions.Value.IsBearerEnabled;
+        public bool CanGenerate => TokenProviderOptions?.Value?.IsBearerEnabled ?? false;
 
         public async Task<string> GetOrCreateBearerTokenAsync(HqUser user)
         {

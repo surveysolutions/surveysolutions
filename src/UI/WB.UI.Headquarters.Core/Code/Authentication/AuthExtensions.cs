@@ -86,16 +86,19 @@ namespace WB.UI.Headquarters.Code.Authentication
                 .AddScheme<AuthTokenAuthenticationSchemeOptions, AuthTokenAuthenticationHandler>(AuthType.AuthToken, _ => { })
                 .AddScheme<AuthenticationSchemeOptions, TenantTokenAuthenticationHandler>(AuthType.TenantToken, _ => { });
 
-            var isJwtBearerEnabled = configuration.GetValue<bool>("JwtBearer:Enabled");
+            bool isJwtBearerEnabled = configuration.GetValue<bool>("JwtBearer:Enabled");
             
             services.Configure<TokenProviderOptions>(options =>
             {
                 options.IsBearerEnabled = isJwtBearerEnabled;
                 options.Audience = configuration.GetValue<string>("JwtBearer:Audience");
                 options.Issuer = configuration.GetValue<string>("JwtBearer:Issuer");
-                options.SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(
-                        Encoding.ASCII.GetBytes(configuration.GetValue<string>("JwtBearer:SecretKey"))),
-                    SecurityAlgorithms.HmacSha256);
+                options.SigningCredentials = 
+                    String.IsNullOrWhiteSpace(configuration.GetValue<string>("JwtBearer:SecretKey"))
+                        ? null
+                        : new SigningCredentials(new SymmetricSecurityKey(
+                            Encoding.ASCII.GetBytes(configuration.GetValue<string>("JwtBearer:SecretKey"))),
+                        SecurityAlgorithms.HmacSha256);
             });
 
 
