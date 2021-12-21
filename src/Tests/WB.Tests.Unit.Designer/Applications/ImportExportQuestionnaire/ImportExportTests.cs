@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.UI.Designer.Code.ImportExport;
+using Questionnaire = WB.Core.BoundedContexts.Designer.ImportExport.Models.Questionnaire;
 
 namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 {
@@ -92,8 +93,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             questionnaireDocument.CoverPageSectionId = coverPageSectionId;
             questionnaireDocument.Children = new List<IComposite>()
             {
-                new Group() { PublicKey = coverPageSectionId, ConditionExpression = null },
-                new Group()
+                new Group() { PublicKey = coverPageSectionId, ConditionExpression = null, VariableName = "cover" },
+                new Group() { ConditionExpression = "true", VariableName = "chapter" }
             }.ToReadOnlyCollection();
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
@@ -110,8 +111,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             questionnaireDocument.CoverPageSectionId = coverPageSectionId;
             questionnaireDocument.Children = new List<IComposite>()
             {
-                new Group() { PublicKey = coverPageSectionId, ConditionExpression = null },
-                new Group(),
+                new Group() { PublicKey = coverPageSectionId, ConditionExpression = null, VariableName = "cover"},
+                new Group() { ConditionExpression = "true", VariableName = "chapter" },
             }.ToReadOnlyCollection();
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
@@ -186,8 +187,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 children: new IComposite[]
                 {
                     roster,
-                    Create.NumericIntegerQuestion(id: roster.RosterSizeQuestionId, variable: "num-trigger"),
-                    Create.TextQuestion(questionId: roster.RosterTitleQuestionId, variable: "title-question"),
+                    Create.NumericIntegerQuestion(id: roster.RosterSizeQuestionId, variable: "num-trigger", enablementCondition: "enable"),
+                    Create.TextQuestion(questionId: roster.RosterTitleQuestionId, variable: "title-question", enablementCondition: "enable"),
                 }
             );
             
@@ -218,7 +219,13 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 new Attachment() { Name = "attach #2", AttachmentId = Guid.NewGuid()/*, ContentId = "content2"*/},
             };
 
-            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors, q =>
+                {
+                    q.Attachments[0].FileName = "attachment1.jpeg";
+                    q.Attachments[0].ContentType = "image/jpeg";
+                    q.Attachments[1].FileName = "attachment2.png";
+                    q.Attachments[1].ContentType = "image/png";
+                });
             
             questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
             newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
@@ -237,7 +244,12 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 new Categories() { Name = "Categories #2", Id = Guid.NewGuid() },
             };
 
-            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors,
+                q =>
+                {
+                    q.Categories[0].FileName = "categories1.json";
+                    q.Categories[1].FileName = "categories2.json";
+                });
             
             questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
             newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
@@ -309,7 +321,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         {
             var questionnaireDocument = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,
                  Create.Chapter(
-                     children: new []{Create.TextQuestion() }
+                     children: new []{Create.TextQuestion(enablementCondition: "enable") }
                  )
             );
 
@@ -359,8 +371,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                  Create.Chapter(
                      children: new []
                      {
-                         Create.NumericIntegerQuestion(variable: "int"), 
-                         Create.NumericRealQuestion(variable: "real")
+                         Create.NumericIntegerQuestion(variable: "int", enablementCondition: "enable"), 
+                         Create.NumericRealQuestion(variable: "real", enablementCondition: "enable")
                      }
                  )
             );
@@ -822,7 +834,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                     children: new []
                     {
                         question,
-                        Create.SingleQuestion(id: question.CascadeFromQuestionId, variable: "cascade-parent", isFilteredCombobox: true),
+                        Create.SingleQuestion(id: question.CascadeFromQuestionId, variable: "cascade-parent", isFilteredCombobox: true, enablementCondition: "enable"),
                     }
                 )
             );
@@ -934,7 +946,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 Create.Chapter(
                     children: new []
                     {
-                        Create.StaticText(), 
+                        Create.StaticText(enablementCondition: "enable"), 
                     }
                 )
             );
@@ -973,7 +985,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             errors.Count.Should().Be(0);
         }
 
-        private QuestionnaireDocument DoImportExportQuestionnaire(QuestionnaireDocument questionnaireDocument, out IList<string> errors)
+        private QuestionnaireDocument DoImportExportQuestionnaire(QuestionnaireDocument questionnaireDocument, out IList<string> errors, Action<Questionnaire> postMappingChanges = null)
         {
             var mapper = new MapperConfiguration(cfg =>
             {
@@ -982,6 +994,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
             var service = new ImportExportQuestionnaireMapper(mapper);
             var questionnaire = service.Map(questionnaireDocument);
+            postMappingChanges?.Invoke(questionnaire);
             var json = new QuestionnaireSerializer().Serialize(questionnaire);
 
             errors = ValidateBySchema(json);
