@@ -70,6 +70,11 @@ $width-right-menu-small: 380px;
 				padding: 24px 5px;
 				text-align: center;
 				@extend .add-transition;
+                &.icon-link{
+                    &::after{
+                        content: '_';
+                    }
+                }
 				&.notifications{
 					padding-left: 45px;
 				}
