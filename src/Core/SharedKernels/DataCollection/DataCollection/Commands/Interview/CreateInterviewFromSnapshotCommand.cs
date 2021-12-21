@@ -9,9 +9,9 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public CreateInterviewFromSnapshotCommand(Guid interviewId,
             Guid userId,
-            InterviewSynchronizationDto sycnhronizedInterview) : base(interviewId, userId)
+            InterviewSynchronizationDto synchronizedInterview) : base(interviewId, userId)
         {
-            SynchronizedInterview = sycnhronizedInterview;
+            SynchronizedInterview = synchronizedInterview;
         }
 
         public InterviewSynchronizationDto SynchronizedInterview { get; private set; }

@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedTo
             viewModel.Options.Last().RemoveAnswerCommand.Execute();
 
             //assert
-            answeringMock.Verify(x => x.SendRemoveAnswerCommandAsync(It.IsAny<RemoveAnswerCommand>()), Times.Once);
+            answeringMock.Verify(x => x.SendQuestionCommandAsync(It.IsAny<RemoveAnswerCommand>()), Times.Once);
 
             Assert.That(viewModel.Options.All(x => x.Selected == false), Is.True);
         }

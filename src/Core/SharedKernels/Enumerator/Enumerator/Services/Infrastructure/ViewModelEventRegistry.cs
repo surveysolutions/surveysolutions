@@ -4,17 +4,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
     public class ViewModelEventRegistry : IViewModelEventRegistry
     {
+        private readonly ILogger logger;
+
         private Dictionary<Type, Dictionary<string, HashSet<IViewModelEventHandler>>> eventTypes =
             new Dictionary<Type, Dictionary<string, HashSet<IViewModelEventHandler>>>();
 
         private readonly ConcurrentDictionary<(Type, Type), MethodInfo> asyncViewModelHandleMethods =
             new ConcurrentDictionary<(Type, Type), MethodInfo>();
 
+
+        public ViewModelEventRegistry(ILogger logger)
+        {
+            this.logger = logger;
+        }
+
+        public void WriteToLogInfoBySubscribers()
+        {
+            var vm = eventTypes.SelectMany(et => et.Value.SelectMany(e => e.Value)).ToList();
+
+            logger.Debug("Count of active subscribers: " + vm.Count);
+            logger.Debug("Active subscribers: " + string.Join(", ", vm.Select(e => e.GetType().Name).Distinct()));
+            logger.Debug("Same identities: " + String.Join(", ", vm.OfType<IInterviewEntityViewModel>().Select(s => s.Identity.ToString()).Distinct()));
+        }
+        
         public void Subscribe(IViewModelEventHandler handler, string aggregateRootId)
         {
             lock (this.eventTypes)
@@ -58,8 +78,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
             var eventType = @event.Payload.GetType();
             var eventSourceId = @event.EventSourceId.ToString("N");
 
-            if (!this.eventTypes.ContainsKey(eventType)) return new IViewModelEventHandler[0];
-            if(!this.eventTypes[eventType].ContainsKey(eventSourceId)) return new IViewModelEventHandler[0];
+            if (!this.eventTypes.ContainsKey(eventType)) return Array.Empty<IViewModelEventHandler>();
+            if(!this.eventTypes[eventType].ContainsKey(eventSourceId)) return Array.Empty<IViewModelEventHandler>();
 
             return this.eventTypes[eventType][eventSourceId].ToList();
         }

@@ -672,9 +672,6 @@
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Ростер достиг максимального размера. Уменьшите размер ростера или уровень вложенности.</value>
   </data>
-  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>Первая секция не может иметь условия включения.</value>
-  </data>
   <data name="WB0264_GpsQuestion" xml:space="preserve">
     <value>Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. </value>
   </data>

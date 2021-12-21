@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Xml.XPath;
 using Microsoft.Deployment.WindowsInstaller;
 

@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Categorical
 
         [NUnit.Framework.Test] public void should_contain_WB0210_warning () => errors.ShouldContainWarning("WB0210");
 
-        [NUnit.Framework.Test] public void should_referece_to_question_with_warning () =>
+        [NUnit.Framework.Test] public void should_reference_to_question_with_warning () =>
             errors.GetWarning("WB0210").References.Should().BeEquivalentTo(new[] {Create.VerificationReference(id: questionId)});
 
         static QuestionnaireDocument questionnaire;

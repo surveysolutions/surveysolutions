@@ -7,6 +7,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
     [TestFixture]
     internal class InitializeTests : QuestionnaireTestsContext
     {
+        [Test]
         public void Initialize_When_sharedPersons_is_null_Then_does_not_throw_any_exception()
         {
             // arrange

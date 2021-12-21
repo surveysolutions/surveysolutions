@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
            NullValueHandling = NullValueHandling.Ignore,
            FloatParseHandling = FloatParseHandling.Decimal,
            Formatting = Formatting.None,
-           Binder = new NewToOldAssemblyRedirectSerializationBinder()
+           SerializationBinder = new NewToOldAssemblyRedirectSerializationBinder()
        };
        static string result;
     }

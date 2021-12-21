@@ -1,6 +1,9 @@
 ﻿using Android.OS;
 using Android.Views;
+using MvvmCross.Base;
+using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
+using MvvmCross.Platforms.Android.Views.Fragments;
 using MvvmCross.ViewModels;
 
 namespace WB.UI.Shared.Enumerator.Activities
@@ -11,8 +14,21 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            var ignored = base.OnCreateView(inflater, container, savedInstanceState);
+            this.EnsureBindingContextIsSet(inflater);
             return this.BindingInflate(ViewResourceId, null);
+        }
+
+        public override void OnDestroy()
+        {
+            this.BindingContext?.ClearAllBindings();
+            this.ViewModel?.DisposeIfDisposable();
+
+            base.OnDestroy();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
         }
     }
 }

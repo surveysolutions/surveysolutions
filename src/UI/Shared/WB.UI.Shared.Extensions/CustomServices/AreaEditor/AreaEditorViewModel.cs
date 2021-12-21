@@ -63,7 +63,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 new MvxObservableCollection<ShapefileDescription>(this.mapService.GetAvailableShapefiles());
 
             var localMaps = this.mapService.GetAvailableMaps(true);
-            var defaultMap = this.mapService.PrepareAndGetDefaultMap();
+            var defaultMap = this.mapService.PrepareAndGetDefaultMapOrNull();
             localMaps.Add(defaultMap);
 
             this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
@@ -273,7 +273,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             //show only once
             this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
 
-            if (e.Position == null) { return; }
+            if (e?.Position == null) { return; }
 
             if (this.Map?.Basemap?.BaseLayers.Count <= 0) return;
             

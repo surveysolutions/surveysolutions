@@ -93,12 +93,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.principal.CurrentUserIdentity.UserId,
                     this.questionIdentity);
 
-                await this.Answering.SendRemoveAnswerCommandAsync(command);
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.Answering.SendQuestionCommandAsync(command);
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
         }
 
@@ -285,8 +285,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                await this.Answering.SendAnswerQuestionCommandAsync(command);
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.Answering.SendQuestionCommandAsync(command);
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
                 this.previousAnswer = answeredOrSelectedValue;
 
@@ -299,7 +299,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (InterviewException ex)
             {
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
         }
 

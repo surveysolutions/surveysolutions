@@ -129,7 +129,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
                 interactionService: Mock.Of<IUserInteractionService>(),
                 interviewsRepository: interviewsRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 new JsonAllTypesSerializer(),
-                auditLogService ?? Substitute.For<IAuditLogService>());
+                auditLogService ?? Substitute.For<IAuditLogService>(),
+                Mock.Of<IViewModelEventRegistry>());
 
             return loadingViewModel;
         }

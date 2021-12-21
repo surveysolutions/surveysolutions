@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
@@ -20,7 +21,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 = SetUp.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
                     id: questionnaireIdentity.ToString(), entity: Create.Entity.QuestionnaireBrowseItem());
 
-            questionnaire = Create.AggregateRoot.Questionnaire(
+            IQuestionnaireStorage questionnaireStorage =
+                SetUp.QuestionnaireRepositoryWithOneQuestionnaire(
+                    Create.Entity.QuestionnaireDocument(questionnaireIdentity.QuestionnaireId));
+            
+            var questionnaire = Create.AggregateRoot.Questionnaire(
+                questionnaireStorage:questionnaireStorage,
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
 
             var questionnaireException = Assert.Throws<QuestionnaireException>(() =>
@@ -30,7 +36,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             questionnaireException.Message.ToLower().ToSeparateWords().Should().Contain("title", "more", "500");
         }
 
-        private static Questionnaire questionnaire;
         private static QuestionnaireIdentity questionnaireIdentity
             = Create.Entity.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
         private static string longTitle;

@@ -1,9 +1,9 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using InvalidOperationException = System.InvalidOperationException;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -25,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestion,
         IDisposable
     {
-        private Area answer;
+        private Area? answer;
         private GeometryType? geometryType;
 
         private readonly Guid userId;
@@ -56,23 +57,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
+            this.interviewId = string.Empty;
+            Identity = new  Identity(Guid.Empty, RosterVector.Empty);
+            this.lengthText = string.Empty;
+            this.areaText = string.Empty;
+            this.pointsText = string.Empty;
             this.userInteractionService = userInteractionService;
 
             this.questionnaireRepository = questionnaireRepository;
         }
 
+        public Guid Id { get; } = Guid.NewGuid();
+        
         public Identity Identity { get; private set; }
         public IQuestionStateViewModel QuestionState => this.questionState;
 
         public QuestionInstructionViewModel InstructionViewModel { get; set; }
         public AnsweringViewModel Answering { get; }
-
-        private bool isInProgress;
-        public bool IsInProgress
-        {
-            get => this.isInProgress;
-            set => this.RaiseAndSetIfChanged(ref this.isInProgress, value);
-        }
 
         private string lengthText;
         public string LengthText
@@ -110,33 +111,55 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
-        public IMvxAsyncCommand SaveAnswerCommand => new MvxAsyncCommand(this.SaveAnswerAsync, () => !this.IsInProgress);
+        public IMvxAsyncCommand SaveAnswerCommand => new MvxAsyncCommand(this.SaveAnswerAsync, () => !this.Answering.InProgress);
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if(interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.Identity = entityIdentity;
-            this.interviewId = interviewId;
+            this.interviewId = interviewId ?? throw new ArgumentNullException("interviewId");
 
-            var interview = this.interviewRepository.Get(interviewId);
+            var interview = interviewRepository.Get(interviewId);
+            if (interview == null)
+                throw new InvalidOperationException($"Interview {interviewId} was not found");
 
             var questionnaire =
                 this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
+            if (questionnaire == null)
+                throw new InvalidOperationException($"Questionnaire {interview.QuestionnaireIdentity} for language {interview.Language} was not found");
+            
             this.geometryType = questionnaire.GetQuestionGeometryType(entityIdentity.Id);
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
-
-            this.UpdateSelfFromModel();
             this.eventRegistry.Subscribe(this, interviewId);
+
+            UpdateSelfFromModel();
+        }
+
+        private void UpdateSelfFromModel()
+        {
+            var interview = interviewRepository.Get(interviewId);
+            if (interview == null)
+                throw new InvalidOperationException($"Interview {interviewId} was not found");
+            
+            var areaQuestion = interview.GetAreaQuestion(this.Identity);
+            Area? answerValue = null;
+            if (areaQuestion.IsAnswered())
+            {
+                var questionAnswer = areaQuestion.GetAnswer().Value;
+                answerValue = new Area(questionAnswer.Geometry, questionAnswer.MapName, questionAnswer.NumberOfPoints, 
+                    questionAnswer.AreaSize, questionAnswer.Length, questionAnswer.DistanceToEditor);
+            }
+
+            SetAnswerAndUpdateLabels(answerValue);
         }
 
         private async Task SaveAnswerAsync()
         {
-            this.IsInProgress = true;
+            this.Answering.StartInProgressIndicator();
             try
             {
                 var answerArea = await this.mapInteractionService.EditAreaAsync(this.answer, geometryType);
@@ -156,16 +179,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         distanceToEditor: answerArea.DistanceToEditor,
                         numberOfPoints: answerArea.NumberOfPoints);
 
-                    await this.Answering.SendAnswerQuestionCommandAsync(command);
-                    this.QuestionState.Validity.ExecutedWithoutExceptions();
-                    this.answer = new Area(answerArea.Geometry, answerArea.MapName, answerArea.NumberOfPoints, answerArea.Area, answerArea.Length,
+                    await this.Answering.SendQuestionCommandAsync(command);
+                    await this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                    var answerValue = new Area(answerArea.Geometry, answerArea.MapName, answerArea.NumberOfPoints, answerArea.Area, answerArea.Length,
                         answerArea.DistanceToEditor);
-                    this.UpdateLabels();
+                    SetAnswerAndUpdateLabels(answerValue);
                 }
             }
             catch (InterviewException ex)
             {
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
             catch (NotImplementedException)
             {
@@ -181,7 +205,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             finally
             {
-                this.IsInProgress = false;
+                this.Answering.FinishInProgressIndicator();
             }
         }
 
@@ -189,35 +213,44 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             try
             {
-                await this.Answering.SendRemoveAnswerCommandAsync(
+                await this.Answering.SendQuestionCommandAsync(
                     new RemoveAnswerCommand(
                         Guid.Parse(this.interviewId),
                         this.userId,
                         this.Identity));
 
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException exception)
             {
-                this.QuestionState.Validity.ProcessException(exception);
+                await this.QuestionState.Validity.ProcessException(exception);
             }
         }
 
-        private void UpdateLabels()
+        private void SetAnswerAndUpdateLabels(Area? answerValue)
         {
-            this.HasArea = this.answer.AreaSize > 0;
-            this.HasLength = this.answer.Length > 0;
+            this.answer = answerValue;
 
-            this.PointsText = string.Format(UIResources.AreaMap_PointsFormat, this.answer.NumberOfPoints);
-            this.AreaText = string.Format(UIResources.AreaMap_AreaFormat, this.answer.AreaSize?.ToString("#.##"));
-            this.LengthText = string.Format(
+            this.HasArea = this.answer?.AreaSize > 0;
+            this.HasLength = this.answer?.Length > 0;
+
+            this.PointsText = this.answer == null ? string.Empty : string.Format(UIResources.AreaMap_PointsFormat, this.answer.NumberOfPoints);
+            this.AreaText = this.answer == null ? string.Empty : string.Format(UIResources.AreaMap_AreaFormat, this.answer.AreaSize?.ToString("#.##"));
+            this.LengthText = this.answer == null ? string.Empty : string.Format(
                 this.geometryType == GeometryType.Polygon
                     ? UIResources.AreaMap_PerimeterFormat
                     : UIResources.AreaMap_LengthFormat, this.answer.Length?.ToString("#.##"));
         }
 
+        private bool isDisposed = false;
+        
         public void Dispose()
         {
+            if (isDisposed)
+                return;
+            
+            isDisposed = true;
+            
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
             this.InstructionViewModel.Dispose();
@@ -229,11 +262,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (this.Identity.Equals(question.Id, question.RosterVector))
                 {
-                    this.answer = null;
+                    SetAnswerAndUpdateLabels(null);
                 }
             }
         }
-
+        
+        //if view model is recreated on return from Geography activity
+        //new instance will react on event
         public void Handle(AreaQuestionAnswered @event)
         {
             if (@event.QuestionId == this.Identity.Id &&
@@ -241,18 +276,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.UpdateSelfFromModel();
             }
-        }
-
-        private void UpdateSelfFromModel()
-        {
-            var interview = this.interviewRepository.Get(interviewId);
-            var areaQuestion = interview.GetAreaQuestion(this.Identity);
-            if (!areaQuestion.IsAnswered()) return;
-
-            var questionAnswer = areaQuestion.GetAnswer().Value;
-            this.answer = new Area(questionAnswer.Geometry, questionAnswer.MapName, questionAnswer.NumberOfPoints, 
-                questionAnswer.AreaSize, questionAnswer.Length, questionAnswer.DistanceToEditor);
-            this.UpdateLabels();
         }
     }
 }

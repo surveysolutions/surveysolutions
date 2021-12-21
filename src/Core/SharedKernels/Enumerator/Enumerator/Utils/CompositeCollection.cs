@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
+using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
@@ -17,7 +18,8 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
     /// The same is applied for other features.
     /// </remarks>
     [DebuggerDisplay("CompositeCollection Count={Count}")]
-    public class CompositeCollection<T> : IObservableCollection<T>
+    public class CompositeCollection<T> : IObservableCollection<T>,
+        IDisposable
     {
         private readonly ReaderWriterLockSlim itemsLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private Object syncRoot;
@@ -376,6 +378,31 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         private void OnPropertyChanged(string name)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        private bool isDisposed = false;
+        public void Dispose()
+        {
+            if (isDisposed) return;
+            this.itemsLock.EnterWriteLock();
+            try
+            {
+                var removedItems = this.ToList();
+
+                this.Count = 0;
+
+                this.collections.OfType<INotifyCollectionChanged>().ForEach(x => x.CollectionChanged -= this.HandleChildCollectionChanged);
+                this.collections.Clear();
+
+                removedItems.ForEach(x => x.DisposeIfDisposable());
+            }
+            finally
+            {
+                isDisposed = true;
+                this.itemsLock.ExitWriteLock();
+            }
+
+            this.itemsLock?.Dispose();
         }
     }
 }

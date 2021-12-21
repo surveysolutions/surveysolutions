@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
     {
         public InterviewSynchronizationDto()
         {
-            Answers = new AnsweredQuestionSynchronizationDto[0];
+            Answers = Array.Empty<AnsweredQuestionSynchronizationDto>();
             this.FailedValidationConditions = new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>();
             this.ReadonlyQuestions = new HashSet<InterviewItemId>();
         }
@@ -31,9 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             HashSet<InterviewItemId> readonlyQuestions, 
             IList<Identity> validStaticTexts, 
             IList<KeyValuePair<Identity, List<FailedValidationCondition>>> invalidStaticTexts, 
-            Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances, 
             IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> failedValidationConditions, 
-            Dictionary<InterviewItemId, RosterVector[]> linkedQuestionOptions, 
             Dictionary<InterviewItemId, object> variables, 
             HashSet<InterviewItemId> disabledVariables, 
             bool wasCompleted, 
@@ -56,11 +54,9 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
             ReadonlyQuestions = readonlyQuestions;
             
-            RosterGroupInstances = rosterGroupInstances;
             this.FailedValidationConditions = failedValidationConditions;
             this.WasCompleted = wasCompleted;
             this.CreatedOnClient = createdOnClient;
-            this.LinkedQuestionOptions = linkedQuestionOptions;
 
             this.ValidStaticTexts = validStaticTexts;
             this.InvalidStaticTexts = invalidStaticTexts;
@@ -94,10 +90,6 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public int? AssignmentId { get; set; }
 
         public IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> FailedValidationConditions { get; set; }
-        [Obsolete("Since all intervewers will be version 5.16+")]
-        public Dictionary<InterviewItemId, RosterSynchronizationDto[]> RosterGroupInstances { get; set; }
-        [Obsolete("Since all intervewers will be version 5.15+")]
-        public Dictionary<InterviewItemId, RosterVector[]> LinkedQuestionOptions { get; set; }
         public Dictionary<InterviewItemId, object> Variables { get; set; }
 
         public bool WasCompleted { get; set; }

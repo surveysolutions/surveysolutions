@@ -72,10 +72,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.audioFileStorage = audioFileStorage;
             this.audioService = audioService;
 
-            this.audioService.OnPlaybackCompleted += (sender, args) =>
-            {
-                this.IsPlaying = false;
-            };
+            this.audioService.OnPlaybackCompleted += OnPlaybackCompleted;
+        }
+
+        private void OnPlaybackCompleted(object sender, PlaybackCompletedEventArgs e)
+        {
+            this.IsPlaying = false;
         }
 
         public bool IsPlaying
@@ -179,15 +181,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         audioMemoryStream.ToArray(), this.audioService.GetMimeType());
                 }
 
-                await this.Answering.SendAnswerQuestionCommandAsync(command);
+                await this.Answering.SendQuestionCommandAsync(command);
 
                 this.SetAnswer(audioDuration);
 
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
         }
 
@@ -262,15 +264,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if(this.IsPlaying) this.TogglePlayback.Execute();
 
-                await this.Answering.SendRemoveAnswerCommandAsync(
+                await this.Answering.SendQuestionCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.principal.CurrentUserIdentity.UserId,
                         this.questionIdentity));
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException exception)
             {
-                this.QuestionState.Validity.ProcessException(exception);
+                await this.QuestionState.Validity.ProcessException(exception);
             }
         }
 
@@ -287,6 +289,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
+            this.audioService.OnPlaybackCompleted -= OnPlaybackCompleted;
             this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
             this.InstructionViewModel.Dispose();

@@ -30,6 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
         private readonly IUserInteractionService interactionService;
         private CancellationTokenSource loadingCancellationTokenSource;
         protected IAuditLogService auditLogService;
+        private readonly IViewModelEventRegistry viewModelEventRegistry;
 
         public LoadingInterviewViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -39,7 +40,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             IUserInteractionService interactionService,
             IPlainStorage<InterviewView> interviewsRepository,
             IJsonAllTypesSerializer serializer,
-            IAuditLogService auditLogService)
+            IAuditLogService auditLogService,
+            IViewModelEventRegistry viewModelEventRegistry)
             : base(principal, viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;
@@ -49,6 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             this.interviewsRepository = interviewsRepository;
             this.serializer = serializer;
             this.auditLogService = auditLogService;
+            this.viewModelEventRegistry = viewModelEventRegistry;
         }
 
         protected Guid InterviewId { get; set; }
@@ -80,6 +83,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
 
         public async Task LoadAndNavigateToInterviewAsync(Guid interviewId)
         {
+            viewModelEventRegistry.WriteToLogInfoBySubscribers();
+            viewModelEventRegistry.Reset();
+            
             var interview = await LoadInterviewAsync(interviewId);
             if (interview == null)
             {

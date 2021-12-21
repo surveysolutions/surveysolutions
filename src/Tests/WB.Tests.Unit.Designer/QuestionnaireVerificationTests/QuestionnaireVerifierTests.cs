@@ -84,8 +84,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier();
             var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
-
-            AQ: verificationMessages.ShouldContainError("WB0056");
+            verificationMessages.ShouldContainError("WB0056");
 
             verificationMessages.GetError("WB0056")
                 .References.Select(x => x.Type)
