@@ -427,7 +427,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 Create.Chapter(
                     children: new []
                     {
-                        new AudioQuestion() { QuestionType = QuestionType.Audio }, 
+                        new AudioQuestion(), 
                     }
                 )
             );
@@ -444,7 +444,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         {
             var question = new AudioQuestion()
             {
-                QuestionType = QuestionType.Audio,
                 PublicKey = Guid.NewGuid(),
                 QuestionText = "question title",
                 VariableLabel = "variable",
@@ -475,7 +474,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 Create.Chapter(
                     children: new []
                     {
-                        new AreaQuestion() { QuestionType = QuestionType.Area }, 
+                        new AreaQuestion(), 
                     }
                 )
             );
@@ -492,7 +491,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         {
             var question = new AreaQuestion()
             {
-                QuestionType = QuestionType.Area,
                 PublicKey = Guid.NewGuid(),
                 QuestionText = "question title",
                 VariableLabel = "variable",
@@ -527,7 +525,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 Create.Chapter(
                     children: new []
                     {
-                        new DateTimeQuestion() { QuestionType = QuestionType.DateTime }, 
+                        new DateTimeQuestion(), 
                     }
                 )
             );
@@ -544,7 +542,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         {
             var question = new DateTimeQuestion()
             {
-                QuestionType = QuestionType.DateTime,
                 PublicKey = Guid.NewGuid(),
                 QuestionText = "question title",
                 VariableLabel = "variable",
@@ -580,7 +577,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 Create.Chapter(
                     children: new []
                     {
-                        new GpsCoordinateQuestion() { QuestionType = QuestionType.GpsCoordinates }, 
+                        new GpsCoordinateQuestion(), 
                     }
                 )
             );
@@ -597,7 +594,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         {
             var question = new GpsCoordinateQuestion()
             {
-                QuestionType = QuestionType.GpsCoordinates,
                 PublicKey = Guid.NewGuid(),
                 QuestionText = "question title",
                 VariableLabel = "variable",
@@ -628,7 +624,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 Create.Chapter(
                     children: new []
                     {
-                        new MultimediaQuestion() { QuestionType = QuestionType.Multimedia }, 
+                        new MultimediaQuestion(), 
                     }
                 )
             );
@@ -645,7 +641,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         {
             var question = new MultimediaQuestion()
             {
-                QuestionType = QuestionType.Multimedia,
                 PublicKey = Guid.NewGuid(),
                 QuestionText = "question title",
                 VariableLabel = "variable",
@@ -677,7 +672,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 Create.Chapter(
                     children: new []
                     {
-                        new MultyOptionsQuestion() { QuestionType = QuestionType.MultyOption }, 
+                        new MultyOptionsQuestion(), 
                     }
                 )
             );
@@ -694,7 +689,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         {
             var question = new MultyOptionsQuestion()
             {
-                QuestionType = QuestionType.MultyOption,
                 PublicKey = Id.g7,
                 QuestionText = "question title",
                 VariableLabel = "variable",
@@ -741,7 +735,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 Create.Chapter(
                     children: new []
                     {
-                        new QRBarcodeQuestion() { QuestionType = QuestionType.QRBarcode }, 
+                        new QRBarcodeQuestion(), 
                     }
                 )
             );
@@ -758,7 +752,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         {
             var question = new QRBarcodeQuestion()
             {
-                QuestionType = QuestionType.QRBarcode,
                 PublicKey = Guid.NewGuid(),
                 QuestionText = "question title",
                 VariableLabel = "variable",
@@ -789,7 +782,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 Create.Chapter(
                     children: new []
                     {
-                        new SingleQuestion() { QuestionType = QuestionType.SingleOption }, 
+                        new SingleQuestion(), 
                     }
                 )
             );
@@ -806,7 +799,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         {
             var question = new SingleQuestion()
             {
-                QuestionType = QuestionType.SingleOption,
                 PublicKey = Id.g7,
                 QuestionText = "question title",
                 VariableLabel = "variable",
@@ -853,7 +845,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 Create.Chapter(
                     children: new []
                     {
-                        new TextListQuestion() { QuestionType = QuestionType.TextList }, 
+                        new TextListQuestion(), 
                     }
                 )
             );
@@ -870,7 +862,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         {
             var question = new TextListQuestion()
             {
-                QuestionType = QuestionType.TextList,
                 PublicKey = Guid.NewGuid(),
                 QuestionText = "question title",
                 VariableLabel = "variable",

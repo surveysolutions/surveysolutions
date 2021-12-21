@@ -200,8 +200,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             this.CreateMap<TextQuestion, Models.Question.TextQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
             this.CreateMap<Models.Question.TextQuestion, TextQuestion>()
-                .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .AfterMap((s, d) => d.QuestionType = QuestionType.Text);
+                .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>();
 
             this.CreateMap<NumericQuestion, Models.Question.NumericQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
@@ -214,28 +213,24 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 .ForMember(s => s.UseFormatting, d => d.MapFrom(t => t.UseThousandsSeparator))
                 .ForMember(s => s.CountOfDecimalPlaces, d => d.MapFrom(t => t.DecimalPlaces))
                 .ForMember(s => s.Answers, d => d.MapFrom(t => t.SpecialValues))
-                .AfterMap((s, d) => d.Properties!.UseFormatting = s.UseThousandsSeparator)
-                .AfterMap((s, d) => d.QuestionType = QuestionType.Numeric);
+                .AfterMap((s, d) => d.Properties!.UseFormatting = s.UseThousandsSeparator);
             
             this.CreateMap<AreaQuestion, Models.Question.AreaQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
                 .ForMember(s => s.GeometryType, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryType : GeometryType.Point));
             this.CreateMap<Models.Question.AreaQuestion, AreaQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .AfterMap((s, d) => d.Properties!.GeometryType = (GeometryType?)(s.GeometryType ?? null))
-                .AfterMap((s, d) => d.QuestionType = QuestionType.Area);
+                .AfterMap((s, d) => d.Properties!.GeometryType = (GeometryType?)(s.GeometryType ?? null));
 
             this.CreateMap<AudioQuestion, Models.Question.AudioQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
             this.CreateMap<Models.Question.AudioQuestion, AudioQuestion>()
-                .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .AfterMap((s, d) => d.QuestionType = QuestionType.Audio);
+                .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>();
 
             this.CreateMap<MultimediaQuestion, Models.Question.PictureQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
             this.CreateMap<Models.Question.PictureQuestion, MultimediaQuestion>()
-                .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .AfterMap((s, d) => d.QuestionType = QuestionType.Multimedia);
+                .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>();
 
             this.CreateMap<SingleQuestion, Models.Question.SingleQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
@@ -269,8 +264,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                         d.LinkedFilterExpression = s.FilterExpression;
                     else
                         d.Properties!.OptionsFilterExpression = s.FilterExpression;
-                })
-                .AfterMap((s, d) => d.QuestionType = QuestionType.SingleOption);
+                });
 
             this.CreateMap<MultyOptionsQuestion, Models.Question.MultiOptionsQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
@@ -301,15 +295,13 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                         d.LinkedFilterExpression = s.FilterExpression;
                     else
                         d.Properties!.OptionsFilterExpression = s.FilterExpression;
-                })
-                .AfterMap((s, d) => d.QuestionType = QuestionType.MultyOption);
+                });
 
             this.CreateMap<TextListQuestion, Models.Question.TextListQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
                 .ForMember(s => s.MaxItemsCount, o => o.MapFrom(d => d.MaxAnswerCount));
             this.CreateMap<Models.Question.TextListQuestion, TextListQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .AfterMap((s, d) => d.QuestionType = QuestionType.TextList)
                 .ForMember(s => s.MaxAnswerCount, o => o.MapFrom(d => d.MaxItemsCount));
 
             this.CreateMap<DateTimeQuestion, Models.Question.DateTimeQuestion>()
@@ -318,20 +310,17 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                     d.MapFrom(t => t.Properties != null ? t.Properties.DefaultDate : null));
             this.CreateMap<Models.Question.DateTimeQuestion, DateTimeQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .AfterMap((s, d) => d.Properties!.DefaultDate = s.DefaultDate)
-                .AfterMap((s, d) => d.QuestionType = QuestionType.DateTime);
+                .AfterMap((s, d) => d.Properties!.DefaultDate = s.DefaultDate);
 
             this.CreateMap<GpsCoordinateQuestion, Models.Question.GpsCoordinateQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
             this.CreateMap<Models.Question.GpsCoordinateQuestion, GpsCoordinateQuestion>()
-                .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .AfterMap((s, d) => d.QuestionType = QuestionType.GpsCoordinates);
+                .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>();
 
             this.CreateMap<QRBarcodeQuestion, Models.Question.QRBarcodeQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
             this.CreateMap<Models.Question.QRBarcodeQuestion, QRBarcodeQuestion>()
-                .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .AfterMap((s, d) => d.QuestionType = QuestionType.QRBarcode);
+                .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>();
             
             this.CreateMap<Answer, Models.Answer>()
                 .ForMember(a => a.Code, opt => 
