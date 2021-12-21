@@ -65,6 +65,9 @@ namespace WB.UI.Shared.Enumerator.Activities
                 recyclerView.SetItemViewCacheSize(0);
                 recyclerView.ClearOnChildAttachStateChangeListeners();
                 recyclerView.Adapter = null;
+                recyclerView.ItemsSource = null;
+                recyclerView.Background?.Dispose();
+                recyclerView.TouchDelegate = null;
             }
 
             base.OnDestroyView();

@@ -9,7 +9,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class InstantAutoCompleteTextViewOnFocusOutBinding : BaseBinding<InstantAutoCompleteTextView, ICommand>
     {
-        private ICommand command;
+        private WeakReference<ICommand> command;
         private IDisposable subscribtion;
 
         public InstantAutoCompleteTextViewOnFocusOutBinding(InstantAutoCompleteTextView androidControl) : base(androidControl)
@@ -23,7 +23,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (this.Target == null)
                 return;
 
-            this.command = value;
+            this.command = new WeakReference<ICommand>(value);
         }
 
         public override void SubscribeToEvents()
@@ -37,9 +37,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private void OnFocusChange(object sender, View.FocusChangeEventArgs e)
         {
-            if (!e.HasFocus)
+            if (!e.HasFocus && this.command != null && this.command.TryGetTarget(out ICommand com))
             {
-                this.command?.Execute(null);
+                com.Execute(null);
             }
         }
 
@@ -51,6 +51,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (isDisposing)
             {
                 this.subscribtion.Dispose();
+                this.subscribtion = null;
+                this.command = null;
             }
             base.Dispose(isDisposing);
         }

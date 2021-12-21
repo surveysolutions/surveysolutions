@@ -8,7 +8,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class InstantAutoCompleteTextViewOnPartialTextChangedBinding : BaseBinding<InstantAutoCompleteTextView, ICommand>
     {
-        private ICommand command;
+        private WeakReference<ICommand> command;
         private IDisposable subscription;
 
         public InstantAutoCompleteTextViewOnPartialTextChangedBinding(InstantAutoCompleteTextView androidControl) : base(androidControl)
@@ -22,11 +22,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (this.Target == null)
                 return;
 
-            this.command = value;
+            this.command = new WeakReference<ICommand>(value);
         }
 
         private void AutoCompleteOnPartialTextChanged(object sender, string partialText)
-            => command?.Execute(partialText);
+        {
+            if (this.command != null && command.TryGetTarget(out var com))
+                com.Execute(partialText);
+        }
 
         public override void SubscribeToEvents()
         {
@@ -47,6 +50,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (isDisposing)
             {
                 this.subscription?.Dispose();
+                this.subscription = null;
+                this.command = null;
             }
             base.Dispose(isDisposing);
         }

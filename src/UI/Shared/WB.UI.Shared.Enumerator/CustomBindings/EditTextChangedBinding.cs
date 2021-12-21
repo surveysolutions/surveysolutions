@@ -8,7 +8,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class EditTextChangedBinding : MvxAndroidTargetBinding
     {
-        private IMvxCommand Command;
+        private WeakReference<IMvxCommand> Command;
 
         protected new EditText Target => (EditText)base.Target;
 
@@ -19,9 +19,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private void Target_TextChanged(object sender, Android.Text.TextChangedEventArgs e)
         {
-            if (this.Target != null)
+            if (this.Target != null && this.Command != null && this.Command.TryGetTarget(out var command))
             {
-                this.Command?.Execute(string.Concat(e.Text));
+                command.Execute(string.Concat(e.Text));
             }
         }
 
@@ -36,12 +36,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 {
                     this.Target.TextChanged -= this.Target_TextChanged;
                 }
+
+                Command = null;
             }
         }
 
         protected override void SetValueImpl(object target, object value)
         {
-            this.Command = (IMvxCommand)value;
+            this.Command = new WeakReference<IMvxCommand>((IMvxCommand)value);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class InstantAutoCompleteTextViewOnItemSelectedBinding : BaseBinding<InstantAutoCompleteTextView, ICommand>
     {
-        private ICommand command;
+        private WeakReference<ICommand> command;
         private IDisposable subscription;
 
         public InstantAutoCompleteTextViewOnItemSelectedBinding(InstantAutoCompleteTextView androidControl) : base(androidControl)
@@ -22,11 +22,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (this.Target == null)
                 return;
 
-            this.command = value;
+            this.command = new WeakReference<ICommand>(value);
         }
 
-        private void AutoCompleteOnSelectedObjectChanged(object sender, object selectedItem) 
-            => command?.Execute(selectedItem);
+        private void AutoCompleteOnSelectedObjectChanged(object sender, object selectedItem)
+        {
+            if (this.command != null && command.TryGetTarget(out var com))
+                com.Execute(selectedItem);
+        }
 
         public override void SubscribeToEvents()
         {
@@ -48,6 +51,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (isDisposing)
             {
                 this.subscription?.Dispose();
+                this.subscription = null;
+                command = null;
             }
             base.Dispose(isDisposing);
         }

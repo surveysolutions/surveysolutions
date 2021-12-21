@@ -19,13 +19,27 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
     
     public class TextInputLayoutEndIconClickBinding : BaseBinding<TextInputLayout, ICommand>
     {
+        private View.IOnClickListener? onClickListener;
+        
         public TextInputLayoutEndIconClickBinding(TextInputLayout androidControl) : base(androidControl)
         {
         }
 
         protected override void SetValueToView(TextInputLayout control, ICommand value)
         {
-            control.SetEndIconOnClickListener(new IconClickListener(value));
+            onClickListener = new IconClickListener(value);
+            control.SetEndIconOnClickListener(onClickListener);
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            base.Dispose(isDisposing);
+
+            if (isDisposing)
+            {
+                onClickListener?.Dispose();
+                onClickListener = null;
+            }
         }
     }
     

@@ -9,7 +9,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class TextViewOnDoneBinding : BaseBinding<TextView, ICommand>
     {
-        private ICommand command;
+        private WeakReference<ICommand> command;
 
         public TextViewOnDoneBinding(TextView androidControl) : base(androidControl)
         {
@@ -22,7 +22,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (this.Target == null)
                 return;
 
-            this.command = value;
+            this.command = new WeakReference<ICommand>(value);
         }
 
         private void OnDone(object sender, TextView.EditorActionEventArgs e)
@@ -30,7 +30,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (e.ActionId != ImeAction.Done) return;
 
             this.HideKeyboard();
-            this.command?.Execute(null);
+            if (this.command != null && this.command.TryGetTarget(out var com))
+                com.Execute(null);
         }
 
         private void HideKeyboard()
@@ -61,6 +62,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             {
                 if (this.Target != null && this.Target.Handle != IntPtr.Zero)
                     this.Target.EditorAction -= this.OnDone;
+                command = null;
             }
             base.Dispose(isDisposing);
         }
