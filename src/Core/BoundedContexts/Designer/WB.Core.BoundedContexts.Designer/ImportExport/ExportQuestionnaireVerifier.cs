@@ -14,11 +14,11 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
     {
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
-            Error<IQuestion>("WB0392", LinkedToQuestionMustHaveVariable, VerificationMessages.WB0392),
-            Error<IQuestion>("WB0393", LinkedToRosterMustHaveVariable, VerificationMessages.WB0393),
-            Error<IQuestion>("WB0394", CascadeFromQuestionMustHaveVariable, VerificationMessages.WB0394),
-            Error<IGroup>("WB0395", RosterTriggerMustHaveVariable, VerificationMessages.WB0395),
-            Error<IGroup>("WB0396", RosterTitleMustHaveVariable, VerificationMessages.WB0396),
+            Error<IQuestion>("QM0001", LinkedToQuestionMustHaveVariable, ImportExportVerificationMessages.QM0001),
+            Error<IQuestion>("QM0002", LinkedToRosterMustHaveVariable, ImportExportVerificationMessages.QM0002),
+            Error<IQuestion>("QM0003", CascadeFromQuestionMustHaveVariable, ImportExportVerificationMessages.QM0003),
+            Error<IGroup>("QM0004", RosterTriggerMustHaveVariable, ImportExportVerificationMessages.QM0004),
+            Error<IGroup>("QM0005", RosterTitleMustHaveVariable, ImportExportVerificationMessages.QM0005),
         };
 
         private IQuestionnaireEntity? RosterTriggerMustHaveVariable(IGroup roster, MultiLanguageQuestionnaireDocument document)

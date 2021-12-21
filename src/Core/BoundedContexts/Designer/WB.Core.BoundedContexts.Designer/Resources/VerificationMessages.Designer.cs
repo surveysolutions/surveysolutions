@@ -2186,69 +2186,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked source question must have variable name.
-        /// </summary>
-        public static string WB0392 {
-            get {
-                return ResourceManager.GetString("WB0392", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Linked source roster must have variable name.
-        /// </summary>
-        public static string WB0393 {
-            get {
-                return ResourceManager.GetString("WB0393", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cascade source question must have variable name.
-        /// </summary>
-        public static string WB0394 {
-            get {
-                return ResourceManager.GetString("WB0394", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Roster trigger question must have variable name.
-        /// </summary>
-        public static string WB0395 {
-            get {
-                return ResourceManager.GetString("WB0395", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Source question for names of rows must have variable name.
-        /// </summary>
-        public static string WB0396 {
-            get {
-                return ResourceManager.GetString("WB0396", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Each entity must have unique id, but found duplicates.
-        /// </summary>
-        public static string WB0397 {
-            get {
-                return ResourceManager.GetString("WB0397", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Variable name must be unique, but found duplicates.
-        /// </summary>
-        public static string WB0398 {
-            get {
-                return ResourceManager.GetString("WB0398", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Link to hidden question is not allowed.
         /// </summary>
         public static string WB3010_LinkToHiddenQuestionNotAllowed {

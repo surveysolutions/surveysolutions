@@ -31,8 +31,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 var variable = entity.GetVariable();
                 if (!string.IsNullOrWhiteSpace(variable) && !variables.Add(variable))
                     yield return QuestionnaireVerificationMessage.Error(
-                        "WB0398",
-                        VerificationMessages.WB0398,
+                        "QM0007",
+                        ImportExportVerificationMessages.QM0007,
                         new QuestionnaireEntityReference(
                             GetReferenceTypeByItemTypeAndId(document, entity.PublicKey, entity.GetType()),
                             entity.PublicKey));
@@ -49,8 +49,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             {
                 if (!guids.Add(entity.PublicKey))
                     yield return QuestionnaireVerificationMessage.Error(
-                        "WB0397",
-                        VerificationMessages.WB0397,
+                        "QM0006",
+                        ImportExportVerificationMessages.QM0006,
                         new QuestionnaireEntityReference(
                             GetReferenceTypeByItemTypeAndId(document, entity.PublicKey, entity.GetType()),
                             entity.PublicKey));

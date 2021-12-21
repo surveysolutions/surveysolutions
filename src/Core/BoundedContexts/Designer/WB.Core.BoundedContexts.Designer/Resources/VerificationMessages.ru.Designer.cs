@@ -2188,69 +2188,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Вопрос на который ссылаются должен иметь имя переменной.
-        /// </summary>
-        public static string WB0392 {
-            get {
-                return ResourceManager.GetString("WB0392", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Ростер на который ссылаются должен иметь имя переменной.
-        /// </summary>
-        public static string WB0393 {
-            get {
-                return ResourceManager.GetString("WB0393", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Каскадный вопрос на который ссылаются должен иметь имя переменной.
-        /// </summary>
-        public static string WB0394 {
-            get {
-                return ResourceManager.GetString("WB0394", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Вопрос который является источником ростера должен иметь имя переменной.
-        /// </summary>
-        public static string WB0395 {
-            get {
-                return ResourceManager.GetString("WB0395", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Вопрос который является источником имени ростера должен иметь имя переменной.
-        /// </summary>
-        public static string WB0396 {
-            get {
-                return ResourceManager.GetString("WB0396", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Каждый элемент должен иметь уникальный идентификатор, но найдены дубликаты.
-        /// </summary>
-        public static string WB0397 {
-            get {
-                return ResourceManager.GetString("WB0397", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Имя переменной должно быть уникальным, но найдены дубликаты.
-        /// </summary>
-        public static string WB0398 {
-            get {
-                return ResourceManager.GetString("WB0398", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Ссылка на скрытую переменную запрещена.
         /// </summary>
         public static string WB3010_LinkToHiddenQuestionNotAllowed {
