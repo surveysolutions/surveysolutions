@@ -522,9 +522,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 .Select(questionnaire.GetRosterVariableName);
             var rosterNamesByNumericRosters = enumerableVariables.ToImmutableHashSet();
 
-            var rowsByNumericRosters = allRowsByAllFiles.GroupBy(z => z.QuestionnaireOrRosterName)
+            var rowsByNumericRosters = allRowsByAllFiles
+                .GroupBy(z => z.QuestionnaireOrRosterName)
                 .Where(x => rosterNamesByNumericRosters.Contains(x.Key));
 
+            string GetRosterCodes(IEnumerable<AssignmentRosterInstanceCode> codes)
+                => string.Join("_", codes.Select(x => x.Code));
+            
             foreach (var rowsByNumericRoster in rowsByNumericRosters)
             {
                 var rosterColumnId = string.Format(ServiceColumns.IdSuffixFormat, rowsByNumericRoster.Key.ToLower());
@@ -539,15 +543,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     rowsByInterviewsAndParentRoster = rowsByNumericRoster.GroupBy(x => x.InterviewIdValue.Value).Select(x => x.ToArray());
                 else
                 {
-                    var parentRosterId = parentRosterIds.Last();
-                    var parentRosterVariable = questionnaire.GetRosterVariableName(parentRosterId).ToLower();
-                    var parentRosterColumnId = string.Format(ServiceColumns.IdSuffixFormat, parentRosterVariable);
+                    var parentRosterColumnIds = parentRosterIds
+                        .Select(id => string.Format(ServiceColumns.IdSuffixFormat, questionnaire.GetRosterVariableName(id).ToLower()))
+                        .ToHashSet();
 
-                    rowsByInterviewsAndParentRoster = rowsByNumericRoster.GroupBy(x => new
-                    {
-                        x.InterviewIdValue.Value,
-                        x.RosterInstanceCodes.FirstOrDefault(y => string.Compare(y.VariableName, parentRosterColumnId,StringComparison.OrdinalIgnoreCase) == 0)?.Code
-                    }).Select(x => x.ToArray());
+                    rowsByInterviewsAndParentRoster = rowsByNumericRoster
+                        .GroupBy(x => new
+                        {
+                            x.InterviewIdValue.Value,
+                            RosterInstanceCodes = GetRosterCodes(x.RosterInstanceCodes.Where(y => parentRosterColumnIds.Contains(y.VariableName.ToLower())))
+                        })
+                        .Select(x => x.ToArray());
                 }
 
                 foreach (var rowsByInterviewAndParentRoster in rowsByInterviewsAndParentRoster)
