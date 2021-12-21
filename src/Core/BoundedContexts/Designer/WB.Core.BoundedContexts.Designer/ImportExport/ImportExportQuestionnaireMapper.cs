@@ -21,18 +21,10 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
 
         public Questionnaire Map(QuestionnaireDocument questionnaireDocument)
         {
-            try
-            {
-                var idToVariableNameMap = GetIdToVariableNameMap(questionnaireDocument);
-                var map = mapper.Map<Models.Questionnaire>(questionnaireDocument, opt => 
-                    opt.Items[ImportExportQuestionnaireConstants.MapCollectionName] = idToVariableNameMap);
-                return map;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            var idToVariableNameMap = GetIdToVariableNameMap(questionnaireDocument);
+            var map = mapper.Map<Models.Questionnaire>(questionnaireDocument, opt => 
+                opt.Items[ImportExportQuestionnaireConstants.MapCollectionName] = idToVariableNameMap);
+            return map;
         }
 
 
@@ -48,22 +40,14 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
 
         public QuestionnaireDocument Map(Questionnaire questionnaire)
         {
-            try
-            {
-                var variableNameToIdMap = GenerateVariableNameToIdMap(questionnaire);
+            var variableNameToIdMap = GenerateVariableNameToIdMap(questionnaire);
 
-                var questionnaireDocument = mapper.Map<QuestionnaireDocument>(questionnaire, opt => 
-                    opt.Items[ImportExportQuestionnaireConstants.MapCollectionName] = variableNameToIdMap);
+            var questionnaireDocument = mapper.Map<QuestionnaireDocument>(questionnaire, opt => 
+                opt.Items[ImportExportQuestionnaireConstants.MapCollectionName] = variableNameToIdMap);
 
-                FixAfterMapping(questionnaireDocument);
+            FixAfterMapping(questionnaireDocument);
 
-                return questionnaireDocument;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            return questionnaireDocument;
         }
 
         private Dictionary<string, Guid> GenerateVariableNameToIdMap(Questionnaire questionnaire)
@@ -113,24 +97,6 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                     }
                 }
             });
-        }
-
-        public QuestionnaireDocument Append(string json, QuestionnaireDocument destination)
-        {
-            try
-            {
-                var questionnaire = JsonConvert.DeserializeObject<Questionnaire>(json);
-                var questionnaireDocument = mapper.Map(questionnaire, destination);
-
-                FixAfterMapping(questionnaireDocument);
-
-                return questionnaireDocument;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
         }
     }
 }

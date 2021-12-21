@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
             Error<IQuestion>("WB0392", LinkedToQuestionMustHaveVariable, VerificationMessages.WB0392),
-            Error<IQuestion>("WB0392", LinkedToRosterMustHaveVariable, VerificationMessages.WB0393),
+            Error<IQuestion>("WB0393", LinkedToRosterMustHaveVariable, VerificationMessages.WB0393),
             Error<IQuestion>("WB0394", CascadeFromQuestionMustHaveVariable, VerificationMessages.WB0394),
             Error<IGroup>("WB0395", RosterTriggerMustHaveVariable, VerificationMessages.WB0395),
             Error<IGroup>("WB0396", RosterTitleMustHaveVariable, VerificationMessages.WB0396),
