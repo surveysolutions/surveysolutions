@@ -23,9 +23,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             this.questionnaireSerializer = questionnaireSerializer;
         }
 
-        public string GetCategoriesJson(QuestionnaireDocument questionnaire, Guid categoriesId)
+        public string GetCategoriesJson(Guid questionnaireId, Guid categoriesId)
         {
-            var questionnaireId = questionnaire.PublicKey;
             var storedCategories = dbContext.CategoriesInstances
                 .Where(x => x.QuestionnaireId == questionnaireId && x.CategoriesId == categoriesId)
                 .OrderBy(x => x.SortIndex)
@@ -42,9 +41,9 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             return json;
         }
 
-        public void StoreCategoriesFromJson(QuestionnaireDocument questionnaire, Guid categoriesId, string json)
+        public void StoreCategoriesFromJson(Guid questionnaireId, Guid categoriesId, string json)
         {
-            if (questionnaire == null) throw new ArgumentNullException(nameof(questionnaire));
+            if (questionnaireId == null) throw new ArgumentNullException(nameof(questionnaireId));
             if (categoriesId == null) throw new ArgumentNullException(nameof(categoriesId));
             if (json == null) throw new ArgumentNullException(nameof(json));
 
@@ -59,7 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                     Value = item.Value,
                     ParentId = item.ParentValue,
                     CategoriesId = categoriesId,
-                    QuestionnaireId = questionnaire.PublicKey,
+                    QuestionnaireId = questionnaireId,
                 }));
             }
             catch (COMException e)

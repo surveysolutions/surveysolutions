@@ -361,7 +361,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 try
                 {
                     string jsonContent = categoryRecord.Value;
-                    this.categoriesImportExportService.StoreCategoriesFromJson(questionnaireDocument,
+                    this.categoriesImportExportService.StoreCategoriesFromJson(questionnaireDocument.PublicKey,
                         categoryRecord.Key, jsonContent);
 
                     state.Success.AppendLine($"[Categories - {categoryRecord.Key}].");

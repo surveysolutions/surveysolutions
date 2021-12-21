@@ -133,7 +133,7 @@ namespace WB.UI.Designer.Code.ImportExport
 
             foreach (var categories in questionnaireDocument.Categories)
             {
-                var json = this.categoriesService.GetCategoriesJson(questionnaireDocument, categories.Id);
+                var json = this.categoriesService.GetCategoriesJson(questionnaireDocument.PublicKey, categories.Id);
                 var fileName = categories.Id.FormatGuid() + ".json";
                 zipStream.PutTextFileEntry($"Categories/{fileName}", json);
                 questionnaire.Categories.Single(c => c.Name == categories.Name).FileName = fileName;
