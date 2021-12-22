@@ -25,7 +25,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
         public override void Dispose()
         {
-            this.GroupTitle.Dispose();            
+            this.GroupTitle.Dispose();           
+            base.Dispose();
         }
     }
 }

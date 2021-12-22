@@ -39,14 +39,14 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         public void should_disable_first_roster_row()
         {
             var roster = interview.GetRoster(Create.Identity(rosterId, 0));
-            Assert.That(roster.IsDisabled, Is.True);
+            Assert.That(roster.IsDisabled(), Is.True);
         }
 
         [Test]
         public void should_disable_second_roster_row()
         {
             var roster = interview.GetRoster(Create.Identity(rosterId, 1));
-            Assert.That(roster.IsDisabled, Is.True);
+            Assert.That(roster.IsDisabled(), Is.True);
         }
 
         private static AppDomainContext appDomainContext;

@@ -1,5 +1,6 @@
 using Android.Content;
 using Android.OS;
+using MvvmCross;
 using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -9,9 +10,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
     {
         private readonly IMvxAndroidCurrentTopActivity currentTopActivity;
 
-        public VibrationService(IMvxAndroidCurrentTopActivity currentTopActivity)
+        public VibrationService()
         {
-            this.currentTopActivity = currentTopActivity;
+            this.currentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
         }
 
         public void Vibrate()

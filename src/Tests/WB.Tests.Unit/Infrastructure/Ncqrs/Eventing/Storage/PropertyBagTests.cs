@@ -19,8 +19,10 @@ namespace Ncqrs.Tests.Eventing.Storage
         [Test]
         public void Creating_a_bag_should_not_throw_exception()
         {
-            Action act = ()=>new PropertyBag("testing");
-            act();
+            Assert.DoesNotThrow(()=>
+            {
+                var propertyBag = new PropertyBag("testing");
+            });
         }
 
         [Test]

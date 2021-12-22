@@ -1,4 +1,3 @@
-//#nullable enable
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.ValueObjects
 {
-    public class RosterScope : IEnumerable<Guid>
+    public class RosterScope : IEnumerable<Guid>, IEquatable<RosterScope>
     {
         private int? cachedHashCode = null;
         public static readonly RosterScope Empty = new Guid[] { };
@@ -18,7 +17,6 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public RosterScope(IEnumerable<Guid> coordinates)
         {
             if (coordinates == null) throw new ArgumentNullException(nameof(coordinates));
-
             this.coordinates = new ReadOnlyCollection<Guid>(new List<Guid>(coordinates));
         }
 
@@ -63,6 +61,12 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         }
 
         #endregion
+
+        public bool Equals(RosterScope? other)
+        {
+            if (other == null) return false;
+            return this.Equals(other as object);
+        }
 
         public override bool Equals(object? obj)
         {

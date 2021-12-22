@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             var answeringViewModel = new Mock<AnsweringViewModel>();
             answeringViewModel
-                .Setup(x => x.SendAnswerQuestionCommandAsync(It.IsAny<AnswerQuestionCommand>()))
+                .Setup(x => x.SendQuestionCommandAsync(It.IsAny<AnswerQuestionCommand>()))
                 .ThrowsAsync(new InterviewException("Test exception"));
 
             viewModel = CreateViewModel(

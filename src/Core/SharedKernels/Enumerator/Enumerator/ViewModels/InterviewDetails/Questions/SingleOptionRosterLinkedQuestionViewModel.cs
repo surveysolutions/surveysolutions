@@ -40,22 +40,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IViewModelEventRegistry eventRegistry,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering, 
             ThrottlingViewModel throttlingModel)
         {
-            if (principal == null) throw new ArgumentNullException("principal");
-            if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
-            if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
-            if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
-
+            if (principal == null) throw new ArgumentNullException(nameof(principal));
+            this.questionnaireRepository = questionnaireRepository ?? throw new ArgumentNullException(nameof(questionnaireRepository));
+            this.interviewRepository = interviewRepository ?? throw new ArgumentNullException(nameof(interviewRepository));
+            this.eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
+            
             this.userId = principal.CurrentUserIdentity.UserId;
-            this.questionnaireRepository = questionnaireRepository;
-            this.interviewRepository = interviewRepository;
-            this.eventRegistry = eventRegistry;
-            this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
+            this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
 
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
@@ -210,11 +206,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     previousOption.Selected = false;
                 }
 
-                await this.Answering.SendAnswerQuestionCommandAsync(command);
+                await this.Answering.SendQuestionCommandAsync(command);
 
                 this.previousOptionToReset = this.selectedOptionToSave;
 
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
@@ -225,7 +221,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     previousOption.Selected = true;
                 }
 
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
         }
 
@@ -251,11 +247,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 this.throttlingModel.CancelPendingAction();
-                await this.Answering.SendRemoveAnswerCommandAsync(
+                await this.Answering.SendQuestionCommandAsync(
                     new RemoveAnswerCommand(Guid.Parse(this.interviewId),
                         this.userId,
                         this.questionIdentity));
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
                 foreach (var option in this.Options.Where(option => option.Selected).ToList())
                 {
@@ -266,7 +262,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (InterviewException exception)
             {
-                this.QuestionState.Validity.ProcessException(exception);
+                await this.QuestionState.Validity.ProcessException(exception);
             }
         }
 

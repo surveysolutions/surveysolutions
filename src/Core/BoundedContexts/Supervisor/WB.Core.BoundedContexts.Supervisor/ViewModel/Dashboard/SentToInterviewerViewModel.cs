@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         private readonly IInterviewViewModelFactory viewModelFactory;
 
         public SentToInterviewerViewModel(IDashboardItemsAccessor dashboardItemsAccessor,
-            IInterviewViewModelFactory viewModelFactory, IMvxMessenger messenger) : base(messenger)
+            IInterviewViewModelFactory viewModelFactory) : base()
         {
             this.dashboardItemsAccessor = dashboardItemsAccessor;
             this.viewModelFactory = viewModelFactory;

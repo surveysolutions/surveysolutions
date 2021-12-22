@@ -7,6 +7,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
     public interface IDesignerQuestionnaireStorage
     {
         QuestionnaireDocument? Get(QuestionnaireRevision questionnaire);
-        QuestionnaireDocument? Get(Guid questionnaire);
+        QuestionnaireDocument? Get(Guid questionnaireId);
     }
 }

@@ -2,6 +2,7 @@ using System.Globalization;
 using Android.Content;
 using AndroidX.Core.Content;
 using Java.IO;
+using MvvmCross;
 using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -11,9 +12,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
     {
         private readonly IMvxAndroidCurrentTopActivity currentTopActivity;
 
-        public ExternalAppLauncher(IMvxAndroidCurrentTopActivity currentTopActivity)
+        public ExternalAppLauncher()
         {
-            this.currentTopActivity = currentTopActivity;
+            this.currentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
         }
 
         public void LaunchMapsWithTargetLocation(double latitude, double longitude)

@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateVariableHandlerT
 
 
         [NUnit.Framework.Test] public void should_contains_variable () =>
-            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId);
+            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_variable_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).PublicKey.Should().Be(entityId);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -51,7 +52,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
           eventContext.ShouldContainEvent<InterviewReceivedBySupervisor>();
 
         [NUnit.Framework.Test] public void should_raise_all_passed_events () =>
-             eventsToPublish.All(x => eventContext.Events.Any(publishedEvent => publishedEvent.Payload.Equals(x)));
+             eventsToPublish.All(x => eventContext.Events.Any(publishedEvent => publishedEvent.Payload.Equals(x)))
+                 .Should().BeTrue();
 
         static EventContext eventContext;
         static readonly Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");

@@ -41,12 +41,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     continue;
                 }
 
-                if (!AllowedNamespaces.Contains(containingNamespace))
+                if (!AllowedNamespaces.Contains(containingNamespace) && !containingNamespace.StartsWith("WB.Core.SharedKernels.DataCollection"))
                 {
-                    if (!containingNamespace.StartsWith("WB.Core.SharedKernels.DataCollection"))
-                    {
-                        foundForbiddenTypes.Add(namedTypeSymbol.ToString());
-                    }
+                    foundForbiddenTypes.Add(namedTypeSymbol.ToString());
                 }
             }
 

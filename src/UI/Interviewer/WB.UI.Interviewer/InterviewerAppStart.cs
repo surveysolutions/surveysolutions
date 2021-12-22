@@ -31,14 +31,13 @@ namespace WB.UI.Interviewer
         private readonly IDeviceSettings deviceSettings;
         
         public InterviewerAppStart(IMvxApplication application, 
-            IMvxNavigationService navigationService,
             IAuditLogService auditLogService,
             IEnumeratorSettings enumeratorSettings, 
             ILogger logger,
             IMigrationRunner migrationRunner,
             ILifetimeScope lifetimeScope,
             IWorkspaceService workspaceService,
-            IDeviceSettings deviceSettings) : base(application, navigationService)
+            IDeviceSettings deviceSettings) : base(application, Mvx.IoCProvider.Resolve<IMvxNavigationService>())
         {
             this.auditLogService = auditLogService;
             this.logger = logger;

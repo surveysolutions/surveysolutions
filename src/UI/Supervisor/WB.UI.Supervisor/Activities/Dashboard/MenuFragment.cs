@@ -42,7 +42,7 @@ namespace WB.UI.Supervisor.Activities.Dashboard
 
         public override void OnDestroyView()
         {
-            ViewModel.MvxNavigationService.AfterNavigate -= MenuFragment_AfterNavigate;
+            ViewModel.MvxNavigationService.DidNavigate -= MenuFragment_AfterNavigate;
             base.OnDestroyView();
         }
 
@@ -50,7 +50,7 @@ namespace WB.UI.Supervisor.Activities.Dashboard
         {
             base.OnViewModelSet();
 
-            ViewModel.MvxNavigationService.AfterNavigate += MenuFragment_AfterNavigate;
+            ViewModel.MvxNavigationService.DidNavigate += MenuFragment_AfterNavigate;
         }
 
         private void MenuFragment_AfterNavigate(object sender, MvvmCross.Navigation.EventArguments.IMvxNavigateEventArgs e)

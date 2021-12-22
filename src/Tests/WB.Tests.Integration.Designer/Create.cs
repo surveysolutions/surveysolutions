@@ -1,4 +1,4 @@
-﻿namespace WB.Tests.Integration.Core
+﻿namespace WB.Tests.Integration.Designer
 {
     internal class Create
     {

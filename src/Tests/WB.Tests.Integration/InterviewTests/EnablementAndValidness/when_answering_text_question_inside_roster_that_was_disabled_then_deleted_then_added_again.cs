@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         {
                             Abc.Create.Entity.Group(null, "Group X", null, "@rowcode != 2", false, new []
                             {
-                                Abc.Create.Entity.Question(idOfQuestionInRoster, variable:"q2")
+                                Abc.Create.Entity.TextQuestion(idOfQuestionInRoster, variable:"q2")
                             })
                                       
                         })

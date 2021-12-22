@@ -95,7 +95,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
         }
 
         [Test]
-        public async Task should_be_able_to_page_all_events()
+        public void should_be_able_to_page_all_events()
         {
             Guid eventSourceId = Id.gB;
 

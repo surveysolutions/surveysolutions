@@ -31,12 +31,9 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             
             var sectionHeader = document.Styles.AddStyle(PdfStyles.SectionHeader, PdfStyles.Default);
             sectionHeader.Font.Size = Unit.FromPoint(18); 
-            //sectionHeader.ParagraphFormat.LeftIndent = "8pt";
-            //sectionHeader.ParagraphFormat.Borders.Top = new Border() { Width = "1pt", Color = Colors.DarkGray };
             sectionHeader.ParagraphFormat.LineSpacing = 0;
             sectionHeader.ParagraphFormat.LineSpacingRule = LineSpacingRule.Single;
             sectionHeader.ParagraphFormat.OutlineLevel = OutlineLevel.Level1;
-            //sectionHeader.ParagraphFormat.SpaceBefore = "40pt";
             sectionHeader.ParagraphFormat.SpaceAfter = Unit.FromPoint(15);
 
             var groupHeader = document.Styles.AddStyle(PdfStyles.GroupHeader, PdfStyles.Default);
@@ -51,17 +48,12 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             var questionStyle = document.Styles.AddStyle(PdfStyles.QuestionTitle, PdfStyles.Default);
             questionStyle.Font.Size = Unit.FromPoint(8);
             questionStyle.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
-            //questionStyle.ParagraphFormat.LineSpacing = Unit.FromPoint(12);
-            //questionStyle.ParagraphFormat.SpaceBefore = Unit.FromPoint(10);
-
             document.Styles.AddStyle(PdfStyles.IdentifyerQuestionAnswer, PdfStyles.Default).Font =
                 new Font() { Size = Unit.FromPoint(8), Bold = true };
             
             var identifyerNotAnswered = document.Styles.AddStyle(PdfStyles.IdentifyerQuestionNotAnswered, PdfStyles.Default);
             identifyerNotAnswered.Font = new Font() { Size = Unit.FromPoint(8), Color = new Color(45, 156, 219), Italic = true };
-            //notAnswered.ParagraphFormat.LineSpacing = 1.5;
             identifyerNotAnswered.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
-            //identifyerNotAnswered.ParagraphFormat.LineSpacing = Unit.FromPoint(12);
 
             var questionAnswer = document.Styles.AddStyle(PdfStyles.QuestionAnswer, PdfStyles.Default);
             questionAnswer.Font.Size = Unit.FromPoint(8);
@@ -69,16 +61,13 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             
             var notAnswered = document.Styles.AddStyle(PdfStyles.QuestionNotAnswered, PdfStyles.Default);
             notAnswered.Font = new Font() { Size = Unit.FromPoint(8), Color = new Color(45, 156, 219), Italic = true };
-            //notAnswered.ParagraphFormat.LineSpacing = 1.5;
             notAnswered.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
             
             var questionDateStyle = document.Styles.AddStyle(PdfStyles.QuestionAnswerDate, PdfStyles.Default);
             questionDateStyle.Font.Size = Unit.FromPoint(8);
-            //questionDateStyle.ParagraphFormat.Alignment = ParagraphAlignment.Right;
             
             var questionTimeStyle = document.Styles.AddStyle(PdfStyles.QuestionAnswerTime, PdfStyles.Default);
             questionTimeStyle.Font.Size = Unit.FromPoint(8);
-            //questionTimeStyle.ParagraphFormat.Alignment = ParagraphAlignment.Right;
             
             document.Styles.AddStyle(PdfStyles.StaticTextTitle, PdfStyles.Default).Font =
                 new Font() { Size = Unit.FromPoint(8) };
@@ -100,7 +89,6 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             commentAuthor.Font.Size = Unit.FromPoint(8);
             commentAuthor.Font.Color = PdfColors.Comment;
             commentAuthor.Font.Italic = true;
-            //commentAuthor.ParagraphFormat.LeftIndent = "0.5cm";
 
             var commentDateTime = document.Styles.AddStyle(PdfStyles.CommentDateTime, PdfStyles.Default);
             commentDateTime.Font.Size = Unit.FromPoint(8);

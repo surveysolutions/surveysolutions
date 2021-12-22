@@ -79,7 +79,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("chapter/{id}")]
         public IActionResult Chapter(QuestionnaireRevision id, string chapterId)
         {
-            var chapterInfoView = this.chapterInfoViewFactory.Load(id, groupId: chapterId);
+            var chapterInfoView = this.chapterInfoViewFactory.Load(id, chapterId: chapterId);
 
             if (chapterInfoView == null)
             {

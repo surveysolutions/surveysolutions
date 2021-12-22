@@ -313,4 +313,7 @@
   <data name="UploadUsers" xml:space="preserve">
     <value>Upload Users</value>
   </data>
+  <data name="ApiTokenTitle" xml:space="preserve">
+      <value>User API Token</value>
+  </data>
 </root>

@@ -34,7 +34,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly IJsonAllTypesSerializer serializer;
-        private readonly ILiteEventBus eventBus;
         private readonly IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAssignmentDocumentsStorage assignmentStorage;
@@ -45,7 +44,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             ICommandService commandService,
             ILogger logger,
             IJsonAllTypesSerializer serializer,
-            ILiteEventBus eventBus,
             IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog,
             IPlainStorage<InterviewView> interviewViewRepository,
             IAssignmentDocumentsStorage assignmentStorage)
@@ -55,7 +53,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             this.commandService = commandService;
             this.logger = logger;
             this.serializer = serializer;
-            this.eventBus = eventBus;
             this.receivedPackagesLog = receivedPackagesLog;
             this.interviewViewRepository = interviewViewRepository;
             this.assignmentStorage = assignmentStorage;

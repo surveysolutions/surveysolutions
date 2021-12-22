@@ -56,6 +56,11 @@ export default {
             if(this.$me == null || this.$me.title == null)
                 return ''
 
+            if (this.$me.type == ButtonType.Complete){
+                if(this.$config.customTexts.completeButton)
+                    return this.$config.customTexts.completeButton
+            }
+
             var title = this.$me.title
 
             if(this.$me.rosterTitle != null)

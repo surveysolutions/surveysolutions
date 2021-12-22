@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
             answering = new Mock<AnsweringViewModel>();
             answering.Setup(x =>
-                    x.SendAnswerQuestionCommandAsync(It.IsAny<AnswerQuestionCommand>()))
+                    x.SendQuestionCommandAsync(It.IsAny<AnswerQuestionCommand>()))
                 .Throws(new InterviewException("Error", InterviewDomainExceptionType.AnswerNotAccepted));
 
             interview.AnswerTextQuestion(Id.gA, Id.g2, Create.Entity.RosterVector(1), DateTime.UtcNow, "answer 1");

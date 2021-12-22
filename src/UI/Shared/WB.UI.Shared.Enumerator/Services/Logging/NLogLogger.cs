@@ -1,5 +1,4 @@
 using System;
-using MvvmCross;
 using NLog;
 using Exception = System.Exception;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;

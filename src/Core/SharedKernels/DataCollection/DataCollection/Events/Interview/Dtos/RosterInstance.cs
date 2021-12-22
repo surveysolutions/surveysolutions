@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 {
     /// <remarks>Make sure not to reuse this class on read or write side. Use your own copies.</remarks>
     [DebuggerDisplay("GroupId = {GroupId}, RosterInstanceId = {RosterInstanceId}, OuterRosterVector = {OuterRosterVector}")]
-    public class RosterInstance
+    public class RosterInstance : IEquatable<RosterInstance>
     {
         public Guid GroupId { get; private set; }
         public decimal[] OuterRosterVector { get; private set; }
@@ -24,8 +24,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 
         private int? hashCode;
 
-        private bool Equals(RosterInstance other)
+        public bool Equals(RosterInstance other)
         {
+            if (other == null)
+                return false;
+            
             return this.GroupId == other.GroupId &&
                    this.RosterInstanceId == other.RosterInstanceId &&
                    this.OuterRosterVector.Length == other.OuterRosterVector.Length &&
@@ -34,11 +37,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 
         public override int GetHashCode()
         {
-            if (!this.hashCode.HasValue)
-            {
-                int hashOfOuterRosterVector = this.OuterRosterVector.Aggregate(0, (current, el) => current ^ el.GetHashCode());
-                this.hashCode = this.GroupId.GetHashCode() ^ this.RosterInstanceId.GetHashCode() ^ hashOfOuterRosterVector;
-            }
+            if (this.hashCode.HasValue) 
+                return this.hashCode.Value;
+            
+            int hashOfOuterRosterVector = this.OuterRosterVector.Aggregate(0, (current, el) => current ^ el.GetHashCode());
+            this.hashCode = this.GroupId.GetHashCode() ^ this.RosterInstanceId.GetHashCode() ^ hashOfOuterRosterVector;
 
             return this.hashCode.Value;
         }

@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var bm = writer.encode(text, BarcodeFormat.CODE_128, width, 1);
             int bmWidth = bm.Width;
 
-            Bitmap imageBitmap = new Bitmap(bmWidth, height, PixelFormat.Format32bppRgb);
+            using Bitmap imageBitmap = new Bitmap(bmWidth, height, PixelFormat.Format32bppRgb);
 
             for (int x = 0; x < bmWidth; x++) 
             {
@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             int bmWidth = bm.Width;
             int bmHeight = bm.Height;
 
-            Bitmap imageBitmap = new Bitmap(bmWidth, bmHeight, PixelFormat.Format32bppRgb);
+            using Bitmap imageBitmap = new Bitmap(bmWidth, bmHeight, PixelFormat.Format32bppRgb);
             for (int x = 0; x < bmWidth; x++) 
             {
                 for (int y = 0; y < bmHeight; y++)

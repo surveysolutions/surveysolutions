@@ -78,8 +78,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
             var eventType = @event.Payload.GetType();
             var eventSourceId = @event.EventSourceId.ToString("N");
 
-            if (!this.eventTypes.ContainsKey(eventType)) return new IViewModelEventHandler[0];
-            if(!this.eventTypes[eventType].ContainsKey(eventSourceId)) return new IViewModelEventHandler[0];
+            if (!this.eventTypes.ContainsKey(eventType)) return Array.Empty<IViewModelEventHandler>();
+            if(!this.eventTypes[eventType].ContainsKey(eventSourceId)) return Array.Empty<IViewModelEventHandler>();
 
             return this.eventTypes[eventType][eventSourceId].ToList();
         }

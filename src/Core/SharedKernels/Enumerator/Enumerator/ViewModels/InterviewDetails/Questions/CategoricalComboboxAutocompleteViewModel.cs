@@ -24,19 +24,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private readonly bool displaySelectedValue;
         private readonly ThrottlingViewModel throttlingModel;
-        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
+        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
         public CategoricalComboboxAutocompleteViewModel(IQuestionStateViewModel questionState,
             FilteredOptionsViewModel filteredOptionsViewModel,
-            bool displaySelectedValue,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
+            bool displaySelectedValue)
         {
             this.QuestionState = questionState;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.displaySelectedValue = displaySelectedValue;
             this.throttlingModel = Mvx.IoCProvider.Create<ThrottlingViewModel>();
             this.throttlingModel.Init(UpdateFilterThrottled);
-            this.mainThreadDispatcher = mainThreadDispatcher;
+            this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -65,7 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
         {
-            this.ResetFilterAndOptions();
+            await this.ResetFilterAndOptions();
 
             if (this.OnAnswerRemoved == null)
                 return;
@@ -94,11 +93,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await InvokeAllHandlers<int>(this.OnItemSelected, selectedOption.Value).ConfigureAwait(false);
                 if (displaySelectedValue)
                 {
-                    await this.UpdateFilter(displaySelectedValue ? selectedOption.Title : null).ConfigureAwait(false);
+                    await this.UpdateFilter(selectedOption.Title).ConfigureAwait(false);
                 }
                 else
                 {
-                    this.ResetFilterAndOptions();    
+                    await this.ResetFilterAndOptions();    
                 }
             }
             else
@@ -130,7 +129,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var suggestions = this.GetSuggestions(filterToUpdate).ToList();
 
-            await mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.AutoCompleteSuggestions = suggestions;
             });
@@ -155,12 +154,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
-        public void ResetFilterAndOptions()
+        public async Task ResetFilterAndOptions()
         {
             this.FilterText = null;
             
             var suggestions = this.GetSuggestions(null).ToList();
-            this.QuestionState.Validity.ExecutedWithoutExceptions();
+            await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
             this.InvokeOnMainThread(() =>
             {

@@ -486,7 +486,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             combo.SaveAnswerBySelectedOptionCommand.Execute(Create.Entity.OptionWithSearchTerm(3, title: "option 3"));
 
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Exactly(0));
+            AnsweringViewModelMock.Verify(x => x.SendQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Exactly(0));
             Assert.That(combo.FilterText, Is.EqualTo("option 3"));
         }
 
@@ -529,7 +529,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             await combo.FilterCommand.ExecuteAsync("oooo");
             await combo.ShowErrorIfNoAnswerCommand.ExecuteAsync(null);
 
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Never);
+            AnsweringViewModelMock.Verify(x => x.SendQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Never);
             QuestionStateMock.Verify(x => x.Validity.MarkAnswerAsNotSavedWithMessage(Moq.It.IsAny<string>()), Times.Once);
         }
 
@@ -628,7 +628,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         [Test]
-        public void when_handling_AnswersRemoved_for_cascading_question()
+        public async Task when_handling_AnswersRemoved_for_cascading_question()
         {
             CascadingSingleOptionQuestionViewModel cascadingModel;
             Mock<IStatefulInterview> StatefulInterviewMock = new Mock<IStatefulInterview>();
@@ -667,7 +667,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             combo.SaveAnswerBySelectedOptionCommand.Execute(Create.Entity.OptionWithSearchTerm(3));
 
-            cascadingModel.Handle(Create.Event.AnswersRemoved(questionIdentity));
+            await cascadingModel.HandleAsync(Create.Event.AnswersRemoved(questionIdentity));
 
             combo.FilterText.Should().BeNullOrEmpty();
         }

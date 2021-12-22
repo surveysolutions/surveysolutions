@@ -614,46 +614,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return string.Empty;
         }
 
-        public static object GetAnswerAsObject(InterviewTreeQuestion question)
-        {
-            //for backward compatibility answers were casted to other types
-            //please take into concideration in case of changes
-
-            if (!question.IsAnswered()) return null;
-
-            if (question.IsText) return ((InterviewTreeTextQuestion)question.InterviewQuestion).GetAnswer()?.Value;
-            if (question.IsMultimedia) return ((InterviewTreeMultimediaQuestion)question.InterviewQuestion).GetAnswer()?.FileName;
-            if (question.IsQRBarcode) return ((InterviewTreeQRBarcodeQuestion)question.InterviewQuestion).GetAnswer()?.DecodedText;
-            if (question.IsInteger) return ((InterviewTreeIntegerQuestion)question.InterviewQuestion).GetAnswer()?.Value;
-            if (question.IsDouble) return ((InterviewTreeDoubleQuestion)question.InterviewQuestion).GetAnswer()?.Value;
-            if (question.IsDateTime) return ((InterviewTreeDateTimeQuestion)question.InterviewQuestion).GetAnswer()?.Value;
-            if (question.IsGps) return ((InterviewTreeGpsQuestion)question.InterviewQuestion).GetAnswer()?.Value;
-            if (question.IsTextList) return ((InterviewTreeTextListQuestion)question.InterviewQuestion).GetAnswer()?.ToTupleArray();
-            if (question.IsSingleLinkedOption) return ((InterviewTreeSingleLinkedToRosterQuestion)question.InterviewQuestion).GetAnswer()?.SelectedValue.CoordinatesAsDecimals;
-            if (question.IsMultiLinkedOption) return ((InterviewTreeMultiLinkedToRosterQuestion)question.InterviewQuestion).GetAnswer()?.CheckedValues;
-            if (question.IsSingleFixedOption || question.IsCascading) return ((InterviewTreeSingleOptionQuestion)question.InterviewQuestion).GetAnswer()?.SelectedValue;
-            if (question.IsMultiFixedOption) return ((InterviewTreeMultiOptionQuestion)question.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToArray();
-            if (question.IsYesNo) return ((InterviewTreeYesNoQuestion)question.InterviewQuestion).GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray();
-            if (question.IsSingleLinkedToList) return ((InterviewTreeSingleOptionLinkedToListQuestion)question.InterviewQuestion).GetAnswer().SelectedValue;
-            if (question.IsMultiLinkedToList) return ((InterviewTreeMultiOptionLinkedToListQuestion)question.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToArray();
-            if (question.IsArea) return ((InterviewTreeAreaQuestion)question.InterviewQuestion).GetAnswer()?.Value;
-            if (question.IsAudio) return ((InterviewTreeAudioQuestion)question.InterviewQuestion).GetAnswer();
-
-            return null;
-        }
-
-        public static object GetProtectedAnswerAsObject(InterviewTreeQuestion question)
-        {
-            if (!question.HasProtectedAnswer()) return null;
-
-            if (question.IsInteger) return ((InterviewTreeIntegerQuestion)question.InterviewQuestion).ProtectedAnswer?.Value;
-            if (question.IsTextList) return ((InterviewTreeTextListQuestion)question.InterviewQuestion).ProtectedAnswer?.ToTupleArray();
-            if (question.IsMultiFixedOption) return ((InterviewTreeMultiOptionQuestion)question.InterviewQuestion).ProtectedAnswer?.ToInts()?.ToArray();
-            if (question.IsYesNo) return ((InterviewTreeYesNoQuestion)question.InterviewQuestion).ProtectedAnswer?.ToAnsweredYesNoOptions()?.ToArray();
-
-            return null;
-        }
-
         public void UpdateLinkedOptionsAndUpdateAnswerIfNeeded(RosterVector[] options, bool updateAnswer = true)
         {
             if (!this.IsLinked) return;

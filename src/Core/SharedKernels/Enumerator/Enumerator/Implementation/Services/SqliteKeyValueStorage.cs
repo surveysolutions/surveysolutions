@@ -1,3 +1,4 @@
+using System;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -19,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
     }
 
-    public class SqliteKeyValueStorage<TEntity, TKey> : IPlainKeyValueStorage<TEntity, TKey>
+    public class SqliteKeyValueStorage<TEntity, TKey> :IDisposable, IPlainKeyValueStorage<TEntity, TKey>
         where TEntity : class, IPlainStorageEntity<TKey>, new()
     {
         private readonly IPlainStorage<KeyValueItem<TKey>, TKey> fileSystemAccessor;

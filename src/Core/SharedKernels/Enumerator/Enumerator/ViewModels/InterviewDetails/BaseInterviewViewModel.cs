@@ -28,12 +28,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         protected readonly IStatefulInterviewRepository interviewRepository;
-        public NavigationState navigationState { get; }
+        public NavigationState NavigationState { get; }
         private readonly AnswerNotifier answerNotifier;
         private readonly GroupStateViewModel groupState;
         private readonly CoverStateViewModel coverState;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
-        public static BaseInterviewViewModel CurrentInterviewScope;
 
         public InterviewStateViewModel InterviewState { get; private set; }
 
@@ -57,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-            this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
+            this.NavigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
             this.answerNotifier = answerNotifier;
             this.groupState = groupState;
             this.InterviewState = interviewState;
@@ -66,7 +65,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
-            CurrentInterviewScope = this;
         }
 
         private bool isInProgress;
@@ -126,13 +124,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.currentLanguage = interview.Language;
             this.defaultLanguageName = questionnaire.DefaultLanguageName;
 
-            this.navigationState.Init(interviewId: InterviewId, questionnaireId: interview.QuestionnaireId);
-            this.navigationState.ScreenChanged += this.OnScreenChanged;
+            this.NavigationState.Init(interviewId: InterviewId, questionnaireId: interview.QuestionnaireId);
+            this.NavigationState.ScreenChanged += this.OnScreenChanged;
 
-            this.BreadCrumbs.Init(InterviewId, this.navigationState);
-            this.Sections.Init(InterviewId, this.navigationState);
+            this.BreadCrumbs.Init(InterviewId, this.NavigationState);
+            this.Sections.Init(InterviewId, this.NavigationState);
             
-            await this.navigationState.NavigateTo(this.targetNavigationIdentity ?? this.GetDefaultScreenToNavigate(questionnaire)).ConfigureAwait(false);
+            await this.NavigationState.NavigateTo(this.targetNavigationIdentity ?? this.GetDefaultScreenToNavigate(questionnaire)).ConfigureAwait(false);
 
             this.answerNotifier.Init(this.InterviewId);
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
@@ -142,7 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.IsAudioRecordingEnabled = interview.GetIsAudioRecordingEnabled();
 
-            this.InterviewState.Init(this.navigationState.InterviewId, null);
+            this.InterviewState.Init(this.NavigationState.InterviewId, null);
         }
 
         public bool? IsAudioRecordingEnabled { get; set; }
@@ -182,11 +180,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
         {
-            if (this.navigationState.CurrentScreenType == ScreenType.Group)
+            if (this.NavigationState.CurrentScreenType == ScreenType.Group)
             {
-                this.UpdateGroupStatus(this.navigationState.CurrentGroup);
+                this.UpdateGroupStatus(this.NavigationState.CurrentGroup);
             }
-            else if (this.navigationState.CurrentScreenType == ScreenType.Cover)
+            else if (this.NavigationState.CurrentScreenType == ScreenType.Cover)
             {
                 coverState.UpdateFromGroupModel();
                 this.Status = this.coverState.Status;
@@ -201,12 +199,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 case ScreenType.Complete:
                     this.vibrationViewModel.Disable();
-                    this.InterviewState.Init(this.navigationState.InterviewId, null);
+                    this.InterviewState.Init(this.NavigationState.InterviewId, null);
                     this.Status = this.InterviewState.Status;
                     break;
                 case ScreenType.Cover:
-                    this.vibrationViewModel.Disable();
-                    this.coverState.Init(this.navigationState.InterviewId, eventArgs.TargetGroup);
+                    this.vibrationViewModel.Disable();                    
+                    this.coverState.Init(this.NavigationState.InterviewId, eventArgs.TargetGroup);
                     this.Status = this.coverState.Status;
                     break;
                 case ScreenType.Group:
@@ -275,23 +273,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected virtual MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
-            switch (this.navigationState.CurrentScreenType)
+            switch (this.NavigationState.CurrentScreenType)
             {
                 case ScreenType.Complete:
                     var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
-                    completeInterviewViewModel.Configure(this.InterviewId, this.navigationState);
+                    completeInterviewViewModel.Configure(this.InterviewId, this.NavigationState);
                     return completeInterviewViewModel;
                 case ScreenType.Cover:
                     var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
-                    coverInterviewViewModel.Configure(this.InterviewId, this.navigationState, eventArgs.AnchoredElementIdentity);
+                    coverInterviewViewModel.Configure(this.InterviewId, this.NavigationState, eventArgs.AnchoredElementIdentity);
                     return coverInterviewViewModel;
                 case ScreenType.Group:
                     var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
-                    activeStageViewModel.Configure(this.InterviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                    activeStageViewModel.Configure(this.InterviewId, this.NavigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
                     return activeStageViewModel;
                 case ScreenType.Overview:
                     var overviewViewModel = this.interviewViewModelFactory.GetNew<OverviewViewModel>();
-                    overviewViewModel.Configure(this.InterviewId, this.navigationState);
+                    overviewViewModel.Configure(this.InterviewId, this.NavigationState);
                     return overviewViewModel;
                 default:
                     return null;
@@ -300,7 +298,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void UpdateGroupStatus(Identity groupIdentity)
         {
-            this.groupState.Init(this.navigationState.InterviewId, groupIdentity);
+            this.groupState.Init(this.NavigationState.InterviewId, groupIdentity);
             this.Status = this.groupState.Status;
         }
 
@@ -375,13 +373,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
-            => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);
+            => this.NavigationState.NavigateBack(navigateToIfHistoryIsEmpty);
 
         public override void Dispose()
         {
             base.Dispose();
 
-            this.navigationState.ScreenChanged -= this.OnScreenChanged;
+            this.NavigationState.ScreenChanged -= this.OnScreenChanged;
             this.answerNotifier.QuestionAnswered -= this.AnswerNotifierOnQuestionAnswered;
             this.CurrentStage.DisposeIfDisposable();
             this.answerNotifier.Dispose();

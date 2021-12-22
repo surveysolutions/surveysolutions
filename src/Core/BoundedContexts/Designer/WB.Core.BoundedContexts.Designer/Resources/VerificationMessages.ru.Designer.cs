@@ -1727,15 +1727,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Первая секция не может иметь условия включения..
-        /// </summary>
-        public static string WB0263_FirstChapterHasEnablingCondition {
-            get {
-                return ResourceManager.GetString("WB0263_FirstChapterHasEnablingCondition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. .
         /// </summary>
         public static string WB0264_GpsQuestion {
@@ -1862,7 +1853,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Плоский режим разрешен для ростеров с не больше чем {0} элементами..
+        ///   Looks up a localized string similar to Плоский режим разрешен для ростеров с не больше чем {0} вопросов или статических текстов..
         /// </summary>
         public static string WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements {
             get {
@@ -2157,6 +2148,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0309_IdentityQuestionsMustHaveVariableLabel {
             get {
                 return ResourceManager.GetString("WB0309_IdentityQuestionsMustHaveVariableLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Переменные на обложке должны иметь описание.
+        /// </summary>
+        public static string WB0311_IdentityVariablesMustHaveLabel {
+            get {
+                return ResourceManager.GetString("WB0311_IdentityVariablesMustHaveLabel", resourceCulture);
             }
         }
         

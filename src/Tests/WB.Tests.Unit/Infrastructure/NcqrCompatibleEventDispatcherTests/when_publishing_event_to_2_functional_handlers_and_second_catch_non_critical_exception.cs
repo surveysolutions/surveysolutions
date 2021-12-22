@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
                 throw new NotImplementedException();
             }
 
-            public new void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
+            public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
             {
                 throw new Exception();
             }

@@ -223,6 +223,60 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you delete token all calls to API using this token will not be permitted.
+        /// </summary>
+        public static string HQ_Views_Api_Token_Delete_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_Api_Token_Delete_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API token is used to perform API calls to the system.
+        /// </summary>
+        public static string HQ_Views_Api_Token_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_Api_Token_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please save token after generation, you will see it just once.
+        /// </summary>
+        public static string HQ_Views_Api_Token_Generate_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_Api_Token_Generate_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to issued.
+        /// </summary>
+        public static string HQ_Views_Api_Token_Issued {
+            get {
+                return ResourceManager.GetString("HQ_Views_Api_Token_Issued", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to not issued.
+        /// </summary>
+        public static string HQ_Views_Api_Token_Not_Issued {
+            get {
+                return ResourceManager.GetString("HQ_Views_Api_Token_Not_Issued", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API Tokens.
+        /// </summary>
+        public static string HQ_Views_ApiTokens_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_ApiTokens_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disable two-factor authentication.
         /// </summary>
         public static string HQ_Views_DisableTwoFactorAuth_Title {

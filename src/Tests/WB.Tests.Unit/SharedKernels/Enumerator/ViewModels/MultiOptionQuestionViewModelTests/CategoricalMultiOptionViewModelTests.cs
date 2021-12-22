@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -13,10 +14,8 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionViewModelTests
 {
     [TestOf(typeof(CategoricalMultiOptionViewModel))]
-    internal class CategoricalMultiOptionViewModelTests : MvxIoCSupportingTest
+    internal class CategoricalMultiOptionViewModelTests : BaseMvvmCrossTest
     {
-        public CategoricalMultiOptionViewModelTests() => base.Setup();
-
         [Test]
         public void when_CheckAnswerCommand_and_question_is_not_roster_size_and_was_unchecked_then_external_action_should_be_invoked()
         {

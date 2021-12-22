@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Abc.Create.Entity.Group(null, "Chapter X", null, null, false, new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(variable: "a"),
-                        Abc.Create.Entity.Question(questionId: questionId, variable: "b", enablementCondition: "a > 0"),
+                        Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "b", enablementCondition: "a > 0"),
                         Abc.Create.Entity.Group(),
                         Abc.Create.Entity.Group(groupId, enablementCondition: "a < 0"),
                         Abc.Create.Entity.Roster(variable: "x", fixedTitles: new[] { "1", "2" }),

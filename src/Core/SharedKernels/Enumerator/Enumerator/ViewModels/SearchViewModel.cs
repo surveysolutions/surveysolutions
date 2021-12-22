@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
@@ -34,15 +35,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IInterviewViewModelFactory viewModelFactory,
             IPlainStorage<InterviewView> interviewViewRepository,
             IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo,
-            IAssignmentDocumentsStorage assignmentsRepository,
-            IMvxMessenger messenger
-            ) : base(principal, viewModelNavigationService)
+            IAssignmentDocumentsStorage assignmentsRepository
+        ) : base(principal, viewModelNavigationService)
         {
             this.viewModelFactory = viewModelFactory;
             this.interviewViewRepository = interviewViewRepository;
             this.identifyingQuestionsRepo = identifyingQuestionsRepo;
             this.assignmentsRepository = assignmentsRepository;
 
+            var messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             startingLongOperationMessageSubscriptionToken = messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
             stopLongOperationMessageSubscriptionToken = messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
         }

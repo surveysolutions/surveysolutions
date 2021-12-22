@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using Android.OS;
+using Android.Runtime;
 using Android.Views;
 using AndroidX.Core.Widget;
 using Java.Lang;
@@ -8,6 +9,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
+    [Register("wb.ui.enumerator.activities.interview.CoverInterviewFragment")]
     public class CoverInterviewFragment : BaseFragment<CoverInterviewViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.interview_cover_screen;

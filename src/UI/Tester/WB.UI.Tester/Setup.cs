@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Autofac;
-using Autofac.Extras.MvvmCross;
 using Autofac.Features.ResolveAnything;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
@@ -27,6 +26,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Services.Autofac.MvvmCross;
 using WB.UI.Shared.Enumerator.Services.Logging;
 using WB.UI.Shared.Enumerator.Utils;
 using WB.UI.Tester.Activities;
@@ -89,6 +89,7 @@ namespace WB.UI.Tester
                 new DataCollectionSharedKernelModule(),
                 new TesterBoundedContextModule(),
                 new TesterInfrastructureModule(basePath),
+                new EnumeratorIocRegistrationModule(),
                 new EnumeratorUIModule(),
                 new EnumeratorSharedKernelModule(),
                 new TesterUIModule(),
@@ -107,12 +108,12 @@ namespace WB.UI.Tester
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
 
-            return new AutofacMvxIocProvider(container);
+            return new MvxIoCProviderWithParent(CreateIocOptions(),container);
         }
 
-        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
+        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, IMvxIoCProvider iocProvider)
         {
-            var result = base.InitializeViewLookup(viewModelViewLookup);
+            var lookup = base.InitializeViewLookup(viewModelViewLookup, iocProvider);
 
             var viewModelViewLookup1 = new Dictionary<Type, Type>()
             {
@@ -126,8 +127,8 @@ namespace WB.UI.Tester
 #endif
             };
 
-            result.AddAll(viewModelViewLookup1);
-            return result;
+            lookup.AddAll(viewModelViewLookup1);
+            return lookup;
         }
 
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)

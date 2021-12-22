@@ -29,20 +29,20 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IInterviewOverviewService overviewService;
-        private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
+        private readonly IStatefulInterviewSearcher statefulInterviewSearcher;
         private readonly IInterviewFactory interviewFactory;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
 
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewNotificationService webInterviewNotificationService, IWebInterviewInterviewEntityFactory interviewEntityFactory,
-            IAuthorizedUser authorizedUser, IInterviewOverviewService overviewService, IStatefullInterviewSearcher statefullInterviewSearcher,
+            IAuthorizedUser authorizedUser, IInterviewOverviewService overviewService, IStatefulInterviewSearcher statefulInterviewSearcher,
             IInterviewFactory interviewFactory, IChangeStatusFactory changeStatusFactory, IInterviewBrokenPackagesService interviewBrokenPackagesService) 
             : base(questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, interviewEntityFactory)
         {
             this.authorizedUser = authorizedUser;
             this.overviewService = overviewService;
-            this.statefullInterviewSearcher = statefullInterviewSearcher;
+            this.statefulInterviewSearcher = statefulInterviewSearcher;
             this.interviewFactory = interviewFactory;
             this.changeStatusFactory = changeStatusFactory;
             this.interviewBrokenPackagesService = interviewBrokenPackagesService;
@@ -59,7 +59,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         [HttpGet]
         [Route("getTopFilteredOptionsForQuestion")]
-        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count)
+        public DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count)
             => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count);
 
         [HttpGet]
@@ -128,7 +128,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             FilterOption[] flagsEnum = flags ?? new FilterOption[0];
             var interview = GetCallerInterview(interviewId);
             var questionnaire = GetCallerQuestionnaire(interview.QuestionnaireIdentity);
-            var result = this.statefullInterviewSearcher.Search(interview, questionnaire, flagsEnum, skip, limit);
+            var result = this.statefulInterviewSearcher.Search(interview, questionnaire, flagsEnum, skip, limit);
             return result;
         }
 

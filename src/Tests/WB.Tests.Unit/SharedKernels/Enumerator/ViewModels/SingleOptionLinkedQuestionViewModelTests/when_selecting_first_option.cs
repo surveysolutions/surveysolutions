@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
         }
 
         [Test] public void should_execute_AnswerSingleOptionLinkedQuestionCommand_command () =>
-            answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(It.IsAny<AnswerSingleOptionLinkedQuestionCommand>()));
+            answeringMock.Verify(x => x.SendQuestionCommandAsync(It.IsAny<AnswerSingleOptionLinkedQuestionCommand>()));
 
         private static SingleOptionLinkedQuestionViewModel viewModel;
         private static string interviewId = "11111111111111111111111111111111";

@@ -35,7 +35,7 @@ namespace WB.Tests.Web.Integration.WebInterviewTests
                 webInterviewInterviewEntityFactory,
                 Mock.Of<IAuthorizedUser>(),
                 Mock.Of<IInterviewOverviewService>(),
-                Mock.Of<IStatefullInterviewSearcher>(),
+                Mock.Of<IStatefulInterviewSearcher>(),
                 Mock.Of<IInterviewFactory>(),
                 Mock.Of<IChangeStatusFactory>(),
                 Mock.Of<IInterviewBrokenPackagesService>());

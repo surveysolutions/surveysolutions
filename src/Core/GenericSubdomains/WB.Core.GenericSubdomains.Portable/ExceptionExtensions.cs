@@ -14,12 +14,7 @@ namespace WB.Core.GenericSubdomains.Portable
                 return exception;
             }
 
-            while (source.InnerException != null)
-            {
-                return source.InnerException.GetSelfOrInnerAs<TException>();
-            }
-
-            return null;
+            return source.InnerException?.GetSelfOrInnerAs<TException>();
         }
 
         public static Exception GetSelfOrInner(this Exception source, Func<Exception, bool> predicate)
@@ -29,12 +24,7 @@ namespace WB.Core.GenericSubdomains.Portable
                 return source;
             }
 
-            while (source.InnerException != null)
-            {
-                return source.InnerException.GetSelfOrInner(predicate);
-            }
-
-            return null;
+            return source.InnerException?.GetSelfOrInner(predicate);
         }
 
         public static IEnumerable<Exception> UnwrapAllInnerExceptions(this Exception exception)

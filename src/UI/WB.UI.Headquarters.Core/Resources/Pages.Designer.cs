@@ -70,6 +70,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to API tokens.
+        /// </summary>
+        public static string AccountManage_ApiTokens {
+            get {
+                return ResourceManager.GetString("AccountManage_ApiTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Authenticator app.
         /// </summary>
         public static string AccountManage_AuthenticatorApp {
@@ -156,6 +165,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string AccountManage_Status2fa {
             get {
                 return ResourceManager.GetString("AccountManage_Status2fa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API token is:.
+        /// </summary>
+        public static string AccountManage_StatusApiToken {
+            get {
+                return ResourceManager.GetString("AccountManage_StatusApiToken", resourceCulture);
             }
         }
         

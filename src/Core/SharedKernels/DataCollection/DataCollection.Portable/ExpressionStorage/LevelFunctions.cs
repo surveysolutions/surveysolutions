@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 
             try
             {
-                new DateTime((int)year.Value, (int)month.Value, (int)day.Value);
+                var test = new DateTime((int)year.Value, (int)month.Value, (int)day.Value);
             }
             catch
             {
@@ -182,8 +182,6 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         #endregion
 
         /// @}
-
-
 
         /// @name  Sampling functions
         /// @{

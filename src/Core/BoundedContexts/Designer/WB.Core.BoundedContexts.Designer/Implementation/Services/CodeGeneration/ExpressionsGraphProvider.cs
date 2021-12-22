@@ -206,9 +206,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return dependencies;
         }
 
-        public Dictionary<Guid, List<Guid>> BuildValidationDependencyGraph(ReadOnlyQuestionnaireDocument questionnaire)
+        public Dictionary<Guid, List<Guid>> BuildValidationDependencyGraph(ReadOnlyQuestionnaireDocument questionnaireDocument)
         {
-            Dictionary<Guid, List<Guid>> validationDependencies = BuildAllValidationDependencies(questionnaire);
+            Dictionary<Guid, List<Guid>> validationDependencies = BuildAllValidationDependencies(questionnaireDocument);
 
             var mergedDependencies = new Dictionary<Guid, List<Guid>>();
 
