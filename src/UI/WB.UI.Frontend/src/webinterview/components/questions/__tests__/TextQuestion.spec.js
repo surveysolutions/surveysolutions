@@ -1,6 +1,5 @@
-import BaseQuestion from './BaseQuestion.base'
-import { shallowMount, mount, createLocalVue  } from '@vue/test-utils'
-import Vue from 'vue'
+import * as MockBaseQuestion from './BaseQuestion.base'
+import { mount, createLocalVue  } from '@vue/test-utils'
 import TextQuestion from '../TextQuestion.vue'
 import Question from '../Question.vue'
 import RemoveAnswer from '../parts/RemoveAnswer.vue'
