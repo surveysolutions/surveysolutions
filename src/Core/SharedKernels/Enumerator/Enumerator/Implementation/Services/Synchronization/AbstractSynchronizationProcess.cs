@@ -245,8 +245,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         Username = this.RestCredentials.Login,
                         Password = this.RestCredentials.Password
                     }, this.RestCredentials, cancellationToken).ConfigureAwait(false);
-
-                    this.RestCredentials.Password = this.RestCredentials.Password;
+                    
                     this.RestCredentials.Token = token;
 
                     shouldUpdateCredentialsInDb = true;

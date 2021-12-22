@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using WB.Tests.Web;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Filters;
@@ -11,8 +12,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
         public void should_not_throw_exception()
         {
             attribute = CreateInstallationAttribute();
-            attribute.OnActionExecuting(
-                CreateFilterContext(Create.Controller.InstallController()));
+            
+            Assert.DoesNotThrow(() =>
+            {
+                attribute.OnActionExecuting(CreateFilterContext(Create.Controller.InstallController()));
+            });
         }
 
         private static InstallationFilter attribute;

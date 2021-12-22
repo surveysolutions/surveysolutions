@@ -4,12 +4,9 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Newtonsoft;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using WB.UI.Headquarters.Code.SwaggerCustomization;
@@ -31,14 +28,27 @@ namespace WB.UI.Headquarters.Code
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
 
-                c.AddSecurityDefinition("basic", new OpenApiSecurityScheme
+
+                var basicScheme = new OpenApiSecurityScheme
                 {
-                    Name="Authentication",
+                    Name = "Basic Authentication",
                     Description = "Basic Authentication",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
                     Scheme = "basic"
-                });
+                };
+                c.AddSecurityDefinition(basicScheme.Scheme, basicScheme);
+
+                var bearerSchema = new OpenApiSecurityScheme
+                {
+                    Name = "JWT Authentication",
+                    Description = "JWT Bearer Token",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer"
+                };
+                c.AddSecurityDefinition(bearerSchema.Scheme, bearerSchema);
+                
                 c.ParameterFilter<XmsEnumParameterFilter>();
                 c.OperationFilter<XmsEnumOperationFilter>();
                 c.SchemaFilter<XmsEnumSchemaFilter>();
@@ -48,15 +58,19 @@ namespace WB.UI.Headquarters.Code
                     {
                         new OpenApiSecurityScheme
                         {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "basic"
-                            }
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "basic" }
+                        },
+                        Array.Empty<string>()
+                    },
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearer" }
                         },
                         Array.Empty<string>()
                     }
                 });
+
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
 
                 c.OrderActionsBy(x =>

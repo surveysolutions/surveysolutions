@@ -8,28 +8,36 @@ namespace WB.Core.SharedKernels.DataCollection
     /// Full identity of group or question: id and roster vector.
     /// </summary>
     [DebuggerDisplay("{" + nameof(ToString) + "()}")]
-    public sealed class Identity
+    public sealed class Identity: IEquatable<Identity>
     {
         private int? hashCode;
 
-        private bool Equals(Identity other)
+        public bool Equals(Identity other)
         {
+            if (other == null)
+                return false;
+            
             return this.Id == other.Id && this.RosterVector.Identical(other.RosterVector);
+        }
+        
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return this.Equals((Identity) obj);
         }
 
         public override int GetHashCode()
         {
-            if (!this.hashCode.HasValue)
-            {
-                this.hashCode = this.Id.GetHashCode() ^ this.RosterVector.GetHashCode();
-            }
+            this.hashCode ??= this.Id.GetHashCode() ^ this.RosterVector.GetHashCode();
 
             return this.hashCode.Value;
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
-        public RosterVector RosterVector { get; private set; }
+        public RosterVector RosterVector { get; set; }
 
         // ReSharper disable once UnusedMember.Local # used by NHibernate
         private Identity()
@@ -65,14 +73,6 @@ namespace WB.Core.SharedKernels.DataCollection
                 identity = null;
                 return false;
             }
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return this.Equals((Identity) obj);
         }
 
         public bool Equals(Guid id, RosterVector rosterVector) => id == this.Id && this.RosterVector.Identical(rosterVector);

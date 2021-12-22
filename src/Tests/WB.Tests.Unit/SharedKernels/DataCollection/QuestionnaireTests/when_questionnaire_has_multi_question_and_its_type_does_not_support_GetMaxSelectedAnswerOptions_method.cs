@@ -11,17 +11,15 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
-    internal class when_questionnaire_has_multi_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method
+    internal class when_questionnaire_has_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method
         : QuestionnaireTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
-                new MultyOptionsQuestion()
+                new TextQuestion()
                 {
                     PublicKey = validatedQuestionId,
-                    MaxAllowedAnswers = proposedSelectedAnswerOptions,
-                    QuestionType = QuestionType.SingleOption
                 }
             });
             
@@ -37,7 +35,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         [NUnit.Framework.Test] public void should_throw_exception_with_message_containing__custom_validation__ () =>
             exception.Message.Should().Contain("Cannot return maximum for selected answers");
 
-        private static int? proposedSelectedAnswerOptions = 5;
         private static Exception exception;
         private static QuestionnaireDocument questionnaireDocument;
         private static Guid validatedQuestionId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

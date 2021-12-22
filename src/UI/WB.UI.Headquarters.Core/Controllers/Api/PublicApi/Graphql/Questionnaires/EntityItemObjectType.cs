@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                                     return new List<CategoricalOption>();
                                 });
                       
-                    },"optionsByQuestion").LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default))
+                    },"optionsByQuestion").LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default).ConfigureAwait(false))
                 .Type<NonNullType<ListType<NonNullType<CategoricalOptionType>>>>();
             
             descriptor.Field(x => x.QuestionText)

@@ -26,18 +26,12 @@ namespace Main.Core.Entities.SubEntities
 
         public List<Answer> Answers { get; set; } = new List<Answer>();
 
-        private ReadOnlyCollection<IComposite> children = new ReadOnlyCollection<IComposite>(new List<IComposite>(0));
+        private readonly ReadOnlyCollection<IComposite> children = new ReadOnlyCollection<IComposite>(new List<IComposite>(0));
 
         public ReadOnlyCollection<IComposite> Children
         {
-            get
-            {
-                return children;
-            }
-            set
-            {
-                // do nothing
-            }
+            get => children;
+            set { }
         }
 
         public string? Comments { get; set; }
@@ -71,7 +65,7 @@ namespace Main.Core.Entities.SubEntities
 
         public string? QuestionText { get; set; }
 
-        public virtual QuestionType QuestionType { get; set; }
+        public abstract QuestionType QuestionType { get; }
 
         public string StataExportCaption { get; set; }
 
@@ -98,10 +92,7 @@ namespace Main.Core.Entities.SubEntities
 
         public IList<ValidationCondition> ValidationConditions
         {
-            get
-            {
-                return this.validationConditions.ConcatWithOldConditionIfNotEmpty(ValidationExpression, ValidationMessage);
-            }
+            get => this.validationConditions.ConcatWithOldConditionIfNotEmpty(ValidationExpression, ValidationMessage);
             set
             {
                 if (value != null)
@@ -111,7 +102,12 @@ namespace Main.Core.Entities.SubEntities
             }
         }
 
-        public abstract void AddAnswer(Answer answer);
+        public void MigrateValidationConditions()
+        {
+            ValidationConditions = this.validationConditions.ConcatWithOldConditionIfNotEmpty(ValidationExpression, ValidationMessage);
+            ValidationExpression = null;
+            ValidationMessage = null;
+        }
 
         public virtual IComposite Clone()
         {
@@ -139,7 +135,6 @@ namespace Main.Core.Entities.SubEntities
 
         public void RemoveChild(Guid child)
         {
-            
         }
 
         public string VariableName => this.StataExportCaption;
@@ -148,11 +143,20 @@ namespace Main.Core.Entities.SubEntities
         {
         }
 
-        public abstract T? Find<T>(Guid publicKey) where T : class, IComposite;
+        public T? Find<T>(Guid publicKey) where T: class, IComposite
+        {
+            return null;
+        }
 
-        public abstract IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class;
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
+        {
+            return Enumerable.Empty<T>();
+        }
 
-        public abstract T? FirstOrDefault<T>(Func<T, bool> condition) where T : class;
+        public T? FirstOrDefault<T>(Func<T, bool> condition) where T: class
+        {
+            return null;
+        }
 
         public override string ToString()
         {

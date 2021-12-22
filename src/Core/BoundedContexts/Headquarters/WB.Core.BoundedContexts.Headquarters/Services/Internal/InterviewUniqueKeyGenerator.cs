@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                 if (uniqueIdString != null) return InterviewKey.Parse(uniqueIdString);
             }
 
-            throw new InterviewUniqueKeyGeneratorException("Failed to generate new human id");
+            throw new InterviewUniqueKeyGeneratorException("Failed to generate new interview key");
         }
 
         private List<InterviewKey> GetRandomSequence()

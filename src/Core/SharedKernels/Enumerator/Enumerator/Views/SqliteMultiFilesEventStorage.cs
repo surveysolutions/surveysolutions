@@ -19,7 +19,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
-    public class SqliteMultiFilesEventStorage : IEnumeratorEventStorage
+    public class SqliteMultiFilesEventStorage : IEnumeratorEventStorage, IDisposable
     {
         internal readonly Dictionary<Guid, SQLiteConnectionWithLock> connectionByEventSource = new Dictionary<Guid, SQLiteConnectionWithLock>();
         private readonly SqliteSettings settings;

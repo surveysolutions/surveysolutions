@@ -100,12 +100,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 verificationMessagesByQuestionnaire.AddRange(errors);
             }
 
-            var errorsCodeForSkipCircleReferanceVerifier = new HashSet<string>() { "WB0102", "WB0026" };
-            if (verificationMessagesByQuestionnaire.Any(er => errorsCodeForSkipCircleReferanceVerifier.Contains(er.Code)))
+            var errorsCodeForSkipCircleReferenceVerifier = new HashSet<string>() { "WB0102", "WB0026" };
+            if (verificationMessagesByQuestionnaire.Any(er => errorsCodeForSkipCircleReferenceVerifier.Contains(er.Code)))
                 return verificationMessagesByQuestionnaire;
 
-            var errorsByCircleReferances = this.ErrorsByCircularReferences(questionnaire);
-            verificationMessagesByQuestionnaire.AddRange(errorsByCircleReferances);
+            var errorsByCircleReferences = this.ErrorsByCircularReferences(questionnaire);
+            verificationMessagesByQuestionnaire.AddRange(errorsByCircleReferences);
 
             if (verificationMessagesByQuestionnaire.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
                 return verificationMessagesByQuestionnaire;

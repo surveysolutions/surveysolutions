@@ -57,7 +57,7 @@
                         dataBind(data);
                         utilityService.scrollToValidationCondition($state.params.indexOfEntityInProperty);
 
-                        var focusId = null;
+                        let focusId = null;
                         switch ($state.params.property) {
                             case 'Title':
                                 focusId = 'edit-static-text';
@@ -73,6 +73,7 @@
                                 break;
                             case 'AttachmentName':
                                 focusId = 'edit-static-attachment-name';
+                                break;
                             default:
                                 break;
                         }

@@ -585,7 +585,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 entity = entity.GetParent();
             }
             rosterSizes.Reverse();
-            return rosterSizes.ToArray();
+            return new ValueVector<Guid>(rosterSizes);
         }
 
         private int? GetLengthOfRosterVectorWhichNeedToBeExported(IQuestion question, QuestionnaireDocument questionnaire)

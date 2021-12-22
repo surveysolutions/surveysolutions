@@ -4,9 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -18,13 +15,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 {
     [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
-    public abstract class BaseOfflineSyncViewModel<TInputArgs> : BaseViewModel<TInputArgs>, IDisposable
+    public abstract class BaseOfflineSyncViewModel<TInputArgs> : BaseViewModel<TInputArgs>
     {
         protected readonly IPermissionsService permissions;
         protected readonly INearbyConnection nearbyConnection;
         protected CancellationTokenSource cancellationTokenSource = null;
 
-        private readonly IDisposable nearbyConnectionSubscribtion;
+        private readonly IDisposable nearbyConnectionSubscription;
 
         public IMvxAsyncCommand StartDiscoveryAsyncCommand => new MvxAsyncCommand(StartDiscoveryAsync);
 
@@ -36,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
             this.permissions = permissions;
             this.nearbyConnection = nearbyConnection;
-            nearbyConnectionSubscribtion = this.nearbyConnection.Events.Subscribe(HandleConnectionEvents);
+            nearbyConnectionSubscription = this.nearbyConnection.Events.Subscribe(HandleConnectionEvents);
         }
 
         private bool shouldStartAdvertising = true;
@@ -198,10 +195,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
         protected abstract string GetDeviceIdentification();
 
-        public virtual void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             cancellationTokenSource?.Dispose();
-            nearbyConnectionSubscribtion?.Dispose();
+            nearbyConnectionSubscription?.Dispose();
         }
     }
 }

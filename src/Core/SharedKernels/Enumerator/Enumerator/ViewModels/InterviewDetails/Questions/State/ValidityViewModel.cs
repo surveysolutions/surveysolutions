@@ -145,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.UpdateValidStateAsync();
             }
         }
-        public virtual async void ProcessException(Exception exception)
+        public virtual async Task ProcessException(Exception exception)
         {
             if (exception is InterviewException interviewException)
             {
@@ -175,10 +175,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public virtual async void ExecutedWithoutExceptions()
+        public virtual async Task ExecutedWithoutExceptions()
         {
             this.exceptionErrorMessageFromViewModel = null;
-
             await this.UpdateValidStateAsync();
         }
 

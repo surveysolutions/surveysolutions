@@ -49,25 +49,34 @@ namespace WB.Tests.Integration.PostgreSQLTests
         [Test]
         public void then_should_create_db_and_run_all_migrations_successfully()
         {
-            DatabaseManagement.InitDatabase(connectionString, "plainstore");
-            DatabaseManagement.InitDatabase(connectionString, "readside");
-            DatabaseManagement.InitDatabase(connectionString, "users");
-            DatabaseManagement.InitDatabase(connectionString, "events");
-            DatabaseManagement.InitDatabase(connectionString, "logs");
-            DatabaseManagement.InitDatabase(connectionString, "quartz");
+            TestDelegate runner = () =>
+            {
+                DatabaseManagement.InitDatabase(connectionString, "plainstore");
+                DatabaseManagement.InitDatabase(connectionString, "readside");
+                DatabaseManagement.InitDatabase(connectionString, "users");
+                DatabaseManagement.InitDatabase(connectionString, "events");
+                DatabaseManagement.InitDatabase(connectionString, "logs");
+                DatabaseManagement.InitDatabase(connectionString, "quartz");
 
-            DbMigrationsRunner.MigrateToLatest(connectionString, "events",
-                new DbUpgradeSettings(typeof(M201812181520_AddedGlobalSequenceSequence).Assembly, typeof(M201812181520_AddedGlobalSequenceSequence).Namespace));
-            DbMigrationsRunner.MigrateToLatest(connectionString, "plainstore",
-                new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace));
-            DbMigrationsRunner.MigrateToLatest(connectionString, "readside",
-                new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace));
-            DbMigrationsRunner.MigrateToLatest(connectionString, "users",
-                new DbUpgradeSettings(typeof(M001_AddUsersHqIdentityModel).Assembly, typeof(M001_AddUsersHqIdentityModel).Namespace));
-            DbMigrationsRunner.MigrateToLatest(connectionString, "logs",
-                new DbUpgradeSettings(typeof(M201905171139_AddErrorsTable).Assembly, typeof(M201905171139_AddErrorsTable).Namespace));
-            DbMigrationsRunner.MigrateToLatest(connectionString, "quartz",
-                new DbUpgradeSettings(typeof(M201905151013_AddQuartzTables).Assembly, typeof(M201905151013_AddQuartzTables).Namespace));
+                DbMigrationsRunner.MigrateToLatest(connectionString, "events",
+                    new DbUpgradeSettings(typeof(M201812181520_AddedGlobalSequenceSequence).Assembly,
+                        typeof(M201812181520_AddedGlobalSequenceSequence).Namespace));
+                DbMigrationsRunner.MigrateToLatest(connectionString, "plainstore",
+                    new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace));
+                DbMigrationsRunner.MigrateToLatest(connectionString, "readside",
+                    new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace));
+                DbMigrationsRunner.MigrateToLatest(connectionString, "users",
+                    new DbUpgradeSettings(typeof(M001_AddUsersHqIdentityModel).Assembly,
+                        typeof(M001_AddUsersHqIdentityModel).Namespace));
+                DbMigrationsRunner.MigrateToLatest(connectionString, "logs",
+                    new DbUpgradeSettings(typeof(M201905171139_AddErrorsTable).Assembly,
+                        typeof(M201905171139_AddErrorsTable).Namespace));
+                DbMigrationsRunner.MigrateToLatest(connectionString, "quartz",
+                    new DbUpgradeSettings(typeof(M201905151013_AddQuartzTables).Assembly,
+                        typeof(M201905151013_AddQuartzTables).Namespace));
+            };
+            
+            Assert.DoesNotThrow(runner.Invoke);
         }
 
         [OneTimeTearDown]

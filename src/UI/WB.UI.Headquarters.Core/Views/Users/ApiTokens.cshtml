@@ -1,0 +1,11 @@
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.Core.BoundedContexts.Headquarters.Resources
+@using WB.UI.Headquarters.Code
+@{
+    ViewBag.Title = Strings.HQ_Views_ApiTokens_Title;
+}
+
+@section Scripts{
+    @Html.RenderHqConfig((object)Model)
+}
+<div id="vueApp"></div>

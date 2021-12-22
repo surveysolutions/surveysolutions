@@ -10,7 +10,7 @@
 
     <PackageGroup Id="WindowsDotNetHosting501">
       <ExePackage
-          Name="dotnet-hosting-5.0.2-win.exe"
+          Name="dotnet-hosting-5.0.12-win.exe"
           InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
@@ -20,16 +20,18 @@
           Vital="yes"
           Permanent="yes"
           Protocol="burn"
-          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/43ea9d7a-39c9-467a-83e6-548b3faf832d/5e7d573d9c4f40d0c1192aa2319f07c5/dotnet-hosting-5.0.2-win.exe"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/bf3abcc3-5461-451c-9dd6-b74491cf0eed/84775adc7e46888289477b5c72e691fd/dotnet-hosting-5.0.12-win.exe"
           LogPathVariable="WindowsDotNetHosting501Log"
           Compressed="no">
         <!-- heat.exe payload "dotnet-hosting-3.1.1-win.exe" -o "dotnet-hosting.wxs" -->
-        <RemotePayload CertificatePublicKey="3756E9BBF4461DCD0AA68E0D1FCFFA9CEA47AC18" 
-                       CertificateThumbprint="2485A7AFA98E178CB8F30C9838346B514AEA4769" 
-                       Description="Microsoft .NET Core 5.0.2 - Windows Server Hosting" 
-                       Hash="45F08415DC91EF20080DE770193218FECD5BC27A" 
-                       ProductName="Microsoft .NET Core 5.0.2 - Windows Server Hosting" 
-                       Size="66656416" Version="5.0.2.20613" />
+        <RemotePayload 
+          CertificatePublicKey="F49F9B33E25E33CCA0BFB15A62B7C29FFAB3880B" 
+          CertificateThumbprint="ABDCA79AF9DD48A0EA702AD45260B3C03093FB4B" 
+          Description="Microsoft .NET 5.0.12 - Windows Server Hosting" 
+          Hash="BEB2DC69DB16704FF1672E3A0720BC22E07ADEE6" 
+          ProductName="Microsoft .NET 5.0.12 - Windows Server Hosting" 
+          Size="67142760" 
+          Version="5.0.12.21524" />
       </ExePackage>
     </PackageGroup>
   </Fragment>

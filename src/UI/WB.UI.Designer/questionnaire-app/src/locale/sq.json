@@ -411,6 +411,7 @@
     "CategoriesObtained_plural": "Obtained {0} rows from categories file",
     "OptionsUploadRevert": "Revert changes",
     "SideBarCategoriesNoName": "categories with no name",
+    "EditorShowComments": "Show comments ({{count}})",
     "JumpToEdit": "Jump to edit",
     "RosterDisplayMode_SubSection": "Sub-Section",
     "RosterDisplayMode_Flat": "Flat",

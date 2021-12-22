@@ -1,4 +1,5 @@
 using System;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
 
@@ -20,7 +21,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             );
 
             // act
-            questionnaire.MoveGroup(chapterAId, null, 1, responsibleId);
+            Assert.DoesNotThrow(() 
+                => questionnaire.MoveGroup(chapterAId, null, 1, responsibleId));
         }
 
         private static Questionnaire questionnaire;

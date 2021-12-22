@@ -92,9 +92,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         public IEnumerable<QuestionnaireVerificationMessage> Verify(MultiLanguageQuestionnaireDocument multiLanguageQuestionnaireDocument)
         {
-            foreach (var verifier in ErrorsVerifiers)
-            foreach (var error in verifier.Invoke(multiLanguageQuestionnaireDocument))
-                yield return error;
+            return ErrorsVerifiers.SelectMany(verifier 
+                => verifier.Invoke(multiLanguageQuestionnaireDocument));
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical(string code, Func<Categories, bool> hasError, string message) =>

@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
         {
-            this.ResetFilterAndOptions();
+            await this.ResetFilterAndOptions();
 
             if (this.OnAnswerRemoved == null)
                 return;
@@ -115,11 +115,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await InvokeAllHandlers<int>(this.OnItemSelected, selectedOption.Value).ConfigureAwait(false);
                 if (displaySelectedValue)
                 {
-                    await this.UpdateFilter(displaySelectedValue ? selectedOption.Title : null).ConfigureAwait(false);
+                    await this.UpdateFilter(selectedOption.Title).ConfigureAwait(false);
                 }
                 else
                 {
-                    this.ResetFilterAndOptions();    
+                    await this.ResetFilterAndOptions();    
                 }
             }
             else
@@ -178,11 +178,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
-        public void ResetFilterAndOptions()
+        public async Task ResetFilterAndOptions()
         {
             this.FilterText = null;
             
-            this.QuestionState.Validity.ExecutedWithoutExceptions();
+            await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
             this.InvokeOnMainThread(() =>
             {
@@ -231,6 +231,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
+            this.QuestionState.Dispose();
+            this.filteredOptionsViewModel.Dispose();
             this.throttlingModel.Dispose();
         }
 

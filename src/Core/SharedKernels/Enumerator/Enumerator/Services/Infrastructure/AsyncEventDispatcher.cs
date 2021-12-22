@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
                 }
                 catch (Exception e)
                 {
-                    this.logger.Error($"Unhandled exception in {viewModelType.Name}.{handler.Name}<{eventType.Name}>", e);
+                    this.logger.Error($"Unhandled exception in {viewModelType.Name}.{handler?.Name}<{eventType.Name}>", e);
 
                     ((BaseInterviewViewModel) this.currentViewModelPresenter.CurrentViewModel)?.ReloadCommand
                         ?.Execute();

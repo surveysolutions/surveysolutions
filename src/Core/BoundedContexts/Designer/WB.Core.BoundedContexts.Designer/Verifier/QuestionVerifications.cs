@@ -238,18 +238,16 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 .Distinct()
                 .ToArray();
 
-            if (existingOptions.Length == 0)
+            if (existingOptions.Length < 2)
                 return false;
 
-            List<int> diffsByPrevNextOptionValues = new List<int>();
-
-            existingOptions.Aggregate((prev, next) =>
+            for (int i = 1; i < existingOptions.Length; i++)
             {
-                diffsByPrevNextOptionValues.Add(next - prev);
-                return next;
-            });
+                if (existingOptions[i] - existingOptions[i - 1] != 1)
+                    return true;
+            }
 
-            return diffsByPrevNextOptionValues.Contains(2);
+            return false;
         }
 
         private static IEnumerable<QuestionnaireEntityReference[]> SameCascadingParentQuestion(MultiLanguageQuestionnaireDocument questionnaire)
@@ -264,7 +262,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (!question.IsFilteredCombobox ?? false) return false;
 
             return question.CategoriesId.HasValue
-                ? GetCategoriesItem(questionnaire.PublicKey, question.CategoriesId.Value).Count() < 10
+                ? GetCategoriesItem(questionnaire.PublicKey, question.CategoriesId.Value).Count < 10
                 : question.Answers.Count < 10;
         }
 

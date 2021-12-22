@@ -133,10 +133,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                         {
                             new InterviewQuestionInvariants(answer.Identity, questionnaire, tree, questionOptionsRepository).RequireQuestionExists();
                         }
-
-                        interviewTreeQuestion.SetAnswer(answer.Answer, DateTime.UtcNow);
-
-                        interviewTreeQuestion.RunImportInvariantsOrThrow(new InterviewQuestionInvariants(answer.Identity, questionnaire, tree, questionOptionsRepository));
+                        else
+                        {
+                            interviewTreeQuestion.SetAnswer(answer.Answer, DateTime.UtcNow);
+                            interviewTreeQuestion.RunImportInvariantsOrThrow(new InterviewQuestionInvariants(answer.Identity, questionnaire, tree, questionOptionsRepository));
+                        }
                     }
                     tree.ActualizeTree();
                 }
@@ -247,8 +248,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
 
             foreach (var file in files)
-            foreach (var error in this.FileVerifiers.SelectMany(x => x.Invoke(originalFileName, file, questionnaire)))
-                if (error != null) yield return error;
+                foreach (var error in this.FileVerifiers.SelectMany(x => x.Invoke(originalFileName, file, questionnaire)))
+                    if (error != null) yield return error;
 
         }
 

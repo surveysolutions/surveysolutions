@@ -20,11 +20,11 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         fixedTitles: new[] {"fixed title", "fixed title 2"},
                         children: new IComposite[]
                         {
-                            new TextQuestion("text 1")
+                            new TextQuestion()
                             {
+                                QuestionText = "text 1",
                                 PublicKey = linkedQuestionId,
                                 StataExportCaption = "var2",
-                                QuestionType = QuestionType.Text
                             }
                         }),
 
@@ -43,6 +43,10 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verifier = CreateQuestionnaireVerifier();
             BecauseOf();
+            foreach (char ch in "dfdf")
+            {
+                
+            }
         }
 
         private void BecauseOf() => 

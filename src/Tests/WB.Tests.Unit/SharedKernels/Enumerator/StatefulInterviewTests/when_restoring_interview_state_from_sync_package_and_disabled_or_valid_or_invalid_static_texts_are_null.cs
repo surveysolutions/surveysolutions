@@ -12,7 +12,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId));
 
             synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId, userId: userId, answers: new AnsweredQuestionSynchronizationDto[0]);
-            interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
+            Assert.DoesNotThrow(() =>
+                interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto)));
         }
 
         private static InterviewSynchronizationDto synchronizationDto;

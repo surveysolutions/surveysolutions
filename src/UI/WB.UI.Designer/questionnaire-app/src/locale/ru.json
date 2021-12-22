@@ -325,6 +325,7 @@
     "ViewResolvedCommentsCounter_plural": "Показать {{count}} закрытых комментария",
     "HideResolvedComments": "Скрыть закрытые комментарии",
     "EditorAddComment": "Добавить комментарий",
+    "EditorShowComments": "Показать комментарии ({{count}})",
     "JumpToEdit": "Перейти к редактированию",
     "EditorHideComment": "Скрыть комментарии",
     "SideBarCommentsTitle": "Комментарии",

@@ -74,7 +74,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAggregateRootPrototypeService prototypeService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
-        private const string CapchaCompletedKey = "CaptchaCompletedKey";
+        private const string CaptchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
         public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
         public static readonly string AskForEmail = "askForEmail";
@@ -86,19 +86,19 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
         {
-            var passedInterviews = HttpContext.Session.Get<List<string>>(CapchaCompletedKey);
+            var passedInterviews = HttpContext.Session.Get<List<string>>(CaptchaCompletedKey);
             return !(passedInterviews?.Contains(interviewId)).GetValueOrDefault();
         }
 
         private void RememberCapchaFilled(string interviewId)
         {
-            var interviews = HttpContext.Session.Get<List<string>>(CapchaCompletedKey) ?? new List<string>();
+            var interviews = HttpContext.Session.Get<List<string>>(CaptchaCompletedKey) ?? new List<string>();
             if (!interviews.Contains(interviewId))
             {
                 interviews.Add(interviewId);
             }
 
-            HttpContext.Session.Set(CapchaCompletedKey, interviews);
+            HttpContext.Session.Set(CaptchaCompletedKey, interviews);
         }
 
         private void RememberPasswordVerified(string interviewId)
@@ -1079,7 +1079,7 @@ namespace WB.UI.Headquarters.Controllers
             if (invitation.Assignment.WebMode == true && invitation.Assignment.Quantity == null)
             {
                 // ReSharper disable once ReturnValueOfPureMethodIsNotUsed - Triggering lazy load
-                invitation.Assignment.Answers.Any();
+                var temp = invitation.Assignment.Answers.Any();
                 this.memoryCache.Set(key, invitation, TimeSpan.FromSeconds(30));
 
                 return invitation;

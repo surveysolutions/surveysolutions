@@ -137,7 +137,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 this.attachmentService.SaveMeta(
                     attachmentId: command.AttachmentId,
                     questionnaireId: command.QuestionnaireId,
-                    contentId: command.AttachmentContentId, 
+                    attachmentContentId: command.AttachmentContentId, 
                     fileName: model.File?.FileName ?? model.FileName);
             }
             catch (FormatException e)

@@ -43,6 +43,11 @@ if ($MyInvocation.ScriptName -notlike '*Invoke-Build.ps1') {
     return
 }
 
+$RevisionId = $ENV:BUILD_VCS_NUMBER
+if ($null -eq $RevisionId) {
+    $RevisionId = (git rev-parse HEAD)
+}
+
 $tmp = $ENV:TEMP + "/.build"
 $gitBranch = $ENV:GIT_BRANCH
 if($null -eq $gitBranch) {
@@ -122,7 +127,7 @@ function Build-Docker($dockerfile, $tags, $arguments = @()) {
         "--build-arg", "APK_FILES=$apkFolder"
         "--file", $dockerfile
         "--iidfile", "$output\headquarters.id"
-        "--label", "org.opencontainers.image.revision=$($ENV:BUILD_VCS_NUMBER)"
+        "--label", "org.opencontainers.image.revision=$RevisionId"
         "--label", "org.opencontainers.image.version=$infoVersion"
         "--label", "org.opencontainers.image.url=https://github.com/surveysolutions/surveysolutions"
         "--label", "org.opencontainers.image.source=https://github.com/surveysolutions/surveysolutions"
@@ -153,13 +158,15 @@ function Build-Docker($dockerfile, $tags, $arguments = @()) {
 
 function Get-DockerTags($name, $registry = $dockerRegistry) {
     return @(
-        "$registry/$name`:$($EscapedBranchName)"
         if ($isRelease) {
             $v = [System.Version]::Parse($version)
 
             "$registry/$name`:$($v.Major).$($v.Minor)"
             "$registry/$name`:$($v.Major).$($v.Minor).$($v.Build)"
             "$registry/$name`:$($v.Major).$($v.Minor).$($v.Build).$($v.Revision)"
+        }
+        else {
+            "$registry/$name`:$($EscapedBranchName)"
         }
     )
 }

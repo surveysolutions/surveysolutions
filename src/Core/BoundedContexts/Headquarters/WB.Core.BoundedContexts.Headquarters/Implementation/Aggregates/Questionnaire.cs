@@ -83,9 +83,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         {
             this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
-            QuestionnaireDocument sourceQuestionnaireClone = 
-                this.questionnaireStorage.GetQuestionnaireDocument(command.QuestionnaireId, command.SourceQuestionnaireVersion)?.Clone();
+            QuestionnaireDocument sourceQuestionnaire = 
+                this.questionnaireStorage.GetQuestionnaireDocument(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
+            if(sourceQuestionnaire == null)
+                throw new QuestionnaireException("Questionnaire was not found.");
+
+            QuestionnaireDocument sourceQuestionnaireClone = sourceQuestionnaire.Clone();
             this.ThrowIfTitleIsInvalid(command.NewTitle, sourceQuestionnaireClone);
 
             string assemblyAsBase64 = this.questionnaireAssemblyFileAccessor.GetAssemblyAsBase64String(command.QuestionnaireId, command.SourceQuestionnaireVersion);

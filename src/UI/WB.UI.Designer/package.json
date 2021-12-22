@@ -80,7 +80,7 @@
     "angular-ui-tree": "^2.22.6",
     "angular-ui-utils": "^0.1.1",
     "angular-unsavedchanges": "^0.2.5",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "bootbox": "^5.5.2",
     "bootstrap": "3.4.1",
     "bootstrap-select": "^1.13.9",

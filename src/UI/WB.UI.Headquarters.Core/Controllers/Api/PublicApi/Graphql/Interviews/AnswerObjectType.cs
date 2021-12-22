@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Linq;
 using GreenDonut;
 using HotChocolate.Resolvers;
@@ -27,19 +28,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.Entity)
                 .Name("entity")
                 .Resolve(async context => {
-                        var parent = context.Parent<IdentifyEntityValue>();
-
                         return await context.BatchDataLoader<int, QuestionnaireCompositeItem>(async (keys, token) =>
-                        {
-                            var unitOfWork = context.Service<IUnitOfWork>();
+                            {
+                                var unitOfWork = context.Service<IUnitOfWork>();
+                                if (unitOfWork == null) throw new InvalidOperationException("unitOfWork is null");
 
-                            var items = await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
-                                .Where(q => keys.Contains(q.Id))
-                                .ToListAsync()
-                                .ConfigureAwait(false);
-                            return items.ToDictionary(x => x.Id);
-                        },"questionByAnswer")
-                            .LoadAsync(parent.Entity.Id);
+                                return (await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
+                                    .Where(q => keys.Contains(q.Id))
+                                    .ToListAsync(token)).ToDictionary(x => x.Id);
+                            },"questionByAnswer")
+                            .LoadAsync(context.Parent<IdentifyEntityValue>().Entity.Id);
                     }
                 )
                 .Type<NonNullType<EntityItemObjectType>>();
