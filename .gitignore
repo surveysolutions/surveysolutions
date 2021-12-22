@@ -140,3 +140,4 @@ src/UI/WB.UI.Designer/wwwroot
 artifacts
 /.tool
 appsettings.*.ini
+!/installer/src/**/appsettings.*.ini

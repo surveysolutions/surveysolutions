@@ -1,8 +1,10 @@
+
 using Android.OS;
 using Android.Views;
 using AndroidX.VectorDrawable.Graphics.Drawable;
 using MvvmCross;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
+using MvvmCross.Platforms.Android.Views;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using NLog;
@@ -79,6 +81,12 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             TryWriteMemoryInformationToLog($"Destroyed Activity {this.GetType().Name}");
             base.OnDestroy();
+            
+            //cleanup cache to remove disposed viewmodel
+            if (Mvx.IoCProvider.TryResolve<IMvxSingleViewModelCache>(out var cache))
+            {
+                cache.GetAndClear(null);
+            }
         }
 
         protected void SetMenuItemIcon(IMenu menu, int itemId, int drawableId)
