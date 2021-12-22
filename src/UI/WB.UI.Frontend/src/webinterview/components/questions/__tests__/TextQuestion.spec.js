@@ -1,4 +1,16 @@
-import * as MockBaseQuestion from './BaseQuestion.base'
+import Vue from 'vue'
+
+Vue.$t = function(str) {
+    return str
+}
+Vue.prototype.$t = function(str) {
+    return str
+}
+
+import '~/webinterview/components'
+import '~/webinterview/components/questions'
+import '~/webinterview/components/questions/parts'
+import '../parts'
 import { mount, createLocalVue  } from '@vue/test-utils'
 import TextQuestion from '../TextQuestion.vue'
 import Question from '../Question.vue'
