@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -55,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private CompositeCollection<ICompositeEntity> prefilledQuestions;
         public CompositeCollection<ICompositeEntity> PrefilledQuestions
         {
-            get { return this.prefilledQuestions; }
+            get => this.prefilledQuestions; 
             set { this.prefilledQuestions = value; this.RaisePropertyChanged(); }
         }
 
@@ -122,11 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             base.Dispose();
 
-            var disposableItems = this.prefilledQuestions.OfType<IDisposable>().ToArray();
-            foreach (var disposableItem in disposableItems)
-            {
-                disposableItem.Dispose();
-            }
+            PrefilledQuestions.ForEach(viewModel=> viewModel.DisposeIfDisposable());
         }
     }
 }

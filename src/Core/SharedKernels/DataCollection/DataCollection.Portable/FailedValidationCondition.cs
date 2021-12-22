@@ -1,6 +1,8 @@
+using System;
+
 namespace WB.Core.SharedKernels.DataCollection
 {
-    public class FailedValidationCondition
+    public class FailedValidationCondition: IEquatable<FailedValidationCondition>
     {
         public FailedValidationCondition()
         {

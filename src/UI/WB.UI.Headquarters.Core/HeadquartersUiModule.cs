@@ -62,6 +62,7 @@ namespace WB.UI.Headquarters
             registry.Bind<ExtraHeadersApiFilter>();
             registry.Bind<IPdfInterviewGenerator, PdfInterviewGenerator>();
             registry.Bind<IWebInterviewTimezoneSetter, WebInterviewTimezoneSetter>();
+            registry.Bind<ITokenProvider, TokenProvider>();
 
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {

@@ -20,13 +20,15 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             {
                 Children = new List<IComposite>()
                 {
-                    new NumericQuestion("first")
+                    new NumericQuestion()
                     {
+                        QuestionText = "first",
                         PublicKey = firstQuestionId,
                         StataExportCaption = variableName
                     },
-                    new NumericQuestion("second")
+                    new NumericQuestion()
                     {
+                        QuestionText = "second",
                         PublicKey = secondQuestionId,
                         StataExportCaption = variableName
                     }

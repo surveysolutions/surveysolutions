@@ -10,6 +10,7 @@ using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -233,23 +234,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             var prefilledQuestionsLocal = PrefilledReadOnlyEntities;
-            foreach (var prefilledQuestion in prefilledQuestionsLocal)
-            {
-                prefilledQuestion.Dispose();
-            }
+            prefilledQuestionsLocal.ForEach(viewModel => viewModel.DisposeIfDisposable());
 
             var prefilledEditable = PrefilledEditableEntities;
-            foreach (var prefilledEditableEntity in prefilledEditable)
-            {
-                prefilledEditableEntity.DisposeIfDisposable();
-            }
+            prefilledEditable.ForEach(viewModel => viewModel.DisposeIfDisposable());
             
             var commentedEntities = CommentedEntities;
-            foreach (var commentedEntity in commentedEntities)
-            {
-                commentedEntity.DisposeIfDisposable();
-            }
-
+            commentedEntities.ForEach(viewModel => viewModel.DisposeIfDisposable());
+            
             Name?.Dispose();
         }
     }

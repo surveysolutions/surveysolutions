@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                          instructions: "old instructions",
                          enablementCondition: "old condition");
 
-            questionnaire.UpdateDateTimeQuestion(command);
+            Assert.DoesNotThrow(()=> questionnaire.UpdateDateTimeQuestion(command));
         }
 
         private static Questionnaire questionnaire;

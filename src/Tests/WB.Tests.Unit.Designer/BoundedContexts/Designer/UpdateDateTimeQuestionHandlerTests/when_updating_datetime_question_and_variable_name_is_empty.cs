@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                         instructions: "old instructions",
                         enablementCondition: "old condition");
 
-            questionnaire.UpdateDateTimeQuestion(command);
+            Assert.DoesNotThrow(() => questionnaire.UpdateDateTimeQuestion(command));
         }
 
         private static Questionnaire questionnaire;

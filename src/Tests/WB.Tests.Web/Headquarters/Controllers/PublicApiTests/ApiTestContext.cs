@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             IUserViewFactory userViewFactory = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences = null,
             IStatefulInterviewRepository statefulInterviewRepository = null,
-            IStatefullInterviewSearcher statefullInterviewSearcher = null,
+            IStatefulInterviewSearcher statefulInterviewSearcher = null,
             IQuestionnaireStorage questionnaireStorage = null,
             IPdfInterviewGenerator pdfInterviewGenerator = null,
             ICalendarEventService calendarEventService = null)
@@ -91,7 +91,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 authorizedUser: authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 Mock.Of<Microsoft.Extensions.Logging.ILogger<InterviewsPublicApiController>>(),
-                statefullInterviewSearcher: statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>(),
+                statefulInterviewSearcher: statefulInterviewSearcher ?? Mock.Of<IStatefulInterviewSearcher>(),
                 diagnosticsFactory: Mock.Of<IInterviewDiagnosticsFactory>(),
                 pdfInterviewGenerator: pdfInterviewGenerator ?? Mock.Of<IPdfInterviewGenerator>(),
                 calendarEventService: calendarEventService ?? Mock.Of<ICalendarEventService>(),

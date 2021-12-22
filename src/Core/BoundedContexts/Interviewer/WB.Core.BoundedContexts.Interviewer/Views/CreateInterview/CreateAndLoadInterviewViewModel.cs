@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             ICalendarEventStorage calendarEventStorage,
             IViewModelEventRegistry viewModelEventRegistry) 
             : base(interviewerPrincipal, viewModelNavigationService, interviewRepository, commandService, logger,
-                userInteractionService, interviewsRepository, serializer, auditLogService)
+                userInteractionService, interviewsRepository, serializer, auditLogService, viewModelEventRegistry)
         {
             this.assignmentsRepository = assignmentsRepository;
             this.interviewerPrincipal = interviewerPrincipal;
@@ -95,6 +95,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 
         private async Task CreateAndNavigateToInterviewAsync()
         {
+            this.viewModelEventRegistry.WriteToLogInfoBySubscribers();
             this.viewModelEventRegistry.Reset();
             var interviewId = await CreateInterviewAsync(this.AssignmentId, this.InterviewId);
             if (!interviewId.HasValue)

@@ -29,11 +29,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
                 Create.Entity.Roster(rosterId: parentRosterGroupId, rosterSizeQuestionId: questionWhichIncreasesRosterSizeId, children: new IComposite[]
                 {
-                    Create.Entity.Question(questionId: questionFromRosterId),
+                    Create.Entity.TextQuestion(questionId: questionFromRosterId),
 
                     Create.Entity.Roster(rosterId: nestedRosterGroupId, rosterSizeQuestionId: questionWhichIncreasesRosterSizeId, children: new IComposite[]
                     {
-                        Create.Entity.Question(questionId: questionFromNestedRosterId),
+                        Create.Entity.TextQuestion(questionId: questionFromNestedRosterId),
                     }),
                 }),
             }));

@@ -116,35 +116,6 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
             return string.Join(",", this.values);
         }
 
-        public static implicit operator ValueVector<T>(T[] values)
-        {
-            return new ValueVector<T>(values);
-        }
-
-        public static implicit operator ValueVector<T>(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-                return null;
-            if (value == Empty)
-            {
-                return new ValueVector<T>();
-            }
-           
-            var values = value.Split(',');
-
-            var result = (IEnumerable<T>) values.Select(v =>
-            {
-                
-                    if (typeof (T) == typeof (Guid))
-                        return Guid.Parse(v);
-
-                    throw new Exception("Not supported type");
-                
-            }).ToList();
-
-            return new ValueVector<T>(result);
-        }
-
         private const string Empty = "Empty";
     }
 }

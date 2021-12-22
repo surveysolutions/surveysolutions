@@ -67,7 +67,6 @@ namespace WB.Tests.Unit.Designer
             question.QuestionText = string.Format("Question {0}", questionId);
 
             question.PublicKey = questionId;
-            question.QuestionType = type;
             question.AnswerOrder = answerOrder;
             question.Featured = featured;
             question.Answers = options;

@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
             multyOptionRosterGroupId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             multyOptionQuestionId = new Guid("1111BBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
-                new MultyOptionsQuestion() { PublicKey = multyOptionQuestionId, QuestionType = QuestionType.MultyOption },
+                new MultyOptionsQuestion() { PublicKey = multyOptionQuestionId },
                 new Group("Roster")
                 {
                     PublicKey = multyOptionRosterGroupId,

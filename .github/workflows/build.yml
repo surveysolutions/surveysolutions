@@ -6,7 +6,7 @@ on:
       build_number:
         description: 'Build Number'
         default: 'auto'
-        required: false
+        required: true
         type: string
 
 env:
@@ -18,8 +18,6 @@ jobs:
 
     outputs:
       build_number: ${{ steps.vars.outputs.build_number }}
-      version: ${{ steps.vars.outputs.version }}
-      info_version: ${{ steps.vars.outputs.info_version }}
       environment: ${{ steps.vars.outputs.environment }}
 
     steps:
@@ -31,14 +29,11 @@ jobs:
           if [[ "${build_number}" == "auto" ]]; then
             build_number=${{ github.run_number }}
           fi
-          ver=$(cat ./src/.version | awk -F. '{printf "%s.%02d.%d\n", $1, $2, $3}')
           environment="development"
           if [ "${{ github.ref_name }}" == "release" ] ; then
             environment="release"
           fi
-          echo ::set-output name=build_number::${build_number}
-          echo ::set-output name=version::$ver.${build_number}
-          echo "::set-output name=info_version::$ver (build ${build_number})"
+          echo "::set-output name=build_number::${build_number}"
           echo "::set-output name=environment::${environment}"
 
   tests:
@@ -154,6 +149,13 @@ jobs:
           name: Mobile Apps
           path: installer/artifacts
 
+      - name: Save Code Signing Certificate
+        if: ${{ needs.prepare.outputs.environment == 'release' }}
+        run: |
+          New-Item -ItemType directory -Path certificate
+          Set-Content -Path certificate\certificate.txt -Value '${{ secrets.CODESIGNING_CERTIFICATE }}'
+          certutil -decode certificate\certificate.txt certificate\certificate.pfx
+
       - name: Build Headquarters
         run: ./.build.ps1 PackageHqOffline -BuildNumber ${{ needs.prepare.outputs.build_number }}
 
@@ -163,11 +165,38 @@ jobs:
           Expand-Archive -Path artifacts/WB.UI.Headquarters.Offline.zip -DestinationPath "HQsources"
 
       - name: Build installer
+        id: build-installer
         run: |
           ./installer/build/build-installation.ps1 -HQSourcePath "HQsources" -ClientPath ${{ steps.download.outputs.download-path }} 
+          $FileName = Get-ChildItem ./installer/src/SurveySolutionsBootstrap/bin/Release/SurveySolutions*.exe `
+            | Select-Object -ExpandProperty FullName
+          Write-Host ""::set-output name=filename::$FileName"
+      - name: Sign the installer
+        if: ${{ needs.prepare.outputs.environment == 'release' }}
+        run: |
+          & 'C:/Program Files (x86)/Windows Kits/10/bin/x86/signtool.exe' sign `
+            /f certificate\certificate.pfx `
+            /p '${{ secrets.CODESIGNING_CERTIFICATE_PASSPHRASE }}' `
+            /tr http://timestamp.sectigo.com /td sha256 /fd sha256 `
+            ${{ steps.build-installer.outputs.filename }}
+
+      - name: Create draft release
+        if: ${{ needs.prepare.outputs.environment == 'release' }}
+        run: |
+          $Version = Get-Content -Path ./src/.version
+          $Title = if ($Version.split(".").count -eq 2) { "Release $Version" } else { "Hotfix $Version" }
+          & gh release create "v$Version" `
+          --target release `
+          --draft `
+          --title "$Title" `
+          --notes '""' `
+          --repo ${{ github.repository }} `
+          "${{ steps.file.outputs.filename }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish
         uses: actions/upload-artifact@v2
         with:
           name: Windows Installer
-          path: ./installer/src/SurveySolutionsBootstrap/bin/Release/SurveySolutions*.exe
+          path: ${{ steps.build-installer.outputs.filename }}

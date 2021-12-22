@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
                 NullValueHandling = NullValueHandling.Ignore,
                 FloatParseHandling = FloatParseHandling.Decimal,
                 Formatting = Formatting.None,
-                Binder = new OldToNewAssemblyRedirectSerializationBinder()
+                SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
             };
 
             data.Add(new Tuple<string,string>(

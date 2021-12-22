@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.Group(groupId: Id.gA),
-                Create.Entity.Question(questionId: Id.gB),
+                Create.Entity.TextQuestion(questionId: Id.gB),
                 Create.Entity.StaticText(publicKey: Id.gC)
             });
             questionnaireDocument.HideIfDisabled = true;

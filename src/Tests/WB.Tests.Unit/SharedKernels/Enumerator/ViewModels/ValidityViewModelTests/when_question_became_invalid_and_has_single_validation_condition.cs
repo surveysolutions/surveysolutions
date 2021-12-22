@@ -12,12 +12,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
 {
     public class when_question_became_invalid_and_has_single_validation_condition
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () 
+        {
             questionIdentity = Create.Entity.Identity(Guid.NewGuid(), RosterVector.Empty);
-            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.Question(questionId: questionIdentity.Id,
-                validationConditions: new List<ValidationCondition>
+            QuestionnaireDocument questionnaire = 
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextQuestion(questionId: questionIdentity.Id,
+                        validationConditions: new List<ValidationCondition>
                 {
-                    new ValidationCondition {Expression = "validation 1", Message = "message 1"},
+                    new() {Expression = "validation 1", Message = "message 1"},
                 }));
             
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);

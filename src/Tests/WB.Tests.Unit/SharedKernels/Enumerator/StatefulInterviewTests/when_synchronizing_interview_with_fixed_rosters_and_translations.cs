@@ -37,11 +37,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 questionnaireRepository: questionnaireRepository, shouldBeInitialized: false
                 );
 
-            var rosterSynchronizationDtoses = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
-            var rosters = new List<RosterSynchronizationDto> {Create.Entity.RosterSynchronizationDto(rosterId, RosterVector.Empty, 0, rosterTitle: rosterTitle)};
-            rosterSynchronizationDtoses.Add(Create.Entity.InterviewItemId(rosterId, Create.Entity.RosterVector(0)), rosters.ToArray());
-
-            syncDto = Create.Entity.InterviewSynchronizationDto(questionnaireId, rosterGroupInstances: rosterSynchronizationDtoses);
+            
+            syncDto = Create.Entity.InterviewSynchronizationDto(questionnaireId);
             BecauseOf();
         }
 

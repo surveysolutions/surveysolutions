@@ -18,7 +18,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
 
             questionnaireDocument.Add(new GpsCoordinateQuestion()
             {
-                QuestionType = QuestionType.GpsCoordinates,
                 PublicKey = questionId,
                 StataExportCaption = "gps1",
                 Featured = true
@@ -27,7 +26,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
 
             questionnaireDocument.Add(new NumericQuestion()
             {
-                QuestionType = QuestionType.Numeric,
                 PublicKey = question1Id,
                 StataExportCaption = "q2",
                 IsInteger = true,

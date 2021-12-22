@@ -273,7 +273,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             //show only once
             this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
 
-            if (e.Position == null) { return; }
+            if (e?.Position == null) { return; }
 
             if (this.Map?.Basemap?.BaseLayers.Count <= 0) return;
             

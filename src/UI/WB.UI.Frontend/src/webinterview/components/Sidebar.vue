@@ -79,7 +79,7 @@ export default {
             return {
                 id: 'SidebarCompleted',
                 collapsed: true,
-                title: this.$t('WebInterviewUI.Complete'),
+                title: this.$config.customTexts.completeButton,
                 to: {
                     name: 'complete',
                 },

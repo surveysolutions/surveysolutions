@@ -133,6 +133,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User API Token.
+        /// </summary>
+        public static string ApiTokenTitle {
+            get {
+                return ResourceManager.GetString("ApiTokenTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to API Users.
         /// </summary>
         public static string APIUsers {
