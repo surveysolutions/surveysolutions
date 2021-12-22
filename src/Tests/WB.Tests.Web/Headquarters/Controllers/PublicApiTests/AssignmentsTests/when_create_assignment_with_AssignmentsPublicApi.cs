@@ -337,6 +337,215 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
             Assert.That(result.Result, Has.Property(nameof(StatusCodeResult.StatusCode)).EqualTo(StatusCodes.Status201Created));
         }
 
+
+        [Test]
+        public void when_creating_assignment_with_nested_rosters_data_valid_long_cut_should_be_ok()
+        {
+            when_creating_assignment_with_nested_rosters_data_should_be_created(
+                new List<AssignmentIdentifyingDataItem>
+                {
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g1:N}",
+                        Answer = "2"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g2:N}_0",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g3:N}_0-0",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g4:N}_0-0-0",
+                        Answer = "text"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g2:N}_1",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g3:N}_1-0",
+                        Answer = "1"
+                    },
+                }
+            );
+        }
+        
+        [Test]
+        public void when_creating_assignment_with_nested_rosters_data_invalid_long_should_be_ok()
+        {
+            when_creating_assignment_with_nested_rosters_data_should_be_created(
+                new List<AssignmentIdentifyingDataItem>
+                {
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g1:N}",
+                        Answer = "2"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g2:N}_0",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g3:N}_0-0",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g4:N}_0-0-0",
+                        Answer = "text"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g2:N}_1",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g3:N}_1-0",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g4:N}_1-0-0",
+                        Answer = "text"
+                    },
+                }
+            );
+        }
+        
+        [Test]
+        public void when_creating_assignment_with_nested_rosters_data_invalid_wide_should_be_ok()
+        {
+            when_creating_assignment_with_nested_rosters_data_should_be_created(
+                new List<AssignmentIdentifyingDataItem>
+                {
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g1:N}",
+                        Answer = "2"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g2:N}_0",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g2:N}_1",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g3:N}_0-0",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g3:N}_1-0",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g4:N}_0-0-0",
+                        Answer = "text"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g4:N}_1-0-0",
+                        Answer = "text"
+                    },
+                }
+            );
+        }
+        
+        [Test]
+        public void when_creating_assignment_with_nested_rosters_data_valid_long_should_be_ok()
+        {
+            when_creating_assignment_with_nested_rosters_data_should_be_created(
+                new List<AssignmentIdentifyingDataItem>
+                {
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g1:N}",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g2:N}_0",
+                        Answer = "1"
+                    },
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g3:N}_0-0",
+                        Answer = "1"
+                    },
+
+                    new AssignmentIdentifyingDataItem
+                    {
+                        Identity = $"{Id.g4:N}_0-0-0",
+                        Answer = "text"
+                    },
+                }
+            );
+        }
+
+        
+        protected void when_creating_assignment_with_nested_rosters_data_should_be_created(List<AssignmentIdentifyingDataItem> identifyingDataItems)
+        {
+            var qid = QuestionnaireIdentity.Parse("a2250674-42e6-4756-b394-b86caa62225a$1");
+
+            var hqUser = Abc.Create.Entity.HqUser();
+            
+            this.SetupResponsibleUser(hqUser);
+            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, string.Empty,
+                children: new IComposite[]
+                {
+                    Abc.Create.Entity.Group(children: new IComposite[]{
+                    
+                        Abc.Create.Entity.NumericIntegerQuestion(Id.g1, variable: "n1"),
+                        Abc.Create.Entity.NumericRoster(rosterSizeQuestionId:Id.g1, variable: "r1", children: new IComposite[]
+                        {
+                            Abc.Create.Entity.NumericIntegerQuestion(Id.g2, variable: "n2"),
+                            Abc.Create.Entity.NumericRoster(rosterSizeQuestionId:Id.g2, variable: "r2", children: new IComposite[]
+                            {
+                                Abc.Create.Entity.NumericIntegerQuestion(Id.g3, variable: "n3"),
+                                Abc.Create.Entity.NumericRoster(rosterSizeQuestionId:Id.g3, variable: "r3", children: new IComposite[]
+                                {
+                                    Abc.Create.Entity.TextQuestion(Id.g4, variable: "text")
+                                }),
+                            }),
+                        }),
+                    })
+                }));
+            
+            this.mapper
+                .Setup(m => m.Map<AssignmentDetails>(It.IsAny<Assignment>()))
+                .Returns(new AssignmentDetails());
+
+            var result = this.controller.Create(new CreateAssignmentApiRequest
+            {
+                QuestionnaireId = qid.ToString(),
+                Responsible = hqUser.UserName,
+                IdentifyingData = identifyingDataItems
+            });
+            
+            this.commandService.Verify(ass => ass.Execute(It.IsAny<CreateAssignment>(), null), Times.Once);
+            Assert.That(result.Result, Has.Property(nameof(StatusCodeResult.StatusCode)).EqualTo(StatusCodes.Status201Created));
+        }
+
+
+        
+        
         private IQuestion GetQuestionByType(QuestionType questionType, string variableName, Guid? linked = null)
         {
             return questionType switch
