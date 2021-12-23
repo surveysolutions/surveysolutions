@@ -71,17 +71,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private List<OptionWithSearchTerm> GetLazySuggestions(string filterText)
         {
-            Task.Factory.StartNew(async () =>
+            LoadOptionsAsync(filterText);
+            return null;
+        }
+
+        internal Task LoadOptionsAsync(string filterText)
+        {
+            return Task.Factory.StartNew(async () =>
             {
                 var suggestions = GetSuggestions(filterText);
-            
-                await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-                {
-                    AutoCompleteSuggestions = suggestions;
-                });
-            });
 
-            return null;
+                await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() => { AutoCompleteSuggestions = suggestions; });
+            });
         }
 
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>

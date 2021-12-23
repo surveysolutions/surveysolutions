@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (questionnaire.IsSupportFilteringForOptions(entityIdentity.Id))
             {
-                this.answerNotifier.Init(interviewId, new[] { questionIdentity });
+                this.answerNotifier.Init(interviewId);
                 this.answerNotifier.QuestionAnswered += AnswerNotifierOnQuestionAnswered;
             }
 
