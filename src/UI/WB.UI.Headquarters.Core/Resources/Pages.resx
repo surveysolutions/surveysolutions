@@ -736,8 +736,11 @@
   <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">
     <value>You do not have permission for this action.</value>
   </data>
-  <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
-    <value>Are you sure you want to delete questionnaire? All interviews conducted by current questionnaire will be lost.</value>
+  <data name="GlobalSettings_DeleteQuestionnaireConfirmation" xml:space="preserve">
+    <value>Are you sure you want to delete questionnaire? All interviews conducted by current questionnaire, including the interviews collected on the tablets, even those that you don't see on the server currently will be lost.</value>
+  </data>
+  <data name="GlobalSettings_DeleteQuestionnaireWarning" xml:space="preserve">
+    <value>Warning! This is an irreversible action</value>
   </data>
   <data name="GlobalSettings_NotifyDialogText" xml:space="preserve">
     <value>Your previous request is not complete. Please wait for it to be finished and repeat your operation.</value>

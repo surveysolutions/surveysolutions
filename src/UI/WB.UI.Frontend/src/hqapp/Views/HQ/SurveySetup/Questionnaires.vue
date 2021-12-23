@@ -18,7 +18,8 @@
         <ModalFrame ref="deleteQuestionnaireModal"
             :title="$t('Pages.ConfirmationNeededTitle')">
             <form onsubmit="return false;">
-                <p>{{ $t("Pages.GlobalSettings_DeleteQuestionnareConfirmation" )}}</p>
+                <p style="color: red;"> {{ $t("Pages.GlobalSettings_DeleteQuestionnareWarning" )}}</p>
+                <p>{{ $t("Pages.GlobalSettings_DeleteQuestionnaireConfirmation" )}}</p>
                 <p class="text-danger"
                     v-if="this.deletionWarnMsg">
                     {{deletionWarnMsg}}
