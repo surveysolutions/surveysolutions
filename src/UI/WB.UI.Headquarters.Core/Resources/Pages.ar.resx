@@ -255,7 +255,7 @@
   <data name="GlobalSettings_DeleteMapConfirmation" xml:space="preserve">
     <value>هل تريد حذف الخريطة؟</value>
   </data>
-  <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
+  <data name="GlobalSettings_DeleteQuestionnaireConfirmation" xml:space="preserve">
     <value>هل تريد بالتأكيد حذف الاستبيان؟ ستفقد جميع المقابلات التي تم إجرائها على هذا الاستبيان.</value>
   </data>
   <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">
