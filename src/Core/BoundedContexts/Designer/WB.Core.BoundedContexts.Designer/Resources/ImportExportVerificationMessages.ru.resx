@@ -12,19 +12,19 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
     <data name="QM0001" xml:space="preserve">
-    <value>Вопрос на который ссылаются должен иметь имя переменной</value>
+    <value>Вопрос, на который ссылаются, должен иметь имя переменной</value>
   </data>
     <data name="QM0002" xml:space="preserve">
-    <value>Ростер на который ссылаются должен иметь имя переменной</value>
+    <value>Ростер, на который ссылаются, должен иметь имя переменной</value>
   </data>
     <data name="QM0003" xml:space="preserve">
-    <value>Каскадный вопрос на который ссылаются должен иметь имя переменной</value>
+    <value>Каскадный вопрос, на который ссылаются, должен иметь имя переменной</value>
   </data>
     <data name="QM0004" xml:space="preserve">
-    <value>Вопрос который является источником ростера должен иметь имя переменной</value>
+    <value>Вопрос, который является источником ростера, должен иметь имя переменной</value>
   </data>
     <data name="QM0005" xml:space="preserve">
-    <value>Вопрос который является источником имени ростера должен иметь имя переменной</value>
+    <value>Вопрос, который является источником имени ростера, должен иметь имя переменной</value>
   </data>
     <data name="QM0006" xml:space="preserve">
     <value>Каждый элемент должен иметь уникальный идентификатор, но найдены дубликаты</value>

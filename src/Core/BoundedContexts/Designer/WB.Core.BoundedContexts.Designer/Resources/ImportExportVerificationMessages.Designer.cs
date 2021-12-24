@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked source question must have variable name.
+        ///   Looks up a localized string similar to A source for the linked question must have variable name.
         /// </summary>
         public static string QM0001 {
             get {
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked source roster must have variable name.
+        ///   Looks up a localized string similar to A source for the linked roster must have variable name.
         /// </summary>
         public static string QM0002 {
             get {
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascade source question must have variable name.
+        ///   Looks up a localized string similar to A source for the cascade question must have variable name.
         /// </summary>
         public static string QM0003 {
             get {
@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Variable name must be unique, but found duplicates.
         /// </summary>
-        public static string QM0007 {
+        public static string WB0398 {
             get {
                 return ResourceManager.GetString("WB0398", resourceCulture);
             }

@@ -118,13 +118,13 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
       <data name="QM0001" xml:space="preserve">
-    <value>Linked source question must have variable name</value>
+    <value>A source for the linked question must have variable name</value>
   </data>
     <data name="QM0002" xml:space="preserve">
-    <value>Linked source roster must have variable name</value>
+    <value>A source for the linked roster must have variable name</value>
   </data>
     <data name="QM0003" xml:space="preserve">
-    <value>Cascade source question must have variable name</value>
+    <value>A source for the cascade question must have variable name</value>
   </data>
     <data name="QM0004" xml:space="preserve">
     <value>Roster trigger question must have variable name</value>
