@@ -29,7 +29,7 @@
     <data name="QM0006" xml:space="preserve">
     <value>Каждый элемент должен иметь уникальный идентификатор, но найдены дубликаты</value>
   </data>
-    <data name="WB0398" xml:space="preserve">
+    <data name="QM0007" xml:space="preserve">
     <value>Имя переменной должно быть уникальным, но найдены дубликаты</value>
   </data>
 </root>

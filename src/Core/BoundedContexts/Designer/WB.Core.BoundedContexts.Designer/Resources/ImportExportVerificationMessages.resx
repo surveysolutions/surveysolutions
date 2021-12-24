@@ -135,7 +135,7 @@
     <data name="QM0006" xml:space="preserve">
     <value>Each entity must have unique id, but found duplicates</value>
   </data>
-    <data name="WB0398" xml:space="preserve">
+    <data name="QM0007" xml:space="preserve">
     <value>Variable name must be unique, but found duplicates</value>
   </data>
 

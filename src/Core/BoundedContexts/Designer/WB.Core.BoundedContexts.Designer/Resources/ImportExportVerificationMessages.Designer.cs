@@ -117,9 +117,9 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Variable name must be unique, but found duplicates.
         /// </summary>
-        public static string WB0398 {
+        public static string QM0007 {
             get {
-                return ResourceManager.GetString("WB0398", resourceCulture);
+                return ResourceManager.GetString("QM0007", resourceCulture);
             }
         }
     }
