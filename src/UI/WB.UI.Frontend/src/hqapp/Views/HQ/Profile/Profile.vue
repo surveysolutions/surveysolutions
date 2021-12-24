@@ -320,7 +320,7 @@
                     <li v-if="this.fullModel.deviceAssignmentDate">
                         <b>
                             {{$t('Pages.InterviewerProfile_DeviceAssignmentDate')}}:
-                            {{formatDate(this.fullModel.deviceAssignmentDate)}} (UTC)
+                            {{formatDate(this.fullModel.deviceAssignmentDate, true)}} (UTC)
                             <span
                                 v-if="this.fullModel.registredDevicesCount > 1"
                                 style="color: red;">({{$t('Pages.InterviewerProfile_Relinked')}})</span>
@@ -353,6 +353,14 @@
                     <li>
                         {{$t('Pages.InterviewerProfile_LastSyncronizationDate')}}:
                         {{formatDate(this.fullModel.lastCommunicationDate)}} ({{formatLastCommunication()}})
+                        <b>
+                            <span
+                                v-if="this.fullModel.lastSuccessfulSync != undefined && this.fullModel.lastCommunicationDate == this.fullModel.lastSuccessfulSync.syncDate"
+                                class="success-text">Successful</span>
+                            <span
+                                v-if="this.fullModel.lastFailedSync != undefined && this.fullModel.lastCommunicationDate == this.fullModel.lastFailedSync.syncDate"
+                                class="error-text">Failed</span>
+                        </b>
                     </li>
                 </ul>
             </div>
@@ -528,11 +536,14 @@ export default {
                 }
             )
         },
-        formatDate(d) {
-            return moment.utc(d).format(DateFormats.dateTime)
+        formatDate(date, noTime = false) {
+            return moment.utc(date).format(noTime ? DateFormats.date : DateFormats.dateTime)
         },
-        formatKb(kb) {
-            return kb.toLocaleString() + '&nbsp;' + this.$t('Pages.Kb')
+        formatKb(value) {
+            if (value == null || value == undefined) return value
+            var language =
+                (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
+            return value.toLocaleString(language, {style: 'decimal', maximumFractionDigits : 0}) + '&nbsp;' + this.$t('Pages.Kb')
         },
         ouputBytes(val) {
             return humanFileSize(val, false)
