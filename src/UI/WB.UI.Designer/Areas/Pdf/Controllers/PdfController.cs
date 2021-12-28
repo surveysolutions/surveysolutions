@@ -83,7 +83,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        protected IActionResult RenderQuestionnaire(QuestionnaireRevision questionnaireRevision, Guid requestedByUserId, string requestedByUserName, Guid? translation, string cultureCode, int timezoneOffsetMinutes)
+        protected IActionResult RenderQuestionnaire(QuestionnaireRevision id, Guid requestedByUserId, string requestedByUserName, Guid? translation, string cultureCode, int timezoneOffsetMinutes)
         {
             if (!string.IsNullOrWhiteSpace(cultureCode))
             {
@@ -91,7 +91,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 Thread.CurrentThread.CurrentCulture = culture;
                 Thread.CurrentThread.CurrentUICulture = culture;
             }
-            PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(questionnaireRevision, requestedByUserId, requestedByUserName, translation, false);
+            PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(id, requestedByUserId, requestedByUserName, translation, false);
             if (questionnaire == null)
             {
                 return StatusCode((int)HttpStatusCode.NotFound);
@@ -108,10 +108,10 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             return this.View("RenderQuestionnaireFooter");
         }
 
-        [Route("printpreview/{questionnaireRevision}")]
-        public IActionResult PrintPreview(QuestionnaireRevision questionnaireRevision, Guid? translation)
+        [Route("printpreview/{id}")]
+        public IActionResult PrintPreview(QuestionnaireRevision id, Guid? translation)
         {
-            PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(questionnaireRevision, User.GetId(), User.GetUserName(), translation: translation, useDefaultTranslation: true);
+            PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation: translation, useDefaultTranslation: true);
             if (questionnaire == null)
             {
                 return StatusCode((int)HttpStatusCode.NotFound);
@@ -120,15 +120,15 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         }
 
         [ResponseCache(Duration = 0, NoStore = true)]
-        [Route("download/{questionnaireRevision}")]
-        public IActionResult Download(QuestionnaireRevision questionnaireRevision, Guid? translation)
+        [Route("download/{id}")]
+        public IActionResult Download(QuestionnaireRevision id, Guid? translation)
         {
-            var pdfKey = questionnaireRevision.ToString() + translation;
+            var pdfKey = id.ToString() + translation;
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(pdfKey);
 
             if (pdfGenerationProgress?.IsFinished == true)
             {
-                var questionnaireTitle = this.pdfFactory.LoadQuestionnaireTitle(questionnaireRevision.QuestionnaireId);
+                var questionnaireTitle = this.pdfFactory.LoadQuestionnaireTitle(id.QuestionnaireId);
 
                 byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
 
@@ -148,11 +148,11 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         [ResponseCache (Duration = 0, NoStore = true)]
         [HttpGet]
-        [Route("status/{questionnaireRevision}")]
-        public JsonResult Status(QuestionnaireRevision questionnaireRevision, Guid? translation, int? timezoneOffsetMinutes)
+        [Route("status/{id}")]
+        public JsonResult Status(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
         {
-            var pdfKey = questionnaireRevision.ToString() + translation;
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(questionnaireRevision, translation, timezoneOffsetMinutes));
+            var pdfKey = id.ToString() + translation;
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, timezoneOffsetMinutes));
 
             if (pdfGenerationProgress.IsFailed)
                 return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate));
@@ -175,31 +175,31 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("retry/{questionnaireRevision}")]
-        public ActionResult Retry(QuestionnaireRevision questionnaireRevision, Guid? translation, int? timezoneOffsetMinutes)
+        [Route("retry/{id}")]
+        public ActionResult Retry(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
         {
-            var pdfKey = questionnaireRevision.ToString() + translation;
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(questionnaireRevision, translation, timezoneOffsetMinutes));
+            var pdfKey = id.ToString() + translation;
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, timezoneOffsetMinutes));
             if (pdfGenerationProgress != null && pdfGenerationProgress.IsFailed)
             {
                 GeneratedPdfs.TryRemove(pdfKey, out _);
             }
-            GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(questionnaireRevision, translation, timezoneOffsetMinutes));
+            GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, timezoneOffsetMinutes));
             return this.Json(PdfStatus.InProgress(PdfMessages.Retry));
         }
 
-        private PdfGenerationProgress StartNewPdfGeneration(QuestionnaireRevision questionnaireRevision, Guid? translation, int? timezoneOffsetMinutes)
+        private PdfGenerationProgress StartNewPdfGeneration(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
         {
             var newPdfGenerationProgress = new PdfGenerationProgress();
-            this.StartRenderPdf(questionnaireRevision, newPdfGenerationProgress, translation, timezoneOffsetMinutes ?? 0);
+            this.StartRenderPdf(id, newPdfGenerationProgress, translation, timezoneOffsetMinutes ?? 0);
             return newPdfGenerationProgress;
         }
         
-        private void StartRenderPdf(QuestionnaireRevision questionnaireRevision, PdfGenerationProgress generationProgress, Guid? translation, int timezoneOffsetMinutes)
+        private void StartRenderPdf(QuestionnaireRevision id, PdfGenerationProgress generationProgress, Guid? translation, int timezoneOffsetMinutes)
         {
             var pathToWkHtmlToPdfExecutable = this.pdfSettings.Value.WKHtmlToPdfExecutablePath;
 
-            PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(questionnaireRevision, User.GetId(), User.GetUserName(), translation, false);
+            PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation, false);
             if (questionnaire == null)
             {
                 generationProgress.Fail();
@@ -233,7 +233,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 }
                 catch (Exception exception)
                 {
-                    this.logger.LogError(exception, $"Failed to generate PDF {questionnaireRevision}");
+                    this.logger.LogError(exception, $"Failed to generate PDF {id}");
                     generationProgress.Fail();
                 }
             }, TaskCreationOptions.LongRunning);
@@ -249,9 +249,9 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             return await this.viewRenderingService.RenderToStringAsync(viewName, model, webRoot, routeData);
         }
 
-        private PdfQuestionnaireModel? LoadQuestionnaire(QuestionnaireRevision questionnaireRevision, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
+        private PdfQuestionnaireModel? LoadQuestionnaire(QuestionnaireRevision id, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
         {
-            return this.pdfFactory.Load(questionnaireRevision, requestedByUserId, requestedByUserName, translation, useDefaultTranslation);
+            return this.pdfFactory.Load(id, requestedByUserId, requestedByUserName, translation, useDefaultTranslation);
         }
 
         private long GetFileSizeInKb(string filepath)
