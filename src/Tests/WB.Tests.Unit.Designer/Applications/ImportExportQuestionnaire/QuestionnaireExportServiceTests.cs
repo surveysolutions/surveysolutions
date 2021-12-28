@@ -7,6 +7,7 @@ using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using ApprovalTests.Reporters.TestFrameworks;
 using AutoMapper;
+using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -28,10 +29,11 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         [Test]
         public void when_export_only_questionnaire_should_generate_valid_zip()
         {
-            var questionnaireDocument = Create.QuestionnaireDocumentWithCoverPage(id: Id.g1, children: new []
-            {
-                Create.TextQuestion(Id.g2)
-            });
+            var questionnaireDocument = Create.QuestionnaireDocumentWithCoverPage(id: Id.g1, coverId: Id.g2, 
+                children: new []
+                {
+                    Create.TextQuestion(Id.g3)
+                });
             questionnaireDocument.Title = "New Questionnaire";
             var view = new QuestionnaireView(questionnaireDocument, Enumerable.Empty<SharedPersonView>());
             var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(f =>

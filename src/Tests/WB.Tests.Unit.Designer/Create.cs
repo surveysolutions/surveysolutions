@@ -890,12 +890,12 @@ namespace WB.Tests.Unit.Designer
             return result;
         }
         
-        public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? questionnaireId = null, Attachment[] attachments = null, 
-            Translation[] translations = null, IEnumerable<Macro> macros = null, params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? id = null, Attachment[] attachments = null, 
+            Translation[] translations = null, IEnumerable<Macro> macros = null, Guid? coverId = null, params IComposite[] children)
         {
-            var coverId = Guid.NewGuid();
-            var document = QuestionnaireDocumentWithOneChapter(questionnaireId, coverId, attachments, translations, macros, children);
-            document.CoverPageSectionId = coverId;
+            var cover = coverId ?? Guid.NewGuid();
+            var document = QuestionnaireDocumentWithOneChapter(id, cover, attachments, translations, macros, children);
+            document.CoverPageSectionId = cover;
             return document;
         }
         
