@@ -45,8 +45,10 @@
         $scope.retryGenerate = function () {
             var translationId = $scope.viewModel.selectedTranslation.translationId;
 
-            pdfService.retryExportPdf($scope.questionnaire.questionnaireId,
-                translationId);
+            var questionnaireId = $scope.questionnaire.previewRevision
+                ? $scope.questionnaire.questionnaireId + '$' + $scope.questionnaire.previewRevision
+                : $scope.questionnaire.questionnaireId
+            pdfService.retryExportPdf(questionnaireId, translationId);
 
             updateExportPdfStatus(translationId);
         };
@@ -60,8 +62,10 @@
 
         var updateExportPdfStatus = function (translationId) {
 
-            var request = pdfService.updateExportPdfStatus($scope.questionnaire.questionnaireId,
-                translationId);
+            var questionnaireId = $scope.questionnaire.previewRevision
+                ? $scope.questionnaire.questionnaireId + '$' + $scope.questionnaire.previewRevision
+                : $scope.questionnaire.questionnaireId
+            var request = pdfService.updateExportPdfStatus(questionnaireId, translationId);
 
             request.then(function(result) {
                 onExportPdfStatusReceived(result.data, translationId);
@@ -92,8 +96,10 @@
             }
             else {
                 $scope.cancel();
-                window.location = '../../pdf/download/' + $scope.questionnaire.questionnaireId +
-                    '?translation=' + translationId;
+                var questionnaireId = $scope.questionnaire.previewRevision
+                    ? $scope.questionnaire.questionnaireId + '$' + $scope.questionnaire.previewRevision
+                    : $scope.questionnaire.questionnaireId
+                window.location = '../../pdf/download/' + questionnaireId + '?translation=' + translationId;
             }
         };
 });
