@@ -23,6 +23,9 @@ namespace WB.UI.Headquarters.HealthChecks
                 .AddCheck<ExportServiceConnectivityCheck>("export_service_connectivity_check")
                 //.AddCheck<BrokenPackagesCheck>("broken_packages_check")
                 .AddCheck<DatabaseConnectionCheck>("database_connection_check");
+                
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                checks.AddCheck<AspTempDirectoryAccessCheck>("temp folder permissions");
         }
     }
 }
