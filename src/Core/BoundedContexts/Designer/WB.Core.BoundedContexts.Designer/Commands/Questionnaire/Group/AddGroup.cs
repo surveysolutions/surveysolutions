@@ -11,10 +11,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
         public AddGroup(Guid questionnaireId, Guid groupId, Guid responsibleId,
             string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool hideIfDisabled,
             Guid? parentGroupId, bool isRoster, RosterDisplayMode displayMode, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] fixedRosterTitles, Guid? rosterTitleQuestionId,
-             bool customRosterTitle, int? index = null)
+            int? index = null)
             : base(
                 questionnaireId, groupId, responsibleId, title, variableName, rosterSizeQuestionId, condition, hideIfDisabled, isRoster, rosterSizeSource,
-                fixedRosterTitles, rosterTitleQuestionId, displayMode, customRosterTitle)
+                fixedRosterTitles, rosterTitleQuestionId, displayMode)
         {
             this.ParentGroupId = parentGroupId;
             this.Index = index;
