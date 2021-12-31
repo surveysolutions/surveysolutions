@@ -1261,7 +1261,7 @@ namespace WB.Tests.Unit.Designer
                 FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null, RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
                 => new UpdateGroup(questionnaireId, groupId, responsibleId ?? Guid.NewGuid(), title, variableName,
                     rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
-                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, displayMode, false);
+                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, displayMode);
 
             public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, 
                 string name, string expression, string label = null, Guid? userId = null, bool doNotExport = false)
