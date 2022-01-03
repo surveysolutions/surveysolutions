@@ -116,8 +116,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.UpdateGroup(hideIfDisabled: true, groupId: groupId, responsibleId: responsibleId,
                 title: "title", variableName: "groupVarName", 
                 condition: null, description: null, rosterSizeQuestionId: null,
-                isRoster: true, rosterFixedTitles: new FixedRosterTitleItem[] { new FixedRosterTitleItem("1", "1"), new FixedRosterTitleItem("2", "2"), }, rosterSizeSource: RosterSizeSourceType.FixedTitles, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat, 
-                customRosterTitle: false);
+                isRoster: true, rosterFixedTitles: new FixedRosterTitleItem[] { new FixedRosterTitleItem("1", "1"), new FixedRosterTitleItem("2", "2"), }, rosterSizeSource: RosterSizeSourceType.FixedTitles, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
         }
 
 

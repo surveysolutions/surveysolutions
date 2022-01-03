@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null,
                 description: null, condition: null, hideIfDisabled: false, rosterSizeQuestionId: rosterSizeQuestionId,
                 isRoster: true, rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null,
-                rosterTitleQuestionId: rosterTitleQuestionId, displayMode: RosterDisplayMode.Flat, customRosterTitle: false);
+                rosterTitleQuestionId: rosterTitleQuestionId, displayMode: RosterDisplayMode.Flat);
 
 
         [NUnit.Framework.Test] public void should_contains_group_with_GroupId_specified () =>

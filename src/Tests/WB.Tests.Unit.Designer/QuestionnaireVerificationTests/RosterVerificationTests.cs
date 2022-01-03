@@ -427,13 +427,33 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         [Test]
-        public void should_not_allow_maxtrix_roster_to_have_custom_title()
+        public void should_not_allow_matrix_roster_to_have_titletitle_variable()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.Roster(displayMode: RosterDisplayMode.Matrix,
+                        title: "title - %rostertitle% - end")
+                )
+                .ExpectError("WB0303");
+        }
+        
+        [Test]
+        public void should_not_allow_matrix_roster_to_have_custom_title()
         {
             Create.QuestionnaireDocumentWithOneChapter(
                     Create.Roster(displayMode: RosterDisplayMode.Matrix,
                         customRosterTitle: true)
                 )
                 .ExpectError("WB0303");
+        }
+
+        [Test]
+        public void should_not_allow_table_roster_to_have_titletitle_variable()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.Roster(displayMode: RosterDisplayMode.Table,
+                        title: "title - %rostertitle% - end")
+                )
+                .ExpectError("WB0304");
         }
 
         [Test]

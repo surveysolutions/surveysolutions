@@ -501,8 +501,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             RosterSizeSourceType rosterSizeSource, 
             FixedRosterTitleItem[]? rosterFixedTitles, 
             Guid? rosterTitleQuestionId,
-            RosterDisplayMode displayMode,
-            bool customRosterTitle)
+            RosterDisplayMode displayMode)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -532,7 +531,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     groupToUpdate.FixedRosterTitles = fixedTitles;
                     groupToUpdate.RosterTitleQuestionId = rosterTitleQuestionId;
                     groupToUpdate.IsRoster = true;
-                    groupToUpdate.CustomRosterTitle = customRosterTitle;
+                    groupToUpdate.CustomRosterTitle = false;
                 });
             }
             else

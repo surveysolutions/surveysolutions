@@ -1436,9 +1436,6 @@
   <data name="HelpDoNotExport" xml:space="preserve">
     <value>Не экспортировать значение этой переменной</value>
   </data>
-  <data name="HelpCustomTitle" xml:space="preserve">
-    <value>Позволяет переопределить шаблон для кнопки ростера и изменить текст подстановки %rostertitle%</value>
-  </data>
   <data name="VariableNoExport" xml:space="preserve">
     <value>Не экспортировать</value>
   </data>
