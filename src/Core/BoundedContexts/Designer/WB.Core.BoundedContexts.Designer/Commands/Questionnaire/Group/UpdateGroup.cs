@@ -12,10 +12,9 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
             string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool hideIfDisabled, bool isRoster,
             RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] fixedRosterTitles,
             Guid? rosterTitleQuestionId, 
-            RosterDisplayMode displayMode,
-            bool customRosterTitle)
+            RosterDisplayMode displayMode)
             : base(
                 questionnaireId, groupId, responsibleId, title, variableName, rosterSizeQuestionId, condition, hideIfDisabled, isRoster, rosterSizeSource,
-                fixedRosterTitles, rosterTitleQuestionId, displayMode, customRosterTitle) {}
+                fixedRosterTitles, rosterTitleQuestionId, displayMode) {}
     }
 }

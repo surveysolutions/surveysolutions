@@ -170,7 +170,7 @@ jobs:
           ./installer/build/build-installation.ps1 -HQSourcePath "HQsources" -ClientPath ${{ steps.download.outputs.download-path }} 
           $FileName = Get-ChildItem ./installer/src/SurveySolutionsBootstrap/bin/Release/SurveySolutions*.exe `
             | Select-Object -ExpandProperty FullName
-          Write-Host ""::set-output name=filename::$FileName"
+          Write-Host "::set-output name=filename::$FileName"
       - name: Sign the installer
         if: ${{ needs.prepare.outputs.environment == 'release' }}
         run: |

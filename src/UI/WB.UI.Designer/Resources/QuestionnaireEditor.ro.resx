@@ -411,9 +411,6 @@
   <data name="HelpCoverPage" xml:space="preserve">
     <value>Prima secțiune a fiecărui chestionar conține întrebări de identificare care sunt afișate și în tablourile de bord ale anchetatorilor și ale supervizorilor.</value>
   </data>
-  <data name="HelpCustomTitle" xml:space="preserve">
-    <value>Permite suprascrierea șablonului pentru butonul listei și furnizarea de text personalizat pentru% rostertitle%</value>
-  </data>
   <data name="HelpDefaultDate" xml:space="preserve">
     <value>Această dată va fi afișată ca data de început pentru selectare pe o tabletă</value>
   </data>

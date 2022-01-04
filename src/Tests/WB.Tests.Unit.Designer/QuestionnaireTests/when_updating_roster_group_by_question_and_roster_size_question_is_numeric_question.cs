@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
         private void BecauseOf() =>
             questionnaire.UpdateGroup(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, hideIfDisabled: false, isRoster: true,
-                rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat, false);
+                rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
 
 
 
