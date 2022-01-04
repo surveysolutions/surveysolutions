@@ -14,10 +14,9 @@
     "@babel/preset-env": "^7.14.2",
     "@babel/runtime": "^7.14.0",
     "autoprefixer": "^10.2.5",
-    "browser-sync": "^2.26.14",
+    "browser-sync": "^2.27.7",
     "glob": "^7.1.7",
     "gulp": "^4.0.2",
-    "gulp-angular-embed-templates": "^2.3.0",
     "gulp-angular-templatecache": "^3.0.0",
     "gulp-append-prepend": "^1.0.9",
     "gulp-babel": "^8.0.0",
@@ -32,7 +31,7 @@
     "gulp-ignore": "^3.0.0",
     "gulp-inject": "^5.0.5",
     "gulp-jshint": "^2.1.0",
-    "gulp-less": "^4.0.1",
+    "gulp-less": "^5.0.0",
     "gulp-load-plugins": "^2.0.6",
     "gulp-ng-annotate": "^2.1.0",
     "gulp-postcss": "^9.0.0",
@@ -46,6 +45,7 @@
     "jshint": "^2.12.0",
     "merge2": "^1.4.1",
     "node-sass": "^6.0.0",
+    "npm-force-resolutions": "0.0.10",
     "plugin-error": "^1.0.1",
     "postcss": "^8.2.15",
     "rimraf": "^3.0.2",
@@ -56,7 +56,9 @@
     "dev": "gulp",
     "build": "gulp --production",
     "preproduction": "bower install --force",
-    "testDeploy": "powershell New-Item -Path ./bin/WB.UI.Designer/app_offline.htm; rimraf ./bin/WB.UI.Designer; New-Item -Path ./bin/WB.UI.Designer/app_offline.htm -ErrorAction SilentlyIgnore;gulp --production; dotnet publish --self-contained -r win-x64 -o ./bin/WB.UI.Designer -c Release; Remove-Item ./bin/WB.UI.Designer/app_offline.htm"
+    "testDeploy": "powershell New-Item -Path ./bin/WB.UI.Designer/app_offline.htm; rimraf ./bin/WB.UI.Designer; New-Item -Path ./bin/WB.UI.Designer/app_offline.htm -ErrorAction SilentlyIgnore;gulp --production; dotnet publish --self-contained -r win-x64 -o ./bin/WB.UI.Designer -c Release; Remove-Item ./bin/WB.UI.Designer/app_offline.htm",
+    "preinstall": "npx npm-force-resolutions",
+    "postshrinkwrap": "npx npm-force-resolutions"
   },
   "author": "",
   "license": "ISC",
@@ -115,5 +117,14 @@
     "vuex": "^3.1.1",
     "xss": "^1.0.6",
     "zebra_datepicker": "^1.9.12"
+  },
+  "resolutions": {
+    "glob-parent": ">=5.1.2",
+    "gulp-footer": "2.1.0",
+    "json-schema": ">=0.4.0",
+    "lodash.template": "4.5.0",
+    "merge": ">=2.1.1",
+    "set-value": ">=4.0.1",
+    "trim-newlines": ">=3.0.1"
   }
 }
