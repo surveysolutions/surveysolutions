@@ -203,7 +203,6 @@
         "node_modules/jquery.fancytree/dist/jquery.fancytree-all-deps.js",
         "questionnaire/external/jquery.fancytree.contextMenu.js",
         "node_modules/jquery-contextmenu/dist/jquery.contextMenu.js",
-        "Content/plugins/bootbox.min.js",
         "Scripts/custom/public-folders.js",
         "node_modules/jquery.fancytree/dist/skin-bootstrap/ui.fancytree.min.css",
         "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css"
