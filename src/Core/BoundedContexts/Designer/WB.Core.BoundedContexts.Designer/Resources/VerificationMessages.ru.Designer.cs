@@ -1727,15 +1727,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Первая секция не может иметь условия включения..
-        /// </summary>
-        public static string WB0263_FirstChapterHasEnablingCondition {
-            get {
-                return ResourceManager.GetString("WB0263_FirstChapterHasEnablingCondition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. .
         /// </summary>
         public static string WB0264_GpsQuestion {

@@ -3,6 +3,7 @@ using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using ActionExecutingContext = Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext;
 using ActionFilterAttribute = Microsoft.AspNetCore.Mvc.Filters.ActionFilterAttribute;
 
@@ -18,9 +19,9 @@ namespace WB.UI.Designer.Code
 
     public class LocalOrDevelopmentAccessOnlyFilter: ActionFilterAttribute
     {
-        private readonly IHostingEnvironment env;
+        private readonly IWebHostEnvironment env;
 
-        public LocalOrDevelopmentAccessOnlyFilter(IHostingEnvironment env)
+        public LocalOrDevelopmentAccessOnlyFilter(IWebHostEnvironment env)
         {
             this.env = env;
         }

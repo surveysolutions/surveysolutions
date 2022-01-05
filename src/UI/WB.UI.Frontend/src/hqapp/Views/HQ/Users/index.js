@@ -16,6 +16,7 @@ import ResetRecoveryCodes from './ResetRecoveryCodes'
 import Disable2fa from './Disable2fa'
 import ChangePassword from './ChangePassword'
 import ProfileLayout from './ProfileLayout'
+import ApiTokens from './ApiTokens'
 
 Vue.component('ProfileLayout', ProfileLayout)
 
@@ -103,6 +104,12 @@ export default class UsersComponent {
         },
         {
             path: '/ChangePassword/', component: ChangePassword,
+        },
+        {
+            path: '/ApiTokens/:userId', component: ApiTokens, name: 'usersApiTokens',
+        },
+        {
+            path: '/ApiTokens', component: ApiTokens,
         }]
     }
 }

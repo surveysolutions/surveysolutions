@@ -1,5 +1,5 @@
 {
-    "name": "hello-world",
+    "name": "suso-frontend",
     "version": "0.1.0",
     "private": true,
     "scripts": {
@@ -10,7 +10,8 @@
         "dev": "vue-cli-service build --mode development",
         "hot": "vue-cli-service build --mode development --watch",
         "styles": "vue-cli-service build --css",
-        "styles:dev": "vue-cli-service build --css --mode development"
+        "styles:dev": "vue-cli-service build --css --mode development",
+        "test": "jest"
     },
     "dependencies": {
         "@google/markerclustererplus": "^4.0.1",
@@ -20,14 +21,14 @@
         "ag-grid-vue": "^25.3.0",
         "append-query": "^2.1.1",
         "autonumeric": "^4.5.3",
-        "axios": "^0.21.1",
+        "axios": "^0.21.2",
         "bootbox": "^5.4.0",
         "bootstrap": "^3.3.7",
         "bootstrap-sass": "^3.4.1",
         "bootstrap-select": "^1.13.15",
         "chart.js": "^2.9.4",
         "core-js": "^3.13.1",
-        "datatables.net": "^1.10.24",
+        "datatables.net": "^1.11.3",
         "datatables.net-select": "^1.3.3",
         "filemanager-webpack-plugin": "^2.0.2",
         "flatpickr": "^4.6.9",
@@ -66,9 +67,12 @@
         "vuex-router-sync": "^5.0.0"
     },
     "devDependencies": {
+        "@vue/cli": "^4.5.15",
         "@vue/cli-plugin-babel": "^4.5.13",
         "@vue/cli-plugin-eslint": "^4.5.13",
-        "@vue/cli-service": "^4.5.13",
+        "@vue/cli-plugin-unit-jest": "^4.5.15",
+        "@vue/cli-service": "^4.5.15",
+        "@vue/test-utils": "^1.3.0",
         "babel-eslint": "^10.0.3",
         "clean-webpack-plugin": "^3.0.0",
         "cross-env": "^6.0.3",
@@ -77,12 +81,14 @@
         "eslint-plugin-vue": "^6.1.2",
         "extra-watch-webpack-plugin": "^1.0.3",
         "graphql-tag": "^2.12.4",
+        "jest": "^27.4.0",
         "mini-css-extract-plugin": "^0.9.0",
         "node-sass": "5.0.0",
         "rimraf": "3.0.2",
         "sass-loader": "10.1.0",
         "stats-webpack-plugin": "^0.7.0",
         "vue-cli-plugin-apollo": "~0.22.2",
+        "vue-jest": "^3.0.7",
         "vue-property-decorator": "^8.2.2",
         "vue-template-compiler": "^2.6.13",
         "webpack-build-notifier": "^2.2.1",
@@ -105,6 +111,11 @@
         "ie > 10"
     ],
     "jest": {
+        "verbose": true,
+        "testEnvironment": "JsDom",
+        "setupFiles": [
+            "./tests/setup-jest.js"
+        ],
         "moduleFileExtensions": [
             "js",
             "jsx",
@@ -117,13 +128,15 @@
             "^.+\\.jsx?$": "babel-jest"
         },
         "moduleNameMapper": {
-            "^@/(.*)$": "<rootDir>/src/$1"
+            "^@/(.*)$": "<rootDir>/src/$1",
+            "^~/(.*)$": "<rootDir>/src/$1"
         },
         "snapshotSerializers": [
             "jest-serializer-vue"
         ],
         "testMatch": [
-            "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
+            "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)",
+            "**/__tests__/**/*.(test|spec).(js|jsx|ts|tsx)"
         ],
         "testURL": "http://localhost/",
         "testPathIgnorePatterns": [

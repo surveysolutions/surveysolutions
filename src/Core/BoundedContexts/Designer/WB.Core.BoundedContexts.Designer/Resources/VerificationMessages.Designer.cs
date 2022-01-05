@@ -1727,15 +1727,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First section cannot have enabling condition..
-        /// </summary>
-        public static string WB0263_FirstChapterHasEnablingCondition {
-            get {
-                return ResourceManager.GetString("WB0263_FirstChapterHasEnablingCondition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You have a GPS question. Tablets must support geolocation to be used with this questionnaire..
         /// </summary>
         public static string WB0264_GpsQuestion {

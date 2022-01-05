@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
             ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '70' is incorrect because answer is greater than Roster upper bound '60'."),
                 Times.Once);
 
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
+            AnsweringViewModelMock.Verify(x => x.SendQuestionCommandAsync(It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
 
             integerModel.Answer.Should().Be(70);
         }

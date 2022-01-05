@@ -27,10 +27,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
         private void BecauseOf() =>
                 questionnaire.UpdateGroup(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, hideIfDisabled: false, isRoster: true,
-                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat, false);
+                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
 
         [NUnit.Framework.Test] public void should_raise_GroupBecameARoster_event () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_raise_GroupBecameARoster_event_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)

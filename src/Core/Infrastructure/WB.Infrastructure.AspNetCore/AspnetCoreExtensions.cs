@@ -118,7 +118,7 @@ namespace WB.Infrastructure.AspNetCore
                             webBuilder.UseKestrel();
                         }
 
-                        if (args.Contains("--httpsys"))
+                        if (args.Contains("--httpsys") && OperatingSystem.IsWindows())
                         {
                             webBuilder.UseHttpSys();
                         }

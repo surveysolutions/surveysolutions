@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using Humanizer;
@@ -38,16 +39,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         {
             this.serviceLocator = serviceLocator;
             Actions = new MvxObservableCollection<ActionDefinition>();
-            Actions.CollectionChanged += (sender, args) =>
-            {
-                RaisePropertyChanged(nameof(PrimaryAction));
-                RaisePropertyChanged(nameof(SecondaryAction));
-                RaisePropertyChanged(nameof(ContextMenu));
-                RaisePropertyChanged(nameof(HasContextMenu));
-                RaisePropertyChanged(nameof(HasSecondaryAction));
-                RaisePropertyChanged(nameof(ExtraAction));
-                RaisePropertyChanged(nameof(HasExtraAction));
-            };
+            Actions.CollectionChanged += CollectionChanged;
+        }
+
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            RaisePropertyChanged(nameof(PrimaryAction));
+            RaisePropertyChanged(nameof(SecondaryAction));
+            RaisePropertyChanged(nameof(ContextMenu));
+            RaisePropertyChanged(nameof(HasContextMenu));
+            RaisePropertyChanged(nameof(HasSecondaryAction));
+            RaisePropertyChanged(nameof(ExtraAction));
+            RaisePropertyChanged(nameof(HasExtraAction));
         }
 
         private IExternalAppLauncher ExternalAppLauncher =>
@@ -238,6 +241,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         public void Dispose()
         {
+            Actions.CollectionChanged -= CollectionChanged;
             Dispose(true);
             GC.SuppressFinalize(this);
         }

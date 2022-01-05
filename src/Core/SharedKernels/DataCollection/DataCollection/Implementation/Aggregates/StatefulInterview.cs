@@ -16,7 +16,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Events;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -108,11 +107,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewKey = @event.InterviewData.InterviewKey;
             this.sourceInterview = this.Tree.Clone();
-        }
-
-        public void Apply(InterviewAnswersFromSyncPackageRestored @event)
-        {
-
         }
 
         protected override void Apply(InterviewCompleted @event)

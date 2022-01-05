@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
     public class AnsweringModelTests: MvxIoCSupportingTest
     {
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetUp()
         {
             base.Setup();
             
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             try
             {
-                await answering.SendAnswerQuestionCommandAsync(
+                await answering.SendQuestionCommandAsync(
                     Create.Command.AnswerNumericRealQuestionCommand(Id.g1, Id.g2, 1));
             }
             catch (InterviewException)

@@ -1,13 +1,11 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Android.App;
-using Plugin.Permissions.Abstractions;
-using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
@@ -15,19 +13,17 @@ namespace WB.UI.Shared.Enumerator.Services
 {
     public class MapService : IMapService
     {
+        private const string TempSuffix = ".part";
+        
+        private readonly string[] mapFilesToSearch = { "*.tpk", "*.tpkx", "*.mmpk", "*.mmpkx",  "*.tif" };
+        private readonly string[] shapefilesToSearch = { "*.shp"};
+        
         private readonly IFileSystemAccessor fileSystemAccessor;
-
         private readonly string mapsLocationCommon;
-        private readonly string mapsLocation;
-        private readonly string shapefilesLocationCommmon;
-        private readonly string shapefilesLocation;
+        private readonly string shapefilesLocationCommon;
         private readonly ILogger logger;
-        private readonly IWorkspaceAccessor workspaceAccessor;
-
-        string[] mapFilesToSearch = { "*.tpk", "*.tpkx", "*.mmpk", "*.mmpkx",  "*.tif" };
-        string[] shapefilesToSearch = { "*.shp"};
-        string tempSuffix = ".part";
-
+        private readonly string? workspaceName = null;
+        
         public MapService(
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
@@ -35,25 +31,33 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
-            this.workspaceAccessor = workspaceAccessor;
-
-            var workspaceName = workspaceAccessor.GetCurrentWorkspaceName();
+            this.workspaceName = workspaceAccessor.GetCurrentWorkspaceName();
+            
             this.mapsLocationCommon = fileSystemAccessor.CombinePath(
                 AndroidPathUtils.GetPathToExternalDirectory(), 
                 "TheWorldBank/Shared/MapCache/");
-            this.mapsLocation = fileSystemAccessor.CombinePath(
-                this.mapsLocationCommon,
-                workspaceName);
-            this.shapefilesLocationCommmon = fileSystemAccessor.CombinePath(
+            
+            this.shapefilesLocationCommon = fileSystemAccessor.CombinePath(
                 AndroidPathUtils.GetPathToExternalDirectory(), 
                 "TheWorldBank/Shared/ShapefileCache");
-            this.shapefilesLocation = fileSystemAccessor.CombinePath(
-                this.shapefilesLocationCommmon,
-                workspaceName);
         }
 
+        private string GetMapsLocationOrThrow()
+        {
+            CheckWorkspaceAndThrow();
+            return fileSystemAccessor.CombinePath(this.mapsLocationCommon, workspaceName);
+        }
 
-        public MapDescription PrepareAndGetDefaultMap()
+        private void CheckWorkspaceAndThrow()
+        {
+            if (string.IsNullOrEmpty(workspaceName))
+            {
+                logger.Error("Workspace name is empty;");
+                throw new InvalidOperationException("Workspace name is empty;");
+            }
+        }
+
+        public MapDescription? PrepareAndGetDefaultMapOrNull()
         {
             var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
                 ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
@@ -67,20 +71,25 @@ namespace WB.UI.Shared.Enumerator.Services
                 if (!this.fileSystemAccessor.IsDirectoryExists(mapFolderPath))
                     this.fileSystemAccessor.CreateDirectory(mapFolderPath);
 
-                using (var br = new BinaryReader(Application.Context.Assets.Open("worldmap(default).tpk")))
+                if (Application.Context.Assets != null)
                 {
-                    using (var bw = new BinaryWriter(new FileStream(mapPath, FileMode.Create)))
+                    using (var br = new BinaryReader(Application.Context.Assets.Open("worldmap(default).tpk")))
                     {
-                        byte[] buffer = new byte[2048];
-                        int length = 0;
-                        while ((length = br.Read(buffer, 0, buffer.Length)) > 0)
+                        using (var bw = new BinaryWriter(new FileStream(mapPath, FileMode.Create)))
                         {
-                            bw.Write(buffer, 0, length);
+                            byte[] buffer = new byte[2048];
+                            int length = 0;
+                            while ((length = br.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                bw.Write(buffer, 0, length);
+                            }
                         }
                     }
                 }
             }
 
+            if (!this.fileSystemAccessor.IsFileExists(mapPath)) return null;
+            
             var defaultMap = new MapDescription(MapType.LocalFile, "Worldmap[default]")
             {
                 MapFullPath = mapPath
@@ -121,7 +130,9 @@ namespace WB.UI.Shared.Enumerator.Services
                     mapList.AddRange(newMaps);
             }
             
-            AddMapsFromFolder(this.mapsLocation);
+            if(!string.IsNullOrEmpty(workspaceName))
+                AddMapsFromFolder(GetMapsLocationOrThrow());
+
             AddMapsFromFolder(this.mapsLocationCommon);
 
             return mapList;
@@ -129,28 +140,21 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public bool DoesMapExist(string mapName)
         {
-            var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
-            if (this.fileSystemAccessor.IsFileExists(filename))
-                return true;
-            
+            if (!string.IsNullOrEmpty(workspaceName))
+            {
+                var filename = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
+                if (this.fileSystemAccessor.IsFileExists(filename))
+                    return true;
+            }
+
             var filenameInCommonFolder = this.fileSystemAccessor.CombinePath(this.mapsLocationCommon, mapName);
             return this.fileSystemAccessor.IsFileExists(filenameInCommonFolder);
         }
 
-        public void SaveMap(string mapName, byte[] content)
-        {
-            if (!DoesMapExist(mapName))
-            {
-                var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
-
-                this.fileSystemAccessor.WriteAllBytes(filename, content);
-            }
-        }
-
         public Stream GetTempMapSaveStream(string mapName)
         {
-            if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
-                this.fileSystemAccessor.CreateDirectory(this.mapsLocation);
+            if (!this.fileSystemAccessor.IsDirectoryExists(GetMapsLocationOrThrow()))
+                this.fileSystemAccessor.CreateDirectory(GetMapsLocationOrThrow());
 
             var tempFileName = GetTempFileName(mapName);
 
@@ -174,7 +178,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public void RemoveMap(string mapName)
         {
-            var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
+            var filename = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
             if (this.fileSystemAccessor.IsFileExists(filename))
                 this.fileSystemAccessor.DeleteFile(filename);
 
@@ -200,11 +204,15 @@ namespace WB.UI.Shared.Enumerator.Services
                     }).ToList();
             }
 
-            var shapesInFolder = GetShapesInFolder(this.shapefilesLocation);
-            if (shapesInFolder.Any())
-                return shapesInFolder;
+            if (!string.IsNullOrEmpty(workspaceName))
+            {
+                var shapesInFolder = GetShapesInFolder(fileSystemAccessor.CombinePath(
+                    this.shapefilesLocationCommon, workspaceName));
+                if (shapesInFolder.Any())
+                    return shapesInFolder;
+            }
 
-            var shapesInCommonFolder = GetShapesInFolder(this.shapefilesLocationCommmon);
+            var shapesInCommonFolder = GetShapesInFolder(this.shapefilesLocationCommon);
             if (shapesInCommonFolder.Any())
                 return shapesInCommonFolder;
 
@@ -213,8 +221,8 @@ namespace WB.UI.Shared.Enumerator.Services
 
         private string GetTempFileName(string mapName)
         {
-            var fileName = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
-            var tempFileName = fileName + tempSuffix;
+            var fileName = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
+            var tempFileName = fileName + TempSuffix;
             return tempFileName;
         }
     }

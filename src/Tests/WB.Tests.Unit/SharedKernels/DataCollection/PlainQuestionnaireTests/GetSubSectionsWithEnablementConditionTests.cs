@@ -9,6 +9,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
     [TestFixture]
     public class GetSubSectionsWithEnablementConditionTests
     {
+        [Test]
         public void when_GetSubSectionsWithEnablementCondition()
         {
             var parentGroup = Guid.NewGuid();

@@ -672,9 +672,6 @@
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Lista a atins limita de mărime. Reduceți dimensiunea listei sau reduceți nivelurie ierarhice.</value>
   </data>
-  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>Prima secțiune nu poate avea condiție de activare.</value>
-  </data>
   <data name="WB0264_GpsQuestion" xml:space="preserve">
     <value>Aveți o întrebare de localizare GPS. Tabletele trebuie să dispună de geolocalizare pentru a fi utilizate împreună cu acest chestionar.</value>
   </data>

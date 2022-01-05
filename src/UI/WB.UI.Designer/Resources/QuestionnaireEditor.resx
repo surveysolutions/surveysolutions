@@ -1424,9 +1424,6 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="CustomRosterTitle" xml:space="preserve">
     <value>Custom title</value>
   </data>
-  <data name="HelpCustomTitle" xml:space="preserve">
-    <value>Allows to override template for roster button and provide custom text for %rostertitle%</value>
-  </data>
   <data name="HelpOptionValue" xml:space="preserve">
     <value>Numeric integer code of the category (not visible to the interviewer)</value>
   </data>

@@ -24,6 +24,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private int inProgressDepth = 0;
 
+        public Guid Id { get; } = Guid.NewGuid();
+
         protected AnsweringViewModel() { }
 
         public AnsweringViewModel(ICommandService commandService,
@@ -46,29 +48,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             private set => this.RaiseAndSetIfChanged(ref this.inProgress, value);
         }
 
-        private async Task MeasureCommandTime(Func<Task> action, string commandName)
+        public virtual async Task SendQuestionCommandAsync(QuestionCommand answerCommand)
         {
             Stopwatch commandTime = Stopwatch.StartNew();
             try
             {
-                await action();
-            }
-            finally
-            {
-                commandTime.Stop();
-                if (commandTime.Elapsed.TotalSeconds > 2)
-                {
-                    logger.Warn($"Answering {commandName} took {commandTime.Elapsed.TotalMilliseconds}ms");
-                }
-                messenger.Publish(new AnswerAcceptedMessage(this, commandTime.Elapsed));
-            }
-        }
-
-        public virtual async Task SendAnswerQuestionCommandAsync(AnswerQuestionCommand answerCommand)
-        {
-            try
-            {
-                await MeasureCommandTime(() => this.ExecuteCommandAsync(answerCommand), $"{answerCommand.GetType()}: {answerCommand.Question}");
+                await this.ExecuteCommandAsync(answerCommand);
             }
             catch (Exception e)
             {
@@ -77,11 +62,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 e.Data.Add("Interview Id", answerCommand.InterviewId.ToString());
                 throw;
             }
-        }
-
-        public virtual Task SendRemoveAnswerCommandAsync(RemoveAnswerCommand command)
-        {
-            return MeasureCommandTime(() => this.ExecuteCommandAsync(command), $"{command.GetType()}: {command.Question}");
+            finally
+            {
+                commandTime.Stop();
+                if (commandTime.Elapsed.TotalSeconds > 2)
+                {
+                    logger.Warn($"Answering {answerCommand.GetType()}: {answerCommand.Question} took {commandTime.Elapsed.TotalMilliseconds}ms");
+                }
+                messenger.Publish(new AnswerAcceptedMessage(this, commandTime.Elapsed));
+            }
         }
 
         private async Task ExecuteActionAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken = default)
@@ -118,7 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private Task ExecuteCommandAsync(ICommand answerCommand)
         {
-            return ExecuteActionAsync(token => this.commandService.ExecuteAsync(answerCommand, cancellationToken: token));
+            return ExecuteActionAsync(async token => await this.commandService.ExecuteAsync(answerCommand, cancellationToken: token));
         }
 
         private void TryCancelLastExecutedCommand()

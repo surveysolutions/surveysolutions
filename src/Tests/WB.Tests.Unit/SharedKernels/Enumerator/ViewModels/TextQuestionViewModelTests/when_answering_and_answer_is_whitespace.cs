@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
             ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer should not be empty"), Times.Once);
 
         [NUnit.Framework.Test] public void should_not_send_answer_command () =>
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextQuestionCommand>()), Times.Never);
+            AnsweringViewModelMock.Verify(x => x.SendQuestionCommandAsync(Moq.It.IsAny<AnswerTextQuestionCommand>()), Times.Never);
 
         private static TextQuestionViewModel model;
     }

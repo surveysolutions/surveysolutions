@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -12,7 +14,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAc
     {
         protected static QuestionnaireAssemblyAccessor CreateQuestionnaireAssemblyFileAccessor(IAssemblyService assemblyService = null)
         {
-            return new QuestionnaireAssemblyAccessor(assemblyService ?? CreateIAssemblyService().Object, Mock.Of<ILogger>());
+            return new QuestionnaireAssemblyAccessor(
+                assemblyService ?? CreateIAssemblyService().Object, 
+                new MemoryCache(Options.Create(new MemoryCacheOptions())),
+                Mock.Of<ILogger>());
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

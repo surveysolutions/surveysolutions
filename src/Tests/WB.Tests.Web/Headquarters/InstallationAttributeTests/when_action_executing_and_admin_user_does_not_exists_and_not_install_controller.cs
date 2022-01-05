@@ -22,10 +22,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
             GetActionExecutingContextResult().RouteValues.Count.Should().Be(2);
 
         [NUnit.Framework.Test] public void should_action_executing_result_route_values_contains_controller_key () =>
-            GetActionExecutingContextResult().RouteValues.ContainsKey("controller");
+            GetActionExecutingContextResult().RouteValues.ContainsKey("controller").Should().BeTrue();
 
         [NUnit.Framework.Test] public void should_action_executing_result_route_values_contains_action_key () =>
-            GetActionExecutingContextResult().RouteValues.ContainsKey("action");
+            GetActionExecutingContextResult().RouteValues.ContainsKey("action").Should().BeTrue();
 
         [NUnit.Framework.Test] public void should_action_executing_result_controller_route_value_be_equal_to_install () =>
             GetActionExecutingContextResult().RouteValues["controller"].Should().Be("Install");

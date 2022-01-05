@@ -18,19 +18,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             grandChildCascadedComboboxId = Guid.Parse("4C603B8A-3237-4915-96FA-8D1568C679E2");
             questionnaire =  CreateQuestionnaireDocumentWithOneChapter(new MultyOptionsQuestion
             {
-                PublicKey = parentSingleOptionQuestionId,
-                QuestionType = QuestionType.SingleOption
+                PublicKey = parentSingleOptionQuestionId
             },
                new SingleQuestion
                {
                    PublicKey = childCascadedComboboxId,
-                   QuestionType = QuestionType.SingleOption,
                    CascadeFromQuestionId = parentSingleOptionQuestionId
                },
                new SingleQuestion
                {
                    PublicKey = grandChildCascadedComboboxId,
-                   QuestionType = QuestionType.SingleOption,
                    CascadeFromQuestionId = childCascadedComboboxId
                });
             BecauseOf();

@@ -1,0 +1,21 @@
+name: ci
+
+on:
+  push:
+    paths:
+      - 'src/**'
+
+  pull_request:
+
+concurrency: 
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    uses: surveysolutions/surveysolutions/.github/workflows/tests.yml@master
+    with:
+      runs_on: 'ubuntu-latest'
+      run_analysis: true
+    secrets:
+      sonar-token: ${{ secrets.SONAR_TOKEN }}

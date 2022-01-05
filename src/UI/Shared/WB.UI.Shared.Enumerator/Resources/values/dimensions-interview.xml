@@ -80,9 +80,6 @@
   <dimen name="Interview_Previous_Group_Navigation_Button_padding">16dp</dimen>
   <dimen name="Interview_Previous_Group_Navigation_Button_paddingTop">18dp</dimen>
 
-  <dimen name="Interview_Sidebar_GpsQuestions_max_width">350dp</dimen>
-  <dimen name="Interview_Sidebar_GpsQuestions_max_height">220dp</dimen>
-
   <dimen name="Interview_Attachment_Small_margin_bottom">32dp</dimen>
   <dimen name="Interview_Attachment_Large_margin_bottom">1dp</dimen>
   

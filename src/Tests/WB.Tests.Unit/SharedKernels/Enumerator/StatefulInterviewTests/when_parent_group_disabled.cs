@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                         groupId: parentGroupId,
                         children: new IComposite[]
                         {
-                            Create.Entity.Question(childQuestionId),
+                            Create.Entity.TextQuestion(childQuestionId),
                         })
                   });
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, Create.Entity.PlainQuestionnaire(questionnaire, 1));

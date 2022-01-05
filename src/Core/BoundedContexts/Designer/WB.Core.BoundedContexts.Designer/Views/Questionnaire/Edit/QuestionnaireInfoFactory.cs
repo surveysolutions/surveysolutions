@@ -177,7 +177,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return list.ToArray();
         }
 
-        private readonly string rosterType = "roster";
+        private readonly string rosterTypeName = "roster";
 
         private SelectOption[] RosterTypeOptions => new[]
         {
@@ -291,17 +291,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public NewEditRosterView? GetRosterEditView(QuestionnaireRevision questionnaireId, Guid rosterId)
         {
             var document = this.questionnaireDocumentReader.Get(questionnaireId);
-
-            var roster = document?.Find<IGroup>(rosterId);
-            if (roster == null)
-                return null;
-
             if (document == null)
                 return null;
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
 
-            RosterType rosterType = this.getRosterType(questionnaire: questionnaire,
-                rosterSizeSourceType: roster.RosterSizeSource, rosterSizeQuestionId: roster.RosterSizeQuestionId);
+            var roster = document?.Find<IGroup>(rosterId);
+            if (roster == null)
+                return null;
+            
+            var rosterType = this.getRosterType(questionnaire: questionnaire,
+                rosterSizeSourceType: roster.RosterSizeSource, 
+                rosterSizeQuestionId: roster.RosterSizeQuestionId);
 
             var rosterScope = questionnaire.GetRosterScope(roster);
 
@@ -310,13 +310,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 displayModes : Enum.GetValues(typeof(RosterDisplayMode)).Cast<RosterDisplayMode>().ToArray())
             {
                 ItemId = roster.PublicKey.FormatGuid(),
-                Title = roster.Title,
+                Title = roster.Title + (roster.CustomRosterTitle ? " - %rostertitle%" : ""),
                 EnablementCondition = roster.ConditionExpression,
                 HideIfDisabled = roster.HideIfDisabled,
                 VariableName = roster.VariableName,
                 DisplayMode = roster.DisplayMode,
-                CustomRosterTitle = roster.CustomRosterTitle,
-                
 
                 Type = rosterType,
                 RosterSizeListQuestionId = rosterType == RosterType.List ? roster.RosterSizeQuestionId.FormatGuid() : null,
@@ -370,14 +368,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public NewEditStaticTextView? GetStaticTextEditView(QuestionnaireRevision questionnaireId, Guid staticTextId)
         {
             var document = this.questionnaireDocumentReader.Get(questionnaireId);
-            var staticText = document?.Find<IStaticText>(staticTextId);
-            if (staticText == null)
-                return null;
-
             if (document == null)
                 return null;
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
 
+            var staticText = document.Find<IStaticText>(staticTextId);
+            if (staticText == null)
+                return null;
+            
             var result = new NewEditStaticTextView
             (
                 id : staticText.PublicKey,
@@ -431,15 +429,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public VariableView? GetVariableEditView(QuestionnaireRevision questionnaireId, Guid variableId)
         {
             var document = this.questionnaireDocumentReader.Get(questionnaireId);
-
-            var variable = document?.Find<IVariable>(variableId);
-            if (variable == null)
-                return null;
-
             if (document == null)
                 return null;
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
-
+            
+            var variable = document.Find<IVariable>(variableId);
+            if (variable == null)
+                return null;
+            
             VariableView result = new VariableView(
                 variable.PublicKey,
                 variable.PublicKey.FormatGuid(),
@@ -714,7 +711,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 Id = roster.PublicKey.FormatGuid(),
                 IsSectionPlaceHolder = false,
                 Breadcrumbs = this.GetBreadcrumbsAsString(document, roster) + BreadcrumbSeparator + roster.Title,
-                Type = this.rosterType,
+                Type = this.rosterTypeName,
                 VarName = roster.VariableName,
                 QuestionType = document.GetRosterSourceType(roster, document)
             };

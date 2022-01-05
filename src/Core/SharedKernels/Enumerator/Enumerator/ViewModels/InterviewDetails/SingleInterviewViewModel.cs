@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public abstract class SingleInterviewViewModel : BaseViewModel<InterviewViewModelArgs>
+    public abstract class SingleInterviewViewModel : BaseViewModel<InterviewViewModelArgs>, IDisposable
     {
         public IEnumeratorSettings EnumeratorSettings { get; }
         protected readonly ICommandService commandService;
@@ -76,8 +76,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void SwitchTranslation(string language) => this.commandService.Execute(
             new SwitchTranslation(Guid.Parse(this.InterviewId), language, this.Principal.CurrentUserIdentity.UserId));
 
-        public virtual void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             this.vibrationViewModel.Dispose();
         }
     }

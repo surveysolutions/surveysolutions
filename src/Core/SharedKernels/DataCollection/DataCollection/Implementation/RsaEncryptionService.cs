@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation
             if (!this.secureStorage.Contains(PublicKey))
                 throw new Exception("RSA public key missing.");
 
-            using (var rsaPublic = new RSACryptoServiceProvider())
+            using (var rsaPublic = new RSACryptoServiceProvider(4096))
             {
                 var publicKeyBytes = this.secureStorage.Retrieve(PublicKey);
                 var publicKey = Encoding.UTF8.GetString(publicKeyBytes);
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation
             if (!this.secureStorage.Contains(PrivateKey))
                 throw new Exception("RSA private key is missing.");
 
-            using (var rsaPrivate = new RSACryptoServiceProvider())
+            using (var rsaPrivate = new RSACryptoServiceProvider(4096))
             {
                 var privateKeyBytes = this.secureStorage.Retrieve(PrivateKey);
                 var privateKey = Encoding.UTF8.GetString(privateKeyBytes);

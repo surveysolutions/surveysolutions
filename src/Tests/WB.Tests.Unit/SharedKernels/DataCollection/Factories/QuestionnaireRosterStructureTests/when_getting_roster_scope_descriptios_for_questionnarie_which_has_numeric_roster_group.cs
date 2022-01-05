@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
             numericRosterGroupId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             numericQuestionId = new Guid("1111BBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion(){PublicKey = numericQuestionId, QuestionType = QuestionType.Numeric},
+                new NumericQuestion(){PublicKey = numericQuestionId},
                 new Group("Roster")
                 {
                     PublicKey = numericRosterGroupId,

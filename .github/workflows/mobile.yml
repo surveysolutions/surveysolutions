@@ -1,0 +1,79 @@
+name: mobile
+
+on:
+  workflow_call:
+    inputs:
+      build_number:
+        description: 'Build Number'
+        default: 'auto'
+        required: false
+        type: string
+      environment:
+        description: 'Is this development or release build?'
+        default: 'development'
+        required: false
+        type: string
+  workflow_dispatch:
+    inputs:
+      build_number:
+        description: 'Build Number'
+        default: 'auto'
+        required: false
+        type: string
+      environment:
+        description: 'Is this development or release build?'
+        default: 'development'
+        required: false
+        type: string
+
+jobs:
+  build:
+    environment: ${{ inputs.environment }}
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        task: [AndroidInterviewer, AndroidInterviewerWithMaps, AndroidSupervisor]
+
+    steps:
+    - name: Define Build Number
+      id: build_number
+      run: |
+        if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+          $BuildNumber = "${{ github.event.inputs.build_number }}"
+        } else {
+          $BuildNumber = "${{ inputs.build_number }}"
+        }
+        if ($BuildNumber -eq "auto") {
+          $BuildNumber = ${{ github.run_number }}
+        }
+        Write-Output "::set-output name=build_number::$BuildNumber"
+
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET Core SDK 5.0.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.3
+
+    - name: Build
+      env:
+        APP_CENTER_INTERVIEWER_DEV: ${{ secrets.APPCENTER_INTERVIEWER_KEY }}
+        APP_CENTER_INTERVIEWER_PROD: ${{ secrets.APPCENTER_INTERVIEWER_KEY }} # will come with the prod value in the release environment
+        APP_CENTER_SUPERVISOR_DEV: ${{ secrets.APPCENTER_SUPERVISOR_KEY }}
+        APP_CENTER_SUPERVISOR_PROD: ${{ secrets.APPCENTER_SUPERVISOR_KEY }} # will come with the prod value in the release environment
+        
+      run: .\.build.ps1 ${{ matrix.task }} `
+        -BuildNumber ${{ steps.build_number.outputs.build_number }} `
+        -signapk -KeystoreAlias wbcapipublish `
+        -androidKeyStore "${{ secrets.INTERVIEWER_KEYSTORE }}" `
+        -KeystorePassword "${{ secrets.INTERVIEWER_KEYSTORE_PASSWORD }}" `
+        -GoogleMapKey "${{ secrets.GOOGLEMAPS_KEY }}" `
+        -ArcGisKey "${{ secrets.ARCGIS_KEY }}"
+       
+    - name: Publish
+      uses: actions/upload-artifact@v2
+      with:
+        path: ${{ github.workspace }}/artifacts

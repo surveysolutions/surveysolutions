@@ -79,7 +79,7 @@ export default {
             return {
                 id: 'SidebarCompleted',
                 collapsed: true,
-                title: this.$t('WebInterviewUI.Complete'),
+                title: this.$config.customTexts.completeButton,
                 to: {
                     name: 'complete',
                 },
@@ -91,7 +91,7 @@ export default {
         },
 
         progressPercent(){
-            return Math.round((this.interviewState.answeredQuestionsCount / this.interviewState.activeQuestionCount) * 100)
+            return this.interviewState.activeQuestionCount == 0 ? 100 : Math.round((this.interviewState.answeredQuestionsCount / this.interviewState.activeQuestionCount) * 100)
         },
     },
     beforeMount() {

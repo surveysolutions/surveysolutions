@@ -1,4 +1,5 @@
 using System;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -18,17 +19,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                 instructions: "old instructions",
                 enablementCondition: "old condition");
 
-
-            questionnaire.UpdateMultiOptionQuestion(
+            Assert.DoesNotThrow(() => questionnaire.UpdateMultiOptionQuestion(
                 Create.Command.UpdateMultiOptionQuestion(
                     questionId,
                     responsibleId,
                     title,
-                    null));
+                    null)));
         }
 
         private static Questionnaire questionnaire;
-        private static Exception exception;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");

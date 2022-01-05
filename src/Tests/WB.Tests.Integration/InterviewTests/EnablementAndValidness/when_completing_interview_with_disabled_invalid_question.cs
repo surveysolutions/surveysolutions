@@ -15,7 +15,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
     {
 
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetUp()
         {
             appDomainContext = AppDomainContext.Create();
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>

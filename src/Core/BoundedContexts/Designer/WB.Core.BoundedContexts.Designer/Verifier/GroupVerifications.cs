@@ -51,7 +51,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(LongListRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
             Error<IGroup>(LongRosterHasMoreThanAllowedChildElements, "WB0068", string.Format(VerificationMessages.WB0068_RosterHasMoreThanAllowedChildElements,Constants.MaxAmountOfItemsInLongRoster)),
             Error<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
-            Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
+            //Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
+            //Do not reuse WB0263
             Error<IGroup>(SectionHasMoreThanAllowedQuestions, "WB0270", string.Format(VerificationMessages.WB0270_SectionContainsTooManyQuestions, 400)),
             Error<IGroup>(FlatModeGroupContainsNestedGroup, "WB0279", VerificationMessages.WB0279_PlainModeGroupContainsNestedGroup),
             Error<IGroup>(FlatModeGroupHasMoreThanAllowedEntities, "WB0278", string.Format(VerificationMessages.WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements, MaxUIEntitiesInPlainModeGroup)),
@@ -203,16 +204,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     return childGroup.DisplayMode == RosterDisplayMode.Flat || childGroup.IsRoster;
                 return false;
             });
-
-        private static bool FirstChapterHasEnablingCondition(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            var parentComposite = group.GetParent();
-            if (parentComposite?.PublicKey != questionnaire.PublicKey) return false;
-
-            if (parentComposite.Children.IndexOf(group) != 0) return false;
-
-            return !string.IsNullOrEmpty(group.ConditionExpression);
-        }
 
         private bool RosterHasPropagationExededLimit(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -533,9 +524,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             });
 
         private static bool MatrixRosterCannotHaveCustomTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-          => group.DisplayMode == RosterDisplayMode.Matrix && group.CustomRosterTitle;
+          => group.DisplayMode == RosterDisplayMode.Matrix && 
+             (group.CustomRosterTitle || group.Title.Contains("%rostertitle%"));
         private static bool TableRosterCannotHaveCustomTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-          => group.DisplayMode == RosterDisplayMode.Table && group.CustomRosterTitle;
+          => group.DisplayMode == RosterDisplayMode.Table && 
+             (group.CustomRosterTitle || group.Title.Contains("%rostertitle%"));
 
         private static bool MatrixRosterHasToContainNoLinkedQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Any(composite =>

@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
         public void SetupMvx()
         {
             base.Setup();
-            Mvx.Resolve<IMvxSettings>().AlwaysRaiseInpcOnUserInterfaceThread = false;
+            Mvx.IoCProvider.Resolve<IMvxSettings>().AlwaysRaiseInpcOnUserInterfaceThread = false;
             Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(Stub.MvxMainThreadAsyncDispatcher());
             Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
         }

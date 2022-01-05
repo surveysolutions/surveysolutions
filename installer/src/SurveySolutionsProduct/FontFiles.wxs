@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+      <DirectoryRef Id="FontsFolder">
+      </DirectoryRef>
+  </Fragment>
+    <Fragment>
+        <ComponentGroup Id="FontFilesComponentGroup">
+          <Component Id="cmpF4DC59CF41D08E4D39EC89D47B0D5851" Directory="FontsFolder" Guid="17E4F71D-CD3E-4CD5-9D14-D7050F236039">
+            <File Id="fil4F5C68E6942933BEE2BF860B2F19C26D" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-Black.ttf" />
+          </Component>
+          <Component Id="cmp5029401909B2022C6BE4C8F1E117F612" Directory="FontsFolder" Guid="CDAA11A7-60DF-4B3D-B078-07B32E3D6263">
+            <File Id="filA65AF1ED779303531EDE6FC858C0E815" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-BlackItalic.ttf" />
+          </Component>
+          <Component Id="cmp1B39366A55B9281DFDDA97B1D22CFB03" Directory="FontsFolder" Guid="22ADFABF-2659-44C2-ADE3-3F0D73D2B08E">
+            <File Id="fil918A11A8D189EB59A3EA80E98D2BD99E" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-Bold.ttf" />
+          </Component>
+          <Component Id="cmpC6CA3C1B3E09D210E94239A26B08C22D" Directory="FontsFolder" Guid="EAF14885-F027-489A-B55F-2DAFAAF1F36B">
+            <File Id="fil8DC77A7D0A29F24CFB1E9CB10272107E" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-BoldItalic.ttf" />
+          </Component>
+          <Component Id="cmpE9D7B935662923F2DF36DB99CC1BFEB4" Directory="FontsFolder" Guid="0FB92C5F-6B3E-4F74-851B-A4940EA309A6">
+            <File Id="fil944F3E72156164052C013C37BC49288E" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-Condensed.ttf" />
+          </Component>
+          <Component Id="cmpC0C80B8C2D004AEF46D9FFC191A2405E" Directory="FontsFolder" Guid="FA2A67CC-4CD5-4067-9479-995BE2B0BB0D">
+            <File Id="filA8BDC97EF88D06DE984F7593502D145D" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedBlack.ttf" />
+          </Component>
+          <Component Id="cmp55138DD01115E53B4F5BDE4E388A1BF5" Directory="FontsFolder" Guid="0633513C-1F3C-4EE9-A61E-97C2025F60F3">
+            <File Id="fil316B6516E6473E99D556E552922BDCC8" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedBlackItalic.ttf" />
+          </Component>
+          <Component Id="cmp60BCE89AC1A131EAB5955C1535A190C9" Directory="FontsFolder" Guid="A055A966-5033-4E8F-9ACF-455917BA9067">
+            <File Id="fil9FB0C75EA0F4AED04966B26DD538FABB" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedBold.ttf" />
+          </Component>
+          <Component Id="cmpB9420E6B264EA6C7B5496FD6F1FF4EA4" Directory="FontsFolder" Guid="D2E7C1E3-E278-430E-84BE-94FC4FDA991A">
+            <File Id="filA6215C7E491B6A0DBA19145EA17CC37F" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedBoldItalic.ttf" />
+          </Component>
+          <Component Id="cmpC9640B808F18B24E4B4650EFC08BC547" Directory="FontsFolder" Guid="E53E1CC6-C453-4675-9E11-3796B42CCFB0">
+            <File Id="filE5B6AF84F2ED85BAEB6CD27CD3F26F44" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedExtraBold.ttf" />
+          </Component>
+          <Component Id="cmp7AEAB28A38C0AA536250F8370FD59C06" Directory="FontsFolder" Guid="29E3E38B-44BF-4782-A1F8-BE53FB6EC12A">
+            <File Id="fil425D7C399B8E6383B87EC08F693716AE" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedExtraBoldItalic.ttf" />
+          </Component>
+          <Component Id="cmpE6BD52657EF9CF9AC3028410B948C26F" Directory="FontsFolder" Guid="1E56CB5E-6CBB-4CE7-9267-1B1CEF12E02D">
+            <File Id="fil489107E8B7386AD6D33D938B53FB0B85" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedExtraLight.ttf" />
+          </Component>
+          <Component Id="cmpD53E3574084D03689A28D5CF4A24956E" Directory="FontsFolder" Guid="F0A06768-6F15-4DD9-8C24-2AF2AD834DF3">
+            <File Id="filA85F587F2A92558DFF34095E8B6C2506" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedExtraLightItalic.ttf" />
+          </Component>
+          <Component Id="cmpEF392133467AA6DB9AD594CCAEBABC28" Directory="FontsFolder" Guid="A5C6D68D-2BC2-4401-8058-CF5263A46C39">
+            <File Id="filE4417EAC90AEA093E2162B42AC4D74BF" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedItalic.ttf" />
+          </Component>
+          <Component Id="cmpC40714276DFBD6E7B1B4259B0ABA32A4" Directory="FontsFolder" Guid="{2AC7C7DC-6433-4781-8E95-11182F022116}">
+            <File Id="filB2AA1129D07D751B87731C1EBB923C7A" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedLight.ttf" />
+          </Component>
+          <Component Id="cmp4C93F0A950249A5DD15F9DC21827ADF3" Directory="FontsFolder" Guid="{F0A0FFC1-44A8-478B-AA1E-C8A84B1B11F2}">
+            <File Id="fil2B865F60AEF44521B1B00C682C6E7992" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedLightItalic.ttf" />
+          </Component>
+          <Component Id="cmp0D9BD7872DD02907A97DB2C52DA4CBF7" Directory="FontsFolder" Guid="{9545FC39-493F-48D3-8873-69AA83F114E4}">
+            <File Id="filD7ED7ECB9AC29821DEEE8B9535CF1D19" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedMedium.ttf" />
+          </Component>
+          <Component Id="cmp8931FE76C9DF66F277583885E80D6183" Directory="FontsFolder" Guid="{46979E65-C1EA-4593-9684-88C12A6A5C15}">
+            <File Id="fil54B8E74CEAC9FD0270923DB7AF28D72C" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedMediumItalic.ttf" />
+          </Component>
+          <Component Id="cmp054A4D227B99781289377CF6DE3BAEA0" Directory="FontsFolder" Guid="{C68F0536-D1C0-4196-A308-9F050A2FE76C}">
+            <File Id="fil760B78F1B73F3F63788308CC26967498" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedSemiBold.ttf" />
+          </Component>
+          <Component Id="cmpB101BBAD78BDEAABE06C01CEA8E3E97E" Directory="FontsFolder" Guid="{B22EBC83-3E3A-4A9B-8AA3-2087F8C67050}">
+            <File Id="filC8BDA27F6E117A50C99ACD7EF2DCB243" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedSemiBoldItalic.ttf" />
+          </Component>
+          <Component Id="cmp3C311DA8B6D0CC8D30751BE8A114BDA6" Directory="FontsFolder" Guid="{D51DC58A-3D2F-4328-A1DD-993E29BAB1DF}">
+            <File Id="fil5756799EFB89300624DD6CCFA60C9DBE" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedThin.ttf" />
+          </Component>
+          <Component Id="cmpC9449E6D19F6F8AA3FD2BE0E4D430BF8" Directory="FontsFolder" Guid="{2BF357A7-23F1-47B0-82BD-1024FE2129A2}">
+            <File Id="filA3548CE34C894C3483E775B9B7DE2038" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-CondensedThinItalic.ttf" />
+          </Component>
+          <Component Id="cmpD0D1E908E1485D540F597D457BB7EB8A" Directory="FontsFolder" Guid="{198B210A-C2B8-429C-AF32-CD7D778B722F}">
+            <File Id="fil23883A1CD7AB1280ED7B4EC26DBAE107" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraBold.ttf" />
+          </Component>
+          <Component Id="cmpD0AFC1CA69D8A04FF57031063EDC2556" Directory="FontsFolder" Guid="{6751D1D2-DF1B-4759-B579-5EFCA2BEA9A2}">
+            <File Id="fil592D7F1961B50DD835E59D94CA148CED" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraBoldItalic.ttf" />
+          </Component>
+          <Component Id="cmpAFB93358DCEF933F0DE2657228EBB13E" Directory="FontsFolder" Guid="{7D3200DC-4817-4092-8F83-776E828CD4FD}">
+            <File Id="fil6A9F9CBB5158C85F64D9E79652D41B36" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensed.ttf" />
+          </Component>
+          <Component Id="cmp8E8F2CA151A25769BBED729472D8B132" Directory="FontsFolder" Guid="{CF17F644-E425-438A-B581-F11756BEA6CF}">
+            <File Id="filED73CB9579CDA8E53C3B39A1C4E5F1C6" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedBlack.ttf" />
+          </Component>
+          <Component Id="cmpC8833C08F28937619A5C134403185B92" Directory="FontsFolder" Guid="{478FDB63-9373-4BE9-A7FD-E141CB672CF8}">
+            <File Id="fil284A467CEAC0519B88A4420C8C282443" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedBlackItalic.ttf" />
+          </Component>
+          <Component Id="cmp30AFFE8431EB459D1A4107AC0B32574C" Directory="FontsFolder" Guid="{E2040A6B-8C49-439B-9CE9-66B79FB632D2}">
+            <File Id="fil141BA7CEA8A65FBB3C01B1EC0BB4729A" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedBold.ttf" />
+          </Component>
+          <Component Id="cmp19AFA053BD11EEEE50D615ED7AC64012" Directory="FontsFolder" Guid="{7599BB87-05CB-4D32-AF3C-9ADB4569EA32}">
+            <File Id="fil25E338408654FB3524E6008B08F6FCFD" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedBoldItalic.ttf" />
+          </Component>
+          <Component Id="cmp4AE3096D9B98690B220ECDD479569483" Directory="FontsFolder" Guid="{34722B0B-DDE9-4BA3-ABB8-F38687C12858}">
+            <File Id="fil17F12C9181D6B7F2B4B998DF30716DF5" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedExtraBold.ttf" />
+          </Component>
+          <Component Id="cmpF9FF76C346BEAC64F30320BEAA22261E" Directory="FontsFolder" Guid="{FA866B60-BC2E-46BB-B05B-A40CFC0A50B2}">
+            <File Id="fil007A1221592AE4EEE1686F7A92FAB335" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedExtraBoldItalic.ttf" />
+          </Component>
+          <Component Id="cmpAB94A9A490E4E1D7437D9549288310B9" Directory="FontsFolder" Guid="{6EB51F58-39CF-43DA-8719-A904F4D22050}">
+            <File Id="fil2B2174B7DA7649D9EE38883F0F7AC147" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedExtraLight.ttf" />
+          </Component>
+          <Component Id="cmp460A847A873314DF64C36DEE258435A2" Directory="FontsFolder" Guid="{7E4DE3E6-3064-4ADF-B34A-21C662727E13}">
+            <File Id="fil42EDF0E3A35593A07CA1236F701EED83" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedExtraLightItalic.ttf" />
+          </Component>
+          <Component Id="cmpD318B8BD9D9BF966B9584ADBDCC7AFB9" Directory="FontsFolder" Guid="{6D8E4A03-510F-48D6-9428-0511B7CFBF57}">
+            <File Id="filAE907E7FC4CA285664B226156CE9A373" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedItalic.ttf" />
+          </Component>
+          <Component Id="cmpB2CFDC88BCC98B6A3AEA7E773921935D" Directory="FontsFolder" Guid="{05E3CD58-3711-4FD2-923B-901F262917E6}">
+            <File Id="fil0ECCEA755D396220BE082A2892D3D0C8" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedLight.ttf" />
+          </Component>
+          <Component Id="cmpD54D06538DEFA9BAA9495265D3A995B5" Directory="FontsFolder" Guid="{E15AAADB-FA25-40C6-947C-C0B28167DB10}">
+            <File Id="fil55BCAE21776D539355DD94821278B300" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedLightItalic.ttf" />
+          </Component>
+          <Component Id="cmpC0B36656918396C004CE6D031B1CC125" Directory="FontsFolder" Guid="{745FB1D0-6FA3-49ED-8578-14EBC003BF0C}">
+            <File Id="filCA812D40ED27AA52403F43AA996F3156" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedMedium.ttf" />
+          </Component>
+          <Component Id="cmp1D174B8C2C08908F1AEA3ED558355C5F" Directory="FontsFolder" Guid="{0E67FB6D-07F7-45F9-85BA-48B2AAF04694}">
+            <File Id="fil66B619BEC411BCC781671E7DAC5D7CEF" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedMediumItalic.ttf" />
+          </Component>
+          <Component Id="cmp2B8F0635A84AFD692C5277A0968619E7" Directory="FontsFolder" Guid="{98772F90-97DA-49B7-A9FD-1822E88C9CE8}">
+            <File Id="filF4DA071D8FEA3BA529CA76EB096362AF" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedSemiBold.ttf" />
+          </Component>
+          <Component Id="cmpFEB6038BA7A9173BA3D24AC7D9AC4272" Directory="FontsFolder" Guid="{559F7781-28A2-44EE-BFFC-F3ADEE145C77}">
+            <File Id="filEB467C0A2F15DDF290B58A0847753D18" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedSemiBoldItalic.ttf" />
+          </Component>
+          <Component Id="cmpF0C76576CB52EF4054F4C8D98FE69F7C" Directory="FontsFolder" Guid="{DF6706A8-5B00-442D-A47E-7FC4A1D29A46}">
+            <File Id="filBC5E86295DDC8B1EB363CA7F33C1CE65" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedThin.ttf" />
+          </Component>
+          <Component Id="cmp8D0198B89E4DC24E9D35AEA8AC50FA4B" Directory="FontsFolder" Guid="{872355E3-F629-4C63-913D-42E547733ECC}">
+            <File Id="fil8D94BDC1F56CBF034EDBD5422D9557C9" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraCondensedThinItalic.ttf" />
+          </Component>
+          <Component Id="cmp69FA4D9A8D0533C0FEBAD803CB36556B" Directory="FontsFolder" Guid="{D55B6FF6-5886-4DA1-90F9-45E597A99AA2}">
+            <File Id="fil2ACCD5A4F25BCDB2057F4DE16B0ACF39" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraLight.ttf" />
+          </Component>
+          <Component Id="cmpA3EF92AB2217B75AA5DDAF89EA5D52B8" Directory="FontsFolder" Guid="{2238DAF9-DC49-46E5-AF68-E55949F8E8CE}">
+            <File Id="fil340B3F0A6BA62C8147FC593393320D25" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ExtraLightItalic.ttf" />
+          </Component>
+          <Component Id="cmp2BDF630196C64080F7CFC5C144408C72" Directory="FontsFolder" Guid="{FAC0C472-211A-4F77-B31A-F6841BEC535F}">
+            <File Id="fil93126E6459F341DABE86E59D2BF78CD6" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-Italic.ttf" />
+          </Component>
+          <Component Id="cmpB16BBF85E79BBE2A47DEE647A8434CEB" Directory="FontsFolder" Guid="{37A45454-03F5-4E61-9671-AB8F76EF1F52}">
+            <File Id="fil9617AAEAE07D27AAA07F8344E447B8A8" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-Light.ttf" />
+          </Component>
+          <Component Id="cmpC9670E8F2097F622F820B25D86877F76" Directory="FontsFolder" Guid="{C0451BE3-7B63-4F1B-8058-FCEFC24BE3ED}">
+            <File Id="fil4C179D122245676B15B20CCB21DD9CF4" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-LightItalic.ttf" />
+          </Component>
+          <Component Id="cmp929D61F052DBDCA90D0DB0F80D0A163A" Directory="FontsFolder" Guid="{DE020B2C-33C6-4826-B9B7-CE2810AA9417}">
+            <File Id="filD5E6DDA136294DE1B0B3F9A251911379" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-Medium.ttf" />
+          </Component>
+          <Component Id="cmp8F4742A7C8F90C83418E6AA261B697F8" Directory="FontsFolder" Guid="{6FED2D97-2EFE-4C2D-AB86-AF3479245E85}">
+            <File Id="fil934959D37E9BE895E6224C740551B97F" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-MediumItalic.ttf" />
+          </Component>
+          <Component Id="cmpB4E70197E1C624351E16A763977F294F" Directory="FontsFolder" Guid="{32FFA6BA-D1DC-441C-BC4E-32D48FCB92AD}">
+            <File Id="fil4F8947FA58798708B146F5AFA670F414" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-Regular.ttf" />
+          </Component>
+          <Component Id="cmp5F44960E9B590041118BEA83ED043E41" Directory="FontsFolder" Guid="{EAE35948-0C33-47A1-B054-FC7BAE4308CD}">
+            <File Id="fil0C282EC4CB1DDE23EA0AF92E8E8B8278" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiBold.ttf" />
+          </Component>
+          <Component Id="cmp27457063396C4AB4B2AF2E08F22479B0" Directory="FontsFolder" Guid="{51724455-530E-447F-B6B1-0496C3209EC3}">
+            <File Id="fil61338A2E9FABEC27ED58CBD6B5E3C749" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiBoldItalic.ttf" />
+          </Component>
+          <Component Id="cmp1063BDD21B1259EDE34B8CCD81F3AFF6" Directory="FontsFolder" Guid="{2BEAE961-0401-4E4E-826B-D5FF0FB3EFF2}">
+            <File Id="filDA0A5510565F42E78F93E9E2D879C304" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensed.ttf" />
+          </Component>
+          <Component Id="cmpA08405BB935AA7E80A5E54D78E14CD7B" Directory="FontsFolder" Guid="{E220F50E-62B2-42EF-9EB7-1FAB3F755121}">
+            <File Id="fil46625E4DAE4E2AE4C6C83412ABF4C7FD" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedBlack.ttf" />
+          </Component>
+          <Component Id="cmpD34E23705EAC5C7E217E611354E53A97" Directory="FontsFolder" Guid="{2062F4CD-578A-4458-887A-DF50BD10DD44}">
+            <File Id="fil74007A8A70D17D310743A62C33B7036A" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedBlackItalic.ttf" />
+          </Component>
+          <Component Id="cmp5FA616CE197BE81E0B673750250C44BF" Directory="FontsFolder" Guid="{77C6B413-2853-4B18-93AA-A2394E9413B9}">
+            <File Id="filB534412B9EE5EC313BC299802FB54BCE" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedBold.ttf" />
+          </Component>
+          <Component Id="cmp97D58215E1B0BA5DDC114DD17593A68F" Directory="FontsFolder" Guid="{D65F18F9-5C9F-4B9E-9920-7F3480F79128}">
+            <File Id="filF2BD3DD99CA18706D5F55A09EC14CEB9" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedBoldItalic.ttf" />
+          </Component>
+          <Component Id="cmpB62B3CA95E8BD23714696A6DF78EC591" Directory="FontsFolder" Guid="{690B0A33-3DAB-48E9-A360-9637AB3F4981}">
+            <File Id="fil42F6AE3AE9C3071AFB5830EEEFBB476C" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedExtraBold.ttf" />
+          </Component>
+          <Component Id="cmp67819C4F2E19D8EB26D7803B9998EBC6" Directory="FontsFolder" Guid="{8FE28391-70DA-43BF-B74C-4D7225FAEFD9}">
+            <File Id="filDB6180929A6CF8425EE1273B54418F60" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedExtraBoldItalic.ttf" />
+          </Component>
+          <Component Id="cmp964130EE7230F483D1BDB5A349ACEB8C" Directory="FontsFolder" Guid="{DE862A85-9D7B-4677-9E83-3E662CA4A275}">
+            <File Id="filA0F7A4179DFB4BA03031D9AB8BC860DE" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedExtraLight.ttf" />
+          </Component>
+          <Component Id="cmpF2692985187644B83156E18354554E0D" Directory="FontsFolder" Guid="{7A135281-2083-4025-9218-5458A691F2F0}">
+            <File Id="filF74A10B5A246B4A95C790CFA8118CACB" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedExtraLightItalic.ttf" />
+          </Component>
+          <Component Id="cmpA18E710EB2991EED95EEB70BD41FADA4" Directory="FontsFolder" Guid="{7C464F57-0257-4CDE-987D-1A561D2F5DFA}">
+            <File Id="filC124F3ACE54C88A1D304EEA012ADA79C" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedItalic.ttf" />
+          </Component>
+          <Component Id="cmp28911D645B69710A954AC61A46CF0AF3" Directory="FontsFolder" Guid="{08F14681-E407-4997-94CE-F569DC5432E6}">
+            <File Id="fil5C3AEA4161E7A89ADBE43C4B321D09CE" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedLight.ttf" />
+          </Component>
+          <Component Id="cmp1BDE0FA076B5807C8E9C5C07DF7B8376" Directory="FontsFolder" Guid="{BED718F1-EFC0-4FD5-8796-78F65D1AA605}">
+            <File Id="fil5890345F9653C43CCB7A79215CEDA5EC" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedLightItalic.ttf" />
+          </Component>
+          <Component Id="cmpF403758DE4F40A324F4A4516225A3685" Directory="FontsFolder" Guid="{A95E745F-EDBB-4AFF-92D0-D9DCAEAA1BFD}">
+            <File Id="fil879E8EB51D5FDBEBE8AF37DC99752C65" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedMedium.ttf" />
+          </Component>
+          <Component Id="cmp6167DA9B7314EB9F327BC4CDB89EB741" Directory="FontsFolder" Guid="{782D5046-024A-4F99-A4DA-972689E098C1}">
+            <File Id="filA792FBE0843CB86FDC86F43A35E33373" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedMediumItalic.ttf" />
+          </Component>
+          <Component Id="cmp0FBC4D7F1217359D53D9258B07DBF670" Directory="FontsFolder" Guid="{2817686E-3898-441A-8D7A-55FA1E7EFE2D}">
+            <File Id="filE2B248AE6604AD3C8C71D59860826E81" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedSemiBold.ttf" />
+          </Component>
+          <Component Id="cmpD82AC7A00FB65B59536DB0078AA5E649" Directory="FontsFolder" Guid="{69940503-C5B8-4793-9B47-BC24C620E6ED}">
+            <File Id="filB57A226D9728F0276E1BB4FD4AF26D07" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedSemiBoldItalic.ttf" />
+          </Component>
+          <Component Id="cmp09D2A5FB880DA1B9A1AD0A5770EA337C" Directory="FontsFolder" Guid="{539E3918-F8F5-4D35-9FDB-7BE801003B32}">
+            <File Id="filA36B49EEFA0D94EFF58C23EFE26B5089" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedThin.ttf" />
+          </Component>
+          <Component Id="cmpE6E53A042477DA4247DFCAAF3B44E182" Directory="FontsFolder" Guid="{55A624C4-ED0A-4AA0-9D47-FFD999E0B7D2}">
+            <File Id="fil6C22EA1DAE7385C11576438D2B39B06D" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-SemiCondensedThinItalic.ttf" />
+          </Component>
+          <Component Id="cmp5D558708CCE44FEF3F5215987C24EC99" Directory="FontsFolder" Guid="{37F67CCB-6204-4E9D-811A-CA7A940D4012}">
+            <File Id="filC759F9F878B1926A3C1F3FE45BEF54F1" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-Thin.ttf" />
+          </Component>
+          <Component Id="cmp9D0DB5987E37B98E93827D848873A3E1" Directory="FontsFolder" Guid="{C6837CF4-C7A6-4F22-97BF-8E6FD72D9078}">
+            <File Id="fil0C6E85C11F3EC91BA7B2CC9F2E28604A" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-ThinItalic.ttf" />
+          </Component>
+        </ComponentGroup>
+	</Fragment>
+</Wix>

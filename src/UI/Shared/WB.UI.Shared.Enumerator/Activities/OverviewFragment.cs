@@ -1,4 +1,5 @@
 using Android.OS;
+using Android.Runtime;
 using Android.Views;
 using AndroidX.RecyclerView.Widget;
 using MvvmCross;
@@ -13,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
+    [Register("wb.ui.enumerator.activities.interview.OverviewFragment")]
     public class OverviewFragment : BaseFragment<OverviewViewModel>
     {
         private MvxRecyclerView recyclerView;

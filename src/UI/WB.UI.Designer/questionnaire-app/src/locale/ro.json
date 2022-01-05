@@ -451,6 +451,7 @@
     "SideBarEditCategories": "Editare Variante de răspuns",
     "StringsView": "Vizualizare text",
     "TableView": "Vizualizare în tabel",
-    "ValidationIntValue": "Valoarea este prea mare"
+    "ValidationIntValue": "Valoarea este prea mare",
+    "EditorShowComments": "Show comments ({{count}})"
   }
 }

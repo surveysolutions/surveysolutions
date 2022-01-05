@@ -384,6 +384,7 @@
     "OptionsWindowTitle": "Edit categories",
     "CascadingOptionsWindowTitle": "Edit cascading categories",
     "SideBarCategoriesNoName": "categories with no name",
+    "EditorShowComments": "Show comments ({{count}})",
     "JumpToEdit": "Jump to edit",
     "SettingsQuestionnaireVariable": "Questionnaire variable",
     "CollaboratorsSettings": "Collaborators",

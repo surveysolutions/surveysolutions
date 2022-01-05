@@ -14,9 +14,7 @@ namespace WB.UI.Supervisor.Activities.Dashboard
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            base.OnCreateView(inflater, container, savedInstanceState);
-
-            var view = this.BindingInflate(this.ViewResourceId, null);
+            var view = base.OnCreateView(inflater, container, savedInstanceState);
 
             var recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.dashboard_tab_recycler);
             recyclerView.HasFixedSize = true;

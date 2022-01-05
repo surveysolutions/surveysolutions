@@ -4,7 +4,7 @@
         <li>{{prefix}}: {{formatDate(syncInfo.syncDate)}} ({{formatLastCommunication(syncInfo.syncDate)}})</li>
 
         <template v-if="syncInfo.hasStatistics">
-            <li>{{$t('Pages.InterviewerProfile_TotalSyncTime')}}: {{syncInfo.totalSyncDuration}}</li>
+            <li>{{$t('Pages.InterviewerProfile_TotalSyncTime')}}: {{formatDuration(syncInfo.totalSyncDuration)}}</li>
             <li>
                 {{$t('Pages.InterviewerProfile_ConnectionSpeed')}}:
                 {{ouputBytes(syncInfo.totalConnectionSpeed)}}/s
@@ -46,6 +46,9 @@ export default {
         },
         formatDate(date){
             return moment.utc(date).format(DateFormats.dateTime)
+        },
+        formatDuration(d){
+            return moment.utc(moment.duration(d).as('milliseconds')).format('HH:mm:ss')
         },
     },
 }

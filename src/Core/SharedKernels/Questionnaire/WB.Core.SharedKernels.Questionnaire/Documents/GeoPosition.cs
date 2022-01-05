@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Main.Core.Entities.SubEntities
 {
-    public class GeoPosition
+    public class GeoPosition : IEquatable<GeoPosition>
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
@@ -62,11 +62,19 @@ namespace Main.Core.Entities.SubEntities
             return geoPosition != null && this.Equals(geoPosition);
         }
 
-        protected bool Equals(GeoPosition other) => this.Latitude.Equals(other.Latitude) &&
-                                                    this.Longitude.Equals(other.Longitude) &&
-                                                    this.Accuracy.Equals(other.Accuracy) &&
-                                                    this.Altitude.Equals(other.Altitude) &&
-                                                    this.Timestamp.Equals(other.Timestamp);
+        public bool Equals(GeoPosition other)
+        {
+            if (other == null)
+                return false;
+            
+            return this.Latitude.Equals(other.Latitude) &&
+                this.Longitude.Equals(other.Longitude) &&
+                this.Accuracy.Equals(other.Accuracy) &&
+                this.Altitude.Equals(other.Altitude) &&
+                this.Timestamp.Equals(other.Timestamp);
+        }
+
+        
 
         public override int GetHashCode()
         {

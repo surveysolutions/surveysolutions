@@ -55,19 +55,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 CreateAnsweredQuestionSynchronizationDto(integerQuestionId, rosterVector, 1),
             };
 
-            var rosterInstances = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
-            {
-                {
-                    Create.Entity.InterviewItemId(fixedRosterIdentity.Id, fixedRosterIdentity.RosterVector),
-                    new[] {Create.Entity.RosterSynchronizationDto(fixedRosterIdentity.Id, fixedRosterIdentity.RosterVector.Shrink(), fixedRosterIdentity.RosterVector.Last())}
-                },
-                {
-                    Create.Entity.InterviewItemId(fixedNestedRosterIdentity.Id, fixedNestedRosterIdentity.RosterVector),
-                    new[] {Create.Entity.RosterSynchronizationDto(fixedNestedRosterIdentity.Id, fixedNestedRosterIdentity.RosterVector.Shrink(), fixedNestedRosterIdentity.RosterVector.Last())}
-                }
-            };
+            
             synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId,
-                userId: userId, answers: answersDtos, rosterGroupInstances: rosterInstances);
+                userId: userId, answers: answersDtos);
             
             command = Create.Command.Synchronize(userId, synchronizationDto);
             command.SynchronizedInterview.Language = "SomeTranso";
