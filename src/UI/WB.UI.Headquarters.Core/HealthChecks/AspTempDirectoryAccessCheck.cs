@@ -8,6 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.HealthChecks
 {
@@ -23,7 +25,7 @@ namespace WB.UI.Headquarters.HealthChecks
         }
         
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
-            CancellationToken cancellationToken = new CancellationToken())
+            CancellationToken cancellationToken = default)
         {
             /*
                https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.httprequestrewindextensions.enablebuffering?view=aspnetcore-6.0
@@ -35,7 +37,7 @@ namespace WB.UI.Headquarters.HealthChecks
              */
             
             if (Environment.OSVersion.Platform != PlatformID.Win32NT)
-                return Task.FromResult(HealthCheckResult.Healthy("System is not Windows"));
+                return Task.FromResult(HealthCheckResult.Healthy(Diagnostics.temp_folder_permissions_Windows_check));
             
             var aspTempFolder = Environment.GetEnvironmentVariable(AspTempEnvironmentVariable);
             if (aspTempFolder == null)
@@ -49,18 +51,48 @@ namespace WB.UI.Headquarters.HealthChecks
                 var hasWritePermission = CheckDirectoryPermissions(aspTempFolder);
                 return Task.FromResult<HealthCheckResult>(
                     hasWritePermission
-                        ? HealthCheckResult.Healthy() 
-                        : HealthCheckResult.Unhealthy($"System can't write temp files to: {aspTempFolder}") );
+                        ? HealthCheckResult.Healthy(Diagnostics.temp_folder_permissions_Healthy) 
+                        : HealthCheckResult.Unhealthy(Diagnostics.temp_folder_permissions_Unhealty_without_permissions.FormatString(aspTempFolder)));
             }
             catch (PrivilegeNotHeldException e)
             {
-                return Task.FromResult(HealthCheckResult.Healthy($"Process hasn't privilege to check permissions of temp folder {aspTempFolder}"));
+                bool success = TryToWriteTempFile(aspTempFolder);
+                return Task.FromResult(success
+                    ? HealthCheckResult.Healthy(Diagnostics.temp_folder_permissions_Healthy)
+                    : HealthCheckResult.Degraded(Diagnostics.temp_folder_permissions_Degraded_without_permissions.FormatString(aspTempFolder)));
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Can't check temp folder permissions {aspTempFolder}", aspTempFolder);
-                return Task.FromResult(HealthCheckResult.Degraded($"Can't check temp folder permissions {aspTempFolder}. Error: {ex.Message}"));
+                return Task.FromResult(HealthCheckResult.Degraded(Diagnostics.temp_folder_permissions_Unhealty_can_not_check.FormatString(aspTempFolder, ex.Message)));
             }
+        }
+
+        private bool TryToWriteTempFile(string folder)
+        {
+            if (!Directory.Exists(folder))
+                return false;
+            
+            try
+            {
+                string filePath = folder + "TEMP_FILE.tmp";
+                using (FileStream fs = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write))
+                {
+                    fs.WriteByte(0xff);
+                }
+
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return false;
         }
 
         private bool CheckDirectoryPermissions(string path)

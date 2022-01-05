@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.HealthChecks
                 .AddCheck<DatabaseConnectionCheck>("database_connection_check");
                 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                checks.AddCheck<AspTempDirectoryAccessCheck>("temp folder permissions");
+                checks.AddCheck<AspTempDirectoryAccessCheck>("temp_folder_permissions");
         }
     }
 }
