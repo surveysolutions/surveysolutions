@@ -358,7 +358,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             {
                 Create.Entity.Roster(rosterId1,displayMode: RosterDisplayMode.Table, variable: "r1", title:"test %age%", children: new IComposite[]
                 {
-                    Create.Entity.NumericQuestion(questionId, variableName:"age")
+                    Create.Entity.NumericQuestion(questionId, variableName:"age", isInteger: true)
                 })
             });
 
@@ -368,14 +368,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             {
                 Create.Entity.InterviewTreeRoster(Create.Entity.Identity(rosterId1, new decimal[] { 0 }), rosterTitle: "test %age%", children: new IInterviewTreeNode[]
                 {
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(questionId, new decimal[] { 0 }), variableName:"age", questionType: QuestionType.Numeric, answer: 5),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(questionId, new decimal[] { 0 }), variableName:"age", questionType: QuestionType.Numeric, isDecimal: false, answer: 5),
                 }),
             });
             var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
 
 
             var substitionTextFactory = Create.Service.SubstitutionTextFactory();
-            var rosterIdentity = Create.Entity.Identity(rosterId1, new decimal[] { 2 });
+            var rosterIdentity = Create.Entity.Identity(rosterId1, new decimal[] { 0 });
             var substitionText = substitionTextFactory.CreateText(rosterIdentity, "title: %age%", questionnaire);
 
 
