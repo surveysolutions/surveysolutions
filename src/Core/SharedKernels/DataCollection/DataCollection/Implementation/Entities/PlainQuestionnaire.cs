@@ -1870,9 +1870,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         
         private static IStaticText GetStaticText(Dictionary<Guid, IStaticText> staticTexts, Guid staticTextsId) => staticTexts.GetOrNull(staticTextsId);
 
-        public Guid GetFirstSectionId()
+        public Guid? GetFirstSectionId()
         {
-            return this.GetAllSections().First(s => !IsCoverPage(s));
+            var sectionId = this.GetAllSections().FirstOrDefault(s => !IsCoverPage(s));
+            if (sectionId == Guid.Empty)
+                return null;
+            return sectionId;
         }
 
         public IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId)
