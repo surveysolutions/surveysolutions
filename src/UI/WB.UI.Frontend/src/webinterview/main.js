@@ -41,9 +41,6 @@ sync(store, router)
 
 const App = require('./App').default
 
-
-box.init(i18n, browserLanguage)
-
 window._api = {
     store,
     router,

@@ -147,20 +147,16 @@ export default {
     navigeToRoute() { },
 
     closeInterview({ dispatch }) {
-        modal.alert({
+        modal.dialog({
             title: Vue.$t('WebInterviewUI.CloseInterviewTitle'),
-            message: Vue.$t('WebInterviewUI.CloseInterviewMessage'),
-            callback: () => {
+            message: '<p>' + Vue.$t('WebInterviewUI.CloseInterviewMessage') + '</p>',
+            confirmCallback: () => {
                 dispatch('reloadInterview')
             },
             onEscape: false,
             closeButton: false,
-            buttons: {
-                ok: {
-                    label: Vue.$t('WebInterviewUI.Reload'),
-                    className: 'btn-success',
-                },
-            },
+            showCancelButton:false,
+            confirmButtonText: Vue.$t('WebInterviewUI.Reload'),
         })
     },
 

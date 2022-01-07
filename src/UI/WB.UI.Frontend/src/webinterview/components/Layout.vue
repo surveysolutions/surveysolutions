@@ -31,7 +31,12 @@ export default {
     },
     mounted() {
         if(this.$config.loadedMessage) {
-            modal.alert(this.$config.loadedMessage)
+            modal.dialog(
+                {
+                    message: '<p>' + this.$config.loadedMessage + '</p>',
+                    showCancelButton: false,
+                }
+            )
         }
     },
 }

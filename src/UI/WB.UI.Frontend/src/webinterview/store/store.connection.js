@@ -22,20 +22,16 @@ const connectionStore = {
                 commit('IS_DISCONNECTED', true)
                 // Vue.$api.stop()
 
-                modal.alert({
+                modal.dialog({
                     title: Vue.$t('WebInterviewUI.Disconnected'),
                     message: '<p>' + Vue.$t('WebInterviewUI.ConnectionLostTitle') + '</p><p>' + Vue.$t('WebInterviewUI.ConnectionLostMessage') + '</p>',
-                    callback: () => {
+                    confirmCallback: () => {
                         location.reload()
                     },
                     onEscape: false,
                     closeButton: false,
-                    buttons: {
-                        ok: {
-                            label: Vue.$t('WebInterviewUI.Reload'),
-                            className: 'btn-success',
-                        },
-                    },
+                    showCancelButton: false,
+                    confirmButtonText: Vue.$t('WebInterviewUI.Reload'),
                 })
             }
         },

@@ -36,6 +36,7 @@
                         @click="pickLocation">
                         {{ $t('WebInterviewUI.PickLocation') }}
                     </button>
+
                 </div>
                 <wb-lock />
             </div>
@@ -48,7 +49,7 @@
 import { entityDetails } from '../mixins'
 import Vue from 'vue'
 import moment from 'moment'
-import box from 'bootbox'
+import Swal from 'sweetalert2'
 
 class GpsAnswer {
     constructor(latitude,
@@ -146,11 +147,25 @@ export default {
         pickLocation() {
             var self = this
 
-            box.dialog({
+            Swal.fire({
                 title: self.$t('WebInterviewUI.PickLocation'),
-                message: '<div id="locationPicker"><div style="height: 400px;" id="map_canvas"></div></div>',
-                size: 'large',
-                onShow: () => {
+                html: '<div id="locationPicker"><div style="height: 400px;" id="map_canvas"></div></div>',
+                width: 600,
+                confirmButtonText: self.$t('Common.Ok'),
+                showCancelButton: true,
+                showCloseButton: true,
+                buttonsStyling: false,
+                customClass:{
+                    confirmButton: 'btn btn-primary',
+                    cancelButton:'btn btn-link',
+                    footer: 'modal-footer',
+                    popup: 'modal-content',
+                    header: 'modal-header',
+                },
+
+                cancelButtonText: self.$t('Common.Cancel'),
+
+                didOpen: () => {
                     self.pickedLocation = null
                     var latlng = new google.maps.LatLng(-34.397, 150.644)
 
@@ -197,26 +212,19 @@ export default {
                         }
                     }
                 },
-                buttons: {
-                    ok: {
-                        label: self.$t('Common.Ok'),
-                        className: 'btn btn-primary',
-                        callback: () => {
-                            if(self.pickedLocation) {
-                                self.onPositionDetermined({
-                                    coords: {
-                                        latitude: self.pickedLocation.latitude,
-                                        longitude: self.pickedLocation.longitude,
-                                    },
-                                }, this.id)
-                            }
-                        },
-                    },
-                    cancel: {
-                        label: self.$t('Common.Cancel'),
-                        className: 'btn btn-link',
-                    },
-                },
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    if(self.pickedLocation) {
+                        self.onPositionDetermined({
+                            coords: {
+                                latitude: self.pickedLocation.latitude,
+                                longitude: self.pickedLocation.longitude,
+                            },
+                        }, this.id)
+                    }
+                }
             })
         },
     },

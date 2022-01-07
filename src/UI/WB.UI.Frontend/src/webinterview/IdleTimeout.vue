@@ -47,22 +47,18 @@ export default {
             this.shown = true
             this.$store.dispatch('stop')
 
-            modal.alert({
+            modal.dialog({
                 title: this.$t('WebInterviewUI.SessionTimeoutTitle'),
                 message: `<p>${this.$t(
                     'WebInterviewUI.SessionTimeoutMessageTitle'
                 )}</p><p>${this.$t('WebInterviewUI.SessionTimeoutMessage')}</p>`,
-                callback: () => {
+                confirmCallback: () => {
                     location.reload()
                 },
                 onEscape: false,
                 closeButton: false,
-                buttons: {
-                    ok: {
-                        label: this.$t('WebInterviewUI.Reload'),
-                        className: 'btn-success',
-                    },
-                },
+                showCancelButton:false,
+                confirmButtonText: this.$t('WebInterviewUI.Reload'),
             })
         },
     },

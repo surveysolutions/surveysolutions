@@ -197,6 +197,8 @@ body > .ui-pnotify{
     }
 	.modal-body{
 		padding: 20px 20px 10px;
+        font-size: 14px;
+        line-height: 16px;
         .bootbox-body{
             h3{
                 font: 18px/20px RobotoRegular;
@@ -235,6 +237,10 @@ body > .ui-pnotify{
             padding: 0;
             margin-right: 20px;
         }
+    }
+    .modal-actions{
+        justify-content: flex-start;
+        margin: 0 20px;
     }
 }
 #confirmApprove{

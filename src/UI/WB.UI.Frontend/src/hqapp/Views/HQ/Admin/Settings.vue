@@ -329,20 +329,13 @@ export default {
             const self = this
             modal.dialog({
                 closeButton: false,
-                message: self.$t('Settings.RegeneratePasswordConfirm'),
-                buttons: {
-                    cancel: {
-                        label: self.$t('Common.No'),
-                    },
-
-                    success: {
-                        label: self.$t('Common.Yes'),
-                        callback: async () => {
-                            const response = await this.$hq.ExportSettings.regenPassword()
-                            this.encryptionPassword = response.data.password
-                            this.encryptionEnabled = response.data.isEnabled
-                        },
-                    },
+                message: '<p>' + self.$t('Settings.RegeneratePasswordConfirm') + '</p>',
+                confirmButtonText: self.$t('Common.Yes'),
+                cancelButtonText: self.$t('Common.No'),
+                confirmCallback: async () => {
+                    const response = await this.$hq.ExportSettings.regenPassword()
+                    this.encryptionPassword = response.data.password
+                    this.encryptionEnabled = response.data.isEnabled
                 },
             })
         },
@@ -401,24 +394,19 @@ export default {
             var self = this
             modal.dialog({
                 closeButton: false,
-                message: self.encryptionEnabled ? self.$t('Settings.ChangeStateConfirm') : self.$t('Settings.ChangeStateDisabledConfirm'),
-                buttons: {
-                    cancel: {
-                        label: self.$t('Common.No'),
-                        callback: () => {
-                            self.encryptionEnabled = !self.encryptionEnabled
-                        },
-                    },
-                    success: {
-                        label: self.$t('Common.Yes'),
-                        callback: async () => {
-                            const response = await self.$hq.ExportSettings.setEncryption(
-                                self.encryptionEnabled
-                            )
-                            self.encryptionEnabled = response.data.isEnabled
-                            self.encryptionPassword = response.data.password
-                        },
-                    },
+                confirmButtonText: self.$t('Common.Yes'),
+                cancelButtonText: self.$t('Common.No'),
+                message: '<p>' + (self.encryptionEnabled ? self.$t('Settings.ChangeStateConfirm') : self.$t('Settings.ChangeStateDisabledConfirm')) + '</p>',
+                cancelCallback: () =>
+                {
+                    self.encryptionEnabled = !self.encryptionEnabled
+                },
+                confirmCallback: async () => {
+                    const response = await self.$hq.ExportSettings.setEncryption(
+                        self.encryptionEnabled
+                    )
+                    self.encryptionEnabled = response.data.isEnabled
+                    self.encryptionPassword = response.data.password
                 },
             })
         },

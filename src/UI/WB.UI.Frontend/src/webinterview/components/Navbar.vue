@@ -331,13 +331,18 @@ export default {
             this.selectedSaveOption = 'saveNew'
             this.selectedScenarioOption = -1
         },
-        emailPersonalLink(){
+        async emailPersonalLink(){
             var self = this
-            let prompt = modal.prompt({
-                title: this.$t('WebInterviewUI.EmailLink_Header'),
 
+            await modal.prompt({
+                title: this.$t('WebInterviewUI.EmailLink_Header'),
+                message: '<p>' + this.$t('WebInterviewUI.EmailLink_ResumeAnyTime') + '</p>',
+                inputLabel: this.$t('WebInterviewUI.EmailLink_Message'),
+                inputPlaceholder: this.$t('WebInterviewUI.EmailLink_Placeholder'),
+                confirmButtonText: this.$t('Common.Ok'),
+                cancelButtonText: this.$t('Common.Cancel'),
                 inputType: 'email',
-                callback: function(result) {
+                confirmCallback: function(result) {
                     if(result === null || result === undefined) return
 
                     if (!self.validateEmail(result))
@@ -354,9 +359,10 @@ export default {
                 },
             })
 
-            prompt.find('input').attr('placeholder', this.$t('WebInterviewUI.EmailLink_Placeholder'))
-            prompt.find('input').before('<p>' + this.$t('WebInterviewUI.EmailLink_Message') + '</p>')
-            prompt.find('input').before('<p>' + this.$t('WebInterviewUI.EmailLink_ResumeAnyTime') + '</p>')
+            //prompt.find('input').attr('placeholder', this.$t('WebInterviewUI.EmailLink_Placeholder'))
+            //prompt.find('input').before('<p>' + this.$t('WebInterviewUI.EmailLink_Message') + '</p>')
+            //prompt.find('input').before('<p>' + this.$t('WebInterviewUI.EmailLink_ResumeAnyTime') + '</p>')
+
             //debugger;
         },
         sendEmailWithPersonalLink(email){
@@ -380,6 +386,9 @@ export default {
 
             modal.dialog({
                 message: '<p>' + this.$t('WebInterviewUI.SwitchingLanguage') +'</p>',
+                showCancelButton: false,
+                showConfirmButton: false,
+                onEscape: false,
                 closeButton: false,
             })
         },
