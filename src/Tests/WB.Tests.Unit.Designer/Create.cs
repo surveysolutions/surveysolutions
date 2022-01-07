@@ -435,7 +435,9 @@ namespace WB.Tests.Unit.Designer
                 LinkedToRosterId = linkedToRosterId,
                 QuestionText = title,
                 VariableLabel = variableLabel,
-                Answers = options?.Select(x => new Answer{ AnswerValue = x.Value, AnswerText = x.Title}).ToList()
+                Answers = options != null
+                    ? options.Select(x => new Answer{ AnswerValue = x.Value, AnswerText = x.Title, ParentValue = x.ParentValue}).ToList()
+                    : Enumerable.Empty<Answer>().ToList()
             };
         }
 
@@ -792,6 +794,19 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X", variable: "questionnaire");
 
+        public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? id, params IComposite[] children)
+            => Create.QuestionnaireDocumentWithCoverPage(id, null, children: children);
+
+        public static QuestionnaireDocument QuestionnaireDocumentWithEmptyCoverPage(Guid? id, params IComposite[] children)
+        {
+            var coverId = Guid.NewGuid();
+            var cover = Create.Chapter("Cover", coverId);
+            var allChildren = Enumerable.Concat((cover as IComposite).ToEnumerable(), children).ToArray();
+            var questionnaireDocument = Create.QuestionnaireDocument(id, "Questionnaire with empty cover", children: allChildren);
+            questionnaireDocument.CoverPageSectionId = coverId;
+            return questionnaireDocument;
+        }
+
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = null, string expression = "2*2", 
             string label = null, bool doNotExport = false)
         {
@@ -810,9 +825,11 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocument(
             string variable, Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null, Categories[] categories = null)
         {
+            var publicKey = id ?? Guid.NewGuid();
             return new QuestionnaireDocument
             {
-                PublicKey = id ?? Guid.NewGuid(),
+                PublicKey = publicKey,
+                Id = publicKey.FormatGuid(),
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
                 Title = title,
                 VariableName = variable,
@@ -873,12 +890,12 @@ namespace WB.Tests.Unit.Designer
             return result;
         }
         
-        public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? questionnaireId = null, Attachment[] attachments = null, 
-            Translation[] translations = null, IEnumerable<Macro> macros = null, params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? id = null, Attachment[] attachments = null, 
+            Translation[] translations = null, IEnumerable<Macro> macros = null, Guid? coverId = null, params IComposite[] children)
         {
-            var coverId = Guid.NewGuid();
-            var document = QuestionnaireDocumentWithOneChapter(questionnaireId, coverId, attachments, translations, macros, children);
-            document.CoverPageSectionId = coverId;
+            var cover = coverId ?? Guid.NewGuid();
+            var document = QuestionnaireDocumentWithOneChapter(id, cover, attachments, translations, macros, children);
+            document.CoverPageSectionId = cover;
             return document;
         }
         
