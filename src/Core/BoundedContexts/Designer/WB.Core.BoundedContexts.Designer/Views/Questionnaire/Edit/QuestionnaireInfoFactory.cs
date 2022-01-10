@@ -305,12 +305,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             var rosterScope = questionnaire.GetRosterScope(roster);
 
+            var rosterTitle = !roster.CustomRosterTitle
+                              && roster.DisplayMode != RosterDisplayMode.Table
+                              && roster.DisplayMode != RosterDisplayMode.Matrix
+                ? roster.Title + " - %rostertitle%"
+                : roster.Title;
+
             var result = new NewEditRosterView(
                 displayMode: roster.DisplayMode,
                 displayModes : Enum.GetValues(typeof(RosterDisplayMode)).Cast<RosterDisplayMode>().ToArray())
             {
                 ItemId = roster.PublicKey.FormatGuid(),
-                Title = roster.Title + (roster.CustomRosterTitle ? " - %rostertitle%" : ""),
+                Title = rosterTitle,
                 EnablementCondition = roster.ConditionExpression,
                 HideIfDisabled = roster.HideIfDisabled,
                 VariableName = roster.VariableName,
