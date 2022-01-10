@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
 {
-    public class LoadingInterviewViewModel : ProgressViewModel, IMvxViewModel<LoadingViewModelArg>
+    public class LoadingInterviewViewModel : ProgressViewModel, IMvxViewModel<LoadingViewModelArg>, IDisposable
     {
         private readonly IPlainStorage<InterviewView> interviewsRepository;
         private readonly IJsonAllTypesSerializer serializer;
@@ -197,6 +197,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             {
                 this.loadingCancellationTokenSource.Cancel();
             }
+        }
+
+        public void Dispose()
+        {
+            loadingCancellationTokenSource?.Dispose();
         }
     }
 }

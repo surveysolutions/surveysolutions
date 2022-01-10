@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         [NUnit.Framework.Test] public void should_return_WB0019_error_with_2_references_on_questions () =>
             verificationMessages.GetError("WB0019")
                 .References.Select(x => x.Type)
-                .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.Question, QuestionnaireVerificationReferenceType.Variable);
+                .Should().BeEquivalentTo(new[] {QuestionnaireVerificationReferenceType.Question, QuestionnaireVerificationReferenceType.Variable});
 
         [NUnit.Framework.Test] public void should_return_WB0019_error_with_first_reference_to_question_with_substitution_text () =>
             verificationMessages.GetError("WB0019").References.ElementAt(0).Id.Should().Be(questionId);

@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verificationMessages.GetError("WB0019")
                     .References.Select(x => x.Type)
-                    .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.Question, QuestionnaireVerificationReferenceType.Variable);
+                    .Should().BeEquivalentTo(new[] {QuestionnaireVerificationReferenceType.Question, QuestionnaireVerificationReferenceType.Variable});
 
             verificationMessages.GetError("WB0019").References.ElementAt(0).Id.Should().Be(questionId);
             verificationMessages.GetError("WB0019").References.ElementAt(1).Id.Should().Be(variableId);
@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verificationMessages.GetError("WB0056")
                 .References.Select(x => x.Type)
-                .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.Question);
+                .Should().BeEquivalentTo(new[] {QuestionnaireVerificationReferenceType.Question});
 
             verificationMessages.GetError("WB0056").References.ElementAt(0).Id.Should().Be(numericQuestionId);
         }
@@ -111,7 +111,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verificationMessages.GetError("WB0280")
                 .References.Select(x => x.Type)
-                .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.Question);
+                .Should().BeEquivalentTo(new[] {QuestionnaireVerificationReferenceType.Question});
 
             verificationMessages.GetError("WB0280").References.ElementAt(0).Id.Should().Be(questionId);
         }
@@ -134,7 +134,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verificationMessages.GetError("WB0280")
                 .References.Select(x => x.Type)
-                .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.StaticText);
+                .Should().BeEquivalentTo(new[] {QuestionnaireVerificationReferenceType.StaticText});
 
             verificationMessages.GetError("WB0280").References.ElementAt(0).Id.Should().Be(staticTextId);
         }
@@ -158,11 +158,11 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verificationMessages.GetError("WB0280")
                 .References.Select(x => x.Type)
-                .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.Question);
+                .Should().BeEquivalentTo(new[] {QuestionnaireVerificationReferenceType.Question});
 
             verificationMessages.GetError("WB0280")
                 .References.Select(x => x.IndexOfEntityInProperty)
-                .Should().BeEquivalentTo(0);
+                .Should().BeEquivalentTo(new[] {0});
 
             verificationMessages.GetError("WB0280").References.ElementAt(0).Id.Should().Be(questionId);
         }
@@ -186,11 +186,11 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verificationMessages.GetError("WB0280")
                 .References.Select(x => x.Type)
-                .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.StaticText);
+                .Should().BeEquivalentTo(new[] {QuestionnaireVerificationReferenceType.StaticText});
 
             verificationMessages.GetError("WB0280")
                 .References.Select(x => x.IndexOfEntityInProperty)
-                .Should().BeEquivalentTo(0);
+                .Should().BeEquivalentTo(new[] {0});
 
             verificationMessages.GetError("WB0280").References.ElementAt(0).Id.Should().Be(staticTextId);
         }
@@ -339,8 +339,12 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.ShouldContainError("WB0313");
 
             verificationMessages.GetError("WB0313")
-                .References.Select(x => x.Type)
-                .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.Group, QuestionnaireVerificationReferenceType.Question);
+                .References.Select(x => x.Type).ToArray()
+                .Should().BeEquivalentTo(new[] 
+                {
+                    QuestionnaireVerificationReferenceType.Group, 
+                    QuestionnaireVerificationReferenceType.Question
+                });
 
             verificationMessages.GetError("WB0313").References.ElementAt(0).Id.Should().Be(rosterId);
             verificationMessages.GetError("WB0313").References.ElementAt(1).Id.Should().Be(questionId);

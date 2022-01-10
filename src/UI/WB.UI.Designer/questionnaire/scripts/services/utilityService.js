@@ -148,7 +148,7 @@
                 var newId = utilityService.guid();
                 var emptyRoster = {
                     "itemId": newId,
-                    "title": $i18next.t('DefaultNewRoster'),
+                    "title": $i18next.t('DefaultNewRoster') + ' - %rostertitle%',
                     "items": [],
                     itemType: 'Group',
                     hasCondition: false,

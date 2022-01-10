@@ -144,6 +144,24 @@
   <data name="database_connection_check" xml:space="preserve">
     <value>Проверка соединения с базой данных</value>
   </data>
+  <data name="temp_folder_permissions" xml:space="preserve">
+    <value>Проверка на доступность записи во временную папку</value>
+  </data>
+  <data name="temp_folder_permissions_Healthy" xml:space="preserve">
+    <value>Успешная проверка на доступ к временной папке</value>
+  </data>
+  <data name="temp_folder_permissions_Unhealty_without_permissions" xml:space="preserve">
+    <value>Приложение не смогло создать временный файл в папке: {0}</value>
+  </data>
+  <data name="temp_folder_permissions_Unhealty_can_not_check" xml:space="preserve">
+    <value>Приложение не смогло проверить права доступа у папки: {0}. Ошибка: {1}</value>
+  </data>
+  <data name="temp_folder_permissions_Degraded_without_permissions" xml:space="preserve">
+    <value>Приложение не имеет прав для проверки прав доступа к временной папке: {0}</value>
+  </data>
+  <data name="temp_folder_permissions_Windows_check" xml:space="preserve">
+    <value>Текущая система не Windows</value>
+  </data>
   <data name="UnexpectedBrokenPackages" xml:space="preserve">
     <value>Обнаружены {0} пакеты(ов) с ошибками</value>
   </data>

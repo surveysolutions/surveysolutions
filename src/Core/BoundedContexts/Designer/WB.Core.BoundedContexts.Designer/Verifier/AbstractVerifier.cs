@@ -150,5 +150,35 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     .Find<TEntity>(entity => hasError(entity, questionnaire))
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
+        
+        protected static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, IQuestionnaireEntity?> hasEntityWithError, string message)
+            where TEntity : class, IComposite
+        {
+            return questionnaire =>
+                questionnaire
+                    .Questionnaire
+                    .Find<TEntity>()
+                    .Select(entity => hasEntityWithError(entity, questionnaire))
+                    .Where(entity => entity != null)
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity!)));
+        }
+        
+        protected static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(MultiLanguageQuestionnaireDocument questionnaire, Guid id, Type entityType)
+        {
+            if (typeof(IQuestion).IsAssignableFrom(entityType))
+                return QuestionnaireVerificationReferenceType.Question;
+
+            if (entityType.IsAssignableFrom(typeof(StaticText)))
+                return QuestionnaireVerificationReferenceType.StaticText;
+
+            if (entityType.IsAssignableFrom(typeof(Variable)))
+                return QuestionnaireVerificationReferenceType.Variable;
+
+            var group = questionnaire.Find<IGroup>(id);
+
+            return questionnaire.Questionnaire.IsRoster(group)
+                ? QuestionnaireVerificationReferenceType.Roster
+                : QuestionnaireVerificationReferenceType.Group;
+        }
     }
 }

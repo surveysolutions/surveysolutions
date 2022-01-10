@@ -56,17 +56,21 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         [Test]
-        public void should_validate_location_of_roster_title()
+        public void should_allow_rosterttle_substitution_in_of_roster_title()
         {
-            Create.QuestionnaireDocumentWithOneChapter(
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
                 Create.FixedRoster(title: "Roster %rostertitle%",
                     rosterId: Id.gA,
                     children: new IComposite[]
                     {
                         Create.NumericIntegerQuestion(variable: "test1", id: Id.g1)
                     }
-                ))
-                .ExpectError("WB0059");
+                ));
+                
+            var verifier = CreateQuestionnaireVerifier();
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));    
+                
+            verificationMessages.ShouldNotContainError("WB0059");
         }
 
         [Test]
@@ -437,13 +441,13 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
         
         [Test]
-        public void should_not_allow_matrix_roster_to_have_custom_title()
+        public void should_allow_matrix_roster_to_have_custom_title()
         {
             Create.QuestionnaireDocumentWithOneChapter(
                     Create.Roster(displayMode: RosterDisplayMode.Matrix,
                         customRosterTitle: true)
                 )
-                .ExpectError("WB0303");
+                .ExpectNoError("WB0303");
         }
 
         [Test]
@@ -457,13 +461,13 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         [Test]
-        public void should_not_allow_table_roster_to_have_custom_title()
+        public void should_allow_table_roster_to_have_custom_title()
         {
             Create.QuestionnaireDocumentWithOneChapter(
                     Create.Roster(displayMode: RosterDisplayMode.Table,
                         customRosterTitle: true)
                 )
-                .ExpectError("WB0304");
+                .ExpectNoError("WB0304");
         }
     }
 }
