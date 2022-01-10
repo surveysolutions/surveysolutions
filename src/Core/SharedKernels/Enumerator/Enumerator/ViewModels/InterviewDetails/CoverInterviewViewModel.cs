@@ -110,9 +110,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             
             this.InterviewState.Init(interviewId, null);
 
-            var firstSectionId = questionnaire.GetAllSections().First(id => !questionnaire.IsCoverPage(id));
-            this.firstSectionIdentity = new Identity(firstSectionId, RosterVector.Empty);
-            this.FirstSectionTitle = interview.GetBrowserReadyTitleHtml(this.firstSectionIdentity);
+            var firstSectionId = questionnaire.GetFirstSectionId();
+            if (firstSectionId.HasValue)
+            {
+                this.firstSectionIdentity = new Identity(firstSectionId.Value, RosterVector.Empty);
+                this.FirstSectionTitle = interview.GetBrowserReadyTitleHtml(this.firstSectionIdentity);
+            }
+            else
+            {
+                this.FirstSectionTitle = UIResources.Interview_CompleteScreen_ButtonText;
+            }
+            
             this.QuestionnaireTitle = questionnaire.Title;
             
             var prefilledEntitiesFromQuestionnaire = questionnaire.GetPrefilledEntities();
@@ -228,7 +236,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private async Task StartInterviewAsync()
         {
             await this.commandService.WaitPendingCommandsAsync();
-            await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSectionIdentity));
+            
+            if (firstSectionIdentity != null)
+                await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSectionIdentity));
+            else
+                await this.navigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
         }
 
         public void Dispose()

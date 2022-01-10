@@ -592,6 +592,9 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool IsNeedShowCoverPage(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
+            if (questionnaire.IsCoverPageSupported && questionnaire.GetFirstSectionId() == null)
+                return true;
+            
             return questionnaire.GetPrefilledEntities().Any()
                    || !string.IsNullOrEmpty(interview.SupervisorRejectComment)
                    || interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any();
