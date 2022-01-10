@@ -87,6 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.UpdateGroup(groupId, group =>
             {
                 group.IsRoster = false;
+                group.CustomRosterTitle = false;
                 group.RosterSizeSource = RosterSizeSourceType.Question;
                 group.RosterSizeQuestionId = null;
                 group.RosterTitleQuestionId = null;
@@ -473,6 +474,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     group.FixedRosterTitles = fixedTitles;
                     group.RosterTitleQuestionId = rosterTitleQuestionId;
                     group.IsRoster = true;
+                    group.CustomRosterTitle = true;
                 });
             }
             else
@@ -531,7 +533,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     groupToUpdate.FixedRosterTitles = fixedTitles;
                     groupToUpdate.RosterTitleQuestionId = rosterTitleQuestionId;
                     groupToUpdate.IsRoster = true;
-                    groupToUpdate.CustomRosterTitle = false;
+                    groupToUpdate.CustomRosterTitle = true;
                 });
             }
             else

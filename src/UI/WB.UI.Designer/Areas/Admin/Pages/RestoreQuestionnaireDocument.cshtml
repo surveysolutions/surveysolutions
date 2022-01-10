@@ -1,0 +1,50 @@
+﻿@page
+@model WB.UI.Designer.Areas.Admin.Pages.RestoreQuestionnaireDocumentModel
+@{
+    ViewBag.Title = "Restore Questionnaire Document from Backup";
+    Layout = "Layout.ControlPanel";
+}
+
+<div class="page-header">
+    <h3>
+        Restore Questionnaire Document from Backup
+    </h3>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Error))
+    {
+<pre class="alert alert-danger">@Html.Raw(Model.Error)</pre>
+    }
+
+@if (!string.IsNullOrEmpty(Model.Success))
+    {
+<pre class="alert alert-success">@Html.Raw(Model.Success)</pre>
+    }
+
+@if (!string.IsNullOrEmpty(Model.Error) || !string.IsNullOrEmpty(Model.Success))
+    {
+<hr />
+<a class="btn btn-lg btn-default" asp-page="/RestoreQuestionnaire">
+    Restore another questionnaire
+</a>
+    }
+    else
+    {
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <input class="form-control" type="file" asp-for="Upload" placeholder=".zip file" accept=".zip" />
+    </div>
+    <div class="form-group">
+        <input id="create-new" type="checkbox" asp-for="CreateNew" />
+        <label for="create-new">Create new questionnaire. </label>
+        <p class="text-danger">If not selected existing questionnaire will be overriden.<p>
+        <p class="text-danger">Owner of questionnaire could loose access or changes could be lost.<p>
+    </div>
+    <div class="form-actions">
+        <input type="submit" class="btn btn-success btn-lg" value="Upload" />
+        <a class="btn" asp-controller="ControlPanel" asp-action="Index">
+            Cancel
+        </a>
+    </div>
+</form>
+    }

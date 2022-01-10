@@ -2002,7 +2002,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool HasCustomRosterTitle(Guid id)
         {
-            return this.GetGroup(id)?.CustomRosterTitle == true;
+            var @group = this.GetGroup(id);
+            return @group?.CustomRosterTitle == true 
+                   && @group?.DisplayMode != RosterDisplayMode.Table
+                   && @group?.DisplayMode != RosterDisplayMode.Matrix;
         }
 
         public bool IsCoverPage(Guid identityId) => innerDocument.IsCoverPage(identityId);

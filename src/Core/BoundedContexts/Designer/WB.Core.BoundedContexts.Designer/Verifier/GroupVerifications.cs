@@ -525,10 +525,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool MatrixRosterCannotHaveCustomTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
           => group.DisplayMode == RosterDisplayMode.Matrix && 
-             (group.CustomRosterTitle || group.Title.Contains("%rostertitle%"));
+             group.Title.Contains("%rostertitle%");
         private static bool TableRosterCannotHaveCustomTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
           => group.DisplayMode == RosterDisplayMode.Table && 
-             (group.CustomRosterTitle || group.Title.Contains("%rostertitle%"));
+             group.Title.Contains("%rostertitle%");
 
         private static bool MatrixRosterHasToContainNoLinkedQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Any(composite =>

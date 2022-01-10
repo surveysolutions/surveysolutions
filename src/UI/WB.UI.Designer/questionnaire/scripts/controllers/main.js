@@ -191,6 +191,26 @@ angular.module('designerApp')
                 }, 500);
             };
 
+            $scope.exportQuestionnaire = function () {
+                $scope.verificationStatus.errors = null;
+                $scope.verificationStatus.warnings = null;
+                $rootScope.$broadcast("verifing", {});
+    
+                questionnaireService.verifyExport($state.params.questionnaireId).then(function(result) {
+                    var data = result.data;
+                    if (data.errors.length > 0) {
+                        $scope.verificationStatus.errors = data.errors;
+                        $scope.verificationStatus.warnings = data.warnings;
+                        $scope.verificationStatus.time = new Date();
+                        $scope.verificationStatus.typeOfMessageToBeShown = ERROR;
+                        $scope.showVerificationErrors();
+                    }
+                    else{
+                        window.location = '../../api/hq/backup/package/' + $state.params.questionnaireId
+                    }
+                });
+            };
+
             $scope.webTest = function () {
                 webTesterService.run($state.params.questionnaireId, $scope.questionnaire);
             };
