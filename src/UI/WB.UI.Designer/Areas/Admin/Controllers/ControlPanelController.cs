@@ -17,6 +17,7 @@ using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.Infrastructure.Versions;
+using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models.ControlPanel;
 
@@ -167,49 +168,33 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
                     change => change.UpdateTimeUtc,
                     change => change.ProductVersion)));
 
-        private static JSchema? questionnaireDocumentSchema = null;
+        private static string? questionnaireDocumentSchema = null;
         
         public IActionResult GetSchema([FromQuery]bool? getFile = null)
         {
-            JSchemaGenerator generator = new JSchemaGenerator()
-            {
-                SchemaReferenceHandling = SchemaReferenceHandling.All,
-                GenerationProviders = { new MyJSchemaGenerationProvider() }
-            };
-            
-            questionnaireDocumentSchema ??= generator.Generate(typeof(QuestionnaireDocument));
+            questionnaireDocumentSchema ??= ReadSchema();
 
             if (getFile == true)
                 return new FileStreamResult(new MemoryStream(
-                    Encoding.UTF8.GetBytes(questionnaireDocumentSchema.ToString())), "application/schema+json")
+                    Encoding.UTF8.GetBytes(questionnaireDocumentSchema)), "application/schema+json")
                 {
                     FileDownloadName = "questionnaire.schema.json"
                 };
             else
-                return this.Json(questionnaireDocumentSchema.ToString());
+                return this.Json(questionnaireDocumentSchema);
         }
 
-        internal class MyJSchemaGenerationProvider : JSchemaGenerationProvider
+        private string ReadSchema()
         {
-            public override JSchema GetSchema(JSchemaTypeGenerationContext context)
-            {
-                var schema = new JSchema();
-                var descendants = typeof(IComposite).Assembly.GetTypes().Where(item => !item.IsAbstract && typeof(IComposite).IsAssignableFrom(item)).ToList();
-                foreach (var descendant in descendants)
-                {
-                    // The line below never exits, because it's calling MySchemaGenerator.GetSchema again with the same parameter
-                    var descendantSchema = context.Generator.Generate(descendant);
-                    schema.PatternProperties.Add(descendant.Name + ".*", descendantSchema);
-                }
-                schema.AllowAdditionalProperties = false;
-                schema.Type = JSchemaType.Object;
-                return schema;
-            }
+            var testType = typeof(QuestionnaireImportService);
+            var readResourceFile = $"{testType.Namespace}.QuestionnaireSchema.json";
 
-            public override bool CanGenerateSchema(JSchemaTypeGenerationContext context)
-            {
-                return context.ObjectType == typeof(IComposite);
-            }
+            using Stream? stream = testType.Assembly.GetManifestResourceStream(readResourceFile);
+            if (stream == null)
+                throw new ArgumentException("Can't find json schema for questionnaire");
+            using StreamReader reader = new StreamReader(stream);
+            string schemaText = reader.ReadToEnd();
+            return schemaText;
         }
         
         public class VersionsInfo

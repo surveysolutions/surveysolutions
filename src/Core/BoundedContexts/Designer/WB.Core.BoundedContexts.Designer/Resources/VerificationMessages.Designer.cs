@@ -2168,6 +2168,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Substitution cannot reference items from a deeper roster level in matrix and table rosters.
+        /// </summary>
+        public static string WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope {
+            get {
+                return ResourceManager.GetString("WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only string variable type can be used as source of the attachment name.
         /// </summary>
         public static string WB0390_OnlyStringVariableAllowedAsAttachmentName {
