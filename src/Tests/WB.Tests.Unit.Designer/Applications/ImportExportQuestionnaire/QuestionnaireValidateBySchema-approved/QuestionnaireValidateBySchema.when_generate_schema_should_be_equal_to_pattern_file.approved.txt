@@ -1,0 +1,444 @@
+﻿{
+  "definitions": {
+    "Attachment": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "Name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "FileName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ContentType": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "Name",
+        "FileName",
+        "ContentType"
+      ]
+    },
+    "Categories": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "Id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "FileName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "Id",
+        "Name",
+        "FileName"
+      ]
+    },
+    "CoverPage": {},
+    "Group": {},
+    "List<Attachment>": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/Attachment"
+      }
+    },
+    "List<Categories>": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/Categories"
+      }
+    },
+    "List<Group>": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/Group"
+      }
+    },
+    "List<LookupTable>": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/LookupTable"
+      }
+    },
+    "List<Macro>": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/Macro"
+      }
+    },
+    "List<Translation>": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/Translation"
+      }
+    },
+    "LookupTable": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "TableName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "FileName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "TableName",
+        "FileName"
+      ]
+    },
+    "Macro": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "Name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Content": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "Name",
+        "Description",
+        "Content"
+      ]
+    },
+    "QuestionnaireMetaInfo": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "SubTitle": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "StudyType": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            null,
+            "AdministrativeRecords",
+            "AgriculturalCensus",
+            "AgriculturalSurvey",
+            "ChildLaborSurvey",
+            "CoreWelfareIndicatorsQuestionnaire",
+            "DemographicAndHealthSurvey",
+            "EnterpriseSurvey",
+            "EnterpriseCensus",
+            "InformalSectorSurvey",
+            "IntegratedSurvey",
+            "MultipleIndicatorClusterSurvey",
+            "LaborForceSurvey",
+            "LivingStandardsMeasurementStudy",
+            "HouseholdHealthSurvey",
+            "HouseholdSurvey",
+            "PriceSurvey",
+            "PrioritySurvey",
+            "PopulationAndHousingCensus",
+            "SampleFrame",
+            "ServiceProvisionAssessments",
+            "SocioEconomicMonitoringSurvey",
+            "StatisticalInfoAndMonitoringProg",
+            "WorldFertilitySurvey",
+            "WorldHealthSurvey"
+          ]
+        },
+        "Version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "VersionNotes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "KindOfData": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Country": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Year": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "Language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Coverage": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Universe": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "UnitOfAnalysis": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "PrimaryInvestigator": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Funding": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Consultant": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ModeOfDataCollection": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            null,
+            "Capi",
+            "Cati",
+            "FaceToFace",
+            "Mail",
+            "FocusGroup",
+            "Internet",
+            "Other"
+          ]
+        },
+        "Notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Keywords": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "AgreeToMakeThisQuestionnairePublic": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "SubTitle",
+        "StudyType",
+        "Version",
+        "VersionNotes",
+        "KindOfData",
+        "Country",
+        "Year",
+        "Language",
+        "Coverage",
+        "Universe",
+        "UnitOfAnalysis",
+        "PrimaryInvestigator",
+        "Funding",
+        "Consultant",
+        "ModeOfDataCollection",
+        "Notes",
+        "Keywords",
+        "AgreeToMakeThisQuestionnairePublic"
+      ]
+    },
+    "Translation": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "Name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "FileName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "Name",
+        "FileName"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "Id": {
+      "type": "string"
+    },
+    "CoverPage": {
+      "$ref": "#/definitions/CoverPage"
+    },
+    "Children": {
+      "$ref": "#/definitions/List<Group>"
+    },
+    "Macros": {
+      "$ref": "#/definitions/List<Macro>"
+    },
+    "LookupTables": {
+      "$ref": "#/definitions/List<LookupTable>"
+    },
+    "Attachments": {
+      "$ref": "#/definitions/List<Attachment>"
+    },
+    "Translations": {
+      "$ref": "#/definitions/List<Translation>"
+    },
+    "Categories": {
+      "$ref": "#/definitions/List<Categories>"
+    },
+    "DefaultTranslation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "HideIfDisabled": {
+      "type": "boolean"
+    },
+    "Title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Metadata": {
+      "$ref": "#/definitions/QuestionnaireMetaInfo"
+    },
+    "VariableName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "Id",
+    "CoverPage",
+    "Children",
+    "Macros",
+    "LookupTables",
+    "Attachments",
+    "Translations",
+    "Categories",
+    "DefaultTranslation",
+    "HideIfDisabled",
+    "Title",
+    "Description",
+    "Metadata",
+    "VariableName"
+  ]
+}

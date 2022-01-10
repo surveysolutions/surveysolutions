@@ -1,0 +1,16 @@
+﻿[
+  {
+    "Type": "Title",
+    "EntityId": "44444444-4444-4444-4444-444444444444",
+    "EntityVariableName": "text #1",
+    "OptionIndex": "index1",
+    "Value": "hello"
+  },
+  {
+    "Type": "OptionTitle",
+    "EntityId": "55555555-5555-5555-5555-555555555555",
+    "EntityVariableName": "single #2",
+    "OptionIndex": "index0",
+    "Value": "hi"
+  }
+]
