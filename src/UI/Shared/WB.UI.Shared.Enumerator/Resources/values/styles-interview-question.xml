@@ -210,6 +210,15 @@
     <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
   </style>
   
+  <style name="Interview_Question_Answer_FilteredComboBox_LoadingIcon" parent="@android:style/Widget.ProgressBar.Small">
+      <item name="android:layout_width">wrap_content</item>
+      <item name="android:layout_height">match_parent</item>
+      <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
+      <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
+      <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:indeterminateDrawable">@drawable/spinnerring</item>
+  </style>
+
   <style name="Interview_Question_Answer_FilteredComboBox_Item" parent="Interview_Entity_BasicFont">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
