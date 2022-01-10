@@ -1007,7 +1007,7 @@ namespace WB.Tests.Unit.Designer
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null,
             RosterDisplayMode displayMode = RosterDisplayMode.SubSection,
-            bool customRosterTitle = false)
+            bool customRosterTitle = true)
         {
             var id = rosterId ?? Guid.NewGuid();
             Group group = Create.Group(
