@@ -1531,6 +1531,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             foreach (IComposite entity in entities)
             {
                 var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(entity.GetTitle(), entity.VariableName).ToList();
+
+                if (entity is IGroup roster && roster.IsRoster && roster.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                {
+                    foreach (var fixedRosterTitle in roster.FixedRosterTitles)
+                    {
+                        var substitutedFixedRosterTitle = this.SubstitutionService.GetAllSubstitutionVariableNames(fixedRosterTitle.Title, entity.VariableName);
+                        substitutedVariableNames.AddRange(substitutedFixedRosterTitle);
+                    }
+                }
+
                 var validateable = entity as IValidatable;
                 if (validateable != null)
                 {
