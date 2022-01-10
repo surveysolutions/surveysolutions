@@ -56,17 +56,21 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         [Test]
-        public void should_validate_location_of_roster_title()
+        public void should_allow_rosterttle_substitution_in_of_roster_title()
         {
-            Create.QuestionnaireDocumentWithOneChapter(
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
                 Create.FixedRoster(title: "Roster %rostertitle%",
                     rosterId: Id.gA,
                     children: new IComposite[]
                     {
                         Create.NumericIntegerQuestion(variable: "test1", id: Id.g1)
                     }
-                ))
-                .ExpectError("WB0059");
+                ));
+                
+            var verifier = CreateQuestionnaireVerifier();
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));    
+                
+            verificationMessages.ShouldNotContainError("WB0059");
         }
 
         [Test]
