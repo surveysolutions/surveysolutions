@@ -189,7 +189,7 @@
   <data name="Forbidden_Title" xml:space="preserve">
     <value>禁止</value>
   </data>
-  <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
+  <data name="GlobalSettings_DeleteQuestionnaireConfirmation" xml:space="preserve">
     <value>您确定要删除问卷吗？所有使用该问卷进行的访谈将丢失？</value>
   </data>
   <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">
