@@ -15,7 +15,7 @@ namespace WB.UI.Shared.Web.Exceptions
             IConfiguration configuration)
         {
             
-            // this code need to run lazy load KnownStoreTypes property
+            // this code is needed to run lazy load KnownStoreTypes property
             if (!ErrorStore.KnownStoreTypes.Contains(typeof(PostgreSqlErrorStore)))
                 ErrorStore.KnownStoreTypes.Add(typeof(PostgreSqlErrorStore));
 
@@ -26,7 +26,13 @@ namespace WB.UI.Shared.Web.Exceptions
                 config.LogFilters.Header.Add("Authorization", "***");
                 config.LogFilters.Form.Add("Password", "***");
                 config.LogFilters.Form.Add("ConfirmPassword", "***");
-
+                
+                config.LogFilters.Form.Add("__RequestVerificationToken", "***");
+                config.LogFilters.Form.Add("Input.Password", "***");
+                config.LogFilters.Form.Add("Input.ConfirmPassword", "***");
+                config.LogFilters.Form.Add("Input.OldPassword", "***");
+                config.LogFilters.Form.Add("Input.NewPassword", "***");
+                
                 if (config.Store.Type == "PostgreSql")
                 {
                     config.Store.TableName = "\"logs\".\"Errors\"";
