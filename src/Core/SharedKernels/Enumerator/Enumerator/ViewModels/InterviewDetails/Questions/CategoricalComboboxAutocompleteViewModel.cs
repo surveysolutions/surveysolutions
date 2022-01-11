@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Base;
@@ -26,6 +27,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ThrottlingViewModel throttlingModel;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
+        private CancellationTokenSource loadSuggestionsToken = new CancellationTokenSource();
+        
         public CategoricalComboboxAutocompleteViewModel(IQuestionStateViewModel questionState,
             FilteredOptionsViewModel filteredOptionsViewModel,
             bool displaySelectedValue)
@@ -45,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void InitFilter(string initialFilter = null)
         {
-            this.AutoCompleteSuggestions = this.GetSuggestions(initialFilter).ToList();
+            this.AutoCompleteSuggestions = null;
             this.FilterText = initialFilter;
             this.RaisePropertyChanged(nameof(FilterText));
         }
@@ -58,10 +61,42 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private List<OptionWithSearchTerm> autoCompleteSuggestions = new List<OptionWithSearchTerm>();
         public List<OptionWithSearchTerm> AutoCompleteSuggestions
         {
-            get => this.autoCompleteSuggestions;
+            get => this.autoCompleteSuggestions ??= GetLazySuggestions(FilterText);
             set => this.SetProperty(ref this.autoCompleteSuggestions, value);
         }
-        
+
+        private bool loading;
+        public bool Loading
+        {
+            get => loading;
+            set => SetProperty(ref loading, value);
+        }
+
+        private List<OptionWithSearchTerm> GetLazySuggestions(string filterText)
+        {
+            loadSuggestionsToken.Cancel();
+            loadSuggestionsToken.Dispose();
+            loadSuggestionsToken = new CancellationTokenSource();
+            
+            LoadOptionsAsync(filterText, loadSuggestionsToken.Token);
+            return null;
+        }
+
+        internal Task LoadOptionsAsync(string filterText, CancellationToken cancellationToken = default)
+        {
+            return Task.Factory.StartNew(async () =>
+            {
+                var suggestions = GetSuggestions(filterText);
+
+                await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                {
+                    if (isDisposed)
+                        return;
+                    AutoCompleteSuggestions = suggestions;
+                });
+            }, cancellationToken);
+        }
+
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
         {
             await this.ResetFilterAndOptions();
@@ -127,10 +162,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string filterToUpdate = null;
         private async Task UpdateFilterThrottled()
         {
-            var suggestions = this.GetSuggestions(filterToUpdate).ToList();
+            var suggestions = this.GetSuggestions(filterToUpdate);
 
             await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
+                if (isDisposed)
+                    return;
                 this.AutoCompleteSuggestions = suggestions;
             });
         }
@@ -158,28 +195,37 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.FilterText = null;
             
-            var suggestions = this.GetSuggestions(null).ToList();
             await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
             this.InvokeOnMainThread(() =>
             {
-                this.AutoCompleteSuggestions = suggestions;
+                this.AutoCompleteSuggestions = null;
                 this.RaisePropertyChanged(nameof(this.FilterText));
             });
         }
 
-        private IEnumerable<OptionWithSearchTerm> GetSuggestions(string filter)
+        private List<OptionWithSearchTerm> GetSuggestions(string filter)
         {
-            List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20);
-
-            foreach (var model in filteredOptions.Count == 1 && displaySelectedValue
-                ? filteredOptions
-                : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value)))
+            try
             {
-                if (model.Title.IsNullOrEmpty())
-                    continue;
+                Loading = true;
+                
+                List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20);
 
-                yield return ToOptionWithSearchTerm(filter, model);
+                var categoricalOptions = filteredOptions.Count == 1 && displaySelectedValue
+                    ? filteredOptions
+                    : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value));
+
+                var options = categoricalOptions
+                    .Where(m => !m.Title.IsNullOrEmpty())
+                    .Select(m => ToOptionWithSearchTerm(filter, m))
+                    .ToList();
+
+                return options;
+            }
+            finally
+            {
+                Loading = false;
             }
         }
 
@@ -192,11 +238,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void ExcludeOptions(int[] optionsToExclude) => this.excludedOptions = optionsToExclude ?? Array.Empty<int>();
 
+        private bool isDisposed = false;
         public void Dispose()
         {
-            this.QuestionState.Dispose();
-            this.filteredOptionsViewModel.Dispose();
-            this.throttlingModel.Dispose();
+            if (isDisposed)
+                return;
+
+            this.isDisposed = true;
+            
+            this.QuestionState?.Dispose();
+            this.filteredOptionsViewModel?.Dispose();
+            this.throttlingModel?.Dispose();
+            this.loadSuggestionsToken?.Dispose();
         }
 
         public QuestionInstructionViewModel InstructionViewModel => null;

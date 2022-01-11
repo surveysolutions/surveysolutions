@@ -144,6 +144,24 @@
   <data name="database_connection_check" xml:space="preserve">
     <value>Database connection check</value>
   </data>
+  <data name="temp_folder_permissions" xml:space="preserve">
+    <value>Temp folder permissions check</value>
+  </data>
+  <data name="temp_folder_permissions_Healthy" xml:space="preserve">
+    <value>Successful access to temp folder</value>
+  </data>
+  <data name="temp_folder_permissions_Unhealty_without_permissions" xml:space="preserve">
+    <value>Application can't write temp files to: {0}</value>
+  </data>
+  <data name="temp_folder_permissions_Unhealty_can_not_check" xml:space="preserve">
+    <value>Can't check temp folder permissions {0}. Error: {1}</value>
+  </data>
+  <data name="temp_folder_permissions_Degraded_without_permissions" xml:space="preserve">
+    <value>Application hasn't privilege to check permissions of temp folder {0}</value>
+  </data>
+  <data name="temp_folder_permissions_Windows_check" xml:space="preserve">
+    <value>System is not Windows</value>
+  </data>
   <data name="UnexpectedBrokenPackages" xml:space="preserve">
     <value>There is {0} Unexpected broken packages detected</value>
   </data>

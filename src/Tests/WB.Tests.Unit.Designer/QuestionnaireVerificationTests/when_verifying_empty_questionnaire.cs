@@ -12,7 +12,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument();
             questionnaire.AddChapter(questionnaire.CoverPageSectionId);
-            questionnaire.Add(Create.TextQuestion(preFilled: true, label: "label"), questionnaire.CoverPageSectionId);
 
             verifier = CreateQuestionnaireVerifier();
             BecauseOf();

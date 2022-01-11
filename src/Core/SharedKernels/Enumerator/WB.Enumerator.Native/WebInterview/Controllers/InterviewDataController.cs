@@ -87,7 +87,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 QuestionnaireTitle = IsReviewMode()
                     ? string.Format(Resources.WebInterview.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version)
                     : questionnaire.Title,
-                FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
+                FirstSectionId = questionnaire.GetFirstSectionId()?.FormatGuid(),
                 QuestionnaireVersion = questionnaire.Version,
                 InterviewKey = statefulInterview.GetInterviewKey().ToString(),
                 InterviewCannotBeChanged = 
@@ -207,7 +207,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             var result = new PrefilledPageData
             {
-                FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
+                FirstSectionId = questionnaire.GetFirstSectionId()?.FormatGuid(),
                 Entities = interviewEntityWithTypes,
                 Details = details,
                 HasAnyQuestions = interviewEntityWithTypes.Length > 1
