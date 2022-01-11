@@ -261,7 +261,7 @@
   <data name="GetLatestAppExtendedDescription" xml:space="preserve">
     <value>ჩამოტვირთეთ და დააინსტალირეთ ინტერვიუერის აპლიკაციის ეს ვერსია  მხოლოდ იმ შემთხვევაში, თუ ისარგებლებთ თანამედროვე ESRI GIS ფუნქციებით. ეს apk შეიცავს დიდ ESRI SDK-ს, არის დიდი ზომის და შესაძლოა ხანგრძლივი დრო დასჭირდება ჩამოსატვირთად.</value>
   </data>
-  <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
+  <data name="GlobalSettings_DeleteQuestionnaireConfirmation" xml:space="preserve">
     <value>დარწმუნებული ხართ, რომ გსურთ წაშალოთ კითხვარი? არსებული ინტერვიუები კითხვარში დაიკარგება</value>
   </data>
   <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">
