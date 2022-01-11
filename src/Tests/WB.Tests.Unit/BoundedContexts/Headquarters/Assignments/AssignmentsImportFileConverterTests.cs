@@ -161,6 +161,34 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(answer.Column, Is.EqualTo(variable));
             Assert.That(answer.VariableName, Is.EqualTo(variable.ToLower()));
         }
+        
+        [Test]
+        public void when_getting_assignment_row_with_missing_value_answer_for_integer_question_should_return_row_with_empty_value()
+        {
+            //arrange
+            var variable = "questionId";
+            var value =  PreloadingExtensions.MissingNumericQuestionValue;
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.NumericIntegerQuestion(variable: variable)));
+
+            var file = Create.Entity.PreloadedFile(rows: Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(variable, value)));
+
+            var converter = Create.Service.AssignmentsImportFileConverter();
+            //act
+            var assignmentRows = converter.GetAssignmentRows(file, questionnaire).ToArray();
+            //assert
+            Assert.That(assignmentRows, Has.One.Items);
+            Assert.That(assignmentRows[0].Answers, Has.One.Items);
+            Assert.That(assignmentRows[0].Answers[0], Is.TypeOf<AssignmentIntegerAnswer>());
+
+            var answer = assignmentRows[0].Answers[0] as AssignmentIntegerAnswer;
+
+            Assert.That(answer.Value, Is.EqualTo(string.Empty));
+            Assert.That(answer.Column, Is.EqualTo(variable));
+            Assert.That(answer.VariableName, Is.EqualTo(variable.ToLower()));
+            Assert.That(answer.Answer, Is.Null);
+        }
 
         [Test]
         public void when_getting_assignment_row_with_answer_by_text_question_should_return_row_with_text_preloading_value()
@@ -185,6 +213,33 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var answer = assignmentRows[0].Answers[0] as AssignmentTextAnswer;
 
             Assert.That(answer.Value, Is.EqualTo(value));
+            Assert.That(answer.Column, Is.EqualTo(variable));
+            Assert.That(answer.VariableName, Is.EqualTo(variable.ToLower()));
+        }
+        
+        [Test]
+        public void when_getting_assignment_row_with_missing_value_answer_for_text_question_should_return_row_with_empty_value()
+        {
+            //arrange
+            var variable = "questionId";
+            var value = PreloadingExtensions.MissingStringQuestionValue;
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(variable: variable)));
+
+            var file = Create.Entity.PreloadedFile(rows: Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(variable, value)));
+
+            var converter = Create.Service.AssignmentsImportFileConverter();
+            //act
+            var assignmentRows = converter.GetAssignmentRows(file, questionnaire).ToArray();
+            //assert
+            Assert.That(assignmentRows, Has.One.Items);
+            Assert.That(assignmentRows[0].Answers, Has.One.Items);
+            Assert.That(assignmentRows[0].Answers[0], Is.TypeOf<AssignmentTextAnswer>());
+
+            var answer = assignmentRows[0].Answers[0] as AssignmentTextAnswer;
+
+            Assert.That(answer.Value, Is.EqualTo(string.Empty));
             Assert.That(answer.Column, Is.EqualTo(variable));
             Assert.That(answer.VariableName, Is.EqualTo(variable.ToLower()));
         }
@@ -217,6 +272,34 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(answer.VariableName, Is.EqualTo(variable.ToLower()));
         }
 
+        [Test]
+        public void when_getting_assignment_row_with_missing_value_for_double_question_should_return_row_with_empty_value()
+        {
+            //arrange
+            var variable = "questionId";
+            var value = PreloadingExtensions.MissingNumericQuestionValue;
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.NumericRealQuestion(variable: variable)));
+
+            var file = Create.Entity.PreloadedFile(rows: Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(variable, value)));
+
+            var converter = Create.Service.AssignmentsImportFileConverter();
+            //act
+            var assignmentRows = converter.GetAssignmentRows(file, questionnaire).ToArray();
+            //assert
+            Assert.That(assignmentRows, Has.One.Items);
+            Assert.That(assignmentRows[0].Answers, Has.One.Items);
+            Assert.That(assignmentRows[0].Answers[0], Is.TypeOf<AssignmentDoubleAnswer>());
+
+            var answer = assignmentRows[0].Answers[0] as AssignmentDoubleAnswer;
+
+            Assert.That(answer.Value, Is.EqualTo(string.Empty));
+            Assert.That(answer.Column, Is.EqualTo(variable));
+            Assert.That(answer.VariableName, Is.EqualTo(variable.ToLower()));
+            Assert.That(answer.Answer, Is.Null);
+        }
+        
         [Test]
         public void when_getting_assignment_row_with_answer_by_datetime_question_should_return_row_with_datetime_preloading_value()
         {

@@ -329,54 +329,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_read_text_file_with_1_row_and_value_has_MissingStringQuestionValue_should_return_preloaded_file_with_1_specified_preloding_value()
-        {
-            // arrange
-            var value = "##N/A##";
-            var columns = new[] { "SINGLE" };
-            var row = new[] { value };
-
-            var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Other.TabDelimitedTextStream(columns, row);
-            // act
-            var file = reader.ReadTextFile(stream, "file.tab");
-            // assert
-            Assert.That(((PreloadingValue)file.Rows[0].Cells[0]).Value, Is.EqualTo(string.Empty));
-        }
-
-        [Test]
-        public void when_read_text_file_with_1_row_and_value_has_MissingNumericQuestionValue_should_return_preloaded_file_with_1_specified_preloding_value()
-        {
-            // arrange
-            var value = "-999999999";
-            var columns = new[] { "SINGLE" };
-            var row = new[] { value };
-
-            var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Other.TabDelimitedTextStream(columns, row);
-            // act
-            var file = reader.ReadTextFile(stream, "file.tab");
-            // assert
-            Assert.That(((PreloadingValue)file.Rows[0].Cells[0]).Value, Is.EqualTo(string.Empty));
-        }
-
-        [Test]
-        public void when_read_text_file_with_1_row_and_value_has_MissingQuantityValue_should_return_preloaded_file_with_1_specified_preloding_value()
-        {
-            // arrange
-            var value = "INF";
-            var columns = new[] { "SINGLE" };
-            var row = new[] { value };
-
-            var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Other.TabDelimitedTextStream(columns, row);
-            // act
-            var file = reader.ReadTextFile(stream, "file.tab");
-            // assert
-            Assert.That(((PreloadingValue)file.Rows[0].Cells[0]).Value, Is.EqualTo("-1"));
-        }
-
-        [Test]
         public void when_read_text_file_with_1_row_and_1_answer_by_composite_columns_should_return_preloaded_file_with_1_specified_composite_preloding_value_with_1_preloading_value()
         {
             // arrange
