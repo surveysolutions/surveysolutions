@@ -5,6 +5,7 @@ using System.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.DataAccess;
+using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -15,6 +16,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
+using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
@@ -33,6 +35,7 @@ namespace WB.UI.Designer.Code
         private readonly ILogger<QuestionnaireHelper> logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly DesignerDbContext questionnaireChangeItemStorage;
+        private readonly IImportExportQuestionnaireMapper importExportQuestionnaireMapper;
 
         public QuestionnaireHelper(
             IQuestionnaireListViewFactory viewFactory,
@@ -44,7 +47,8 @@ namespace WB.UI.Designer.Code
             ICategoriesService categoriesService, 
             ILogger<QuestionnaireHelper> logger, 
             IFileSystemAccessor fileSystemAccessor,
-            DesignerDbContext questionnaireChangeItemStorage)
+            DesignerDbContext questionnaireChangeItemStorage,
+            IImportExportQuestionnaireMapper importExportQuestionnaireMapper)
         {
             this.viewFactory = viewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -56,6 +60,7 @@ namespace WB.UI.Designer.Code
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireChangeItemStorage = questionnaireChangeItemStorage;
+            this.importExportQuestionnaireMapper = importExportQuestionnaireMapper;
         }
 
         public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(Guid viewerId, bool isAdmin, QuestionnairesType type, Guid? folderId,

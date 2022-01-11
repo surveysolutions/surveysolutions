@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private readonly string selfVariable;
         private readonly ISubstitutionService substitutionService;
         private readonly IVariableToUIStringService variableToUiStringService;
-        private readonly List<SubstitutionVariable> substitutionVariables;
+        protected internal readonly List<SubstitutionVariable> substitutionVariables;
 
         public SubstitutionText()
         {

@@ -65,7 +65,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 var assignment = assignmentsLocal.GetAssignment(calendarEventPackage.AssignmentId);
                 if (assignment == null)
-                    throw new InvalidOperationException("Assignment for calendar event was not found");
+                {
+                    //questionnaire was deleted
+                    logger.LogWarning($"Assignment (id={calendarEventPackage.AssignmentId}) for calendar event {calendarEventPackage.Id} was not found. Ignoring calendar event.");
+                    return;
+                }
 
                 //check responsible
                 //ignore calendar event event if responsible is another person

@@ -17,6 +17,7 @@
         local:MvxBind="ItemsSource AutoCompleteSuggestions;
                      PartialText FilterText; 
                      DisableDefaultSearch true;
+                     Loading Loading;
                      OnPartialTextChanged FilterCommand;
                      OnItemSelected SaveAnswerBySelectedOptionCommand;                     
                      OnFocusOut ShowErrorIfNoAnswerCommand;

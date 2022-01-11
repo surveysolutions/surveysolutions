@@ -1076,9 +1076,6 @@
   <data name="HelpCoverPage" xml:space="preserve">
     <value>La primera sección de cada cuestionario contiene preguntas de identificación que también se muestran en los paneles de control de los entrevistadores y supervisores.</value>
   </data>
-  <data name="HelpCustomTitle" xml:space="preserve">
-    <value>Permite anular la plantilla para el botón de lista y proporcionar texto personalizado para% rostertitle%</value>
-  </data>
   <data name="HelpDefaultDate" xml:space="preserve">
     <value>Esta fecha se mostrará como fecha de inicio para la selección en una tableta.</value>
   </data>

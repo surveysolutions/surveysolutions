@@ -57,7 +57,8 @@ export default {
                         render: function(data) {
                             if (data === null || data === undefined || data === '')
                                 return ''
-                            return new moment(data).format(DateFormats.dateTime)
+                            const utcDate = moment.utc(data)
+                            return utcDate.local().format(DateFormats.dateTime)
                         },
                     },
                     {

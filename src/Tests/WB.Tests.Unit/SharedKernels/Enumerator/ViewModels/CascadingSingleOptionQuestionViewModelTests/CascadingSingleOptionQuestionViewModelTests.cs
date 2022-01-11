@@ -124,6 +124,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
+            await combo.LoadOptionsAsync(combo.FilterText);
             combo.AutoCompleteSuggestions.Should().NotBeEmpty();
             combo.AutoCompleteSuggestions.Count.Should().Be(3);
             combo.AutoCompleteSuggestions.Select(x => x.Title).Should()
@@ -131,7 +132,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         [Test]
-        public void when_initializing_cascading_view_model_and_parent_question_is_answered_and_question_2_level_roster()
+        public async Task when_initializing_cascading_view_model_and_parent_question_is_answered_and_question_2_level_roster()
         {
             CascadingSingleOptionQuestionViewModel cascadingModel;
             Mock<IStatefulInterview> StatefulInterviewMock = new Mock<IStatefulInterview>();
@@ -169,6 +170,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
+            await combo.LoadOptionsAsync(combo.FilterText);
             combo.FilterText.Should().BeNullOrEmpty();
             combo.AutoCompleteSuggestions.Should().NotBeEmpty();
             combo.AutoCompleteSuggestions.Count.Should().Be(3);
@@ -218,15 +220,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
+            await combo.LoadOptionsAsync(combo.FilterText);
+
             //assert
             combo.AutoCompleteSuggestions.Should().NotBeEmpty();
             combo.AutoCompleteSuggestions.Count.Should().Be(3);
             combo.AutoCompleteSuggestions.Select(x => x.Title).Should().BeEquivalentTo(OptionsIfParentAnswerIs2.Select(x => x.Title));
-
         }
 
         [Test]
-        public void when_initializing_cascading_view_model_and_there_is_no_answers_in_interview_and_question_2_level_roster()
+        public async Task when_initializing_cascading_view_model_and_there_is_no_answers_in_interview_and_question_2_level_roster()
         {
             CascadingSingleOptionQuestionViewModel cascadingModel;
 
@@ -257,6 +260,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             EventRegistry.Verify(x => x.Subscribe(cascadingModel, Moq.It.IsAny<string>()), Times.Once);
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
+            await combo.LoadOptionsAsync(combo.FilterText);
             combo.FilterText.Should().BeNullOrEmpty();
             combo.AutoCompleteSuggestions.Should().BeEmpty();
         }

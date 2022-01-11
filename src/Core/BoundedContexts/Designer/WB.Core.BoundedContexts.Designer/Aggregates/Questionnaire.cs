@@ -87,6 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.UpdateGroup(groupId, group =>
             {
                 group.IsRoster = false;
+                group.CustomRosterTitle = false;
                 group.RosterSizeSource = RosterSizeSourceType.Question;
                 group.RosterSizeQuestionId = null;
                 group.RosterTitleQuestionId = null;
@@ -473,6 +474,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     group.FixedRosterTitles = fixedTitles;
                     group.RosterTitleQuestionId = rosterTitleQuestionId;
                     group.IsRoster = true;
+                    group.CustomRosterTitle = true;
                 });
             }
             else
@@ -501,8 +503,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             RosterSizeSourceType rosterSizeSource, 
             FixedRosterTitleItem[]? rosterFixedTitles, 
             Guid? rosterTitleQuestionId,
-            RosterDisplayMode displayMode,
-            bool customRosterTitle)
+            RosterDisplayMode displayMode)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -532,7 +533,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     groupToUpdate.FixedRosterTitles = fixedTitles;
                     groupToUpdate.RosterTitleQuestionId = rosterTitleQuestionId;
                     groupToUpdate.IsRoster = true;
-                    groupToUpdate.CustomRosterTitle = customRosterTitle;
+                    groupToUpdate.CustomRosterTitle = true;
                 });
             }
             else
@@ -549,8 +550,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
             var isSection = this.QuestionnaireDocument.Children.Any(s => s.PublicKey == groupId);
-            var isLastUserSection = (this.QuestionnaireDocument.Children.Count == 1 && !this.QuestionnaireDocument.IsCoverPageSupported)
-                                    || (this.QuestionnaireDocument.Children.Count == 2 && this.QuestionnaireDocument.IsCoverPageSupported);
+            var isLastUserSection = this.QuestionnaireDocument.Children.Count == 1;
             if (isSection && isLastUserSection)
             {
                 throw new QuestionnaireException(DomainExceptionType.Undefined, ExceptionMessages.CantRemoveLastSectionInQuestionnaire);

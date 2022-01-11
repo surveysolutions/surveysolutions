@@ -1006,15 +1006,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allows to override template for roster button and provide custom text for %rostertitle%.
-        /// </summary>
-        public static string HelpCustomTitle {
-            get {
-                return ResourceManager.GetString("HelpCustomTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to This date will be shown as started date for selection on a tablet.
         /// </summary>
         public static string HelpDefaultDate {

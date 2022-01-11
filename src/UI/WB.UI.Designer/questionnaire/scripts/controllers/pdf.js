@@ -2,6 +2,7 @@
     .module('designerApp')
     .controller('pdfCtrl', function(
         $scope,
+        $state,
         $log,
         $i18next,
         $uibModalInstance,
@@ -45,8 +46,7 @@
         $scope.retryGenerate = function () {
             var translationId = $scope.viewModel.selectedTranslation.translationId;
 
-            pdfService.retryExportPdf($scope.questionnaire.questionnaireId,
-                translationId);
+            pdfService.retryExportPdf($state.params.questionnaireId, translationId);
 
             updateExportPdfStatus(translationId);
         };
@@ -60,8 +60,7 @@
 
         var updateExportPdfStatus = function (translationId) {
 
-            var request = pdfService.updateExportPdfStatus($scope.questionnaire.questionnaireId,
-                translationId);
+            var request = pdfService.updateExportPdfStatus($state.params.questionnaireId, translationId);
 
             request.then(function(result) {
                 onExportPdfStatusReceived(result.data, translationId);
@@ -92,8 +91,7 @@
             }
             else {
                 $scope.cancel();
-                window.location = '../../pdf/download/' + $scope.questionnaire.questionnaireId +
-                    '?translation=' + translationId;
+                window.location = '../../pdf/download/' + $state.params.questionnaireId + '?translation=' + translationId;
             }
         };
 });
