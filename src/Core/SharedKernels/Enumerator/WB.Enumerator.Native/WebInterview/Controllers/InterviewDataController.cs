@@ -339,7 +339,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 return NewButtonState(new ButtonState
                 {
                     Title = parentGroup.Title.Text,
-                    RosterTitle = parentRoster?.RosterTitle,
+                    RosterTitle = callerQuestionnaire.HasCustomRosterTitle(parent.Id) ? null : parentRoster?.RosterTitle,
                     Type = ButtonType.Parent
                 }, parentGroup);
             }
@@ -396,7 +396,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                         Title = treeGroup.Title.Text,
                         RosterTitle = (treeGroup as InterviewTreeRoster)?.RosterTitle,
                         Target = itemIdentity.ToString(),
-                        IsRoster = true
+                        IsRoster = true,
+                        HasCustomRosterTitle = questionnaire.HasCustomRosterTitle(parentId), 
                     };
 
                     if (breadCrumbs.Any())
