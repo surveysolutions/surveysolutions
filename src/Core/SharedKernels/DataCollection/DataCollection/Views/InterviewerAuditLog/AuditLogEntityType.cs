@@ -19,6 +19,8 @@
         RejectInterview,
         AssignResponsibleToInterview,
         AssignResponsibleToAssignment,
-        FinishInstallation
+        FinishInstallation,
+        SwitchInterviewMode,
+        RestartInterview
     }
 }

@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Администрирование Сервера.
+        ///   Looks up a localized string similar to Администрирование.
         /// </summary>
         public static string ServerAdministration {
             get {
@@ -385,7 +385,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Рабочие пространства.
+        ///   Looks up a localized string similar to Рабочие области.
         /// </summary>
         public static string Workspaces {
             get {

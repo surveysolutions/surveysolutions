@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+    <Property Id="SITE_APP_NAME" Value="SurveySolutions" />
+    <Property Id="SITE_PORT" Value="80" />
+    
+    <Property Id="App_Version" Value="1.0.0.0" />
+
+    <?define ProductVersion = "1.0.0.0" ?>
+</Include>

@@ -138,9 +138,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             else
             {
-                auditLogService.Write(new LoginAuditLogEntity(userName));
+                auditLogService.WriteApplicationLevelRecord(new LoginAuditLogEntity(userName));
             }
 
+            this.Password = string.Empty;
             await this.ViewModelNavigationService.NavigateToDashboardAsync();
             await this.ViewModelNavigationService.Close(this);
         }

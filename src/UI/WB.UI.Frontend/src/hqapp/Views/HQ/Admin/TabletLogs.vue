@@ -13,6 +13,7 @@
 <script>
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
+import { escape } from 'lodash'
 
 export default {
     computed: {
@@ -25,6 +26,9 @@ export default {
                         data: 'deviceId',
                         name: 'DeviceId',
                         title: this.$t('TabletLogs.DeviceId'),
+                        render: function(data, type, row){
+                            return escape(data)
+                        },
                     },
                     {
                         data: 'userName',

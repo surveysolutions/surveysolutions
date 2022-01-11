@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
     public class when_initializing_and_no_user_activated_on_device : LoginViewModelTestContext
     {
         [NUnit.Framework.Test]
-        public async Task should_redirect_to_finish_installation_page()
+        public void should_redirect_to_finish_installation_page()
         {
             Mock<IViewModelNavigationService> viewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
             Mock<IInterviewerPrincipal> interviewerPrincipal = new Mock<IInterviewerPrincipal>();

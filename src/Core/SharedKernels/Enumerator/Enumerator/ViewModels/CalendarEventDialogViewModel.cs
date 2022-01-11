@@ -2,12 +2,14 @@
 
 using System;
 using System.Globalization;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using NodaTime;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -46,14 +48,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private string? comment;
         private CalendarEvent? calendarEvent;
 
-        public CalendarEventDialogViewModel(IMvxNavigationService navigationService,
+        public CalendarEventDialogViewModel(
             ICommandService commandService,
             IPrincipal principal,
             ICalendarEventStorage calendarEventStorage,
             IUserInteractionService userInteractionService,
             IStringFormat stringFormat)
         {
-            this.navigationService = navigationService;
+            this.navigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
             this.commandService = commandService;
             this.principal = principal;
             this.calendarEventStorage = calendarEventStorage;
@@ -181,8 +183,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         timezone, 
                         initValues.InterviewId, 
                         initValues.InterviewKey,
-                        initValues.AssignmentId, Comment)
-                    : new UpdateCalendarEventCommand(calendarEvent.Id, userId, DateTimeValue, timezone,Comment);
+                        initValues.AssignmentId, 
+                        Comment,
+                        new QuestionnaireIdentity() //dummy one, no validation on tablet
+                        )
+                    : new UpdateCalendarEventCommand(calendarEvent.Id, userId, 
+                        DateTimeValue, timezone,
+                        Comment,
+                        new QuestionnaireIdentity() //dummy one, no validation on tablet
+                        );
 
                 commandService.Execute(command);
                 

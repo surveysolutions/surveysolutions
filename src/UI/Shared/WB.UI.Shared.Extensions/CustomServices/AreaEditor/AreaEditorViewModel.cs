@@ -14,6 +14,7 @@ using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
@@ -44,15 +45,14 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             IMapService mapService,
             IUserInteractionService userInteractionService,
             ILogger logger,
-            IFileSystemAccessor fileSystemAccessor,
-            IMvxNavigationService navigationService)
+            IFileSystemAccessor fileSystemAccessor)
             : base(principal, viewModelNavigationService)
         {
             this.userInteractionService = userInteractionService;
             this.mapService = mapService;
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.navigationService = navigationService;
+            this.navigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
         }
 
         public override async Task Initialize()
@@ -63,7 +63,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 new MvxObservableCollection<ShapefileDescription>(this.mapService.GetAvailableShapefiles());
 
             var localMaps = this.mapService.GetAvailableMaps(true);
-            var defaultMap = this.mapService.PrepareAndGetDefaultMap();
+            var defaultMap = this.mapService.PrepareAndGetDefaultMapOrNull();
             localMaps.Add(defaultMap);
 
             this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
@@ -130,7 +130,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 {
                     this.Map.Basemap = basemap;
 
-                    if (basemap?.BaseLayers[0]?.FullExtent != null)
+                    if (basemap?.BaseLayers.Count > 0 && basemap?.BaseLayers[0]?.FullExtent != null)
                         await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);
                 }
             }
@@ -224,6 +224,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             {
                 var newFeatureLayer = await MapUtilityService.GetShapefileAsFeatureLayer(AvailableShapefiles.First().FullPath);
                 
+                this.MapView.Map.OperationalLayers.Clear();
+
                 // Add the feature layer to the map
                 this.MapView.Map.OperationalLayers.Add(newFeatureLayer);
 
@@ -271,8 +273,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             //show only once
             this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
 
-            if (e.Position == null) { return; }
+            if (e?.Position == null) { return; }
 
+            if (this.Map?.Basemap?.BaseLayers.Count <= 0) return;
+            
             var extent = this.MapView.Map.Basemap.BaseLayers[0].FullExtent;
 
             var point = GeometryEngine.Project(e.Position, extent.SpatialReference);

@@ -24,7 +24,7 @@
                         <input
                             class="checkbox-filter single-checkbox"
                             v-model="encryptionEnabled"
-                            @click="clickEncryptionEnabled"
+                            @change="changeEncryptionEnabled"
                             id="isEnabled"
                             type="checkbox"/>
                         <label for="isEnabled"
@@ -209,6 +209,7 @@
             <div class="col-sm-7">
                 <h2>{{$t('Settings.LogoSettings')}}</h2>
                 <p>{{$t('Settings.LogoSettings_Description')}}</p>
+                <p>{{$t('Settings.LogoSettings_Description1')}}</p>
             </div>
             <form :action="$config.model.updateLogoUrl"
                 method="post"
@@ -254,7 +255,7 @@
                             @error="logoError" />
                     </figure>
                 </div>
-                <div class="block-filter">
+                <div class="block-filter action-block">
                     <form :action="$config.model.removeLogoUrl"
                         method="post">
                         <input
@@ -396,11 +397,11 @@ export default {
             if (this.$refs.logoImage.src !== this.$config.model.defaultLogoUrl)
                 this.$refs.logoImage.src = this.$config.model.defaultLogoUrl
         },
-        clickEncryptionEnabled() {
+        changeEncryptionEnabled() {
             var self = this
             modal.dialog({
                 closeButton: false,
-                message: self.$t('Settings.ChangeStateConfirm'),
+                message: self.encryptionEnabled ? self.$t('Settings.ChangeStateConfirm') : self.$t('Settings.ChangeStateDisabledConfirm'),
                 buttons: {
                     cancel: {
                         label: self.$t('Common.No'),

@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             viewModel.Init("interview", Create.Identity(staticTextId, RosterVector.Empty), Create.Other.NavigationState());
 
         [NUnit.Framework.Test] public void should_mark_static_text_view_model_as_invalid () =>
-            viewModel.QuestionState.Validity.IsInvalid.Should().BeTrue();
+            viewModel.StaticTextState.Validity.IsInvalid.Should().BeTrue();
 
         static StaticTextViewModel viewModel;
         static Guid numericId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

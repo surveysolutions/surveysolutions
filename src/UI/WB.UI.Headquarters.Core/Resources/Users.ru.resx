@@ -321,4 +321,16 @@
   <data name="Filter_Archived" xml:space="preserve">
     <value>Архивированные</value>
   </data>  
+  <data name="UsersTitle" xml:space="preserve">
+    <value>Пользователи</value>
+  </data>
+  <data name="AddUser" xml:space="preserve">
+    <value>Добавить пользователя</value>
+  </data>
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Загрузить</value>
+  </data>
+  <data name="ApiTokenTitle" xml:space="preserve">
+      <value>API ключ пользователя</value>
+  </data>
 </root>

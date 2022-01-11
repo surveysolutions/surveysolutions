@@ -235,6 +235,9 @@
   <data name="UpgradeProgressNumbers" xml:space="preserve">
     <value>Обновление {{processed}} из {{totalCount}}</value>
   </data>
+  <data name="UpgradeProgressErrors" xml:space="preserve">
+    <value>С ошибками {{errorCount}}</value>
+  </data>
   <data name="UpgradeProgressTitle" xml:space="preserve">
     <value>Обновление заданий из {{from}} в {{to}}</value>
   </data>
@@ -246,6 +249,9 @@
   </data>
   <data name="UpgradeCancelled" xml:space="preserve">
     <value>Обновление остановлено</value>
+  </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>Произошла ошибка. Попробуйте позже.</value>
   </data>
   <data name="UpgradePreparation" xml:space="preserve">
     <value>Ожидание завершения других процессов обновления </value>
@@ -298,6 +304,9 @@
   <data name="AudioRecordingEnable" xml:space="preserve">
     <value>Вести аудио запись</value>
   </data>
+  <data name="CawiModeEnable" xml:space="preserve">
+    <value>Режим CAWI</value>
+  </data>
   <data name="AudioRecordingExplanation" xml:space="preserve">
     <value>Вести аудио запись во время интервью. При включении аудио аудита размер данных синхронизации значительно увеличится</value>
   </data>
@@ -323,13 +332,16 @@
     <value>Пароль будет использован для защиты задания</value>
   </data>
   <data name="WebMode" xml:space="preserve">
-    <value>Веб режим</value>
+    <value>Режим</value>
   </data>
   <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
     <value>Задание в Веб режиме</value>
   </data>
   <data name="Activated" xml:space="preserve">
     <value>Активирован</value>
+  </data>
+  <data name="CawiActivated" xml:space="preserve">
+    <value>CAWI Активирован</value>
   </data>
   <data name="Tooltip_Table_WebMode" xml:space="preserve">
     <value>Задание создано в Веб режиме</value>
@@ -488,5 +500,17 @@
   </data>
   <data name="NoComment" xml:space="preserve">
       <value>(нет комментария)</value>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+      <value>Пример ссылки при переключении интерьвю в Веб Режим</value>
+  </data>
+  <data name="ChangeModeModalTitle" xml:space="preserve">
+    <value>Изменить режим назначения {{assignmentId}}</value>
+  </data>
+  <data name="ModeExplanation" xml:space="preserve">
+    <value>CAWI режим позволяет собирать данные непосредственно вводом отвечающего</value>
+  </data>
+  <data name="Action_UpgradedFrom" xml:space="preserve">
+    <value>Обновлён с задания {{id}}</value>
   </data>
 </root>

@@ -1,5 +1,6 @@
 import Details from './Details'
 import Clone from './Clone'
+import ExposedVariables from './ExposedVariables'
 
 export default class MapComponent {
     get routes() {
@@ -8,6 +9,9 @@ export default class MapComponent {
         },
         {
             path: '/Questionnaires/Clone/:questionnaireId', component: Clone,
+        },
+        {
+            path: '/Questionnaires/ExposedVariables/:questionnaireId', component: ExposedVariables,
         }]
     }
 }

@@ -118,12 +118,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private IReadOnlyCollection<InterviewView> GetOutboxInterviews()
         {
-            return this.interviews.Where(GetOutboxInterviewsFilter());
+            return this.principal.IsAuthenticated
+                ? this.interviews.Where(GetOutboxInterviewsFilter())
+                : Array.Empty<InterviewView>();
         }
 
         private int GetOutboxInterviewsCount()
         {
-            return this.interviews.Count(GetOutboxInterviewsFilter());
+            return this.principal.IsAuthenticated
+                ? this.interviews.Count(GetOutboxInterviewsFilter())
+                : 0;
         }
 
         private Expression<Func<AssignmentDocument, bool>> GetOutboxAssignmentsFilter()
@@ -136,12 +140,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private IEnumerable<AssignmentDocument> GetOutboxAssignments()
         {
-            return this.assignments.Query(GetOutboxAssignmentsFilter());
+            return this.principal.IsAuthenticated
+                ? this.assignments.Query(GetOutboxAssignmentsFilter())
+                : Array.Empty<AssignmentDocument>();
         }
 
         private int GetOutboxAssignmentsCount()
         {
-            return this.assignments.Count(GetOutboxAssignmentsFilter());
+            return this.principal.IsAuthenticated
+                ? this.assignments.Count(GetOutboxAssignmentsFilter())
+                : 0;
         }
 
         public int OutboxCount()
@@ -151,10 +159,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         public IEnumerable<IDashboardItem> GetSentToInterviewerItems()
         {
-            var outboxAssignments = GetSentToInterviewerAssignments();
-
             var outboxInterviews = GetSentToInterviewerInterviews();
-
             foreach (var interviewView in outboxInterviews)
             {
                 var dashboardItem = ConvertInterviewToViewModel(interviewView);
@@ -162,6 +167,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
                 yield return dashboardItem;
             }
 
+            var outboxAssignments = GetSentToInterviewerAssignments();
             foreach (var assignment in outboxAssignments)
             {
                 var dashboardItem = this.viewModelFactory.GetNew<SupervisorAssignmentDashboardItemViewModel>();
@@ -173,8 +179,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         public int SentToInterviewerCount()
         {
-            return this.assignments.Count(GetSentToInterviewerAssignmentsFilter()) 
-                 + this.interviews.Count(GetSentToInterviewerInterviewsFilter());
+            return this.principal.IsAuthenticated
+                ? this.assignments.Count(GetSentToInterviewerAssignmentsFilter())
+                  + this.interviews.Count(GetSentToInterviewerInterviewsFilter())
+                : 0;
         }
 
         private Expression<Func<AssignmentDocument, bool>> GetSentToInterviewerAssignmentsFilter()
@@ -184,7 +192,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private IEnumerable<AssignmentDocument> GetSentToInterviewerAssignments()
         {
-            return this.assignments.Query(GetSentToInterviewerAssignmentsFilter());
+            return this.principal.IsAuthenticated
+                ? this.assignments.Query(GetSentToInterviewerAssignmentsFilter())
+                : Array.Empty<AssignmentDocument>();
         }
 
         private Expression<Func<InterviewView, bool>> GetSentToInterviewerInterviewsFilter()
@@ -194,7 +204,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private IEnumerable<InterviewView> GetSentToInterviewerInterviews()
         {
-            return this.interviews.Where(GetSentToInterviewerInterviewsFilter());
+            return this.principal.IsAuthenticated
+                ? this.interviews.Where(GetSentToInterviewerInterviewsFilter())
+                : Array.Empty<InterviewView>();
         }
 
         //usage of property causes an error
@@ -214,15 +226,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private IReadOnlyCollection<InterviewView> GetItemsWaitingForSupervisorAction()
         {
-            var itemsWaitingForSupervisorAction = 
-                this.interviews.Where(GetItemsWaitingForSupervisorActionFilter());
-            return itemsWaitingForSupervisorAction;
+            return this.principal.IsAuthenticated 
+                ? this.interviews.Where(GetItemsWaitingForSupervisorActionFilter()) 
+                : Array.Empty<InterviewView>();
         }
 
         private int GetItemsWaitingForSupervisorActionCount()
         {
-            var count = this.interviews.Count(GetItemsWaitingForSupervisorActionFilter());
-            return count;
+            return this.principal.IsAuthenticated 
+                ? this.interviews.Count(GetItemsWaitingForSupervisorActionFilter())
+                : 0;
         }
 
         private Expression<Func<AssignmentDocument, bool>> GetAssignmentsToAssignFilter()
@@ -236,12 +249,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private IEnumerable<AssignmentDocument> GetAssignmentsToAssign()
         {
-            return this.assignments.Query(GetAssignmentsToAssignFilter());
+            return this.principal.IsAuthenticated 
+                ? this.assignments.Query(GetAssignmentsToAssignFilter()) 
+                : Array.Empty<AssignmentDocument>();
         }
 
         private int GetAssignmentsToAssignCount()
         {
-            return this.assignments.Count(GetAssignmentsToAssignFilter());
+            return this.principal.IsAuthenticated 
+                ? this.assignments.Count(GetAssignmentsToAssignFilter()) 
+                : 0;
         }
 
         public bool IsWaitingForSupervisorActionInterview(Guid interviewId)

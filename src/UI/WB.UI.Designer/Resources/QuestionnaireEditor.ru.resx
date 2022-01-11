@@ -1132,6 +1132,9 @@
   <data name="EditorAddComment" xml:space="preserve">
     <value>Добавить комментарий</value>
   </data>
+  <data name="EditorShowComments" xml:space="preserve">
+    <value>Показать комментарии ({{count}})</value>
+  </data>
   <data name="JumpToEdit" xml:space="preserve">
     <value>Перейти к редактированию</value>
   </data>
@@ -1432,9 +1435,6 @@
   </data>
   <data name="HelpDoNotExport" xml:space="preserve">
     <value>Не экспортировать значение этой переменной</value>
-  </data>
-  <data name="HelpCustomTitle" xml:space="preserve">
-    <value>Позволяет переопределить шаблон для кнопки ростера и изменить текст подстановки %rostertitle%</value>
   </data>
   <data name="VariableNoExport" xml:space="preserve">
     <value>Не экспортировать</value>

@@ -8,7 +8,7 @@
             
                 <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank" ng-i18next>History</a>
                 <button class="btn" type="button" ng-click="showDownloadPdf()" ng-i18next>DownloadPdf</button>
-                <a class="btn" type="button" ng-show="questionnaire.hasViewerAdminRights" href="../../questionnaire/backup/{{questionnaire.questionnaireId}}" ng-i18next>Backup</a>
+                <a class="btn" type="button" ng-show="questionnaire.hasViewerAdminRights" ng-click="exportQuestionnaire()" ng-i18next>Backup</a>
 
                 <a class="btn"  ng-if="questionnaire.questionnaireRevision" href="../../questionnaire/clone/{{questionnaire.questionnaireId}}${{questionnaire.questionnaireRevision}}" target="_blank" ng-i18next>SaveAs</a>
                 <button class="btn" type="button" ng-disabled="questionnaire.isReadOnlyForUser && !questionnaire.hasViewerAdminRights && !questionnaire.isSharedWithUser" ng-click="showShareInfo()" ng-i18next>Settings</button>
@@ -189,11 +189,10 @@
                                         <input focus-on-out="focusMacro{{macro.itemId}}" ng-i18next="[placeholder]SideBarMacroName" maxlength="32" spellcheck="false" ng-model="macro.name" name="name" class="form-control" type="text" />
                                     </div>
                                     <div class="divider"></div>
-                                    <input ng-model="macro.content" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" class="form-control" type="text" />
+                                    <div ng-model="macro.content" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" type="text"></div>
                                     <div ng-show="macro.isDescriptionVisible">
                                         <div class="divider"></div>
-                                        <textarea ng-i18next="[placeholder]SideBarMacroDescription" type="text" ng-model="macro.description" class="form-control macros-description" msd-elastic></textarea>
-                                    </div>
+                                        <textarea ng-i18next="[placeholder]SideBarMacroDescription" type="text" ng-model="macro.description" class="form-control macros-description" msd-elastic></textarea></div>
                                     <div class="actions" ng-show="macro.form.$dirty">
                                         <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || macro.form.$invalid" class="btn lighter-hover" ng-click="saveMacro(macro)" ng-i18next>Save</button>
                                         <button type="button" class="btn lighter-hover" ng-click="cancel(macro)" ng-i18next>Cancel</button>

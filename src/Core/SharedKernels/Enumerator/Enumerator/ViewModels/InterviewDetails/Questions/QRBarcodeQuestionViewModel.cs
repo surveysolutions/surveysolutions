@@ -119,14 +119,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         rosterVector: this.questionIdentity.RosterVector,
                         answer: scanCode.Code);
 
-                    await this.Answering.SendAnswerQuestionCommandAsync(command);
-                    this.QuestionState.Validity.ExecutedWithoutExceptions();
+                    await this.Answering.SendQuestionCommandAsync(command);
+                    await this.QuestionState.Validity.ExecutedWithoutExceptions();
                     this.Answer = scanCode.Code;
                 }
             }
             catch (InterviewException ex)
             {
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
             catch (MissingPermissionsException)
             {
@@ -138,33 +138,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public ICommand RemoveAnswerCommand
+        private async Task RemoveAnswerAsync()
         {
-            get
+            try
             {
-                return new MvxCommand(async () =>
-                {
-                    try
-                    {
-                        await this.Answering.SendRemoveAnswerCommandAsync(
-                            new RemoveAnswerCommand(this.interviewId,
-                                this.userId, 
-                                this.questionIdentity));
+                await this.Answering.SendQuestionCommandAsync(
+                    new RemoveAnswerCommand(this.interviewId,
+                        this.userId, 
+                        this.questionIdentity));
 
-                        this.QuestionState.Validity.ExecutedWithoutExceptions();
-                    }
-                    catch (InterviewException exception)
-                    {
-                        this.QuestionState.Validity.ProcessException(exception);
-                    }
-                });
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
+            }
+            catch (InterviewException exception)
+            {
+                await this.QuestionState.Validity.ProcessException(exception);
             }
         }
+
+        public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
+
 
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
+            this.InstructionViewModel.Dispose();
         }
 
         public void Handle(AnswersRemoved @event)

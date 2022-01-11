@@ -33,6 +33,8 @@
         KeyAssigned = 27,
         TranslationSwitched = 28,
         OpenedBySupervisor = 29,
-        ClosedBySupervisor = 30
+        ClosedBySupervisor = 30,
+        InterviewModeChanged = 31,
+        InterviewCreated = 32
     }
 }

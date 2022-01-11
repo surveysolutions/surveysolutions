@@ -31,6 +31,7 @@ using WB.UI.Headquarters.Code;
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     [RequestSizeLimit(1 * 1024 * 1024 * 1024)]
+    [RequestFormLimits(MultipartBodyLengthLimit = 1 * 1024 * 1024 * 1024)]
     public abstract class InterviewsControllerBase : ControllerBase
     {
         private readonly IImageFileStorage imageFileStorage;
@@ -72,32 +73,44 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
         public virtual ActionResult<List<InterviewApiView>> Get()
         {
-            List<InterviewApiView> interviewApiViews = GetInProgressInterviewsForResponsible(this.authorizedUser.Id)
-                .Select(interview => new InterviewApiView
-                {
-                    Id = interview.Id,
-                    QuestionnaireIdentity = interview.QuestionnaireIdentity,
-                    IsRejected = interview.IsRejected,
-                    ResponsibleId = interview.ResponsibleId,
-                    Sequence = interview.LastEventSequence,
-                    LastEventId = interview.LastEventId,
-                    IsMarkedAsReceivedByInterviewer = interview.IsReceivedByInterviewer
-                }).ToList();
+            var interviewApiViews = GetInProgressInterviewsForResponsible(this.authorizedUser.Id)
+                .ToList();
 
             var isNeedUpdateApp = IsNeedUpdateApp(interviewApiViews);
             if (isNeedUpdateApp)
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
 
-            return interviewApiViews;
+            return interviewApiViews.Select(interview => new InterviewApiView
+            {
+                Id = interview.Id,
+                QuestionnaireIdentity = interview.QuestionnaireIdentity,
+                IsRejected = interview.IsRejected,
+                ResponsibleId = interview.ResponsibleId,
+                Sequence = interview.LastEventSequence,
+                LastEventId = interview.LastEventId,
+                IsMarkedAsReceivedByInterviewer = interview.IsReceivedByInterviewer
+            }).ToList();
         }
 
-        private bool IsNeedUpdateApp(List<InterviewApiView> interviews)
+        private bool IsNeedUpdateApp(List<InterviewInformation> interviews)
         {
             var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
-            if (productVersion != null && productVersion >= new Version(20, 5))
-                return false;
 
-            return interviews.Any(interview => interviewsFactory.HasAnySmallSubstitutionEvent(interview.Id));
+            if (productVersion != null && productVersion < new Version(20, 5))
+            {
+                if (interviews.Any(interview => interviewsFactory.HasAnySmallSubstitutionEvent(interview.Id)))
+                    return true;
+            }
+
+            if (productVersion != null && productVersion < new Version(21, 5))
+            {
+                if (interviews.Any(interview => interview.Mode != InterviewMode.Unknown))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
 
@@ -156,7 +169,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 AudioQuestionsFilesMd5 = audioQuestionsFilesMd5,
                 AudioAuditFilesMd5 = audioAuditFilesMd5,
                 ResponsibleId = interview?.ResponsibleId,
-                IsReceivedByInterviewer = interview?.IsReceivedByInterviewer ?? false
+                IsReceivedByInterviewer = interview?.IsReceivedByInterviewer ?? false,
+                Mode = interview?.Mode ?? InterviewMode.Unknown
             };
         }
 

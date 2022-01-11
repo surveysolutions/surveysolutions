@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -37,11 +38,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 else if (interviewEntityViewModel is StaticTextViewModel staticText)
                 {
                     allVisibleGroupItems.Add(staticText);
-                    staticText.QuestionState.Enablement.PropertyChanged += (sender, e) =>
+                    
+                    void PropertyChangedHandler(object s, PropertyChangedEventArgs e)
                     {
                         if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
                         allVisibleGroupItems.NotifyItemChanged(staticText);
                     };
+
+                    staticText.StaticTextState.Enablement.AddPropertyChangedHandler(PropertyChangedHandler);
                 }
                 else
                 {
@@ -78,11 +82,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             this.OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
 
-            compositeQuestion.QuestionState.Enablement.PropertyChanged += (sender, e) =>
+            void PropertyChangedHandler(object s, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
                 OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
             };
+            
+            compositeQuestion.QuestionState.Enablement.AddPropertyChangedHandler(PropertyChangedHandler);
         }
 
         private void OnEnablementChanged(

@@ -28,11 +28,10 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
         public Dictionary<Guid, string> IdMap { get; set; } = new Dictionary<Guid, string>();
 
 
-        public List<RosterModel> AllRosters => this.Levels
+        public IEnumerable<RosterModel> AllRosters => this.Levels
             .SelectMany(x => x.Rosters)
             .GroupBy(x => x.Variable)
-            .Select(x => x.First())
-            .ToList();
+            .Select(x => x.First());
 
         public int TargetVersion { get; set; }
 

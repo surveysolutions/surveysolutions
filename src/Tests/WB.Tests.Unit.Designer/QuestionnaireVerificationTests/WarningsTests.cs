@@ -829,16 +829,27 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         public void single_option_with_options_1_4_5()
             => Create
                 .SingleOptionQuestion(answerCodes: new decimal[] { 1, 4, 5 })
-                .ExpectNoWarning("WB0228");
+                .ExpectWarning("WB0228");
 
         [Test]
         public void single_option_with_options_1_2_3_4_5()
             => Create
                 .SingleOptionQuestion(answerCodes: new decimal[] { 1, 2, 3, 4, 5 })
                 .ExpectNoWarning("WB0228");
+        
+        [Test]
+        public void single_option_with_options_1()
+            => Create
+                .SingleOptionQuestion(answerCodes: new decimal[] { 1 })
+                .ExpectNoWarning("WB0228");
+        [Test]
+        public void single_option_with_options_1_5()
+            => Create
+                .SingleOptionQuestion(answerCodes: new decimal[] { 1, 5 })
+                .ExpectWarning("WB0228");
 
         [Test]
-        public void single_option_with_options_where_code_and_title_are_numbers_but_are_not_equeals()
+        public void single_option_with_options_where_code_and_title_are_numbers_but_are_not_equals()
             => Create
                 .SingleOptionQuestion(answers: new List<Answer>
                 {

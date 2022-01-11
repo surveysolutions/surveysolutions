@@ -301,9 +301,9 @@ namespace WB.UI.Headquarters.Code
             var interviewerApiView = this.GetResponseObject<InterviewerApiView>(context);
 
             UserView supervisorInfo;
-            if (interviewerApiView != null)
+            if (interviewerApiView != null && interviewerApiView.SupervisorId.HasValue)
             {
-                supervisorInfo = userViewFactory.GetUser(new UserViewInputModel(interviewerApiView.SupervisorId));
+                supervisorInfo = userViewFactory.GetUser(new UserViewInputModel(interviewerApiView.SupervisorId.Value));
             }
             else
             {
@@ -313,7 +313,7 @@ namespace WB.UI.Headquarters.Code
                 };
             }
 
-            return SyncLogMessages.GetInterviewer.FormatString(supervisorInfo.UserName, supervisorInfo.PublicKey.FormatGuid());
+            return SyncLogMessages.GetInterviewer.FormatString(supervisorInfo?.UserName, supervisorInfo?.PublicKey.FormatGuid());
         }
 
         private string GetQuestionnairesLogMessage(ActionExecutedContext context, IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory)

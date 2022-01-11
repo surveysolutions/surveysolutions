@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Mime;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -47,10 +49,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly ILogger<InterviewsPublicApiController> logger;
-        private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
+        private readonly IStatefulInterviewSearcher statefulInterviewSearcher;
         private readonly IInterviewDiagnosticsFactory diagnosticsFactory;
         private readonly IPdfInterviewGenerator pdfInterviewGenerator;
         private readonly ICalendarEventService calendarEventService;
+        private readonly IWebInterviewLinkProvider webInterviewLinkProvider;
 
         public InterviewsPublicApiController(
             IAllInterviewsFactory allInterviewsViewFactory,
@@ -62,10 +65,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
             ILogger<InterviewsPublicApiController> logger,
-            IStatefullInterviewSearcher statefullInterviewSearcher,
+            IStatefulInterviewSearcher statefulInterviewSearcher,
             IInterviewDiagnosticsFactory diagnosticsFactory,
             IPdfInterviewGenerator pdfInterviewGenerator,
-            ICalendarEventService calendarEventService)
+            ICalendarEventService calendarEventService,
+            IWebInterviewLinkProvider webInterviewLinkProvider)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
@@ -76,10 +80,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
             this.logger = logger;
-            this.statefullInterviewSearcher = statefullInterviewSearcher;
+            this.statefulInterviewSearcher = statefulInterviewSearcher;
             this.diagnosticsFactory = diagnosticsFactory;
             this.pdfInterviewGenerator = pdfInterviewGenerator;
             this.calendarEventService = calendarEventService;
+            this.webInterviewLinkProvider = webInterviewLinkProvider;
         }
 
 
@@ -118,8 +123,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// Gets all the answers for given interview
         /// </summary>
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
+        /// <response code="404">Interview was not found</response>
         [HttpGet]
         [Route("{id:guid}")]
+        [Produces(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<InterviewApiDetails> Get(Guid id)
         {
@@ -134,9 +141,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// Get statistics by interview
         /// </summary>
         /// <param name="id">Interview id</param>
-        /// <returns></returns>
+        /// <response code="404">Interview was not found</response>
         [HttpGet]
         [Route("{id:guid}/stats")]
+        [Produces(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<InterviewApiStatistics> Stats(Guid id)
         {
@@ -146,13 +154,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
             }
 
-            var statistics = this.statefullInterviewSearcher.GetStatistics(interview);
+            var statistics = this.statefulInterviewSearcher.GetStatistics(interview);
             var diagnosticsInfo = diagnosticsFactory.GetById(id);
-            var interviewSummary = this.allInterviewsViewFactory.Load(new AllInterviewsInputModel
-            {
-                InterviewId = id
-            });
 
+            InterviewSummary interviewSummary = this.allInterviewsViewFactory.Load(id);
+            
             return new InterviewApiStatistics
             {
                 Answered = statistics[FilterOption.Answered],
@@ -175,12 +181,21 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 NumberRejectionsBySupervisor = diagnosticsInfo.NumberRejectionsBySupervisor,
                 NumberRejectionsByHq = diagnosticsInfo.NumberRejectionsByHq,
                 InterviewDuration = diagnosticsInfo.InterviewDuration != null ? new TimeSpan(diagnosticsInfo.InterviewDuration.Value) : (TimeSpan?)null,
-                UpdatedAtUtc = interviewSummary.Items.First().LastEntryDateUtc
+                UpdatedAtUtc = interviewSummary.UpdateDate,
+                WebInterviewUrl = interviewSummary.InterviewMode == InterviewMode.CAWI
+                    ? webInterviewLinkProvider.WebInterviewRequestLink((interviewSummary.AssignmentId ?? 0).ToString(), id.ToString())
+                    : string.Empty
             };
         }
 
+        /// <summary>
+        /// Get interview history
+        /// </summary>
+        /// <param name="id">Interview id</param>
+        /// <response code="404">Interview was not found</response>
         [HttpGet]
         [Route("{id:guid}/history")]
+        [Produces(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<InterviewHistoryView> InterviewHistory(Guid id)
         {
@@ -202,6 +217,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Interview not found or pdf cannot be generated</response>
         [HttpGet]
         [Route("{id:guid}/pdf")]
+        [Produces(MediaTypeNames.Application.Pdf)]
         [AllowAnonymous]
         public IActionResult Pdf(Guid id)
         {
@@ -246,6 +262,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id:guid}/comment-by-variable/{variable}")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
         [ObservingNotAllowed]
+        [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public ActionResult CommentByVariable(Guid id, [Required]string variable, int[] rosterVector, [Required]string comment)
         {
@@ -285,6 +302,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id:guid}/comment/{questionId}")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
         [ObservingNotAllowed]
+        [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public ActionResult CommentByIdentity(Guid id, [Required]string questionId, [Required]string comment)
         {
@@ -324,6 +342,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
         [HttpPatch]
         [Route("{id:guid}/assign")]
+        [Consumes(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public ActionResult Assign(Guid id, [FromBody, BindRequired] AssignChangeApiModel request)
         {
@@ -358,23 +377,24 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public ActionResult Approve(Guid id, string? comment = null)
         {
-            var q = this.GetQuestionnaireIdForInterview(id);
-            if (q == null) return NotFound();
+            var questionnaireIdentity = this.GetQuestionnaireIdForInterview(id);
+            if (questionnaireIdentity == null) return NotFound();
             
             var result = this.TryExecuteCommand(new ApproveInterviewCommand(id, this.authorizedUser.Id, comment));
             if (result is OkObjectResult)
             {
-                CompleteCalendarEventIfExists(id);
+                CompleteCalendarEventIfExists(id, questionnaireIdentity);
             }
 
             return result;
         }
 
-        private void CompleteCalendarEventIfExists(Guid interviewId)
+        private void CompleteCalendarEventIfExists(Guid interviewId, QuestionnaireIdentity questionnaireIdentity)
         {
             var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
             if (calendarEvent != null && !calendarEvent.IsCompleted())
-                this.commandService.Execute(new CompleteCalendarEventCommand(calendarEvent.PublicKey, this.authorizedUser.Id));
+                this.commandService.Execute(new CompleteCalendarEventCommand(calendarEvent.PublicKey, 
+                    this.authorizedUser.Id, questionnaireIdentity));
         }
         
         /// <summary>
@@ -392,15 +412,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public ActionResult Reject(Guid id, string? comment = null, Guid? responsibleId = null)
         {
-            var q = this.GetQuestionnaireIdForInterview(id);
-            if (q == null) return NotFound();
+            var questionnaireIdentity = this.GetQuestionnaireIdForInterview(id);
+            if (questionnaireIdentity == null) return NotFound();
 
             if (!responsibleId.HasValue)
             {
                 var result = this.TryExecuteCommand(new RejectInterviewCommand(id, this.authorizedUser.Id, comment));
                 if (result is OkResult)
                 {
-                    CompleteCalendarEventIfExists(id);
+                    CompleteCalendarEventIfExists(id, questionnaireIdentity);
                 }
 
                 return result;
@@ -418,7 +438,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 id, userInfo.PublicKey, comment));
             if (resultToInter is OkResult)
             {
-                CompleteCalendarEventIfExists(id);
+                CompleteCalendarEventIfExists(id, questionnaireIdentity);
             }
             
             return resultToInter;
@@ -507,6 +527,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
         [HttpPatch]
         [Route("{id:guid}/assignsupervisor")]
+        [Consumes(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
         public ActionResult PostAssignSupervisor(Guid id, [FromBody, BindRequired]  AssignChangeApiModel request)
         {
@@ -575,7 +596,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return Ok();
         }
 
-        private QuestionnaireIdentity GetQuestionnaireIdForInterview(Guid id)
+        private QuestionnaireIdentity? GetQuestionnaireIdForInterview(Guid id)
         {
             var interviewRefs = this.interviewReferences.GetQuestionnaireIdentity(id);
             return interviewRefs;

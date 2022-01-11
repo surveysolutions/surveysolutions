@@ -11,13 +11,15 @@ param(
     [string] $Tasks,    
     [string] $buildNumber = '42',
     [string] $androidKeyStore = $ENV:ANDROID_KEY_STORE,
-    [string] $KeystorePassword = $ENV:ANDROID_SIGNING_KEY_PASS ,
+    [string] $KeystorePassword = $ENV:ANDROID_SIGNING_KEY_PASS,
     [string] $KeystoreAlias = $ENV:ANDROID_KEY_ALIAS,
     [string] $GoogleMapKey = $NULL,
     [string] $ArcGisKey = $NULL,
     [string] $dockerRegistry = $ENV:DOCKER_REGISTRY,
     [string] $releaseBranch = 'release', # Docker builds will push to release 
-    [switch] $noDockerPush 
+    [switch] $noDockerPush,
+    [switch] $signapk ,
+    [string] $apkFolder = "artifacts" # where should docker build look for apk artifacts
 )
 
 #region Bootstrap
@@ -32,8 +34,18 @@ if ($MyInvocation.ScriptName -notlike '*Invoke-Build.ps1') {
     If (-not(Get-InstalledModule InvokeBuild -ErrorAction silentlycontinue)) {
         Install-Module InvokeBuild -Force
     }
+
+    If (-not(Get-InstalledModule VsSetup -ErrorAction silentlycontinue)) {
+        Install-Module VsSetup -Force
+    }
+
     & "Invoke-Build" $Tasks $MyInvocation.MyCommand.Path @PSBoundParameters
     return
+}
+
+$RevisionId = $ENV:BUILD_VCS_NUMBER
+if ($null -eq $RevisionId) {
+    $RevisionId = (git rev-parse HEAD)
 }
 
 $tmp = $ENV:TEMP + "/.build"
@@ -44,22 +56,36 @@ if($null -eq $gitBranch) {
 $EscapedBranchName = $gitBranch -replace '([Kk][Pp]-?[\d]+)|_|\+'
 $EscapedBranchName = $EscapedBranchName -replace '/|\\','-'
 $EscapedBranchName = $EscapedBranchName -replace '^[^\d\w]+' # tab should not start with non numeric non word character
-$EscapedBranchName =  $EscapedBranchName.Substring(0, [System.Math]::Min($EscapedBranchName.Length, 128))
+$EscapedBranchName = $EscapedBranchName.Substring(0, [System.Math]::Min($EscapedBranchName.Length, 128))
 
 $isRelease = $gitBranch -eq $releaseBranch
 $version = Get-Content ./src/.version
+if ($isRelease) {
+    $infoVersion = '{0} (build {1})' -f $version, $buildNumber 
+}
+
 if ($version.Split('.').Length -eq 2) {
     $version += ".0"
 }
 $version += "." + $buildNumber
-$infoVersion = $version + '-' + $EscapedBranchName
+
+if (-not $isRelease) {
+    $infoVersion = $version + '-' + $EscapedBranchName
+}
+
 $output = "./artifacts"
 New-Item -Type Directory $output -ErrorAction SilentlyContinue | Out-Null
 $output = Resolve-Path $output
 
 Enter-Build {
-    Write-Build 10 $version 
-    Write-Build 10 $infoversion
+    Write-Build 10 "Version: $version"
+    Write-Build 10 "InfoVersion: $infoVersion"
+    
+    try {
+        Write-Build 10 "MsBuild: $(Resolve-MSBuild)"
+    } catch {
+
+    }
 }
 
 function Compress($folder, $dest) {
@@ -78,7 +104,7 @@ function Set-AndroidXmlResourceValue {
         [string] $keyValue
     )    
 
-    $filePath = "$([System.IO.Path]::GetDirectoryName($project))/Resources/values/settings.xml"
+    $filePath = "$([System.IO.Path]::GetDirectoryName((Resolve-Path $project)))/Resources/values/settings.xml"
     "Updating app resource key in $filePath" | Out-Host
 
     $doc = [System.Xml.Linq.XDocument]::Load($filePath);
@@ -95,25 +121,13 @@ function Set-AndroidXmlResourceValue {
 }
 
 function Build-Docker($dockerfile, $tags, $arguments = @()) {
-    #$builderName = "tc_buildx_builder"
-    #$builder = docker buildx ls | Where-Object { $_.Contains($builderName) }
-
-    # if ($builder.Length -eq 0) {
-    #     $create = @("buildx", "create", "--name", $builderName)
-    #     exec { docker $create }
-    # }
-
-    # exec { docker buildx ls } 
-
-    # exec { docker buildx use --builder $builderName }
-
     $params = @('buildx', 'build'
         '--build-arg', "VERSION=$version", 
         "--build-arg", "INFO_VERSION=$infoVersion"
-        "--build-arg", "APK_FILES=artifacts"
+        "--build-arg", "APK_FILES=$apkFolder"
         "--file", $dockerfile
         "--iidfile", "$output\headquarters.id"
-        "--label", "org.opencontainers.image.revision=$($ENV:BUILD_VCS_NUMBER)"
+        "--label", "org.opencontainers.image.revision=$RevisionId"
         "--label", "org.opencontainers.image.version=$infoVersion"
         "--label", "org.opencontainers.image.url=https://github.com/surveysolutions/surveysolutions"
         "--label", "org.opencontainers.image.source=https://github.com/surveysolutions/surveysolutions"
@@ -138,19 +152,21 @@ function Build-Docker($dockerfile, $tags, $arguments = @()) {
         "."
     )
 
-    $params | Join-String -Separator ', ' | Out-Host
+    $params -join ', ' | Out-Host
     exec { docker $params }
 }
 
 function Get-DockerTags($name, $registry = $dockerRegistry) {
     return @(
-        "$registry/$name`:$($EscapedBranchName)"
         if ($isRelease) {
             $v = [System.Version]::Parse($version)
 
             "$registry/$name`:$($v.Major).$($v.Minor)"
             "$registry/$name`:$($v.Major).$($v.Minor).$($v.Build)"
             "$registry/$name`:$($v.Major).$($v.Minor).$($v.Build).$($v.Revision)"
+        }
+        else {
+            "$registry/$name`:$($EscapedBranchName)"
         }
     )
 }
@@ -163,7 +179,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
     Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_key" $ArcGisKey
 
     $keyStore = [System.IO.Path]::GetTempFileName()
-    if ($null -ne $androidKeyStore) {
+    if ($signapk) {
         $keyStore = [System.IO.Path]::GetTempFileName()
         [System.IO.File]::WriteAllBytes($keyStore, [System.Convert]::FromBase64String($androidKeyStore))
     }
@@ -180,7 +196,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
         "/verbosity:Quiet"
         "/p:ApkOutputPath=$output/$apk"
         "/bl:$output/$apk.binlog"
-        if ($null -ne $androidKeyStore -and $null -ne $KeystorePassword) {
+        if ($signapk) {
             '/p:AndroidUseApkSigner=true'
             '/p:AndroidKeyStore=True'
             "/p:AndroidSigningKeyAlias=$KeystoreAlias"
@@ -190,7 +206,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
         }
     )
     
-    $params | Join-String -Separator ', ' | Out-Host
+    $params -join ', ' | Out-Host
     exec { msbuild $params }
 }
 
@@ -207,7 +223,7 @@ task PackageHq frontend, {
     exec {
         dotnet publish ./src/UI/WB.UI.Headquarters.Core `
             --self-contained  `
-            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/hq
+            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/hq
     }
     Compress $tmp/hq $output/WB.UI.Headquarters.zip
 }
@@ -220,7 +236,7 @@ task PackageHqOffline frontend, {
     exec {
         dotnet publish ./src/Services/Export/WB.Services.Export.Host `
             -c Release -r win-x64 --no-self-contained  `
-            -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION `
+            -p:Version=$VERSION -p:InformationalVersion=$infoVersion `
             -o ./src/UI/WB.UI.Headquarters.Core/Export.Service
     }
      
@@ -228,7 +244,7 @@ task PackageHqOffline frontend, {
         dotnet publish ./src/UI/WB.UI.Headquarters.Core `
             /p:PublishSingleFile=true /p:SelfContained=False /p:AspNetCoreHostingModel=outofprocess `
             /p:IncludeAllContentForSelfExtract=true `
-            -c Release -r win-x64 --no-self-contained    -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/hq-offline
+            -c Release -r win-x64 --no-self-contained    -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/hq-offline
     }
 
     New-Item -Type Directory $tmp/hq-prepare -ErrorAction SilentlyContinue | Out-Null
@@ -242,7 +258,7 @@ task PackageHqOffline frontend, {
 task PackageExport {
     exec {
         dotnet publish ./src/Services/Export/WB.Services.Export.Host `
-            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/export
+            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/export
     }
     Compress $tmp/export $output/WB.Services.Export.zip
 }
@@ -250,7 +266,7 @@ task PackageExport {
 task PackageWebTester frontend, {
     exec {
         dotnet publish ./src/UI/WB.UI.WebTester `
-            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/webtester
+            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/webtester
     }
     Compress $tmp/webtester $output/WB.UI.WebTester.zip
 }
@@ -266,24 +282,39 @@ task PackageDesigner {
     Set-location $BuildRoot
     dotnet publish ./src/UI/WB.UI.Designer `
         -c Release -r win-x64 `
-        -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION `
+        -p:Version=$VERSION -p:InformationalVersion=$infoVersion `
         -p:SkipSpaBuild=True -o $tmp/Designer
 
     Compress $tmp/Designer $output/WB.UI.Designer.zip
 }
 
 task AndroidInterviewerWithMaps {
-    $appCenterKey = $isRelease ? $ENV:APP_CENTER_INTERVIEWER_PROD : $ENV:APP_CENTER_INTERVIEWER_DEV
+    if ($isRelease) {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_PROD
+    }
+    else {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_DEV
+    }
     Invoke-Android "./src/UI/Interviewer/WB.UI.Interviewer/WB.UI.Interviewer.csproj" "WBCapi.Ext.apk" $true $appCenterKey
 }
 
 task AndroidInterviewer {
-    $appCenterKey = $isRelease ? $ENV:APP_CENTER_INTERVIEWER_PROD : $ENV:APP_CENTER_INTERVIEWER_DEV
+    if ($isRelease) {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_PROD
+    }
+    else {
+        $appCenterKey = $ENV:APP_CENTER_INTERVIEWER_DEV
+    }
     Invoke-Android "./src/UI/Interviewer/WB.UI.Interviewer/WB.UI.Interviewer.csproj" "WBCapi.apk" $false $appCenterKey
 }
 
 task AndroidSupervisor {
-    $appCenterKey = $isRelease ? $ENV:APP_CENTER_SUPERVISOR_PROD : $ENV:APP_CENTER_SUPERVISOR_DEV
+    if ($isRelease) {
+        $appCenterKey = $ENV:APP_CENTER_SUPERVISOR_PROD
+    }
+    else {
+        $appCenterKey = $ENV:APP_CENTER_SUPERVISOR_DEV
+    }
     Invoke-Android "./src/UI/Supervisor/WB.UI.Supervisor/WB.UI.Supervisor.csproj" "Supervisor.apk" $true $appCenterKey
 }
 
@@ -319,10 +350,10 @@ task Docker DockerHq, DockerDesigner, DockerWebTester
 
 task . {
     Set-Location $BuildRoot/src/UI/WB.UI.Designer
-    npm i
+    npm ci
     npm run dev
 
     Set-Location $BuildRoot/src/UI/WB.UI.Frontend
-    npm i
+    npm ci
     npm run dev
 }

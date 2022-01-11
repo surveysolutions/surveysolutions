@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
@@ -37,7 +38,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public SupervisorResolveInterviewViewModel(
             ICommandService commandService, 
             IPrincipal principal, 
-            IMvxMessenger messenger, 
             IStatefulInterviewRepository interviewRepository,
             IEntitiesListViewModelFactory entitiesListViewModelFactory, 
             ILastCompletionComments lastCompletionComments, 
@@ -52,7 +52,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 base(navigationService,
                 commandService,
                 principal,
-                messenger,
                 entitiesListViewModelFactory,
                 lastCompletionComments,
                 interviewState,
@@ -162,7 +161,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             if (calendarEvent == null)
                 return;
 
-            var command = new CompleteCalendarEventCommand(calendarEvent.Id, this.principal.CurrentUserIdentity.UserId);
+            var command = new CompleteCalendarEventCommand(calendarEvent.Id, this.principal.CurrentUserIdentity.UserId, 
+                new QuestionnaireIdentity() //dummy
+                );
             this.commandService.Execute(command);
 
             logger.Info($"Calendar event {calendarEvent.Id} completed after approve/reject interview {interview.GetInterviewKey()?.ToString()} ({interviewId})");

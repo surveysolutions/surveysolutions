@@ -47,6 +47,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
         Task<AttachmentContent> GetAttachmentContentAsync(string contentId, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
         Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken token = default);
+        
+        Task<List<QuestionnaireIdentity>> GetServerQuestionnairesPermittedToSwitchToWebModeAsync(CancellationToken token = default);
+
         Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken token = default);
 
         Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken);

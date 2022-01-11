@@ -2,6 +2,11 @@
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Moq;
+using MvvmCross;
+using MvvmCross.Base;
+using MvvmCross.Core;
+using MvvmCross.Plugin.Messenger;
+using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -16,8 +21,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewViewModelFact
 {
     [TestOf(typeof(InterviewViewModelFactory))]
     [TestFixture]
-    public class InterviewViewModelFactoryTest
+    public class InterviewViewModelFactoryTest: MvxIoCSupportingTest
     {
+        [SetUp]
+        public void SetupMvx()
+        {
+            base.Setup();
+            
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(Stub.MvxMainThreadAsyncDispatcher());
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
+        }
+    
         [Test]
         public void When_GetEntities_with_settings_dont_show_variables_Then_should_return_all_entities_except_variables()
         {

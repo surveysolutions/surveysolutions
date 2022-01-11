@@ -196,4 +196,10 @@
   <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
     <value>Продолжить</value>
   </data>
+  <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
+    <value>Текст приветствия</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
+    <value>Текст заголовка</value>
+  </data>
 </root>

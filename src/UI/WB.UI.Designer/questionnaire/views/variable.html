@@ -65,7 +65,8 @@
         <div class="pull-right">
             <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="add-comment-button"
                 class="btn btn-lg btn-link" ng-click="toggleComments(activeQuestion)" unsaved-warning-clear>
-                <span ng-i18next ng-hide="isCommentsBlockVisible">EditorAddComment</span>
+                <span ng-i18next ng-show="!isCommentsBlockVisible && commentsCount == 0">EditorAddComment</span>
+                <span ng-show="!isCommentsBlockVisible && commentsCount > 0">{{'EditorShowComments' | i18next: { count: commentsCount } }}</span>
                 <span ng-i18next ng-show="isCommentsBlockVisible">EditorHideComment</span>
             </button>
             <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button"

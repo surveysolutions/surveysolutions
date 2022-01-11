@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Workspaces;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
@@ -45,6 +46,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [Route("current")]
         [AllowPrimaryWorkspaceFallback]
         [IgnoreWorkspacesLimitation]
+        [AllowDisabledWorkspaceAccess]
         public virtual SupervisorApiView Current()
         {
             var user = this.userViewFactory.FindById(this.authorizedUser.Id);
@@ -54,7 +56,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             {
                 Id = user.Id,
                 Email = user.Email,
-                Workspaces = workspaces.Select(x => new WorkspaceApiView
+                Workspaces = workspaces.Select(x => new UserWorkspaceApiView
                 { 
                     Name = x.Name,
                     DisplayName = x.DisplayName
@@ -68,7 +70,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         public virtual async Task<bool> HasDevice()
         {
             var user = await this.userViewFactory.FindByIdAsync(this.authorizedUser.Id);
-            return !string.IsNullOrEmpty(user.Profile?.DeviceId);
+            return !string.IsNullOrEmpty(user.WorkspaceProfile?.DeviceId);
         }
 
         [HttpPost]
@@ -80,7 +82,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             if (user == null)
                 return Unauthorized();
 
-            var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, false);
+            var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, true);
             if (signInResult.IsLockedOut)
             {
                 return Unauthorized(new {Message = "User is locked"});

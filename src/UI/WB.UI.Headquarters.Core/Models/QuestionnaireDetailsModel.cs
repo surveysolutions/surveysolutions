@@ -33,6 +33,7 @@ namespace WB.UI.Headquarters.Models
         public bool IsObserving { get; set; }
 
         public string DefaultLanguageName { get; set; }
+        public string ExposedVariablesUrl { get; set; }
 
         public class User
         {

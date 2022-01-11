@@ -132,4 +132,7 @@
   <data name="CannotParseIncomingFile" xml:space="preserve">
     <value>Provided file has error in row {0} and cannot be parsed</value>
   </data>
+  <data name="FileDoesNotContainAnyData" xml:space="preserve">
+    <value>The file '{0}' does not contain any user data</value>
+  </data>
 </root>

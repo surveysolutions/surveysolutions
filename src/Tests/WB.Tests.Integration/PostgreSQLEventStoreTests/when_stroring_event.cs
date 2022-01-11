@@ -23,7 +23,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             new DateTimeOffset(2020, 9, 10, 18, 0, 0, TimeSpan.Zero).ToOffset(TimeSpan.FromHours(10));
 
         [NUnit.Framework.OneTimeSetUp]
-        public void context()
+        public void OneTimeSetUp()
         {
             eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
@@ -124,7 +124,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
         }
 
         [OneTimeTearDown]
-        public void TearDown()
+        public void OneTimeTearDown()
         {
             npgsqlConnection.Close();
         }

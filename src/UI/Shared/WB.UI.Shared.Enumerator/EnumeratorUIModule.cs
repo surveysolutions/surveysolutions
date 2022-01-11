@@ -68,7 +68,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<IMvxNameMapping, MvxViewToViewModelNameMapping>();
             registry.Bind<IApplicationCypher, ApplicationCypher>();
             
-            registry.BindAsSingletonWithConstructorArgument<IAudioService, AudioService>("pathToAudioDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("audio"));
+            registry.BindAsSingletonWithConstructorArgument<IAudioService, AudioService>("audioDirectory", "audio");
             registry.BindAsSingleton<IAudioDialog, AudioDialog>();
             registry.Bind<IServiceLocator, AutofacServiceLocatorAdapter>();
             registry.BindToConstant<IEventTypeResolver>(() => new EventTypeResolver(

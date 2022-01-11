@@ -26,6 +26,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual decimal? AnswerCode { get; set; }
         public virtual InterviewSummary InterviewSummary { get; set; }
         public virtual int Position { get; set; }
+
+        public virtual DateTime? ValueDate { get; set; }
+        public virtual bool? ValueBool { get; set; }
+        public virtual double? ValueDouble { get; set; }
+        public virtual long? ValueLong { get; set; }
+        public virtual bool IsEnabled { get; set; }
+
+        public virtual bool Identifying { get; set; }
         
         protected bool Equals(IdentifyEntityValue other)
         {

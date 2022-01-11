@@ -30,7 +30,12 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             }
             else
             {
-                serializer.Serialize(writer, vector.Array);
+                writer.WriteStartArray();
+                for (int i = 0; i < vector.Array.Length; i++)
+                {
+                    writer.WriteValue(vector.Array[i]);
+                }
+                writer.WriteEndArray();
             }
         }
 
@@ -67,9 +72,9 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 {
                     switch (reader.Value)
                     {
+                        case int val: vector.Add(val); break;
                         case Double val: vector.Add((int)val); break;
                         case long val: vector.Add((int)val); break;
-                        case int val: vector.Add(val); break;
                         case decimal val: vector.Add((int)val); break;
                         default:
                             vector.Add((int) Convert.ToDecimal(reader.Value)); break;

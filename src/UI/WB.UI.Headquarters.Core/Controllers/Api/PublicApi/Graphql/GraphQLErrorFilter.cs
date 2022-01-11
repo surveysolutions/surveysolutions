@@ -31,7 +31,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             }
             
             return ErrorBuilder.New()
-                .SetMessage(error.Exception.Message)
+                .SetMessage(error.Exception?.Message ?? error.Message)
                 .Build();
         }
     }

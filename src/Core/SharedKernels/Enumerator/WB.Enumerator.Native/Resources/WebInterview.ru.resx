@@ -133,7 +133,7 @@
     <value>Информация по этому интервью была записана. Никаких дальнейших действий не требуется</value>
   </data>
   <data name="Error_NotFound" xml:space="preserve">
-    <value>Интервью ненайдено</value>
+    <value>Интервью не найдено</value>
   </data>
   <data name="Error_UserNotAuthorised" xml:space="preserve">
     <value>Пользователь не авторизован</value>
@@ -307,6 +307,9 @@
   <data name="InterviewSizeLimitReached" xml:space="preserve">
     <value>Количество ростеров и вопросов в интервью превысило лимиты.</value>
   </data>
+  <data name="InterviewNotFound" xml:space="preserve">
+    <value>Интервью не найдено.</value>
+  </data>  
   <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
     <value>Приглашение на участвие в %SURVEYNAME%</value>
   </data>
@@ -367,7 +370,10 @@
     <value>Эта ссылка защищена паролем, который распространяется вместе со ссылкой. Пожалуйста введите его</value>
   </data>
   <data name="InvalidPassword" xml:space="preserve">
-      <value>Неправильный пароль</value>
-      <comment>Неправильный пароль</comment>
+    <value>Неправильный пароль</value>
+    <comment>Неправильный пароль</comment>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Пример ссылки на веб интервью</value>
   </data>
 </root>

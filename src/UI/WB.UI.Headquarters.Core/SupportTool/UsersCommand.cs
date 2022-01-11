@@ -1,5 +1,6 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Workspaces;
 using Option = System.CommandLine.Option;
 
@@ -25,6 +27,7 @@ namespace WB.UI.Headquarters.SupportTool
             this.Add(UsersCreateCommand());
             this.Add(ResetPasswordCommand());
             this.Add(Disable2faCommand());
+            this.Add(ReleaseAutoLockCommand());
         }
 
         private Command UsersCreateCommand()
@@ -55,10 +58,15 @@ namespace WB.UI.Headquarters.SupportTool
                 {
                     Required = false,
                     Argument = new Argument<string>()
+                },
+                new Option("--supervisor")
+                {
+                    Required = false,
+                    Argument = new Argument<string>()
                 }
             };
 
-            cmd.Handler = CommandHandler.Create<UserRoles, string, string, string, string>(async (role, password, login, workspace, email) =>
+            cmd.Handler = CommandHandler.Create<UserRoles, string, string, string, string, string>(async (role, password, login, workspace, email, supervisor) =>
             {
                 var inScopeExecutor = this.host.Services.GetRequiredService<IInScopeExecutor>();
                 await inScopeExecutor.ExecuteAsync(async (locator, unitOfWork) =>
@@ -66,26 +74,42 @@ namespace WB.UI.Headquarters.SupportTool
                     var loggerProvider = locator.GetInstance<ILoggerProvider>();
                     var logger = loggerProvider.CreateLogger(nameof(UsersCreateCommand));
                     var workspaceService = locator.GetInstance<IWorkspaceContextSetter>();
-                    workspaceService.Set(workspace ?? WorkspaceConstants.DefaultWorkspaceName);
+                    var workspaceName = workspace ?? WorkspaceConstants.DefaultWorkspaceName;
+                    workspaceService.Set(workspaceName);
 
                     var userManager = locator.GetInstance<HqUserManager>();
                     var user = new HqUser
                     {
                         UserName = login,
-                        Email = email
+                        Email = email,
+                        PasswordChangeRequired = !(role is UserRoles.ApiUser or UserRoles.Administrator)
                     };
+
+                    HqUser supervisorUser = null;
+
+                    if (!string.IsNullOrWhiteSpace(supervisor) && role == UserRoles.Interviewer)
+                        supervisorUser = await userManager.FindByNameAsync(supervisor);
+
+                    if (role == UserRoles.Interviewer && supervisorUser == null)
+                    {
+                        logger.LogError("Supervisor name is required for interviewer creation");
+                        return;
+                    }
+
+                    if (supervisorUser != null && supervisorUser.Workspaces.All(w => w.Workspace.Name != workspaceName))
+                    {
+                        logger.LogError("Supervisor must exists in workspace of interviewer");
+                        return;
+                    }
+                    
+                    var workspaces = locator.GetInstance<IPlainStorageAccessor<Workspace>>();
+                    var workspaceObj = await workspaces.GetByIdAsync(workspaceName);
+                    user.Workspaces.Add(new WorkspacesUsers(workspaceObj, user, supervisorUser));
 
                     var creationResult = await userManager.CreateAsync(user, password);
                     if (creationResult.Succeeded)
                     {
                         await userManager.AddToRoleAsync(user, role.ToString());
-                        
-                        bool disableForcePassword = role == UserRoles.Administrator || role == UserRoles.ApiUser;
-                        if (disableForcePassword)
-                        {
-                            user.PasswordChangeRequired = false;
-                            await userManager.UpdateAsync(user);
-                        }
                         
                         logger.LogInformation("Created user {user} as {role}", login, role);
                     }
@@ -198,6 +222,54 @@ namespace WB.UI.Headquarters.SupportTool
                     else
                     {
                         logger.LogError($"Failed to disable 2fa for user {username}");
+                        foreach (var error in result.Errors)
+                        {
+                            logger.LogError(error.Description);
+                        }
+
+                        unitOfWork.DiscardChanges();
+                    }
+                });
+
+            });
+            return cmd;
+        }
+
+        private Command ReleaseAutoLockCommand()
+        {
+            var cmd = new Command("releaselock")
+            {
+                new Option(new [] { "--username", "--login" })
+                {
+                    Required = true,
+                    Argument = new Argument<string>()
+                }
+            };
+
+            cmd.Handler = CommandHandler.Create<string>(async (username) =>
+            {
+                var inScopeExecutor = this.host.Services.GetRequiredService<IInScopeExecutor>();
+                await inScopeExecutor.ExecuteAsync(async (locator, unitOfWork) =>
+                {
+                    var loggerProvider = locator.GetInstance<ILoggerProvider>();
+                    var logger = loggerProvider.CreateLogger(nameof(ReleaseAutoLockCommand));
+                    var userManager = locator.GetInstance<UserManager<HqUser>>();
+                    var user = await userManager.FindByNameAsync(username);
+                    if (user == null)
+                    {
+                        logger.LogError($"User {username} not found");
+                        unitOfWork.DiscardChanges();
+                        return;
+                    }
+                    
+                    var result = await userManager.SetLockoutEndDateAsync(user, null);
+                    if (result.Succeeded)
+                    {
+                        logger.LogInformation($"Release lock for user {username} succeeded");
+                    }
+                    else
+                    {
+                        logger.LogError($"Failed to release lock for user {username}");
                         foreach (var error in result.Errors)
                         {
                             logger.LogError(error.Description);

@@ -12,11 +12,21 @@ const store = {
         createInterview({ dispatch }, assignmentId) {
             dispatch('showProgress', true)
 
-
-            $.post(Vue.$config.model.interviewerHqEndpoint + '/StartNewInterview/' + assignmentId, response => {
-                dispatch('showProgress', true)
-                window.location = response
-            })
+            $.post(
+                {
+                    url: Vue.$config.model.interviewerHqEndpoint + '/StartNewInterview/' + assignmentId,
+                    headers: {
+                        'X-CSRF-TOKEN': Vue.$hq.Util.getCsrfCookie(),
+                    },
+                }
+            )
+                .done(function( data ) {
+                    dispatch('showProgress', true)
+                    const interviewId = data.interviewId
+                    const workspace = Vue.$config.workspace
+                    const url = `/${workspace}/WebInterview/${interviewId}/Cover`
+                    window.location = url
+                })
                 .catch(data => {
                     new PNotify({
                         title: 'Unhandled error occurred',
@@ -26,7 +36,6 @@ const store = {
                     dispatch('hideProgress')
                 })
                 .then(() => dispatch('hideProgress'))
-
         },
         openInterview(context, interviewId) {
             context.dispatch('showProgress', true)
@@ -38,6 +47,9 @@ const store = {
                 url: Vue.$config.model.interviewerHqEndpoint + '/DiscardInterview/' + interviewId,
                 type: 'DELETE',
                 success: callback,
+                headers: {
+                    'X-CSRF-TOKEN': Vue.$hq.Util.getCsrfCookie(),
+                },
             })
         },
     },

@@ -16,12 +16,14 @@ using Microsoft.AspNetCore.SpaServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
 using VueCliMiddleware;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -33,7 +35,9 @@ using WB.Infrastructure.Native.Files;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Code.Implementation;
+using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.CommonWeb;
+using WB.UI.Designer.Filters;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
@@ -98,7 +102,8 @@ namespace WB.UI.Designer
             services.AddDbContext<DesignerDbContext>(options =>
                 options.UseNpgsql(
                     Configuration.GetConnectionString("DefaultConnection")));
-
+            
+            services.AddScoped<AntiForgeryFilter>();
             services.AddScoped<IPasswordHasher<DesignerIdentityUser>, PasswordHasher>();
             services
                 .AddDefaultIdentity<DesignerIdentityUser>()
@@ -147,6 +152,8 @@ namespace WB.UI.Designer
                 };
             });
 
+            services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
+            
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)
@@ -176,6 +183,8 @@ namespace WB.UI.Designer
             services.AddDatabaseStoredExceptional(hostingEnvironment, Configuration);
 
             services.AddTransient<IQuestionnaireRestoreService, QuestionnaireRestoreService>();
+            services.AddTransient<IQuestionnaireImportService, QuestionnaireImportService>();
+            services.AddTransient<IQuestionnaireExportService, QuestionnaireExportService>();
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
             services.AddSingleton<IProductVersion, ProductVersion>();
@@ -236,7 +245,7 @@ namespace WB.UI.Designer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             app.UseExceptional();
 

@@ -444,6 +444,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Diagnostics.resx">
       <Link>Resources\Diagnostics.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Diagnostics.ro.resx">
+      <Link>Resources\Diagnostics.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Diagnostics.ru.resx">
       <Link>Resources\Diagnostics.ru.resx</Link>
     </EmbeddedResource>
@@ -906,6 +909,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Roles.resx">
       <Link>Resources\Roles.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Roles.ro.resx">
+      <Link>Resources\Roles.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Roles.ru.resx">
       <Link>Resources\Roles.ru.resx</Link>
     </EmbeddedResource>
@@ -972,6 +978,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletLogs.resx">
       <Link>Resources\TabletLogs.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletLogs.ro.resx">
+      <Link>Resources\TabletLogs.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletLogs.ru.resx">
       <Link>Resources\TabletLogs.ru.resx</Link>
     </EmbeddedResource>
@@ -1034,6 +1043,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UnderConstruction.resx">
       <Link>Resources\UnderConstruction.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UnderConstruction.ro.resx">
+      <Link>Resources\UnderConstruction.ro.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UnderConstruction.ru.resx">
       <Link>Resources\UnderConstruction.ru.resx</Link>

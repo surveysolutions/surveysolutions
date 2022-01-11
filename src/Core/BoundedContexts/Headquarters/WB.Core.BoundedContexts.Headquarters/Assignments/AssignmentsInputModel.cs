@@ -23,6 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public UserRoles? UserRole { get; set; }
         public AssignmentReceivedState ReceivedByTablet { get; set; }
         public int? Id { get; set; }
+        public bool NonCawiOnly { set; get; }
+
 
         [Flags]
         public enum SearchTypes

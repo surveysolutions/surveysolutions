@@ -6,9 +6,20 @@
             <div class="about-questionnaire clearfix">
                 <div class="about-questionnaire-details clearfix">
                     <ul class="main-info-column list-unstyled pull-left">
-                        <li id="detailsInfo_interviewKeyListItem">{{this.$t('Common.InterviewKey')}}: {{$config.model.key}}({{this.$t('Common.Assignment')}} #{{this.$config.model.assignmentId}})</li>
+                        <li id="detailsInfo_interviewKeyListItem">{{this.$t('Common.InterviewKey')}}: {{$config.model.key}}({{this.$t('Common.Assignment')}}
+                            <a :href="this.$config.model.assignmentDetailsUrl">#{{this.$config.model.assignmentId}}</a>)</li>
                         <li id="detailsInfo_qusetionnaireTitleListItem"
                             class="questionnaire-title">[ver.{{this.$config.model.questionnaireVersion}}] {{this.$config.model.questionnaireTitle}}</li>
+
+                        <li id="detailsInfo_interviewMode">
+                            <span class="data-label">{{this.$t('Details.InterviewMode')}}: </span>
+                            <span v-if="interviewinCawiMode">
+                                <button type="button"
+                                    class="btn btn-link gray-action-unit"
+                                    @click="showModeDetails">{{this.$t('Common.Cawi')}}</button>
+                            </span>
+                            <span v-else>{{this.$t('Common.Capi')}}</span>
+                        </li>
                     </ul>
                     <ul class="list-unstyled pull-left table-info">
                         <li id="detailsInfo_interviewDurationListItem"
@@ -32,7 +43,8 @@
                         </li>
                     </ul>
                     <ul class="list-unstyled pull-left table-info">
-                        <li id="detailsInfo_StatusListItem"><span class="data-label">{{this.$t('Details.Status')}}</span>
+                        <li id="detailsInfo_StatusListItem">
+                            <span class="data-label">{{this.$t('Details.Status')}}</span>
                             <span class="data">{{this.$config.model.statusName}}</span>
                             <button type="button"
                                 class="btn btn-link gray-action-unit"
@@ -188,6 +200,21 @@
                 v-model="rejectComment"></textarea>
             <span class="countDown">{{rejectCharsLeft}}</span>
         </Confirm>
+
+        <ModalFrame ref="modeDetails"
+            id="modeDetails">
+            <h3>{{$t("Details.InterviewMode")}}: {{interviewinCawiMode ? this.$t('Common.Cawi') : this.$t('Common.Capi')}}</h3>
+            <div>
+                <p>{{webLink}}</p>
+            </div>
+            <div slot="actions">
+                <button type="button"
+                    class="btn btn-link"
+                    @click="hideModeDetails">
+                    {{ $t("Pages.CloseLabel") }}
+                </button>
+            </div>
+        </ModalFrame>
     </div>
 </template>
 
@@ -243,6 +270,12 @@ export default {
         showOverview() {
         //this.$router.push({name: "Overview"})
             this.$refs.overview.show()
+        },
+        showModeDetails(){
+            this.$refs.modeDetails.modal('show')
+        },
+        hideModeDetails() {
+            $(this.$refs.modeDetails).modal('hide')
         },
     },
 
@@ -303,6 +336,12 @@ export default {
             return this.calendarEvent != null
                 ? convertToLocal(this.calendarEvent.startUtc, this.calendarEvent.startTimezone)
                 : ''
+        },
+        interviewinCawiMode(){
+            return this.$config.model.interviewMode === 2
+        },
+        webLink(){
+            return this.$config.model.webInterviewUrl ?? ''
         },
     },
 

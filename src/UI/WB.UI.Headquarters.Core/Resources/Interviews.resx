@@ -137,6 +137,9 @@
   <data name="ApproveReceivedWarning" xml:space="preserve">
     <value>Current responsible interviewers will not be notified about the interview(s) approving until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
   </data>
+  <data name="SwitchToCawiReceivedWarning" xml:space="preserve">
+    <value>Current responsible interviewers will not be notified about the interview(s) switching interview mode until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
+  </data>
   <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be assigned.&lt;/h3&gt;
 &lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt; can be reassigned.</value>
@@ -235,14 +238,23 @@
   <data name="ChooseQuestionsTitle" xml:space="preserve">
     <value>Choose identifying questions to use in the filter</value>
   </data>
+  <data name="DynamicFilter" xml:space="preserve">
+    <value>Dynamic filter</value>
+  </data>
   <data name="FiltersByQuestions" xml:space="preserve">
     <value>Filters by questions</value>
   </data>
   <data name="QuestionsSelector" xml:space="preserve">
     <value>Questions selector</value>
   </data>
+  <data name="AdvancedFilterSelector" xml:space="preserve">
+    <value>Dynamic filter</value>
+  </data>
   <data name="QuestionsFilterNotAvailable" xml:space="preserve">
     <value>Filters by questions is only available when specific questionnaire version is selected</value>
+  </data>
+  <data name="DynamicFilterNotAvailable" xml:space="preserve">
+    <value>No data available</value>
   </data>
   <data name="ApproveConfirmMessage_plural" xml:space="preserve">
       <value>{{count}} interviews will be approved.</value>
@@ -252,5 +264,23 @@
   </data>
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
       <value>You can approve interviews with the following statuses only: {{status1}},  {{status2}} and {{status3}}.</value>
+  </data>
+  <data name="DynamicFilter_MatchType" xml:space="preserve">
+    <value>Match Type</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_And" xml:space="preserve">
+    <value>AND</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_Or" xml:space="preserve">
+    <value>OR</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddRule" xml:space="preserve">
+    <value>Add Rule</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddGroup" xml:space="preserve">
+    <value>Add Group</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_ValuePlaceholder" xml:space="preserve">
+    <value>value</value>
   </data>
 </root>

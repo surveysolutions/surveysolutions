@@ -27,6 +27,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     public class PrefilledPageData
     {
         public InterviewEntityWithType[] Entities { get; set; }
+        public InterviewEntity[] Details { get; set; }
 
         public string FirstSectionId { get; set; }
 
@@ -66,5 +67,6 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string Target { get; set; }
         public string ScrollTo { get; set; }
         public bool IsRoster { get; set; }
+        public bool HasCustomRosterTitle { get; set; }
     }
 }

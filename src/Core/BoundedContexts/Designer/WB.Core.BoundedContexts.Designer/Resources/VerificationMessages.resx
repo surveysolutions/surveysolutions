@@ -537,9 +537,10 @@
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Roster has reached size limit. Reduce roster size or decrease nesting.</value>
   </data>
-  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>First section cannot have enabling condition.</value>
-  </data>
+  <!-- preserved for history. do not reuse WB0263 -->
+  <!-- <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve"> -->
+  <!--   <value>First section cannot have enabling condition.</value> -->
+  <!-- </data> -->
   <data name="WB0264_GpsQuestion" xml:space="preserve">
     <value>You have a GPS question. Tablets must support geolocation to be used with this questionnaire.</value>
   </data>
@@ -715,7 +716,7 @@
     <value>Questionnaire title shouldn't have two and more consecutive underscore characters.</value>
   </data>
   <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-    <value>Plain mode allowed only for rosters with no more than {0} elements.</value>
+      <value>Plain mode allowed only for rosters with no more than {0} questions or static texts.</value>
   </data>
   <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
     <value>Plain mode doesn't allow the use of nested rosters.</value>
@@ -830,5 +831,8 @@
   </data>
   <data name="WB0312" xml:space="preserve">
       <value>Categories must have at least two options</value>
+  </data>
+  <data name="WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope" xml:space="preserve">
+    <value>Substitution cannot reference items from a deeper roster level in matrix and table rosters</value>
   </data>
 </root>

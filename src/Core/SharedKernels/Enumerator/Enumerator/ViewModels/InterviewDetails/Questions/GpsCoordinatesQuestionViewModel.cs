@@ -120,12 +120,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 var command = new RemoveAnswerCommand(this.interviewId, this.userId, this.questionIdentity);
-                await this.Answering.SendRemoveAnswerCommandAsync(command);
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.Answering.SendQuestionCommandAsync(command);
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
         }
 
@@ -194,21 +194,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                await this.Answering.SendAnswerQuestionCommandAsync(command);
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.Answering.SendQuestionCommandAsync(command);
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
                 this.Answer = location;
             }
             catch (InterviewException ex)
             {
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
         }
 
+        private bool isDisposed = false;
+        
         public void Dispose()
         {
+            if (isDisposed)
+                return;
+            
+            isDisposed = true;
+            
             this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
+            this.InstructionViewModel.Dispose();
         }
 
         public void Handle(AnswersRemoved @event)

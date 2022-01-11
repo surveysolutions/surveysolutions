@@ -42,7 +42,7 @@
                         </tr>
                         <tr>
                             <td>{{$t('Dashboard.WebMode')}}</td>
-                            <td>{{model.webMode ? $t('Common.Yes') : $t('Common.No')}}</td>
+                            <td>{{model.webMode ? $t('Common.Cawi') : $t('Common.Capi')}}</td>
                         </tr>
                         <tr>
                             <td>{{$t('Dashboard.RecordAudio')}}</td>
@@ -81,6 +81,14 @@
                                 </ul>
                             </td>
                         </tr>
+                        <tr>
+                            <td>{{$t('Dashboard.ExposedVariables')}}</td>
+                            <td>
+                                <a :href="model.exposedVariablesUrl + '/' + model.questionnaireId + '$' + model.version">
+                                    {{$t('Dashboard.Edit')}}</a>
+                            </td>
+                        </tr>
+
                     </tbody>
                 </table>
             </div>

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Android.Content;
+using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -22,28 +23,20 @@ namespace WB.UI.Interviewer.Implementations.Services
 {
     internal class ViewModelNavigationService : BaseViewModelNavigationService
     {
-        private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
-        private readonly IMvxNavigationService navigationService;
         private readonly ILogger log;
 
         public ViewModelNavigationService(
             ICommandService commandService,
             IUserInteractionService userInteractionService,
             IUserInterfaceStateService userInterfaceStateService,
-            IMvxAndroidCurrentTopActivity androidCurrentTopActivity,
             IPrincipal principal,
-            IMvxNavigationService navigationService,
             ILogger log)
             : base(commandService,
                 userInteractionService,
                 userInterfaceStateService,
-                androidCurrentTopActivity,
-                navigationService,
                 principal,
                 log)
         {
-            this.androidCurrentTopActivity = androidCurrentTopActivity;
-            this.navigationService = navigationService;
             this.log = log;
         }
 
@@ -52,10 +45,10 @@ namespace WB.UI.Interviewer.Implementations.Services
             this.log.Trace($"Navigating to dashboard interviewId: {interviewId ?? "'null'"}");
             if (interviewId == null)
             {
-               return await this.navigationService.Navigate<DashboardViewModel>().ConfigureAwait(false);
+               return await NavigationService.Navigate<DashboardViewModel>().ConfigureAwait(false);
             }
 
-            return await this.navigationService.Navigate<DashboardViewModel, DashboardViewModelArgs>(new DashboardViewModelArgs
+            return await NavigationService.Navigate<DashboardViewModel, DashboardViewModelArgs>(new DashboardViewModelArgs
             {
                 InterviewId = Guid.Parse(interviewId)
             }).ConfigureAwait(false);
@@ -64,7 +57,7 @@ namespace WB.UI.Interviewer.Implementations.Services
         public override Task NavigateToPrefilledQuestionsAsync(string interviewId)
         {
             this.log.Trace($"Navigating to PrefilledQuestionsViewModel interviewId: {interviewId}");
-            return this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(
+            return NavigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(
                 new InterviewViewModelArgs
                 {
                     InterviewId = interviewId,
@@ -92,7 +85,7 @@ namespace WB.UI.Interviewer.Implementations.Services
         public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
         {
             this.log.Trace($"Navigating to interview {interviewId}:{navigationIdentity}");
-            return this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(
+            return NavigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(
                 new InterviewViewModelArgs
                 {
                     InterviewId = interviewId,
@@ -116,8 +109,8 @@ namespace WB.UI.Interviewer.Implementations.Services
             return this.NavigateToAsync<LoginViewModel>();
         }
 
-        protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();
+        protected override void FinishActivity() => TopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
-            this.androidCurrentTopActivity.Activity.StartActivity(new Intent(this.androidCurrentTopActivity.Activity, typeof(PrefsActivity)));
+            TopActivity.Activity.StartActivity(new Intent(TopActivity.Activity, typeof(PrefsActivity)));
     }
 }

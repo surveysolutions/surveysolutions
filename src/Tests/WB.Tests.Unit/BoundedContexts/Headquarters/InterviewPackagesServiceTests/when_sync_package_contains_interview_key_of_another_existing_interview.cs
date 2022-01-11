@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>()).Returns(interviews);
 
             var users = new Mock<IUserRepository>();
-            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new HqUser() { Profile = new HqUserProfile() { /*SupervisorId = supervisorId*/ } }));
+            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new HqUser() { WorkspaceProfile = new WorkspaceUserProfile() { /*SupervisorId = supervisorId*/ } }));
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
 
@@ -89,7 +89,5 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             Assert.That(syncCommand, Is.Not.Null);
             Assert.That(syncCommand.InterviewKey, Is.EqualTo(new InterviewKey(5533)));
         }
-        
-        private static IServiceLocator serviceLocatorOriginal = null;
     }
 }

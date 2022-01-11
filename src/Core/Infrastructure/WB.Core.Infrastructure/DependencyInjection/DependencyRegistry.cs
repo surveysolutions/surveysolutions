@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Core.Infrastructure.DependencyInjection
 {
@@ -38,6 +39,11 @@ namespace WB.Core.Infrastructure.DependencyInjection
         public void BindAsScoped<TInterface, TImplementation>() where TImplementation : class, TInterface where TInterface : class
         {
             services.AddScoped<TInterface, TImplementation>();
+        }
+
+        public void BindToConstant<TInterface>(Func<IServiceProvider, TInterface> implementation) where TInterface : class
+        {
+            services.AddSingleton(s => implementation.Invoke(s));
         }
 
         public void BindToConstant<TInterface>(Func<TInterface> implementation) where TInterface : class

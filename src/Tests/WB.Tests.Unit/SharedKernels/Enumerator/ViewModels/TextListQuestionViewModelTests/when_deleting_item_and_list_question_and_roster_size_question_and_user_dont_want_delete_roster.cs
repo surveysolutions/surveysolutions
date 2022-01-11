@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             listModel.Answers.OfType<TextListAddNewItemViewModel>().Should().BeEmpty();
 
         [NUnit.Framework.Test] public void should_not_send_answer_command () =>
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Never);
+            AnsweringViewModelMock.Verify(x => x.SendQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Never);
 
         private static TextListQuestionViewModel listModel;
         private static NavigationState navigationState = Create.Other.NavigationState();

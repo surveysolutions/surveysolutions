@@ -20,6 +20,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         private readonly Guid interviewId;
         private readonly Identity questionIdentity;
 
+        private MvxWeakEventSubscription<IAudioService, PlaybackCompletedEventArgs> audioServiceSubscription;
+
         public OverviewAudioQuestionViewModel(InterviewTreeQuestion treeQuestion,
             IAudioFileStorage audioFileStorage,
             IAudioService audioService,
@@ -36,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                 fileName = audioQuestion.GetAnswer().FileName;
 
                 this.Audio = audioFileStorage.GetInterviewBinaryData(interviewId, fileName);
-                this.audioService.WeakSubscribe<IAudioService, PlaybackCompletedEventArgs>(nameof(audioService.OnPlaybackCompleted), PlaybackCompleted);
+                audioServiceSubscription = this.audioService.WeakSubscribe<IAudioService, PlaybackCompletedEventArgs>(nameof(audioService.OnPlaybackCompleted), PlaybackCompleted);
             }
         }
 
@@ -60,7 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             }
         }
 
-        public IMvxCommand TogglePlayback => new MvxAsyncCommand(async () =>
+        public IMvxCommand TogglePlayback => new MvxCommand(() =>
         {
             if (this.IsPlaying)
             {
@@ -69,7 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             }
             else
             {
-                await this.audioService.Play(this.interviewId, this.questionIdentity, fileName);
+                this.audioService.Play(this.Audio, this.questionIdentity);
                 this.IsPlaying = true;
             }
         }, () => CanBePlayed);
@@ -79,6 +81,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            
+            audioServiceSubscription?.Dispose();
         }
     }
 }

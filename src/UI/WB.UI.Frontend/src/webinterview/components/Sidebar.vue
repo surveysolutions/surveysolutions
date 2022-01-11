@@ -2,6 +2,20 @@
     <aside class="content"
         v-if="sections"
         style="transform: translateZ(0);">
+        <div v-if="interviewState!=null"
+            class="interview-progress">
+            <div class="progress-counts">
+                {{this.$t('WebInterviewUI.Progress')}}:{{interviewState.answeredQuestionsCount}}/{{interviewState.activeQuestionCount}}
+            </div>
+            <wb-progress
+                :striped = false
+                :visible="interviewState!=null"
+                :valuemax="interviewState.activeQuestionCount"
+                :valuenow="interviewState.answeredQuestionsCount" />
+            <div class="progress-percents">
+                {{progressPercent}}%
+            </div>
+        </div>
         <wb-humburger id="sidebarHamburger"
             :show-foldback-button-as-hamburger="showFoldbackButtonAsHamburger" />
         <div class="panel-group structured-content">
@@ -65,15 +79,19 @@ export default {
             return {
                 id: 'SidebarCompleted',
                 collapsed: true,
-                title: this.$t('WebInterviewUI.Complete'),
+                title: this.$config.customTexts.completeButton,
                 to: {
                     name: 'complete',
                 },
-                status: this.interviewState,
+                status: this.interviewState ? this.interviewState.status : null,
                 validity: {
-                    isValid: !(this.interviewState == GroupStatus.StartedInvalid || this.interviewState == GroupStatus.CompletedInvalid),
+                    isValid: this.interviewState ? !(this.interviewState.status == GroupStatus.StartedInvalid || this.interviewState.status == GroupStatus.CompletedInvalid) : true,
                 },
             }
+        },
+
+        progressPercent(){
+            return this.interviewState.activeQuestionCount == 0 ? 100 : Math.round((this.interviewState.answeredQuestionsCount / this.interviewState.activeQuestionCount) * 100)
         },
     },
     beforeMount() {

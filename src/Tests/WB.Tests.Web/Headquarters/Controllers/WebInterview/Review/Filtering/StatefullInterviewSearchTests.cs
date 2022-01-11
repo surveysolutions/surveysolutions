@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
                 TextInRosterFlagged
             });
 
-            Subject = new StatefullInterviewSearcher(interviewFactory);
+            Subject = new StatefulInterviewSearcher(interviewFactory);
         }
 
         private static readonly Identity[] AllQuestions = {
@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
 
         private static Identity[] AllQuestionsBut(params Identity[] ids) => AllQuestions.Except(ids).ToArray();
 
-        public StatefullInterviewSearcher Subject { get; set; }
+        public StatefulInterviewSearcher Subject { get; set; }
 
         [TestCaseSource(nameof(TestCaseData))]
         public void ShouldFilterResults(FilterTestCase @case)

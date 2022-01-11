@@ -121,13 +121,13 @@
     <value>ANDROID 4.4 SAU VERSIUNE MAI VECHE</value>
   </data>
   <data name="COLUMN_APPROVED_BY_HQ" xml:space="preserve">
-    <value>APROBAT DE RINS</value>
+    <value>APROBAT DE HQ</value>
   </data>
   <data name="COLUMN_APPROVED_BY_SUPERVISOR" xml:space="preserve">
-    <value>APROBAT DE CONTROLOR</value>
+    <value>APROBAT DE SUPERVIZOR</value>
   </data>
   <data name="COLUMN_AVERAGE" xml:space="preserve">
-    <value>MEDIA</value>
+    <value>MEDIE</value>
   </data>
   <data name="COLUMN_COMPLETED" xml:space="preserve">
     <value>FINALIZATE</value>
@@ -157,13 +157,13 @@
     <value>TITLUL CHESTIONARULUI</value>
   </data>
   <data name="COLUMN_REJECTED_BY_HQ" xml:space="preserve">
-    <value>RESPINSE DE RINS</value>
+    <value>RESPINSE DE HQ</value>
   </data>
   <data name="COLUMN_REJECTED_BY_SUPERVISOR" xml:space="preserve">
-    <value>RESPINSE DE CONTROLOR</value>
+    <value>RESPINSE DE SUPERVIZOR</value>
   </data>
   <data name="COLUMN_SUPERVISOR_ASSIGNED" xml:space="preserve">
-    <value>INTERVIURI ALOCATE CONTROLORULUI</value>
+    <value>INTERVIURI ALOCATE SUPERVIZORULUI</value>
   </data>
   <data name="COLUMN_TABLET_REASSIGNED" xml:space="preserve">
     <value>TABLETE REALOCATE</value>

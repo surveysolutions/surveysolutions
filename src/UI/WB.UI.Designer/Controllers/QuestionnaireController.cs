@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Verifier;
@@ -21,7 +22,9 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Filters;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers
@@ -74,11 +77,8 @@ namespace WB.UI.Designer.Controllers
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IPublicFoldersStorage publicFoldersStorage;
-        private readonly IAttachmentService attachmentService;
-        private readonly ITranslationsService translationsService;
         private readonly ICategoriesService categoriesService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
-        private readonly ISerializer serializer;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -94,10 +94,7 @@ namespace WB.UI.Designer.Controllers
             DesignerDbContext dbContext,
             IQuestionnaireHelper questionnaireHelper,
             IPublicFoldersStorage publicFoldersStorage,
-            IAttachmentService attachmentService,
-            ITranslationsService translationsService,
-            ICategoriesService categoriesService,
-            ISerializer serializer)
+            ICategoriesService categoriesService)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -111,11 +108,8 @@ namespace WB.UI.Designer.Controllers
             this.dbContext = dbContext;
             this.questionnaireHelper = questionnaireHelper;
             this.publicFoldersStorage = publicFoldersStorage;
-            this.attachmentService = attachmentService;
-            this.translationsService = translationsService;
             this.categoriesService = categoriesService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
-            this.serializer = serializer;
         }
 
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]
@@ -135,6 +129,7 @@ namespace WB.UI.Designer.Controllers
             return this.LackOfPermits();
         }
 
+        [AntiForgeryFilter]
         [Route("questionnaire/details/{id}")]
         [Route("questionnaire/details/{id}/chapter/{chapterId}/{entityType}/{entityId}")]
         public IActionResult Details(QuestionnaireRevision? id, Guid? chapterId, string entityType, Guid? entityid)
@@ -274,6 +269,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Revert(Guid id, Guid commandId)
         {
             var historyReferenceId = commandId;
@@ -293,6 +289,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult<bool>> SaveComment(Guid id, Guid historyItemId, string comment)
         {
             bool hasAccess = this.User.IsAdmin() 
@@ -309,6 +306,7 @@ namespace WB.UI.Designer.Controllers
                 historyItemId.FormatGuid(), comment);
         }
 
+        [AntiForgeryFilter]
         public async Task<IActionResult> QuestionnaireHistory(Guid id, int? p)
         {
             bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.User.GetId());
@@ -349,6 +347,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult GetLanguages(QuestionnaireRevision id)
         {
             QuestionnaireView? questionnaire = this.questionnaireViewFactory.Load(id);
@@ -370,6 +369,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AssignFolder(Guid id, Guid folderId)
         {
             QuestionnaireView? questionnaire = GetQuestionnaireView(id);
@@ -377,19 +377,24 @@ namespace WB.UI.Designer.Controllers
                 return NotFound();
 
             string referer = Request.Headers["Referer"].ToString();
-            return this.Redirect(referer);
+            if (!string.IsNullOrEmpty(referer) && Url.IsLocalUrl(referer))
+            {
+                return this.Redirect(referer);
+            }
+            
+            return Redirect(Url.Content("~/"));
         }
 
-        [HttpGet]
+        /*[HttpGet]
         [Authorize(Roles = "Administrator")]
         public FileResult? Backup(Guid id)
         {
-            var stream = this.questionnaireHelper.GetBackupQuestionnaire(id, out string questionnaireFileName);
+            var stream = this.questionnaireBackupService.GetBackupQuestionnaire(id, out string questionnaireFileName);
             
             return stream == null
                     ? null
                     : File(stream, "application/zip", $"{questionnaireFileName}.zip");
             
-        }
+        }*/
     }
 }

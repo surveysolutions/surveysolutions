@@ -1,6 +1,7 @@
 using System;
 using Moq;
 using MvvmCross.Base;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Tests.Abc.Storage;
@@ -31,8 +32,7 @@ namespace WB.Tests.Abc
         public static IMvxMainThreadAsyncDispatcher MvxMainThreadAsyncDispatcher() =>
             Create.Fake.MvxMainThreadAsyncDispatcher();
 
-
-        internal class StubAggregateLock : IAggregateLock
+       internal class StubAggregateLock : IAggregateLock
         {
             public T RunWithLock<T>(string aggregateGuid, Func<T> run)
             {

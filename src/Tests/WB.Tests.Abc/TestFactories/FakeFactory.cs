@@ -10,6 +10,7 @@ using Humanizer;
 using Main.Core.Documents;
 using Moq;
 using MvvmCross.Base;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using Ncqrs.Domain;
@@ -135,7 +136,6 @@ namespace WB.Tests.Abc.TestFactories
         
         public IMvxViewDispatcher MvxMainThreadDispatcher1() => (IMvxViewDispatcher)Stub.MvxMainThreadAsyncDispatcher();
 
-
         public IMvxMainThreadAsyncDispatcher MvxMainThreadAsyncDispatcher()
         {
             if (FakeMvxMainThreadAsyncDispatcher.Instance == null)
@@ -144,7 +144,6 @@ namespace WB.Tests.Abc.TestFactories
             }
             return (IMvxMainThreadAsyncDispatcher)FakeMvxMainThreadAsyncDispatcher.Instance;
         }
-
         private class FakeMvxMainThreadAsyncDispatcher : MvxMainThreadAsyncDispatcher, IMvxViewDispatcher
         {
             public readonly List<MvxViewModelRequest> Requests = new List<MvxViewModelRequest>();
@@ -169,8 +168,6 @@ namespace WB.Tests.Abc.TestFactories
                 Hints.Add(hint);
                 return Task.FromResult(true);
             }
-
-
         }
 
         public IMvxMainThreadAsyncDispatcher MvxMainThreadDispatcher() => new FakeMvxMainThreadDispatcher();

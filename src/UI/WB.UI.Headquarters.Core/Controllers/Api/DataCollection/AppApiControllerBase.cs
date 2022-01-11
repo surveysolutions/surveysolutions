@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Shared.Web.Controllers;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
@@ -84,6 +85,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         }
 
         [RequestSizeLimit(10L * 1024 * 1024 * 1024)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 10L * 1024* 1024 * 1024)]
         public virtual async Task<IActionResult> PostTabletInformation()
         {
             if (!Request.HasFormContentType)
@@ -102,7 +104,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 var formData = new MemoryStream();
                 await  section.Body.CopyToAsync(formData);
 
-                var deviceId = this.Request.Headers["DeviceId"].Single();
+                var deviceId = this.Request.Headers["DeviceId"].Single().RemoveHtmlTags();
 
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 

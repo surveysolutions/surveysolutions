@@ -39,16 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 questionnaireId: questionnaireId,
                 questionnaireVersion: questionnaire.Version,
                 answers: new[] { Create.Entity.AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[] { }, new decimal[] { 1 }) },
-                rosterGroupInstances: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
-                {
-                    {
-                        new InterviewItemId(rosterGroupId, new decimal[] {}),
-                        new[]
-                        {
-                            new RosterSynchronizationDto(rosterGroupId, new decimal[] {}, 1.0m, null, string.Empty),
-                        }
-                    }
-                },
+                
                 wasCompleted: true);
 
             interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));

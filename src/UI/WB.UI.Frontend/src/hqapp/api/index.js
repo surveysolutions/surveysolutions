@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { map } from 'lodash'
 
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
@@ -45,6 +46,24 @@ class QuestionnaireApi {
             enabled: enabled,
         })
     }
+
+    async ExposedVariables(id) {
+        const response = await this.http.get(`api/QuestionnairesApi/GetQuestionnaireExposedVariables?id=${id}`,
+            {
+                params: {
+                    limit: 100,
+                },
+            })
+        return response.data
+    }
+
+    ChangeVariableExposeStatus(questionnaireIdentity, variables){
+        return this.http.post('api/QuestionnairesApi/changeVariableExposeStatus', {
+            questionnaireIdentity: questionnaireIdentity,
+            variables: variables,
+        })
+    }
+
 }
 
 class SurveyStatistics {
@@ -108,16 +127,36 @@ class Workspaces {
                 params: {
                     userId,
                     includeDisabled,
-                    limit: 1000,
+                    length: 1000,
                 },
             })
         return response.data
     }
 
     Assign(userIds, workspaces, mode = 'Assign') {
+        var assignWorkspaces = map(workspaces, w => {
+            return {
+                workspace: w,
+                supervisorId: null,
+            }
+        })
+
         return this.http.post('api/v1/workspaces/assign',
             {
-                userIds, workspaces, mode,
+                userIds, workspaces: assignWorkspaces, mode,
+            }
+        )
+    }
+
+    AssignInterviewer(userIds, workspace, supervisor, mode = 'Add') {
+        var assignWorkspaces = [{
+            workspace: workspace,
+            supervisorId: supervisor,
+        }]
+
+        return this.http.post('api/v1/workspaces/assign',
+            {
+                userIds, workspaces: assignWorkspaces, mode,
             }
         )
     }
@@ -342,6 +381,14 @@ class AssignmentsApi {
             },
         })
     }
+
+    changeMode(assignmentId, isEnabled) {
+        var url = `${this.base}/${assignmentId}/changeMode`
+
+        return this.http.patch(url, {
+            enabled: isEnabled,
+        })
+    }
 }
 
 class WebInterviewSettingsApi {
@@ -361,25 +408,35 @@ class WebInterviewSettingsApi {
 
     updateEmailTemplate(questionnaireId, type, subject, message, passwordDescription, linkText) {
         var url = `${this.base}/${questionnaireId}/emailTemplate`
-        return this.http.post(url, {
-            type: type,
-            subject: subject,
-            message: message,
-            passwordDescription: passwordDescription,
-            linkText: linkText,
-        })
+        return this.http(
+            {
+                method: 'post',
+                url: url,
+                data: {
+                    type: type,
+                    subject: subject,
+                    message: message,
+                    passwordDescription: passwordDescription,
+                    linkText: linkText},
+                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            })
     }
 
     updatePageMessage(questionnaireId, titleType, titleText, messageType, messageText, buttonType, buttonText) {
         var url = `${this.base}/${questionnaireId}/pageTemplate`
-        return this.http.post(url, {
-            titleType: titleType,
-            titleText: titleText,
-            messageType: messageType,
-            messageText: messageText,
-            buttonType: buttonType,
-            buttonText: buttonText,
-        })
+        return this.http(
+            {
+                method: 'post',
+                url: url,
+                data: {
+                    titleType: titleType,
+                    titleText: titleText,
+                    messageType: messageType,
+                    messageText: messageText,
+                    buttonType: buttonType,
+                    buttonText: buttonText},
+                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            })
     }
 
     /*updateReminderSettings(questionnaireId, reminderAfterDaysIfNoResponse, reminderAfterDaysIfPartialResponse) {
@@ -398,26 +455,44 @@ class WebInterviewSettingsApi {
         reminderAfterDaysIfPartialResponse,
         singleResponse,
         emailOnComplete,
-        attachAnswersInEmail) {
+        attachAnswersInEmail,
+        allowSwitchToCawiForInterviewer) {
         var url = `${this.base}/${questionnaireId}/additionalSettings`
-        return this.http.post(url, {
-            spamProtection: isEnabledSpamProtection,
-            reminderAfterDaysIfNoResponse: reminderAfterDaysIfNoResponse,
-            reminderAfterDaysIfPartialResponse: reminderAfterDaysIfPartialResponse,
-            singleResponse: singleResponse,
-            emailOnComplete: emailOnComplete,
-            attachAnswersInEmail: attachAnswersInEmail,
-        })
+        return this.http(
+            {
+                method: 'post',
+                url:url,
+                data: {
+                    spamProtection: isEnabledSpamProtection,
+                    reminderAfterDaysIfNoResponse: reminderAfterDaysIfNoResponse,
+                    reminderAfterDaysIfPartialResponse: reminderAfterDaysIfPartialResponse,
+                    singleResponse: singleResponse,
+                    emailOnComplete: emailOnComplete,
+                    attachAnswersInEmail: attachAnswersInEmail,
+                    allowSwitchToCawiForInterviewer: allowSwitchToCawiForInterviewer},
+                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            })
     }
 
     startWebInterview(questionnaireId) {
         var url = `${this.base}/${questionnaireId}/start`
-        return this.http.post(url, {})
+
+        return this.http(
+            {
+                url:url,
+                method: 'post',
+                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            })
     }
 
     stopWebInterview(questionnaireId) {
         var url = `${this.base}/${questionnaireId}/stop`
-        return this.http.post(url, {})
+        return this.http(
+            {
+                url:url,
+                method: 'post',
+                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            })
     }
 }
 
@@ -429,9 +504,13 @@ class ExportSettings {
 
     setEncryption(val) {
         const url = `${this.base}/ChangeState`
-        return this.http.post(url, {
-            enableState: val,
-        })
+        return this.http(
+            {
+                method: 'post',
+                url: url,
+                data:{ enableState: val },
+                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            })
     }
 
     getEncryption() {
@@ -439,7 +518,12 @@ class ExportSettings {
     }
 
     regenPassword() {
-        return this.http.post(`${this.base}/RegeneratePassword`)
+        return this.http(
+            {
+                method: 'post',
+                url: `${this.base}/RegeneratePassword`,
+                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            })
     }
 }
 

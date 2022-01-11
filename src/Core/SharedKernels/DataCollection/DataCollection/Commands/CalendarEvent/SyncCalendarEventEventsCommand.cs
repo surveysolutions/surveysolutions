@@ -1,5 +1,6 @@
 ﻿using System;
 using Main.Core.Events;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent
 {
@@ -13,16 +14,10 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent
         
         public bool ShouldRestorePreviousStateAfterApplying { get; set; }
         
-        public SyncCalendarEventEventsCommand(AggregateRootEvent[] synchronizedEvents ,Guid publicKey, Guid userId) 
-            : base(publicKey, userId)
-        {
-            this.SynchronizedEvents = synchronizedEvents;
-        }
-
-        public SyncCalendarEventEventsCommand(AggregateRootEvent[] synchronizedEvents, Guid publicKey, Guid userId,
+       public SyncCalendarEventEventsCommand(AggregateRootEvent[] synchronizedEvents, Guid publicKey, Guid userId,
             bool restoreCalendarEventBefore, bool restoreCalendarEventAfter, bool deleteCalendarEventAfter,
-            bool shouldRestorePreviousStateAfterApplying) 
-            : base(publicKey, userId)
+            bool shouldRestorePreviousStateAfterApplying, QuestionnaireIdentity questionnaireIdentity) 
+            : base(publicKey, userId, questionnaireIdentity)
         {
             SynchronizedEvents = synchronizedEvents;
             RestoreCalendarEventBefore = restoreCalendarEventBefore;

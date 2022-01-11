@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
     {
         public ISubstitutionService SubstitutionService { get; }
 
-        private readonly IQuestionOptionsRepository questionOptionsRepository;
+        public IQuestionOptionsRepository QuestionOptionsRepository { get; set; }
 
         #region State
 
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private HashSet<string> questionVariableNamesCache = null;
         private HashSet<string> rosterVariableNamesCache = null;
         private Dictionary<string, IVariable> variableNamesCache = null;
-
+        private HashSet<int> identifyingMappedEntitiesCache = null;
 
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
@@ -69,6 +69,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly ConcurrentDictionary<Guid, ConcurrentDictionary<string, CategoricalOption>> cacheOfAnswerOptions = new ConcurrentDictionary<Guid, ConcurrentDictionary<string, CategoricalOption>>();
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingStaticTexts = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
 
+        private readonly ConcurrentDictionary<Guid, HashSet<int>> cacheOfWarningsIndeces = new ConcurrentDictionary<Guid, HashSet<int>>();
+        
 
         public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
 
@@ -207,7 +209,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             this.Revision = document.Revision;
             this.Version = version;
             this.translation = translation;
-            this.questionOptionsRepository = questionOptionsRepository;
+            this.QuestionOptionsRepository = questionOptionsRepository;
             this.SubstitutionService = substitutionService;
 
             this.QuestionnaireIdentity = new QuestionnaireIdentity(this.QuestionnaireId, Version);
@@ -245,6 +247,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool HasGroup(Guid groupId) => this.GetGroup(groupId) != null;
 
         public QuestionType GetQuestionType(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionType;
+
+        public VariableType GetVariableVariableType(Guid variableId) => this.GetVariable(variableId).Type;
 
         public QuestionScope GetQuestionScope(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionScope;
 
@@ -379,7 +383,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 => this.GetMultiSelectAnswerOptionsAsValuesImpl(questionId));
 
         public IEnumerable<CategoricalOption> GetCategoricalMultiOptionsByValues(Guid questionId, int[] values) =>
-            this.questionOptionsRepository.GetOptionsByOptionValues(this, questionId, values, this.translation);
+            this.QuestionOptionsRepository.GetOptionsByOptionValues(this, questionId, values, this.translation);
 
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue,
             string searchFor, int[] excludedOptionIds)
@@ -389,7 +393,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
-                return questionOptionsRepository.GetOptionsForQuestion(this,
+                return QuestionOptionsRepository.GetOptionsForQuestion(this,
                     questionId, parentQuestionValue, searchFor, this.translation, excludedOptionIds);
             }
 
@@ -417,7 +421,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
-                return questionOptionsRepository.GetOptionForQuestionByOptionText(
+                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(
                     this,
                     questionId,
                     optionText, 
@@ -485,7 +489,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
-                return questionOptionsRepository.GetOptionForQuestionByOptionValue(this,
+                return QuestionOptionsRepository.GetOptionForQuestionByOptionValue(this,
                     questionId, optionValue, answerParentValue, this.translation);
             }
 
@@ -537,14 +541,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetStaticTextImpl(entityId) != null;
         }
 
-        public bool IsInterviewierQuestion(Guid questionId)
+        public bool IsInterviewerQuestion(Guid questionId)
         {
             var question = this.GetQuestion(questionId);
 
-            return IsInterviewierQuestion(question);
+            return IsInterviewerQuestion(question);
         }
 
-        private bool IsInterviewierQuestion(IQuestion question)
+        private bool IsInterviewerQuestion(IQuestion question)
         {
             return question != null && question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
         }
@@ -584,6 +588,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 return GetPrefilledQuestions();
             }
         }
+
+        public HashSet<int> GetIdentifyingMappedEntities()
+            => this.identifyingMappedEntitiesCache 
+               ?? (this.identifyingMappedEntitiesCache = 
+                   this.GetPrefilledEntities()
+                       .Where(x => (this.IsQuestion(x) && this.GetQuestionType(x) != QuestionType.GpsCoordinates) || this.IsVariable(x))
+                       .Select(GetEntityIdMapValue)
+                       .ToHashSet());
 
         public ReadOnlyCollection<Guid> GetHiddenQuestions()
             => this
@@ -866,7 +878,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.cacheOfChildEntities[groupId];
         }
 
-        public IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutChache(Guid groupId)
+        public IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutCache(Guid groupId)
         {
             return this.GetGroupOrThrow(groupId)
                 .Children
@@ -874,7 +886,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToReadOnlyCollection();
         }
 
-        public IEnumerable<QuestionnaireItemReference> GetChidrenReferences(Guid groupId)
+        public IEnumerable<QuestionnaireItemReference> GetChildrenReferences(Guid groupId)
         {
             var group = this.GetGroupOrThrow(groupId);
 
@@ -945,13 +957,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string GetRosterVariableName(Guid id) => this.GetGroupOrThrow(id).VariableName;
 
-        public IReadOnlyCollection<int> GetValidationWarningsIndexes(Guid entityId)
+        public HashSet<int> GetValidationWarningsIndexes(Guid entityId)
         {
-            return GetEntityOrThrow(entityId).GetValidationConditions()
+            return this.cacheOfWarningsIndeces.GetOrAdd(entityId,  
+                GetEntityOrThrow(entityId).GetValidationConditions()
                 .Select((v, i) => new {index = i, validationCondition = v})
                 .Where(v => v.validationCondition.Severity == ValidationSeverity.Warning)
                 .Select(v => v.index)
-                .ToReadOnlyCollection();
+                .ToHashSet());
         }
 
         public bool IsSignature(Guid entityIdentityId)
@@ -991,7 +1004,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId)
         {
             var result = GetChildEntityIds(groupId)
-                        .Except(x => (this.IsQuestion(x) && !this.IsInterviewierQuestion(x)));
+                        .Except(x => (this.IsQuestion(x) && !this.IsInterviewerQuestion(x)));
 
             return new ReadOnlyCollection<Guid>(result.ToList());
         }
@@ -1015,7 +1028,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, id => this
                     .GetGroupOrThrow(id)
                     .Children.OfType<IQuestion>()
-                    .Where(IsInterviewierQuestion)
+                    .Where(IsInterviewerQuestion)
                     .Select(question => question.PublicKey)
                     .ToReadOnlyCollection());
 
@@ -1028,21 +1041,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .ToReadOnlyCollection());
 
 
-        public bool IsPrefilled(Guid questionId)
+        public bool IsPrefilled(Guid entityId)
         {
-            var entity = GetEntityOrThrow(questionId);
+            var entity = GetEntityOrThrow(entityId);
             if (IsCoverPageSupported)
             {
                 var parent = entity.GetParent();
                 return parent?.PublicKey == CoverPageSectionId;
             }
-            else if (entity is IVariable)
-            {
-                return false;
-            }
-            
-            var question = this.GetQuestionOrThrow(questionId);
-            return question.Featured;
+            else
+                return entity is IQuestion && this.GetQuestionOrThrow(entityId).Featured;
         }
 
         public bool ShouldBeHiddenIfDisabled(Guid entityId)
@@ -1202,7 +1210,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool HasRoster(string variableName) => this.RosterVariableNamesCache.Contains(variableName?.ToLower());
 
-        public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestion(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
+        public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestionOrThrow(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
         public bool IsSupportFilteringForOptions(Guid questionId)
         {
             return !this.GetQuestion(questionId).Properties.OptionsFilterExpression?.Trim().IsNullOrEmpty() ?? false;
@@ -1232,7 +1240,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public IReadOnlyList<Translation> Translations => this.QuestionnaireDocument.Translations.ToList();
 
-        public string GetDefaultTransation()
+        public string GetDefaultTranslation()
         {
             return this.QuestionnaireDocument.Translations.SingleOrDefault(t =>
                 t.Id == this.QuestionnaireDocument.DefaultTranslation)?.Name;
@@ -1385,7 +1393,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var group = this.GetGroup(groupId);
             if (group == null || !group.IsRoster || group.RosterSizeSource != RosterSizeSourceType.FixedTitles)
             {
-                return new FixedRosterTitle[0];
+                return Array.Empty<FixedRosterTitle>();
             }
             return group.FixedRosterTitles;
         }
@@ -1523,6 +1531,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             foreach (IComposite entity in entities)
             {
                 var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(entity.GetTitle(), entity.VariableName).ToList();
+
+                if (entity is IGroup roster && roster.IsRoster && roster.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                {
+                    foreach (var fixedRosterTitle in roster.FixedRosterTitles)
+                    {
+                        var substitutedFixedRosterTitle = this.SubstitutionService.GetAllSubstitutionVariableNames(fixedRosterTitle.Title, entity.VariableName);
+                        substitutedVariableNames.AddRange(substitutedFixedRosterTitle);
+                    }
+                }
+
                 var validateable = entity as IValidatable;
                 if (validateable != null)
                 {
@@ -1801,8 +1819,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private IQuestion GetQuestion(Guid questionId) => GetQuestion(this.QuestionCache, questionId);
 
         private IVariable GetVariable(Guid variableId) => GetVariable(this.VariablesCache, variableId);
+        private IVariable GetVariableOrThrow(Guid variableId) => GetVariableOrThrow(this.VariablesCache, variableId);
 
-        private IStaticText GetStaticTextImpl(Guid staticTextId) => GetEntity(this.EntityCache, staticTextId) as IStaticText;
+        private IStaticText GetStaticTextImpl(Guid staticTextId) => GetStaticText(this.StaticTextCache, staticTextId);
 
         private static string FormatQuestionForException(IQuestion question)
         {
@@ -1825,6 +1844,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return question;
         }
 
+        private static IVariable GetVariableOrThrow(Dictionary<Guid, IVariable> variables, Guid variableId)
+        {
+            IVariable variable = GetVariable(variables, variableId);
+
+            if (variable == null)
+                throw new QuestionnaireException("Variable is not found.")
+                {
+                    Data = {{"VariableId", variableId}}
+                };
+
+            return variable;
+        }
+
         private static IComposite GetEntityOrThrow(Dictionary<Guid, IComposite> entities, Guid entityId)
         {
             IComposite entity = GetEntity(entities, entityId);
@@ -1845,10 +1877,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private static IComposite GetEntity(Dictionary<Guid, IComposite> entities, Guid entityId) => entities.GetOrNull(entityId);
 
         private static IGroup GetGroup(Dictionary<Guid, IGroup> groups, Guid groupId) => groups.GetOrNull(groupId);
+        
+        private static IStaticText GetStaticText(Dictionary<Guid, IStaticText> staticTexts, Guid staticTextsId) => staticTexts.GetOrNull(staticTextsId);
 
-        public Guid GetFirstSectionId()
+        public Guid? GetFirstSectionId()
         {
-            return this.GetAllSections().First(s => !IsCoverPage(s));
+            var sectionId = this.GetAllSections().FirstOrDefault(s => !IsCoverPage(s));
+            if (sectionId == Guid.Empty)
+                return null;
+            return sectionId;
         }
 
         public IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId)
@@ -1978,7 +2015,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool HasCustomRosterTitle(Guid id)
         {
-            return this.GetGroup(id)?.CustomRosterTitle == true;
+            var @group = this.GetGroup(id);
+            return @group?.CustomRosterTitle == true 
+                   && @group?.DisplayMode != RosterDisplayMode.Table
+                   && @group?.DisplayMode != RosterDisplayMode.Matrix;
         }
 
         public bool IsCoverPage(Guid identityId) => innerDocument.IsCoverPage(identityId);

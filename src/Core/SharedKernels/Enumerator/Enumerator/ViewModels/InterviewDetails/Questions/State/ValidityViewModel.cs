@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -27,18 +28,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
+        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
         protected ValidityViewModel() { }
 
         public ValidityViewModel(IViewModelEventRegistry liteEventRegistry,
             IStatefulInterviewRepository interviewRepository,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             ErrorMessagesViewModel errorMessagesViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.interviewRepository = interviewRepository;
-            this.mainThreadDispatcher = mainThreadDispatcher;
+            this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
             this.Error = errorMessagesViewModel;
         }
 
@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             bool wasError = this.exceptionErrorMessageFromViewModel != null;
 
-            await mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 if (isInvalidEntity && !wasError)
                 {
@@ -145,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.UpdateValidStateAsync();
             }
         }
-        public virtual async void ProcessException(Exception exception)
+        public virtual async Task ProcessException(Exception exception)
         {
             if (exception is InterviewException interviewException)
             {
@@ -165,7 +165,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
                 else
                 {
-                    await mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                    await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                     {
                         this.Error.Caption = UIResources.Validity_NotAnswered_InterviewException_ErrorCaption;
                         this.Error.ChangeValidationErrors(UIResources.Validity_QuestionDoesntExist.ToEnumerable(), this.interviewId, this.Identity, this.navigationState);
@@ -175,10 +175,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public virtual async void ExecutedWithoutExceptions()
+        public virtual async Task ExecutedWithoutExceptions()
         {
             this.exceptionErrorMessageFromViewModel = null;
-
             await this.UpdateValidStateAsync();
         }
 

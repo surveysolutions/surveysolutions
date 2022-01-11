@@ -4,9 +4,6 @@
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <RootNamespace>WB.UI.Shared.Web</RootNamespace>
-    <AssemblyVersion>5.22.20.0</AssemblyVersion>
-    <FileVersion>5.22.20.0</FileVersion>
-    <Version>0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,10 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="Autofac" Version="6.2.0" />
     <PackageReference Include="Castle.Core" Version="4.4.1" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
-    <PackageReference Include="NHibernate" Version="5.3.6" />
+    <PackageReference Include="NHibernate" Version="5.3.10" />
     <PackageReference Include="Refit" Version="6.0.24" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />

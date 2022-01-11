@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>Înapoi la configurarea anchetei</value>
+    <value>Întoarcere la configurarea anchetei</value>
   </data>
   <data name="CustomMessageTooLong" xml:space="preserve">
     <value>Mesajul personalizat nu trebuie să conțină mai mult de {0} caractere (inclusiv html)</value>
   </data>
   <data name="CustomText" xml:space="preserve">
-    <value>Foloseşte un text personalizat</value>
+    <value>Foloseşte text personalizat</value>
   </data>
   <data name="Done" xml:space="preserve">
     <value>Efectuat</value>
@@ -241,12 +241,18 @@
     <value>Complet</value>
   </data>
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
-    <value>Notă pentru Controlor</value>
+    <value>Notă pentru Supervizor</value>
   </data>
   <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
     <value>Reluare</value>
   </data>
   <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
     <value>Începe o nouă anchetă</value>
+  </data>
+  <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
+    <value>Atașare transcrierea Pdf</value>
+  </data>
+  <data name="EmailOnComplete" xml:space="preserve">
+    <value>Trimiteți e-mail după finalizarea interviului web</value>
   </data>
 </root>

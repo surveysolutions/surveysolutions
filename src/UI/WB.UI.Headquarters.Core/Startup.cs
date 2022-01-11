@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -90,6 +89,18 @@ namespace WB.UI.Headquarters
         {
             this.environment = environment;
             Configuration = configuration;
+            AppDomain.CurrentDomain.AssemblyResolve += ResolveDataCollectionFix;
+        }
+        
+        private static Assembly ResolveDataCollectionFix(object sender, ResolveEventArgs args)
+        {
+            if (args.Name.StartsWith("WB.Core.SharedKernels.DataCollection.Portable, Version="))
+            {
+                var assembly = Assembly.GetAssembly(typeof(Identity));
+                return assembly;
+            }
+
+            return null;
         }
 
         public IConfiguration Configuration { get; }
@@ -223,6 +234,7 @@ namespace WB.UI.Headquarters
                 {
                     options.AddPolicy("export", b => b
                         .WithOrigins(redirectUri)
+                        .AllowAnyHeader()
                         .WithMethods("POST")
                     );
                 }
@@ -245,6 +257,9 @@ namespace WB.UI.Headquarters
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+				options.ForwardLimit = 2;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
             });
 
             services.AddDistributedMemoryCache();
@@ -267,9 +282,19 @@ namespace WB.UI.Headquarters
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
 
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                var securityPolicy = Configuration.GetValue<Boolean?>("Policies:CookiesSecurePolicyAlways");
+                
+                if (securityPolicy.HasValue)
+                    options.Secure = securityPolicy.Value ? CookieSecurePolicy.Always : CookieSecurePolicy.None;
+                else
+                    options.Secure = CookieSecurePolicy.SameAsRequest;
+            });
+
             services.AddRazorPages();
 
-            services.AddHqAuthorization();
+            services.AddHqAuthorization(Configuration);
             services.AddDatabaseStoredExceptional(environment, Configuration);
 
             services.AddScoped<UnitOfWorkActionFilter>();
@@ -315,6 +340,11 @@ namespace WB.UI.Headquarters
                     mvc.Filters.AddService<GlobalNotificationResultFilter>(200);
                     mvc.Filters.AddService<ObservingNotAllowedActionFilter>(300);
                     mvc.Filters.AddService<UpdateRequiredFilter>(400);
+
+                    mvc.Filters.AddService<ExtraHeadersApiFilter>(500);
+                    
+                    //mvc.Filters.Add(new ResponseCacheAttribute { NoStore = true, Location = ResponseCacheLocation.None });
+
                     mvc.Conventions.Add(new OnlyPublicApiConvention());
                     mvc.ModelBinderProviders.Insert(0, new DataTablesRequestModelBinderProvider());
                     var noContentFormatter = mvc.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();
@@ -344,19 +374,6 @@ namespace WB.UI.Headquarters
 #endif
             services.AddQuartzIntegration(Configuration,
                 DbUpgradeSettings.FromFirstMigration<M201905151013_AddQuartzTables>());
-
-            var passwordOptions = Configuration.GetSection("PasswordOptions").Get<PasswordOptions>();
-
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Default Password settings.
-                options.Password.RequireDigit = passwordOptions.RequireDigit;
-                options.Password.RequireLowercase = passwordOptions.RequireLowercase;
-                options.Password.RequireNonAlphanumeric = passwordOptions.RequireNonAlphanumeric;
-                options.Password.RequireUppercase = passwordOptions.RequireUppercase;
-                options.Password.RequiredLength = passwordOptions.RequiredLength;
-                options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
-            });
 
             services.AddMediatR(typeof(Startup), typeof(HeadquartersBoundedContextModule));
         }
@@ -394,7 +411,6 @@ namespace WB.UI.Headquarters
 
             if (!env.IsDevelopment())
             {
-
                 app.UseHsts();
             }
 
@@ -450,6 +466,8 @@ namespace WB.UI.Headquarters
             app.UseMetrics(Configuration);
             app.UseRouting();
             app.UseCors();
+
+            app.UseCookiePolicy();
             app.UseAuthentication();
 
             app.UseResetPasswordRedirect();
@@ -465,8 +483,6 @@ namespace WB.UI.Headquarters
             app.UseHqSwaggerUI();
 
             app.UseGraphQLApi();
-
-         
 
             app.UseEndpoints(endpoints =>
             {

@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly IPlainStorage<RawQuestionnaireDocumentView> rawQuestionnaireDocumentStorage;
         private readonly IPlainStorage<DeletedQuestionnaire> deletedQuestionnairesStorage;
         private readonly IOptionsRepository optionsRepository;
+        private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
 
         public SupervisorQuestionnairesHandler(
             IInterviewerQuestionnaireAccessor questionnairesAccessor,
@@ -34,7 +35,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             IPlainStorage<RawQuestionnaireDocumentView> rawQuestionnaireDocumentStorage,
             IAttachmentContentStorage attachmentContentStorage, 
             IPlainStorage<DeletedQuestionnaire> deletedQuestionnairesStorage,
-            IOptionsRepository optionsRepository)
+            IOptionsRepository optionsRepository,
+            IPlainStorage<QuestionnaireView> questionnaireViewRepository)
         {
             this.questionnairesAccessor = questionnairesAccessor;
             this.questionnaireAssemblyAccessor = questionnaireAssemblyAccessor;
@@ -43,6 +45,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             this.attachmentContentStorage = attachmentContentStorage;
             this.deletedQuestionnairesStorage = deletedQuestionnairesStorage;
             this.optionsRepository = optionsRepository;
+            this.questionnaireViewRepository = questionnaireViewRepository;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -54,6 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<GetAttachmentContentsRequest, GetAttachmentContentsResponse>(GetAttachmentContents);
             requestHandler.RegisterHandler<GetAttachmentContentRequest, GetAttachmentContentResponse>(GetAttachmentContent);
             requestHandler.RegisterHandler<GetQuestionnaireReusableCategoriesRequest, GetQuestionnaireReusableCategoriesResponse>(GetQuestionnaireReusableCategories);
+            requestHandler.RegisterHandler<GetQuestionnairesWebModeRequest, GetQuestionnairesWebModeResponse>(GetQuestionnairesWebMode);
         }
 
         private Task<GetAttachmentContentResponse> GetAttachmentContent(GetAttachmentContentRequest request)
@@ -156,6 +160,23 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             return Task.FromResult(new GetQuestionnaireAssemblyResponse
             {
                 Content = assembly
+            });
+        }
+
+        public Task<GetQuestionnairesWebModeResponse> GetQuestionnairesWebMode(GetQuestionnairesWebModeRequest arg)
+        {
+            var deleted = deletedQuestionnairesStorage.LoadAll().Select(q => QuestionnaireIdentity.Parse(q.Id));
+
+            var response = this.questionnaireViewRepository
+                .Where(x => x.WebModeAllowed == true)
+                .Select(x=>x.GetIdentity())
+                .Except(deleted)
+                
+                .ToList();
+
+            return Task.FromResult(new GetQuestionnairesWebModeResponse
+            {
+                Questionnaires = response
             });
         }
     }

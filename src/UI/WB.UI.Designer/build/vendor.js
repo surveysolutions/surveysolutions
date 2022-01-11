@@ -10,7 +10,6 @@ const merge = require("merge2");
 const concat = require("gulp-concat");
 const filter = require("gulp-filter");
 const gulpif = require("gulp-if");
-const imagemin = require("gulp-imagemin");
 const postcss = require("gulp-postcss");
 const rev = require("gulp-rev");
 const sourcemaps = require("gulp-sourcemaps");
@@ -45,13 +44,11 @@ const bowerImages = () =>
 
 const favicons = () =>
   src(config.vendor.favicons)
-    //.pipe(cache(imagemin()))
     .pipe(dest(config.dist));
 
 const assets = () =>
   merge(
     src(config.assets.images)
-      //.pipe(cache(imagemin()))
       .pipe(dest(join(config.dist, "images"))),
     src(config.assets.fonts).pipe(dest(join(config.dist, "fonts"))),
     src(config.assets.qbank)

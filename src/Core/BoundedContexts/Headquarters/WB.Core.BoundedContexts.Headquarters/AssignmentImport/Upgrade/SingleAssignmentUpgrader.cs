@@ -57,10 +57,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                         oldAssignment.AudioRecording,
                         oldAssignment.Answers.ToList(),
                         oldAssignment.ProtectedVariables,
-                        oldAssignment.Comments);
+                        oldAssignment.Comments,
+                        assignmentId);
 
                     invitationService.MigrateInvitationToNewAssignment(assignmentId, newAssignment.Id);
-                    commandService.Execute(new UpgradeAssignmentCommand(oldAssignment.PublicKey, userId));
+                    commandService.Execute(new UpgradeAssignmentCommand(oldAssignment.PublicKey, userId, oldAssignment.QuestionnaireId));
                 }
                 else
                 {

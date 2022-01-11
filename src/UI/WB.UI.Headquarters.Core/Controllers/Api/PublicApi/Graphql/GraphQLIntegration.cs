@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.AspNetCore;
-using HotChocolate.Data.Filters;
 using HotChocolate.Execution;
 using HotChocolate.Execution.Configuration;
 using HotChocolate.Types.Descriptors;
@@ -13,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection;
+using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Filters;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries;
@@ -37,9 +37,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
         private static IRequestExecutorBuilder GetExecutorBuilder(IServiceCollection services)
         {
+            services.AddHttpResultSerializer<CompositeSerializer>();
+
             return services
                 .AddGraphQLServer()
-                .ConfigureSchema(x=>x.Use<WorkspaceGraphQlMiddleware>())
+                .ConfigureSchema(x=>
+                {
+                    x.Use<WorkspaceGraphQlMiddleware>();
+                })
                 .AddAuthorization()
                 .SetPagingOptions(new PagingOptions(){MaxPageSize = 200})
                 .AddQueryType(x => x.Name("HeadquartersQuery"))
@@ -50,10 +55,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .AddType<QuestionsQueryExtension>()
                 .AddType<QuestionnaireItemsQueryExtension>()
                 .AddType<UsersQueryExtension>()
+                .AddType<MapReportQueryExtension>()
                 .AddMutationType(x => x.Name("HeadquartersMutation"))
                 .AddType<CalendarEventsMutationExtension>()
                 .AddType<MapsMutationExtension>()
-                .AddFiltering()
+                .AddFiltering<HqFilteringConventions>()
                 .AddConvention<INamingConventions>(new CompatibilityNamingConvention())
                 .BindRuntimeType<string, CustomStringOperationFilterInput>()
                 .BindRuntimeType<IdentifyEntityValue, IdentifyEntityValueFilterInput>()

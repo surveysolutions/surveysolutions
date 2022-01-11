@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
@@ -144,6 +145,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 {
                     Questionnaires = localQuestionnaires
                 }, token);
+
+            return response.Questionnaires;
+        }
+
+        public async Task<List<QuestionnaireIdentity>> GetServerQuestionnairesPermittedToSwitchToWebModeAsync(CancellationToken cancellationToken)
+        {
+            var response = await this.syncClient.SendAsync<GetQuestionnairesWebModeRequest, GetQuestionnairesWebModeResponse>(
+                new GetQuestionnairesWebModeRequest { }, cancellationToken);
 
             return response.Questionnaires;
         }
@@ -344,9 +353,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task CanSynchronizeAsync(RestCredentials? credentials = null, string? tenantId = null, CancellationToken token = default)
         {
+            var interviewerIdentity = (IInterviewerUserIdentity)this.principal.CurrentUserIdentity;
+            
             var request = new CanSynchronizeRequest(this.deviceSettings.GetApplicationVersionCode(), 
-                this.principal.CurrentUserIdentity.UserId,
-                this.principal.CurrentUserIdentity.SecurityStamp,
+                interviewerIdentity.UserId,
+                interviewerIdentity.SecurityStamp,
                 settings.LastHqSyncTimestamp);
 
             var response = await this.syncClient.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(request,  token);

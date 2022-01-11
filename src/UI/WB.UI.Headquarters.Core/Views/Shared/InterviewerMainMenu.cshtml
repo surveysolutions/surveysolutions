@@ -1,21 +1,31 @@
 ﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.Infrastructure.Native.Workspaces
 @using WB.UI.Headquarters.Services
+@inject IWorkspaceContextAccessor workspaceContext
+
+@{
+    var workspace = workspaceContext.CurrentWorkspace();
+    var isSystemWorkspace = workspace?.IsSystemDefinedWorkspace() ?? false;
+    if (isSystemWorkspace)
+    {
+        var workspaces = (IEnumerable<WorkspaceContext>)ViewData["UserWorkspacesList"];
+        workspace = workspaces.FirstOrDefault();
+    }
+}
 
 <ul class="nav navbar-nav" role="menu">
-    @Html.MainMenuItem(@"CreateNew", @"InterviewerHq", MainMenu.CreateNew, MenuItem.CreateNew)
-    @Html.MainMenuItem(@"Started", @"InterviewerHq", MainMenu.Started, MenuItem.Started)
-    @Html.MainMenuItem(@"Rejected", @"InterviewerHq", MainMenu.Rejected, MenuItem.Rejected)
-    @Html.MainMenuItem(@"Completed", @"InterviewerHq", MainMenu.Completed, MenuItem.Completed)
+    @Html.MainMenuItem(workspace, @"CreateNew", @"InterviewerHq", MainMenu.CreateNew, MenuItem.CreateNew)
+    @Html.MainMenuItem(workspace, @"Started", @"InterviewerHq", MainMenu.Started, MenuItem.Started)
+    @Html.MainMenuItem(workspace, @"Rejected", @"InterviewerHq", MainMenu.Rejected, MenuItem.Rejected)
+    @Html.MainMenuItem(workspace, @"Completed", @"InterviewerHq", MainMenu.Completed, MenuItem.Completed)
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
-    @Html.MainMenuItem(@"Index", @"MapDashboard", MainMenu.MapDashboard, MenuItem.MapDashboard)
+    @Html.MainMenuItem(workspace, @"Index", @"MapDashboard", MainMenu.MapDashboard, MenuItem.MapDashboard)
     <li class="dropdown">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
+        <a href="javascript:void(0);" class="dropdown-toggle toggle-sized" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
             <li>
-                <a asp-action="Profile" asp-controller="Interviewer">
-                    @Pages.Profile_InterviewerProfile
-                </a>
+                @Html.MainMenuItem(workspace, @"Profile", @"Interviewer", Pages.Profile_InterviewerProfile, MenuItem.UsersManagement)
             </li>
             <li>
                 <a href="/Account/LogOff">@Common.Logoff</a>

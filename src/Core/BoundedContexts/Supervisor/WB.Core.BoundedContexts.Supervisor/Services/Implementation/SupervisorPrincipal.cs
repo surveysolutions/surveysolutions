@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         protected override IUserIdentity GetUserById(string userId)
             => this.usersStorage.GetById(userId);
 
-        public ISupervisorUserIdentity CurrentUserIdentity => (ISupervisorUserIdentity)base.currentUserIdentity;
+        //public ISupervisorUserIdentity CurrentUserIdentity => (ISupervisorUserIdentity)base.currentUserIdentity;
 
         protected override void UpdateUserHash(string userId, string hash)
         {

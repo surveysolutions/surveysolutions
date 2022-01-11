@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="~/css/markup.css">
     <!-- endinject -->
     <!-- manifest:json -->
-    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-ab1710a6c0.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-59939c24fd.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-1887635b34.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-ac8bf00e25.fr.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-48ce9563b0.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-c510dcb7a8.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-ee74b420a6.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-ab1710a6c0.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-59939c24fd.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-1887635b34.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-ac8bf00e25.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-48ce9563b0.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-c510dcb7a8.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-ee74b420a6.zh.json""}"; }
+    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-9b4e0aac24.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-0c56ffca7d.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-e0455a71da.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-5a5afd869f.fr.json","QuestionnaireEditor.ro.json":"../../resx/QuestionnaireEditor-014130c697.ro.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-463a88f473.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-5a4c133b69.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-ac3c63b215.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-9b4e0aac24.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-0c56ffca7d.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-e0455a71da.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-5a5afd869f.fr.json"",""QuestionnaireEditor.ro.json"":""../../resx/QuestionnaireEditor-014130c697.ro.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-463a88f473.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-5a4c133b69.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-ac3c63b215.zh.json""}"; }
     <!-- endinject -->
     @{
         var locales = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(locales_json);
@@ -77,16 +77,17 @@
     <script defer src="~/js/app/controllers/tree.js"></script>  
     <script defer src="~/js/app/controllers/variable.js"></script>  
     <script defer src="~/js/app/decorators/exceptionhandlerdecorator.js"></script>  
-    <script defer src="~/js/app/filters/escapeFilter.js"></script>  
-    <script defer src="~/js/app/modules/ng-context-menu.js"></script>  
-    <script defer src="~/js/app/modules/perfect_scrollbar.js"></script>  
-    <script defer src="~/js/app/modules/positionCalculator.js"></script>  
-    <script defer src="~/js/app/modules/ui-ace.js"></script>  
     <script defer src="~/js/app/directives/animations.js"></script>  
     <script defer src="~/js/app/directives/directives.js"></script>  
     <script defer src="~/js/app/directives/help.js"></script>  
     <script defer src="~/js/app/directives/itemBreadcrumbs.js"></script>  
     <script defer src="~/js/app/directives/matchOptionsPattern.js"></script>  
+    <script defer src="~/js/app/filters/escapeFilter.js"></script>  
+    <script defer src="~/js/app/modules/ng-context-menu.js"></script>  
+    <script defer src="~/js/app/modules/perfect_scrollbar.js"></script>  
+    <script defer src="~/js/app/modules/positionCalculator.js"></script>  
+    <script defer src="~/js/app/modules/ui-ace.js"></script>  
+    <script defer src="~/js/app/services/agular-notify.js"></script>  
     <script defer src="~/js/app/services/alertService.js"></script>  
     <script defer src="~/js/app/services/authorizationinterceptor.js"></script>  
     <script defer src="~/js/app/services/commandService.js"></script>  
@@ -109,6 +110,9 @@
     <!-- endinject -->
     <!-- templates:js -->
     <script defer src="~/js/templates.js"></script>
+    <!-- endinject -->
+    <!-- utils:js -->
+    <script defer src="~/js/utils.js"></script>
     <!-- endinject -->
 </body>
 </html>

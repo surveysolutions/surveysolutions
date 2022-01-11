@@ -432,7 +432,7 @@ export default {
                 const settings = response.data || {}
                 self.provider = (settings.provider || '').toLocaleLowerCase()
                 self.senderAddress = settings.senderAddress
-                self.awsAccessKeyId = settings.awsAccessKeyId
+                self.awsAccessKeyId =settings.awsAccessKeyId
                 self.awsSecretAccessKey = settings.awsSecretAccessKey
                 self.awsRegion = settings.awsRegion
                 self.sendGridApiKey = settings.sendGridApiKey
@@ -527,14 +527,15 @@ export default {
             var validationResult = await this.$validator.validateAll('settings')
             if (validationResult) {
                 const settings = {
-                    provider: this.provider,
-                    senderAddress: this.senderAddress,
-                    awsAccessKeyId: this.awsAccessKeyId,
-                    awsSecretAccessKey: this.awsSecretAccessKey,
-                    sendGridApiKey: this.sendGridApiKey,
-                    senderName: this.senderName,
-                    replyAddress: this.replyAddress,
-                    address: this.address,
+                    provider: self.provider,
+                    senderAddress: (self.senderAddress || '').trim(),
+                    awsAccessKeyId: (self.awsAccessKeyId || '').trim(),
+                    awsSecretAccessKey: (self.awsSecretAccessKey || '').trim(),
+                    awsRegion: self.awsRegion,
+                    sendGridApiKey: (self.sendGridApiKey || '').trim(),
+                    senderName: (self.senderName || '').trim(),
+                    replyAddress: (self.replyAddress || '').trim(),
+                    address: (self.address || '').trim(),
                 }
                 self.$store.dispatch('showProgress')
 

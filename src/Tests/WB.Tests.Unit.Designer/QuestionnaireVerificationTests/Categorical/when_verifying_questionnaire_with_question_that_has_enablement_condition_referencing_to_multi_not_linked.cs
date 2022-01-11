@@ -27,8 +27,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Categorical
                             new Answer() {AnswerValue = "2", AnswerText = "opt 2"}
                         }
                 },
-                new NumericQuestion("test")
+                new NumericQuestion()
                 {
+                    QuestionText = "test",
                     PublicKey = questionWithEnablementConditionId,
                     ConditionExpression = "some condition",
                     StataExportCaption = "var2"

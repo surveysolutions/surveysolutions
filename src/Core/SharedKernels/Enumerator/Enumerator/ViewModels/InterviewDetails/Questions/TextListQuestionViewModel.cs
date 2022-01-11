@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -52,8 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<TextListQuestionAnswered> questionStateViewModel,
             IUserInteractionService userInteractionService,
             AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
+            QuestionInstructionViewModel instructionViewModel)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.userInteractionService = userInteractionService;
-            this.mainThreadDispatcher = mainThreadDispatcher;
+            this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
             this.Answering = answering;
             this.Answers = new CovariantObservableCollection<ICompositeEntity>();
         }
@@ -182,13 +182,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                await this.Answering.SendAnswerQuestionCommandAsync(command).ConfigureAwait(false);
-                this.questionState.Validity.ExecutedWithoutExceptions();
+                await this.Answering.SendQuestionCommandAsync(command).ConfigureAwait(false);
+                await this.questionState.Validity.ExecutedWithoutExceptions();
                 await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(this.ShowOrHideAddNewItem).ConfigureAwait(false);
             }
             catch (InterviewException ex)
             {
-                this.questionState.Validity.ProcessException(ex);
+                await this.questionState.Validity.ProcessException(ex);
             }
         }
 
@@ -207,7 +207,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return optionViewModel;
         }
 
-        public void Dispose() => this.questionState.Dispose();
+        public void Dispose()
+        {
+            Answers.OfType<TextListItemViewModel>().ForEach(x =>
+            {
+                x.ItemDeleted -= this.ListItemDeleted;
+                x.ItemEdited -= ListItemEdited;
+            });
+            
+            this.questionState.Dispose();
+            this.InstructionViewModel.Dispose();
+        }
 
         public IObservableCollection<ICompositeEntity> Children
         {

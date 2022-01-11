@@ -8,7 +8,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
     public class CreateAssignment : AssignmentCommand
     {
         public int Id { get; }
-        public QuestionnaireIdentity QuestionnaireId { get; }
         public Guid ResponsibleId { get; }
         public int? Quantity { get; }
         public bool AudioRecording { get; }
@@ -18,6 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
         public List<InterviewAnswer> Answers { get; }
         public List<string> ProtectedVariables { get; }
         public string Comment { get; }
+        public int? UpgradedFromId { get; }
 
         public CreateAssignment(Guid publicKey,
             int id,
@@ -31,11 +31,11 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             bool? webMode,
             List<InterviewAnswer> answers, 
             List<string> protectedVariables,
-            string comment) 
-            : base(publicKey, userId)
+            string comment,
+            int? upgradedFromId = null) 
+            : base(publicKey, userId, questionnaireId)
         {
             Id = id;
-            QuestionnaireId = questionnaireId;
             ResponsibleId = responsibleId;
             Quantity = quantity;
             AudioRecording = audioRecording;
@@ -45,6 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             Answers = answers ?? new List<InterviewAnswer>();
             ProtectedVariables = protectedVariables ?? new List<string>();
             Comment = comment;
+            UpgradedFromId = upgradedFromId;
         }
     }
 }

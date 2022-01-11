@@ -207,7 +207,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         historyItem.AdditionalData = new
                         {
                             c.Comment,
-                            Responsible = responsible
+                            Responsible = responsible,
+                            UpgradedFromId = c.UpgradedFromId
                         };
                         break;
                     case AssignmentArchived _:
@@ -369,6 +370,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (input.OnlyWithInterviewsNeeded)
             {
                 items = items.Where(x => !x.Quantity.HasValue || x.Quantity - x.InterviewSummaries.Count > 0);
+            }
+
+            if (input.NonCawiOnly)
+            {
+                items = items.Where(x => x.WebMode != true);
             }
 
             if (input.DateStart.HasValue || input.DateEnd.HasValue)

@@ -191,7 +191,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             {
                                 var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
 
-                                if (jsonObject?.maps?.Count > 0)
+                                if (jsonObject != null && jsonObject.maps?.Count > 0)
                                 {
                                     var mapName = jsonObject.maps[0];
                                     unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{mapName}.mmap");
@@ -207,16 +207,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                     item.YMaxVal = extent[1][1];
 
                                     var layers = jsonObject.map.baseMap.baseMapLayers;
-                                    if (layers?.Count > 0)
+                                    if (layers != null && layers.Count > 0)
                                     {
                                         var layer = layers[0];
 
                                         item.MaxScale = layer.maxScale ?? 0;
                                         item.MinScale = layer.minScale ?? 0;
                                     }
+                                    else
+                                    {
+                                        throw new InvalidOperationException(".mmpk file has no base layers");
+                                    }
 
                                 }
                             }
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Invalid data. iteminfo.xml not found");
                         }
                     }
                     break;
@@ -234,30 +242,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                     "gdalinfo"),
                                     $"\"{fullPath}\" -json");
                             var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
-
-                            /*var allX = new List<double>
-                            {
-                                deserialized.CornerCoordinates.LowerLeft[0],
-                                deserialized.CornerCoordinates.UpperLeft[0],
-                                deserialized.CornerCoordinates.LowerRight[0],
-                                deserialized.CornerCoordinates.UpperRight[0],
-                            };
-
-                            var allY = new List<double>
-                            {
-                                deserialized.CornerCoordinates.LowerLeft[1],
-                                deserialized.CornerCoordinates.UpperLeft[1],
-                                deserialized.CornerCoordinates.LowerRight[1],
-                                deserialized.CornerCoordinates.UpperRight[1],
-                            };
-                            item.XMinVal = allX.Min();
-                            item.YMinVal = allY.Min();
-
-                            item.XMaxVal = allX.Max();
-                            item.YMaxVal = allY.Max();
-
-                            //item.Wkid = 32735; // probably written in WKT format in the deserialized.CoordinateSystem but there is no parser for it
-                                 */
 
                             if (deserialized?.Wgs84Extent != null)
                             {
@@ -288,13 +272,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                 item.Wkid = 4326; //geographic coordinates Wgs84
                             }
                             else
-                                throw new Exception(".tif file is not recognized as map");
+                                throw new InvalidOperationException(".tif file is not recognized as map");
                         }
                         catch (Win32Exception e)
                         {
                             if (e.NativeErrorCode == 2)
                             {
-                                throw new Exception("gdalinfo utility not found. Please install gdal library and add to PATH variable", e);
+                                throw new InvalidOperationException("gdalinfo utility not found. Please install gdal library and add to PATH variable", e);
                             }
                         }
                         catch (NonZeroExitCodeException e)
@@ -304,7 +288,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             
                             if (e.ProcessExitCode == 4)
                             {
-                                throw new Exception(".tif file is not recognized as map", e);
+                                throw new InvalidOperationException(".tif file is not recognized as map", e);
                             }
 
                             throw;
@@ -359,7 +343,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (this.authorizedUser.IsSupervisor)
             {
                 bool isTeamInterviewer = this.userStorage.Users
-                    .Any(x => x.UserName.ToLower() == lowerCasedUserName && x.Profile.SupervisorId == this.authorizedUser.Id);
+                    .Any(x => x.UserName.ToLower() == lowerCasedUserName && x.WorkspaceProfile.SupervisorId == this.authorizedUser.Id);
                 if (!isTeamInterviewer)
                 {
                     throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer.");
@@ -379,7 +363,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 this.userMapsStorage.Remove(mapUsers);
             else
             {
-                throw new Exception("Map is not assigned to specified interviewer.");
+                throw new InvalidOperationException("Map is not assigned to specified interviewer.");
             }
             return map;
         }
@@ -463,7 +447,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public string[] GetAllMapsForSupervisor(Guid supervisorId)
         {
             var interviewerNames = this.userStorage.Users
-                .Where(x => supervisorId == x.Profile.SupervisorId && x.IsArchived == false)
+                .Where(x => supervisorId == x.WorkspaceProfile.SupervisorId && x.IsArchived == false)
                 .Select(x => x.UserName)
                 .ToArray();
 
@@ -494,7 +478,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             var map = this.mapPlainStorageAccessor.GetById(id);
             if (map == null)
-                throw new Exception(@"Map was not found.");
+                throw new InvalidOperationException(@"Map was not found.");
 
             var userNameLowerCase = userName.ToLower();
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
@@ -505,7 +489,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             x.Roles.Any(role => role.Id == interviewerRoleId));
             if (authorizedUser.IsSupervisor)
             {
-                userQuery = userQuery.Where(x => x.Profile.SupervisorId == this.authorizedUser.Id);
+                userQuery = userQuery.Where(x => x.WorkspaceProfile.SupervisorId == this.authorizedUser.Id);
             }
 
             var interviewer = userQuery.FirstOrDefault();
@@ -520,7 +504,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             if (userMap != null)
             {
-                throw new Exception("Provided map already assigned to specified interviewer.");
+                throw new InvalidOperationException("Provided map already assigned to specified interviewer.");
             }
 
             userMapsStorage.Store(new UserMap

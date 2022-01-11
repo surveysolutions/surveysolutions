@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.UI.Designer.Filters;
 
 namespace WB.UI.Designer.Areas.Admin.Controllers
 {
@@ -29,6 +30,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
             public bool folder { get; set; } = true;
         }
 
+        [AntiForgeryFilter]
         public IActionResult Index()
         {
             return View();
@@ -62,6 +64,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public TreeNode CreateFolder(CreateFolderModel model)
         {
             var id = Guid.NewGuid();
@@ -81,6 +84,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RenameFolder(RenameFolderModel model)
         {
             this.publicFoldersStorage.RenameFolder(model.Id, model.NewTitle ?? "");
@@ -93,6 +97,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RemoveFolder(RemoveFolderModel model)
         {
             this.publicFoldersStorage.RemoveFolder(model.Id);
@@ -106,6 +111,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AssignFolderToQuestionnaire(AssignFolderToQuestionnaireModel model)
         {
             this.publicFoldersStorage.AssignFolderToQuestionnaire(model.QuestionnaireId, model.Id);

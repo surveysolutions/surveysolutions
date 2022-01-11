@@ -115,8 +115,10 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
             var interviews =
                 this.interviewStatuses.Query(_ => _
                     .Where(i => id.Contains(i.InterviewId))
-                    .SelectMany(interviewWithStatusHistory => interviewWithStatusHistory.InterviewCommentedStatuses,
+                    .SelectMany(summary => summary.InterviewCommentedStatuses,
                         (interview, status) => new { interview.InterviewId, interview.Key, StatusHistory = status })
+                    .Where(s=> s.StatusHistory.Status != InterviewExportedAction.Paused 
+                            && s.StatusHistory.Status != InterviewExportedAction.Resumed) 
                     .Select(i => new InterviewSummariesDto
                     {
                         InterviewId = i.InterviewId, Key = i.Key, Status = i.StatusHistory.Status,

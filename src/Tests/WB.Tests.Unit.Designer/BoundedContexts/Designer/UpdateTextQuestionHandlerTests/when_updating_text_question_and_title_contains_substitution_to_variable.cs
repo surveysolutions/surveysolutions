@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
@@ -13,12 +14,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
     internal class when_updating_text_question_and_title_contains_substitution_to_variable : QuestionnaireTestsContext
     {
         [NUnit.Framework.Test] public void should_not_throw_QuestionnaireException () {
-            questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire = CreateQuestionnaire(responsibleId: ResponsibleId);
+            questionnaire.AddGroup(ChapterId, responsibleId:ResponsibleId);
             questionnaire.AddQRBarcodeQuestion(
-                questionId,
-                chapterId,
-                responsibleId,
+                QuestionId,
+                ChapterId,
+                ResponsibleId,
                 title: "title",
                 variableName: "q1",
                 instructions: "instructions",
@@ -26,31 +27,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
 
             questionnaire.AddVariable(
                 Guid.NewGuid(),
-                responsibleId:responsibleId,
-                parentId: chapterId,
+                responsibleId:ResponsibleId,
+                parentId: ChapterId,
                 variableType: VariableType.String,
-                variableName: variableName,
+                variableName: VariableName,
                 variableExpression: "text + text");
 
-
-            questionnaire.UpdateTextQuestion(
+            Assert.DoesNotThrow(()=> questionnaire.UpdateTextQuestion(
                 new UpdateTextQuestion(
                     questionnaire.Id,
-                    questionId,
-                    responsibleId,
-                    new CommonQuestionParameters() {Title = titleWithSubstitutionToVariable, VariableName = "q1"},
+                    QuestionId,
+                    ResponsibleId,
+                    new CommonQuestionParameters() {Title = TitleWithSubstitutionToVariable, VariableName = "q1"},
                     null, scope, false,
-                    new List<ValidationCondition>()));
+                    new List<ValidationCondition>())));
 
         }
 
         private static Questionnaire questionnaire;
-        private static Exception exception;
-        private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
-        private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        private const string variableName = "var";
-        private static string titleWithSubstitutionToVariable = $"title with substitution to variable - %{variableName}%";
+        private static readonly Guid QuestionId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid ChapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        private static readonly Guid ResponsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        private const string VariableName = "var";
+        private static readonly string TitleWithSubstitutionToVariable = $"title with substitution to variable - %{VariableName}%";
         
         private static QuestionScope scope = QuestionScope.Interviewer;
         

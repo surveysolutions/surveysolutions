@@ -35,8 +35,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 RosterTitleQuestionId = rosterTitleQuestionId,
                 Children = new List<IComposite>()
                 {
-                    new TextQuestion("question 1")
+                    new TextQuestion()
                     {
+                        QuestionText = "question 1",
                         StataExportCaption = "var2",
                         PublicKey = rosterTitleQuestionId
                     }

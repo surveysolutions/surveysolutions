@@ -129,4 +129,10 @@
   <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
     <value>Все задания для web интервью должны быть назначены на интервьюера</value>
   </data>
+  <data name="AssignmentResponsibleNotFound" xml:space="preserve">
+    <value>Пользователь не найден</value>
+  </data>
+  <data name="QuestionnaireWasDeleted" xml:space="preserve">
+      <value>Опросник удален</value>
+  </data>
 </root>

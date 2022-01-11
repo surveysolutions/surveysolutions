@@ -5,6 +5,6 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
 {
     public interface ICommandTransformator
     {
-        ICommand TransformCommnadIfNeeded(ICommand command, Guid? responsibleId = null);
+        ICommand TransformCommandIfNeeded(ICommand command, Guid? responsibleId = null);
     }
 }

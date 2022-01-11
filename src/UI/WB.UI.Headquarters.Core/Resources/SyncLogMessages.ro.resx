@@ -121,22 +121,22 @@
     <value>Este necesar un nou fișier de tip aplicație </value>
   </data>
   <data name="CanSynchronize" xml:space="preserve">
-    <value>Începe sincronizarea</value>
+    <value>Începere sincronizare</value>
   </data>
   <data name="CensusQuestionnaire" xml:space="preserve">
     <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
   </data>
   <data name="CheckObsoleteInterviews" xml:space="preserve">
-    <value>Verificați anchetele vechi. Este necesar: &lt;pre&gt; {0} &lt;/ pre&gt;</value>
+    <value>Verificare interviuri vechi. Este necesar: &lt;pre&gt;{0}&lt;/pre&gt;</value>
   </data>
   <data name="DeleteInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;Ștergeți ancheta: &lt;a href='{3}'&gt;{0}&lt;/a&gt;, Pachetul: {1}, Indexul de sortare: {2}&lt;/ li&gt;</value>
+    <value>&lt;li&gt;Ștergere interviu: &lt;a href='{3}'&gt;{0}&lt;/a&gt;, Pachetul: {1}, Indexul de sortare: {2}&lt;/ li&gt;</value>
   </data>
   <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
     <value>Dispozitivul poate fi alocat anchetatorului</value>
   </data>
   <data name="DeviceRelinkRequired" xml:space="preserve">
-    <value>&lt;font color='orange'&gt;Este necesară refacerea link-ului&lt;/font&gt;</value>
+    <value>&lt;font color='orange'&gt;Refacerea link-ului este necesară&lt;/font&gt;</value>
   </data>
   <data name="DeviceUpdateRequired" xml:space="preserve">
     <value>&lt;font color='red'&gt;Actualizare necesară. Versiunea aplicației Interviewer - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
@@ -145,10 +145,10 @@
     <value>&lt;b&gt;[DISPOZITIV GOL]&lt;/b&gt;</value>
   </data>
   <data name="ExtendedApkRequested" xml:space="preserve">
-    <value>Este necesar un fișier nou al aplicației extinse</value>
+    <value>Este solicitat un fișier nou al aplicației extinse</value>
   </data>
   <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
-    <value>Fișier suplimentar necesar pentru versiunea extinsă {0}</value>
+    <value>Fișier Patch necesar pentru versiunea extinsă {0}</value>
   </data>
   <data name="GetAssignmentFormat" xml:space="preserve">
     <value>Descarcă alocarea ({0})&lt;/br&gt;</value>
@@ -166,7 +166,7 @@
     <value>Descarcă interviul: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewer" xml:space="preserve">
-    <value>Descarcă informaƫile despre anchetator. &lt;br/&gt;Controlorul: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    <value>Descarcă informaƫile despre anchetator. &lt;br/&gt;Supervizorul: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="GetInterviewPackage" xml:space="preserve">
     <value>Descarcă pachetul pentru anchetator: &lt;b&gt;{0}&lt;/b&gt;</value>
@@ -208,10 +208,10 @@
     <value>Anchetatorul este conectat și a obținut AuthToken</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color='green''&gt;Interviul &lt;b&gt;{0}&lt;/b&gt; a fost prelucrat cu succes&lt;/font&gt;</value>
+      <value>&lt;font color="green''&gt;Interviul &lt;b&gt;{0}&lt;/b&gt; a fost prelucrat cu succes&lt;/font&gt;</value>
   </data>
   <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color = 'green' '&gt; Chestionarul &lt;b&gt; {0} &lt;/ b&gt; a fost prelucrat cu succes &lt;/ font&gt;</value>
+      <value>&lt;font color="green"&gt; Chestionarul &lt;b&gt; {0} &lt;/ b&gt; a fost prelucrat cu succes &lt;/ font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
     <value>Conectarea anchetatorului la tabletă</value>
@@ -244,18 +244,27 @@
     <value>Sarcina &lt;b&gt;{0}&lt;/b&gt; primită și stocată de dispozitiv</value>
   </data>
   <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
-    <value>Verificați anchetele vechi: &lt;pre&gt; {0} &lt;/ pre&gt;</value>
+    <value>Verificare duplicate interviu. Interviu: &lt;pre&gt;{0}&lt;/pre&gt;</value>
   </data>
   <data name="DownloadReusableCategories" xml:space="preserve">
     <value>Se descarcă lista reutilizabilă {0}</value>
   </data>
   <data name="GetInterviewPatch" xml:space="preserve">
-    <value>Descărcați modificările nachetei de la RINS: {0}</value>
+    <value>Descărcați modificările anchetei de la HQ: {0}</value>
   </data>
   <data name="SupervisorApkRequested" xml:space="preserve">
-    <value>A fost solicitat un nouă aplicație pentru Controlor</value>
+    <value>A fost solicitat un nouă aplicație pentru Supervizor</value>
   </data>
   <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
-    <value>A fost solicitată o aducere la zi a versiunii {0} a aplicației pentru Controlor</value>
+    <value>A fost solicitată o aducere la zi a versiunii {0} a aplicației pentru Supervizor</value>
+  </data>
+  <data name="CalendarEventsListFormat" xml:space="preserve">
+    <value>Descărcare listă evenimente calendar ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+  </data>
+  <data name="GetCalendarEventPackage" xml:space="preserve">
+    <value>Descarcă pachetul eveniment calendar: {0}</value>
+  </data>
+  <data name="PostCalendarEventPackage" xml:space="preserve">
+    <value>}ncarcare eveniment calendar: {0}</value>
   </data>
 </root>

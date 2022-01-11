@@ -133,13 +133,13 @@
     <value>Alocat către {0} anchetatori</value>
   </data>
   <data name="AssignedToMultipleSupervisors" xml:space="preserve">
-    <value>Alocat către {0} controlori</value>
+    <value>Alocat către {0} supervizori</value>
   </data>
   <data name="AssignedToSingleEnumerator" xml:space="preserve">
     <value>Alocat către 1 anchetator</value>
   </data>
   <data name="AssignedToSingleSupervisor" xml:space="preserve">
-    <value>Alocat către 1 controlor</value>
+    <value>Alocat către 1 supervizor</value>
   </data>
   <data name="AssignmentsAreNotCreated" xml:space="preserve">
     <value>Nu au fost alocate</value>
@@ -154,7 +154,7 @@
     <value>Date de identificare și date colectate anterior (arhivă)</value>
   </data>
   <data name="BatchUpload_Title" xml:space="preserve">
-    <value>Încărcare automată</value>
+    <value>Încărcare lot</value>
   </data>
   <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
     <value>creare de alocări multiple</value>
@@ -232,7 +232,7 @@
     <value>Descarcă template-ul .zip pentru acest chestionar</value>
   </data>
   <data name="EmptySupervisorDescription" xml:space="preserve">
-    <value>În cazul în care nu sunt specificați utilizatorii, trebuie să alocați un controlor pentru toate interviurile alocate.</value>
+    <value>În cazul în care nu sunt specificați utilizatorii, trebuie să alocați un supervizor pentru toate interviurile alocate.</value>
   </data>
   <data name="EstimatedTime" xml:space="preserve">
     <value>Timp estimat</value>
@@ -301,7 +301,7 @@
     <value>Verificare completă</value>
   </data>
   <data name="ImportAssignments_PageTitle" xml:space="preserve">
-    <value>Crearea alocării multiple cu încărcare automată</value>
+    <value>Creare sarcini multiple prin încărcare lot</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
       <value>Importarea interviurilor alocate pentru {{title}}</value>
@@ -325,7 +325,7 @@
     <value>Ne-eșuate</value>
   </data>
   <data name="ImportInterviews_PageTitle" xml:space="preserve">
-    <value>Crearea interviurilor multiple cu încărcare automată</value>
+    <value>Crearea interviurilor multiple prin încărcare lot</value>
   </data>
   <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
     <value>Selectare</value>
@@ -460,7 +460,7 @@
     <value>Selectarea responsabilului (necesar)</value>
   </data>
   <data name="SelectResponsibleToAssign" xml:space="preserve">
-    <value>Selectați responsabilul pentru acest grup</value>
+    <value>Selectați responsabilul pentru acest lot</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>Date de identificare</value>
@@ -484,7 +484,7 @@
     <value>Stare</value>
   </data>
   <data name="SupervisorMustBeSelected" xml:space="preserve">
-    <value>Trebuie selectat controlorul sau anchetatorul</value>
+    <value>Trebuie selectat supervizorul sau anchetatorul</value>
   </data>
   <data name="Upload" xml:space="preserve">
     <value>Încărcat</value>
@@ -520,7 +520,7 @@
     <value>Lista de fișiere cu utilizatori preîncărcați</value>
   </data>
   <data name="UploadUsersDescription" xml:space="preserve">
-    <value>Pregătirea unui fișier cu valori separate prin tab (.tab) corespunzător template-ului de mai jos. Coloanele marcate cu (*) sunt obligatorii. În coloana de 'roluri' se trec numai 'Controlorii' și 'Anchetatorii'.</value>
+    <value>Pregătirea unui fișier cu valori separate prin tab (.tab) corespunzător template-ului de mai jos. Coloanele marcate cu (*) sunt obligatorii. În coloana de 'roluri' se trec numai 'Supervizorii' și 'Anchetatorii'.</value>
   </data>
   <data name="UploadZipFile" xml:space="preserve">
     <value>Încărcare fișier .zip</value>
@@ -564,35 +564,35 @@
   <data name="BatchDescription" xml:space="preserve">
     <value>Încărcați o arhivă zip cu unul sau mai multe fișiere cu date separate prin tab-uri care să corespundă nivelului principal al interviului și listelor subordonate. Este permisă încărcarea variabilelor la orice nivel al interviului. &lt;br/&gt;
 Toate fișierele de date trebuie să conțină o variabilă denumită interviu__id compusă dintr-un șir de caractere sau identificator numeric al interviului care să fie unic. &lt;br/&gt;
-&lt;br/&gt;
-Opțional, puteți specifica următoarele coloane în fișierul de la nivelul principal al interviului: &lt;br/&gt;
-_responsible - numele de utilizator al unui sediu, al supraveghetorului sau al unui intervievator care va fi responsabil pentru sarcină; &lt;br/&gt;
-_quantity - capacitatea sarcinii; &lt;br/&gt;
-_email - e-mail-ul respondentului (numai pentru interviuri web); &lt;br/&gt;
-_password - parola pentru a începe un interviu (numai pentru interviuri web); &lt;br/&gt;
-_webmode - dacă această sarcină este în modul web (ar trebui utilizată valoarea 1); &lt;br/&gt;
-_record_audio - înregistrarea audio este activată pentru interviuri (1 - activată, 0 - dezactivată, necompletată - obțineți această valoare din chestionar); &lt;br/&gt;
-_comment - comentarii pentru sarcină</value>
+</value>
+  </data>
+  <data name="BatchColumnsTitle" xml:space="preserve">
+    <value>Opțional, puteți specifica următoarele coloane în fișierul de la nivelul principal al interviului:</value>
   </data>
   <data name="FileTypeDescription" xml:space="preserve">
     <value>Salvați fișierulcu codare UTF8 pentru a putea suporta textele din limba specificată</value>
   </data>
   <data name="Select_Responsible_Description" xml:space="preserve">
-    <value>Dacă niciun responsabil desemnat în fișier nu folosește acest cont de sediu / controlor / anchetator:</value>
+    <value>Dacă niciun responsabil nu este desemnat în fișierul lot, folosește acest cont de coordonator/supervizor/anchetator:</value>
+  </data>
+  <data name="SimpleColumnsTitle" xml:space="preserve">
+    <value>Opțional, puteți specifica următoarele coloane în fișierul de la nivelul principal al interviului:</value>
   </data>
   <data name="SimpleDescription" xml:space="preserve">
-    <value>Încărcați un fișier cu date separate prin tab-uri cu valori pentru întrebările de la acest nivel al anchetei. Este permisă includerea valorilor pentru întrebările de identificare și celelalte întrebări la nivelul principal al interviului.&lt;br/&gt;
-Opțional, puteți specifica următoarele coloane în fișierul de la nivelul principal al interviului: &lt;br/&gt;
-_responsible - numele de utilizator al unui sediu, al supraveghetorului sau al unui intervievator care va fi responsabil pentru sarcină; &lt;br/&gt;
-_quantity - capacitatea sarcinii; &lt;br/&gt;
-_email - e-mail-ul respondentului (numai pentru interviuri web); &lt;br/&gt;
-_password - parola pentru a începe un interviu (numai pentru interviuri web); &lt;br/&gt;
-_webmode - dacă această sarcină este în modul web (ar trebui utilizată valoarea 1); &lt;br/&gt;
-_record_audio - înregistrarea audio este activată pentru interviuri (1 - activată, 0 - dezactivată, necompletată - obțineți această valoare din chestionar); &lt;br/&gt;
-_comment - comentarii pentru sarcină</value>
+    <value>Încărcați un fișier cu date separate prin tab-uri cu valori pentru întrebările de la acest nivel al anchetei. Este permisă includerea valorilor pentru întrebările de identificare și celelalte întrebări la nivelul principal al interviului.</value>
+  </data>
+  <data name="ColumnsDescription" xml:space="preserve">
+    <value>&lt;b&gt;_responsible&lt;/b&gt; - numele de utilizator al unui sediu, al supervizorului sau al unui anchetator care va fi responsabil pentru sarcină;&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - capacitatea sarcinii;&lt;br/&gt;
+&lt;b&gt;_email&lt;/b&gt; - e-mail-ul respondentului (numai pentru interviuri web);&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - parola pentru a începe un interviu (numai pentru interviuri web);&lt;br/&gt;
+&lt;b&gt;_webmode&lt;/b&gt; - dacă această sarcină este în modul web (1 - CAWI, 0 sau necompletată - CAPI );&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - înregistrarea audio este activată pentru interviuri (1 - activată, 0 - dezactivată, necompletată - obțineți această valoare din chestionar);&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; - comentarii pentru sarcină</value>
+    <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
   </data>
   <data name="UploadDescription" xml:space="preserve">
     <value>Încărcați un fișier cu date de identificare pentru a crea noi sarcini.
-Specificați numele de utilizator pentru RINS, supraveghetori sau intervievatori pentru a executa sarcini multiple.</value>
+Specificați numele de utilizator pentru coordonatori, supervizori sau anchetatori pentru a executa sarcini multiple.</value>
   </data>
 </root>

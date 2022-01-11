@@ -35,13 +35,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 CreateAnsweredQuestionSynchronizationDto(integerQuestionId, rosterVector, "text"),
             };
 
-            var rosterInstances = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
             synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId,
-                userId: userId, answers: answersDtos, rosterGroupInstances: rosterInstances);
+                userId: userId, answers: answersDtos);
 
             command = Create.Command.CreateInterviewFromSnapshot(userId, synchronizationDto);
 
-            Assert.That(() => interview.CreateInterviewFromSnapshot(command), Throws.Exception);
+            Assert.That((TestDelegate)(() => interview.CreateInterviewFromSnapshot(command)), Throws.Exception);
         }
 
         static InterviewSynchronizationDto synchronizationDto;

@@ -6,16 +6,18 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
-    public class PrefilledQuestionsRepository : SqlitePlainStorage<PrefilledQuestionView>
+    public class PrefilledQuestionsRepository : SqlitePlainStorageAutoWorkspaceResolve<PrefilledQuestionView>
     {
         private readonly IEncryptionService encryptionService;
 
         public PrefilledQuestionsRepository(ILogger logger, IFileSystemAccessor fileSystemAccessor,
-            SqliteSettings settings, IEncryptionService encryptionService) : base(logger, fileSystemAccessor, settings)
+            SqliteSettings settings, IEncryptionService encryptionService, IWorkspaceAccessor workspaceAccessor) 
+            : base(logger, fileSystemAccessor, settings,workspaceAccessor)
         {
             this.encryptionService = encryptionService;
         }

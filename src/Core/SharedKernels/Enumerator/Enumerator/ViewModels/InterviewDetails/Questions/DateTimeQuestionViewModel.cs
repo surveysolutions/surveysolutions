@@ -90,15 +90,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 var command = new RemoveAnswerCommand(Guid.Parse(this.interviewId),
                     this.principal.CurrentUserIdentity.UserId,
                     this.questionIdentity);
-                await this.Answering.SendRemoveAnswerCommandAsync(command);
+                await this.Answering.SendQuestionCommandAsync(command);
 
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
                 this.AnswerRemoved?.Invoke(this, EventArgs.Empty);
             }
             catch (InterviewException ex)
             {
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
         }
 
@@ -113,13 +113,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     rosterVector: this.questionIdentity.RosterVector,
                     answer: answerValue
                     );
-                await this.Answering.SendAnswerQuestionCommandAsync(command);
+                await this.Answering.SendQuestionCommandAsync(command);
                 this.SetToView(answerValue);
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
         }
 
@@ -143,6 +143,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
+            this.InstructionViewModel.Dispose();
         }
 
         public void Handle(AnswersRemoved @event)

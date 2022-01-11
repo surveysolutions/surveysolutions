@@ -74,6 +74,9 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
                     logger.LogError(e, "Exception during job {jobType} run in workspace {workspace}", 
                         jobType, workspace);
+
+                    if (e.InnerException != null)
+                        logger.LogError(e.InnerException, "Inner exception");
                 }
             }, workspace);
         }

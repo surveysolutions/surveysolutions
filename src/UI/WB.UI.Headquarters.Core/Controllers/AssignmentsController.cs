@@ -57,6 +57,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IArchiveUtils archiver;
         private readonly IInvitationService invitationService;
         private readonly ICalendarEventService calendarEventService;
+        private readonly IWebInterviewLinkProvider webInterviewLinkProvider;
 
         public AssignmentsController(IAuthorizedUser currentUser, 
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
@@ -72,7 +73,9 @@ namespace WB.UI.Headquarters.Controllers
             IPreloadedDataVerifier dataVerifier,
             ILogger<AssignmentsController> logger,
             IArchiveUtils archiver,
-            IInvitationService invitationService, ICalendarEventService calendarEventService)
+            IInvitationService invitationService, 
+            ICalendarEventService calendarEventService, 
+            IWebInterviewLinkProvider webInterviewLinkProvider)
         {
             this.currentUser = currentUser;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
@@ -90,11 +93,12 @@ namespace WB.UI.Headquarters.Controllers
             this.archiver = archiver;
             this.invitationService = invitationService;
             this.calendarEventService = calendarEventService;
+            this.webInterviewLinkProvider = webInterviewLinkProvider;
         }
-        
+
         [ActivePage(MenuItem.Assignments)]
         [HttpGet]
-        [Route("{controller}/{id}")]
+        [Route("{controller}/{id:int?}")]
         [Route("{controller}/{action=Index}")]
         public IActionResult Index(int? id = null)
         {
@@ -183,7 +187,9 @@ namespace WB.UI.Headquarters.Controllers
                         StartUtc1 = calendarEvent.Start.ToDateTimeUtc(),
                         StartTimezone1 = calendarEvent.Start.Zone.Id
                     } 
-                    : null
+                    : null,
+                LinkToWebInterviewExample = this.webInterviewLinkProvider.WebInterviewRequestLink(
+                    assignment.Id.ToString(), Guid.Empty.ToString())
             });
         }
 
@@ -238,6 +244,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
         [RequestSizeLimit(500 * 1024 * 1024)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 500 * 1024 * 1024)]
         public async Task<IActionResult> Upload(AssignmentUploadModel model)
         {
             if (!QuestionnaireIdentity.TryParse(model.QuestionnaireId, out QuestionnaireIdentity questionnaireIdentity))
@@ -280,7 +287,7 @@ namespace WB.UI.Headquarters.Controllers
                 if (isTextFile)
                 {
                     var file = this.assignmentsImportReader.ReadTextFileInfo(model.File.OpenReadStream(), fileName);
-                    file.QuestionnaireOrRosterName = questionnaire.VariableName ?? questionnaire.Title; /*we expect that it is main file*/
+                    file.QuestionnaireOrRosterName = questionnaire?.VariableName ?? questionnaire?.Title; /*we expect that it is main file*/
 
                     allImportedFileInfos = new[] {file};
                 }
@@ -294,7 +301,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             if (allImportedFileInfos?.Any() != true)
-                return this.Ok(CreateError(PreloadingVerificationMessages.PL0024_DataWasNotFound));
+                return this.Ok(CreateError(PreloadingVerificationMessages.PL0024_DataWasNotFound, "PL0024"));
 
             try
             {
@@ -330,7 +337,7 @@ namespace WB.UI.Headquarters.Controllers
                                 : this.assignmentsImportReader.ReadFileFromZip(model.File.OpenReadStream(), preloadedFileInfo.FileName);
 
                             if (preloadedFile.Rows.Length == 0)
-                                return this.Ok(CreateError(PreloadingVerificationMessages.PL0024_DataWasNotFound));
+                                return this.Ok(CreateError(PreloadingVerificationMessages.PL0024_DataWasNotFound, "PL0024"));
 
                             errors = this.assignmentsImportService
                                 .VerifySimpleAndSaveIfNoErrors(preloadedFile, model.ResponsibleId.Value, questionnaire).Take(10).ToArray();
@@ -387,7 +394,7 @@ namespace WB.UI.Headquarters.Controllers
             return null;
         }
 
-        private PanelImportVerificationError[] CreateError(string error)
-            => new[] {new PanelImportVerificationError(@"PL0000", error)};
+        private PanelImportVerificationError[] CreateError(string error, string code = null)
+            => new[] {new PanelImportVerificationError(code ?? "PL0000", error)};
     }
 }

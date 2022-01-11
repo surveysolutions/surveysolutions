@@ -288,6 +288,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
                 url: string.Concat(this.QuestionnairesController, "/list"), credentials: this.restCredentials, token: cancellationToken));
         }
+
+        public Task<List<QuestionnaireIdentity>> GetServerQuestionnairesPermittedToSwitchToWebModeAsync(CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
+                url: string.Concat(this.QuestionnairesController, "/switchabletoweb"), credentials: this.restCredentials, token: cancellationToken));
+        }
       
         public Task<List<MapView>> GetMapList(CancellationToken cancellationToken)
         {

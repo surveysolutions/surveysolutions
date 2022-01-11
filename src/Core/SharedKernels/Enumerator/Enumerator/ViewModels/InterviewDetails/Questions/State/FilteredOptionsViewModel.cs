@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILogger logger;
 
-        private IStatefulInterview interview = null!;
+        private IQuestionnaire questionnaire = null!;
         private List<CategoricalOption>? options;
         private string Filter { get; set; } = String.Empty;
         public int Count { get; protected set; } = 200;
@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private Identity questionIdentity = null!;
         private int[]? excludedOptionIds;
+        private string interviewId = null!;
 
         private class CategoricalOptionEqualityComparer : IEqualityComparer<CategoricalOption>
         {
@@ -45,7 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected FilteredOptionsViewModel()
         {
             this.logger = null!;
-            this.interview = null!;
+            this.questionnaire = null!;
             this.interviewRepository = null!;
             this.questionnaireRepository = null!;
             this.answerNotifier = null!;
@@ -71,8 +72,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (maxCountToLoad.HasValue)
                 this.Count = maxCountToLoad.Value;
 
-            interview = this.interviewRepository.GetOrThrow(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(this.interview.QuestionnaireIdentity, this.interview.Language);
+            this.interviewId = interviewId;
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
             this.questionIdentity = entityIdentity;
 
@@ -108,7 +110,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.Filter = filter;
             this.excludedOptionIds = excludedOptionIdsArg;
-            var optionsFromInterview = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, count ?? this.Count, excludedOptionIdsArg)
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            var optionsFromInterview = interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, count ?? this.Count, excludedOptionIdsArg)
                 ?.ToList();
             this.options = optionsFromInterview ?? new List<CategoricalOption>();
             return options;
@@ -116,11 +119,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public virtual CategoricalOption GetOptionByTextValue(string textValue)
         {
-            return this.interview.GetOptionForQuestionWithFilter(this.questionIdentity, textValue, ParentValue);
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            return interview.GetOptionForQuestionWithFilter(this.questionIdentity, textValue, ParentValue);
         }
 
         public virtual CategoricalOption GetAnsweredOption(int answer)
-            => this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, answer, ParentValue);
+        {
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            return interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, answer, ParentValue);
+        }
 
 
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
@@ -129,12 +136,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             //if view model was created for item in roster
             //and trigger is changed and item is gone
             // getting options could fail
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
             if (interview.GetQuestion(questionIdentity) == null)
             {
                 logger.Warn($"Trying to reload options on question {questionIdentity} that doesn't exist in interview {interview.Id}");
                 return;
             }
 
+            if (questionnaire.IsQuestionFilteredCombobox(questionIdentity.Id))
+            {
+                // for combo always drop list of options
+                if (this.options != null)
+                    this.OptionsChanged?.Invoke(this, EventArgs.Empty);
+                return;
+            }
+            
             var listOfNewOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, ParentValue, Filter, Count, this.excludedOptionIds).ToList(); 
 
             var existingOptions = this.options;

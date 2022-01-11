@@ -39,6 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             if (eventArgs.TargetStage != ScreenType.Group)
             {
+                this.Items?.Where(x => x != null).ForEach(x => x.Dispose());
                 this.Items = new ReadOnlyCollection<BreadCrumbItemViewModel>(new List<BreadCrumbItemViewModel>());
             }
             else

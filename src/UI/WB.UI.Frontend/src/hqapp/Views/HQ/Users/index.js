@@ -16,6 +16,7 @@ import ResetRecoveryCodes from './ResetRecoveryCodes'
 import Disable2fa from './Disable2fa'
 import ChangePassword from './ChangePassword'
 import ProfileLayout from './ProfileLayout'
+import ApiTokens from './ApiTokens'
 
 Vue.component('ProfileLayout', ProfileLayout)
 
@@ -41,68 +42,74 @@ export default class UsersComponent {
             path: '/Supervisors', component: Supervisors,
         },
         {
-            path: '/Users/Manage/:userId', component: Manage, name: 'usersManage',
+            path: '/Manage/:userId', component: Manage, name: 'usersManage',
         },
         {
-            path: '/Users/Manage/', component: Manage,
+            path: '/Manage/', component: Manage,
         },
         {
-            path: '/Users/Create/:role', component: Create,
+            path: '/Create', component: Create,
         },
         {
-            path: '/Users/TwoFactorAuthentication', component: TwoFactorAuthentication,
+            path: '/TwoFactorAuthentication', component: TwoFactorAuthentication,
         },
         {
-            path: '/Users/TwoFactorAuthentication/:userId', component: TwoFactorAuthentication, name: 'users2fa',
+            path: '/TwoFactorAuthentication/:userId', component: TwoFactorAuthentication, name: 'users2fa',
         },
         {
-            path: '/Users/SetupAuthenticator', component: SetupAuthenticator,
+            path: '/SetupAuthenticator', component: SetupAuthenticator,
         },
         {
-            path: '/Users/SetupAuthenticator/:userId',
+            path: '/SetupAuthenticator/:userId',
             name: 'two-fa-setup',
             component: SetupAuthenticator,
         },
         {
-            path: '/Users/ResetAuthenticator', component: ResetAuthenticator,
+            path: '/ResetAuthenticator', component: ResetAuthenticator,
         },
         {
-            path: '/Users/ResetAuthenticator/:userId',
+            path: '/ResetAuthenticator/:userId',
             name: 'two-fa-reset-authenticator',
             component: ResetAuthenticator,
         },
         {
-            path: '/Users/ShowRecoveryCodes', component: ShowRecoveryCodes,
+            path: '/ShowRecoveryCodes', component: ShowRecoveryCodes,
         },
         {
-            path: '/Users/ShowRecoveryCodes/:userId', component: ShowRecoveryCodes,
+            path: '/ShowRecoveryCodes/:userId', component: ShowRecoveryCodes,
         },
         {
-            path: '/Users/ResetRecoveryCodes', component: ResetRecoveryCodes,
+            path: '/ResetRecoveryCodes', component: ResetRecoveryCodes,
         },
         {
-            path: '/Users/ResetRecoveryCodes/:userId',
+            path: '/ResetRecoveryCodes/:userId',
             name: 'two-fa-reset-recovery-codes',
             component: ResetRecoveryCodes,
         },
         {
-            path: '/Users/Disable2fa',
+            path: '/Disable2fa',
             //name: 'two-fa-disable',
             component: Disable2fa,
         },
         {
-            path: '/Users/Disable2fa/:userId',
+            path: '/Disable2fa/:userId',
             name: 'two-fa-disable',
             component: Disable2fa,
         },
         {
-            path: '/Users/ChangePassword/:userId', component: ChangePassword, name: 'usersChangePassword',
+            path: '/ChangePassword/:userId', component: ChangePassword, name: 'usersChangePassword',
         },
         {
-            path: '/Users/Workspaces/:userId', component: UserWorkspaces,
+            path: '/Workspaces/:userId', component: UserWorkspaces,
         },
         {
-            path: '/Users/ChangePassword/', component: ChangePassword,
+            path: '/ChangePassword/', component: ChangePassword,
+        },
+        {
+            path: '/ApiTokens/:userId', component: ApiTokens, name: 'usersApiTokens',
+        },
+        {
+            path: '/ApiTokens', component: ApiTokens,
         }]
     }
 }

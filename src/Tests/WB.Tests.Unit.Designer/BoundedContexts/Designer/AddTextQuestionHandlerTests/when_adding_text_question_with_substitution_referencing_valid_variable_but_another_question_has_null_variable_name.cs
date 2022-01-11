@@ -18,7 +18,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 
             questionnaire.AddNumericQuestion(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), chapterId, responsibleId, variableName: "valid_varname");
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(questionnaire.Id, Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"), chapterId, "title", responsibleId));
-            questionnaire.AddTextQuestion(
+            
+            Assert.DoesNotThrow(() => questionnaire.AddTextQuestion(
                 questionId: questionId,
                 parentId: chapterId,
                 title: "title %valid_varname%",
@@ -31,10 +32,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 validationMessage: string.Empty,
                 instructions: string.Empty,
                 mask: null,
-                responsibleId: responsibleId);
+                responsibleId: responsibleId));
         }
 
-        private static Exception exception;
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("22220000000000000000000000000000");

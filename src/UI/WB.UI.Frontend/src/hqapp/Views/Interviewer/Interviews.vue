@@ -437,14 +437,18 @@ export default {
 
             self.$refs.confirmRestart.promt(ok => {
                 if (ok) {
-                    $.post(
-                        this.$config.model.interviewerHqEndpoint + '/RestartInterview/' + interviewId,
-                        {comment: self.restart_comment},
-                        () => {
+                    $.post({
+                        url:this.$config.model.interviewerHqEndpoint + '/RestartInterview/' + interviewId,
+                        data:{comment: self.restart_comment},
+                        headers: {
+                            'X-CSRF-TOKEN': self.$hq.Util.getCsrfCookie(),
+                        },
+                    }
+                    )
+                        .done(function( data ) {
                             self.restart_comment = ''
                             self.$store.dispatch('openInterview', interviewId)
-                        }
-                    )
+                        })
                 } else {
                     self.$refs.table.reload()
                 }
@@ -510,6 +514,23 @@ export default {
                             .format(DateFormats.dateTimeInList)
                     },
                     width: '180px',
+                },
+                {
+                    data: 'receivedByInterviewerAtUtc',
+                    name: 'ReceivedByInterviewerAtUtc',
+                    title: this.$t('Common.ReceivedByInterviewer'),
+                    render(data) {
+                        if (data)
+                            return moment
+                                .utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
+                        return self.$t('Common.No')
+                    },
+                    createdCell(td, cellData, rowData, row, col) {
+                        $(td).attr('role', 'received')
+                    },
+                    width: '50px',
                 },
                 {
                     data: 'calendarEvent',

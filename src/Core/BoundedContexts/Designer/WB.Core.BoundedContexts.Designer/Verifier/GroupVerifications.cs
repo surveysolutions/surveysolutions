@@ -51,10 +51,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(LongListRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
             Error<IGroup>(LongRosterHasMoreThanAllowedChildElements, "WB0068", string.Format(VerificationMessages.WB0068_RosterHasMoreThanAllowedChildElements,Constants.MaxAmountOfItemsInLongRoster)),
             Error<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
-            Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
+            //Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
+            //Do not reuse WB0263
             Error<IGroup>(SectionHasMoreThanAllowedQuestions, "WB0270", string.Format(VerificationMessages.WB0270_SectionContainsTooManyQuestions, 400)),
             Error<IGroup>(FlatModeGroupContainsNestedGroup, "WB0279", VerificationMessages.WB0279_PlainModeGroupContainsNestedGroup),
-            Error<IGroup>(FlatModeGroupHasMoreThanAllowedEntities, "WB0278", string.Format(VerificationMessages.WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInPlainModeGroup)),
+            Error<IGroup>(FlatModeGroupHasMoreThanAllowedEntities, "WB0278", string.Format(VerificationMessages.WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements, MaxUIEntitiesInPlainModeGroup)),
             Error<IGroup>(LinksAreProhibitedOnNavigationElements, "WB0057", VerificationMessages.WB0057_LinksAreProhibitedOnNavigationElements),
             Error<IGroup>(TableRosterContainsNestedGroup, "WB0282", VerificationMessages.WB0282_TableRosterContainsNestedGroup),
             Error<IGroup>(TableRosterHasMoreThanAllowedEntities, "WB0283", string.Format(VerificationMessages.WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInTableRoster)),
@@ -193,7 +194,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             => group.Children.OfType<IQuestion>().Count() > MaxQuestionsCountInSection;
 
         private static bool FlatModeGroupHasMoreThanAllowedEntities(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-            => group.DisplayMode == RosterDisplayMode.Flat && group.Children.Count() > MaxEntitiesInPlainModeGroup;
+            => group.DisplayMode == RosterDisplayMode.Flat 
+               && group.Children.Count(x => x is IStaticText || x is IQuestion) > MaxUIEntitiesInPlainModeGroup;
 
         private static bool FlatModeGroupContainsNestedGroup(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.DisplayMode == RosterDisplayMode.Flat && group.Children.Any(composite =>
@@ -202,16 +204,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     return childGroup.DisplayMode == RosterDisplayMode.Flat || childGroup.IsRoster;
                 return false;
             });
-
-        private static bool FirstChapterHasEnablingCondition(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            var parentComposite = group.GetParent();
-            if (parentComposite?.PublicKey != questionnaire.PublicKey) return false;
-
-            if (parentComposite.Children.IndexOf(group) != 0) return false;
-
-            return !string.IsNullOrEmpty(group.ConditionExpression);
-        }
 
         private bool RosterHasPropagationExededLimit(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -532,9 +524,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             });
 
         private static bool MatrixRosterCannotHaveCustomTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-          => group.DisplayMode == RosterDisplayMode.Matrix && group.CustomRosterTitle;
+          => group.DisplayMode == RosterDisplayMode.Matrix && 
+             group.Title.Contains("%rostertitle%");
         private static bool TableRosterCannotHaveCustomTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-          => group.DisplayMode == RosterDisplayMode.Table && group.CustomRosterTitle;
+          => group.DisplayMode == RosterDisplayMode.Table && 
+             group.Title.Contains("%rostertitle%");
 
         private static bool MatrixRosterHasToContainNoLinkedQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Any(composite =>

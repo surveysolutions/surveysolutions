@@ -19,8 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 new NumericQuestion()
                 {
                     PublicKey = rosterSizeQuestionId,
-                    IsInteger = true,
-                    QuestionType = QuestionType.Numeric
+                    IsInteger = true
                 },
                 new Group()
                 {

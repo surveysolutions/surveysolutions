@@ -84,6 +84,18 @@
                 </a>
             </div>
         </div>
+
+        <div v-if="isLockedOut">
+            <p>{{$t('Pages.AutolockDescription')}}</p>
+            <button
+                type="submit"
+                class="btn btn-success"
+                style="margin-right:5px"
+                id="btnUpdateUser"
+                v-if='lockedOutCanBeReleased'
+                v-bind:disabled="userInfo.isObserving"
+                @click="releaseLock">{{$t('Pages.Unlock')}}</button>
+        </div >
     </ProfileLayout>
 </template>
 
@@ -100,6 +112,7 @@ export default {
             phoneNumber: null,
             isLockedByHeadquarters: false,
             isLockedBySupervisor: false,
+            isLockedOut : false,
             successMessage: null,
         }
     },
@@ -126,19 +139,23 @@ export default {
             return this.userInfo.role == 'Interviewer'
         },
         canLockBySupervisor() {
-            return this.isInterviewer
+            return this.userInfo.canBeLockedAsSupervisor
         },
-        canBeLockedAsHeadquarters(){
+        canBeLockedAsHeadquarters() {
             return this.userInfo.canBeLockedAsHeadquarters
         },
         lockMessage() {
+            if (!this.canBeLockedAsHeadquarters && !this.canLockBySupervisor) return null
             if (this.isHeadquarters) return this.$t('Pages.HQ_LockWarning')
             if (this.isSupervisor) return this.$t('Pages.Supervisor_LockWarning')
             if (this.isInterviewer) return this.$t('Pages.Interviewer_LockWarning')
             return null
         },
         referrerUrl() {
-            return '/'
+            return '/users/UsersManagement'
+        },
+        lockedOutCanBeReleased(){
+            return this.userInfo.lockedOutCanBeReleased
         },
     },
     mounted() {
@@ -147,6 +164,7 @@ export default {
         this.phoneNumber = this.userInfo.phoneNumber
         this.isLockedByHeadquarters = this.userInfo.isLockedByHeadquarters
         this.isLockedBySupervisor = this.userInfo.isLockedBySupervisor
+        this.isLockedOut = this.userInfo.isLockedOut
     },
     watch: {
         personName: function(val) {
@@ -189,6 +207,24 @@ export default {
                     self.processModelState(error.response.data, self)
                 }
             )
+        },
+        releaseLock: function()
+        {
+            var self = this
+            this.$http({
+                method: 'post',
+                url: this.model.api.releaseUserLockUrl,
+                data: {
+                    userId: self.userInfo.userId,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                },
+            }).then(
+                response => {
+
+                    self.isLockedOut = false
+                })
         },
         processModelState: function(response, vm) {
             if (response) {

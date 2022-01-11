@@ -672,9 +672,6 @@
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Ростер достиг максимального размера. Уменьшите размер ростера или уровень вложенности.</value>
   </data>
-  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>Первая секция не может иметь условия включения.</value>
-  </data>
   <data name="WB0264_GpsQuestion" xml:space="preserve">
     <value>Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. </value>
   </data>
@@ -718,8 +715,8 @@
     <value>Имя опросника не должно содержать двух и более последовательных символов подчеркивания.</value>
   </data>
   <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-    <value>Плоский режим разрешен для ростеров с не больше чем {0} элементами.</value>
-    <comment>Плоский режим разрешен для ростеров с не больше чем {0} элементами.</comment>
+      <value>Плоский режим разрешен для ростеров с не больше чем {0} вопросов или статических текстов.</value>
+      <comment>Плоский режим разрешен для ростеров с не больше чем {0} элементами.</comment>
   </data>
   <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
     <value>Плоский режим запрещает использовать внутри ростеры.</value>
@@ -848,5 +845,8 @@
   </data>
   <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
     <value>Переменные на обложке должны иметь описание</value>
+  </data>
+  <data name="WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope" xml:space="preserve">
+    <value>Подстановка не может ссылаться на элементы внутри матричного или табличного ростера</value>
   </data>
 </root>

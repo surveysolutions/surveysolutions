@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using Humanizer;
@@ -38,14 +39,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         {
             this.serviceLocator = serviceLocator;
             Actions = new MvxObservableCollection<ActionDefinition>();
-            Actions.CollectionChanged += (sender, args) =>
-            {
-                RaisePropertyChanged(nameof(PrimaryAction));
-                RaisePropertyChanged(nameof(SecondaryAction));
-                RaisePropertyChanged(nameof(ContextMenu));
-                RaisePropertyChanged(nameof(HasContextMenu));
-                RaisePropertyChanged(nameof(HasSecondaryAction));
-            };
+            Actions.CollectionChanged += CollectionChanged;
+        }
+
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            RaisePropertyChanged(nameof(PrimaryAction));
+            RaisePropertyChanged(nameof(SecondaryAction));
+            RaisePropertyChanged(nameof(ContextMenu));
+            RaisePropertyChanged(nameof(HasContextMenu));
+            RaisePropertyChanged(nameof(HasSecondaryAction));
+            RaisePropertyChanged(nameof(ExtraAction));
+            RaisePropertyChanged(nameof(HasExtraAction));
         }
 
         private IExternalAppLauncher ExternalAppLauncher =>
@@ -83,11 +88,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         public ActionDefinition PrimaryAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Primary);
         public ActionDefinition SecondaryAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Secondary);
+        public ActionDefinition ExtraAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Extra);
         public IEnumerable<ActionDefinition> ContextMenu => Actions.Where(a => a.ActionType == ActionType.Context);
 
         public bool HasContextMenu => ContextMenu.Any(cm => cm.IsEnabled);
 
         public bool HasSecondaryAction => SecondaryAction != null;
+        public bool HasExtraAction => ExtraAction != null;
 
         public MvxObservableCollection<ActionDefinition> Actions { get; }
 
@@ -234,6 +241,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         public void Dispose()
         {
+            Actions.CollectionChanged -= CollectionChanged;
             Dispose(true);
             GC.SuppressFinalize(this);
         }

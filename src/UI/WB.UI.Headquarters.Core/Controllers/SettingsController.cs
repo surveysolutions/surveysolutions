@@ -62,7 +62,7 @@ namespace WB.UI.Headquarters.Controllers
                     SendTestEmail = Url.Action("SendTestEmail", "AdminSettings"),
                 },
                 AwsRegions = RegionEndpoint.EnumerableAllRegions.Select(s => 
-                    new KeyValuePair<string,string>(s.SystemName, s.DisplayName)).ToList()
+                    new KeyValuePair<string,string>(s.SystemName, s.DisplayName + " - " + (s.SystemName))).ToList()
             });
         }
 

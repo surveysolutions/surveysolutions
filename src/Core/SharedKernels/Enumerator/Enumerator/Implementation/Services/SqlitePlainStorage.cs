@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -10,14 +10,18 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class SqlitePlainStorage<TEntity> : SqlitePlainStorage<TEntity, string>, IPlainStorage<TEntity>
+    public class SqlitePlainStorage<TEntity> : SqlitePlainStorage<TEntity, string>,
+        IPlainStorage<TEntity>
         where TEntity : class, IPlainStorageEntity, new()
     {
-        public SqlitePlainStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings) : base(logger, fileSystemAccessor, settings)
+        public SqlitePlainStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor,
+            SqliteSettings settings)
+            : base(logger, fileSystemAccessor, settings)
         {
         }
 
-        public SqlitePlainStorage(SQLiteConnectionWithLock storage, ILogger logger) : base(storage, logger)
+        public SqlitePlainStorage(SQLiteConnectionWithLock storage, ILogger logger) : base(storage,
+            logger)
         {
         }
     }
@@ -25,24 +29,54 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     public class SqlitePlainStorage<TEntity, TKey> : IPlainStorage<TEntity, TKey>
         where TEntity : class, IPlainStorageEntity<TKey>, new()
     {
-        protected readonly SQLiteConnectionWithLock connection;
+        private SQLiteConnectionWithLock connection;
         protected readonly ILogger logger;
+        protected readonly IFileSystemAccessor fileSystemAccessor;
+        protected readonly SqliteSettings settings;
 
         public SqlitePlainStorage(ILogger logger,
             IFileSystemAccessor fileSystemAccessor,
             SqliteSettings settings)
         {
-            var entityName = typeof(TEntity).Name;
+            this.logger = logger;
+            this.fileSystemAccessor = fileSystemAccessor;
+            this.settings = settings;
+        }
 
-            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, entityName + "-data.sqlite3");
+        protected virtual SQLiteConnectionWithLock GetConnection()
+        {
+            if (this.connection != null)
+                return this.connection;
+
+            this.connection = CreateConnection();
+            return this.connection;
+        }
+        
+        protected virtual SQLiteConnectionWithLock CreateConnection()
+        {
+            var pathToDatabase = GetPathToDatabase();
+
+            var dbDirectory = fileSystemAccessor.GetDirectory(pathToDatabase);
+            if (!fileSystemAccessor.IsDirectoryExists(dbDirectory))
+                fileSystemAccessor.CreateDirectory(dbDirectory);
 
             var sqliteConnectionString = new SQLiteConnectionString(pathToDatabase,
                 SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true);
-            this.connection = new SQLiteConnectionWithLock(sqliteConnectionString);
+            var newConnection = new SQLiteConnectionWithLock(sqliteConnectionString);
 
-            this.logger = logger;
-            this.connection.CreateTable<TEntity>();
+            CreateTable(newConnection);
+            
+            return newConnection;
         }
+
+
+        protected virtual void CreateTable(SQLiteConnectionWithLock connect)
+        {
+            connect.CreateTable<TEntity>();
+        }
+
+        protected virtual string GetPathToDatabase()
+            => fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, typeof(TEntity).Name + "-data.sqlite3");
 
         public SqlitePlainStorage(SQLiteConnectionWithLock storage, ILogger logger)
         {
@@ -81,7 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch (SQLiteException ex)
             {
-                this.logger.Fatal($"Failed to persist {entities.Count()} entities as batch", ex);
+                this.logger.Fatal($"Failed to remove {entities.Count()} entities as batch", ex);
                 throw;
             }
         }
@@ -106,7 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch (SQLiteException ex)
             {
-                this.logger.Fatal($"Failed to persist {entities.Count()} entities as batch", ex);
+                this.logger.Fatal($"Failed to persist {entities.Count()} entities {typeof(TEntity).Name} as batch", ex);
                 throw;
             }
         }
@@ -121,14 +155,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             Expression<Func<TEntity, TResult>> selectPredicate) where TResult : class
         {
             return this.RunInTransaction(
-                           table => table
-                               .Where(wherePredicate).AsQueryable()
-                               .Select(selectPredicate)
-                               .ToReadOnlyCollection());
+                table => table
+                    .Where(wherePredicate).AsQueryable()
+                    .Select(selectPredicate)
+                    .ToReadOnlyCollection());
         }
 
         public int Count(Expression<Func<TEntity, bool>> predicate)
-          => this.RunInTransaction(table => table.Count(predicate));
+            => this.RunInTransaction(table => table.Count(predicate));
 
         public int Count()
             => this.RunInTransaction(table => table.Count());
@@ -147,9 +181,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             Expression<Func<TEntity, int>> orderPredicate, int takeCount, int skip = 0)
             => this.RunInTransaction(
                 table => ToModifiedCollection(table.Where(wherePredicate)
-                    .OrderBy(orderPredicate)
-                    .Skip(skip)
-                    .Take(takeCount))
+                        .OrderBy(orderPredicate)
+                        .Skip(skip)
+                        .Take(takeCount))
                     .ToReadOnlyCollection());
 
         public IReadOnlyCollection<TResult> FixedQueryWithSelection<TResult>(
@@ -165,33 +199,35 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     .AsQueryable()
                     .Select(selectPredicate)
                     .ToReadOnlyCollection()
-                );
+            );
 
         public virtual void RemoveAll()
         {
             RunInTransaction(table => table.Connection.DeleteAll<TEntity>());
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
-            this.connection.Dispose();
+            connection?.Dispose();
         }
 
         protected TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
-            TResult result = default(TResult);
-            using (this.connection.Lock())
-                this.connection.RunInTransaction(() => result = function.Invoke(this.connection.Table<TEntity>()));
+            var connect = GetConnection();
 
+            TResult result = default(TResult);
+            using (connect.Lock())
+                connect.RunInTransaction(() => result = function.Invoke(connect.Table<TEntity>()));
             return result;
         }
 
         protected void RunInTransaction(Action<TableQuery<TEntity>> function)
         {
-            using (this.connection.Lock())
+            var connect = GetConnection();
+            using (connect.Lock())
             {
-                this.connection.RunInTransaction(
-                    () => function.Invoke(this.connection.Table<TEntity>()));
+                connect.RunInTransaction(
+                    () => function.Invoke(connect.Table<TEntity>()));
             }
         }
 

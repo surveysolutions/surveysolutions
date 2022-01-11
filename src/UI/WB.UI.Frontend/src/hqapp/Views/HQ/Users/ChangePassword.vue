@@ -6,13 +6,14 @@
         :canChangePassword="userInfo.canChangePassword"
         :userName="userInfo.userName"
         :userId="userInfo.userId"
-        :currentTab="currentTab">
+        :currentTab="currentTab"
+        :successMessage="successMessage">
         <div>
             <div v-if="userInfo.forceChangePassword && userInfo.isOwnProfile"
                 class="alerts form-group"
                 style="margin-left:-10px">
                 <div class="alert">
-                    {{ $t('FieldsAndValidations.ForceChangePassword') }}
+                    {{ $t('FieldsAndValidations.PasswordChangeRequired') }}
                 </div>
                 <br/>
             </div>
@@ -48,6 +49,7 @@
                 <input
                     id="ShowPassword"
                     type="checkbox"
+                    style="margin-right:5px"
                     onclick="if(window.CONFIG.model.userInfo.isOwnProfile){var oldPass = document.getElementById('OldPassword');oldPass.type = (oldPass.type === 'text' ? 'password' : 'text');} var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');var confirm = document.getElementById('ConfirmPassword');confirm.type = (confirm.type === 'text' ? 'password' : 'text');">
                 <label for="ShowPassword"                    >
                     <span></span>{{$t('Pages.ShowPassword')}}
@@ -86,6 +88,7 @@ export default {
             oldPassword: null,
             password: null,
             confirmPassword: null,
+            successMessage: null,
         }
     },
     computed: {
@@ -144,7 +147,9 @@ export default {
                 },
             }).then(
                 response => {
-                    self.$refs.profile.successMessage = self.$t('Strings.HQ_AccountController_AccountPasswordChangedSuccessfully')
+                    self.successMessage = self.$t('Strings.HQ_AccountController_AccountPasswordChangedSuccessfully')
+                    if (self.userInfo.forceChangePassword && self.userInfo.isOwnProfile)
+                        window.location.href = '/'
                 },
                 error => {
                     self.processModelState(error.response.data, self)

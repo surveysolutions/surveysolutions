@@ -1,9 +1,7 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+﻿using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -18,7 +16,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             InterviewStatusTimeSpanDenormalizer statusTimeSpanDenormalizer,
             IInterviewStatisticsReportDenormalizer statisticsReportDenormalizer,
             InterviewGeoLocationAnswersDenormalizer geoLocationAnswersDenormalizer,
-            InterviewExportedCommentariesDenormalizer commentsDenormalizer) : base(eventBusSettings, readSideStorage)
+            InterviewExportedCommentariesDenormalizer commentsDenormalizer,
+            InterviewDynamicReportAnswersDenormalizer dynamicReportAnswersDenormalizer) : base(eventBusSettings, readSideStorage)
         {
             Handlers = new ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>[]
             {
@@ -27,7 +26,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 statusTimeSpanDenormalizer,
                 geoLocationAnswersDenormalizer,
                 statisticsReportDenormalizer,
-                commentsDenormalizer
+                commentsDenormalizer,
+                dynamicReportAnswersDenormalizer
             };
         }
 

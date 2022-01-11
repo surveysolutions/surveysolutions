@@ -8,10 +8,10 @@ const httpPlugin = {
             baseURL: store.getters.basePath,
         })
 
-        // Add a response interceptor
-        http.interceptors.request.use(function (response) {
+        // Add a request interceptor
+        http.interceptors.request.use(function (config) {
             store.dispatch('fetchProgress', 1)
-            return response
+            return config
         }, function (error) {
             store.dispatch('fetchProgress', -1)
             // Any status codes that falls outside the range of 2xx cause this function to trigger
@@ -94,7 +94,7 @@ const httpPlugin = {
                 })
             },
 
-            async upload(url, id, file) {
+            async upload(url, id, file, duration) {
                 const state = store.state
                 const dispatch = store.dispatch
 
@@ -103,6 +103,8 @@ const httpPlugin = {
                 const fd = new FormData()
                 fd.append('questionId', id)
                 fd.append('file', file)
+                if(duration)
+                    fd.append('duration', duration)
                 dispatch('uploadProgress', { id, now: 0, total: 100 })
 
                 await axios.post(url + '/' + interviewId, fd, {

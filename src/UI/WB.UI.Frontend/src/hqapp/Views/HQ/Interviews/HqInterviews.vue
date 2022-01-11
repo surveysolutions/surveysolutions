@@ -77,11 +77,23 @@
                 </div>
             </FilterBlock>
 
+            <FilterBlock :title="$t('Pages.Filters_InterviewMode')">
+                <Typeahead
+                    no-search
+                    control-id="responsibleId"
+                    :placeholder="$t('Pages.Filters_InterviewModePlaceHolder')"
+                    :value="interviewMode"
+                    :values="interviewModes"
+                    v-on:selected="inteviewModeSelected"></Typeahead>
+            </FilterBlock>
+
             <InterviewFilter slot="additional"
                 :questionnaireId="where.questionnaireId"
                 :questionnaireVersion="where.questionnaireVersion"
                 :value="conditions"
-                @change="questionFilterChanged" />
+                :exposedValuesFilter="exposedValuesFilter"
+                @change="questionFilterChanged"
+                @changeFilter="changeExposedValuesFilter" />
         </Filters>
 
         <DataTables
@@ -128,6 +140,16 @@
                         v-if="selectedRows.length && !config.isSupervisor"
                         :disabled="getFilteredToUnApprove().length == 0"
                         @click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
+                    <button
+                        class="btn btn-lg btn-primary"
+                        v-if="selectedRows.length"
+                        :disabled="getFilteredToCapi().length == 0"
+                        @click="changeToCAPI">{{ $t("Common.ChangeToCAPI")}}</button>
+                    <button
+                        class="btn btn-lg btn-primary"
+                        v-if="selectedRows.length"
+                        :disabled="getFilteredToCawi().length == 0"
+                        @click="changeToCAWI">{{ $t("Common.ChangeToCAWI")}}</button>
                     <button
                         class="btn btn-link"
                         v-if="selectedRows.length && !config.isSupervisor"
@@ -412,6 +434,23 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
+        <ChangeToCapi ref="modalChangeToCAWI"
+            :modalId="'switchToCawi_id'"
+            :title="$t('Common.ChangeToCAWI')"
+            :confirmMessage="$t('Common.ChangeToCAWIConfirmHQ', {
+                count: getFilteredToCawi().length})"
+            :filteredCount="getFilteredToCawi().length"
+            :receivedByInterviewerItemsCount="CountReceivedByInterviewerItems()"
+            @confirm="changeInterviewModeToCawi" />
+
+        <ChangeToCapi ref="modalChangeToCAPI"
+            :modalId="'switchToCapi_id'"
+            :title="$t('Common.ChangeToCAPI')"
+            :confirmMessage="$t('Common.ChangeToCAPIConfirmHQ', {
+                count: getFilteredToCapi().length})"
+            :filteredCount="getFilteredToCapi().length"
+            :receivedByInterviewerItemsCount="CountReceivedByInterviewerItems()"
+            @confirm="changeInterviewModeToCapi" />
     </HqLayout>
 </template>
 
@@ -423,6 +462,7 @@ import {lowerCase, find, filter, flatten, map,
 import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
 import * as toastr from 'toastr'
+import ChangeToCapi from './ChangeModeModal.vue'
 
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
@@ -438,7 +478,9 @@ const query = gql`query hqInterviews($workspace: String!, $order: [InterviewSort
       status
       questionnaireId
       responsibleId
+      cawiLink,
       responsibleName
+      interviewMode
       responsibleRole
       errorsCount
       assignmentId
@@ -489,6 +531,7 @@ function queryStringToCondition(queryStringArray) {
 export default {
     components: {
         InterviewFilter,
+        ChangeToCapi,
     },
 
     data() {
@@ -498,6 +541,7 @@ export default {
             questionnaireVersion: null,
             isLoading: false,
             selectedRows: [],
+            interviewMode: null,
             selectedRowWithMenu: null,
             totalRows: 0, filteredCount: 0,
             draw: 0,
@@ -517,6 +561,10 @@ export default {
             isVisiblePrefilledColumns: true,
 
             conditions: [],
+
+            interviewModes: [{ key: 'CAWI', value: 'CAWI'}, { key: 'CAPI', value: 'CAPI'}],
+            exposedValuesFilter: null,
+
         }
     },
 
@@ -640,7 +688,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'errors')
                     },
-                    width: '50px',
+                    width: '45px',
                 },{
                     data: 'notAnsweredCount',
                     name: 'NotAnsweredCount',
@@ -656,6 +704,22 @@ export default {
                     width: '50px',
                 },
                 {
+                    data: 'interviewMode',
+                    name: 'InterviewMode',
+                    title: this.$t('Common.InterviewMode'),
+                    orderable: false,
+                    createdCell(td, cellData, rowData, row, col) {
+                        $(td).attr('role', 'mode')
+                    },
+                    render(data, type, rowData) {
+                        if(rowData.cawiLink != null) {
+                            return '<a href="'+ rowData.cawiLink+'">' + data + ' <span class="glyphicon glyphicon-link"/></a>'
+                        }
+                        return data === 'UNKNOWN' ? `<span class="text-muted">${self.$t('Common.Unknown')}</span>` : data
+                    },
+                    width: '50px',
+                },
+                {
                     data: 'status',
                     name: 'Status',
                     title: this.$t('Common.Status'),
@@ -666,7 +730,7 @@ export default {
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'status')
                     },
-                    width: '100px',
+                    width: '120px',
                 },
                 {
                     data: 'receivedByInterviewerAtUtc',
@@ -809,6 +873,7 @@ export default {
             if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
             if (this.responsibleId) data.responsibleName = this.responsibleId.value
             if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
+            if (this.interviewMode) data.interviewMode = this.interviewMode.key
 
             return data
         },
@@ -829,6 +894,10 @@ export default {
                 and.push({ status: {in: JSON.parse(this.status.alias)}})
             }
 
+            if(this.where.interviewMode) {
+                and.push({interviewMode: {eq: this.where.interviewMode}})
+            }
+
             if(this.conditions != null && this.conditions.length > 0) {
 
                 var identifyingData = []
@@ -846,6 +915,10 @@ export default {
                     and.push({identifyingData : {some: value_filter}})
                 })
 
+            }
+
+            if(this.exposedValuesFilter != null) {
+                and.push(this.exposedValuesFilter)
             }
 
             if(this.responsibleId) {
@@ -889,6 +962,10 @@ export default {
             this.conditions = conditions
             this.reloadTableAndSaveRoute()
         },
+        changeExposedValuesFilter(exposedValuesFilter) {
+            this.exposedValuesFilter = exposedValuesFilter
+            this.reloadTableAndSaveRoute()
+        },
 
         togglePrefield() {
             this.isVisiblePrefilledColumns = !this.isVisiblePrefilledColumns
@@ -901,6 +978,21 @@ export default {
                 return !isNaN(value) && value
             })
         },
+
+        getFilteredToCapi() {
+            return this.getFilteredItems(function(item) {
+                var value = item.actionFlags.indexOf('CANCHANGETOCAPI') >= 0
+                return !isNaN(value) && value
+            })
+        },
+
+        getFilteredToCawi() {
+            return this.getFilteredItems(function(item) {
+                var value = item.actionFlags.indexOf('CANCHANGETOCAWI') >= 0
+                return !isNaN(value) && value
+            })
+        },
+
         getFilteredToAssign() {
             return this.getFilteredItems(function(item) {
                 var value =  item.actionFlags.indexOf('CANBEREASSIGNED') >= 0
@@ -947,18 +1039,25 @@ export default {
                 this.questionnaireVersion = null
             }
             this.conditions = []
+            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
         },
 
         questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue
             this.conditions = []
+            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
         },
 
         userSelected(newValue) {
             this.responsibleId = newValue
         },
+
         statusSelected(newValue) {
             this.status = newValue
+        },
+
+        inteviewModeSelected(newValue) {
+            this.interviewMode = newValue
         },
 
         viewInterview() {
@@ -1319,6 +1418,57 @@ export default {
             this.$refs.deleteModal.modal({keyboard: false})
         },
 
+        changeToCAWI() {
+            this.$refs.modalChangeToCAWI.modal({keyboard: false})
+        },
+
+        changeToCAPI() {
+            this.$refs.modalChangeToCAPI.modal({keyboard: false})
+        },
+
+        changeInterviewModeToCawi(confirmReceivedByInterviewer)
+        {
+            this.changeInterviewMode(this.getFilteredToCawi(), 'CAWI', confirmReceivedByInterviewer)
+        },
+        changeInterviewModeToCapi(confirmReceivedByInterviewer)
+        {
+            this.changeInterviewMode(this.getFilteredToCapi(), 'CAPI', confirmReceivedByInterviewer)
+        },
+
+        changeInterviewMode(filteredItems, mode, confirmReceivedByInterviewer) {
+            const self = this
+
+            if (!confirmReceivedByInterviewer) {
+                filteredItems = this.arrayFilter(filteredItems, function(item) {
+                    return item.receivedByInterviewerAtUtc === null
+                })
+            }
+
+            if (filteredItems.length == 0) {
+                return
+            }
+
+            const commands = map(filteredItems, i => {
+                return JSON.stringify({
+                    InterviewId: i.id,
+                    Mode: mode,
+                })
+            })
+
+            const command = {
+                type: 'ChangeInterviewModeCommand',
+                commands,
+            }
+
+            this.executeCommand(
+                command,
+                function() {},
+                function() {
+                    self.reloadTable()
+                }
+            )
+        },
+
         newResponsibleSelected(newValue) {
             this.newResponsibleId = newValue
         },
@@ -1438,6 +1588,20 @@ export default {
                     disabled: !canBeRejected,
                 })
 
+                if(rowData.actionFlags.indexOf('CANCHANGETOCAPI') >= 0) {
+                    menu.push({
+                        name: self.$t('Common.ChangeToCAPI'),
+                        callback: () => self.changeToCAPI(),
+                    })
+                }
+
+                if(rowData.actionFlags.indexOf('CANCHANGETOCAWI') >= 0) {
+                    menu.push({
+                        name: self.$t('Common.ChangeToCAWI'),
+                        callback: () => self.changeToCAWI(),
+                    })
+                }
+
                 if (!self.config.isSupervisor) {
                     menu.push({
                         name: self.$t('Common.Unapprove'),
@@ -1457,6 +1621,7 @@ export default {
                         disabled: !canBeDeleted,
                     })
                 }
+
             }
 
             return menu
@@ -1505,8 +1670,8 @@ export default {
             }
         },
 
-        async loadResponsibleIdByName(onDone) {
-            if (this.$route.query.responsibleName != undefined) {
+        loadResponsibleIdByName(onDone) {
+            if (this.$route.query.responsibleName !== undefined) {
                 const requestParams = assign(
                     {
                         query: this.$route.query.responsibleName,
@@ -1517,22 +1682,32 @@ export default {
                     },
                     this.ajaxParams
                 )
+                const responsibleQueryName = this.$route.query.responsibleName
 
-                const response = await this.$http.get(this.config.api.responsible, {params: requestParams})
-
-                onDone(
-                    response.data.options.length > 0 && response.data.options[0].value == this.$route.query.responsibleName
-                        ? response.data.options[0].key
-                        : undefined
-                )
-            } else onDone()
+                this.$http.get(this.config.api.responsible, {params: requestParams})
+                    .then(function (response) {
+                        onDone(
+                            responsibleQueryName,
+                            response.data.options.length > 0 && response.data.options[0].value === responsibleQueryName
+                                ? response.data.options[0].key
+                                : undefined)
+                    })
+            }
+            else onDone()
         },
 
-        loadQuestionnaireId(onDone) {
-            const questionnaireId = this.$route.query.questionnaireId
-            const version = this.$route.query.questionnaireVersion
+        loadQuestionnaireId(self, questionnaireId, version, queryConditions) {
 
-            onDone(questionnaireId, version)
+            if (questionnaireId != null) {
+                self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId)
+                if (version != null && self.questionnaireId != null) {
+                    self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version)
+
+                    if(queryConditions != null) {
+                        self.conditions = queryStringToCondition(flatten([queryConditions]))
+                    }
+                }
+            }
         },
 
         initPageFilters() {
@@ -1547,35 +1722,29 @@ export default {
                 self.status = self.statuses.find(o => o.key === query.status)
             }
 
-            self.loadQuestionnaireId((questionnaireId, version) => {
-                if (questionnaireId != null) {
-                    self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId)
-                    if (version != null && self.questionnaireId != null) {
-                        self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version)
+            if(query.mode != null) {
+                self.interviewMode = self.interviewModes.find(o => o.key == query.mode)
+            }
 
-                        if(query.conditions != null) {
-                            self.conditions = queryStringToCondition(flatten([query.conditions]))
-                        }
-                    } else {
-                        if(version == null && self.questionnaireId.versions.length == 1) {
-                            self.questionnaireVersionSelected(self.questionnaireId.versions[0])
-                        }
-                    }
-                }
-            })
-
-            self.loadResponsibleIdByName(responsibleId => {
+            self.loadResponsibleIdByName((responsibleQueryName, responsibleId) => {
                 if (responsibleId != null)
-                    self.responsibleId = {key: responsibleId, value: query.responsibleName}
+                    self.responsibleId = {key: responsibleId, value: responsibleQueryName}
                 else
                     self.responsibleId = null
+
+                const questionnaireId = self.$route.query.questionnaireId
+                const version = self.$route.query.questionnaireVersion
+                const queryConditions = query.conditions
+
+                self.loadQuestionnaireId(self, questionnaireId, version, queryConditions)
 
                 self.startWatchers(
                     ['responsibleId',
                         'questionnaireId',
                         'status',
                         'assignmentId',
-                        'questionnaireVersion'],
+                        'questionnaireVersion',
+                        'interviewMode'],
                     self.reloadTableAndSaveRoute.bind(self)
                 )
             })

@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -33,6 +34,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasGroup(Guid groupId);
 
         QuestionType GetQuestionType(Guid questionId);
+
+        VariableType GetVariableVariableType(Guid questionId);
 
         QuestionScope GetQuestionScope(Guid questionId);
 
@@ -103,11 +106,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsStaticText(Guid entityId);
 
-        bool IsInterviewierQuestion(Guid questionId);
+        bool IsInterviewerQuestion(Guid questionId);
 
         ReadOnlyCollection<Guid> GetPrefilledQuestions();
         
         ReadOnlyCollection<Guid> GetPrefilledEntities();
+
+        HashSet<int> GetIdentifyingMappedEntities();
 
         ReadOnlyCollection<Guid> GetHiddenQuestions();
 
@@ -271,20 +276,20 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         decimal[] GetFixedRosterCodes(Guid rosterId);
         IReadOnlyCollection<string> GetTranslationLanguages();
-        string GetDefaultTransation();
+        string GetDefaultTranslation();
         bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
         bool IsSubSection(Guid groupId);
         bool IsVariable(Guid id);
         bool HasCustomRosterTitle(Guid id);
-        IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutChache(Guid groupId);
+        IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutCache(Guid groupId);
 
-        IEnumerable<QuestionnaireItemReference> GetChidrenReferences(Guid groupId);
+        IEnumerable<QuestionnaireItemReference> GetChildrenReferences(Guid groupId);
         Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid linkedQuestionId);
         string GetVariableLabel(Guid variableId);
         string GetVariableName(Guid variableId);
         bool HasVariable(Guid variableId);
         bool HasStaticText(Guid entityId);
-        Guid GetFirstSectionId();
+        Guid? GetFirstSectionId();
         IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId);
 
         List<Guid> GetExpressionsPlayOrder();
@@ -294,7 +299,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId, int selectedParentValue);
         string GetRosterVariableName(Guid id);
-        IReadOnlyCollection<int> GetValidationWarningsIndexes(Guid entityId);
+        HashSet<int> GetValidationWarningsIndexes(Guid entityId);
         bool IsSignature(Guid entityIdentityId);
         bool IsRosterTriggeredByOrderedMultiQuestion(Guid rosterId);
         DateTime? GetDefaultDateForDateQuestion(Guid dateQuestionId);

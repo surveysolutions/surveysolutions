@@ -2,9 +2,9 @@
 
   <PropertyGroup>
       <TargetFramework>net5.0</TargetFramework>
-      <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
-      <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-      <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+      <GenerateAssemblyInformationalVersionAttribute>true</GenerateAssemblyInformationalVersionAttribute>
+      <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
+      <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
       <Configurations>Debug;Release;Debug-ESRI</Configurations>
   </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -18,6 +18,8 @@
       <None Remove="Migrations\ReadSide\M101-200\**" />
       <None Remove="Migrations\Workspace\Init.sql" />
       <EmbeddedResource Include="Migrations\Workspace\Init.sql" />
+      <None Remove="Migrations\Workspace\M202102231117_AddedUserProfileView.sql" />
+      <EmbeddedResource Include="Migrations\Workspace\M202102231117_AddedUserProfileView.sql" />
     </ItemGroup>
     <ItemGroup>
       <None Remove="Migrations\Logs\M201904221727_AddErrorsTable.sql" />
@@ -39,7 +41,7 @@
       <PackageReference Include="Dapper" Version="2.0.78" />
       <PackageReference Include="FluentMigrator" Version="3.2.15" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-      <PackageReference Include="Npgsql" Version="5.0.3" />
+      <PackageReference Include="Npgsql" Version="5.0.5" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />

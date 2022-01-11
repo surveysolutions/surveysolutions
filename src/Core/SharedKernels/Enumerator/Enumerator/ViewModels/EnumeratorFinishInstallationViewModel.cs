@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
@@ -29,6 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IUserInteractionService userInteractionService;
         private readonly IAuditLogService auditLogService;
         private readonly IDeviceInformationService deviceInformationService;
+        private readonly IWorkspaceService workspaceService;
         private const string StateKey = "identity";
         private readonly IQRBarcodeScanService qrBarcodeScanService;
         private readonly ISerializer serializer;
@@ -43,7 +45,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             ISerializer serializer,
             IUserInteractionService userInteractionService,
             IAuditLogService auditLogService,
-            IDeviceInformationService deviceInformationService) 
+            IDeviceInformationService deviceInformationService,
+            IWorkspaceService workspaceService) 
                 :base(principal, viewModelNavigationService, false)
         {
             this.deviceSettings = deviceSettings;
@@ -52,6 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.userInteractionService = userInteractionService;
             this.auditLogService = auditLogService;
             this.deviceInformationService = deviceInformationService;
+            this.workspaceService = workspaceService;
 
             this.qrBarcodeScanService = qrBarcodeScanService;
             this.serializer = serializer;
@@ -121,7 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.Endpoint =  this.deviceSettings.Endpoint;
 
 #if DEBUG
-            this.Endpoint = "http://10.0.2.2:5001";
+            this.Endpoint = "http://192.168.0.1";
             this.UserName = "int";
             this.Password = "1";
 #endif
@@ -205,6 +209,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 restCredentials.Token = authToken;
 
                 var workspaces = await GetUserWorkspaces(restCredentials, cancellationTokenSource.Token);
+                if (workspaces.Count == 0)
+                    throw new NoWorkspaceFoundException();
                 restCredentials.Workspace = workspaces.First().Name;
                 
                 if (!await this.synchronizationService.HasCurrentUserDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false))
@@ -214,14 +220,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
                 await this.synchronizationService.CanSynchronizeAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false);
 
+                SaveWorkspaces(workspaces);
                 await this.SaveUserToLocalStorageAsync(restCredentials, userPassword, cancellationTokenSource.Token);
 
                 this.Principal.SignIn(restCredentials.Login, userPassword, true);
 
-                this.auditLogService.Write(new FinishInstallationAuditLogEntity(this.Endpoint));
-                this.auditLogService.Write(new LoginAuditLogEntity(this.UserName));
+                this.auditLogService.WriteApplicationLevelRecord(new FinishInstallationAuditLogEntity(this.Endpoint));
+                this.auditLogService.WriteApplicationLevelRecord(new LoginAuditLogEntity(this.UserName));
 
                 await this.ViewModelNavigationService.NavigateToDashboardAsync();
+            }
+            catch (NoWorkspaceFoundException we)
+            {
+                this.ErrorMessage = EnumeratorUIResources.Synchronization_WorkspaceAccessDisabledReason;
+                this.logger.Error($"Any one workspace found.", we);
             }
             catch (SynchronizationException ex)
             {
@@ -242,8 +254,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         this.PasswordError = EnumeratorUIResources.Login_WrongPassword;
                         break;
                     case SynchronizationExceptionType.UserLinkedToAnotherDevice:
-                        await this.RelinkUserToAnotherDeviceAsync(restCredentials, userPassword, cancellationTokenSource.Token);
+                    {
+                        try
+                        {
+                            await this.RelinkUserToAnotherDeviceAsync(restCredentials, userPassword,
+                                cancellationTokenSource.Token);
+                        }
+                        catch (NoWorkspaceFoundException we)
+                        {
+                            this.ErrorMessage = EnumeratorUIResources.Synchronization_WorkspaceAccessDisabledReason;
+                            this.logger.Error($"Any one workspace found.", we);
+                        }
+                        catch (SynchronizationException se1)
+                        {
+                            this.ErrorMessage = se1.Message;
+                            if (se1.Type == SynchronizationExceptionType.ShouldChangePassword)
+                            {
+                                await ChangePasswordAsync();
+                            }
+                        }
+                        catch (Exception ex11)
+                        {
+                            this.ErrorMessage = EnumeratorUIResources.UnexpectedException;
+                            this.logger.Error("Finish installation view model. Unexpected exception", ex11);
+                        }
+
                         break;
+                    }
                     case SynchronizationExceptionType.ShouldChangePassword:
                         await ChangePasswordAsync();
                         break;
@@ -270,6 +307,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
+        private void SaveWorkspaces(List<UserWorkspaceApiView> workspaces)
+        {
+            workspaceService.Save(workspaces.Select(w => new WorkspaceView()
+            {
+                Id = w.Name,
+                DisplayName = w.DisplayName,
+                Disabled = w.Disabled,
+                SupervisorId = w.SupervisorId,
+            }).ToArray());
+        }
+        
+        
         private async Task ChangePasswordAsync()
         {
             var message = EnumeratorUIResources.Synchronization_PasswordChangeRequired;
@@ -334,7 +383,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         protected abstract Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, string password, CancellationToken token);
         protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, string password, CancellationToken token);
         
-        protected abstract Task<List<WorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials,
+        protected abstract Task<List<UserWorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials,
             CancellationToken token);
 
         public void CancelInProgressTask() => this.cancellationTokenSource?.Cancel();

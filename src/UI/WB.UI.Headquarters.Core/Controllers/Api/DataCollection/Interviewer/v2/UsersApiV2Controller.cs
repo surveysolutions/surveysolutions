@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Workspaces;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 {
@@ -31,7 +32,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             IAuthorizedUser authorizedUser,
             UserManager<HqUser> userManager,
             SignInManager<HqUser> signInManager,
-            IUserViewFactory userViewFactory,
+            IUserRepository userViewFactory,
             IApiTokenProvider apiAuthTokenProvider,
             IUserToDeviceService userToDeviceService) : base(
                 authorizedUser,
@@ -49,8 +50,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         [Route("supervisor")]
         public Guid Supervisor()
         {
-            var user = userViewFactory.GetUser(new UserViewInputModel(this.authorizedUser.Id));
-            return user.Supervisor.Id;
+            var user = userViewFactory.FindById(this.authorizedUser.Id);
+            if (!user.WorkspaceProfile.SupervisorId.HasValue)
+                throw new ArgumentException("SupervisorId must be set for interviewer");
+
+            return user.WorkspaceProfile.SupervisorId.Value;
         }
 
         [HttpGet]
@@ -58,6 +62,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         [Route("current")]
         [AllowPrimaryWorkspaceFallback]
         [IgnoreWorkspacesLimitation]
+        [AllowDisabledWorkspaceAccess]
         public override ActionResult<InterviewerApiView> Current() => base.Current();
 
         [HttpGet]
@@ -75,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             if (user == null)
                 return Unauthorized();
 
-            var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, false);
+            var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, true);
             if (signInResult.IsLockedOut)
             {
                 return Unauthorized(new {Message = "User is locked"});

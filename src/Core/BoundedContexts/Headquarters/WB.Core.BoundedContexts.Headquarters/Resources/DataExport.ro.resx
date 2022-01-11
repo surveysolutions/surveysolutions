@@ -262,10 +262,10 @@
     <value>toate stările</value>
   </data>
   <data name="ApprovedByHeadquarters" xml:space="preserve">
-    <value>Stare: aprobat de RINS</value>
+    <value>Stare: aprobat de Coordonatori</value>
   </data>
   <data name="ApprovedBySupervisor" xml:space="preserve">
-    <value>Stare: aprobat de controlor</value>
+    <value>Stare: aprobat de Supervizor</value>
   </data>
   <data name="DataDestination" xml:space="preserve">
     <value>Calea fișierului exportat</value>

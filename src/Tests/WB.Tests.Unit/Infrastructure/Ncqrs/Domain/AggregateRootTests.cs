@@ -227,7 +227,7 @@ namespace Ncqrs.Tests.Domain
 
             var history = new CommittedEventStream(Guid.Empty);
 
-            theAggregate.InitializeFromHistory(history.SourceId, history);
+            Assert.DoesNotThrow(()=> theAggregate.InitializeFromHistory(history.SourceId, history));
         }
 
         [Test]
@@ -254,7 +254,7 @@ namespace Ncqrs.Tests.Domain
                 new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 4, DateTime.UtcNow,0, new HandledEvent()),
                 new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 5, DateTime.UtcNow,0, new HandledEvent()));
 
-            theAggregate.InitializeFromHistory(theAggregate.EventSourceId, stream);
+            Assert.DoesNotThrow(()=> theAggregate.InitializeFromHistory(theAggregate.EventSourceId, stream));
         }
 
         [Test]
@@ -327,7 +327,8 @@ namespace Ncqrs.Tests.Domain
                 EventSourcedAggregateRoot.RegisterThreadStaticEventAppliedCallback(callback);
             };
 
-            System.Threading.Tasks.Parallel.Invoke(
+            Assert.DoesNotThrow(() => 
+                System.Threading.Tasks.Parallel.Invoke(
                 registerOneCallbackOnAggregateRoot,
                 registerTwoCallbacksOnAggregateRoot,
                 registerOneCallbackOnAggregateRoot,
@@ -335,7 +336,7 @@ namespace Ncqrs.Tests.Domain
                 registerOneCallbackOnAggregateRoot,
                 registerTwoCallbacksOnAggregateRoot,
                 registerOneCallbackOnAggregateRoot,
-                registerTwoCallbacksOnAggregateRoot);
+                registerTwoCallbacksOnAggregateRoot));
         }
     }
 }

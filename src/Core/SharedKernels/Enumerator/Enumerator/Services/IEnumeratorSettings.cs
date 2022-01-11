@@ -35,5 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void SetLastOpenedMapName(string mapName);
         bool DashboardViewsUpdated { get; }
         void SetDashboardViewsUpdated(bool updated);
+        
+        string WebInterviewUriTemplate { get; }
     }
 }

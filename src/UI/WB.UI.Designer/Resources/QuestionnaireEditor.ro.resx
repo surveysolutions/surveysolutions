@@ -262,10 +262,10 @@
     <value>Sigur doriți să ștergeți comentariul?</value>
   </data>
   <data name="DeleteConfirmCategories" xml:space="preserve">
-    <value>Sigur doriți să ștergeți setul de variante de răspuns „{{trimmedTitle}}”? Sursa variantelor de răspuns pentru întrebări categoriale dependente de aceasta va fi schimbată în variante de răspuns definite de utilizator</value>
+    <value>Sigur doriți să ștergeți setul de variante de răspuns "{{trimmedTitle}}"? Sursa variantelor de răspuns pentru întrebări categoriale dependente de aceasta va fi schimbată în variante de răspuns definite de utilizator</value>
   </data>
   <data name="DeleteConfirmQuestion" xml:space="preserve">
-    <value>Sigur doriți să ștergeți „{{trimmedTitle}}”?</value>
+    <value>Sigur doriți să ștergeți "{{trimmedTitle}}"?</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Descarcă</value>
@@ -274,10 +274,10 @@
     <value>Descărcați PDF</value>
   </data>
   <data name="EditorAddComment" xml:space="preserve">
-    <value>Adaugă comentariu</value>
+    <value>Adaugare comentariu</value>
   </data>
   <data name="EditorHideComment" xml:space="preserve">
-    <value>Ascundeți comentariile</value>
+    <value>Ascundere comentarii</value>
   </data>
   <data name="EmptySectionLine1" xml:space="preserve">
     <value>Această secțiune este goală.</value>
@@ -409,10 +409,7 @@
     <value>O expresie logică care activează (dezactivează) elementul curent în funcție de răspunsurile la celelalte întrebări.</value>
   </data>
   <data name="HelpCoverPage" xml:space="preserve">
-    <value>Prima secțiune a fiecărui chestionar conține întrebări de identificare care sunt afișate și în tablourile de bord ale anchetatorilor și ale controlorilor.</value>
-  </data>
-  <data name="HelpCustomTitle" xml:space="preserve">
-    <value>Permite suprascrierea șablonului pentru butonul listei și furnizarea de text personalizat pentru% rostertitle%</value>
+    <value>Prima secțiune a fiecărui chestionar conține întrebări de identificare care sunt afișate și în tablourile de bord ale anchetatorilor și ale supervizorilor.</value>
   </data>
   <data name="HelpDefaultDate" xml:space="preserve">
     <value>Această dată va fi afișată ca data de început pentru selectare pe o tabletă</value>
@@ -495,7 +492,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Nivel ierarhic inferior din chestionar</value>
   </data>
   <data name="HideResolvedComments" xml:space="preserve">
-    <value>Ascunde comentariile rezolvate</value>
+    <value>Ascundere comentarii rezolvate</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>Istoric</value>
@@ -627,7 +624,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Ați introdus date incorecte. Fiecare linie trebuie să urmeze formatul: „Titlu ... Valoare”. „Valoare” trebuie să fie un număr întreg. "Titlu" trebuie să fie un șir alfa-numeric. Nu sunt permise linii goale.</value>
   </data>
   <data name="OptionsUploadApply" xml:space="preserve">
-    <value>Aplică</value>
+    <value>Aplică schimbările</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
     <value>Nu există variante de răspuns. Folosiți un fișier text cu separator "Tab". Fișierul poate conține maximum {limit} variante de răspuns.</value>
@@ -1389,7 +1386,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Etichetă variabilă</value>
   </data>
   <data name="VariableName" xml:space="preserve">
-    <value>Nume</value>
+    <value>nume</value>
   </data>
   <data name="VariableNoExport" xml:space="preserve">
     <value>Nu se va exporta</value>
@@ -1401,13 +1398,13 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Numele variabilei</value>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Vedere</value>
+    <value>Vizualizare</value>
   </data>
   <data name="ViewResolvedCommentsCounter" xml:space="preserve">
     <value>Vizualizați toate {{count}} comentariile rezolvate</value>
   </data>
   <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
-    <value>Vedeți toate {{count}} comentariile rezolvate</value>
+    <value>Vizualizați toate {{count}} comentariile rezolvate</value>
   </data>
   <data name="VirtualCoverPage" xml:space="preserve">
     <value>Pagina de copertă virtuală</value>
@@ -1420,5 +1417,62 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Da</value>
+  </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Eroare de rețea</value>
+  </data>
+  <data name="DataChangesReverted" xml:space="preserve">
+    <value>Schimbările de date au fost anulate</value>
+  </data>
+  <data name="DeleteItemCofirm" xml:space="preserve">
+    <value>Sigur doriți să ștergeți acest element?</value>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Editare element</value>
+  </data>
+  <data name="FileUploaded" xml:space="preserve">
+    <value>Fișier încărcat</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filtru</value>
+  </data>
+  <data name="HideParentValues" xml:space="preserve">
+    <value>Ascundere valori parent</value>
+  </data>
+  <data name="NewItem" xml:space="preserve">
+    <value>Element nou</value>
+  </data>
+  <data name="OptionsCascadingListError" xml:space="preserve">
+    <value>Ați introdus ceva nevalid. Fiecare linie trebuie să urmeze formatul: "Title...ParentValue/Value". "Value" și "ParentValue" trebuie să fie un număr întreg. Titlul trebuie să fie un șir alfa-numeric. Nu sunt permise linii goale.</value>
+  </data>
+  <data name="OptionsSizeLimit" xml:space="preserve">
+    <value>Maxim {{ max }} rânduri permise</value>
+  </data>
+  <data name="OptionsUploadRevert" xml:space="preserve">
+    <value>Reveniți la modificări</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Câmp necesar</value>
+  </data>
+  <data name="RowAdded" xml:space="preserve">
+    <value>Rând adăugat</value>
+  </data>
+  <data name="ShowParentValues" xml:space="preserve">
+    <value>Afișare valori Parent</value>
+  </data>
+  <data name="SideBarCategoriesAddNew" xml:space="preserve">
+    <value>Adăugare nouă categorie</value>
+  </data>
+  <data name="SideBarEditCategories" xml:space="preserve">
+    <value>Editare Variante de răspuns</value>
+  </data>
+  <data name="StringsView" xml:space="preserve">
+    <value>Vizualizare text</value>
+  </data>
+  <data name="TableView" xml:space="preserve">
+    <value>Vizualizare în tabel</value>
+  </data>
+  <data name="ValidationIntValue" xml:space="preserve">
+    <value>Valoarea este prea mare</value>
   </data>
 </root>

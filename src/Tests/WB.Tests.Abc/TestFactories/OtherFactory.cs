@@ -114,7 +114,8 @@ namespace WB.Tests.Abc.TestFactories
                 Id = id ?? Guid.NewGuid().FormatGuid(),
                 Name = userName ?? "name",
                 PasswordHash = passwordHash ?? "pswdHash",
-                UserId = userId ?? Guid.NewGuid()
+                UserId = userId ?? Guid.NewGuid(),
+                Workspace = "primary"
             };
         }
 

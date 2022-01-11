@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
+using WB.Core.BoundedContexts.Interviewer.Implementation;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -48,40 +50,46 @@ namespace WB.UI.Interviewer.Infrastructure
                     context => new RsaEncryptionService(context.Get<ISecureStorage>())),
                 new ConstructorArgument("sendTabletInfoRelativeUrl", context => "api/interviewer/v2/tabletInfo"));
 
-            registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
-                "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
+            registry.BindWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
+                "assembliesDirectory", "assemblies");
             registry.Bind<ISerializer, PortableJsonSerializer>();
             registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, PortableJsonAllTypesSerializer>();
 
-            registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, QuestionnaireKeyValueStorage>();
+            registry.Bind<IPlainKeyValueStorage<QuestionnaireDocument>, QuestionnaireKeyValueStorage>();
 
             registry.Bind<IInterviewerQuestionnaireAccessor, InterviewerQuestionnaireAccessor>();
             registry.Bind<IInterviewerInterviewAccessor, InterviewerInterviewAccessor>();
             registry.Bind<IInterviewEventStreamOptimizer, InterviewEventStreamOptimizer>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
-            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
+            registry.Bind<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
-            registry.BindAsSingleton<IAudioAuditService, AudioAuditService>();
+            registry.Bind<IAudioAuditService, AudioAuditService>();
             
-            registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
+            registry.Bind<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();
 
             registry.BindToConstant(() => new SqliteSettings
             {
+                PathToRootDirectory = AndroidPathUtils.GetPathToInternalDirectory(), 
                 PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"),
-                PathToInterviewsDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory($"data{Path.DirectorySeparatorChar}interviews")
+                DataDirectoryName = "data",
+                InterviewsDirectoryName = "interviews"
             });
 
-            registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>));
-            registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
+            registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorageAutoWorkspaceResolve<,>));
+            registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorageAutoWorkspaceResolve<>));
 
+            // this storages need before identity and workspaceaccessor exists 
+            registry.BindAsSingleton<IPlainStorage<InterviewerIdentity>, SqlitePlainStorage<InterviewerIdentity>>();
+            registry.BindAsSingleton<IPlainStorage<WorkspaceView>, SqlitePlainStorage<WorkspaceView>>();
             registry.BindAsSingleton<IPlainStorage<PrefilledQuestionView>, PrefilledQuestionsRepository>();
 
             registry.Bind<INotificationsCollector, InterviewerNotificationsCollector>();
+            registry.Bind<IInAppNotificationsCollector, InterviewerInAppNotificationsCollector>();
             
             registry.BindAsSingleton<ICalendarEventStorage, CalendarEventStorage>();
-            registry.BindAsSingleton<ICalendarEventRemoval, CalendarEventRemoval>();
+            registry.Bind<ICalendarEventRemoval, CalendarEventRemoval>();
         }
     }
 }

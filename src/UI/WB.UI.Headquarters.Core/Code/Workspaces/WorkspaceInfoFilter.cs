@@ -48,6 +48,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                         payload,
                         new CookieOptions
                         {
+                            HttpOnly = true,
                             Expires = DateTimeOffset.Now.AddDays(7)
                         });
                 }

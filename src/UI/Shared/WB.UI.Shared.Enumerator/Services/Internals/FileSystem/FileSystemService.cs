@@ -70,6 +70,11 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
             return Path.GetDirectoryName(path);
         }
 
+        public string GetDirectoryName(string path)
+        {
+            return new DirectoryInfo(path).Name;
+        }
+
         public bool IsFileExists(string pathToFile)
         {
             return File.Exists(pathToFile);
@@ -219,6 +224,11 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
             }
 
             File.Delete(pathToFile);
+        }
+
+        public void MoveDirectory(string pathToDir, string newPathToDir)
+        {
+            Directory.Move(pathToDir, newPathToDir);
         }
     }
 }

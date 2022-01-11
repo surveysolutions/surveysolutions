@@ -5,6 +5,7 @@ using Android.App;
 using Android.Content;
 using Android.Gms.Nearby;
 using Android.OS;
+using Android.Runtime;
 using Android.Views;
 using AndroidX.AppCompat.Widget;
 using AndroidX.ViewPager.Widget;
@@ -18,6 +19,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Dashboard;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Notifications;
@@ -72,7 +74,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             var enumeratorSettings = Mvx.IoCProvider.Resolve<IEnumeratorSettings>();
             if (!enumeratorSettings.NotificationsEnabled) return;
 
-            var notificationsCollector = Mvx.IoCProvider.Resolve<INotificationsCollector>();
+            var notificationsCollector = Mvx.IoCProvider.Resolve<IInAppNotificationsCollector>();
             List<SimpleNotification> notifications = notificationsCollector.CollectInAppNotifications();
 
             if (notifications.Count <= 0) return;
@@ -93,6 +95,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.ViewModel.StartedInterviews.PropertyChanged -= this.StartedInterviewsOnPropertyChanged;
             this.ViewModel.RejectedInterviews.PropertyChanged -= this.RejectedInterviewsOnPropertyChanged;
             this.ViewModel.CompletedInterviews.PropertyChanged -= this.CompletedInterviewsOnPropertyChanged;
+            this.ViewModel.WorkspaceListUpdated -= this.WorkspaceListUpdated;
+            this.ViewModel.WebInterviews.PropertyChanged -= this.WebInterviewInterviewsOnPropertyChanged;
         }
 
         private void CreateFragments()
@@ -106,6 +110,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.ViewModel.StartedInterviews.PropertyChanged += this.StartedInterviewsOnPropertyChanged;
             this.ViewModel.RejectedInterviews.PropertyChanged += this.RejectedInterviewsOnPropertyChanged;
             this.ViewModel.CompletedInterviews.PropertyChanged += this.CompletedInterviewsOnPropertyChanged;
+            this.ViewModel.WorkspaceListUpdated += this.WorkspaceListUpdated;
+            this.ViewModel.WebInterviews.PropertyChanged += this.WebInterviewInterviewsOnPropertyChanged;
 
             this.fragmentStatePagerAdapter.InsertFragment(typeof(QuestionnairesFragment), this.ViewModel.CreateNew,
                 nameof(InterviewTabPanel.Title));
@@ -118,12 +124,15 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 new PropertyChangedEventArgs(itemsCountPropertyCountName));
             this.CompletedInterviewsOnPropertyChanged(this.ViewModel.CompletedInterviews,
                 new PropertyChangedEventArgs(itemsCountPropertyCountName));
+            this.WebInterviewInterviewsOnPropertyChanged(this.ViewModel.WebInterviews,
+                new PropertyChangedEventArgs(itemsCountPropertyCountName));
 
             var tabLayout = this.FindViewById<TabLayout>(Resource.Id.tabs);
             tabLayout.SetupWithViewPager(this.viewPager);
 
             OpenRequestedTab();
         }
+
 
         private void OpenRequestedTab()
         {
@@ -138,6 +147,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 }
             }
         }
+
+        private void WebInterviewInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+            => this.UpdateFragmentByViewModelPropertyChange<WebInterviewsFragment>((ListViewModel)sender, propertyChangedEventArgs.PropertyName, 4);
 
         private void CompletedInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
             => this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>((ListViewModel)sender, propertyChangedEventArgs.PropertyName, 3);
@@ -208,9 +220,18 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         public override void OnBackPressed() { }
 
+        private void WorkspaceListUpdated(object sender, EventArgs e)
+        {
+            UpdateWorkspacesDependentMenu();
+        }
+
+        private IMenu dashboardMenu;
+
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
+
+            dashboardMenu = menu;
 
             SetMenuItemIcon(menu, Resource.Id.menu_search, Resource.Drawable.dashboard_search_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_synchronization, Resource.Drawable.synchronize_icon);
@@ -228,8 +249,11 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
             if (!ViewModel.DoesSupportMaps)
             {
-                menu.FindItem(Resource.Id.menu_map_dashboard).SetVisible(false);
+                var mapDashboardMenu = menu.FindItem(Resource.Id.menu_map_dashboard);
+                mapDashboardMenu.SetVisible(false);
             }
+            
+            UpdateWorkspacesDependentMenu();
 
             menu.LocalizeMenuItem(Resource.Id.menu_search, EnumeratorUIResources.MenuItem_Title_Search);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, EnumeratorUIResources.MenuItem_Title_SignOut);
@@ -238,6 +262,48 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             menu.LocalizeMenuItem(Resource.Id.menu_maps, EnumeratorUIResources.MenuItem_Title_Maps);
             //menu.LocalizeMenuItem(Resource.Id.menu_map_dashboard, EnumeratorUIResources.MenuItem_Title_Map_Dashboard);
             return base.OnCreateOptionsMenu(menu);
+        }
+
+        private void UpdateWorkspacesDependentMenu()
+        {
+            IMenu menu = dashboardMenu;
+            var workspaces = this.ViewModel.GetWorkspaces();
+            var workspacesMenuItem = menu.FindItem(Resource.Id.menu_workspaces);
+            if (workspacesMenuItem != null)
+            {
+                menu.LocalizeMenuItem(Resource.Id.menu_workspaces, EnumeratorUIResources.MenuItem_Title_Workspaces);
+
+                var sub = workspacesMenuItem.SubMenu;
+                sub.Clear();
+                
+                foreach (var workspace in workspaces)
+                {
+                    var menuItem = sub!.Add(workspace.DisplayName);
+                    menuItem.SetCheckable(true);
+                    menuItem.SetChecked(workspace.Name == ViewModel.CurrentWorkspace);
+                    var workspaceName = workspace.Name;
+                    menuItem.SetOnMenuItemClickListener(new MenuItemOnMenuItemClickListener(() =>
+                    {
+                        ViewModel.ChangeWorkspace(workspaceName);
+                        return true;
+                    }));
+                }
+
+                sub.Add(EnumeratorUIResources.MenuItem_Title_RefreshWorkspaces)
+                    .SetOnMenuItemClickListener(new MenuItemOnMenuItemClickListener(() =>
+                    {
+                        ViewModel.RefreshWorkspaces();
+                        return true;
+                    }));
+            }
+
+            workspacesMenuItem.SetVisible(true);
+            
+            
+            var mapDashboardMenu = menu.FindItem(Resource.Id.menu_map_dashboard);
+            var hasWorkspace = !string.IsNullOrEmpty(ViewModel.CurrentWorkspace);
+            mapDashboardMenu.SetEnabled(hasWorkspace);
+            mapDashboardMenu.Icon.Mutate().Alpha = hasWorkspace ? 255 : 120;
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)

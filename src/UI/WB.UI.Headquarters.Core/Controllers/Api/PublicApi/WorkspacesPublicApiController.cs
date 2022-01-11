@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -34,6 +35,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IMapper mapper;
         private readonly IWorkspacesService workspacesService;
         private readonly IWorkspacesCache workspacesCache;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IMediator mediator;
         private readonly ILogger<WorkspacesPublicApiController> logger;
         private readonly IAuthorizedUser authorizedUser;
@@ -44,6 +46,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IMapper mapper,
             IWorkspacesService workspacesService,
             IWorkspacesCache workspacesCache,
+            IUnitOfWork unitOfWork,
             IMediator mediator,
             ILogger<WorkspacesPublicApiController> logger,
             IAuthorizedUser authorizedUser, ISystemLog systemLog, 
@@ -53,6 +56,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.mapper = mapper;
             this.workspacesService = workspacesService;
             this.workspacesCache = workspacesCache;
+            this.unitOfWork = unitOfWork;
             this.mediator = mediator;
             this.logger = logger;
             this.authorizedUser = authorizedUser;
@@ -64,8 +68,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// List existing workspaces
         /// </summary>
         [HttpGet]
-        [SwaggerResponse(200, Type = typeof(WorkspaceApiView))]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(WorkspaceApiView))]
+        [Produces(MediaTypeNames.Application.Json)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         public WorkspacesApiView Index([FromQuery] WorkspacesListFilter filter)
         {
             IEnumerable<WorkspaceApiView> result =
@@ -96,9 +101,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 result = result.Where(x => userWorkspaces.Contains(x.Name));
             }
 
-            if (filter.UserId.HasValue)
+            if (!string.IsNullOrEmpty(filter.UserId))
             {
-                result = result.Where(x => x.Users.Any(u => u.User.Id == filter.UserId));
+                result = result.Where(x => x.Users.Any(u => u.User.Id.ToString() == filter.UserId));
             }
 
             if (!filter.IncludeDisabled)
@@ -113,8 +118,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// Get single workspace details
         /// </summary>
         [Route("{name}")]
-        [SwaggerResponse(404, "Workspace not found")]
-        [SwaggerResponse(200, Type = typeof(WorkspaceApiView))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Workspace not found")]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(WorkspaceApiView))]
+        [Produces(MediaTypeNames.Application.Json)]
         [HttpGet]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<WorkspaceApiView> Details(string name)
@@ -131,12 +137,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Creates new workspace. Accessible only to administrator 
         /// </summary>
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status201Created, "Workspace created", typeof(WorkspaceApiView))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed", Type = typeof(ValidationProblemDetails))]
         [HttpPost]
         [AuthorizeByRole(UserRoles.Administrator)]
         [ObservingNotAllowed]
-        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public async Task<ActionResult> Create([FromBody] WorkspaceCreateApiView request)
         {
             if (ModelState.IsValid)
@@ -154,18 +161,18 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     value: this.mapper.Map<WorkspaceApiView>(workspace));
             }
 
+            unitOfWork.DiscardChanges();
             return ValidationProblem();
         }
 
         /// <summary>
         /// Updates workspace 
         /// </summary>
-        /// <response code="204">Workspace updated</response>
         /// <response code="404">Workspace not found</response>
         /// <response code="403">User is not authorized to make changes to workspace</response>
-        /// <response code="400">Validation failed</response>
         [HttpPatch]
         [Route("{name}")]
+        [Consumes(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Workspace updated")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
         [ObservingNotAllowed]
@@ -193,6 +200,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NoContent();
             }
 
+            unitOfWork.DiscardChanges();
             return ValidationProblem();
         }
 
@@ -204,6 +212,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Workspace not found</response>
         [HttpPost]
         [Route("{name}/disable")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Workspace disabled")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Workspace not found")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator)]
         public ActionResult Disable(string name)
@@ -234,6 +245,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NoContent();
             }
 
+            unitOfWork.DiscardChanges();
             return ValidationProblem();
         }
 
@@ -245,6 +257,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="404">Workspace not found</response>
         [HttpPost]
         [Route("{name}/enable")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Workspace enabled")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Workspace not found")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator)]
         public ActionResult Enable(string name)
@@ -269,6 +284,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NoContent();
             }
 
+            unitOfWork.DiscardChanges();
             return ValidationProblem();
         }
 
@@ -279,10 +295,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="400">Validation failed</response>
         [HttpPost]
         [Route("assign")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Workspaces list updated")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
         [ObservingNotAllowed]
-        [AuthorizeByRole(UserRoles.Administrator)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.ApiUser)]
         public async Task<ActionResult> AssignWorkspaces([FromBody] AssignWorkspacesToUserModel model, CancellationToken cancellationToken)
         {
+            if(model == null)
+                return BadRequest();
+
             await this.mediator.Send(new AssignWorkspacesToUserModelRequest(ModelState, model), cancellationToken);
 
             if (ModelState.IsValid)
@@ -290,6 +312,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NoContent();
             }
 
+            unitOfWork.DiscardChanges();
             return ValidationProblem();
         }
 
@@ -300,6 +323,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <returns>Workspace status information</returns>
         [HttpGet]
         [Route("status/{name}")]
+        [Produces(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.Administrator)]
         public async Task<WorkspaceStatusInformation> Status(string name)
         {
@@ -313,6 +337,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="name">Workspace name</param>
         [HttpDelete]
         [Route("{name}")]
+        [Produces(MediaTypeNames.Application.Json)]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator)]
         public async Task<DeleteWorkspaceResponse> Delete(string name)

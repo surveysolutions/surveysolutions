@@ -15,6 +15,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private static int executingCommandsCount = 0;
         private static readonly object executionCountLock = new object();
         private TaskCompletionSource<object> executionAwaiter = null;
+        private TaskCompletionSource<object> commandAwaiter = null;
 
         public CommandService(IServiceLocator serviceLocator,
             IAggregateLock aggregateLock)
@@ -52,6 +53,12 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             lock (executionCountLock)
             {
                 executingCommandsCount++;
+
+                if (this.commandAwaiter != null)
+                {
+                    this.commandAwaiter.SetResult(new object());
+                    this.commandAwaiter = null;
+                }
             }
         }
 
@@ -85,6 +92,22 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                 }
 
                 return this.executionAwaiter.Task;
+            }
+        }
+
+        public Task WaitOnCommandAsync()
+        {
+            lock (executionCountLock)
+            {
+                if (executingCommandsCount > 0)
+                    return Task.FromResult(null as object);
+                
+                if (this.commandAwaiter == null)
+                {
+                    this.commandAwaiter = new TaskCompletionSource<object>();
+                }
+
+                return this.commandAwaiter.Task;
             }
         }
 

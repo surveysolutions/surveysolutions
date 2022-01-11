@@ -234,6 +234,9 @@
   <data name="ApproveReceivedWarning" xml:space="preserve">
     <value>Текущие интервьюверы не будут уведомлены об утверждении интервью. Данные, которые они начали собирать, будут удалены.</value>
   </data>
+  <data name="SwitchToCawiReceivedWarning" xml:space="preserve">
+    <value>Текущие интервьюверы не будут уведомлены об смене режима интервью. Данные, которые они начали собирать, будут удалены.</value>
+  </data>
   <data name="RejectToOriginal" xml:space="preserve">
     <value>Вернуть отправителю</value>
   </data>
@@ -251,5 +254,32 @@
   </data>
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
       <value>Вы можете утвердить интервью имеющие следующие статусы: {{status1}}, {{status2}} и {{status3}}</value>
+  </data>
+  <data name="AdvancedFilterSelector" xml:space="preserve">
+    <value>Динамический фильтр</value>
+  </data>
+  <data name="DynamicFilterNotAvailable" xml:space="preserve">
+    <value>Нет данных</value>
+  </data>
+  <data name="DynamicFilter" xml:space="preserve">
+    <value>Динамический фильтр</value>
+  </data>
+  <data name="DynamicFilter_MatchType" xml:space="preserve">
+    <value>Тип соответствия</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_And" xml:space="preserve">
+    <value>И</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_Or" xml:space="preserve">
+    <value>ИЛИ</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddRule" xml:space="preserve">
+    <value>Добавить правило</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddGroup" xml:space="preserve">
+    <value>Добавить группу</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_ValuePlaceholder" xml:space="preserve">
+    <value>значение</value>
   </data>
 </root>

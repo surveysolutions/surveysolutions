@@ -4,7 +4,11 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -21,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.TimeSpansBetweenStatuses = new HashSet<TimeSpanBetweenStatuses>();
             this.Comments = new HashSet<InterviewComment>();
             this.GpsAnswers = new HashSet<InterviewGps>();
-            
+
             this.GpsAnswersToRemove = new HashSet<InterviewGps>();
         }
 
@@ -30,20 +34,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public InterviewSummary(IQuestionnaire questionnaire) : this()
         {
             int position = 0;
-            foreach (var entityId in questionnaire.GetPrefilledEntities()
-                .Where(x =>
-                    (questionnaire.IsQuestion(x) && questionnaire.GetQuestionType(x) != QuestionType.GpsCoordinates)
-                    || questionnaire.IsVariable(x)))
+            foreach (var entityId in questionnaire.GetIdentifyingMappedEntities())
             {
                 var result = new IdentifyEntityValue
                 {
                     Entity = new Questionnaire.QuestionnaireCompositeItem
                     {
-                        Id = questionnaire.GetEntityIdMapValue(entityId)
+                        Id = entityId
                     },
                     Value = string.Empty,
                     InterviewSummary = this,
-                    Position = position
+                    Position = position,
+                    IsEnabled = true,
+                    Identifying = true
                 };
                 position++;
 
@@ -158,16 +161,100 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual string ResponsibleNameLowerCase { get; protected set; }
         public virtual bool HasSmallSubstitutions { get; set; }
         public virtual int? NotAnsweredCount { get; set; }
-
-        public virtual void AnswerFeaturedQuestion(int questionId, string answer, decimal? optionCode = null)
+        public virtual InterviewMode InterviewMode { get; set; } = InterviewMode.CAPI;
+        
+        public virtual InterviewProperties GetInterviewProperties()
         {
-            this.IdentifyEntitiesValues.First(x => x.Entity.Id == questionId).Value = answer;
-            this.IdentifyEntitiesValues.First(x => x.Entity.Id == questionId).AnswerCode = optionCode;
+            return new() {
+                Mode = InterviewMode,
+                Status = Status,
+                AssignmentId = AssignmentId,
+                WasCompleted = this.WasCompleted
+            };
         }
 
-        public virtual bool CanAnswerFeaturedQuestion(int questionId)
+        public virtual void AnswerFeaturedQuestion(int entityId, string answer, decimal? optionCode = null)
         {
-            return this.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId);
+            var entity = this.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.Id == entityId);
+            if (entity == null)
+                throw new ArgumentException($@"Cannot find entity {entityId} ", nameof(entityId));
+
+            entity.Value = answer;
+            entity.AnswerCode = optionCode;
+        }
+
+        public virtual void RemoveAnswerFeaturedQuestion(int entityId)
+        {
+            var entity = this.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.Id == entityId);
+            if (entity == null)
+                throw new ArgumentException($@"Cannot find entity {entityId} ", nameof(entityId));
+
+            entity.Value = String.Empty;
+            entity.AnswerCode = null;
+            entity.ValueDate = null;
+            entity.ValueDouble = null;
+            entity.ValueBool = null;
+            entity.ValueLong = null;
+        }
+
+        public virtual void AnswerDateTimeFeaturedQuestion(int entityId, DateTime answer, string answerString)
+        {
+            var entity = this.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.Id == entityId);
+            if (entity == null)
+                throw new ArgumentException($@"Cannot find entity {entityId} ", nameof(entityId));
+            entity.ValueDate = answer;
+            entity.Value = answerString;
+        }
+
+        public virtual void AnswerIntegerFeaturedQuestion(int entityId, int answer)
+        {
+            var entity = this.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.Id == entityId);
+            if (entity == null)
+                throw new ArgumentException($@"Cannot find entity {entityId} ", nameof(entityId));
+            entity.ValueLong = answer;
+            entity.Value = AnswerUtils.AnswerToString(answer);
+        }
+
+        public virtual void AnswerRealFeaturedQuestion(int entityId, decimal answer)
+        {
+            var entity = this.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.Id == entityId);
+            if (entity == null)
+                throw new ArgumentException($@"Cannot find entity {entityId} ", nameof(entityId));
+            entity.ValueDouble = Convert.ToDouble(answer);
+            entity.Value = AnswerUtils.AnswerToString(answer);
+        }
+
+        public virtual void AnswerFeaturedVariable(int entityId, object value, VariableType variableType)
+        {
+            var entity = this.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.Id == entityId);
+            if (entity == null)
+                throw new ArgumentException($@"Cannot find entity {entityId} ", nameof(entityId));
+            entity.Value = AnswerUtils.AnswerToString(value);
+
+            switch (variableType)
+            {
+                case VariableType.Boolean:
+                    entity.ValueBool = Convert.ToBoolean(value);
+                    break;
+                case VariableType.DateTime:
+                    entity.ValueDate = value as DateTime?;
+                    break;
+                case VariableType.Double:
+                    entity.ValueDouble = Convert.ToDouble(value);
+                    break;
+                case VariableType.LongInteger:
+                    entity.ValueLong = Convert.ToInt64(value);
+                    break;
+                case VariableType.String:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(variableType), variableType, null);
+            }
+        }
+
+        public virtual bool IsEntityIdentifying(int questionId)
+        {
+            return this.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId && x.Identifying);
         }
 
         protected bool Equals(InterviewSummary other)

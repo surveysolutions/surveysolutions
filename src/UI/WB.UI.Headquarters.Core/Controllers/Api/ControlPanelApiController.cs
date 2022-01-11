@@ -15,10 +15,12 @@ using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.TabletInformation;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Utils;
 using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Metrics;
 using WB.UI.Headquarters.Models.Api;
@@ -84,12 +86,20 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         public ActionResult<DataTableResponse<TabletInformationView>> TabletInfos(DataTableRequest request)
         {
-            var items = this.tabletInformationService.GetAllTabletInformationPackages();
+            var items =
+                this.tabletInformationService.GetAllTabletInformationPackages();
 
             if (!string.IsNullOrEmpty(request.Search?.Value))
                 items = items.Where(x =>
                     x.UserName != null &&
                     x.UserName.StartsWith(request.Search.Value, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            var order = request.Order.FirstOrDefault();
+            if (order != null)
+            {
+                var sortOrder = request.GetSortOrder();
+                items = items.AsQueryable().OrderUsingSortExpression(sortOrder).ToList();
+            }
 
             var itemsSlice = items.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).ToList();
 
@@ -185,6 +195,9 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         public IActionResult Download(string id)
         {
+            if (id.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+                return this.BadRequest();
+            
             var hostName = this.Request.Host.ToString().Split('.').FirstOrDefault() ?? @"unknownhost";
             var fullPathToContentFile = this.tabletInformationService.GetFullPathToContentFile(id);
 

@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 {
@@ -36,6 +37,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             public string ButtonText { get; set; }
         }
 
+        [ValidateAntiForgeryToken]
         [Route(@"{id}/pageTemplate")]
         [HttpPost]
         public IActionResult UpdatePageTemplate(string id, [FromBody]UpdatePageTemplateModel updateModel)
@@ -69,6 +71,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             public string LinkText { get; set; }
         }
 
+        [ValidateAntiForgeryToken]
         [Route(@"{id}/emailTemplate")]
         [HttpPost]
         public IActionResult UpdateEmailTemplate(string id, [FromBody]UpdateEmailTemplateModel updateModel)
@@ -96,6 +99,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             [Required] public string Message { get; set; }
         }
 
+        [ValidateAntiForgeryToken]
         [Route(@"{id}/pageMessage")]
         [HttpPost]
         public IActionResult UpdatePageMessage(string id, [FromBody]UpdatePageMessageModel updateModel)
@@ -126,8 +130,10 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             public bool SingleResponse { get; set; }
             public bool EmailOnComplete { get; set; }
             public bool AttachAnswersInEmail { get; set; }
+            public bool AllowSwitchToCawiForInterviewer { get;set; }
         }
 
+        [ValidateAntiForgeryToken]
         [Route(@"{id}/additionalSettings")]
         [HttpPost]
         public IActionResult UpdateAdditionalSettings(string id, [FromBody]UpdateAdditionalSettingsModel updateModel)
@@ -146,12 +152,14 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             config.SingleResponse = updateModel.SingleResponse;
             config.EmailOnComplete = updateModel.EmailOnComplete;
             config.AttachAnswersInEmail = updateModel.AttachAnswersInEmail;
+            config.AllowSwitchToCawiForInterviewer = updateModel.AllowSwitchToCawiForInterviewer;
 
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 
             return Ok();
         }
 
+        [ValidateAntiForgeryToken]
         [Route(@"{id}/start")]
         [HttpPost]
         public IActionResult Start(string id)
@@ -173,6 +181,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             return Ok();
         }
 
+        [ValidateAntiForgeryToken]
         [Route(@"{id}/stop")]
         [HttpPost]
         public IActionResult Stop(string id)

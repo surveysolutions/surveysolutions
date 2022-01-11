@@ -94,8 +94,8 @@ export default {
         return Vue.$api.interview.upload(Vue.$config.imageUploadUri, identity, file)
     },
 
-    answerAudioQuestion(_, { identity, file }) {
-        return Vue.$api.interview.upload(Vue.$config.audioUploadUri, identity, file)
+    answerAudioQuestion(_, { identity, file, duration }) {
+        return Vue.$api.interview.upload(Vue.$config.audioUploadUri, identity, file, duration)
     },
 
     answerQRBarcodeQuestion(_, { identity, text }) {
@@ -299,6 +299,14 @@ export default {
         commit('CURRENT_SECTION', { interviewId: interviewId, section: null })
 
         Vue.$api.interview.answer(null, 'completeInterview', { comment })
+    },
+
+    requestWebInterview({ state, commit, rootState }, comment) {
+
+        const interviewId = rootState.route.params.interviewId
+        commit('CURRENT_SECTION', { interviewId: interviewId, section: null })
+
+        Vue.$api.interview.answer(null, 'requestWebInterview', { comment })
     },
 
     cleanUpEntity: batchedAction(({ commit }, ids) => {

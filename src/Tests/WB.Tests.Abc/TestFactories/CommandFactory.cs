@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -247,7 +248,7 @@ namespace WB.Tests.Abc.TestFactories
             return new CreateInterviewFromSnapshotCommand(
                 interviewId: synchronizationDto.Id,
                 userId: userId,
-                sycnhronizedInterview: synchronizationDto);
+                synchronizedInterview: synchronizationDto);
         }
 
         public CreateInterview CreateInterview(Guid interviewId,
@@ -271,7 +272,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerId, 
                 interviewKey, 
                 assignmentId,
-                false);
+                false,
+                InterviewMode.CAPI);
         }
 
         public CreateInterview CreateInterview(Guid? questionnaireId = null,
@@ -389,42 +391,81 @@ namespace WB.Tests.Abc.TestFactories
                 comment);
         }
 
-        public ArchiveAssignment ArchiveAssignment(Guid? assignmentId = null, Guid? userId = null)
+        public ArchiveAssignment ArchiveAssignment(Guid? assignmentId = null, Guid? userId = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new ArchiveAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
+            return new ArchiveAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity());
         }
-        public UnarchiveAssignment UnarchiveAssignment(Guid? assignmentId = null, Guid? userId = null)
+        public UnarchiveAssignment UnarchiveAssignment(Guid? assignmentId = null, Guid? userId = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new UnarchiveAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
+            return new UnarchiveAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity());
         }
-        public DeleteAssignment DeleteAssignment(Guid? assignmentId = null, Guid? userId = null)
+        public DeleteAssignment DeleteAssignment(Guid? assignmentId = null, Guid? userId = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new DeleteAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
+            return new DeleteAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity());
         }
-        public MarkAssignmentAsReceivedByTablet MarkAssignmentAsReceivedByTablet(Guid? assignmentId = null, Guid? userId = null)
+        public MarkAssignmentAsReceivedByTablet MarkAssignmentAsReceivedByTablet(Guid? assignmentId = null, Guid? userId = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new MarkAssignmentAsReceivedByTablet(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
+            return new MarkAssignmentAsReceivedByTablet(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity());
         }
-        public ReassignAssignment ReassignAssignment(Guid? assignmentId = null, Guid? userId = null, Guid? responsibleId = null, string comment = null)
+        public ReassignAssignment ReassignAssignment(Guid? assignmentId = null, Guid? userId = null, Guid? responsibleId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new ReassignAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), responsibleId ?? Guid.NewGuid(), comment);
+            return new ReassignAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), responsibleId ?? Guid.NewGuid(), comment, questionnaireIdentity ?? new QuestionnaireIdentity());
         }
-        public UpdateAssignmentAudioRecording UpdateAssignmentAudioRecording(Guid? assignmentId = null, Guid? userId = null, bool? audioRecording = null)
+        public UpdateAssignmentAudioRecording UpdateAssignmentAudioRecording(Guid? assignmentId = null, Guid? userId = null, bool? audioRecording = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new UpdateAssignmentAudioRecording(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), audioRecording ?? false);
+            return new UpdateAssignmentAudioRecording(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), audioRecording ?? false, questionnaireIdentity ?? new QuestionnaireIdentity());
         }
-        public UpdateAssignmentWebMode UpdateAssignmentWebMode(Guid? assignmentId = null, Guid? userId = null, bool? webMode = null)
+        public UpdateAssignmentWebMode UpdateAssignmentWebMode(Guid? assignmentId = null, Guid? userId = null, bool? webMode = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new UpdateAssignmentWebMode(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), webMode ?? false);
+            return new UpdateAssignmentWebMode(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), webMode ?? false, questionnaireIdentity ?? new QuestionnaireIdentity());
         }
-        public UpdateAssignmentQuantity UpdateAssignmentQuantity(Guid? assignmentId = null, Guid? userId = null, int? quantity = null)
+        public UpdateAssignmentQuantity UpdateAssignmentQuantity(Guid? assignmentId = null, Guid? userId = null, int? quantity = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new UpdateAssignmentQuantity(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), quantity);
+            return new UpdateAssignmentQuantity(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), quantity, questionnaireIdentity ?? new QuestionnaireIdentity());
         }
 
         public UpgradeAssignmentCommand UpgradeAssignment()
         {
-            return new UpgradeAssignmentCommand(Id.g1, Id.g2);
+            return new UpgradeAssignmentCommand(Id.g1, Id.g2, new QuestionnaireIdentity());
+        }
+
+        public CreateCalendarEventCommand CreateCalendarEventCommand(
+            Guid? calendarEventId = null,
+            Guid? userId = null,
+            Guid? interviewId = null,
+            string interviewKey = "",
+            int assignmentId = 0,
+            QuestionnaireIdentity questionnaireIdentity = null)
+        {
+            return new CreateCalendarEventCommand(
+                calendarEventId ?? Guid.NewGuid(),
+                userId?? Guid.NewGuid(),
+                DateTimeOffset.Now, 
+                "America/New_York",
+                interviewId,
+                interviewKey,
+                assignmentId,
+                "",
+                questionnaireIdentity ?? new QuestionnaireIdentity()
+                );
+        }
+        
+        public UpdateCalendarEventCommand UpdateCalendarEventCommand(
+            Guid? publicKey = null,
+            Guid? userId = null,
+            Guid? interviewId = null,
+            string interviewKey = "",
+            int assignmentId = 0,
+            QuestionnaireIdentity questionnaireIdentity = null)
+        {
+            return new UpdateCalendarEventCommand(
+                publicKey ?? Guid.NewGuid(),
+                userId?? Guid.NewGuid(),
+                DateTimeOffset.Now, 
+                "America/New_York",
+                "",
+                questionnaireIdentity ?? new QuestionnaireIdentity()
+            );
         }
     }
 }

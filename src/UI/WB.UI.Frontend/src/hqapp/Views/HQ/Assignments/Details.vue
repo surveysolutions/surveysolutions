@@ -27,7 +27,7 @@
                     <h3>
                         {{$t('Assignments.AssignmentInfo')}}
                         <a
-                            v-if="model.webMode"
+                            v-if="model.webMode && model.invitationToken"
                             :href="webInterviewUrl"
                             target="_blank">
                             <span
@@ -78,6 +78,7 @@
                                 <td>
                                     <a v-bind:href="interviewsUrl">
                                         {{model.interviewsProvided}}
+                                        <span class="glyphicon glyphicon-link"/>
                                     </a>
                                 </td>
                             </tr>
@@ -204,7 +205,7 @@ export default {
                 : this.$t('Common.No')
         },
         isWebMode() {
-            return this.model.webMode === false ?  this.$t('Common.No') : this.$t('Common.Yes')
+            return this.model.webMode === false ? this.$t('Common.Capi') : this.$t('Common.Cawi')
         },
         interviewsCount() {
             if (this.model.quantity == null || this.model.quantity < 0) return this.$t('Assignments.Unlimited')
@@ -278,9 +279,14 @@ export default {
                                 let createdText = self.$t('Assignments.Action_Created_Responsible', {
                                     responsible: data.Responsible,
                                 })
-                                if (data.comment) {
+                                if (data.Comment) {
                                     createdText +=
                                         '<br/>' + self.$t('Assignments.Action_Created_Comment', {comment: escape(data.Comment)})
+                                }
+
+                                if(data.UpgradedFromId) {
+                                    createdText += '<br/>' + self.$t('Assignments.Action_UpgradedFrom',
+                                        { id: `<a href='./${data.UpgradedFromId}'>${data.UpgradedFromId}</a>`})
                                 }
                                 return createdText
                             }

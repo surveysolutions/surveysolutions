@@ -150,7 +150,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             var commandService = serviceLocator.GetInstance<ICommandService>();
             var principal = serviceLocator.GetInstance<IPrincipal>();
             var command = new DeleteCalendarEventCommand(calendarEvent.Id,
-                principal.CurrentUserIdentity.UserId);
+                principal.CurrentUserIdentity.UserId,
+                new QuestionnaireIdentity() //dummy
+                );
             commandService.Execute(command);
             
             RaiseOnItemUpdated();

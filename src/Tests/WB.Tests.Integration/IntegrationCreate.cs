@@ -190,7 +190,7 @@ namespace WB.Tests.Integration
                 userId: Guid.NewGuid(),
                 questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
                 version: 1,
-                answers: preloadedData.Answers,
+                answers: preloadedData.GetAnswers(),
                 //answersTime: new DateTime(2012, 12, 20),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
@@ -475,13 +475,6 @@ namespace WB.Tests.Integration
             }
 
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
-        }
-
-        public static AggregateRootEvent AggregateRootEvent(IEvent evnt)
-        {
-            var rnd = new Random();
-            return new AggregateRootEvent(new CommittedEvent(Guid.NewGuid(), "origin", Guid.NewGuid(), Guid.NewGuid(),
-                    rnd.Next(1, 10000000), DateTime.UtcNow, rnd.Next(1, 1000000), evnt));
         }
 
         public static CumulativeReportStatusChange CumulativeReportStatusChange(Guid? questionnaireId=null, long? questionnaireVersion=null, DateTime? date = null, Guid? interviewId = null, long eventSequence = 1)

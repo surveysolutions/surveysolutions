@@ -14,6 +14,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             Title?.Dispose();
+            Attachment?.ViewDestroy();
+            Attachment?.Dispose();
         }
     }
 }

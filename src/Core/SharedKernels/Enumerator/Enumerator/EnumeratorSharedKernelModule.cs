@@ -4,6 +4,7 @@ using Ncqrs;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -19,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
@@ -26,6 +28,7 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -40,8 +43,6 @@ namespace WB.Core.SharedKernels.Enumerator
     {
         public void Load(IIocRegistry registry)
         {
-            registry.Bind<ILiteEventBus, LiteEventBus>();
-
             registry.Bind<IEntitiesListViewModelFactory, EntitiesListViewModelFactory>();
             registry.Bind<IDynamicTextViewModelFactory, DynamicTextViewModelFactory>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
@@ -57,7 +58,11 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IInterviewsRemover, Implementation.Services.Synchronization.Steps.InterviewsRemover>();
             registry.Bind<ICompanyLogoSynchronizer, CompanyLogoSynchronizer>();
             registry.Bind<IAttachmentsCleanupService, AttachmentsCleanupService>();
-            
+            registry.BindAsSingleton<IWorkspaceService, WorkspaceService>();
+            registry.BindAsSingleton<IWorkspaceAccessor, WorkspaceAccessor>();
+            registry.Bind<IInScopeExecutor, ExecuteInWorkspaceService>();
+            registry.Bind<IInterviewPdfService, InterviewPdfService>();
+
             registry.Bind<NavigationState>();
             registry.Bind<AnswerNotifier>();
 
@@ -71,7 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
             registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             registry.Bind<IAudioAuditFileStorage, InterviewerAudioAuditFileStorage>();
-            registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
+            registry.Bind<IAuditLogService, EnumeratorAuditLogService>();
             registry.Bind<IServiceProvider, MvxServiceProvider>();
             registry.Bind<IMigrationRunner, MigrationRunner>();
 
@@ -80,6 +85,14 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<ILiteEventBus, LiteEventBus>();
             registry.Bind<IAsyncEventDispatcher, AsyncEventDispatcher>();
             registry.BindAsSingleton<IAsyncEventQueue, AsyncEventQueue>();
+            
+            registry.BindAsSingleton<IWorkspaceMemoryCacheSource, WorkspaceMemoryCacheSource>();
+            registry.BindToMethod(ctx =>
+            {
+                var cacheSource = ctx.Resolve<IWorkspaceMemoryCacheSource>();
+                var contextAccessor = ctx.Resolve<IWorkspaceAccessor>();
+                return cacheSource.GetCache(contextAccessor.GetCurrentWorkspaceName() ?? "common");
+            }, externallyOwned: true);
 
             RegisterViewModels(registry);
         }
@@ -197,6 +210,7 @@ namespace WB.Core.SharedKernels.Enumerator
                 .Handles<CommentAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CommentAnswer(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Comment))
                 .Handles<ResolveCommentAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.ResolveComment(command))
                 .Handles<CompleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Complete(command.UserId, command.Comment, command.OriginDate))
+                .Handles<ChangeInterviewModeCommand>(command => command.InterviewId, (command, aggregate) => aggregate.ChangeInterviewMode(command.UserId, command.OriginDate, command.Mode, command.Comment))
                 .Handles<DeleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Delete(command.UserId, command.OriginDate))
                 .Handles<HardDeleteInterview>(command => command.InterviewId, (command, aggregate) => aggregate.HardDelete(command.UserId, command.OriginDate))
                 .Handles<HqApproveInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqApprove(command.UserId, command.Comment, command.OriginDate))

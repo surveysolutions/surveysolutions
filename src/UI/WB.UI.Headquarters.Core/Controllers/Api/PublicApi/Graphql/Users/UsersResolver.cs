@@ -1,30 +1,32 @@
-﻿#nullable enable
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using HotChocolate;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
 {
     public class UsersResolver
     {
-        public UserDto GetViewer([Service] IAuthorizedUser authorizedUser)
+        public IQueryable<HqUser> GetUsers(
+            [Service] IUnitOfWork unitOfWork,
+            [Service] IAuthorizedUser authorizedUser)
         {
-            var roles = new List<UserRoles>();
-            
-            if(authorizedUser.IsAdministrator) roles.Add(UserRoles.Administrator);
-            if(authorizedUser.IsHeadquarter) roles.Add(UserRoles.Headquarter);
-            if(authorizedUser.IsInterviewer) roles.Add(UserRoles.Interviewer);
-            if(authorizedUser.IsSupervisor) roles.Add(UserRoles.Supervisor);
+            unitOfWork.DiscardChanges();
+            var query = unitOfWork.Session.Query<HqUser>();
 
-            return new UserDto
+            /*if (!authorizedUser.IsAdministrator)
             {
-                Id = authorizedUser.Id,
-                UserName = authorizedUser.UserName,
-                Roles = roles.ToArray(),
-                Workspaces = authorizedUser.Workspaces.ToArray()
-            };
+                var authorizedWorkspaces = authorizedUser.Workspaces.ToList();
+
+                query = query
+                    .Where(u =>
+                        u.Workspaces.Any(w => authorizedWorkspaces.Any(aw => aw == w.Workspace.Name)))
+                    /*.Select(u =>
+                        u.Workspaces.Where(w => authorizedWorkspaces.Any(aw => aw == w.Workspace.Name)))#1#;
+            }*/
+            
+            return query;
         }
     }
 }

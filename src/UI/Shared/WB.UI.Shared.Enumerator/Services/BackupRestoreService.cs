@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -274,7 +275,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
             if (this.fileSystemAccessor.IsFileExists(backupFilePath))
             {
-                this.ReCreatePrivateDirectory();
+                this.CleanUpPrivateDirectory();
 
                 await this.archiver.UnzipAsync(backupFilePath, this.privateStorage, true);
 
@@ -292,7 +293,7 @@ namespace WB.UI.Shared.Enumerator.Services
                 {
                     this.logger.Error("Restore unhandled exception", e);
 
-                    this.ReCreatePrivateDirectory();
+                    this.CleanUpPrivateDirectory();
 
                     await this.userInteractionService.AlertAsync("Could not restore encrypted data", "Warning");
                 }
@@ -353,12 +354,26 @@ namespace WB.UI.Shared.Enumerator.Services
             }
         }
 
-        private void ReCreatePrivateDirectory()
+        private void CleanUpPrivateDirectory()
         {
             if (!this.fileSystemAccessor.IsDirectoryExists(this.privateStorage)) return;
 
-            this.fileSystemAccessor.DeleteDirectory(this.privateStorage);
-            this.fileSystemAccessor.CreateDirectory(this.privateStorage);
+            string[] directoriesToPreserve = new[] { ".__override__", ".__tools__" };
+            
+
+            foreach (var directory in this.fileSystemAccessor.GetDirectoriesInDirectory(this.privateStorage))
+            {
+                if (!directoriesToPreserve.Contains(this.fileSystemAccessor.GetDirectoryName(directory).ToLower()))
+                {
+                    this.fileSystemAccessor.DeleteDirectory(directory);
+                }
+            }
+            
+            foreach (var file in this.fileSystemAccessor.GetFilesInDirectory(this.privateStorage))
+            {
+                this.fileSystemAccessor.DeleteFile(file);
+            }
+
         }
 
         private void CreateDeviceInfoFile()

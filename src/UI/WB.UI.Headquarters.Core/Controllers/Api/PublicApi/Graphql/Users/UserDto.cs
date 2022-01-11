@@ -7,8 +7,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
     {
         public Guid Id { get; set; }
         public string UserName { get; set; }
-        public UserRoles[] Roles { get; set; }
-
+        public UserRoles Role { get; set; }
         public string[] Workspaces { get; set; }
     }
 }

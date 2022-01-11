@@ -12,7 +12,6 @@ namespace WB.Enumerator.Native.WebInterview
         Sidebar GetSidebarChildSectionsOf(string currentSectionId, IStatefulInterview interview, IQuestionnaire questionnaire, string[] sectionIds, bool isReviewMode);
         InterviewEntity GetEntityDetails(string id, IStatefulInterview callerInterview, IQuestionnaire questionnaire, bool isReviewMode);
         GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode, IStatefulInterview interview, IQuestionnaire questionnaire);
-        GroupStatus GetInterviewSimpleStatus(IStatefulInterview interview, bool isReviewMode);
         void ApplyValidity(Validity validity, GroupStatus status);
         Identity GetUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity);
 

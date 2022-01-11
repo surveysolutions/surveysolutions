@@ -10,12 +10,13 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     public class AssignmentDocumentsStorage :
-        SqlitePlainStorage<AssignmentDocument, int>,
+        SqlitePlainStorageAutoWorkspaceResolve<AssignmentDocument, int>,
         IAssignmentDocumentsStorage
     {
         // sql support max 999 parameters in query
@@ -24,12 +25,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         private readonly IEncryptionService encryptionService;
 
         public AssignmentDocumentsStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor,
-            SqliteSettings settings, IEncryptionService encryptionService)
-            : base(logger, fileSystemAccessor, settings)
+            SqliteSettings settings, IEncryptionService encryptionService, IWorkspaceAccessor workspaceAccessor)
+            : base(logger, fileSystemAccessor, settings, workspaceAccessor)
         {
             this.encryptionService = encryptionService;
-            this.connection.CreateTable<AssignmentDocument.AssignmentAnswer>();
-            this.connection.CreateTable<AssignmentDocument.AssignmentProtectedVariable>();
+        }
+
+        protected override void CreateTable(SQLiteConnectionWithLock connect)
+        {
+            base.CreateTable(connect);
+            
+            connect.CreateTable<AssignmentDocument.AssignmentAnswer>();
+            connect.CreateTable<AssignmentDocument.AssignmentProtectedVariable>();
         }
 
         public AssignmentDocumentsStorage(SQLiteConnectionWithLock storage, ILogger logger, IEncryptionService encryptionService)
@@ -37,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         {
             this.encryptionService = encryptionService;
             storage.CreateTable<AssignmentDocument.AssignmentAnswer>();
-            this.connection.CreateTable<AssignmentDocument.AssignmentProtectedVariable>();
+            storage.CreateTable<AssignmentDocument.AssignmentProtectedVariable>();
         }
 
         public new void Remove(int assignmentId)
@@ -96,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         public override void Store(AssignmentDocument entity)
         {
             entity.LastUpdated = DateTime.Now;
-            RunInTransaction(table => StoreImplementation(table, entity));
+            this.Store(new[]{entity});
         }
 
         public override void Store(IEnumerable<AssignmentDocument> entities)
@@ -114,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             }
             catch (SQLiteException ex)
             {
-                this.logger.Fatal($"Failed to persist {entities.Count()} entities as batch", ex);
+                this.logger.Fatal($"Failed to persist {entities.Count()} assignments as batch", ex);
                 throw;
             }
         }

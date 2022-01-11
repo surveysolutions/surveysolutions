@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Responsible was not found.
+        /// </summary>
+        public static string AssignmentResponsibleNotFound {
+            get {
+                return ResourceManager.GetString("AssignmentResponsibleNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire &apos;{0}&apos; already exists. Please choose another name..
         /// </summary>
         public static string QuestionnaireNameUniqueFormat {
@@ -75,6 +84,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string QuestionnaireVariableUniqueFormat {
             get {
                 return ResourceManager.GetString("QuestionnaireVariableUniqueFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire was deleted.
+        /// </summary>
+        public static string QuestionnaireWasDeleted {
+            get {
+                return ResourceManager.GetString("QuestionnaireWasDeleted", resourceCulture);
             }
         }
         

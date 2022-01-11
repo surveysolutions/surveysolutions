@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -140,6 +141,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
         [HttpGet]
         [Route("{id:guid}/{version:long}/document")]
+        [Produces(MediaTypeNames.Application.Json)]
         [Authorize(Roles = "ApiUser, Administrator")]
         public ActionResult QuestionnaireDocument(Guid id, long version)
         {
@@ -182,7 +184,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="204">Questionnaire setting updated</response>
         /// <response code="404">Questionnaire cannot be found</response>
         [HttpPost]
-        [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
+        [Route("{id:guid}/{version:long}/recordAudio", Name = "SetRecordAudioSetting")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Consumes(MediaTypeNames.Application.Json)]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
         [ObservingNotAllowed]
         public ActionResult RecordAudio(Guid id, long version, [FromBody, BindRequired]RecordAudioRequest requestData)
@@ -216,7 +221,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="version">Questionnaire version</param>
         /// <response code="404">Questionnaire cannot be found</response>
         [HttpGet]
-        [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
+        [Route("{id:guid}/{version:long}/recordAudio", Name = "GetRecordAudioSetting")]
+        [Produces(MediaTypeNames.Application.Json)]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
         [ObservingNotAllowed]
         public ActionResult<AudioRecordingEnabled> GetRecordAudio(Guid id, long version)

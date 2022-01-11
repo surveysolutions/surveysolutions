@@ -59,24 +59,28 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.CreateNew)]
+        [AntiForgeryFilter]
         public IActionResult CreateNew()
         {
             return View("Index", NewModel(MenuItem.CreateNew));
         }
 
         [ActivePage(MenuItem.Started)]
+        [AntiForgeryFilter]
         public IActionResult Started()
         {
             return View("Interviews", NewModel(MenuItem.Started, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted));
         }
 
         [ActivePage(MenuItem.Rejected)]
+        [AntiForgeryFilter]
         public IActionResult Rejected()
         {
             return View("Interviews", NewModel(MenuItem.Rejected, InterviewStatus.RejectedBySupervisor));
         }
 
         [ActivePage(MenuItem.Completed)]
+        [AntiForgeryFilter]
         public IActionResult Completed()
         {
             return View("Interviews", NewModel(MenuItem.Completed, InterviewStatus.Completed));
@@ -97,6 +101,10 @@ namespace WB.UI.Headquarters.Controllers
         private string CreateInterview(Assignment assignment)
         {
             var interviewer = this.usersRepository.GetUser(new UserViewInputModel(assignment.ResponsibleId));
+            
+            if (interviewer == null)
+                throw new InvalidOperationException($"User was not found");
+            
             if (!interviewer.IsInterviewer())
                 throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
 
@@ -113,7 +121,8 @@ namespace WB.UI.Headquarters.Controllers
                 interviewer.PublicKey,
                 interviewKey,
                 assignment.Id,
-                assignment.AudioRecording);
+                assignment.AudioRecording,
+                InterviewMode.CAPI);
 
             this.commandService.Execute(createInterviewCommand);
             
@@ -127,7 +136,8 @@ namespace WB.UI.Headquarters.Controllers
                     interviewId,
                     interviewKey.ToString(),
                     assignment.Id,
-                    calendarEvent.Comment);
+                    calendarEvent.Comment,
+                    assignment.QuestionnaireId);
                 commandService.Execute(createCalendarEvent);
             }
             
@@ -135,6 +145,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult StartNewInterview(int id)
         {
             var assignment = this.assignments.GetAssignment(id);
@@ -142,7 +153,7 @@ namespace WB.UI.Headquarters.Controllers
             var interviewId = CreateInterview(assignment);
             TempData["lastCreatedInterviewId"] = interviewId; // todo replace with lastCreatedInterviewId from webinterview controller when its migrated
 
-            return Content(Url.Content(GenerateUrl(@"Cover", interviewId)));
+            return Json(new { InterviewId = interviewId});
         }
 
         [HttpGet]
@@ -152,6 +163,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpDelete]
+        [ValidateAntiForgeryToken]
         public IActionResult DiscardInterview(Guid id)
         {
             var deleteInterview = new DeleteInterviewCommand(id, this.authorizedUser.Id);
@@ -160,6 +172,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RestartInterview(Guid id, string comment)
         {
             var restartCommand = new RestartInterviewCommand(id, this.authorizedUser.Id, comment, DateTime.UtcNow);

@@ -30,7 +30,6 @@ namespace WB.Tests.Integration.InterviewTests
                             {
                                 PublicKey = numericQuestionId,
                                 IsInteger = true,
-                                QuestionType = QuestionType.Numeric,
                                 StataExportCaption = "num"
                             },
                             new Group
@@ -44,7 +43,6 @@ namespace WB.Tests.Integration.InterviewTests
                                     new TextQuestion
                                     {
                                         PublicKey = referencedQuestionId,
-                                        QuestionType = QuestionType.Text,
                                         StataExportCaption = "txt"
                                     },
                                     new Group
@@ -58,7 +56,6 @@ namespace WB.Tests.Integration.InterviewTests
                                             new MultyOptionsQuestion
                                             {
                                                 PublicKey = linkedQuestionId,
-                                                QuestionType = QuestionType.MultyOption,
                                                 LinkedToQuestionId = referencedQuestionId,
                                                 StataExportCaption = "link_mul"
                                             }

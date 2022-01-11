@@ -2,6 +2,7 @@
 using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Events.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;

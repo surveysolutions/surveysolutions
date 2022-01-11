@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class EnumeratorUIResources {
@@ -156,6 +156,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Dashboard_AssignmentsTabTitle {
             get {
                 return ResourceManager.GetString("Dashboard_AssignmentsTabTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can&apos;t open interview in CAWI mode. It will be send to headquarters after synchronization..
+        /// </summary>
+        public static string Dashboard_CantOpenCawi {
+            get {
+                return ResourceManager.GetString("Dashboard_CantOpenCawi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (CAWI).
+        /// </summary>
+        public static string Dashboard_CawiLabel {
+            get {
+                return ResourceManager.GetString("Dashboard_CawiLabel", resourceCulture);
             }
         }
         
@@ -343,6 +361,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refreshing workspaces.
+        /// </summary>
+        public static string Dashboard_RefreshWorkspaces {
+            get {
+                return ResourceManager.GetString("Dashboard_RefreshWorkspaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error getting list of workspaces. Please contact your system administrator. .
+        /// </summary>
+        public static string Dashboard_RefreshWorkspacesError {
+            get {
+                return ResourceManager.GetString("Dashboard_RefreshWorkspacesError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspaces list updated.
+        /// </summary>
+        public static string Dashboard_RefreshWorkspacesFinished {
+            get {
+                return ResourceManager.GetString("Dashboard_RefreshWorkspacesFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This interview is completed. Do you want to reopen the interview?.
         /// </summary>
         public static string Dashboard_Reinitialize_Interview_Message {
@@ -507,6 +552,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Web Interviews ({0}).
+        /// </summary>
+        public static string Dashboard_WebInterviewsLinkText {
+            get {
+                return ResourceManager.GetString("Dashboard_WebInterviewsLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews in Web interview mode. Will be removed during synchronization when web interview is completed by respondent.
+        /// </summary>
+        public static string Dashboard_WebInterviewTabText {
+            get {
+                return ResourceManager.GetString("Dashboard_WebInterviewTabText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approved by Supervisor: {0}.
         /// </summary>
         public static string DashboardItem_ApprovedBySupervisor {
@@ -575,6 +638,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string DashboardItem_NotStarted {
             get {
                 return ResourceManager.GetString("DashboardItem_NotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show QR Code.
+        /// </summary>
+        public static string DashboardItem_QRCode {
+            get {
+                return ResourceManager.GetString("DashboardItem_QRCode", resourceCulture);
             }
         }
         
@@ -1047,7 +1119,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server error. Please contact the support team at support@mysurvey.solutions.
+        ///   Looks up a localized string similar to Server error. Please contact your server administrator..
         /// </summary>
         public static string InternalServerError {
             get {
@@ -1098,6 +1170,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Loading_With_Percents {
             get {
                 return ResourceManager.GetString("Interview_Loading_With_Percents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Progress: {0}/{1}.
+        /// </summary>
+        public static string Interview_Progress_Format {
+            get {
+                return ResourceManager.GetString("Interview_Progress_Format", resourceCulture);
             }
         }
         
@@ -1331,6 +1412,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refresh workspaces.
+        /// </summary>
+        public static string MenuItem_Title_RefreshWorkspaces {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_RefreshWorkspaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string MenuItem_Title_Search {
@@ -1354,6 +1444,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MenuItem_Title_SignOut {
             get {
                 return ResourceManager.GetString("MenuItem_Title_SignOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspaces.
+        /// </summary>
+        public static string MenuItem_Title_Workspaces {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Workspaces", resourceCulture);
             }
         }
         
@@ -2250,11 +2349,20 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Authentication problem. We were unable to confirm your credentials &apos;{0}&apos;. Your account may have a different password, be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor or Headquarters..
+        ///   Looks up a localized string similar to Authentication problem. We were unable to confirm your credentials &apos;{0}&apos;. Your account may have a different password, be locked. Please re-enter your password. If the problem persists, contact your Supervisor or Headquarters..
         /// </summary>
         public static string Synchronization_UserPassword_Update_Format {
             get {
                 return ResourceManager.GetString("Synchronization_UserPassword_Update_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your account is no longer active in the workspace. Please contact your system administrator..
+        /// </summary>
+        public static string Synchronization_WorkspaceAccessDisabledReason {
+            get {
+                return ResourceManager.GetString("Synchronization_WorkspaceAccessDisabledReason", resourceCulture);
             }
         }
         

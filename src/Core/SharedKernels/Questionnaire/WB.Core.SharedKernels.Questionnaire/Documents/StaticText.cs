@@ -29,10 +29,7 @@ namespace Main.Core.Entities.SubEntities
         public ReadOnlyCollection<IComposite> Children
         {
             get => children;
-            set
-            {
-                // do nothing
-            }
+            set { }
         }
 
         private IComposite? parent;

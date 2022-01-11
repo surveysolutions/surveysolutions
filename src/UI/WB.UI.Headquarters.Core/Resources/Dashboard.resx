@@ -220,7 +220,7 @@
     <value>Download web links</value>
   </data>
   <data name="WebMode" xml:space="preserve">
-    <value>Web mode</value>
+    <value>Mode</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>Details</value>
@@ -243,5 +243,14 @@
   </data>
   <data name="UsersManagement" xml:space="preserve">
       <value>Users Management</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+      <value>Create User</value>
+  </data>
+  <data name="ExposedVariables" xml:space="preserve">
+    <value>Exposed Variables</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
   </data>
 </root>

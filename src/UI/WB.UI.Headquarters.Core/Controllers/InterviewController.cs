@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -32,14 +33,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ICalendarEventService calendarEventService;
-        
+        private readonly IWebInterviewLinkProvider webInterviewLinkProvider;
+
 
         public InterviewController(IAuthorizedUser authorizedUser,
             IAllInterviewsFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory,
             IStatefulInterviewRepository statefulInterviewRepository, 
             IQuestionnaireStorage questionnaireRepository, 
-            ICalendarEventService calendarEventService)
+            ICalendarEventService calendarEventService,
+            IWebInterviewLinkProvider webInterviewLinkProvider)
         {
             this.authorizedUser = authorizedUser;
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
@@ -47,6 +50,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.questionnaireRepository = questionnaireRepository;
             this.calendarEventService = calendarEventService;
+            this.webInterviewLinkProvider = webInterviewLinkProvider;
         }
 
         private bool CurrentUserCanAccessInterview(InterviewSummary interviewSummary)
@@ -76,8 +80,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
 
         [ActivePage(MenuItem.Docs)]
-        [Route("Interview/Review/{id}")]
-        [Route("Interview/Review/{id}/Cover")]
+        [Route("Interview/Review/{id:guid}")]
+        [Route("Interview/Review/{id:guid}/Cover")]
+        [ExtraHeaderPermissions(HeaderPermissionType.Google)]
         public ActionResult Cover(Guid id)
         {
             var interviewId = id.FormatGuid();
@@ -101,6 +106,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [ActivePage(MenuItem.Docs)]
         [Route("Interview/Review/{id}/Section/{url}")]
+        [ExtraHeaderPermissions(HeaderPermissionType.Google)]
         public ActionResult Review(Guid id, string url)
         {
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
@@ -134,7 +140,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                             "javascript:void(0);",
                 InterviewsUrl = Url.Action("Index", "Interviews"),
                 PdfUrl = Url.Action("Pdf", "InterviewsPublicApi", new{ id = id }),
-                CalendarEvent = GetCalendarEventOrNull(id) 
+                CalendarEvent = GetCalendarEventOrNull(id),
+                InterviewMode = interviewSummary.InterviewMode,
+                WebInterviewUrl = webInterviewLinkProvider.WebInterviewRequestLink((interviewSummary.AssignmentId ?? 0).ToString(), id.ToString()),
+                AssignmentDetailsUrl = interviewSummary.AssignmentId.HasValue 
+                    ? Url.Action("Index", "Assignments", new { id = interviewSummary.AssignmentId.Value })
+                    : "javascript:void(0);"
             });
         }
 
@@ -193,6 +204,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(interviewHistoryViewFactory.Load(id));
         }
 
+        [ExtraHeaderPermissions(HeaderPermissionType.Esri)]
         public ActionResult InterviewAreaFrame(Guid id, string questionId)
         {
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
@@ -256,6 +268,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public string PdfUrl { get; set; }
 
         public CalendarEventView CalendarEvent { get; set; }
+        public InterviewMode InterviewMode { get; set; }
+        public string WebInterviewUrl { get; set; }
+        public string AssignmentDetailsUrl { get; set; }
     }
 
     public class CalendarEventView

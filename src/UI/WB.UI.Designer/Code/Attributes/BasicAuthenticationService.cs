@@ -60,7 +60,7 @@ namespace WB.UI.Designer.Code.Attributes
         
         private bool IsAccountLockedOut(DesignerIdentityUser user)
         {
-            return user.LockoutEnabled && user.LockoutEnd.HasValue;
+            return user.LockoutEnabled && user.LockoutEnd.HasValue && user.LockoutEnd.Value >= DateTimeOffset.UtcNow;
         }
 
         private bool IsAccountNotApproved(DesignerIdentityUser user)
@@ -72,7 +72,7 @@ namespace WB.UI.Designer.Code.Attributes
         {
             if (user == null) return false;
 
-            var signInResult = await signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: false);
+            var signInResult = await signInManager.CheckPasswordSignInAsync(user, password, true);
             return signInResult.Succeeded;
         }
     }

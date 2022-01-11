@@ -324,6 +324,9 @@
   <data name="Activated" xml:space="preserve">
     <value>Activat</value>
   </data>
+  <data name="CawiActivated" xml:space="preserve">
+    <value>CAWI Activat</value>
+  </data>
   <data name="Actor" xml:space="preserve">
     <value>De către </value>
   </data>
@@ -349,7 +352,7 @@
     <value>Activați înregistrarea audio</value>
   </data>
   <data name="AudioRecordingExplanation" xml:space="preserve">
-    <value>Aplicația Intervievator va înregistra sunetul interviului atunci când auditul audio este activat. Cantitatea de date de sincronizare ar fi semnificativ mai mare.</value>
+    <value>Aplicația Interviewer va înregistra sunetul interviului atunci când auditul audio este activat. Cantitatea de date de sincronizare ar fi semnificativ mai mare.</value>
   </data>
   <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
     <value>Setări de înregistrare audio pentru atribuire {{id}}</value>
@@ -361,7 +364,7 @@
     <value>Comentariu</value>
   </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Selectați responsabilul (sediul central sau supraveghetorul sau intervievatorul) pentru această sarcină</value>
+    <value>Selectați responsabilul (coordonatorii sau supervizorul sau anchetatorul) pentru această sarcină</value>
   </data>
   <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
     <value>Această sarcină va fi utilizată în modul Web</value>
@@ -472,7 +475,7 @@
     <value>Sarcina a fost creată în modul Web</value>
   </data>
   <data name="WebMode" xml:space="preserve">
-    <value>Modul Web</value>
+    <value>Modul</value>
   </data>
   <data name="WebModeNonInterviewer" xml:space="preserve">
     <value>Toate sarcinile pentru interviuri web trebuie alocate unor anchetatori</value>
@@ -485,5 +488,20 @@
   </data>
   <data name="Action_Reassigned_To_Comment" xml:space="preserve">
     <value>Comentariu: {{comment}}</value>
+  </data>
+  <data name="DateFromPast" xml:space="preserve">
+    <value>Data selectată este în trecut</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>(fără comentarii)</value>
+  </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>A apărut o eroare. Încercați mai târziu.</value>
+  </data>
+  <data name="UpgradeProgressErrors" xml:space="preserve">
+    <value>Cu erori {{errorCount}}</value>
+  </data>
+  <data name="WebModeEnabledWarning" xml:space="preserve">
+    <value>Sarcina nu poate fi terminată. Are modul web activat, în timp ce chestionarul are modul de colectare web dezactivat</value>
   </data>
 </root>

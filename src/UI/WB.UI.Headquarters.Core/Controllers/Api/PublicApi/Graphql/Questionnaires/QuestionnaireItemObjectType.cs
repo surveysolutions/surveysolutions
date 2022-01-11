@@ -45,13 +45,21 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                 .Name("type")
                 .Type<QuestionTypeObjectType>();
 
+            descriptor.Field(x => x.VariableType)
+                .Name("variableType")
+                .Type<VariableTypeObjectType>();
+
             descriptor.Field(x => x.Featured)
                 .Name("identifying")
                 .Type<BooleanType>();
 
+            descriptor.Field(x => x.IncludedInReportingAtUtc)
+                .Name("includedInReportingAtUtc")
+                .Type<DateTimeType>();
+
             descriptor.Field("options")
                 .Name("options")
-                .Resolver(context => 
+                .Resolve(async context => await
                     context.BatchDataLoader<int, List<CategoricalOption>>(async (keys, token) =>
                     {
                         var unitOfWork = context.Service<IUnitOfWork>();
@@ -85,7 +93,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                                 return new List<CategoricalOption>();
                             });
                       
-                    },"optionsByQuestion").LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default))
+                    },"optionsByQuestion").LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default).ConfigureAwait(false))
                 .Type<NonNullType<ListType<NonNullType<CategoricalOptionType>>>>();
         }
     }

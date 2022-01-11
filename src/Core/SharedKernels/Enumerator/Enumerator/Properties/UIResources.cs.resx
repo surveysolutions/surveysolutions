@@ -124,7 +124,7 @@
     <value>Odpověď přijata. {0} na zpracování</value>
   </data>
   <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
-    <value>Zavrhnout</value>
+    <value>Zamítnout</value>
   </data>
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
     <value>AKTIVNÍ MAPA:</value>
@@ -174,9 +174,6 @@
   <data name="AreaMap_NoMapsFound" xml:space="preserve">
     <value>Nebyla nalezena žádná mapa. Aktualizujte si mapy na Vašem zařízení</value>
   </data>
-  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
-    <value>Perimeter: {0:0.00} m</value>
-  </data>
   <data name="AreaMap_PointsFormat" xml:space="preserve">
     <value>Body: {0}</value>
   </data>
@@ -218,9 +215,6 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   <data name="Dashboard_EmptySearchResult" xml:space="preserve">
     <value>Nebyly nalezeny žádné dotazníky</value>
   </data>
-  <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
-    <value>{0:dd MMM HH:mm}</value>
-  </data>
   <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
     <value>Moje dotazníky</value>
   </data>
@@ -238,12 +232,6 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   </data>
   <data name="Device_Does_Not_Support" xml:space="preserve">
     <value>Vaše zařízení nepodporuje tuto funkcionalitu</value>
-  </data>
-  <data name="EndpointHint" xml:space="preserve">
-    <value>Synchronization endpoint</value>
-  </data>
-  <data name="EndpointText" xml:space="preserve">
-    <value>Web Service Endpoint:</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Chyba</value>
@@ -267,7 +255,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Aplikaci není uděleno oprávnění k vlastní aktualizaci. V nabídce nastavení „Informace o aplikaci“ povolte možnost „Povolit z tohoto zdroje“.</value>
   </data>
   <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
-    <value>Vypršel časový limit při připojení k Survey Solutions Supervisor. Zkontrolujte připojení k internetu.</value>
+    <value>Vypršel časový limit při připojení k Survey Solutions Designer. Zkontrolujte připojení k internetu.</value>
   </data>
   <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
     <value>Nelze se připojit k Survey Solutions Designer. Ujistěte se, že je stránka k dispozici.</value>
@@ -276,7 +264,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Vaše uživatelské jméno nebo heslo je chybné</value>
   </data>
   <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
-    <value>Byla nalezena nová verze aplikace. Aplikaci si prosím aktualizujte</value>
+    <value>Byla nalezena nová verze aplikace. Aktualizujte si ji.</value>
   </data>
   <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
     <value>Klepnutím zadejte text</value>
@@ -294,52 +282,52 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Vaše poznámka</value>
   </data>
   <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
-    <value>Na předchozí odpověď</value>
+    <value>K předchozí odpovědi</value>
   </data>
   <data name="Interview_Comment_Resolve" xml:space="preserve">
     <value>Vyřešeno</value>
   </data>
   <data name="Interview_Complete_Answered" xml:space="preserve">
-    <value>Odpovězeno</value>
+    <value>Vyplněno</value>
   </data>
   <data name="Interview_Complete_Button" xml:space="preserve">
-    <value>Dokončit</value>
+    <value>Uzamknout</value>
   </data>
   <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
-    <value>Po dokončení tohoto rozhovoru bude dotazník označen jako dokončený a během příští synchronizace bude odeslán garantovi.</value>
+    <value>Po dokončení bude dotazník označen jako uzamčený a během příští synchronizace bude odeslán garantovi.</value>
   </data>
   <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
-    <value>Subjekty s chybami:</value>
+    <value>Otázky s chybou:</value>
   </data>
   <data name="Interview_Complete_Errors" xml:space="preserve">
-    <value>Chyba</value>
+    <value>Chybně</value>
   </data>
   <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
-    <value>První {0} subjekt s chybami:</value>
+    <value>První {0} otázky s chybami:</value>
   </data>
   <data name="Interview_Complete_No" xml:space="preserve">
-    <value>Ne</value>
+    <value>0</value>
   </data>
   <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
     <value>Poznámka pro garanta</value>
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
-    <value>Stav otázek</value>
+    <value>Přehled vyplněnosti otázek</value>
   </data>
   <data name="Interview_Complete_Screen_Description" xml:space="preserve">
-    <value>Chystáte se dokončit tento rozhovor</value>
+    <value>Chystáte se dokončit tento dotazník</value>
   </data>
   <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
-    <value>Chystáte se dokončit rozhovor {0}</value>
+    <value>Chystáte se dokončit dotazník {0}</value>
   </data>
   <data name="Interview_Complete_Screen_Title" xml:space="preserve">
     <value>Dokončit</value>
   </data>
   <data name="Interview_Complete_Unanswered" xml:space="preserve">
-    <value>Nezodpovězeno</value>
+    <value>Nevyplněno</value>
   </data>
   <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
-    <value>Pro dokončení obrazovky</value>
+    <value>Dokončit</value>
   </data>
   <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
     <value>První {0} otázek s poznámkou:</value>
@@ -351,7 +339,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Úvod</value>
   </data>
   <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
-    <value>Není komentář pro garanta</value>
+    <value>Není poznámka pro garanta</value>
   </data>
   <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
     <value>Poznámka garanta:</value>
@@ -387,7 +375,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>žádné podsekce</value>
   </data>
   <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
-    <value>Komentář ústředí</value>
+    <value>Poznámka od ústředí</value>
   </data>
   <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
     <value>Ukázat nápovědu</value>
@@ -411,7 +399,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Další sekce</value>
   </data>
   <data name="Interview_Other_Comment_Caption" xml:space="preserve">
-    <value>Uživatelský komentář</value>
+    <value>Uživatelská poznámka</value>
   </data>
   <data name="Interview_Overview" xml:space="preserve">
     <value>Výpis dotazníku</value>
@@ -474,7 +462,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Odpověď by neměla být prázdná</value>
   </data>
   <data name="Interview_Question_Text_MaskError" xml:space="preserve">
-    <value>Vyplňte prosím všechny požadované hodnoty</value>
+    <value>Vyplňte všechny požadované hodnoty</value>
   </data>
   <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
     <value>Klepnutím upravte oblast</value>
@@ -516,7 +504,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Přihlaste se zde</value>
   </data>
   <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
-    <value>Komentář garanta</value>
+    <value>Poznámka garanta</value>
   </data>
   <data name="Interview_TakeSignature" xml:space="preserve">
     <value>Uložit podpis</value>
@@ -534,7 +522,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Hotovo</value>
   </data>
   <data name="Interviewer_Reassign_Comment" xml:space="preserve">
-    <value>Napsat komentář pro další zodpovědnou osobu</value>
+    <value>Napsat komentář pro nadřízenou osobu</value>
   </data>
   <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
     <value>Zrušit</value>
@@ -549,7 +537,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Pokud znovu připojíte toto zařízení &lt;br/&gt; všechna data ve starém zařízení budou ztracena</value>
   </data>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
-    <value>Přihlaste se online</value>
+    <value>Přihlaste se, až budete připojeni k internetu</value>
   </data>
   <data name="InterviewKey" xml:space="preserve">
     <value>Číslo dotazníku: {0}</value>
@@ -570,16 +558,16 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Všechny dotazníky</value>
   </data>
   <data name="MapDashboard_Assignments" xml:space="preserve">
-    <value>Přiřazené dotazníky</value>
+    <value>Nové rozhovory</value>
   </data>
   <data name="MapDashboard_Disclaimer" xml:space="preserve">
-    <value>jsou zobrazeny pouze položky se známými souřadnicemi</value>
+    <value>Na mapě jsou zobrazeny pouze rozhovory se známými souřadnicemi</value>
   </data>
   <data name="MapDashboard_FiltersTitle" xml:space="preserve">
     <value>Filtr</value>
   </data>
   <data name="MapDashboard_Interviews" xml:space="preserve">
-    <value>Rozhovory</value>
+    <value>Rozpracované dotazníky</value>
   </data>
   <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
     <value>Dotazník</value>
@@ -757,5 +745,29 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Ano</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Poznámka</value>
+  </data>
+  <data name="ConfirmNewPasswordHint" xml:space="preserve">
+    <value>Potvrzení nového hesla</value>
+  </data>
+  <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
+    <value>Přepnout na dotazníky ve webovém režimu</value>
+  </data>
+  <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
+    <value>Tento dotazník bude přístupný online po synchronizaci. Pro přístup k dotazníku respondent zadá níže uvedený odkaz v prohlížeči na počítači, tabletu nebo smartphonu připojeném k internetu. Odkaz lze také naskenovat pomocí QR kódu zobrazeného níže.</value>
+  </data>
+  <data name="NewPasswordHint" xml:space="preserve">
+    <value>Nové heslo</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>Neobsahuje žádnou poznámku</value>
+  </data>
+  <data name="OldPasswordHint" xml:space="preserve">
+    <value>Současné heslo</value>
+  </data>
+  <data name="PasswordMatchError" xml:space="preserve">
+    <value>Heslo musí být stejné</value>
   </data>
 </root>

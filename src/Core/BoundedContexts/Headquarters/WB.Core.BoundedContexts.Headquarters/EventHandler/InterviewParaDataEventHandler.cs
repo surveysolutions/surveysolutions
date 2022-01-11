@@ -26,6 +26,8 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     public class InterviewParaDataEventHandler :
+        IUpdateHandler<InterviewHistoryView, InterviewCreated>,
+        IUpdateHandler<InterviewHistoryView, InterviewOnClientCreated>,
         IUpdateHandler<InterviewHistoryView, SupervisorAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewHistoryView, InterviewerAssigned>,
@@ -68,7 +70,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, InterviewResumed>,
         IUpdateHandler<InterviewHistoryView, InterviewOpenedBySupervisor>,
         IUpdateHandler<InterviewHistoryView, InterviewClosedBySupervisor>,
-        IUpdateHandler<InterviewHistoryView, TranslationSwitched>
+        IUpdateHandler<InterviewHistoryView, TranslationSwitched>,
+        IUpdateHandler<InterviewHistoryView, InterviewModeChanged>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IUserViewFactory userReader;
@@ -851,6 +854,38 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var result = this.CreateVariableParameters(variableId, propagationVector);
             result.Add("value", newValue?.ToString() ?? string.Empty);
             return result;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewModeChanged> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.InterviewModeChanged, @event.Payload.UserId,
+                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.Offset,
+                new Dictionary<string, string>()
+                {
+                    { "mode", @event.Payload.Mode.ToString() },
+                    { "comment", @event.Payload.Comment }
+                });
+
+            return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewCreated> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.InterviewCreated, @event.Payload.UserId,
+                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.Offset);
+
+            return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewOnClientCreated> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.InterviewCreated, @event.Payload.UserId,
+                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.Offset);
+
+            return state;
         }
     }
 }

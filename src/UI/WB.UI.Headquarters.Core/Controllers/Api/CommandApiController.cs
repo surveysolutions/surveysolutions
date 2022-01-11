@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -44,17 +45,19 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IInterviewFactory interviewFactory;
         private ICommandTransformator commandTransformator;
         private readonly ICalendarEventService calendarEventService;
+        private readonly IAssignmentsService assignmentsStorage;
 
         public CommandApiController(
             ICommandService commandService, ICommandDeserializer commandDeserializer,
             IInterviewFactory interviewFactory, ICommandTransformator commandTransformator, 
-            ICalendarEventService calendarEventService)
+            ICalendarEventService calendarEventService, IAssignmentsService assignmentsStorage)
         {
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
             this.interviewFactory = interviewFactory;
             this.commandTransformator = commandTransformator;
             this.calendarEventService = calendarEventService;
+            this.assignmentsStorage = assignmentsStorage;
         }
 
         [HttpPost]
@@ -85,7 +88,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 try
                 {
                     ICommand concreteCommand = this.commandDeserializer.Deserialize(request.Type, request.Command);
-                    ICommand transformedCommand = this.commandTransformator.TransformCommnadIfNeeded(concreteCommand);
+                    ICommand transformedCommand = this.commandTransformator.TransformCommandIfNeeded(concreteCommand);
 
                     switch (transformedCommand)
                     {
@@ -117,6 +120,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                             this.commandService.Execute(transformedCommand);
                             CompleteCalendarEventIfExists(approveInterview.InterviewId, approveInterview.UserId);
                             break;
+                        case ChangeInterviewModeCommand changeInterviewMode:
+                            this.commandService.Execute(changeInterviewMode);
+                            break;
                         default:
                             this.commandService.Execute(transformedCommand);
                             break;
@@ -145,8 +151,13 @@ namespace WB.UI.Headquarters.Controllers.Api
         private void CompleteCalendarEventIfExists(Guid interviewId, Guid userId)
         {
             var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
+
             if (calendarEvent != null && !calendarEvent.IsCompleted())
-                this.commandService.Execute(new CompleteCalendarEventCommand(calendarEvent.PublicKey,userId));
+            {
+                var assignment = this.assignmentsStorage.GetAssignment(calendarEvent.AssignmentId);
+                this.commandService.Execute(
+                    new CompleteCalendarEventCommand(calendarEvent.PublicKey, userId, assignment.QuestionnaireId));
+            }
         }
         
         public class JsonCommandBaseRequest

@@ -1,5 +1,6 @@
 using System;
 using Android.Gms.Common;
+using MvvmCross;
 using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -9,9 +10,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
 
-        public GoogleApiService(IMvxAndroidCurrentTopActivity androidCurrentTopActivity)
+        public GoogleApiService()
         {
-            this.androidCurrentTopActivity = androidCurrentTopActivity;
+            this.androidCurrentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();;
         }
 
         public GoogleApiConnectionStatus GetPlayServicesConnectionStatus() =>

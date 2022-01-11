@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -28,6 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<SynchronizationMetadataApplied>,
                                          IEventHandler<InterviewSynchronized>,
                                          IEventHandler<InterviewStatusChanged>,
+                                         IEventHandler<InterviewModeChanged>,
                                          IEventHandler<InterviewHardDeleted>,
                                          IEventHandler<InterviewerAssigned>,
                                          IEventHandler<SupervisorAssigned>,
@@ -65,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
         private readonly IAssignmentDocumentsStorage assignmentStorage;
         private readonly ICalendarEventStorage calendarEventStorage;
 
-        public InterviewDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository, 
+        public InterviewDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository,
             IPlainStorage<PrefilledQuestionView> prefilledQuestions,
             IQuestionnaireStorage questionnaireRepository,
             IAnswerToStringConverter answerToStringConverter,
@@ -669,6 +671,16 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 Answer = stringValue,
             };
             return prefilledView;
+        }
+
+        public void Handle(IPublishedEvent<InterviewModeChanged> evnt)
+        {
+            InterviewView interviewView = this.interviewViewRepository.GetById(evnt.EventSourceId.FormatGuid());
+            if (interviewView == null)
+                return;
+
+            interviewView.Mode = evnt.Payload.Mode;
+            this.interviewViewRepository.Store(interviewView);
         }
     }
 }

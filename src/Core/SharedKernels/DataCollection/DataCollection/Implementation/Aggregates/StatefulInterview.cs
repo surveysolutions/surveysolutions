@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Ncqrs;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -17,7 +16,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Events;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -111,11 +109,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.sourceInterview = this.Tree.Clone();
         }
 
-        public void Apply(InterviewAnswersFromSyncPackageRestored @event)
-        {
-
-        }
-
         protected override void Apply(InterviewCompleted @event)
         {
             base.Apply(@event);
@@ -155,6 +148,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public DateTimeOffset? StartedDate => this.properties.StartedDate;
         public DateTimeOffset? CompletedDate => this.properties.CompletedDate;
         public InterviewStatus Status => this.properties.Status;
+        public InterviewMode Mode => this.properties.Mode;
+
         public bool IsDeleted => this.properties.IsHardDeleted || this.Status == InterviewStatus.Deleted;
 
         public Guid Id => this.EventSourceId;
@@ -469,7 +464,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public int CountInvalidEntitiesInInterviewForSupervisor() => this.GetInvalidEntitiesInInterviewForSupervisor().Count();
 
-
         public int CountAllEnabledAnsweredQuestions()
             => this.GetEnabledNotHiddenQuestions().Count(question => question.IsAnswered());
         public int CountAllEnabledQuestions() => this.GetEnabledNotHiddenQuestions().Count();
@@ -525,7 +519,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var allCommentedQuestions = this.GetCommentedBySupervisorNonResolvedQuestions();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            return allCommentedQuestions.Where(identity => questionnaire.IsInterviewierQuestion(identity.Id));
+            return allCommentedQuestions.Where(identity => questionnaire.IsInterviewerQuestion(identity.Id));
         }
 
         public IEnumerable<Identity> GetCommentedBySupervisorNonResolvedQuestions()
@@ -568,11 +562,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
             => this.GetAllChildrenOrEmptyList(groupIdentity)
-                .OfType<InterviewTreeQuestion>()
+                .Where(x=> x.NodeType == NodeType.Question)
                 .Select(question => question.Identity);
 
         private IEnumerable<IInterviewTreeNode> GetAllChildrenOrEmptyList(Identity groupIdentity)
-            => this.Tree.GetGroup(groupIdentity)?.Children ?? new List<IInterviewTreeNode>();
+            => this.Tree.GetGroup(groupIdentity)?.Children ?? Array.Empty<IInterviewTreeNode>();
 
         public List<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
             => this.GetAllChildrenOrEmptyList(parentIdentity)
@@ -588,7 +582,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(x => x.Identity);
 
         private IEnumerable<InterviewTreeGroup> GetGroupsAndRostersInGroup(Identity group)
-            => this.Tree.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
+            => this.Tree.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? Array.Empty<InterviewTreeGroup>();
 
         public IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>();
@@ -853,6 +847,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return !IsDeleted && (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.Restarted || Status == InterviewStatus.RejectedBySupervisor);
         }
 
+        public bool AcceptsCAWIAnswers()
+        {
+            return !IsDeleted && properties.AcceptsCAWIAnswers;
+        }
+
         public IReadOnlyCollection<IInterviewTreeNode> GetAllSections()
         {
             return this.Tree.Sections;
@@ -895,6 +894,55 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             return questionnaire.GetAttachmentIdByName(attachmentName);
+        }
+
+        public InterviewSimpleStatus GetInterviewSimpleStatus(bool includingSupervisorEntities)
+        {
+            int invalidEntities = includingSupervisorEntities
+                ? this.CountInvalidEntitiesInInterviewForSupervisor()
+                : this.CountInvalidEntitiesInInterview();
+
+            int activeQuestionsCount = includingSupervisorEntities
+                ? this.CountActiveQuestionsInInterviewForSupervisor()
+                : this.CountActiveQuestionsInInterview();
+
+            int answeredQuestionsCount = includingSupervisorEntities
+                ? this.CountActiveAnsweredQuestionsInInterviewForSupervisor()
+                : this.CountActiveAnsweredQuestionsInInterview();
+
+            var simpleStatus = (invalidEntities > 0)
+                ? SimpleGroupStatus.Invalid
+                : ((activeQuestionsCount == answeredQuestionsCount)
+                    ? SimpleGroupStatus.Completed
+                    : SimpleGroupStatus.Other);
+
+            var status = GetGroupStatus(simpleStatus, activeQuestionsCount, answeredQuestionsCount);
+
+            return new InterviewSimpleStatus()
+            {
+                Status = status,
+                SimpleStatus = simpleStatus,
+                ActiveQuestionCount = activeQuestionsCount,
+                AnsweredQuestionsCount = answeredQuestionsCount
+            };
+        }
+
+        private GroupStatus GetGroupStatus(SimpleGroupStatus simpleStatus, int questionsCount, int answeredQuestionsCount)
+        {
+            switch (simpleStatus)
+            {
+                case SimpleGroupStatus.Completed:
+                    return GroupStatus.Completed;
+
+                case SimpleGroupStatus.Invalid:
+                    return questionsCount == answeredQuestionsCount ? GroupStatus.CompletedInvalid : GroupStatus.StartedInvalid;
+
+                case SimpleGroupStatus.Other:
+                    return answeredQuestionsCount > 0 ? GroupStatus.Started : GroupStatus.NotStarted;
+
+                default:
+                    return GroupStatus.Started;
+            }			
         }
 
         public bool IsParentOf(Identity parentIdentity, Identity childIdentity)

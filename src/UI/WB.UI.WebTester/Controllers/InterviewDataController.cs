@@ -24,7 +24,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getTopFilteredOptionsForQuestion")]
-        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count)
+        public DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count)
             => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count);
 
         [HttpGet]
@@ -56,7 +56,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getInterviewStatus")]
-        public override GroupStatus GetInterviewStatus(Guid interviewId) => base.GetInterviewStatus(interviewId);
+        public override InterviewSimpleStatus GetInterviewStatus(Guid interviewId) => base.GetInterviewStatus(interviewId);
 
         [HttpGet]
         [Route("getNavigationButtonState")]

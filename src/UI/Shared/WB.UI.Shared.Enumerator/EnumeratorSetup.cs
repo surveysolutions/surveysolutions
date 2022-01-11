@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Android.Gms.Maps;
 using Android.Runtime;
 using Android.Views;
-using Android.Webkit;
 using Android.Widget;
 using AndroidX.AppCompat.Widget;
 using AndroidX.DrawerLayout.Widget;
@@ -15,14 +14,19 @@ using Com.Google.Android.Exoplayer2.UI;
 using FFImageLoading.Cross;
 using Google.Android.Material.Button;
 using Google.Android.Material.TextField;
+using Microsoft.Extensions.Logging;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Binding.Combiners;
 using MvvmCross.Converters;
 using MvvmCross.DroidX.RecyclerView;
-using MvvmCross.Logging;
+using MvvmCross.IoC;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
+using NLog;
+using NLog.Extensions.Logging;
+using Serilog;
+using Serilog.Extensions.Logging;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -80,20 +84,41 @@ namespace WB.UI.Shared.Enumerator
         {
             NLog.LogManager.GetCurrentClassLogger().Error(exception);
         }
-
-        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
+        
+        
+        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, IMvxIoCProvider iocProvider)
         {
-            var lookup = base.InitializeViewLookup(viewModelViewLookup);
+            var lookup = base.InitializeViewLookup(viewModelViewLookup, iocProvider);
             lookup.Add<EnumerationStageViewModel, InterviewEntitiesListFragment>();
             lookup.Add<CoverInterviewViewModel, CoverInterviewFragment>();
             lookup.Add<OverviewViewModel, OverviewFragment>();
-            lookup.Add<PdfViewModel, PdfViewFragment>();
             lookup.Add<OverviewNodeDetailsViewModel, OverviewNodeDetailsFragment>();
             lookup.Add<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentFragment>();
             return lookup;
         }
 
-        public override MvxLogProviderType GetDefaultLogProviderType() => MvxLogProviderType.NLog;
+        protected override ILoggerProvider CreateLogProvider()
+        {
+            return new NLogLoggerProvider();
+            //return new SerilogLoggerProvider();
+        }
+
+        protected override ILoggerFactory CreateLogFactory()
+        {
+            //configure it
+            return new NLogLoggerFactory();
+
+            // // serilog configuration
+            //Log.Logger = new LoggerConfiguration()
+            //    .MinimumLevel.Debug()
+            //    .WriteTo.AndroidLog()
+            //    .CreateLogger();
+
+            //return new SerilogLoggerFactory();
+        }
+        
+        
+        //public override MvxLogProviderType GetDefaultLogProviderType() => MvxLogProviderType.NLog;
 
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)
         {
@@ -164,12 +189,12 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<EditText>("TextChanged", (editText) => new EditTextChangedBinding(editText));
             registry.RegisterCustomBindingFactory<FrameLayout>("CurrentScreen", (frameLayout) => new FrameLayoutCurrentScreenBinding(frameLayout));
             registry.RegisterCustomBindingFactory<ImageView>("BitmapWithFallback", (img) => new ImageViewBitmapWithFallbackBinding(img));
+            registry.RegisterCustomBindingFactory<ImageView>("QRCode", img => new ImageViewQRCodeBinding(img));
             registry.RegisterCustomBindingFactory<PlayerView>("Video", player => new ExoPlayerBinding(player));
             registry.RegisterCustomBindingFactory<PlayerView>("Audio", player => new ExoPlayerAudioAttachmentBinding(player));
             registry.RegisterCustomBindingFactory<View>("SizeByNoiseLevel", (view) => new AudioSizeByNoiseLevelBinding(view));
             registry.RegisterCustomBindingFactory<View>("Tag", (img) => new ViewTagBinding(img));
             registry.RegisterCustomBindingFactory<SignaturePadView>("Signature", (view) => new SignatureBinding(view));
-            registry.RegisterCustomBindingFactory<WebView>("PdfFilePath", (view) => new WebViewPdfFilePathBinding(view));
             registry.RegisterCustomBindingFactory<SignaturePadView>("SignaturePadSettings", (view) => new SignaturePadSettingsBinding(view));
             registry.RegisterCustomBindingFactory<ImageButton>("Playback", (view) => new ImageButtonPlaybackToggleBinding(view));
             registry.RegisterCustomBindingFactory<RecyclerView>("ScrollToPosition", view => new RecyclerViewScrollToPositionBinding(view));

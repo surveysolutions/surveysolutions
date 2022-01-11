@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using MvvmCross.Plugin.Messenger;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>>
                 {DefaultValue = DefaultValue.Mock};
             var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(),
-                Mock.Of<IUserInterfaceStateService>(), Mock.Of<IMvxMessenger>(), Mock.Of<ILogger>());
+                Mock.Of<IUserInterfaceStateService>(),  Mock.Of<ILogger>());
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId
@@ -140,7 +141,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             Mock<AnsweringViewModel> answeringViewModelMock;
             string interviewId;
             Guid userId;
-            interviewId = "interviewId";
+            interviewId = Id.g1.FormatGuid();
             userId = Guid.NewGuid();
 
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
@@ -172,7 +173,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             viewModel.Init(interviewId, questionIdentity, navigationState);
             await viewModel.SaveAnswerAsync(4);
 
-            answeringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerSingleOptionQuestionCommand>(y => y.SelectedValue == 4)), Times.Once);
+            answeringViewModelMock.Verify(x => x.SendQuestionCommandAsync(Moq.It.Is<AnswerSingleOptionQuestionCommand>(y => y.SelectedValue == 4)), Times.Once);
         }
 
         [Test]

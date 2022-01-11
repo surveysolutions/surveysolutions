@@ -12,20 +12,24 @@ namespace WB.UI.Headquarters.Code
 {
     public class PublicApiJsonAttribute : ActionFilterAttribute
     {
-        public override void OnActionExecuted(ActionExecutedContext ctx)
-        {
-            if (ctx.Result is ObjectResult objectResult)
-            {
-                var jsonSerializerSettings = new JsonSerializerSettings
+        public static readonly JsonSerializerSettings PublicApiSerializerSettings =
+            new JsonSerializerSettings
                 {
                     ContractResolver = new DefaultContractResolver
                     {
                         NamingStrategy = new DefaultNamingStrategy()
-                    }
+                    },
+                    Converters = {new EnumToStringConverter()}
                 };
-                jsonSerializerSettings.Converters.Add(new EnumToStringConverter());
+                
+        
+
+        public override void OnActionExecuted(ActionExecutedContext ctx)
+        {
+            if (ctx.Result is ObjectResult objectResult)
+            {
                 objectResult.Formatters.Add(new NewtonsoftJsonOutputFormatter(
-                    jsonSerializerSettings,
+                    PublicApiSerializerSettings,
                     ctx.HttpContext.RequestServices.GetRequiredService<ArrayPool<char>>(),
                     ctx.HttpContext.RequestServices.GetRequiredService<IOptions<MvcOptions>>().Value));
             }

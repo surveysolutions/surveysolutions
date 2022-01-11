@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 
 namespace WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions
@@ -41,9 +42,9 @@ namespace WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersion
             this.dbContext.SaveChanges();
         }
 
-        public QuestionnaireCompilationVersion GetById(Guid id)
+        public QuestionnaireCompilationVersion GetById(Guid questionnaireId)
         {
-            return this.dbContext.QuestionnaireCompilationVersions.Find(id);
+            return this.dbContext.QuestionnaireCompilationVersions.Find(questionnaireId);
         }
     }
 }

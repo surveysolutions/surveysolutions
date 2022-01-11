@@ -118,58 +118,58 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="WB0001_NoQuestions" xml:space="preserve">
-    <value>Chestionarul trebuie să conțină cel puțin o întrebare</value>
+    <value>Chestionarul trebuie să conțină cel puțin o întrebare.</value>
   </data>
   <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
-    <value>Condiția de validare are o eroare de sintaxă</value>
+    <value>Condiția de validare are o eroare de sintaxă.</value>
   </data>
   <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
-    <value>Condiția de activare are o eroare de sintaxă</value>
+    <value>Condiția de activare are o eroare de sintaxă.</value>
   </data>
   <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
-    <value>Variabila nu poate fi necompletată</value>
+    <value>Variabila nu poate avea expresie goală.</value>
   </data>
   <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Variabila are o lungime mai mare de {0} caractere</value>
+    <value>Expresia variabilei are o lungime mai mare de {0} caractere.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Numai o singură întrebare de GPS poate fi marcată ca fiind întrebare de identificare</value>
+    <value>Numai o singură întrebare GPS poate fi stabilită ca întrebare de identificare</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
-    <value>O întrebare cu răspunsuri multiple de tipul da/nu nu poate fi legată</value>
+    <value>Întrebarea cu selectare multiplă da/nu nu poate fi legată</value>
   </data>
   <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
     <value>Nu este permisă utilizarea de substituiri în eticheta variabilei</value>
   </data>
   <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
-    <value>Dimensiunea intrebarii de tip lista lipseste </value>
+    <value>Întrebarea privind dimensiunea listei lipsește.</value>
   </data>
   <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
-    <value>Macrocomanda are un nume eronat</value>
+    <value>Macrocomanda are un nume nevalid.</value>
   </data>
   <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Întrebarea se leagă de o altă întrebare inexistentă</value>
+    <value>Întrebarea legată face trimitere la o întrebare inexistentă.</value>
   </data>
   <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
-    <value>Întrebarea se leagă de o altă întrebare al cărui tip nu este acceptat pentru legare</value>
+    <value>Întrebarea legată face referire la un tip de întrebare care nu este acceptat.</value>
   </data>
   <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
-    <value>Întrebarea se leagă de o altă întrebare care nu se află într-o listă</value>
+    <value>Întrebarea legată face trimitere la o întrebare care nu se află într-o listă.</value>
   </data>
   <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
-    <value>Macrocomanda nu poate avea numele gol</value>
+    <value>Macrocomanda nu poate avea numele gol.</value>
   </data>
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
-    <value>Întrebarea care conține substituiri de date în titlu sau instrucțiuni nu poate fi marcată ca întrebare de identificare</value>
+    <value>Întrebarea cu titlu sau care conține substituiri de date nu poate fi stabilită ca întrebare de identificare.</value>
   </data>
   <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
-    <value>Substituirea face legătura cu o variabilă sau întrebare inexistentă</value>
+    <value>Instrucțiunea de substituire face referire la o întrebare sau o variabilă inexistentă.</value>
   </data>
   <data name="WB0018_SubstitutionReferencesUnsupportedEntity" xml:space="preserve">
-    <value>Substituirea face legătura cu un element care nu este acceptat în substituiri</value>
+    <value>Instrucțiunea de substituire face referire la un element care nu este acceptat în substituiri.</value>
   </data>
   <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
-    <value>Substituirea nu poate face legătura cu elemente care sunt la un nivel inferior în liste</value>
+    <value>Instrucțiunea de substituire nu poate face referire la elemente aflate la un nivel inferior din listă.</value>
   </data>
   <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
     <value>Există o altă macrocomandă cu același nume</value>
@@ -178,22 +178,22 @@
     <value>Numărul maxim de răspunsuri este mai mare decât numărul de variante de răspuns</value>
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
-    <value>Acest tip de întrebare nu poate fi o întrebare de identificare</value>
+    <value>Acest tip de întrebare nu poate fi o întrebare de identificare.</value>
   </data>
   <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
-    <value>Întrebarea care este sursa mărimii listei este incorectă. Nu pot fi folosite decât întrebări numerice, categoriale cu selecție multiplă sau liste text.</value>
+    <value>Întrebarea care este sursa mărimii listei este incorectă. Pot fi utilizate numai întrebări numerice, categoriale, cu selecție multiplă sau liste de tip text.</value>
   </data>
   <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
-    <value>Tabelul de căutare are un nume eronat.</value>
+    <value>Tabelul de căutare are un nume nevalid.</value>
   </data>
   <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
     <value>Tabelul de căutare nu poate avea numele gol.</value>
   </data>
   <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
-    <value>Au fost găsite elemente cu același nume</value>
+    <value>Au fost găsite elemente cu același nume.</value>
   </data>
   <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
-    <value>Condiția are o eroare de sintaxă</value>
+    <value>Expresia are o eroare de sintaxă.</value>
   </data>
   <data name="WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
     <value>Condiția de filtrare are mai mult de {0} caractere</value>
@@ -232,7 +232,7 @@
     <value>Întrebarea de tip listă nu poate fi întrebare de identificare</value>
   </data>
   <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
-    <value>Întrebarea de tip listă nu poate fi completată de controlor</value>
+    <value>Întrebarea de tip listă nu poate fi completată de supervizor</value>
   </data>
   <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
     <value>Valorile din lista cu număr fix de elemente trebuie să fie unice</value>
@@ -259,7 +259,7 @@
     <value>Tabelul de căutare nu poate fi gol</value>
   </data>
   <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
-    <value>Întrebarea tip cod de bare nu poate fi completată de controlor</value>
+    <value>Întrebarea tip cod de bare nu poate fi completată de supervizor</value>
   </data>
   <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
     <value>Întrebarea tip cod de bare nu poate fi întrebare de identificare</value>
@@ -607,7 +607,7 @@
     <value>Întrebarea categorială are coduri de variante de răspuns neconsecutive. Verificați dacă există variante de răspuns omise.</value>
   </data>
   <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
-    <value>În validare se folosesc întrebări ale controlorului. Verificați corelațiile pentru situația de non-răspuns a controlorului sau instruiți controlorii să răspundă întotdeauna.</value>
+    <value>În validare se folosesc întrebări ale supervizorului. Verificați corelațiile pentru situația de non-răspuns a supervizorului sau instruiți supervizorii să răspundă întotdeauna.</value>
   </data>
   <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
     <value>Întrebări neconsecutive legate de un nivel superior. Vă trecomandăm să puneți întrebările una după alta.</value>
@@ -672,9 +672,6 @@
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Lista a atins limita de mărime. Reduceți dimensiunea listei sau reduceți nivelurie ierarhice.</value>
   </data>
-  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>Prima secțiune nu poate avea condiție de activare.</value>
-  </data>
   <data name="WB0264_GpsQuestion" xml:space="preserve">
     <value>Aveți o întrebare de localizare GPS. Tabletele trebuie să dispună de geolocalizare pentru a fi utilizate împreună cu acest chestionar.</value>
   </data>
@@ -718,7 +715,7 @@
     <value>Titlul chestionarului nu ar trebui să aibă două sau mai multe caractere underscore _ consecutive.</value>
   </data>
   <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-    <value>Modul simplu este permis numai pentru listele cu cel mult {0} elemente.</value>
+      <value>Modul simplu este permis numai pentru listele cu cel mult {0} întrebări sau texte statice.</value>
   </data>
   <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
     <value>Modul simplu nu permite utilizarea listelor cu niveluri ierarhice inferioare.</value>
@@ -739,7 +736,7 @@
     <value>Formatul tabular este permis numai pentru listele cu cel mult {0} întrebări.</value>
   </data>
   <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
-    <value>Lista în format tabular nu permite utilizarea întrebărilor controlorului.</value>
+    <value>Lista în format tabular nu permite utilizarea întrebărilor supervizorului.</value>
   </data>
   <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
     <value>Lista în format tabular permite utilizarea numai a întrebărilor text și numerice.</value>
@@ -784,7 +781,7 @@
     <value>Modul matricial este permis numai listelor cu cel mult {0} întrebări.</value>
   </data>
   <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
-    <value>Lista matricială nu trebuie să conțină întrebări pentru controlor sau întrebări de identificare.</value>
+    <value>Lista matricială nu trebuie să conțină întrebări pentru supervizor sau întrebări de identificare.</value>
   </data>
   <data name="WB0300" xml:space="preserve">
     <value>Întrebarea din lista matricială nu trebuie să conțină substituții de tipul %rostertitle%.</value>
@@ -821,5 +818,14 @@
   </data>
   <data name="WB0391" xml:space="preserve">
     <value>Textul static nu pate să facă legătură către varabile dintr-o listă de la un nivel inferior textului static.</value>
+  </data>
+  <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
+    <value>Variabilele din secțiunea Copertă trebuie să aibă etichetă.</value>
+  </data>
+  <data name="WB0312" xml:space="preserve">
+    <value>Variantele de răspuns trebuie să conțină cel puțin două opțiuni.</value>
+  </data>
+  <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
+    <value>Link către întrebare de tip ascuns nu este permis</value>
   </data>
 </root>

@@ -4,7 +4,6 @@ using System.Linq;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.Enumerator.Events;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
@@ -26,8 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             || IsCalculatedButNotAggregating(committedEvent, lastCompletionCommitId);
 
         private static bool IsInterviewerOnly(IEvent eventPayload)
-            => eventPayload is InterviewAnswersFromSyncPackageRestored
-            || eventPayload is InterviewSynchronized;
+            => eventPayload is InterviewSynchronized;
 
         private static bool IsCalculatedButNotAggregating(CommittedEvent committedEvent, Guid lastCompletionCommitId)
             => IsCalculated(committedEvent.Payload)

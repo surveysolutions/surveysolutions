@@ -15,7 +15,8 @@
             </div>
         </div>
         <div slot="headers">
-            <ol class="breadcrumb">
+            <ol class="breadcrumb"
+                v-if="!isOwnProfile">
                 <li>
                     <a v-bind:href="referrerUrl">{{referrerTitle}}</a>
                 </li>
@@ -32,28 +33,35 @@
                         v-bind:class=" {'active': currentTab == 'account'}" >
                         <a class="nav-link"
                             id="profile"
-                            v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a>
+                            v-bind:href="getUrl('Manage')">{{$t('Pages.AccountManage_Profile')}}</a>
                     </li>
                     <li class="nav-item"
                         v-if="showWorkspaces && !forceChangePassword"
                         v-bind:class=" {'active': currentTab == 'workspaces'}" >
                         <a class="nav-link"
                             id="profile"
-                            v-bind:href="getUrl(`../../Users/Workspaces`)">{{$t('Workspaces.UserWorkspacesTab')}}</a>
+                            v-bind:href="getUrl(`Workspaces`)">{{$t('Workspaces.UserWorkspacesTab')}}</a>
                     </li>
                     <li class="nav-item"
                         v-if="canChangePassword"
                         v-bind:class="{'active': currentTab=='password'}">
                         <a class="nav-link"
                             id="password"
-                            v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a>
+                            v-bind:href="getUrl('ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a>
                     </li>
                     <li class="nav-item"
                         v-if="!forceChangePassword"
                         v-bind:class="{'active': currentTab=='two-factor'}">
                         <a class="nav-link"
                             id="two-factor"
-                            v-bind:href="getUrl('../../Users/TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a>
+                            v-bind:href="getUrl('TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a>
+                    </li>
+                    <li class="nav-item"
+                        v-if="(isAdmin || isApiUser) && !forceChangePassword"
+                        v-bind:class="{'active': currentTab=='api-token'}">
+                        <a class="nav-link"
+                            id="two-factor"
+                            v-bind:href="getUrl('ApiTokens')">{{$t('Pages.AccountManage_ApiTokens')}}</a>
                     </li>
                 </ul>
 
@@ -111,54 +119,32 @@ export default {
             return this.isInterviewer
         },
         referrerTitle() {
-            const returnUrl = this.$route.query['returnUrl']
-            if(returnUrl != null) {
-                return this.$t('Dashboard.UsersManagement')
-            }
-
-            if (!this.isOwnProfile) {
-                if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
-                if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
-                if (this.isInterviewer) return this.$t('Pages.Profile_InterviewerProfile')
-                if (this.isObserver) return this.$t('Pages.Profile_ObserversList')
-                if (this.isApiUser) return this.$t('Pages.Profile_ApiUsersList')
-            }
-
-            return this.$t('Pages.Home')
+            return this.$t('Dashboard.UsersManagement')
         },
         showWorkspaces() {
             return this.$config.model.userInfo.canChangeWorkspacesList
         },
         referrerUrl() {
             const returnUrl = this.$route.query['returnUrl']
-            if(returnUrl != null) {
+            if(returnUrl != null && returnUrl.startsWith('/')) {
                 return returnUrl
             }
 
-            if (!this.isOwnProfile) {
-                if (this.isHeadquarters) return '../../Headquarters'
-                if (this.isSupervisor) return '../../Supervisors'
-                if (this.isInterviewer) return '../../Interviewer/Profile/' + this.userId
-                if (this.isObserver) return '../../Observers'
-                if (this.isApiUser) return '../../ApiUsers'
-            }
-
-            return '/'
+            return '/users/UsersManagement'
         },
 
     },
     methods:{
         getUrl: function(baseUrl){
             if(this.isOwnProfile)
-                return baseUrl
+                return `./${baseUrl}`
             else{
                 const returnUrl = this.$route.query['returnUrl']
-                if(returnUrl != null) {
-                    return `${baseUrl}/${this.userId}?returnUrl=${encodeURIComponent(returnUrl)}`
+                if(returnUrl != null && returnUrl.startsWith('/')) {
+                    return `../${baseUrl}/${this.userId}?returnUrl=${encodeURIComponent(returnUrl)}`
                 }
-                return `${baseUrl}/${this.userId}`
+                return `../${baseUrl}/${this.userId}`
             }
-
         },
     },
 }

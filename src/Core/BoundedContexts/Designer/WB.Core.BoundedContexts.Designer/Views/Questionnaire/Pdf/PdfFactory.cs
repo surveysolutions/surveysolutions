@@ -6,8 +6,11 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -18,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public interface IPdfFactory
     {
-        PdfQuestionnaireModel? Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation);
+        PdfQuestionnaireModel? Load(QuestionnaireRevision questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation);
         string? LoadQuestionnaireTitle(Guid questionnaireId);
     }
 
@@ -28,28 +31,28 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         private readonly DesignerDbContext dbContext;
         private readonly PdfSettings pdfSettings;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
-        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly ICategoriesService categoriesService;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
 
         public PdfFactory(
             DesignerDbContext dbContext, 
             ITranslationsService translationService,
             IOptions<PdfSettings> pdfSettings,
             IQuestionnaireTranslator questionnaireTranslator,
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            ICategoriesService categoriesService)
+            ICategoriesService categoriesService,
+            IQuestionnaireViewFactory questionnaireViewFactory)
         {
             this.dbContext = dbContext;
             this.translationService = translationService;
             this.pdfSettings = pdfSettings.Value;
             this.questionnaireTranslator = questionnaireTranslator;
-            this.questionnaireStorage = questionnaireStorage;
             this.categoriesService = categoriesService;
+            this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
-        public PdfQuestionnaireModel? Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
+        public PdfQuestionnaireModel? Load(QuestionnaireRevision questionnaireRevision, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
         {
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
+            var questionnaire = this.questionnaireViewFactory.Load(questionnaireRevision)?.Source;
             
             if (questionnaire == null || questionnaire.IsDeleted)
             {
@@ -73,8 +76,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
             }
 
-            var listItem = this.dbContext.Questionnaires.Where(x => x.QuestionnaireId == questionnaireId).Include(x => x.SharedPersons).First();
-            var sharedPersons =  listItem.SharedPersons;
+            var questionnaireId = questionnaireRevision.QuestionnaireId.FormatGuid();
+            var listItem = this.dbContext.Questionnaires
+                .Where(x => x.QuestionnaireId == questionnaireId)
+                .Include(x => x.SharedPersons)
+                .First();
+            var sharedPersons =  listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First());
 
             var modificationStatisticsByUsers = this.dbContext.QuestionnaireChangeRecords
                 .Where(x => x.QuestionnaireId == questionnaireId)

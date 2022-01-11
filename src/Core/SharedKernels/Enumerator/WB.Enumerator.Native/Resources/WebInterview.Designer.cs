@@ -19,7 +19,7 @@ namespace WB.Enumerator.Native.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class WebInterview {
@@ -515,6 +515,15 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview was not found..
+        /// </summary>
+        public static string InterviewNotFound {
+            get {
+                return ResourceManager.GetString("InterviewNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot modify interview that was received by device.
         /// </summary>
         public static string InterviewReceivedByInterviewer {
@@ -565,6 +574,15 @@ namespace WB.Enumerator.Native.Resources {
         public static string InvitationText {
             get {
                 return ResourceManager.GetString("InvitationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Link to web interview landing page example.
+        /// </summary>
+        public static string LinkToWebInterviewExample {
+            get {
+                return ResourceManager.GetString("LinkToWebInterviewExample", resourceCulture);
             }
         }
         

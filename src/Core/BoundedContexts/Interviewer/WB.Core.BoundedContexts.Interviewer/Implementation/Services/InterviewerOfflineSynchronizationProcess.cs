@@ -63,11 +63,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             if(this.RestCredentials == null)
                 throw new NullReferenceException("Rest credentials not set");
             var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.RestCredentials);
-            if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)
+            if (currentSupervisorId != ((IInterviewerUserIdentity)this.principal.CurrentUserIdentity).SupervisorId)
             {
                 this.UpdateSupervisorOfInterviewer(currentSupervisorId, this.RestCredentials.Login);
             }
         }
+        
+        protected override Task RefreshUserInfo(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        protected override Task ChangeWorkspaceAndNavigateToItAsync()
+            => throw new NotImplementedException("Remove workspace by offline synchronization no supported");
 
         private void UpdateSupervisorOfInterviewer(Guid supervisorId, string name)
         {

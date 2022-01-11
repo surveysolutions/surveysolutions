@@ -3,6 +3,7 @@
         :role="userInfo.role"
         :isOwnProfile="userInfo.isOwnProfile"
         :userName="userInfo.userName"
+        :canChangePassword="userInfo.canChangePassword"
         :userId="userInfo.userId"
         :currentTab="currentTab">
         <div >
@@ -59,13 +60,5 @@ export default {
             return this.userInfo.isOwnProfile
         },
     },
-    methods: {
-        getUrl: function(baseUrl){
-            if(this.isOwnProfile)
-                return baseUrl
-            else
-                return baseUrl + '/' + this.model.userInfo.userId
-
-        }},
 }
 </script>

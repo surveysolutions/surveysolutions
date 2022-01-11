@@ -316,6 +316,9 @@
   <data name="InterviewSizeLimitReached" xml:space="preserve">
     <value>Interview contains total number of roster instances and questions exceeding the system limits.</value>
   </data>
+  <data name="InterviewNotFound" xml:space="preserve">
+    <value>Interview was not found.</value>
+  </data>
   <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
     <value>Invitation to take a part in %SURVEYNAME%</value>
   </data>
@@ -368,5 +371,8 @@ Thank you for your cooperation!</value>
   <data name="Complete" xml:space="preserve">
     <value>Complete</value>
     <comment>Complete interview button text</comment>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Link to web interview landing page example</value>
   </data>
 </root>

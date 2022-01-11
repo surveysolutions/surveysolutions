@@ -6,6 +6,13 @@ namespace WB.UI.Interviewer.Implementations.Services
 {
     public class StoredEvent
     {
+        private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.All,
+            NullValueHandling = NullValueHandling.Ignore,
+            FloatParseHandling = FloatParseHandling.Decimal
+        };
+        
         public StoredEvent()
         {
         }
@@ -23,12 +30,7 @@ namespace WB.UI.Interviewer.Implementations.Services
         private string GetJsonData(object payload)
         {
             return JsonConvert.SerializeObject(
-                payload, Formatting.None, new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.All,
-                    NullValueHandling = NullValueHandling.Ignore,
-                    FloatParseHandling = FloatParseHandling.Decimal
-                });
+                payload, Formatting.None, Settings);
         }
 
         public string CommitId { get; set; }

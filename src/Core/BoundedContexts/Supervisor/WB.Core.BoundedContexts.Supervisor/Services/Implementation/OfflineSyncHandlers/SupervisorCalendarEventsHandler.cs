@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
@@ -33,7 +34,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly IJsonAllTypesSerializer serializer;
-        private readonly ILiteEventBus eventBus;
         private readonly IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAssignmentDocumentsStorage assignmentStorage;
@@ -44,7 +44,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             ICommandService commandService,
             ILogger logger,
             IJsonAllTypesSerializer serializer,
-            ILiteEventBus eventBus,
             IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog,
             IPlainStorage<InterviewView> interviewViewRepository,
             IAssignmentDocumentsStorage assignmentStorage)
@@ -54,7 +53,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             this.commandService = commandService;
             this.logger = logger;
             this.serializer = serializer;
-            this.eventBus = eventBus;
             this.receivedPackagesLog = receivedPackagesLog;
             this.interviewViewRepository = interviewViewRepository;
             this.assignmentStorage = assignmentStorage;
@@ -159,7 +157,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     && activeCalendarEvent.LastUpdateDateUtc < request.CalendarEvent.MetaInfo.LastUpdateDateTime
                     && !deleteCalendarEventAfterApplying)
                 {
-                    commandService.Execute(new DeleteCalendarEventCommand(activeCalendarEvent.Id, responsibleId));
+                    commandService.Execute(new DeleteCalendarEventCommand(activeCalendarEvent.Id, 
+                        responsibleId,
+                        new QuestionnaireIdentity( ) //dummy
+                        ));
                 }
                 
                 var calendarEvent = calendarEventStorage.GetById(request.CalendarEvent.CalendarEventId);
@@ -190,7 +191,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                             restoreCalendarEventBefore: restoreCalendarEventBefore,
                             restoreCalendarEventAfter: restoreCalendarEventAfter, 
                             deleteCalendarEventAfter: deleteCalendarEventAfterApplying,
-                            shouldRestorePreviousStateAfterApplying));
+                            shouldRestorePreviousStateAfterApplying,
+                            new QuestionnaireIdentity() //dummy
+                            ));
             
                 RecordProcessedPackageInfo(calendarEventStream);
             }

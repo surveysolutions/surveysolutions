@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Assignments.Validators;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents.Validators;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.CompletedEmails;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -21,15 +22,20 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DynamicReporting;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.Interview.Postprocessors;
+using WB.Core.BoundedContexts.Headquarters.Interview.Preprocessors;
+using WB.Core.BoundedContexts.Headquarters.Interview.Validators;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.Services.DynamicReporting;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
@@ -86,6 +92,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
@@ -187,7 +194,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<AssignmentDenormalizer>();
             registry.Bind<CompletedEmailDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
-            
+            registry.Bind<InterviewDynamicReportAnswersDenormalizer>();
+
             registry.Bind<CalendarEventDenormalizer>();
           
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
@@ -251,12 +259,16 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<InterviewSummaryErrorsCountPostProcessor>();
             registry.Bind<InterviewReceivedByInterviewerCommandValidator>();
             registry.Bind<QuestionnaireValidator>();
-            registry.Bind<WebModeResponsibleAssignmentValidator>();
+            registry.Bind<ResponsibleAssignmentValidator>();
+
+            registry.Bind<QuestionnaireStateForAssignmentValidator>();
+            registry.Bind<QuestionnaireStateForCalendarEventValidator>();
+            registry.Bind<QuestionnaireStateForInterviewValidator>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
             registry.Bind<ICalendarEventPackageService, CalendarEventPackageService>();
             
-            registry.Bind<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
+            registry.Bind<IExposedVariablesService, ExposedVariablesService>();
             registry.Bind<ISubstitutionService, SubstitutionService>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
 
@@ -372,6 +384,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindScheduledJob<DeleteQuestionnaireJob, DeleteQuestionnaireRequest>();
             registry.BindScheduledJob<UpgradeAssignmentJob, AssignmentsUpgradeProcess>();
             registry.BindScheduledJob<UsersImportJob, Unit>();
+            registry.BindScheduledJob<UpdateDynamicReportJob, UpdateDynamicReportRequest>();
 
             registry.Bind<CalendarEvent>();
 
@@ -390,16 +403,18 @@ namespace WB.Core.BoundedContexts.Headquarters
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
-                .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireValidator>())
+                .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, 
+                    config => config.ValidatedBy<QuestionnaireValidator>())
                 .InitializesWith<RegisterPlainQuestionnaire>(aggregate => aggregate.RegisterPlainQuestionnaire)
                 .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
                 .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire)
-                .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire, config => config.ValidatedBy<QuestionnaireValidator>());
+                .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire, 
+                    config => config.ValidatedBy<QuestionnaireValidator>());
 
             CommandRegistry
                 .Setup<AssignmentAggregateRoot>()
                 .ResolvesIdFrom<AssignmentCommand>(command => command.PublicKey)
-                .InitializesWith<CreateAssignment>(aggregate => aggregate.CreateAssignment, cfg =>cfg.ValidatedBy<WebModeResponsibleAssignmentValidator>())
+                .InitializesWith<CreateAssignment>(aggregate => aggregate.CreateAssignment, cfg =>cfg.ValidatedBy<ResponsibleAssignmentValidator>())
                 .StatelessHandles<DeleteAssignment>(aggregate => aggregate.DeleteAssignment)
 
                 .Handles<ReassignAssignment>(aggregate => aggregate.Reassign)
@@ -410,6 +425,10 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<UpdateAssignmentQuantity>(aggregate => aggregate.UpdateAssignmentQuantity)
                 .Handles<UpgradeAssignmentCommand>(aggregate => aggregate.UpgradeAssignment)
                 .Handles<UpdateAssignmentWebMode>(aggregate => aggregate.UpdateAssignmentWebMode);
+
+            CommandRegistry.Configure<AssignmentAggregateRoot, AssignmentCommand>(configuration => configuration
+                .ValidatedBy<QuestionnaireStateForAssignmentValidator>()
+                    .SkipValidationFor<DeleteAssignment>());
 
             CommandRegistry
                 .Setup<StatefulInterview>()
@@ -444,6 +463,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<CommentAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CommentAnswer(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Comment))
                 .Handles<DeleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Delete(command.UserId, command.OriginDate))
                 .Handles<HqApproveInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqApprove(command.UserId, command.Comment, command.OriginDate))
+                .Handles<ChangeInterviewModeCommand>(command => command.InterviewId, (command, aggregate) => aggregate.ChangeInterviewMode(command.UserId, command.OriginDate, command.Mode))
                 .Handles<HqRejectInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqReject(command.UserId, command.Comment, command.OriginDate))
                 .Handles<HqRejectInterviewToSupervisorCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqRejectInterviewToSupervisor(command.UserId, command.SupervisorId, command.Comment, command.OriginDate))
                 .Handles<HqRejectInterviewToInterviewerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqRejectInterviewToInterviewer(command.UserId, command.InterviewerId, command.SupervisorId, command.Comment, command.OriginDate))
@@ -462,16 +482,6 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<ResumeInterviewCommand>(cmd => cmd.InterviewId, a => a.Resume)
                 .Handles<OpenInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.OpenBySupervisor)
                 .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupervisor);
-            
-            CommandRegistry
-                .Setup<CalendarEvent>()
-                .ResolvesIdFrom<CalendarEventCommand>(command => command.PublicKey)
-                .InitializesWith<CreateCalendarEventCommand>( aggregate => aggregate.CreateCalendarEvent)
-                .InitializesWith<SyncCalendarEventEventsCommand>( aggregate => aggregate.SyncCalendarEventEvents)
-                .Handles<DeleteCalendarEventCommand>( aggregate => aggregate.DeleteCalendarEvent)
-                .Handles<UpdateCalendarEventCommand>(aggregate => aggregate.UpdateCalendarEvent)
-                .Handles<CompleteCalendarEventCommand>(aggregate => aggregate.CompleteCalendarEvent)
-                .Handles<RestoreCalendarEventCommand>( aggregate => aggregate.RestoreCalendarEvent);
             
             CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => configuration
                 .PreProcessBy<InterviewCacheWarmupPreProcessor>()
@@ -501,7 +511,24 @@ namespace WB.Core.BoundedContexts.Headquarters
                     .SkipValidationFor<UnapproveByHeadquartersCommand>()
                     .SkipValidationFor<ApproveInterviewCommand>()
                     .SkipValidationFor<HqApproveInterviewCommand>()
+                    .SkipValidationFor<ChangeInterviewModeCommand>()
+                .ValidatedBy<QuestionnaireStateForInterviewValidator>()
+                    .SkipValidationFor<HardDeleteInterview>()
+            
             );
+            
+            CommandRegistry
+                .Setup<CalendarEvent>()
+                .ResolvesIdFrom<CalendarEventCommand>(command => command.PublicKey)
+                .InitializesWith<CreateCalendarEventCommand>( aggregate => aggregate.CreateCalendarEvent)
+                .InitializesWith<SyncCalendarEventEventsCommand>( aggregate => aggregate.SyncCalendarEventEvents)
+                .Handles<DeleteCalendarEventCommand>( aggregate => aggregate.DeleteCalendarEvent)
+                .Handles<UpdateCalendarEventCommand>(aggregate => aggregate.UpdateCalendarEvent)
+                .Handles<CompleteCalendarEventCommand>(aggregate => aggregate.CompleteCalendarEvent)
+                .Handles<RestoreCalendarEventCommand>( aggregate => aggregate.RestoreCalendarEvent);
+            
+            CommandRegistry.Configure<CalendarEvent, CalendarEventCommand>(configuration => configuration
+                .ValidatedBy<QuestionnaireStateForCalendarEventValidator>());
 
             return Task.CompletedTask;
         }

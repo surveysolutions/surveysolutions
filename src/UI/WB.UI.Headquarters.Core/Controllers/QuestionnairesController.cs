@@ -21,18 +21,19 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
     [Localizable(false)]
     public class QuestionnairesController : Controller
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
         private readonly IQuestionnaireBrowseViewFactory browseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
@@ -53,7 +54,8 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireVersionProvider questionnaireVersionProvider, 
             IAuthorizedUser authorizedUser, 
             ICommandService commandService,
-            ILogger<QuestionnairesController> logger)
+            ILogger<QuestionnairesController> logger,
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.browseViewFactory = browseViewFactory ?? throw new ArgumentNullException(nameof(browseViewFactory));
@@ -65,12 +67,16 @@ namespace WB.UI.Headquarters.Controllers
             this.authorizedUser = authorizedUser;
             this.commandService = commandService;
             this.logger = logger;
+            this.questionnaireItems = questionnaireItems;
         }
 
         public IActionResult Details(string id)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+            if (questionnaire == null)
+                return NotFound(string.Format(HQ.QuestionnaireNotFoundFormat, questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
+            
             var browseItem = browseViewFactory.GetById(questionnaireIdentity);
 
             var model = new QuestionnaireDetailsModel
@@ -88,8 +94,9 @@ namespace WB.UI.Headquarters.Controllers
                 Comment = browseItem.Comment,
                 Variable = browseItem.Variable,
                 IsObserving = this.authorizedUser.IsObserving,
-                DefaultLanguageName = questionnaire.DefaultLanguageName
-            };
+                DefaultLanguageName = questionnaire.DefaultLanguageName,
+                ExposedVariablesUrl = Url.Action("ExposedVariables", "Questionnaires")
+        };
 
             if (browseItem.ImportedBy.HasValue && browseItem.ImportedBy != Guid.Empty)
             {
@@ -133,7 +140,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [AntiForgeryFilter]
-        [Authorize(Roles = "Administrator")]
+        [AuthorizeByRole(UserRoles.Administrator)]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult Clone(Guid id, long version)
         {
@@ -153,7 +160,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [AuthorizeByRole(UserRoles.Administrator)]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult Clone(CloneQuestionnaireModel model)
         {
@@ -183,6 +190,56 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             return this.RedirectToAction("Index", "SurveySetup");
+        }
+
+        [AntiForgeryFilter]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
+        [ActivePage(MenuItem.Questionnaires)]
+        public IActionResult ExposedVariables(string id)
+        {
+            //var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+
+            if (!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
+            {
+                return NotFound();
+            }
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+
+            if (questionnaire == null)
+            {
+                return NotFound();
+            }
+
+            var model = new QuestionnaireExposedVariablesModel()
+            {
+                QuestionnaireIdentity = id,
+                QuestionnaireId = questionnaireIdentity.QuestionnaireId,
+                Title = questionnaire.Title,
+                Version = questionnaireIdentity.Version,
+                IsObserving = this.authorizedUser.IsObserving,
+                DataUrl = Url.Action("GetQuestionnaireVariables", "QuestionnairesApi"),
+                DesignerUrl = this.restServiceSettings.Endpoint.TrimEnd('/') +
+                              $"/questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
+
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
+        [ActivePage(MenuItem.Questionnaires)]
+        public IActionResult ExposedVariables(QuestionnaireExposedVariablesModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+            //var model = new QuestionnaireExposedVariablesModel();
+            
+            return View(model);
         }
 
         public IActionResult Pdf(string id, Guid? translation = null)

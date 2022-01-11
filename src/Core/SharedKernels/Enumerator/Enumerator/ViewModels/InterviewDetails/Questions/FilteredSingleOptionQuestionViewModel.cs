@@ -21,11 +21,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher) :
+            QuestionInstructionViewModel instructionViewModel) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository, 
-                eventRegistry: eventRegistry, filteredOptionsViewModel, mainThreadDispatcher)
+                eventRegistry: eventRegistry, filteredOptionsViewModel)
         {
         }
 
@@ -41,7 +40,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             await comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText, true);
         }
-
 
         public override void Dispose()
         {

@@ -11,10 +11,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
     internal class ResourcesPostProcessor :
         ICommandPostProcessor<Questionnaire, DeleteQuestionnaire>
     {
-        private IAttachmentService attachmentService;
-        private ILookupTableService lookupTableService;
-        private ITranslationsService translationsService;
-        private ICommentsService commentsService;
+        private readonly IAttachmentService attachmentService;
+        private readonly ILookupTableService lookupTableService;
+        private readonly ITranslationsService translationsService;
+        private readonly ICommentsService commentsService;
         private readonly ICategoriesService categoriesService;
 
         public ResourcesPostProcessor(IAttachmentService attachmentService,

@@ -5,7 +5,10 @@ using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Newtonsoft;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using WB.UI.Headquarters.Code.SwaggerCustomization;
 
 namespace WB.UI.Headquarters.Code
@@ -18,39 +21,58 @@ namespace WB.UI.Headquarters.Code
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Survey Solutions API"
+                    Title = "Survey Solutions API",
+                    Version = "v1"
                 });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
 
-                c.AddSecurityDefinition("basicAuth", new OpenApiSecurityScheme
+
+                var basicScheme = new OpenApiSecurityScheme
                 {
+                    Name = "Basic Authentication",
+                    Description = "Basic Authentication",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
                     Scheme = "basic"
-                });
+                };
+                c.AddSecurityDefinition(basicScheme.Scheme, basicScheme);
+
+                var bearerSchema = new OpenApiSecurityScheme
+                {
+                    Name = "JWT Authentication",
+                    Description = "JWT Bearer Token",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer"
+                };
+                c.AddSecurityDefinition(bearerSchema.Scheme, bearerSchema);
+                
                 c.ParameterFilter<XmsEnumParameterFilter>();
                 c.OperationFilter<XmsEnumOperationFilter>();
                 c.SchemaFilter<XmsEnumSchemaFilter>();
                 c.DocumentFilter<WorkspaceDocumentFilter>();
-
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
                         {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "basicAuth"
-                            }
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "basic" }
+                        },
+                        Array.Empty<string>()
+                    },
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearer" }
                         },
                         Array.Empty<string>()
                     }
                 });
 
-                c.SchemaFilter<CapitalizedCaseSchemaFilter>();
+                c.OperationFilter<SecurityRequirementsOperationFilter>();
+
                 c.OrderActionsBy(x =>
                 {
                     var sort = new StringBuilder(x.ActionDescriptor.RouteValues["controller"]);
@@ -87,7 +109,9 @@ namespace WB.UI.Headquarters.Code
                     new List<string> {x.ActionDescriptor.RouteValues["controller"].Replace("PublicApi", "")});
             });
 
-            services.AddSwaggerGenNewtonsoftSupport();
+            services.Replace(
+                ServiceDescriptor.Transient<ISerializerDataContractResolver>(s =>
+                    new NewtonsoftDataContractResolver(PublicApiJsonAttribute.PublicApiSerializerSettings)));
         }
 
         public static void UseHqSwaggerUI(this IApplicationBuilder appBuilder)

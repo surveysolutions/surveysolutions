@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         event EventHandler OnMaxDurationReached;
 
         event EventHandler<PlaybackCompletedEventArgs> OnPlaybackCompleted;
-        Task Play(Guid interviewId, Identity questionId, string fileName);
+        void Play(byte[] content, Identity identity);
         void Stop();
 
         string GetAuditPath();

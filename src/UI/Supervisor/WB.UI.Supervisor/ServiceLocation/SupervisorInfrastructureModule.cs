@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -49,36 +50,41 @@ namespace WB.UI.Supervisor.ServiceLocation
                     context => new RsaEncryptionService(context.Get<ISecureStorage>())),
                 new ConstructorArgument("sendTabletInfoRelativeUrl", context => "api/supervisor/v1/tabletInfo"));
 
-            registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
-                "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
+            registry.BindWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
+                "assembliesDirectory", "assemblies");
             registry.Bind<ISerializer, PortableJsonSerializer>();
             registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, PortableJsonAllTypesSerializer>();
 
-            registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, QuestionnaireKeyValueStorage>();
+            registry.Bind<IPlainKeyValueStorage<QuestionnaireDocument>, QuestionnaireKeyValueStorage>();
 
             registry.Bind<IInterviewerInterviewAccessor, InterviewerInterviewAccessor>();
             registry.Bind<IInterviewEventStreamOptimizer, InterviewEventStreamOptimizer>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
-            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
+            registry.Bind<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.Bind<IInterviewerQuestionnaireAccessor, SupervisorQuestionnaireAccessor>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
-            registry.BindAsSingleton<ITabletInfoService, TabletInfoService>();
+            registry.Bind<ITabletInfoService, TabletInfoService>();
             registry.BindAsSingleton<IDeviceSynchronizationProgress, DeviceSynchronizationProgress>();
             registry.BindAsSingleton<ICalendarEventStorage, CalendarEventStorage>();
-            registry.BindAsSingleton<ICalendarEventRemoval, CalendarEventRemoval>();
+            registry.Bind<ICalendarEventRemoval, CalendarEventRemoval>();
             
-            registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
+            registry.Bind<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();
 
             registry.BindToConstant(() => new SqliteSettings
             {
+                PathToRootDirectory = AndroidPathUtils.GetPathToInternalDirectory(), 
                 PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"),
-                PathToInterviewsDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory($"data{Path.DirectorySeparatorChar}interviews")
+                DataDirectoryName = "data",
+                InterviewsDirectoryName = "interviews",
             });
 
-            registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>));
-            registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
+            registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorageAutoWorkspaceResolve<,>));
+            registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorageAutoWorkspaceResolve<>));
+
+            registry.BindAsSingleton<IPlainStorage<SupervisorIdentity>, SqlitePlainStorage<SupervisorIdentity>>();
+            registry.BindAsSingleton<IPlainStorage<WorkspaceView>, SqlitePlainStorage<WorkspaceView>>();
         }
     }
 }

@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var assignmentToImports = ConcatRosters(assignmentRows, questionnaire);
 
             if (assignmentToImports.Count == 0)
-                yield return new PanelImportVerificationError(@"PL0000", PreloadingVerificationMessages.PL0024_DataWasNotFound);
+                yield return new PanelImportVerificationError(@"PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound);
             else
                 this.Save(file.FileInfo.FileName, questionnaireIdentity, defaultResponsibleId, assignmentToImports);
         }
@@ -141,7 +141,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var assignmentsToImport = FixRosterSizeAnswers(answersByAssignments, questionnaire).ToList();
 
             if (assignmentsToImport.Count == 0)
-                yield return new PanelImportVerificationError(@"PL0000", PreloadingVerificationMessages.PL0024_DataWasNotFound);
+                yield return new PanelImportVerificationError(@"PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound);
             else
                 this.Save(originalFileName, questionnaireIdentity, defaultResponsibleId, assignmentsToImport);
         }
@@ -481,22 +481,22 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             Dictionary<int, int> oldToNewRosterInstanceIds, int[] levelsOfRostersByRosterSize)
         {
             foreach (var answersByRosterInstanceId in answersGroupedByRosterInstanceId)
-            foreach (var interviewAnswer in answersByRosterInstanceId)
-            foreach (var rosterLevel in levelsOfRostersByRosterSize.Distinct())
-            {
-                if (rosterLevel > interviewAnswer.Identity.RosterVector.Length) continue;
+                foreach (var interviewAnswer in answersByRosterInstanceId)
+                    foreach (var rosterLevel in levelsOfRostersByRosterSize.Distinct())
+                    {
+                        if (rosterLevel > interviewAnswer.Identity.RosterVector.Length) continue;
 
-                var rosterVectorIndex = rosterLevel - 1;
-                var numericRosterInstanceCode = interviewAnswer.Identity.RosterVector[rosterVectorIndex];
+                        var rosterVectorIndex = rosterLevel - 1;
+                        var numericRosterInstanceCode = interviewAnswer.Identity.RosterVector[rosterVectorIndex];
 
-                // this means that roster instance id in roster file as we expected in our system
-                if (oldToNewRosterInstanceIds[numericRosterInstanceCode] == numericRosterInstanceCode) continue;
+                        // this means that roster instance id in roster file as we expected in our system
+                        if (oldToNewRosterInstanceIds[numericRosterInstanceCode] == numericRosterInstanceCode) continue;
 
-                var newRosterVector = interviewAnswer.Identity.RosterVector.Replace(
-                    rosterVectorIndex, oldToNewRosterInstanceIds[numericRosterInstanceCode]);
+                        var newRosterVector = interviewAnswer.Identity.RosterVector.Replace(
+                            rosterVectorIndex, oldToNewRosterInstanceIds[numericRosterInstanceCode]);
 
-                interviewAnswer.Identity = Identity.Create(interviewAnswer.Identity.Id, newRosterVector);
-            }
+                        interviewAnswer.Identity = Identity.Create(interviewAnswer.Identity.Id, newRosterVector);
+                    }
         }
 
         private static TextListAnswer ToRosterSizeListAnswer(int[] rosterInstanceCodes,

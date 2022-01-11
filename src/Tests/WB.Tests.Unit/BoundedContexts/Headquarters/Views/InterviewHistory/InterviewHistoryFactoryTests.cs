@@ -96,12 +96,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.InterviewHistory
             var historyView = interviewHistoryFactory.Load(new[]{interviewId1, interviewId2});
             
             Assert.That(historyView.Length, Is.EqualTo(2));
-            Assert.That(historyView[0].Records.Count, Is.EqualTo(3));
+            Assert.That(historyView[0].Records.Count, Is.EqualTo(4));
             Assert.That(historyView[0].Records[2].Index, Is.EqualTo(2));
             
             Assert.That(historyView[0].Records[2].OriginatorRole, Is.EqualTo("ApiUser"));
             
-            Assert.That(historyView[1].Records.Count, Is.EqualTo(2));
+            Assert.That(historyView[1].Records.Count, Is.EqualTo(3));
             Assert.That(historyView[1].Records[1].Index, Is.EqualTo(1));
         }
     }

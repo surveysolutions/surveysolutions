@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
@@ -22,7 +23,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private readonly IPasswordHasher passwordHasher;
         private readonly IPlainStorage<SupervisorIdentity> supervisorsPlainStorage;
         private readonly ISupervisorSynchronizationService synchronizationService;
-
 
         public FinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -36,10 +36,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             ISerializer serializer,
             IUserInteractionService userInteractionService,
             IAuditLogService auditLogService,
-            IDeviceInformationService deviceInformationService) 
+            IDeviceInformationService deviceInformationService,
+            IWorkspaceService workspaceService) 
             : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, 
                 logger, qrBarcodeScanService, serializer, userInteractionService, auditLogService,
-                deviceInformationService)
+                deviceInformationService, workspaceService)
         {
             this.passwordHasher = passwordHasher;
             this.supervisorsPlainStorage = interviewersPlainStorage;
@@ -86,7 +87,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.supervisorsPlainStorage.Store(supervisorIdentity);
         }
 
-        protected override async Task<List<WorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials, CancellationToken token)
+        protected override async Task<List<UserWorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials, CancellationToken token)
         {
             var supervisor = await this.synchronizationService.GetSupervisorAsync(credentials, token: token).ConfigureAwait(false);
             return supervisor.Workspaces;

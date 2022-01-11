@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -26,13 +27,15 @@ namespace WB.UI.Headquarters.Controllers
         private readonly SignInManager<HqUser> signInManager;
         private readonly UserManager<HqUser> userManager;
         protected readonly IAuthorizedUser authorizedUser;
+        private readonly ILogger<AccountController> logger;
 
         public AccountController(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
             ICaptchaService captchaService,
             ICaptchaProvider captchaProvider,
             SignInManager<HqUser> signInManager,
             UserManager<HqUser> userManager,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser,
+            ILogger<AccountController> logger)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.captchaService = captchaService;
@@ -40,13 +43,16 @@ namespace WB.UI.Headquarters.Controllers
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.authorizedUser = authorizedUser;
+            this.logger = logger;
         }
 
         [HttpGet]
         public IActionResult LogOn(string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
-            this.ViewBag.ReturnUrl = returnUrl;
+            this.ViewBag.ReturnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : null;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
 
             return this.View(new LogOnModel
@@ -59,7 +65,9 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<IActionResult> LogOn2fa(string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
-            this.ViewBag.ReturnUrl = returnUrl;
+            this.ViewBag.ReturnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : null;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
 
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
@@ -75,7 +83,6 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<IActionResult> LoginWithRecoveryCode()
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
-            //this.ViewBag.ReturnUrl = returnUrl;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
 
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
@@ -93,6 +100,9 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
+            returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : null;
             model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
 
             if (model.RequireCaptcha && !await this.captchaProvider.IsCaptchaValid(Request))
@@ -117,7 +127,7 @@ namespace WB.UI.Headquarters.Controllers
                 return View(model);
             }
 
-            var signInResult = await this.signInManager.PasswordSignInAsync(model.UserName, model.Password, true, false);
+            var signInResult = await this.signInManager.PasswordSignInAsync(model.UserName, model.Password, true, true);
             if (signInResult.Succeeded)
             {
                 this.captchaService.ResetFailedLogin(model.UserName);
@@ -129,9 +139,15 @@ namespace WB.UI.Headquarters.Controllers
                     return RedirectToAction(actionName, controllerName);
                 }
 
-                if (returnUrl != null && returnUrl != "/")
+                
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
                     return Redirect(returnUrl);
+                }
+
+                if (user.IsInRole(UserRoles.Administrator))
+                {
+                    return Redirect(Url.Content("/administration/Workspaces"));
                 }
 
                 return Redirect(Url.Content("~/"));
@@ -160,6 +176,9 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
+            returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : null;
 
             if (!ModelState.IsValid)
             {
@@ -183,8 +202,13 @@ namespace WB.UI.Headquarters.Controllers
                     var actionName = nameof(UsersController.ChangePassword);
                     return RedirectToAction(actionName, controllerName);
                 }
-                
-                return Redirect(returnUrl ?? Url.Action("Index", "Home"));
+
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+
+                return Redirect(Url.Action("Index", "Home"));
             }
 
             if (signInResult.IsLockedOut)
@@ -204,6 +228,9 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
+            returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? returnUrl
+                : null;
 
             if (!ModelState.IsValid)
             {
@@ -221,7 +248,12 @@ namespace WB.UI.Headquarters.Controllers
 
             if (signInResult.Succeeded)
             {
-                return Redirect(returnUrl ?? Url.Action("Index", "Home"));
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+
+                return Redirect(Url.Action("Index", "Home"));
             }
 
             if (signInResult.IsLockedOut)

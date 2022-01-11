@@ -3,6 +3,9 @@ import Vuex from 'vuex'
 
 import { sync } from 'vuex-router-sync'
 
+import * as toastr from 'toastr'
+toastr.options.escapeHtml = true
+
 Vue.use(Vuex)
 
 import config from '~/shared/config'

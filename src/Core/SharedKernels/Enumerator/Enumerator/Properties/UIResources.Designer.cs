@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class UIResources {
@@ -729,6 +729,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Switch interview to Web Mode.
+        /// </summary>
+        public static string Interview_Complete_SwitchTo_WebMode_Checkbox {
+            get {
+                return ResourceManager.GetString("Interview_Complete_SwitchTo_WebMode_Checkbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This interview will be accessible online after synchronization. To access the interview the respondent should enter the link below in the browser on an internet-connected computer, tablet, or smartphone. The same link can be scanned using the QR-code shown below..
+        /// </summary>
+        public static string Interview_Complete_SwitchTo_WebMode_Instruction {
+            get {
+                return ResourceManager.GetString("Interview_Complete_SwitchTo_WebMode_Instruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unanswered.
         /// </summary>
         public static string Interview_Complete_Unanswered {
@@ -1391,6 +1409,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string InvalidTimeMessage {
             get {
                 return ResourceManager.GetString("InvalidTimeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading....
+        /// </summary>
+        public static string Loading {
+            get {
+                return ResourceManager.GetString("Loading", resourceCulture);
             }
         }
         

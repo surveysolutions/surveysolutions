@@ -9,15 +9,16 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -32,10 +33,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
         private readonly ICommandService commandService;
         private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
         private readonly ILogger logger;
-        private readonly IAuditLogService auditLogService;
         private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly IUserInteractionService userInteractionService;
         private readonly ICalendarEventStorage calendarEventStorage;
+        private readonly IViewModelEventRegistry viewModelEventRegistry;
 
         public CreateAndLoadInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService, 
@@ -51,9 +52,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             IInterviewAnswerSerializer answerSerializer, 
             IUserInteractionService userInteractionService,
             IJsonAllTypesSerializer serializer,
-            ICalendarEventStorage calendarEventStorage) 
+            ICalendarEventStorage calendarEventStorage,
+            IViewModelEventRegistry viewModelEventRegistry) 
             : base(interviewerPrincipal, viewModelNavigationService, interviewRepository, commandService, logger,
-                userInteractionService, interviewsRepository, serializer)
+                userInteractionService, interviewsRepository, serializer, auditLogService, viewModelEventRegistry)
         {
             this.assignmentsRepository = assignmentsRepository;
             this.interviewerPrincipal = interviewerPrincipal;
@@ -61,10 +63,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             this.commandService = commandService;
             this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
             this.logger = logger;
-            this.auditLogService = auditLogService;
             this.answerSerializer = answerSerializer;
             this.userInteractionService = userInteractionService;
             this.calendarEventStorage = calendarEventStorage;
+            this.viewModelEventRegistry = viewModelEventRegistry;
         }
 
         protected int AssignmentId { get; set; }
@@ -93,6 +95,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 
         private async Task CreateAndNavigateToInterviewAsync()
         {
+            this.viewModelEventRegistry.WriteToLogInfoBySubscribers();
+            this.viewModelEventRegistry.Reset();
             var interviewId = await CreateInterviewAsync(this.AssignmentId, this.InterviewId);
             if (!interviewId.HasValue)
             {
@@ -119,7 +123,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                     return null;
                 }
 
-                var interviewerIdentity = this.interviewerPrincipal.CurrentUserIdentity;
+                var interviewerIdentity = (IInterviewerUserIdentity)this.interviewerPrincipal.CurrentUserIdentity;
 
                 this.assignmentsRepository.FetchPreloadedData(assignment);
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
@@ -130,14 +134,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                 var interviewKey = keyGenerator.Get();
                 ICommand createInterviewCommand = new SharedKernels.DataCollection.Commands.Interview.CreateInterview(interviewId,
                     interviewerIdentity.UserId,
-                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version),
+                    questionnaireIdentity,
                     answers,
                     protectedVariables,
                     interviewerIdentity.SupervisorId,
                     interviewerIdentity.UserId,
                     interviewKey,
                     assignment.Id,
-                    assignment.IsAudioRecordingEnabled
+                    assignment.IsAudioRecordingEnabled, 
+                    InterviewMode.CAPI
                 );
 
                 this.commandService.Execute(createInterviewCommand);
@@ -154,7 +159,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                         interviewId,
                         interviewKey.ToString(),
                         assignment.Id,
-                        calendarEvent.Comment);
+                        calendarEvent.Comment,
+                        questionnaireIdentity);
+                    
                     commandService.Execute(createCalendarEvent);
                 }
                 

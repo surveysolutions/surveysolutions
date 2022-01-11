@@ -9,7 +9,7 @@
                     :ajax-params="{ }"
                     :fetch-url="model.questionnaires"
                     :value="selectedQuestionnaireId"
-                    :selectedValue="this.query.questionnaire"
+                    :selectedKey="this.query.questionnaireId"
                     v-on:selected="selectQuestionnaire"/>
             </FilterBlock>
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -119,11 +119,11 @@
                         click="assignInterview">{{ $t("Common.Assign") }}</button>
                     <button
                         class="btn btn-sm btn-success"
-                        v-if="model.userRole == 'Supervisor' && selectedTooltip.status == 'Completed'"
+                        v-if="model.userRole == 'Supervisor' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'RejectedByHeadquarters')"
                         click="approveSvInterview">{{ $t("Common.Approve")}}</button>
                     <button
                         class="btn btn-sm reject"
-                        v-if="model.userRole == 'Supervisor' && selectedTooltip.status == 'Completed'"
+                        v-if="model.userRole == 'Supervisor' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'RejectedByHeadquarters')"
                         click="rejectSvInterview">{{ $t("Common.Reject")}}</button>
                     <button
                         class="btn btn-sm btn-success"
@@ -245,7 +245,7 @@
 
     </HqLayout>
 </template>
-<style>
+<style scoped>
 .progress {
     margin: 15px;
 }
@@ -370,6 +370,7 @@ export default {
         queryString() {
             return {
                 questionnaire: this.query.questionnaire,
+                questionnaireId: this.query.questionnaireId,
                 version: this.query.version,
                 responsible: this.query.responsible,
                 assignmentId: this.query.assignmentId,
@@ -401,15 +402,17 @@ export default {
     methods: {
 
         openInterview() {
-            window.open('InterviewerHq/OpenInterview/' + this.selectedTooltip.interviewId, '_blank')
+            window.open(this.$hq.basePath + 'InterviewerHq/OpenInterview/' + this.selectedTooltip.interviewId, '_blank')
         },
 
         createInterview() {
             const self = this
             const assignmentId = this.selectedTooltip.assignmentId
             $.post('InterviewerHq/StartNewInterview/' + assignmentId, response => {
-                //window.location = response
-                window.open(response, '_blank')
+                const interviewId = response.interviewId
+                const workspace = self.$hq.basePath
+                const url = `${workspace}WebInterview/${interviewId}/Cover`
+                window.open(url, '_blank')
                 self.reloadMarkersInBounds()
             })
         },
@@ -497,13 +500,13 @@ export default {
         selectQuestionnaire(value) {
             this.selectedQuestionnaireId = value
 
-            if (value == null || this.$route.query.questionnaire !== value.value)
+            if (value == null || this.$route.query.questionnaireId !== value.key)
                 this.selectQuestionnaireVersion(null)
             else
                 this.selectQuestionnaireVersion(this.$route.query.version ? {key: this.$route.query.version} : null)
 
             this.onChange(q => {
-                q.questionnaire = value == null ? null : value.value
+                q.questionnaireId = value == null ? null : value.key
             })
         },
 

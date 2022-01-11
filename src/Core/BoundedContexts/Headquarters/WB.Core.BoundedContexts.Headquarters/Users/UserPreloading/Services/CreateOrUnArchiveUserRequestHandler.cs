@@ -2,11 +2,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 {
@@ -16,15 +19,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
         private readonly UserManager<HqUser> userManager;
         private readonly IUserImportService userImportService;
         private readonly ISystemLog systemLog;
+        private readonly IWorkspacesService workspacesService;
 
         public CreateOrUnArchiveUserRequestHandler(IUserRepository userRepository,
             UserManager<HqUser> userManager,
-            IUserImportService importService, ISystemLog systemLog)
+            IUserImportService importService, 
+            ISystemLog systemLog,
+            IWorkspacesService workspacesService)
         {
             this.userRepository = userRepository;
             this.userManager = userManager;
             this.userImportService = importService;
             this.systemLog = systemLog;
+            this.workspacesService = workspacesService;
         }
 
         public async Task<UserToImport?> Handle(CreateOrUnArchiveUserRequest _, CancellationToken cancellationToken)
@@ -65,15 +72,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                     FullName = userToCreate.FullName,
                     Email = userToCreate.Email,
                     PhoneNumber = userToCreate.PhoneNumber,
-                    Profile = supervisorId.HasValue
-                        ? new HqUserProfile
-                        {
-                            SupervisorId = supervisorId
-                        }
-                        : null,
+                    PasswordChangeRequired = userToCreate.UserRole != UserRoles.ApiUser 
                 };
                 hqUser.Roles.Add(role);
+                
                 await userManager.CreateAsync(hqUser, userToCreate.Password);
+
+                var userWorkspaces = userToCreate.GetWorkspaces();
+                foreach (var userWorkspace in userWorkspaces)
+                {
+                    workspacesService.AddUserToWorkspace(hqUser, userWorkspace, supervisorId);
+                }
             }
             else
             {
@@ -81,7 +90,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                 user.Email = userToCreate.Email;
                 user.PhoneNumber = userToCreate.PhoneNumber;
                 user.IsArchived = false;
-                user.PasswordChangeRequired = true;
+                user.PasswordChangeRequired = user.Role != UserRoles.ApiUser;
 
                 await userManager.UpdateAsync(user);
                 string passwordResetToken = await userManager.GeneratePasswordResetTokenAsync(user);

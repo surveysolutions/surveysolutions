@@ -53,6 +53,9 @@
                 <p>{{$t('WebInterviewSetup.Invitations_SuccessfulSetup')}}</p>
             </div>
             <form method="post">
+                <input name="__RequestVerificationToken"
+                    type="hidden"
+                    :value="this.$hq.Util.getCsrfCookie()" />
                 <input type="hidden"
                     :value="questionnaireId"
                     name="questionnaireId"/>

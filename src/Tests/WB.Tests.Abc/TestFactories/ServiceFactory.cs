@@ -28,6 +28,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Assignments.Validators;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents.Validators;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
@@ -36,6 +37,7 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.Interview.Validators;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -115,6 +117,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -189,20 +192,38 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<PrefilledQuestionView> prefilledQuestions = null,
             IAnswerToStringConverter answerToStringConverter = null
         )
-            => new InterviewDashboardEventHandler(
-                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
-                prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(Mock.Of<ILogger>()),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>(),
+        {
+            /*var serviceLocator = Create.Fake.ServiceLocator()
+                .With(interviewViewRepository ?? Substitute.For<IPlainStorage<InterviewView>>())
+                .With(questionnaireStorage ?? Substitute.For<IQuestionnaireStorage>())
+                .With(prefilledQuestions ?? Substitute.For<IPlainStorage<PrefilledQuestionView>>())
+                .With(answerToStringConverter ?? Substitute.For<IAnswerToStringConverter>())
+                .Object;
+            return new InterviewDashboardEventHandler(serviceLocator);*/
+            return new InterviewDashboardEventHandler(
+                interviewViewRepository ?? Substitute.For<IPlainStorage<InterviewView>>(),
+                prefilledQuestions ?? Substitute.For<IPlainStorage<PrefilledQuestionView>>(), 
+                questionnaireStorage ?? Substitute.For<IQuestionnaireStorage>(), 
+                answerToStringConverter ?? Substitute.For<IAnswerToStringConverter>(),
                 Mock.Of<IAssignmentDocumentsStorage>(),
                 Mock.Of<ICalendarEventStorage>());
-
-        CalendarEventEventHandler CalendarEventDenormalizer(ICalendarEventStorage calendarEventStorage = null) =>
-            new CalendarEventEventHandler(calendarEventStorage ?? Mock.Of<ICalendarEventStorage>(),
+        }
+        
+        CalendarEventEventHandler CalendarEventDenormalizer(ICalendarEventStorage calendarEventStorage = null)
+        {
+            /*var serviceLocator = Create.Fake.ServiceLocator()
+                .With(calendarEventStorage ?? Substitute.For<ICalendarEventStorage>())
+                .With(Substitute.For<IPlainStorage<InterviewView>>())
+                .With(Substitute.For<IAssignmentDocumentsStorage>())
+                .Object;
+            return new CalendarEventEventHandler(serviceLocator);*/
+            return new CalendarEventEventHandler(
+                calendarEventStorage ?? Substitute.For<ICalendarEventStorage>(),
                 Mock.Of<IPlainStorage<InterviewView>>(),
                 Mock.Of<IAssignmentDocumentsStorage>());
-        
-        
+        }
+
+
         public DomainRepository DomainRepository(
             IServiceLocator serviceLocator = null)
             => new DomainRepository(
@@ -299,7 +320,7 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public ViewModelEventRegistry LiteEventRegistry()
-            => new ViewModelEventRegistry();
+            => new ViewModelEventRegistry(Mock.Of<ILogger>());
 
         public EnumeratorDenormalizerRegistry DenormalizerRegistry() =>
             new EnumeratorDenormalizerRegistry(
@@ -474,7 +495,8 @@ namespace WB.Tests.Abc.TestFactories
             IPasswordHasher passwordHasher = null,
             IInterviewerPrincipal principal = null,
             IHttpStatistician httpStatistician = null,
-            IServiceLocator serviceLocator = null)
+            IServiceLocator serviceLocator = null,
+            IWorkspaceService workspaceService = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<IOnlineSynchronizationService>();
 
@@ -490,7 +512,9 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAuditLogService>(),
                 Mock.Of<IDeviceInformationService>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                serviceLocator ?? Mock.Of<IServiceLocator>());
+                serviceLocator ?? Mock.Of<IServiceLocator>(),
+                workspaceService ?? Mock.Of<IWorkspaceService>(),
+                Mock.Of<IViewModelNavigationService>());
         }
 
         public InterviewerOfflineSynchronizationProcess OfflineSynchronizationProcess(
@@ -646,7 +670,7 @@ namespace WB.Tests.Abc.TestFactories
             IAuthorizedUser authorizedUser = null,
             IUnitOfWork sessionProvider = null,
             PasswordOptions passwordOptions = null,
-            IWorkspaceContextAccessor workspaceContextAccessor = null)
+            IWorkspacesService workspacesService = null)
         {
             PasswordOptions defaultPasswordOptions = passwordOptions ?? new PasswordOptions
             {
@@ -669,7 +693,7 @@ namespace WB.Tests.Abc.TestFactories
                     Mock.Of<IOptions<IdentityOptions>>(x => x.Value == new IdentityOptions {Password = defaultPasswordOptions} )),
                 authorizedUser ?? Stub<IAuthorizedUser>.WithNotEmptyValues,
                 sessionProvider ?? Stub<IUnitOfWork>.WithNotEmptyValues,
-                workspaceContextAccessor ?? Create.Service.WorkspaceContextAccessor());
+                workspacesService ?? Create.Service.WorkspacesService(Mock.Of<IPlainStorageAccessor<Workspace>>()));
         }
 
         public ICsvReader CsvReader<T>(string[] headers, params T[] rows)
@@ -717,10 +741,10 @@ namespace WB.Tests.Abc.TestFactories
 
             var userRepositoryMock = new Mock<IUserRepository>();
 
-            var hqUserProfile = Mock.Of<HqUserProfile>(_ => _.SupervisorId == Id.gB);
+            var hqUserProfile = Mock.Of<WorkspaceUserProfile>(_ => _.SupervisorId == Id.gB);
 
             var hqUser = Mock.Of<HqUser>(_ => _.Id == Id.gA
-                                           && _.Profile == hqUserProfile);
+                                           && _.WorkspaceProfile == hqUserProfile);
             userRepositoryMock
                 .Setup(arg => arg.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(hqUser);
@@ -778,7 +802,8 @@ namespace WB.Tests.Abc.TestFactories
                 assignmentsService,
                 questionnaires,
                 upgService,
-                Create.Service.InScopeExecutor(sl));
+                Create.Service.InScopeExecutor(sl),
+                Mock.Of<ILogger<AssignmentsUpgrader>>());
         }
 
         public IAssignmentFactory AssignmentFactory(
@@ -946,21 +971,21 @@ namespace WB.Tests.Abc.TestFactories
             return interviewerDownloadInterviews;
         }
 
-        public RemoveObsoleteQuestionnaires RemoveObsoleteQuestionnaires(ISynchronizationService synchronizationService = null,
+        public UpdateQuestionnaires UpdateQuestionnaires(ISynchronizationService synchronizationService = null,
             IInterviewerQuestionnaireAccessor questionnairesAccessor = null,
             IPlainStorage<InterviewView> interviewViewRepository = null,
             IAttachmentsCleanupService attachmentsCleanupService = null,
             IInterviewsRemover interviewsRemover = null)
         {
-            var result = new RemoveObsoleteQuestionnaires(
+            var result = new UpdateQuestionnaires(
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
                 interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(Mock.Of<ILogger>()),
                 attachmentsCleanupService ?? Mock.Of<IAttachmentsCleanupService>(),
                 interviewsRemover ?? Mock.Of<IInterviewsRemover>(),
                 Mock.Of<ILogger>(),
-                10
-                );
+                10);
+
             result.Context = new EnumeratorSynchonizationContext
             {
                 CancellationToken = CancellationToken.None,
@@ -1047,7 +1072,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new RestService(
                 restServiceSettings ?? Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost"),
-                networkService ?? Mock.Of<INetworkService>(x => x.IsHostReachable(It.IsAny<string>()) == true && x.IsNetworkEnabled() == true),
+                networkService ?? Mock.Of<INetworkService>(x => x.IsNetworkEnabled() == true),
                 synchronizationSerializer ?? new JsonAllTypesSerializer(),
                 stringCompressor ?? Mock.Of<IStringCompressor>(),
                 restServicePointManager ?? Mock.Of<IRestServicePointManager>(),
@@ -1245,9 +1270,30 @@ namespace WB.Tests.Abc.TestFactories
              Mock.Of<ILogger<MapFileStorageService>>()); 
         }
 
-        public WebModeResponsibleAssignmentValidator WebModeResponsibleAssignmentValidator(IUserViewFactory userViewFactory = null)
+        public ResponsibleAssignmentValidator WebModeResponsibleAssignmentValidator(IUserViewFactory userViewFactory = null)
         {
-            return new WebModeResponsibleAssignmentValidator(userViewFactory ?? Create.Storage.UserViewFactory());
+            return new ResponsibleAssignmentValidator(userViewFactory ?? Create.Storage.UserViewFactory());
+        }
+
+        public QuestionnaireStateForAssignmentValidator QuestionnaireStateForAssignmentValidator(
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
+        {
+            return new QuestionnaireStateForAssignmentValidator(questionnaireBrowseItemStorage ?? 
+                                                                Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
+        }
+        
+        public QuestionnaireStateForCalendarEventValidator QuestionnaireStateForCalendarEventValidator(
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
+        {
+            return new QuestionnaireStateForCalendarEventValidator(questionnaireBrowseItemStorage ?? 
+                                                                   Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
+        }
+        
+        public QuestionnaireStateForInterviewValidator QuestionnaireStateForInterviewValidator(
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
+        {
+            return new QuestionnaireStateForInterviewValidator(questionnaireBrowseItemStorage ?? 
+                                                               Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
         }
 
         public QuestionnaireTranslator QuestionnaireTranslator()
@@ -1318,17 +1364,20 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerInterviewsFactory ?? Mock.Of<IInterviewInformationFactory>());
         }
 
-        public WorkspacesService WorkspacesService(IPlainStorageAccessor<Workspace> workspaces)
+        public WorkspacesService WorkspacesService(IPlainStorageAccessor<Workspace> workspaces,
+            IServiceLocator serviceLocator = null)
         {
             return new WorkspacesService(
                 new UnitOfWorkConnectionSettings(),
                 Mock.Of<Microsoft.Extensions.Logging.ILoggerProvider>(),
+                Mock.Of<IAuthorizedUser>(),
                 workspaces,
                 new TestPlainStorage<WorkspacesUsers>(),
                 Mock.Of<IUserRepository>(),
                 Mock.Of<ILogger<WorkspacesService>>(),
                 Mock.Of<ISystemLog>(),
-                Mock.Of<IWorkspacesUsersCache>()
+                Mock.Of<IWorkspacesUsersCache>(),
+                new NoScopeInScopeExecutor(serviceLocator ?? Create.Service.ServiceLocatorService())
             );
         }
     }

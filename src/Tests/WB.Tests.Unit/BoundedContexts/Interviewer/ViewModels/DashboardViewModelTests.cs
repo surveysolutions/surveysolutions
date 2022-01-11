@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
@@ -27,6 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
         public DashboardViewModelTests()
         {
             base.Setup();
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
         }
 
         [Test]
@@ -37,7 +39,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             mockOfViewModelNavigationService.SetupGet(x => x.HasPendingOperations).Returns(true);
 
             var mockOfSynchronizationViewModel = new Mock<LocalSynchronizationViewModel>(
-                Mock.Of<IMvxMessenger>(),
                 new SynchronizationCompleteSource(),
                 Mock.Of<ITabletDiagnosticService>(),
                 Mock.Of<ILogger>());
@@ -72,7 +73,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     viewModelNavigationService: viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                     principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
                     synchronization: synchronization ?? Create.ViewModel.LocalSynchronizationViewModel(),
-                    messenger: messenger ?? Mock.Of<IMvxMessenger>(),
                     interviewerSettings: Mock.Of<IInterviewerSettings>(),
                     createNewViewModel: DashboardQuestionnairesViewModel(),
                     startedInterviewsViewModel: DashboardStartedInterviewsViewModel(),
@@ -87,7 +87,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     userInteractionService: Mock.Of<IUserInteractionService>(),
                     googleApiService: Mock.Of<IGoogleApiService>(),
                     mapInteractionService: Mock.Of<IMapInteractionService>(),
-                    dashboardNotifications: dashboardNotifications ?? Create.ViewModel.DashboardNotificationsViewModel());
+                    dashboardNotifications: dashboardNotifications ?? Create.ViewModel.DashboardNotificationsViewModel(),
+                    workspaceService: Mock.Of<IWorkspaceService>(),
+                    onlineSynchronizationService: Mock.Of<IOnlineSynchronizationService>(),
+                    memoryCacheSource: Mock.Of<IWorkspaceMemoryCacheSource>(),
+                    webInterviews: DashboardWebInterviewsViewModel());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();
@@ -117,6 +121,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 
         private static RejectedInterviewsViewModel DashboardRejectedInterviewsViewModel()
             => new RejectedInterviewsViewModel(
+                Substitute.For<IPlainStorage<InterviewView>>(),
+                Substitute.For<IInterviewViewModelFactory>(),
+                Substitute.For<IPlainStorage<PrefilledQuestionView>>(),
+                Substitute.For<IPrincipal>());
+
+        private static WebInterviewsViewModel DashboardWebInterviewsViewModel()
+            => new WebInterviewsViewModel(
                 Substitute.For<IPlainStorage<InterviewView>>(),
                 Substitute.For<IInterviewViewModelFactory>(),
                 Substitute.For<IPlainStorage<PrefilledQuestionView>>(),

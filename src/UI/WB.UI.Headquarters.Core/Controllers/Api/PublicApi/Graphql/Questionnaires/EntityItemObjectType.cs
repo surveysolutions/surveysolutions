@@ -31,7 +31,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             
             descriptor.Field("options")
                 .Name("options")
-                .Resolver(context =>
+                .Resolve(async context => await
                     context.BatchDataLoader<int, List<CategoricalOption>>(async (keys, token )  =>
                     {
                         var unitOfWork = context.Service<IUnitOfWork>();
@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                                     return new List<CategoricalOption>();
                                 });
                       
-                    },"optionsByQuestion").LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default))
+                    },"optionsByQuestion").LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default).ConfigureAwait(false))
                 .Type<NonNullType<ListType<NonNullType<CategoricalOptionType>>>>();
             
             descriptor.Field(x => x.QuestionText)
@@ -78,11 +78,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             
             descriptor.Field(x => x.QuestionType)
                 .Name("type")
-                .Type<NonNullType<QuestionTypeObjectType>>();
+                .Type<QuestionTypeObjectType>();
 
             descriptor.Field(x => x.StataExportCaption)
                 .Name("variable")
                 .Type<StringType>();
+
+            descriptor.Field(x => x.VariableType)
+                .Name("variableType")
+                .Type<VariableTypeObjectType>();
         }
         
     }

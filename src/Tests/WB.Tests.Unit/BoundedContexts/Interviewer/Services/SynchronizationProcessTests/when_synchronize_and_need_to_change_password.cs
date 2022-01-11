@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -6,15 +7,15 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
-using WB.Tests.Unit.SharedKernels.DataCollection.YesNoAnswersTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
@@ -35,6 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             Mock<IPlainStorage<InterviewerIdentity>> interviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
             Mock<IUserInteractionService> userInteractionServiceMock = new Mock<IUserInteractionService>();
             Mock<IOnlineSynchronizationService> synchronizationServiceMock = new Mock<IOnlineSynchronizationService>();
+            Mock<IWorkspaceService> workspaceService = new Mock<IWorkspaceService>();
 
             Mock<IPasswordHasher> passwordHasherMock = new Mock<IPasswordHasher>();
 
@@ -61,6 +63,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .Setup(x => x.CanSynchronizeAsync(It.Is<RestCredentials>(r => r.Token == "new token"), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask);
 
+            synchronizationServiceMock
+                .Setup(x => x.GetInterviewerAsync(It.Is<RestCredentials>(r => r.Token == interviewerIdentity.Token), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new InterviewerApiView() { Workspaces = new List<UserWorkspaceApiView>() { new UserWorkspaceApiView() { Name = "primary"} }}));
+
             passwordHasherMock
                 .Setup(x => x.Hash(It.IsAny<string>()))
                 .Returns<string>(x => x);
@@ -73,10 +79,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .Setup(x => x.FirstOrDefault())
                 .Returns(interviewerIdentity);
 
+            workspaceService
+                .Setup(x => x.GetAll())
+                .Returns(new WorkspaceView[] {new WorkspaceView() { Id = "primary" }});
+
             var viewModel = Create.Service.SynchronizationProcess(principal: principalMock.Object,
                 synchronizationService: synchronizationServiceMock.Object,
                 userInteractionService: userInteractionServiceMock.Object,
-                passwordHasher: passwordHasherMock.Object);
+                passwordHasher: passwordHasherMock.Object,
+                workspaceService: workspaceService.Object);
 
             // Act
             await viewModel.SynchronizeAsync(new Progress<SyncProgressInfo>(), default);

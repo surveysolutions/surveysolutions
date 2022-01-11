@@ -1,16 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Net;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Schema.Generation;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.Infrastructure.Versions;
+using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models.ControlPanel;
 
@@ -55,11 +62,13 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         public ActionResult HttpStatusCode(int? statusCode, string message = "Use query argument 'statusCode' and 'message' to display custom response") =>
             this.StatusCode(statusCode ?? 404, message);
 
+        public ActionResult DocumentSchema() => this.View();
 
         public ActionResult CompilationVersions() 
             => this.View("CompilationVersionsViews/CompilationVersions", this.questionnaireCompilationVersionService.GetCompilationVersions());
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult RemoveCompilationVersion(Guid questionnaireId)
         {
             this.questionnaireCompilationVersionService.Remove(questionnaireId);
@@ -69,6 +78,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         public ActionResult AddCompilationVersion() => this.View("CompilationVersionsViews/AddCompilationVersion", new CompilationVersionModel());
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AddCompilationVersion(CompilationVersionModel model)
         {
             if (ModelState.IsValid)
@@ -96,6 +106,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult EditCompilationVersion(CompilationVersionModel model)
         {
             if (ModelState.IsValid)
@@ -112,6 +123,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> MakeAdmin(MakeAdminViewModel model)
         {
             if (ModelState.IsValid)
@@ -156,6 +168,35 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
                     change => change.UpdateTimeUtc,
                     change => change.ProductVersion)));
 
+        private static string? questionnaireDocumentSchema = null;
+        
+        public IActionResult GetSchema([FromQuery]bool? getFile = null)
+        {
+            questionnaireDocumentSchema ??= ReadSchema();
+
+            if (getFile == true)
+                return new FileStreamResult(new MemoryStream(
+                    Encoding.UTF8.GetBytes(questionnaireDocumentSchema)), "application/schema+json")
+                {
+                    FileDownloadName = "questionnaire.schema.json"
+                };
+            else
+                return this.Json(questionnaireDocumentSchema);
+        }
+
+        private string ReadSchema()
+        {
+            var testType = typeof(QuestionnaireImportService);
+            var readResourceFile = $"{testType.Namespace}.QuestionnaireSchema.json";
+
+            using Stream? stream = testType.Assembly.GetManifestResourceStream(readResourceFile);
+            if (stream == null)
+                throw new ArgumentException("Can't find json schema for questionnaire");
+            using StreamReader reader = new StreamReader(stream);
+            string schemaText = reader.ReadToEnd();
+            return schemaText;
+        }
+        
         public class VersionsInfo
         {
             public VersionsInfo(string product, Dictionary<DateTime, string> history)

@@ -1,9 +1,11 @@
 ﻿using System;
 using SQLite;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
+    [NonWorkspaced]
     public class AuditLogEntityView 
     {
         [PrimaryKey, Unique, AutoIncrement]
@@ -18,5 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public string ResponsibleName { get; set; }
 
         public IAuditLogEntity Payload { get; set; }
+        
+        public string Workspace { get; set; }
     }
 }

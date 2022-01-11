@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -10,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 {
     public static class InterviewReaderExtensions
     {
-        public static QuestionnaireIdentity GetQuestionnaireIdentity(
+        public static QuestionnaireIdentity? GetQuestionnaireIdentity(
             this IQueryableReadSideRepositoryReader<InterviewSummary> summaries,
             Guid interviewId)
         {
@@ -24,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
             return null;
         }
 
-        public static QuestionnaireIdentity GetQuestionnaireIdentity(this IMemoryCache cache,
+        public static QuestionnaireIdentity? GetQuestionnaireIdentity(this IMemoryCache cache,
             IQueryableReadSideRepositoryReader<InterviewSummary> summaries, Guid interviewId)
         {
             return cache.GetOrCreate("gqi:" + interviewId, entry =>

@@ -23,8 +23,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 {
                     Abc.Create.Entity.Group(children: new IComposite[]
                     {
-                        Abc.Create.Entity.Question(variable: "a", enablementCondition: null),
-                        Abc.Create.Entity.Question(variable: "b", enablementCondition: null),
+                        Abc.Create.Entity.TextQuestion(variable: "a", enablementCondition: null),
+                        Abc.Create.Entity.TextQuestion(variable: "b", enablementCondition: null),
                         Abc.Create.Entity.Group(null, "Group X", "i", null, false, null),
                         Abc.Create.Entity.Group(null, "Group X", "j", null, false, null),
                         Abc.Create.Entity.Roster(variable: "x", enablementCondition: null),

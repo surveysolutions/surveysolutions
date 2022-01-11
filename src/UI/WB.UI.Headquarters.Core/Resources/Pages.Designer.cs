@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Pages {
@@ -66,6 +66,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string AccessDenied_Title {
             get {
                 return ResourceManager.GetString("AccessDenied_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API tokens.
+        /// </summary>
+        public static string AccountManage_ApiTokens {
+            get {
+                return ResourceManager.GetString("AccountManage_ApiTokens", resourceCulture);
             }
         }
         
@@ -142,11 +151,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show users.
+        /// </summary>
+        public static string AccountManage_ShowUsers {
+            get {
+                return ResourceManager.GetString("AccountManage_ShowUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Two factor authentication is currently .
         /// </summary>
         public static string AccountManage_Status2fa {
             get {
                 return ResourceManager.GetString("AccountManage_Status2fa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API token is:.
+        /// </summary>
+        public static string AccountManage_StatusApiToken {
+            get {
+                return ResourceManager.GetString("AccountManage_StatusApiToken", resourceCulture);
             }
         }
         
@@ -457,6 +484,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid request data..
+        /// </summary>
+        public static string AntiForgeryError_Title {
+            get {
+                return ResourceManager.GetString("AntiForgeryError_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Any.
         /// </summary>
         public static string AnyOption {
@@ -642,6 +678,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string AuthenticatorCode {
             get {
                 return ResourceManager.GetString("AuthenticatorCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account is autolocked.
+        /// </summary>
+        public static string AutolockDescription {
+            get {
+                return ResourceManager.GetString("AutolockDescription", resourceCulture);
             }
         }
         
@@ -1006,11 +1051,110 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available variables.
+        /// </summary>
+        public static string Exposed_Variables_AvailableVariablesTitle {
+            get {
+                return ResourceManager.GetString("Exposed_Variables_AvailableVariablesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selecting these variables will allow to use them in reporting. Newly created interviews will be available instantly. Previously collected interviews will be processed and it would take some time. You may select up to 15 variables..
+        /// </summary>
+        public static string Exposed_Variables_Description {
+            get {
+                return ResourceManager.GetString("Exposed_Variables_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exposed variables.
+        /// </summary>
+        public static string Exposed_Variables_SelectedVariablesTitle {
+            get {
+                return ResourceManager.GetString("Exposed_Variables_SelectedVariablesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are changing the set of exposed variables. It will take some time to update the reports..
+        /// </summary>
+        public static string ExposedVariables_ChangeMessage {
+            get {
+                return ResourceManager.GetString("ExposedVariables_ChangeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to remove variable from the list?.
+        /// </summary>
+        public static string ExposedVariables_RemoveMessage {
+            get {
+                return ResourceManager.GetString("ExposedVariables_RemoveMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display title.
+        /// </summary>
+        public static string ExposedVariables_VariableDisplayTitle {
+            get {
+                return ResourceManager.GetString("ExposedVariables_VariableDisplayTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Label.
+        /// </summary>
+        public static string ExposedVariables_VariableLabel {
+            get {
+                return ResourceManager.GetString("ExposedVariables_VariableLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable Name.
+        /// </summary>
+        public static string ExposedVariables_VariableName {
+            get {
+                return ResourceManager.GetString("ExposedVariables_VariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string ExposedVariables_VariableTitle {
+            get {
+                return ResourceManager.GetString("ExposedVariables_VariableTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignment.
         /// </summary>
         public static string Filters_Assignment {
             get {
                 return ResourceManager.GetString("Filters_Assignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview Mode.
+        /// </summary>
+        public static string Filters_InterviewMode {
+            get {
+                return ResourceManager.GetString("Filters_InterviewMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All interview modes.
+        /// </summary>
+        public static string Filters_InterviewModePlaceHolder {
+            get {
+                return ResourceManager.GetString("Filters_InterviewModePlaceHolder", resourceCulture);
             }
         }
         
@@ -1056,6 +1200,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string GetEsriExtraDescription {
             get {
                 return ResourceManager.GetString("GetEsriExtraDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download interviewer app.
+        /// </summary>
+        public static string GetInterviewerApp {
+            get {
+                return ResourceManager.GetString("GetInterviewerApp", resourceCulture);
             }
         }
         
@@ -1551,6 +1704,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewDetails_UnansweredButtonLabel {
             get {
                 return ResourceManager.GetString("InterviewDetails_UnansweredButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action will create individual user with interviewer rights,&lt;br&gt; to create several users you can use &lt;a href=&quot;{{link}}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;..
+        /// </summary>
+        public static string Interviewer_CreateText {
+            get {
+                return ResourceManager.GetString("Interviewer_CreateText", resourceCulture);
             }
         }
         
@@ -3535,6 +3697,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire exposed variables.
+        /// </summary>
+        public static string Questionnaire_Exposed_Variables {
+            get {
+                return ResourceManager.GetString("Questionnaire_Exposed_Variables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire details.
         /// </summary>
         public static string Questionnaire_Info {
@@ -3806,7 +3977,7 @@ namespace WB.UI.Headquarters.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to This action will create individual user with supervisor rights,
-        ///        &lt;br&gt;to create several users you can use &lt;a href=&quot;{{link}}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;..
+        ///        &lt;br&gt;to create several users you can use &lt;a href=&quot;{{link}}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;.
         /// </summary>
         public static string Supervisor_CreateText {
             get {
@@ -4193,6 +4364,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unlock.
+        /// </summary>
+        public static string Unlock {
+            get {
+                return ResourceManager.GetString("Unlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update.
         /// </summary>
         public static string Update {
@@ -4220,6 +4400,105 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to user batch creation.
+        /// </summary>
+        public static string User_CreateText_UserBatchUploadLinkText {
+            get {
+                return ResourceManager.GetString("User_CreateText_UserBatchUploadLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action will create individual user,.
+        /// </summary>
+        public static string User_CreateText1 {
+            get {
+                return ResourceManager.GetString("User_CreateText1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to create several interviewers and supervisors you can use {{link}}.
+        /// </summary>
+        public static string User_CreateText2 {
+            get {
+                return ResourceManager.GetString("User_CreateText2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to workspaces.
+        /// </summary>
+        public static string UserManagement_AddToWorkspace {
+            get {
+                return ResourceManager.GetString("UserManagement_AddToWorkspace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage workspaces.
+        /// </summary>
+        public static string UserManagement_ManageWorkspacesTitle {
+            get {
+                return ResourceManager.GetString("UserManagement_ManageWorkspacesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove from workspaces.
+        /// </summary>
+        public static string UserManagement_RemoveFromWorkspace {
+            get {
+                return ResourceManager.GetString("UserManagement_RemoveFromWorkspace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select workspaces that need to be added to selected users.
+        /// </summary>
+        public static string UserManagement_SubtitleAdd {
+            get {
+                return ResourceManager.GetString("UserManagement_SubtitleAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select workspace and supervisor that need to create interviewer.
+        /// </summary>
+        public static string UserManagement_SubtitleAddInterviewer {
+            get {
+                return ResourceManager.GetString("UserManagement_SubtitleAddInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select workspaces that need to be removed from selected users.
+        /// </summary>
+        public static string UserManagement_SubtitleRemove {
+            get {
+                return ResourceManager.GetString("UserManagement_SubtitleRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User(s) selected.
+        /// </summary>
+        public static string UserManagement_UsersSelected {
+            get {
+                return ResourceManager.GetString("UserManagement_UsersSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Active users.
+        /// </summary>
+        public static string Users_ActiveUsers {
+            get {
+                return ResourceManager.GetString("Users_ActiveUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Press Add API button to create a new API user..
         /// </summary>
         public static string Users_API_Instruction1 {
@@ -4234,6 +4513,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string Users_API_Instruction2 {
             get {
                 return ResourceManager.GetString("Users_API_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archived users.
+        /// </summary>
+        public static string Users_ArchivedUsers {
+            get {
+                return ResourceManager.GetString("Users_ArchivedUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You will archive supervisors and interviewers within theirs team. Interviewers assigned to archived supervisor will be also archived in all workspaces. If interviewers have any non synchronized data on tablets it will be deleted..
+        /// </summary>
+        public static string Users_ArchiveUsersConfirmMessage {
+            get {
+                return ResourceManager.GetString("Users_ArchiveUsersConfirmMessage", resourceCulture);
             }
         }
         
@@ -4310,20 +4607,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show Locked users.
+        ///   Looks up a localized string similar to User(s) will be unarchived..
         /// </summary>
-        public static string UsersManage_LockedUsers {
+        public static string Users_UnarchiveUsersWarning {
             get {
-                return ResourceManager.GetString("UsersManage_LockedUsers", resourceCulture);
+                return ResourceManager.GetString("Users_UnarchiveUsersWarning", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Users with missing workspace.
+        ///   Looks up a localized string similar to Do you want to continue?.
         /// </summary>
-        public static string UsersManage_MissingWorkspace {
+        public static string Users_UsersConfirm {
             get {
-                return ResourceManager.GetString("UsersManage_MissingWorkspace", resourceCulture);
+                return ResourceManager.GetString("Users_UsersConfirm", resourceCulture);
             }
         }
         
@@ -4333,6 +4630,51 @@ namespace WB.UI.Headquarters.Resources {
         public static string UsersManage_RoleFilterPlaceholder {
             get {
                 return ResourceManager.GetString("UsersManage_RoleFilterPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All users.
+        /// </summary>
+        public static string UsersManage_ShowUsersFilterPlaceholder {
+            get {
+                return ResourceManager.GetString("UsersManage_ShowUsersFilterPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select supervisor.
+        /// </summary>
+        public static string UsersManage_SupervisorFilterPlaceholder {
+            get {
+                return ResourceManager.GetString("UsersManage_SupervisorFilterPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor (Interviewers will be added to his team).
+        /// </summary>
+        public static string UsersManage_SupervisorFilterTitle {
+            get {
+                return ResourceManager.GetString("UsersManage_SupervisorFilterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team.
+        /// </summary>
+        public static string UsersManage_TeamFilter {
+            get {
+                return ResourceManager.GetString("UsersManage_TeamFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team.
+        /// </summary>
+        public static string UsersManage_TeamFilterPlaceHolder {
+            get {
+                return ResourceManager.GetString("UsersManage_TeamFilterPlaceHolder", resourceCulture);
             }
         }
         

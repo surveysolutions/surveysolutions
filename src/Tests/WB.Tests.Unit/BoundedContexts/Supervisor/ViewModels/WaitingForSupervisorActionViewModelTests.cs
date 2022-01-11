@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Moq;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
@@ -19,6 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         {
             base.Setup();
             Ioc.RegisterSingleton(Create.Fake.MvxMainThreadAsyncDispatcher());
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
         }
 
         [Test]

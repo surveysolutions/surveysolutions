@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -48,7 +49,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, InterviewPaused>,
         IUpdateHandler<InterviewSummary, InterviewOpenedBySupervisor>,
         IUpdateHandler<InterviewSummary, InterviewClosedBySupervisor>,
-        IUpdateHandler<InterviewSummary, TranslationSwitched>
+        IUpdateHandler<InterviewSummary, TranslationSwitched>,
+        IUpdateHandler<InterviewSummary, InterviewModeChanged>
+        //IUpdateHandler<InterviewSummary, InterviewReceivedByInterviewer>,
+        //IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>        
     {
         private readonly IUserViewFactory users;
         private readonly string unknown = "Unknown";
@@ -231,7 +235,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             var expectedStatus = InterviewExportedAction.InterviewerAssigned;
 
-            var lastStatusInfo = state?.InterviewCommentedStatuses?.LastOrDefault();
+            var lastStatusInfo = state.InterviewCommentedStatuses?.LastOrDefault();
             if(lastStatusInfo?.Status == InterviewExportedAction.Completed)
                 expectedStatus = InterviewExportedAction.Completed;
 
@@ -280,7 +284,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             InterviewExportedAction.Paused,
             InterviewExportedAction.Resumed,
             InterviewExportedAction.OpenedBySupervisor,
-            InterviewExportedAction.ClosedBySupervisor
+            InterviewExportedAction.ClosedBySupervisor,
+            InterviewExportedAction.InterviewSwitchedToCapiMode,
+            InterviewExportedAction.InterviewSwitchedToCawiMode
         };
 
         private InterviewSummary AddCommentedStatus(
@@ -467,5 +473,29 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 @event.EventTimeStamp,
                 null);
         }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewModeChanged> @event)
+        {
+            return AddCommentedStatus(@event.EventIdentifier,
+                state,
+                @event.Payload.UserId,
+                state.SupervisorId,
+                @event.Payload.UserId,
+                @event.Payload.Mode == InterviewMode.CAWI ? InterviewExportedAction.InterviewSwitchedToCawiMode : InterviewExportedAction.InterviewSwitchedToCapiMode,
+                @event.EventTimeStamp,
+                @event.Payload.Comment);
+        }
+
+        //public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewReceivedByInterviewer> @event)
+        //{
+        //    //passive event, has no user
+        //    return state;
+        //}
+
+        //public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewReceivedBySupervisor> @event)
+        //{
+        //    //passive event, has no user
+        //    return state;
+        //}
     }
 }

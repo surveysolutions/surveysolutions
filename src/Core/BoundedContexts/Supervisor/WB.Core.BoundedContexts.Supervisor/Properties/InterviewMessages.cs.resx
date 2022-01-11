@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="NotAllowedAnswеringNonSupervisor" xml:space="preserve">
-    <value>Garant nemá právo odpovídat na tazatelské otázky</value>
+    <value>Garant nemůže odpovídat na tazatelské otázky</value>
   </data>
 </root>

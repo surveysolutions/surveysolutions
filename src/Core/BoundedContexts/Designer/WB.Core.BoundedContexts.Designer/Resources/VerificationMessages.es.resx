@@ -645,9 +645,6 @@
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>El roster ha alcanzado el tamaño límite. Reduzca el tamaño del roster  o decremente los niveles de anidación</value>
   </data>
-  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>La primera sección no puede contener condición habilitante.</value>
-  </data>
   <data name="WB0264_GpsQuestion" xml:space="preserve">
     <value>Usted tiene una pregunta de tipo GPS. La tableta a usar para este cuestionario debe soportar geo localización</value>
   </data>
@@ -718,7 +715,7 @@
     <value>El título del cuestionario no debe tener dos o más guiones bajos consecutivos.</value>
   </data>
   <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-    <value>El modo simple se permite sólo para rosters con no más de {0} elementos.</value>
+      <value>El modo simple se permite sólo para rosters con no más de {0} preguntas o textos estáticos.</value>
   </data>
   <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
     <value>El modo simple no permite el uso de rosters anidados.</value>

@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="NotAllowedAnswеringNonSupervisor" xml:space="preserve">
-    <value>Controlorul nu are voie să răspundă la întrebările non-controlor</value>
+    <value>Supervizorul nu are voie să răspundă la întrebările non-Supervizor</value>
   </data>
 </root>

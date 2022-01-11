@@ -1,24 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using Android.Gms.Common;
 using Android.Text;
 using Android.Text.Format;
 using Android.Views;
 using Android.Widget;
-using Google.Android.Material.DatePicker;
 using Google.Android.Material.Dialog;
 using Google.Android.Material.TextField;
 using Java.Lang;
+using MvvmCross;
 using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Utils;
-using AlertDialog = AndroidX.AppCompat.App.AlertDialog;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
@@ -44,9 +42,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             }
         }
 
-        public UserInteractionService(IMvxAndroidCurrentTopActivity mvxCurrentTopActivity)
+        public UserInteractionService()
         {
-            this.mvxCurrentTopActivity = mvxCurrentTopActivity;
+            this.mvxCurrentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
         }
 
         public Task<bool> ConfirmAsync(
@@ -173,6 +171,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             timePickerDialog.SetCanceledOnTouchOutside(false);
             timePickerDialog.Show();
 
+            return tcs.Task;
+        }
+
+        public Task ShowAlertWithQRCodeAndText(string qrCodeText, string description)
+        {
+            var tcs = new TaskCompletionSource<object>();
+            this.AlertWithQrCode(() => tcs.TrySetResult(null),description, qrCodeText, UIResources.Ok);
             return tcs.Task;
         }
 
@@ -470,9 +475,53 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             HandleDialogClose(userInteractionId);
                             return;
                         }
-
+                        
                         new MaterialAlertDialogBuilder(this.mvxCurrentTopActivity.Activity)
                             .SetMessage(message.ToAndroidSpanned())
+                            .SetTitle(title.ToAndroidSpanned())
+                            .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () =>
+                            {
+                                callback?.Invoke();
+                            }); })
+                            .SetCancelable(false)
+                            .Show();
+                    },
+                    null);
+            }
+            catch
+            {
+                HandleDialogClose(userInteractionId);
+                throw;
+            }
+        }    
+        
+        private void AlertWithQrCode(Action callback, string title, string qrCodeValue, string okButton)
+        {
+            var userInteractionId = Guid.NewGuid();
+
+            try
+            {
+                HandleDialogOpen(userInteractionId);
+
+                Application.SynchronizationContext.Post(
+                    ignored =>
+                    {
+                        if (this.mvxCurrentTopActivity.Activity == null)
+                        {
+                            HandleDialogClose(userInteractionId);
+                            return;
+                        }
+
+                        View view = this.mvxCurrentTopActivity.Activity.LayoutInflater
+                            .Inflate(Resource.Layout.qr_code_popup, null);
+                        
+                        var textView = view!.FindViewById<TextView>(Resource.Id.linkWebInterview);
+                        textView.Text = qrCodeValue;
+                        var image = view!.FindViewById<ImageView>(Resource.Id.qrCodeImage);
+                        image!.SetImageBitmap(QRCodeRenderer.RenderToBitmap(qrCodeValue));
+
+                        new MaterialAlertDialogBuilder(this.mvxCurrentTopActivity.Activity)
+                            .SetView(view)
                             .SetTitle(title.ToAndroidSpanned())
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () =>
                             {

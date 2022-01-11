@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -32,17 +33,19 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         private readonly IInterviewFactory interviewFactory;
         private readonly IUserViewFactory userViewFactory;
         private readonly ICalendarEventService calendarEventService;
+        private readonly IAssignmentsService assignmentsStorage;
 
         public InterviewCommandsController(ICommandService commandService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, 
             IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository, 
             IWebInterviewNotificationService webInterviewNotificationService, IAuthorizedUser authorizedUser, IInterviewFactory interviewFactory,
-            IUserViewFactory userViewFactory, ICalendarEventService calendarEventService) 
+            IUserViewFactory userViewFactory, ICalendarEventService calendarEventService, IAssignmentsService assignmentsStorage) 
             : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService)
         {
             this.authorizedUser = authorizedUser;
             this.interviewFactory = interviewFactory;
             this.userViewFactory = userViewFactory;
             this.calendarEventService = calendarEventService;
+            this.assignmentsStorage = assignmentsStorage;
         }
 
         protected bool IsReviewMode() =>
@@ -122,7 +125,23 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         [Route("completeInterview")]
         public override IActionResult CompleteInterview(Guid interviewId, [FromBody]CompleteInterviewRequest completeInterviewRequest)
         {
-            var command = new CompleteInterviewCommand(interviewId, GetCommandResponsibleId(interviewId), completeInterviewRequest.Comment);
+            ICommand command = new CompleteInterviewCommand(interviewId, GetCommandResponsibleId(interviewId), completeInterviewRequest.Comment);
+            this.commandService.Execute(command);
+            return Ok();
+        }
+
+        public class RequestWebInterviewRequest : AnswerRequest
+        {
+            public string Comment { get; set; }
+        }
+
+        [HttpPost]
+        [Route("requestWebInterview")]
+        public IActionResult RequestWebInterview(Guid interviewId, [FromBody]RequestWebInterviewRequest completeInterviewRequest)
+        {
+            ICommand command = new ChangeInterviewModeCommand(interviewId, GetCommandResponsibleId(interviewId), 
+                InterviewMode.CAWI, completeInterviewRequest.Comment);
+                
             this.commandService.Execute(command);
             return Ok();
         }
@@ -157,7 +176,12 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         {
             var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
             if (calendarEvent != null && !calendarEvent.IsCompleted())
-                this.commandService.Execute(new CompleteCalendarEventCommand(calendarEvent.PublicKey, this.GetCommandResponsibleId(interviewId)));
+            {
+                var assignment = this.assignmentsStorage.GetAssignment(calendarEvent.AssignmentId);
+                this.commandService.Execute(new CompleteCalendarEventCommand(calendarEvent.PublicKey,
+                    this.GetCommandResponsibleId(interviewId),
+                    assignment.QuestionnaireId));
+            }
         }
 
         public class RejectInterviewRequest

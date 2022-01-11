@@ -67,7 +67,8 @@ namespace WB.UI.WebTester.Services.Implementation
                 interviewerId: Guid.NewGuid(),
                 interviewKey: new InterviewKey(new Random().Next(99999999)),
                 assignmentId: null,
-                isAudioRecordingEnabled: false);
+                isAudioRecordingEnabled: false, 
+                InterviewMode.CAPI);
 
             this.commandService.Execute(createInterview);
 
@@ -100,7 +101,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
                 return CreationResult.DataRestored;
             }
-            catch (InterviewException ie)
+            catch (InterviewException)
             {
                 return CreationResult.DataPartialRestored;
             }
@@ -148,7 +149,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
                 return CreationResult.DataRestored;
             }
-            catch (InterviewException ie)
+            catch (InterviewException)
             {
                 if (existingInterviewCommands != null && existingInterviewCommands.Count > 0 && lastCommandIndex > 0)
                 {
@@ -162,7 +163,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 await this.ImportQuestionnaireAndCreateInterview(designerToken);
                 return CreationResult.EmptyCreated;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Evict(designerToken);
                 await this.ImportQuestionnaireAndCreateInterview(designerToken);

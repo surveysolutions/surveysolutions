@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Services
 {
     public static class HtmlExtensions
     {
-        private static readonly JsonSerializerSettings asJsonValueSettings = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Services
         {
             var urlFactory = html.ViewContext.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>();
             var urlHelper = urlFactory.GetUrlHelper(html.ViewContext);
-            var actionLinkUrl = urlHelper.Action(actionName, controllerName);
+            var actionLinkUrl = urlHelper.Action(actionName, controllerName, new { id = "" });
 
             var context = html.ViewContext.HttpContext.RequestServices.GetWorkspaceContext();
             
@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Services
 
         public static IHtmlContent AsJsonValue(this object obj)
         {
-            return new HtmlString(JsonConvert.SerializeObject(obj, asJsonValueSettings));
+            return new HtmlString(JsonConvert.SerializeObject(obj, SerializerSettings));
         }
     }
 }

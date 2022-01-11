@@ -28,6 +28,9 @@ Vue.component('popover', Popover)
 import box from '@/shared/modal'
 import 'flatpickr/dist/flatpickr.css'
 import 'toastr/build/toastr.css'
+import * as toastr from 'toastr'
+toastr.options.escapeHtml = true
+
 import * as poly from 'smoothscroll-polyfill'
 poly.polyfill()
 
@@ -55,6 +58,9 @@ const router = new Router({
 sync(store, router)
 
 box.init(i18n, browserLanguage)
+
+Vue.prototype.$eventHub = new Vue()
+
 export default new Vue({
     el: '#vueApp',
     render: h => h('router-view'),

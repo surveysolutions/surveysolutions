@@ -19,6 +19,12 @@ namespace WB.UI.Headquarters.Filters
                 ? context.RouteData.Values["id"].ToString()
                 : context.HttpContext.Request.Query[InterviewIdQueryString].ToString();
 
+            if (string.IsNullOrEmpty(interviewId))
+            {
+                RedirectToError(context, Enumerator.Native.Resources.WebInterview.InterviewNotFound);
+                return;
+            }
+
             try
             {
                 var ctx = context.HttpContext;
@@ -38,13 +44,18 @@ namespace WB.UI.Headquarters.Filters
             {
                 string errorMessage = WebInterview.GetUiMessageFromException(ie);
 
-                if (context.Controller is Controller controller)
-                {
-                    controller.TempData["WebInterview.ErrorMessage"] = errorMessage;
-                }
-
-                context.Result = new RedirectToActionResult("Error", "WebInterview", null); 
+                RedirectToError(context, errorMessage);
             }
+        }
+
+        private void RedirectToError(ActionExecutingContext context, string errorMessage)
+        {
+            if (context.Controller is Controller controller)
+            {
+                controller.TempData["WebInterview.ErrorMessage"] = errorMessage;
+            }
+
+            context.Result = new RedirectToActionResult("Error", "WebInterview", null); 
         }
     }
 }

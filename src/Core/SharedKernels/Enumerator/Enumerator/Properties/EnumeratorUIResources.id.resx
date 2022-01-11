@@ -186,7 +186,7 @@ untuk instruksi lebih lanjut</value>
     <value>{0} (v{1})</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Server error. Silahkan hubungi tim pendukung di support@mysurvey.solutions.</value>
+    <value>Server error. Silakan hubungi administrator server.</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>Alamat situs Supervisor tidak benar. Pastikan bahwa Anda memasukkan alamat url yang benar.</value>

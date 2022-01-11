@@ -25,19 +25,6 @@
                     <p>{{error.recomendation}}</p>
                 </div>
                 <div class="action-buttons">
-                    <input
-                        name="file"
-                        ref="uploader"
-                        v-show="false"
-                        :accept="allowedFileExtensions"
-                        :value="selectedFileName"
-                        type="file"
-                        @change="onFileChange"
-                        class="btn btn-default btn-lg btn-action-questionnaire"/>
-                    <button
-                        type="button"
-                        class="btn btn-success"
-                        @click="selectFile">{{$t('UploadUsers.ReUploadTabFile')}}</button>
                     <router-link
                         class="btn btn-link"
                         :to="{ name: 'upload'}">{{$t('UploadUsers.BackToImport')}}</router-link>
@@ -87,6 +74,7 @@ export default {
             var file = files[0]
             var formData = new FormData()
             formData.append('file', files[0])
+            formData.append('workspace', this.workspace.key)
 
             var self = this
 

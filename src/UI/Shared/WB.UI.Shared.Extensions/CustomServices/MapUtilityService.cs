@@ -109,8 +109,11 @@ namespace WB.UI.Shared.Extensions.CustomServices
             addressLabelsBuilder.AppendLine("\"labelPlacement\": \"esriServerPolygonPlacementAlwaysHorizontal\",");
             //     Use a green bold text symbol
             addressLabelsBuilder.AppendLine("\"symbol\": {");
-            addressLabelsBuilder.AppendLine("\"color\": [0,255,50,255],");
-            addressLabelsBuilder.AppendLine("\"font\": {\"size\": 18, \"weight\": \"bold\"},");
+            addressLabelsBuilder.AppendLine("\"haloColor\": [255,255,255,255],");
+            addressLabelsBuilder.AppendLine("\"haloSize\": 2,");
+            addressLabelsBuilder.AppendLine("\"horizontalAlignment\": \"center\",");
+            addressLabelsBuilder.AppendLine("\"color\": [255,0,0,255],");
+            addressLabelsBuilder.AppendLine("\"font\": {\"size\": 12, \"weight\": \"bold\"},");
             addressLabelsBuilder.AppendLine("\"type\": \"esriTS\"}");
             addressLabelsBuilder.AppendLine("}");
 
@@ -129,11 +132,13 @@ namespace WB.UI.Shared.Extensions.CustomServices
             // Make sure labeling is enabled for the layer
             newFeatureLayer.LabelsEnabled = true;
 
-
-            SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Aqua, 1.0);
-            SimpleFillSymbol fillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Solid, Color.FromArgb(20, Color.Aquamarine), lineSymbol);
-
+            SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Red, 2.0);
+            SimpleFillSymbol fillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Null, Color.White, lineSymbol);
+            
             var alternateRenderer = new SimpleRenderer(fillSymbol);
+            
+            RendererSceneProperties myRendererSceneProperties = alternateRenderer.SceneProperties;
+            myRendererSceneProperties.ExtrusionMode = ExtrusionMode.Minimum;
 
             newFeatureLayer.Renderer = alternateRenderer;
 

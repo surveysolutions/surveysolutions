@@ -7,7 +7,7 @@ namespace WB.Core.Infrastructure.Domain
     public interface IInScopeExecutor
     {
         void Execute(Action<IServiceLocator> action, string workspace = null);
-        T Execute<T>(Func<IServiceLocator, T> func);
+        T Execute<T>(Func<IServiceLocator, T> func, string workspace = null);
         Task<T> ExecuteAsync<T>(Func<IServiceLocator, Task<T>> func, string workspace = null);
         Task ExecuteAsync(Func<IServiceLocator, Task> func, string workspace = null);
     }

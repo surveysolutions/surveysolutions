@@ -11,18 +11,8 @@ namespace WB.UI.Shared.Web.Versions
         public ProductVersion(Assembly assembly)
         {
             FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            if (!fileVersionInfo.ProductVersion.Contains("-"))
-            {
-                // build is on release branch and has no version suffix
-                this.version = FormatVersion(Version.Parse(fileVersionInfo.FileVersion));
-            }
-            else
-            {
-                this.version = fileVersionInfo.ProductVersion;
-            }
-
+            this.version = fileVersionInfo.ProductVersion;
             this.getVersion = Version.TryParse(this.version.Split(' ')[0], out var ver) ? ver : null;
-            
             this.buildNumber = fileVersionInfo.FilePrivatePart;
         }
 

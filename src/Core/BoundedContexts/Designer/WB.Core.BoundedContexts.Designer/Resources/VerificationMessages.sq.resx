@@ -672,9 +672,6 @@
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Rosteri ka arritur madhësinë limit. Ulni madhësinë e rosterit ose zvogëloni përsëritjen.</value>
   </data>
-  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>Rubrika e parë nuk mund të ketë kusht aktivizues.</value>
-  </data>
   <data name="WB0264_GpsQuestion" xml:space="preserve">
     <value>Ju keni një pyetje GPS. Tabletat mund ta mbështetin përdorimin e vendndodhjes gjeografike me këtë pyetësor.</value>
   </data>
@@ -718,7 +715,7 @@
     <value>Titulli i pyetësorit nuk duhet të ketë dy ose më shumë karaktere të njëpasnjëshme të nënvizuara.</value>
   </data>
   <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-    <value>Modaliteti i thjeshtë lejohet vetëm për rosterat me jo më shumë se {0} elemente.</value>
+      <value>Modaliteti i thjeshtë lejohet vetëm për rosterat me jo më shumë se {0} pyetje ose tekste statike.</value>
   </data>
   <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
     <value>Modaliteti i thjeshtë nuk lejon përdorimin e rosterave fole.</value>

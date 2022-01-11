@@ -304,5 +304,16 @@
   <data name="Filter_Archived" xml:space="preserve">
     <value>Archived users</value>
   </data>
-  
+  <data name="UsersTitle" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="AddUser" xml:space="preserve">
+    <value>Add User</value>
+  </data>
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Upload Users</value>
+  </data>
+  <data name="ApiTokenTitle" xml:space="preserve">
+      <value>User API Token</value>
+  </data>
 </root>

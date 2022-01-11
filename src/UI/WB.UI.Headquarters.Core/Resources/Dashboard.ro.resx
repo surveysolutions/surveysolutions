@@ -148,13 +148,13 @@
     <value>Creat la data de</value>
   </data>
   <data name="DeleteMap" xml:space="preserve">
-    <value>Șterge hartă</value>
+    <value>Ștergere hartă</value>
   </data>
   <data name="DeleteMapUser" xml:space="preserve">
-    <value>Șterge utilizatorul hărții</value>
+    <value>Ștergere utilizator hărți</value>
   </data>
   <data name="DeleteQuestionnaire" xml:space="preserve">
-    <value>Șterge chestionarul</value>
+    <value>Ștergere chestionarul</value>
   </data>
   <data name="ExportQuestionnaire" xml:space="preserve">
     <value>Exportă chestionarul</value>
@@ -217,13 +217,13 @@
     <value>{{role}} utilizator {{name}}</value>
   </data>
   <data name="QuestionnaireDeleteWarn" xml:space="preserve">
-    <value>Anchetele {{receivedInterviews}} și sarcinile {{receivedAssignments}}  au fost primite de anchetatorii / supraveghetorii care lucrează deconectați. După ce confirmați ștergerea sondajului, serverul nu va mai accepta informațiile pe baza acestor anchete / sarcini, care vor dispărea la următoarea sincronizare fără posibilitatea de recuperare, chiar dacă conțin informații introduse / editate recent. Este responsabilitatea dumneavoastră să avertizați / să anunțați anchetatorii să nu mai completeze acele anchete / sarcini, deoarece aceștia nu vor fi anunțați automat. Doriți să continuați?</value>
+    <value>Anchetele {{receivedInterviews}} și sarcinile {{receivedAssignments}}  au fost primite de anchetatorii / supervizorii care lucrează deconectați. După ce confirmați ștergerea sondajului, serverul nu va mai accepta informațiile pe baza acestor anchete / sarcini, care vor dispărea la următoarea sincronizare fără posibilitatea de recuperare, chiar dacă conțin informații introduse / editate recent. Este responsabilitatea dumneavoastră să avertizați / să anunțați anchetatorii să nu mai completeze acele anchete / sarcini, deoarece aceștia nu vor fi anunțați automat. Doriți să continuați?</value>
   </data>
   <data name="RecordAudio" xml:space="preserve">
     <value>Înregistrați audio</value>
   </data>
   <data name="RecordAudioTitle" xml:space="preserve">
-    <value>Aplicația Intervievator va înregistra sunetul interviului atunci când auditul audio este activat. Rețineți că cantitatea de date de sincronizare ar fi semnificativ mai mare.</value>
+    <value>Aplicația Interviewer va înregistra sunetul interviului atunci când auditul audio este activat. Rețineți că cantitatea de date de sincronizare ar fi semnificativ mai mare.</value>
   </data>
   <data name="SendInvitations" xml:space="preserve">
     <value>Trimite invitații</value>
@@ -235,6 +235,12 @@
     <value>Vă rugăm să introduceți '{{questionnaireTitle}}' pentru a confirma</value>
   </data>
   <data name="WebMode" xml:space="preserve">
-    <value>Modul WEB</value>
+    <value>Modul</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Tablou de bord hartă</value>
+  </data>
+  <data name="UsersManagement" xml:space="preserve">
+    <value>Managementul utilizatorilor</value>
   </data>
 </root>

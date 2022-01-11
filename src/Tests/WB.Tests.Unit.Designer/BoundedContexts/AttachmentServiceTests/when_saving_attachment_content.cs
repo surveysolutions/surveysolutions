@@ -1,5 +1,6 @@
 using System.Linq;
 using FluentAssertions;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests

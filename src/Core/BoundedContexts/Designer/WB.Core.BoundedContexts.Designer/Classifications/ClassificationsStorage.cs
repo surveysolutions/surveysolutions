@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 
 namespace WB.Core.BoundedContexts.Designer.Classifications

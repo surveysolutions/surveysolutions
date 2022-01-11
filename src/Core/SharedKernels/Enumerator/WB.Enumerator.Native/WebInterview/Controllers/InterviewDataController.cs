@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -88,7 +87,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 QuestionnaireTitle = IsReviewMode()
                     ? string.Format(Resources.WebInterview.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version)
                     : questionnaire.Title,
-                FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
+                FirstSectionId = questionnaire.GetFirstSectionId()?.FormatGuid(),
                 QuestionnaireVersion = questionnaire.Version,
                 InterviewKey = statefulInterview.GetInterviewKey().ToString(),
                 InterviewCannotBeChanged = 
@@ -109,12 +108,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return statefulInterview.IsEnabled(Identity.Parse(id));
         }
 
-        public virtual GroupStatus GetInterviewStatus(Guid interviewId)
+        public virtual InterviewSimpleStatus GetInterviewStatus(Guid interviewId)
         {
             var interview = this.GetCallerInterview(interviewId);
-            if (interview == null) return GroupStatus.StartedInvalid;
+            if (interview == null) return new InterviewSimpleStatus(){ Status = GroupStatus.StartedInvalid };
 
-            return this.interviewEntityFactory.GetInterviewSimpleStatus(interview, IsReviewMode());
+            return interview.GetInterviewSimpleStatus(IsReviewMode());
         }
 
         private IdentifyingEntity GetIdentifyingEntity(Guid entityId, IStatefulInterview interview, IQuestionnaire questionnaire)
@@ -134,7 +133,6 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 };
             }
 
-            
             if (entityType == InterviewEntityType.StaticText)
             {
                 var staticText = interview.GetStaticText(entityIdentity);
@@ -205,10 +203,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 .Union(ActionButtonsDefinition)
                 .ToArray();
 
+            var details = GetEntitiesDetails(interviewId, interviewEntityWithTypes.Select(e => e.Identity).ToArray());
+
             var result = new PrefilledPageData
             {
-                FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
+                FirstSectionId = questionnaire.GetFirstSectionId()?.FormatGuid(),
                 Entities = interviewEntityWithTypes,
+                Details = details,
                 HasAnyQuestions = interviewEntityWithTypes.Length > 1
             };
 
@@ -288,12 +289,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (statefulInterview == null) return null;
 
             var callerQuestionnaire = questionnaire ?? this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity);
-            ButtonState NewButtonState(ButtonState button, InterviewTreeGroup target)
+            ButtonState NewButtonState(ButtonState button, InterviewTreeGroup target = null)
             {
                 button.Id = id;
-                button.Target = target.Identity.ToString();
+                button.Target = target?.Identity.ToString();
                 button.Status = button.Type == ButtonType.Complete
-                    ? this.interviewEntityFactory.GetInterviewSimpleStatus(statefulInterview, IsReviewMode())
+                    ? statefulInterview.GetInterviewSimpleStatus(IsReviewMode()).Status
                     : this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode(), statefulInterview, questionnaire);
 
                 this.interviewEntityFactory.ApplyValidity(button.Validity, button.Status);
@@ -309,6 +310,15 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             if (sectionId == null)
             {
+                if (sections.Length == 0)
+                {
+                    return NewButtonState(new ButtonState
+                    {
+                        Title = Resources.WebInterview.CompleteInterview,
+                        Type = ButtonType.Complete
+                    } );
+                }
+
                 var firstSection = statefulInterview.GetGroup(Identity.Create(sections[0], RosterVector.Empty));
 
                 return NewButtonState(new ButtonState
@@ -329,7 +339,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 return NewButtonState(new ButtonState
                 {
                     Title = parentGroup.Title.Text,
-                    RosterTitle = parentRoster?.RosterTitle,
+                    RosterTitle = callerQuestionnaire.HasCustomRosterTitle(parent.Id) ? null : parentRoster?.RosterTitle,
                     Type = ButtonType.Parent
                 }, parentGroup);
             }
@@ -386,7 +396,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                         Title = treeGroup.Title.Text,
                         RosterTitle = (treeGroup as InterviewTreeRoster)?.RosterTitle,
                         Target = itemIdentity.ToString(),
-                        IsRoster = true
+                        IsRoster = true,
+                        HasCustomRosterTitle = questionnaire.HasCustomRosterTitle(parentId), 
                     };
 
                     if (breadCrumbs.Any())
@@ -509,12 +520,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return this.interviewEntityFactory.GetSidebarChildSectionsOf(sectionId, interview, questionnaire, ids, IsReviewMode());
         }
 
-        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @Combobox.vue")]
-        public virtual DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count)
-            => this.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count, null);
-
-
-        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @MultiCombobox.vue")]
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @MultiCombobox.vue and @Combobox.vue")]
         public virtual DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, int[] excludedOptionIds = null)
         {
             var questionIdentity = Identity.Parse(id);

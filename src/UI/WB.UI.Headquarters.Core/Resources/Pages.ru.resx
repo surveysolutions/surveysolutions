@@ -145,7 +145,7 @@
     <value>Устаревшая</value>
   </data>
   <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
-      <value>Вы переносите интервьюера у которого есть задания по web интервью. Эти задания будут назначены на текущего супервизора. Если Вы уже отправили ссылки для этих заданий, респонденты не смогут проходить интервью до тех пор пока задания не будут назначены на интервьюра.</value>
+    <value>Вы переносите интервьюера у которого есть задания по web интервью. Эти задания будут назначены на текущего супервизора. Если Вы уже отправили ссылки для этих заданий, респонденты не смогут проходить интервью до тех пор пока задания не будут назначены на интервьюра.</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Утвердить</value>
@@ -667,6 +667,9 @@
   <data name="GetLatestApp" xml:space="preserve">
     <value>Скачать последнюю версию</value>
   </data>
+    <data name="GetInterviewerApp" xml:space="preserve">
+    <value>Скачать приложение Интервьюера</value>
+  </data>
   <data name="GetLatestSupervisorApp" xml:space="preserve">
     <value>Скачать приложение Супервизора</value>
   </data>
@@ -843,7 +846,7 @@
   <data name="AccountManage_ShowUsers" xml:space="preserve">
     <value>Отобразить пользователей</value>
     <comment>Отобразить пользователей</comment>
-  </data>  
+  </data>
   <data name="AccountManage_Login" xml:space="preserve">
     <value>Логин</value>
     <comment>Логин</comment>
@@ -856,23 +859,44 @@
     <value>Обновить</value>
     <comment>Обновить</comment>
   </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Разблокировать</value>
+  </data>
   <data name="Verify" xml:space="preserve">
     <value>Проверить</value>
+  </data>
+    <data name="AutolockDescription" xml:space="preserve">
+    <value>Пользователь автоматически заблокирован</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
     <value>Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей</value>
     <comment>Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей</comment>
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
-      <value>Это действие создаст индивидуального пользователя с правами супервизора&lt;br&gt;
+    <value>Это действие создаст индивидуального пользователя с правами супервизора&lt;br&gt;
 Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{{link}}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
-      <comment>&lt;strong&gt;{0}&lt;/strong&gt; - link to batch user creation</comment>
+    <comment>&lt;strong&gt;{0}&lt;/strong&gt; - link to batch user creation</comment>
+  </data>
+  <data name="User_CreateText1" xml:space="preserve">
+    <value>Это действие создаст индивидуального пользователя,</value>
+  </data>
+  <data name="User_CreateText2" xml:space="preserve">
+    <value>Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией {{link}}</value>
+  </data>
+  <data name="User_CreateText_UserBatchUploadLinkText" xml:space="preserve">
+    <value>массового создания пользователей</value>
   </data>
   <data name="FilterTitle" xml:space="preserve">
     <value>Фильтры</value>
   </data>
   <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
     <value>Вы хотите продолжить?</value>
+  </data>
+  <data name="Users_UsersConfirm" xml:space="preserve">
+    <value>Вы хотите продолжить?</value>
+  </data>
+  <data name="Users_UnarchiveUsersWarning" xml:space="preserve">
+    <value>Пользователи будут разархивированы.</value>
   </data>
   <data name="Profile_InterviewerEditFormat" xml:space="preserve">
     <value>Редактирование профиля интервьюера: &lt;strong&gt;{0}&lt;/strong&gt;</value>
@@ -939,6 +963,10 @@
   <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
     <value>Если интервьюер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</value>
     <comment>Если интервьюер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</comment>
+  </data>
+  <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
+    <value>Будут заархивированы интервьюверы и супервизоры с их командами. Интервьюверы супервизора будут заархивированы во всех рабочих областях. Если интервьюеры имеют не просинхронизированные данные на на планшетах, то они будут удалены.</value>
+
   </data>
   <data name="Supervisors_Archive" xml:space="preserve">
     <value>Архивировать</value>
@@ -1138,6 +1166,12 @@
   <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
     <value>Статус архивирования</value>
   </data>
+  <data name="Users_ActiveUsers" xml:space="preserve">
+    <value>Активные пользователи</value>
+  </data>
+  <data name="Users_ArchivedUsers" xml:space="preserve">
+    <value>Архивные пользователи</value>
+  </data>
   <data name="InterviewersAndDevicesTitle" xml:space="preserve">
     <value>Устройства/Интервьюеры</value>
   </data>
@@ -1267,7 +1301,7 @@
     <value>Перенести в другую команду</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-      <value>{{names}} и {{lastname}}</value>
+    <value>{{names}} и {{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
     <value>{{names}} и еще {{more}}</value>
@@ -1377,129 +1411,129 @@
     <value>Имя переменной</value>
   </data>
   <data name="Home" xml:space="preserve">
-      <value>Домой</value>
-      <comment>Домой</comment>
+    <value>Домой</value>
+    <comment>Домой</comment>
   </data>
   <data name="AppUpdates" xml:space="preserve">
     <value>Apk infos</value>
   </data>
   <data name="Configuration" xml:space="preserve">
-      <value>Настройки</value>
+    <value>Настройки</value>
   </data>
   <data name="InterviewPackages" xml:space="preserve">
-      <value>Интервью пакеты</value>
-      <comment>Интервью пакеты</comment>
+    <value>Интервью пакеты</value>
+    <comment>Интервью пакеты</comment>
   </data>
   <data name="Exceptions" xml:space="preserve">
-      <value>Ошибки</value>
-      <comment>Ошибки</comment>
+    <value>Ошибки</value>
+    <comment>Ошибки</comment>
   </data>
   <data name="Admin_InterviewPackages_Exception" xml:space="preserve">
-      <value>Ошибка</value>
-      <comment>Ошибка</comment>
+    <value>Ошибка</value>
+    <comment>Ошибка</comment>
   </data>
   <data name="Admin_InterviewPackages_InterviewKey" xml:space="preserve">
-      <value>№</value>
-      <comment>№</comment>
+    <value>№</value>
+    <comment>№</comment>
   </data>
   <data name="Admin_InterviewPackages_InterviewId" xml:space="preserve">
-      <value>Идентификатор</value>
-      <comment>Идентификатор</comment>
+    <value>Идентификатор</value>
+    <comment>Идентификатор</comment>
   </data>
   <data name="Admin_InterviewPackages_IncomingDate" xml:space="preserve">
-      <value>Дата поступления</value>
-      <comment>Дата поступления</comment>
+    <value>Дата поступления</value>
+    <comment>Дата поступления</comment>
   </data>
   <data name="Admin_InterviewPackages_ProcessingDate" xml:space="preserve">
-      <value>Дата обработки</value>
-      <comment>Дата обработки</comment>
+    <value>Дата обработки</value>
+    <comment>Дата обработки</comment>
   </data>
   <data name="Admin_InterviewPackages_PackageSize" xml:space="preserve">
-      <value>Размер</value>
-      <comment>Размер</comment>
+    <value>Размер</value>
+    <comment>Размер</comment>
   </data>
   <data name="Admin_InterviewPackages_SelectInterviewer" xml:space="preserve">
-      <value>Выберите интервьюера</value>
-      <comment>Выберите интервьюера</comment>
+    <value>Выберите интервьюера</value>
+    <comment>Выберите интервьюера</comment>
   </data>
   <data name="Admin_InterviewPackages_Interviewer" xml:space="preserve">
-      <value>Интервьюер</value>
-      <comment>Интервьюер</comment>
+    <value>Интервьюер</value>
+    <comment>Интервьюер</comment>
   </data>
   <data name="Admin_InterviewPackages_SelectQuestionnaire" xml:space="preserve">
-      <value>Выберите опросник</value>
-      <comment>Выберите опросник</comment>
+    <value>Выберите опросник</value>
+    <comment>Выберите опросник</comment>
   </data>
   <data name="Admin_InterviewPackages_Questionnaire" xml:space="preserve">
-      <value>Опросник</value>
-      <comment>Опросник</comment>
+    <value>Опросник</value>
+    <comment>Опросник</comment>
   </data>
   <data name="Admin_InterviewPackages_ExceptionType" xml:space="preserve">
-      <value>Тип ошибки</value>
-      <comment>Тип ошибки</comment>
+    <value>Тип ошибки</value>
+    <comment>Тип ошибки</comment>
   </data>
   <data name="Admin_InterviewPackages_SelectExceptionType" xml:space="preserve">
-      <value>Выберите тип ошибки</value>
-      <comment>Выберите тип ошибки</comment>
+    <value>Выберите тип ошибки</value>
+    <comment>Выберите тип ошибки</comment>
   </data>
   <data name="Admin_InterviewPackages_Type" xml:space="preserve">
-      <value>Вид ошибок</value>
-      <comment>Вид ошибок</comment>
+    <value>Вид ошибок</value>
+    <comment>Вид ошибок</comment>
   </data>
   <data name="Admin_InterviewPackages_Broken" xml:space="preserve">
-      <value>Непредвиденные</value>
-      <comment>Непредвиденные</comment>
+    <value>Непредвиденные</value>
+    <comment>Непредвиденные</comment>
   </data>
   <data name="Admin_InterviewPackages_Rejected" xml:space="preserve">
-      <value>Ожидаемые</value>
-      <comment>Ожидаемые</comment>
+    <value>Ожидаемые</value>
+    <comment>Ожидаемые</comment>
   </data>
   <data name="Admin_InterviewPackages_Period" xml:space="preserve">
-      <value>Период</value>
-      <comment>Период</comment>
+    <value>Период</value>
+    <comment>Период</comment>
   </data>
   <data name="Admin_InterviewPackages_ReprocessSelectedConfirmation" xml:space="preserve">
-      <value>Вы уверены что хотите повторно обработать выделенные пакеты?</value>
-      <comment>Вы уверены что хотите повторно обработать выделенные пакеты?</comment>
+    <value>Вы уверены что хотите повторно обработать выделенные пакеты?</value>
+    <comment>Вы уверены что хотите повторно обработать выделенные пакеты?</comment>
   </data>
   <data name="Admin_InterviewPackages_SelectedPackagesCount" xml:space="preserve">
-      <value>{{count}} пакета(ов) выбрано</value>
-      <comment>{{count}} пакета(ов) выбрано</comment>
+    <value>{{count}} пакета(ов) выбрано</value>
+    <comment>{{count}} пакета(ов) выбрано</comment>
   </data>
   <data name="Admin_InterviewPackages_Reprocess" xml:space="preserve">
-      <value>Повторно обработать</value>
-      <comment>Повторно обработать</comment>
+    <value>Повторно обработать</value>
+    <comment>Повторно обработать</comment>
   </data>
   <data name="Admin_InterviewPackages_PutReason" xml:space="preserve">
-      <value>Указать причину</value>
-      <comment>Указать причину</comment>
+    <value>Указать причину</value>
+    <comment>Указать причину</comment>
   </data>
   <data name="Admin_InterviewPackages_Title" xml:space="preserve">
-      <value>Интервью пакеты({{count}})</value>
-      <comment>Интервью пакеты({{count}})</comment>
+    <value>Интервью пакеты({{count}})</value>
+    <comment>Интервью пакеты({{count}})</comment>
   </data>
   <data name="Admin_InterviewPackages_Subtitle" xml:space="preserve">
-      <value>Если Вы потеряли интевью или получили сообщение что интервью битое, &lt;br/&gt; Вы можете найти данные по этому интервью здесь</value>
-      <comment>Если Вы потеряли интевью или получили сообщение что интервью битое, &lt;br/&gt; Вы можете найти данные по этому интервью здесь
+    <value>Если Вы потеряли интевью или получили сообщение что интервью битое, &lt;br/&gt; Вы можете найти данные по этому интервью здесь</value>
+    <comment>Если Вы потеряли интевью или получили сообщение что интервью битое, &lt;br/&gt; Вы можете найти данные по этому интервью здесь
       </comment>
   </data>
   <data name="Admin_InterviewPackages_NumberOfPackagesAffected" xml:space="preserve">
-      <value>{{count}} пакета(ов) интервью будет обработано</value>
-      <comment>{{count}} пакета(ов) интервью будет обработано</comment>
+    <value>{{count}} пакета(ов) интервью будет обработано</value>
+    <comment>{{count}} пакета(ов) интервью будет обработано</comment>
   </data>
   <data name="Admin_InterviewPackages_SelectReason" xml:space="preserve">
-      <value>Укажите причину</value>
-      <comment>Укажите причину</comment>
+    <value>Укажите причину</value>
+    <comment>Укажите причину</comment>
   </data>
   <data name="Admin_InterviewPackages_Reason" xml:space="preserve">
-      <value>Причина</value>
-      <comment>Причина</comment>
+    <value>Причина</value>
+    <comment>Причина</comment>
   </data>
   <data name="CreateUser" xml:space="preserve">
-      <value>Создать пользователя</value>
+    <value>Создать пользователя</value>
   </data>
   <data name="ChangePassword" xml:space="preserve">
-      <value>Сброс пользовательского пароля</value>
+    <value>Сброс пользовательского пароля</value>
   </data>
   <data name="ResetAuthenticator" xml:space="preserve">
     <value>Сброс аутентификатора</value>
@@ -1571,38 +1605,41 @@
     <value>сбросить аутефикационный ключ.</value>
   </data>
   <data name="ReevaluateInterview" xml:space="preserve">
-      <value>Актуализировать интервью</value>
-      <comment>Актуализировать интервью</comment>
+    <value>Актуализировать интервью</value>
+    <comment>Актуализировать интервью</comment>
   </data>
   <data name="Admin_ControlPanelLinkTitle" xml:space="preserve">
-      <value>Панель управления</value>
-      <comment>Панель управления</comment>
+    <value>Панель управления</value>
+    <comment>Панель управления</comment>
   </data>
   <data name="Admin_ReevaluateInterview_InterviewId" xml:space="preserve">
-      <value>Идентификатор  интервью</value>
-      <comment>Идентификатор  интервью</comment>
+    <value>Идентификатор  интервью</value>
+    <comment>Идентификатор  интервью</comment>
   </data>
   <data name="Admin_Reevaluate" xml:space="preserve">
-      <value>Актуализировать</value>
-      <comment>Актуализировать</comment>
+    <value>Актуализировать</value>
+    <comment>Актуализировать</comment>
   </data>
   <data name="Admin_Reevaluate_InterviewId_Required" xml:space="preserve">
-      <value>Пустой идентификатор интервью</value>
-      <comment>Пустой идентификатор интервью </comment>
+    <value>Пустой идентификатор интервью</value>
+    <comment>Пустой идентификатор интервью </comment>
   </data>
   <data name="Admin_Reevaluate_InterviewId_Invalid" xml:space="preserve">
-      <value>Не валидное GUID значение</value>
-      <comment>Не валидное GUID значение</comment>
+    <value>Не валидное GUID значение</value>
+    <comment>Не валидное GUID значение</comment>
   </data>
   <data name="Admin_Reevaluate_Success" xml:space="preserve">
-      <value>Интервью успешно актуализировано</value>
-      <comment>Интервью успешно актуализировано</comment>
+    <value>Интервью успешно актуализировано</value>
+    <comment>Интервью успешно актуализировано</comment>
   </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>Сгенерировать ключи восстановления</value>
   </data>
   <data name="AccountManage_Status2fa" xml:space="preserve">
     <value>Двухфакторная аутентификация </value>
+  </data>
+  <data name="AccountManage_StatusApiToken" xml:space="preserve">
+    <value>API ключ:</value>
   </data>
   <data name="Diagnostics" xml:space="preserve">
     <value>Диагностика</value>
@@ -1614,36 +1651,96 @@
     <value>Дата, когда интервьюер последний раз заходил в систему</value>
   </data>
   <data name="UsersManage_WorkspacesFilterTitle" xml:space="preserve">
-      <value>Рабочие области</value>
+    <value>Рабочие области</value>
   </data>
   <data name="UsersManage_WorkspacesFilterPlaceholder" xml:space="preserve">
-      <value>Все рабочие области</value>
+    <value>Все рабочие области</value>
+  </data>
+  <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
+    <value>Супервизор (Интервьюеры будут добавлены в команду этого супервизора)</value>
+
+  </data>
+  <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
+    <value>Выберите супервизора</value>
   </data>
   <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
     <value>Все роли</value>
   </data>
   <data name="UsersManage_ShowUsersFilterPlaceholder" xml:space="preserve">
     <value>Все пользователи</value>
-  </data>  
+  </data>
   <data name="UserManagement_SubtitleAdd" xml:space="preserve">
-      <value>Выберите к каким рабочим пронстранствам нужно добавить выбранных пользователей</value>
+    <value>Выберите к каким рабочим областям нужно добавить выбранных пользователей</value>
+
+  </data>
+  <data name="UserManagement_SubtitleAddInterviewer" xml:space="preserve">
+    <value>Выберите к какой рабочей области и супервизору (необходим для добавления интервьюверов) нужно добавить выбранных пользователей</value>
+
   </data>
   <data name="UserManagement_SubtitleRemove" xml:space="preserve">
-      <value>Выберите рабочие области из которых нужно убрать выбранных пользователей</value>
+    <value>Выберите рабочие области из которых нужно убрать выбранных пользователей</value>
   </data>
   <data name="UserManagement_ManageWorkspacesTitle" xml:space="preserve">
-      <value>Управление рабочими областями</value>
+    <value>Управление рабочими областями</value>
   </data>
   <data name="UserManagement_AddToWorkspace" xml:space="preserve">
-      <value>Добавить к рабочим областям</value>
+    <value>Добавить к рабочим областям</value>
   </data>
   <data name="UserManagement_RemoveFromWorkspace" xml:space="preserve">
-      <value>Убрать из рабочей области</value>
+    <value>Убрать из рабочей области</value>
   </data>
   <data name="UserManagement_UsersSelected" xml:space="preserve">
     <value>Выбранных пользователей</value>
   </data>
   <data name="Interviewer_CreateText" xml:space="preserve">
     <value>Это действие создаст индивидуального пользователя с правами интервьюера&lt;br&gt; Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{{link}}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
+  </data>
+  <data name="Filters_InterviewMode" xml:space="preserve">
+    <value>Режим интервью</value>
+  </data>
+  <data name="Filters_InterviewModePlaceHolder" xml:space="preserve">
+    <value>Все режимы</value>
+  </data>
+  <data name="UsersManage_TeamFilterPlaceHolder" xml:space="preserve">
+    <value>Команда</value>
+  </data>
+  <data name="UsersManage_TeamFilter" xml:space="preserve">
+    <value>Команда</value>
+  </data>
+  <data name="ExposedVariables_VariableName" xml:space="preserve">
+    <value>Имя переменной</value>
+  </data>
+  <data name="ExposedVariables_VariableTitle" xml:space="preserve">
+    <value>Заголовок</value>
+  </data>
+  <data name="ExposedVariables_VariableDisplayTitle" xml:space="preserve">
+    <value>Отображаемый заголовок</value>
+  </data>
+  <data name="ExposedVariables_VariableLabel" xml:space="preserve">
+    <value>Метка</value>
+  </data>
+  <data name="ExposedVariables_ChangeMessage" xml:space="preserve">
+    <value>Вы меняете список переменных. Перестройка отчетов займет некоторое время.</value>
+  </data>
+  <data name="Exposed_Variables_AvailableVariablesTitle" xml:space="preserve">
+    <value>Доступные переменные</value>
+  </data>
+  <data name="Exposed_Variables_Description" xml:space="preserve">
+    <value>Выбир этих переменных позволит использовать их в некоторых отчетах. Изменение списка переменных потребует времени, чтобы данные стали доступны. Можно выбрать до 15 переменных.</value>
+  </data>
+  <data name="Exposed_Variables_SelectedVariablesTitle" xml:space="preserve">
+    <value>Открытые переменные</value>
+  </data>
+  <data name="ExposedVariables_RemoveMessage" xml:space="preserve">
+    <value>Вы хотите убрать переменную из списка?</value>
+  </data>
+  <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
+    <value>Открытые переменные по опроснику</value>
+  </data>
+  <data name="AntiForgeryError_Title" xml:space="preserve">
+      <value>Ошибка данных</value>
+  </data>
+  <data name="AccountManage_ApiTokens" xml:space="preserve">
+      <value>API ключи</value>
   </data>
 </root>

@@ -1,42 +1,63 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Android.App;
-using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
     public class MapService : IMapService
     {
-        private readonly IPermissions permissions;
+        private const string TempSuffix = ".part";
+        
+        private readonly string[] mapFilesToSearch = { "*.tpk", "*.tpkx", "*.mmpk", "*.mmpkx",  "*.tif" };
+        private readonly string[] shapefilesToSearch = { "*.shp"};
+        
         private readonly IFileSystemAccessor fileSystemAccessor;
-
-        private readonly string mapsLocation;
-        private readonly string shapefilesLocation;
+        private readonly string mapsLocationCommon;
+        private readonly string shapefilesLocationCommon;
         private readonly ILogger logger;
-
-        string[] mapFilesToSearch = { "*.tpk", "*.tpkx", "*.mmpk", "*.mmpkx",  "*.tif" };
-        string[] shapefilesToSearch = { "*.shp"};
-        string tempSuffix = ".part";
-
-        public MapService(IPermissions permissions,
+        private readonly string? workspaceName = null;
+        
+        public MapService(
             IFileSystemAccessor fileSystemAccessor,
-            ILogger logger)
+            ILogger logger,
+            IWorkspaceAccessor workspaceAccessor)
         {
-            this.permissions = permissions;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
-
-            this.mapsLocation = fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "TheWorldBank/Shared/MapCache/");
-            this.shapefilesLocation = fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "TheWorldBank/Shared/ShapefileCache");
+            this.workspaceName = workspaceAccessor.GetCurrentWorkspaceName();
+            
+            this.mapsLocationCommon = fileSystemAccessor.CombinePath(
+                AndroidPathUtils.GetPathToExternalDirectory(), 
+                "TheWorldBank/Shared/MapCache/");
+            
+            this.shapefilesLocationCommon = fileSystemAccessor.CombinePath(
+                AndroidPathUtils.GetPathToExternalDirectory(), 
+                "TheWorldBank/Shared/ShapefileCache");
         }
 
+        private string GetMapsLocationOrThrow()
+        {
+            CheckWorkspaceAndThrow();
+            return fileSystemAccessor.CombinePath(this.mapsLocationCommon, workspaceName);
+        }
 
-        public MapDescription PrepareAndGetDefaultMap()
+        private void CheckWorkspaceAndThrow()
+        {
+            if (string.IsNullOrEmpty(workspaceName))
+            {
+                logger.Error("Workspace name is empty;");
+                throw new InvalidOperationException("Workspace name is empty;");
+            }
+        }
+
+        public MapDescription? PrepareAndGetDefaultMapOrNull()
         {
             var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
                 ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
@@ -50,20 +71,25 @@ namespace WB.UI.Shared.Enumerator.Services
                 if (!this.fileSystemAccessor.IsDirectoryExists(mapFolderPath))
                     this.fileSystemAccessor.CreateDirectory(mapFolderPath);
 
-                using (var br = new BinaryReader(Application.Context.Assets.Open("worldmap(default).tpk")))
+                if (Application.Context.Assets != null)
                 {
-                    using (var bw = new BinaryWriter(new FileStream(mapPath, FileMode.Create)))
+                    using (var br = new BinaryReader(Application.Context.Assets.Open("worldmap(default).tpk")))
                     {
-                        byte[] buffer = new byte[2048];
-                        int length = 0;
-                        while ((length = br.Read(buffer, 0, buffer.Length)) > 0)
+                        using (var bw = new BinaryWriter(new FileStream(mapPath, FileMode.Create)))
                         {
-                            bw.Write(buffer, 0, length);
+                            byte[] buffer = new byte[2048];
+                            int length = 0;
+                            while ((length = br.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                bw.Write(buffer, 0, length);
+                            }
                         }
                     }
                 }
             }
 
+            if (!this.fileSystemAccessor.IsFileExists(mapPath)) return null;
+            
             var defaultMap = new MapDescription(MapType.LocalFile, "Worldmap[default]")
             {
                 MapFullPath = mapPath
@@ -82,49 +108,53 @@ namespace WB.UI.Shared.Enumerator.Services
                 mapList.Add(new MapDescription(MapType.OnlineOpenStreetMap, "Online: Open Street Map"));
             }
 
-            if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
-                return mapList;
+            void AddMapsFromFolder(string folder)
+            {
+                if (!this.fileSystemAccessor.IsDirectoryExists(folder))
+                    return;
 
+                var localMaps = this.mapFilesToSearch
+                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(folder, i))
+                    .OrderBy(x => x)
+                    .Select(x =>
+                        new MapDescription(MapType.LocalFile, this.fileSystemAccessor.GetFileNameWithoutExtension(x))
+                        {
+                            MapFullPath = x,
+                            Size = this.fileSystemAccessor.GetFileSize(x),
+                            MapFileName = this.fileSystemAccessor.GetFileName(x),
+                            CreationDate = this.fileSystemAccessor.GetCreationTime(x)
+                        }).ToList();
+
+                var newMaps = localMaps.Where(m => mapList.All(ml => ml.MapName != m.MapName)).ToList();
+                if (newMaps.Count > 0)
+                    mapList.AddRange(newMaps);
+            }
             
-            var localMaps = this.mapFilesToSearch
-                .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(this.mapsLocation, i))
-                .OrderBy(x => x)
-                .Select(x => new MapDescription(MapType.LocalFile, this.fileSystemAccessor.GetFileNameWithoutExtension(x))
-                {
-                    MapFullPath = x,
-                    Size = this.fileSystemAccessor.GetFileSize(x),
-                    MapFileName = this.fileSystemAccessor.GetFileName(x),
-                    CreationDate = this.fileSystemAccessor.GetCreationTime(x)
+            if(!string.IsNullOrEmpty(workspaceName))
+                AddMapsFromFolder(GetMapsLocationOrThrow());
 
-                }).ToList();
+            AddMapsFromFolder(this.mapsLocationCommon);
 
-            return mapList.Union(localMaps).ToList();
+            return mapList;
         }
 
         public bool DoesMapExist(string mapName)
         {
-            if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
-                return false;
-
-            var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
-
-            return this.fileSystemAccessor.IsFileExists(filename);
-        }
-
-        public void SaveMap(string mapName, byte[] content)
-        {
-            if (!DoesMapExist(mapName))
+            if (!string.IsNullOrEmpty(workspaceName))
             {
-                var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
-
-                this.fileSystemAccessor.WriteAllBytes(filename, content);
+                var filename = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
+                if (this.fileSystemAccessor.IsFileExists(filename))
+                    return true;
             }
+
+            var filenameInCommonFolder = this.fileSystemAccessor.CombinePath(this.mapsLocationCommon, mapName);
+            return this.fileSystemAccessor.IsFileExists(filenameInCommonFolder);
         }
 
         public Stream GetTempMapSaveStream(string mapName)
         {
-            if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
-                this.fileSystemAccessor.CreateDirectory(this.mapsLocation);
+            if (!this.fileSystemAccessor.IsDirectoryExists(GetMapsLocationOrThrow()))
+                this.fileSystemAccessor.CreateDirectory(GetMapsLocationOrThrow());
 
             var tempFileName = GetTempFileName(mapName);
 
@@ -132,7 +162,6 @@ namespace WB.UI.Shared.Enumerator.Services
                 this.fileSystemAccessor.DeleteFile(tempFileName);
 
             return this.fileSystemAccessor.OpenOrCreateFile(tempFileName, false);
-
         }
 
         public void MoveTempMapToPermanent(string mapName)
@@ -149,33 +178,51 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public void RemoveMap(string mapName)
         {
-            var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
-
+            var filename = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
             if (this.fileSystemAccessor.IsFileExists(filename))
                 this.fileSystemAccessor.DeleteFile(filename);
+
+            var filenameInCommon = this.fileSystemAccessor.CombinePath(this.mapsLocationCommon, mapName);
+            if (this.fileSystemAccessor.IsFileExists(filenameInCommon))
+                this.fileSystemAccessor.DeleteFile(filenameInCommon);
         }
 
         public List<ShapefileDescription> GetAvailableShapefiles()
         {
-            if (!this.fileSystemAccessor.IsDirectoryExists(this.shapefilesLocation))
-                return new List<ShapefileDescription>();
+            List<ShapefileDescription> GetShapesInFolder(string path)
+            {
+                if (!this.fileSystemAccessor.IsDirectoryExists(path))
+                    return new List<ShapefileDescription>();
 
-            return
-                this.shapefilesToSearch
-                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(this.shapefilesLocation, i))
+                return this.shapefilesToSearch
+                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(path, i))
                     .OrderBy(x => x)
                     .Select(x => new ShapefileDescription()
                     {
                         FullPath = x,
                         ShapefileName = this.fileSystemAccessor.GetFileNameWithoutExtension(x)
-
                     }).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(workspaceName))
+            {
+                var shapesInFolder = GetShapesInFolder(fileSystemAccessor.CombinePath(
+                    this.shapefilesLocationCommon, workspaceName));
+                if (shapesInFolder.Any())
+                    return shapesInFolder;
+            }
+
+            var shapesInCommonFolder = GetShapesInFolder(this.shapefilesLocationCommon);
+            if (shapesInCommonFolder.Any())
+                return shapesInCommonFolder;
+
+            return new List<ShapefileDescription>();
         }
 
         private string GetTempFileName(string mapName)
         {
-            var fileName = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
-            var tempFileName = fileName + tempSuffix;
+            var fileName = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
+            var tempFileName = fileName + TempSuffix;
             return tempFileName;
         }
     }

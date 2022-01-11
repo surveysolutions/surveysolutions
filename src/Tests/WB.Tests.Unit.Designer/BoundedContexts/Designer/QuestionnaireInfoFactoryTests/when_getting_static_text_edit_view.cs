@@ -25,16 +25,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         }
 
         private void BecauseOf() =>
-            result = factory.GetStaticTextEditView(questionnaireId, entityId);
+            result = factory.GetStaticTextEditView(questionnaireId, EntityId);
 
         [NUnit.Framework.Test] public void should_return_not_null_view () =>
             result.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_return_question_with_Id_equals_questionId () =>
-            result.Id.Should().Be(entityId);
+            result.Id.Should().Be(EntityId);
 
         [NUnit.Framework.Test] public void should_return_question_equals_g3 () =>
-            result.Text.Should().Be(GetStaticText(entityId).Text);
+            result.Text.Should().Be(GetStaticText(EntityId).Text);
 
         private static IStaticText GetStaticText(Guid entityId)
         {
@@ -45,8 +45,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         private static NewEditStaticTextView result;
         private static QuestionnaireDocument questionnaireView;
         private static Mock<IDesignerQuestionnaireStorage> questionnaireEntityDetailsReaderMock;
-        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("11111111111111111111111111111111");
-        private static Guid entityId = st1Id;
+        private static readonly Guid EntityId = st1Id;
 
     }
 }

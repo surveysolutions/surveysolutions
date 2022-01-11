@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -37,12 +38,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel, 
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher,
+            
             FilteredOptionsViewModel filteredOptionsViewModel,
             ThrottlingViewModel throttlingModel) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
-                eventRegistry: eventRegistry, filteredOptionsViewModel, mvxMainThreadDispatcher)
+                eventRegistry: eventRegistry, filteredOptionsViewModel)
         {
             this.questionnaireRepository = questionnaireRepository ??
                                            throw new ArgumentNullException(nameof(questionnaireRepository));
@@ -56,6 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             base.Init(interviewId, entityIdentity, navigationState);
 
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
             showCascadingAsList = questionnaire.ShowCascadingAsList(entityIdentity.Id);
@@ -74,7 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             }
 
-            UpdateOptions();
+            UpdateOptions().WaitAndUnwrapException();
         }
 
         public override async Task SaveAnswerAsync(int optionValue)
@@ -89,7 +91,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (!this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector)) return;
 
-            var parentSingleOptionQuestion = this.interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            var parentSingleOptionQuestion = interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
             if (!parentSingleOptionQuestion.IsAnswered()) return;
 
             this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
@@ -97,7 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             await this.RaisePropertyChanged(nameof(RenderAsComboBox));
 
-            await this.InvokeOnMainThreadAsync(this.UpdateOptions);
+            await this.InvokeOnMainThreadAsync(async () => await this.UpdateOptions());
 
             await this.RaisePropertyChanged(nameof(Options));
             await this.RaisePropertyChanged(nameof(Children));
@@ -110,6 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (!showCascadingAsList || answerOnParentQuestion == null)
                     return true;
                 
+                var interview = this.interviewRepository.GetOrThrow(interviewId);
                 return interview.DoesCascadingQuestionHaveMoreOptionsThanThreshold(this.Identity, showCascadingAsListThreshold);
             }
         }
@@ -131,7 +135,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> Options { get; private set; }
 
-        private void UpdateOptions()
+        private async Task UpdateOptions()
         {
             this.Options.ForEach(x => x.BeforeSelected -= this.OptionSelected);
             this.Options.ForEach(x => x.AnswerRemoved -= this.RemoveAnswer);
@@ -141,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (Answer == null)
             {
-                this.comboboxViewModel.ResetFilterAndOptions();
+                await this.comboboxViewModel.ResetFilterAndOptions();
             }
 
             this.comboboxCollection.Remove(this.comboboxViewModel);
@@ -191,11 +195,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 this.throttlingModel.CancelPendingAction();
-                await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interviewId,
+                await this.Answering.SendQuestionCommandAsync(
+                    new RemoveAnswerCommand(Guid.Parse(this.interviewId),
                         this.principal.CurrentUserIdentity.UserId,
                         this.Identity));
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
                 foreach (var option in this.Options.Where(option => option.Selected).ToList())
                 {
@@ -206,7 +210,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (InterviewException exception)
             {
-                this.QuestionState.Validity.ProcessException(exception);
+                await this.QuestionState.Validity.ProcessException(exception);
             }
         }
 
@@ -226,7 +230,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             
             var command = new AnswerSingleOptionQuestionCommand(
-                this.interviewId,
+                Guid.Parse(this.interviewId),
                 this.principal.CurrentUserIdentity.UserId,
                 this.Identity.Id,
                 this.Identity.RosterVector,
@@ -239,11 +243,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     previousOption.Selected = false;
                 }
 
-                await this.Answering.SendAnswerQuestionCommandAsync(command).ConfigureAwait(false);
+                await this.Answering.SendQuestionCommandAsync(command).ConfigureAwait(false);
 
                 this.previousOptionToReset = this.selectedOptionToSave;
 
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
@@ -254,7 +258,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     previousOption.Selected = true;
                 }
 
-                this.QuestionState.Validity.ProcessException(ex);
+                await this.QuestionState.Validity.ProcessException(ex);
             }
         }
 

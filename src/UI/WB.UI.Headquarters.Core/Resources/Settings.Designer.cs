@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enumerator&apos;s Profile editing.
+        ///   Looks up a localized string similar to Enumerator&apos;s profile editing.
         /// </summary>
         public static string AllowInterviewerUpdateProfile {
             get {
@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allow enumerators update their contact information in the profile.
+        ///   Looks up a localized string similar to Allow enumerators to update their contact information in their account profile.
         /// </summary>
         public static string AllowInterviewerUpdateProfileDesc {
             get {
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web Interview Email Notifications.
+        ///   Looks up a localized string similar to Web interview email notifications.
         /// </summary>
         public static string AllowWebInterviewEmailNotifications {
             get {
@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allow Web Interview respondent to send emails (effective if mail provider was set up).
+        ///   Looks up a localized string similar to Allow respondents to web interviews to request emails with links to resume started interviews (effective if bulk email service provider is set up).
         /// </summary>
         public static string AllowWebInterviewEmailNotificationsDesc {
             get {
@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to change the export file security settings? You will need to create regenerate exported data in order to open it..
+        ///   Looks up a localized string similar to Are you sure you want to change the export file security settings? All export data files will be protected by a password..
         /// </summary>
         public static string ChangeStateConfirm {
             get {
@@ -457,7 +457,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check Enable encryption box to encrypt export data archives and protect them with the provided password. Change password by pressing the circular error button. After encryption, only people who know the password can open the exported data..
+        ///   Looks up a localized string similar to Check &apos;Enable encryption&apos; checkbox to protect the export data archives by encrypting them with the provided password. Change password by pressing the circular arrow button. After encryption, only people who know the password can open the exported data..
         /// </summary>
         public static string ExportEncryption_Description {
             get {
@@ -466,7 +466,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export Encryption.
+        ///   Looks up a localized string similar to Export encryption.
         /// </summary>
         public static string ExportEncryption_Title {
             get {
@@ -511,7 +511,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify text in the Global Note field to be shown on the top of every screen on the server..
+        ///   Looks up a localized string similar to Specify text in the &apos;Global note&apos; field to be shown on the top of every screen on the server..
         /// </summary>
         public static string GlobalNoteSettings_Description {
             get {
@@ -592,11 +592,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Company logo shows a custom image on the server login page and on the login page of the Interviewer app. Click the Choose file button to upload an image from your computer to the server..
+        ///   Looks up a localized string similar to Company logo shows a custom image on the server login page and on the login page of the Interviewer app..
         /// </summary>
         public static string LogoSettings_Description {
             get {
                 return ResourceManager.GetString("LogoSettings_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click the Choose file button to upload an image from your computer to the server..
+        /// </summary>
+        public static string LogoSettings_Description1 {
+            get {
+                return ResourceManager.GetString("LogoSettings_Description1", resourceCulture);
             }
         }
         
@@ -628,7 +637,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When enabled, interviewer tablet will send answers from non completed interviews to Headquarters.
+        ///   Looks up a localized string similar to When enabled, interviewer tablets will send answers in noncompleted interviews to Headquarters.
         /// </summary>
         public static string PartialSynchronizationDescription {
             get {
@@ -646,7 +655,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to create a new password? You will need to regenerate exported data in order to open them..
+        ///   Looks up a localized string similar to Are you sure you want to create a new password? The new password will be applied to all exported data files produced from now on..
         /// </summary>
         public static string RegeneratePasswordConfirm {
             get {
@@ -673,7 +682,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User Profile settings.
+        ///   Looks up a localized string similar to User profile settings.
         /// </summary>
         public static string UserProfileSettings_Title {
             get {
@@ -682,7 +691,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web interview Settings.
+        ///   Looks up a localized string similar to Web interview settings.
         /// </summary>
         public static string WebInterviewEmailNotifications_Title {
             get {

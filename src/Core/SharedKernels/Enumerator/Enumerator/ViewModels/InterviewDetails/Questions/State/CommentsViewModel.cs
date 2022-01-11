@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -50,7 +51,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private readonly IStatefulInterviewRepository interviewRepository;
-        private IStatefulInterview interview;
         private readonly ICommandService commandService;
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
@@ -62,14 +62,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
             ICommandService commandService,
-            IViewModelEventRegistry eventRegistry,
-            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher)
+            IViewModelEventRegistry eventRegistry)
         {
             this.interviewRepository = interviewRepository;
             this.principal = principal;
             this.commandService = commandService;
             this.eventRegistry = eventRegistry;
-            this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
+            this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
         }
 
         private string interviewId;
@@ -80,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
             this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
-            this.interview = this.interviewRepository.Get(interviewId);
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
 
             var question = interview.GetQuestion(entityIdentity);
             if (question != null)
@@ -97,6 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void UpdateCommentsFromInterview(bool showResolved = false)
         {
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
             var allQuestionComments = interview.GetQuestionComments(this.Identity, true) ?? new List<AnswerComment>();
             var visibleComments = allQuestionComments.Where(x => x.Resolved == showResolved).ToList();
 
@@ -112,7 +112,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             bool anyHqComment = this.Comments.Any(x => x.CommentState != CommentState.ResolvedComment
                                                         && x.UserRole == UserRoles.Headquarter || x.UserRole == UserRoles.Administrator);
 
-            this.ResolveCommentsButtonVisible = principalCurrentUserIdentity.UserId == this.interview.SupervisorId
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            this.ResolveCommentsButtonVisible = principalCurrentUserIdentity.UserId == interview.SupervisorId
                                                 && this.Comments.Any(x => x.CommentState != CommentState.ResolvedComment)
                                                 && !anyHqComment;
         }

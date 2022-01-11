@@ -1,6 +1,7 @@
 import Start from './Start'
 import Finish from './Finish'
 import Resume from './Resume'
+import Link from './Link'
 import OutdatedBrowser from './OutdatedBrowser'
 import Error from './Error'
 
@@ -14,6 +15,10 @@ export default class ProfileComponent {
             {
                 path: '/WebInterview/Resume/:interviewId',
                 component: Resume,
+            },
+            {
+                path: '/WebInterview/Link/:id/:interviewId',
+                component: Link,
             },
             {
                 path: '/WebInterview/Finish/:interviewId',

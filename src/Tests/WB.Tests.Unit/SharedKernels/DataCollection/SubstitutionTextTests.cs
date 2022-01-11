@@ -261,12 +261,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         [Test]
         public void when_create_substitution_text_with_markdown_syntax_then_any_exceptions_should_not_be_throwing()
         {
-            Assert.That(() =>
-                    CreateSubstitutionText(Id.Identity1,
-                        "2. Mira este dibujo aquí arriba (SEÑALE ARRIBA). \n" +
-                        "<br>A este dibujo le falta un tuquito. \n\n<br>" +
-                        "Aquí abajo tenemos 6 tuquitos diferentes (SEÑALE ABAJO)\n" +
-                        "<br>Solo uno de estos tuquitos es el que completa a este dibujo."),
+            TestDelegate testDelegate = () =>
+                CreateSubstitutionText(Id.Identity1,
+                    "2. Mira este dibujo aquí arriba (SEÑALE ARRIBA). \n" +
+                    "<br>A este dibujo le falta un tuquito. \n\n<br>" +
+                    "Aquí abajo tenemos 6 tuquitos diferentes (SEÑALE ABAJO)\n" +
+                    "<br>Solo uno de estos tuquitos es el que completa a este dibujo.");
+            
+            Assert.That(testDelegate,
                 Throws.Nothing);
         }
 
@@ -342,6 +344,44 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             // assert
             Assert.That(substitutionText.Text, Is.EqualTo(markdownText + HttpUtility.HtmlEncode(specSymbolsForMarkdownEngine)));
+        }
+        
+         [Test]
+        public void When_ReplaceSubstitutions_for_table_roster_title_referencing_question_inside()
+        {
+            //arrange
+            var rosterId1 = Guid.Parse("22222222222222222222222222222222");
+            var questionId = Guid.Parse("44444444444444444444444444444444");
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.Roster(rosterId1,displayMode: RosterDisplayMode.Table, variable: "r1", title:"test %name%", children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(questionId, variable:"name")
+                })
+            });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[]
+            {
+                Create.Entity.InterviewTreeRoster(Create.Entity.Identity(rosterId1, new decimal[] { 1 }), children: new IInterviewTreeNode[]
+                {
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(questionId, new decimal[] { 1 }), questionType: QuestionType.Text, answer: "Bob"),
+                }),
+            });
+            var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
+
+            var substitutionTextFactory = Create.Service.SubstitutionTextFactory();
+            var rosterIdentity = Create.Entity.Identity(rosterId1, new decimal[] { 1 });
+            var substitutionText = substitutionTextFactory.CreateText(rosterIdentity, "title: %name%", questionnaire);
+
+            //act
+            substitutionText.ReplaceSubstitutions(tree);
+
+            //assert
+            Assert.That(substitutionText.HasSubstitutions, Is.True);
+            Assert.That(substitutionText.Text, Is.EqualTo("title: Bob"));
         }
     }
 }

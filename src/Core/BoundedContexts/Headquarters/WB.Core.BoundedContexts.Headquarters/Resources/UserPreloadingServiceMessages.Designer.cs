@@ -88,6 +88,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file &apos;{0}&apos; does not contain any user data.
+        /// </summary>
+        public static string FileDoesNotContainAnyData {
+            get {
+                return ResourceManager.GetString("FileDoesNotContainAnyData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please, wait until previous import of users is completed.
         /// </summary>
         public static string HasUsersToImport {

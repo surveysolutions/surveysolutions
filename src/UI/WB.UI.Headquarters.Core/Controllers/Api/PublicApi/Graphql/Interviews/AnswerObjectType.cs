@@ -1,3 +1,5 @@
+#nullable enable
+using System;
 using System.Linq;
 using GreenDonut;
 using HotChocolate.Resolvers;
@@ -25,18 +27,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 
             descriptor.Field(x => x.Entity)
                 .Name("entity")
-                .Resolver(context => {
-                        var parent = context.Parent<IdentifyEntityValue>();
+                .Resolve(async context => {
+                        return await context.BatchDataLoader<int, QuestionnaireCompositeItem>(async (keys, token) =>
+                            {
+                                var unitOfWork = context.Service<IUnitOfWork>();
+                                if (unitOfWork == null) throw new InvalidOperationException("unitOfWork is null");
 
-                        return context.BatchDataLoader<int, QuestionnaireCompositeItem>(async (keys, token) =>
-                        {
-                            var unitOfWork = context.Service<IUnitOfWork>();
-                            var items = await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
-                                .Where(q => keys.Contains(q.Id))
-                                .ToListAsync()
-                                .ConfigureAwait(false);
-                            return items.ToDictionary(x => x.Id);
-                        },"questionByAnswer").LoadAsync(parent.Entity.Id);
+                                return (await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
+                                    .Where(q => keys.Contains(q.Id))
+                                    .ToListAsync(token)).ToDictionary(x => x.Id);
+                            },"questionByAnswer")
+                            .LoadAsync(context.Parent<IdentifyEntityValue>().Entity.Id);
                     }
                 )
                 .Type<NonNullType<EntityItemObjectType>>();
@@ -44,6 +45,31 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.Value)
                 .Name("value")
                 .Type<StringType>();
+
+
+            descriptor.Field(x => x.ValueBool)
+                .Type<BooleanType>()
+                .Name("valueBool")
+                .Description("Bool answer value");
+
+            descriptor.Field(x => x.ValueDate)
+                .Type<DateTimeType>()
+                .Name("valueDate")
+                .Description("Date answer value");
+
+            descriptor.Field(x => x.ValueLong)
+                .Type<LongType>()
+                .Name("valueLong")
+                .Description("Long answer value");
+
+            descriptor.Field(x => x.ValueDouble)
+                .Type<FloatType>()
+                .Name("valueDouble")
+                .Description("Double answer value");
+
+            descriptor.Field(x => x.IsEnabled)
+                .Name("isEnabled")
+                .Type<BooleanType>();
         }
     }
 }

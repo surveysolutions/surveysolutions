@@ -84,7 +84,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.RemoveInterviewImages(interviewId);
             this.eventStore.RemoveEventSourceById(interviewId);
             this.eventRegistry.RemoveAggregateRoot(interviewId.FormatGuid());
-            
         }
 
         private void RemoveInterviewImages(Guid interviewId)
@@ -149,7 +148,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         private IReadOnlyCollection<CommittedEvent> GetFilteredEventsToSend(Guid interviewId)
         {
-            var lastCompleteSequence = this.eventStore.GetMaxSequenceForAnyEvent(interviewId, new[] { typeof(InterviewCompleted).Name });
+            var lastCompleteSequence = this.eventStore.GetMaxSequenceForAnyEvent(interviewId, nameof(InterviewCompleted), nameof(InterviewModeChanged));
             var lastComplete = this.eventStore.GetEventByEventSequence(interviewId, lastCompleteSequence);
 
             return this.eventStreamOptimizer.FilterEventsToBeSent(

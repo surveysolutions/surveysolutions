@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
 {
@@ -23,22 +21,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
         private readonly ISystemLog auditLog;
         private readonly ICommandService commandService;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
+        private readonly IWorkspaceContextAccessor workspaceContext;
 
         public MoveUserToAnotherTeamService(
             IAssignmentsService assignmentsService, 
             IUserRepository userManager, 
             ICommandService commandService,
             ISystemLog auditLog,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader,
+            IWorkspaceContextAccessor workspaceContext)
         {
             this.assignmentsService = assignmentsService;
             this.userManager = userManager;
             this.commandService = commandService;
             this.auditLog = auditLog;
             this.interviewsReader = interviewsReader;
+            this.workspaceContext = workspaceContext;
         }
 
-        public async Task<MoveInterviewerToAnotherTeamResult> Move(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId,
+        public async Task<MoveInterviewerToAnotherTeamResult> Move(Guid userId,
+            Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId,
             MoveUserToAnotherTeamMode moveRequestMode)
         {
             if (moveRequestMode == MoveUserToAnotherTeamMode.MoveAllToNewTeam)
@@ -51,14 +53,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
 
         private async Task<MoveInterviewerToAnotherTeamResult> MoveUserAndAssignDataToOriginalSupervisor(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
         {
-            var result = new MoveInterviewerToAnotherTeamResult();
-            
-            var interviewIds = GetInterviewIds(interviewerId);
-            foreach (var interviewId in interviewIds)
+            var moveInterviewsResult = MoveInterviewsToSupervisor(userId, interviewerId, previousSupervisorId);
+
+            var result = new MoveInterviewerToAnotherTeamResult()
             {
-                var moveInterviewToTeam = new MoveInterviewToTeam(interviewId, userId, previousSupervisorId, null);
-                ExecuteMoveInterviewToTeam(moveInterviewToTeam, result, interviewId);
-            }
+                InterviewsProcessed = moveInterviewsResult.InterviewsProcessed,
+                InterviewsProcessedWithErrors = moveInterviewsResult.InterviewsProcessedWithErrors,
+            };
 
             var assignmentIds = assignmentsService.GetAllAssignmentIds(interviewerId);
             foreach (var assignmentId in assignmentIds)
@@ -66,7 +67,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
                 try
                 {
                     result.AssignmentsProcessed++;
-                    commandService.Execute(new ReassignAssignment(assignmentId, userId, previousSupervisorId, null));
+                    var assignment = assignmentsService.GetAssignmentByAggregateRootId(assignmentId);
+                    commandService.Execute(
+                        new ReassignAssignment(assignmentId, userId, 
+                            previousSupervisorId, null, assignment.QuestionnaireId));
                 }
                 catch (Exception exception)
                 {
@@ -83,13 +87,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
             return result;
         }
 
+        public MoveInterviewsToSupervisorResult MoveInterviewsToSupervisor(Guid userId, Guid interviewerId, Guid supervisorId)
+        {
+            var result = new MoveInterviewsToSupervisorResult();
+            var interviewIds = GetInterviewIds(interviewerId);
+            foreach (var interviewId in interviewIds)
+            {
+                var moveInterviewToTeam = new MoveInterviewToTeam(interviewId, userId, supervisorId, null);
+                ExecuteMoveInterviewToTeam(moveInterviewToTeam, result, interviewId);
+            }
+            return result;
+        }
+
         private async Task<Microsoft.AspNetCore.Identity.IdentityResult> MoveToAnotherTeamAsync(Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
         {
             var interviewer = await this.userManager.FindByIdAsync(interviewerId);
             var newSupervisor = await this.userManager.FindByIdAsync(newSupervisorId);
             var previousSupervisor = await this.userManager.FindByIdAsync(previousSupervisorId);
-
-            interviewer.Profile.SupervisorId = newSupervisorId;
+            var workspaceName = workspaceContext.CurrentWorkspace()!.Name;
+            
+            //interviewer.Profile.SupervisorId = newSupervisorId;
+            var userWorkspace = interviewer.Workspaces
+                .First(w => w.Workspace.Name == workspaceName && w.Supervisor.Id == previousSupervisorId);
+            userWorkspace.ChangeSupervisorId(newSupervisor);
 
             this.auditLog.UserMovedToAnotherTeam(interviewer.UserName, newSupervisor.UserName, previousSupervisor.UserName);
 
@@ -122,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
             return interviewsReader.Query(_ => _.Where(x => x.ResponsibleId == interviewerId).Select(x => x.InterviewId).ToList());
         }
 
-        private void ExecuteMoveInterviewToTeam(MoveInterviewToTeam moveInterviewToTeam, MoveInterviewerToAnotherTeamResult errors, Guid interviewId)
+        private void ExecuteMoveInterviewToTeam(MoveInterviewToTeam moveInterviewToTeam, IMoveInterviewsResult errors, Guid interviewId)
         {
             try
             {

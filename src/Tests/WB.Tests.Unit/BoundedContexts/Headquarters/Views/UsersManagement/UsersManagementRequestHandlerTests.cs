@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Tests.Abc;
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             var mock = new Mock<IUserRepository>();
             mock.Setup(r => r.Users).Returns(() => Users.AsQueryable().GetNhQueryable());
 
-            Subject = new UsersManagementRequestHandler(mock.Object);
+            Subject = new UsersManagementRequestHandler(mock.Object, Mock.Of<IAuthorizedUser>(u => u.IsAdministrator == true));
         }
 
         [Test]

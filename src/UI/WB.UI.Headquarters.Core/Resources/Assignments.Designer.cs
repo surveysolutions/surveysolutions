@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Assignments {
@@ -214,6 +214,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upgraded from assignment {{id}}.
+        /// </summary>
+        public static string Action_UpgradedFrom {
+            get {
+                return ResourceManager.GetString("Action_UpgradedFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Web mode changed.
         /// </summary>
         public static string Action_WebModeChanged {
@@ -394,11 +403,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CAWI Activated.
+        /// </summary>
+        public static string CawiActivated {
+            get {
+                return ResourceManager.GetString("CawiActivated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable CAWI mode.
+        /// </summary>
+        public static string CawiModeEnable {
+            get {
+                return ResourceManager.GetString("CawiModeEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Audio recording settings for assignment {{id}}.
         /// </summary>
         public static string ChangeAudioRecordingModalTitle {
             get {
                 return ResourceManager.GetString("ChangeAudioRecordingModalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change mode for assignment {{assignmentId}}.
+        /// </summary>
+        public static string ChangeModeModalTitle {
+            get {
+                return ResourceManager.GetString("ChangeModeModalTitle", resourceCulture);
             }
         }
         
@@ -660,6 +696,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string IsAudioRecordingEnabled {
             get {
                 return ResourceManager.GetString("IsAudioRecordingEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Swich to Web Interview link sample.
+        /// </summary>
+        public static string LinkToWebInterviewExample {
+            get {
+                return ResourceManager.GetString("LinkToWebInterviewExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CAWI mode allows collect data from respondents directly.
+        /// </summary>
+        public static string ModeExplanation {
+            get {
+                return ResourceManager.GetString("ModeExplanation", resourceCulture);
             }
         }
         
@@ -1015,7 +1069,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignment was created in Web Mode.
+        ///   Looks up a localized string similar to Assignment Mode.
         /// </summary>
         public static string Tooltip_Table_WebMode {
             get {
@@ -1087,6 +1141,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error occurred. Try again later..
+        /// </summary>
+        public static string UpgradeError {
+            get {
+                return ResourceManager.GetString("UpgradeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Waiting for other upgrades to finish .
         /// </summary>
         public static string UpgradePreparation {
@@ -1132,6 +1195,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to With errors {{errorCount}}.
+        /// </summary>
+        public static string UpgradeProgressErrors {
+            get {
+                return ResourceManager.GetString("UpgradeProgressErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upgrading {{processed}} of {{totalCount}}.
         /// </summary>
         public static string UpgradeProgressNumbers {
@@ -1150,7 +1222,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web Mode.
+        ///   Looks up a localized string similar to Mode.
         /// </summary>
         public static string WebMode {
             get {

@@ -754,6 +754,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Section or sub-section cannot have more than {0} direct child items.
+        /// </summary>
+        public static string SubsectionCantHaveMoreThan_DirectChildren {
+            get {
+                return ResourceManager.GetString("SubsectionCantHaveMoreThan_DirectChildren", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sub-section or roster depth cannot be higher than {0}..
         /// </summary>
         public static string SubSectionDepthLimit {

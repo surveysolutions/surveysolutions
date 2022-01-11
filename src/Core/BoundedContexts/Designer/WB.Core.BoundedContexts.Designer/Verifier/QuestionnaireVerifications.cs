@@ -475,34 +475,34 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private QuestionnaireVerificationMessage? GetVerificationErrorsBySubstitutionReferenceOrNull(
-            MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> traslatedEntityWithSubstitution,
+            MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntityWithSubstitution,
             int? validationConditionIndex,
             string substitutionReference,
             RosterScope vectorOfRosterQuestionsByEntityWithSubstitutions,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var referenceToEntityWithSubstitution = CreateReference(traslatedEntityWithSubstitution.Entity, validationConditionIndex);
+            var referenceToEntityWithSubstitution = CreateReference(translatedEntityWithSubstitution.Entity, validationConditionIndex);
 
             if (substitutionReference == this.substitutionService.RosterTitleSubstitutionReference)
             {
-                bool isCheckedEntityaRoster = traslatedEntityWithSubstitution.Entity is IGroup group && group.IsRoster && !group.CustomRosterTitle; 
+                bool isCheckedEntityaRoster = translatedEntityWithSubstitution.Entity is IGroup group && group.IsRoster && !group.CustomRosterTitle; 
                 if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 0 || 
                          vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 1 && isCheckedEntityaRoster)
                 {
                     return QuestionnaireVerificationMessage.Error("WB0059",
                         VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,
-                        traslatedEntityWithSubstitution.TranslationName,
+                        translatedEntityWithSubstitution.TranslationName,
                         referenceToEntityWithSubstitution);
                 }
                 else if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length > 0)
                 {
-                    var parentGroup = questionnaire.Questionnaire.GetParentGroupsIds(traslatedEntityWithSubstitution.Entity);
+                    var parentGroup = questionnaire.Questionnaire.GetParentGroupsIds(translatedEntityWithSubstitution.Entity);
                     var roster = questionnaire.Questionnaire.GetRoster(parentGroup.First());
                     if (roster != null && roster.DisplayMode == RosterDisplayMode.Matrix)
                     {
                         return QuestionnaireVerificationMessage.Error("WB0300",
                             VerificationMessages.WB0300,
-                            traslatedEntityWithSubstitution.TranslationName,
+                            translatedEntityWithSubstitution.TranslationName,
                             referenceToEntityWithSubstitution);
                     }
                 }
@@ -515,7 +515,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 return QuestionnaireVerificationMessage.Error("WB0017",
                     VerificationMessages.WB0017_SubstitutionReferencesNotExistingQuestionOrVariable,
-                    traslatedEntityWithSubstitution.TranslationName,
+                    translatedEntityWithSubstitution.TranslationName,
                     referenceToEntityWithSubstitution);
             }
 
@@ -530,7 +530,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 return QuestionnaireVerificationMessage.Error("WB0018",
                     VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
-                    traslatedEntityWithSubstitution.TranslationName,
+                    translatedEntityWithSubstitution.TranslationName,
                     referenceToEntityWithSubstitution,
                     referenceToEntityBeingSubstituted);
             }
@@ -541,15 +541,27 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 return QuestionnaireVerificationMessage.Error("WB0019",
                     VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,
-                    traslatedEntityWithSubstitution.TranslationName,
+                    translatedEntityWithSubstitution.TranslationName,
                     referenceToEntityWithSubstitution,
                     referenceToEntityBeingSubstituted);
+            }
+
+            if (translatedEntityWithSubstitution.Entity is IGroup { IsRoster: true, DisplayMode: RosterDisplayMode.Table or RosterDisplayMode.Matrix } targetAsGroup)
+            {
+                if (questionnaire.Questionnaire.GetParentGroupsIds(entityToSubstitute).Contains(translatedEntityWithSubstitution.Entity.PublicKey))
+                {
+                    return QuestionnaireVerificationMessage.Error("WB0313",
+                        VerificationMessages.WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope,
+                        translatedEntityWithSubstitution.TranslationName,
+                        referenceToEntityWithSubstitution,
+                        referenceToEntityBeingSubstituted);
+                }
             }
 
             return null;
         }
 
-        private static IComposite GetEntityByVariable(string identifier, MultiLanguageQuestionnaireDocument questionnaire)
+        private static IComposite? GetEntityByVariable(string identifier, MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier) as IComposite
                ?? questionnaire.FirstOrDefault<IVariable>(v => v.Name == identifier) as IComposite
                ?? questionnaire.FirstOrDefault<IGroup>(g => g.VariableName == identifier) as IComposite;
@@ -575,25 +587,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         "WB0102",
                         VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId,
                         group.Select(x => new QuestionnaireEntityReference(GetReferenceTypeByItemTypeAndId(questionnaire, x.Id, x.Type), x.Id)).ToArray()));
-        }
-
-
-        private static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(MultiLanguageQuestionnaireDocument questionnaire, Guid id, Type entityType)
-        {
-            if (typeof(IQuestion).IsAssignableFrom(entityType))
-                return QuestionnaireVerificationReferenceType.Question;
-
-            if (entityType.IsAssignableFrom(typeof(StaticText)))
-                return QuestionnaireVerificationReferenceType.StaticText;
-
-            if (entityType.IsAssignableFrom(typeof(Variable)))
-                return QuestionnaireVerificationReferenceType.Variable;
-
-            var group = questionnaire.Find<IGroup>(id);
-
-            return questionnaire.Questionnaire.IsRoster(group)
-                ? QuestionnaireVerificationReferenceType.Roster
-                : QuestionnaireVerificationReferenceType.Group;
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> Warning_QuestionnaireHasRostersPropagationsExededLimit(MultiLanguageQuestionnaireDocument questionnaire)
@@ -624,7 +617,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool NoQuestionsExist(MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return !questionnaire.Find<IQuestion>(question => !questionnaire.Questionnaire.IsCoverPage(question.GetParent()!.PublicKey)).Any();
+            return !questionnaire.Find<IQuestion>().Any();
         }
 
         private static bool QuestionnaireTitleTooLong(MultiLanguageQuestionnaireDocument questionnaire)

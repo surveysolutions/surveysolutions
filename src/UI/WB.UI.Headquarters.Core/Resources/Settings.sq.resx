@@ -276,9 +276,6 @@
   <data name="LogoSettings" xml:space="preserve">
     <value>Logoja e kompanisë</value>
   </data>
-  <data name="LogoSettings_Description" xml:space="preserve">
-    <value>Logoja e kompanisë shfaq një pamje të personalizuar në faqen hyrëse të serverit dhe në faqen hyrëse të aplikacionit të Intervistuesit. Shtyp butonin Zgjidh skedarin për të ngarkuar një imaxh nga kompjuteri juaj në server.</value>
-  </data>
   <data name="LogoUpdated" xml:space="preserve">
     <value>Logoja e kompanisë u përditësua</value>
   </data>

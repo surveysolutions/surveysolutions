@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Users {
@@ -115,11 +115,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add User.
+        /// </summary>
+        public static string AddUser {
+            get {
+                return ResourceManager.GetString("AddUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Admin.
         /// </summary>
         public static string Admin {
             get {
                 return ResourceManager.GetString("Admin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User API Token.
+        /// </summary>
+        public static string ApiTokenTitle {
+            get {
+                return ResourceManager.GetString("ApiTokenTitle", resourceCulture);
             }
         }
         
@@ -264,6 +282,51 @@ namespace WB.UI.Headquarters.Resources {
         public static string Email {
             get {
                 return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All users.
+        /// </summary>
+        public static string Filter_AllUsers {
+            get {
+                return ResourceManager.GetString("Filter_AllUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archived users.
+        /// </summary>
+        public static string Filter_Archived {
+            get {
+                return ResourceManager.GetString("Filter_Archived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locked users.
+        /// </summary>
+        public static string Filter_Locked {
+            get {
+                return ResourceManager.GetString("Filter_Locked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With disabled workspaces only.
+        /// </summary>
+        public static string Filter_WithDisabledWorkspaces {
+            get {
+                return ResourceManager.GetString("Filter_WithDisabledWorkspaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing workspaces.
+        /// </summary>
+        public static string Filter_WithMissingWorkspace {
+            get {
+                return ResourceManager.GetString("Filter_WithMissingWorkspace", resourceCulture);
             }
         }
         
@@ -556,6 +619,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upload Users.
+        /// </summary>
+        public static string UploadUsers {
+            get {
+                return ResourceManager.GetString("UploadUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login name.
         /// </summary>
         public static string UserName {
@@ -570,6 +642,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string UserNotFound {
             get {
                 return ResourceManager.GetString("UserNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Users.
+        /// </summary>
+        public static string UsersTitle {
+            get {
+                return ResourceManager.GetString("UsersTitle", resourceCulture);
             }
         }
     }

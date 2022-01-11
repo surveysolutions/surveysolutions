@@ -139,7 +139,7 @@
     <value>Recensământul intreprinderilor</value>
   </data>
   <data name="EnterpriseSurvey" xml:space="preserve">
-    <value>Ancheta intreprinderilor</value>
+    <value>Ancheta întreprinderilor</value>
   </data>
   <data name="HouseholdHealthSurvey" xml:space="preserve">
     <value>Ancheta în gospodării privind starea de sănătate</value>
@@ -163,7 +163,7 @@
     <value>Ancheta pe grupuri de indicatori multipli (MICS)</value>
   </data>
   <data name="PopulationAndHousingCensus" xml:space="preserve">
-    <value>Recensământul populației și al locuințelor</value>
+    <value>Recensământul populației și locuințelor</value>
   </data>
   <data name="PriceSurvey" xml:space="preserve">
     <value>Ancheta de prețuri</value>
@@ -178,7 +178,7 @@
     <value>Evaluări privind furnizarea de servicii</value>
   </data>
   <data name="SocioEconomicMonitoringSurvey" xml:space="preserve">
-    <value>Anchetă socio-economică</value>
+    <value>Ancheta socio-economică</value>
   </data>
   <data name="StatisticalInfoAndMonitoringProg" xml:space="preserve">
     <value>Program de monitorizare și informații statistice</value>

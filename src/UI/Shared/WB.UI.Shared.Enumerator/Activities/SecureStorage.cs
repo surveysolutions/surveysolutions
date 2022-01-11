@@ -5,6 +5,7 @@ using Android.Runtime;
 using Java.IO;
 using Java.Security;
 using Javax.Crypto;
+using MvvmCross;
 using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.DataCollection.Services;
 
@@ -13,7 +14,7 @@ namespace WB.UI.Shared.Enumerator.Activities
     /// <summary>
     /// Implementation of <see cref="ISecureStorage"/> using Android KeyStore.
     /// </summary>
-    public class SecureStorage : ISecureStorage
+    public class SecureStorage1 : ISecureStorage
     {
         private readonly IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity;
         private readonly KeyStore keyStore;
@@ -27,9 +28,9 @@ namespace WB.UI.Shared.Enumerator.Activities
         static readonly object keyStoreFileLock = new object();
         static string keyStoreFileName = "keystore.dat";
 
-        public SecureStorage(IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity)
+        public SecureStorage1()
         {
-            this.mvxAndroidCurrentTopActivity = mvxAndroidCurrentTopActivity;
+            this.mvxAndroidCurrentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
 
             this.keyStore = KeyStore.GetInstance(KeyStore.DefaultType);
             this.protection = new KeyStore.PasswordProtection(KeyStoreFileProtectionPassword);

@@ -26,6 +26,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -136,7 +137,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 this.attachmentService.SaveMeta(
                     attachmentId: command.AttachmentId,
                     questionnaireId: command.QuestionnaireId,
-                    contentId: command.AttachmentContentId, 
+                    attachmentContentId: command.AttachmentContentId, 
                     fileName: model.File?.FileName ?? model.FileName);
             }
             catch (FormatException e)
