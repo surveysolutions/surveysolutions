@@ -236,64 +236,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             }).Using(new PreloadingValueComparer()));
         }
 
-
-        [Test]
-        public void when_file_contains_missing_value_for_gps_question_should_substitute_empty_string()
-        {
-            // arrange
-            var value = "-999999999";
-            var columns = new[] { "to_preload_gps__Latitude", "to_preload_gps__Longitude", "to_preload_gps__Accuracy", "to_preload_gps__Altitude", "to_preload_gps__Timestamp"
-            };
-            var row = new[] { value };
-
-            var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Other.TabDelimitedTextStream(columns, row);
-            // act
-            var file = reader.ReadTextFile(stream, "file.tab");
-            // assert
-            Assert.That(file.Rows[0].Cells, Is.EquivalentTo(new[]
-            {
-                new PreloadingCompositeValue
-                {
-                    VariableOrCodeOrPropertyName = "to_preload_gps",
-                    Values = new []
-                    {
-                        new PreloadingValue{
-                            VariableOrCodeOrPropertyName = "latitude",
-                            Column = columns[0],
-                            Row = 1,
-                            Value = ""
-                        },
-                        new PreloadingValue{
-                            VariableOrCodeOrPropertyName = "longitude",
-                            Column = columns[1],
-                            Row = 1,
-                            Value = ""
-                        },
-                        new PreloadingValue{
-                            VariableOrCodeOrPropertyName = "accuracy",
-                            Column = columns[2],
-                            Row = 1,
-                            Value = ""
-                        },
-                        new PreloadingValue{
-                            VariableOrCodeOrPropertyName = "altitude",
-                            Column = columns[3],
-                            Row = 1,
-                            Value = ""
-                        },
-                        new PreloadingValue{
-                            VariableOrCodeOrPropertyName = "timestamp",
-                            Column = columns[4],
-                            Row = 1,
-                            Value = ""
-                        }
-                    }
-                    
-                }
-            }).Using(new PreloadingCompositeValueComparer()));
-        }
-
         [Test]
         public void when_read_text_file_with_1_row_and_answers_by_composite_columns_should_return_preloaded_file_with_1_specified_composite_preloding_value_with_2_preloading_values()
         {

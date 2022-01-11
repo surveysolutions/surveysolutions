@@ -507,6 +507,55 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(((AssignmentDateTimeAnswer)answer.Values[1]).Answer, Is.EqualTo(new DateTime(1998, 12, 1)));
             Assert.That(answer.Values[1].VariableName, Is.EqualTo(gpsPropertyName2.ToLower()));
         }
+        
+        [Test]
+        public void when_getting_assignment_row_with_missing_value_answer_by_gps_question_should_return_row_with_empty_value()
+        {
+            //arrange
+            var variable = "questionId";
+            var gpsPropertyName1 = "Latitude";
+            var gpsPropertyName2 = "tImestamp";
+
+            var latitudeColumnName = $"{variable}__{gpsPropertyName1}";
+            var timestampColumnName = $"{variable}__{gpsPropertyName2}";
+
+            var latitudeAnswer = PreloadingExtensions.MissingNumericQuestionValue;
+            var timestampAnswer = "";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.GpsCoordinateQuestion(variable: variable)));
+
+            var file = Create.Entity.PreloadedFile(rows: Create.Entity.PreloadingRow(
+                Create.Entity.PreloadingCompositeValue(variable,
+                    Create.Entity.PreloadingValue(gpsPropertyName1, latitudeAnswer, latitudeColumnName),
+                    Create.Entity.PreloadingValue(gpsPropertyName2, timestampAnswer, timestampColumnName))));
+
+            var converter = Create.Service.AssignmentsImportFileConverter();
+            //act
+            var assignmentRows = converter.GetAssignmentRows(file, questionnaire).ToArray();
+            //assert
+            Assert.That(assignmentRows, Has.One.Items);
+            Assert.That(assignmentRows[0].Answers, Has.One.Items);
+            Assert.That(assignmentRows[0].Answers[0], Is.TypeOf<AssignmentGpsAnswer>());
+
+            var answer = assignmentRows[0].Answers[0] as AssignmentGpsAnswer;
+
+            Assert.That(answer.VariableName, Is.EqualTo(variable.ToLower()));
+            Assert.That(answer.Values.Length, Is.EqualTo(2));
+
+            Assert.That(answer.Values[0], Is.TypeOf<AssignmentDoubleAnswer>());
+            Assert.That(answer.Values[0].Value, Is.EqualTo(string.Empty));
+            Assert.That(answer.Values[0].Column, Is.EqualTo(latitudeColumnName));
+            Assert.That(((AssignmentDoubleAnswer)answer.Values[0]).Answer, Is.EqualTo(null));
+            Assert.That(answer.Values[0].VariableName, Is.EqualTo(gpsPropertyName1.ToLower()));
+
+            Assert.That(answer.Values[1], Is.TypeOf<AssignmentDateTimeAnswer>());
+            Assert.That(answer.Values[1].Value, Is.EqualTo(timestampAnswer));
+            Assert.That(answer.Values[1].Column, Is.EqualTo(timestampColumnName));
+            Assert.That(((AssignmentDateTimeAnswer)answer.Values[1]).Answer, Is.EqualTo(null));
+            Assert.That(answer.Values[1].VariableName, Is.EqualTo(gpsPropertyName2.ToLower()));
+        }
 
         [Test]
         public void when_getting_assignment_row_with_answer_by_categorical_multi_question_should_return_row_with_multi_answers_preloading_value()
