@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             await this.RefreshDashboard(this.LastVisitedInterviewId);
             this.SelectTypeOfInterviewsByInterviewId(this.LastVisitedInterviewId);
         }
-
+        
         public override void ViewAppeared()
         {
             if (!this.principal.IsAuthenticated)
@@ -518,7 +518,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         #endregion
 
-        public string CurrentWorkspace => principal.CurrentUserIdentity.Workspace;
+        public string? CurrentWorkspace => principal?.CurrentUserIdentity?.Workspace;
         public WorkspaceView[] GetWorkspaces()
         {
             return workspaceService.GetAll();
