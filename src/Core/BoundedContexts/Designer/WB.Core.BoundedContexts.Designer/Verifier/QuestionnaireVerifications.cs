@@ -494,18 +494,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         translatedEntityWithSubstitution.TranslationName,
                         referenceToEntityWithSubstitution);
                 }
-                else if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length > 0)
-                {
-                    var parentGroup = questionnaire.Questionnaire.GetParentGroupsIds(translatedEntityWithSubstitution.Entity);
-                    var roster = questionnaire.Questionnaire.GetRoster(parentGroup.First());
-                    if (roster != null && roster.DisplayMode == RosterDisplayMode.Matrix)
-                    {
-                        return QuestionnaireVerificationMessage.Error("WB0300",
-                            VerificationMessages.WB0300,
-                            translatedEntityWithSubstitution.TranslationName,
-                            referenceToEntityWithSubstitution);
-                    }
-                }
 
                 return null;
             }
@@ -544,18 +532,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     translatedEntityWithSubstitution.TranslationName,
                     referenceToEntityWithSubstitution,
                     referenceToEntityBeingSubstituted);
-            }
-
-            if (translatedEntityWithSubstitution.Entity is IGroup { IsRoster: true, DisplayMode: RosterDisplayMode.Table or RosterDisplayMode.Matrix } targetAsGroup)
-            {
-                if (questionnaire.Questionnaire.GetParentGroupsIds(entityToSubstitute).Contains(translatedEntityWithSubstitution.Entity.PublicKey))
-                {
-                    return QuestionnaireVerificationMessage.Error("WB0313",
-                        VerificationMessages.WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope,
-                        translatedEntityWithSubstitution.TranslationName,
-                        referenceToEntityWithSubstitution,
-                        referenceToEntityBeingSubstituted);
-                }
             }
 
             return null;

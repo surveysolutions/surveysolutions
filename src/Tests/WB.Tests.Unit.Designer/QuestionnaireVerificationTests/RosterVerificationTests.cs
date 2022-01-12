@@ -74,39 +74,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         [Test]
-        public void should_not_allow_roster_title_inside_matrix_roster()
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                    Create.FixedRoster(title: "Roster ",
-                        rosterId: Id.gA,
-                        displayMode:RosterDisplayMode.Matrix,
-                        children: new IComposite[]
-                        {
-                            Create.SingleQuestion(variable: "test1 %rostertitle%", id:Id.g1)
-                        }
-                    ))
-                .ExpectError("WB0300");
-        }
-
-        [Test]
-        public void should_not_allow_roster_title_inside_matrix_roster_triggered_by_numeric()
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                    Create.NumericIntegerQuestion(Id.g5),
-                    Create.Roster(
-                        rosterSizeQuestionId: Id.g5,
-                        title: "Roster ",
-                        rosterId: Id.gA,
-                        displayMode: RosterDisplayMode.Matrix,
-                        children: new IComposite[]
-                        {
-                            Create.SingleQuestion(variable: "test1 %rostertitle%", id:Id.g1)
-                        }
-                    ))
-                .ExpectError("WB0300");
-        }
-
-        [Test]
         public void should_validate_location_of_roster_title_for_numeric_roster()
         {
             Create.QuestionnaireDocumentWithOneChapter(
@@ -307,22 +274,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 .ExpectWarning("WB0286");
         }
 
-        [TestCase("title %i1%")]
-        [TestCase("title %self%")]
-        [TestCase("title %q1%")]
-        public void should_show_error_on_question_with_substitution_in_title_inside_table_roster(string title)
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                    Create.NumericIntegerQuestion(id: Id.g1, variable: "i1"),
-                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Table,
-                        children: new IComposite[]
-                        {
-                            Create.Question(title: title, variable: "q1"),
-                        })
-                )
-                .ExpectError("WB0287");
-        }
-
         [TestCase(QuestionType.Area)]
         [TestCase(QuestionType.Audio)]
         [TestCase(QuestionType.DateTime)]
@@ -428,46 +379,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         })
                 )
                 .ExpectError("WB0298");
-        }
-
-        [Test]
-        public void should_not_allow_matrix_roster_to_have_titletitle_variable()
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                    Create.Roster(displayMode: RosterDisplayMode.Matrix,
-                        title: "title - %rostertitle% - end")
-                )
-                .ExpectError("WB0303");
-        }
-        
-        [Test]
-        public void should_allow_matrix_roster_to_have_custom_title()
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                    Create.Roster(displayMode: RosterDisplayMode.Matrix,
-                        customRosterTitle: true)
-                )
-                .ExpectNoError("WB0303");
-        }
-
-        [Test]
-        public void should_not_allow_table_roster_to_have_titletitle_variable()
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                    Create.Roster(displayMode: RosterDisplayMode.Table,
-                        title: "title - %rostertitle% - end")
-                )
-                .ExpectError("WB0304");
-        }
-
-        [Test]
-        public void should_allow_table_roster_to_have_custom_title()
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                    Create.Roster(displayMode: RosterDisplayMode.Table,
-                        customRosterTitle: true)
-                )
-                .ExpectNoError("WB0304");
         }
     }
 }

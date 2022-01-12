@@ -316,38 +316,5 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.GetCritical("WB0026").References.Last().Type.Should().Be(QuestionnaireVerificationReferenceType.Categories);
             verificationMessages.GetCritical("WB0026").References.Last().Id.Should().Be(categoriesId);
         }
-        
-        [Test]
-        public void when_verifying_questionnaire_having_table_roster_with_substitution_to_a_child_question()
-        {
-            Guid rosterId = Guid.Parse("13333333333333333333333333333333");
-            Guid questionId = Guid.Parse("10000000000000000000000000000000");
-            Guid variableId = Guid.Parse("12222222222222222222222222222222");
-
-            var questionnaire = Create.QuestionnaireDocument(children: Create.Chapter(children: new IComposite[]
-            {
-                Create.FixedRoster(rosterId, title:"roster title %name%", displayMode:RosterDisplayMode.Table,fixedTitles: new[] {"1", "2", "3"}, children: new List<IComposite>
-                {
-                    Create.TextQuestion(questionId, variable:"name")
-                })
-            }));
-
-            var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
-
-
-            verificationMessages.ShouldContainError("WB0313");
-
-            verificationMessages.GetError("WB0313")
-                .References.Select(x => x.Type).ToArray()
-                .Should().BeEquivalentTo(new[] 
-                {
-                    QuestionnaireVerificationReferenceType.Group, 
-                    QuestionnaireVerificationReferenceType.Question
-                });
-
-            verificationMessages.GetError("WB0313").References.ElementAt(0).Id.Should().Be(rosterId);
-            verificationMessages.GetError("WB0313").References.ElementAt(1).Id.Should().Be(questionId);
-        }
     }
 }
