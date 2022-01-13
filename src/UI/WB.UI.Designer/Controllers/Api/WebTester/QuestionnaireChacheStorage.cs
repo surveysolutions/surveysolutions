@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
@@ -6,9 +7,9 @@ namespace WB.UI.Designer.Api.WebTester
 {
     public interface IQuestionnaireCacheStorage
     {
-        Lazy<Questionnaire>? Get(string cacheKey);
-        void Add(string cacheKey, Lazy<Questionnaire> cacheEntry);
         void Remove(string cacheKey);
+        
+        Questionnaire GetOrCreate(string cacheKey, Guid questionnaireId, Func<Guid, Questionnaire> factory);
     }
 
     public class QuestionnaireCacheStorage : IQuestionnaireCacheStorage
@@ -22,22 +23,24 @@ namespace WB.UI.Designer.Api.WebTester
 
         private const string CachePrefix = "qcs::";
 
-        public Lazy<Questionnaire>? Get(string cacheKey)
-        {
-            return memoryCache.Get(CachePrefix + cacheKey) as Lazy<Questionnaire>;
-        }
 
-        public void Add(string cacheKey, Lazy<Questionnaire> cacheEntry)
+        public Questionnaire GetOrCreate(string cacheKey, Guid questionnaireId, Func<Guid, Questionnaire> factory)
         {
-            memoryCache.Set(CachePrefix + cacheKey, cacheEntry, new MemoryCacheEntryOptions()
+            return memoryCache.GetOrCreate(GetKey(cacheKey), cache =>
             {
-                SlidingExpiration = TimeSpan.FromMinutes(10)
-            });
+                cache.SetSlidingExpiration(TimeSpan.FromMinutes(5));
+                return factory.Invoke(questionnaireId);
+            });            
         }
 
         public void Remove(string cacheKey)
         {
-            memoryCache.Remove(CachePrefix + cacheKey);
+            memoryCache.Remove(GetKey(cacheKey));
+        }
+
+        private string GetKey(string cacheKey)
+        {
+            return CachePrefix + cacheKey;
         }
     }
 }
