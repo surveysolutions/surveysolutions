@@ -329,11 +329,10 @@ namespace WB.UI.Designer
                     );
                 }
             });
-            
+
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = SpaRoot;
-                spa.Options.DefaultPage = "/";
             });
 
             if (aspCoreKernel == null) return;
