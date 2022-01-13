@@ -89,6 +89,10 @@ namespace WB.UI.WebTester.Controllers
             {
                 return this.RedirectToAction("QuestionnaireWithErrors", "Error");
             }
+            catch (TaskCanceledException e) 
+            {
+                return this.RedirectToAction("QuestionnaireWithErrors", "Error");
+            }
 
             var interview = statefulInterviewRepository.Get(id.FormatGuid()) as WebTesterStatefulInterview;
             if (interview?.Questionnaire.IsCoverPageSupported ?? false)

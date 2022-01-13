@@ -55,23 +55,15 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                 .Select(y => (int?)y.Sequence)
                 .Max();
 
-            var cacheKey = $"{questionnaireId}.{maxSequenceByQuestionnaire}";
-
-            var cacheEntry = questionnaireCacheStorage.Get(cacheKey);
-
-            if (cacheEntry == null)
-            {
-                cacheEntry = new Lazy<Questionnaire>(() => ComposeQuestionnaireImpl(questionnaireId));
-                questionnaireCacheStorage.Add(cacheKey, cacheEntry);
-            }
+            var questionnaireKey = $"{questionnaireId}.{maxSequenceByQuestionnaire}";
 
             try
             {
-                return cacheEntry.Value;
+                return questionnaireCacheStorage.GetOrCreate(questionnaireKey, questionnaireId, ComposeQuestionnaireImpl);
             }
             catch
             {
-                questionnaireCacheStorage.Remove(cacheKey);
+                questionnaireCacheStorage.Remove(questionnaireKey);
                 throw;
             }
         }
