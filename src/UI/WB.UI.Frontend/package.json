@@ -12,8 +12,7 @@
         "styles": "vue-cli-service build --css",
         "styles:dev": "vue-cli-service build --css --mode development",
         "test": "jest",
-        "preinstall": "npx npm-force-resolutions",
-        "postshrinkwrap": "npx npm-force-resolutions"
+        "preinstall": "npx npm-force-resolutions"
     },
     "dependencies": {
         "@google/markerclustererplus": "^4.0.1",
