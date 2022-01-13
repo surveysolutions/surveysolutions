@@ -18,18 +18,20 @@
         <ModalFrame ref="deleteQuestionnaireModal"
             :title="$t('Pages.ConfirmationNeededTitle')">
             <form onsubmit="return false;">
-                <p style="color: red;"> {{ $t("Pages.GlobalSettings_DeleteQuestionnareWarning" )}}</p>
+                <p style="color: red;"> {{ $t("Pages.GlobalSettings_DeleteQuestionnaireWarning" )}}</p>
                 <p>{{ $t("Pages.GlobalSettings_DeleteQuestionnaireConfirmation" )}}</p>
                 <p class="text-danger"
                     v-if="this.deletionWarnMsg">
                     {{deletionWarnMsg}}
                 </p>
                 <div class="form-group">
-                    <label style="white-space: pre;"
-                        class="control-label"
-                        for="deleteConfirmInput">
-                        {{deletionApproveLabel}}
-                    </label>
+                    <div style="overflow-x:auto;">
+                        <label style="white-space: pre;"
+                            class="control-label"
+                            for="deleteConfirmInput">
+                            {{deletionApproveLabel}}
+                        </label>
+                    </div>
                     <input type="text"
                         class="form-control"
                         id="deleteConfirmInput"
