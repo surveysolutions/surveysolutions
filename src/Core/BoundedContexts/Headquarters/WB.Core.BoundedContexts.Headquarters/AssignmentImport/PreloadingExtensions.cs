@@ -14,6 +14,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     public static class PreloadingExtensions
     {
+        public const string MissingNumericQuestionValue = "-999999999";
+        public const string MissingStringQuestionValue = "##N/A##";
+        
         public static AssignmentAnswers ToAssignmentAnswers(this PreloadingCompositeValue compositeValue, IQuestionnaire questionnaire)
         {
             var questionId = questionnaire.GetQuestionIdByVariable(compositeValue.VariableOrCodeOrPropertyName);
@@ -121,6 +124,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private static AssignmentAnswer ToAssignmentDoubleAnswer(this PreloadingValue answer)
         {
+            if (string.Compare(MissingNumericQuestionValue, answer.Value, StringComparison.InvariantCulture) == 0)
+                answer.Value = string.Empty;
+            
             double? doubleValue = null;
             if (double.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
                 out var doubleNumericValue))
@@ -168,11 +174,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 VariableName = answer.VariableOrCodeOrPropertyName,
                 Column = answer.Column,
-                Value = answer.Value,
+                Value = string.Compare(MissingStringQuestionValue, answer.Value, StringComparison.InvariantCulture) == 0 ? string.Empty :  answer.Value,
             };
 
         private static AssignmentAnswer ToAssignmentIntegerAnswer(this PreloadingValue answer)
         {
+            if (string.Compare(MissingNumericQuestionValue, answer.Value, StringComparison.InvariantCulture) == 0)
+                answer.Value = string.Empty;
+            
             int? intValue = null;
             if (int.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
                 out var intNumericValue))
