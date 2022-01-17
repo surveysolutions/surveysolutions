@@ -225,7 +225,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         }
 
         public string? GetQuestionTitle(IQuestion question) => question.QuestionText;
+        public string? GetVariable(Guid id) => this.FindOrNull<IComposite>(id)?.VariableName;
+        public Guid? GetParentRoster(Guid questionId)
+        {
+            var question = this.FindOrThrow<IComposite>(questionId);
+            IComposite? parent = null;
+            do
+            {
+                parent = question.GetParent();
+                if (parent is IGroup { IsRoster: true })
+                    return parent.PublicKey;
+            } while (parent != null);
+            
+            return null;
+        }
 
+        public QuestionType? GetQuestionType(Guid id) => this.FindOrNull<IQuestion>(id)?.QuestionType;
         public string GetGroupTitle(IGroup group) => group.Title;
 
         public string GetGroupTitle(Guid groupId, bool removeHtmlTags = false) => removeHtmlTags ? this.FindOrThrow<Group>(groupId).Title.RemoveHtmlTags() : this.FindOrThrow<Group>(groupId).Title;
