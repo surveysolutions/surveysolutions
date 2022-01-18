@@ -127,11 +127,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private bool CheckForbiddenClassesUsage(string? expression, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (string.IsNullOrEmpty(expression)) return false;
-            if (ExpressionContainsForbiddenTypeRef.ContainsKey(expression))
-            {
-                cacheHit++;
-                return ExpressionContainsForbiddenTypeRef[expression];
-            }
+            if (ExpressionContainsForbiddenTypeRef.TryGetValue(expression, out var value))
+                return value;
 
             var expressionWithInlinedMacros = this.macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values);
             string code = WrapToClass(expressionWithInlinedMacros);
@@ -651,7 +648,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             var verificationMessagesByQuestionnaire = new List<QuestionnaireVerificationMessage>();
             ExpressionContainsForbiddenTypeRef = new Dictionary<string, bool>();
-            cacheHit = 0;
             
             foreach (var verifier in ErrorsVerifiers.AsParallel())
             {
@@ -661,6 +657,5 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private Dictionary<string, bool> ExpressionContainsForbiddenTypeRef = new Dictionary<string, bool>();
-        int cacheHit = 0;
     }
 }

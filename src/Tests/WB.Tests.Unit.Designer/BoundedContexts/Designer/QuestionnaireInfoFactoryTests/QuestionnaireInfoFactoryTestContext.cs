@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                             Create.StaticText(st2Id, "static text 2"),
                         })
                     }),
-                    Create.Roster(rosterId:g2Id, title:"Roster 1.2", rosterSizeQuestionId: numericQuestionId, rosterTitleQuestionId: q3Id, rosterType: RosterSizeSourceType.Question, children: new IComposite[]
+                    Create.Roster(rosterId:g6Id, title:"Roster 1.2", rosterSizeQuestionId: numericQuestionId, rosterTitleQuestionId: q3Id, rosterType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
                         Create.TextQuestion(q3Id, text: "text title"),
                     }),
@@ -65,6 +65,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         protected static Guid g3Id = Guid.Parse("33333333333333333333333333333333");
         protected static Guid g4Id = Guid.Parse("44444444444444444444444444444444");
         protected static Guid g5Id = Guid.Parse("55555555555555555555555555555555");
+        protected static Guid g6Id = Guid.Parse("66666666666666666666666666666666");
 
         protected static Guid q1Id = Guid.Parse("11111111111111111000000000000000");
         protected static Guid q2Id = Guid.Parse("22222222222222222000000000000000");

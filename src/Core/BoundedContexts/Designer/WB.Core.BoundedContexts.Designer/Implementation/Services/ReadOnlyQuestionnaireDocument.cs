@@ -82,33 +82,33 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private EntityWithMeta? FindEntityWithMeta(Guid publicKey)
         {
-            return this.allItemsWithMeta.ContainsKey(publicKey) 
-                ? this.allItemsWithMeta[publicKey]
+            return this.allItemsWithMeta.TryGetValue(publicKey, out var entityWithMeta) 
+                ? entityWithMeta
                 : null;
         }
 
         public IEnumerable<T> Find<T>() where T : class
-            => this.entities.Where(x => x is T).Select(x => x).Cast<T>();
+            => this.entities.OfType<T>();
 
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
             => this.Find<T>().Where(condition);
 
-        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        public T? FirstOrDefault<T>(Func<T, bool> condition) where T : class
             => Find(condition).FirstOrDefault();
 
         public IQuestion? GetQuestionByName(string name) =>
-            questionsCache.ContainsKey(name)
-                ? questionsCache[name]
+            questionsCache.TryGetValue(name, out var question)
+                ? question
                 : null;
 
         public IVariable? GetVariableByName(string name)
-            => variableCache.ContainsKey(name)
-                ? variableCache[name]
+            => variableCache.TryGetValue(name, out var variable)
+                ? variable
                 : null;
         
         public IGroup? GetGroupByName(string name)
-            => groupCache.ContainsKey(name)
-                ? groupCache[name]
+            => groupCache.TryGetValue(name, out var group)
+                ? group
                 : null;
 
         public IEnumerable<QuestionnaireItemTypeReference> GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
@@ -131,14 +131,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 if (!(current is QuestionnaireDocument))
                 {
-                    this.allItemsWithMeta.Add(current.PublicKey, new EntityWithMeta(current, BuildEntityMeta(current)));
+                    this.allItemsWithMeta[current.PublicKey] = new EntityWithMeta(current, BuildEntityMeta(current));
 
                     if(current is IQuestion asQuestion && !string.IsNullOrEmpty(asQuestion.StataExportCaption))
-                        questionsCache.Add(asQuestion.StataExportCaption, asQuestion);
+                        questionsCache[asQuestion.StataExportCaption] = asQuestion;
                     else if (current is IVariable asVariable && !string.IsNullOrEmpty(asVariable.Name))
-                        variableCache.Add(asVariable.Name, asVariable);
+                        variableCache[asVariable.Name] = asVariable;
                     else if(current is IGroup asGroup && !string.IsNullOrEmpty(asGroup.VariableName))
-                        groupCache.Add(asGroup.VariableName, asGroup);
+                        groupCache[asGroup.VariableName] = asGroup;
                 }
             }
         }
@@ -272,8 +272,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public IComposite? GetEntityByIdOrNull(Guid id)
         {
-            return this.allItemsWithMeta.ContainsKey(id) 
-                ? this.allItemsWithMeta[id].Entity
+            return this.allItemsWithMeta.TryGetValue(id, out var entityWithMeta) 
+                ? entityWithMeta.Entity
                 : null;
         }
         
