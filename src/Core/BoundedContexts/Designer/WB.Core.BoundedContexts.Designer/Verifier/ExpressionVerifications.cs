@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -138,7 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             var compilation = CSharpCompilation.Create(
                 "rules.dll",
-                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, 
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
                     optimizationLevel: OptimizationLevel.Release),
                 syntaxTrees: syntaxTree.ToEnumerable(),
                 references: compilerSettings.GetAssembliesToReference());
@@ -502,11 +503,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (string.IsNullOrWhiteSpace(expression)) return false;
-            return Enumerable.Contains(GetIdentifiersUsedInExpression(expression, questionnaire),
-                RoslynExpressionProcessor.ForbiddenDatetimeNow);
+            return GetIdentifiersUsedInExpression(expression, questionnaire)
+                .Contains(RoslynExpressionProcessor.ForbiddenDatetimeNow);
         }
 
-        protected IEnumerable<string> GetIdentifiersUsedInExpression(string expression,
+        protected IReadOnlyCollection<string> GetIdentifiersUsedInExpression(string expression,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
             string expressionWithInlinedMacros =
