@@ -232,7 +232,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return noErrors;
 
             var rosterTitleQuestion =
-                questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == group.RosterTitleQuestionId.Value);
+                questionnaire.GetEntityByIdOrNull(group.RosterTitleQuestionId.Value) as IQuestion;
+            
             if (rosterTitleQuestion == null)
                 return noErrors;
 
@@ -488,7 +489,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (!group.RosterTitleQuestionId.HasValue)
                 return false;
 
-            var rosterTitleQuestion = questionnaire.FirstOrDefault<IQuestion>(x => x.PublicKey == group.RosterTitleQuestionId.Value);
+            var rosterTitleQuestion = questionnaire.GetEntityByIdOrNull(group.RosterTitleQuestionId.Value);
             if (rosterTitleQuestion == null)
                 return true;
 

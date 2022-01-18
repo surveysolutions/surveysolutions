@@ -48,8 +48,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             public RosterScope RosterScope { get; }
         }
 
-        private readonly List<EntityWithMeta> allItems;
-        private IEnumerable<IComposite> entities => this.allItems.Select(x => x.Entity);
+        private readonly Dictionary<Guid, EntityWithMeta> allItemsWithMeta = new Dictionary<Guid, EntityWithMeta>();
+        private readonly Dictionary<string, IQuestion> questionsCache = new Dictionary<string, IQuestion>();
+        private readonly Dictionary<string, IVariable> variableCache = new Dictionary<string, IVariable>();
+        private readonly Dictionary<string, IGroup> groupCache = new Dictionary<string, IGroup>();
+        private IEnumerable<IComposite> entities => this.allItemsWithMeta.Values.Select(x => x.Entity);
 
         public QuestionnaireDocument Questionnaire { get; private set; }
         public string? Translation { get; private set; }
@@ -58,8 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             this.Translation = translation;
             this.Questionnaire = questionnaire;
-
-            this.allItems = this.CreateEntitiesIdAndTypePairsInQuestionnaireFlowOrder(this.Questionnaire);
+            this.BuildCache(this.Questionnaire);
         }
 
         public Dictionary<Guid, Macro> Macros => this.Questionnaire.Macros;
@@ -80,7 +82,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private EntityWithMeta? FindEntityWithMeta(Guid publicKey)
         {
-            return this.allItems.FirstOrDefault(x => x.Entity.PublicKey == publicKey);
+            return this.allItemsWithMeta.ContainsKey(publicKey) 
+                ? this.allItemsWithMeta[publicKey]
+                : null;
         }
 
         public IEnumerable<T> Find<T>() where T : class
@@ -90,16 +94,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             => this.Find<T>().Where(condition);
 
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
-            => this.Find(condition).FirstOrDefault();
+            => Find(condition).FirstOrDefault();
+
+        public IQuestion? GetQuestionByName(string name) =>
+            questionsCache.ContainsKey(name)
+                ? questionsCache[name]
+                : null;
+
+        public IVariable? GetVariableByName(string name)
+            => variableCache.ContainsKey(name)
+                ? variableCache[name]
+                : null;
+        
+        public IGroup? GetGroupByName(string name)
+            => groupCache.ContainsKey(name)
+                ? groupCache[name]
+                : null;
 
         public IEnumerable<QuestionnaireItemTypeReference> GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
         {
             return this.entities.Select(x => new QuestionnaireItemTypeReference(x.PublicKey, x.GetType()));
         }
 
-        private List<EntityWithMeta> CreateEntitiesIdAndTypePairsInQuestionnaireFlowOrder(QuestionnaireDocument questionnaire)
+        private void BuildCache(QuestionnaireDocument questionnaire)
         {
-            var result = new List<EntityWithMeta>();
             var stack = new Stack<IComposite>();
             stack.Push(questionnaire);
             while (stack.Any())
@@ -110,10 +128,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     var child = current.Children[i];
                     stack.Push(child);
                 }
+
                 if (!(current is QuestionnaireDocument))
-                    result.Add(new EntityWithMeta(current, BuildEntityMeta(current)));
+                {
+                    this.allItemsWithMeta.Add(current.PublicKey, new EntityWithMeta(current, BuildEntityMeta(current)));
+
+                    if(current is IQuestion asQuestion && !string.IsNullOrEmpty(asQuestion.StataExportCaption))
+                        questionsCache.Add(asQuestion.StataExportCaption, asQuestion);
+                    else if (current is IVariable asVariable && !string.IsNullOrEmpty(asVariable.Name))
+                        variableCache.Add(asVariable.Name, asVariable);
+                    else if(current is IGroup asGroup && !string.IsNullOrEmpty(asGroup.VariableName))
+                        groupCache.Add(asGroup.VariableName, asGroup);
+                }
             }
-            return result;
         }
 
         private EntityMeta BuildEntityMeta(IComposite entity)
@@ -144,14 +171,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 parent = parent.GetParent() as IGroup;
             }
             return parents.Select(x => x.PublicKey).ToArray();
-        }
-
-        public IEnumerable<IComposite> FindEntitiesFromTheSameOrUpperRosterScope(IComposite entity)
-        {
-            var entityRosterScope = this.GetRosterScope(entity);
-            return this.allItems
-                .Where(x => entityRosterScope.Equals(x.Meta.RosterScope) || x.Meta.RosterScope.IsParentScopeFor(entityRosterScope))
-                .Select(x => x.Entity);
         }
 
         public RosterScope GetRosterScope(IComposite entity)
@@ -243,7 +262,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public bool IsRosterSizeQuestion(IQuestion question)
         {
-            return this.Find<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey).Any();
+            return this.groupCache.Values.Any(group => group.RosterSizeQuestionId == question.PublicKey);
         }
 
         public bool IsSupervisorQuestion(IQuestion question)
@@ -251,7 +270,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.QuestionScope == QuestionScope.Supervisor;
         }
 
-        public IComposite GetEntityByVariable(string variableName)
+        public IComposite? GetEntityByIdOrNull(Guid id)
+        {
+            return this.allItemsWithMeta.ContainsKey(id) 
+                ? this.allItemsWithMeta[id].Entity
+                : null;
+        }
+        
+        public IComposite? GetEntityByVariable(string variableName)
         {
             return this.Find<IComposite>(x => x.VariableName == variableName).FirstOrDefault();
         }

@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -72,12 +74,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
-            => this.Questionnaire.FirstOrDefault(condition);
-
         public IEnumerable<ReadOnlyQuestionnaireDocument.QuestionnaireItemTypeReference> GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
             => Questionnaire.GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder();
 
+        public IComposite? GetEntityByIdOrNull(Guid id) => this.Questionnaire.GetEntityByIdOrNull(id);
+
+        public IQuestion? GetQuestionByName(string name) => this.Questionnaire.GetQuestionByName(name);
         
+        public IVariable? GetVariableByName(string name) => this.Questionnaire.GetVariableByName(name);
+        
+        public IGroup? GetGroupByName(string name) => this.Questionnaire.GetGroupByName(name);
     }
 }

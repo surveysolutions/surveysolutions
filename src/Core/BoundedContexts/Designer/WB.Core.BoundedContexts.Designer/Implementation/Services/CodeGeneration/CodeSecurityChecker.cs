@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.Activator", "System.AppContext", "System.AppDomain", "System.Console", "System.Environment", "System.GC"
         };
 
-        public List<string> FindForbiddenClassesUsage(SyntaxTree syntaxTree, CSharpCompilation compilation)
+        public IEnumerable<string> FindForbiddenClassesUsage(SyntaxTree syntaxTree, CSharpCompilation compilation)
         {
             var allUsedTypes = FindUsedTypes(syntaxTree, compilation);
 
@@ -37,7 +37,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     namedTypeSymbol.Kind == SymbolKind.NamedType &&
                     ForbiddenClassesFromSystemNamespace.Contains(namedTypeSymbol.ToString()))
                 {
-                    foundForbiddenTypes.Add(namedTypeSymbol.ToString());
+                    var symbol = namedTypeSymbol.ToString();
+                    if (!foundForbiddenTypes.Contains(symbol))
+                    {
+                        foundForbiddenTypes.Add(symbol);
+                        yield return symbol;
+                    }
                     continue;
                 }
 
@@ -45,16 +50,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 {
                     if (!containingNamespace.StartsWith("WB.Core.SharedKernels.DataCollection"))
                     {
-                        foundForbiddenTypes.Add(namedTypeSymbol.ToString());
+                        var symbol = namedTypeSymbol.ToString();
+                        if (!foundForbiddenTypes.Contains(symbol))
+                        {
+                            foundForbiddenTypes.Add(symbol);
+                            yield return symbol;
+                        }
                     }
                 }
             }
-
-            return foundForbiddenTypes.ToList();
         }
 
         // https://stackoverflow.com/a/29178633/72174
-        static List<INamedTypeSymbol> FindUsedTypes(SyntaxTree tree, CSharpCompilation compilation)
+        static IEnumerable<INamedTypeSymbol> FindUsedTypes(SyntaxTree tree, CSharpCompilation compilation)
         {
                 var root = tree.GetRoot();
                 var nodes = root.DescendantNodes(n => true);
@@ -75,9 +83,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         .Select(id => sm.GetSymbolInfo(id).Symbol)
                         .OfType<INamedTypeSymbol>();
 
-
-                    namedTypeSymbols.AddRange(namedTypes);
-
                     // ExpressionSyntax:
                     //  - method calls
                     //  - property uses
@@ -88,9 +93,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         .Select(ma => sm.GetTypeInfo(ma).Type)
                         .OfType<INamedTypeSymbol>();
 
-                    namedTypeSymbols.AddRange(expressionTypes);
+                    return namedTypes.Concat(expressionTypes);
                 }
-            return namedTypeSymbols;
+                else
+                {
+                    return new List<INamedTypeSymbol>();
+                }
+                
         }
     }
 }
