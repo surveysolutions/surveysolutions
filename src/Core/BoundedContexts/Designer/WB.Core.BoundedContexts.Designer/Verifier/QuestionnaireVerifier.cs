@@ -104,7 +104,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 verificationMessagesByQuestionnaire.AddRange(errors);
             }
 
-            var errorsByCircularReferences = this.ErrorsByCircularReferences(questionnaire);
+            var errorsByCircularReferences = 
+                this.ErrorsByCircularReferences(readOnlyQuestionnaireDocumentWithCache);
+            
             verificationMessagesByQuestionnaire.AddRange(errorsByCircularReferences);
 
             if (verificationMessagesByQuestionnaire.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
@@ -119,14 +121,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             var compilationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
                 questionnaire, questionnaireVersionToCompileAssembly, out resultAssembly);
-            
-            var elementsWithErrorMessages = 
-                compilationResult.Diagnostics.GroupBy(x => x.Location, x => x.Message);
-            
-            foreach (var elementWithErrors in elementsWithErrorMessages)
+
+            if (!compilationResult.Success)
             {
-                verificationMessagesByCompiler.Add(CreateExpressionSyntaxError(
-                    new ExpressionLocation(elementWithErrors.Key), elementWithErrors.ToList()));
+                var elementsWithErrorMessages =
+                    compilationResult.Diagnostics.GroupBy(x => x.Location, x => x.Message);
+
+                foreach (var elementWithErrors in elementsWithErrorMessages)
+                {
+                    verificationMessagesByCompiler.Add(CreateExpressionSyntaxError(
+                        new ExpressionLocation(elementWithErrors.Key), elementWithErrors.ToList()));
+                }
             }
 
             return verificationMessagesByQuestionnaire.Concat(verificationMessagesByCompiler);
@@ -151,9 +156,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     .Where(x => x.MessageLevel != VerificationMessageLevel.Warning);
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByCircularReferences(QuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByCircularReferences(ReadOnlyQuestionnaireDocumentWithCache questionnaire)
         {
-            var dependencyGraph = graphProvider.GetDependencyGraph(questionnaire.AsReadOnly());
+            var dependencyGraph = graphProvider.GetDependencyGraph(questionnaire);
             var cycles = topologicalSorter.DetectCycles(dependencyGraph);
 
             foreach (var cycle in cycles)

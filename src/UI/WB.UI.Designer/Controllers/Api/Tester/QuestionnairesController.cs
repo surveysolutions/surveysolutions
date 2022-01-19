@@ -94,7 +94,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             }
 
             var questionnaire = questionnaireView.Source.Clone();
-            var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
+            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaireView.Source);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
             questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
             questionnaire.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument).ToDictionary(x => x.Key, x => x.Value.ToArray());

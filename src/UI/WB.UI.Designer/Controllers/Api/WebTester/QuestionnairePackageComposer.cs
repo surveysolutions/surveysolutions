@@ -81,22 +81,23 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                                                this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source));
 
             string resultAssembly;
+            List<QuestionnaireVerificationMessage> verificationResult;
             try
             {
-                var verificationResult = this.questionnaireVerifier.CompileAndVerify(questionnaireView,
+                verificationResult = this.questionnaireVerifier.CompileAndVerify(questionnaireView,
                     versionToCompileAssembly,
-                    out resultAssembly);
-                
-                if (verificationResult.Any(x => x.MessageLevel != VerificationMessageLevel.Warning))
-                    throw new ComposeException();
+                    out resultAssembly).ToList();
             }
             catch (Exception)
             {
                 throw new ComposeException();
             }
+            
+            if (verificationResult.Any(x => x.MessageLevel != VerificationMessageLevel.Warning))
+                throw new ComposeException();
 
             var questionnaire = questionnaireView.Source.Clone();
-            var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
+            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaireView.Source);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
 
             questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
