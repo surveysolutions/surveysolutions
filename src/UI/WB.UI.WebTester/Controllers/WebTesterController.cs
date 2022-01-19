@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Resources;
 using WB.UI.WebTester.Services;
+using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.UI.WebTester.Controllers
 {
@@ -20,13 +21,13 @@ namespace WB.UI.WebTester.Controllers
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IEvictionNotifier evictionService;
-        private readonly IInterviewFactory interviewFactory;
+        private readonly IImportQuestionnaireAndCreateInterviewService interviewFactory;
         private readonly IOptions<TesterConfiguration> testerConfig;
 
         public WebTesterController(
             IStatefulInterviewRepository statefulInterviewRepository,
             IEvictionNotifier evictionService,
-            IInterviewFactory interviewFactory,
+            IImportQuestionnaireAndCreateInterviewService interviewFactory,
             IOptions<TesterConfiguration> testerConfig)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
@@ -36,64 +37,50 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [Route("Run/{id:Guid}")]
-        public IActionResult Run(Guid id, string sid, int? scenarioId = null)
-        {
-            return this.View(new InterviewPageModel
-            {
-                Id = id.ToString(),
-                OriginalInterviewId = sid ?? string.Empty,
-                ScenarioId = scenarioId
-            });
-        }
-
-        [Route("Redirect/{id:Guid}")]
-        public async Task<IActionResult> Redirect(Guid id, string originalInterviewId, string scenarioId)
+        public IActionResult Run(Guid id, Guid? sid, int? scenarioId = null)
         {
             if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
             {
                 evictionService.Evict(id);
             }
-
-            try
+            
+            var key = interviewFactory.StartImportQuestionnaireAndCreateInterview(id, sid, scenarioId);
+            return this.View(new InterviewPageModel
             {
-                if (!string.IsNullOrEmpty(scenarioId))
-                {
-                    var result = await this.interviewFactory.ImportQuestionnaireAndCreateInterview(id, int.Parse(scenarioId));
-                    if (result == CreationResult.DataPartialRestored)
-                    {
-                        TempData["Message"] = Common.ReloadPartialInterviewErrorMessage;
-                    }
-                    else if (result != CreationResult.DataRestored)
-                    {
-                        TempData["Message"] = Common.ReloadInterviewErrorMessage;
-                    }
-                }
-                else if (!string.IsNullOrEmpty(originalInterviewId))
-                {
-                    var result = await this.interviewFactory.ImportQuestionnaireAndCreateInterview(id, Guid.Parse(originalInterviewId));
-                    if (result == CreationResult.DataPartialRestored)
-                    {
-                        TempData["Message"] = Common.ReloadPartialInterviewErrorMessage;
-                    }
-                    else if (result != CreationResult.DataRestored)
-                    {
-                        TempData["Message"] = Common.ReloadInterviewErrorMessage;
-                    }
-                }
-                else
-                {
-                    await this.interviewFactory.ImportQuestionnaireAndCreateInterview(id);
-                }
-            }
-            catch (ApiException e) when (e.StatusCode == HttpStatusCode.PreconditionFailed)
+                Id = key.ToString(),
+            });
+        }
+        
+        [Route("Status/{id:Guid}")]
+        public CreationResult? GetStatus(Guid id)
+        {
+            return interviewFactory.GetStatus(id);
+        }
+        
+        [Route("Loading/{id:Guid}")]
+        public IActionResult Loading(Guid id)
+        {
+            var status = interviewFactory.GetStatus(id);
+            if (status is null or CreationResult.Error)
             {
                 return this.RedirectToAction("QuestionnaireWithErrors", "Error");
             }
-            catch (TaskCanceledException e) 
+            if (status == CreationResult.Loading)
             {
-                return this.RedirectToAction("QuestionnaireWithErrors", "Error");
+                return this.View("Loading", new InterviewPageModel
+                {
+                    Id = id.ToString(),
+                });
             }
-
+            else if (status == CreationResult.DataPartialRestored)
+            {
+                TempData["Message"] = Common.ReloadPartialInterviewErrorMessage;
+            }
+            else if (status == CreationResult.DataRestoreError)
+            {
+                TempData["Message"] = Common.ReloadInterviewErrorMessage;
+            }
+            
             var interview = statefulInterviewRepository.Get(id.FormatGuid()) as WebTesterStatefulInterview;
             if (interview?.Questionnaire.IsCoverPageSupported ?? false)
                 return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Section/{interview?.Questionnaire.CoverPageSectionId.FormatGuid()}");

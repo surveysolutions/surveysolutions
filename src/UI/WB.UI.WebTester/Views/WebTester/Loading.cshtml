@@ -1,0 +1,19 @@
+﻿@model WB.UI.WebTester.Controllers.InterviewPageModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scripts {
+    <script>
+        window.CONFIG.hqLink = "null";
+        window.CONFIG.splashScreen = true;
+    </script>
+    
+    <b>Loading...</b>
+}
+@section footer{
+    <script>
+        setTimeout(() => {
+            window.location = '@Html.Raw(Url.Content("~/WebTester/Loading/" + Model.Id))'
+        }, 5000)
+    </script>
+}
