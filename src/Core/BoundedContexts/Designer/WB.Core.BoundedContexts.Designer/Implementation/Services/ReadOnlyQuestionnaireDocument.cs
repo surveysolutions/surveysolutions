@@ -12,47 +12,10 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    public class ReadOnlyQuestionnaireDocument
+    public partial class ReadOnlyQuestionnaireDocument
     {
-        public class QuestionnaireItemTypeReference
-        {
-            public Guid Id { get; }
-            public Type Type { get; }
-
-            public QuestionnaireItemTypeReference(Guid id, Type type)
-            {
-                this.Id = id;
-                this.Type = type;
-            }
-        }
-
-        private class EntityWithMeta
-        {
-            public EntityWithMeta(IComposite entity, EntityMeta meta)
-            {
-                Entity = entity;
-                Meta = meta ;
-            }
-
-            public IComposite Entity { get; private set; }
-            public EntityMeta Meta { get; private set; }
-        }
-
-        private class EntityMeta
-        {
-            public EntityMeta(RosterScope rosterScope)
-            {
-                RosterScope = rosterScope;
-            }
-
-            public RosterScope RosterScope { get; }
-        }
-
-        private readonly Dictionary<Guid, EntityWithMeta> allItemsWithMeta = new Dictionary<Guid, EntityWithMeta>();
-        private readonly Dictionary<string, IQuestion> questionsCache = new Dictionary<string, IQuestion>();
-        private readonly Dictionary<string, IVariable> variableCache = new Dictionary<string, IVariable>();
-        private readonly Dictionary<string, IGroup> groupCache = new Dictionary<string, IGroup>();
-        private IEnumerable<IComposite> entities => this.allItemsWithMeta.Values.Select(x => x.Entity);
+        protected readonly List<EntityWithMeta> allItems;
+        protected IEnumerable<IComposite> entities => this.allItems.Select(x => x.Entity);
 
         public QuestionnaireDocument Questionnaire { get; private set; }
         public string? Translation { get; private set; }
@@ -61,7 +24,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             this.Translation = translation;
             this.Questionnaire = questionnaire;
-            this.BuildCache(this.Questionnaire);
+
+            this.allItems = this.CreateEntitiesIdAndTypePairsInQuestionnaireFlowOrder(this.Questionnaire);
         }
 
         public Dictionary<Guid, Macro> Macros => this.Questionnaire.Macros;
@@ -80,44 +44,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return this.FindEntityWithMeta(publicKey)?.Entity as T;
         }
 
-        private EntityWithMeta? FindEntityWithMeta(Guid publicKey)
+        protected virtual EntityWithMeta? FindEntityWithMeta(Guid publicKey)
         {
-            return this.allItemsWithMeta.TryGetValue(publicKey, out var entityWithMeta) 
-                ? entityWithMeta
-                : null;
+            return this.allItems.FirstOrDefault(x => x.Entity.PublicKey == publicKey);
         }
 
         public IEnumerable<T> Find<T>() where T : class
-            => this.entities.OfType<T>();
+            => this.entities.Where(x => x is T).Select(x => x).Cast<T>();
 
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
             => this.Find<T>().Where(condition);
 
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
-            => Find(condition).FirstOrDefault();
-
-        public IQuestion? GetQuestionByName(string name) =>
-            questionsCache.TryGetValue(name, out var question)
-                ? question
-                : null;
-
-        public IVariable? GetVariableByName(string name)
-            => variableCache.TryGetValue(name, out var variable)
-                ? variable
-                : null;
-        
-        public IGroup? GetGroupByName(string name)
-            => groupCache.TryGetValue(name, out var group)
-                ? group
-                : null;
+            => this.Find(condition).FirstOrDefault();
 
         public IEnumerable<QuestionnaireItemTypeReference> GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
         {
             return this.entities.Select(x => new QuestionnaireItemTypeReference(x.PublicKey, x.GetType()));
         }
 
-        private void BuildCache(QuestionnaireDocument questionnaire)
+        private List<EntityWithMeta> CreateEntitiesIdAndTypePairsInQuestionnaireFlowOrder(QuestionnaireDocument questionnaire)
         {
+            var result = new List<EntityWithMeta>();
             var stack = new Stack<IComposite>();
             stack.Push(questionnaire);
             while (stack.Any())
@@ -128,19 +76,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     var child = current.Children[i];
                     stack.Push(child);
                 }
-
                 if (!(current is QuestionnaireDocument))
-                {
-                    this.allItemsWithMeta[current.PublicKey] = new EntityWithMeta(current, BuildEntityMeta(current));
-
-                    if(current is IQuestion asQuestion && !string.IsNullOrEmpty(asQuestion.StataExportCaption))
-                        questionsCache[asQuestion.StataExportCaption] = asQuestion;
-                    else if (current is IVariable asVariable && !string.IsNullOrEmpty(asVariable.Name))
-                        variableCache[asVariable.Name] = asVariable;
-                    else if(current is IGroup asGroup && !string.IsNullOrEmpty(asGroup.VariableName))
-                        groupCache[asGroup.VariableName] = asGroup;
-                }
+                    result.Add(new EntityWithMeta(current, BuildEntityMeta(current)));
             }
+            return result;
         }
 
         private EntityMeta BuildEntityMeta(IComposite entity)
@@ -260,9 +199,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.Featured;
         }
 
-        public bool IsRosterSizeQuestion(IQuestion question)
+        public virtual bool IsRosterSizeQuestion(IQuestion question)
         {
-            return this.groupCache.Values.Any(group => group.RosterSizeQuestionId == question.PublicKey);
+            return this.Find<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey).Any();
         }
 
         public bool IsSupervisorQuestion(IQuestion question)
@@ -270,14 +209,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.QuestionScope == QuestionScope.Supervisor;
         }
 
-        public IComposite? GetEntityByIdOrNull(Guid id)
-        {
-            return this.allItemsWithMeta.TryGetValue(id, out var entityWithMeta) 
-                ? entityWithMeta.Entity
-                : null;
-        }
-        
-        public IComposite? GetEntityByVariable(string variableName)
+        public virtual IComposite? GetEntityByVariable(string variableName)
         {
             return this.Find<IComposite>(x => x.VariableName == variableName).FirstOrDefault();
         }

@@ -185,7 +185,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return NotFound();
             }
 
-            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = this.questionnaireVerifier.Verify(questionnaireView).ToArray();
+            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = 
+                this.questionnaireVerifier.GetAllErrors(questionnaireView,true).ToArray();
             
             var verificationErrors = verificationMessagesAndWarning
                 .Where(x => x.MessageLevel > VerificationMessageLevel.Warning)

@@ -12,12 +12,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class MultiLanguageQuestionnaireDocument
     {
-        public ReadOnlyQuestionnaireDocument Questionnaire { get; }
-        public IReadOnlyCollection<ReadOnlyQuestionnaireDocument> TranslatedQuestionnaires { get; }
+        public ReadOnlyQuestionnaireDocumentWithCache Questionnaire { get; }
+        public IReadOnlyCollection<ReadOnlyQuestionnaireDocumentWithCache> TranslatedQuestionnaires { get; }
         public IReadOnlyCollection<SharedPersonView> SharedPersons { get; }
 
-        public MultiLanguageQuestionnaireDocument(ReadOnlyQuestionnaireDocument originalQuestionnaireDocument,
-            IEnumerable<ReadOnlyQuestionnaireDocument> translatedQuestionnaireDocuments,
+        public MultiLanguageQuestionnaireDocument(ReadOnlyQuestionnaireDocumentWithCache originalQuestionnaireDocument,
+            IEnumerable<ReadOnlyQuestionnaireDocumentWithCache> translatedQuestionnaireDocuments,
             IEnumerable<SharedPersonView> sharedPersons)
         {
             this.Questionnaire = originalQuestionnaireDocument;
@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        public IEnumerable<ReadOnlyQuestionnaireDocument.QuestionnaireItemTypeReference> GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
+        public IEnumerable<QuestionnaireItemTypeReference> GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
             => Questionnaire.GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder();
 
         public IComposite? GetEntityByIdOrNull(Guid id) => this.Questionnaire.GetEntityByIdOrNull(id);

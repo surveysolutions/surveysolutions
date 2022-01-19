@@ -21,7 +21,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             BecauseOf();
         }
 
-        private void BecauseOf() => messages = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() 
+            => messages = verifier.CompileAndVerify(Create.QuestionnaireView(questionnaire),
+        null, out string _);
 
         [NUnit.Framework.Test] public void should_return_warning_WB0204 () =>
             messages.ShouldContainWarning("WB0204");

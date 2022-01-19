@@ -9,13 +9,11 @@ using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.TopologicalSorter;
-using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
@@ -73,65 +71,84 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 new CategoriesVerifications(keywordsProvider, categoriesService), 
             };
         }
-       
-        public IEnumerable<QuestionnaireVerificationMessage> Verify(QuestionnaireView questionnaireView)
+
+        public IEnumerable<QuestionnaireVerificationMessage> CompileAndVerify(QuestionnaireView questionnaireView,
+            int? targetCompilationVersion, out string resultAssembly)
         {
+            resultAssembly = string.Empty;
             var questionnaire = questionnaireView.Source;
 
-            var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
+            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocument(questionnaire);
+            var verificationMessagesByQuestionnaire = PreVerify(readOnlyQuestionnaireDocument);
+            if(verificationMessagesByQuestionnaire.Any())
+                return verificationMessagesByQuestionnaire;
 
-            List<ReadOnlyQuestionnaireDocument> translatedQuestionnaires = new List<ReadOnlyQuestionnaireDocument>();
+            var readOnlyQuestionnaireDocumentWithCache = new ReadOnlyQuestionnaireDocumentWithCache(questionnaire);
+            
+            List<ReadOnlyQuestionnaireDocumentWithCache> translatedQuestionnaires = new List<ReadOnlyQuestionnaireDocumentWithCache>();
             questionnaire.Translations.ForEach(t =>
             {
                 var translation = this.translationService.Get(questionnaire.PublicKey, t.Id);
                 var translatedQuestionnaireDocument = this.questionnaireTranslator.Translate(questionnaire, translation);
-                translatedQuestionnaires.Add(new ReadOnlyQuestionnaireDocument(translatedQuestionnaireDocument, t.Name));
+                translatedQuestionnaires.Add(new ReadOnlyQuestionnaireDocumentWithCache(translatedQuestionnaireDocument, t.Name));
             });
 
             var multiLanguageQuestionnaireDocument = new MultiLanguageQuestionnaireDocument(
-                readOnlyQuestionnaireDocument,
+                readOnlyQuestionnaireDocumentWithCache,
                 translatedQuestionnaires.ToArray(),
                 questionnaireView.SharedPersons);
 
-            var verificationMessagesByQuestionnaire = new List<QuestionnaireVerificationMessage>();
             foreach (var verifier in this.verifiers)
             {
                 IEnumerable<QuestionnaireVerificationMessage> errors = verifier.Verify(multiLanguageQuestionnaireDocument);
                 verificationMessagesByQuestionnaire.AddRange(errors);
             }
 
-            var errorsCodeForSkipCircleReferanceVerifier = new HashSet<string>() { "WB0102", "WB0026" };
-            if (verificationMessagesByQuestionnaire.Any(er => errorsCodeForSkipCircleReferanceVerifier.Contains(er.Code)))
-                return verificationMessagesByQuestionnaire;
-
-            var errorsByCircleReferances = this.ErrorsByCircularReferences(questionnaire);
-            verificationMessagesByQuestionnaire.AddRange(errorsByCircleReferances);
+            var errorsByCircularReferences = this.ErrorsByCircularReferences(questionnaire);
+            verificationMessagesByQuestionnaire.AddRange(errorsByCircularReferences);
 
             if (verificationMessagesByQuestionnaire.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
                 return verificationMessagesByQuestionnaire;
 
-            var verificationMessagesByCompiler = this.ErrorsByCompiler(questionnaire).ToList();
+            List<QuestionnaireVerificationMessage> verificationMessagesByCompiler = new List<QuestionnaireVerificationMessage>();
+
+            var questionnaireVersionToCompileAssembly = 
+                targetCompilationVersion 
+                ?? ( this.questionnaireCompilationVersionService.GetById(questionnaire.PublicKey)?.Version
+                     ?? Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire)));
+
+            var compilationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
+                questionnaire, questionnaireVersionToCompileAssembly, out resultAssembly);
+            
+            var elementsWithErrorMessages = 
+                compilationResult.Diagnostics.GroupBy(x => x.Location, x => x.Message);
+            
+            foreach (var elementWithErrors in elementsWithErrorMessages)
+            {
+                verificationMessagesByCompiler.Add(CreateExpressionSyntaxError(
+                    new ExpressionLocation(elementWithErrors.Key), elementWithErrors.ToList()));
+            }
 
             return verificationMessagesByQuestionnaire.Concat(verificationMessagesByCompiler);
         }
 
-        public IEnumerable<QuestionnaireVerificationMessage> CheckForErrors(QuestionnaireView questionnaireView)
+        private List<QuestionnaireVerificationMessage> PreVerify(ReadOnlyQuestionnaireDocument readOnlyQuestionnaireDocument)
         {
-            return this.Verify(questionnaireView).Where(x => x.MessageLevel != VerificationMessageLevel.Warning);
+            var preCheckVerifications = new QuestionnairePreVerifications();
+            var verificationMessagesByQuestionnaire = new List<QuestionnaireVerificationMessage>();
+            verificationMessagesByQuestionnaire.AddRange(preCheckVerifications.Verify(readOnlyQuestionnaireDocument));
+            
+            return verificationMessagesByQuestionnaire;
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByCompiler(QuestionnaireDocument questionnaire)
+        public IEnumerable<QuestionnaireVerificationMessage> GetAllErrors(QuestionnaireView questionnaireView, 
+            bool includeWarnings = false)
         {
-            var compilationResult = GetCompilationResult(questionnaire);
-
-            if (compilationResult.Success)
-                yield break;
-
-            var elementsWithErrorMessages = compilationResult.Diagnostics.GroupBy(x => x.Location, x => x.Message);
-            foreach (var elementWithErrors in elementsWithErrorMessages)
-            {
-                yield return CreateExpressionSyntaxError(new ExpressionLocation(elementWithErrors.Key), elementWithErrors.ToList());
-            }
+            if (includeWarnings)
+                return this.CompileAndVerify(questionnaireView, null, out string assembly);
+            else
+                return this.CompileAndVerify(questionnaireView, null, out string assembly)
+                    .Where(x => x.MessageLevel != VerificationMessageLevel.Warning);
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsByCircularReferences(QuestionnaireDocument questionnaire)
@@ -149,19 +166,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
                 yield return QuestionnaireVerificationMessage.Error("WB0056", VerificationMessages.WB0056_EntityShouldNotHaveCircularReferences, references);
             }
-        }
-
-        private GenerationResult GetCompilationResult(QuestionnaireDocument questionnaire)
-        {
-            string resultAssembly;
-
-            var questionnaireVersionToCompileAssembly =
-                this.questionnaireCompilationVersionService.GetById(questionnaire.PublicKey)?.Version 
-                ?? Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire));
-
-            return this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                questionnaire, questionnaireVersionToCompileAssembly,
-                out resultAssembly);
         }
 
         private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation, IEnumerable<string> compilationErrorMessages)

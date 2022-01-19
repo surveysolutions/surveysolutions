@@ -29,7 +29,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             BecauseOf();
         }
 
-        private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => errors = verifier.CompileAndVerify(Create.QuestionnaireView(questionnaire),
+            null, out string _);
 
         [NUnit.Framework.Test] public void should_return_WB0251_warning () => errors.ShouldContainWarning("WB0251", "Enablement condition refers to a future question. Consider reversing the order.");
 

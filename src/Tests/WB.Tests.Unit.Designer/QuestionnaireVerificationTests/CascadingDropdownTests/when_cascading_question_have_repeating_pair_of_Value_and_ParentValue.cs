@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
             BecauseOf();
         }
 
-        private void BecauseOf() => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+        private void BecauseOf() => verificationErrors = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
         [NUnit.Framework.Test] public void should_return_WB0089_error () => verificationErrors.ShouldContainError("WB0089");
 

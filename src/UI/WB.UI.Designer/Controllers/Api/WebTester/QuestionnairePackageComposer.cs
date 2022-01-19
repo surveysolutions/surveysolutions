@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
@@ -74,11 +75,6 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             if (questionnaireView == null)
                 throw new InvalidOperationException("Questionnaire not found.");
 
-            if (this.questionnaireVerifier.CheckForErrors(questionnaireView).Any())
-            {
-                throw new ComposeException();
-            }
-
             var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(questionnaireId)?.Version;
 
             var versionToCompileAssembly = specifiedCompilationVersion ?? Math.Max(20,
@@ -87,11 +83,11 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             string resultAssembly;
             try
             {
-                GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                    questionnaireView.Source,
+                var verificationResult = this.questionnaireVerifier.CompileAndVerify(questionnaireView,
                     versionToCompileAssembly,
                     out resultAssembly);
-                if (!generationResult.Success)
+                
+                if (verificationResult.Any(x => x.MessageLevel != VerificationMessageLevel.Warning))
                     throw new ComposeException();
             }
             catch (Exception)
