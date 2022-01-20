@@ -1,15 +1,16 @@
 ﻿using System;
 
-namespace WB.Core.BoundedContexts.Designer.Implementation.Services;
-public class QuestionnaireItemTypeReference
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    public Guid Id { get; }
-    public Type Type { get; }
-
-    public QuestionnaireItemTypeReference(Guid id, Type type)
+    public class QuestionnaireItemTypeReference
     {
-        this.Id = id;
-        this.Type = type;
+        public Guid Id { get; }
+        public Type Type { get; }
+
+        public QuestionnaireItemTypeReference(Guid id, Type type)
+        {
+            this.Id = id;
+            this.Type = type;
+        }
     }
 }
-

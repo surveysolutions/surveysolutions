@@ -8,32 +8,36 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
-namespace WB.Core.BoundedContexts.Designer.Verifier;
-
-public class QuestionnairePreVerifications : AbstractVerifier, IQuestionnairePreVerifier
+namespace WB.Core.BoundedContexts.Designer.Verifier
 {
-    private IEnumerable<Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => 
-        new Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>[]
-        {
-            ErrorsByQuestionnaireEntitiesShareSameInternalId_WB0102,
-            Critical_EntitiesWithDuplicateVariableName_WB0026
-        };
-    
-    private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionnaireEntitiesShareSameInternalId_WB0102(ReadOnlyQuestionnaireDocument questionnaire)
+    public class QuestionnairePreVerifications : AbstractVerifier, IQuestionnairePreVerifier
     {
-        return questionnaire
-            .GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
-            .GroupBy(x => x.Id)
-            .Where(group => group.Count() > 1)
-            .Select(group =>
-                QuestionnaireVerificationMessage.Critical(
-                    "WB0102",
-                    VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId,
-                    group.Select(x => new QuestionnaireEntityReference(GetReferenceTypeByItemTypeAndId(questionnaire, x.Id, x.Type), x.Id)).ToArray()));
-    }
-    
-    private static IEnumerable<QuestionnaireVerificationMessage> Critical_EntitiesWithDuplicateVariableName_WB0026(
-        ReadOnlyQuestionnaireDocument questionnaire)
+        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>>
+            ErrorsVerifiers =>
+            new Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>[]
+            {
+                ErrorsByQuestionnaireEntitiesShareSameInternalId_WB0102,
+                Critical_EntitiesWithDuplicateVariableName_WB0026
+            };
+
+        private static IEnumerable<QuestionnaireVerificationMessage>
+            ErrorsByQuestionnaireEntitiesShareSameInternalId_WB0102(ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            return questionnaire
+                .GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
+                .GroupBy(x => x.Id)
+                .Where(group => group.Count() > 1)
+                .Select(group =>
+                    QuestionnaireVerificationMessage.Critical(
+                        "WB0102",
+                        VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId,
+                        group.Select(x =>
+                            new QuestionnaireEntityReference(
+                                GetReferenceTypeByItemTypeAndId(questionnaire, x.Id, x.Type), x.Id)).ToArray()));
+        }
+
+        private static IEnumerable<QuestionnaireVerificationMessage> Critical_EntitiesWithDuplicateVariableName_WB0026(
+            ReadOnlyQuestionnaireDocument questionnaire)
         {
             var rosterVariableNameMappedOnRosters = questionnaire
                 .Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
@@ -95,34 +99,35 @@ public class QuestionnairePreVerifications : AbstractVerifier, IQuestionnairePre
                     VerificationMessages.WB0026_ItemsWithTheSameNamesFound,
                     group.Select(x => x.Reference).ToArray()));
         }
-    
-    private static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(ReadOnlyQuestionnaireDocument questionnaire, Guid id, Type entityType)
-    {
-        if (typeof(IQuestion).IsAssignableFrom(entityType))
-            return QuestionnaireVerificationReferenceType.Question;
 
-        if (entityType.IsAssignableFrom(typeof(StaticText)))
-            return QuestionnaireVerificationReferenceType.StaticText;
-
-        if (entityType.IsAssignableFrom(typeof(Variable)))
-            return QuestionnaireVerificationReferenceType.Variable;
-
-        var group = questionnaire.Find<IGroup>(id);
-
-        return questionnaire.IsRoster(group)
-            ? QuestionnaireVerificationReferenceType.Roster
-            : QuestionnaireVerificationReferenceType.Group;
-    }
-    
-    public IEnumerable<QuestionnaireVerificationMessage> Verify(ReadOnlyQuestionnaireDocument questionnaireDocument)
-    {
-        var verificationMessagesByQuestionnaire = new List<QuestionnaireVerificationMessage>();
-        foreach (var verifier in ErrorsVerifiers)
+        private static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(
+            ReadOnlyQuestionnaireDocument questionnaire, Guid id, Type entityType)
         {
-            verificationMessagesByQuestionnaire.AddRange(verifier.Invoke(questionnaireDocument));
+            if (typeof(IQuestion).IsAssignableFrom(entityType))
+                return QuestionnaireVerificationReferenceType.Question;
+
+            if (entityType.IsAssignableFrom(typeof(StaticText)))
+                return QuestionnaireVerificationReferenceType.StaticText;
+
+            if (entityType.IsAssignableFrom(typeof(Variable)))
+                return QuestionnaireVerificationReferenceType.Variable;
+
+            var group = questionnaire.Find<IGroup>(id);
+
+            return questionnaire.IsRoster(group)
+                ? QuestionnaireVerificationReferenceType.Roster
+                : QuestionnaireVerificationReferenceType.Group;
         }
-        return verificationMessagesByQuestionnaire;
+
+        public IEnumerable<QuestionnaireVerificationMessage> Verify(ReadOnlyQuestionnaireDocument questionnaireDocument)
+        {
+            var verificationMessagesByQuestionnaire = new List<QuestionnaireVerificationMessage>();
+            foreach (var verifier in ErrorsVerifiers)
+            {
+                verificationMessagesByQuestionnaire.AddRange(verifier.Invoke(questionnaireDocument));
+            }
+
+            return verificationMessagesByQuestionnaire;
+        }
     }
 }
-
-
