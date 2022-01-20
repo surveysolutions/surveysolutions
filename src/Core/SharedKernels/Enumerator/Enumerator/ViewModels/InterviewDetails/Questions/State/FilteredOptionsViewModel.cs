@@ -144,6 +144,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
             if (questionnaire.IsQuestionFilteredCombobox(questionIdentity.Id))
             {
+                // for combo always drop list of options
                 if (this.options != null)
                     this.OptionsChanged?.Invoke(this, EventArgs.Empty);
                 return;
