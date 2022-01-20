@@ -17,7 +17,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILogger logger;
 
-        private IQuestionnaire questionnaire = null!;
         private List<CategoricalOption>? options;
         private string Filter { get; set; } = String.Empty;
         public int Count { get; protected set; } = 200;
@@ -46,7 +45,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected FilteredOptionsViewModel()
         {
             this.logger = null!;
-            this.questionnaire = null!;
             this.interviewRepository = null!;
             this.questionnaireRepository = null!;
             this.answerNotifier = null!;
@@ -143,11 +141,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
 
+            var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
             if (questionnaire.IsQuestionFilteredCombobox(questionIdentity.Id))
             {
-                // for combo always drop list of options
                 if (this.options != null)
+                {
+                    this.options = null;
                     this.OptionsChanged?.Invoke(this, EventArgs.Empty);
+                }
                 return;
             }
             
