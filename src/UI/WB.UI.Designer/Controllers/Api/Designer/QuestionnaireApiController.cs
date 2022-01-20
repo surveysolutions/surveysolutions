@@ -198,7 +198,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 .Take(MaxVerificationErrors - verificationErrors.Length)
                 .ToArray();
 
-            var readOnlyQuestionnaire = new ReadOnlyQuestionnaireDocumentWithCache(questionnaireView.Source);
+            var readOnlyQuestionnaire = new ReadOnlyQuestionnaireDocument(questionnaireView.Source);
             VerificationMessage[] errors = this.verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, readOnlyQuestionnaire);
             VerificationMessage[] warnings = this.verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, readOnlyQuestionnaire);
 
