@@ -145,10 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (questionnaire.IsQuestionFilteredCombobox(questionIdentity.Id))
             {
                 if (this.options != null)
-                {
-                    //this.options = null;
                     this.OptionsChanged?.Invoke(this, EventArgs.Empty);
-                }
                 return;
             }
             
