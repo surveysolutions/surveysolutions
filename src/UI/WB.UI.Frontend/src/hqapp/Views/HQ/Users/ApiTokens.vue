@@ -36,7 +36,7 @@
                             style="margin-right:5px"
                             id="btnCreateToken"
                             v-bind:disabled="userInfo.isObserving && !canGenerate"
-                            @click="generateApiKey">{{$t('Pages.HQ_Views_Api_Token_Issued')}}</button>
+                            @click="generateApiKey">{{$t('Pages.Profile_IssueApiToken')}}</button>
                     </div>
                 </div>
             </div>
