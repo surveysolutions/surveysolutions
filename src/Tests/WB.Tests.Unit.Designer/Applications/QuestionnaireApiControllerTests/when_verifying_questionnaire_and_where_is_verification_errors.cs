@@ -74,9 +74,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 
             string _;
             verifierMock
-                .Setup(x => x.CompileAndVerify(questionnaireView, 
-                    Moq.It.IsAny<int?>(), 
-                    out  _))
+                .Setup(x => x.GetAllErrors(questionnaireView, 
+                    Moq.It.IsAny<bool>()))
                 .Returns(allVerificationErrors);
             
             errorsMapperMock = new Mock<IVerificationErrorsMapper>();
@@ -100,10 +99,12 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             result = (VerificationResult) (controller.Verify(questionnaireId) as OkObjectResult).Value;
 
         [Test] public void should_call_verifier_once () =>
-            verifierMock.Verify(x => x.CompileAndVerify(questionnaireView, It.IsAny<int?>(), out _), Times.Once);
+            verifierMock.Verify(x => x.GetAllErrors(It.IsAny<QuestionnaireView>(),
+                It.IsAny<bool>()), Times.Once);
         
         [Test] public void should_call_errors_mapper_once () =>
-            errorsMapperMock.Verify(x => x.EnrichVerificationErrors(verificationMessages, Moq.It.IsAny<ReadOnlyQuestionnaireDocument>()), Times.Once);
+            errorsMapperMock.Verify(x => 
+                x.EnrichVerificationErrors(verificationMessages, Moq.It.IsAny<ReadOnlyQuestionnaireDocument>()), Times.Once);
 
         [Test] public void should_return_messages_created_by_mapper_as_action_result () =>
             result.Errors.Should().BeEquivalentTo(mappedAndEnrichedVerificationErrors);

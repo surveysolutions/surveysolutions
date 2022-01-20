@@ -239,11 +239,11 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         {
             var questionnaire = Create.QuestionnaireDocument(children: Create.Chapter(children: new IComposite[]
             {
-                Create.FixedRoster(fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
+                Create.FixedRoster(variable: "level 1", fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
                 {
-                    Create.FixedRoster(fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
+                    Create.FixedRoster(variable: "level 2", fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
                     {
-                        Create.FixedRoster(fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
+                        Create.FixedRoster(variable: "level 3", fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
                         {
                             Create.TextQuestion()
                         })
