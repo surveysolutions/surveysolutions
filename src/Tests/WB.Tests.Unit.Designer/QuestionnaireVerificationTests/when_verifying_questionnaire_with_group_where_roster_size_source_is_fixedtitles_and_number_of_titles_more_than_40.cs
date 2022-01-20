@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Tests.Abc;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
@@ -12,7 +13,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         QuestionnaireVerifierTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            rosterGroupId = Guid.Parse("13333333333333333333333333333333");
+            rosterGroupId = Guid.Parse("13333333333333333333333333333331");
 
             var fixedTitles = new List<string>();
             for (int i = 0; i < 201; i++)
@@ -25,7 +26,13 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     variable: "a",
                     fixedTitles: fixedTitles.ToArray(),
                     children: new IComposite[]
-                    {new TextQuestion() {StataExportCaption = "var"}}));
+                    {
+                        new TextQuestion()
+                        {
+                            PublicKey = Id.g10,
+                            StataExportCaption = "var"
+                        }
+                    }));
 
             verifier = CreateQuestionnaireVerifier();
             BecauseOf();

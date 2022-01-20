@@ -38,9 +38,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 
             string _;
             verifierMock
-                .Setup(x => x.CompileAndVerify(questionnaireView, 
-                    Moq.It.IsAny<int?>(), 
-                    out  _))
+                .Setup(x => x.GetAllErrors(questionnaireView, 
+                    Moq.It.IsAny<bool>()))
                 .Returns(verificationMessages);
 
             controller = CreateQuestionnaireController(
