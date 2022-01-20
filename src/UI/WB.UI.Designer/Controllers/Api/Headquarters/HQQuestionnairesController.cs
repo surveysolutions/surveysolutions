@@ -130,14 +130,6 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status417ExpectationFailed, reasonPhrase);
             }
 
-            var questionnaireErrors = this.questionnaireVerifier.CheckForErrors(questionnaireView).ToArray();
-
-            if (questionnaireErrors.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
-            {
-                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status412PreconditionFailed,
-                    ErrorMessages.Questionnaire_verification_failed);
-            }
-
             var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(id)?.Version;
             int versionToCompileAssembly;
 
@@ -152,9 +144,19 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                     : Math.Max(questionnaireContentVersion, minSupportedQuestionnaireVersion.GetValueOrDefault());
             }
 
-            var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, versionToCompileAssembly);
-
-            if (string.IsNullOrEmpty(resultAssembly))
+            string resultAssembly;
+            try
+            {
+                var questionnaireErrors = 
+                    this.questionnaireVerifier.CompileAndVerify(questionnaireView, versionToCompileAssembly, out resultAssembly);
+                
+                if (questionnaireErrors.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
+                {
+                    return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status412PreconditionFailed,
+                        ErrorMessages.Questionnaire_verification_failed);
+                }
+            }
+            catch (Exception)
             {
                 var message = string.Format(
                     ErrorMessages
@@ -170,7 +172,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 .TrackQuestionnaireImportAsync(questionnaire, userAgent, User.GetId());
 
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
-            var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
+            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaireView.Source);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
             questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
             questionnaire.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument).ToDictionary(x => x.Key, x => x.Value.ToArray());
@@ -260,22 +262,6 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             }
 
             return Ok(result);
-        }
-
-        private string GetQuestionnaireAssemblyOrThrow(QuestionnaireView questionnaireView, int questionnaireContentVersion)
-        {
-            string resultAssembly;
-            try
-            {
-                this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                        questionnaireView.Source, questionnaireContentVersion, out resultAssembly);
-            }
-            catch (Exception)
-            {
-                resultAssembly = string.Empty;
-            }
-
-            return resultAssembly;
         }
     }
 }

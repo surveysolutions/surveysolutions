@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
         public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, int targetVersion, bool inSingleFile = false)
         {
-            var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
+            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaire);
             ExpressionStorageModel model = this.modelsFactory.CreateModel(readOnlyQuestionnaireDocument);
             model.LookupTables = this.modelsFactory.CreateLookupModels(readOnlyQuestionnaireDocument).ToList();
             model.TargetVersion = targetVersion;

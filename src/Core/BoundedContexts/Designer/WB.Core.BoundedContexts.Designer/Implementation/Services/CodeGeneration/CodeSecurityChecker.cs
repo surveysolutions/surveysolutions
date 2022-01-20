@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -8,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class CodeSecurityChecker
     {
-        private static readonly List<string> AllowedNamespaces = new List<string>
+        private static readonly HashSet<string> AllowedNamespaces = new HashSet<string>
         {
             "System",
             "System.Collections",
@@ -19,12 +20,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.Text.RegularExpressions"
         };
 
-        private static readonly List<string> ForbiddenClassesFromSystemNamespace = new List<string>
+        private static readonly HashSet<string> ForbiddenClassesFromSystemNamespace = new HashSet<string>
         {
-            "System.Activator", "System.AppContext", "System.AppDomain", "System.Console", "System.Environment", "System.GC"
+            "System.Activator", 
+            "System.AppContext", 
+            "System.AppDomain", 
+            "System.Console", 
+            "System.Environment", 
+            "System.GC"
         };
 
-        public List<string> FindForbiddenClassesUsage(SyntaxTree syntaxTree, CSharpCompilation compilation)
+        public IEnumerable<string> FindForbiddenClassesUsage(SyntaxTree syntaxTree, CSharpCompilation compilation)
         {
             var allUsedTypes = FindUsedTypes(syntaxTree, compilation);
 
@@ -33,64 +39,66 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 var containingNamespace = namedTypeSymbol.ContainingNamespace.ToString();
 
-                if (containingNamespace == "System" &&
-                    namedTypeSymbol.Kind == SymbolKind.NamedType &&
+                if (namedTypeSymbol.Kind == SymbolKind.NamedType &&
+                    string.Compare(containingNamespace, "System", StringComparison.InvariantCulture) == 0 &&
                     ForbiddenClassesFromSystemNamespace.Contains(namedTypeSymbol.ToString()))
                 {
-                    foundForbiddenTypes.Add(namedTypeSymbol.ToString());
+                    var symbol = namedTypeSymbol.ToString();
+                    if (!foundForbiddenTypes.Contains(symbol))
+                    {
+                        foundForbiddenTypes.Add(symbol);
+                        yield return symbol;
+                    }
                     continue;
                 }
 
                 if (!AllowedNamespaces.Contains(containingNamespace))
                 {
-                    if (!containingNamespace.StartsWith("WB.Core.SharedKernels.DataCollection"))
+                    if (!containingNamespace.StartsWith("WB.Core.SharedKernels.DataCollection", StringComparison.InvariantCulture))
                     {
-                        foundForbiddenTypes.Add(namedTypeSymbol.ToString());
+                        var symbol = namedTypeSymbol.ToString();
+                        if (!foundForbiddenTypes.Contains(symbol))
+                        {
+                            foundForbiddenTypes.Add(symbol);
+                            yield return symbol;
+                        }
                     }
                 }
             }
-
-            return foundForbiddenTypes.ToList();
         }
 
         // https://stackoverflow.com/a/29178633/72174
-        static List<INamedTypeSymbol> FindUsedTypes(SyntaxTree tree, CSharpCompilation compilation)
+        static IEnumerable<INamedTypeSymbol> FindUsedTypes(SyntaxTree tree, CSharpCompilation compilation)
         {
-                var root = tree.GetRoot();
-                var nodes = root.DescendantNodes(n => true);
+            var root = tree.GetRoot();
+            var st = root.SyntaxTree;
+            var sm = compilation.GetSemanticModel(st);
+            var syntaxNodes = root.DescendantNodes();
 
-                var st = root.SyntaxTree;
-                var sm = compilation.GetSemanticModel(st);
-                List<INamedTypeSymbol> namedTypeSymbols = new List<INamedTypeSymbol>();
-
-                if (nodes != null)
+            foreach (var syntaxNode in syntaxNodes)
+            {
+                // IdentifierNameSyntax:
+                //  - var keyword
+                //  - identifiers of any kind (including type names)
+                if (syntaxNode is IdentifierNameSyntax identifierNameSyntax)
                 {
-                    var syntaxNodes = nodes as SyntaxNode[] ?? nodes.ToArray();
-
-                    // IdentifierNameSyntax:
-                    //  - var keyword
-                    //  - identifiers of any kind (including type names)
-                    var namedTypes = syntaxNodes
-                        .OfType<IdentifierNameSyntax>()
-                        .Select(id => sm.GetSymbolInfo(id).Symbol)
-                        .OfType<INamedTypeSymbol>();
-
-
-                    namedTypeSymbols.AddRange(namedTypes);
-
-                    // ExpressionSyntax:
-                    //  - method calls
-                    //  - property uses
-                    //  - field uses
-                    //  - all kinds of composite expressions
-                    var expressionTypes = syntaxNodes
-                        .OfType<ExpressionSyntax>()
-                        .Select(ma => sm.GetTypeInfo(ma).Type)
-                        .OfType<INamedTypeSymbol>();
-
-                    namedTypeSymbols.AddRange(expressionTypes);
+                    var symbol = sm.GetSymbolInfo(identifierNameSyntax).Symbol;
+                    if (symbol is INamedTypeSymbol namedTypeSymbol)
+                        yield return namedTypeSymbol;
                 }
-            return namedTypeSymbols;
+                
+                // ExpressionSyntax:
+                //  - method calls
+                //  - property uses
+                //  - field uses
+                //  - all kinds of composite expressions
+                if (syntaxNode is ExpressionSyntax expressionSyntax)
+                {
+                    var type = sm.GetTypeInfo(expressionSyntax).Type;
+                    if (type is INamedTypeSymbol namedTypeSymbol)
+                        yield return namedTypeSymbol;
+                }
+            }
         }
     }
 }

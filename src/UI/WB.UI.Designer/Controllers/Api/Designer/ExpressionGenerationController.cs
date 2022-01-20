@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
@@ -15,6 +16,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     [QuestionnairePermissions]
     public class ExpressionGenerationController : ControllerBase
     {
+        private readonly IQuestionnaireVerifier questionnaireVerifier; 
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IDesignerEngineVersionService engineVersionService;
@@ -23,12 +25,14 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public ExpressionGenerationController(IExpressionProcessorGenerator expressionProcessorGenerator, 
             IQuestionnaireViewFactory questionnaireViewFactory, 
             IDesignerEngineVersionService engineVersionService, 
-            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
+            IQuestionnaireVerifier questionnaireVerifier)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.engineVersionService = engineVersionService;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
+            this.questionnaireVerifier = questionnaireVerifier;
         }
 
         [HttpGet]
@@ -56,22 +60,22 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public IActionResult GetCompilationResultForLatestVersion(Guid id)
         {
             //do async
-            var questionnaire = this.GetQuestionnaire(id).Source;
+            var questionnaire = this.GetQuestionnaire(id);
 
             var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(id)?.Version;
 
-            var generated = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
+            var generated = this.questionnaireVerifier.CompileAndVerify(questionnaire,
                 specifiedCompilationVersion ?? this.engineVersionService.LatestSupportedVersion, out _);
-            if (generated.Success)
+            if (generated.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
             {
-                return Ok("No errors");
+                //var errorLocations = generated.Diagnostics.Select(x => x.Location).Distinct().Aggregate("Errors: \r\n", (current, location) => current + (current + "\r\n" + location));
+                var errorLocations = generated.Select(x => x.Message).ToArray();
+
+                return StatusCode((int) HttpStatusCode.PreconditionFailed, errorLocations);
             }
             else
             {
-                //var errorLocations = generated.Diagnostics.Select(x => x.Location).Distinct().Aggregate("Errors: \r\n", (current, location) => current + (current + "\r\n" + location));
-                var errorLocations = generated.Diagnostics.Select(x => x.Message).ToArray();
-
-                return StatusCode((int) HttpStatusCode.PreconditionFailed, errorLocations);
+                return Ok("No errors");
             }
         }
 
@@ -80,20 +84,20 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         {
             //do async
             var supervisorVersion = version ?? this.engineVersionService.LatestSupportedVersion;
-            var questionnaire = this.GetQuestionnaire(id).Source;
+            var questionnaire = this.GetQuestionnaire(id);
             string assembly;
-            var generated = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire, supervisorVersion, out assembly);
-            if (generated.Success)
+            var generated = this.questionnaireVerifier.CompileAndVerify(questionnaire, supervisorVersion, out assembly);
+            if (generated.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
             {
-                return File(Convert.FromBase64String(assembly), "application/x-msdownload",
-                    string.Format("expressions-{0}.dll", id));
+                //var errorLocations = generated.Diagnostics.Select(x => x.Location).Distinct().Aggregate("Errors: \r\n", (current, location) => current + (current + "\r\n" + location));
+                var errorLocations = generated.Select(x => x.Message).Aggregate("Errors: \r\n", (current, message) => current + "\r\n" + message);
+
+                return StatusCode((int) HttpStatusCode.PreconditionFailed, errorLocations);
             }
             else
             {
-                //var errorLocations = generated.Diagnostics.Select(x => x.Location).Distinct().Aggregate("Errors: \r\n", (current, location) => current + (current + "\r\n" + location));
-                var errorLocations = generated.Diagnostics.Select(x => x.Message).Aggregate("Errors: \r\n", (current, message) => current + "\r\n" + message);
-
-                return StatusCode((int) HttpStatusCode.PreconditionFailed, errorLocations);
+                return File(Convert.FromBase64String(assembly), "application/x-msdownload",
+                    string.Format("expressions-{0}.dll", id));
             }
         }
 

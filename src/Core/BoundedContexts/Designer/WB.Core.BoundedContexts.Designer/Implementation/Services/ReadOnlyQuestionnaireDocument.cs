@@ -12,44 +12,10 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    public class ReadOnlyQuestionnaireDocument
+    public partial class ReadOnlyQuestionnaireDocument
     {
-        public class QuestionnaireItemTypeReference
-        {
-            public Guid Id { get; }
-            public Type Type { get; }
-
-            public QuestionnaireItemTypeReference(Guid id, Type type)
-            {
-                this.Id = id;
-                this.Type = type;
-            }
-        }
-
-        private class EntityWithMeta
-        {
-            public EntityWithMeta(IComposite entity, EntityMeta meta)
-            {
-                Entity = entity;
-                Meta = meta ;
-            }
-
-            public IComposite Entity { get; private set; }
-            public EntityMeta Meta { get; private set; }
-        }
-
-        private class EntityMeta
-        {
-            public EntityMeta(RosterScope rosterScope)
-            {
-                RosterScope = rosterScope;
-            }
-
-            public RosterScope RosterScope { get; }
-        }
-
-        private readonly List<EntityWithMeta> allItems;
-        private IEnumerable<IComposite> entities => this.allItems.Select(x => x.Entity);
+        protected readonly List<EntityWithMeta> allItems;
+        protected IEnumerable<IComposite> entities => this.allItems.Select(x => x.Entity);
 
         public QuestionnaireDocument Questionnaire { get; private set; }
         public string? Translation { get; private set; }
@@ -78,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return this.FindEntityWithMeta(publicKey)?.Entity as T;
         }
 
-        private EntityWithMeta? FindEntityWithMeta(Guid publicKey)
+        protected virtual EntityWithMeta? FindEntityWithMeta(Guid publicKey)
         {
             return this.allItems.FirstOrDefault(x => x.Entity.PublicKey == publicKey);
         }
@@ -144,14 +110,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 parent = parent.GetParent() as IGroup;
             }
             return parents.Select(x => x.PublicKey).ToArray();
-        }
-
-        public IEnumerable<IComposite> FindEntitiesFromTheSameOrUpperRosterScope(IComposite entity)
-        {
-            var entityRosterScope = this.GetRosterScope(entity);
-            return this.allItems
-                .Where(x => entityRosterScope.Equals(x.Meta.RosterScope) || x.Meta.RosterScope.IsParentScopeFor(entityRosterScope))
-                .Select(x => x.Entity);
         }
 
         public RosterScope GetRosterScope(IComposite entity)
@@ -241,7 +199,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.Featured;
         }
 
-        public bool IsRosterSizeQuestion(IQuestion question)
+        public virtual bool IsRosterSizeQuestion(IQuestion question)
         {
             return this.Find<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey).Any();
         }
@@ -251,7 +209,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.QuestionScope == QuestionScope.Supervisor;
         }
 
-        public IComposite GetEntityByVariable(string variableName)
+        public virtual IComposite? GetEntityByVariable(string variableName)
         {
             return this.Find<IComposite>(x => x.VariableName == variableName).FirstOrDefault();
         }

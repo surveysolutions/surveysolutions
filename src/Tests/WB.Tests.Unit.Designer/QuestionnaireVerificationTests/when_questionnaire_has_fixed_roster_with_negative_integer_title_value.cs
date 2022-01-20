@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            messages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            messages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_have_0_error () =>
             messages.Count().Should().Be(0);

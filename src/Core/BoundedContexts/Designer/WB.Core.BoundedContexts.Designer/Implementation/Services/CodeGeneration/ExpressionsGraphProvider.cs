@@ -297,7 +297,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             var identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(conditionExpression);
 
-            if (!ignoreReferenceOnSelf && identifiersUsedInExpression.Any(i => i == "self"))
+            if (!ignoreReferenceOnSelf && identifiersUsedInExpression.Contains("self"))
                 yield return entityId;
 
             foreach (var variable in identifiersUsedInExpression)

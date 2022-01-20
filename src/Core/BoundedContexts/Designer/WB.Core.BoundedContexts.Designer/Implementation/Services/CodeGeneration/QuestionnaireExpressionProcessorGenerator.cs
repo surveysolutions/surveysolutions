@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             EmitResult emitedResult = this.codeCompiler.TryGenerateAssemblyAsStringAndEmitResult(
                 questionnaire.PublicKey, 
                 generatedEvaluator, 
-                referencedPortableAssemblies.ToArray(),
+                referencedPortableAssemblies,
                 out generatedAssembly);
 
             return new GenerationResult(emitedResult.Success, emitedResult.Diagnostics);

@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-                verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+                verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_error_with_code__WB0003__ () =>
                 verificationMessages.GetError("WB0003").Should().NotBeNull();

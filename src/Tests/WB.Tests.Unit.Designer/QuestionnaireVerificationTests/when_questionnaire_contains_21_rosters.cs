@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.CompileAndVerify(Create.QuestionnaireView(questionnaire), null, out string _);
 
         [NUnit.Framework.Test] public void should_return_1_WB0200_message () =>
             verificationMessages.Count(x => x.Code == "WB0200").Should().Be(1);
