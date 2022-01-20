@@ -1,7 +1,7 @@
 ﻿using WB.Core.BoundedContexts.Designer.ValueObjects;
 
-namespace WB.Core.BoundedContexts.Designer.Implementation.Services;
-
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services
+{
     public class EntityMeta
     {
         public EntityMeta(RosterScope rosterScope)
@@ -11,3 +11,4 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services;
 
         public RosterScope RosterScope { get; }
     }
+}

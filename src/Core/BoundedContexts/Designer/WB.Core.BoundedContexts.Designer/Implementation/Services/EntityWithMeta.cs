@@ -1,7 +1,7 @@
 ﻿using Main.Core.Entities.Composite;
 
-namespace WB.Core.BoundedContexts.Designer.Implementation.Services;
-
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services
+{
     public class EntityWithMeta
     {
         public EntityWithMeta(IComposite entity, EntityMeta meta)
@@ -13,3 +13,4 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services;
         public IComposite Entity { get; private set; }
         public EntityMeta Meta { get; private set; }
     }
+}
