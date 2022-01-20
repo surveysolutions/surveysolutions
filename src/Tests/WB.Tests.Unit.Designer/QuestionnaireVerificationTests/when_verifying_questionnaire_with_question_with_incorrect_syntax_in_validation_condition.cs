@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
         [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().Should().Be(1);

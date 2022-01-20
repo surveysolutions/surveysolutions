@@ -46,11 +46,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Critical<IComposite>("WB0122", VariableNameHasSpecialCharacters, VerificationMessages.WB0122_VariableNameHasSpecialCharacters),
             Critical<IComposite>("WB0123", VariableNameStartWithDigitOrUnderscore, VerificationMessages.WB0123_VariableNameStartWithDigitOrUnderscore),
             
-            ErrorsByQuestionnaireEntitiesShareSameInternalId,
             ErrorsBySubstitutions,
             ErrorsByMarkdownText,
             ErrorsByInvalidQuestionnaireVariable,
-            Critical_EntitiesWithDuplicateVariableName_WB0026,
 
             Warning_QuestionnaireHasRostersPropagationsExededLimit,
             Warning("WB0227", NotShared, VerificationMessages.WB0227_NotShared),
@@ -71,70 +69,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             QuestionType.MultyOption,
             QuestionType.TextList
         };
-
-        private static IEnumerable<QuestionnaireVerificationMessage> Critical_EntitiesWithDuplicateVariableName_WB0026(
-            MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            var rosterVariableNameMappedOnRosters = questionnaire
-                .Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
-                .Select(r => new
-                {
-                    Name = r.VariableName,
-                    Reference = QuestionnaireEntityReference.CreateForRoster(r.PublicKey)
-                })
-                .Union(questionnaire
-                    .Find<IGroup>(g => !g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
-                    .Select(r => new
-                    {
-                        Name = r.VariableName,
-                        Reference = QuestionnaireEntityReference.CreateForGroup(r.PublicKey)
-                    }))
-                .Union(questionnaire.Find<IQuestion>(q => true)
-                    .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
-                    .Select(r => new
-                    {
-                        Name = r.StataExportCaption,
-                        Reference = CreateReference(r)
-                    }))
-                .Union(questionnaire.LookupTables.Where(x => !string.IsNullOrEmpty(x.Value.TableName))
-                    .Select(r => new
-                    {
-                        Name = r.Value.TableName,
-                        Reference = QuestionnaireEntityReference.CreateForLookupTable(r.Key)
-                    }))
-                .Union(questionnaire.Find<IVariable>(x => !string.IsNullOrEmpty(x.Name))
-                    .Where(x => !string.IsNullOrEmpty(x.Name))
-                    .Select(r => new
-                    {
-                        Name = r.Name,
-                        Reference = CreateReference(r)
-                    })
-                ).Union(questionnaire.Categories
-                    .Where(x => !string.IsNullOrEmpty(x.Name))
-                    .Select(r => new
-                    {
-                        Name = r.Name,
-                        Reference = QuestionnaireEntityReference.CreateForCategories(r.Id)
-                    })
-                ).Union(questionnaire.VariableName.ToEnumerable()
-                    .Where(x => !string.IsNullOrEmpty(x))
-                    .Select(r => new
-                    {
-                        Name = r,
-                        Reference = QuestionnaireEntityReference.CreateForQuestionnaire(questionnaire.PublicKey)
-                    })
-
-                ).ToList();
-
-
-            return rosterVariableNameMappedOnRosters
-                .GroupBy(s => s.Name, StringComparer.InvariantCultureIgnoreCase)
-                .Where(group => group.Count() > 1)
-                .Select(group => QuestionnaireVerificationMessage.Critical(
-                    "WB0026",
-                    VerificationMessages.WB0026_ItemsWithTheSameNamesFound,
-                    group.Select(x => x.Reference).ToArray()));
-        }
         
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsByInvalidQuestionnaireVariable(MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -573,20 +507,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                || entity is IStaticText
                || entity is IGroup;
 
-        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionnaireEntitiesShareSameInternalId(MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return questionnaire
-                .GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
-                .GroupBy(x => x.Id)
-                .Where(group => group.Count() > 1)
-                .Select(group =>
-                    QuestionnaireVerificationMessage.Critical(
-                        "WB0102",
-                        VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId,
-                        group.Select(x => new QuestionnaireEntityReference(GetReferenceTypeByItemTypeAndId(questionnaire, x.Id, x.Type), x.Id)).ToArray()));
-        }
-
-
+        
         private static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(MultiLanguageQuestionnaireDocument questionnaire, Guid id, Type entityType)
         {
             if (typeof(IQuestion).IsAssignableFrom(entityType))

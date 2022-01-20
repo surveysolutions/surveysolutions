@@ -49,7 +49,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 return this.Error(StatusCodes.Status403Forbidden, reasonPhrase);
             }
 
-            var questionnaireErrors = this.questionnaireVerifier.CheckForErrors(questionnaireView).ToArray();
+            var questionnaireErrors = this.questionnaireVerifier.GetAllErrors(questionnaireView).ToArray();
 
             if (questionnaireErrors.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
             {

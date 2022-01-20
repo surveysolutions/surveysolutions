@@ -372,7 +372,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             var verifier = Create.QuestionnaireVerifier(lookupTableService: lookupTableServiceMock.Object);
 
-            var result = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var result = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
             result.ShouldContainCritical("WB0031");
         }

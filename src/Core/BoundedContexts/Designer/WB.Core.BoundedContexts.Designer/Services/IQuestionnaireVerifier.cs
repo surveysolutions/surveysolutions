@@ -6,7 +6,10 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IQuestionnaireVerifier
     {
-        IEnumerable<QuestionnaireVerificationMessage> CheckForErrors(QuestionnaireView questionnaireView);
-        IEnumerable<QuestionnaireVerificationMessage> Verify(QuestionnaireView questionnaireView);
+        IEnumerable<QuestionnaireVerificationMessage> GetAllErrors(QuestionnaireView questionnaireView, 
+            bool includeWarnings = false);
+        IEnumerable<QuestionnaireVerificationMessage> CompileAndVerify(QuestionnaireView questionnaireView, 
+            int? version, 
+            out string assembly);
     }
 }

@@ -26,7 +26,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.CompileAndVerify(Create.QuestionnaireView(questionnaire),
+                null, out string _);
 
         [NUnit.Framework.Test] public void should_return_messages_each_with_code__WB00107__ () =>
             verificationMessages.Should().Contain(x =>x.Code == "WB0107");

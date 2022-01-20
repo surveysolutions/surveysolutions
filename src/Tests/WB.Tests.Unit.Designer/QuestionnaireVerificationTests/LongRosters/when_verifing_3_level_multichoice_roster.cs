@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.LongRosters
                 })
             });
 
-            verificationErrors = CreateQuestionnaireVerifier().CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            verificationErrors = CreateQuestionnaireVerifier().GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
         }
 
         [Test]

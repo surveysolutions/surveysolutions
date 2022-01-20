@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var childItems = Enumerable.Range(0, 401).Select(i => Create.TextQuestion(variable: "bar" + i)).ToList();
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: childItems);
 
-            var errors = CreateQuestionnaireVerifier().CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var errors = CreateQuestionnaireVerifier().GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             errors.ShouldContainError("WB0270");
         }

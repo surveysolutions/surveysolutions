@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
             var verifier = CreateQuestionnaireVerifier();
 
             //act
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             //assert
             Assert.AreEqual(verificationMessages.Count(), 1);

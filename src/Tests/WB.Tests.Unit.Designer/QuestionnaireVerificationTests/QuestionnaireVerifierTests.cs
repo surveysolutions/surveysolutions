@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             var verifier = CreateQuestionnaireVerifier();
 
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
             verificationMessages.ShouldContainError("WB0017");
 
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 }));
 
              var verifier = CreateQuestionnaireVerifier();
-             var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+             var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldContainError("WB0019");
@@ -82,7 +82,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             AQ: verificationMessages.ShouldContainError("WB0056");
@@ -104,7 +104,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldContainError("WB0280");
@@ -127,7 +127,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldContainError("WB0280");
@@ -151,7 +151,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldContainError("WB0280");
@@ -179,7 +179,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldContainError("WB0280");
@@ -209,7 +209,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldNotContainError("WB0280");
@@ -228,7 +228,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldNotContainError("WB0280");
@@ -252,7 +252,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
             verificationMessages.ShouldContainError("WB0281");
         }
@@ -285,7 +285,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
             verificationMessages.ShouldNotContainError("WB0281");
         }
@@ -305,7 +305,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier();
 
             // act
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             // assert
             verificationMessages.ShouldContainCritical("WB0026");

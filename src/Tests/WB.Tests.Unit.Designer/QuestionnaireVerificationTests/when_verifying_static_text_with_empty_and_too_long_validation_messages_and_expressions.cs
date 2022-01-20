@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
         [NUnit.Framework.Test] public void should_return_messages_with_codes__WB0104___WB0105___WB0106__ () =>
             verificationMessages.Select(message => message.Code).Should().Contain("WB0104", "WB0105", "WB0106");

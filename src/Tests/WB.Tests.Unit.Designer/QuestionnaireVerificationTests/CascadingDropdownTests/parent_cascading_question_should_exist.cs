@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
             BecauseOf();
         }
 
-        private void BecauseOf() => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)));
+        private void BecauseOf() => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)));
 
         [NUnit.Framework.Test] public void should_return_WB0086_verification_error () => verificationErrors.ShouldContainError("WB0086");
 

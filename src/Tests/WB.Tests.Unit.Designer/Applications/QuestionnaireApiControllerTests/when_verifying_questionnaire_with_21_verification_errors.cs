@@ -36,8 +36,11 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => x.Load(Moq.It.IsAny<QuestionnaireRevision>()) == questionnaireView);
             verifierMock = new Mock<IQuestionnaireVerifier>();
 
+            string _;
             verifierMock
-                .Setup(x => x.Verify(questionnaireView))
+                .Setup(x => x.CompileAndVerify(questionnaireView, 
+                    Moq.It.IsAny<int?>(), 
+                    out  _))
                 .Returns(verificationMessages);
 
             controller = CreateQuestionnaireController(

@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Models;
@@ -71,10 +72,13 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 
             verifierMock = new Mock<IQuestionnaireVerifier>();
 
+            string _;
             verifierMock
-                .Setup(x => x.Verify(questionnaireView))
+                .Setup(x => x.CompileAndVerify(questionnaireView, 
+                    Moq.It.IsAny<int?>(), 
+                    out  _))
                 .Returns(allVerificationErrors);
-
+            
             errorsMapperMock = new Mock<IVerificationErrorsMapper>();
 
             errorsMapperMock
@@ -96,7 +100,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             result = (VerificationResult) (controller.Verify(questionnaireId) as OkObjectResult).Value;
 
         [Test] public void should_call_verifier_once () =>
-            verifierMock.Verify(x => x.Verify(questionnaireView), Times.Once);
+            verifierMock.Verify(x => x.CompileAndVerify(questionnaireView, It.IsAny<int?>(), out _), Times.Once);
         
         [Test] public void should_call_errors_mapper_once () =>
             errorsMapperMock.Verify(x => x.EnrichVerificationErrors(verificationMessages, Moq.It.IsAny<ReadOnlyQuestionnaireDocument>()), Times.Once);
@@ -117,5 +121,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         private static VerificationMessage[] mappedAndEnrichedVerificationErrors;
         private static VerificationMessage[] mappedAndEnrichedVerificationWarnings;
         private static VerificationResult result;
+        private static string _;
     }
 }

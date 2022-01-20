@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier();
 
             // act
-            var errors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var errors = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             // assert
             var expectedError = errors.GetError("WB0268");
