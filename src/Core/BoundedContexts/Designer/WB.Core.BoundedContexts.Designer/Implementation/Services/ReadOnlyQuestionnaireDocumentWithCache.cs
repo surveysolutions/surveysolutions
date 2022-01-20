@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         
         public override bool IsRosterSizeQuestion(IQuestion question)
         {
-            return this.Find<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey).Any();
+            return groupCache.Values.Any(group => group.RosterSizeQuestionId == question.PublicKey);
         }
         
         public IQuestion? GetQuestionByName(string name) =>
