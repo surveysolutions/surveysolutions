@@ -28,11 +28,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 this.allItemsWithMeta[current.Entity.PublicKey] = current;
 
                 if(current.Entity is IQuestion asQuestion && !string.IsNullOrEmpty(asQuestion.StataExportCaption))
-                    questionsCache[asQuestion.StataExportCaption] = asQuestion;
+                    questionsCache.Add(asQuestion.StataExportCaption, asQuestion);
                 else if (current.Entity is IVariable asVariable && !string.IsNullOrEmpty(asVariable.Name))
-                    variableCache[asVariable.Name] = asVariable;
+                    variableCache.Add(asVariable.Name, asVariable);
                 else if(current.Entity is IGroup asGroup && !string.IsNullOrEmpty(asGroup.VariableName))
-                    groupCache[asGroup.VariableName] = asGroup;
+                    groupCache.Add(asGroup.VariableName, asGroup);
             }
         }
         
