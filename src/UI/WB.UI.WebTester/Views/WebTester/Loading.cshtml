@@ -7,13 +7,23 @@
         window.CONFIG.hqLink = "null";
         window.CONFIG.splashScreen = true;
     </script>
-    
-    <b>Loading...</b>
 }
 @section footer{
     <script>
-        setTimeout(() => {
-            window.location = '@Html.Raw(Url.Content("~/WebTester/Loading/" + Model.Id))'
-        }, 5000)
+        function checkStatus() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+                    if (xhr.responseText != "Loading")
+                        document.location.reload(true);
+                    else
+                        setTimeout(function() { checkStatus() }, 3 * 1000);
+                }
+            }
+            xhr.open('GET', '@Url.Action("GetStatus", "WebTester", new {id = Model.Id})', true);
+            xhr.send(null);
+        }
+    
+        checkStatus();
     </script>
 }

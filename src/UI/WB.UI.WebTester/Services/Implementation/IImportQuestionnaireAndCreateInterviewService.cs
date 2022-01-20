@@ -8,5 +8,6 @@ namespace WB.UI.WebTester.Services.Implementation
             Guid? originalInterviewId, int? scenarioId);
 
         CreationResult? GetStatus(Guid key);
+        CreationResult? RemoveStatus(Guid key);
     }
 }

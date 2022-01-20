@@ -82,13 +82,7 @@ namespace WB.UI.WebTester.Services.Implementation
         public CreationResult? GetStatus(Guid key)
         {
             if (statuses.TryGetValue(key, out var creationResult))
-            {
-                if (creationResult != CreationResult.Loading)
-                {
-                    statuses.TryRemove(key, out creationResult);
-                }
                 return creationResult;
-            }
             return null;
         }
 

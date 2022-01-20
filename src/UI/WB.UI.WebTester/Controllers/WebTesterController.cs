@@ -52,25 +52,28 @@ namespace WB.UI.WebTester.Controllers
         }
         
         [Route("Status/{id:Guid}")]
-        public CreationResult? GetStatus(Guid id)
+        public IActionResult GetStatus(Guid id)
         {
-            return interviewFactory.GetStatus(id);
+            return Ok(interviewFactory.GetStatus(id)?.ToString());
         }
         
         [Route("Loading/{id:Guid}")]
         public IActionResult Loading(Guid id)
         {
             var status = interviewFactory.GetStatus(id);
-            if (status is null or CreationResult.Error)
-            {
-                return this.RedirectToAction("QuestionnaireWithErrors", "Error");
-            }
             if (status == CreationResult.Loading)
             {
                 return this.View("Loading", new InterviewPageModel
                 {
                     Id = id.ToString(),
                 });
+            }
+
+            interviewFactory.RemoveStatus(id);
+            
+            if (status is null or CreationResult.Error)
+            {
+                return this.RedirectToAction("QuestionnaireWithErrors", "Error");
             }
             else if (status == CreationResult.DataPartialRestored)
             {
