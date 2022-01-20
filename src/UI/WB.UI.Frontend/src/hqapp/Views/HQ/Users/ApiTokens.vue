@@ -6,7 +6,8 @@
         :canChangePassword="userInfo.canChangePassword"
         :userName="userInfo.userName"
         :userId="userInfo.userId"
-        :currentTab="currentTab">
+        :currentTab="currentTab"
+        :canGenerateToken="userInfo.canGetApiToken">
 
         <div class="col-sm-12">
 
@@ -35,7 +36,7 @@
                             style="margin-right:5px"
                             id="btnCreateToken"
                             v-bind:disabled="userInfo.isObserving && !canGenerate"
-                            @click="generateApiKey">{{$t('Pages.Create')}}</button>
+                            @click="generateApiKey">{{$t('Pages.HQ_Views_Api_Token_Issued')}}</button>
                     </div>
                 </div>
             </div>

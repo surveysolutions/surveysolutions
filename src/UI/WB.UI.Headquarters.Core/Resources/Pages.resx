@@ -1682,4 +1682,7 @@
   <data name="AccountManage_ApiTokens" xml:space="preserve">
       <value>API tokens</value>
   </data>
+  <data name="Profile_IssueApiToken" xml:space="preserve">
+      <value>Issue</value>
+  </data>
 </root>

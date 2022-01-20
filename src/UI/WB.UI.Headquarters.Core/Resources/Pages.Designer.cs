@@ -3634,6 +3634,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Issue.
+        /// </summary>
+        public static string Profile_IssueApiToken {
+            get {
+                return ResourceManager.GetString("Profile_IssueApiToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create observer.
         /// </summary>
         public static string Profile_ObserverCreate {

@@ -1743,4 +1743,7 @@
   <data name="AccountManage_ApiTokens" xml:space="preserve">
       <value>API ключи</value>
   </data>
+  <data name="Profile_IssueApiToken" xml:space="preserve">
+      <value>Выдать</value>
+  </data>
 </root>
