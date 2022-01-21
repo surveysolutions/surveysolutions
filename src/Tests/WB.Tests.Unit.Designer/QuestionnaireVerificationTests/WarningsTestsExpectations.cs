@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = Create.QuestionnaireVerifier();
 
             // act
-            var messages = verifier.Verify(questionnaireView).ToList();
+            var messages = verifier.CompileAndVerify(questionnaireView, null, out string _).ToList();
 
             //assert
             messages.ShouldContainWarning(warningCode);
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = Create.QuestionnaireVerifier();
 
             // act
-            var messages = verifier.Verify(questionnaireView).ToList();
+            var messages = verifier.CompileAndVerify(questionnaireView, null, out string _).ToList();
 
             //assert
             messages.ShouldNotContainWarning(warningCode);

@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.LongRosters
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_contain_error_WB0068 () =>
             verificationMessages.ShouldContainError("WB0068");

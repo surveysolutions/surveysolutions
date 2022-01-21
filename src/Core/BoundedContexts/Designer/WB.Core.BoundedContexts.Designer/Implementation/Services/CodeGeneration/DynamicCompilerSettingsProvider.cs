@@ -23,7 +23,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.Text.RegularExpressions"
         };
 
+        private List<MetadataReference>? cachedReferences = null;
         public List<MetadataReference> GetAssembliesToReference()
+        {
+            return cachedReferences ??= GetAssembliesToReferenceImpl();
+        }
+
+        private List<MetadataReference> GetAssembliesToReferenceImpl()
         {
             var references = new List<MetadataReference>();
             var designerContextModule = Assembly.GetAssembly(typeof(DesignerBoundedContextModule));

@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 {
                     PublicKey = Guid.NewGuid(),
                     IsRoster = false,
-                    VariableName = "a",
+                    VariableName = "a1",
                     Children = new List<IComposite>
                     {
                         Create.TextListQuestion
@@ -36,63 +36,63 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         {
                             PublicKey = Guid.NewGuid(),
                             IsRoster = false,
-                            VariableName = "a",
+                            VariableName = "a2",
                             Children = new List<IComposite>
                             {
                                 new Group
                                 {
                                     PublicKey = Guid.NewGuid(),
                                     IsRoster = false,
-                                    VariableName = "a",
+                                    VariableName = "a3",
                                     Children = new List<IComposite>
                                     {
                                         new Group
                                         {
                                             PublicKey = Guid.NewGuid(),
                                             IsRoster = false,
-                                            VariableName = "a",
+                                            VariableName = "a4",
                                             Children = new List<IComposite>
                                             {
                                                 new Group
                                                 {
                                                     PublicKey = Guid.NewGuid(),
                                                     IsRoster = false,
-                                                    VariableName = "a",
+                                                    VariableName = "a5",
                                                     Children = new List<IComposite>
                                                     {
                                                         new Group
                                                         {
                                                             PublicKey = Guid.NewGuid(),
                                                             IsRoster = false,
-                                                            VariableName = "a",
+                                                            VariableName = "a6",
                                                             Children = new List<IComposite>
                                                             {
                                                                 new Group
                                                                 {
                                                                     PublicKey = Guid.NewGuid(),
                                                                     IsRoster = false,
-                                                                    VariableName = "a",
+                                                                    VariableName = "a7",
                                                                     Children = new List<IComposite>
                                                                     {
                                                                         new Group
                                                                         {
                                                                             PublicKey = Guid.NewGuid(),
                                                                             IsRoster = false,
-                                                                            VariableName = "a",
+                                                                            VariableName = "a8",
                                                                             Children = new List<IComposite>
                                                                             {
                                                                                 new Group
                                                                                 {
                                                                                     PublicKey = Guid.NewGuid(),
                                                                                     IsRoster = false,
-                                                                                    VariableName = "a",
+                                                                                    VariableName = "a9",
                                                                                     Children = new List<IComposite>
                                                                                     {
                                                                                         new Group
                                                                                         {
                                                                                             PublicKey = Guid.NewGuid(),
                                                                                             IsRoster = false,
-                                                                                            VariableName = "a",
+                                                                                            VariableName = "a10",
                                                                                             Children =
                                                                                                 new List<IComposite>
                                                                                                 {
@@ -102,7 +102,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                                                                                                             rosterGroupId,
                                                                                                         IsRoster = false,
                                                                                                         VariableName =
-                                                                                                            "a"
+                                                                                                            "a11"
                                                                                                     }
                                                                                                 }.ToReadOnlyCollection()
                                                                                         }
@@ -131,7 +131,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_rosterGroupId () =>
             verificationMessages.GetError("WB0101").References.First().Id.Should().Be(rosterGroupId);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
@@ -48,7 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var codeSecurityChecker = GetCodeSecurityChecker();
             var compilation = CreateCompilation(syntaxTree.ToEnumerable());
             // Act
-            var forbiddenClassesUsed = codeSecurityChecker.FindForbiddenClassesUsage(syntaxTree, compilation);
+            var forbiddenClassesUsed = codeSecurityChecker.FindForbiddenClassesUsage(syntaxTree, compilation).ToList();
 
             Assert.That(forbiddenClassesUsed, Has.Count.EqualTo(1));
             Assert.That(forbiddenClassesUsed[0], Is.EqualTo(expectedClassName));

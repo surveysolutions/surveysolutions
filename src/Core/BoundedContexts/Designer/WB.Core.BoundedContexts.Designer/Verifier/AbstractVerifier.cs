@@ -124,9 +124,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return roster.FixedRosterTitles.Length;
             }
 
-            var question = questionnaire.Questionnaire.FirstOrDefault<IQuestion>(x => x.PublicKey == roster.RosterSizeQuestionId);
             int questionMaxAnswersCount = Constants.MaxRosterRowCount;
+            if (roster.RosterSizeQuestionId == null)
+                return questionMaxAnswersCount;
 
+            var question = questionnaire.Questionnaire.GetEntityByIdOrNull(roster.RosterSizeQuestionId.Value) as IQuestion;
             switch (question)
             {
                 case MultyOptionsQuestion multyOptionsQuestion:

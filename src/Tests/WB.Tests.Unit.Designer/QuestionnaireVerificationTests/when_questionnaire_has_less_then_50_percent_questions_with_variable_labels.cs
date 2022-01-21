@@ -26,7 +26,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             BecauseOf();
         }
 
-        private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => errors = verifier.CompileAndVerify(Create.QuestionnaireView(questionnaire),
+            null, out string _);
 
         [NUnit.Framework.Test] public void should_return_WB0253_warning () => errors.ShouldContainWarning("WB0253", "Too few variable labels are defined. Add variable labels to improve the usability of exported data and to provide input into metadata for Data Documentation Initiative (DDI) format.");
 

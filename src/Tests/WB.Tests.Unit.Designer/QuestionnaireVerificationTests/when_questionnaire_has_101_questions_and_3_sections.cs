@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            messages = verifier.Verify(Create.QuestionnaireView(questionnaire));
+            messages = verifier.CompileAndVerify(Create.QuestionnaireView(questionnaire), null, out string _);
 
         [NUnit.Framework.Test] public void should_not_return_message_WB0206 () =>
             messages.ShouldNotContainMessage("WB0206");

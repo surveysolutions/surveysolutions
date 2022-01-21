@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
@@ -74,33 +75,29 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             if (questionnaireView == null)
                 throw new InvalidOperationException("Questionnaire not found.");
 
-            if (this.questionnaireVerifier.CheckForErrors(questionnaireView).Any())
-            {
-                throw new ComposeException();
-            }
-
             var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(questionnaireId)?.Version;
 
             var versionToCompileAssembly = specifiedCompilationVersion ?? Math.Max(20,
                                                this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source));
 
             string resultAssembly;
+            List<QuestionnaireVerificationMessage> verificationResult;
             try
             {
-                GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                    questionnaireView.Source,
+                verificationResult = this.questionnaireVerifier.CompileAndVerify(questionnaireView,
                     versionToCompileAssembly,
-                    out resultAssembly);
-                if (!generationResult.Success)
-                    throw new ComposeException();
+                    out resultAssembly).ToList();
             }
             catch (Exception)
             {
                 throw new ComposeException();
             }
+            
+            if (verificationResult.Any(x => x.MessageLevel != VerificationMessageLevel.Warning))
+                throw new ComposeException();
 
             var questionnaire = questionnaireView.Source.Clone();
-            var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
+            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaireView.Source);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
 
             questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
