@@ -153,7 +153,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
         
-        protected static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, IQuestionnaireEntity?> hasEntityWithError, string message)
+        protected static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, Func<TEntity, ReadOnlyQuestionnaireDocument, IQuestionnaireEntity?> hasEntityWithError, string message)
             where TEntity : class, IComposite
         {
             return questionnaire =>
@@ -164,8 +164,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     .Where(entity => entity != null)
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity!)));
         }
-        
+
         protected static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(MultiLanguageQuestionnaireDocument questionnaire, Guid id, Type entityType)
+        {
+            return GetReferenceTypeByItemTypeAndId(questionnaire.Questionnaire, id, entityType);
+        }
+
+        protected static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(ReadOnlyQuestionnaireDocument questionnaire, Guid id, Type entityType)
         {
             if (typeof(IQuestion).IsAssignableFrom(entityType))
                 return QuestionnaireVerificationReferenceType.Question;
@@ -178,7 +183,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             var group = questionnaire.Find<IGroup>(id);
 
-            return questionnaire.Questionnaire.IsRoster(group)
+            return questionnaire.IsRoster(group)
                 ? QuestionnaireVerificationReferenceType.Roster
                 : QuestionnaireVerificationReferenceType.Group;
         }

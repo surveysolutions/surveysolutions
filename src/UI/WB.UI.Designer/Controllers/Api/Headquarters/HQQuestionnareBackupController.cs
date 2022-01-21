@@ -79,13 +79,9 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         {
             var questionnaireDocument = questionnaireView.Source;
             var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
-            var multiLanguageQuestionnaireDocument = new MultiLanguageQuestionnaireDocument(
-                readOnlyQuestionnaireDocument,
-                Enumerable.Empty<ReadOnlyQuestionnaireDocument>(),
-                questionnaireView.SharedPersons);
 
             var verifier = new ExportQuestionnaireVerifier();
-            var result = verifier.Verify(multiLanguageQuestionnaireDocument).ToList();
+            var result = verifier.Verify(readOnlyQuestionnaireDocument).ToList();
             return result;
         }
 
