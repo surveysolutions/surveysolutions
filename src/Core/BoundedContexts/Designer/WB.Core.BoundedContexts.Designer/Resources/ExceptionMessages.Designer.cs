@@ -403,6 +403,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid user info..
+        /// </summary>
+        public static string InvalidUserInfo {
+            get {
+                return ResourceManager.GetString("InvalidUserInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Non empty values for fixed roster titles are required.
         /// </summary>
         public static string InvalidValueOfFixedTitle {

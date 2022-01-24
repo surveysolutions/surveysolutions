@@ -4,7 +4,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -22,14 +21,11 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 using Group = Main.Core.Entities.SubEntities.Group;
 
 
@@ -1551,6 +1547,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void AddSharedPerson(Guid personId, string emailOrLogin, ShareType shareType, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+
+            if (personId == Guid.Empty || string.IsNullOrEmpty(emailOrLogin))
+                throw new QuestionnaireException(DomainExceptionType.InvalidUserInfo,
+                    ExceptionMessages.InvalidUserInfo);
 
             if (this.innerDocument.CreatedBy == personId)
             {

@@ -243,6 +243,9 @@
   <data name="UserIsInTheList" xml:space="preserve">
     <value>Пользователь {0} уже присуствует в списке.</value>
   </data>
+  <data name="InvalidUserInfo" xml:space="preserve">
+    <value>Неправильная информация пользователя.</value>
+  </data>
   <data name="UserIsOwner" xml:space="preserve">
     <value>Пользователь {0}  является владельцем опросника. Введите другой email, пожалуйста.</value>
   </data>

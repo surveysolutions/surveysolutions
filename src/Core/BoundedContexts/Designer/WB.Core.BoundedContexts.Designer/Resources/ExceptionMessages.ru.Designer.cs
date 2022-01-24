@@ -403,6 +403,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Неправильная информация пользователя..
+        /// </summary>
+        public static string InvalidUserInfo {
+            get {
+                return ResourceManager.GetString("InvalidUserInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Все значения для фиксированного ростера обязательны..
         /// </summary>
         public static string InvalidValueOfFixedTitle {
