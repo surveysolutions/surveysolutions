@@ -132,7 +132,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             var expressionWithInlinedMacros = this.macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values);
             string code = WrapToClass(expressionWithInlinedMacros);
-            var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
+            var syntaxTree = SyntaxFactory.ParseSyntaxTree(code, 
+                options: new CSharpParseOptions(documentationMode:DocumentationMode.None));
 
             var compilation = CSharpCompilation.Create(
                 "rules.dll",
