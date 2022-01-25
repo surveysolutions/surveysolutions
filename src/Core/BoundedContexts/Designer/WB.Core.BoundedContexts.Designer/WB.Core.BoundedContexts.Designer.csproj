@@ -17,17 +17,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!--Assemblies that are referenced during conditions assembly compilation-->
-    <EmbeddedResource Include="$(NuGetPackageRoot)\system.collections\4.3.0\ref\netstandard1.3\System.Collections.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.linq\4.3.0\ref\netstandard1.0\System.Linq.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.linq.expressions\4.3.0\ref\netstandard1.3\System.Linq.Expressions.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime\4.3.0\ref\netstandard1.5\System.Runtime.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime.extensions\4.3.0\ref\netstandard1.5\System.Runtime.Extensions.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime.numerics\4.3.0\ref\netstandard1.1\System.Runtime.Numerics.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.text.encoding.extensions\4.3.0\ref\netstandard1.3\System.Text.Encoding.Extensions.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.reflection\4.3.0\ref\netstandard1.5\System.Reflection.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.io\4.3.0\ref\netstandard1.5\System.IO.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.text.regularexpressions\4.3.0\ref\netstandard1.3\System.Text.RegularExpressions.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.globalization\4.3.0\ref\netstandard1.3\System.Globalization.dll" Visible="false" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
@@ -44,6 +33,17 @@
     <PackageReference Include="NJsonSchema" Version="10.5.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
     <PackageReference Include="System.CodeDom" Version="5.0.0" />
+    <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="System.Globalization" Version="4.3.0" />
+    <PackageReference Include="System.IO" Version="4.3.0" />
+    <PackageReference Include="System.Linq" Version="4.3.0" />
+    <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
+    <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
+    <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
+    <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
