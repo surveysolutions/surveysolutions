@@ -403,7 +403,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Неправильная информация пользователя..
+        ///   Looks up a localized string similar to Неправильная информация о пользователе..
         /// </summary>
         public static string InvalidUserInfo {
             get {
