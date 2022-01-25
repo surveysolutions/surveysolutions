@@ -76,8 +76,8 @@ namespace WB.UI.Interviewer
                 {typeof(SearchViewModel), typeof(InterviewerSearchActivity)},
                 {typeof(CalendarEventDialogViewModel), typeof(CalendarEventDialog)}
 #if !EXCLUDEEXTENSIONS
-                ,{typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
-                ,{typeof (Shared.Extensions.CustomServices.MapDashboard.MapDashboardViewModel), typeof (Shared.Extensions.CustomServices.MapDashboard.MapDashboardActivity)}
+                ,{typeof (Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (Shared.Extensions.Activities.GeographyEditorActivity)}
+                ,{typeof (Shared.Extensions.ViewModels.MapDashboardViewModel), typeof (Shared.Extensions.Activities.MapDashboardActivity)}
 #endif
             });
 
@@ -196,7 +196,7 @@ namespace WB.UI.Interviewer
                 typeof(Setup).Assembly,
                 typeof(LoginViewModel).Assembly,
 #if !EXCLUDEEXTENSIONS
-                typeof(Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
+                typeof(Shared.Extensions.ViewModels.GeographyEditorViewModel).Assembly
 #endif
             });
         }

@@ -49,17 +49,18 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomServices\AreaEditor\AreaEditorActivity.cs" />
-    <Compile Include="CustomServices\AreaEditor\AreaEditorResult.cs" />
-    <Compile Include="CustomServices\AreaEditor\AreaEditorViewModel.cs" />
-    <Compile Include="CustomServices\AreaEditor\AreaEditorViewModelArgs.cs" />
-    <Compile Include="CustomServices\MapDashboard\QuestionnaireItem.cs" />
-    <Compile Include="CustomServices\MapInteractionService.cs" />
-    <Compile Include="CustomServices\MapDashboard\MapDashboardActivity.cs" />
-    <Compile Include="CustomServices\MapDashboard\MapDashboardViewModel.cs" />
-    <Compile Include="CustomServices\MapUtilityService.cs" />
+    <Compile Include="Activities\GeographyEditorActivity.cs" />
+    <Compile Include="Activities\MapDashboardActivity.cs" />
+    <Compile Include="Entities\AreaEditorResult.cs" />
+    <Compile Include="Entities\QuestionnaireItem.cs" />
+    <Compile Include="Services\MapInteractionService.cs" />
+    <Compile Include="Services\MapUtilityService.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\BaseMapInteractionViewModel.cs" />
+    <Compile Include="ViewModels\GeographyEditorViewModel.cs" />
+    <Compile Include="ViewModels\GeographyEditorViewModelArgs.cs" />
+    <Compile Include="ViewModels\MapDashboardViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
