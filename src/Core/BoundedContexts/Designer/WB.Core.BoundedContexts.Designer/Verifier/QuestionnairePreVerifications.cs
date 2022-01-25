@@ -100,25 +100,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     group.Select(x => x.Reference).ToArray()));
         }
 
-        private static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(
-            ReadOnlyQuestionnaireDocument questionnaire, Guid id, Type entityType)
-        {
-            if (typeof(IQuestion).IsAssignableFrom(entityType))
-                return QuestionnaireVerificationReferenceType.Question;
-
-            if (entityType.IsAssignableFrom(typeof(StaticText)))
-                return QuestionnaireVerificationReferenceType.StaticText;
-
-            if (entityType.IsAssignableFrom(typeof(Variable)))
-                return QuestionnaireVerificationReferenceType.Variable;
-
-            var group = questionnaire.Find<IGroup>(id);
-
-            return questionnaire.IsRoster(group)
-                ? QuestionnaireVerificationReferenceType.Roster
-                : QuestionnaireVerificationReferenceType.Group;
-        }
-
         public IEnumerable<QuestionnaireVerificationMessage> Verify(ReadOnlyQuestionnaireDocument questionnaireDocument)
         {
             var verificationMessagesByQuestionnaire = new List<QuestionnaireVerificationMessage>();
