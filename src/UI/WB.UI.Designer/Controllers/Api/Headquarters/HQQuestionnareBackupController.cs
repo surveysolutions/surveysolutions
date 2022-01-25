@@ -47,7 +47,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireId));
             }
 
-            if (!(this.ValidateAccessPermissions(questionnaireView) || User.IsAdmin()))
+            if (!ValidateAccessPermissionsOrAdmin(questionnaireView))
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status403Forbidden, ErrorMessages.NoAccessToQuestionnaire);
             }
@@ -99,7 +99,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireId));
             }
 
-            if (!(this.ValidateAccessPermissions(questionnaireView) || User.IsAdmin()))
+            if (!ValidateAccessPermissionsOrAdmin(questionnaireView))
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status403Forbidden, ErrorMessages.NoAccessToQuestionnaire);
             }
@@ -120,7 +120,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireId));
             }
 
-            if (!(this.ValidateAccessPermissions(questionnaireView) || User.IsAdmin()))
+            if (!ValidateAccessPermissionsOrAdmin(questionnaireView))
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status403Forbidden, ErrorMessages.NoAccessToQuestionnaire);
             }
