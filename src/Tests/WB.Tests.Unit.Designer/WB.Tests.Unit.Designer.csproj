@@ -68,4 +68,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Applications\ImportControllerTests" />
+  </ItemGroup>
 </Project>
