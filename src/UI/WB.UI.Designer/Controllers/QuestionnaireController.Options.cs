@@ -18,6 +18,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Designer.Code.Vue;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -77,6 +78,13 @@ namespace WB.UI.Designer.Controllers
                 CascadeFromQuestionId = editQuestionView?.CascadeFromQuestionId
             };
         }
+        
+        [HttpGet]
+        [VuePage]
+        public IActionResult EditOptions()
+        {
+            return Ok();
+        }
 
         [HttpPost]
         public ActionResult<EditOptionsResponse> EditOptions([FromForm] QuestionnaireRevision id, [FromForm] Guid questionId, [FromForm] IFormFile? csvFile)
@@ -124,6 +132,13 @@ namespace WB.UI.Designer.Controllers
             };
         }
 
+        [HttpGet]
+        [VuePage]
+        public IActionResult EditCategories()
+        {
+            return Ok();
+        }
+        
         [HttpPost]
         public ActionResult<EditOptionsResponse> EditCategories(IFormFile? csvFile)
         {
