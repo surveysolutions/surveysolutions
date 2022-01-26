@@ -321,4 +321,7 @@
   <data name="Classifications" xml:space="preserve">
     <value>Classifications</value>
   </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Save as</value>
+  </data>
 </root>

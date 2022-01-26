@@ -18,5 +18,17 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
             return questionnaireView.SharedPersons.Any(x => x.UserId == User.GetId());
         }
+        
+        protected bool ValidateAccessPermissionsOrAdmin(QuestionnaireView questionnaireView)
+        {
+            if (ValidateAccessPermissions(questionnaireView))
+                return true;
+
+            if (User.IsAdmin())
+                return true;
+            
+            return false;
+        }
+
     }
 }

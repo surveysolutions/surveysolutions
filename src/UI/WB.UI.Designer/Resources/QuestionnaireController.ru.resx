@@ -345,4 +345,7 @@
       <value>Панель управления</value>
       <comment>Панель управления</comment>
   </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Сохранить как</value>
+  </data>
 </root>
