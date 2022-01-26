@@ -333,7 +333,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldContainError("WB0313");

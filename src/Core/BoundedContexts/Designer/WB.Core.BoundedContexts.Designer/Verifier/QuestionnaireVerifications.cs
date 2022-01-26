@@ -519,25 +519,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                || entity is IStaticText
                || entity is IGroup;
 
-        
-        private static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(MultiLanguageQuestionnaireDocument questionnaire, Guid id, Type entityType)
-        {
-            if (typeof(IQuestion).IsAssignableFrom(entityType))
-                return QuestionnaireVerificationReferenceType.Question;
-
-            if (entityType.IsAssignableFrom(typeof(StaticText)))
-                return QuestionnaireVerificationReferenceType.StaticText;
-
-            if (entityType.IsAssignableFrom(typeof(Variable)))
-                return QuestionnaireVerificationReferenceType.Variable;
-
-            var group = questionnaire.Find<IGroup>(id);
-
-            return questionnaire.Questionnaire.IsRoster(group)
-                ? QuestionnaireVerificationReferenceType.Roster
-                : QuestionnaireVerificationReferenceType.Group;
-        }
-
         private static IEnumerable<QuestionnaireVerificationMessage> Warning_QuestionnaireHasRostersPropagationsExededLimit(MultiLanguageQuestionnaireDocument questionnaire)
         {
             var rosters = questionnaire.Find<IGroup>(q => q.IsRoster).ToList();

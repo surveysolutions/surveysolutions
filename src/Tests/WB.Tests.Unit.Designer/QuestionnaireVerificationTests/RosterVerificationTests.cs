@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 ));
                 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));    
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));    
                 
             verificationMessages.ShouldNotContainError("WB0059");
         }

@@ -1258,11 +1258,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete questionnaire? All interviews conducted by current questionnaire will be lost..
+        ///   Looks up a localized string similar to Are you sure you want to delete questionnaire? All interviews conducted by current questionnaire, including the interviews collected on the tablets, even those that you don&apos;t see on the server currently will be lost..
         /// </summary>
-        public static string GlobalSettings_DeleteQuestionnareConfirmation {
+        public static string GlobalSettings_DeleteQuestionnaireConfirmation {
             get {
-                return ResourceManager.GetString("GlobalSettings_DeleteQuestionnareConfirmation", resourceCulture);
+                return ResourceManager.GetString("GlobalSettings_DeleteQuestionnaireConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning! This is an irreversible action.
+        /// </summary>
+        public static string GlobalSettings_DeleteQuestionnaireWarning {
+            get {
+                return ResourceManager.GetString("GlobalSettings_DeleteQuestionnaireWarning", resourceCulture);
             }
         }
         
