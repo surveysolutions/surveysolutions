@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using WB.UI.Shared.Web.Authentication;
 
 namespace WB.UI.Designer.Code.Attributes
@@ -28,16 +30,19 @@ namespace WB.UI.Designer.Code.Attributes
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            if (!Request.Headers.ContainsKey("Authorization"))
+            if (!Request.Headers.ContainsKey(HeaderNames.Authorization))
                 return AuthenticateResult.NoResult();
 
             ClaimsPrincipal principal;
             try
             {
-                var creds = Request.Headers.ParseBasicCredentials();
-                principal = await _userService.AuthenticateAsync(creds);
+                var credentials = Request.Headers.ParseBasicCredentials();
+                if (credentials == null)
+                    return AuthenticateResult.NoResult();
+                
+                principal = await _userService.AuthenticateAsync(credentials);
             } 
-            catch (UnauthorizedException e)
+            catch (Exception e)
             {
                 this.loginException = e;
                 return AuthenticateResult.Fail(e);
