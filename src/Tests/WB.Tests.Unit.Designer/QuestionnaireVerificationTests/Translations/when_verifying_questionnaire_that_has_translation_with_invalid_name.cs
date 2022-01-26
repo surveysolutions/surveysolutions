@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Translations
             BecauseOf();
         }
 
-        private void BecauseOf() => verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => verificationMessages = verifier.CompileAndVerify(Create.QuestionnaireView(questionnaire), null, out string _);
 
         [NUnit.Framework.Test] public void should_return_WB0256_error () => 
             verificationMessages.ShouldContainError("WB0256");

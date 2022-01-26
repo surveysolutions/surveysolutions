@@ -10,9 +10,9 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.ImportExport
 {
-    public class ExportQuestionnaireVerifier : AbstractVerifier, IPartialVerifier
+    public class ExportQuestionnaireVerifier : AbstractVerifier, IQuestionnairePreVerifier
     {
-        private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
+        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
             Error<IQuestion>("QM0001", LinkedToQuestionMustHaveVariable, ImportExportVerificationMessages.QM0001),
             Error<IQuestion>("QM0002", LinkedToRosterMustHaveVariable, ImportExportVerificationMessages.QM0002),
@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             Error<IGroup>("QM0005", RosterTitleMustHaveVariable, ImportExportVerificationMessages.QM0005),
         };
 
-        private IQuestionnaireEntity? RosterTriggerMustHaveVariable(IGroup roster, MultiLanguageQuestionnaireDocument document)
+        private IQuestionnaireEntity? RosterTriggerMustHaveVariable(IGroup roster, ReadOnlyQuestionnaireDocument document)
         {
             if (roster.IsRoster && roster.RosterSizeQuestionId.HasValue)
             {
@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             return null;
         }
         
-        private IQuestionnaireEntity? RosterTitleMustHaveVariable(IGroup roster, MultiLanguageQuestionnaireDocument document)
+        private IQuestionnaireEntity? RosterTitleMustHaveVariable(IGroup roster, ReadOnlyQuestionnaireDocument document)
         {
             if (roster.IsRoster && roster.RosterTitleQuestionId.HasValue)
             {
@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             return null;
         }
 
-        private IQuestionnaireEntity? LinkedToQuestionMustHaveVariable(IQuestion question, MultiLanguageQuestionnaireDocument document)
+        private IQuestionnaireEntity? LinkedToQuestionMustHaveVariable(IQuestion question, ReadOnlyQuestionnaireDocument document)
         {
             if (question.LinkedToQuestionId.HasValue)
             {
@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             return null;
         }
 
-        private IQuestionnaireEntity? LinkedToRosterMustHaveVariable(IQuestion question, MultiLanguageQuestionnaireDocument document)
+        private IQuestionnaireEntity? LinkedToRosterMustHaveVariable(IQuestion question, ReadOnlyQuestionnaireDocument document)
         {
             if (question.LinkedToRosterId.HasValue)
             {
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             return null;
         }
 
-        private IQuestionnaireEntity? CascadeFromQuestionMustHaveVariable(IQuestion question, MultiLanguageQuestionnaireDocument document)
+        private IQuestionnaireEntity? CascadeFromQuestionMustHaveVariable(IQuestion question, ReadOnlyQuestionnaireDocument document)
         {
             if (question.CascadeFromQuestionId.HasValue)
             {
@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
 
             return null;
         }
-        public IEnumerable<QuestionnaireVerificationMessage> Verify(MultiLanguageQuestionnaireDocument multiLanguageQuestionnaireDocument)
+        public IEnumerable<QuestionnaireVerificationMessage> Verify(ReadOnlyQuestionnaireDocument multiLanguageQuestionnaireDocument)
         {
             var verificationMessagesByQuestionnaire = new List<QuestionnaireVerificationMessage>();
             foreach (var verifier in this.ErrorsVerifiers)

@@ -26,7 +26,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             BecauseOf();
         }
 
-        private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => errors = verifier.CompileAndVerify(Create.QuestionnaireView(questionnaire),
+            null, out string _);
 
         [NUnit.Framework.Test] public void should_produce_WB0205_warning () => errors.Count(x => x.Code == "WB0209").Should().Be(2);
 

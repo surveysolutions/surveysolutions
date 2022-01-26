@@ -1210,9 +1210,18 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return items;
         }
 
-        private static IComposite GetEntityByVariable(string identifier, MultiLanguageQuestionnaireDocument questionnaire)
-            => questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier) as IComposite
-               ?? questionnaire.FirstOrDefault<IVariable>(v => v.Name == identifier) as IComposite
-               ?? questionnaire.FirstOrDefault<IGroup>(g => g.VariableName == identifier) as IComposite;
+        private static IComposite? GetEntityByVariable(string identifier,
+            MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var question = questionnaire.GetQuestionByName(identifier);
+            if (question != null)
+                return question;
+
+            var variable = questionnaire.GetVariableByName(identifier);
+            if (variable != null)
+                return variable;
+            
+            return  questionnaire.GetGroupByName(identifier);
+        }
     }
 }

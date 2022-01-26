@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             BecauseOf();
         }
 
-        private void BecauseOf() => verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_WB0269_message () => verificationMessages.ShouldContainError("WB0269");
 

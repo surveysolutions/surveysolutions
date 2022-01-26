@@ -273,7 +273,7 @@
   <data name="GlobalSettings_DeleteMapConfirmation" xml:space="preserve">
     <value>Doriți să ștergeți harta?</value>
   </data>
-  <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
+  <data name="GlobalSettings_DeleteQuestionnaireConfirmation" xml:space="preserve">
     <value>Sigur doriți să ștergeți chestionarul? Toate interviurile realizate prin chestionarul curent vor fi pierdute.</value>
   </data>
   <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">

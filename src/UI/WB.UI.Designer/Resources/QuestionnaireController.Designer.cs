@@ -604,6 +604,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save as.
+        /// </summary>
+        public static string SaveAs {
+            get {
+                return ResourceManager.GetString("SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose tab-separated values file to upload, please.
         /// </summary>
         public static string SelectTabFile {

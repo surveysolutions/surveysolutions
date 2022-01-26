@@ -190,6 +190,9 @@ namespace WB.UI.Headquarters.Controllers
         {
             if(id == this.authorizedUser.Id)
                 return RedirectToAction("ApiTokens", new {id = (Guid?)null});
+            
+            if (!this.tokenProvider.CanGenerate)
+                return this.Forbid();
 
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
@@ -348,7 +351,7 @@ namespace WB.UI.Headquarters.Controllers
                     CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
                     CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
                     CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
-
+                    CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     RecoveryCodes = string.Join(" ", RecoveryCodes)
 
                 },
@@ -449,6 +452,7 @@ namespace WB.UI.Headquarters.Controllers
                     CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
                     CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
                     CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
+                    CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                 },
                 Api = new
                 {

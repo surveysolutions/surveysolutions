@@ -32,7 +32,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             base.Init(interviewId, entityIdentity, navigationState);
 
-            this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
         }
 

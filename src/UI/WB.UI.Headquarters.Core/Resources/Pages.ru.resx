@@ -204,9 +204,12 @@
   <data name="Forbidden_Title" xml:space="preserve">
     <value>Запрещено</value>
   </data>
-  <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
-    <value>Вы уверены, что вы хотите удалить вопросник? Все интервью, собранные в рамках вопросника будут потеряны.</value>
+  <data name="GlobalSettings_DeleteQuestionnaireConfirmation" xml:space="preserve">
+    <value>Вы уверены, что вы хотите удалить вопросник? Все интервью, собранные в рамках вопросника, включаяя собранные на планшетах и сейчас не видны на сервере, будут потеряны.</value>
   </data>
+  <data name="GlobalSettings_DeleteQuestionnaireWarning" xml:space="preserve">
+    <value>Внимание! Эта операция необратима</value>
+  </data>  
   <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">
     <value>У вас нет прав для выполнения этого действия</value>
   </data>
@@ -1742,5 +1745,8 @@
   </data>
   <data name="AccountManage_ApiTokens" xml:space="preserve">
       <value>API ключи</value>
+  </data>
+  <data name="Profile_IssueApiToken" xml:space="preserve">
+      <value>Выдать</value>
   </data>
 </root>
