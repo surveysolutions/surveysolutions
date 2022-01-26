@@ -1642,7 +1642,7 @@
     <value>Двухфакторная аутентификация </value>
   </data>
   <data name="AccountManage_StatusApiToken" xml:space="preserve">
-    <value>API ключ:</value>
+    <value>Доступ к REST и GraphQL API </value>
   </data>
   <data name="Diagnostics" xml:space="preserve">
     <value>Диагностика</value>
