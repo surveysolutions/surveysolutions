@@ -89,7 +89,7 @@
 
         LinkedCategoricalQuestionCanNotBeFilledBySupervisor,
 
-        NotCategoricalQuestionLinkedToAnoterQuestion,
+        NotCategoricalQuestionLinkedToAnotherQuestion,
 
         QuestionWithLinkedQuestionCanNotBeFeatured,
 
@@ -164,5 +164,6 @@
         CanNotAddElementToCoverPage,
         CanNotEditElementIntoCoverPage,
         MigrateToNewVersion,
+        InvalidUserInfo
     }
 }

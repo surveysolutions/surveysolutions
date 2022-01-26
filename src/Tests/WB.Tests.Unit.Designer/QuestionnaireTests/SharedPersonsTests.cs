@@ -36,13 +36,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         public void RemoveSharedPerson_When_shared_personid_is_not_empty_Then_raised_SharedPersonFromQuestionnaireRemoved_event_with_specified_person_key()
         {
             // arrange
+            var email = "string@empty.com";
             Guid personId = Guid.NewGuid();
             Guid responsibleId = Guid.NewGuid();
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
                 
             // act
-            questionnaire.AddSharedPerson(personId, string.Empty, ShareType.Edit, responsibleId);
-            questionnaire.RemoveSharedPerson(personId, string.Empty, responsibleId);
+            questionnaire.AddSharedPerson(personId, email, ShareType.Edit, responsibleId);
+            questionnaire.RemoveSharedPerson(personId, email, responsibleId);
 
             // assert
             var isExistsPerson = questionnaire.SharedPersons.Any(p => p.UserId == personId);
@@ -53,13 +54,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         public void RemoveSharedPerson_When_shared_person_is_read_only_Then_raised_ShredPersonFromQuestionnaireRemoved_event_with_specified_person_key()
         {
             // arrange
+            var email = "string@empty.com";
             Guid personId = Guid.NewGuid();
             Guid responsibleId = Guid.NewGuid();
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
 
             // act
-            questionnaire.AddSharedPerson(personId, string.Empty, ShareType.View, responsibleId);
-            questionnaire.RemoveSharedPerson(personId, string.Empty, personId);
+            questionnaire.AddSharedPerson(personId, email, ShareType.View, responsibleId);
+            questionnaire.RemoveSharedPerson(personId, email, personId);
 
             // assert
             var isExistsPerson = questionnaire.SharedPersons.Any(p => p.UserId == personId);

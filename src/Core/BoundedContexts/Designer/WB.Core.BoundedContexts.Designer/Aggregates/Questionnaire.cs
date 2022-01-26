@@ -1498,6 +1498,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
+            if (personId == Guid.Empty || string.IsNullOrEmpty(emailOrLogin))
+                throw new QuestionnaireException(DomainExceptionType.InvalidUserInfo,
+                    ExceptionMessages.InvalidUserInfo);
+
             if (this.innerDocument.CreatedBy == personId)
             {
                 throw new QuestionnaireException(

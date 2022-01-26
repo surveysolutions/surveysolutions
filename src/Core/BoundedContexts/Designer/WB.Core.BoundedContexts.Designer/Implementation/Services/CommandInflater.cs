@@ -118,6 +118,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 addSharedPersonCommand.PersonId = sharedWith.Id;
                 addSharedPersonCommand.EmailOrLogin = sharedWith.Email;
             }
+            else
+            {
+                throw new CommandInflaitingException(CommandInflatingExceptionType.Common,
+                    "User was not found");
+            }
         }
 
         private void ValidateRemoveSharedPersonCommand(ICommand command)

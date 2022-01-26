@@ -70,7 +70,8 @@ namespace WB.UI.WebTester
             services.AddHttpContextAccessor();
 
             services.AddHealthChecks()
-                .AddCheck<DesignerConnectionCheck>("designer-connection");
+                //.AddCheck<DesignerConnectionCheck>("designer-connection")
+                ;
 
             services.AddHttpClientWithConfigurator<IDesignerWebTesterApi, DesignerApiConfigurator>(
                     new RefitSettings
