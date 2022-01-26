@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             var verifier = CreateQuestionnaireVerifier();
 
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             verificationMessages.ShouldContainError("WB0057");
             Assert.That(verificationMessages.GetError("WB0057").References.First().Id, Is.EqualTo(Id.gA));
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             });
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             verificationMessages.ShouldNotContainError("WB0056");
             verificationMessages.GetError("WB0056").Should().BeNull();
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 ));
                 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));    
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));    
                 
             verificationMessages.ShouldNotContainError("WB0059");
         }

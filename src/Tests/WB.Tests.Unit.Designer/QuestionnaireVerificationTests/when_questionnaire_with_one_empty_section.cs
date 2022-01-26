@@ -15,7 +15,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() => 
-            errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
+            errors = verifier.CompileAndVerify(Create.QuestionnaireView(questionnaire),
+                null, out string _);
 
         [NUnit.Framework.Test] public void should_not_return_WB0202_warning () => 
             errors.GetWarning("WB0202").Should().BeNull();

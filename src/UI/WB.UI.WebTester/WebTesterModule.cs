@@ -55,7 +55,8 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<ILiteEventBus, NcqrCompatibleEventDispatcher>();
 
             registry.Bind<WebTesterStatefulInterview>();
-            registry.Bind<IInterviewFactory, InterviewFactory>();
+            //registry.Bind<IInterviewFactory, InterviewFactory>();
+            registry.Bind<IImportQuestionnaireAndCreateInterviewService, ImportQuestionnaireAndCreateInterviewService>();
 
             registry.BindAsSingleton<IEvictionObservable, IEvictionNotifier, TokenEviction>();
 

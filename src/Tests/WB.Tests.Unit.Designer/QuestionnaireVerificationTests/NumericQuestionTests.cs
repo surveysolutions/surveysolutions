@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         Create.Option(2, "B"),
                         Create.Option(61, "C")
                     )),
-                    Create.NumericRoster(Id.g2, rosterSizeQuestionId: Id.g1, children: new IComposite[]
+                    Create.NumericRoster(Id.g2, variable:"parent", rosterSizeQuestionId: Id.g1, children: new IComposite[]
                     {
                         Create.NumericRoster(Id.g3, rosterSizeQuestionId: Id.g1)
                     })

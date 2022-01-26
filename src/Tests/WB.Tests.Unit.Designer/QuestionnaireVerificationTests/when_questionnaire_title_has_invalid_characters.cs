@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             questionnaire.Title = "this is title [variable]";
             var verifier = CreateQuestionnaireVerifier();
             
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
         }
 
         [Test] public void should_return_WB0097_message () => 
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             questionnaire.Title = "this is valid ы (title) \\variable/";
             var verifier = CreateQuestionnaireVerifier();
             
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
         }
 
         [Test] public void should_return_WB0097_message () => 

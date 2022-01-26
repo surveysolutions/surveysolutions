@@ -121,13 +121,8 @@ namespace WB.UI.Designer.Code.ImportExport
         private List<QuestionnaireVerificationMessage> ValidateQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
         {
             var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
-            var multiLanguageQuestionnaireDocument = new MultiLanguageQuestionnaireDocument(
-                readOnlyQuestionnaireDocument,
-                Enumerable.Empty<ReadOnlyQuestionnaireDocument>(),
-                Enumerable.Empty<SharedPersonView>());
-
             var verifier = new ImportQuestionnaireVerifier();
-            var result = verifier.Verify(multiLanguageQuestionnaireDocument).ToList();
+            var result = verifier.Verify(readOnlyQuestionnaireDocument).ToList();
             return result;
         }
 

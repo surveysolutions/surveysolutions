@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Categorical
         }
 
         private void BecauseOf() =>
-            resultErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            resultErrors = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_error_with_code__WB0007__ () =>
             resultErrors.ShouldContainError("WB0007");

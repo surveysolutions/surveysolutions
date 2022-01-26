@@ -189,7 +189,7 @@
   <data name="Forbidden_Title" xml:space="preserve">
     <value>Proibido</value>
   </data>
-  <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
+  <data name="GlobalSettings_DeleteQuestionnaireConfirmation" xml:space="preserve">
     <value>Tem certeza que deseja excluir o questionário? Todas as entrevistas realizadas pelo questionário atual será perdidas.</value>
   </data>
   <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">

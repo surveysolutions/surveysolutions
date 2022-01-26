@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToArray();
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToArray();
 
         [NUnit.Framework.Test] public void should_return_messages_each_with_code__WB0003__ () =>
             verificationMessages.ShouldContainError("WB0003");

@@ -54,7 +54,8 @@
                 :title="$t('Pages.Admin_InterviewPackages_Period')">
                 <DatePicker :config="datePickerConfig"
                     :value="selectedDateRange"
-                    :withClear="true"></DatePicker>
+                    :withClear="true"
+                    v-on:clear="clearDateRange"></DatePicker>
             </FilterBlock>
         </Filters>
 
@@ -222,6 +223,9 @@ export default {
             this.$refs.putReasonModal.hide()
             this.reason = null
             this.loadData()
+        },
+        clearDateRange() {
+            this.dateRange = null
         },
     },
     computed: {

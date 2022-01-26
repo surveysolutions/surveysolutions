@@ -37,10 +37,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         private void ShouldContainError(QuestionnaireDocument questionnaireDocument, string errorCode)
         {
             var verifier = new ImportQuestionnaireVerifier();
-            var verify = verifier.Verify(new MultiLanguageQuestionnaireDocument(
-                new ReadOnlyQuestionnaireDocument(questionnaireDocument),
-                Enumerable.Empty<ReadOnlyQuestionnaireDocument>(),
-                Enumerable.Empty<SharedPersonView>()));
+            var verify = verifier.Verify(
+                new ReadOnlyQuestionnaireDocument(questionnaireDocument));
             verify.ShouldContainError(errorCode);
         }
     }
