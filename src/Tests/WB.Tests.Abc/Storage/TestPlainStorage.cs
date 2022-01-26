@@ -11,6 +11,6 @@ namespace WB.Tests.Abc.Storage
         }
 
         public TestPlainStorage(Dictionary<object, T> entities) =>
-            entities.ForEach(x => base.inMemoryStorage.Add(x.Key, x.Value));
+            entities.ForEach(x => base.InMemoryStorage.Add(x.Key, x.Value));
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,13 +11,11 @@ namespace WB.Core.Infrastructure.Implementation
     public class InMemoryPlainStorageAccessor<TEntity> : IPlainStorageAccessor<TEntity>, IPlainKeyValueStorage<TEntity>
         where TEntity : class
     {
-        protected readonly Dictionary<object,TEntity> inMemoryStorage = new Dictionary<object, TEntity>(); 
+        protected readonly ConcurrentDictionary<object, TEntity> InMemoryStorage = new ConcurrentDictionary<object, TEntity>(); 
 
         public TEntity GetById(object id)
         {
-            if (this.inMemoryStorage.ContainsKey(id))
-                return this.inMemoryStorage[id];
-            return null;
+            return this.InMemoryStorage.ContainsKey(id) ? this.InMemoryStorage[id] : null;
         }
 
         public Task<TEntity> GetByIdAsync(object id)
@@ -26,33 +25,32 @@ namespace WB.Core.Infrastructure.Implementation
 
         public void Remove(object id)
         {
-            if (this.inMemoryStorage.ContainsKey(id))
-                this.inMemoryStorage.Remove(id);
+            this.InMemoryStorage.TryRemove(id, out _);
         }
 
         public void Remove(IEnumerable<TEntity> entities)
         {
-            foreach (var entity in entities)
+            foreach (var entity in entities.ToList())
             {
-                var itemToRemove = this.inMemoryStorage.SingleOrDefault(x => x.Value.Equals(entity));
-                this.inMemoryStorage.Remove(itemToRemove.Key);
+                var itemToRemove = this.InMemoryStorage.SingleOrDefault(x => x.Value.Equals(entity));
+                this.InMemoryStorage.TryRemove(itemToRemove.Key, out _);
             }
         }
 
         public void Remove(Func<IQueryable<TEntity>, IQueryable<TEntity>> query)
-            => this.Remove(query.Invoke(this.inMemoryStorage.Values.AsQueryable()));
+            => this.Remove(query.Invoke(this.InMemoryStorage.Values.AsQueryable()));
 
         public void Store(TEntity entity, object id)
         {
-            if (id != null && this.inMemoryStorage.ContainsKey(id))
-                this.inMemoryStorage[id] = entity;
+            if (id != null && this.InMemoryStorage.ContainsKey(id))
+                this.InMemoryStorage[id] = entity;
             else
-                this.inMemoryStorage.Add(id ?? this.inMemoryStorage.Count + 1, entity);
+                this.InMemoryStorage.TryAdd(id ?? this.InMemoryStorage.Count + 1, entity);
         }
 
         public void Store(IEnumerable<Tuple<TEntity, object>> entities)
         {
-            foreach (var entity in entities)
+            foreach (var entity in entities.ToList())
             {
                 this.Store(entity.Item1,entity.Item2);
             }
@@ -66,7 +64,7 @@ namespace WB.Core.Infrastructure.Implementation
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
-            return query.Invoke(this.inMemoryStorage.Values.AsQueryable());
+            return query.Invoke(this.InMemoryStorage.Values.AsQueryable());
         }
 
         public TEntity GetById(string id)
@@ -76,7 +74,7 @@ namespace WB.Core.Infrastructure.Implementation
 
         public bool HasNotEmptyValue(string id)
         {
-            return this.inMemoryStorage.ContainsKey(id) && this.inMemoryStorage[id] != null;
+            return this.InMemoryStorage.ContainsKey(id) && this.InMemoryStorage[id] != null;
         }
 
         public void Remove(string id)
