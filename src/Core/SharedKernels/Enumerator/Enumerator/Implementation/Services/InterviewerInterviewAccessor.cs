@@ -139,28 +139,46 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 prefilledQuestion.Answer);
         }
 
-        private IReadOnlyCollection<CommittedEvent> GetAllEventsToSend(Guid interviewId)
+        private IReadOnlyCollection<CommittedEvent> GetAllEventsToSend(Guid interviewId,
+            SyncInfoPackageResponse syncInfo)
         {
-            var minVersion = this.eventStore.GetLastEventKnownToHq(interviewId) + 1;
+            var minVersion = syncInfo.HasInterview && syncInfo.IsExistsClientLastEvent
+                ? this.eventStore.GetLastEventKnownToHq(interviewId) + 1
+                : 0;
             return this.eventStore.Read(interviewId, minVersion)
                 .ToReadOnlyCollection();
         }
 
-        private IReadOnlyCollection<CommittedEvent> GetFilteredEventsToSend(Guid interviewId)
+        private IReadOnlyCollection<CommittedEvent> GetFilteredEventsToSend(Guid interviewId,
+            SyncInfoPackageResponse syncInfo)
         {
             var lastCompleteSequence = this.eventStore.GetMaxSequenceForAnyEvent(interviewId, nameof(InterviewCompleted), nameof(InterviewModeChanged));
             var lastComplete = this.eventStore.GetEventByEventSequence(interviewId, lastCompleteSequence);
 
+            var minVersion = syncInfo.HasInterview && syncInfo.IsExistsClientLastEvent
+                ? this.eventStore.GetLastEventKnownToHq(interviewId) + 1
+                : 0;
+
             return this.eventStreamOptimizer.FilterEventsToBeSent(
-                this.eventStore.Read(interviewId, this.eventStore.GetLastEventKnownToHq(interviewId) + 1),
+                this.eventStore.Read(interviewId, minVersion),
                 lastComplete?.CommitId);
         }
 
-        public InterviewPackageContainer GetInterviewEventStreamContainer(Guid interviewId, bool needCompress)
+        public InterviewSyncInfoPackage GetInterviewSyncInfoPackage(Guid interviewId)
+        {
+            return new InterviewSyncInfoPackage()
+            {
+                FirstEventId = this.eventStore.GetFirstEventId(interviewId)!.Value,
+                LastEventIdFromPreviousSync = this.eventStore.GetLastEventIdUploadedToHq(interviewId),
+            };
+        }
+        
+        public InterviewPackageContainer GetInterviewEventStreamContainer(Guid interviewId, bool needCompress,
+            SyncInfoPackageResponse syncInfoPackageResponse)
         {
             var events = needCompress
-                ? this.GetFilteredEventsToSend(interviewId)
-                : this.GetAllEventsToSend(interviewId);
+                ? this.GetFilteredEventsToSend(interviewId, syncInfoPackageResponse)
+                : this.GetAllEventsToSend(interviewId, syncInfoPackageResponse);
             return new InterviewPackageContainer(interviewId, events);
         }
 

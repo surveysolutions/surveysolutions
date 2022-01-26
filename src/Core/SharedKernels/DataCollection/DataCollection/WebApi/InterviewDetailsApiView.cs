@@ -32,6 +32,18 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public string Events { get; set; }
     }
 
+    public class InterviewSyncInfoPackage
+    {
+        public Guid FirstEventId { get; set; }
+        public Guid? LastEventIdFromPreviousSync { get; set; }
+    }
+
+    public class SyncInfoPackageResponse
+    {
+        public bool HasInterview { get; set; } 
+        public bool IsExistsClientLastEvent { get; set; }
+    }
+
     public class InterviewPackageContainer
     {
         public InterviewPackageContainer(Guid interviewId, IReadOnlyCollection<CommittedEvent> events)

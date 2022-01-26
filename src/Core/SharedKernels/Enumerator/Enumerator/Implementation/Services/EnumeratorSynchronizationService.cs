@@ -35,6 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected string DevicesController => string.Concat(ApplicationUrl, "/devices");
         protected string UsersController => string.Concat(ApplicationUrl, "/users");
         protected virtual string InterviewsController => string.Concat(ApplicationUrl, "/interviews");
+        protected virtual string EnumeratorInterviewsController => string.Concat(ApplicationUrl, "/interviews");
         protected virtual string CalendarEventsController => string.Concat(ApplicationUrl, "/calendarevents");
         protected string QuestionnairesController => string.Concat(ApplicationUrl, "/questionnaires");
         protected string AssignmentsController => string.Concat(ApplicationUrl, "/assignments");
@@ -435,6 +436,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 throw;
             }
         }
+        
+        public Task<SyncInfoPackageResponse> GetSyncInfoPackageResponse(Guid interviewId, InterviewSyncInfoPackage interviewSyncInfoPackage,
+            CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(
+                () => this.restService.PostAsync<SyncInfoPackageResponse>(
+                    url: string.Concat(this.InterviewsController,"/", interviewId, "/getSyncInfoPackage"),
+                    credentials: this.restCredentials, 
+                    token: cancellationToken,
+                    request: interviewSyncInfoPackage));
+        }
 
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
@@ -619,7 +631,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 this.restService.GetAsync<List<CalendarEventApiView>>(url: this.CalendarEventsController,
                     credentials: this.restCredentials, token: token));
         }
+
         
+
         #endregion
 
         protected async Task TryGetRestResponseOrThrowAsync(Func<Task> restRequestTask)
