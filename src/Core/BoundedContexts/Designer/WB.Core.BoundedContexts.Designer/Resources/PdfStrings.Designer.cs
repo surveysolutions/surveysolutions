@@ -160,6 +160,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to in roster.
+        /// </summary>
+        public static string InRosterSourceOfCategories {
+            get {
+                return ResourceManager.GetString("InRosterSourceOfCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} last edited {1}.
         /// </summary>
         public static string LastEdited {
@@ -412,6 +421,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Question.
+        /// </summary>
+        public static string QuestionInRosterSourceOfCategories {
+            get {
+                return ResourceManager.GetString("QuestionInRosterSourceOfCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to hidden.
         /// </summary>
         public static string QuestionScope_Hidden {
@@ -637,6 +655,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Roster.
+        /// </summary>
+        public static string RosterSourceOfCategories {
+            get {
+                return ResourceManager.GetString("RosterSourceOfCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to list.
         /// </summary>
         public static string RosterType_List {
@@ -714,6 +741,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string SideBarMetadataSurveyInfo {
             get {
                 return ResourceManager.GetString("SideBarMetadataSurveyInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source of categories:.
+        /// </summary>
+        public static string SourceOfCategories {
+            get {
+                return ResourceManager.GetString("SourceOfCategories", resourceCulture);
             }
         }
         
@@ -835,6 +871,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Text list question.
+        /// </summary>
+        public static string TextListSourceOfCategories {
+            get {
+                return ResourceManager.GetString("TextListSourceOfCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation Condition:.
         /// </summary>
         public static string ValidationCondition {
@@ -862,7 +907,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This variable is marked to be excluded from the exported data.
+        ///   Looks up a localized string similar to This variable is excluded from the exported data.
         /// </summary>
         public static string VariableExcludedFromExport {
             get {
