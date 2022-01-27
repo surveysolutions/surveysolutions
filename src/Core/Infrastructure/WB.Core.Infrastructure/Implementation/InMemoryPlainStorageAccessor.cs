@@ -15,7 +15,9 @@ namespace WB.Core.Infrastructure.Implementation
 
         public TEntity GetById(object id)
         {
-            return this.InMemoryStorage.ContainsKey(id) ? this.InMemoryStorage[id] : null;
+            return this.InMemoryStorage.TryGetValue(id, out var value) 
+                ? value 
+                : null;
         }
 
         public Task<TEntity> GetByIdAsync(object id)
@@ -45,7 +47,7 @@ namespace WB.Core.Infrastructure.Implementation
             if (id != null && this.InMemoryStorage.ContainsKey(id))
                 this.InMemoryStorage[id] = entity;
             else
-                this.InMemoryStorage.TryAdd(id ?? this.InMemoryStorage.Count + 1, entity);
+                this.InMemoryStorage.TryAdd(id ?? entity, entity);
         }
 
         public void Store(IEnumerable<Tuple<TEntity, object>> entities)
