@@ -44,10 +44,8 @@ namespace WB.Core.Infrastructure.Implementation
 
         public void Store(TEntity entity, object id)
         {
-            if (id != null && this.InMemoryStorage.ContainsKey(id))
-                this.InMemoryStorage[id] = entity;
-            else
-                this.InMemoryStorage.TryAdd(id ?? entity, entity);
+            var key = (id ?? entity) ?? this.InMemoryStorage.Count + 1;
+            this.InMemoryStorage.AddOrUpdate(key, entity, (i, p) => entity);
         }
 
         public void Store(IEnumerable<Tuple<TEntity, object>> entities)
