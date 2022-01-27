@@ -45,7 +45,7 @@ namespace WB.Core.Infrastructure.Implementation
         public void Store(TEntity entity, object id)
         {
             if (id == null && entity == null)
-                throw ArgumentNullException("entity and id are null");
+                throw new ArgumentException("entity and id are null");
             var key = id ?? entity;
             this.InMemoryStorage.AddOrUpdate(key, entity, (i, p) => entity);
         }
