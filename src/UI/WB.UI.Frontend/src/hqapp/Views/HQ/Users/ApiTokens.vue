@@ -40,7 +40,7 @@
                         </div>
 
                         <div v-if="apiToken && tokenWasIssued">
-                            <span>{{$t('Strings.HQ_Views_Api_Token_Generate_Description')}}</span>
+                            <span style="color:red;">{{$t('Strings.HQ_Views_Api_Token_Generate_Description')}}</span>
                             <pre v-text="apiToken"
                                 style="white-space:normal;">
                     </pre>
