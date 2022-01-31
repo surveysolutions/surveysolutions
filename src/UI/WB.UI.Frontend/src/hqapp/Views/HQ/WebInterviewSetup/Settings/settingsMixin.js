@@ -1,4 +1,4 @@
-import marked from 'marked'
+import { marked } from 'marked'
 import mdEditor from '@/hqapp/components/MdEditor'
 import Logo from './_Logo.vue'
 import Vue from 'vue'
