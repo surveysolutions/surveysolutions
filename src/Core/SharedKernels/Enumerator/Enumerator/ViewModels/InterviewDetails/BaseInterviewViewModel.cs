@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.BreadCrumbs.Init(InterviewId, this.NavigationState);
             this.Sections.Init(InterviewId, this.NavigationState);
             
-            await this.NavigationState.NavigateTo(this.targetNavigationIdentity ?? this.GetDefaultScreenToNavigate(questionnaire)).ConfigureAwait(false);
+            await this.NavigationState.NavigateTo(this.targetNavigationIdentity ?? this.GetDefaultScreenToNavigate(interview, questionnaire)).ConfigureAwait(false);
 
             this.answerNotifier.Init(this.InterviewId);
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
@@ -164,18 +164,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        protected virtual NavigationIdentity GetDefaultScreenToNavigate(IQuestionnaire questionnaire)
+        protected virtual NavigationIdentity GetDefaultScreenToNavigate(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
-            var sections = questionnaire.GetAllSections();
-            var firstSectionId = questionnaire.IsCoverPageSupported
+            var sections = interview
+                .GetAllEnabledGroupsAndRosters();
+            var firstSection = questionnaire.IsCoverPageSupported
                                  && (
                                      HasPrefilledQuestions
                                      || HasNotEmptyNoteFromSupervior
                                      || HasCommentsFromSupervior
                                  )
-                ? sections.First(id => questionnaire.IsCoverPage(id))
-                : sections.First(id => !questionnaire.IsCoverPage(id));
-            return NavigationIdentity.CreateForGroup(new Identity(firstSectionId, RosterVector.Empty));
+                ? sections.FirstOrDefault(id => questionnaire.IsCoverPage(id.Identity.Id))
+                : sections.FirstOrDefault(id => !questionnaire.IsCoverPage(id.Identity.Id));
+
+            return firstSection == null ? NavigationIdentity.CreateForCompleteScreen() : NavigationIdentity.CreateForGroup(firstSection.Identity);
         }
 
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
