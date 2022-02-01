@@ -12,14 +12,13 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument();
             questionnaire.AddChapter(questionnaire.CoverPageSectionId);
-            questionnaire.Add(Create.TextQuestion(preFilled: true, label: "label"), questionnaire.CoverPageSectionId);
 
             verifier = CreateQuestionnaireVerifier();
             BecauseOf();
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().Should().Be(1);

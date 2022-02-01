@@ -65,8 +65,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(MatrixRosterHasMoreThanAllowedEntities, "WB0298", string.Format(VerificationMessages.WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInMatrixRoster)),
             Error<IGroup>(MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions, "WB0299", VerificationMessages. WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions),
             Error<IGroup>(MatrixRosterHasToContainNoLinkedQuestions, "WB0301", VerificationMessages. WB0301_MatrixRosterHasToContainNoLinkedQuestions),
-            Error<IGroup>(MatrixRosterCannotHaveCustomTitle, "WB0303", VerificationMessages.WB0303_MatrixRosterCannotHaveCustomTitle),
-            Error<IGroup>(TableRosterCannotHaveCustomTitle, "WB0304", VerificationMessages.WB0304_TableRosterCannotHaveCustomTitle),
             
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", string.Format(VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup, MaxQuestionsCountInSubSection)),
@@ -223,7 +221,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return noErrors;
 
             var rosterTitleQuestion =
-                questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == group.RosterTitleQuestionId.Value);
+                questionnaire.GetEntityByIdOrNull(group.RosterTitleQuestionId.Value) as IQuestion;
+            
             if (rosterTitleQuestion == null)
                 return noErrors;
 
@@ -479,7 +478,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (!group.RosterTitleQuestionId.HasValue)
                 return false;
 
-            var rosterTitleQuestion = questionnaire.FirstOrDefault<IQuestion>(x => x.PublicKey == group.RosterTitleQuestionId.Value);
+            var rosterTitleQuestion = questionnaire.GetEntityByIdOrNull(group.RosterTitleQuestionId.Value);
             if (rosterTitleQuestion == null)
                 return true;
 
@@ -522,13 +521,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                            || question.QuestionScope == QuestionScope.Headquarter;
                 return false;
             });
-
-        private static bool MatrixRosterCannotHaveCustomTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-          => group.DisplayMode == RosterDisplayMode.Matrix && 
-             group.Title.Contains("%rostertitle%");
-        private static bool TableRosterCannotHaveCustomTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-          => group.DisplayMode == RosterDisplayMode.Table && 
-             group.Title.Contains("%rostertitle%");
 
         private static bool MatrixRosterHasToContainNoLinkedQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Any(composite =>

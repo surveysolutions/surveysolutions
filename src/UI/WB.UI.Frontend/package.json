@@ -11,7 +11,8 @@
         "hot": "vue-cli-service build --mode development --watch",
         "styles": "vue-cli-service build --css",
         "styles:dev": "vue-cli-service build --css --mode development",
-        "test": "jest"
+        "test": "jest",
+        "preinstall": "npx npm-force-resolutions"
     },
     "dependencies": {
         "@google/markerclustererplus": "^4.0.1",
@@ -38,7 +39,7 @@
         "jquery-highlight": "^3.4.0",
         "jquery-mask-plugin": "^1.14.16",
         "lodash": "^4.17.21",
-        "marked": "^2.0.7",
+        "marked": "^4.0.10",
         "moment": "^2.24.0",
         "moment-duration-format": "^2.3.2",
         "moment-timezone": "^0.5.33",
@@ -84,6 +85,7 @@
         "jest": "^27.4.0",
         "mini-css-extract-plugin": "^0.9.0",
         "node-sass": "5.0.0",
+        "npm-force-resolutions": "0.0.10",
         "rimraf": "3.0.2",
         "sass-loader": "10.1.0",
         "stats-webpack-plugin": "^0.7.0",
@@ -142,5 +144,14 @@
         "testPathIgnorePatterns": [
             "/locale//.resources/"
         ]
+    },
+    "resolutions": {
+        "braces": ">=2.3.1",
+        "glob-parent": ">=5.1.2",
+        "json-schema": ">=0.4.0",
+        "merge": ">=2.1.1",
+        "normalize-url": "4.5.1",
+        "nth-check": ">=2.0.1",
+        "trim-newlines": ">=3.0.1"
     }
 }

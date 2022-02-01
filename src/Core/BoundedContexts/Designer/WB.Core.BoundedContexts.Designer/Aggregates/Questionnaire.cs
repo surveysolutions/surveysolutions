@@ -550,8 +550,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
             var isSection = this.QuestionnaireDocument.Children.Any(s => s.PublicKey == groupId);
-            var isLastUserSection = (this.QuestionnaireDocument.Children.Count == 1 && !this.QuestionnaireDocument.IsCoverPageSupported)
-                                    || (this.QuestionnaireDocument.Children.Count == 2 && this.QuestionnaireDocument.IsCoverPageSupported);
+            var isLastUserSection = this.QuestionnaireDocument.Children.Count == 1;
             if (isSection && isLastUserSection)
             {
                 throw new QuestionnaireException(DomainExceptionType.Undefined, ExceptionMessages.CantRemoveLastSectionInQuestionnaire);
@@ -1498,6 +1497,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void AddSharedPerson(Guid personId, string emailOrLogin, ShareType shareType, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+
+            if (personId == Guid.Empty || string.IsNullOrEmpty(emailOrLogin))
+                throw new QuestionnaireException(DomainExceptionType.InvalidUserInfo,
+                    ExceptionMessages.InvalidUserInfo);
 
             if (this.innerDocument.CreatedBy == personId)
             {

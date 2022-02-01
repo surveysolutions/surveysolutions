@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
         }
 
         private void BecauseOf() => 
-            verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationErrors = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_not_return_verification_errors () => 
             verificationErrors.Count().Should().Be(0);

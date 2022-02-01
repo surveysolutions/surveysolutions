@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Categorical
                 => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { "s546i" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
-            resultErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            resultErrors = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             Assert.That(resultErrors, Is.Not.Null);
 

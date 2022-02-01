@@ -283,21 +283,18 @@
     <value>User is not authorized to execute provided action</value>
   </data>
   <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
-      <value>API Tokens</value>
+      <value>API access</value>
   </data>
   <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
     <value>API token is used to perform API calls to the system</value>
   </data>    
   <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
-    <value>issued</value>
+    <value>enabled</value>
   </data>
     <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
-  <value>not issued</value>
+  <value>disabled</value>
   </data>
   <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
-    <value>Please save token after generation, you will see it just once</value>
-  </data>
-  <data name="HQ_Views_Api_Token_Delete_Description" xml:space="preserve">
-    <value>If you delete token all calls to API using this token will not be permitted</value>
-  </data>
+    <value>Please save the token now. You will only be able to see it once!</value>
+  </data> 
 </root>

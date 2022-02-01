@@ -6,7 +6,8 @@
         :canChangePassword="userInfo.canChangePassword"
         :userName="userInfo.userName"
         :userId="userInfo.userId"
-        :currentTab="currentTab">
+        :currentTab="currentTab"
+        :canGenerateToken="userInfo.canGetApiToken">
         <div>
             <form-group
                 :label="$t('FieldsAndValidations.PersonNameFieldName')"

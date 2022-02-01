@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 {
                     Create.Entity.InterviewTreeRoster(Create.Entity.Identity(rosterId2, new decimal[] { 2, 1}), rosterTitle: "title 2.1", children: new IInterviewTreeNode[]
                     {
-                        Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(questionId), questionType: QuestionType.Numeric, answer: 5),
+                        Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(questionId, new decimal[] { 2, 1}), questionType: QuestionType.Numeric, answer: 5),
                     }),
                 }),
             });

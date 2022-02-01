@@ -25,7 +25,7 @@
 
 <script>
 
-import marked from 'marked'
+import { marked } from 'marked'
 import StartOrResumeForm from './_StartOrResumeForm'
 
 export default {

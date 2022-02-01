@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Categorical
         }
 
         private void BecauseOf() =>
-            resultErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            resultErrors = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_have_1_error () =>
             resultErrors.Count().Should().Be(1);

@@ -104,6 +104,38 @@
         <div class="question-meta">
             <div class="type">
                 @questionnaire.GetFormattedQuestionType(question)
+                @if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue)
+                {
+                    <br />
+                    <span>@PdfStrings.SourceOfCategories</span>
+                    @if (question.LinkedToRosterId.HasValue)
+                    {
+                        <span>@PdfStrings.RosterSourceOfCategories</span>
+                        <a href="#@questionnaire.GetItemRef(question.LinkedToRosterId.Value)">@questionnaire.GetVariable(question.LinkedToRosterId.Value)</a>
+                    }
+                    else if (question.LinkedToQuestionId.HasValue)
+                    {
+                        @if (questionnaire.GetQuestionType(question.LinkedToQuestionId.Value) == QuestionType.TextList)
+                        {
+                            <span>@PdfStrings.TextListSourceOfCategories</span>
+                            <a href="#@questionnaire.GetItemRef(question.LinkedToQuestionId.Value)">@questionnaire.GetVariable(question.LinkedToQuestionId.Value)</a>
+                        }
+                        else
+                        {
+                            <span>@PdfStrings.QuestionInRosterSourceOfCategories</span>
+                            <a href="#@questionnaire.GetItemRef(question.LinkedToQuestionId.Value)">@questionnaire.GetVariable(question.LinkedToQuestionId.Value)</a>
+                            {
+                                var linkedParentRoster = questionnaire.GetParentRoster(question.LinkedToQuestionId.Value);
+                                if (linkedParentRoster.HasValue)
+                                {
+                                    <span>@PdfStrings.InRosterSourceOfCategories</span>
+                                    <a href="#@questionnaire.GetItemRef(linkedParentRoster.Value)">@questionnaire.GetVariable(linkedParentRoster.Value)</a>
+                                }
+                            }
+                        }
+                    }
+                    
+                }
                 @if (!questionnaire.IsInterviewerQuestion(question) && !questionnaire.IsParentCover(question))
                 {
                     <br />

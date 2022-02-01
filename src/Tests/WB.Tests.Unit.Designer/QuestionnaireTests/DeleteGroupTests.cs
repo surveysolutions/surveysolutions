@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         }
 
         [Test]
-        public void DeleteGroup_When_try_to_delete_last_section_with_cover_Then_DomainException_should_be_thrown()
+        public void DeleteGroup_When_try_to_delete_last_section_with_cover_Then_DomainException_should_not_be_thrown()
         {
             // arrange
             Guid userSectionId = Guid.NewGuid();
@@ -80,10 +80,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var questionnaire = Create.Questionnaire(responsibleId, questionnaireDocument);
 
             // act
-            TestDelegate act = () => questionnaire.DeleteGroup(userSectionId, responsibleId: responsibleId);
+            questionnaire.DeleteGroup(userSectionId, responsibleId: responsibleId);
 
             // assert
-            Assert.Catch<QuestionnaireException>(act);
+            Assert.That(questionnaireDocument.Children.Count, Is.EqualTo(1));
         }
 
         [Test]

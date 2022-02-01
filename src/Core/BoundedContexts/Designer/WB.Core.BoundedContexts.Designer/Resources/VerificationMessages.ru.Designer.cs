@@ -1944,15 +1944,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Вопросы внутри табличного ростера не могут ссылаться на другие вопросы в своих заголовках..
-        /// </summary>
-        public static string WB0287_TableRosterDoesntContainsQuestionWithSubstitutions {
-            get {
-                return ResourceManager.GetString("WB0287_TableRosterDoesntContainsQuestionWithSubstitutions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Заголовок {1} и код {0} числовые и отличается значениями.
         /// </summary>
         public static string WB0288_ValueAndTitleNumbersIsNotEquals {
@@ -2061,15 +2052,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Матричное представление ростера не может содержать вопрос с подстановкой %rostertitle%..
-        /// </summary>
-        public static string WB0300 {
-            get {
-                return ResourceManager.GetString("WB0300", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Матричное представление ростера не может содержать связанные вопросы.
         ///.
         /// </summary>
@@ -2085,24 +2067,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0302 {
             get {
                 return ResourceManager.GetString("WB0302", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Матричный ростер не может переопределять имя.
-        /// </summary>
-        public static string WB0303_MatrixRosterCannotHaveCustomTitle {
-            get {
-                return ResourceManager.GetString("WB0303_MatrixRosterCannotHaveCustomTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Табличный ростер не может переопределять имя.
-        /// </summary>
-        public static string WB0304_TableRosterCannotHaveCustomTitle {
-            get {
-                return ResourceManager.GetString("WB0304_TableRosterCannotHaveCustomTitle", resourceCulture);
             }
         }
         
@@ -2166,15 +2130,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0312 {
             get {
                 return ResourceManager.GetString("WB0312", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Подстановка не может ссылаться на элементы внутри матричного или табличного ростера.
-        /// </summary>
-        public static string WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope {
-            get {
-                return ResourceManager.GetString("WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope", resourceCulture);
             }
         }
         

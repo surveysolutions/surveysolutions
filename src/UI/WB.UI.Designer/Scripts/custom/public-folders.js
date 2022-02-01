@@ -75,15 +75,14 @@
                 } else if (action === "edit") {
                     node.editStart();
                 } else if (action === "delete") {
-                    var message = localization.DeleteConfirmation.replace("{0}", "<b>" + node.title + "</b>");
-                    bootbox.confirm(message, function (result) {
-                        if (result)
-                        {
-                            self.postRequest(removeNodeUrl, { 'id': node.key }, function () {
-                                node.remove();
-                            });
-                        }
-                    });
+                    var message = localization.DeleteConfirmation.replace("{0}", "'" + node.title + "'");
+                                        
+                    if (window.confirm(message))
+                    {
+                        self.postRequest(removeNodeUrl, { 'id': node.key }, function () {
+                            node.remove();
+                        });
+                    }                    
                 } 
             }
         },

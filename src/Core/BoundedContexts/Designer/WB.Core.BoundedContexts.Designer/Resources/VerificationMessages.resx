@@ -748,9 +748,6 @@
   <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
     <value>Table or Matrix roster mode works only in web survey, on tablets it will be 'sub section' mode.</value>
   </data>
-  <data name="WB0287_TableRosterDoesntContainsQuestionWithSubstitutions" xml:space="preserve">
-    <value>Questions in a table roster may not contain any substitutions in text.</value>
-  </data>
   <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
     <value>Questions in Сover section must have variable label.</value>
   </data>
@@ -793,20 +790,11 @@
   <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
     <value>Matrix roster has to contain no supervisor or identifying questions.</value>
   </data>
-  <data name="WB0300" xml:space="preserve">
-    <value>Question in Matrix roster must not contain %rostertitle% substitution.</value>
-  </data>
   <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
     <value>Matrix roster has to contain no linked questions.</value>
   </data>
   <data name="WB0302" xml:space="preserve">
     <value>Substitution cannot reference items from same roster level.</value>
-  </data>
-  <data name="WB0303_MatrixRosterCannotHaveCustomTitle" xml:space="preserve">
-    <value>Matrix roster cannot have custom roster title</value>
-  </data>
-  <data name="WB0304_TableRosterCannotHaveCustomTitle" xml:space="preserve">
-    <value>Table roster cannot have custom roster title</value>
   </data>
   <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
     <value>Reusable category cannot have row with same Id and ParentId values</value>
@@ -831,8 +819,5 @@
   </data>
   <data name="WB0312" xml:space="preserve">
       <value>Categories must have at least two options</value>
-  </data>
-  <data name="WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope" xml:space="preserve">
-    <value>Substitution cannot reference items from a deeper roster level in matrix and table rosters</value>
   </data>
 </root>

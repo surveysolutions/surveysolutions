@@ -1531,6 +1531,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             foreach (IComposite entity in entities)
             {
                 var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(entity.GetTitle(), entity.VariableName).ToList();
+
+                if (entity is IGroup roster && roster.IsRoster && roster.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                {
+                    foreach (var fixedRosterTitle in roster.FixedRosterTitles)
+                    {
+                        var substitutedFixedRosterTitle = this.SubstitutionService.GetAllSubstitutionVariableNames(fixedRosterTitle.Title, entity.VariableName);
+                        substitutedVariableNames.AddRange(substitutedFixedRosterTitle);
+                    }
+                }
+
                 var validateable = entity as IValidatable;
                 if (validateable != null)
                 {
@@ -1870,9 +1880,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         
         private static IStaticText GetStaticText(Dictionary<Guid, IStaticText> staticTexts, Guid staticTextsId) => staticTexts.GetOrNull(staticTextsId);
 
-        public Guid GetFirstSectionId()
+        public Guid? GetFirstSectionId()
         {
-            return this.GetAllSections().First(s => !IsCoverPage(s));
+            var sectionId = this.GetAllSections().FirstOrDefault(s => !IsCoverPage(s));
+            if (sectionId == Guid.Empty)
+                return null;
+            return sectionId;
         }
 
         public IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId)
@@ -2003,9 +2016,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool HasCustomRosterTitle(Guid id)
         {
             var @group = this.GetGroup(id);
-            return @group?.CustomRosterTitle == true 
-                   && @group?.DisplayMode != RosterDisplayMode.Table
-                   && @group?.DisplayMode != RosterDisplayMode.Matrix;
+            return @group?.CustomRosterTitle == true;
         }
 
         public bool IsCoverPage(Guid identityId) => innerDocument.IsCoverPage(identityId);

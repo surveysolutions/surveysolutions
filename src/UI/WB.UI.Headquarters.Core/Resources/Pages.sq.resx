@@ -288,7 +288,7 @@
   <data name="GlobalSettings_DeleteMapConfirmation" xml:space="preserve">
     <value>Dëshiron ta fshish hartën?</value>
   </data>
-  <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
+  <data name="GlobalSettings_DeleteQuestionnaireConfirmation" xml:space="preserve">
     <value>Jeni të sigurt që dëshironi ta fshini pyetësorin? Të gjitha intervistat e zhvilluara me pyetësorin aktual do të humbasin.</value>
   </data>
   <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">

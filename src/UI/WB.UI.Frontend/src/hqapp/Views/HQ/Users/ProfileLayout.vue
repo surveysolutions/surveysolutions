@@ -57,7 +57,7 @@
                             v-bind:href="getUrl('TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a>
                     </li>
                     <li class="nav-item"
-                        v-if="(isAdmin || isApiUser) && !forceChangePassword"
+                        v-if="canGenerateToken && !forceChangePassword"
                         v-bind:class="{'active': currentTab=='api-token'}">
                         <a class="nav-link"
                             id="two-factor"
@@ -94,7 +94,11 @@ export default {
             type: String,
             required: true,
         },
-
+        canGenerateToken:{
+            type:Boolean,
+            require: false,
+            default: false,
+        },
     },
     computed:{
         isAdmin() {

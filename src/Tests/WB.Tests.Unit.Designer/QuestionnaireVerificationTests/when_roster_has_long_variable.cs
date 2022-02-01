@@ -16,7 +16,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             var verifier = CreateQuestionnaireVerifier();
 
-            var questionnaireVerificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));
+            var questionnaireVerificationMessages = verifier.CompileAndVerify(Create.QuestionnaireView(questionnaire),
+                null, out string _);
 
 
             var error = questionnaireVerificationMessages.GetError("WB0121");

@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<ISerializer, NewtonJsonSerializer>();
 
             registry.BindAsSingleton<IExpressionProcessor, RoslynExpressionProcessor>();
-            registry.Bind<IDynamicCompilerSettingsProvider, DynamicCompilerSettingsProvider>();
+            registry.BindAsSingleton<IDynamicCompilerSettingsProvider, DynamicCompilerSettingsProvider>();
             registry.Bind<ILookupTableService, LookupTableService>();
             registry.Bind<IAttachmentService, AttachmentService>();
 

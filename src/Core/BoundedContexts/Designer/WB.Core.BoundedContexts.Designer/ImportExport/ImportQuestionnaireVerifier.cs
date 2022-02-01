@@ -12,18 +12,18 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.ImportExport
 {
-    public class ImportQuestionnaireVerifier : AbstractVerifier, IPartialVerifier
+    public class ImportQuestionnaireVerifier : AbstractVerifier, IQuestionnairePreVerifier
     {
-        private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
+        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
-            (Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>)DuplicatePublicId,
+            (Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>)DuplicatePublicId,
             DuplicateVariableName,
         };
 
-        private static IEnumerable<QuestionnaireVerificationMessage> DuplicateVariableName(MultiLanguageQuestionnaireDocument document)
+        private static IEnumerable<QuestionnaireVerificationMessage> DuplicateVariableName(ReadOnlyQuestionnaireDocument document)
         {
             HashSet<string> variables = new HashSet<string>();
-            var elements = document.Questionnaire.Questionnaire.Children
+            var elements = document.Questionnaire.Children
                 .Cast<IComposite>()
                 .TreeToEnumerable(c => c.Children);
             foreach (var entity in elements)
@@ -39,10 +39,10 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             }
         }
 
-        private static IEnumerable<QuestionnaireVerificationMessage> DuplicatePublicId(MultiLanguageQuestionnaireDocument document)
+        private static IEnumerable<QuestionnaireVerificationMessage> DuplicatePublicId(ReadOnlyQuestionnaireDocument document)
         {
             HashSet<Guid> guids = new HashSet<Guid>();
-            var elements = document.Questionnaire.Questionnaire.Children
+            var elements = document.Questionnaire.Children
                 .Cast<IComposite>()
                 .TreeToEnumerable(c => c.Children);
             foreach (var entity in elements)
@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             }
         }
         
-        public IEnumerable<QuestionnaireVerificationMessage> Verify(MultiLanguageQuestionnaireDocument multiLanguageQuestionnaireDocument)
+        public IEnumerable<QuestionnaireVerificationMessage> Verify(ReadOnlyQuestionnaireDocument multiLanguageQuestionnaireDocument)
         {
             var verificationMessagesByQuestionnaire = new List<QuestionnaireVerificationMessage>();
             foreach (var verifier in this.ErrorsVerifiers)

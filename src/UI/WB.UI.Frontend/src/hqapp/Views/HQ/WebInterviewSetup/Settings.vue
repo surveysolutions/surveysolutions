@@ -581,7 +581,7 @@
 
 <script>
 import Vue from 'vue'
-import marked from 'marked'
+import { marked } from 'marked'
 import {map, isNil} from 'lodash'
 import { escape } from 'lodash'
 

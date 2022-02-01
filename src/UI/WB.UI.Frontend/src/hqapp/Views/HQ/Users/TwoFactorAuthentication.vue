@@ -5,7 +5,8 @@
         :userName="userInfo.userName"
         :canChangePassword="userInfo.canChangePassword"
         :userId="userInfo.userId"
-        :currentTab="currentTab">
+        :currentTab="currentTab"
+        :canGenerateToken="userInfo.canGetApiToken">
         <div class="block-filter">
             <p>{{$t('Strings.HQ_Views_TwoFactorAuthentication_Description')}}</p>
         </div>
