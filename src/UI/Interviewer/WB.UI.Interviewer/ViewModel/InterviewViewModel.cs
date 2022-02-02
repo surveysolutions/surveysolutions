@@ -83,12 +83,12 @@ namespace WB.UI.Interviewer.ViewModel
             this.Dispose();
         }
 
-        protected override NavigationIdentity GetDefaultScreenToNavigate(IQuestionnaire questionnaire)
+        protected override NavigationIdentity GetDefaultScreenToNavigate(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             if (HasNotEmptyNoteFromSupervior || HasCommentsFromSupervior || HasPrefilledQuestions)
                 return NavigationIdentity.CreateForCoverScreen();
 
-            return base.GetDefaultScreenToNavigate(questionnaire);
+            return base.GetDefaultScreenToNavigate(interview, questionnaire);
         }
 
         protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
