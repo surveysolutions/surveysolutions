@@ -25,7 +25,6 @@ Vue.use(VueTextareaAutosize)
 import { Popover } from 'uiv'
 Vue.component('popover', Popover)
 
-import box from '@/shared/modal'
 import 'flatpickr/dist/flatpickr.css'
 import 'toastr/build/toastr.css'
 import * as toastr from 'toastr'
