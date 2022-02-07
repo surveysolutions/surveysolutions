@@ -8,7 +8,7 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Enumerator;
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Enumerator
 {
     [AuthorizeByRole(UserRoles.Interviewer, UserRoles.Supervisor)]
     [Route("api/enumerator/v3/interviews")]
