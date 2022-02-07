@@ -9,30 +9,32 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Enumerator;
-
-[AuthorizeByRole(UserRoles.Interviewer, UserRoles.Supervisor)]
-[Route("api/enumerator/v3/interviews")]
-public class EnumeratorInterviewsApiV1Controller: ControllerBase
 {
-    private readonly IHeadquartersEventStore eventStore;
-
-    public EnumeratorInterviewsApiV1Controller(IHeadquartersEventStore eventStore)
+    [AuthorizeByRole(UserRoles.Interviewer, UserRoles.Supervisor)]
+    [Route("api/enumerator/v3/interviews")]
+    public class EnumeratorInterviewsApiV1Controller : ControllerBase
     {
-        this.eventStore = eventStore;
-    }
+        private readonly IHeadquartersEventStore eventStore;
 
-    [Route("{interviewId}/getSyncInfoPackage")]
-    public SyncInfoPackageResponse GetSyncInfoPackage(Guid interviewId, InterviewSyncInfoPackage package)
-    {
-        var hqEvents = eventStore.Read(interviewId).ToList();
-        if (hqEvents.Count == 0)
-            return new SyncInfoPackageResponse() { HasInterview = false, NeedSendFullStream = true };
+        public EnumeratorInterviewsApiV1Controller(IHeadquartersEventStore eventStore)
+        {
+            this.eventStore = eventStore;
+        }
 
-        var infoPackageResponse = new SyncInfoPackageResponse() { HasInterview = true, NeedSendFullStream = false };
+        [Route("{interviewId}/getSyncInfoPackage")]
+        public SyncInfoPackageResponse GetSyncInfoPackage(Guid interviewId, InterviewSyncInfoPackage package)
+        {
+            var hqEvents = eventStore.Read(interviewId).ToList();
+            if (hqEvents.Count == 0)
+                return new SyncInfoPackageResponse() { HasInterview = false, NeedSendFullStream = true };
 
-        if (package.LastEventIdFromPreviousSync.HasValue)
-            infoPackageResponse.NeedSendFullStream = hqEvents.All(e => e.EventIdentifier != package.LastEventIdFromPreviousSync.Value);
+            var infoPackageResponse = new SyncInfoPackageResponse() { HasInterview = true, NeedSendFullStream = false };
 
-        return infoPackageResponse;
+            if (package.LastEventIdFromPreviousSync.HasValue)
+                infoPackageResponse.NeedSendFullStream =
+                    hqEvents.All(e => e.EventIdentifier != package.LastEventIdFromPreviousSync.Value);
+
+            return infoPackageResponse;
+        }
     }
 }
