@@ -155,8 +155,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
                 Create.Event.CommittedEvent(eventSourceId: interviewId));
             var package = new InterviewPackageApiView();
             var interviewFactory = Mock.Of<IInterviewerInterviewAccessor>(f =>
-                f.GetInterviewEventStreamContainer(interviewId, false) == eventsContainer &&
-                f.GetInterviewEventsPackageOrNull(eventsContainer) == package);
+                f.GetInterviewEventStreamContainer(interviewId, false, It.IsAny<SyncInfoPackageResponse>()) == eventsContainer &&
+                f.GetInterviewEventsPackageOrNull(eventsContainer, It.IsAny<SyncInfoPackageResponse>()) == package);
 
             var synchronizationStep = CreateInterviewerUploadInterviews(responsibleId, localInterviews, synchronizationService.Object, eventStore, interviewFactory);
 
@@ -195,8 +195,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
                 Create.Event.CommittedEvent(eventSourceId: interviewId));
             var package = new InterviewPackageApiView();
             var interviewFactory = Mock.Of<IInterviewerInterviewAccessor>(f =>
-                f.GetInterviewEventStreamContainer(interviewId, false) == eventsContainer &&
-                f.GetInterviewEventsPackageOrNull(eventsContainer) == package);
+                f.GetInterviewEventStreamContainer(interviewId, false, It.IsAny<SyncInfoPackageResponse>()) == eventsContainer &&
+                f.GetInterviewEventsPackageOrNull(eventsContainer, It.IsAny<SyncInfoPackageResponse>()) == package);
 
             var synchronizationStep = CreateInterviewerUploadInterviews(responsibleId, localInterviews, synchronizationService.Object, eventStore, interviewFactory);
 
@@ -236,7 +236,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
                     It.IsAny<IProgress<TransferProgress>>(),
                     It.IsAny<CancellationToken>()),
                 Times.Never);
-            interviewFactory.Verify(f => f.GetInterviewEventStreamContainer(interviewId, It.IsAny<bool>()), Times.Never);
+            interviewFactory.Verify(f => f.GetInterviewEventStreamContainer(interviewId, It.IsAny<bool>(), It.IsAny<SyncInfoPackageResponse>()), Times.Never);
         }
 
         private SynchronizationStep CreateInterviewerUploadInterviews(

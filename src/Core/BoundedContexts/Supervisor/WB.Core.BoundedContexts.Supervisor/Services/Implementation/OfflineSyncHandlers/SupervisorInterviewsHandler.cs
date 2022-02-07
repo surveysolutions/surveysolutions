@@ -78,6 +78,26 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<UploadInterviewRequest, OkResponse>(UploadInterview);
             requestHandler.RegisterHandler<SupervisorIdRequest, SupervisorIdResponse>(GetSupervisorId);
             requestHandler.RegisterHandler<ApplicationSettingsRequest, ApplicationSettingsResponse>(GetApplicationSettings);
+            requestHandler.RegisterHandler<GetInterviewSyncInfoPackageRequest, InterviewSyncInfoPackageResponse>(GetInterviewSyncInfoPackageRequest);
+        }
+
+        private Task<InterviewSyncInfoPackageResponse> GetInterviewSyncInfoPackageRequest(GetInterviewSyncInfoPackageRequest request)
+        {
+            var response = new InterviewSyncInfoPackageResponse()
+            {
+                SyncInfoPackageResponse = new SyncInfoPackageResponse()
+            };
+            
+            var svEvents = eventStore.Read(request.InterviewId, 0).ToList();
+            response.SyncInfoPackageResponse.HasInterview = svEvents.Count != 0;
+            if (svEvents.Count == 0)
+                return Task.FromResult(response);
+
+            if (request.SyncInfoPackage.LastEventIdFromPreviousSync.HasValue)
+                response.SyncInfoPackageResponse.NeedSendFullStream = svEvents.All(e => 
+                    e.EventIdentifier != request.SyncInfoPackage.LastEventIdFromPreviousSync.Value);
+
+            return Task.FromResult(response);
         }
 
         private Task<ApplicationSettingsResponse> GetApplicationSettings(ApplicationSettingsRequest arg)
@@ -112,6 +132,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 }
 
                 AssertPackageNotDuplicated(aggregateRootEvents);
+
+                if (request.Interview.IsFullEventStream)
+                {
+                    var svEvents = eventStore.Read(request.Interview.InterviewId, 0).ToList();
+                    if (svEvents.Count > 0)
+                        aggregateRootEvents = FilterDuplicateEvents(aggregateRootEvents, svEvents);
+                }
 
                 var serializedEvents = aggregateRootEvents
                     .Select(e => e.Payload)
@@ -180,6 +207,30 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             innerwatch.Stop();
 
             return Task.FromResult(new OkResponse());
+        }
+        
+        private static HashSet<string> ChangeEventsState = EventsThatChangeAnswersStateProvider.GetTypeNames()
+            .Concat(EventsThatAssignInterviewToResponsibleProvider.GetTypeNames())
+            .ToHashSet();
+
+        private AggregateRootEvent[] FilterDuplicateEvents(AggregateRootEvent[] tabletEvents, List<CommittedEvent> svEvents)
+        {
+            var tabletEventIds = tabletEvents.Select(e => e.EventIdentifier).Reverse();
+            var hqEventIds = svEvents.Select(e => e.EventIdentifier).Reverse();
+            var lastCommonEventId = tabletEventIds.Intersect(hqEventIds).FirstOrDefault();
+            if (lastCommonEventId == default)
+                return tabletEvents;
+            
+            var filteredHqEvents = tabletEvents.SkipWhile(e => e.EventIdentifier != lastCommonEventId).Skip(1).ToArray();
+            if (filteredHqEvents.Any(e => ChangeEventsState.Contains(e.Payload.GetType().Name)))
+            {
+                throw new InterviewException(
+                    "Found active event on supervisor side. Can not merge streams",
+                    exceptionType: InterviewDomainExceptionType.InterviewHasIncompatibleMode);
+            }
+
+            var filteredTabletEvents = tabletEvents.SkipWhile(e => e.EventIdentifier != lastCommonEventId).Skip(1).ToArray();
+            return filteredTabletEvents;
         }
 
         private void UpdateAssignmentQuantityByInterview(Guid interviewId)

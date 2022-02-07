@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected string DevicesController => string.Concat(ApplicationUrl, "/devices");
         protected string UsersController => string.Concat(ApplicationUrl, "/users");
         protected virtual string InterviewsController => string.Concat(ApplicationUrl, "/interviews");
-        protected virtual string EnumeratorInterviewsController => string.Concat(ApplicationUrl, "/interviews");
+        protected virtual string EnumeratorInterviewsController => string.Concat(EnumeratorApiUrl, "v3", "/interviews");
         protected virtual string CalendarEventsController => string.Concat(ApplicationUrl, "/calendarevents");
         protected string QuestionnairesController => string.Concat(ApplicationUrl, "/questionnaires");
         protected string AssignmentsController => string.Concat(ApplicationUrl, "/assignments");
@@ -442,7 +442,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             return this.TryGetRestResponseOrThrowAsync(
                 () => this.restService.PostAsync<SyncInfoPackageResponse>(
-                    url: string.Concat(this.InterviewsController,"/", interviewId, "/getSyncInfoPackage"),
+                    url: string.Concat(this.EnumeratorInterviewsController,"/", interviewId, "/getSyncInfoPackage"),
                     credentials: this.restCredentials, 
                     token: cancellationToken,
                     request: interviewSyncInfoPackage));

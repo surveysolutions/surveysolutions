@@ -48,9 +48,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             fixture.Register<IPlainStorage<InterviewView>>(() => interviewStorage);
             var accessor = fixture.GetMock<IInterviewerInterviewAccessor>();
 
-            accessor.Setup(iia => iia.GetInterviewEventsPackageOrNull(It.IsAny<InterviewPackageContainer>()))
+            accessor.Setup(iia => iia.GetInterviewEventsPackageOrNull(It.IsAny<InterviewPackageContainer>(), It.IsAny<SyncInfoPackageResponse>()))
                 .Returns(new InterviewPackageApiView());
-            accessor.Setup(iia => iia.GetInterviewEventStreamContainer(It.IsAny<Guid>(), It.IsAny<bool>()))
+            accessor.Setup(iia => iia.GetInterviewEventStreamContainer(It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<SyncInfoPackageResponse>()))
                 .Returns(new InterviewPackageContainer(interviewId, new ArraySegment<CommittedEvent>()));
         }
 
@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         public async Task should_not_upload_binaries_that_exists()
         {
             fixture.GetMock<IInterviewerInterviewAccessor>()
-                .Setup(s => s.GetInterviewEventStreamContainer(It.IsAny<Guid>(), It.IsAny<bool>()))
+                .Setup(s => s.GetInterviewEventStreamContainer(It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<SyncInfoPackageResponse>()))
                 .Returns(new InterviewPackageContainer(interviewId, new[] { Create.Event.CommittedEvent() }.ToReadOnlyCollection()));
             // arrange interview with 2 images and 2 audio
             fixture.GetMock<IPlainStorage<InterviewMultimediaView>>()
@@ -132,7 +132,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         public async Task should_upload_interviews_when_there_is_no_interview_exists()
         {
             fixture.GetMock<IInterviewerInterviewAccessor>()
-                .Setup(s => s.GetInterviewEventStreamContainer(It.IsAny<Guid>(), It.IsAny<bool>()))
+                .Setup(s => s.GetInterviewEventStreamContainer(It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<SyncInfoPackageResponse>()))
                 .Returns(new InterviewPackageContainer(interviewId, new[] { Create.Event.CommittedEvent() }.ToReadOnlyCollection()));
 
             syncService

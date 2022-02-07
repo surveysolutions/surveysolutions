@@ -30,6 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public Guid InterviewId { get; set; }
         public InterviewMetaInfo MetaInfo { get; set; }
         public string Events { get; set; }
+        public bool IsFullEventStream { get; set; }
     }
 
     public class InterviewSyncInfoPackage
@@ -41,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
     public class SyncInfoPackageResponse
     {
         public bool HasInterview { get; set; } 
-        public bool IsExistsClientLastEvent { get; set; }
+        public bool NeedSendFullStream { get; set; } 
     }
 
     public class InterviewPackageContainer

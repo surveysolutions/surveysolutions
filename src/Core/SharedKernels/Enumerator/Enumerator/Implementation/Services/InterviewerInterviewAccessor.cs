@@ -97,7 +97,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.interviewMultimediaViewRepository.Remove(imageViews);
         }
         
-        public InterviewPackageApiView GetInterviewEventsPackageOrNull(InterviewPackageContainer packageContainer)
+        public InterviewPackageApiView GetInterviewEventsPackageOrNull(InterviewPackageContainer packageContainer,
+            SyncInfoPackageResponse syncInfoPackageResponse)
         {
             InterviewView interview = this.interviewViewRepository.GetById(packageContainer.InterviewId.FormatGuid());
             var optimizedEvents = packageContainer.Events;
@@ -122,14 +123,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 Comments = interview.LastInterviewerOrSupervisorComment,
                 Valid = true,
                 CreatedOnClient = interview.Census,
-                TemplateVersion = questionnaireIdentity.Version
+                TemplateVersion = questionnaireIdentity.Version,
             };
 
             return new InterviewPackageApiView
             {
                 InterviewId = interview.InterviewId,
                 Events = this.synchronizationSerializer.Serialize(eventsToSend),
-                MetaInfo = metadata
+                MetaInfo = metadata,
+                IsFullEventStream = syncInfoPackageResponse.NeedSendFullStream && syncInfoPackageResponse.HasInterview,
             };
         }
 
@@ -142,9 +144,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private IReadOnlyCollection<CommittedEvent> GetAllEventsToSend(Guid interviewId,
             SyncInfoPackageResponse syncInfo)
         {
-            var minVersion = syncInfo.HasInterview && syncInfo.IsExistsClientLastEvent
-                ? this.eventStore.GetLastEventKnownToHq(interviewId) + 1
-                : 0;
+            var minVersion = syncInfo.NeedSendFullStream || !syncInfo.HasInterview
+                ? 0
+                : this.eventStore.GetLastEventKnownToHq(interviewId) + 1;
             return this.eventStore.Read(interviewId, minVersion)
                 .ToReadOnlyCollection();
         }
@@ -155,9 +157,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var lastCompleteSequence = this.eventStore.GetMaxSequenceForAnyEvent(interviewId, nameof(InterviewCompleted), nameof(InterviewModeChanged));
             var lastComplete = this.eventStore.GetEventByEventSequence(interviewId, lastCompleteSequence);
 
-            var minVersion = syncInfo.HasInterview && syncInfo.IsExistsClientLastEvent
-                ? this.eventStore.GetLastEventKnownToHq(interviewId) + 1
-                : 0;
+            var minVersion = syncInfo.NeedSendFullStream || !syncInfo.HasInterview
+                ? 0
+                : this.eventStore.GetLastEventKnownToHq(interviewId) + 1;
 
             return this.eventStreamOptimizer.FilterEventsToBeSent(
                 this.eventStore.Read(interviewId, minVersion),

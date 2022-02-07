@@ -116,7 +116,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                     if (!uploadState.IsEventsUploaded)
                     {
-                        var interviewPackage = this.interviewFactory.GetInterviewEventsPackageOrNull(interviewEventStreamContainer);
+                        var interviewPackage = this.interviewFactory.GetInterviewEventsPackageOrNull(interviewEventStreamContainer, syncInfoPackageResponse);
 
                         if (interviewPackage != null)
                         {
