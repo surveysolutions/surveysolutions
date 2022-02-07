@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             var verifier = CreateQuestionnaireVerifier();
 
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
             verificationMessages.ShouldContainError("WB0017");
 
@@ -50,14 +51,14 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 }));
 
              var verifier = CreateQuestionnaireVerifier();
-             var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+             var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldContainError("WB0019");
 
             verificationMessages.GetError("WB0019")
                     .References.Select(x => x.Type)
-                    .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.Question, QuestionnaireVerificationReferenceType.Variable);
+                    .Should().BeEquivalentTo(new[] {QuestionnaireVerificationReferenceType.Question, QuestionnaireVerificationReferenceType.Variable});
 
             verificationMessages.GetError("WB0019").References.ElementAt(0).Id.Should().Be(questionId);
             verificationMessages.GetError("WB0019").References.ElementAt(1).Id.Should().Be(variableId);
@@ -82,14 +83,13 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
-
-            AQ: verificationMessages.ShouldContainError("WB0056");
+            verificationMessages.ShouldContainError("WB0056");
 
             verificationMessages.GetError("WB0056")
                 .References.Select(x => x.Type)
-                .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.Question);
+                .Should().BeEquivalentTo(new[] {QuestionnaireVerificationReferenceType.Question});
 
             verificationMessages.GetError("WB0056").References.ElementAt(0).Id.Should().Be(numericQuestionId);
         }
@@ -104,14 +104,14 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldContainError("WB0280");
 
             verificationMessages.GetError("WB0280")
                 .References.Select(x => x.Type)
-                .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.Question);
+                .Should().BeEquivalentTo(new[] {QuestionnaireVerificationReferenceType.Question});
 
             verificationMessages.GetError("WB0280").References.ElementAt(0).Id.Should().Be(questionId);
         }
@@ -127,14 +127,14 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldContainError("WB0280");
 
             verificationMessages.GetError("WB0280")
                 .References.Select(x => x.Type)
-                .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.StaticText);
+                .Should().BeEquivalentTo(new[] {QuestionnaireVerificationReferenceType.StaticText});
 
             verificationMessages.GetError("WB0280").References.ElementAt(0).Id.Should().Be(staticTextId);
         }
@@ -151,18 +151,18 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldContainError("WB0280");
 
             verificationMessages.GetError("WB0280")
                 .References.Select(x => x.Type)
-                .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.Question);
+                .Should().BeEquivalentTo(new[] {QuestionnaireVerificationReferenceType.Question});
 
             verificationMessages.GetError("WB0280")
                 .References.Select(x => x.IndexOfEntityInProperty)
-                .Should().BeEquivalentTo(0);
+                .Should().BeEquivalentTo(new[] {0});
 
             verificationMessages.GetError("WB0280").References.ElementAt(0).Id.Should().Be(questionId);
         }
@@ -179,18 +179,18 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldContainError("WB0280");
 
             verificationMessages.GetError("WB0280")
                 .References.Select(x => x.Type)
-                .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.StaticText);
+                .Should().BeEquivalentTo(new[] {QuestionnaireVerificationReferenceType.StaticText});
 
             verificationMessages.GetError("WB0280")
                 .References.Select(x => x.IndexOfEntityInProperty)
-                .Should().BeEquivalentTo(0);
+                .Should().BeEquivalentTo(new[] {0});
 
             verificationMessages.GetError("WB0280").References.ElementAt(0).Id.Should().Be(staticTextId);
         }
@@ -209,7 +209,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldNotContainError("WB0280");
@@ -228,7 +228,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
             verificationMessages.ShouldNotContainError("WB0280");
@@ -239,11 +239,11 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         {
             var questionnaire = Create.QuestionnaireDocument(children: Create.Chapter(children: new IComposite[]
             {
-                Create.FixedRoster(fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
+                Create.FixedRoster(variable: "level 1", fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
                 {
-                    Create.FixedRoster(fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
+                    Create.FixedRoster(variable: "level 2", fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
                     {
-                        Create.FixedRoster(fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
+                        Create.FixedRoster(variable: "level 3", fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
                         {
                             Create.TextQuestion()
                         })
@@ -252,7 +252,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
             verificationMessages.ShouldContainError("WB0281");
         }
@@ -285,7 +285,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             }));
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
             verificationMessages.ShouldNotContainError("WB0281");
         }
@@ -305,7 +305,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier();
 
             // act
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             // assert
             verificationMessages.ShouldContainCritical("WB0026");
@@ -315,6 +315,27 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.GetCritical("WB0026").References.First().Id.Should().Be(questionId);
             verificationMessages.GetCritical("WB0026").References.Last().Type.Should().Be(QuestionnaireVerificationReferenceType.Categories);
             verificationMessages.GetCritical("WB0026").References.Last().Id.Should().Be(categoriesId);
+        }
+        
+        [Test]
+        public void when_verifying_questionnaire_having_table_roster_with_substitution_to_a_child_question()
+        {
+            Guid rosterId = Guid.Parse("13333333333333333333333333333333");
+            Guid questionId = Guid.Parse("10000000000000000000000000000000");
+            Guid variableId = Guid.Parse("12222222222222222222222222222222");
+
+            var questionnaire = Create.QuestionnaireDocument(children: Create.Chapter(children: new IComposite[]
+            {
+                Create.FixedRoster(rosterId, title:"roster title %name%", displayMode:RosterDisplayMode.Table,fixedTitles: new[] {"1", "2", "3"}, children: new List<IComposite>
+                {
+                    Create.TextQuestion(questionId, variable:"name")
+                })
+            }));
+
+            var verifier = CreateQuestionnaireVerifier();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
+
+            verificationMessages.Count.Should().Be(0);
         }
     }
 }

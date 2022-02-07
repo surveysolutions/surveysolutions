@@ -227,7 +227,7 @@ namespace WB.Tests.Abc.TestFactories
             Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null,
             QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false, bool hideIfDisabled = false, bool isTimestamp = false)
-            => new DateTimeQuestion("Question DT")
+            => new DateTimeQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
@@ -235,7 +235,6 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 QuestionText = text,
-                QuestionType = QuestionType.DateTime,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 Featured = preFilled,
@@ -315,7 +314,6 @@ namespace WB.Tests.Abc.TestFactories
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = variable,
-                QuestionType = QuestionType.GpsCoordinates,
                 QuestionScope = scope,
                 Featured = isPrefilled,
                 QuestionText = title,
@@ -485,7 +483,6 @@ namespace WB.Tests.Abc.TestFactories
             Guid? interviewId = null,
             Dictionary<Identity, IList<FailedValidationCondition>> failedValidationConditions = null,
             InterviewStatus status = InterviewStatus.InterviewerAssigned,
-            Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances = null,
             bool? wasCompleted = false,
             List<Identity> disabledStaticTexts = null,
             List<Identity> validStaticTexts = null,
@@ -505,7 +502,7 @@ namespace WB.Tests.Abc.TestFactories
                 supervisorId ?? Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 1,
-                answers ?? new AnsweredQuestionSynchronizationDto[0],
+                answers ?? Array.Empty<AnsweredQuestionSynchronizationDto>(),
                 disabledGroups ?? new HashSet<InterviewItemId>(),
                 disabledQuestions ?? new HashSet<InterviewItemId>(),
                 disabledStaticTexts ?? new List<Identity>(),
@@ -514,10 +511,7 @@ namespace WB.Tests.Abc.TestFactories
                 readonlyQuestions ?? new HashSet<InterviewItemId>(),
                 validStaticTexts ?? new List<Identity>(),
                 invalidStaticTexts ?? new List<KeyValuePair<Identity, List<FailedValidationCondition>>>(),
-                rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
-                failedValidationConditions?.ToList() ??
-                new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
-                new Dictionary<InterviewItemId, RosterVector[]>(),
+                failedValidationConditions?.ToList() ?? new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
                 variables ?? new Dictionary<InterviewItemId, object>(),
                 disabledVariables ?? new HashSet<InterviewItemId>(),
                 wasCompleted ?? false)
@@ -585,10 +579,9 @@ namespace WB.Tests.Abc.TestFactories
         public MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null,
             string validationExpression = null, string variable = null, string validationMessage = null, string text = null,
             QuestionScope scope = QuestionScope.Interviewer, bool hideIfDisabled = false)
-            => new MultimediaQuestion("Question T")
+            => new MultimediaQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
-                QuestionType = QuestionType.Multimedia,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
@@ -618,7 +611,6 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationExpression = validationExpression,
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
-                QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 LinkedFilterExpression = linkedFilterExpression,
@@ -643,7 +635,6 @@ namespace WB.Tests.Abc.TestFactories
             Guid? categoryId = null)
             => new MultyOptionsQuestion
             {
-                QuestionType = QuestionType.MultyOption,
                 PublicKey = id ?? Guid.NewGuid(),
                 Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(options ?? new Answer[] { }),
                 LinkedToQuestionId = linkedToQuestionId,
@@ -674,7 +665,6 @@ namespace WB.Tests.Abc.TestFactories
             => new NumericQuestion
             {
                 QuestionText = questionText ?? "text",
-                QuestionType = QuestionType.Numeric,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 IsInteger = true,
@@ -692,14 +682,13 @@ namespace WB.Tests.Abc.TestFactories
         public NumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             bool isInteger = false, int? countOfDecimalPlaces = null, string variableName = "var1", bool prefilled = false, string title = null,
             IEnumerable<Answer> options = null)
-            => new NumericQuestion("Question N")
+            => new NumericQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces,
-                QuestionType = QuestionType.Numeric,
                 StataExportCaption = variableName,
                 Featured = prefilled,
                 QuestionText = title,
@@ -716,7 +705,6 @@ namespace WB.Tests.Abc.TestFactories
             IEnumerable<Answer> specialValues = null)
             => new NumericQuestion
             {
-                QuestionType = QuestionType.Numeric,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 IsInteger = false,
@@ -797,7 +785,6 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 QuestionText = text,
-                QuestionType = QuestionType.QRBarcode,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 Featured = preFilled
@@ -817,7 +804,6 @@ namespace WB.Tests.Abc.TestFactories
             => new AreaQuestion
             {
                 QuestionText = questionText ?? "text",
-                QuestionType = QuestionType.Area,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
@@ -826,28 +812,6 @@ namespace WB.Tests.Abc.TestFactories
                 QuestionScope = scope,
                 Featured = isPrefilled,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>()
-            };
-
-        public IQuestion Question(
-            Guid? questionId = null,
-            string variable = "question",
-            string enablementCondition = null,
-            string validationExpression = null,
-            string validationMessage = null,
-            string title = null,
-            QuestionType questionType = QuestionType.Text,
-            IList<ValidationCondition> validationConditions = null,
-            params Answer[] answers)
-            => new TextQuestion(title ?? "Question X")
-            {
-                PublicKey = questionId ?? Guid.NewGuid(),
-                QuestionType = questionType,
-                StataExportCaption = variable,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
-                Answers = answers.ToList(),
-                ValidationConditions = validationConditions ?? new List<ValidationCondition>()
             };
 
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(
@@ -1129,7 +1093,6 @@ namespace WB.Tests.Abc.TestFactories
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
-                QuestionType = QuestionType.SingleOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
@@ -1161,7 +1124,6 @@ namespace WB.Tests.Abc.TestFactories
             Guid? categoryId = null)
             => new SingleQuestion
             {
-                QuestionType = QuestionType.SingleOption,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
@@ -1205,14 +1167,13 @@ namespace WB.Tests.Abc.TestFactories
             string variable = null, 
             bool hideIfDisabled = false,
             string questionText = null)
-            => new TextListQuestion("Question TL")
+            => new TextListQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 MaxAnswerCount = maxAnswerCount,
-                QuestionType = QuestionType.TextList,
                 StataExportCaption = variable,
                 QuestionText = questionText
             };
@@ -1228,7 +1189,7 @@ namespace WB.Tests.Abc.TestFactories
             string instruction = null,
             IEnumerable<ValidationCondition> validationConditions = null,
             bool hideIfDisabled = false)
-            => new TextQuestion(text)
+            => new TextQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
@@ -1237,7 +1198,6 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationMessage = validationMessage,
                 Mask = mask,
                 QuestionText = text,
-                QuestionType = QuestionType.Text,
                 StataExportCaption = variable ?? "vv" + Guid.NewGuid().ToString("N"),
                 QuestionScope = scope,
                 Featured = preFilled,
@@ -1397,8 +1357,6 @@ namespace WB.Tests.Abc.TestFactories
         public VariableValueLabel VariableValueLabel(string value = "1", string label = "l1")
             => new VariableValueLabel(value, label);
 
-        public YesNoAnswers YesNoAnswers(decimal[] allOptionCodes, YesNoAnswersOnly yesNoAnswersOnly = null)
-            => new YesNoAnswers(allOptionCodes, yesNoAnswersOnly);
         public InterviewTreeYesNoQuestion InterviewTreeYesNoQuestion(AnsweredYesNoOption[] answer)
             => new InterviewTreeYesNoQuestion(answer);
 
@@ -1973,7 +1931,6 @@ namespace WB.Tests.Abc.TestFactories
                 PublicKey = qId?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 QuestionScope = QuestionScope.Interviewer,
-                QuestionType = QuestionType.Audio
             };
         }
 

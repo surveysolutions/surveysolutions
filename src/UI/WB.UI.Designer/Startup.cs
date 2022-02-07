@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ using Microsoft.AspNetCore.SpaServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
@@ -34,6 +37,8 @@ using WB.Infrastructure.Native.Files;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Code.Implementation;
+using WB.UI.Designer.Code.ImportExport;
+using WB.UI.Designer.Code.Vue;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Implementation.Services;
@@ -181,6 +186,8 @@ namespace WB.UI.Designer
             services.AddDatabaseStoredExceptional(hostingEnvironment, Configuration);
 
             services.AddTransient<IQuestionnaireRestoreService, QuestionnaireRestoreService>();
+            services.AddTransient<IQuestionnaireImportService, QuestionnaireImportService>();
+            services.AddTransient<IQuestionnaireExportService, QuestionnaireExportService>();
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
             services.AddSingleton<IProductVersion, ProductVersion>();
@@ -220,7 +227,7 @@ namespace WB.UI.Designer
             services.Configure<QuestionnaireHistorySettings>(Configuration.GetSection("QuestionnaireHistorySettings"));
             services.Configure<WebTesterSettings>(Configuration.GetSection("WebTester"));
 
-            // In production, the React files will be served from this directory
+            // In production, the Vue files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = $"{SpaRoot}/dist";
@@ -241,7 +248,7 @@ namespace WB.UI.Designer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             app.UseExceptional();
 
@@ -251,6 +258,7 @@ namespace WB.UI.Designer
                     appBuilder =>
                     {
                         appBuilder.UseStatusCodePagesWithReExecute("/error/{0}");
+                        appBuilder.UseExceptionHandler("/error/500");
                     });
             }
 
@@ -302,6 +310,19 @@ namespace WB.UI.Designer
             app.UseRouting();
             app.UseAuthorization();
             
+            app.Use((context, next) =>
+            {
+                var endpoint = context.GetEndpoint();
+                if (endpoint != null && endpoint.Metadata.All(f => f.GetType() != typeof(VuePageAttribute)))
+                {
+                    return next();
+                }
+
+                // if it is client vue page, set null to transfer control to SPA middleware
+                context.SetEndpoint(null);
+                return next();
+            });
+            
             app.UseEndpoints(routes =>
             {
                 routes.MapVersionEndpoint();
@@ -329,7 +350,7 @@ namespace WB.UI.Designer
                     );
                 }
             });
-
+            
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = SpaRoot;

@@ -12,8 +12,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(
-                new TextQuestion(new string('q', 5 * 1024 * 1024))
+                new TextQuestion()
                 {
+                    QuestionText = new string('q', 5 * 1024 * 1024),
                     StataExportCaption = "var0"
                 }); 
             verifier = CreateQuestionnaireVerifier();
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() => 
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0098 () =>

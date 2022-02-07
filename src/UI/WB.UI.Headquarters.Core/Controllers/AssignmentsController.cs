@@ -95,10 +95,10 @@ namespace WB.UI.Headquarters.Controllers
             this.calendarEventService = calendarEventService;
             this.webInterviewLinkProvider = webInterviewLinkProvider;
         }
-        
+
         [ActivePage(MenuItem.Assignments)]
         [HttpGet]
-        [Route("{controller}/{id}")]
+        [Route("{controller}/{id:int?}")]
         [Route("{controller}/{action=Index}")]
         public IActionResult Index(int? id = null)
         {
@@ -244,6 +244,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
         [RequestSizeLimit(500 * 1024 * 1024)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 500 * 1024 * 1024)]
         public async Task<IActionResult> Upload(AssignmentUploadModel model)
         {
             if (!QuestionnaireIdentity.TryParse(model.QuestionnaireId, out QuestionnaireIdentity questionnaireIdentity))

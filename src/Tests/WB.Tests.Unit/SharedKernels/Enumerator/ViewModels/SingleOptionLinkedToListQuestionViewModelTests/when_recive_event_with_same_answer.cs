@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedTo
 
             //assert
             Assert.That(viewModel.Options.Single().Value, Is.EqualTo(11));
-            answeringMock.Verify(a => a.SendAnswerQuestionCommandAsync(It.IsAny<AnswerQuestionCommand>()), Times.Never);
+            answeringMock.Verify(a => a.SendQuestionCommandAsync(It.IsAny<AnswerQuestionCommand>()), Times.Never);
         }
     }
 }

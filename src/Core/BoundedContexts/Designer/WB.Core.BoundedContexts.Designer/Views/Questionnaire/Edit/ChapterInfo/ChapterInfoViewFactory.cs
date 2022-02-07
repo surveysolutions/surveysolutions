@@ -161,10 +161,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         private GroupInfoView ConvertToGroupInfoView(IGroup group)
         {
+            var title = group.IsRoster && !group.CustomRosterTitle
+                ? @group.Title + " - %rostertitle%"
+                : @group.Title;
             return new GroupInfoView
             {
                 ItemId = group.PublicKey.FormatGuid(),
-                Title = group.Title,
+                Title = title,
                 IsRoster = group.IsRoster,
                 HasCondition = !string.IsNullOrWhiteSpace(group.ConditionExpression),
                 HideIfDisabled = group.HideIfDisabled,

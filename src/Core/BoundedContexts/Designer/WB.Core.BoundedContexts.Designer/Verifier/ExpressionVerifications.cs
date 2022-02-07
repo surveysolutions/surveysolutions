@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -15,7 +16,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Questionnaire.Documents;
-using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.QuestionnaireEntities; 
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
 {
@@ -26,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private readonly IDynamicCompilerSettingsProvider compilerSettings;
 
         
-        private static string WrapToClass(string expression) => $"using System; class __0c6e6226bbc84e43aae9324a93cd594f {{ bool __b1d0447f51874e3b83f145683aeec643() {{ return ({expression}); }} }} ";
+        private static string WrapToClass(string expression) => $"using System; class __0c6e6226bbc84e43aae9324a93cd594f {{ bool __b1d0447f51874e3b83f145683aeec643() {{ return ({expression}); }} }} ";
 
         public ExpressionVerifications(IMacrosSubstitutionService macrosSubstitutionService,
             IExpressionProcessor expressionProcessor,
@@ -102,65 +103,49 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private bool FilterExpressionUsingForbiddenClasses(IQuestion node, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var expression = string.IsNullOrEmpty(node.LinkedFilterExpression) ? node.Properties?.OptionsFilterExpression : node.LinkedFilterExpression;
-            if (!string.IsNullOrEmpty(expression))
-            {
-                var foundUsages = FindForbiddenClassesUsage(expression, questionnaire);
-                return foundUsages.Count > 0;
-            }
-
-            return false;
+            return CheckForbiddenClassesUsage(expression, questionnaire);
         }
 
         private bool VariableUsingForbiddenClasses(IVariable node, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var expression = node.Expression;
-            if (!string.IsNullOrEmpty(expression))
-            {
-                var foundUsages = FindForbiddenClassesUsage(expression, questionnaire);
-                return foundUsages.Count > 0;
-            }
-
-            return false;
+            return CheckForbiddenClassesUsage(expression, questionnaire);
         }
 
         private bool ValidationUsingForbiddenClasses(IComposite node, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var validationConditionExpression = validationCondition.Expression;
-            if (!string.IsNullOrEmpty(validationConditionExpression))
-            {
-                var foundUsages = FindForbiddenClassesUsage(validationConditionExpression, questionnaire);
-                return foundUsages.Count > 0;
-            }
-
-            return false;
+            return CheckForbiddenClassesUsage(validationConditionExpression, questionnaire);
         }
 
         private bool ConditionUsingForbiddenClasses(IComposite item, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var enablingCondition = item.GetEnablingCondition();
-            if (!string.IsNullOrEmpty(enablingCondition))
-            {
-                var foundUsages = FindForbiddenClassesUsage(enablingCondition, questionnaire);
-                return foundUsages.Count > 0;
-            }
-            return false;
+            return CheckForbiddenClassesUsage(enablingCondition, questionnaire);
         }
 
-        private List<string> FindForbiddenClassesUsage(string expression, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool CheckForbiddenClassesUsage(string? expression, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var expressionWithInlinedMacroses =
-                this.macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values);
-            string code = WrapToClass(expressionWithInlinedMacroses);
-            var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
+            if (string.IsNullOrEmpty(expression)) return false;
+            if (ExpressionContainsForbiddenTypeRef.TryGetValue(expression, out var value))
+                return value;
+
+            var expressionWithInlinedMacros = this.macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values);
+            string code = WrapToClass(expressionWithInlinedMacros);
+            var syntaxTree = SyntaxFactory.ParseSyntaxTree(code, 
+                options: new CSharpParseOptions(documentationMode:DocumentationMode.None));
 
             var compilation = CSharpCompilation.Create(
                 "rules.dll",
-                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary),
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
+                    optimizationLevel: OptimizationLevel.Release),
                 syntaxTrees: syntaxTree.ToEnumerable(),
                 references: compilerSettings.GetAssembliesToReference());
 
             var foundUsages = new CodeSecurityChecker().FindForbiddenClassesUsage(syntaxTree, compilation);
-            return foundUsages;
+            ExpressionContainsForbiddenTypeRef[expression] = foundUsages.Any();
+
+            return ExpressionContainsForbiddenTypeRef[expression];
         }
 
         private bool GroupEnablementConditionReferenceChildItems(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
@@ -183,13 +168,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             }
             return false;
         }
-
-
+        
         private IEnumerable<IQuestion> GetReferencedQuestions(string expression, MultiLanguageQuestionnaireDocument questionnaire)
             => this
                 .GetIdentifiersUsedInExpression(expression, questionnaire)
-                .Select(identifier => questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier))
-                .Where(referencedQuestion => referencedQuestion != null);
+                .Select(identifier => questionnaire.GetQuestionByName(identifier))
+                .Where(referencedQuestion => referencedQuestion != null)
+                .Select(question => question!);
 
         private IEnumerable<IQuestion> GetReferencedQuestions(ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
             => this.GetReferencedQuestions(validationCondition.Expression, questionnaire);
@@ -407,10 +392,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInFilterExpression(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue))
-                new EntityVerificationResult<IComposite> { HasErrors = false };
+               return new EntityVerificationResult<IComposite> { HasErrors = false };
 
             if (string.IsNullOrEmpty(question.LinkedFilterExpression))
-                new EntityVerificationResult<IComposite> { HasErrors = false };
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
 
             return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question,
                 question.LinkedFilterExpression,
@@ -472,6 +457,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 .GetIdentifiersUsedInExpression(expression, questionnaire)
                 .Select(identifier => questionnaire.Questionnaire.GetEntityByVariable(identifier))
                 .Where(referencedQuestion => referencedQuestion != null)
+                .Select(question => question!)
                 .Where(isReferencedQuestionIncorrect)
                 .ToList();
 
@@ -515,11 +501,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (string.IsNullOrWhiteSpace(expression)) return false;
-            return Enumerable.Contains(GetIdentifiersUsedInExpression(expression, questionnaire),
-                RoslynExpressionProcessor.ForbiddenDatetimeNow);
+            return GetIdentifiersUsedInExpression(expression, questionnaire)
+                .Contains(RoslynExpressionProcessor.ForbiddenDatetimeNow);
         }
 
-        protected IEnumerable<string> GetIdentifiersUsedInExpression(string expression,
+        protected IReadOnlyCollection<string> GetIdentifiersUsedInExpression(string expression,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
             string expressionWithInlinedMacros =
@@ -662,11 +648,15 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         public IEnumerable<QuestionnaireVerificationMessage> Verify(MultiLanguageQuestionnaireDocument multiLanguageQuestionnaireDocument)
         {
             var verificationMessagesByQuestionnaire = new List<QuestionnaireVerificationMessage>();
+            ExpressionContainsForbiddenTypeRef = new Dictionary<string, bool>();
+            
             foreach (var verifier in ErrorsVerifiers.AsParallel())
             {
                 verificationMessagesByQuestionnaire.AddRange(verifier.Invoke(multiLanguageQuestionnaireDocument));
             }
             return verificationMessagesByQuestionnaire;
         }
+
+        private Dictionary<string, bool> ExpressionContainsForbiddenTypeRef = new Dictionary<string, bool>();
     }
 }

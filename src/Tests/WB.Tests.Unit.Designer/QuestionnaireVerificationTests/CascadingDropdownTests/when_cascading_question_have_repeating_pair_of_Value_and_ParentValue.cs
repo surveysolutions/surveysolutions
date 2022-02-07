@@ -20,7 +20,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
             {
                 PublicKey = parentSingleOptionQuestionId,
                 StataExportCaption = "var",
-                QuestionType = QuestionType.SingleOption,
                 Answers = new List<Answer> {
                             new Answer { AnswerText = "one", AnswerValue = "1" },
                             new Answer { AnswerText = "two", AnswerValue = "2" }
@@ -29,7 +28,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
                     new SingleQuestion
                     {
                         PublicKey = childCascadedComboboxId,
-                        QuestionType = QuestionType.SingleOption,
                         StataExportCaption = "var1",
                         CascadeFromQuestionId = parentSingleOptionQuestionId,
                         Answers = new List<Answer> {
@@ -42,7 +40,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
                     new SingleQuestion
                     {
                         PublicKey = Guid.NewGuid(),
-                        QuestionType = QuestionType.SingleOption,
                         StataExportCaption = "var2",
                         CascadeFromQuestionId = parentSingleOptionQuestionId,
                         Answers = new List<Answer> {
@@ -57,7 +54,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
             BecauseOf();
         }
 
-        private void BecauseOf() => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+        private void BecauseOf() => verificationErrors = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
         [NUnit.Framework.Test] public void should_return_WB0089_error () => verificationErrors.ShouldContainError("WB0089");
 

@@ -102,6 +102,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.Settings = settings;
             this.Metadata = this.questionnaire.Metadata ?? new QuestionnaireMetaInfo();
             AllItems = allItems;
+            SectionIds = this.questionnaire.Children.Select(x => x.PublicKey).ToList();
         }
 
         public List<ICategoricalQuestion> QuestionsWithLongOptionsList { get; internal set; } = new List<ICategoricalQuestion>();
@@ -122,12 +123,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public List<Categories> CategoriesList { get; internal set; } = new List<Categories>();
 
         public string Title => this.questionnaire.Title;
-        public QuestionnaireMetaInfo Metadata { get; internal set; } 
-        public IEnumerable<Guid> SectionIds => this.questionnaire.Children.Select(x => x.PublicKey).ToList();
+        public QuestionnaireMetaInfo Metadata { get; internal set; }
+        public List<Guid> SectionIds { get; }
         public IEnumerable<ModificationStatisticsByUser> SharedPersons { get; set; } = new List<ModificationStatisticsByUser>();
 
-        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
-           => this.Find(condition).FirstOrDefault();
+        public T? FirstOrDefault<T>(Func<T, bool> condition) where T : class
+           => this.Find(condition)?.FirstOrDefault();
 
         public IEnumerable<T> Find<T>() where T : class
            => this.AllItems.Where(x => x is T).Cast<T>();
@@ -224,7 +225,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         }
 
         public string? GetQuestionTitle(IQuestion question) => question.QuestionText;
+        public string? GetVariable(Guid id) => this.FindOrNull<IComposite>(id)?.VariableName;
+        public Guid? GetParentRoster(Guid questionId)
+        {
+            var question = this.FindOrThrow<IComposite>(questionId);
+            IComposite? parent = null;
+            do
+            {
+                parent = question.GetParent();
+                if (parent is IGroup { IsRoster: true })
+                    return parent.PublicKey;
+            } while (parent != null);
+            
+            return null;
+        }
 
+        public QuestionType? GetQuestionType(Guid id) => this.FindOrNull<IQuestion>(id)?.QuestionType;
         public string GetGroupTitle(IGroup group) => group.Title;
 
         public string GetGroupTitle(Guid groupId, bool removeHtmlTags = false) => removeHtmlTags ? this.FindOrThrow<Group>(groupId).Title.RemoveHtmlTags() : this.FindOrThrow<Group>(groupId).Title;

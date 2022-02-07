@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="INSTALLFILESFOLDER">
+            <Directory Id="dirBC2EE47B4B5C4027A43DC102365B0F4A" Name="Site" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="ProductFilesComponentGroup">
+            <Component Id="cmpF649D99E75A1E6359ADEF5E196BAA8E9" Directory="INSTALLFILESFOLDER" Guid="*">
+                <File Id="fil25D2DFE319EC4D2D13DDFD3D2EE36094" KeyPath="yes" Source="$(var.HarvestDir)\New Text Document.txt" />
+            </Component>
+            
+            
+        </ComponentGroup>
+    </Fragment>
+</Wix>

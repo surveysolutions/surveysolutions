@@ -20,11 +20,11 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         fixedTitles: new[] {"fixed title", "fixed title 2"},
                         children: new IComposite[]
                         {
-                            new TextQuestion("text 1")
+                            new TextQuestion()
                             {
+                                QuestionText = "text 1",
                                 PublicKey = linkedQuestionId,
                                 StataExportCaption = "var2",
-                                QuestionType = QuestionType.Text
                             }
                         }),
 
@@ -43,10 +43,14 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verifier = CreateQuestionnaireVerifier();
             BecauseOf();
+            foreach (char ch in "dfdf")
+            {
+                
+            }
         }
 
         private void BecauseOf() => 
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().Should().Be(1);

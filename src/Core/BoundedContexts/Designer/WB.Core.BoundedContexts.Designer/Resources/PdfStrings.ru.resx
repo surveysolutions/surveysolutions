@@ -249,6 +249,21 @@
   <data name="Scope" xml:space="preserve">
     <value>Область видимости: {0}</value>
   </data>
+  <data name="SourceOfCategories" xml:space="preserve">
+    <value>Источник категорий:</value>
+  </data>
+  <data name="RosterSourceOfCategories" xml:space="preserve">
+    <value>Ростер</value>
+  </data>
+  <data name="TextListSourceOfCategories" xml:space="preserve">
+    <value>Списочный вопрос</value>
+  </data>
+  <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
+    <value>Вопрос</value>
+  </data>
+  <data name="InRosterSourceOfCategories" xml:space="preserve">
+    <value>в ростере</value>
+  </data>
   <data name="SharedWith" xml:space="preserve">
     <value>Доступ открыт:</value>
   </data>

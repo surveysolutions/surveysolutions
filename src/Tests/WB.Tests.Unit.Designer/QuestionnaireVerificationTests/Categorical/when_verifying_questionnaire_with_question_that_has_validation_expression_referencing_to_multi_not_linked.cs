@@ -27,8 +27,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Categorical
                             new Answer() {AnswerValue = "2", AnswerText = "opt 2"}
                         }
                 }, 
-                new NumericQuestion("test")
+                new NumericQuestion()
                 {
+                    QuestionText = "test",
                     PublicKey = questionWithValidationExpressionId,
                     ValidationExpression = "some validation",
                     ValidationMessage = "some message",
@@ -43,7 +44,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Categorical
         }
 
         private void BecauseOf() =>
-            resultErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            resultErrors = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_have_no_errors () =>
            resultErrors.Should().BeEmpty();

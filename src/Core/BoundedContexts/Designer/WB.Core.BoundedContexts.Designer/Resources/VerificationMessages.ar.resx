@@ -604,9 +604,6 @@
   <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
     <value>العنوان طويل جدا. يجب ألا يزيد عدد الأحرف عن {0}.</value>
   </data>
-  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>القسم الأول لا يمكن أن يكون شرط التمكين.</value>
-  </data>
   <data name="WB0264_GpsQuestion" xml:space="preserve">
     <value>لديك سؤال تحديد الموقع الجغرافي. الاجهزة اللوحية يجب أن تدعم تحديد الموقع الجغرافي لاستخدامها مع هذا الاستبيان.</value>
   </data>

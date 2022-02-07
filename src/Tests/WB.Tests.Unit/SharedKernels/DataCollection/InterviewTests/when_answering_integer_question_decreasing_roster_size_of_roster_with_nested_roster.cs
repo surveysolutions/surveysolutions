@@ -27,10 +27,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             nestedTextListQuestionId = Guid.Parse("32222222222222222222222222222222");
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-               new NumericQuestion("roster size question")
+               new NumericQuestion()
                {
+                   QuestionText = "roster size question",
                    PublicKey = numericQuestionId,
-                   QuestionType = QuestionType.Numeric,
                    IsInteger = true
                },
                new Group("top level roster")
@@ -41,10 +41,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                    RosterSizeQuestionId = numericQuestionId,
                    Children = new List<IComposite>
                    {
-                        new TextListQuestion("nested roster size question")
+                        new TextListQuestion()
                         {
-                            PublicKey = nestedTextListQuestionId,
-                            QuestionType = QuestionType.TextList
+                            QuestionText = "nested roster size question",
+                            PublicKey = nestedTextListQuestionId
                         },
                         new Group("nested roster")
                         {

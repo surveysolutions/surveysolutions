@@ -20,13 +20,15 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             {
                 Children = new List<IComposite>()
                 {
-                    new NumericQuestion("first")
+                    new NumericQuestion()
                     {
+                        QuestionText = "first",
                         PublicKey = firstQuestionId,
                         StataExportCaption = variableName
                     },
-                    new NumericQuestion("second")
+                    new NumericQuestion()
                     {
+                        QuestionText = "second",
                         PublicKey = secondQuestionId,
                         StataExportCaption = variableName
                     }
@@ -38,7 +40,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_WB0026_error () =>
             verificationMessages.ShouldContainCritical("WB0026");

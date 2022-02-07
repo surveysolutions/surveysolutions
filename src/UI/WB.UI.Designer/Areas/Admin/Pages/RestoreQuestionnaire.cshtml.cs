@@ -7,19 +7,21 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Services.Restore;
 
 namespace WB.UI.Designer.Areas.Admin.Pages
 {
     [Authorize(Roles = nameof(SimpleRoleEnum.Administrator))]
     [RequestSizeLimit(200 * 1024 * 1024)]
+    [RequestFormLimits(MultipartBodyLengthLimit = 200 * 1024 * 1024)]
     public class RestoreQuestionnaireModel : PageModel
     {
         private readonly ILogger<RestoreQuestionnaireModel> logger;
-        private readonly IQuestionnaireRestoreService restoreService;
+        private readonly IQuestionnaireImportService restoreService;
 
         public RestoreQuestionnaireModel(ILogger<RestoreQuestionnaireModel> logger, 
-            IQuestionnaireRestoreService restoreService)
+            IQuestionnaireImportService restoreService)
         {
             this.logger = logger;
             this.restoreService = restoreService;
@@ -71,10 +73,9 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             }
             catch (Exception exception)
             {
-                this.Success = state.Success.ToString();
-                this.Error = state.Error;
+                this.Success = null;//state.Success.ToString();
                 this.logger.LogError(exception, "Unexpected error occurred during restore of questionnaire from backup.");
-                this.Error = $"Unexpected error occurred.{Environment.NewLine}{exception}";
+                this.Error = state.Error;// ?? $"Unexpected error occurred.{Environment.NewLine}{exception}";
                 return Page();
             }
         }

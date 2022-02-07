@@ -24,7 +24,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 new TextQuestion()
                 {
                     PublicKey = questionId,
-                    QuestionType = QuestionType.Text,
                     StataExportCaption = nonUniqueVariableName,
                     QuestionText = "text question"
                 },
@@ -35,7 +34,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_WB0026_error () =>
            verificationMessages.ShouldContainCritical("WB0026");

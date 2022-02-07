@@ -56,7 +56,10 @@ export default {
                 dispatch('getJobsUpdate', jobsToUpdate)
 
             } catch (error) {
-                Vue.config.errorHandler(error)
+                if (error && error.response && error.response.status === 401)
+                    location.reload()
+                else
+                    Vue.config.errorHandler(error)
             } finally {
                 await new Promise(r => setTimeout(r, jobsToUpdate.length > 0 ? 1000 : 2000))
                 commit('SET_UPDATE_IN_PROGRESS', false)

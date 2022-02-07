@@ -46,11 +46,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Critical<IComposite>("WB0122", VariableNameHasSpecialCharacters, VerificationMessages.WB0122_VariableNameHasSpecialCharacters),
             Critical<IComposite>("WB0123", VariableNameStartWithDigitOrUnderscore, VerificationMessages.WB0123_VariableNameStartWithDigitOrUnderscore),
             
-            ErrorsByQuestionnaireEntitiesShareSameInternalId,
             ErrorsBySubstitutions,
             ErrorsByMarkdownText,
             ErrorsByInvalidQuestionnaireVariable,
-            Critical_EntitiesWithDuplicateVariableName_WB0026,
 
             Warning_QuestionnaireHasRostersPropagationsExededLimit,
             Warning("WB0227", NotShared, VerificationMessages.WB0227_NotShared),
@@ -71,70 +69,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             QuestionType.MultyOption,
             QuestionType.TextList
         };
-
-        private static IEnumerable<QuestionnaireVerificationMessage> Critical_EntitiesWithDuplicateVariableName_WB0026(
-            MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            var rosterVariableNameMappedOnRosters = questionnaire
-                .Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
-                .Select(r => new
-                {
-                    Name = r.VariableName,
-                    Reference = QuestionnaireEntityReference.CreateForRoster(r.PublicKey)
-                })
-                .Union(questionnaire
-                    .Find<IGroup>(g => !g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
-                    .Select(r => new
-                    {
-                        Name = r.VariableName,
-                        Reference = QuestionnaireEntityReference.CreateForGroup(r.PublicKey)
-                    }))
-                .Union(questionnaire.Find<IQuestion>(q => true)
-                    .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
-                    .Select(r => new
-                    {
-                        Name = r.StataExportCaption,
-                        Reference = CreateReference(r)
-                    }))
-                .Union(questionnaire.LookupTables.Where(x => !string.IsNullOrEmpty(x.Value.TableName))
-                    .Select(r => new
-                    {
-                        Name = r.Value.TableName,
-                        Reference = QuestionnaireEntityReference.CreateForLookupTable(r.Key)
-                    }))
-                .Union(questionnaire.Find<IVariable>(x => !string.IsNullOrEmpty(x.Name))
-                    .Where(x => !string.IsNullOrEmpty(x.Name))
-                    .Select(r => new
-                    {
-                        Name = r.Name,
-                        Reference = CreateReference(r)
-                    })
-                ).Union(questionnaire.Categories
-                    .Where(x => !string.IsNullOrEmpty(x.Name))
-                    .Select(r => new
-                    {
-                        Name = r.Name,
-                        Reference = QuestionnaireEntityReference.CreateForCategories(r.Id)
-                    })
-                ).Union(questionnaire.VariableName.ToEnumerable()
-                    .Where(x => !string.IsNullOrEmpty(x))
-                    .Select(r => new
-                    {
-                        Name = r,
-                        Reference = QuestionnaireEntityReference.CreateForQuestionnaire(questionnaire.PublicKey)
-                    })
-
-                ).ToList();
-
-
-            return rosterVariableNameMappedOnRosters
-                .GroupBy(s => s.Name, StringComparer.InvariantCultureIgnoreCase)
-                .Where(group => group.Count() > 1)
-                .Select(group => QuestionnaireVerificationMessage.Critical(
-                    "WB0026",
-                    VerificationMessages.WB0026_ItemsWithTheSameNamesFound,
-                    group.Select(x => x.Reference).ToArray()));
-        }
         
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsByInvalidQuestionnaireVariable(MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -475,36 +409,24 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private QuestionnaireVerificationMessage? GetVerificationErrorsBySubstitutionReferenceOrNull(
-            MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> traslatedEntityWithSubstitution,
+            MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntityWithSubstitution,
             int? validationConditionIndex,
             string substitutionReference,
             RosterScope vectorOfRosterQuestionsByEntityWithSubstitutions,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var referenceToEntityWithSubstitution = CreateReference(traslatedEntityWithSubstitution.Entity, validationConditionIndex);
+            var referenceToEntityWithSubstitution = CreateReference(translatedEntityWithSubstitution.Entity, validationConditionIndex);
 
             if (substitutionReference == this.substitutionService.RosterTitleSubstitutionReference)
             {
-                bool isCheckedEntityaRoster = traslatedEntityWithSubstitution.Entity is IGroup group && group.IsRoster && !group.CustomRosterTitle; 
+                bool isCheckedEntityaRoster = translatedEntityWithSubstitution.Entity is IGroup group && group.IsRoster && !group.CustomRosterTitle; 
                 if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 0 || 
                          vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 1 && isCheckedEntityaRoster)
                 {
                     return QuestionnaireVerificationMessage.Error("WB0059",
                         VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,
-                        traslatedEntityWithSubstitution.TranslationName,
+                        translatedEntityWithSubstitution.TranslationName,
                         referenceToEntityWithSubstitution);
-                }
-                else if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length > 0)
-                {
-                    var parentGroup = questionnaire.Questionnaire.GetParentGroupsIds(traslatedEntityWithSubstitution.Entity);
-                    var roster = questionnaire.Questionnaire.GetRoster(parentGroup.First());
-                    if (roster != null && roster.DisplayMode == RosterDisplayMode.Matrix)
-                    {
-                        return QuestionnaireVerificationMessage.Error("WB0300",
-                            VerificationMessages.WB0300,
-                            traslatedEntityWithSubstitution.TranslationName,
-                            referenceToEntityWithSubstitution);
-                    }
                 }
 
                 return null;
@@ -515,7 +437,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 return QuestionnaireVerificationMessage.Error("WB0017",
                     VerificationMessages.WB0017_SubstitutionReferencesNotExistingQuestionOrVariable,
-                    traslatedEntityWithSubstitution.TranslationName,
+                    translatedEntityWithSubstitution.TranslationName,
                     referenceToEntityWithSubstitution);
             }
 
@@ -530,7 +452,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 return QuestionnaireVerificationMessage.Error("WB0018",
                     VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
-                    traslatedEntityWithSubstitution.TranslationName,
+                    translatedEntityWithSubstitution.TranslationName,
                     referenceToEntityWithSubstitution,
                     referenceToEntityBeingSubstituted);
             }
@@ -541,7 +463,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 return QuestionnaireVerificationMessage.Error("WB0019",
                     VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,
-                    traslatedEntityWithSubstitution.TranslationName,
+                    translatedEntityWithSubstitution.TranslationName,
                     referenceToEntityWithSubstitution,
                     referenceToEntityBeingSubstituted);
             }
@@ -549,10 +471,19 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return null;
         }
 
-        private static IComposite GetEntityByVariable(string identifier, MultiLanguageQuestionnaireDocument questionnaire)
-            => questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier) as IComposite
-               ?? questionnaire.FirstOrDefault<IVariable>(v => v.Name == identifier) as IComposite
-               ?? questionnaire.FirstOrDefault<IGroup>(g => g.VariableName == identifier) as IComposite;
+        private static IComposite? GetEntityByVariable(string identifier,
+            MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var question = questionnaire.GetQuestionByName(identifier);
+            if (question != null)
+                return question;
+
+            var variable = questionnaire.GetVariableByName(identifier);
+            if (variable != null)
+                return variable;
+            
+            return  questionnaire.GetGroupByName(identifier);
+        }
 
         private static QuestionnaireVerificationMessage QuestionWithTitleSubstitutionCantBePrefilled(IQuestion questionsWithSubstitution)
             => QuestionnaireVerificationMessage.Error("WB0015",
@@ -563,38 +494,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             => entity is IQuestion
                || entity is IStaticText
                || entity is IGroup;
-
-        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionnaireEntitiesShareSameInternalId(MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return questionnaire
-                .GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
-                .GroupBy(x => x.Id)
-                .Where(group => group.Count() > 1)
-                .Select(group =>
-                    QuestionnaireVerificationMessage.Critical(
-                        "WB0102",
-                        VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId,
-                        group.Select(x => new QuestionnaireEntityReference(GetReferenceTypeByItemTypeAndId(questionnaire, x.Id, x.Type), x.Id)).ToArray()));
-        }
-
-
-        private static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(MultiLanguageQuestionnaireDocument questionnaire, Guid id, Type entityType)
-        {
-            if (typeof(IQuestion).IsAssignableFrom(entityType))
-                return QuestionnaireVerificationReferenceType.Question;
-
-            if (entityType.IsAssignableFrom(typeof(StaticText)))
-                return QuestionnaireVerificationReferenceType.StaticText;
-
-            if (entityType.IsAssignableFrom(typeof(Variable)))
-                return QuestionnaireVerificationReferenceType.Variable;
-
-            var group = questionnaire.Find<IGroup>(id);
-
-            return questionnaire.Questionnaire.IsRoster(group)
-                ? QuestionnaireVerificationReferenceType.Roster
-                : QuestionnaireVerificationReferenceType.Group;
-        }
 
         private static IEnumerable<QuestionnaireVerificationMessage> Warning_QuestionnaireHasRostersPropagationsExededLimit(MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -624,7 +523,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool NoQuestionsExist(MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return !questionnaire.Find<IQuestion>(question => !questionnaire.Questionnaire.IsCoverPage(question.GetParent()!.PublicKey)).Any();
+            return !questionnaire.Find<IQuestion>().Any();
         }
 
         private static bool QuestionnaireTitleTooLong(MultiLanguageQuestionnaireDocument questionnaire)

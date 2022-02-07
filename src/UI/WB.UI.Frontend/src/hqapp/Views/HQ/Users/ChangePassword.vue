@@ -7,7 +7,8 @@
         :userName="userInfo.userName"
         :userId="userInfo.userId"
         :currentTab="currentTab"
-        :successMessage="successMessage">
+        :successMessage="successMessage"
+        :canGenerateToken="userInfo.canGetApiToken">
         <div>
             <div v-if="userInfo.forceChangePassword && userInfo.isOwnProfile"
                 class="alerts form-group"

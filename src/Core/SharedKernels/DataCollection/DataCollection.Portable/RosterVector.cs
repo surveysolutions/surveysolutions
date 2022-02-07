@@ -8,7 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 namespace WB.Core.SharedKernels.DataCollection
 {
     [DebuggerDisplay("{" + nameof(ToString) + "()}")]
-    public class RosterVector : IEnumerable<int>
+    public class RosterVector : IEnumerable<int>, IEquatable<RosterVector>
     {
         private int? cachedHashCode;
         public static readonly RosterVector Empty = new int[] { };
@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection
                 case int[][] answerAsIntArrayArray:
                     return answerAsIntArrayArray.Select(intArray => (RosterVector)intArray).ToArray();
                 case decimal[][] answerAsDecimalArrayArray:
-                    return answerAsDecimalArrayArray.Select(desimalArray => (RosterVector)desimalArray).ToArray();
+                    return answerAsDecimalArrayArray.Select(decimalArray => (RosterVector)decimalArray).ToArray();
                 case IReadOnlyCollection<RosterVector> readOnlyCollection:
                     return readOnlyCollection.ToArray();
                 default:
@@ -68,8 +68,15 @@ namespace WB.Core.SharedKernels.DataCollection
         public IReadOnlyCollection<int> Coordinates => this.coordinates;
 
         [Obsolete("version 5.19. started transition to ints as vector. should be removed later")]
-        public decimal[] CoordinatesAsDecimals => this.coordinatesAsDecimals
-            ?? (this.coordinatesAsDecimals = this.coordinates.Select(System.Convert.ToDecimal).ToArray());
+        public decimal[] CoordinatesAsDecimals => this.coordinatesAsDecimals ??= this.coordinates.Select(System.Convert.ToDecimal).ToArray();
+
+        public bool Equals(RosterVector other)
+        {
+            if (other == null)
+                return false;
+            
+            return this.Identical(other);
+        }
 
         public override bool Equals(object obj)
         {

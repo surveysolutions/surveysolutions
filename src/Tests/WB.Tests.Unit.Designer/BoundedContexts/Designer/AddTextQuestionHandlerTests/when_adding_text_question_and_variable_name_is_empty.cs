@@ -33,7 +33,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
         }
 
         private static Questionnaire questionnaire;
-        private static Exception exception;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");

@@ -5,6 +5,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 {
     public interface IGoogleApiClientFactory
     {
-        ConnectionsClient ConnectionsClient { get; set; }
+        IConnectionsClient ConnectionsClient { get; set; }
     }
 }

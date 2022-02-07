@@ -33,6 +33,6 @@ namespace WB.UI.Headquarters.Services.Impl
 
         public void Delete(string key) => throw new NotImplementedException();
 
-        public bool Contains(string key) => key == RsaEncryptionService.PrivateKey || key == RsaEncryptionService.PrivateKey;
+        public bool Contains(string key) => key == RsaEncryptionService.PrivateKey;
     }
 }

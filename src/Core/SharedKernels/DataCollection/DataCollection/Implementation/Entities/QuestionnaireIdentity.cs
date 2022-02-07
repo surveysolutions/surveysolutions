@@ -3,7 +3,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
-    public sealed class QuestionnaireIdentity
+    public sealed class QuestionnaireIdentity: IEquatable<QuestionnaireIdentity>
     {
         public QuestionnaireIdentity() { }
         public QuestionnaireIdentity(Guid questionnaireId, long version)
@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public static QuestionnaireIdentity Parse(string id)
         {
             if (string.IsNullOrEmpty(id))
-                throw new ArgumentNullException(nameof(id), "the id is null or empty string");
+                throw new ArgumentNullException(nameof(id), "id is null or empty string");
 
             var idParameters = id.Split('$');
             if (idParameters.Length != 2)

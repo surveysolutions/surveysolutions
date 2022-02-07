@@ -223,6 +223,51 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to API token is used to perform API calls to the system.
+        /// </summary>
+        public static string HQ_Views_Api_Token_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_Api_Token_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please save the token now. You will only be able to see it once!.
+        /// </summary>
+        public static string HQ_Views_Api_Token_Generate_Description {
+            get {
+                return ResourceManager.GetString("HQ_Views_Api_Token_Generate_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to enabled.
+        /// </summary>
+        public static string HQ_Views_Api_Token_Issued {
+            get {
+                return ResourceManager.GetString("HQ_Views_Api_Token_Issued", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to disabled.
+        /// </summary>
+        public static string HQ_Views_Api_Token_Not_Issued {
+            get {
+                return ResourceManager.GetString("HQ_Views_Api_Token_Not_Issued", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API access.
+        /// </summary>
+        public static string HQ_Views_ApiTokens_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_ApiTokens_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disable two-factor authentication.
         /// </summary>
         public static string HQ_Views_DisableTwoFactorAuth_Title {

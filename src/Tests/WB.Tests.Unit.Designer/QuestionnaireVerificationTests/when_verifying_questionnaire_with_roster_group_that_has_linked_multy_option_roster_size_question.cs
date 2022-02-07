@@ -25,7 +25,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     PublicKey = rosterSizeQuestionId,
                     StataExportCaption = "var1",
                     LinkedToQuestionId = referencedQuestionId,
-                    QuestionType = QuestionType.MultyOption,
                     Answers =
                     {
                         new Answer() {AnswerValue = "1", AnswerText = "opt 1"},
@@ -41,10 +40,10 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
                     Children = new IComposite[]
                     {
-                        new NumericQuestion("test")
+                        new NumericQuestion()
                         {
+                            QuestionText = "test",
                             PublicKey = referencedQuestionId,
-                            QuestionType = QuestionType.Numeric,
                             StataExportCaption = "var2"
                         }
                     }.ToReadOnlyCollection()
@@ -56,7 +55,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0023__ () =>
             verificationMessages.ShouldContainError("WB0023");

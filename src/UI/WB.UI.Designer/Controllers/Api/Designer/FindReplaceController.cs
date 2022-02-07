@@ -48,7 +48,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             try
             {
-                var regex = new Regex(pattern);
+                var regex = new Regex(Regex.Escape(pattern));
                 regex.IsMatch("");
             }
             catch (ArgumentException)

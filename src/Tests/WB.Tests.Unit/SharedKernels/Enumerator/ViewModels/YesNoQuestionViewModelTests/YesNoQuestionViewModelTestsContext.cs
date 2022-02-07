@@ -47,8 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 answeringViewModel ?? Mock.Of<AnsweringViewModel>(),
                 Create.ViewModel.QuestionInstructionViewModel(),
                 throttlingModel ?? Create.ViewModel.ThrottlingViewModel(),
-                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
-                Create.Fake.MvxMainThreadDispatcher1());
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>());
         }
     }
 }

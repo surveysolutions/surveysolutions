@@ -79,7 +79,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("chapter/{id}")]
         public IActionResult Chapter(QuestionnaireRevision id, string chapterId)
         {
-            var chapterInfoView = this.chapterInfoViewFactory.Load(id, groupId: chapterId);
+            var chapterInfoView = this.chapterInfoViewFactory.Load(id, chapterId: chapterId);
 
             if (chapterInfoView == null)
             {
@@ -185,7 +185,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return NotFound();
             }
 
-            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = this.questionnaireVerifier.Verify(questionnaireView).ToArray();
+            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = 
+                this.questionnaireVerifier.GetAllErrors(questionnaireView,true).ToArray();
             
             var verificationErrors = verificationMessagesAndWarning
                 .Where(x => x.MessageLevel > VerificationMessageLevel.Warning)
@@ -197,7 +198,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 .Take(MaxVerificationErrors - verificationErrors.Length)
                 .ToArray();
 
-            var readOnlyQuestionnaire = questionnaireView.Source.AsReadOnly();
+            var readOnlyQuestionnaire = new ReadOnlyQuestionnaireDocument(questionnaireView.Source);
             VerificationMessage[] errors = this.verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, readOnlyQuestionnaire);
             VerificationMessage[] warnings = this.verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, readOnlyQuestionnaire);
 

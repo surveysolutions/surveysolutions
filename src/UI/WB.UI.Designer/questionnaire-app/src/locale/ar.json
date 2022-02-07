@@ -380,6 +380,7 @@
     "ViewResolvedCommentsCounter_plural": "View all {{count}} resolved comments",
     "HideResolvedComments": "Hide resolved comments",
     "EditorAddComment": "Add comment",
+    "EditorShowComments": "Show comments ({{count}})",
     "JumpToEdit": "Jump to edit",
     "CommentEditorResolve": "Resolve",
     "EditorHideComment": "Hide comments",

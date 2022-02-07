@@ -17,8 +17,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             rosterSizeQuestionId = Guid.Parse("13333333333333333333333333333333");
             var rosterTitleQuestionId = Guid.Parse("11333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument(
-                new NumericQuestion("question 1")
+                new NumericQuestion()
             {
+                QuestionText = "question 1",
                 PublicKey = rosterSizeQuestionId,
                 StataExportCaption = "var",
                 IsInteger = true
@@ -37,7 +38,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0035__ () =>
             verificationMessages.ShouldContainError("WB0035");

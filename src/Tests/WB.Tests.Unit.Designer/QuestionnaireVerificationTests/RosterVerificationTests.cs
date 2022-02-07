@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             var verifier = CreateQuestionnaireVerifier();
 
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             verificationMessages.ShouldContainError("WB0057");
             Assert.That(verificationMessages.GetError("WB0057").References.First().Id, Is.EqualTo(Id.gA));
@@ -49,57 +49,28 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             });
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             verificationMessages.ShouldNotContainError("WB0056");
             verificationMessages.GetError("WB0056").Should().BeNull();
         }
 
         [Test]
-        public void should_validate_location_of_roster_title()
+        public void should_allow_rosterttle_substitution_in_of_roster_title()
         {
-            Create.QuestionnaireDocumentWithOneChapter(
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
                 Create.FixedRoster(title: "Roster %rostertitle%",
                     rosterId: Id.gA,
                     children: new IComposite[]
                     {
                         Create.NumericIntegerQuestion(variable: "test1", id: Id.g1)
                     }
-                ))
-                .ExpectError("WB0059");
-        }
-
-        [Test]
-        public void should_not_allow_roster_title_inside_matrix_roster()
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                    Create.FixedRoster(title: "Roster ",
-                        rosterId: Id.gA,
-                        displayMode:RosterDisplayMode.Matrix,
-                        children: new IComposite[]
-                        {
-                            Create.SingleQuestion(variable: "test1 %rostertitle%", id:Id.g1)
-                        }
-                    ))
-                .ExpectError("WB0300");
-        }
-
-        [Test]
-        public void should_not_allow_roster_title_inside_matrix_roster_triggered_by_numeric()
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                    Create.NumericIntegerQuestion(Id.g5),
-                    Create.Roster(
-                        rosterSizeQuestionId: Id.g5,
-                        title: "Roster ",
-                        rosterId: Id.gA,
-                        displayMode: RosterDisplayMode.Matrix,
-                        children: new IComposite[]
-                        {
-                            Create.SingleQuestion(variable: "test1 %rostertitle%", id:Id.g1)
-                        }
-                    ))
-                .ExpectError("WB0300");
+                ));
+                
+            var verifier = CreateQuestionnaireVerifier();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));    
+                
+            verificationMessages.ShouldNotContainError("WB0059");
         }
 
         [Test]
@@ -303,22 +274,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 .ExpectWarning("WB0286");
         }
 
-        [TestCase("title %i1%")]
-        [TestCase("title %self%")]
-        [TestCase("title %q1%")]
-        public void should_show_error_on_question_with_substitution_in_title_inside_table_roster(string title)
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                    Create.NumericIntegerQuestion(id: Id.g1, variable: "i1"),
-                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Table,
-                        children: new IComposite[]
-                        {
-                            Create.Question(title: title, variable: "q1"),
-                        })
-                )
-                .ExpectError("WB0287");
-        }
-
         [TestCase(QuestionType.Area)]
         [TestCase(QuestionType.Audio)]
         [TestCase(QuestionType.DateTime)]
@@ -424,26 +379,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         })
                 )
                 .ExpectError("WB0298");
-        }
-
-        [Test]
-        public void should_not_allow_maxtrix_roster_to_have_custom_title()
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                    Create.Roster(displayMode: RosterDisplayMode.Matrix,
-                        customRosterTitle: true)
-                )
-                .ExpectError("WB0303");
-        }
-
-        [Test]
-        public void should_not_allow_table_roster_to_have_custom_title()
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                    Create.Roster(displayMode: RosterDisplayMode.Table,
-                        customRosterTitle: true)
-                )
-                .ExpectError("WB0304");
         }
     }
 }

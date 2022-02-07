@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 {
                     Create.Entity.InterviewTreeRoster(Create.Entity.Identity(rosterId2, new decimal[] { 2, 1}), rosterTitle: "title 2.1", children: new IInterviewTreeNode[]
                     {
-                        Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(questionId), questionType: QuestionType.Numeric, answer: 5),
+                        Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(questionId, new decimal[] { 2, 1}), questionType: QuestionType.Numeric, answer: 5),
                     }),
                 }),
             });
@@ -344,6 +344,44 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             // assert
             Assert.That(substitutionText.Text, Is.EqualTo(markdownText + HttpUtility.HtmlEncode(specSymbolsForMarkdownEngine)));
+        }
+        
+         [Test]
+        public void When_ReplaceSubstitutions_for_table_roster_title_referencing_question_inside()
+        {
+            //arrange
+            var rosterId1 = Guid.Parse("22222222222222222222222222222222");
+            var questionId = Guid.Parse("44444444444444444444444444444444");
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.Roster(rosterId1,displayMode: RosterDisplayMode.Table, variable: "r1", title:"test %name%", children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(questionId, variable:"name")
+                })
+            });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[]
+            {
+                Create.Entity.InterviewTreeRoster(Create.Entity.Identity(rosterId1, new decimal[] { 1 }), children: new IInterviewTreeNode[]
+                {
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(questionId, new decimal[] { 1 }), questionType: QuestionType.Text, answer: "Bob"),
+                }),
+            });
+            var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
+
+            var substitutionTextFactory = Create.Service.SubstitutionTextFactory();
+            var rosterIdentity = Create.Entity.Identity(rosterId1, new decimal[] { 1 });
+            var substitutionText = substitutionTextFactory.CreateText(rosterIdentity, "title: %name%", questionnaire);
+
+            //act
+            substitutionText.ReplaceSubstitutions(tree);
+
+            //assert
+            Assert.That(substitutionText.HasSubstitutions, Is.True);
+            Assert.That(substitutionText.Text, Is.EqualTo("title: Bob"));
         }
     }
 }

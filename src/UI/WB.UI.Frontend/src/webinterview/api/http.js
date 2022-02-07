@@ -8,10 +8,10 @@ const httpPlugin = {
             baseURL: store.getters.basePath,
         })
 
-        // Add a response interceptor
-        http.interceptors.request.use(function (response) {
+        // Add a request interceptor
+        http.interceptors.request.use(function (config) {
             store.dispatch('fetchProgress', 1)
-            return response
+            return config
         }, function (error) {
             store.dispatch('fetchProgress', -1)
             // Any status codes that falls outside the range of 2xx cause this function to trigger

@@ -1,5 +1,6 @@
 ﻿using System;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Core.Infrastructure.DependencyInjection
 {
@@ -11,6 +12,7 @@ namespace WB.Core.Infrastructure.DependencyInjection
         void BindAsSingleton<TInterface, TImplementation>(TImplementation instance) where TImplementation : class, TInterface where TInterface : class;
         void BindAsScoped<TInterface, TImplementation>() where TImplementation : class, TInterface where TInterface : class;
 
+        void BindToConstant<TInterface>(Func<IServiceProvider, TInterface> implementation) where TInterface : class;
         void BindToConstant<TInterface>(Func<TInterface> implementation) where TInterface : class;
         
         void BindAsSingleton(Type @interface, Type implementation);

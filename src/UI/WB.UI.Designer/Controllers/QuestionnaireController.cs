@@ -22,6 +22,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Resources;
@@ -76,11 +77,8 @@ namespace WB.UI.Designer.Controllers
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IPublicFoldersStorage publicFoldersStorage;
-        private readonly IAttachmentService attachmentService;
-        private readonly ITranslationsService translationsService;
         private readonly ICategoriesService categoriesService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
-        private readonly ISerializer serializer;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -96,10 +94,7 @@ namespace WB.UI.Designer.Controllers
             DesignerDbContext dbContext,
             IQuestionnaireHelper questionnaireHelper,
             IPublicFoldersStorage publicFoldersStorage,
-            IAttachmentService attachmentService,
-            ITranslationsService translationsService,
-            ICategoriesService categoriesService,
-            ISerializer serializer)
+            ICategoriesService categoriesService)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -113,11 +108,8 @@ namespace WB.UI.Designer.Controllers
             this.dbContext = dbContext;
             this.questionnaireHelper = questionnaireHelper;
             this.publicFoldersStorage = publicFoldersStorage;
-            this.attachmentService = attachmentService;
-            this.translationsService = translationsService;
             this.categoriesService = categoriesService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
-            this.serializer = serializer;
         }
 
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]
@@ -393,16 +385,16 @@ namespace WB.UI.Designer.Controllers
             return Redirect(Url.Content("~/"));
         }
 
-        [HttpGet]
+        /*[HttpGet]
         [Authorize(Roles = "Administrator")]
         public FileResult? Backup(Guid id)
         {
-            var stream = this.questionnaireHelper.GetBackupQuestionnaire(id, out string questionnaireFileName);
+            var stream = this.questionnaireBackupService.GetBackupQuestionnaire(id, out string questionnaireFileName);
             
             return stream == null
                     ? null
                     : File(stream, "application/zip", $"{questionnaireFileName}.zip");
             
-        }
+        }*/
     }
 }

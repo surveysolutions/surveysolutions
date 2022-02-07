@@ -481,22 +481,22 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             Dictionary<int, int> oldToNewRosterInstanceIds, int[] levelsOfRostersByRosterSize)
         {
             foreach (var answersByRosterInstanceId in answersGroupedByRosterInstanceId)
-            foreach (var interviewAnswer in answersByRosterInstanceId)
-            foreach (var rosterLevel in levelsOfRostersByRosterSize.Distinct())
-            {
-                if (rosterLevel > interviewAnswer.Identity.RosterVector.Length) continue;
+                foreach (var interviewAnswer in answersByRosterInstanceId)
+                    foreach (var rosterLevel in levelsOfRostersByRosterSize.Distinct())
+                    {
+                        if (rosterLevel > interviewAnswer.Identity.RosterVector.Length) continue;
 
-                var rosterVectorIndex = rosterLevel - 1;
-                var numericRosterInstanceCode = interviewAnswer.Identity.RosterVector[rosterVectorIndex];
+                        var rosterVectorIndex = rosterLevel - 1;
+                        var numericRosterInstanceCode = interviewAnswer.Identity.RosterVector[rosterVectorIndex];
 
-                // this means that roster instance id in roster file as we expected in our system
-                if (oldToNewRosterInstanceIds[numericRosterInstanceCode] == numericRosterInstanceCode) continue;
+                        // this means that roster instance id in roster file as we expected in our system
+                        if (oldToNewRosterInstanceIds[numericRosterInstanceCode] == numericRosterInstanceCode) continue;
 
-                var newRosterVector = interviewAnswer.Identity.RosterVector.Replace(
-                    rosterVectorIndex, oldToNewRosterInstanceIds[numericRosterInstanceCode]);
+                        var newRosterVector = interviewAnswer.Identity.RosterVector.Replace(
+                            rosterVectorIndex, oldToNewRosterInstanceIds[numericRosterInstanceCode]);
 
-                interviewAnswer.Identity = Identity.Create(interviewAnswer.Identity.Id, newRosterVector);
-            }
+                        interviewAnswer.Identity = Identity.Create(interviewAnswer.Identity.Id, newRosterVector);
+                    }
         }
 
         private static TextListAnswer ToRosterSizeListAnswer(int[] rosterInstanceCodes,

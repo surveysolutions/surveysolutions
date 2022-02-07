@@ -24,21 +24,24 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             correctGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new TextQuestion("text 1")
+                new NumericQuestion()
                 {
+                    QuestionText = "text 1",
                     PublicKey = firstIncorrectQuestionId,
                     ConditionExpression = InvalidExpression,
                     StataExportCaption = "var1"
                 },
-                new TextQuestion("text 1")
+                new TextQuestion()
                 {
+                    QuestionText = "text 1",
                     PublicKey = secondIncorrectQuestionId,
                     ConditionExpression = InvalidExpression,
                     StataExportCaption = "var2"
                 },
                 new Group("Title") { PublicKey = incorrectGroupId, ConditionExpression = InvalidExpression },
-                new NumericQuestion("text 1")
+                new NumericQuestion()
                 {
+                    QuestionText = "text 1",
                     PublicKey = correctQuestionId,
                     ConditionExpression = ValidExpression,
                     StataExportCaption = "var3"
@@ -51,7 +54,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToArray();
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToArray();
 
         [NUnit.Framework.Test] public void should_return_messages_each_with_code__WB0003__ () =>
             verificationMessages.ShouldContainError("WB0003");

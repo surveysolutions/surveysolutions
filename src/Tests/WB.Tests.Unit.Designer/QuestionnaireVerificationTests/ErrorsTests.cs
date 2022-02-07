@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     Create.Group(Id.gB, children: new IComposite[]
                     {
                         Create.TextQuestion(Id1),
-                        Create.FixedRoster(Id1, variable: "questionnaire_var")
+                        Create.FixedRoster(Id2, variable: "questionnaire_var")
                     })
                 })
                 .ExpectCritical("WB0026");
@@ -372,7 +372,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             var verifier = Create.QuestionnaireVerifier(lookupTableService: lookupTableServiceMock.Object);
 
-            var result = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var result = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
             result.ShouldContainCritical("WB0031");
         }

@@ -30,9 +30,9 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 SetUp.MockedServiceLocator();
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.Question(questionAId, "a"),
-                    Abc.Create.Entity.Question(questionBId, "b", enablementCondition: "a == 1.ToString()"),
-                    Abc.Create.Entity.Question(questionCId, "c", enablementCondition: "b == 1.ToString()")
+                    Abc.Create.Entity.TextQuestion(questionAId, variable:"a"),
+                    Abc.Create.Entity.TextQuestion(questionBId, enablementCondition: "a == 1.ToString()", variable: "b"),
+                    Abc.Create.Entity.TextQuestion(questionCId, enablementCondition: "b == 1.ToString()", variable: "c")
                 );
 
                 var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>

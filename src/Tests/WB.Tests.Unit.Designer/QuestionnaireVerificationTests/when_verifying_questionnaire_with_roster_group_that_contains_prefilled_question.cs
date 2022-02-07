@@ -31,8 +31,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     RosterSizeQuestionId = rosterSizeQiestionId,
                     Children = new List<IComposite>()
                     {
-                        new TextQuestion("Title")
+                        new TextQuestion()
                         {
+                            QuestionText = "Title",
                             PublicKey = prefilledQuestionId, Featured = true, StataExportCaption = "var2"
                         }
                     }.ToReadOnlyCollection()
@@ -43,7 +44,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
 
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0029__ () =>

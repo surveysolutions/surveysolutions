@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.OptionsFilter);
                     }
 
-                    if (MatchesSearchTerm(question.Instructions, searchRegex) || MatchesSearchTerm(question.Instructions, searchRegex))
+                    if (MatchesSearchTerm(question.Instructions, searchRegex))
                     {
                         yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Instructions);
                     }

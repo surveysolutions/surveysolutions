@@ -16,14 +16,16 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion("rosterSizeQuestion1")
+                new NumericQuestion()
                 {
+                    QuestionText = "rosterSizeQuestion1",
                     PublicKey = rosterSizeQuestion1Id,
                     StataExportCaption = "var1",
                     IsInteger = true
                 },
-                new NumericQuestion("rosterSizeQuestion2")
+                new NumericQuestion()
                 {
+                    QuestionText = "rosterSizeQuestion2",
                     PublicKey = rosterSizeQuestion2Id,
                     StataExportCaption = "var2",
                     IsInteger = true
@@ -39,8 +41,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     RosterTitleQuestionId = rosterTitleQuestionId,
                     Children = new List<IComposite>()
                     {
-                        new TextQuestion("rosterTitleQuestion")
+                        new TextQuestion()
                         {
+                            QuestionText = "rosterTitleQuestion",
                             StataExportCaption = "var3",
                             PublicKey = rosterTitleQuestionId
                         }
@@ -63,7 +66,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().Should().Be(1);

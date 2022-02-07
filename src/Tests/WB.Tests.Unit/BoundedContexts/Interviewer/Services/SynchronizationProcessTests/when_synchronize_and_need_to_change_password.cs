@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -17,7 +16,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
-using WB.Tests.Unit.SharedKernels.DataCollection.YesNoAnswersTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {

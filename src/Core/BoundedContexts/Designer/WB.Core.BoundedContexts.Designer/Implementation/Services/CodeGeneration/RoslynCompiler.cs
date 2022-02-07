@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -22,7 +21,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             generatedAssembly = string.Empty;
 
             IEnumerable<SyntaxTree> syntaxTrees = generatedClasses.Select(
-                    generatedClass => SyntaxFactory.ParseSyntaxTree(generatedClass.Value, path: generatedClass.Key))
+                    generatedClass => 
+                        SyntaxFactory.ParseSyntaxTree(generatedClass.Value, 
+                            path: generatedClass.Key, 
+                            options: new CSharpParseOptions(documentationMode:DocumentationMode.None)))
                     .ToArray();
 
             var metadataReferences = new List<MetadataReference>();
@@ -49,10 +51,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             return CSharpCompilation.Create(
                 String.Format("rules-{0}-{1}.dll", templateId.FormatGuid(), Guid.NewGuid().FormatGuid()),
-                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, 
+                options: new CSharpCompilationOptions(
+                    OutputKind.DynamicallyLinkedLibrary, 
                     checkOverflow: true, 
                     optimizationLevel: OptimizationLevel.Release, 
                     warningLevel: 1,
+                    allowUnsafe: false,
+                    concurrentBuild: true,
                     assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default),
                 syntaxTrees: syntaxTrees,
                 references: metadataReferences);

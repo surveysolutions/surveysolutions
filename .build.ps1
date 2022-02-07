@@ -17,7 +17,9 @@ param(
     [string] $ArcGisKey = $NULL,
     [string] $dockerRegistry = $ENV:DOCKER_REGISTRY,
     [string] $releaseBranch = 'release', # Docker builds will push to release 
-    [switch] $noDockerPush 
+    [switch] $noDockerPush,
+    [switch] $signapk ,
+    [string] $apkFolder = "artifacts" # where should docker build look for apk artifacts
 )
 
 #region Bootstrap
@@ -41,6 +43,11 @@ if ($MyInvocation.ScriptName -notlike '*Invoke-Build.ps1') {
     return
 }
 
+$RevisionId = $ENV:BUILD_VCS_NUMBER
+if ($null -eq $RevisionId) {
+    $RevisionId = (git rev-parse HEAD)
+}
+
 $tmp = $ENV:TEMP + "/.build"
 $gitBranch = $ENV:GIT_BRANCH
 if($null -eq $gitBranch) {
@@ -49,7 +56,7 @@ if($null -eq $gitBranch) {
 $EscapedBranchName = $gitBranch -replace '([Kk][Pp]-?[\d]+)|_|\+'
 $EscapedBranchName = $EscapedBranchName -replace '/|\\','-'
 $EscapedBranchName = $EscapedBranchName -replace '^[^\d\w]+' # tab should not start with non numeric non word character
-$EscapedBranchName =  $EscapedBranchName.Substring(0, [System.Math]::Min($EscapedBranchName.Length, 128))
+$EscapedBranchName = $EscapedBranchName.Substring(0, [System.Math]::Min($EscapedBranchName.Length, 128))
 
 $isRelease = $gitBranch -eq $releaseBranch
 $version = Get-Content ./src/.version
@@ -114,25 +121,13 @@ function Set-AndroidXmlResourceValue {
 }
 
 function Build-Docker($dockerfile, $tags, $arguments = @()) {
-    #$builderName = "tc_buildx_builder"
-    #$builder = docker buildx ls | Where-Object { $_.Contains($builderName) }
-
-    # if ($builder.Length -eq 0) {
-    #     $create = @("buildx", "create", "--name", $builderName)
-    #     exec { docker $create }
-    # }
-
-    # exec { docker buildx ls } 
-
-    # exec { docker buildx use --builder $builderName }
-
     $params = @('buildx', 'build'
         '--build-arg', "VERSION=$version", 
         "--build-arg", "INFO_VERSION=$infoVersion"
-        "--build-arg", "APK_FILES=artifacts"
+        "--build-arg", "APK_FILES=$apkFolder"
         "--file", $dockerfile
         "--iidfile", "$output\headquarters.id"
-        "--label", "org.opencontainers.image.revision=$($ENV:BUILD_VCS_NUMBER)"
+        "--label", "org.opencontainers.image.revision=$RevisionId"
         "--label", "org.opencontainers.image.version=$infoVersion"
         "--label", "org.opencontainers.image.url=https://github.com/surveysolutions/surveysolutions"
         "--label", "org.opencontainers.image.source=https://github.com/surveysolutions/surveysolutions"
@@ -163,13 +158,15 @@ function Build-Docker($dockerfile, $tags, $arguments = @()) {
 
 function Get-DockerTags($name, $registry = $dockerRegistry) {
     return @(
-        "$registry/$name`:$($EscapedBranchName)"
         if ($isRelease) {
             $v = [System.Version]::Parse($version)
 
             "$registry/$name`:$($v.Major).$($v.Minor)"
             "$registry/$name`:$($v.Major).$($v.Minor).$($v.Build)"
             "$registry/$name`:$($v.Major).$($v.Minor).$($v.Build).$($v.Revision)"
+        }
+        else {
+            "$registry/$name`:$($EscapedBranchName)"
         }
     )
 }
@@ -182,7 +179,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
     Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_key" $ArcGisKey
 
     $keyStore = [System.IO.Path]::GetTempFileName()
-    if ($null -ne $androidKeyStore) {
+    if ($signapk) {
         $keyStore = [System.IO.Path]::GetTempFileName()
         [System.IO.File]::WriteAllBytes($keyStore, [System.Convert]::FromBase64String($androidKeyStore))
     }
@@ -199,7 +196,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
         "/verbosity:Quiet"
         "/p:ApkOutputPath=$output/$apk"
         "/bl:$output/$apk.binlog"
-        if ($null -ne $androidKeyStore -and $null -ne $KeystorePassword) {
+        if ($signapk) {
             '/p:AndroidUseApkSigner=true'
             '/p:AndroidKeyStore=True'
             "/p:AndroidSigningKeyAlias=$KeystoreAlias"

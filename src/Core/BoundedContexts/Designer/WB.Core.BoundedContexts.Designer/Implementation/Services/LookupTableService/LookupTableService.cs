@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             {
                 var rows = new List<LookupTableRow>();
 
-                if (!csvReader.Read() | !csvReader.ReadHeader() | !csvReader.Read()) // | - because we need execute all Reads
+                if (!csvReader.Read() || !csvReader.ReadHeader() || !csvReader.Read())
                 {
                     throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
                 }
@@ -229,22 +229,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     {
                         if (i == indexOfRowcodeColumn)
                         {
-                            decimal rowcodeAsDecumal;
-                            if (!decimal.TryParse(record[i], out rowcodeAsDecumal))
+                            if (!decimal.TryParse(record[i], out var rowCodeAsDecimal))
                             {
                                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_rowcode_value_cannot_be_parsed, record[i], ROWCODE, rowCurrentRowNumber));
                             }
-                            if (rowcodeAsDecumal > long.MaxValue || rowcodeAsDecumal < long.MinValue)
+                            if (rowCodeAsDecimal > long.MaxValue || rowCodeAsDecimal < long.MinValue)
                             {
                                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_rowcode_value_cannot_be_parsed, record[i], ROWCODE, rowCurrentRowNumber));
                             }
-                            long rowcode = (long)rowcodeAsDecumal;
-                            var isParcedDecimalValueConvertableToInteger = (decimal)rowcode == rowcodeAsDecumal;
-                            if (!isParcedDecimalValueConvertableToInteger)
+                            
+                            long rowCode = (long)rowCodeAsDecimal;
+                            if (rowCode != rowCodeAsDecimal)
                             {
                                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_rowcode_value_cannot_be_parsed, record[i], ROWCODE, rowCurrentRowNumber));
                             }
-                            row.RowCode = rowcode;
+                            row.RowCode = rowCode;
                         }
                         else
                         {
@@ -254,8 +253,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                             }
                             else
                             {
-                                decimal variable;
-                                if (!decimal.TryParse(record[i], NumberStyles.Float, CultureInfo.InvariantCulture, out variable))
+                                if (!decimal.TryParse(record[i], NumberStyles.Float, CultureInfo.InvariantCulture, out var variable))
                                 {
                                     throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_data_value_cannot_be_parsed, record[i], fieldHeaders[i], rowCurrentRowNumber));
                                 }

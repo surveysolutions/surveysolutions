@@ -1727,15 +1727,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Первая секция не может иметь условия включения..
-        /// </summary>
-        public static string WB0263_FirstChapterHasEnablingCondition {
-            get {
-                return ResourceManager.GetString("WB0263_FirstChapterHasEnablingCondition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. .
         /// </summary>
         public static string WB0264_GpsQuestion {
@@ -1862,7 +1853,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Плоский режим разрешен для ростеров с не больше чем {0} элементами..
+        ///   Looks up a localized string similar to Плоский режим разрешен для ростеров с не больше чем {0} вопросов или статических текстов..
         /// </summary>
         public static string WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements {
             get {
@@ -1949,15 +1940,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0286_TableAndMatixRosterWorksOnlyInWebMode {
             get {
                 return ResourceManager.GetString("WB0286_TableAndMatixRosterWorksOnlyInWebMode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Вопросы внутри табличного ростера не могут ссылаться на другие вопросы в своих заголовках..
-        /// </summary>
-        public static string WB0287_TableRosterDoesntContainsQuestionWithSubstitutions {
-            get {
-                return ResourceManager.GetString("WB0287_TableRosterDoesntContainsQuestionWithSubstitutions", resourceCulture);
             }
         }
         
@@ -2070,15 +2052,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Матричное представление ростера не может содержать вопрос с подстановкой %rostertitle%..
-        /// </summary>
-        public static string WB0300 {
-            get {
-                return ResourceManager.GetString("WB0300", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Матричное представление ростера не может содержать связанные вопросы.
         ///.
         /// </summary>
@@ -2094,24 +2067,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0302 {
             get {
                 return ResourceManager.GetString("WB0302", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Матричный ростер не может переопределять имя.
-        /// </summary>
-        public static string WB0303_MatrixRosterCannotHaveCustomTitle {
-            get {
-                return ResourceManager.GetString("WB0303_MatrixRosterCannotHaveCustomTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Табличный ростер не может переопределять имя.
-        /// </summary>
-        public static string WB0304_TableRosterCannotHaveCustomTitle {
-            get {
-                return ResourceManager.GetString("WB0304_TableRosterCannotHaveCustomTitle", resourceCulture);
             }
         }
         
@@ -2157,6 +2112,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0309_IdentityQuestionsMustHaveVariableLabel {
             get {
                 return ResourceManager.GetString("WB0309_IdentityQuestionsMustHaveVariableLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Переменные на обложке должны иметь описание.
+        /// </summary>
+        public static string WB0311_IdentityVariablesMustHaveLabel {
+            get {
+                return ResourceManager.GetString("WB0311_IdentityVariablesMustHaveLabel", resourceCulture);
             }
         }
         

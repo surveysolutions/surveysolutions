@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public void Prepare(Guid? parameter) => this.lastVisitedInterviewId = parameter;
 
         public OutboxViewModel(IDashboardItemsAccessor dashboardItemsAccessor,
-            IInterviewViewModelFactory viewModelFactory, IMvxMessenger messenger) : base(messenger)
+            IInterviewViewModelFactory viewModelFactory) : base()
         {
             this.dashboardItemsAccessor = dashboardItemsAccessor;
             this.viewModelFactory = viewModelFactory;

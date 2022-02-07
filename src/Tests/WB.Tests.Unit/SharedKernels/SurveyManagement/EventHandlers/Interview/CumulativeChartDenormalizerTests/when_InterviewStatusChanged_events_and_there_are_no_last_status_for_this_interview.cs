@@ -73,9 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
 
         private static CumulativeChartDenormalizer denormalizer;
         private static TestInMemoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
-        private static InterviewStatus newStatus = InterviewStatus.ApprovedBySupervisor;
         private static readonly Guid questionnaireId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        private static string questionnaireIdentity = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$7112";
         private static long questionnaireVersion = 7112;
     }
 }

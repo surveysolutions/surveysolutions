@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoFixture;
 
 using Main.Core.Documents;
@@ -8,8 +9,8 @@ using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.DataAccess;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
@@ -27,7 +28,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
         private IFixture fixture;
         private QuestionnaireDocument document;
         private QuestionnaireView questionnaireView;
-        private Mock<IExpressionProcessorGenerator> assemblyGeneratorMock;
+        private Mock<IQuestionnaireVerifier> questionnaireVerifier;
         private DesignerDbContext dbContext;
 
         [SetUp]
@@ -58,10 +59,10 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
             // ReSharper disable once RedundantAssignment - value will be used in GenerateProcessorStateAssembly usage
             string assembly = fixture.Create<string>();
 
-            assemblyGeneratorMock = fixture.Freeze<Mock<IExpressionProcessorGenerator>>();
-            assemblyGeneratorMock
-                .Setup(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly))
-                .Returns(new GenerationResult(true, Array.Empty<Diagnostic>()));
+            questionnaireVerifier = fixture.Freeze<Mock<IQuestionnaireVerifier>>();
+            questionnaireVerifier
+                .Setup(m => m.CompileAndVerify(questionnaireView, It.IsAny<int>(), out assembly))
+                .Returns(new List<QuestionnaireVerificationMessage>());
 
             subj = fixture.Create<QuestionnairePackageComposer>();
         }
@@ -83,8 +84,8 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
             result = subj.ComposeQuestionnaire(Id.gA);
 
             string assembly;
-            assemblyGeneratorMock
-                .Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
+            questionnaireVerifier
+                .Verify(m => m.CompileAndVerify(questionnaireView, It.IsAny<int>(), out assembly), Times.Once);
         }
 
         [Test]
@@ -99,8 +100,8 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
 
             string assembly;
             // should still generate assembly only once
-            assemblyGeneratorMock
-                .Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
+            questionnaireVerifier
+                .Verify(m => m.CompileAndVerify(questionnaireView, It.IsAny<int>(), out assembly), Times.Once);
 
             Assert.That(result, Is.EqualTo(result1));
             Assert.That(result, Is.EqualTo(result2));
@@ -114,21 +115,21 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
 
             string assembly;
             // should still generate assembly only once
-            assemblyGeneratorMock
-                .Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
+            questionnaireVerifier
+                .Verify(m => m.CompileAndVerify(questionnaireView, It.IsAny<int>(), out assembly), Times.Once);
            
             // Change questionnaire to invalidate cache
             var questionnaireChangeRecord = Create.QuestionnaireChangeRecord(questionnaireId: document.PublicKey.FormatGuid(), sequence: 2);
             dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeRecord);
             dbContext.SaveChanges();
 
-            assemblyGeneratorMock.Invocations.Clear();
+            questionnaireVerifier.Invocations.Clear();
 
             subj.ComposeQuestionnaire(Id.gA);
             subj.ComposeQuestionnaire(Id.gA);
 
-            assemblyGeneratorMock
-                .Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
+            questionnaireVerifier
+                .Verify(m => m.CompileAndVerify(questionnaireView, It.IsAny<int>(), out assembly), Times.Once);
         }
 
         [Test]
@@ -136,20 +137,20 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
         {
             string assembly;
 
-            assemblyGeneratorMock
-                .Setup(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly))
+            questionnaireVerifier
+                .Setup(m => m.CompileAndVerify(questionnaireView, It.IsAny<int>(), out assembly))
                 .Throws<Exception>();
 
             // Act
             Assert.Throws<ComposeException>(() => result = subj.ComposeQuestionnaire(Id.gA));
 
             // ensure that generate processor were called
-            assemblyGeneratorMock.Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
-            assemblyGeneratorMock.Invocations.Clear();
+            questionnaireVerifier.Verify(m => m.CompileAndVerify(questionnaireView, It.IsAny<int>(), out assembly), Times.Once);
+            questionnaireVerifier.Invocations.Clear();
 
             // should not cache error, and throw again and try to generate assembly
             Assert.Throws<ComposeException>(() => result = subj.ComposeQuestionnaire(Id.gA));
-            assemblyGeneratorMock.Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
+            questionnaireVerifier.Verify(m => m.CompileAndVerify(questionnaireView, It.IsAny<int>(), out assembly), Times.Once);
         }
     }
 }

@@ -224,6 +224,9 @@
   </data>
   <data name="RestoreQuestionnaire" xml:space="preserve">
     <value>Восстановить опросник</value>
+  </data>  
+  <data name="RestoreQuestionnaireDocument" xml:space="preserve">
+    <value>Восстановить опросник (старый формат)</value>
   </data>
   <data name="RetryExportPDF" xml:space="preserve">
     <value>Повторить экспорт в PDF</value>
@@ -341,5 +344,8 @@
   <data name="ControlPanel" xml:space="preserve">
       <value>Панель управления</value>
       <comment>Панель управления</comment>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Сохранить как</value>
   </data>
 </root>

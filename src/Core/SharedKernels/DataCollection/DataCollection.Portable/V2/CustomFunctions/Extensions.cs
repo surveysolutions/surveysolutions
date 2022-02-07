@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.V2.CustomFunctions
         /// <returns>True if value being tested is within the interval, false otherwise.</returns>
         public static bool InRange(this long? value, long? low, long? high)
         {
+            if (value == null || low == null || high == null) return false;
             if (value < low) return false;
             if (value > high) return false;
             return true;
@@ -40,6 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.V2.CustomFunctions
         /// <returns>True if value being tested is within the interval, false otherwise.</returns>
         public static bool InRange(this double? value, double? low, double? high)
         {
+            if (value == null || low == null || high == null) return false;
             if (value < low) return false;
             if (value > high) return false;
             return true;
@@ -54,6 +56,7 @@ namespace WB.Core.SharedKernels.DataCollection.V2.CustomFunctions
         /// <returns>True if value being tested is within the interval, false otherwise.</returns>
         public static bool InRange(this decimal? value, decimal? low, decimal? high)
         {
+            if (value == null || low == null || high == null) return false;
             if (value < low) return false;
             if (value > high) return false;
             return true;

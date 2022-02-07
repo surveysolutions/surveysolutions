@@ -56,6 +56,13 @@
                             id="two-factor"
                             v-bind:href="getUrl('TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a>
                     </li>
+                    <li class="nav-item"
+                        v-if="canGenerateToken && !forceChangePassword"
+                        v-bind:class="{'active': currentTab=='api-token'}">
+                        <a class="nav-link"
+                            id="two-factor"
+                            v-bind:href="getUrl('ApiTokens')">{{$t('Pages.AccountManage_ApiTokens')}}</a>
+                    </li>
                 </ul>
 
                 <div class="col-sm-12">
@@ -87,7 +94,11 @@ export default {
             type: String,
             required: true,
         },
-
+        canGenerateToken:{
+            type:Boolean,
+            require: false,
+            default: false,
+        },
     },
     computed:{
         isAdmin() {
@@ -138,7 +149,6 @@ export default {
                 }
                 return `../${baseUrl}/${this.userId}`
             }
-
         },
     },
 }

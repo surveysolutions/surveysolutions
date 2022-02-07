@@ -645,9 +645,6 @@
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>二维表已经达到大小的限制。请缩小二维表的大小或者删减嵌套。</value>
   </data>
-  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>第一个问卷模块不能有启用性条件。</value>
-  </data>
   <data name="WB0264_GpsQuestion" xml:space="preserve">
     <value>有一个GPS型问题。平板电脑必须有定位功能才能使用此问卷。</value>
   </data>

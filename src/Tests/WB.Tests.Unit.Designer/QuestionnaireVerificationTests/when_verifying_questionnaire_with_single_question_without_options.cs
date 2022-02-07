@@ -20,7 +20,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     PublicKey = multiQuestionId,
                     StataExportCaption = "var",
                     Answers = new List<Answer>(),
-                    QuestionType = QuestionType.MultyOption
                 });
 
             verifier = CreateQuestionnaireVerifier();
@@ -28,7 +27,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_not_return_messages_with_code__WB0072__and__WB0073 () =>
             verificationMessages.Select(x => x.Code).Should().NotContain("WB0072", "WB0073");

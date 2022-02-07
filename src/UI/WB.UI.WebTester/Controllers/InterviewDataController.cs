@@ -24,7 +24,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getTopFilteredOptionsForQuestion")]
-        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count)
+        public DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count)
             => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count);
 
         [HttpGet]

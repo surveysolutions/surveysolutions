@@ -232,7 +232,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (string.IsNullOrEmpty(createItem.Responsible))
                 return StatusCode(StatusCodes.Status400BadRequest, "Responsible is required");
 
-            var assignmentAnswers = createItem.IdentifyingData
+            try
+            {
+                var assignmentAnswers = createItem.IdentifyingData
                 .Select(x => this.ToAssignmentAnswer(x, questionnaire))
                 .ToList();
 
@@ -294,8 +296,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     result.WebInterviewLink = this.interviewLinkProvider.WebInterviewStartLink(invitation);
                 }
             }
-
+            
             return CreatedAtAction("Details", new {id = result.Assignment.Id}, result);
+
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, "Invalid data.");
+            }
         }
 
         /// <summary>
@@ -745,7 +753,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     roster = questionnaire.GetRosterVariableName(questionnaire
                         .GetRostersFromTopToSpecifiedQuestion(x.QuestionIdentity.Id).Last())
                 })
-                .GroupBy(x => x.answer.QuestionIdentity.RosterVector)
+                .GroupBy(x => new{x.roster, x.answer.QuestionIdentity.RosterVector})
                 .Where(x => x.Any())
                 .Select(x => new PreloadingAssignmentRow
                 {

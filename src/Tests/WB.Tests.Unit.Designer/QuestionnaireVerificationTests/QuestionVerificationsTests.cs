@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using NHibernate.Collection.Generic;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Verifier;
@@ -46,7 +47,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             QuestionnaireVerifier verifier = CreateQuestionnaireVerifier();
 
             // act
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             // assert
             verificationMessages.Count().Should().Be(1);
@@ -82,7 +83,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             );
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             verificationMessages.ShouldContainError("WB0076");
 
@@ -125,7 +126,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
             // act
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
             // assert
             verificationMessages.Count().Should().Be(1);
@@ -148,7 +149,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             
             var verifier = CreateQuestionnaireVerifier();
             // act
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
             // assert
             verificationMessages.Count().Should().Be(1);
@@ -167,7 +168,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion {
                     PublicKey = parentSingleOptionQuestionId,
                     StataExportCaption = "var",
-                    QuestionType = QuestionType.SingleOption,
                     Answers = new List<Answer> {
                         new Answer { AnswerText = "one", AnswerValue = "1" },
                         new Answer { AnswerText = "two", AnswerValue = "2" }
@@ -176,7 +176,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 new SingleQuestion
                 {
                     PublicKey = childCascadedComboboxId,
-                    QuestionType = QuestionType.SingleOption,
                     StataExportCaption = "var1",
                     CascadeFromQuestionId = parentSingleOptionQuestionId,
                     CategoriesId = childCategoriesId
@@ -192,7 +191,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
 
             // act
-            var verificationErrors = Enumerable.ToList(verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)));
+            var verificationErrors = Enumerable.ToList(verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)));
 
             // assert
             verificationErrors.ShouldContainError("WB0084");
@@ -212,13 +211,11 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion {
                     PublicKey = parentSingleOptionQuestionId,
                     StataExportCaption = "var",
-                    QuestionType = QuestionType.SingleOption,
                     CategoriesId = parentCategoriesId
                 },
                 new SingleQuestion
                 {
                     PublicKey = childCascadedComboboxId,
-                    QuestionType = QuestionType.SingleOption,
                     StataExportCaption = "var1",
                     CascadeFromQuestionId = parentSingleOptionQuestionId,
                     Answers = new List<Answer> {
@@ -237,7 +234,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
 
             // act
-            var verificationErrors = Enumerable.ToList(verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)));
+            var verificationErrors = Enumerable.ToList(verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)));
 
             // assert
             verificationErrors.ShouldContainError("WB0084");
@@ -258,13 +255,11 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion {
                     PublicKey = parentSingleOptionQuestionId,
                     StataExportCaption = "var",
-                    QuestionType = QuestionType.SingleOption,
                     CategoriesId = parentCategoriesId
                 },
                 new SingleQuestion
                 {
                     PublicKey = childCascadedComboboxId,
-                    QuestionType = QuestionType.SingleOption,
                     StataExportCaption = "var1",
                     CascadeFromQuestionId = parentSingleOptionQuestionId,
                     CategoriesId = childCategoriesId
@@ -285,7 +280,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
 
             // act
-            var verificationErrors = Enumerable.ToList(verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)));
+            var verificationErrors = Enumerable.ToList(verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)));
 
             // assert
             verificationErrors.ShouldContainError("WB0084");
@@ -323,7 +318,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
 
             // act
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             // arrange
             verificationMessages.ShouldContainError("WB0076");
@@ -362,7 +357,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
 
             // act
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             // arrange
             verificationMessages.ShouldContainError("WB0076");
@@ -397,7 +392,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
 
             // act
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             // arrange
             verificationMessages.ShouldContainError("WB0073");
@@ -433,7 +428,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
 
             // act
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             // arrange
             verificationMessages.ShouldContainError("WB0073");
@@ -468,7 +463,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
 
             // act
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             // arrange
             verificationMessages.ShouldContainError("WB0073");
@@ -515,7 +510,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
 
             // act
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             // arrange
             verificationMessages.ShouldContainError("WB0073");
@@ -574,7 +569,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             });
 
             var verifier = CreateQuestionnaireVerifier();
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
             verificationMessages.ShouldContainError("WB0302");
             verificationMessages.GetError("WB0302").References.Count().Should().Be(2);
             verificationMessages.GetError("WB0302").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
@@ -582,7 +577,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.GetError("WB0302").References.Last().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
             verificationMessages.GetError("WB0302").References.Last().Id.Should().Be(sameRosterLevelQuestionId);
         }
-
+        
         [Test]
         public void when_question_on_cover_page_without_variable_label()
             => QuestionnaireDocumentWithCoverPage(new[]

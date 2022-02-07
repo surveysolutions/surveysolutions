@@ -86,6 +86,7 @@ namespace WB.UI.WebTester.Infrastructure
         }
 
         public Task WaitPendingCommandsAsync() => Task.CompletedTask;
+        public Task WaitOnCommandAsync() => Task.CompletedTask;
 
         public bool HasPendingCommands => false;
     }

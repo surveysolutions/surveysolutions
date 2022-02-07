@@ -1,5 +1,4 @@
-// ApiMocker located at src/tests/setup.js
-const api = new ApiMocker();
+import { find } from 'lodash'
 
 global._ = require("lodash")
 

@@ -6,7 +6,8 @@
         :canChangePassword="userInfo.canChangePassword"
         :userName="userInfo.userName"
         :currentTab="currentTab"
-        :userId="userInfo.userId">
+        :userId="userInfo.userId"
+        :canGenerateToken="userInfo.canGetApiToken">
 
         <h4>
             {{$t('Workspaces.AssignedWorkspaces')}}

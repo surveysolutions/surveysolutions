@@ -48,7 +48,6 @@ using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
@@ -58,7 +57,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.TopologicalSorter;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -66,11 +64,9 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
-using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
-using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
 using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
@@ -194,7 +190,7 @@ namespace WB.Tests.Unit.Designer
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer,
             bool preFilled = false, bool hideIfDisabled = false, bool isCurrentTime = false)
         {
-            return new DateTimeQuestion("Question DT")
+            return new DateTimeQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
@@ -202,7 +198,6 @@ namespace WB.Tests.Unit.Designer
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 QuestionText = text,
-                QuestionType = QuestionType.DateTime,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 Featured = preFilled,
@@ -226,15 +221,6 @@ namespace WB.Tests.Unit.Designer
         public static IDesignerEngineVersionService DesignerEngineVersionService()
         {
             return new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), Mock.Of<IDesignerTranslationService>());
-        }
-
-        public static DownloadQuestionnaireRequest DownloadQuestionnaireRequest(Guid? questionnaireId, QuestionnaireVersion questionnaireVersion = null)
-        {
-            return new DownloadQuestionnaireRequest()
-            {
-                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                SupportedVersion = questionnaireVersion ?? new QuestionnaireVersion()
-            };
         }
 
         public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
@@ -267,7 +253,6 @@ namespace WB.Tests.Unit.Designer
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = variable,
-                QuestionType = QuestionType.GpsCoordinates,
                 Featured = isPrefilled,
                 QuestionText = title,
                 ValidationExpression = validationExpression,
@@ -355,10 +340,9 @@ namespace WB.Tests.Unit.Designer
             string variable = null, string validationMessage = null, string title = "test", QuestionScope scope = QuestionScope.Interviewer
             , bool hideIfDisabled = false, bool isSignature = false)
         {
-            return new MultimediaQuestion("Question T")
+            return new MultimediaQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
-                QuestionType = QuestionType.Multimedia,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
@@ -387,7 +371,6 @@ namespace WB.Tests.Unit.Designer
                 ValidationExpression = validationExpression,
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
-                QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 YesNoView = isYesNo,
                 Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList(),
@@ -410,7 +393,6 @@ namespace WB.Tests.Unit.Designer
         {
             return new MultyOptionsQuestion
             {
-                QuestionType = QuestionType.MultyOption,
                 PublicKey = id ?? Guid.NewGuid(),
                 Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(options ?? new Answer[] { }),
                 LinkedToQuestionId = linkedToQuestionId,
@@ -441,7 +423,6 @@ namespace WB.Tests.Unit.Designer
             var stataExportCaption = variable ?? "numeric_question"+publicKey;
             return new NumericQuestion
             {
-                QuestionType = QuestionType.Numeric,
                 PublicKey = publicKey,
                 StataExportCaption = stataExportCaption,
                 IsInteger = true,
@@ -454,7 +435,9 @@ namespace WB.Tests.Unit.Designer
                 LinkedToRosterId = linkedToRosterId,
                 QuestionText = title,
                 VariableLabel = variableLabel,
-                Answers = options?.Select(x => new Answer{ AnswerValue = x.Value, AnswerText = x.Title}).ToList()
+                Answers = options != null
+                    ? options.Select(x => new Answer{ AnswerValue = x.Value, AnswerText = x.Title, ParentValue = x.ParentValue}).ToList()
+                    : Enumerable.Empty<Answer>().ToList()
             };
         }
 
@@ -463,7 +446,6 @@ namespace WB.Tests.Unit.Designer
         {
             return new NumericQuestion
             {
-                QuestionType = QuestionType.Numeric,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 IsInteger = false,
@@ -526,7 +508,6 @@ namespace WB.Tests.Unit.Designer
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 QuestionText = text,
-                QuestionType = QuestionType.QRBarcode,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 Featured = preFilled
@@ -552,23 +533,202 @@ namespace WB.Tests.Unit.Designer
         {
             var publicKey = questionId ?? Guid.NewGuid();
             var stataExportCaption = variable ?? GetNameForEntity("question", publicKey);
-            return new TextQuestion(title)
+
+            switch (questionType)
             {
-                PublicKey = publicKey,
-                QuestionType = questionType,
-                StataExportCaption = stataExportCaption,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
-                VariableLabel = variableLabel,
-                Instructions = instructions,
-                Answers = answers.ToList(),
-                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
-                Featured = isPrefilled,
-                QuestionScope = scope,
-                LinkedToRosterId = linkedToRoster,
-                LinkedToQuestionId = linkedToQuestion,
-            };
+                case QuestionType.Area:
+                    return new AreaQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.Audio:
+                    return new AudioQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.Multimedia:
+                    return new MultimediaQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.Numeric:
+                    return new NumericQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.DateTime:
+                    return new DateTimeQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.GpsCoordinates:
+                    return new GpsCoordinateQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.MultyOption:
+                    return new MultyOptionsQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.SingleOption:
+                    return new SingleQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.TextList:
+                    return new TextListQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.QRBarcode:
+                    return new QRBarcodeQuestion()
+                    {
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+                case QuestionType.Text:
+                    default:
+                    return new TextQuestion()
+                    {
+                        QuestionText = title,
+                        PublicKey = publicKey,
+                        StataExportCaption = stataExportCaption,
+                        ConditionExpression = enablementCondition,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        Answers = answers.ToList(),
+                        ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                        Featured = isPrefilled,
+                        QuestionScope = scope,
+                        LinkedToRosterId = linkedToRoster,
+                        LinkedToQuestionId = linkedToQuestion,
+                    };
+            }
+            
+            
+            
         }
 
         public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnaireHistoryVersionsService historyVersionsService = null,
@@ -634,6 +794,19 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X", variable: "questionnaire");
 
+        public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? id, params IComposite[] children)
+            => Create.QuestionnaireDocumentWithCoverPage(id, null, children: children);
+
+        public static QuestionnaireDocument QuestionnaireDocumentWithEmptyCoverPage(Guid? id, params IComposite[] children)
+        {
+            var coverId = Guid.NewGuid();
+            var cover = Create.Chapter("Cover", coverId);
+            var allChildren = Enumerable.Concat((cover as IComposite).ToEnumerable(), children).ToArray();
+            var questionnaireDocument = Create.QuestionnaireDocument(id, "Questionnaire with empty cover", children: allChildren);
+            questionnaireDocument.CoverPageSectionId = coverId;
+            return questionnaireDocument;
+        }
+
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = null, string expression = "2*2", 
             string label = null, bool doNotExport = false)
         {
@@ -652,9 +825,11 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocument(
             string variable, Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null, Categories[] categories = null)
         {
+            var publicKey = id ?? Guid.NewGuid();
             return new QuestionnaireDocument
             {
-                PublicKey = id ?? Guid.NewGuid(),
+                PublicKey = publicKey,
+                Id = publicKey.FormatGuid(),
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
                 Title = title,
                 VariableName = variable,
@@ -715,12 +890,12 @@ namespace WB.Tests.Unit.Designer
             return result;
         }
         
-        public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? questionnaireId = null, Attachment[] attachments = null, 
-            Translation[] translations = null, IEnumerable<Macro> macros = null, params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? id = null, Attachment[] attachments = null, 
+            Translation[] translations = null, IEnumerable<Macro> macros = null, Guid? coverId = null, params IComposite[] children)
         {
-            var coverId = Guid.NewGuid();
-            var document = QuestionnaireDocumentWithOneChapter(questionnaireId, coverId, attachments, translations, macros, children);
-            document.CoverPageSectionId = coverId;
+            var cover = coverId ?? Guid.NewGuid();
+            var document = QuestionnaireDocumentWithOneChapter(id, cover, attachments, translations, macros, children);
+            document.CoverPageSectionId = cover;
             return document;
         }
         
@@ -832,7 +1007,7 @@ namespace WB.Tests.Unit.Designer
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null,
             RosterDisplayMode displayMode = RosterDisplayMode.SubSection,
-            bool customRosterTitle = false)
+            bool customRosterTitle = true)
         {
             var id = rosterId ?? Guid.NewGuid();
             Group group = Create.Group(
@@ -887,7 +1062,6 @@ namespace WB.Tests.Unit.Designer
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
-                QuestionType = QuestionType.SingleOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
@@ -910,7 +1084,6 @@ namespace WB.Tests.Unit.Designer
         {
             return new SingleQuestion
             {
-                QuestionType = QuestionType.SingleOption,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
@@ -954,14 +1127,13 @@ namespace WB.Tests.Unit.Designer
         public static ITextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false, string title = "test", QuestionScope scope = QuestionScope.Interviewer, bool featured = false)
         {
-            return new TextListQuestion("Question TL")
+            return new TextListQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 MaxAnswerCount = maxAnswerCount,
-                QuestionType = QuestionType.TextList,
                 StataExportCaption = variable,
                 QuestionText = title,
                 QuestionScope = scope,
@@ -984,7 +1156,7 @@ namespace WB.Tests.Unit.Designer
         {
             var publicKey = questionId ?? Guid.NewGuid();
             var stataExportCaption = variable ?? GetNameForEntity("text_question", publicKey);
-            return new TextQuestion(text)
+            return new TextQuestion()
             {
                 PublicKey = publicKey,
                 ConditionExpression = enablementCondition,
@@ -993,7 +1165,6 @@ namespace WB.Tests.Unit.Designer
                 ValidationMessage = validationMessage,
                 Mask = mask,
                 QuestionText = text,
-                QuestionType = QuestionType.Text,
                 StataExportCaption = stataExportCaption,
                 QuestionScope = scope,
                 Featured = preFilled,
@@ -1107,7 +1278,7 @@ namespace WB.Tests.Unit.Designer
                 FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null, RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
                 => new UpdateGroup(questionnaireId, groupId, responsibleId ?? Guid.NewGuid(), title, variableName,
                     rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
-                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, displayMode, false);
+                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, displayMode);
 
             public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, 
                 string name, string expression, string label = null, Guid? userId = null, bool doNotExport = false)

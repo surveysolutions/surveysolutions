@@ -248,7 +248,7 @@ namespace WB.Tests.Abc.TestFactories
             return new CreateInterviewFromSnapshotCommand(
                 interviewId: synchronizationDto.Id,
                 userId: userId,
-                sycnhronizedInterview: synchronizationDto);
+                synchronizedInterview: synchronizationDto);
         }
 
         public CreateInterview CreateInterview(Guid interviewId,

@@ -537,9 +537,10 @@
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Roster has reached size limit. Reduce roster size or decrease nesting.</value>
   </data>
-  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>First section cannot have enabling condition.</value>
-  </data>
+  <!-- preserved for history. do not reuse WB0263 -->
+  <!-- <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve"> -->
+  <!--   <value>First section cannot have enabling condition.</value> -->
+  <!-- </data> -->
   <data name="WB0264_GpsQuestion" xml:space="preserve">
     <value>You have a GPS question. Tablets must support geolocation to be used with this questionnaire.</value>
   </data>
@@ -747,9 +748,6 @@
   <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
     <value>Table or Matrix roster mode works only in web survey, on tablets it will be 'sub section' mode.</value>
   </data>
-  <data name="WB0287_TableRosterDoesntContainsQuestionWithSubstitutions" xml:space="preserve">
-    <value>Questions in a table roster may not contain any substitutions in text.</value>
-  </data>
   <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
     <value>Questions in Сover section must have variable label.</value>
   </data>
@@ -792,20 +790,11 @@
   <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
     <value>Matrix roster has to contain no supervisor or identifying questions.</value>
   </data>
-  <data name="WB0300" xml:space="preserve">
-    <value>Question in Matrix roster must not contain %rostertitle% substitution.</value>
-  </data>
   <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
     <value>Matrix roster has to contain no linked questions.</value>
   </data>
   <data name="WB0302" xml:space="preserve">
     <value>Substitution cannot reference items from same roster level.</value>
-  </data>
-  <data name="WB0303_MatrixRosterCannotHaveCustomTitle" xml:space="preserve">
-    <value>Matrix roster cannot have custom roster title</value>
-  </data>
-  <data name="WB0304_TableRosterCannotHaveCustomTitle" xml:space="preserve">
-    <value>Table roster cannot have custom roster title</value>
   </data>
   <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
     <value>Reusable category cannot have row with same Id and ParentId values</value>

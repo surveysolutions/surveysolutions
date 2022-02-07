@@ -47,7 +47,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                      interview.GetMultiOptionLinkedToListQuestion(new Identity(linkedToQuestionId,
                         new decimal[0]));
 
-                Assert.That(linkedQuestion.IsAnswered, Is.True);
+                Assert.That(linkedQuestion.IsAnswered(), Is.True);
                 Assert.That(linkedQuestion.GetAnswer().CheckedValues, Is.EqualTo(new int[] { 1, 2 }));
             }
         }

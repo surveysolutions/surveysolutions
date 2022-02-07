@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using System.Drawing;
 using Esri.ArcGISRuntime.Data;
+using MvvmCross;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -45,7 +46,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             IFileSystemAccessor fileSystemAccessor,
             IAssignmentDocumentsStorage assignmentsRepository,
             IPlainStorage<InterviewView> interviewViewRepository,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             IEnumeratorSettings enumeratorSettings,
             ILogger logger) : base(principal, viewModelNavigationService)
         {
@@ -55,7 +55,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             this.fileSystemAccessor = fileSystemAccessor;
             this.assignmentsRepository = assignmentsRepository;
             this.interviewViewRepository = interviewViewRepository;
-            this.mainThreadDispatcher = mainThreadDispatcher;
+            this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
             this.enumeratorSettings = enumeratorSettings;
         }
 
@@ -111,7 +111,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                     new MvxObservableCollection<ShapefileDescription>(this.mapService.GetAvailableShapefiles());
 
                 var localMaps = this.mapService.GetAvailableMaps(true);
-                var defaultMap = this.mapService.PrepareAndGetDefaultMap();
+                var defaultMap = this.mapService.PrepareAndGetDefaultMapOrNull();
 
                 this.Map = new Map(await MapUtilityService.GetBaseMap(this.fileSystemAccessor, defaultMap).ConfigureAwait(false));
 

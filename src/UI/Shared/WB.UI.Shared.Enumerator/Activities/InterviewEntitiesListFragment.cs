@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Android.OS;
+using Android.Runtime;
 using Android.Views;
 using Android.Views.InputMethods;
 using AndroidX.RecyclerView.Widget;
@@ -14,6 +15,7 @@ using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
+    [Register("wb.ui.enumerator.activities.interview.InterviewEntitiesListFragment")]
     public class InterviewEntitiesListFragment : BaseFragment<EnumerationStageViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.interview_active_group;

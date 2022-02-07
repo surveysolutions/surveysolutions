@@ -11,11 +11,13 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.UI.Designer.Controllers.Api.WebTester;
 using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
@@ -71,11 +73,6 @@ namespace WB.UI.Designer.Controllers.Api.Tester
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
 
-            if (this.questionnaireVerifier.CheckForErrors(questionnaireView).Any())
-            {
-                return StatusCode(StatusCodes.Status412PreconditionFailed);
-            }
-
             var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(id)?.Version;
 
             var versionToCompileAssembly = specifiedCompilationVersion ?? Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source));
@@ -83,11 +80,12 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             string resultAssembly;
             try
             {
-                GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                    questionnaireView.Source,
-                    versionToCompileAssembly, 
-                    out resultAssembly);
-                if(!generationResult.Success)
+                var verificationResult = 
+                    this.questionnaireVerifier.CompileAndVerify(questionnaireView,
+                      versionToCompileAssembly,
+                      out resultAssembly);
+                
+                if (verificationResult.Any(x => x.MessageLevel != VerificationMessageLevel.Warning))
                     return StatusCode(StatusCodes.Status412PreconditionFailed);
             }
             catch (Exception)
@@ -96,7 +94,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             }
 
             var questionnaire = questionnaireView.Source.Clone();
-            var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
+            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaireView.Source);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
             questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
             questionnaire.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument).ToDictionary(x => x.Key, x => x.Value.ToArray());

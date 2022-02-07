@@ -20,8 +20,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var rosterSizeQuestion = Guid.Parse("30000000000000000000000000000000");
             var rosterGroup = Guid.Parse("40000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                    new NumericQuestion("Roster Size Question")
+                    new NumericQuestion()
                     {
+                        QuestionText = "Roster Size Question",
                         PublicKey = rosterSizeQuestion,
                         StataExportCaption = "var1",
                         IsInteger = true
@@ -53,7 +54,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() => 
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_no_errors () =>
              verificationMessages.Should().BeEmpty();

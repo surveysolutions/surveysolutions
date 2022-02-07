@@ -10,6 +10,7 @@ using Android.Widget;
 using Google.Android.Material.Dialog;
 using Google.Android.Material.TextField;
 using Java.Lang;
+using MvvmCross;
 using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -41,9 +42,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             }
         }
 
-        public UserInteractionService(IMvxAndroidCurrentTopActivity mvxCurrentTopActivity)
+        public UserInteractionService()
         {
-            this.mvxCurrentTopActivity = mvxCurrentTopActivity;
+            this.mvxCurrentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
         }
 
         public Task<bool> ConfirmAsync(

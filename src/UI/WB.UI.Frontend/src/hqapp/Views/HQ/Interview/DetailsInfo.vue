@@ -6,7 +6,8 @@
             <div class="about-questionnaire clearfix">
                 <div class="about-questionnaire-details clearfix">
                     <ul class="main-info-column list-unstyled pull-left">
-                        <li id="detailsInfo_interviewKeyListItem">{{this.$t('Common.InterviewKey')}}: {{$config.model.key}}({{this.$t('Common.Assignment')}} #{{this.$config.model.assignmentId}})</li>
+                        <li id="detailsInfo_interviewKeyListItem">{{this.$t('Common.InterviewKey')}}: {{$config.model.key}}({{this.$t('Common.Assignment')}}
+                            <a :href="this.$config.model.assignmentDetailsUrl">#{{this.$config.model.assignmentId}}</a>)</li>
                         <li id="detailsInfo_qusetionnaireTitleListItem"
                             class="questionnaire-title">[ver.{{this.$config.model.questionnaireVersion}}] {{this.$config.model.questionnaireTitle}}</li>
 

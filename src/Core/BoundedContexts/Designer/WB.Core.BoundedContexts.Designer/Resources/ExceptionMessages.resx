@@ -202,6 +202,9 @@
   <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
     <value>Section cannot have more than {0} child items</value>
   </data>
+  <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+    <value>Section or sub-section cannot have more than {0} direct child items</value>
+  </data>
   <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
     <value>One or more question(s) with same ID {0} already exist:{1}{2}.</value>
   </data>
@@ -258,6 +261,9 @@
   </data>
   <data name="UserIsInTheList" xml:space="preserve">
     <value>User {0} already exists in share list.</value>
+  </data>
+  <data name="InvalidUserInfo" xml:space="preserve">
+    <value>Invalid user info.</value>
   </data>
   <data name="UserIsOwner" xml:space="preserve">
     <value>User {0} is an owner of this questionnaire. Please, input another email.</value>
