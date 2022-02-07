@@ -50,6 +50,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             synchronizationService
                 .Setup(s => s.GetInterviewUploadState(interviewId, It.IsAny<EventStreamSignatureTag>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(remoteInterviewUploadState));
+            synchronizationService
+                .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new SyncInfoPackageResponse()));
 
             var eventStore = Create.Storage.InMemorySqliteMultiFilesEventStorage();
             eventStore.Store(new UncommittedEventStream(null, new []{ 
@@ -99,6 +102,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             synchronizationService
                 .Setup(s => s.GetInterviewUploadState(interviewId, It.IsAny<EventStreamSignatureTag>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(remoteInterviewUploadState));
+            synchronizationService
+                .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new SyncInfoPackageResponse()));
 
             var eventStore = Create.Storage.InMemorySqliteMultiFilesEventStorage();
             eventStore.Store(new UncommittedEventStream(null, new[]{

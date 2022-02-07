@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 new CommittedEvent(Guid.NewGuid(), "origin", lastEvent.eventId, interviewId, 1, lastEvent.timeStamp, 2, null)
             };
 
-            var check = subject.GetInterviewEventStreamContainer(interviewId, false, It.IsAny<SyncInfoPackageResponse>()).Tag;
+            var check = subject.GetInterviewEventStreamContainer(interviewId, false, new SyncInfoPackageResponse()).Tag;
 
             Assert.That(check.FirstEventId, Is.EqualTo(firstEvent.eventId));
             Assert.That(check.LastEventId, Is.EqualTo(lastEvent.eventId));
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         {
             events = new List<CommittedEvent>();
 
-            var check = subject.GetInterviewEventStreamContainer(interviewId, false, It.IsAny<SyncInfoPackageResponse>()).Tag;
+            var check = subject.GetInterviewEventStreamContainer(interviewId, false, new SyncInfoPackageResponse()).Tag;
 
             Assert.Null(check);
         }
