@@ -9,8 +9,7 @@
         :currentTab="currentTab"
         :canGenerateToken="userInfo.canGetApiToken">
 
-        <div class="col-sm-12">
-
+        <div>
             <div class="block-filter">
                 <h3>
                     {{$t('Pages.AccountManage_StatusApiToken')}}
@@ -22,52 +21,39 @@
                     </span>
                 </h3>
             </div>
-            <div class="row flex-row">
-                <div class="col-sm-4">
-                    <div class="flex-block selection-box"><div class="block">
-                        <div v-if="!tokenWasIssued">
-                            <div>
-                                <div class="block-filter">
-                                    <button
-                                        type="submit"
-                                        class="btn btn-success"
-                                        style="margin-right:5px"
-                                        id="btnCreateToken"
-                                        v-bind:disabled="userInfo.isObserving && !canGenerate"
-                                        @click="generateApiKey">{{$t('Common.Enable')}}</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div v-if="apiToken && tokenWasIssued">
-                            <span style="color:red;">{{$t('Strings.HQ_Views_Api_Token_Generate_Description')}}</span>
-                            <pre v-text="apiToken"
-                                style="white-space:normal;">
-                    </pre>
-                        </div>
-
-                        <div v-if="tokenWasIssued">
-                            <div class="col-sm-12">
-                                <div class="block-filter">
-                                    <button
-                                        type="submit"
-                                        class="btn btn-danger"
-                                        id="btnDelete"
-                                        v-bind:disabled="userInfo.isObserving || !canGenerate"
-                                        @click="deleteToken">{{$t('Common.Disable')}}</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
+        </div>
+        <div v-if="apiToken && tokenWasIssued"
+            class="row">
+            <div class="col-md-6 col-xs-12">
+                <span style="color:red;">{{$t('Strings.HQ_Views_Api_Token_Generate_Description')}}</span>
+                <pre v-text="apiToken"
+                    style="white-space:normal;"></pre>
             </div>
         </div>
+        <div>
+            <div class="block-filter">
+                <button
+                    v-if="tokenWasIssued"
+                    type="submit"
+                    class="btn btn-danger"
+                    id="btnDelete"
+                    v-bind:disabled="userInfo.isObserving || !canGenerate"
+                    @click="deleteToken">{{$t('Common.Disable')}}</button>
+                <button
+                    v-if="!tokenWasIssued"
+                    type="submit"
+                    class="btn btn-success"
+                    style="margin-right:5px"
+                    id="btnCreateToken"
+                    v-bind:disabled="userInfo.isObserving && !canGenerate"
+                    @click="generateApiKey">{{$t('Common.Enable')}}</button>
+            </div>
+        </div>
+
     </ProfileLayout>
 </template>
 
 <script>
-import Vue from 'vue'
 import {each} from 'lodash'
 
 export default {
