@@ -42,10 +42,15 @@ namespace WB.UI.Designer.Code.Attributes
                 
                 principal = await _userService.AuthenticateAsync(credentials);
             } 
-            catch (Exception e)
+            catch (UnauthorizedException e)
             {
                 this.loginException = e;
                 return AuthenticateResult.Fail(e);
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogCritical(ex, "Error during authentication");
+                return AuthenticateResult.Fail("Can't authorize user");
             }
 
             var ticket = new AuthenticationTicket(principal, Scheme.Name);
