@@ -1610,7 +1610,7 @@
     <value>Two factor authentication is currently </value>
   </data>
   <data name="AccountManage_StatusApiToken" xml:space="preserve">
-    <value>API token is:</value>
+    <value>Access to REST and GraphQL API endpoints is currently </value>
   </data>
   <data name="UsersManage_WorkspacesFilterTitle" xml:space="preserve">
     <value>Workspace</value>

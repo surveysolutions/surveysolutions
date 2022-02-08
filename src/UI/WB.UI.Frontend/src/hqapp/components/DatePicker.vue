@@ -112,6 +112,7 @@ export default {
                                     $this.find('.flatpickr-clear').on('click', function() {
                                         instance.close()
                                         self.$emit('clear')
+                                        self.fp.setDate(null, true)
                                     })
                                 }
                             })

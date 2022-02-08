@@ -40,7 +40,8 @@ namespace WB.Enumerator.Native.Questionnaire.Impl
         {
             var translationInstances = this.translations.Query(_ => _.Where(x =>
                 x.QuestionnaireId.QuestionnaireId == questionnaireId.QuestionnaireId &&
-                x.QuestionnaireId.Version == questionnaireId.Version).ToList());
+                x.QuestionnaireId.Version == questionnaireId.Version).ToList())
+                .ToList();
 
             this.translations.Remove(translationInstances);
         }

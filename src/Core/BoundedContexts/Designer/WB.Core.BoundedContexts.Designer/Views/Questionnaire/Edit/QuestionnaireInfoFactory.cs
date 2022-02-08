@@ -306,8 +306,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var rosterScope = questionnaire.GetRosterScope(roster);
 
             var rosterTitle = !roster.CustomRosterTitle
-                              && roster.DisplayMode != RosterDisplayMode.Table
-                              && roster.DisplayMode != RosterDisplayMode.Matrix
                 ? roster.Title + " - %rostertitle%"
                 : roster.Title;
 

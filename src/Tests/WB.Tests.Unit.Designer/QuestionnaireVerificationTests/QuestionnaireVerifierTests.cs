@@ -335,19 +335,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verifier = CreateQuestionnaireVerifier();
             var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
-
-            verificationMessages.ShouldContainError("WB0313");
-
-            verificationMessages.GetError("WB0313")
-                .References.Select(x => x.Type).ToArray()
-                .Should().BeEquivalentTo(new[] 
-                {
-                    QuestionnaireVerificationReferenceType.Group, 
-                    QuestionnaireVerificationReferenceType.Question
-                });
-
-            verificationMessages.GetError("WB0313").References.ElementAt(0).Id.Should().Be(rosterId);
-            verificationMessages.GetError("WB0313").References.ElementAt(1).Id.Should().Be(questionId);
+            verificationMessages.Count.Should().Be(0);
         }
     }
 }

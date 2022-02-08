@@ -12,10 +12,6 @@
         <div class="col-sm-12">
 
             <div class="block-filter">
-                <p>{{$t('Strings.HQ_Views_Api_Token_Description')}}</p>
-            </div>
-
-            <div class="block-filter">
                 <h3>
                     {{$t('Pages.AccountManage_StatusApiToken')}}
                     <span style="color:green;"
@@ -26,38 +22,43 @@
                     </span>
                 </h3>
             </div>
+            <div class="row flex-row">
+                <div class="col-sm-4">
+                    <div class="flex-block selection-box"><div class="block">
+                        <div v-if="!tokenWasIssued">
+                            <div>
+                                <div class="block-filter">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-success"
+                                        style="margin-right:5px"
+                                        id="btnCreateToken"
+                                        v-bind:disabled="userInfo.isObserving && !canGenerate"
+                                        @click="generateApiKey">{{$t('Common.Enable')}}</button>
+                                </div>
+                            </div>
+                        </div>
 
-            <div v-if="!tokenWasIssued">
-                <div>
-                    <div class="block-filter">
-                        <button
-                            type="submit"
-                            class="btn btn-success"
-                            style="margin-right:5px"
-                            id="btnCreateToken"
-                            v-bind:disabled="userInfo.isObserving && !canGenerate"
-                            @click="generateApiKey">{{$t('Pages.Profile_IssueApiToken')}}</button>
+                        <div v-if="apiToken && tokenWasIssued">
+                            <span style="color:red;">{{$t('Strings.HQ_Views_Api_Token_Generate_Description')}}</span>
+                            <pre v-text="apiToken"
+                                style="white-space:normal;">
+                    </pre>
+                        </div>
+
+                        <div v-if="tokenWasIssued">
+                            <div class="col-sm-12">
+                                <div class="block-filter">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-danger"
+                                        id="btnDelete"
+                                        v-bind:disabled="userInfo.isObserving || !canGenerate"
+                                        @click="deleteToken">{{$t('Common.Disable')}}</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <div v-if="apiToken">
-                <p>{{$t('Strings.HQ_Views_Api_Token_Generate_Description')}}</p>
-                <pre v-text="apiToken"
-                    style="white-space:normal;">
-                </pre>
-            </div>
-
-            <div v-if="tokenWasIssued">
-                <p>{{$t('Strings.HQ_Views_Api_Token_Delete_Description')}}</p>
-                <div class="col-sm-12">
-                    <div class="block-filter">
-                        <button
-                            type="submit"
-                            class="btn btn-danger"
-                            id="btnDelete"
-                            v-bind:disabled="userInfo.isObserving || !canGenerate"
-                            @click="deleteToken">{{$t('Common.Delete')}}</button>
                     </div>
                 </div>
             </div>

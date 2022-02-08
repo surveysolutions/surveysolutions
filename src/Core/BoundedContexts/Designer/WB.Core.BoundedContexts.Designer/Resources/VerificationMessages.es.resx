@@ -744,9 +744,6 @@
   <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
     <value>La modalidad de roster tipo tabla o matriz funciona solamente en encuestas web. En las tablets se presentará en forma de sub-sección.</value>
   </data>
-  <data name="WB0287_TableRosterDoesntContainsQuestionWithSubstitutions" xml:space="preserve">
-    <value>Las preguntas de un roster presentado como tabla, no pueden contener sustituciones en el texto.</value>
-  </data>
   <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
     <value>La etiqueta {1} para el código {0} es un número diferente del valor etiquetado.</value>
   </data>
@@ -783,20 +780,11 @@
   <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
     <value>La presentación tipo matriz se permite solamente para rosters que no contienen preguntas para el supervisor ni preguntas de identificación.</value>
   </data>
-  <data name="WB0300" xml:space="preserve">
-    <value>Un roster en modalidad matriz no debe contener sustituciones de tipo %rostertitle%.</value>
-  </data>
   <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
     <value>La lista de la matriz no debe contener preguntas vinculadas.</value>
   </data>
   <data name="WB0302" xml:space="preserve">
     <value>La sustitución no puede hacer referencia a elementos del mismo nivel de lista.</value>
-  </data>
-  <data name="WB0303_MatrixRosterCannotHaveCustomTitle" xml:space="preserve">
-    <value>La lista de Matrix no puede tener un título de lista personalizado</value>
-  </data>
-  <data name="WB0304_TableRosterCannotHaveCustomTitle" xml:space="preserve">
-    <value>El roster tipo tabla no puede tener un título personalizado</value>
   </data>
   <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
     <value>La categoría reutilizable no puede tener una fila con los mismos valores de Id y ParentId</value>

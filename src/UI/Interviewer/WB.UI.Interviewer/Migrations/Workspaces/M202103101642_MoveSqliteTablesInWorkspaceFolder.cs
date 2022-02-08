@@ -89,8 +89,8 @@ namespace WB.UI.Interviewer.Migrations.Workspaces
                     continue;
 
                 var newFilePath = fileSystemAccessor.CombinePath(workspaceDataFolder, fileName);
-                if(fileSystemAccessor.IsFileExists(newFilePath))
-                    throw new InvalidOperationException($"Target file already exists. Entity: {entityTypeName}");
+                if (fileSystemAccessor.IsFileExists(newFilePath))
+                    fileSystemAccessor.DeleteFile(newFilePath);
 
                 fileSystemAccessor.MoveFile(file, newFilePath);
             }
