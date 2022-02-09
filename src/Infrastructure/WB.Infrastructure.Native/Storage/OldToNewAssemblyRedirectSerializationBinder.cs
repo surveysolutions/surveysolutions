@@ -10,30 +10,32 @@ namespace WB.Infrastructure.Native.Storage
     [Obsolete]
     public class OldToNewAssemblyRedirectSerializationBinder : MainCoreAssemblyRedirectSerializationBaseBinder
     {
-        protected static readonly Dictionary<string, Type> nameToType = new Dictionary<string, Type>();
+        protected static readonly Dictionary<string, Type> NameToType = new Dictionary<string, Type>();
 
         static OldToNewAssemblyRedirectSerializationBinder()
         {
             var interviewAnswerType = typeof(InterviewAnswer);
             var assembly = interviewAnswerType.Assembly;
-            typesMap[interviewAnswerType.Name] = interviewAnswerType.FullName;
-            typeToName[interviewAnswerType] = interviewAnswerType.Name;
-            nameToType[interviewAnswerType.Name] = interviewAnswerType;
+            TypesMap[interviewAnswerType.Name] = interviewAnswerType.FullName;
+            TypeToName[interviewAnswerType] = interviewAnswerType.Name;
+            NameToType[interviewAnswerType.Name] = interviewAnswerType;
 
             foreach (var type in assembly.GetTypes().Where(t => t.IsPublic && t.GetBaseTypes().Any(type => type == typeof(AbstractAnswer))))
             {
-                if (typesMap.ContainsKey(type.Name))
-                    throw new InvalidOperationException($"Assembly contains more then one type with same name. Duplicate type: {type.Name}");
-
-                typesMap[type.Name] = type.FullName;
-                typeToName[type] = type.Name;
-                nameToType[type.Name] = type;
+                if (TypesMap.ContainsKey(type.Name))
+                {
+                    initTypeError = type;
+                    return;
+                }
+                TypesMap[type.Name] = type.FullName;
+                TypeToName[type] = type.Name;
+                NameToType[type.Name] = type;
             }
         }
         public override Type BindToType(string assemblyName, string typeName)
         {
             var typeNameWithoutNamespace = typeName.Split('.').Last();
-            if (string.IsNullOrEmpty(assemblyName) && nameToType.TryGetValue(typeNameWithoutNamespace, out Type type))
+            if (string.IsNullOrEmpty(assemblyName) && NameToType.TryGetValue(typeNameWithoutNamespace, out Type type))
             {
                 typeName = type.FullName;
                 assemblyName = type.Assembly.FullName;
@@ -44,13 +46,13 @@ namespace WB.Infrastructure.Native.Storage
             {
                 assemblyName = targetAssemblyName;
 
-                if (typesMap.TryGetValue(typeNameWithoutNamespace, out string fullTypeName))
+                if (TypesMap.TryGetValue(typeNameWithoutNamespace, out string fullTypeName))
                     typeName = fullTypeName;
             }
             else
             {
                 //generic replace
-                typeName = typeName.Replace(oldAssemblyGenericReplacePattern, newAssemblyGenericReplacePattern);
+                typeName = typeName.Replace(OldAssemblyGenericReplacePattern, NewAssemblyGenericReplacePattern);
             }
 
             return base.BindToType(assemblyName, typeName);
@@ -58,7 +60,7 @@ namespace WB.Infrastructure.Native.Storage
 
         public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
         {
-            if (typeToName.TryGetValue(serializedType, out string name))
+            if (TypeToName.TryGetValue(serializedType, out string name))
             {
                 assemblyName = null;
                 typeName = name;

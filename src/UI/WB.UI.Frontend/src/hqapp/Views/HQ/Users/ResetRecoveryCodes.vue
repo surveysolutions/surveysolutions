@@ -5,7 +5,8 @@
         :userName="userInfo.userName"
         :canChangePassword="userInfo.canChangePassword"
         :userId="userInfo.userId"
-        :currentTab="currentTab">
+        :currentTab="currentTab"
+        :canGenerateToken="userInfo.canGetApiToken">
 
         <div >
             <h2>{{$t('Strings.HQ_Views_ResetRecoveryCodes_Title')}}</h2>

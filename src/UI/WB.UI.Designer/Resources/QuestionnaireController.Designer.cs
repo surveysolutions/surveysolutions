@@ -586,11 +586,29 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Restore questionnaire document (old).
+        /// </summary>
+        public static string RestoreQuestionnaireDocument {
+            get {
+                return ResourceManager.GetString("RestoreQuestionnaireDocument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Retry export as PDF.
         /// </summary>
         public static string RetryExportPDF {
             get {
                 return ResourceManager.GetString("RetryExportPDF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save as.
+        /// </summary>
+        public static string SaveAs {
+            get {
+                return ResourceManager.GetString("SaveAs", resourceCulture);
             }
         }
         

@@ -145,13 +145,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                     try
                     {
-                        await this.Answering.SendAnswerQuestionCommandAsync(command);
-                        this.QuestionState.Validity.ExecutedWithoutExceptions();
+                        await this.Answering.SendQuestionCommandAsync(command);
+                        await this.QuestionState.Validity.ExecutedWithoutExceptions();
                     }
                     catch (InterviewException ex)
                     {
                         await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
-                        this.QuestionState.Validity.ProcessException(ex);
+                        await this.QuestionState.Validity.ProcessException(ex);
                     }
                 }
             }
@@ -191,16 +191,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                             try
                             {
-                                await this.Answering.SendAnswerQuestionCommandAsync(command);
+                                await this.Answering.SendQuestionCommandAsync(command);
                                 this.Answer =
                                     await this.imageFileStorage.GetInterviewBinaryDataAsync(this.interviewId,
                                         pictureFileName);
-                                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                                await this.QuestionState.Validity.ExecutedWithoutExceptions();
                             }
                             catch (InterviewException ex)
                             {
                                 await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
-                                this.QuestionState.Validity.ProcessException(ex);
+                                await this.QuestionState.Validity.ProcessException(ex);
                             }
                         }
                     }
@@ -229,15 +229,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 var pictureFileName = this.GetPictureFileName();
                 await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
 
-                await this.Answering.SendRemoveAnswerCommandAsync(
+                await this.Answering.SendQuestionCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.userId,
                         this.questionIdentity));
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                await this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException exception)
             {
-                this.QuestionState.Validity.ProcessException(exception);
+                await this.QuestionState.Validity.ProcessException(exception);
             }
         }
 

@@ -20,7 +20,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion {
                     PublicKey = parentSingleOptionQuestionId,
                     StataExportCaption = "var",
-                    QuestionType = QuestionType.SingleOption,
                     Answers = new List<Answer> {
                             new Answer { AnswerText = "one", AnswerValue = "1" },
                             new Answer { AnswerText = "two", AnswerValue = "2" }
@@ -29,7 +28,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
                     new SingleQuestion
                     {
                         PublicKey = childCascadedComboboxId,
-                        QuestionType = QuestionType.SingleOption,
                         StataExportCaption = "var1",
                         CascadeFromQuestionId = parentSingleOptionQuestionId,
                         Answers = new List<Answer> {

@@ -17,8 +17,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             rosterSizeQuestionId = Guid.Parse("13333333333333333333333333333333");
             rosterTitleQuestionId = Guid.Parse("11333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion("question 1")
+                new NumericQuestion()
                 {
+                    QuestionText = "question 1",
                     PublicKey = rosterSizeQuestionId,
                     StataExportCaption = "var1",
                     IsInteger = true
@@ -32,8 +33,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     RosterTitleQuestionId = rosterTitleQuestionId
                 },
-                new TextQuestion("question 1")
+                new TextQuestion()
                 {
+                    QuestionText = "question 1",
                     StataExportCaption = "var2",
                     PublicKey = rosterTitleQuestionId
                 });

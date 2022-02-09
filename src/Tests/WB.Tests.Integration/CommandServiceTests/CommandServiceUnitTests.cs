@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
 using NUnit.Framework;
+using SQLite;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;

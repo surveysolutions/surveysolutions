@@ -672,9 +672,6 @@
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Ростер достиг максимального размера. Уменьшите размер ростера или уровень вложенности.</value>
   </data>
-  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>Первая секция не может иметь условия включения.</value>
-  </data>
   <data name="WB0264_GpsQuestion" xml:space="preserve">
     <value>Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. </value>
   </data>
@@ -754,10 +751,6 @@
     <value>Табличное представление доступно только в web режиме, на плпншетах это будет обычный режим.</value>
     <comment>Табличное представление доступно только в web режиме, на плпншетах это будет обычный режим.</comment>
   </data>
-  <data name="WB0287_TableRosterDoesntContainsQuestionWithSubstitutions" xml:space="preserve">
-    <value>Вопросы внутри табличного ростера не могут ссылаться на другие вопросы в своих заголовках.</value>
-    <comment>Вопросы внутри табличного ростера не могут ссылаться на другие вопросы в своих заголовках.</comment>
-  </data>
   <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
     <value>Заголовок {1} и код {0} числовые и отличается значениями</value>
     <comment>Заголовок {1} и код {0} числовые и отличается значениями</comment>
@@ -803,21 +796,12 @@
   <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
     <value>Матричное представление ростера не может содержать идентифицирующие вопросы и вопросы для супервизора.</value>
   </data>
-  <data name="WB0300" xml:space="preserve">
-    <value>Матричное представление ростера не может содержать вопрос с подстановкой %rostertitle%.</value>
-  </data>
   <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
     <value>Матричное представление ростера не может содержать связанные вопросы.
 </value>
   </data>
   <data name="WB0302" xml:space="preserve">
     <value>В подстановках не могут быть использованы переменные с таким же уровнем вложенности.</value>
-  </data>
-  <data name="WB0303_MatrixRosterCannotHaveCustomTitle" xml:space="preserve">
-    <value>Матричный ростер не может переопределять имя</value>
-  </data>
-  <data name="WB0304_TableRosterCannotHaveCustomTitle" xml:space="preserve">
-    <value>Табличный ростер не может переопределять имя</value>
   </data>
   <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
     <value>Категории должны содержать уникальную пару Id, ParentId</value>

@@ -132,7 +132,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
         {
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
                 new IComposite[]{
-                    Create.Roster(displayMode: RosterDisplayMode.Table)
+                    Create.Roster(displayMode: RosterDisplayMode.Table, customRosterTitle: false)
                 });
 
 

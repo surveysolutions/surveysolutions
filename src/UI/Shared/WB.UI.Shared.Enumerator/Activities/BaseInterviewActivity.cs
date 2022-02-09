@@ -134,7 +134,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected void Navigate(string navigateTo)
         {
             var parts = navigateTo.Split('|');
-            this.ViewModel.navigationState.NavigateTo(new NavigationIdentity
+            this.ViewModel.NavigationState.NavigateTo(new NavigationIdentity
             {
                 TargetScreen = ScreenType.Group,
                 TargetGroup = Identity.Parse(parts[0]),

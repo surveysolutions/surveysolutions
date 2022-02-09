@@ -16,8 +16,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion("rosterSizeQuestion1")
+                new NumericQuestion()
                 {
+                    QuestionText = "rosterSizeQuestion1",
                     PublicKey = rosterSizeQuestionId,
                     StataExportCaption = "var1",
                     IsInteger = true
@@ -33,8 +34,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     RosterTitleQuestionId = rosterTitleMultimediaQuestionId,
                     Children = new List<IComposite>()
                     {
-                        new MultimediaQuestion("rosterTitleQuestion")
+                        new MultimediaQuestion()
                         {
+                            QuestionText = "rosterTitleQuestion",
                             StataExportCaption = "var3",
                             PublicKey = rosterTitleMultimediaQuestionId
                         }

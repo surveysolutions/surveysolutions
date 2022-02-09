@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System.Linq;
+﻿using System.Linq;
 using HotChocolate;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;

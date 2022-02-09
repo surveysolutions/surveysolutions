@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using NHibernate.Collection.Generic;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Verifier;
@@ -167,7 +168,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion {
                     PublicKey = parentSingleOptionQuestionId,
                     StataExportCaption = "var",
-                    QuestionType = QuestionType.SingleOption,
                     Answers = new List<Answer> {
                         new Answer { AnswerText = "one", AnswerValue = "1" },
                         new Answer { AnswerText = "two", AnswerValue = "2" }
@@ -176,7 +176,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 new SingleQuestion
                 {
                     PublicKey = childCascadedComboboxId,
-                    QuestionType = QuestionType.SingleOption,
                     StataExportCaption = "var1",
                     CascadeFromQuestionId = parentSingleOptionQuestionId,
                     CategoriesId = childCategoriesId
@@ -212,13 +211,11 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion {
                     PublicKey = parentSingleOptionQuestionId,
                     StataExportCaption = "var",
-                    QuestionType = QuestionType.SingleOption,
                     CategoriesId = parentCategoriesId
                 },
                 new SingleQuestion
                 {
                     PublicKey = childCascadedComboboxId,
-                    QuestionType = QuestionType.SingleOption,
                     StataExportCaption = "var1",
                     CascadeFromQuestionId = parentSingleOptionQuestionId,
                     Answers = new List<Answer> {
@@ -258,13 +255,11 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion {
                     PublicKey = parentSingleOptionQuestionId,
                     StataExportCaption = "var",
-                    QuestionType = QuestionType.SingleOption,
                     CategoriesId = parentCategoriesId
                 },
                 new SingleQuestion
                 {
                     PublicKey = childCascadedComboboxId,
-                    QuestionType = QuestionType.SingleOption,
                     StataExportCaption = "var1",
                     CascadeFromQuestionId = parentSingleOptionQuestionId,
                     CategoriesId = childCategoriesId
@@ -582,7 +577,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.GetError("WB0302").References.Last().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
             verificationMessages.GetError("WB0302").References.Last().Id.Should().Be(sameRosterLevelQuestionId);
         }
-
+        
         [Test]
         public void when_question_on_cover_page_without_variable_label()
             => QuestionnaireDocumentWithCoverPage(new[]

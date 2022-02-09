@@ -141,6 +141,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
 
+            var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
+            if (questionnaire.IsQuestionFilteredCombobox(questionIdentity.Id))
+            {
+                // for combo always drop list of options
+                if (this.options != null)
+                    this.OptionsChanged?.Invoke(this, EventArgs.Empty);
+                return;
+            }
+            
             var listOfNewOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, ParentValue, Filter, Count, this.excludedOptionIds).ToList(); 
 
             var existingOptions = this.options;

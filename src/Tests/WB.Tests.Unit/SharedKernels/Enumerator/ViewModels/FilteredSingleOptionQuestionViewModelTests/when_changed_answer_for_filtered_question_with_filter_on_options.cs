@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var interviewRepository = Create.Storage.InterviewRepository(interview.Object);
             var questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
 
-            var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>(), Mock.Of<IMvxMessenger>(), Mock.Of<ILogger>());
+            var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>(),  Mock.Of<ILogger>());
 
             var filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
             filteredOptionsViewModel.Setup(x => x.GetAnsweredOption(3)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = null });

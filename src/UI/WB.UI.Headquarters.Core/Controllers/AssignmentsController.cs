@@ -95,10 +95,10 @@ namespace WB.UI.Headquarters.Controllers
             this.calendarEventService = calendarEventService;
             this.webInterviewLinkProvider = webInterviewLinkProvider;
         }
-        
+
         [ActivePage(MenuItem.Assignments)]
         [HttpGet]
-        [Route("{controller}/{id}")]
+        [Route("{controller}/{id:int?}")]
         [Route("{controller}/{action=Index}")]
         public IActionResult Index(int? id = null)
         {

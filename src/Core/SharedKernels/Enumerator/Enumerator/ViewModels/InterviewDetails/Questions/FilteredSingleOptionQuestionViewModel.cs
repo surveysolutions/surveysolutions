@@ -21,11 +21,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher) :
+            QuestionInstructionViewModel instructionViewModel) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository, 
-                eventRegistry: eventRegistry, filteredOptionsViewModel, mainThreadDispatcher)
+                eventRegistry: eventRegistry, filteredOptionsViewModel)
         {
         }
 
@@ -33,7 +32,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             base.Init(interviewId, entityIdentity, navigationState);
 
-            this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
         }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Designer.Classifications;
 
-namespace WB.Tests.Integration.Core
+namespace WB.Tests.Integration.Designer
 {
     internal class ClassificationsFactory
     {

@@ -19,31 +19,22 @@ namespace WB.UI.Tester.Implementation.Services
 {
     public class ViewModelNavigationService : BaseViewModelNavigationService
     {
-        private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
-        private readonly IMvxNavigationService navigationService;
-
         public ViewModelNavigationService(
             ICommandService commandService,
             IUserInteractionService userInteractionService,
             IUserInterfaceStateService userInterfaceStateService,
-            IMvxAndroidCurrentTopActivity androidCurrentTopActivity,
             IPrincipal principal,
-            IMvxNavigationService navigationService,
-            ILogger log, IMvxMessenger messenger)
+            ILogger log)
             : base(commandService, 
                 userInteractionService, 
-                userInterfaceStateService, 
-                androidCurrentTopActivity, 
-                navigationService, 
+                userInterfaceStateService,
                 principal, log)
         {
-            this.androidCurrentTopActivity = androidCurrentTopActivity;
-            this.navigationService = navigationService;
         }
 
         public override async Task<bool> NavigateToDashboardAsync(string interviewId = null)
         {
-            return await this.navigationService.Navigate<DashboardViewModel>();
+            return await NavigationService.Navigate<DashboardViewModel>();
         }
 
         public override void NavigateToSplashScreen()
@@ -52,7 +43,7 @@ namespace WB.UI.Tester.Implementation.Services
         }
 
         public override Task NavigateToPrefilledQuestionsAsync(string interviewId) => 
-            this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
+            NavigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId,
                 NavigationIdentity = NavigationIdentity.CreateForCoverScreen()
@@ -65,7 +56,7 @@ namespace WB.UI.Tester.Implementation.Services
         => throw new NotImplementedException();
 
         public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
-            => this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
+            => NavigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId,
                 NavigationIdentity = navigationIdentity
@@ -77,8 +68,8 @@ namespace WB.UI.Tester.Implementation.Services
         }
 
         public override Task NavigateToLoginAsync() => this.NavigateToAsync<LoginViewModel>();
-        protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();
+        protected override void FinishActivity() => TopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
-            this.androidCurrentTopActivity.Activity.StartActivity(new Intent(this.androidCurrentTopActivity.Activity, typeof(PrefsActivity)));
+            TopActivity.Activity.StartActivity(new Intent(TopActivity.Activity, typeof(PrefsActivity)));
     }
 }

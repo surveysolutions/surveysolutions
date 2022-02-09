@@ -31,8 +31,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     RosterSizeQuestionId = rosterSizeQiestionId,
                     Children = new List<IComposite>()
                     {
-                        new TextQuestion("Title")
+                        new TextQuestion()
                         {
+                            QuestionText = "Title",
                             PublicKey = prefilledQuestionId, Featured = true, StataExportCaption = "var2"
                         }
                     }.ToReadOnlyCollection()

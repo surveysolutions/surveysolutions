@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.DataAccess;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.DependencyInjection;
@@ -14,7 +13,7 @@ using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.UI.Designer.Migrations.PlainStore;
 
-namespace WB.Tests.Integration.Core
+namespace WB.Tests.Integration.Designer
 {
     public class IntegrationTest
     {
@@ -23,7 +22,7 @@ namespace WB.Tests.Integration.Core
         [SetUp]
         public void InitEnvironment()
         {
-            var connectionString = $"Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database={"testdb_" + Guid.NewGuid().ToString("N")};";
+            var connectionString = string.Format(TestsConfigurationManager.TestConnectionStringFormat, Guid.NewGuid().ToString("N"));
 
             var migration = typeof(M001_Init);
             var schemaName = "plainstore";
@@ -55,7 +54,7 @@ namespace WB.Tests.Integration.Core
                     action(serviceLocator);
                     transaction.Commit();
                 }
-                catch(Exception e)
+                catch
                 {
                     transaction.Rollback();
                 }

@@ -285,6 +285,9 @@
   <data name="RestoreQuestionnaire" xml:space="preserve">
     <value>Restore questionnaire</value>
   </data>
+  <data name="RestoreQuestionnaireDocument" xml:space="preserve">
+    <value>Restore questionnaire document (old)</value>
+  </data>
   <data name="RetryExportPDF" xml:space="preserve">
     <value>Retry export as PDF</value>
   </data>
@@ -317,5 +320,8 @@
   </data>
   <data name="Classifications" xml:space="preserve">
     <value>Classifications</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Save as</value>
   </data>
 </root>

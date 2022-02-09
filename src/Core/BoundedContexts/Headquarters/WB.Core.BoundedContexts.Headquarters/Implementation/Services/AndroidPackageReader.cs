@@ -60,18 +60,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private class APKManifest
         {
             private string result = "";
-
-            public static int startDocTag = 1048832;
-
-            public static int endDocTag = 1048833;
-
-            public static int startTag = 1048834;
-
-            public static int endTag = 1048835;
-
-            public static int textTag = 1048836;
-
-            public static string spaces = "                                             ";
+            private static int startDocTag = 1048832;
+            private static int endDocTag = 1048833;
+            private static int startTag = 1048834;
+            private static int endTag = 1048835;
+            private static int textTag = 1048836;
+            private static string spaces = "                                             ";
 
             public string ReadManifestFileIntoXml(byte[] manifestFileData)
             {
@@ -215,7 +209,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 return this.result;
             }
 
-            public string compXmlString(byte[] xml, int sitOff, int stOff, int strInd)
+            private string compXmlString(byte[] xml, int sitOff, int stOff, int strInd)
             {
                 bool flag = strInd < 0;
                 string text;
@@ -231,7 +225,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 return text;
             }
 
-            public void prtIndent(int indent, string str)
+            private void prtIndent(int indent, string str)
             {
                 this.prt(APKManifest.spaces.Substring(0, Math.Min(indent * 2, APKManifest.spaces.Length)) + str);
             }
@@ -241,7 +235,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 this.result += p;
             }
 
-            public string compXmlStringAt(byte[] arr, int strOff)
+            private string compXmlStringAt(byte[] arr, int strOff)
             {
                 int num = ((int)arr[strOff + 1] << 8 & 65280) | (int)(arr[strOff] & 255);
                 byte[] array = new byte[num];
@@ -254,7 +248,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 return Encoding.UTF8.GetString(array);
             }
 
-            public int LEW(byte[] arr, int off)
+            private int LEW(byte[] arr, int off)
             {
                 return ((int)arr[off + 3] << 24 & -16777216) | ((int)arr[off + 2] << 16 & 16711680) | ((int)arr[off + 1] << 8 & 65280) | (int)(arr[off] & 255);
             }

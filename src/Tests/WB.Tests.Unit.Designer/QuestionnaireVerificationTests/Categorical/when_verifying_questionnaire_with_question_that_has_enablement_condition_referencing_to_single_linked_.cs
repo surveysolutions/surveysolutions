@@ -22,10 +22,10 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Categorical
                 fixedTitles: new[] {"fixed title 1", "fixed title 2"},
                 children: new IComposite[]
                 {
-                    new TextQuestion("test")
+                    new TextQuestion()
                     {
+                        QuestionText = "test",
                         PublicKey = linkedSourceQuestionId,
-                        QuestionType = QuestionType.Text,
                         StataExportCaption = "var"
                     }
                 }),
@@ -35,8 +35,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Categorical
                     StataExportCaption = "var1",
                     LinkedToQuestionId = linkedSourceQuestionId
                 },
-                new NumericQuestion("test")
+                new NumericQuestion()
                 {
+                    QuestionText = "test",
                     PublicKey = questionWithEnablementConditionId,
                     ConditionExpression = "some condition",
                     StataExportCaption = "var2"

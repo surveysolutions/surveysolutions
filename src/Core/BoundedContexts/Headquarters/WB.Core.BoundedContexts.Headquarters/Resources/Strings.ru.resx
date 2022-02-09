@@ -293,4 +293,19 @@
   <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
     <value>Не назначенные на интервьюера</value>
   </data>
+  <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
+      <value>API доступ</value>
+  </data>
+    <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
+    <value>API ключ используется для совершения API запросов к системе</value>
+  </data>
+    <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
+    <value>включен</value>
+  </data>
+    <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
+  <value>выключен</value>
+  </data>
+    <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
+    <value>Пожалуйста, сохраните его, он будет показан единожды!</value>
+  </data>
 </root>

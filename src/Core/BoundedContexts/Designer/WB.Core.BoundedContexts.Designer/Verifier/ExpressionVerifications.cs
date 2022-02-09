@@ -16,7 +16,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Questionnaire.Documents;
-using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.QuestionnaireEntities; 
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
 {
@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private readonly IDynamicCompilerSettingsProvider compilerSettings;
 
         
-        private static string WrapToClass(string expression) => $"using System; class __0c6e6226bbc84e43aae9324a93cd594f {{ bool __b1d0447f51874e3b83f145683aeec643() {{ return ({expression}); }} }} ";
+        private static string WrapToClass(string expression) => $"using System; class __0c6e6226bbc84e43aae9324a93cd594f {{ bool __b1d0447f51874e3b83f145683aeec643() {{ return ({expression}); }} }} ";
 
         public ExpressionVerifications(IMacrosSubstitutionService macrosSubstitutionService,
             IExpressionProcessor expressionProcessor,
@@ -132,7 +132,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             var expressionWithInlinedMacros = this.macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values);
             string code = WrapToClass(expressionWithInlinedMacros);
-            var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
+            var syntaxTree = SyntaxFactory.ParseSyntaxTree(code, 
+                options: new CSharpParseOptions(documentationMode:DocumentationMode.None));
 
             var compilation = CSharpCompilation.Create(
                 "rules.dll",
@@ -391,10 +392,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInFilterExpression(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue))
-                new EntityVerificationResult<IComposite> { HasErrors = false };
+               return new EntityVerificationResult<IComposite> { HasErrors = false };
 
             if (string.IsNullOrEmpty(question.LinkedFilterExpression))
-                new EntityVerificationResult<IComposite> { HasErrors = false };
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
 
             return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question,
                 question.LinkedFilterExpression,

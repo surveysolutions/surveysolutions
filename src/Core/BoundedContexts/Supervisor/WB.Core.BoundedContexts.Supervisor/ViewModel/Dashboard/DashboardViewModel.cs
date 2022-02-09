@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.Navigation.EventArguments;
@@ -56,8 +57,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public DashboardViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IDashboardItemsAccessor dashboardItemsAccessor,
-            IMvxNavigationService mvxNavigationService,
-            IMvxMessenger messenger,
             LocalSynchronizationViewModel synchronization,
             DashboardNotificationsViewModel dashboardNotifications,
             IWorkspaceService workspaceService,
@@ -66,7 +65,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             IWorkspaceMemoryCacheSource memoryCacheSource)
             : base(principal, viewModelNavigationService)
         {
-            this.mvxNavigationService = mvxNavigationService;
+            this.mvxNavigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
             this.workspaceService = workspaceService;
             this.supervisorSynchronizationService = supervisorSynchronizationService;
             this.supervisorPlainStorage = supervisorPlainStorage;
@@ -76,10 +75,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.Synchronization.Init();
             this.DashboardNotifications = dashboardNotifications;
             
-            this.mvxNavigationService.AfterNavigate += OnAfterNavigate;
+            this.mvxNavigationService.DidNavigate += OnAfterNavigate;
             this.Synchronization.OnProgressChanged += SynchronizationOnProgressChanged;
 
-            messengerSubscribtion = messenger.Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
+            messengerSubscribtion = Mvx.IoCProvider.GetSingleton<IMvxMessenger>().Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
         }
 
         public DashboardNotificationsViewModel DashboardNotifications { get; set; }
@@ -220,10 +219,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             messengerSubscribtion.Dispose();
-            this.mvxNavigationService.AfterNavigate -= OnAfterNavigate;
+            this.mvxNavigationService.DidNavigate -= OnAfterNavigate;
             this.Synchronization.OnProgressChanged -= SynchronizationOnProgressChanged;
         }
 

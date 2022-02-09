@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         PreloadedFile ReadTextFile(Stream inputStream, string fileName);
         PreloadedFileInfo ReadTextFileInfo(Stream inputStream, string fileName);
         IEnumerable<PreloadedFile> ReadZipFile(Stream inputStream);
-        PreloadedFile ReadFileFromZip(Stream inputStream, string fileName);
+        PreloadedFile ReadFileFromZip(Stream inputStream, string originalFileName);
         IEnumerable<PreloadedFileInfo> ReadZipFileInfo(Stream inputStream);
     }
 }

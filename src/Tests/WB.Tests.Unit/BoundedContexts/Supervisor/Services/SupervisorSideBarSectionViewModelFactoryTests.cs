@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
+using MvvmCross.Plugin.Messenger;
+using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.Services;
@@ -11,8 +13,16 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 {
     [TestOf(typeof(SupervisorSideBarSectionViewModelFactory))]
-    public class SupervisorSideBarSectionViewModelFactoryTests
+    public class SupervisorSideBarSectionViewModelFactoryTests : MvxIoCSupportingTest
     {
+        [OneTimeSetUp]
+        public void SetUp()
+        {
+            base.Setup();
+            Ioc.RegisterSingleton(Stub.MvxMainThreadAsyncDispatcher());
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
+        }
+        
         [Test]
         public void should_initialize_with_resolve_text()
         {

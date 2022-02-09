@@ -20,7 +20,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     PublicKey = multiQuestionId,
                     StataExportCaption = "var",
                     Answers = new List<Answer>(),
-                    QuestionType = QuestionType.MultyOption
                 });
 
             verifier = CreateQuestionnaireVerifier();

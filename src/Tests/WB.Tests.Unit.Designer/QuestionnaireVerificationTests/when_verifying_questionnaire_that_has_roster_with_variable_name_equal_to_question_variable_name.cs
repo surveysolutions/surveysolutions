@@ -24,7 +24,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 new TextQuestion()
                 {
                     PublicKey = questionId,
-                    QuestionType = QuestionType.Text,
                     StataExportCaption = nonUniqueVariableName,
                     QuestionText = "text question"
                 },

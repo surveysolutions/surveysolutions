@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private void BecauseOf() => questionnaire.MoveGroup(groupToMoveId, parentRosterId, 0, responsibleId);
 
         [NUnit.Framework.Test] public void should_contains_group () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToMoveId);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToMoveId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_group_with_parentRosterId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupToMoveId).GetParent().PublicKey.Should().Be(parentRosterId);

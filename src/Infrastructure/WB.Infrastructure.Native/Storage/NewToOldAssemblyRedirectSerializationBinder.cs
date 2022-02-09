@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WB.Infrastructure.Native.Storage
 {
-    [Obsolete("Resolves old namespaces. Cuold be dropped after incompatibility shift with the next version.")]
+    [Obsolete("Resolves old namespaces. Could be dropped after incompatibility shift with the next version.")]
     public class NewToOldAssemblyRedirectSerializationBinder : MainCoreAssemblyRedirectSerializationBaseBinder
     {
         public override Type BindToType(string assemblyName, string typeName)
@@ -19,19 +19,15 @@ namespace WB.Infrastructure.Native.Storage
 
         public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
         {
-            string typeShortName;
-            if (typeToName.TryGetValue(serializedType, out typeShortName))
+            if (TypeToName.TryGetValue(serializedType, out var typeShortName))
             {
                 assemblyName = oldAssemblyNameToRedirect;
-
-                string fullTypeName;
-                typeName = oldTypesMap.TryGetValue(typeShortName, out fullTypeName) ? fullTypeName : serializedType.FullName;
-
+                typeName = oldTypesMap.TryGetValue(typeShortName, out var fullTypeName) ? fullTypeName : serializedType.FullName;
             }
             else
             {
                 assemblyName = serializedType.Assembly.FullName;
-                typeName = serializedType.FullName.Replace(newAssemblyGenericReplacePattern, oldAssemblyGenericReplacePattern); //generic
+                typeName = serializedType.FullName?.Replace(NewAssemblyGenericReplacePattern, OldAssemblyGenericReplacePattern); //generic
             }
         }
 

@@ -103,7 +103,7 @@
 
             utilityService.createQuestionForDeleteConfirmationPopup = function (title) {
                 var trimmedTitle = utilityService.trimText(title);
-                var message = $i18next.t('DeleteConfirmQuestion',  {trimmedTitle: trimmedTitle});
+                var message = $i18next.t('DeleteConfirmQuestion',  {trimmedTitle: trimmedTitle, interpolation: {escapeValue: false}});
                 return {
                     title: message,
                     okButtonTitle: $i18next.t("Delete"),
@@ -113,7 +113,7 @@
 
             utilityService.replaceOptionsConfirmationPopup = function (title) {
                 var trimmedTitle = utilityService.trimText(title);
-                var message = $i18next.t('ReplaceOptionsConfirmation',  {trimmedTitle: trimmedTitle});
+                var message = $i18next.t('ReplaceOptionsConfirmation',  {trimmedTitle: trimmedTitle, interpolation: {escapeValue: false}});
                 return {
                     title: message,
                     okButtonTitle: $i18next.t("Yes"),
@@ -123,7 +123,7 @@
 
             utilityService.willBeTakenOnlyFirstOptionsConfirmationPopup = function (title, count) {
                 var trimmedTitle = utilityService.trimText(title);
-                var message = $i18next.t('OnlyFirstOptionsWillBeTakenConfirmation',  {trimmedTitle: trimmedTitle, count: count });
+                var message = $i18next.t('OnlyFirstOptionsWillBeTakenConfirmation',  {trimmedTitle: trimmedTitle, count: count, interpolation: {escapeValue: false} });
                 return {
                     title: message,
                     okButtonTitle: $i18next.t("Yes"),
@@ -148,7 +148,7 @@
                 var newId = utilityService.guid();
                 var emptyRoster = {
                     "itemId": newId,
-                    "title": $i18next.t('DefaultNewRoster'),
+                    "title": $i18next.t('DefaultNewRoster') + ' - %rostertitle%',
                     "items": [],
                     itemType: 'Group',
                     hasCondition: false,

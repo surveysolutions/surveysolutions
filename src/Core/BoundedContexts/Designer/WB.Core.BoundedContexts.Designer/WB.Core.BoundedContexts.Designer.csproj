@@ -30,16 +30,18 @@
     <EmbeddedResource Include="$(NugetPackageRoot)\system.globalization\4.3.0\ref\netstandard1.3\System.Globalization.dll" Visible="false" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="CsvHelper" Version="19.0.0" />
     <PackageReference Include="ClosedXML" Version="0.95.4" />
     <PackageReference Include="Dapper" Version="2.0.78" />
-    <PackageReference Include="HtmlSanitizer" Version="5.0.376" />
+    <PackageReference Include="HtmlSanitizer" Version="6.0.441" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.3.0" />
     <PackageReference Include="Markdig" Version="0.23.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.4" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
+    <PackageReference Include="NJsonSchema" Version="10.5.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
     <PackageReference Include="System.CodeDom" Version="5.0.0" />
   </ItemGroup>

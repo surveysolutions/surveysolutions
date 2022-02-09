@@ -737,7 +737,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Секция не может содержать более {0} дочерних элементов..
+        ///   Looks up a localized string similar to Секция не может содержать более {0} вложенных дочерних элементов..
         /// </summary>
         public static string SectionCantHaveMoreThan_Items {
             get {
@@ -760,6 +760,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string SubSectionCantBeFound {
             get {
                 return ResourceManager.GetString("SubSectionCantBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Секция или подсекция не может содержать более {0} непосредственных дочених элементов.
+        /// </summary>
+        public static string SubsectionCantHaveMoreThan_DirectChildren {
+            get {
+                return ResourceManager.GetString("SubsectionCantHaveMoreThan_DirectChildren", resourceCulture);
             }
         }
         

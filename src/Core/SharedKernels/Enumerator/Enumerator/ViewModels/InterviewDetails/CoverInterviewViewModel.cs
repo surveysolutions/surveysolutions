@@ -48,7 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IEntitiesListViewModelFactory entitiesListViewModelFactory, 
             IDynamicTextViewModelFactory dynamicTextViewModelFactory,
             IInterviewViewModelFactory interviewViewModelFactory,
-            ICompositeCollectionInflationService compositeCollectionInflationService)
+            ICompositeCollectionInflationService compositeCollectionInflationService,
+            GroupNavigationViewModel nextGroupNavigationViewModel)
         {
             this.commandService = commandService;
             this.principal = principal;
@@ -61,6 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.compositeCollectionInflationService = compositeCollectionInflationService;
+            this.NextGroupNavigationViewModel = nextGroupNavigationViewModel;
         }
 
         public string InterviewKey { get; set; }
@@ -89,8 +91,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public bool DoesShowCommentsBlock { get; set; }
         public string CommentedEntitiesDescription { get; set; }
         public int CountOfCommentedQuestions { get; set; }
-        
-        public string FirstSectionTitle { get; set; }
+
+        public GroupNavigationViewModel NextGroupNavigationViewModel { get; }
 
         protected Guid interviewId;
         protected NavigationState navigationState;
@@ -109,10 +111,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.Name.InitAsStatic(UIResources.Interview_Cover_Screen_Title);
             
             this.InterviewState.Init(interviewId, null);
-
-            var firstSectionId = questionnaire.GetAllSections().First(id => !questionnaire.IsCoverPage(id));
-            this.firstSectionIdentity = new Identity(firstSectionId, RosterVector.Empty);
-            this.FirstSectionTitle = interview.GetBrowserReadyTitleHtml(this.firstSectionIdentity);
             this.QuestionnaireTitle = questionnaire.Title;
             
             var prefilledEntitiesFromQuestionnaire = questionnaire.GetPrefilledEntities();
@@ -120,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (IsEditMode)
             {
-                this.PrefilledReadOnlyEntities = new CoverPrefilledEntity[0];
+                this.PrefilledReadOnlyEntities = Array.Empty<CoverPrefilledEntity>();
                 this.PrefilledEditableEntities = GetEditablePrefilledData(interviewId, navigationState);
             }
             else
@@ -147,9 +145,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     : string.Format(UIResources.Interview_Cover_First_n_Questions_With_Comments, entitiesListViewModelFactory.MaxNumberOfEntities);
 
             this.DoesShowCommentsBlock = CountOfCommentedQuestions > 0 || interview.WasCompleted || interview.WasRejected;
-
             this.SupervisorNote = interview.GetLastSupervisorComment();
-            
+            NextGroupNavigationViewModel.Init(this.interviewId.FormatGuid(), null, this.navigationState);
             this.SetScrollTo(anchoredElementIdentity);
         }
         
@@ -220,17 +217,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             title.Init(interviewId, entityIdentity);
             return title;
         }
-
-        private Identity firstSectionIdentity;
-
-        public IMvxAsyncCommand StartInterviewCommand => new MvxAsyncCommand(this.StartInterviewAsync);
-
-        private async Task StartInterviewAsync()
-        {
-            await this.commandService.WaitPendingCommandsAsync();
-            await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSectionIdentity));
-        }
-
+        
         public void Dispose()
         {
             var prefilledQuestionsLocal = PrefilledReadOnlyEntities;
@@ -241,6 +228,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             
             var commentedEntities = CommentedEntities;
             commentedEntities.ForEach(viewModel => viewModel.DisposeIfDisposable());
+            
+            NextGroupNavigationViewModel.Dispose();
             
             Name?.Dispose();
         }

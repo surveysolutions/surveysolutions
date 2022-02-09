@@ -70,6 +70,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to API tokens.
+        /// </summary>
+        public static string AccountManage_ApiTokens {
+            get {
+                return ResourceManager.GetString("AccountManage_ApiTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Authenticator app.
         /// </summary>
         public static string AccountManage_AuthenticatorApp {
@@ -156,6 +165,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string AccountManage_Status2fa {
             get {
                 return ResourceManager.GetString("AccountManage_Status2fa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Access to REST and GraphQL API endpoints is currently .
+        /// </summary>
+        public static string AccountManage_StatusApiToken {
+            get {
+                return ResourceManager.GetString("AccountManage_StatusApiToken", resourceCulture);
             }
         }
         
@@ -1240,11 +1258,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete questionnaire? All interviews conducted by current questionnaire will be lost..
+        ///   Looks up a localized string similar to Are you sure you want to delete questionnaire? All interviews conducted by current questionnaire, including the interviews collected on the tablets, even those that you don&apos;t see on the server currently will be lost..
         /// </summary>
-        public static string GlobalSettings_DeleteQuestionnareConfirmation {
+        public static string GlobalSettings_DeleteQuestionnaireConfirmation {
             get {
-                return ResourceManager.GetString("GlobalSettings_DeleteQuestionnareConfirmation", resourceCulture);
+                return ResourceManager.GetString("GlobalSettings_DeleteQuestionnaireConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning! This is an irreversible action.
+        /// </summary>
+        public static string GlobalSettings_DeleteQuestionnaireWarning {
+            get {
+                return ResourceManager.GetString("GlobalSettings_DeleteQuestionnaireWarning", resourceCulture);
             }
         }
         
@@ -3612,6 +3639,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Profile_InterviewersList {
             get {
                 return ResourceManager.GetString("Profile_InterviewersList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Issue.
+        /// </summary>
+        public static string Profile_IssueApiToken {
+            get {
+                return ResourceManager.GetString("Profile_IssueApiToken", resourceCulture);
             }
         }
         

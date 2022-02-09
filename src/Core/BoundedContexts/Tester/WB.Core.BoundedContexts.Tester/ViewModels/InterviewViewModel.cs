@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
-        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
+        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.NavigationState.CurrentNavigationIdentity));
 
         public IMvxAsyncCommand ReloadQuestionnaireCommand => new MvxAsyncCommand(this.ReloadQuestionnaire, () => !this.IsInProgress);
 
@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
 
                 bool succeeded = await this.QuestionnaireDownloader.ReloadQuestionnaireAsync(
-                    questionnaireId, this.QuestionnaireTitle, interview, this.navigationState.CurrentNavigationIdentity,
+                    questionnaireId, this.QuestionnaireTitle, interview, this.NavigationState.CurrentNavigationIdentity,
                     new Progress<string>(), CancellationToken.None);
 
                 if (!succeeded) return;

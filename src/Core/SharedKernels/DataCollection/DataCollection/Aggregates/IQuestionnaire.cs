@@ -289,7 +289,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetVariableName(Guid variableId);
         bool HasVariable(Guid variableId);
         bool HasStaticText(Guid entityId);
-        Guid GetFirstSectionId();
+        Guid? GetFirstSectionId();
         IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId);
 
         List<Guid> GetExpressionsPlayOrder();

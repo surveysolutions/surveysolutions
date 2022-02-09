@@ -43,6 +43,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public List<DropdownEntityView> NotLinkedMultiOptionQuestions { get; set; }
         public List<DropdownEntityView> TextListsQuestions { get; set; }
         public Breadcrumb[] Breadcrumbs { get; set; }
-        public bool CustomRosterTitle { get; set; }
     }
 }

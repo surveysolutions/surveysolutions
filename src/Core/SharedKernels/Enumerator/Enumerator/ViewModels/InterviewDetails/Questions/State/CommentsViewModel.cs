@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -61,14 +62,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
             ICommandService commandService,
-            IViewModelEventRegistry eventRegistry,
-            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher)
+            IViewModelEventRegistry eventRegistry)
         {
             this.interviewRepository = interviewRepository;
             this.principal = principal;
             this.commandService = commandService;
             this.eventRegistry = eventRegistry;
-            this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
+            this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
         }
 
         private string interviewId;

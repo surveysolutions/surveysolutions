@@ -6,7 +6,6 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters;
@@ -22,6 +21,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Users;
@@ -39,8 +39,8 @@ namespace WB.UI.Headquarters.Controllers
         private UrlEncoder urlEncoder;
         private IOptions<HeadquartersConfig> options;
         private readonly IPlainStorageAccessor<Workspace> workspaces;
-        private readonly SignInManager<HqUser> signInManager;
-
+        private readonly ITokenProvider tokenProvider;
+        
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
         [TempData]
@@ -52,7 +52,7 @@ namespace WB.UI.Headquarters.Controllers
             UrlEncoder urlEncoder,
             IOptions<HeadquartersConfig> options,
             IPlainStorageAccessor<Workspace> workspaces,
-            SignInManager<HqUser> signInManager)
+            ITokenProvider tokenProvider)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters.Controllers
             this.urlEncoder = urlEncoder;
             this.options = options;
             this.workspaces = workspaces;
-            this.signInManager = signInManager;
+            this.tokenProvider = tokenProvider;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -180,6 +180,27 @@ namespace WB.UI.Headquarters.Controllers
 
             return View(await GetUserInfo(user));
         }
+        
+        [HttpGet]
+        [AuthorizeByRole(UserRoles.Administrator)]
+        [AntiForgeryFilter]
+        [ActivePage(MenuItem.ManageAccount)]
+        [Route("/ApiTokens/{id:guid?}")]
+        public async Task<ActionResult> ApiTokens(Guid? id)
+        {
+            if(id == this.authorizedUser.Id)
+                return RedirectToAction("ApiTokens", new {id = (Guid?)null});
+            
+            if (!this.tokenProvider.CanGenerate)
+                return this.Forbid();
+
+            var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
+            if (user == null) return NotFound("User not found");
+
+            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+
+            return View(await GetUserInfo(user));
+        }
 
         private string FormatKey(string unformattedKey)
         {
@@ -243,7 +264,9 @@ namespace WB.UI.Headquarters.Controllers
                     CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
                     CanBeLockedAsSupervisor = authorizedUser.IsAdministrator && (userRole == UserRoles.Interviewer),
                     CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
-                    RecoveryCodes = ""
+                    RecoveryCodes = "",
+                    CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
+                    TokenIssued = await this.tokenProvider.DoesTokenExist(user)
                 },
                 Api = new
                 {
@@ -258,7 +281,9 @@ namespace WB.UI.Headquarters.Controllers
                     SetupAuthenticatorUrl = Url.Action("SetupAuthenticator", new { id = user.Id }),
                     ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes", new { id = user.Id }),
                     TwoFactorAuthenticationUrl = Url.Action("TwoFactorAuthentication", new { id = user.Id }),
-                    CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = user.Id })
+                    CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = user.Id }),
+                    GenerateApiKeyUrl = Url.Action("GenerateApiKey"),
+                    DeleteApiKeyUrl = Url.Action("DeleteApiKey")
                 }
             };
         }
@@ -326,7 +351,7 @@ namespace WB.UI.Headquarters.Controllers
                     CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
                     CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
                     CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
-
+                    CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     RecoveryCodes = string.Join(" ", RecoveryCodes)
 
                 },
@@ -341,7 +366,9 @@ namespace WB.UI.Headquarters.Controllers
                     SetupAuthenticatorUrl = Url.Action("SetupAuthenticator", new { id = user.Id }),
                     ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes", new { id = user.Id }),
                     TwoFactorAuthenticationUrl = Url.Action("TwoFactorAuthentication", new { id = user.Id }),
-                    CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = user.Id })
+                    CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = user.Id }),
+                    GenerateApiKeyUrl = Url.Action("GenerateApiKey"),
+                    DeleteApiKeyUrl = Url.Action("DeleteApiKey")
                 }
             });
         }
@@ -425,6 +452,7 @@ namespace WB.UI.Headquarters.Controllers
                     CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
                     CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
                     CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
+                    CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                 },
                 Api = new
                 {
@@ -437,11 +465,12 @@ namespace WB.UI.Headquarters.Controllers
                     SetupAuthenticatorUrl = Url.Action("SetupAuthenticator", new { id = user.Id }),
                     ShowRecoveryCodesUrl = Url.Action("ShowRecoveryCodes", new { id = user.Id }),
                     TwoFactorAuthenticationUrl = Url.Action("TwoFactorAuthentication", new { id = user.Id }),
-                    CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = user.Id })
+                    CheckVerificationCodeUrl = Url.Action("CheckVerificationCode", new { id = user.Id }),
+                    GenerateApiKeyUrl = Url.Action("GenerateApiKey"),
+                    DeleteApiKEyUrl = Url.Action("DeleteApiKey")
                 }
             });
         }
-
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
@@ -584,7 +613,7 @@ namespace WB.UI.Headquarters.Controllers
                     await this.userManager.AddToRoleAsync(user, model.Role);
                 }
             }
-            
+
             return this.ModelState.ErrorsToJsonResult();
         }
 
@@ -663,10 +692,10 @@ namespace WB.UI.Headquarters.Controllers
 
             var result = await userManager.SetLockoutEndDateAsync(currentUser, null);
             if (!result.Succeeded)
-                {
-                    this.ModelState.AddModelError(nameof(UserModel.UserId),
-                        "Unable to release autolock");
-                }
+            {
+                this.ModelState.AddModelError(nameof(UserModel.UserId),
+                    "Unable to release autolock");
+            }
 
             return this.ModelState.ErrorsToJsonResult();
         }
@@ -848,6 +877,50 @@ namespace WB.UI.Headquarters.Controllers
                     RecoveryCodes = recoveryCodes.ToArray();
                 }
             }
+
+            return this.ModelState.ErrorsToJsonResult();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObservingNotAllowed]
+        [AuthorizeByRole(UserRoles.Administrator)]
+        public async Task<ActionResult> GenerateApiKey([FromBody] UserModel editModel)
+        {
+            if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
+
+            var currentUser = await this.userManager.FindByIdAsync(editModel.UserId.FormatGuid());
+            if (currentUser == null) return NotFound("User not found");
+
+            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+
+            if (currentUser.Role != UserRoles.ApiUser && currentUser.Role != UserRoles.Administrator)
+            {
+                this.ModelState.AddModelError(nameof(UserModel.UserId), "Invalid role."); 
+            }
+            else if (this.ModelState.IsValid)
+            {
+                string encodedJwt = await this.tokenProvider.GetOrCreateBearerTokenAsync(currentUser);
+                return Content(encodedJwt);
+            }
+
+            return this.ModelState.ErrorsToJsonResult();
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObservingNotAllowed]
+        [AuthorizeByRole(UserRoles.Administrator)]
+        public async Task<ActionResult> DeleteApiKey([FromBody] UserModel editModel)
+        {
+            if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
+
+            var currentUser = await this.userManager.FindByIdAsync(editModel.UserId.FormatGuid());
+            if (currentUser == null) return NotFound("User not found");
+
+            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+
+            await this.tokenProvider.InvalidateBearerTokenAsync(currentUser);
 
             return this.ModelState.ErrorsToJsonResult();
         }

@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.questionnaireIdentity = interview.QuestionnaireIdentity;
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            if (!questionnaire.GetParentGroup(groupIdentity.Id).HasValue)
+            if (groupIdentity == null || !questionnaire.GetParentGroup(groupIdentity.Id).HasValue)
             {
                 this.SetNextEnabledSection();
             }
@@ -135,8 +135,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             this.SetNavigationItemTitle();
             this.SetGroupsStates();
-
-            var questionsToListen = interview.GetChildQuestions(groupIdentity);
+            
+            var questionsToListen = groupIdentity == null
+                ? questionnaire.GetPrefilledQuestions().Select(x => new Identity(x, RosterVector.Empty)).ToArray()
+                :interview.GetChildQuestions(groupIdentity);
+            
             this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
             this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
 
@@ -177,7 +180,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             var sections = questionnaire.GetAllSections().ToList();
 
-            int currentSectionIndex = sections.FindIndex(x => x == this.Identity.Id);
+            int currentSectionIndex = this.Identity == null ? 0 :sections.FindIndex(x => x == this.Identity.Id);
             for (int sectionIndex = currentSectionIndex + 1; sectionIndex < sections.Count; sectionIndex++)
             {
                 var nextSectionIdentity = new Identity(sections[sectionIndex], RosterVector.Empty);

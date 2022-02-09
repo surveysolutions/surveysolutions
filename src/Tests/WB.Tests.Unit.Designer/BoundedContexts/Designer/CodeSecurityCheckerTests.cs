@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var compilation = CreateCompilation(syntaxTree.ToEnumerable());
 
             // Act
-            codeSecurityChecker.FindForbiddenClassesUsage(syntaxTree, compilation);
+            Assert.DoesNotThrow(() => codeSecurityChecker.FindForbiddenClassesUsage(syntaxTree, compilation));
         }
 
         [Test]

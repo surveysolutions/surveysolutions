@@ -38,7 +38,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public SupervisorResolveInterviewViewModel(
             ICommandService commandService, 
             IPrincipal principal, 
-            IMvxMessenger messenger, 
             IStatefulInterviewRepository interviewRepository,
             IEntitiesListViewModelFactory entitiesListViewModelFactory, 
             ILastCompletionComments lastCompletionComments, 
@@ -53,7 +52,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 base(navigationService,
                 commandService,
                 principal,
-                messenger,
                 entitiesListViewModelFactory,
                 lastCompletionComments,
                 interviewState,

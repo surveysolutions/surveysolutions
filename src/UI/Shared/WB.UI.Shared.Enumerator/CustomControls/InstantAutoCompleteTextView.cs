@@ -3,6 +3,7 @@ using System.Collections;
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
+using Android.Text;
 using Android.Util;
 using Android.Views;
 using Android.Views.InputMethods;
@@ -35,6 +36,12 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             this.EditorAction += this.OnEditorAction;
             this.Click += OnEditTextClick;
+        }
+
+        public bool Loading
+        {
+            get => adapter.Loading;
+            set => adapter.Loading = value;
         }
 
         public void DisableDefaultSearch()

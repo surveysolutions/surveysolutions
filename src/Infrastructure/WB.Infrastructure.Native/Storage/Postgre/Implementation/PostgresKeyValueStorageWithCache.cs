@@ -12,6 +12,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly IMemoryCache memoryCache;
 
         private static readonly string CachePrefix = $"pkvs::{typeof(TEntity).Name}::";
+        private static readonly object lockObj = new object();
 
         public PostgresKeyValueStorageWithCache(IUnitOfWork unitOfWork,
             IMemoryCache memoryCache,
@@ -25,7 +26,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             return memoryCache.GetOrCreate(CachePrefix + id, cache =>
             {
-                lock (CachePrefix)
+                lock (lockObj)
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(10);
                     return base.GetById(id);

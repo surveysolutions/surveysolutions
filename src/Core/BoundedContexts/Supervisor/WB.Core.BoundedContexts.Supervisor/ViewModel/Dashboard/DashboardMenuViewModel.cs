@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.Plugin.Messenger;
@@ -24,13 +25,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         protected readonly IPrincipal Principal;
         private MvxSubscriptionToken messengerSubscription;
 
-        public DashboardMenuViewModel(IMvxNavigationService mvxNavigationService, 
-            IMvxMessenger messenger,
-            IDashboardItemsAccessor dashboardItemsAccessor,
-            IPrincipal principal)
+        public DashboardMenuViewModel(IDashboardItemsAccessor dashboardItemsAccessor, IPrincipal principal)
         {
-            MvxNavigationService = mvxNavigationService;
-            this.messenger = messenger;
+            this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
+            MvxNavigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();;
             this.dashboardItemsAccessor = dashboardItemsAccessor;
 
             this.Principal = principal ?? throw new ArgumentNullException(nameof(principal));

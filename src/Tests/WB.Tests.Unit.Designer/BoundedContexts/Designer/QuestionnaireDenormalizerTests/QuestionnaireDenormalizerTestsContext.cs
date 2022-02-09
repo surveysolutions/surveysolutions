@@ -90,7 +90,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             {
                 PublicKey = questionId,
                 QuestionText = title,
-                QuestionType = QuestionType.QRBarcode,
                 ConditionExpression = enablementCondition,
                 StataExportCaption = variableName,
                 Instructions = instructions
@@ -103,7 +102,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             {
                 PublicKey = questionId,
                 QuestionText = title,
-                QuestionType = QuestionType.Multimedia,
                 ConditionExpression = enablementCondition,
                 StataExportCaption = variableName,
                 Instructions = instructions
@@ -116,7 +114,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionText = title,
-                QuestionType = QuestionType.Text,
             };
         }
 
@@ -126,7 +123,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionText = title,
-                QuestionType = QuestionType.Numeric
             };
         }
 
@@ -136,7 +132,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             return new TextListQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
-                QuestionType = QuestionType.TextList
             };
         }
     }

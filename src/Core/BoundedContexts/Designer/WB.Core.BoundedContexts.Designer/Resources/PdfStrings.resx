@@ -252,6 +252,21 @@
   <data name="Scope" xml:space="preserve">
     <value>Scope: {0}</value>
   </data>
+  <data name="SourceOfCategories" xml:space="preserve">
+    <value>Source of categories:</value>
+  </data>
+  <data name="RosterSourceOfCategories" xml:space="preserve">
+    <value>Roster</value>
+  </data>
+  <data name="TextListSourceOfCategories" xml:space="preserve">
+    <value>Text list question</value>
+  </data>
+  <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="InRosterSourceOfCategories" xml:space="preserve">
+    <value>in roster</value>
+  </data>
   <data name="SharedWith" xml:space="preserve">
     <value>Shared with:</value>
   </data>

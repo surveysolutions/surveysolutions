@@ -51,7 +51,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(LongListRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
             Error<IGroup>(LongRosterHasMoreThanAllowedChildElements, "WB0068", string.Format(VerificationMessages.WB0068_RosterHasMoreThanAllowedChildElements,Constants.MaxAmountOfItemsInLongRoster)),
             Error<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
-            Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
+            //Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
+            //Do not reuse WB0263
             Error<IGroup>(SectionHasMoreThanAllowedQuestions, "WB0270", string.Format(VerificationMessages.WB0270_SectionContainsTooManyQuestions, 400)),
             Error<IGroup>(FlatModeGroupContainsNestedGroup, "WB0279", VerificationMessages.WB0279_PlainModeGroupContainsNestedGroup),
             Error<IGroup>(FlatModeGroupHasMoreThanAllowedEntities, "WB0278", string.Format(VerificationMessages.WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements, MaxUIEntitiesInPlainModeGroup)),
@@ -64,8 +65,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(MatrixRosterHasMoreThanAllowedEntities, "WB0298", string.Format(VerificationMessages.WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInMatrixRoster)),
             Error<IGroup>(MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions, "WB0299", VerificationMessages. WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions),
             Error<IGroup>(MatrixRosterHasToContainNoLinkedQuestions, "WB0301", VerificationMessages. WB0301_MatrixRosterHasToContainNoLinkedQuestions),
-            Error<IGroup>(MatrixRosterCannotHaveCustomTitle, "WB0303", VerificationMessages.WB0303_MatrixRosterCannotHaveCustomTitle),
-            Error<IGroup>(TableRosterCannotHaveCustomTitle, "WB0304", VerificationMessages.WB0304_TableRosterCannotHaveCustomTitle),
             
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", string.Format(VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup, MaxQuestionsCountInSubSection)),
@@ -203,16 +202,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     return childGroup.DisplayMode == RosterDisplayMode.Flat || childGroup.IsRoster;
                 return false;
             });
-
-        private static bool FirstChapterHasEnablingCondition(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            var parentComposite = group.GetParent();
-            if (parentComposite?.PublicKey != questionnaire.PublicKey) return false;
-
-            if (parentComposite.Children.IndexOf(group) != 0) return false;
-
-            return !string.IsNullOrEmpty(group.ConditionExpression);
-        }
 
         private bool RosterHasPropagationExededLimit(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -532,11 +521,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                            || question.QuestionScope == QuestionScope.Headquarter;
                 return false;
             });
-
-        private static bool MatrixRosterCannotHaveCustomTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-          => group.DisplayMode == RosterDisplayMode.Matrix && group.CustomRosterTitle;
-        private static bool TableRosterCannotHaveCustomTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-          => group.DisplayMode == RosterDisplayMode.Table && group.CustomRosterTitle;
 
         private static bool MatrixRosterHasToContainNoLinkedQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Any(composite =>

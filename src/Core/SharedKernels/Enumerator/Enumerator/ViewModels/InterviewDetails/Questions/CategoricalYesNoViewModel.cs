@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireRepository, IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, IUserInteractionService userInteraction,
             AnsweringViewModel answering, QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel,
-            FilteredOptionsViewModel filteredOptionsViewModel, IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
+            FilteredOptionsViewModel filteredOptionsViewModel)
             : base(questionStateViewModel, questionnaireRepository, eventRegistry, interviewRepository, principal,
                 answering, instructionViewModel, throttlingModel)
         {

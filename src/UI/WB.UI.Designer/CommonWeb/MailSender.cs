@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -23,9 +24,9 @@ namespace WB.UI.Designer.CommonWeb
     public class MailSender : IEmailSender
     {
         private readonly IOptions<MailSettings> settings;
-        private readonly IHostingEnvironment env;
+        private readonly IWebHostEnvironment env;
 
-        public MailSender(IOptions<MailSettings> settings, IHostingEnvironment env)
+        public MailSender(IOptions<MailSettings> settings, IWebHostEnvironment env)
         {            
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.env = env;

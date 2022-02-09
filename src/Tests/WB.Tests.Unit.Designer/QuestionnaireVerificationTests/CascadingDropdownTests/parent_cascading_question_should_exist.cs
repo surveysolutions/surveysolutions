@@ -17,7 +17,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion
             {
                 PublicKey = questionId,
-                QuestionType = QuestionType.SingleOption,
                 CascadeFromQuestionId = Guid.NewGuid(),
                 StataExportCaption = "var",
                 Answers = new List<Answer>

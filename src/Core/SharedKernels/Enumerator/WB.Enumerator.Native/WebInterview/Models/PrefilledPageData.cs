@@ -67,5 +67,6 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string Target { get; set; }
         public string ScrollTo { get; set; }
         public bool IsRoster { get; set; }
+        public bool HasCustomRosterTitle { get; set; }
     }
 }

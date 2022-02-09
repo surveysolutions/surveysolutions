@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Core;
@@ -23,7 +22,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
         }
 
-        public AutofacKernel(ContainerBuilder containerBuilder, Action<IContainer> onBuildAction = null)
+        public AutofacKernel(ContainerBuilder containerBuilder, Action<ILifetimeScope> onBuildAction = null)
         {
             this.containerBuilder = containerBuilder;
 

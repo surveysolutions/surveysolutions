@@ -2,6 +2,7 @@
 using System.Globalization;
 using Android.Text.Format;
 using Java.Util;
+using MvvmCross;
 using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -11,9 +12,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
     {
         private readonly IMvxAndroidCurrentTopActivity mvxCurrentTopActivity;
 
-        public StringFormat(IMvxAndroidCurrentTopActivity mvxCurrentTopActivity)
+        public StringFormat()
         {
-            this.mvxCurrentTopActivity = mvxCurrentTopActivity;
+            this.mvxCurrentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
         }
 
         public string ShortTime(DateTimeOffset dateTime)

@@ -1,8 +1,9 @@
-
+using Android.Content;
 using Android.OS;
 using Android.Views;
 using AndroidX.VectorDrawable.Graphics.Drawable;
 using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using MvvmCross.Platforms.Android.Views;
 using MvvmCross.Plugin.Messenger;
@@ -30,7 +31,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             Xamarin.Essentials.Platform.Init(this, bundle);
             CrossCurrentActivity.Current.Init(this, bundle);
         }
-
+        
         protected override void OnStart()
         {
             log.Trace("Start");
@@ -82,6 +83,9 @@ namespace WB.UI.Shared.Enumerator.Activities
             TryWriteMemoryInformationToLog($"Destroyed Activity {this.GetType().Name}");
             base.OnDestroy();
             
+            this.BindingContext.ClearAllBindings();
+            this.ViewModel.DisposeIfDisposable();
+            
             //cleanup cache to remove disposed viewmodel
             if (Mvx.IoCProvider.TryResolve<IMvxSingleViewModelCache>(out var cache))
             {
@@ -104,7 +108,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
             catch
             {
-                // ignore if we can get info about RAM and Disk
+                // ignore if we cannot get info about RAM and Disk
             }
         }
     }

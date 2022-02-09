@@ -125,8 +125,6 @@ namespace Main.Core.Documents
 
         public RosterSizeSourceType RosterSizeSource => RosterSizeSourceType.Question;
 
-        public string[] RosterFixedTitles { set {} }
-
         public FixedRosterTitle[] FixedRosterTitles => Array.Empty<FixedRosterTitle>();
 
         public Guid? RosterTitleQuestionId => null;

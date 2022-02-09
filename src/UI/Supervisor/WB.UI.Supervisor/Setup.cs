@@ -5,7 +5,6 @@ using System.Reflection;
 using Android.Widget;
 using AndroidX.DrawerLayout.Widget;
 using Autofac;
-using Autofac.Extras.MvvmCross;
 using Autofac.Features.ResolveAnything;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
@@ -35,6 +34,7 @@ using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Services.Autofac.MvvmCross;
 using WB.UI.Shared.Enumerator.Services.Logging;
 using WB.UI.Shared.Enumerator.Utils;
 using WB.UI.Supervisor.Activities;
@@ -52,9 +52,9 @@ namespace WB.UI.Supervisor
         {
         }
 
-        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
+        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, IMvxIoCProvider iocProvider)
         {
-            var lookup = base.InitializeViewLookup(viewModelViewLookup);
+            var lookup = base.InitializeViewLookup(viewModelViewLookup, iocProvider);
 
             var our = new Dictionary<Type, Type>()
             {
@@ -97,7 +97,7 @@ namespace WB.UI.Supervisor
 
         protected override IMvxIoCProvider CreateIocProvider()
         {
-            return new AutofacMvxIocProvider(this.CreateAndInitializeIoc());
+            return new MvxIoCProviderWithParent(CreateIocOptions(),this.CreateAndInitializeIoc());
         }
 
         protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
@@ -125,7 +125,7 @@ namespace WB.UI.Supervisor
             }
 
             status.Finish();
-            base.InitializeFirstChance();
+            //base.InitializeFirstChance();
         }
 
         private IContainer CreateAndInitializeIoc()
@@ -134,6 +134,7 @@ namespace WB.UI.Supervisor
                 new NcqrsModule(),
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
+                new EnumeratorIocRegistrationModule(),
                 new EnumeratorUIModule(),
                 new EnumeratorSharedKernelModule(),
                 new SupervisorInfrastructureModule(),

@@ -639,9 +639,6 @@
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Le roster a atteint la taille limite. Réduire la taille du roster ou réduire l'imbrication.</value>
   </data>
-  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>La première section ne peut pas avoir de condition d'activation.</value>
-  </data>
   <data name="WB0264_GpsQuestion" xml:space="preserve">
     <value>Vous avez une question GPS. Les tablettes doivent prendre en charge la géolocalisation afin d'utiliser ce type de question.</value>
   </data>

@@ -72,7 +72,7 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () =>
             await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId,
-                this.navigationState.CurrentNavigationIdentity));
+                this.NavigationState.CurrentNavigationIdentity));
 
         public IMvxCommand NavigateToMapsCommand =>
             new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>);
@@ -83,22 +83,22 @@ namespace WB.UI.Interviewer.ViewModel
             this.Dispose();
         }
 
-        protected override NavigationIdentity GetDefaultScreenToNavigate(IQuestionnaire questionnaire)
+        protected override NavigationIdentity GetDefaultScreenToNavigate(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             if (HasNotEmptyNoteFromSupervior || HasCommentsFromSupervior || HasPrefilledQuestions)
                 return NavigationIdentity.CreateForCoverScreen();
 
-            return base.GetDefaultScreenToNavigate(questionnaire);
+            return base.GetDefaultScreenToNavigate(interview, questionnaire);
         }
 
         protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
-            switch (this.navigationState.CurrentScreenType)
+            switch (this.NavigationState.CurrentScreenType)
             {
                 case ScreenType.Complete:
                     var completeInterviewViewModel =
                         this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
-                    completeInterviewViewModel.Configure(this.InterviewId, this.navigationState);
+                    completeInterviewViewModel.Configure(this.InterviewId, this.NavigationState);
                     return completeInterviewViewModel;
                 default:
                     return base.UpdateCurrentScreenViewModel(eventArgs);
@@ -189,12 +189,12 @@ namespace WB.UI.Interviewer.ViewModel
             var interviewView = this.interviewViewRepository.GetById(InterviewId);
             if (interviewView != null)
             {
-                if (this.navigationState.CurrentGroup != null)
+                if (this.NavigationState.CurrentGroup != null)
                 {
-                    interviewView.LastVisitedSectionId = this.serializer.Serialize(this.navigationState.CurrentGroup);
+                    interviewView.LastVisitedSectionId = this.serializer.Serialize(this.NavigationState.CurrentGroup);
                 }
 
-                interviewView.LastVisitedScreenType = this.navigationState.CurrentScreenType;
+                interviewView.LastVisitedScreenType = this.NavigationState.CurrentScreenType;
                 this.interviewViewRepository.Store(interviewView);
             }
 

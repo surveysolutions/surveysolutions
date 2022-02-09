@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -22,11 +23,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public SpecialValuesViewModel(
             FilteredOptionsViewModel optionsViewModel,
-            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher,
             IStatefulInterviewRepository interviewRepository) 
         {
             this.optionsViewModel = optionsViewModel;
-            this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
+            this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
             this.interviewRepository = interviewRepository;
         }
 

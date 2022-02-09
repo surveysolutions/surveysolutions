@@ -627,17 +627,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => answeredOptions == null ? null : new YesNoAnswer(
                 answeredOptions.Select(option => new CheckedYesNoAnswerOption((int)option.OptionValue, option.Yes)));
 
-        public static YesNoAnswer FromYesNoAnswersOnly(YesNoAnswersOnly yesNoAnswersOnly)
-            => yesNoAnswersOnly == null ? null : new YesNoAnswer(
-                Enumerable.Concat(
-                    yesNoAnswersOnly.Yes.Select(yesOption => new CheckedYesNoAnswerOption((int)yesOption, true)),
-                    yesNoAnswersOnly.No.Select(noOption => new CheckedYesNoAnswerOption((int)noOption, false))));
-
-        public YesNoAnswersOnly ToYesNoAnswersOnly()
-            => new YesNoAnswersOnly(
-                this.CheckedOptions.Where(x => x.Yes).Select(x => (decimal)x.Value).ToArray(),
-                this.CheckedOptions.Where(x => x.No).Select(x => (decimal)x.Value).ToArray());
-
         public override string ToString() => string.Join(", ", CheckedOptions);
 
         protected bool Equals(YesNoAnswer other)

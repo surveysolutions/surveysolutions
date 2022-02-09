@@ -17,8 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             Guid validatedQuestionId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             var questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new MultyOptionsQuestion
             {
-                PublicKey = validatedQuestionId,
-                QuestionType = QuestionType.MultyOption
+                PublicKey = validatedQuestionId
             });
 
             // act

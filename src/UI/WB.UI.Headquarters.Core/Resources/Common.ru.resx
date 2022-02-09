@@ -392,4 +392,10 @@
   <data name="Cawi" xml:space="preserve">
     <value>CAWI</value>
   </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Включить</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Выключить</value>
+  </data>
 </root>

@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
     public class when_interview_has_prefilled_readonly_question
     {
         [Test]
-        [TestOf(typeof(StatefullInterviewSearcher))]
+        [TestOf(typeof(StatefulInterviewSearcher))]
         public void should_not_include_it_in_ForInterviewer_filter()
         {
             var interviewerQuestionId = Id.g1;

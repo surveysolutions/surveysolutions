@@ -74,7 +74,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAggregateRootPrototypeService prototypeService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
-        private const string CapchaCompletedKey = "CaptchaCompletedKey";
+        private const string CaptchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
         public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
         public static readonly string AskForEmail = "askForEmail";
@@ -86,19 +86,19 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
         {
-            var passedInterviews = HttpContext.Session.Get<List<string>>(CapchaCompletedKey);
+            var passedInterviews = HttpContext.Session.Get<List<string>>(CaptchaCompletedKey);
             return !(passedInterviews?.Contains(interviewId)).GetValueOrDefault();
         }
 
         private void RememberCapchaFilled(string interviewId)
         {
-            var interviews = HttpContext.Session.Get<List<string>>(CapchaCompletedKey) ?? new List<string>();
+            var interviews = HttpContext.Session.Get<List<string>>(CaptchaCompletedKey) ?? new List<string>();
             if (!interviews.Contains(interviewId))
             {
                 interviews.Add(interviewId);
             }
 
-            HttpContext.Session.Set(CapchaCompletedKey, interviews);
+            HttpContext.Session.Set(CaptchaCompletedKey, interviews);
         }
 
         private void RememberPasswordVerified(string interviewId)
@@ -187,7 +187,7 @@ namespace WB.UI.Headquarters.Controllers
             var targetSectionIsEnabled = interview.IsEnabled(sectionIdentity);
             if (!targetSectionIsEnabled)
             {
-                return this.RedirectToFirstSection(id, interview);
+                return this.RedirectToFirstEnabledSection(id, interview);
             }
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
@@ -201,8 +201,7 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
             if (questionnaire.IsCoverPage(sectionIdentity.Id) && !IsNeedShowCoverPage(interview, questionnaire))
             {
-                var firstSectionUrl = GenerateUrl(nameof(Section), id, questionnaire.GetFirstSectionId().FormatGuid());
-                return Redirect(firstSectionUrl);
+                return this.RedirectToFirstEnabledSection(id, interview, sectionIdentity.Id);
             }
 
             return this.View("Index", GetInterviewModel(id, interview, webInterviewConfig));
@@ -592,6 +591,9 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool IsNeedShowCoverPage(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
+            if (questionnaire.IsCoverPageSupported && questionnaire.GetFirstSectionId() == null)
+                return true;
+            
             return questionnaire.GetPrefilledEntities().Any()
                    || !string.IsNullOrEmpty(interview.SupervisorRejectComment)
                    || interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any();
@@ -1038,10 +1040,15 @@ namespace WB.UI.Headquarters.Controllers
             };
         }
 
-        private RedirectResult RedirectToFirstSection(string id, IStatefulInterview interview)
+        private RedirectResult RedirectToFirstEnabledSection(string id, IStatefulInterview interview, Guid? excludingCoverId = null)
         {
-            var sectionId = interview.GetAllEnabledGroupsAndRosters().First().Identity.ToString();
-            var uri = GenerateUrl(@"Section", id, sectionId);
+            var section = interview
+                .GetAllEnabledGroupsAndRosters()
+                .FirstOrDefault(x => excludingCoverId == null || x.Identity.Id != excludingCoverId);
+            
+            var uri = section == null 
+                    ? GenerateUrl(@"Complete", id)
+                    : GenerateUrl(@"Section", id, section.Identity.ToString());
 
             return Redirect(uri);
         }
@@ -1079,7 +1086,7 @@ namespace WB.UI.Headquarters.Controllers
             if (invitation.Assignment.WebMode == true && invitation.Assignment.Quantity == null)
             {
                 // ReSharper disable once ReturnValueOfPureMethodIsNotUsed - Triggering lazy load
-                invitation.Assignment.Answers.Any();
+                var temp = invitation.Assignment.Answers.Any();
                 this.memoryCache.Set(key, invitation, TimeSpan.FromSeconds(30));
 
                 return invitation;

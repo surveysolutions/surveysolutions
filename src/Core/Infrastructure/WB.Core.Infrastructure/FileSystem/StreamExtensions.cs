@@ -37,7 +37,7 @@ namespace WB.Core.Infrastructure.FileSystem
 
         public static T WrapStreamIntoTempFile<T>(this Stream stream, Func<Stream, T> body)
         {
-            var tmpFile = Path.GetTempFileName();
+            var tmpFile = Path.GetRandomFileName();
             
             try
             {

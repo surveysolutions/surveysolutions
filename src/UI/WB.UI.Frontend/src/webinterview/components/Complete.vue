@@ -4,7 +4,7 @@
         v-bind:class="{'section-with-error' : hasInvalidQuestions, 'complete-section' : isAllAnswered  }" >
         <div class="unit-title">
             <wb-humburger></wb-humburger>
-            <h3>{{ $t('WebInterviewUI.Complete') }}</h3>
+            <h3>{{ competeButtonTitle }}</h3>
         </div>
         <div class="wrapper-info">
             <div class="container-info">

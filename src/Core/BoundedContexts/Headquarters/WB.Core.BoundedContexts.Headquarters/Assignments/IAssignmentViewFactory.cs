@@ -8,6 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         AssignmentsWithoutIdentifingData Load(AssignmentsInputModel input);
         List<AssignmentIdentifyingQuestionRow> GetIdentifyingColumnText(Assignment assignment);
-        Task<AssignmentHistory> LoadHistoryAsync(Guid assignmentId, int offset, int limit);
+        Task<AssignmentHistory> LoadHistoryAsync(Guid assignmentPublicKey, int offset, int limit);
     }
 }

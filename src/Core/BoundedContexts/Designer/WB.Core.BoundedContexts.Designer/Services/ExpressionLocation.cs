@@ -13,117 +13,19 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         public int? ExpressionPosition { set; get; }
 
-        public ExpressionLocation()
+        public ExpressionLocation() { }
+
+        public ExpressionLocation(ExpressionLocationItemType itemType, 
+            ExpressionLocationType expressionType,
+            Guid? id,
+            int? expressionPosition = null)
         {
+            ItemType = itemType;
+            ExpressionType = expressionType;
+            Id = id ?? Guid.Empty;
+            ExpressionPosition = expressionPosition;
         }
-
-        public static ExpressionLocation LookupTables()
-        {
-            return new ExpressionLocation
-            {
-                ItemType = ExpressionLocationItemType.LookupTable,
-                ExpressionType = ExpressionLocationType.General,
-                Id = Guid.Empty
-            };
-        }
-
-        public static ExpressionLocation Questionnaire(Guid questionnaireId)
-        {
-            return new ExpressionLocation
-            {
-                ItemType = ExpressionLocationItemType.Questionnaire,
-                ExpressionType = ExpressionLocationType.General,
-                Id = questionnaireId
-            };
-        }
-
-        public static ExpressionLocation GroupCondition(Guid groupId) => new ExpressionLocation
-        {
-            ItemType = ExpressionLocationItemType.Group,
-            ExpressionType = ExpressionLocationType.Condition,
-            Id = groupId
-        };
-
-        public static ExpressionLocation StaticTextCondition(Guid staticTextId) => new ExpressionLocation
-        {
-            ItemType = ExpressionLocationItemType.StaticText,
-            ExpressionType = ExpressionLocationType.Condition,
-            Id = staticTextId
-        };
-
-        public static ExpressionLocation LinkedQuestionFilter(Guid questionId)
-        {
-            return new ExpressionLocation
-            {
-                ItemType = ExpressionLocationItemType.Question,
-                ExpressionType = ExpressionLocationType.Filter,
-                Id = questionId
-            };
-        }
-
-        public static ExpressionLocation CategoricalQuestionFilter(Guid questionId)
-        {
-            return new ExpressionLocation
-            {
-                ItemType = ExpressionLocationItemType.Question,
-                ExpressionType = ExpressionLocationType.CategoricalFilter,
-                Id = questionId
-            };
-        }
-
-        public static ExpressionLocation Variable(Guid variableId)
-        {
-            return new ExpressionLocation
-            {
-                ItemType = ExpressionLocationItemType.Variable,
-                ExpressionType = ExpressionLocationType.Expression,
-                Id = variableId
-            };
-        }
-
-        public static ExpressionLocation QuestionValidation(Guid questionId, int? position) => new ExpressionLocation
-        {
-            ItemType = ExpressionLocationItemType.Question,
-            ExpressionType = ExpressionLocationType.Validation,
-            Id = questionId,
-            ExpressionPosition = position
-        };
-
-        public static ExpressionLocation StaticTextValidation(Guid questionId, int? position) => new ExpressionLocation
-        {
-            ItemType = ExpressionLocationItemType.StaticText,
-            ExpressionType = ExpressionLocationType.Validation,
-            Id = questionId,
-            ExpressionPosition = position
-        };
-
-        public static ExpressionLocation QuestionCondition(Guid questionId)
-        {
-            return new ExpressionLocation
-            {
-                ItemType = ExpressionLocationItemType.Question,
-                ExpressionType = ExpressionLocationType.Condition,
-                Id = questionId
-            };
-        }
-
-        public static ExpressionLocation RosterCondition(Guid rosterId)
-        {
-            return new ExpressionLocation
-            {
-                ItemType = ExpressionLocationItemType.Roster,
-                ExpressionType = ExpressionLocationType.Condition,
-                Id = rosterId
-            };
-        }
-
-        public ExpressionLocation(ExpressionLocationItemType itemType = ExpressionLocationItemType.Question, ExpressionLocationType expressionType = ExpressionLocationType.General, Guid? id = null)
-        {
-            this.ItemType = itemType;
-            this.ExpressionType = expressionType;
-            this.Id = id ?? Guid.Empty;
-        }
-
+        
         public ExpressionLocation(string? stringValue)
         {
             if (stringValue == null) throw new ArgumentNullException(nameof(stringValue));
@@ -140,7 +42,49 @@ namespace WB.Core.BoundedContexts.Designer.Services
             if (expressionLocation.Length == 4)
                 ExpressionPosition = int.Parse(expressionLocation[3]);
         }
+        
+        public static ExpressionLocation LookupTables()
+            => new ExpressionLocation(
+                    itemType : ExpressionLocationItemType.LookupTable,
+                    expressionType : ExpressionLocationType.General,
+                    id : Guid.Empty);
+        
 
+        public static ExpressionLocation Questionnaire(Guid questionnaireId)
+            => new  ExpressionLocation(ExpressionLocationItemType.Questionnaire, ExpressionLocationType.General,
+                 questionnaireId);
+        
+
+        public static ExpressionLocation GroupCondition(Guid groupId) 
+            => new ExpressionLocation(ExpressionLocationItemType.Group, ExpressionLocationType.Condition, groupId);
+
+        public static ExpressionLocation StaticTextCondition(Guid staticTextId) 
+            => new ExpressionLocation(ExpressionLocationItemType.StaticText,ExpressionLocationType.Condition, staticTextId);
+
+        public static ExpressionLocation LinkedQuestionFilter(Guid questionId)
+            => new ExpressionLocation(ExpressionLocationItemType.Question, ExpressionLocationType.Filter, questionId);
+        
+        public static ExpressionLocation CategoricalQuestionFilter(Guid questionId)
+            => new ExpressionLocation(ExpressionLocationItemType.Question, ExpressionLocationType.CategoricalFilter, questionId);
+        
+        public static ExpressionLocation Variable(Guid variableId)
+            => new ExpressionLocation(ExpressionLocationItemType.Variable, ExpressionLocationType.Expression, variableId);
+        
+        public static ExpressionLocation QuestionValidation(Guid questionId, int? position) 
+            => new ExpressionLocation(ExpressionLocationItemType.Question, ExpressionLocationType.Validation,
+                questionId, position);
+
+        public static ExpressionLocation StaticTextValidation(Guid questionId, int? position) 
+            => new ExpressionLocation(ExpressionLocationItemType.StaticText, ExpressionLocationType.Validation,
+                questionId, position);
+
+        public static ExpressionLocation QuestionCondition(Guid questionId)
+            => new ExpressionLocation(ExpressionLocationItemType.Question, ExpressionLocationType.Condition, questionId);
+        
+
+        public static ExpressionLocation RosterCondition(Guid rosterId)
+            => new ExpressionLocation(ExpressionLocationItemType.Roster, ExpressionLocationType.Condition, rosterId);
+        
         public override string ToString()
         {
             var result = String.Format("{0}:{1}:{2}", ItemType, ExpressionType, Id);

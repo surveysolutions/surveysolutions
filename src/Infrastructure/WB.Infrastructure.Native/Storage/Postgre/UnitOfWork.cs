@@ -17,7 +17,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     {
         private readonly Lazy<ISessionFactory> sessionFactory;
         private readonly ILogger<UnitOfWork> logger;
-        private bool isDisposed = false;
+        
         private bool shouldAcceptChanges = false;
         private bool shouldDiscardChanges = false;
         private readonly bool rootScopeExecution = false;
@@ -25,13 +25,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public long Id { get; }
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
+        private int disposeCount;
+
         public UnitOfWork(
             Lazy<ISessionFactory> sessionFactory,
             ILogger<UnitOfWork> logger, 
             IWorkspaceContextAccessor workspaceContextAccessor,
             ILifetimeScope scope)
         {
-            if (isDisposed == true) throw new ObjectDisposedException(nameof(UnitOfWork));
+            if (disposeCount > 0) throw new ObjectDisposedException(nameof(UnitOfWork));
 
             if (scope.Tag == LifetimeScope.RootTag)
             {
@@ -51,13 +53,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public void AcceptChanges()
         {
-            if (isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
+            if (disposeCount > 0) throw new ObjectDisposedException(nameof(UnitOfWork));
             shouldAcceptChanges = true;
         }
 
         public void DiscardChanges()
         {
-            if (isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
+            if (disposeCount > 0) throw new ObjectDisposedException(nameof(UnitOfWork));
             shouldDiscardChanges = true;
         }
 
@@ -73,9 +75,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     throw new RootScopeResolveException("UnitOfWork should not be resolved from Root lifetime scope");
                 }
 
-                if (isDisposed)
+                if (disposeCount > 0)
                 {
-                    logger.LogError("Error getting session. Unit of work Id: {UnitOfWorkId} Thread:{threadId}", Id, Thread.CurrentThread.ManagedThreadId);
+                    logger.LogError("Error getting session. Unit of work is disposed. Id: {UnitOfWorkId} Thread:{threadId}", Id, Thread.CurrentThread.ManagedThreadId);
                     throw new ObjectDisposedException(nameof(UnitOfWork));
                 }
 
@@ -94,27 +96,32 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public void Dispose()
         {
-            if (isDisposed) return;
-
-            foreach (var (session, transaction) in unitOfWorks.Values)
+            if (Interlocked.Increment(ref disposeCount) == 1)
             {
-                if (transaction.IsActive == true)
+                foreach (var (session, transaction) in unitOfWorks.Values)
                 {
-                    if (shouldAcceptChanges && !shouldDiscardChanges)
+                    try
                     {
-                        transaction.Commit();
+                        if (transaction.IsActive == true)
+                        {
+                            if (shouldAcceptChanges && !shouldDiscardChanges)
+                            {
+                                transaction.Commit();
+                            }
+                            else
+                            {
+                                transaction.Rollback();
+                            }
+                        }
+                        
+                        transaction.Dispose();
                     }
-                    else
+                    finally
                     {
-                        transaction.Rollback();
+                        session.Dispose();
                     }
                 }
-
-                transaction.Dispose();
-                session.Dispose();
             }
-
-            isDisposed = true;
         }
     }
 }

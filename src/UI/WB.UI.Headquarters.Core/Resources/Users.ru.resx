@@ -330,4 +330,7 @@
   <data name="UploadUsers" xml:space="preserve">
     <value>Загрузить</value>
   </data>
+  <data name="ApiTokenTitle" xml:space="preserve">
+      <value>API ключ пользователя</value>
+  </data>
 </root>
