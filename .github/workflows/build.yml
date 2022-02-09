@@ -147,6 +147,10 @@ jobs:
           New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
             -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
 
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - uses: actions/checkout@v2
 
       - name: Setup WIX
