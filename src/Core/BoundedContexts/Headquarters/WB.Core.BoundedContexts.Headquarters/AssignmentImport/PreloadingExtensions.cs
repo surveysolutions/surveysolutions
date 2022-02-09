@@ -143,6 +143,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private static AssignmentAnswer ToAssignmentDateTimeAnswer(this PreloadingValue answer)
         {
+            if (string.Compare(MissingStringQuestionValue, answer.Value, StringComparison.InvariantCulture) == 0)
+                answer.Value = string.Empty;
+            
             DateTime? dataTimeValue = null;
             if (DateTime.TryParse(answer.Value, null, DateTimeStyles.AdjustToUniversal, out var date))
                 dataTimeValue = date;
