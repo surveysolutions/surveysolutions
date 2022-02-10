@@ -348,4 +348,7 @@
   <data name="SaveAs" xml:space="preserve">
     <value>Сохранить как</value>
   </data>
+  <data name="CopyTo" xml:space="preserve">
+    <value>Копировать в</value>
+  </data>
 </root>
