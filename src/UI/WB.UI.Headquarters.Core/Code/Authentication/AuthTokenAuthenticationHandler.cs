@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -41,12 +42,13 @@ namespace WB.UI.Headquarters.Code.Authentication
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            if (!Request.Headers.ContainsKey("Authorization"))
+            if (!Request.Headers.ContainsKey(HeaderNames.Authorization))
                 return AuthenticateResult.NoResult();
-            BasicCredentials creds;
+            
+            BasicCredentials credentials;
             try
             {
-                creds = Request.Headers.ParseBasicCredentials();
+                credentials = Request.Headers.ParseBasicCredentials();
             }
             catch (Exception e)
             {
@@ -54,7 +56,10 @@ namespace WB.UI.Headquarters.Code.Authentication
                 return AuthenticateResult.NoResult();
             }
 
-            var user = await userRepository.FindByNameAsync(creds.Username);
+            if (credentials == null)
+                return AuthenticateResult.NoResult();
+            
+            var user = await userRepository.FindByNameAsync(credentials.Username);
             
             if(user == null) return AuthenticateResult.Fail("No user found");
             
@@ -84,7 +89,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                 }
             }
 
-            var verificationResult = await authTokenProvider.ValidateTokenAsync(user.Id, creds.Password);
+            var verificationResult = await authTokenProvider.ValidateTokenAsync(user.Id, credentials.Password);
             if (verificationResult)
             {
                 var claimsPrincipal = await this.claimFactory.CreateAsync(user);

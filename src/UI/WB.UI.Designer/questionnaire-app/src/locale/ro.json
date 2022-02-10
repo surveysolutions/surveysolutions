@@ -98,7 +98,6 @@
     "HelpCombobox": "\"Combo-box\" este o combinație între o listă derulantă și o casetă text editabilă cu o singură linie. Categoriile pot fi selectate fie prin tastarea unei valori sau a unei părți din valoare, fie prin selectarea unei valori din listă",
     "HelpConditionExpression": "O expresie logică care activează (dezactivează) elementul curent în funcție de răspunsurile la celelalte întrebări.",
     "HelpCoverPage": "Prima secțiune a fiecărui chestionar conține întrebări de identificare care sunt afișate și în tablourile de bord ale anchetatorilor și ale supervizorilor.",
-    "HelpCustomTitle": "Permite suprascrierea șablonului pentru butonul listei și furnizarea de text personalizat pentru% rostertitle%",
     "HelpDefaultDate": "Această dată va fi afișată ca data de început pentru selectare pe o tabletă",
     "HelpDoNotExport": "Marcați această variabilă pentru a o exclude de la exportare",
     "HelpExpression": "O expresie logică care se calculează în funcție de răspunsurile de la celelalte întrebări.",

@@ -10,7 +10,11 @@ namespace WB.UI.Shared.Web.Authentication
     {
         public static BasicCredentials ParseBasicCredentials(this IHeaderDictionary headerDictionary)
         {
-            AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(headerDictionary[HeaderNames.Authorization]);
+            var authorizationHeader = headerDictionary[HeaderNames.Authorization];
+            AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(authorizationHeader);
+            if (authHeader.Parameter == null)
+                return null;
+            
             var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
             var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':');
             var username = credentials[0];
