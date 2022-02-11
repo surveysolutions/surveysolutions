@@ -14,7 +14,12 @@
             };
 
             pdfService.retryExportPdf = function(questionnaireId, translationId) {
-                return $http.post('../../pdf/retry', { id: questionnaireId, translation: translationId });
+                return $http({
+                    method: 'POST',
+                    url: '../../pdf/retry/' + questionnaireId,
+                    data: {translation: translationId},
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': getCsrfCookie() }
+                });
             };
 
             return pdfService;

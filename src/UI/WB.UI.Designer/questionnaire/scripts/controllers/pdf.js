@@ -44,11 +44,10 @@
         };
 
         $scope.retryGenerate = function () {
-            var translationId = $scope.viewModel.selectedTranslation.translationId;
-
-            pdfService.retryExportPdf($state.params.questionnaireId, translationId);
-
-            updateExportPdfStatus(translationId);
+            var translationId = $scope.viewModel.selectedTranslation.translationId;            
+            pdfService.retryExportPdf($scope.params.questionnaireId, translationId);            
+            $scope.generate();
+            $scope.viewModel.canRetryGenerate = false;
         };
 
         $scope.generate = function () {
