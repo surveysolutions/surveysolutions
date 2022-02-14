@@ -123,7 +123,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         [Route("download/{id}")]
         public IActionResult Download(QuestionnaireRevision id, Guid? translation)
         {
-            var pdfKey = id.ToString() + translation;
+            var pdfKey = GetPdfKey(id, translation);
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(pdfKey);
 
             if (pdfGenerationProgress?.IsFinished == true)
@@ -151,11 +151,22 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         [Route("status/{id}")]
         public JsonResult Status(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
         {
-            var pdfKey = id.ToString() + translation;
+            var pdfKey = GetPdfKey(id, translation);
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, timezoneOffsetMinutes));
 
             if (pdfGenerationProgress.IsFailed)
-                return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate));
+            {
+                if (timezoneOffsetMinutes != null)
+                {
+                    return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate));
+                }
+                else
+                {
+                    GeneratedPdfs.TryRemove(pdfKey, out _);
+                    GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, timezoneOffsetMinutes));
+                    return this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate));
+                }
+            }
 
             long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
 
@@ -173,19 +184,36 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                     : PdfStatus.InProgress(string.Format(PdfMessages.GeneratingSuccess, sizeInKb)));
         }
 
+        private static string GetPdfKey(QuestionnaireRevision id, Guid? translation)
+        {
+            return id.ToString() + ":" + translation;
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("retry/{id}")]
-        public ActionResult Retry(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
+        public ActionResult Retry(QuestionnaireRevision? id, [FromBody]RetryRequest retryRequest)
         {
-            var pdfKey = id.ToString() + translation;
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, timezoneOffsetMinutes));
+            if (id == null || retryRequest == null)
+            {
+                return StatusCode((int)HttpStatusCode.NotFound);
+            }
+
+            var pdfKey = GetPdfKey(id, retryRequest.Translation);
+            PdfGenerationProgress pdfGenerationProgress = 
+                GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, retryRequest.Translation, null));
             if (pdfGenerationProgress != null && pdfGenerationProgress.IsFailed)
             {
                 GeneratedPdfs.TryRemove(pdfKey, out _);
             }
-            GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, timezoneOffsetMinutes));
+            
+            GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, retryRequest.Translation, null));
             return this.Json(PdfStatus.InProgress(PdfMessages.Retry));
+        }
+            
+        public class RetryRequest
+        {
+            public Guid? Translation { set; get; }
         }
 
         private PdfGenerationProgress StartNewPdfGeneration(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
