@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                 var attachmentInfo = questionnaire.GetAttachmentById(attachmentId.Value);
                 var attachment = attachmentContentService.GetAttachmentContent(attachmentInfo.ContentId);
                 if (attachment == null)
-                    throw new ArgumentException("Unknown attachment");
+                    throw new ArgumentException($"Unknown attachment. AttachmentId: {attachmentInfo.AttachmentId}. ContentId: {attachmentInfo.ContentId}. StaticText: {staticText.Identity}. Interview: {interview.Id}. Questionnaire: {interview.QuestionnaireIdentity}.");
                 
                 paragraph.AddLineBreak();
 
