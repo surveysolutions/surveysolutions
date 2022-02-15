@@ -13,6 +13,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Tests.Abc;
@@ -35,13 +36,14 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                     Create.TextQuestion(Id.g3)
                 });
             questionnaireDocument.Title = "New Questionnaire";
+            var questionnaireRevision = new QuestionnaireRevision(Id.g1);
             var view = new QuestionnaireView(questionnaireDocument, Enumerable.Empty<SharedPersonView>());
             var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(f =>
-                f.Load(It.IsAny<QuestionnaireViewInputModel>()) == view);
+                f.Load(It.Is<QuestionnaireRevision>(qr => qr == questionnaireRevision)) == view);
             
             var service = CreateQuestionnaireExportService(questionnaireViewFactory);
 
-            using var stream = service.GetBackupQuestionnaire(Id.g1, out var filename);
+            using var stream = service.GetBackupQuestionnaire(questionnaireRevision, out var filename);
 
             ZipArchive zip = new ZipArchive(stream);
             var document = zip.GetEntry("document.json").Open();

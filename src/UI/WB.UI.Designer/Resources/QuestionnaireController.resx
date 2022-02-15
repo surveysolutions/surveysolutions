@@ -324,4 +324,7 @@
   <data name="SaveAs" xml:space="preserve">
     <value>Save as</value>
   </data>
+  <data name="CopyTo" xml:space="preserve">
+    <value>Copy to</value>
+  </data>
 </root>

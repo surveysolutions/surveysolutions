@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ImportExport;
@@ -39,9 +40,9 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
         [HttpGet]
         [Route("verify/{questionnaireId}")]
-        public IActionResult Verify(Guid questionnaireId)
+        public IActionResult Verify(QuestionnaireRevision questionnaireId)
         {
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
+            var questionnaireView = this.questionnaireViewFactory.Load(questionnaireId);
             if (questionnaireView == null)
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireId));
@@ -108,9 +109,9 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         
         [HttpGet]
         [Route("package/{questionnaireId}")]
-        public IActionResult GetQuestionnairePackage(Guid questionnaireId)
+        public IActionResult GetQuestionnairePackage(QuestionnaireRevision questionnaireId)
         {
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
+            var questionnaireView = this.questionnaireViewFactory.Load(questionnaireId);
             if (questionnaireView == null)
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireId));
