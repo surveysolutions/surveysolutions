@@ -15,6 +15,10 @@
     <WarningsAsErrors />
     <NoWarn>1701;1702;618</NoWarn>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;</NoWarn>
+  </PropertyGroup>
 
   <ItemGroup>
     <Content Update="**\*.json" CopyToPublishDirectory="Never" />
