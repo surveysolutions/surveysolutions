@@ -335,6 +335,7 @@
     "RetryExportPDF": "Réessayer l'exportation en PDF",
     "Translation_Original": "Original",
     "SaveAs": "Save as",
+    "CopyTo": "Copy to",
     "ReadOnlyQuestion": "It is readonly question. You can not edit it.",
     "SideBarAttachmentsEmptyLine3": "To refer to an attachment in the questionnaire add a static text element and specify the attachment {{-name}} in its attachment property",
     "SideBarEditCategories": "Edit Categories",

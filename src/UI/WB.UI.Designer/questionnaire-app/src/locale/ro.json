@@ -451,6 +451,7 @@
     "StringsView": "Vizualizare text",
     "TableView": "Vizualizare în tabel",
     "ValidationIntValue": "Valoarea este prea mare",
+    "CopyTo": "Copy to",
     "EditorShowComments": "Show comments ({{count}})"
   }
 }

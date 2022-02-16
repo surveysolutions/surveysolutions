@@ -214,15 +214,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy to.
-        /// </summary>
-        public static string CopyTo {
-            get {
-                return ResourceManager.GetString("CopyTo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
