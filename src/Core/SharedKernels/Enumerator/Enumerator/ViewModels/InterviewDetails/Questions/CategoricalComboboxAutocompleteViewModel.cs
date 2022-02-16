@@ -198,7 +198,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
-            this.InvokeOnMainThread(() =>
+            await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.AutoCompleteSuggestions = null;
                 this.RaisePropertyChanged(nameof(this.FilterText));
@@ -250,6 +250,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.isDisposed = true;
             
+            this.loadSuggestionsToken?.Cancel();
             this.QuestionState?.Dispose();
             this.filteredOptionsViewModel?.Dispose();
             this.throttlingModel?.Dispose();

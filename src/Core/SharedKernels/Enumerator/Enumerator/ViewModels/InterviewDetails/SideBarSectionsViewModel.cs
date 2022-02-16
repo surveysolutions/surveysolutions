@@ -274,21 +274,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.isDisposed = true;
 
-                this.navigationState.ScreenChanged -= this.OnScreenChanged;
+                if(this.navigationState!= null)
+                    this.navigationState.ScreenChanged -= this.OnScreenChanged;
 
-                this.eventRegistry.Unsubscribe(this);
+                if(this.eventRegistry != null)
+                    this.eventRegistry.Unsubscribe(this);
+                
                 this.AllVisibleSections?.ForEach(viewModel =>
                 {
                     var sectionViewModel = viewModel as ISideBarSectionItem;
                     if (sectionViewModel != null)
                         this.DisposeSectionViewModel(sectionViewModel);
                     else
-                        viewModel.Dispose();
+                        viewModel?.Dispose();
                 });
                 var itemsToDispose = this.items;
                 foreach (var sideBarSectionItem in itemsToDispose)
                 {
-                    sideBarSectionItem.DisposeIfDisposable();
+                    sideBarSectionItem?.DisposeIfDisposable();
                 }
             }
         }
