@@ -90,8 +90,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
-                    if (isDisposed)
+                    if (isDisposed || cancellationToken.IsCancellationRequested)
                         return;
+                    
                     AutoCompleteSuggestions = suggestions;
                 });
             }, cancellationToken);
@@ -229,12 +230,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private static OptionWithSearchTerm ToOptionWithSearchTerm(string filter, CategoricalOption model) => new OptionWithSearchTerm
+        private static OptionWithSearchTerm ToOptionWithSearchTerm(string filter, CategoricalOption model)
         {
-            Value = model.Value,
-            Title = model.Title,
-            SearchTerm = filter
-        };
+            return new OptionWithSearchTerm
+            {
+                Value = model.Value,
+                Title = model.Title,
+                SearchTerm = filter
+            };
+        }
 
         public void ExcludeOptions(int[] optionsToExclude) => this.excludedOptions = optionsToExclude ?? Array.Empty<int>();
 

@@ -1862,7 +1862,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IComposite entity = GetEntity(entities, entityId);
 
             if (entity == null)
-                throw new QuestionnaireException($"Entity is not found.")
+                throw new QuestionnaireException($"Entity is not found. entityId : {entityId}")
                 {
                     Data = {{"entityId", entityId}}
                 };
