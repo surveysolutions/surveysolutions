@@ -348,6 +348,7 @@
     "RetryExportPDF": "重新导出为PDF",
     "Translation_Original": "初始的",
     "SaveAs": "Save as",
+    "CopyTo": "Copy to",
     "ReadOnlyQuestion": "It is readonly question. You can not edit it.",
     "SideBarEditCategories": "Edit Categories",
     "SideBarScenarioCounter": "{{count}} Scenario:",
