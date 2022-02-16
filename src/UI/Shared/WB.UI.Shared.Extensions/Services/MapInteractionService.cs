@@ -5,11 +5,12 @@ using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services;
-using WB.UI.Shared.Extensions.CustomServices.AreaEditor;
-using WB.UI.Shared.Extensions.CustomServices.MapDashboard;
+using WB.UI.Shared.Extensions.Activities;
+using WB.UI.Shared.Extensions.Entities;
+using WB.UI.Shared.Extensions.ViewModels;
 using AreaEditResult = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.AreaEditResult;
 
-namespace WB.UI.Shared.Extensions.CustomServices
+namespace WB.UI.Shared.Extensions.Services
 {
     public class MapInteractionService : WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IMapInteractionService
     {
@@ -53,7 +54,8 @@ namespace WB.UI.Shared.Extensions.CustomServices
             await this.permissions.AssureHasPermissionOrThrow<LocationPermission>().ConfigureAwait(false);
             await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
 
-            await this.viewModelNavigationService.NavigateToAsync<MapDashboardViewModel>().ConfigureAwait(false);
+            await this.viewModelNavigationService.NavigateToAsync<MapDashboardViewModel, MapDashboardViewModelArgs>(
+                new MapDashboardViewModelArgs()).ConfigureAwait(false);
         }
 
         public void Init(string key)
@@ -65,8 +67,8 @@ namespace WB.UI.Shared.Extensions.CustomServices
 
         private async Task<AreaEditResult> EditAreaImplAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
         {
-            bool activityCreated = await this.viewModelNavigationService.NavigateToAsync<AreaEditorViewModel, AreaEditorViewModelArgs>(
-                new AreaEditorViewModelArgs
+            bool activityCreated = await this.viewModelNavigationService.NavigateToAsync<GeographyEditorViewModel, GeographyEditorViewModelArgs>(
+                new GeographyEditorViewModelArgs
                 {
                     Geometry = area?.Geometry,
                     MapName = area?.MapName,
@@ -77,7 +79,7 @@ namespace WB.UI.Shared.Extensions.CustomServices
             {
                 var tcs = new TaskCompletionSource<AreaEditResult>();
                 
-                AreaEditorActivity.OnAreaEditCompleted = (AreaEditorResult editResult) =>
+                GeographyEditorActivity.OnAreaEditCompleted = (AreaEditorResult editResult) =>
                 {
                     tcs.TrySetResult(editResult == null
                         ? null

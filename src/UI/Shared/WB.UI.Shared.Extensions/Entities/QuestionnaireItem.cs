@@ -1,4 +1,4 @@
-﻿namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
+﻿namespace WB.UI.Shared.Extensions.Entities
 {
     public class QuestionnaireItem
     {

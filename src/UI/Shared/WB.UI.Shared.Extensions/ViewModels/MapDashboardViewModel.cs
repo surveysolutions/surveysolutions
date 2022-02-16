@@ -1,40 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
+using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.MapService;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
-using System.Drawing;
-using Esri.ArcGISRuntime.Data;
-using MvvmCross;
-using MvvmCross.Base;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Views;
-using MapView = Esri.ArcGISRuntime.UI.Controls.MapView;
+using WB.UI.Shared.Extensions.Entities;
 
-namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
+namespace WB.UI.Shared.Extensions.ViewModels
 {
-    public class MapDashboardViewModel: BaseViewModel
+    public class MapDashboardViewModel: BaseMapInteractionViewModel<MapDashboardViewModelArgs>
     {
         private readonly ILogger logger;
-        private readonly IUserInteractionService userInteractionService;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -47,16 +44,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             IAssignmentDocumentsStorage assignmentsRepository,
             IPlainStorage<InterviewView> interviewViewRepository,
             IEnumeratorSettings enumeratorSettings,
-            ILogger logger) : base(principal, viewModelNavigationService)
+            ILogger logger) 
+            : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
+                fileSystemAccessor, enumeratorSettings)
         {
             this.logger = logger;
-            this.userInteractionService = userInteractionService;
-            this.mapService = mapService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.assignmentsRepository = assignmentsRepository;
             this.interviewViewRepository = interviewViewRepository;
             this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
-            this.enumeratorSettings = enumeratorSettings;
         }
 
         private GraphicsOverlayCollection graphicsOverlays = new GraphicsOverlayCollection();
@@ -64,13 +60,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
         {
             get => this.graphicsOverlays;
             set => this.RaiseAndSetIfChanged(ref this.graphicsOverlays, value);
-        }
-
-        private Map map;
-        public Map Map
-        {
-            get => this.map;
-            set => this.RaiseAndSetIfChanged(ref this.map, value);
         }
 
         private bool isInProgress;
@@ -93,49 +82,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             set => this.RaiseAndSetIfChanged(ref this.showAssignments, value);
         }
 
-        public MapView MapView { get; set; }
+        
 
-        private string LastMap
+        public override void Prepare(MapDashboardViewModelArgs parameter)
         {
-            set => enumeratorSettings.SetLastOpenedMapName(value);
-            get => enumeratorSettings.LastOpenedMapName;
         }
 
         public override async Task Initialize()
         {
             await base.Initialize();
-
-            try
-            {
-                this.AvailableShapefiles =
-                    new MvxObservableCollection<ShapefileDescription>(this.mapService.GetAvailableShapefiles());
-
-                var localMaps = this.mapService.GetAvailableMaps(true);
-                var defaultMap = this.mapService.PrepareAndGetDefaultMapOrNull();
-
-                this.Map = new Map(await MapUtilityService.GetBaseMap(this.fileSystemAccessor, defaultMap).ConfigureAwait(false));
-
-                MapDescription mapToLoad = null;
-                if (!string.IsNullOrEmpty(LastMap))
-                {
-                    mapToLoad = localMaps.FirstOrDefault(x => x.MapName == LastMap);
-                }
-
-                mapToLoad ??= localMaps.FirstOrDefault(x => x.MapType == MapType.LocalFile);
-                
-                var firstMap = mapToLoad ?? defaultMap;
-
-                localMaps.Add(defaultMap);
-                this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
-                this.SelectedMap = firstMap.MapName;
-
-                this.GraphicsOverlays.Add(graphicsOverlay);
-            }
-            catch (Exception e)
-            {
-                logger.Error("Error on map initialization", e);
-                throw;
-            }
 
             Assignments = this.assignmentsRepository
                 .LoadAll()
@@ -145,16 +100,31 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             Interviews = this.interviewViewRepository
                 .Where(x => x.LocationLatitude != null).ToList();
 
-            this.Map.Loaded += async delegate (object sender, EventArgs e)
-            {
-                CollectQuestionnaires();
-                await UpdateBaseMap().ConfigureAwait(false);
-                await RefreshMarkers();
-            };
+            this.GraphicsOverlays.Add(graphicsOverlay);
 
             PropertyChanged += OnPropertyChanged;
         }
 
+        public override Task OnMapLoaded()
+        {
+            CollectQuestionnaires();
+            return RefreshMarkers();
+        }
+
+        public override MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom)
+        {
+            MapDescription mapToLoad = null;
+            
+            if (!string.IsNullOrEmpty(this.LastMap))
+            {
+                mapToLoad = mapsToSelectFrom.FirstOrDefault(x => x.MapName == LastMap);
+            }
+
+            mapToLoad ??= mapsToSelectFrom.FirstOrDefault(x => x.MapType == MapType.LocalFile);
+                
+            return mapToLoad ?? mapsToSelectFrom.First();
+        }
+        
         private void CollectQuestionnaires()
         {
             List<QuestionnaireItem> result = new List<QuestionnaireItem>();
@@ -559,94 +529,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
         }
 
-        public async Task UpdateBaseMap()
-        {
-            var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == this.SelectedMap);
-
-            if (existingMap != null)
-            {
-                var baseMap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, existingMap);
-                if (baseMap != null)
-                {
-                    this.Map.Basemap = baseMap;
-
-                    if (baseMap?.BaseLayers.Count > 0 && baseMap?.BaseLayers[0]?.FullExtent != null && this.MapView?.VisibleArea != null)
-                    {
-                        var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea,
-                            baseMap.BaseLayers[0].SpatialReference);
-
-                        if (projectedArea!= null && !GeometryEngine.Intersects(baseMap.BaseLayers[0].FullExtent, projectedArea))
-                            this.userInteractionService.ShowToast(UIResources.AreaMap_MapIsOutOfVisibleBoundaries);
-                    }
-
-                    /*if (basemap?.BaseLayers[0]?.FullExtent != null)
-                        await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);*/
-
-                    LastMap = this.SelectedMap;
-                }
-            }
-        }
-
-        private MvxObservableCollection<ShapefileDescription> availableShapefiles = new MvxObservableCollection<ShapefileDescription>();
-        public MvxObservableCollection<ShapefileDescription> AvailableShapefiles
-        {
-            get => this.availableShapefiles;
-            protected set => this.RaiseAndSetIfChanged(ref this.availableShapefiles, value);
-        }
-
-
-        public IMvxAsyncCommand LoadShapefile => new MvxAsyncCommand(async () =>
-        {
-            if (AvailableShapefiles.Count < 1)
-                return;
-
-            try
-            {
-                var newFeatureLayer = await MapUtilityService.GetShapefileAsFeatureLayer(AvailableShapefiles.First().FullPath);
-
-                this.MapView.Map.OperationalLayers.Clear();
-
-                // Add the feature layer to the map
-                this.MapView.Map.OperationalLayers.Add(newFeatureLayer);
-
-                // Zoom the map to the extent of the shapefile
-                await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
-            }
-            catch (Exception e)
-            {
-                logger.Error("Error on shapefile loading", e);
-                userInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
-            }
-        });
-
-        private string selectedMap;
-        public string SelectedMap
-        {
-            get => this.selectedMap;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref this.selectedMap, value);
-            }
-        }
-
-        public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
-            await this.MapView?.SetViewpointRotationAsync(0));
-
-        public IMvxAsyncCommand ZoomMapIn => new MvxAsyncCommand(async () =>
-            await this.MapView?.SetViewpointScaleAsync(this.MapView.MapScale / 1.3));
-
-        public IMvxAsyncCommand ZoomMapOut => new MvxAsyncCommand(async () =>
-            await this.MapView?.SetViewpointScaleAsync(this.MapView.MapScale * 1.3));
-
-        private bool isLocationServiceSwitchEnabled = false;
-        private readonly IMapService mapService;
-
-        public bool IsLocationServiceSwitchEnabled 
-        {
-            get => this.isLocationServiceSwitchEnabled;
-            set => this.RaiseAndSetIfChanged(ref this.isLocationServiceSwitchEnabled, value);
-        }
-
         public IMvxAsyncCommand ShowFullMapCommand => new MvxAsyncCommand(async () =>
         {
             if (this.Map?.Basemap?.BaseLayers.Count > 0 && this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
@@ -658,84 +540,23 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             await SetViewExtentToItems();
         });
 
-
-        public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async () =>
-        {
-            if (IsLocationServiceSwitchEnabled)
-                return;
-
-            //try to workaround Esri crash with location service
-            //Esri case 02209395
-            try
-            {
-                IsLocationServiceSwitchEnabled = true;
-
-                if (!this.MapView.LocationDisplay.IsEnabled)
-                    this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
-
-                //try to stop service first to avoid crash
-                await this.MapView.LocationDisplay.DataSource.StopAsync();
-
-                this.MapView.LocationDisplay.DataSource.StatusChanged += DataSourceOnStatusChanged; 
-
-                await this.MapView.LocationDisplay.DataSource.StartAsync();
-                this.MapView.LocationDisplay.IsEnabled = true;
-                this.MapView.LocationDisplay.LocationChanged += LocationDisplayOnLocationChanged;
-            }
-            catch (Exception exc)
-            {
-                logger.Error("Error occurred on map location start.", exc);
-            }
-        });
-
-        private void DataSourceOnStatusChanged(object sender, LocationDataSourceStatus e)
-        {
-            if(e == LocationDataSourceStatus.FailedToStart)
-                this.userInteractionService.ShowToast(UIResources.AreaMap_LocationDataSourceFailed);
-        }
-
-        private void LocationDisplayOnLocationChanged(object sender, Location e)
-        {
-            //show only once
-            this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
-
-            if (e.Position == null) { return; }
-            if (this.Map?.Basemap?.BaseLayers.Count <= 0) return;
-
-            var extent = this.MapView.Map.Basemap.BaseLayers[0].FullExtent;
-
-            var point = GeometryEngine.Project(e.Position, extent.SpatialReference);
-
-            if (!GeometryEngine.Contains(extent, point))
-            {
-                this.userInteractionService.ShowToast(UIResources.AreaMap_LocationOutOfBoundaries);
-            }
-        }
-
         private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
-        private readonly IEnumeratorSettings enumeratorSettings;
-
-
-        public MvxObservableCollection<MapDescription> AvailableMaps
-        {
-            get => this.availableMaps;
-            protected set => this.RaiseAndSetIfChanged(ref this.availableMaps, value);
-        }
+        
 
         public IMvxCommand NavigateToDashboardCommand => 
             new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
         
-        public void Dispose()
+        public override void Dispose()
         {
-            if(this.MapView?.LocationDisplay!= null )
-                this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
-            
-            if (this.MapView?.LocationDisplay?.DataSource != null)
-                this.MapView.LocationDisplay.DataSource.StatusChanged -= DataSourceOnStatusChanged;
+            base.Dispose();
 
             if (MapView != null)
                 MapView.GeoViewTapped -= OnMapViewTapped;
         }
+    }
+
+    public class MapDashboardViewModelArgs
+    {
     }
 }
