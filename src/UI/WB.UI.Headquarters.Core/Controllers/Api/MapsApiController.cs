@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
+using NetTopologySuite.IO.Streams;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
@@ -28,6 +31,7 @@ namespace WB.UI.Headquarters.Controllers.Api
     public class MapsApiController : ControllerBase
     {
         private readonly string[] permittedMapFileExtensions = { ".tpk", ".mmpk", ".tif" };
+        private readonly string[] shapeMapFileExtensions = { ".txt", ".dbf", ".shp", ".shx", ".cpg", ".prj" };
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IMapBrowseViewFactory mapBrowseViewFactory;
@@ -141,7 +145,24 @@ namespace WB.UI.Headquarters.Controllers.Api
             try
             {
                 var filesInArchive = archiveUtils.GetArchivedFileNamesAndSize(file.OpenReadStream());
-                
+
+                var validShapeFilesCount = filesInArchive.Keys.Count(x =>
+                    shapeMapFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(x)));
+                bool isShapeFile = validShapeFilesCount == filesInArchive.Count && filesInArchive.Count > 0;
+                if (isShapeFile)
+                {
+                    await using MemoryStream ms = new MemoryStream();
+                    await file.OpenReadStream().CopyToAsync(ms);
+                    await mapStorageService.SaveOrUpdateMapAsync(new ExtractedFile()
+                    {
+                        Name = file.FileName,
+                        Size = ms.Length,
+                        Bytes = ms.ToArray()
+                    });
+                    response.IsSuccess = true;
+                    return response;
+                }
+
                 var validMapFilesCount = filesInArchive.Keys.Count(x =>
                     permittedMapFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(x)));
 
@@ -150,7 +171,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                     response.Errors.Add(Maps.MapLoadingNoMapsInArchive);
                     return response;
                 }
-                if (filesInArchive.Count > validMapFilesCount)
+
+                if (!isShapeFile && filesInArchive.Count > validMapFilesCount)
                 {
                     response.Errors.Add(Maps.MapLoadingUnsupportedFilesInArchive);
                     return response;

@@ -9,6 +9,7 @@ using System.Xml;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NetTopologySuite.IO;
 using Newtonsoft.Json;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Maps;
@@ -294,6 +295,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             throw;
                         }
                     }
+                    break;
+                case ".zip":
+                {
+                    var tempDirectory = tempFile + "-dir";
+                    try
+                    {
+                        if (fileSystemAccessor.IsDirectoryExists(tempDirectory))
+                            fileSystemAccessor.DeleteDirectory(tempDirectory);
+                        fileSystemAccessor.CreateDirectory(tempDirectory);
+                    
+                        archiveUtils.Unzip(tempFile, tempDirectory);
+
+                        var shapeFilesInDirectory = fileSystemAccessor.GetFilesInDirectory(tempDirectory, "*.shp");
+
+                        foreach (var shapeFile in shapeFilesInDirectory)
+                        {
+                            ShapefileReader sr = new ShapefileReader(shapeFile);
+                            var geometryCollection = sr.ReadAll();
+                        }
+                    }
+                    finally
+                    {
+                        if (fileSystemAccessor.IsDirectoryExists(tempDirectory))
+                            fileSystemAccessor.DeleteDirectory(tempDirectory);
+                    }
+
+                }
                     break;
             }
 
