@@ -394,7 +394,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         private void RestoreGoogleApiConnectionIfNeeded()
         {
             var apiClientFactory = Mvx.IoCProvider.GetSingleton<IGoogleApiClientFactory>();
-            apiClientFactory.ConnectionsClient = NearbyClass.GetConnectionsClient(this);
+            if(apiClientFactory!= null && NearbyClass != null)
+                apiClientFactory.ConnectionsClient = NearbyClass.GetConnectionsClient(this);
             // System.Diagnostics.Trace.Write("StartDiscoveryAsyncCommand call from  RestoreGoogleApiConnectionIfNeeded");
             
             // this.ViewModel.StartDiscoveryAsyncCommand.Execute();
