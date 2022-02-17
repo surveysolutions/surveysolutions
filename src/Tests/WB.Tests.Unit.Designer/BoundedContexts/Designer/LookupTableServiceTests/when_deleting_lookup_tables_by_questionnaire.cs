@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -23,8 +24,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
             var questionnaireDocument = new  QuestionnaireDocument() {PublicKey = questionnaireId };
             questionnaireDocument.LookupTables = lookupTables;
 
-            var qStore = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            qStore.Setup(x=> x.GetById(Moq.It.IsAny<string>()))
+            var qStore = new Mock<IDesignerQuestionnaireStorage>();
+            qStore.Setup(x=> x.Get(Moq.It.IsAny<Guid>()))
                 .Returns(questionnaireDocument);
             
 
@@ -35,8 +36,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
 
             lookupTableService = Create.LookupTableService(lookupTableContentStorage: LookupTableContentStorageMock.Object, documentStorage: qStore.Object);
             lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent);
-            BecauseOf();
 
+            BecauseOf();
         }
 
         private void BecauseOf() =>

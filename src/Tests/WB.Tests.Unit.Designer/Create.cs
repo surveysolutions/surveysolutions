@@ -315,11 +315,11 @@ namespace WB.Tests.Unit.Designer
 
         public static LookupTableService LookupTableService(
             IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage = null,
-            IPlainKeyValueStorage<QuestionnaireDocument> documentStorage = null)
+            IDesignerQuestionnaireStorage documentStorage = null)
         {
             return new LookupTableService(
                 lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
-                documentStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>());
+                documentStorage ?? Mock.Of<IDesignerQuestionnaireStorage>());
         }
 
         public static Macro Macro(string name, string content = null, string description = null)

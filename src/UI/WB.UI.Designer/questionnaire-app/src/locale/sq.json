@@ -371,6 +371,7 @@
     "WarningsCounter": "{{count}} paralajmërim",
     "WarningsCounter_plural": "{{count}} paralajmërime",
     "SaveAs": "Save as",
+    "CopyTo": "Copy to",
     "ReadOnlyQuestion": "It is readonly question. You can not edit it.",
     "SideBarEditCategories": "Edit Categories",
     "SideBarScenarioCounter": "{{count}} Scenario:",

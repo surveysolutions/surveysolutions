@@ -432,6 +432,7 @@
     "ViewResolvedCommentsCounter_plural": "Ver todos los {{count}} comentarios resueltos",
     "VirtualCoverPage": "Portada virtual",
     "Yes": "Si",
+    "CopyTo": "Copy to",
     "SideBarEditCategories": "Edit Categories",
     "Filter": "Filter",
     "OptionsUploadRevert": "Revert changes",
