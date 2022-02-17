@@ -9,6 +9,7 @@ using System.Xml;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using Newtonsoft.Json;
 using NHibernate.Linq;
@@ -304,16 +305,42 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         if (fileSystemAccessor.IsDirectoryExists(tempDirectory))
                             fileSystemAccessor.DeleteDirectory(tempDirectory);
                         fileSystemAccessor.CreateDirectory(tempDirectory);
-                    
+
                         archiveUtils.Unzip(tempFile, tempDirectory);
 
                         var shapeFilesInDirectory = fileSystemAccessor.GetFilesInDirectory(tempDirectory, "*.shp");
 
+                        double xMin = double.MaxValue;
+                        double xMax = double.MinValue;
+                        double yMin = double.MaxValue;
+                        double yMax = double.MinValue;
+
+                        //GeometryCollection geometries = null;
                         foreach (var shapeFile in shapeFilesInDirectory)
                         {
                             ShapefileReader sr = new ShapefileReader(shapeFile);
                             var geometryCollection = sr.ReadAll();
+
+                            foreach (var geom in geometryCollection)
+                            {
+                                xMin = Math.Min(xMin, geom.Coordinate.X);
+                                xMax = Math.Max(xMax, geom.Coordinate.X);
+
+                                yMin = Math.Min(yMin, geom.Coordinate.Y);
+                                yMax = Math.Max(yMax, geom.Coordinate.Y);
+                            }
+                            // if (geometries == null || geometries.Count > geometryCollection.Count)
+                            //     geometries = geometryCollection;
                         }
+
+                        //var geometry = geometries[0];
+                        item.XMinVal = xMin;
+                        item.YMinVal = yMin;
+
+                        item.XMaxVal = xMax;
+                        item.YMaxVal = yMax;
+                        
+                        item.Wkid = 4326; //geographic coordinates Wgs84
                     }
                     finally
                     {
@@ -322,7 +349,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     }
 
                 }
-                    break;
+                break;
             }
 
             return item;

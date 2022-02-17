@@ -30,12 +30,14 @@
                     "esri/Graphic",
                     "esri/geometry/Polygon",
                     "esri/geometry/Extent",
+                    "esri/layers/FeatureLayer",
+                    "esri/layers/support/Field",
                     "esri/symbols/SimpleLineSymbol",
-                "esri/symbols/SimpleFillSymbol",
-                "esri/geometry/support/webMercatorUtils",
+                    "esri/symbols/SimpleFillSymbol",
+                    "esri/geometry/support/webMercatorUtils",
                     "dojo/domReady!"
                 ],
-                function (Map, MapView, Graphic, Polygon, Extent, SimpleLineSymbol, SimpleFillSymbol, webMercatorUtils) {
+                function (Map, MapView, Graphic, Polygon, Extent, FeatureLayer, Field, SimpleLineSymbol, SimpleFillSymbol, webMercatorUtils) {
 
                     var startExtent = new Extent({
                         "xmin":@Model.XMinVal,"ymin":@Model.YMinVal,"xmax":@Model.XMaxVal,"ymax":@Model.YMaxVal,
@@ -71,7 +73,42 @@
 
                     view.graphics.addMany([polygonGraphic]);
                     view.extent = startExtent;
-
+                    
+                    /*var graphics = {
+                        geometryType: "Point",
+                        fields: "",
+                        objectIdField: "FID", 
+                    };
+                    
+                    const layer = new FeatureLayer({
+                        geometryType: "Point",
+                        source: graphics,  // array of graphics objects
+                        objectIdField: "FID",
+                        fields: [{
+                            name: "FID",
+                            type: "oid"
+                        }, {
+                            name: "url",
+                            type: "string"
+                        }],
+                        popupTemplate: {
+                            content: "<img src='{url}'>"
+                        },
+                        renderer: {  // overrides the layer's default renderer
+                            type: "simple",
+                            symbol: {
+                                type: "text",
+                                color: "#7A003C",
+                                text: "\ue661",
+                                font: {
+                                    size: 20,
+                                    family: "CalciteWebCoreIcons"
+                                }
+                            }
+                        }
+                    });
+                    
+                    map.add(layer);*/
                 });
         </script>
     
