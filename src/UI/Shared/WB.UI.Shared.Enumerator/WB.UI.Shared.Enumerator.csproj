@@ -246,6 +246,7 @@
     <Compile Include="Settings\GsmSignalStrengthListener.cs" />
     <Compile Include="Settings\PreferenceExtensions.cs" />
     <Compile Include="Utils\AndroidInformationUtils.cs" />
+    <Compile Include="Utils\ANRListener.cs" />
     <Compile Include="Utils\ContextExtensions.cs" />
     <Compile Include="Utils\CrashReporting.cs" />
     <Compile Include="Utils\LogCatTarget.cs" />
@@ -1502,6 +1503,9 @@
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Work.Runtime">
       <Version>2.6.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.ANRWatchDog">
+      <Version>1.4.25</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Build.Download">
       <Version>0.10.0</Version>
