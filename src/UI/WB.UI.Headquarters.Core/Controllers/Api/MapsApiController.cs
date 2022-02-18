@@ -151,6 +151,14 @@ namespace WB.UI.Headquarters.Controllers.Api
                 bool isShapeFile = validShapeFilesCount == filesInArchive.Count && filesInArchive.Count > 0;
                 if (isShapeFile)
                 {
+                    ShapeFileValidator shapeFileValidator = new ShapeFileValidator();
+                    var validatorErrors = shapeFileValidator.Verify(filesInArchive).ToList();
+                    if (validatorErrors.Any())
+                    {
+                        validatorErrors.ForEach(error => response.Errors.Add(error.Message));
+                        return response;
+                    }
+                    
                     await using MemoryStream ms = new MemoryStream();
                     await file.OpenReadStream().CopyToAsync(ms);
                     await mapStorageService.SaveOrUpdateMapAsync(new ExtractedFile()

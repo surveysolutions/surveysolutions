@@ -297,9 +297,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         }
                     }
                     break;
-                case ".zip":
+                case ".zip": // shape file
                 {
-                    var tempDirectory = tempFile + "-dir";
+                    var tempDirectory = fileSystemAccessor.GetFileNameWithoutExtension(tempFile);
                     try
                     {
                         if (fileSystemAccessor.IsDirectoryExists(tempDirectory))
