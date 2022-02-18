@@ -139,6 +139,7 @@ jobs:
   installer:
     needs: [prepare, mobile]
     runs-on: windows-2019
+    environment: ${{ needs.prepare.outputs.environment }}
 
     steps:
       - name: Support longpaths
@@ -169,7 +170,7 @@ jobs:
         if: ${{ needs.prepare.outputs.environment == 'release' }}
         run: |
           New-Item -ItemType directory -Path certificate
-          Set-Content -Path certificate\certificate.txt -Value "${{ secrets.CODESIGNING_CERTIFICATE }}"
+          Set-Content -Path certificate\certificate.txt -Value '${{ secrets.CODESIGNING_CERTIFICATE }}'
           certutil -decode certificate\certificate.txt certificate\certificate.pfx
 
       - name: Build Headquarters
@@ -192,7 +193,7 @@ jobs:
         run: |
           & 'C:/Program Files (x86)/Windows Kits/10/bin/x86/signtool.exe' sign `
             /f certificate\certificate.pfx `
-            /p "${{ secrets.CODESIGNING_CERTIFICATE_PASSPHRASE }}" `
+            /p '${{ secrets.CODESIGNING_CERTIFICATE_PASSPHRASE }}'' `
             /tr http://timestamp.sectigo.com /td sha256 /fd sha256 `
             ${{ steps.build-installer.outputs.filename }}
 
