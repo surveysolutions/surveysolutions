@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
 using Ncqrs.Domain;
@@ -645,7 +646,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         protected List<CategoricalOption> FilteredCategoricalOptions(Identity questionIdentity, int itemsCount,
-            IEnumerable<CategoricalOption> unfilteredOptionsForQuestion)
+            IEnumerable<CategoricalOption> unfilteredOptionsForQuestion, CancellationToken token)
         {
             IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
 
@@ -662,7 +663,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var level = expressionStorage.GetLevel(nearestRoster);
             var categoricalFilter = level.GetCategoricalFilter(questionIdentity);
             return unfilteredOptionsForQuestion
-                .Where(x => RunOptionFilter(categoricalFilter, x.Value))
+                .Where(x =>
+                {
+                    token.ThrowIfCancellationRequested();
+                    return RunOptionFilter(categoricalFilter, x.Value);
+                })
                 .Take(itemsCount)
                 .ToList();
         }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
@@ -104,12 +105,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public virtual List<CategoricalOption> GetOptions(string filter = "", int[]? excludedOptionIdsArg = null, int? count = null)
+        public virtual List<CategoricalOption> GetOptions(string filter = "", int[]? excludedOptionIdsArg = null, int? count = null, CancellationToken token = default)
         {
             this.Filter = filter;
             this.excludedOptionIds = excludedOptionIdsArg;
             var interview = this.interviewRepository.GetOrThrow(interviewId);
-            var optionsFromInterview = interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, count ?? this.Count, excludedOptionIdsArg)
+            var optionsFromInterview = interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, count ?? this.Count, excludedOptionIdsArg, token)
                 ?.ToList();
             this.options = optionsFromInterview ?? new List<CategoricalOption>();
             return options;

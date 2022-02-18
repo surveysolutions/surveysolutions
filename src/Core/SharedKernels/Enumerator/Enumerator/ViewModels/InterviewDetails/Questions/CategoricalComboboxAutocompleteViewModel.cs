@@ -10,6 +10,7 @@ using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
@@ -27,7 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ThrottlingViewModel throttlingModel;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
-        private CancellationTokenSource loadSuggestionsToken = new CancellationTokenSource();
+        private CancellationTokenSourceWithTag loadSuggestionsToken = new CancellationTokenSourceWithTag(null);
         
         public CategoricalComboboxAutocompleteViewModel(IQuestionStateViewModel questionState,
             FilteredOptionsViewModel filteredOptionsViewModel,
@@ -37,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.displaySelectedValue = displaySelectedValue;
             this.throttlingModel = Mvx.IoCProvider.Create<ThrottlingViewModel>();
-            this.throttlingModel.Init(UpdateFilterThrottled);
+            this.throttlingModel.Init(() => UpdateFilterThrottled(filterToUpdate));
             this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
         }
 
@@ -61,7 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private List<OptionWithSearchTerm> autoCompleteSuggestions = new List<OptionWithSearchTerm>();
         public List<OptionWithSearchTerm> AutoCompleteSuggestions
         {
-            get => this.autoCompleteSuggestions ??= GetLazySuggestions();
+            get => this.autoCompleteSuggestions ??= GetLazySuggestions(FilterText);
             set => this.SetProperty(ref this.autoCompleteSuggestions, value);
         }
 
@@ -74,16 +75,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private bool firstInit = true;
 
-        private List<OptionWithSearchTerm> GetLazySuggestions()
+        private List<OptionWithSearchTerm> GetLazySuggestions(string filterText)
         {
-            loadSuggestionsToken.Cancel();
-            loadSuggestionsToken.Dispose();
-            loadSuggestionsToken = new CancellationTokenSource();
+            if (filterText != loadSuggestionsToken.Tag)
+            {
+                loadSuggestionsToken.Cancel();
+                loadSuggestionsToken.Dispose();
+                loadSuggestionsToken = new CancellationTokenSourceWithTag(filterText);
 
-            if (firstInit)
-                firstInit = false;
-            else
-                LoadOptionsAsync(FilterText, loadSuggestionsToken.Token);
+                if (firstInit)
+                    firstInit = false;
+                else
+                    LoadOptionsAsync(filterText, loadSuggestionsToken.Token);
+            }
+
             return null;
         }
 
@@ -92,15 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             //TaskCreationOptions.LongRunning avoiding UI Thread to be used
             return Task.Factory.StartNew(async () =>
             {
-                var suggestions = GetSuggestions(filterText);
-
-                await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-                {
-                    if (isDisposed || cancellationToken.IsCancellationRequested)
-                        return;
-                    
-                    AutoCompleteSuggestions = suggestions;
-                });
+                await UpdateUiSuggestions(filterText, cancellationToken);
             }, cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
@@ -167,17 +164,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private string filterToUpdate = null;
-        private async Task UpdateFilterThrottled()
+        private async Task UpdateFilterThrottled(string filterText)
         {
-            var suggestions = this.GetSuggestions(filterToUpdate);
+            if (filterText != loadSuggestionsToken.Tag)
+            {
+                loadSuggestionsToken.Cancel();
+                loadSuggestionsToken.Dispose();
+                loadSuggestionsToken = new CancellationTokenSourceWithTag(filterText);
+
+                await UpdateUiSuggestions(filterText, loadSuggestionsToken.Token);
+            }
+        }
+        
+        private async Task UpdateUiSuggestions(string filter, CancellationToken cancellationToken)
+        {
+            var suggestions = this.GetSuggestions(filter, cancellationToken);
 
             await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
-                if (isDisposed)
+                if (isDisposed || cancellationToken.IsCancellationRequested)
                     return;
                 this.AutoCompleteSuggestions = suggestions;
             });
         }
+
 
         public async Task UpdateFilter(string filter, bool forced = false)
         {
@@ -211,17 +221,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        private List<OptionWithSearchTerm> GetSuggestions(string filter)
+        private List<OptionWithSearchTerm> GetSuggestions(string filter, CancellationToken cancellationToken)
         {
             try
             {
                 Loading = true;
-                
-                List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20);
+
+                List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20, cancellationToken);
+
+                cancellationToken.ThrowIfCancellationRequested();
 
                 var categoricalOptions = filteredOptions.Count == 1 && displaySelectedValue
                     ? filteredOptions
                     : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value));
+
+                cancellationToken.ThrowIfCancellationRequested();
 
                 var options = categoricalOptions
                     .Where(m => !m.Title.IsNullOrEmpty())
@@ -229,6 +243,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     .ToList();
 
                 return options;
+            }
+            catch (TaskCanceledException)
+            {
+                return null;
             }
             finally
             {

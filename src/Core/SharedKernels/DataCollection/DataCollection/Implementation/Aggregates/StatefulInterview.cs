@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -713,14 +714,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.Tree.GetQuestion(entityIdentity).AnswerComments.Where(x => includeResolved || !x.Resolved).ToList();
 
         List<CategoricalOption> IStatefulInterview.GetTopFilteredOptionsForQuestion(Identity question,
-            int? parentQuestionValue, string filter, int sliceSize, int[] excludedOptionIds)
-            => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize, excludedOptionIds);
+            int? parentQuestionValue, string filter, int sliceSize, int[] excludedOptionIds, CancellationToken token)
+            => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize, excludedOptionIds, token);
 
         public List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity,
-            int? parentQuestionValue, string filter, int itemsCount = 200, int[] excludedOptionIds = null)
+            int? parentQuestionValue, string filter, int itemsCount = 200, int[] excludedOptionIds = null, CancellationToken token = default)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
+            token.ThrowIfCancellationRequested();
+            
             if (questionnaire.IsLinkedToListQuestion(questionIdentity.Id))
             {
                 return OptionsForLinkedToTextListQuestion(questionIdentity)
@@ -730,12 +733,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .ToList();
             }
 
+            token.ThrowIfCancellationRequested();
+
             var options = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter, excludedOptionIds);
 
             if (!questionnaire.IsSupportFilteringForOptions(questionIdentity.Id))
                 return options.Take(itemsCount).ToList();
 
-            return this.FilteredCategoricalOptions(questionIdentity, itemsCount, options);
+            token.ThrowIfCancellationRequested();
+
+            return this.FilteredCategoricalOptions(questionIdentity, itemsCount, options, token);
         }
 
         private IEnumerable<CategoricalOption> OptionsForLinkedToTextListQuestion(Identity questionId)
@@ -810,7 +817,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value,
             int? parentQuestionValue) => this.GetOptionForQuestionWithFilter(question, value, parentQuestionValue);
 
-        public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText, int? parentQuestionValue = null)
+        public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText, int? parentQuestionValue = null, CancellationToken token = default)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             if (questionnaire.IsLinkedToListQuestion(question.Id))
@@ -826,7 +833,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.IsSupportFilteringForOptions(question.Id))
             {
-                return FilteredCategoricalOptions(question, 1, filteredOption.ToEnumerable()).SingleOrDefault();
+                return FilteredCategoricalOptions(question, 1, filteredOption.ToEnumerable(), token).SingleOrDefault();
             }
 
             return filteredOption;

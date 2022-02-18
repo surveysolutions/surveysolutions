@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using Main.Core.Documents;
@@ -194,7 +195,7 @@ namespace WB.Tests.Abc
                 .ToList();
 
             Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
-            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>())).Returns<string, int[], int?>((filter, excludedOptions, count)=>options.FindAll(x=>x.Title.Contains(filter)));
+            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>(), It.IsAny<CancellationToken>())).Returns<string, int[], int?>((filter, excludedOptions, count)=>options.FindAll(x=>x.Title.Contains(filter)));
             filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<int>()));
 
             return filteredOptionsViewModel.Object;
@@ -212,7 +213,7 @@ namespace WB.Tests.Abc
             };
 
             Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
-            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>())).Returns<string, int[], int?>((filter, excludedOptions, count) =>options.FindAll(x=>x.Title.Contains(filter??string.Empty)));
+            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>(), It.IsAny<CancellationToken>())).Returns<string, int[], int?>((filter, excludedOptions, count) =>options.FindAll(x=>x.Title.Contains(filter??string.Empty)));
             filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<int>()));
             filteredOptionsViewModel.Setup(x => x.GetAnsweredOption(It.IsAny<int>())).Returns<int>(filter => options.Find(x => x.Value == filter ));
             

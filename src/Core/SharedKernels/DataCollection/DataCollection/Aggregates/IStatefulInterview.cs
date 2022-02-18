@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -151,7 +152,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsFirstEntityBeforeSecond(Identity first, Identity second);
 
-        List<CategoricalOption> GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize, int[] excludedOptionIds);
+        List<CategoricalOption> GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize, int[] excludedOptionIds, CancellationToken cancellationToken = default);
 
         bool DoesCascadingQuestionHaveMoreOptionsThanThreshold(Identity question, int threshold);
 
