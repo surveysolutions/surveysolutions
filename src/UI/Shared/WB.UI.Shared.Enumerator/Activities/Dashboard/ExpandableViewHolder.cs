@@ -35,11 +35,17 @@ namespace WB.UI.Shared.Enumerator.Activities.Dashboard
         {
             if (disposing)
             {
-                DashboardItem.Click -= CardClick;
-                MenuHandle.Click -= MenuClick;
-                
-                DashboardItem.Dispose();
-                MenuHandle.Dispose();
+                if (DashboardItem != null)
+                {
+                    DashboardItem.Click -= CardClick;
+                    DashboardItem.Dispose();
+                }
+
+                if (MenuHandle != null)
+                {
+                    MenuHandle.Click -= MenuClick;
+                    MenuHandle.Dispose();
+                }
             }
         }
 
@@ -70,10 +76,10 @@ namespace WB.UI.Shared.Enumerator.Activities.Dashboard
                 }
 
                 popup.MenuItemClick += (s, e) =>
-                {
-                    var action = dashboardItem.ContextMenu.SingleOrDefault(a => a.Tag == e.Item.GetHashCode());
-                    action?.Command.Execute();
-                };
+                    {
+                        var action = dashboardItem.ContextMenu.SingleOrDefault(a => a.Tag == e.Item.GetHashCode());
+                        action?.Command.Execute();
+                    };
 
                 popup.Show();
             }
