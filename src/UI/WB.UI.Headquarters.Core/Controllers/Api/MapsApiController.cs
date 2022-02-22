@@ -22,6 +22,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Services.Maps;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Headquarters.Controllers.Api
@@ -40,13 +41,15 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IExportFactory exportFactory;
         private readonly ICsvReader recordsAccessorFactory;
         private readonly IArchiveUtils archiveUtils;
+        private readonly IUploadPackageAnalyzer uploadPackageAnalyzer;
 
         public MapsApiController(
             IMapBrowseViewFactory mapBrowseViewFactory, ILogger logger,
             IMapStorageService mapStorageService, IExportFactory exportFactory,
             IFileSystemAccessor fileSystemAccessor,
             ICsvReader recordsAccessorFactory,
-            IArchiveUtils archiveUtils)
+            IArchiveUtils archiveUtils,
+            IUploadPackageAnalyzer uploadPackageAnalyzer)
         {
             this.mapBrowseViewFactory = mapBrowseViewFactory;
             this.logger = logger;
@@ -55,6 +58,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.fileSystemAccessor = fileSystemAccessor;
             this.recordsAccessorFactory = recordsAccessorFactory;
             this.archiveUtils = archiveUtils;
+            this.uploadPackageAnalyzer = uploadPackageAnalyzer;
         }
 
         [HttpGet]
@@ -142,47 +146,21 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return response;
             }
 
+            AnalyzeResult analyzeResult = null;
             try
             {
-                var filesInArchive = archiveUtils.GetArchivedFileNamesAndSize(file.OpenReadStream());
-
-                var validShapeFilesCount = filesInArchive.Keys.Count(x =>
-                    shapeMapFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(x)));
-                bool isShapeFile = validShapeFilesCount == filesInArchive.Count && filesInArchive.Count > 0;
-                if (isShapeFile)
-                {
-                    ShapeFileValidator shapeFileValidator = new ShapeFileValidator();
-                    var validatorErrors = shapeFileValidator.Verify(filesInArchive).ToList();
-                    if (validatorErrors.Any())
-                    {
-                        validatorErrors.ForEach(error => response.Errors.Add(error.Message));
-                        return response;
-                    }
-                    
-                    await using MemoryStream ms = new MemoryStream();
-                    await file.OpenReadStream().CopyToAsync(ms);
-                    await mapStorageService.SaveOrUpdateMapAsync(new ExtractedFile()
-                    {
-                        Name = file.FileName,
-                        Size = ms.Length,
-                        Bytes = ms.ToArray()
-                    });
-                    response.IsSuccess = true;
-                    return response;
-                }
-
-                var validMapFilesCount = filesInArchive.Keys.Count(x =>
-                    permittedMapFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(x)));
-
-                if (validMapFilesCount == 0)
+                analyzeResult = uploadPackageAnalyzer.Analyze(file);
+                if (!analyzeResult.IsValid || analyzeResult.Maps.Count == 0)
                 {
                     response.Errors.Add(Maps.MapLoadingNoMapsInArchive);
                     return response;
                 }
-
-                if (!isShapeFile && filesInArchive.Count > validMapFilesCount)
+                
+                MapFilesValidator mapFilesValidator = new MapFilesValidator();
+                var validatorErrors = mapFilesValidator.Verify(analyzeResult).ToList();
+                if (validatorErrors.Any())
                 {
-                    response.Errors.Add(Maps.MapLoadingUnsupportedFilesInArchive);
+                    validatorErrors.ForEach(error => response.Errors.Add(error.Message));
                     return response;
                 }
             }
@@ -197,14 +175,32 @@ namespace WB.UI.Headquarters.Controllers.Api
             var invalidMaps = new List<Tuple<string, Exception>>();
             try
             {
-                var extractedFiles = archiveUtils.GetFilesFromArchive(file.OpenReadStream());
-                foreach (var map in extractedFiles)
+                foreach (var map in analyzeResult.Maps)
                 {
                     try
                     {
-                        await mapStorageService.SaveOrUpdateMapAsync(map);
+                        if (map.IsShapeFile)
+                        {
+                            IEnumerable<ExtractedFile> entities = map.Files
+                                .Select(fileName => new ExtractedFile()
+                                {
+                                    Name = fileName,
+                                    Bytes = archiveUtils.GetFileFromArchive(file.OpenReadStream(), fileName).Bytes
+                                });
+                            var compressStream = archiveUtils.CompressStream(entities);
+                            await mapStorageService.SaveOrUpdateMapAsync(new ExtractedFile()
+                            {
+                                Bytes = compressStream,
+                                Name = map.Name + ".zip",
+                                Size = compressStream.LongLength,
+                            });
+                        }
+                        else
+                        {
+                            var extractedFile = archiveUtils.GetFileFromArchive(file.OpenReadStream(), map.Files.Single());
+                            await mapStorageService.SaveOrUpdateMapAsync(extractedFile);
+                        }
                     }
-
                     catch (Exception e)
                     {
                         logger.Error($"Error on maps import map {map.Name}", e);

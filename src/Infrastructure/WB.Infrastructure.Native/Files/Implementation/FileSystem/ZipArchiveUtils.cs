@@ -31,6 +31,26 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             return compressedBytes;
         }
 
+        public byte[] CompressStream(IEnumerable<ExtractedFile> entities)
+        {
+            byte[] compressedBytes;
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (ZipFile zip = new ZipFile())
+                {
+                    foreach (var entity in entities)
+                    {
+                        zip.AddEntry(entity.Name, entity.Bytes);
+                    }
+                    zip.Save(memoryStream);
+                }
+
+                compressedBytes = memoryStream.ToArray();
+            }
+            return compressedBytes;
+        }
+
+
         public void ZipDirectory(string directory, string archiveFile, string password, IProgress<int> progress = null)
         {
             using (var zipFile = new ZipFile
@@ -170,6 +190,42 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
             return null;
         }
+        
+        public ExtractedFile GetFileFromArchive(Stream inputStream, string fileName)
+        {
+            inputStream.Seek(0, SeekOrigin.Begin);
+            
+            using (ZipFile zip = ZipFile.Read(inputStream))
+            {
+                foreach (var zipEntry in zip.Entries)
+                {
+                    if (zipEntry.IsDirectory) continue;
+                    if (!zipEntry.FileName.Contains(fileName)) continue;
+
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        try
+                        {
+                            zipEntry.Extract(memoryStream);
+                        }
+                        catch (BadPasswordException ex)
+                        {
+                            throw new Core.Infrastructure.FileSystem.ZipException("Password required", ex);
+                        }
+
+                        return new ExtractedFile
+                        {
+                            Name = zipEntry.FileName,
+                            Size = zipEntry.UncompressedSize,
+                            Bytes = memoryStream.ToArray()
+                        };
+                    }
+                }
+            }
+
+            return null;
+        }
+
 
         public ExtractedFile GetFileFromArchive(byte[] archivedFileAsArray, string fileName)
         {
