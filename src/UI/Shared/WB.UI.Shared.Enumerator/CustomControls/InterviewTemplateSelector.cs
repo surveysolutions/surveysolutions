@@ -64,18 +64,18 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (OptionBorderViewModel), Resource.Layout.interview_question_option_rounded_corner},
             {typeof (FlatRosterTitleViewModel), Resource.Layout.interview_group_flat_roster_title}
         };
-
+        
+        HashSet<Type> disabledViewModelTypes = new HashSet<Type>()
+        {
+            typeof(QuestionHeaderViewModel),
+            typeof(GroupViewModel),
+            typeof(StaticTextViewModel),
+            typeof(FlatRosterTitleViewModel)
+        };
+        
         public int GetItemViewType(object forItemObject)
         {
             var typeOfViewModel = forItemObject.GetType();
-
-            var disabledViewModelTypes = new[]
-            {
-                typeof(QuestionHeaderViewModel),
-                typeof(GroupViewModel),
-                typeof(StaticTextViewModel),
-                typeof(FlatRosterTitleViewModel)
-            };
 
             if (disabledViewModelTypes.Contains(typeOfViewModel))
             {

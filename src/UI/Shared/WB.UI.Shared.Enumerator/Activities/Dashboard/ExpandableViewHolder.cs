@@ -37,6 +37,9 @@ namespace WB.UI.Shared.Enumerator.Activities.Dashboard
             {
                 DashboardItem.Click -= CardClick;
                 MenuHandle.Click -= MenuClick;
+                
+                DashboardItem.Dispose();
+                MenuHandle.Dispose();
             }
         }
 
