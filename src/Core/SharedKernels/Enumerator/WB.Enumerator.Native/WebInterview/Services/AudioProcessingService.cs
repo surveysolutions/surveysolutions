@@ -28,7 +28,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         {
             this.logger = logger;
             this.fileStorageConfig = fileStorageConfig;
-            audioProcessor = Task.Factory.StartNew(AudioCompressionQueueProcessor);
+            audioProcessor = Task.Factory.StartNew(AudioCompressionQueueProcessor, TaskCreationOptions.LongRunning);
             TempFilesFolder = Path.Combine(this.fileStorageConfig.Value.TempData, pathInAppDataForFfmpeg);
             if(!Directory.Exists(TempFilesFolder))
             {

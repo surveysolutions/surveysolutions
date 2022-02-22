@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -30,9 +29,14 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         private class PdfGenerationProgress
         {
+            public PdfGenerationProgress()
+            {
+                FilePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            }
+
             private DateTime? finishTime;
 
-            public string FilePath { get; } = Path.GetRandomFileName();
+            public string FilePath { get; }
             public bool IsFailed { get; private set; }
             public bool IsFinished => finishTime.HasValue;
             public TimeSpan TimeSinceFinished => this.finishTime.HasValue ? DateTime.Now - this.finishTime.Value : TimeSpan.Zero;
