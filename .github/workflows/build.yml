@@ -208,7 +208,7 @@ jobs:
           --title "$Title" `
           --notes '""' `
           --repo ${{ github.repository }} `
-          "${{ steps.file.outputs.filename }}"
+          "${{ steps.build-installer.outputs.filename }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
