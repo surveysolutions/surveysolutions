@@ -159,6 +159,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private void ChangeCurrentGroupAndFireEvent(NavigationIdentity navigationIdentity)
         {
+            this.viewModelNavigationService.CheckNavigationState();
+
             this.BeforeScreenChanged?.Invoke(new BeforeScreenChangedEventArgs(this.CurrentGroup, navigationIdentity.TargetGroup));
 
             var previousStage = this.CurrentScreenType;

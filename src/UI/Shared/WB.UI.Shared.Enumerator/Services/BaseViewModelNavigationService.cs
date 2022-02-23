@@ -118,6 +118,8 @@ namespace WB.UI.Shared.Enumerator.Services
             }
 
             this.logger.Trace($"Navigate to new {typeof(TViewModel)} with {typeof(TParam)}");
+
+            CheckNavigationState();
             return this.NavigationService.Navigate<TViewModel, TParam>(param);
         }
 
@@ -129,7 +131,14 @@ namespace WB.UI.Shared.Enumerator.Services
                 return Task.CompletedTask;
             }
 
+            CheckNavigationState();
             return this.NavigationService.Navigate<TViewModel>();
+        }
+
+        public void CheckNavigationState()
+        {
+            if(Java.Interop.JniRuntime.CurrentRuntime.ObjectReferenceManager.GlobalReferenceCount > 15000)
+                GC.Collect();
         }
 
         public abstract Task<bool> NavigateToDashboardAsync(string interviewId = null);
