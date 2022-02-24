@@ -37,7 +37,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             var targetFolder = Path.Combine(basePath, "Questionnaire");
             Directory.CreateDirectory(targetFolder);
             
-            targetFolder = Path.Combine(targetFolder, "Pdf");
+            targetFolder = Path.Combine(targetFolder, "Preview");
             IHeadquartersApi hqApi = tenantApi.For(tenant);
 
             this.logger.LogDebug("Loading main pdf for {questionnaire}", questionnaire.QuestionnaireId);

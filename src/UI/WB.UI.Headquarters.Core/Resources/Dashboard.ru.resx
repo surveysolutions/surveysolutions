@@ -213,6 +213,9 @@
   <data name="RecordAudio" xml:space="preserve">
     <value>Вести аудио запись</value>
   </data>
+  <data name="QuestionnairePreview" xml:space="preserve">
+    <value>Просмотр опросника</value>
+  </data>  
   <data name="RecordAudioTitle" xml:space="preserve">
     <value>Когда включено, приложение interviewer будет вести аудио запись интервью. При включении аудио аудита размер данных синхронизации значительно увеличится</value>
   </data>
