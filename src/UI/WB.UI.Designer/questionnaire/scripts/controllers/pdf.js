@@ -90,7 +90,7 @@
             }
             else {
                 $scope.cancel();
-                window.location = '../../pdf/download/' + $state.params.questionnaireId + '?translation=' + translationId;
+                window.location = '../../pdf/downloadPdf/' + $state.params.questionnaireId + '?translation=' + translationId;
             }
         };
 });

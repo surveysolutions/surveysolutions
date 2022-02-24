@@ -5,7 +5,7 @@
             var pdfService = {};
 
             pdfService.updateExportPdfStatus = function(questionnaireId, translationId) {
-                return $http.get('../../pdf/status/' +
+                return $http.get('../../pdf/statusPdf/' +
                     questionnaireId +
                     '?timezoneOffsetMinutes=' +
                     new Date().getTimezoneOffset() +
