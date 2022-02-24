@@ -55,6 +55,9 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public override void OnDestroyView()
         {
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+            GC.WaitForPendingFinalizers();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
             this.ViewModel?.Items.OfType<CommentsViewModel>()
                 .ForEach(x => x.CommentsInputShown -= this.OnCommentsBlockShown);
 
