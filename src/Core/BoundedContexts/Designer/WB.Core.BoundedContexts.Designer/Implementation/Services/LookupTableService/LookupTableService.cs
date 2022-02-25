@@ -9,6 +9,7 @@ using CsvHelper.Configuration;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -17,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
     internal class LookupTableService : ILookupTableService
     {
         private readonly IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireDocument> documentStorage;
+        private readonly IDesignerQuestionnaireStorage documentStorage;
         private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$", RegexOptions.Compiled);
         private const string ROWCODE = "rowcode";
         private const string DELIMETER = "\t";
@@ -25,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         private const int MAX_COLS_COUNT = 11;
 
         public LookupTableService(IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage,
-            IPlainKeyValueStorage<QuestionnaireDocument> documentStorage)
+            IDesignerQuestionnaireStorage documentStorage)
         {
             this.lookupTableContentStorage = lookupTableContentStorage;
             this.documentStorage = documentStorage;
@@ -51,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         {
             //old instances are stuck
 
-            var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaire = this.documentStorage.Get(questionnaireId);
             if (questionnaire == null)
                 return;
 
@@ -65,7 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         public LookupTableContent? GetLookupTableContent(Guid questionnaireId, Guid lookupTableId)
         {
-            var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaire = this.documentStorage.Get(questionnaireId);
             if (questionnaire == null)
                 throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
 
@@ -87,7 +88,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         public LookupTableContentFile? GetLookupTableContentFile(Guid questionnaireId, Guid lookupTableId)
         {
-            var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaire = this.documentStorage.Get(questionnaireId);
+
+            if (questionnaire == null)
+                throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
+
+            return GetLookupTableContentFileImpl(questionnaire, lookupTableId);
+        }
+
+        public LookupTableContentFile? GetLookupTableContentFile(QuestionnaireRevision questionnaireId, Guid lookupTableId)
+        {
+            var questionnaire = this.documentStorage.Get(questionnaireId);
 
             if (questionnaire == null)
                 throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
@@ -97,10 +108,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         public Dictionary<Guid, string> GetQuestionnairesLookupTables(Guid questionnaireId)
         {
-            var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
-
+            var questionnaire = this.documentStorage.Get(questionnaireId);
             if (questionnaire == null)
                 throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
+
+            return GetQuestionnairesLookupTablesImpl(questionnaire);
+        }
+
+        public Dictionary<Guid, string> GetQuestionnairesLookupTables(QuestionnaireRevision questionnaireId)
+        {
+            var questionnaire = this.documentStorage.Get(questionnaireId);
+            if (questionnaire == null)
+                throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
+
+            return GetQuestionnairesLookupTablesImpl(questionnaire);
+        }
+
+        private Dictionary<Guid, string> GetQuestionnairesLookupTablesImpl(QuestionnaireDocument questionnaire)
+        {
 
             var result = new Dictionary<Guid, string>();
 
@@ -110,6 +135,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 if (lookupFile != null)
                     result.Add(lookupTable.Key, System.Text.Encoding.UTF8.GetString(lookupFile.Content));
             }
+
             return result;
         }
 

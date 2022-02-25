@@ -7,7 +7,7 @@ using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Code
 {
-    public interface IQuestionnaireHelper : IQuestionnaireExportService
+    public interface IQuestionnaireHelper
     {
         IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
             Guid viewerId,
@@ -22,5 +22,7 @@ namespace WB.UI.Designer.Code
         IPagedList<QuestionnaireListViewModel> GetMyQuestionnairesByViewerId(Guid viewerId, bool isAdmin, Guid? folderId);
 
         IPagedList<QuestionnaireListViewModel> GetSharedQuestionnairesByViewerId(Guid viewerId, bool isAdmin, Guid? folderId);
+        
+        Stream? GetBackupQuestionnaire(Guid id, out string questionnaireFileName);
     }
 }

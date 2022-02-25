@@ -27,7 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class CoverInterviewViewModel : MvxViewModel, IDisposable
     {
-        private readonly ICommandService commandService;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly IPrincipal principal;
@@ -39,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public CoverStateViewModel InterviewState { get; set; }
         public DynamicTextViewModel Name { get; }
 
-        public CoverInterviewViewModel(ICommandService commandService,
+        public CoverInterviewViewModel(
             IPrincipal principal,
             CoverStateViewModel interviewState,
             DynamicTextViewModel dynamicTextViewModel, 
@@ -51,7 +50,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ICompositeCollectionInflationService compositeCollectionInflationService,
             GroupNavigationViewModel nextGroupNavigationViewModel)
         {
-            this.commandService = commandService;
             this.principal = principal;
 
             this.InterviewState = interviewState;
@@ -217,19 +215,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             title.Init(interviewId, entityIdentity);
             return title;
         }
+
+        private bool isDisposed = false;
         
         public void Dispose()
         {
+            if (isDisposed)
+                return;
+
+            isDisposed = true;
+            
             var prefilledQuestionsLocal = PrefilledReadOnlyEntities;
-            prefilledQuestionsLocal.ForEach(viewModel => viewModel.DisposeIfDisposable());
+            prefilledQuestionsLocal.ForEach(viewModel => viewModel?.DisposeIfDisposable());
 
             var prefilledEditable = PrefilledEditableEntities;
-            prefilledEditable.ForEach(viewModel => viewModel.DisposeIfDisposable());
+            prefilledEditable.ForEach(viewModel => viewModel?.DisposeIfDisposable());
             
             var commentedEntities = CommentedEntities;
-            commentedEntities.ForEach(viewModel => viewModel.DisposeIfDisposable());
+            commentedEntities.ForEach(viewModel => viewModel?.DisposeIfDisposable());
             
-            NextGroupNavigationViewModel.Dispose();
+            NextGroupNavigationViewModel?.Dispose();
             
             Name?.Dispose();
         }

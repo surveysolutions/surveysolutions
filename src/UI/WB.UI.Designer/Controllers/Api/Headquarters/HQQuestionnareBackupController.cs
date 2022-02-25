@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ImportExport;
@@ -38,13 +39,13 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         private const int MaxVerificationErrors = 20;
 
         [HttpGet]
-        [Route("verify/{questionnaireId}")]
-        public IActionResult Verify(Guid questionnaireId)
+        [Route("verify/{questionnaireRevision}")]
+        public IActionResult Verify(QuestionnaireRevision questionnaireRevision)
         {
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
+            var questionnaireView = this.questionnaireViewFactory.Load(questionnaireRevision);
             if (questionnaireView == null)
             {
-                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireId));
+                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireRevision));
             }
 
             if (!ValidateAccessPermissionsOrAdmin(questionnaireView))
@@ -86,13 +87,13 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         }
 
         [HttpGet]
-        [Route("{questionnaireId}")]
-        public IActionResult Get(Guid questionnaireId)
+        [Route("{questionnaireRevision}")]
+        public IActionResult Get(Guid questionnaireRevision)
         {
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireRevision));
             if (questionnaireView == null)
             {
-                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireId));
+                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireRevision));
             }
 
             if (!ValidateAccessPermissionsOrAdmin(questionnaireView))
@@ -100,20 +101,20 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status403Forbidden, ErrorMessages.NoAccessToQuestionnaire);
             }
 
-            var stream = this.questionnaireHelper.GetBackupQuestionnaire(questionnaireId, out string questionnaireFileName);
+            var stream = this.questionnaireHelper.GetBackupQuestionnaire(questionnaireRevision, out string questionnaireFileName);
             if (stream == null) return NotFound();
 
             return File(stream, "application/zip", $"{questionnaireFileName}.zip");
         }
         
         [HttpGet]
-        [Route("package/{questionnaireId}")]
-        public IActionResult GetQuestionnairePackage(Guid questionnaireId)
+        [Route("package/{questionnaireRevision}")]
+        public IActionResult GetQuestionnairePackage(QuestionnaireRevision questionnaireRevision)
         {
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
+            var questionnaireView = this.questionnaireViewFactory.Load(questionnaireRevision);
             if (questionnaireView == null)
             {
-                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireId));
+                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireRevision));
             }
 
             if (!ValidateAccessPermissionsOrAdmin(questionnaireView))
@@ -127,7 +128,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 return Forbid();
             }
 
-            var stream = this.questionnaireExportService.GetBackupQuestionnaire(questionnaireId, out string questionnaireFileName);
+            var stream = this.questionnaireExportService.GetBackupQuestionnaire(questionnaireRevision, out string questionnaireFileName);
             if (stream == null) return NotFound();
 
             return File(stream, "application/zip", $"{questionnaireFileName}.zip");

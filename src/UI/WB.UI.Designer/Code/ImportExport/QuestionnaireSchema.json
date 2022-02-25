@@ -609,7 +609,7 @@
     "Variable": {
       "type": "object",
       "properties": {
-        "Label": { "$ref": "#/definitions/VariableLabel" },
+        "Label": { "type": "string" },
         "VariableType": {
           "type": "string",
           "oneOf": [

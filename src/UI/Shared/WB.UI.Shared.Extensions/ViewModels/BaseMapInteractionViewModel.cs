@@ -223,6 +223,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         }
 
         private MapView mapView;
+        private bool isDisposed;
 
         public MapView MapView
         {
@@ -277,8 +278,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         });
 
-        public virtual void Dispose()
+        public override void Dispose()
         {
+            if (isDisposed)
+                return;
+            isDisposed = true;
+            
+            base.Dispose();
+            
             if(this.MapView?.LocationDisplay!= null )
                 this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
             
