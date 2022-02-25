@@ -60,7 +60,6 @@ const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip
   maps(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
-    filteredCount
     nodes {
       fileName
       importDateUtc
@@ -199,6 +198,15 @@ export default {
                         name: 'FileName',
                         class: 'title',
                         title: this.$t('Pages.MapList_MapName'),
+                    },
+                    {
+                        data: 'fileName',
+                        name: 'MapType',
+                        class: 'parameters',
+                        title: this.$t('Pages.MapList_MapType'),
+                        render(data) {
+                            return data.endsWith('.zip') ? 'V' : ''
+                        },
                     },
                     {
                         data: 'size',

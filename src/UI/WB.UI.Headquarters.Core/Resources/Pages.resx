@@ -1320,6 +1320,9 @@
   <data name="MapList_MapName" xml:space="preserve">
     <value>Map File</value>
   </data>
+  <data name="MapList_MapType" xml:space="preserve">
+    <value>Type</value>
+  </data>
   <data name="MapList_Name" xml:space="preserve">
     <value>Name</value>
   </data>
