@@ -116,6 +116,9 @@ export default {
             var self = this
             return {
                 deferLoading: 0,
+                language: {
+                    emptyTable: this.$t('Pages.Map_NoUsers'),
+                },
                 columns: [
                     {
                         data: 'userName',

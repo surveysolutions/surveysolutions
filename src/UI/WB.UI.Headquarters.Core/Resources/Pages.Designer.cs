@@ -3103,6 +3103,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The map is not assigned to any interviewer.
+        /// </summary>
+        public static string Map_NoUsers {
+            get {
+                return ResourceManager.GetString("Map_NoUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status.
         /// </summary>
         public static string Map_Status {

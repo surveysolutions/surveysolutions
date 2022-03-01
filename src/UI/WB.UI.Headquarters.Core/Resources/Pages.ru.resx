@@ -1276,6 +1276,9 @@
   <data name="Map_Status" xml:space="preserve">
     <value>Статус</value>
   </data>
+  <data name="Map_NoUsers" xml:space="preserve">
+    <value>Карта не назначена ни на одного интервьювера</value>
+  </data>
   <data name="Map_Uploaded" xml:space="preserve">
     <value>Файл загружен. Обработка.</value>
   </data>

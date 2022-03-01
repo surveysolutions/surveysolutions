@@ -1359,6 +1359,9 @@
   <data name="Map_Status" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="Map_NoUsers" xml:space="preserve">
+    <value>The map is not assigned to any interviewer</value>
+  </data>
   <data name="Map_Uploaded" xml:space="preserve">
     <value>File was uploaded. Processing.</value>
   </data>
