@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using Ionic.Zip;
 using Ionic.Zlib;
@@ -251,6 +252,20 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                         }
                     }
                 }
+            }
+
+            return null;
+        }
+
+        public Stream GetFileStream(string zipFilePath, string fileName)
+        {
+            using var zips = ZipFile.Read(zipFilePath);
+            foreach (var zip in zips)
+            {
+                if (zip.IsDirectory) continue;
+                if (!zip.FileName.Contains(fileName)) continue;
+
+                return zip.InputStream;
             }
 
             return null;

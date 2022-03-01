@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.UI.Shared.Extensions.Entities;
+using WB.UI.Shared.Extensions.Services;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
 
 namespace WB.UI.Shared.Extensions.ViewModels
@@ -24,9 +25,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public GeographyEditorViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService, 
             IMapService mapService, IUserInteractionService userInteractionService, ILogger logger, 
-            IFileSystemAccessor fileSystemAccessor, IEnumeratorSettings enumeratorSettings) 
+            IFileSystemAccessor fileSystemAccessor, IEnumeratorSettings enumeratorSettings,
+            IMapUtilityService mapUtilityService) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
-                fileSystemAccessor, enumeratorSettings)
+                fileSystemAccessor, enumeratorSettings, mapUtilityService)
         {
         }
         

@@ -31,6 +31,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private readonly IFileSystemAccessor fileSystemAccessor;
         protected readonly IMvxNavigationService navigationService;
         private readonly IEnumeratorSettings enumeratorSettings;
+        private readonly IMapUtilityService mapUtilityService;
 
         protected BaseMapInteractionViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -38,7 +39,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IUserInteractionService userInteractionService,
             ILogger logger,
             IFileSystemAccessor fileSystemAccessor,
-            IEnumeratorSettings enumeratorSettings) 
+            IEnumeratorSettings enumeratorSettings,
+            IMapUtilityService mapUtilityService) 
             : base(principal, viewModelNavigationService)
         {
             this.userInteractionService = userInteractionService;
@@ -47,6 +49,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.fileSystemAccessor = fileSystemAccessor;
             this.navigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
             this.enumeratorSettings = enumeratorSettings;
+            this.mapUtilityService = mapUtilityService;
         }
 
         public override async Task Initialize()
@@ -71,7 +74,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
                 var mapToDisplay = GetSelectedMap(this.AvailableMaps);
                 
-                var defaultBaseMap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, mapToDisplay).ConfigureAwait(false);
+                var defaultBaseMap = await mapUtilityService.GetBaseMap(mapToDisplay).ConfigureAwait(false);
                 //var basemap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, mapToDisplay).ConfigureAwait(false);
                 this.Map = new Map(defaultBaseMap);
 
@@ -192,7 +195,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             if (existingMap != null)
             {
-                var baseMap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, existingMap);
+                var baseMap = await mapUtilityService.GetBaseMap(existingMap);
                 if (baseMap != null)
                 {
                     this.Map.Basemap = baseMap;
@@ -224,6 +227,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private MapView mapView;
         private bool isDisposed;
+        private bool showedBoundaries;
 
         public MapView MapView
         {
@@ -260,7 +264,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             try
             {
-                var newFeatureLayer = await MapUtilityService.GetShapefileAsFeatureLayer(AvailableShapefiles.First().FullPath);
+                var newFeatureLayer = await mapUtilityService.GetShapefileAsFeatureLayer(AvailableShapefiles.First().FullPath);
                 
                 this.MapView.Map.OperationalLayers.Clear();
 
@@ -270,6 +274,30 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 // Zoom the map to the extent of the shapefile
                 await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
 
+                ShowedBoundaries = true;
+            }
+            catch (Exception e)
+            {
+                logger.Error("Error on shapefile loading", e);
+                userInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
+            }
+        });
+
+        public bool ShowedBoundaries
+        {
+            get => showedBoundaries;
+            set => this.RaiseAndSetIfChanged(ref showedBoundaries, value);
+        }
+
+        public IMvxAsyncCommand HideShapefile => new MvxAsyncCommand(async () =>
+        {
+            if (!ShowedBoundaries)
+                return;
+
+            try
+            {
+                this.MapView.Map.OperationalLayers.Clear();
+                ShowedBoundaries = false;
             }
             catch (Exception e)
             {

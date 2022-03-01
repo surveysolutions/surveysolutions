@@ -6,6 +6,7 @@ using System.Linq;
 using Android.App;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
@@ -19,6 +20,7 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly string shapefilesLocationCommon;
         
         private readonly ILogger logger;
+        private readonly IEnumeratorArchiveUtils archiveUtils;
 
         private readonly string[] mapFilesToSearch = { "*.tpk", "*.tpkx", "*.mmpk", "*.mmpkx",  "*.tif" };
         private readonly string[] shapefilesToSearch = { "*.shp"};
@@ -29,10 +31,12 @@ namespace WB.UI.Shared.Enumerator.Services
         public MapService(
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
-            IWorkspaceAccessor workspaceAccessor)
+            IWorkspaceAccessor workspaceAccessor,
+            IEnumeratorArchiveUtils archiveUtils)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
+            this.archiveUtils = archiveUtils;
             this.workspaceName = workspaceAccessor.GetCurrentWorkspaceName();
             
             this.mapsLocationCommon = fileSystemAccessor.CombinePath(
@@ -116,7 +120,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     return;
 
                 var localMaps = this.mapFilesToSearch
-                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(folder, i))
+                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(folder, i, true))
                     .OrderBy(x => x)
                     .Select(x =>
                         new MapDescription(MapType.LocalFile, this.fileSystemAccessor.GetFileNameWithoutExtension(x))
@@ -147,6 +151,8 @@ namespace WB.UI.Shared.Enumerator.Services
                 var filename = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
                 if (this.fileSystemAccessor.IsFileExists(filename))
                     return true;
+                if (this.fileSystemAccessor.IsDirectoryExists(filename))
+                    return true;
             }
 
             var filenameInCommonFolder = this.fileSystemAccessor.CombinePath(this.mapsLocationCommon, mapName);
@@ -173,9 +179,20 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!this.fileSystemAccessor.IsFileExists(tempFileName))
                 return;
 
-            var newName = this.fileSystemAccessor.ChangeExtension(tempFileName, null);
-
-            this.fileSystemAccessor.MoveFile(tempFileName, newName);
+            var fileExtension = fileSystemAccessor.GetFileExtension(mapName);
+            if (fileExtension == ".zip") // shape file package
+            {
+                var mapFolder = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
+                if (!fileSystemAccessor.IsDirectoryExists(mapFolder))
+                    fileSystemAccessor.CreateDirectory(mapFolder);
+                archiveUtils.Unzip(tempFileName, mapFolder);
+                fileSystemAccessor.DeleteFile(tempFileName);
+            }
+            else
+            {
+                var newName = this.fileSystemAccessor.ChangeExtension(tempFileName, null);
+                this.fileSystemAccessor.MoveFile(tempFileName, newName);
+            }            
         }
 
         public void RemoveMap(string mapName)
@@ -183,6 +200,9 @@ namespace WB.UI.Shared.Enumerator.Services
             var filename = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
             if (this.fileSystemAccessor.IsFileExists(filename))
                 this.fileSystemAccessor.DeleteFile(filename);
+
+            if (this.fileSystemAccessor.IsDirectoryExists(filename))
+                this.fileSystemAccessor.DeleteDirectory(filename);
 
             var filenameInCommon = this.fileSystemAccessor.CombinePath(this.mapsLocationCommon, mapName);
             if (this.fileSystemAccessor.IsFileExists(filenameInCommon))
@@ -197,7 +217,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     return new List<ShapefileDescription>();
 
                 return this.shapefilesToSearch
-                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(path, i))
+                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(path, i, true))
                     .OrderBy(x => x)
                     .Select(x => new ShapefileDescription()
                     {
@@ -206,19 +226,23 @@ namespace WB.UI.Shared.Enumerator.Services
                     }).ToList();
             }
 
+            List<ShapefileDescription> shapefileDescriptions = new List<ShapefileDescription>();
+
             if (!string.IsNullOrEmpty(workspaceName))
             {
                 var shapesInFolder = GetShapesInFolder(fileSystemAccessor.CombinePath(
                     this.shapefilesLocationCommon, workspaceName));
-                if (shapesInFolder.Any())
-                    return shapesInFolder;
+                shapefileDescriptions.AddRange(shapesInFolder);
+
+                var shapesInMapFolder = GetShapesInFolder(fileSystemAccessor.CombinePath(
+                    this.mapsLocationCommon, workspaceName));
+                shapefileDescriptions.AddRange(shapesInMapFolder);
             }
 
             var shapesInCommonFolder = GetShapesInFolder(this.shapefilesLocationCommon);
-            if (shapesInCommonFolder.Any())
-                return shapesInCommonFolder;
+            shapefileDescriptions.AddRange(shapesInCommonFolder);
 
-            return new List<ShapefileDescription>();
+            return shapefileDescriptions;
         }
 
         private string GetTempFileName(string mapName)

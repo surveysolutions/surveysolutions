@@ -551,6 +551,12 @@
   <data name="AreaMap_LoadShapefile" xml:space="preserve">
     <value>Загрузить шейп-файл</value>
   </data>
+  <data name="AreaMap_ShowBoundaries" xml:space="preserve">
+    <value>Показать границы</value>
+  </data>
+  <data name="AreaMap_HideBoundaries" xml:space="preserve">
+    <value>Скрыть границы</value>
+  </data>
   <data name="MapDashboard_Assignments" xml:space="preserve">
     <value>Задачи</value>
   </data>

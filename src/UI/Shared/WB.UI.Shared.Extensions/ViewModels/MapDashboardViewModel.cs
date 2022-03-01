@@ -26,6 +26,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Entities;
+using WB.UI.Shared.Extensions.Services;
 
 namespace WB.UI.Shared.Extensions.ViewModels
 {
@@ -44,9 +45,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IAssignmentDocumentsStorage assignmentsRepository,
             IPlainStorage<InterviewView> interviewViewRepository,
             IEnumeratorSettings enumeratorSettings,
-            ILogger logger) 
+            ILogger logger,
+            IMapUtilityService mapUtilityService) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
-                fileSystemAccessor, enumeratorSettings)
+                fileSystemAccessor, enumeratorSettings, mapUtilityService)
         {
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;

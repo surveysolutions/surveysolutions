@@ -617,6 +617,12 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_LoadShapefile" xml:space="preserve">
     <value>Load shapefile</value>
   </data>
+  <data name="AreaMap_ShowBoundaries" xml:space="preserve">
+    <value>Show boundaries</value>
+  </data>
+  <data name="AreaMap_HideBoundaries" xml:space="preserve">
+    <value>Hide boundaries</value>
+  </data>
   <data name="MapDashboard_Assignments" xml:space="preserve">
     <value>Assignments</value>
   </data>
