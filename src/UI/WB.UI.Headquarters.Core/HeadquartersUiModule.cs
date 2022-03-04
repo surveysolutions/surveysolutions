@@ -55,6 +55,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
             registry.Bind<IViewRenderService, ViewRenderService>();
             registry.Bind<IUploadPackageAnalyzer, UploadPackageAnalyzer>();
+            registry.Bind<IUploadMapsService, UploadMapsService>();
             //registry.Bind<IUrlHelperFactory, WorkspaceUrlHelperFactory>();
 
             registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();

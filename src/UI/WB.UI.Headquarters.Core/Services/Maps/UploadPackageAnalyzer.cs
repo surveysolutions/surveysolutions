@@ -31,11 +31,11 @@ public class UploadPackageAnalyzer : IUploadPackageAnalyzer
         this.archiveUtils = archiveUtils;
     }
 
-    public AnalyzeResult Analyze(IFormFile file)
+    public AnalyzeResult Analyze(Stream file)
     {
         var result = new AnalyzeResult();
         
-        var filesInArchive = archiveUtils.GetArchivedFileNamesAndSize(file.OpenReadStream());
+        var filesInArchive = archiveUtils.GetArchivedFileNamesAndSize(file);
 
         foreach (var fileInArchive in filesInArchive)
         {
@@ -60,9 +60,4 @@ public class UploadPackageAnalyzer : IUploadPackageAnalyzer
         result.IsValid = true;
         return result;
     }
-}
-
-public interface IUploadPackageAnalyzer
-{
-    AnalyzeResult Analyze(IFormFile file);
 }

@@ -9,6 +9,7 @@ using HotChocolate.Data.Filters;
 using HotChocolate.Data.Filters.Expressions;
 using HotChocolate.Language;
 using HotChocolate.Language.Visitors;
+using HotChocolate.Types;
 using HotChocolate.Utilities;
 using Main.Core.Entities.SubEntities;
 using NHibernate.Util;
@@ -26,7 +27,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             RoleIdPropertyInfo = typeof(HqRole).GetProperty(nameof(HqRole.Id)) ?? throw new InvalidCastException();
             RolesPropetyInfo = typeof(HqUser).GetProperty(nameof(HqUser.Roles)) ?? throw new InvalidCastException();
         }
-        public RoleEqualsEnumHandler(ITypeConverter typeConverter) : base(typeConverter)
+        public RoleEqualsEnumHandler(ITypeConverter typeConverter, InputParser inputParser) 
+            : base(typeConverter, inputParser)
         {
         }
 

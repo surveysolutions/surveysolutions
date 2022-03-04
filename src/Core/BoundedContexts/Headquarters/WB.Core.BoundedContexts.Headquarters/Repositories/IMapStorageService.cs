@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 {
     public interface IMapStorageService
     {
-        Task SaveOrUpdateMapAsync(ExtractedFile map);
+        Task<MapBrowseItem> SaveOrUpdateMapAsync(ExtractedFile map);
         Task<MapBrowseItem> DeleteMap(string map);
         Task DeleteAllMaps();
         Task<byte[]> GetMapContentAsync(string mapName);

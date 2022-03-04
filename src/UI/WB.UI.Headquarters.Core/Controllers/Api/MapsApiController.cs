@@ -40,16 +40,14 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IMapStorageService mapStorageService;
         private readonly IExportFactory exportFactory;
         private readonly ICsvReader recordsAccessorFactory;
-        private readonly IArchiveUtils archiveUtils;
-        private readonly IUploadPackageAnalyzer uploadPackageAnalyzer;
+        private readonly IUploadMapsService uploadMapsService;
 
         public MapsApiController(
             IMapBrowseViewFactory mapBrowseViewFactory, ILogger logger,
             IMapStorageService mapStorageService, IExportFactory exportFactory,
             IFileSystemAccessor fileSystemAccessor,
             ICsvReader recordsAccessorFactory,
-            IArchiveUtils archiveUtils,
-            IUploadPackageAnalyzer uploadPackageAnalyzer)
+            IUploadMapsService uploadMapsService)
         {
             this.mapBrowseViewFactory = mapBrowseViewFactory;
             this.logger = logger;
@@ -57,8 +55,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.exportFactory = exportFactory;
             this.fileSystemAccessor = fileSystemAccessor;
             this.recordsAccessorFactory = recordsAccessorFactory;
-            this.archiveUtils = archiveUtils;
-            this.uploadPackageAnalyzer = uploadPackageAnalyzer;
+            this.uploadMapsService = uploadMapsService;
         }
 
         [HttpGet]
@@ -134,92 +131,14 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             var response = new JsonMapResponse();
 
-            if (file == null)
+            var result = await uploadMapsService.Upload(file.FileName, file.OpenReadStream());
+            if (result.Errors.Any())
             {
-                response.Errors.Add(Maps.MapsLoadingError);
+                result.Errors.ForEach(error => response.Errors.Add(error));
                 return response;
             }
-
-            if (".zip" != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
-            {
-                response.Errors.Add(Maps.MapLoadingNotZipError);
-                return response;
-            }
-
-            AnalyzeResult analyzeResult = null;
-            try
-            {
-                analyzeResult = uploadPackageAnalyzer.Analyze(file);
-                if (!analyzeResult.IsValid || analyzeResult.Maps.Count == 0)
-                {
-                    response.Errors.Add(Maps.MapLoadingNoMapsInArchive);
-                    return response;
-                }
-                
-                MapFilesValidator mapFilesValidator = new MapFilesValidator();
-                var validatorErrors = mapFilesValidator.Verify(analyzeResult).ToList();
-                if (validatorErrors.Any())
-                {
-                    validatorErrors.ForEach(error => response.Errors.Add(error.Message));
-                    return response;
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.Error($"Invalid map archive", ex);
-
-                response.Errors.Add(Maps.MapsLoadingError);
-                return response;
-            }
-
-            var invalidMaps = new List<Tuple<string, Exception>>();
-            try
-            {
-                foreach (var map in analyzeResult.Maps)
-                {
-                    try
-                    {
-                        if (map.IsShapeFile)
-                        {
-                            IEnumerable<ExtractedFile> entities = map.Files
-                                .Select(fileName => new ExtractedFile()
-                                {
-                                    Name = fileName,
-                                    Bytes = archiveUtils.GetFileFromArchive(file.OpenReadStream(), fileName).Bytes
-                                });
-                            var compressStream = archiveUtils.CompressStream(entities);
-                            await mapStorageService.SaveOrUpdateMapAsync(new ExtractedFile()
-                            {
-                                Bytes = compressStream,
-                                Name = map.Name + ".zip",
-                                Size = compressStream.LongLength,
-                            });
-                        }
-                        else
-                        {
-                            var extractedFile = archiveUtils.GetFileFromArchive(file.OpenReadStream(), map.Files.Single());
-                            await mapStorageService.SaveOrUpdateMapAsync(extractedFile);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error($"Error on maps import map {map.Name}", e);
-                        invalidMaps.Add(new Tuple<string, Exception>(map.Name, e));
-                    }
-                }
-
-                if (invalidMaps.Count > 0)
-                    response.Errors.AddRange(invalidMaps.Select(x => String.Format(Maps.MapLoadingInvalidFile, x.Item1, x.Item2.Message)).ToList());
-                else
-                    response.IsSuccess = true;
-            }
-            catch (Exception e)
-            {
-                logger.Error("Error on maps import", e);
-                response.Errors.Add(Maps.MapsLoadingError);
-                return response;
-            }
-
+            
+            response.IsSuccess = true;
             return response;
         }
 

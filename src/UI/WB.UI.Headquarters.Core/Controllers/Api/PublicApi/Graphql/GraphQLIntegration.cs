@@ -4,6 +4,7 @@ using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.Execution;
 using HotChocolate.Execution.Configuration;
+using HotChocolate.Types;
 using HotChocolate.Types.Descriptors;
 using HotChocolate.Types.Pagination;
 using Microsoft.AspNetCore.Builder;
@@ -59,6 +60,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .AddMutationType(x => x.Name("HeadquartersMutation"))
                 .AddType<CalendarEventsMutationExtension>()
                 .AddType<MapsMutationExtension>()
+                .AddType<UploadType>()
                 .AddFiltering<HqFilteringConventions>()
                 .AddConvention<INamingConventions>(new CompatibilityNamingConvention())
                 .BindRuntimeType<string, CustomStringOperationFilterInput>()
@@ -86,7 +88,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             }
             
             var options = new GraphQLServerOptions {EnableSchemaRequests = true};
-            options.Tool.Credentials = DefaultCredentials.Include;
+            //options.Tool.Credentials = DefaultCredentials.Include;
             
             return app.UseEndpoints(x => x.MapGraphQL().WithOptions(options));
         }
