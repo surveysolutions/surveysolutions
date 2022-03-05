@@ -13,6 +13,7 @@ using WB.UI.Headquarters.Models.Maps;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -20,15 +21,18 @@ namespace WB.UI.Headquarters.Controllers
     public class MapsController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IUserViewFactory userViewFactory;
 
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
 
         public MapsController(
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser,
+            IUserViewFactory userViewFactory)
         {
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
             this.authorizedUser = authorizedUser;
+            this.userViewFactory = userViewFactory;
         }
 
         [ActivePage(MenuItem.Maps)]
@@ -88,6 +92,9 @@ namespace WB.UI.Headquarters.Controllers
             if (map == null)
                 return NotFound();
 
+            var uploadedBy = map.UploadedBy.HasValue
+                ? userViewFactory.GetUser(map.UploadedBy.Value)?.UserName
+                : (string)null;
             return this.View("Details",
                 new MapDetailsModel
                 {
@@ -99,6 +106,7 @@ namespace WB.UI.Headquarters.Controllers
                     Size = FileSizeUtils.SizeInMegabytes(map.Size),
                     Wkid = map.Wkid,
                     ImportDate = map.ImportDate.HasValue ? map.ImportDate.Value.FormatDateWithTime() : "",
+                    UploadedBy = uploadedBy,
                     MaxScale = map.MaxScale,
                     MinScale = map.MinScale,
                     DeleteMapUserLinkUrl = Url.Action("DeleteMapUser", "MapsApi"),

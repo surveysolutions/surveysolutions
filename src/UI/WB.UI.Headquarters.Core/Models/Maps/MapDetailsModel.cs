@@ -7,6 +7,7 @@
         public double Size { get; set; }
         public string FileName { get; set; }
         public string ImportDate { get; set; }
+        public string UploadedBy { get; set; }
         public double XMaxVal { set; get; }
         public double YMaxVal { set; get; }
         public double XMinVal { set; get; }

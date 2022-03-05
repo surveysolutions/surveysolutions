@@ -1290,6 +1290,9 @@
   <data name="MapDetails_ImportedOn" xml:space="preserve">
     <value>Imported on</value>
   </data>
+  <data name="MapDetails_UploadedBy" xml:space="preserve">
+    <value>Uploaded by</value>
+  </data>
   <data name="MapDetails_Size" xml:space="preserve">
     <value>Size(MB)</value>
   </data>

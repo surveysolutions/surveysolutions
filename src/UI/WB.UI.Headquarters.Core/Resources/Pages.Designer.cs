@@ -3238,6 +3238,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uploaded by.
+        /// </summary>
+        public static string MapDetails_UploadedBy {
+            get {
+                return ResourceManager.GetString("MapDetails_UploadedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upload file containing correspondence between maps and users.
         /// </summary>
         public static string MapLinking_Description {

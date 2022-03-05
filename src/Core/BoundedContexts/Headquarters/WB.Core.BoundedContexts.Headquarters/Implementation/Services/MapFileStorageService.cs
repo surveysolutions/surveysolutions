@@ -139,7 +139,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 ImportDate = DateTime.UtcNow,
                 FileName = mapFile.Name,
                 Size = mapFile.Size,
-                Wkid = 102100
+                Wkid = 102100,
+                UploadedBy = authorizedUser.Id,
             };
 
             void SetMapProperties(dynamic _, MapBrowseItem i)

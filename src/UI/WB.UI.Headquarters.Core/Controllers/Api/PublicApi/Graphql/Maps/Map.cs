@@ -19,6 +19,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             descriptor.Field(x => x.ImportDate)
                 .Name("importDateUtc")
                 .Description("Utc date when map was imported on HQ");
+            descriptor.Field(x => x.UploadedBy)
+                .Name("uploadedBy")
+                .Description("User which uploaded map on HQ");
             descriptor.Field(x => x.Users)
                 .Description("List of users assigned to map")
                 .Type<NonNullType<ListType<NonNullType<UserMapObjectType>>>>()

@@ -26,6 +26,7 @@
                     <div class="col-md-4 col-sm-4 questionnaire-statistics">
                         <ul class="list-unstyled">
                             <li><b>{{ $t("Pages.MapDetails_ImportedOn") }}:</b> <span>{{$config.model.importDate}}</span></li>
+                            <li v-if="$config.model.uploadedBy"><b>{{ $t("Pages.MapDetails_UploadedBy") }}:</b> <span>{{$config.model.uploadedBy}}</span></li>
                         </ul>
                     </div>
                 </div>

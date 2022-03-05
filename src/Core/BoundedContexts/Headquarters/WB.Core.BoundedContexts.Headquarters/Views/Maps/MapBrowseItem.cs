@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
         public virtual long Size { get; set; }
         public virtual string FileName { get; set; }
         public virtual DateTime? ImportDate { get; set; }
+        public virtual Guid? UploadedBy { get; set; }
         public virtual double XMaxVal { set; get; }
         public virtual double YMaxVal { set; get; }
         public virtual double XMinVal { set; get; }

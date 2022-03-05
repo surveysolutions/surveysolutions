@@ -1207,6 +1207,9 @@
   <data name="MapDetails_ImportedOn" xml:space="preserve">
     <value>Карта загружена</value>
   </data>
+  <data name="MapDetails_UploadedBy" xml:space="preserve">
+    <value>Загружен на сервер пользователем</value>
+  </data>
   <data name="MapDetails_Size" xml:space="preserve">
     <value>Размер(МБ)</value>
   </data>

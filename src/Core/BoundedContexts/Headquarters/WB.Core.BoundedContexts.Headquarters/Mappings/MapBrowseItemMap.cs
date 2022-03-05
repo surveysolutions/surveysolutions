@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.FileName);
             Property(x => x.Size);
             Property(x => x.ImportDate);
+            Property(x => x.UploadedBy);
             Property(x=> x.Wkid);
             Property(x=> x.XMaxVal);
             Property(x => x.XMinVal);
