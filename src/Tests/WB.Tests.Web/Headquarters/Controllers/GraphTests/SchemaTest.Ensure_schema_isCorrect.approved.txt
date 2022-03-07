@@ -207,7 +207,7 @@ type Map {
   size: Long!
   "Utc date when map was imported on HQ"
   importDateUtc: DateTime
-  "User who uploaded map on HQ"
+  "User which uploaded map on HQ"
   uploadedBy: UUID
   "List of users assigned to map"
   users: [UserMap]
@@ -218,6 +218,8 @@ type Map {
   wkid: Int!
   maxScale: Float!
   minScale: Float!
+  shapeType: String
+  shapesCount: Int
 }
 
 type MapReport {
