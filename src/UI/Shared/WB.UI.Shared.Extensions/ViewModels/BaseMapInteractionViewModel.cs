@@ -302,7 +302,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref showedBoundaries, value);
         }
 
-        public IMvxAsyncCommand HideShapefile => new MvxAsyncCommand(async () =>
+        public IMvxCommand HideShapefile => new MvxCommand(() =>
         {
             if (!ShowedBoundaries)
                 return;
