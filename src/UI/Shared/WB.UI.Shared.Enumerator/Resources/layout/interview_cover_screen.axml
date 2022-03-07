@@ -84,9 +84,10 @@
             <Button
                 style="@style/Interview_Group_Navigation_Button"
                 android:id="@+id/btn_coverStartInterview"
-                local:MvxBind="HideKeyboardOnClick .; 
-                Click StartInterviewCommand; 
-                Text FirstSectionTitle; "/>
+                local:MvxBind="HideKeyboardOnClick .;                 
+                Click NextGroupNavigationViewModel.NavigateCommand; 
+                Html SpannableGroupTitle(NextGroupNavigationViewModel.Title.PlainText, NextGroupNavigationViewModel.RosterInstanceTitle);
+                ButtonGroupStyle NextGroupNavigationViewModel.NavigateToGroupState.Status; "/>
         </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

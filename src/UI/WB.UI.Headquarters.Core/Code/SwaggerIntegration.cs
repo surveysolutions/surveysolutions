@@ -52,7 +52,6 @@ namespace WB.UI.Headquarters.Code
                 c.ParameterFilter<XmsEnumParameterFilter>();
                 c.OperationFilter<XmsEnumOperationFilter>();
                 c.SchemaFilter<XmsEnumSchemaFilter>();
-                c.DocumentFilter<WorkspaceDocumentFilter>();
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -118,7 +117,7 @@ namespace WB.UI.Headquarters.Code
         {
             appBuilder.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Survey Solutions API");
+                c.SwaggerEndpoint("../swagger/v1/swagger.json", "Survey Solutions API");
                 c.RoutePrefix = "apidocs";
             });
         }

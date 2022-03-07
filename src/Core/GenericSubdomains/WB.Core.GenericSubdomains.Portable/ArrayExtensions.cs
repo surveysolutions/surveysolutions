@@ -56,7 +56,7 @@ namespace WB.Core.GenericSubdomains.Portable
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool SequenceEqual(this int[] source, int[] target, int targetLength)
         {
-            if (source.Length != targetLength) return false;
+            if (source.Length != targetLength || target.Length < targetLength) return false;
             
             switch (targetLength)
             {

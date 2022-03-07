@@ -46,7 +46,7 @@ jobs:
 
   mobile:
     needs: [prepare, tests]
-    runs-on: windows-latest
+    runs-on: windows-2019
     environment: ${{ needs.prepare.outputs.environment }}
 
     strategy:
@@ -54,6 +54,12 @@ jobs:
         task: [AndroidInterviewer, AndroidInterviewerWithMaps, AndroidSupervisor]
 
     steps:
+    - name: Support longpaths
+      run: |
+        git config --system core.longpaths true
+        New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
+          -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
+
     - uses: actions/checkout@v2
 
     - name: Setup .NET Core SDK 5.0.x
@@ -132,9 +138,20 @@ jobs:
 
   installer:
     needs: [prepare, mobile]
-    runs-on: windows-latest
+    runs-on: windows-2019
+    environment: ${{ needs.prepare.outputs.environment }}
 
     steps:
+      - name: Support longpaths
+        run: |
+          git config --system core.longpaths true
+          New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
+            -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - uses: actions/checkout@v2
 
       - name: Setup WIX
@@ -191,7 +208,7 @@ jobs:
           --title "$Title" `
           --notes '""' `
           --repo ${{ github.repository }} `
-          "${{ steps.file.outputs.filename }}"
+          "${{ steps.build-installer.outputs.filename }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -223,15 +223,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you delete token all calls to API using this token will not be permitted.
-        /// </summary>
-        public static string HQ_Views_Api_Token_Delete_Description {
-            get {
-                return ResourceManager.GetString("HQ_Views_Api_Token_Delete_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to API token is used to perform API calls to the system.
         /// </summary>
         public static string HQ_Views_Api_Token_Description {
@@ -241,7 +232,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please save token after generation, you will see it just once.
+        ///   Looks up a localized string similar to Please save the token now. You will only be able to see it once!.
         /// </summary>
         public static string HQ_Views_Api_Token_Generate_Description {
             get {
@@ -250,7 +241,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to issued.
+        ///   Looks up a localized string similar to enabled.
         /// </summary>
         public static string HQ_Views_Api_Token_Issued {
             get {
@@ -259,7 +250,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to not issued.
+        ///   Looks up a localized string similar to disabled.
         /// </summary>
         public static string HQ_Views_Api_Token_Not_Issued {
             get {
@@ -268,7 +259,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to API Tokens.
+        ///   Looks up a localized string similar to API access.
         /// </summary>
         public static string HQ_Views_ApiTokens_Title {
             get {

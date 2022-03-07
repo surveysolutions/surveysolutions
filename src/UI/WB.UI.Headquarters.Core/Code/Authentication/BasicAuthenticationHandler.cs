@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.Domain;
@@ -38,22 +39,23 @@ namespace WB.UI.Headquarters.Code.Authentication
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            if (!Request.Headers.ContainsKey("Authorization"))
+            if (!Request.Headers.ContainsKey(HeaderNames.Authorization))
                 return AuthenticateResult.NoResult();
 
-            BasicCredentials creds;
             try
             {
-                creds = Request.Headers.ParseBasicCredentials();
+                var credentials = Request.Headers.ParseBasicCredentials();
+                if (credentials == null)
+                    return AuthenticateResult.NoResult();
 
                 return await executor.ExecuteAsync(async (sl) =>
                 {
                     var signinManager = sl.GetInstance<SignInManager<HqUser>>();
                     
-                    var user = await signinManager.UserManager.FindByNameAsync(creds.Username);
+                    var user = await signinManager.UserManager.FindByNameAsync(credentials.Username);
                     if (user == null) return AuthenticateResult.Fail(FailureMessage);                    
                     
-                    var result = await signinManager.CheckPasswordSignInAsync(user, creds.Password, true);
+                    var result = await signinManager.CheckPasswordSignInAsync(user, credentials.Password, true);
 
                     if (result.IsLockedOut)
                         return AuthenticateResult.Fail("User is locked");

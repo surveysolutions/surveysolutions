@@ -108,15 +108,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.userInterfaceStateService.NotifyRefreshStarted();
 
-                var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
-                previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
+                var nextNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
+                nextNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
 
                 List<IInterviewEntityViewModel> entities = this.interviewViewModelFactory.GetEntities(
                     interviewId: this.navigationState.InterviewId,
                     groupIdentity: groupIdentity,
                     navigationState: this.navigationState);
 
-                entities.Add(previousGroupNavigationViewModel);
+                entities.Add(nextNavigationViewModel);
 
                 var newEntities = this.compositeCollectionInflationService.GetInflatedCompositeCollection(entities);
 

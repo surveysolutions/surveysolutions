@@ -1943,15 +1943,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questions in a table roster may not contain any substitutions in text..
-        /// </summary>
-        public static string WB0287_TableRosterDoesntContainsQuestionWithSubstitutions {
-            get {
-                return ResourceManager.GetString("WB0287_TableRosterDoesntContainsQuestionWithSubstitutions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Label {1} for code {0} is a number different from the value being labeled..
         /// </summary>
         public static string WB0288_ValueAndTitleNumbersIsNotEquals {
@@ -2060,15 +2051,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question in Matrix roster must not contain %rostertitle% substitution..
-        /// </summary>
-        public static string WB0300 {
-            get {
-                return ResourceManager.GetString("WB0300", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Matrix roster has to contain no linked questions..
         /// </summary>
         public static string WB0301_MatrixRosterHasToContainNoLinkedQuestions {
@@ -2083,24 +2065,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0302 {
             get {
                 return ResourceManager.GetString("WB0302", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Matrix roster cannot have custom roster title.
-        /// </summary>
-        public static string WB0303_MatrixRosterCannotHaveCustomTitle {
-            get {
-                return ResourceManager.GetString("WB0303_MatrixRosterCannotHaveCustomTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Table roster cannot have custom roster title.
-        /// </summary>
-        public static string WB0304_TableRosterCannotHaveCustomTitle {
-            get {
-                return ResourceManager.GetString("WB0304_TableRosterCannotHaveCustomTitle", resourceCulture);
             }
         }
         
@@ -2164,15 +2128,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0312 {
             get {
                 return ResourceManager.GetString("WB0312", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Substitution cannot reference items from a deeper roster level in matrix and table rosters.
-        /// </summary>
-        public static string WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope {
-            get {
-                return ResourceManager.GetString("WB0313_SubstitutionCantReferenceItemInsideMatrixRosterScope", resourceCulture);
             }
         }
         

@@ -744,9 +744,6 @@
   <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
     <value>Lista în format tabular sau lista în format matriceal funcționează numai în sondajul web, pe tablete se va vedea modul „sub secțiune”.</value>
   </data>
-  <data name="WB0287_TableRosterDoesntContainsQuestionWithSubstitutions" xml:space="preserve">
-    <value>Întrebările dintr-o listă de tabele nu pot să conțină înlocuiri în text.</value>
-  </data>
   <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
     <value>Eticheta {1} pentru cod {0} este un număr diferit de valoarea etichetată.</value>
   </data>
@@ -783,20 +780,11 @@
   <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
     <value>Lista matricială nu trebuie să conțină întrebări pentru supervizor sau întrebări de identificare.</value>
   </data>
-  <data name="WB0300" xml:space="preserve">
-    <value>Întrebarea din lista matricială nu trebuie să conțină substituții de tipul %rostertitle%.</value>
-  </data>
   <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
     <value>Lista matricială nu trebuie să conțină întrebări legate.</value>
   </data>
   <data name="WB0302" xml:space="preserve">
     <value>Înlocuirea nu poate face referință la articole de la același nivel de listă.</value>
-  </data>
-  <data name="WB0303_MatrixRosterCannotHaveCustomTitle" xml:space="preserve">
-    <value>Lista matricială nu poate avea un titlu personalizat</value>
-  </data>
-  <data name="WB0304_TableRosterCannotHaveCustomTitle" xml:space="preserve">
-    <value>Lista tabulară nu poate avea un titlu de listă personalizat</value>
   </data>
   <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
     <value>Lista reutilizabilă de variante de răspuns nu poate avea rând cu aceleași valori Id și ParentId</value>

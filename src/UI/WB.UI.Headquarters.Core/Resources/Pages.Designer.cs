@@ -169,7 +169,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to API token is:.
+        ///   Looks up a localized string similar to Access to REST and GraphQL API endpoints is currently .
         /// </summary>
         public static string AccountManage_StatusApiToken {
             get {
