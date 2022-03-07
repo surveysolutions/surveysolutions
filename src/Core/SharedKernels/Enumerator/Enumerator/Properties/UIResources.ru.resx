@@ -590,6 +590,9 @@
   <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
     <value>Загруженая карта расположена вне границ видимой зоны</value>
   </data>
+  <data name="AreaMap_SelectShapefile" xml:space="preserve">
+    <value>Выберите файл с границами</value>
+  </data>
   <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
     <value>Ошибка загрузки. Шейп-файл не может быть открыт</value>
   </data>

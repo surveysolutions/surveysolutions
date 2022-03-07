@@ -268,6 +268,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select boundaries file.
+        /// </summary>
+        public static string AreaMap_SelectShapefile {
+            get {
+                return ResourceManager.GetString("AreaMap_SelectShapefile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show boundaries.
         /// </summary>
         public static string AreaMap_ShowBoundaries {

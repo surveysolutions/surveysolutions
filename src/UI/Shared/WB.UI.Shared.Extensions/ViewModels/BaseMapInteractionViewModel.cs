@@ -272,7 +272,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     new Tuple<string, string>(s.ShapefileName,
                         s.FullPath)
                 ).ToArray();
-                fullPathToShapefile = await userInteractionService.SelectOneOptionFromList("Select", options);
+                fullPathToShapefile = await userInteractionService.SelectOneOptionFromList(UIResources.AreaMap_SelectShapefile, options);
+                if (string.IsNullOrEmpty(fullPathToShapefile))
+                    return;
             }
 
             try
