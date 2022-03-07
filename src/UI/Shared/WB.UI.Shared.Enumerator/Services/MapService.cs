@@ -222,7 +222,9 @@ namespace WB.UI.Shared.Enumerator.Services
                     .Select(x => new ShapefileDescription()
                     {
                         FullPath = x,
-                        ShapefileName = this.fileSystemAccessor.GetFileNameWithoutExtension(x)
+                        ShapefileName = this.fileSystemAccessor.GetFileNameWithoutExtension(x),
+                        CreationDate = this.fileSystemAccessor.GetCreationTime(x),
+                        Size = this.fileSystemAccessor.GetFileSize(x),
                     }).ToList();
             }
 

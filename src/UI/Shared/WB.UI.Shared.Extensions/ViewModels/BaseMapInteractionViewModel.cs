@@ -164,6 +164,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             await UpdateBaseMap().ConfigureAwait(false);
             await OnMapLoaded().ConfigureAwait(false);
+
+            if (AvailableShapefiles.Count == 1)
+                await LoadShapefile.ExecuteAsync();
         }
 
         public abstract MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom);
@@ -262,9 +265,19 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (AvailableShapefiles.Count < 1)
                 return;
 
+            var fullPathToShapefile = AvailableShapefiles.First().FullPath;
+            if (AvailableShapefiles.Count > 1)
+            {
+                var options = AvailableShapefiles.Select(s =>
+                    new Tuple<string, string>(s.ShapefileName,
+                        s.FullPath)
+                ).ToArray();
+                fullPathToShapefile = await userInteractionService.SelectOneOptionFromList("Select", options);
+            }
+
             try
             {
-                var newFeatureLayer = await mapUtilityService.GetShapefileAsFeatureLayer(AvailableShapefiles.First().FullPath);
+                var newFeatureLayer = await mapUtilityService.GetShapefileAsFeatureLayer(fullPathToShapefile);
                 
                 this.MapView.Map.OperationalLayers.Clear();
 

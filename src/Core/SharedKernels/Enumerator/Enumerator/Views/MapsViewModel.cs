@@ -124,8 +124,13 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                     MapName = x.MapName,
                     CreationDate = x.CreationDate,
                     Size = x.Size
-                }  
-                ).ToList();
+                }).Concat(this.mapService.GetAvailableShapefiles().Select(x => new MapItem()
+                {
+                    MapName = x.ShapefileName,
+                    CreationDate = x.CreationDate,
+                    Size = x.Size
+                }
+                )).ToList();
                 this.Maps = new MvxObservableCollection<MapItem>(newItems);
             }
             finally

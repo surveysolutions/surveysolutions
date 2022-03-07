@@ -31,9 +31,6 @@ namespace WB.UI.Headquarters.Controllers.Api
     [Route("api/[controller]/[action]")]
     public class MapsApiController : ControllerBase
     {
-        private readonly string[] permittedMapFileExtensions = { ".tpk", ".mmpk", ".tif" };
-        private readonly string[] shapeMapFileExtensions = { ".txt", ".dbf", ".shp", ".shx", ".cpg", ".prj" };
-
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IMapBrowseViewFactory mapBrowseViewFactory;
         private readonly ILogger logger;
