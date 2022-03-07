@@ -1302,6 +1302,12 @@
   <data name="MapDetails_MaxScale" xml:space="preserve">
     <value>Max Scale</value>
   </data>
+  <data name="MapDetails_ShapeType" xml:space="preserve">
+    <value>Shape type</value>
+  </data>
+  <data name="MapDetails_ShapesCount" xml:space="preserve">
+    <value>Shapes count</value>
+  </data>
   <data name="MapList_Title" xml:space="preserve">
     <value>Map files</value>
   </data>

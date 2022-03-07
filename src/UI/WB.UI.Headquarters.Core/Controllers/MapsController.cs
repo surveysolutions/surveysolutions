@@ -98,7 +98,6 @@ namespace WB.UI.Headquarters.Controllers
             return this.View("Details",
                 new MapDetailsModel
                 {
-
                     DataUrl = Url.Action("MapUserList", "MapsApi"),
                     MapPreviewUrl = Url.Action("MapPreview", "Maps", new { mapName = map.Id }),
                     MapsUrl = Url.Action("Index", "Maps"),
@@ -109,6 +108,8 @@ namespace WB.UI.Headquarters.Controllers
                     UploadedBy = uploadedBy,
                     MaxScale = map.MaxScale,
                     MinScale = map.MinScale,
+                    ShapeType = map.ShapeType,
+                    ShapesCount = map.ShapesCount,
                     DeleteMapUserLinkUrl = Url.Action("DeleteMapUser", "MapsApi"),
                 });
         }

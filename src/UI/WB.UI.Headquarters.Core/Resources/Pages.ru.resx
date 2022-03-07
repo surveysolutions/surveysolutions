@@ -1219,6 +1219,12 @@
   <data name="MapDetails_MaxScale" xml:space="preserve">
     <value>Максимальный масштаб</value>
   </data>
+  <data name="MapDetails_ShapeType" xml:space="preserve">
+    <value>Тип шейпа</value>
+  </data>
+  <data name="MapDetails_ShapesCount" xml:space="preserve">
+    <value>Количество шейпов</value>
+  </data>
   <data name="MapList_Title" xml:space="preserve">
     <value>Файлы карт</value>
   </data>

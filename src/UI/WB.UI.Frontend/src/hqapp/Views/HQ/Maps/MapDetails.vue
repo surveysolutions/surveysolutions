@@ -13,8 +13,10 @@
                 <div class="row">
                     <div class="col-md-4 col-sm-4 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li><b>{{ $t("Pages.MapDetails_MaxScale") }}:</b> <span>{{$config.model.maxScale}}</span></li>
-                            <li><b>{{ $t("Pages.MapDetails_MinScale") }}:</b> <span>{{$config.model.minScale}}</span></li>
+                            <li v-if="!$config.model.shapeType"><b>{{ $t("Pages.MapDetails_MaxScale") }}:</b> <span>{{$config.model.maxScale}}</span></li>
+                            <li v-if="!$config.model.shapesCount"><b>{{ $t("Pages.MapDetails_MinScale") }}:</b> <span>{{$config.model.minScale}}</span></li>
+                            <li v-if="$config.model.shapeType"><b>{{ $t("Pages.MapDetails_ShapeType") }}:</b> <span>{{$config.model.shapeType}}</span></li>
+                            <li v-if="$config.model.shapesCount"><b>{{ $t("Pages.MapDetails_ShapesCount") }}:</b> <span>{{$config.model.shapesCount}}</span></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-4 questionnaire-statistics">

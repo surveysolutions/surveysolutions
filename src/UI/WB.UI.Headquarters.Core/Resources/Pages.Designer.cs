@@ -3229,6 +3229,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shapes count.
+        /// </summary>
+        public static string MapDetails_ShapesCount {
+            get {
+                return ResourceManager.GetString("MapDetails_ShapesCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shape type.
+        /// </summary>
+        public static string MapDetails_ShapeType {
+            get {
+                return ResourceManager.GetString("MapDetails_ShapeType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Size(MB).
         /// </summary>
         public static string MapDetails_Size {

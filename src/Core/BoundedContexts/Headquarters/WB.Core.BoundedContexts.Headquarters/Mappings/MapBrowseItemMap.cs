@@ -26,6 +26,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.MaxScale);
             Property(x => x.MinScale);
             
+            Property(x => x.ShapesCount);
+            Property(x => x.ShapeType);
+            
             Set(x => x.Users,
                 collection =>
                 {

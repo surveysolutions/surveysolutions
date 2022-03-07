@@ -16,6 +16,8 @@
 
         public double MaxScale { set; get; }
         public double MinScale { set; get; }
+        public string ShapeType { get; set; }
+        public int? ShapesCount { get; set; }
 
         public string DataUrl { get; set; }
         public string MapPreviewUrl { get; set; }

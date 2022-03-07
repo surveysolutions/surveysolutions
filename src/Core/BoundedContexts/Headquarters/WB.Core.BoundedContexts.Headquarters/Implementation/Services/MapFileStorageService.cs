@@ -9,6 +9,7 @@ using System.Xml;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using Newtonsoft.Json;
@@ -301,7 +302,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     break;
                 case ".zip": // shape file
                 {
-                    var tempDirectory = fileSystemAccessor.GetFileNameWithoutExtension(tempFile);
+                    var tempDirectory = fileSystemAccessor.CombinePath(
+                        fileSystemAccessor.GetDirectory(tempFile),
+                        fileSystemAccessor.GetFileNameWithoutExtension(tempFile));
                     try
                     {
                         if (fileSystemAccessor.IsDirectoryExists(tempDirectory))
@@ -310,46 +313,46 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                         archiveUtils.Unzip(tempFile, tempDirectory);
 
-                        var shapeFilesInDirectory = fileSystemAccessor.GetFilesInDirectory(tempDirectory, "*.shp");
+                        var shapeFileName = fileSystemAccessor.ChangeExtension(fileSystemAccessor.GetFileNameWithoutExtension(tempFile), ".shp");
+                        var shapeFile = fileSystemAccessor.CombinePath(tempDirectory, shapeFileName);
 
-                        double xMin = double.MaxValue;
-                        double xMax = double.MinValue;
-                        double yMin = double.MaxValue;
-                        double yMax = double.MinValue;
+                        using ShapefileDataReader rd = new ShapefileDataReader(shapeFile, GeometryFactory.Default);
+                        var headerBounds = rd.ShapeHeader.Bounds;
+                        item.XMinVal = headerBounds.MinX;
+                        item.YMinVal = headerBounds.MinY;
+                        item.XMaxVal = headerBounds.MaxX;
+                        item.YMaxVal = headerBounds.MaxY;
+                        item.ShapeType = rd.ShapeHeader.ShapeType.ToString();
+                        item.Wkid = 4326; //geographic coordinates Wgs84
 
-                        //GeometryCollection geometries = null;
-                        foreach (var shapeFile in shapeFilesInDirectory)
+                        var readHeader = rd.DbaseHeader;
+                        item.ShapesCount = readHeader.NumRecords;
+                        /*string[] fieldNames = new string[readHeader.NumFields];
+                        var features = new List<Feature>(readHeader.NumRecords);
+
+                        for (int i = 0; i < fieldNames.Length; i++)
                         {
-                            ShapefileReader sr = new ShapefileReader(shapeFile);
-                            var geometryCollection = sr.ReadAll();
-
-                            foreach (var geom in geometryCollection)
-                            {
-                                xMin = Math.Min(xMin, geom.Coordinate.X);
-                                xMax = Math.Max(xMax, geom.Coordinate.X);
-
-                                yMin = Math.Min(yMin, geom.Coordinate.Y);
-                                yMax = Math.Max(yMax, geom.Coordinate.Y);
-                            }
-                            // if (geometries == null || geometries.Count > geometryCollection.Count)
-                            //     geometries = geometryCollection;
+                            // +1 because the first field is the geometry.
+                            fieldNames[i] = rd.GetName(i + 1);
                         }
 
-                        //var geometry = geometries[0];
-                        item.XMinVal = xMin;
-                        item.YMinVal = yMin;
+                        while (rd.Read())
+                        {
+                            var attributes = new AttributesTable();
+                            for (int i = 0; i < fieldNames.Length; i++)
+                            {
+                                // +1 because the first field is the geometry.
+                                attributes.Add(fieldNames[i], rd.GetValue(i + 1));
+                            }
 
-                        item.XMaxVal = xMax;
-                        item.YMaxVal = yMax;
-                        
-                        item.Wkid = 4326; //geographic coordinates Wgs84
+                            features.Add(new Feature(rd.Geometry, attributes));
+                        }*/
                     }
                     finally
                     {
                         if (fileSystemAccessor.IsDirectoryExists(tempDirectory))
                             fileSystemAccessor.DeleteDirectory(tempDirectory);
                     }
-
                 }
                 break;
             }

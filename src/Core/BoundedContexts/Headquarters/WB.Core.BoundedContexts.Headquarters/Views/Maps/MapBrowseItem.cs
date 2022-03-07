@@ -24,5 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
         public virtual double MaxScale { set; get; }
         public virtual double MinScale { set; get; }
         public virtual ICollection<UserMap> Users { get; set; }
+        public virtual string ShapeType { get; set; }
+        public virtual int? ShapesCount { get; set; }
     }
 }
