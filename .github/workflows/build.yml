@@ -188,9 +188,21 @@ jobs:
           $FileName = Get-ChildItem ./installer/src/SurveySolutionsBootstrap/bin/Release/SurveySolutions*.exe `
             | Select-Object -ExpandProperty FullName
           Write-Host "::set-output name=filename::$FileName"
+
       - name: Sign the installer
         if: ${{ needs.prepare.outputs.environment == 'release' }}
         run: |
+          & installer/wix314-binaries/insignia.exe `
+            -ib ${{ steps.build-installer.outputs.filename }} `
+            -o engine.exe
+          & 'C:/Program Files (x86)/Windows Kits/10/bin/x86/signtool.exe' sign `
+            /f certificate\certificate.pfx `
+            /p '${{ secrets.CODESIGNING_CERTIFICATE_PASSPHRASE }}' `
+            /tr http://timestamp.sectigo.com /td sha256 /fd sha256 `
+            engine.exe
+          & installer/wix314-binaries/insignia `
+            -ab engine.exe ${{ steps.build-installer.outputs.filename }} `
+            -o ${{ steps.build-installer.outputs.filename }}
           & 'C:/Program Files (x86)/Windows Kits/10/bin/x86/signtool.exe' sign `
             /f certificate\certificate.pfx `
             /p '${{ secrets.CODESIGNING_CERTIFICATE_PASSPHRASE }}' `
