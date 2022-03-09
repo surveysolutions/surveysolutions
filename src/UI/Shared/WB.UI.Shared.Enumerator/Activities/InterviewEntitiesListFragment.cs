@@ -55,6 +55,9 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public override void OnDestroyView()
         {
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+            GC.WaitForPendingFinalizers();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
             this.ViewModel?.Items.OfType<CommentsViewModel>()
                 .ForEach(x => x.CommentsInputShown -= this.OnCommentsBlockShown);
 
@@ -72,6 +75,22 @@ namespace WB.UI.Shared.Enumerator.Activities
                 InputMethodManager imm = (InputMethodManager) this.Activity.GetSystemService(Android.Content.Context.InputMethodService);
                 imm.ToggleSoftInput(ShowFlags.Implicit, HideSoftInputFlags.None);
                 this.layoutManager?.ScrollToPositionWithOffset(itemIndex, 200);
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing)
+            {
+                recyclerView?.Dispose();
+                layoutManager?.Dispose();
+                adapter?.Dispose();
+            
+                recyclerView = null;
+                layoutManager  = null;
+                adapter = null;
             }
         }
     }

@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Shared.Enumerator.Services;
+using Xamarin.ANRWatchDog;
 
 namespace WB.UI.Shared.Enumerator.Utils
 {
@@ -77,6 +78,11 @@ namespace WB.UI.Shared.Enumerator.Utils
                         AppCenter.Start(apiKey, typeof(Analytics), typeof(Crashes));
 
                         IsCrashReportingConfigured = true;
+                        
+                        
+                        Log.Info("CrashReporting", "Starting ANRWatchDog");
+                        new ANRWatchDog().SetANRListener(new ANRListener()).Start();
+                        
                         Log.Info("CrashReporting", "Initialized appcenter");
                     }
                 }

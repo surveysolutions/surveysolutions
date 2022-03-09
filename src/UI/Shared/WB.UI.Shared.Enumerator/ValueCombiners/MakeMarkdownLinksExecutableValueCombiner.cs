@@ -162,9 +162,9 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
 
         private class NavigateToEntitySpan : ClickableSpan
         {
-            private readonly Action<string, IInterviewEntity> onClick;
-            private readonly string variable;
-            private readonly IInterviewEntity interviewEntity;
+            private Action<string, IInterviewEntity> onClick;
+            private string variable;
+            private IInterviewEntity interviewEntity;
 
             public NavigateToEntitySpan(Action<string, IInterviewEntity> onClick, string variable, IInterviewEntity interviewEntity)
             {
@@ -174,6 +174,15 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             }
 
             public override void OnClick(View widget) => onClick.Invoke(variable, interviewEntity);
+
+            protected override void Dispose(bool disposing)
+            {
+                base.Dispose(disposing);
+
+                this.onClick = null;
+                this.variable = null;
+                this.interviewEntity = null;
+            }
         }
     }
 }
