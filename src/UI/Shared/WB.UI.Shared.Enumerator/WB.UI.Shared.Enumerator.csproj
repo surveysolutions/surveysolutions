@@ -1534,7 +1534,7 @@
       <Version>8.0.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
-      <Version>1.0.0.10</Version>
+      <Version>1.0.0.12</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
       <Version>1.1.0.12</Version>
