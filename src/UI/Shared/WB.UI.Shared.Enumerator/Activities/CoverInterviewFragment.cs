@@ -16,16 +16,17 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private class InnerRunnable :  Java.Lang.Object, IRunnable
         {
-            private readonly Action action;
+            private readonly WeakReference<Action> action;
 
             public InnerRunnable(Action action)
             {
-                this.action = action;
+                this.action = new WeakReference<Action>(action);
             }
 
             public void Run()
             {
-                this.action.Invoke();
+                if (this.action.TryGetTarget(out var target))
+                    target.Invoke();
             }
         }
         
