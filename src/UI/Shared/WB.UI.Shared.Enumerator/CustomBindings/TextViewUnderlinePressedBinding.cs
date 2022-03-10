@@ -55,9 +55,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             if (isDisposing)
             {
-                if (this.Target != null && this.Target.Handle != IntPtr.Zero)
+                var editText = this.Target;
+                if (editText != null && editText.Handle != IntPtr.Zero)
                 {
-                    this.Target.Touch -= Target_Touch;
+                    editText.Touch -= Target_Touch;
                 }
             }
             base.Dispose(isDisposing);

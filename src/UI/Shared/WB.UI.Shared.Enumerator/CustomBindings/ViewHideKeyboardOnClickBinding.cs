@@ -34,9 +34,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (IsDisposed)
                 return;
 
-            if (isDisposing && this.Target != null && this.Target.Handle != IntPtr.Zero)
+            var editText = this.Target;
+            if (isDisposing && editText != null && editText.Handle != IntPtr.Zero)
             {
-                this.Target.Click -= this.HandleClick;
+                editText.Click -= this.HandleClick;
             }
 
             base.Dispose(isDisposing);

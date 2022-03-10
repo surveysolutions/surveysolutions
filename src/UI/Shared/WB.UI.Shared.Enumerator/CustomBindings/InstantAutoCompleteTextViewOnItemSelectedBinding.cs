@@ -48,6 +48,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (isDisposing)
             {
                 this.subscription?.Dispose();
+                this.subscription = null;
             }
             base.Dispose(isDisposing);
         }

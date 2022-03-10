@@ -50,7 +50,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             if (isDisposing)
             {
-                this.subscribtion.Dispose();
+                this.subscribtion?.Dispose();
+                this.subscribtion = null;
             }
             base.Dispose(isDisposing);
         }

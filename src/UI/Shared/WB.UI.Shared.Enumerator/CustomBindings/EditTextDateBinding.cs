@@ -39,7 +39,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            base.Dispose(isDisposing);
             if (isDisposing)
             {
                 if (this.Target != null)
@@ -47,6 +46,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                     this.Target.Click -= this.InputClick;
                 }
             }
+            
+            base.Dispose(isDisposing);
         }
 
         protected override void SetValueImpl(EditText target, DateTimeQuestionViewModel value)

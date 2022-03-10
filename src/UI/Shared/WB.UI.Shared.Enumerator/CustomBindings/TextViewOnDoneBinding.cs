@@ -59,8 +59,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             if (isDisposing)
             {
-                if (this.Target != null && this.Target.Handle != IntPtr.Zero)
-                    this.Target.EditorAction -= this.OnDone;
+                var editText = this.Target;
+                if (editText != null && editText.Handle != IntPtr.Zero)
+                    editText.EditorAction -= this.OnDone;
             }
             base.Dispose(isDisposing);
         }
