@@ -1,10 +1,11 @@
 ﻿using System.IO;
 
-namespace WB.Core.Infrastructure.FileSystem;
-
-public class ExtractedStream
+namespace WB.Core.Infrastructure.FileSystem
 {
-    public string Name { get; set; }
-    public Stream Content { get; set; }
-    public long Size { get; set; }
+    public class ExtractedStream
+    {
+        public string Name { get; set; }
+        public Stream Content { get; set; }
+        public long Size { get; set; }
+    }
 }
