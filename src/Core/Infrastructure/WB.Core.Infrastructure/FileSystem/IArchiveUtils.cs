@@ -25,7 +25,7 @@ namespace WB.Core.Infrastructure.FileSystem
         string DecompressString(string stringToDecompress);
         IEnumerable<ExtractedFile> GetFilesFromArchive(Stream inputStream);
         byte[] CompressStream(Stream uncompressedDataStream, string entryName);
-        byte[] CompressStream(IEnumerable<ExtractedStream> entities);
+        byte[] CompressStream(IEnumerable<ExtractedFile> entities);
         string CompressStream(string newZipPath, IEnumerable<string> paths);
     }
 }
