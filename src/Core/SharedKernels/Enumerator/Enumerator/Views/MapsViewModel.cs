@@ -121,12 +121,12 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             {
                 var newItems = this.mapService.GetAvailableMaps().Select(x => new MapItem()
                 {
-                    MapName = x.MapName,
+                    MapName = x.MapFileName,
                     CreationDate = x.CreationDate,
                     Size = x.Size
                 }).Concat(this.mapService.GetAvailableShapefiles().Select(x => new MapItem()
                 {
-                    MapName = x.ShapefileName,
+                    MapName = x.ShapefileFileName,
                     CreationDate = x.CreationDate,
                     Size = x.Size
                 }

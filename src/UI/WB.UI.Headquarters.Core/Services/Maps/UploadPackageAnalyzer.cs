@@ -66,15 +66,31 @@ Other files
 
             if (permittedMapFileExtensions.Contains(mapExtension))
             {
-                result.Maps.Add(new MapFiles() { Name = fileName, Files = new List<string>() { fileName }});
+                result.Maps.Add(new MapFiles() 
+                { 
+                    Name = fileName,
+                    Files = new List<string>() { fileName }, 
+                    Size = fileInArchive.Value 
+                });
             }
             else if (shapeMapFileExtensions.Contains(mapExtension))
             {
                 var mapFiles = result.Maps.FirstOrDefault(m => m.Name == mapName);
                 if (mapFiles == null)
-                    result.Maps.Add(new MapFiles() { Name = mapName, IsShapeFile = true, Files = new List<string>() { fileName }});
+                {
+                    result.Maps.Add(new MapFiles()
+                    {
+                        Name = mapName, 
+                        IsShapeFile = true, 
+                        Files = new List<string>() { fileName },
+                        Size = fileInArchive.Value,
+                    });
+                }
                 else
+                {
+                    mapFiles.Size += fileInArchive.Value;
                     mapFiles.Files.Add(fileName);
+                }
             }
         }
 

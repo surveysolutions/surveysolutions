@@ -50,6 +50,16 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             }
             return compressedBytes;
         }
+        
+        public string CompressStream(string newZipPath, IEnumerable<string> paths)
+        {
+            using (ZipFile zip = new ZipFile())
+            {
+                zip.AddFiles(paths);
+                zip.Save(newZipPath);
+            }
+            return newZipPath;
+        }
 
 
         public void ZipDirectory(string directory, string archiveFile, string password, IProgress<int> progress = null)
@@ -107,6 +117,15 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         public void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
         {
             using (ZipFile decompress = ZipFile.Read(archivedFile))
+            {
+                decompress.ExtractAll(extractToFolder, ExtractExistingFileAction.OverwriteSilently);
+            }
+        }
+
+        public void Unzip(Stream fileStream, string extractToFolder, bool ignoreRootDirectory = false)
+        {
+            fileStream.Seek(0, SeekOrigin.Begin);
+            using (ZipFile decompress = ZipFile.Read(fileStream))
             {
                 decompress.ExtractAll(extractToFolder, ExtractExistingFileAction.OverwriteSilently);
             }
@@ -192,7 +211,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             return null;
         }
         
-        public ExtractedFile GetFileFromArchive(Stream inputStream, string fileName)
+        public ExtractedStream GetFileFromArchive(Stream inputStream, string fileName)
         {
             inputStream.Seek(0, SeekOrigin.Begin);
             
@@ -203,23 +222,18 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                     if (zipEntry.IsDirectory) continue;
                     if (!zipEntry.FileName.Contains(fileName)) continue;
 
-                    using (var memoryStream = new MemoryStream())
+                    try
                     {
-                        try
-                        {
-                            zipEntry.Extract(memoryStream);
-                        }
-                        catch (BadPasswordException ex)
-                        {
-                            throw new Core.Infrastructure.FileSystem.ZipException("Password required", ex);
-                        }
-
-                        return new ExtractedFile
+                        return new ExtractedStream
                         {
                             Name = zipEntry.FileName,
                             Size = zipEntry.UncompressedSize,
-                            Bytes = memoryStream.ToArray()
+                            Content = zipEntry.OpenReader(),
                         };
+                    }
+                    catch (BadPasswordException ex)
+                    {
+                        throw new Core.Infrastructure.FileSystem.ZipException("Password required", ex);
                     }
                 }
             }

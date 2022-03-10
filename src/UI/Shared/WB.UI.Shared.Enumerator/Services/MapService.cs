@@ -223,6 +223,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     {
                         FullPath = x,
                         ShapefileName = this.fileSystemAccessor.GetFileNameWithoutExtension(x),
+                        ShapefileFileName = this.fileSystemAccessor.GetFileName(x),
                         CreationDate = this.fileSystemAccessor.GetCreationTime(x),
                         Size = this.fileSystemAccessor.GetFileSize(x),
                     }).ToList();

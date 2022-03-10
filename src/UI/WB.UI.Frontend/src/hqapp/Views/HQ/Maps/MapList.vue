@@ -205,7 +205,7 @@ export default {
                         class: 'parameters',
                         title: this.$t('Pages.MapList_MapType'),
                         render(data) {
-                            return data.endsWith('.zip') ? 'V' : ''
+                            return data.endsWith('.shp') ? 'V' : ''
                         },
                     },
                     {

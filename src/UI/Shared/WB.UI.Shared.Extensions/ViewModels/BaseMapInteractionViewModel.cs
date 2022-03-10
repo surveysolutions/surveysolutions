@@ -165,8 +165,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             await UpdateBaseMap().ConfigureAwait(false);
             await OnMapLoaded().ConfigureAwait(false);
 
-            if (AvailableShapefiles.Count == 1)
-                await LoadShapefile.ExecuteAsync();
+            //if (AvailableShapefiles.Count == 1)
+            //    await LoadShapefile.ExecuteAsync().ConfigureAwait(false);
         }
 
         public abstract MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom);

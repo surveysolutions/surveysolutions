@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
@@ -9,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 {
     public interface IMapStorageService
     {
-        Task<MapBrowseItem> SaveOrUpdateMapAsync(ExtractedFile map);
+        Task<MapBrowseItem> SaveOrUpdateMapAsync(MapFiles map, string mapsDirectory);
         Task<MapBrowseItem> DeleteMap(string map);
         Task DeleteAllMaps();
         Task<byte[]> GetMapContentAsync(string mapName);
@@ -21,5 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         string[] GetAllMapsForSupervisor(Guid supervisorId);
         MapBrowseItem GetMapById(string id);
         MapBrowseItem AddUserToMap(string id, string userName);
+        string ExtractMapsToTempDirectory(Stream content);
     }
 }

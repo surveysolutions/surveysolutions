@@ -87,21 +87,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public string GetExternalStoragePath(string name) => $"maps/" + name;
 
-        public async Task<MapBrowseItem> SaveOrUpdateMapAsync(ExtractedFile mapFile)
+        public async Task<MapBrowseItem> SaveOrUpdateMapAsync(MapFiles mapFiles, string mapsDirectory)
         {
-            var tempFileStore = Guid.NewGuid().FormatGuid();
-            var pathToSave = this.fileSystemAccessor.CombinePath(this.path, tempFileStore);
-            if (!this.fileSystemAccessor.IsDirectoryExists(pathToSave))
-                this.fileSystemAccessor.CreateDirectory(pathToSave);
-
-            var tempFile = this.fileSystemAccessor.CombinePath(pathToSave, mapFile.Name);
-
-            await this.fileSystemAccessor.WriteAllBytesAsync(tempFile, mapFile.Bytes)
-                .ConfigureAwait(false);
-
+            string tempFile = null;
             try
             {
-                var mapItem = this.ToMapBrowseItem(tempFile, mapFile);
+                var mapItem = this.ToMapBrowseItem(mapFiles, mapsDirectory);
+
+                if (mapFiles.IsShapeFile)
+                {
+                    var zipName = fileSystemAccessor.CombinePath(mapsDirectory, mapFiles.Name + ".sch");
+                    var entities = mapFiles.Files.Select(f =>
+                        fileSystemAccessor.CombinePath(mapsDirectory, f)
+                    );
+                    tempFile = archiveUtils.CompressStream(zipName, entities);
+                }
+                else
+                {
+                    tempFile = this.fileSystemAccessor.CombinePath(mapsDirectory, mapFiles.Name);
+                }
 
                 if (externalFileStorage.IsEnabled())
                 {
@@ -112,7 +116,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }
                 else
                 {
-                    var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapFile.Name);
+                    var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapFiles.Name);
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
                 }
 
@@ -125,20 +129,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     fileSystemAccessor.DeleteFile(tempFile);
                 throw;
             }
-            finally
-            {
-                if (this.fileSystemAccessor.IsDirectoryExists(pathToSave))
-                    fileSystemAccessor.DeleteDirectory(pathToSave);
-            }
         }
 
-        private MapBrowseItem ToMapBrowseItem(string tempFile, ExtractedFile mapFile)
+        private MapBrowseItem ToMapBrowseItem(MapFiles mapFile, string mapsDirectory)
         {
+            var mapName = mapFile.IsShapeFile ? mapFile.Name + ".shp" : mapFile.Name; 
             var item = new MapBrowseItem
             {
-                Id = mapFile.Name,
+                Id = mapName,
                 ImportDate = DateTime.UtcNow,
-                FileName = mapFile.Name,
+                FileName = mapName,
                 Size = mapFile.Size,
                 Wkid = 102100,
                 UploadedBy = authorizedUser.Id,
@@ -155,10 +155,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 i.MinScale = _.minScal;
             };
 
-            switch (this.fileSystemAccessor.GetFileExtension(tempFile))
+            switch (this.fileSystemAccessor.GetFileExtension(mapName))
             {
                 case ".tpk":
                     {
+                        var tempFile = this.fileSystemAccessor.CombinePath(mapsDirectory, mapFile.Name);
                         var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "conf.cdi");
                         if (unzippedFile != null)
                         {
@@ -184,6 +185,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     break;
                 case ".mmpk":
                     {
+                        var tempFile = this.fileSystemAccessor.CombinePath(mapsDirectory, mapFile.Name);
                         var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "iteminfo.xml");
                         if (unzippedFile != null)
                         {
@@ -198,8 +200,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                                 if (jsonObject != null && jsonObject.maps?.Count > 0)
                                 {
-                                    var mapName = jsonObject.maps[0];
-                                    unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{mapName}.mmap");
+                                    var jsonMapName = jsonObject.maps[0];
+                                    unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{jsonMapName}.mmap");
                                     jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
 
                                     item.Wkid = WGS84Wkid;
@@ -237,6 +239,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     {
                         try
                         {
+                            var tempFile = this.fileSystemAccessor.CombinePath(mapsDirectory, mapFile.Name);
+
                             var fullPath = Path.GetFullPath(tempFile);
 
                             var valueGdalHome = this.geospatialConfig.Value.GdalHome;
@@ -300,21 +304,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         }
                     }
                     break;
-                case ".zip": // shape file
+                case ".shp": // shape file
                 {
-                    var tempDirectory = fileSystemAccessor.CombinePath(
-                        fileSystemAccessor.GetDirectory(tempFile),
-                        fileSystemAccessor.GetFileNameWithoutExtension(tempFile));
                     try
                     {
-                        if (fileSystemAccessor.IsDirectoryExists(tempDirectory))
-                            fileSystemAccessor.DeleteDirectory(tempDirectory);
-                        fileSystemAccessor.CreateDirectory(tempDirectory);
-
-                        archiveUtils.Unzip(tempFile, tempDirectory);
-
-                        var shapeFileName = fileSystemAccessor.ChangeExtension(fileSystemAccessor.GetFileNameWithoutExtension(tempFile), ".shp");
-                        var shapeFile = fileSystemAccessor.CombinePath(tempDirectory, shapeFileName);
+                        var shapeFile = fileSystemAccessor.CombinePath(mapsDirectory, mapFile.Name);
 
                         using ShapefileDataReader rd = new ShapefileDataReader(shapeFile, GeometryFactory.Default);
                         var headerBounds = rd.ShapeHeader.Bounds;
@@ -327,31 +321,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                         var readHeader = rd.DbaseHeader;
                         item.ShapesCount = readHeader.NumRecords;
-                        /*string[] fieldNames = new string[readHeader.NumFields];
+                        
+                        
+                        List<string> fieldNames = new List<string>(readHeader.NumFields);
                         var features = new List<Feature>(readHeader.NumRecords);
 
-                        for (int i = 0; i < fieldNames.Length; i++)
+                        for (int i = 0; i < readHeader.NumFields; i++)
                         {
                             // +1 because the first field is the geometry.
-                            fieldNames[i] = rd.GetName(i + 1);
+                            fieldNames.Add(rd.GetName(i + 1));
                         }
 
-                        while (rd.Read())
+                        var indexOf = fieldNames.ToList().IndexOf("label");
+                        if (indexOf >= 0)
                         {
-                            var attributes = new AttributesTable();
-                            for (int i = 0; i < fieldNames.Length; i++)
+                            HashSet<string> checkOnUnique = new HashSet<string>();
+                            HashSet<string> duplicateLabels = new HashSet<string>();
+                            while (rd.Read())
                             {
-                                // +1 because the first field is the geometry.
-                                attributes.Add(fieldNames[i], rd.GetValue(i + 1));
-                            }
-
-                            features.Add(new Feature(rd.Geometry, attributes));
-                        }*/
+                                var labelValue = rd.GetValue(indexOf + 1).ToString();
+                                if (!checkOnUnique.Add(labelValue))
+                                    duplicateLabels.Add(labelValue);
+                            }   
+                        }
                     }
-                    finally
+                    catch (Exception ex)
                     {
-                        if (fileSystemAccessor.IsDirectoryExists(tempDirectory))
-                            fileSystemAccessor.DeleteDirectory(tempDirectory);
+                        logger.LogError(ex, "Can't read {MapName}.shp file", mapFile.Name);
+                        throw new InvalidOperationException($"Can't read {mapFile.Name}.shp file. File is corrupt.", ex);
                     }
                 }
                 break;
@@ -574,6 +571,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }, null);
 
             return this.mapPlainStorageAccessor.GetById(id);
+        }
+
+        public string ExtractMapsToTempDirectory(Stream content)
+        {
+            var tempFileStore = Guid.NewGuid().FormatGuid();
+            var pathToSave = this.fileSystemAccessor.CombinePath(this.path, tempFileStore);
+            if (!this.fileSystemAccessor.IsDirectoryExists(pathToSave))
+                this.fileSystemAccessor.CreateDirectory(pathToSave);
+
+            archiveUtils.Unzip(content, pathToSave);
+            return pathToSave;
         }
 
         public async Task<byte[]> GetMapContentAsync(string mapName)
