@@ -83,12 +83,10 @@ class UploadMapsService : IUploadMapsService
                     logger.LogError($"Error on maps import map {map.Name}", e);
                     invalidMaps.Add(new Tuple<string, Exception>(map.Name, e));
                 }
-                finally
-                {
-                    if (fileSystemAccessor.IsDirectoryExists(mapsInTempDirectory))
-                        fileSystemAccessor.DeleteDirectory(mapsInTempDirectory);
-                }
             }
+
+            if (fileSystemAccessor.IsDirectoryExists(mapsInTempDirectory))
+                fileSystemAccessor.DeleteDirectory(mapsInTempDirectory);
 
             if (invalidMaps.Count > 0)
                 result.Errors.AddRange(invalidMaps.Select(x => String.Format(Resources.Maps.MapLoadingInvalidFile, x.Item1, x.Item2.Message)).ToList());

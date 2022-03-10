@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 if (mapFiles.IsShapeFile)
                 {
-                    var zipName = fileSystemAccessor.CombinePath(mapsDirectory, mapFiles.Name + ".sch");
+                    var zipName = fileSystemAccessor.CombinePath(mapsDirectory, mapFiles.Name + ".shp.zip");
                     var entities = mapFiles.Files.Select(f =>
                         fileSystemAccessor.CombinePath(mapsDirectory, f)
                     );
@@ -107,16 +107,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     tempFile = this.fileSystemAccessor.CombinePath(mapsDirectory, mapFiles.Name);
                 }
 
+                var mapName = mapFiles.IsShapeFile ? mapFiles.Name + ".shp" : mapFiles.Name; 
                 if (externalFileStorage.IsEnabled())
                 {
                     await using FileStream file = File.OpenRead(tempFile);
-                    var name = this.fileSystemAccessor.GetFileName(tempFile);
+                    var name = this.fileSystemAccessor.GetFileName(mapName);
                     await this.externalFileStorage.StoreAsync(GetExternalStoragePath(name), file, "application/zip")
                         .ConfigureAwait(false);
                 }
                 else
                 {
-                    var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapFiles.Name);
+                    var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
                 }
 
@@ -308,7 +309,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                     try
                     {
-                        var shapeFile = fileSystemAccessor.CombinePath(mapsDirectory, mapFile.Name);
+                        var shapeFile = fileSystemAccessor.CombinePath(mapsDirectory, mapName);
 
                         using ShapefileDataReader rd = new ShapefileDataReader(shapeFile, GeometryFactory.Default);
                         var headerBounds = rd.ShapeHeader.Bounds;
