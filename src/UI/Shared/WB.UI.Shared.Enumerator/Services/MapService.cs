@@ -180,12 +180,21 @@ namespace WB.UI.Shared.Enumerator.Services
                 return;
 
             var fileExtension = fileSystemAccessor.GetFileExtension(mapName);
-            if (fileExtension == ".zip") // shape file package
+            if (fileExtension == ".shp") // shape file package
             {
                 var mapFolder = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
-                if (!fileSystemAccessor.IsDirectoryExists(mapFolder))
-                    fileSystemAccessor.CreateDirectory(mapFolder);
-                archiveUtils.Unzip(tempFileName, mapFolder);
+                try
+                {
+                    if (!fileSystemAccessor.IsDirectoryExists(mapFolder))
+                        fileSystemAccessor.CreateDirectory(mapFolder);
+                    archiveUtils.Unzip(tempFileName, mapFolder);
+                }
+                catch
+                {
+                    if (fileSystemAccessor.IsDirectoryExists(mapFolder))
+                        fileSystemAccessor.DeleteDirectory(mapFolder);
+                    throw;
+                }
                 fileSystemAccessor.DeleteFile(tempFileName);
             }
             else

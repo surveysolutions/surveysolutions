@@ -55,7 +55,8 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         {
             using (ZipFile zip = new ZipFile())
             {
-                zip.AddFiles(paths);
+                
+                zip.AddFiles(paths, "");
                 zip.Save(newZipPath);
             }
             return newZipPath;
