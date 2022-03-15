@@ -7,6 +7,7 @@ using AndroidX.AppCompat.App;
 using AndroidX.DrawerLayout.Widget;
 using AndroidX.RecyclerView.Widget;
 using MvvmCross;
+using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.WeakSubscription;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -25,6 +26,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken interviewCompleteActivityToken;
+        private MvxNamedNotifyPropertyChangedEventSubscription<PropertyChangedEventArgs> subscription;
 
         protected override int ViewResourceId => Resource.Layout.interview;
 
@@ -55,7 +57,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.ViewModel.NavigateToPreviousViewModel(() =>
             {
                 this.ViewModel.NavigateBack();
-                this.Finish();
+                ReleaseActivity();
             });
         }
 
@@ -63,10 +65,12 @@ namespace WB.UI.Shared.Enumerator.Activities
             => this.drawerToggle.OnOptionsItemSelected(item)
             || base.OnOptionsItemSelected(item);
 
-        private void OnInterviewCompleteActivity(InterviewCompletedMessage obj)
+        protected void ReleaseActivity()
         {
             try
             {
+                subscription?.Dispose();
+                subscription = null;
                 this.ViewModel.Dispose();
                 this.Finish();
             }
@@ -74,6 +78,11 @@ namespace WB.UI.Shared.Enumerator.Activities
             {
                 Mvx.IoCProvider.Resolve<ILoggerProvider>().GetForType(this.GetType()).Warn("Disposing already disposed activity", e);
             }
+        }
+
+        private void OnInterviewCompleteActivity(InterviewCompletedMessage obj)
+        {
+            ReleaseActivity();
         }
 
         private void OnSectionChange(SectionChangeMessage msg) =>
@@ -119,7 +128,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnViewModelSet()
         {
             base.OnViewModelSet();
-            ViewModel.WeakSubscribe<PropertyChangedEventArgs>(nameof(ViewModel.CurrentStage), OnNavigation);
+            subscription = ViewModel.WeakSubscribe<PropertyChangedEventArgs>(nameof(ViewModel.CurrentStage), OnNavigation);
         }
 
         private void OnNavigation(object sender, PropertyChangedEventArgs e)
@@ -130,6 +139,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 list?.SetItemAnimator(null);
             }
         }
+        
 
         protected void Navigate(string navigateTo)
         {

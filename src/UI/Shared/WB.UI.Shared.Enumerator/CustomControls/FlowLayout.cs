@@ -21,7 +21,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         public int Orientation = 0;
         public bool DebugDraw = false;
 
-        private bool subscibed = false;
+        private bool subscribed = false;
 
         public FlowLayout(Context context)
             : this(context, null)
@@ -45,7 +45,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 this.Adapter.ItemTemplateId = num;
             }
 
-            subscibed = true;
+            subscribed = true;
             this.ChildViewRemoved += this.OnChildViewRemoved;
         }
 
@@ -447,16 +447,21 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             if (disposing)
             {
-                if (subscibed)
+                if (subscribed)
                 {
                     this.ChildViewRemoved -= this.OnChildViewRemoved;
-                    subscibed = false;
+                    subscribed = false;
                 }
                 
                 IMvxAdapterWithChangedEvent withChangedEvent = this._adapter;
                 if (withChangedEvent != null)
                 {
                     withChangedEvent.DataSetChanged -= this.AdapterOnDataSetChanged;
+                }
+
+                if (this._adapter != null)
+                {
+                    this._adapter.Dispose();
                 }
             }
             base.Dispose(disposing);

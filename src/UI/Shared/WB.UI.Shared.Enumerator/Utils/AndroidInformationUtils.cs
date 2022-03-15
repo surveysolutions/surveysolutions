@@ -1,4 +1,7 @@
-﻿using Android.App;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using WB.Core.GenericSubdomains.Portable;
@@ -28,6 +31,27 @@ namespace WB.UI.Shared.Enumerator.Utils
             var availableInternalMemorySize = (availableBlocks * blockSize);
             var totalInternalMemorySize = totalBlocks * blockSize;
             return $"{FileSizeUtils.SizeSuffix(totalInternalMemorySize)} total, avaliable {availableInternalMemorySize.PercentOf(totalInternalMemorySize)}% ({FileSizeUtils.SizeSuffix(availableInternalMemorySize)})";
+        }
+
+        public static List<GroupedPeer> GetPeers()
+        {
+            var groupBy = Java.Interop.JniRuntime.CurrentRuntime.ValueManager.GetSurfacedPeers()
+                .Select(s => s.SurfacedPeer.TryGetTarget(out var target)
+                    ? target
+                    : null).Where(v => v != null)
+                .Select(v => v.GetType().Name)
+                .GroupBy(k => k)
+                .Select(k => new GroupedPeer{ Type = k.Key, Count = k.Count() })
+                .OrderByDescending(k => k.Count)
+                .ToList();
+
+            return groupBy;
+        }
+
+        public class GroupedPeer
+        {
+            public string Type { get; set; }
+            public int Count { get; set; }
         }
     }
 }
