@@ -62,7 +62,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
             this.ViewModel?.Items.OfType<CommentsViewModel>()
                 .ForEach(x => x.CommentsInputShown -= this.OnCommentsBlockShown);
-
+            
             base.OnDestroyView();
         }
 

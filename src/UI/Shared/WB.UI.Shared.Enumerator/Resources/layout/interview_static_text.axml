@@ -15,7 +15,7 @@
     android:textColor="@color/errorTextColor"
     local:MvxBind="Text Text.PlainText; 
                    Visible StaticTextState.Validity.IsInvalid;
-                   Tag Format('Static_Invalid_Title{0}', Identity)" />
+                   Tag Format('Static_Invalid_Title_{0}', Identity)" />
 
   <include layout="@layout/interview__attachment" />
   <LinearLayout 

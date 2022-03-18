@@ -4,6 +4,8 @@ using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.OS;
+using Java.Interop;
+using Mono.CSharp;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Shared.Enumerator.Utils
@@ -39,9 +41,8 @@ namespace WB.UI.Shared.Enumerator.Utils
                 .Select(s => s.SurfacedPeer.TryGetTarget(out var target)
                     ? target
                     : null).Where(v => v != null)
-                .Select(v => v.GetType().Name)
-                .GroupBy(k => k)
-                .Select(k => new GroupedPeer{ Type = k.Key, Count = k.Count() })
+                .GroupBy(k => k.GetType().Name)
+                .Select(k => new GroupedPeer{ Type = k.Key, Count = k.Count(), Instances = k.ToList() })
                 .OrderByDescending(k => k.Count)
                 .ToList();
 
@@ -52,6 +53,7 @@ namespace WB.UI.Shared.Enumerator.Utils
         {
             public string Type { get; set; }
             public int Count { get; set; }
+            public List<IJavaPeerable> Instances { set; get; } = new List<IJavaPeerable>();
         }
     }
 }

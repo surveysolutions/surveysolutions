@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,7 +7,6 @@ using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.throttlingModel = throttlingModel;
             this.Options = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
 
-            this.throttlingModel.Init(SaveAnswer);
+            
         }
 
         private Identity questionIdentity;
@@ -88,6 +88,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
+            this.throttlingModel.Init(SaveAnswer);
+            
             this.questionIdentity = entityIdentity;
             var interview = this.interviewRepository.Get(interviewId);
             this.interviewId = interview.Id;
@@ -110,8 +112,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             List<SingleOptionQuestionOptionViewModel> singleOptionQuestionOptionViewModels = this.filteredOptionsViewModel.GetOptions()
                 .Select(model => this.ToViewModel(model, isSelected: singleOptionQuestion.IsAnswered() && model.Value == singleOptionQuestion.GetAnswer().SelectedValue))
                 .ToList();
+            
+            var options = this.Options;
+            foreach (var option in options)
+            {
+                option.BeforeSelected -= this.OptionSelected;
+                option.AnswerRemoved -= this.RemoveAnswer;
+                option.DisposeIfDisposable();
+            }
 
-            this.Options.ForEach(x => x.DisposeIfDisposable());
             this.Options.Clear();
             singleOptionQuestionOptionViewModels.ForEach(x => this.Options.Add(x));
         }
@@ -193,7 +202,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var optionViewModel = new SingleOptionQuestionOptionViewModel
             {
-                Enablement = this.questionState.Enablement,
                 Value = model.Value,
                 Title = model.Title,
                 Selected = isSelected,
@@ -245,8 +253,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        private bool isDisposed = false;
+
         public void Dispose()
         {
+            if (isDisposed)
+                return;
+            
+            isDisposed = true;
+            
+            this.throttlingModel.Dispose();
+            
             this.eventRegistry.Unsubscribe(this);
             this.questionState.Dispose();
             this.InstructionViewModel.Dispose();
@@ -254,12 +271,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
             this.filteredOptionsViewModel.Dispose();
 
-            foreach (var option in this.Options)
+            var options = this.Options;
+            foreach (var option in options)
             {
                 option.BeforeSelected -= this.OptionSelected;
                 option.AnswerRemoved -= this.RemoveAnswer;
+                option.DisposeIfDisposable();
             }
-            this.throttlingModel.Dispose();
+            //options.Clear();
         }
 
         public IObservableCollection<ICompositeEntity> Children
