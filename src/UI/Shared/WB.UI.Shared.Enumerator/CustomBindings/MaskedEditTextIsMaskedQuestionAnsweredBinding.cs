@@ -1,11 +1,14 @@
 ﻿using System;
 using MvvmCross.Binding;
+using MvvmCross.WeakSubscription;
 using WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class MaskedEditTextIsMaskedQuestionAnsweredBinding : BaseBinding<MaskedEditText, bool>
     {
+        private IDisposable subscription;
+        
         public MaskedEditTextIsMaskedQuestionAnsweredBinding(MaskedEditText target)
             : base(target)
         {
@@ -13,7 +16,13 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         public override void SubscribeToEvents()
         {
-            this.Target.IsMaskedFormAnsweredChanged += this.IsMaskedFormAnsweredChangedHandler;
+            var target = Target;
+            if (target == null)
+                return;
+            
+            subscription = target.WeakSubscribe(
+                nameof(target.IsMaskedFormAnsweredChanged),
+                IsMaskedFormAnsweredChangedHandler);
         }
 
         protected override void SetValueToView(MaskedEditText control, bool value)
@@ -24,7 +33,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         private void IsMaskedFormAnsweredChangedHandler(object sender, EventArgs e)
         {
             var target = this.Target;
-
             if (target == null)
                 return;
 
@@ -39,16 +47,12 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            if (IsDisposed)
-                return;
-
             if (isDisposing)
             {
-                if (this.Target != null && this.Target.Handle != IntPtr.Zero)
-                {
-                    this.Target.IsMaskedFormAnsweredChanged -= this.IsMaskedFormAnsweredChangedHandler;
-                }
+                subscription?.Dispose();
+                subscription = null;
             }
+            
             base.Dispose(isDisposing);
         }
     }

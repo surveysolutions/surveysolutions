@@ -3,12 +3,15 @@ using Android.Views;
 using MvvmCross;
 using MvvmCross.Binding;
 using MvvmCross.Platforms.Android;
+using MvvmCross.WeakSubscription;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ViewHideKeyboardOnClickBinding : BaseBinding<View, object>
     {
+        private IDisposable _subscription;
+        
         public ViewHideKeyboardOnClickBinding(View view)
             : base(view) {}
 
@@ -21,25 +24,22 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         public override void SubscribeToEvents()
         {
-            if (this.Target != null)
-            {
-                this.Target.Click += this.HandleClick;
-            }
+            var target = this.Target;
+            if (target == null)
+                return;
 
-            base.SubscribeToEvents();
+            _subscription = target.WeakSubscribe(
+                nameof(target.Click),
+                HandleClick);
         }
 
         protected override void Dispose(bool isDisposing)
         {
-            if (IsDisposed)
-                return;
-
-            var editText = this.Target;
-            if (isDisposing && editText != null && editText.Handle != IntPtr.Zero)
+            if (isDisposing)
             {
-                editText.Click -= this.HandleClick;
+                _subscription?.Dispose();
+                _subscription = null;
             }
-
             base.Dispose(isDisposing);
         }
 
