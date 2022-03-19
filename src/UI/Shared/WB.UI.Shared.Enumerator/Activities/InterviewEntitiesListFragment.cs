@@ -79,6 +79,19 @@ namespace WB.UI.Shared.Enumerator.Activities
                 this.layoutManager?.ScrollToPositionWithOffset(itemIndex, 200);
             }
         }
+        
+        public override void OnDestroy()
+        {
+            recyclerView?.Dispose();
+            layoutManager?.Dispose();
+            adapter?.Dispose();
+            
+            recyclerView = null;
+            layoutManager  = null;
+            adapter = null;
+            
+            base.OnDestroy();
+        }
 
         protected override void Dispose(bool disposing)
         {
