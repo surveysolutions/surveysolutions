@@ -41,9 +41,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            if (IsDisposed)
-                return;
-
             if (isDisposing)
             {
                 this.subscription?.Dispose();

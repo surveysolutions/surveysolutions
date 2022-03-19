@@ -9,6 +9,7 @@ using MvvmCross;
 using MvvmCross.Binding;
 using MvvmCross.Commands;
 using MvvmCross.Platforms.Android;
+using MvvmCross.WeakSubscription;
 using WB.UI.Shared.Enumerator.Activities;
 using Object = Java.Lang.Object;
 
@@ -33,8 +34,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         }
 
         private ICommand command;
-
         private string oldEditTextValue;
+
+        private IDisposable focusChangeSubscription;
+        private IDisposable editorActionSubscription;
 
         public EditTextFocusValueChangedBinding(EditText target)
             : base(target)
@@ -44,20 +47,32 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         public override void SubscribeToEvents()
         {
-            this.Target.FocusChange += this.FocusChange;
-            this.Target.EditorAction += this.HandleEditorAction;
+            var target = Target;
+            if (target == null)
+                return;
+            
+            focusChangeSubscription = target.WeakSubscribe<EditText, View.FocusChangeEventArgs>(
+                nameof(target.FocusChange),
+                this.FocusChange);
+
+            editorActionSubscription = target.WeakSubscribe<EditText, TextView.EditorActionEventArgs>(
+                nameof(target.EditorAction),
+                this.HandleEditorAction);
         }
 
         private void FocusChange(object sender, View.FocusChangeEventArgs e)
         {
-            if (e.HasFocus)
+            if (this.Target != null)
             {
-                this.oldEditTextValue = this.Target.Text;
-            }
-            else
-            {
-                this.TrySendAnswerTextQuestionCommand();
-                this.HideKeyboard(this.Target);
+                if (e.HasFocus)
+                {
+                    this.oldEditTextValue = this.Target.Text;
+                }
+                else
+                {
+                    this.TrySendAnswerTextQuestionCommand();
+                    this.HideKeyboard(this.Target);
+                }
             }
         }
 
@@ -65,7 +80,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             e.Handled = false;
 
-            if (e.ActionId != ImeAction.Done) 
+            if (e.ActionId != ImeAction.Done)
                 return;
 
             e.Handled = true;
@@ -117,17 +132,15 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            if(IsDisposed)
-                return;
-
             if (isDisposing)
             {
-                if (this.Target != null && this.Target.Handle != IntPtr.Zero)
-                {
-                    this.Target.FocusChange -= this.FocusChange;
-                    this.Target.EditorAction -= this.HandleEditorAction;
-                }
+                this.focusChangeSubscription?.Dispose();
+                this.focusChangeSubscription = null;
+                
+                this.editorActionSubscription?.Dispose();
+                this.editorActionSubscription = null;
             }
+            
             base.Dispose(isDisposing);
         }
 

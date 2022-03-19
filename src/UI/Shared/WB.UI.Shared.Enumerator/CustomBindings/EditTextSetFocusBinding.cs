@@ -6,6 +6,7 @@ using Android.Widget;
 using MvvmCross;
 using MvvmCross.Binding;
 using MvvmCross.Platforms.Android;
+using MvvmCross.WeakSubscription;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
@@ -22,6 +23,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             get { return this.Target; }
         }
+        
+        private IDisposable focusChangeSubscription;
+        private IDisposable editorActionSubscription;
 
         protected override void SetValueToView(EditText control, bool value)
         {
@@ -44,25 +48,26 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (this.EditText == null)
                 return;
 
-            this.EditText.FocusChange += this.HandleFocusChange;
-            this.EditText.EditorAction += this.HandleEditorAction;
+            focusChangeSubscription = this.EditText.WeakSubscribe<EditText, View.FocusChangeEventArgs>(
+                nameof(this.EditText.FocusChange),
+                this.HandleFocusChange);
+
+            editorActionSubscription = this.EditText.WeakSubscribe<EditText, TextView.EditorActionEventArgs>(
+                nameof(this.EditText.EditorAction),
+                this.HandleEditorAction);
         }
 
         private void HandleEditorAction(object sender, TextView.EditorActionEventArgs e)
         {
             e.Handled = false;
-
             if (e.ActionId != ImeAction.Done) return;
-
             e.Handled = true;
-
             this.TriggerValueChangeToFalse();
         }
 
         private void HandleFocusChange(object sender, View.FocusChangeEventArgs e)
         {
             if (e.HasFocus) return;
-
             this.TriggerValueChangeToFalse();
         }
 
@@ -79,16 +84,13 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            if (IsDisposed)
-                return;
-
             if (isDisposing)
             {
-                if (this.EditText != null && this.EditText.Handle != IntPtr.Zero)
-                {
-                    this.EditText.FocusChange -= this.HandleFocusChange;
-                    this.EditText.EditorAction -= this.HandleEditorAction;
-                }
+                this.focusChangeSubscription?.Dispose();
+                this.focusChangeSubscription = null;
+                
+                this.editorActionSubscription?.Dispose();
+                this.editorActionSubscription = null;
             }
             base.Dispose(isDisposing);
         }

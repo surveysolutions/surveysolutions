@@ -26,7 +26,9 @@ namespace WB.UI.Shared.Enumerator.Activities
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken interviewCompleteActivityToken;
-        private MvxNamedNotifyPropertyChangedEventSubscription<PropertyChangedEventArgs> subscription;
+        
+        private IDisposable onNavigationSubscription;
+        private IDisposable onDrawerOpenedSubscription;
 
         protected override int ViewResourceId => Resource.Layout.interview;
 
@@ -36,11 +38,16 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.rootLayout);
             this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, base.Toolbar, 0, 0);
             this.drawerLayout.AddDrawerListener(this.drawerToggle);
-            this.drawerLayout.DrawerOpened += (sender, args) =>
-            {
-                this.RemoveFocusFromEditText();
-                this.HideKeyboard(drawerLayout.WindowToken);
-            };
+            
+            onDrawerOpenedSubscription = this.drawerLayout.WeakSubscribe<DrawerLayout, DrawerLayout.DrawerOpenedEventArgs>(
+                nameof(this.drawerLayout.DrawerOpened),
+                OnDrawerLayoutOnDrawerOpened)  ;
+        }
+
+        private void OnDrawerLayoutOnDrawerOpened(object sender, DrawerLayout.DrawerOpenedEventArgs args)
+        {
+            this.RemoveFocusFromEditText();
+            this.HideKeyboard(drawerLayout.WindowToken);
         }
 
         protected override void OnStart()
@@ -69,8 +76,12 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             try
             {
-                subscription?.Dispose();
-                subscription = null;
+                onNavigationSubscription?.Dispose();
+                onNavigationSubscription = null;
+                
+                onDrawerOpenedSubscription?.Dispose();
+                onDrawerOpenedSubscription = null;
+                
                 this.ViewModel.Dispose();
                 this.Finish();
             }
@@ -128,7 +139,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnViewModelSet()
         {
             base.OnViewModelSet();
-            subscription = ViewModel.WeakSubscribe<PropertyChangedEventArgs>(nameof(ViewModel.CurrentStage), OnNavigation);
+            onNavigationSubscription = ViewModel.WeakSubscribe<PropertyChangedEventArgs>(nameof(ViewModel.CurrentStage), OnNavigation);
         }
 
         private void OnNavigation(object sender, PropertyChangedEventArgs e)

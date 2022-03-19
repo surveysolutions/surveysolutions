@@ -30,10 +30,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             var valueInDpi = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, (int)dpValue, Application.Context.Resources.DisplayMetrics);
 
-            var layout_params = control.LayoutParameters;
-            layout_params.Height = valueInDpi;
-            layout_params.Width = valueInDpi;
-            control.LayoutParameters = layout_params;
+            var layoutParams = control.LayoutParameters;
+            layoutParams.Height = valueInDpi;
+            layoutParams.Width = valueInDpi;
+            control.LayoutParameters = layoutParams;
         }
     }
 }

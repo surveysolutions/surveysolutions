@@ -31,7 +31,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         public override void SubscribeToEvents()
         {
             var autoComplete = this.Target;
-
             if (autoComplete == null)
                 return;
 
@@ -42,9 +41,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            if (IsDisposed)
-                return;
-
             if (isDisposing)
             {
                 this.subscription?.Dispose();

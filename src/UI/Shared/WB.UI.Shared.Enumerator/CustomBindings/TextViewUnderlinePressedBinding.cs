@@ -4,6 +4,7 @@ using Android.Text.Style;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Binding;
+using MvvmCross.WeakSubscription;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
@@ -20,6 +21,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             this.Target.TextFormatted = decoratedContent;
         }
 
+        private IDisposable subscription;
 
         public override void SubscribeToEvents()
         {
@@ -28,17 +30,19 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (this.Target == null)
                 return;
 
-            this.Target.Touch += Target_Touch;
+            subscription = this.Target.WeakSubscribe<TextView, View.TouchEventArgs>(
+                nameof(this.Target.Touch),
+                OnTouch);
         }
 
-        private void Target_Touch(object sender, Android.Views.View.TouchEventArgs e)
+        private void OnTouch(object sender, Android.Views.View.TouchEventArgs e)
         {
-            if (e.Event.Action == MotionEventActions.Down)
+            if (e.Event?.Action == MotionEventActions.Down)
             {
                 var decoratedContent = new SpannableString(this.Target.Text);
                 this.Target.TextFormatted = decoratedContent;
             }
-            else if (e.Event.Action == MotionEventActions.Up)
+            else if (e.Event?.Action == MotionEventActions.Up)
             {
                 var decoratedContent = new SpannableString(this.Target.Text);
                 decoratedContent.SetSpan(new UnderlineSpan(), 0, decoratedContent.Length(), 0);
@@ -50,23 +54,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            if (IsDisposed)
-                return;
-
             if (isDisposing)
             {
-                var editText = this.Target;
-                if (editText != null && editText.Handle != IntPtr.Zero)
-                {
-                    editText.Touch -= Target_Touch;
-                }
+                subscription?.Dispose();
+                subscription = null;
             }
             base.Dispose(isDisposing);
         }
 
-        public override MvxBindingMode DefaultMode
-        {
-            get { return MvxBindingMode.TwoWay; }
-        }
+        public override MvxBindingMode DefaultMode => MvxBindingMode.TwoWay;
     }
 }

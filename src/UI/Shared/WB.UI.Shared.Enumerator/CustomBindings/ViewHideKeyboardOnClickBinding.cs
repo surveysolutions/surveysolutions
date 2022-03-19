@@ -10,7 +10,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ViewHideKeyboardOnClickBinding : BaseBinding<View, object>
     {
-        private IDisposable _subscription;
+        private IDisposable subscription;
         
         public ViewHideKeyboardOnClickBinding(View view)
             : base(view) {}
@@ -28,7 +28,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (target == null)
                 return;
 
-            _subscription = target.WeakSubscribe(
+            subscription = target.WeakSubscribe(
                 nameof(target.Click),
                 HandleClick);
         }
@@ -37,8 +37,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             if (isDisposing)
             {
-                _subscription?.Dispose();
-                _subscription = null;
+                subscription?.Dispose();
+                subscription = null;
             }
             base.Dispose(isDisposing);
         }

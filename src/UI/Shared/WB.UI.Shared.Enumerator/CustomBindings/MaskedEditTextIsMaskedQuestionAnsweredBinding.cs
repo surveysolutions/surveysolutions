@@ -7,13 +7,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class MaskedEditTextIsMaskedQuestionAnsweredBinding : BaseBinding<MaskedEditText, bool>
     {
-        private IDisposable subscription;
-        
-        public MaskedEditTextIsMaskedQuestionAnsweredBinding(MaskedEditText target)
-            : base(target)
-        {
-        }
+        public MaskedEditTextIsMaskedQuestionAnsweredBinding(MaskedEditText target) : base(target) {}
 
+        private IDisposable subscription;
         public override void SubscribeToEvents()
         {
             var target = Target;
@@ -40,10 +36,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             this.FireValueChanged(value);
         }
 
-        public override MvxBindingMode DefaultMode
-        {
-            get { return MvxBindingMode.TwoWay; }
-        }
+        public override MvxBindingMode DefaultMode => MvxBindingMode.TwoWay;
 
         protected override void Dispose(bool isDisposing)
         {
