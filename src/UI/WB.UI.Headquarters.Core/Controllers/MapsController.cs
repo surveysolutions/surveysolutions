@@ -125,5 +125,17 @@ namespace WB.UI.Headquarters.Controllers
 
             return View(map);
         }
+        
+        [HttpGet]
+        [ActivePage(MenuItem.Maps)]
+        [ExtraHeaderPermissions(HeaderPermissionType.Esri)]
+        public ActionResult MapPreviewJson(string mapName)
+        {
+            MapBrowseItem map = mapPlainStorageAccessor.GetById(mapName);
+            if (map == null)
+                return NotFound();
+
+            return this.Content(map.GeoJson, "application/json");
+        }
     }
 }

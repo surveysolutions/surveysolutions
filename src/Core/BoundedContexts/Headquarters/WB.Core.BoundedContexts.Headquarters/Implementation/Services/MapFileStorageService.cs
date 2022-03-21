@@ -9,6 +9,7 @@ using System.Xml;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NetTopologySuite.Dissolve;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
@@ -322,10 +323,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                         var readHeader = rd.DbaseHeader;
                         item.ShapesCount = readHeader.NumRecords;
-                        
-                        
+
+                        LineDissolver lineDissolver = new LineDissolver();
+
                         List<string> fieldNames = new List<string>(readHeader.NumFields);
                         var features = new List<Feature>(readHeader.NumRecords);
+                        FeatureCollection fc = new FeatureCollection();
 
                         for (int i = 0; i < readHeader.NumFields; i++)
                         {
@@ -334,17 +337,51 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         }
 
                         var indexOf = fieldNames.ToList().IndexOf("label");
-                        if (indexOf >= 0)
+                        HashSet<string> checkOnUnique = new HashSet<string>();
+                        Dictionary<string, int> duplicateLabels = new Dictionary<string, int>();
+                        while (rd.Read())
                         {
-                            HashSet<string> checkOnUnique = new HashSet<string>();
-                            HashSet<string> duplicateLabels = new HashSet<string>();
-                            while (rd.Read())
+                            lineDissolver.Add(rd.Geometry);
+                            
+                            AttributesTable attribs = new AttributesTable();
+
+                            if (indexOf >= 0)
                             {
                                 var labelValue = rd.GetValue(indexOf + 1).ToString();
-                                if (!checkOnUnique.Add(labelValue))
-                                    duplicateLabels.Add(labelValue);
+                                attribs.Add("name", labelValue);
+                                if (!string.IsNullOrWhiteSpace(labelValue) && !checkOnUnique.Add(labelValue))
+                                {
+                                    if (!duplicateLabels.TryAdd(labelValue, 2))
+                                        duplicateLabels[labelValue] += 1;
+                                }
                             }   
+
+                            //attribs.Add("id", rd.MarketId);
+                            IFeature feature = new Feature(rd.Geometry, attribs);
+                            fc.Add(feature);
                         }
+
+                        foreach (var duplicateLabel in duplicateLabels)
+                        {
+                            item.DuplicateLabels.Add(new DuplicateMapLabel()
+                            {
+                                Label = duplicateLabel.Key,
+                                Count = duplicateLabel.Value
+                            });
+                        }
+                       
+                       
+                        var geometry = lineDissolver.GetResult();
+                        var normalized = geometry.Normalized();
+                        var jsonSerializer = GeoJsonSerializer.Create();
+                        StringBuilder sb = new StringBuilder();
+                        TextWriter tw = new StringWriter(sb);
+                        //jsonSerializer.Serialize(tw, normalized.Envelope);
+                        jsonSerializer.Serialize(tw, fc);
+                        tw.Flush();
+                        var json = sb.ToString();
+
+                        item.GeoJson = json;
                     }
                     catch (Exception ex)
                     {

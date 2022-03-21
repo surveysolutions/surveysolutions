@@ -2,6 +2,7 @@
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
@@ -28,8 +29,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             
             Property(x => x.ShapesCount);
             Property(x => x.ShapeType);
+            Property(x => x.GeoJson);
             
             Set(x => x.Users,
+                collection =>
+                {
+                    collection.Key(key => key.Column("map"));
+                    collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                    
+                    collection.Inverse(true);
+                },
+                rel => rel.OneToMany());
+
+            Set(x => x.DuplicateLabels,
                 collection =>
                 {
                     collection.Key(key => key.Column("map"));

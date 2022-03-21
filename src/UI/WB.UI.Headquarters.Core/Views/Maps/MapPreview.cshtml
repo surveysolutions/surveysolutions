@@ -22,22 +22,24 @@
     </style>
     
         <link rel="stylesheet" href="https://js.arcgis.com/4.3/esri/css/main.css">
-        <script src="https://js.arcgis.com/4.3/"></script>
+        <script src="https://js.arcgis.com/4.22/"></script>
         <script>
             require([
                     "esri/Map",
                     "esri/views/MapView",
                     "esri/Graphic",
+                    "esri/geometry/Geometry",
                     "esri/geometry/Polygon",
                     "esri/geometry/Extent",
                     "esri/layers/FeatureLayer",
+                    "esri/layers/GeoJSONLayer",
                     "esri/layers/support/Field",
                     "esri/symbols/SimpleLineSymbol",
                     "esri/symbols/SimpleFillSymbol",
                     "esri/geometry/support/webMercatorUtils",
                     "dojo/domReady!"
                 ],
-                function (Map, MapView, Graphic, Polygon, Extent, FeatureLayer, Field, SimpleLineSymbol, SimpleFillSymbol, webMercatorUtils) {
+                function (Map, MapView, Graphic, Geometry, Polygon, Extent, FeatureLayer, GeoJSONLayer, Field, SimpleLineSymbol, SimpleFillSymbol, webMercatorUtils) {
 
                     var startExtent = new Extent({
                         "xmin":@Model.XMinVal,"ymin":@Model.YMinVal,"xmax":@Model.XMaxVal,"ymax":@Model.YMaxVal,
@@ -49,7 +51,7 @@
 
                     var map = new Map({
                         basemap: "hybrid",
-                        extent: startExtent
+                        extent: startExtent,
                     });
 
                     var polygon = Polygon.fromExtent(startExtent);
@@ -70,45 +72,25 @@
                         container: "viewDiv",
                         map: map
                     });
-
-                    view.graphics.addMany([polygonGraphic]);
+                    
                     view.extent = startExtent;
+
+
+                    var hasGeoJson = @(!string.IsNullOrEmpty(Model.GeoJson) ? "true" : "false")
+
+                    if (hasGeoJson)
+                    {
+                        var geojsonurl = "@Url.Action("MapPreviewJson", "Maps", new { mapName = Model.FileName })"
+                        const geojsonlayer = new GeoJSONLayer({
+                            url: geojsonurl,
+                            //geometryType: "polygon",
+                          });
+                        map.add(geojsonlayer);
+                    }
+                    else {
+                        view.graphics.addMany([polygonGraphic]);
+                    }
                     
-                    /*var graphics = {
-                        geometryType: "Point",
-                        fields: "",
-                        objectIdField: "FID", 
-                    };
-                    
-                    const layer = new FeatureLayer({
-                        geometryType: "Point",
-                        source: graphics,  // array of graphics objects
-                        objectIdField: "FID",
-                        fields: [{
-                            name: "FID",
-                            type: "oid"
-                        }, {
-                            name: "url",
-                            type: "string"
-                        }],
-                        popupTemplate: {
-                            content: "<img src='{url}'>"
-                        },
-                        renderer: {  // overrides the layer's default renderer
-                            type: "simple",
-                            symbol: {
-                                type: "text",
-                                color: "#7A003C",
-                                text: "\ue661",
-                                font: {
-                                    size: 20,
-                                    family: "CalciteWebCoreIcons"
-                                }
-                            }
-                        }
-                    });
-                    
-                    map.add(layer);*/
                 });
         </script>
     

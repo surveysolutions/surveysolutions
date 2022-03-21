@@ -8,6 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
         public MapBrowseItem()
         {
             this.Users = new HashSet<UserMap>();
+            this.DuplicateLabels = new List<DuplicateMapLabel>();
         }
         public virtual string Id { get; set; }
 
@@ -26,5 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
         public virtual ICollection<UserMap> Users { get; set; }
         public virtual string ShapeType { get; set; }
         public virtual int? ShapesCount { get; set; }
+        public virtual string GeoJson { get; set; }
+        public virtual ICollection<DuplicateMapLabel> DuplicateLabels { get; set; }
     }
 }
