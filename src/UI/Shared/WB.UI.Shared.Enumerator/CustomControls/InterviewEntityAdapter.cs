@@ -12,6 +12,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             : base(bindingContext)
         {
         }
+        
+        //temporary solution of System.MissingMethodException: No constructor found
+        //on destroy activity 
+        public InterviewEntityAdapter(System.IntPtr pointer, Android.Runtime.JniHandleOwnership ownership)
+            :base(pointer, ownership) { }
 
         public override void OnViewDetachedFromWindow(Java.Lang.Object holder)
         {
