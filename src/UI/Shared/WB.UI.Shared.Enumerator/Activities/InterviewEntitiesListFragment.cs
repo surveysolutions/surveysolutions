@@ -82,6 +82,13 @@ namespace WB.UI.Shared.Enumerator.Activities
         
         public override void OnDestroy()
         {
+            base.OnDestroy();
+        }
+
+        public override void OnDetach()
+        {
+            base.OnDetach();
+            
             recyclerView?.Dispose();
             layoutManager?.Dispose();
             adapter?.Dispose();
@@ -89,8 +96,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             recyclerView = null;
             layoutManager  = null;
             adapter = null;
-            
-            base.OnDestroy();
         }
 
         protected override void Dispose(bool disposing)

@@ -16,24 +16,17 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (target == null)
                 return;
             
-            subscription = target.WeakSubscribe(
+            subscription = target.WeakSubscribe<MaskedEditText, EventArgs>(
                 nameof(target.IsMaskedFormAnsweredChanged),
-                IsMaskedFormAnsweredChangedHandler);
+                (sender, args) => {
+                    var value = this.Target?.IsMaskedFormAnswered;
+                    this.FireValueChanged(value); }
+            );
         }
 
         protected override void SetValueToView(MaskedEditText control, bool value)
         {
             // ignore, we only read this property from control
-        }
-
-        private void IsMaskedFormAnsweredChangedHandler(object sender, EventArgs e)
-        {
-            var target = this.Target;
-            if (target == null)
-                return;
-
-            var value = target.IsMaskedFormAnswered;
-            this.FireValueChanged(value);
         }
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.TwoWay;
