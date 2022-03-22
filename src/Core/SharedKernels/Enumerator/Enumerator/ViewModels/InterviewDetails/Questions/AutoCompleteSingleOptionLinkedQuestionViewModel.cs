@@ -31,8 +31,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        
         private readonly QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState;
-        private string? filterText;
+        
         private IEnumerable<Guid> parentRosterIds;
         private List<SingleOptionLinkedQuestionOptionViewModel> autoCompleteSuggestions;
         private string interviewId = null!;
@@ -102,6 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public Identity Identity { get; private set; } = null!;
 
+        private string? filterText;
         public string? FilterText
         {
             get => filterText;
@@ -177,6 +179,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void Clear()
         {
+            //remove suggestions to avoid delayed filtering 
+            this.AutoCompleteSuggestions = new List<SingleOptionLinkedQuestionOptionViewModel>();
             this.FilterText = null;
         }
 
