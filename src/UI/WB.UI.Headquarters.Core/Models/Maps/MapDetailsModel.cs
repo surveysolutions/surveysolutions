@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Headquarters.Models.Maps
+﻿using WB.Core.BoundedContexts.Headquarters.Views.Maps;
+
+namespace WB.UI.Headquarters.Models.Maps
 {
     public class MapDetailsModel
     {
@@ -23,5 +25,7 @@
         public string MapPreviewUrl { get; set; }
         public string MapsUrl { get; set; }
         public string DeleteMapUserLinkUrl { get; set; }
+        public DuplicateMapLabel[] DuplicateMapLabels { get; set; }
+        public bool IsPreviewGeoJson { get; set; }
     }
 }

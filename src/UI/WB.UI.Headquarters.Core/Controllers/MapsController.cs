@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -22,7 +24,6 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory userViewFactory;
-
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
 
         public MapsController(
@@ -111,6 +112,8 @@ namespace WB.UI.Headquarters.Controllers
                     ShapeType = map.ShapeType,
                     ShapesCount = map.ShapesCount,
                     DeleteMapUserLinkUrl = Url.Action("DeleteMapUser", "MapsApi"),
+                    DuplicateMapLabels = map.DuplicateLabels?.ToArray() ?? Array.Empty<DuplicateMapLabel>(),
+                    IsPreviewGeoJson = map.IsPreviewGeoJson,
                 });
         }
 
@@ -131,7 +134,7 @@ namespace WB.UI.Headquarters.Controllers
         [ExtraHeaderPermissions(HeaderPermissionType.Esri)]
         public ActionResult MapPreviewJson(string mapName)
         {
-            MapBrowseItem map = mapPlainStorageAccessor.GetById(mapName);
+            var map = mapPlainStorageAccessor.GetById(mapName);
             if (map == null)
                 return NotFound();
 

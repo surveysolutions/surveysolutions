@@ -28,6 +28,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
         public virtual string ShapeType { get; set; }
         public virtual int? ShapesCount { get; set; }
         public virtual string GeoJson { get; set; }
+        public virtual bool HasGeoJson => !string.IsNullOrEmpty(GeoJson);
+        public virtual bool IsPreviewGeoJson { get; set; }
         public virtual ICollection<DuplicateMapLabel> DuplicateLabels { get; set; }
     }
 }

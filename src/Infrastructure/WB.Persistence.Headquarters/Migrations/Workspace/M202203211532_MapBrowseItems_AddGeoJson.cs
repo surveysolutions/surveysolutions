@@ -13,6 +13,10 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
                 .Column("geojson")
                 .OnTable("mapbrowseitems")
                 .AsString().Nullable();
+            this.Create
+                .Column("ispreviewgeojson")
+                .OnTable("mapbrowseitems")
+                .AsBoolean().NotNullable().WithDefaultValue(false);
         }
     }
 }

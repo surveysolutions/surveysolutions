@@ -29,7 +29,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             
             Property(x => x.ShapesCount);
             Property(x => x.ShapeType);
-            Property(x => x.GeoJson);
+            Property(x => x.GeoJson, m => m.Lazy(true));
+            Property(x => x.IsPreviewGeoJson);
             
             Set(x => x.Users,
                 collection =>

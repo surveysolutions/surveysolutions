@@ -34,12 +34,13 @@
                     "esri/layers/FeatureLayer",
                     "esri/layers/GeoJSONLayer",
                     "esri/layers/support/Field",
+                    "esri/layers/support/LabelClass",
                     "esri/symbols/SimpleLineSymbol",
                     "esri/symbols/SimpleFillSymbol",
                     "esri/geometry/support/webMercatorUtils",
                     "dojo/domReady!"
                 ],
-                function (Map, MapView, Graphic, Geometry, Polygon, Extent, FeatureLayer, GeoJSONLayer, Field, SimpleLineSymbol, SimpleFillSymbol, webMercatorUtils) {
+                function (Map, MapView, Graphic, Geometry, Polygon, Extent, FeatureLayer, GeoJSONLayer, Field, LabelClass, SimpleLineSymbol, SimpleFillSymbol, webMercatorUtils) {
 
                     var startExtent = new Extent({
                         "xmin":@Model.XMinVal,"ymin":@Model.YMinVal,"xmax":@Model.XMaxVal,"ymax":@Model.YMaxVal,
@@ -76,14 +77,26 @@
                     view.extent = startExtent;
 
 
-                    var hasGeoJson = @(!string.IsNullOrEmpty(Model.GeoJson) ? "true" : "false")
+                    var hasGeoJson = @(Model.HasGeoJson ? "true" : "false")
 
                     if (hasGeoJson)
                     {
+                        const labelClass = new LabelClass({
+                          labelExpressionInfo: { expression: "$feature.label" },
+                          symbol: {
+                            type: "text",  // autocasts as new TextSymbol()
+                            color: "black",
+                            haloSize: 1,
+                            haloColor: "white"
+                          }
+                        });
+                        
                         var geojsonurl = "@Url.Action("MapPreviewJson", "Maps", new { mapName = Model.FileName })"
                         const geojsonlayer = new GeoJSONLayer({
                             url: geojsonurl,
                             //geometryType: "polygon",
+                            labelingInfo : labelClass,
+                            labelsVisible: true,
                           });
                         map.add(geojsonlayer);
                     }

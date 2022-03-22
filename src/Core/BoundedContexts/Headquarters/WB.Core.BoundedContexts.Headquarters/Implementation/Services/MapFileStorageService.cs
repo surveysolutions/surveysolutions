@@ -13,6 +13,7 @@ using NetTopologySuite.Dissolve;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
+using NetTopologySuite.Operation.Union;
 using Newtonsoft.Json;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Maps;
@@ -324,10 +325,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         var readHeader = rd.DbaseHeader;
                         item.ShapesCount = readHeader.NumRecords;
 
-                        LineDissolver lineDissolver = new LineDissolver();
-
                         List<string> fieldNames = new List<string>(readHeader.NumFields);
-                        var features = new List<Feature>(readHeader.NumRecords);
                         FeatureCollection fc = new FeatureCollection();
 
                         for (int i = 0; i < readHeader.NumFields; i++)
@@ -336,23 +334,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             fieldNames.Add(rd.GetName(i + 1));
                         }
 
-                        var indexOf = fieldNames.ToList().IndexOf("label");
+                        var labelIndexOf = fieldNames.ToList().IndexOf("label");
                         HashSet<string> checkOnUnique = new HashSet<string>();
                         Dictionary<string, int> duplicateLabels = new Dictionary<string, int>();
                         while (rd.Read())
                         {
-                            lineDissolver.Add(rd.Geometry);
-                            
                             AttributesTable attribs = new AttributesTable();
 
-                            if (indexOf >= 0)
+                            if (labelIndexOf >= 0)
                             {
-                                var labelValue = rd.GetValue(indexOf + 1).ToString();
-                                attribs.Add("name", labelValue);
-                                if (!string.IsNullOrWhiteSpace(labelValue) && !checkOnUnique.Add(labelValue))
+                                var labelValue = rd.GetValue(labelIndexOf + 1).ToString();
+
+                                if (!string.IsNullOrWhiteSpace(labelValue))
                                 {
-                                    if (!duplicateLabels.TryAdd(labelValue, 2))
-                                        duplicateLabels[labelValue] += 1;
+                                    attribs.Add("label", labelValue);
+
+                                    if (!checkOnUnique.Add(labelValue))
+                                    {
+                                        if (!duplicateLabels.TryAdd(labelValue, 2))
+                                            duplicateLabels[labelValue] += 1;
+                                    }
                                 }
                             }   
 
@@ -369,17 +370,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                 Count = duplicateLabel.Value
                             });
                         }
-                       
-                       
-                        var geometry = lineDissolver.GetResult();
-                        var normalized = geometry.Normalized();
-                        var jsonSerializer = GeoJsonSerializer.Create();
-                        StringBuilder sb = new StringBuilder();
-                        TextWriter tw = new StringWriter(sb);
-                        //jsonSerializer.Serialize(tw, normalized.Envelope);
-                        jsonSerializer.Serialize(tw, fc);
-                        tw.Flush();
-                        var json = sb.ToString();
+
+                        var json = GetGeoJson(fc);
+                        var byteCount = Encoding.Unicode.GetByteCount(json);
+                        if (byteCount > geospatialConfig.Value.GeoJsonMaxSize)
+                        {
+                            UnaryUnionOp unionOp = new UnaryUnionOp(fc.Select(f => f.Geometry));
+                            var union = unionOp.Union();
+                            FeatureCollection unionFc = new FeatureCollection();
+                            unionFc.Add(new Feature(union, new AttributesTable()));
+                            json = GetGeoJson(unionFc);
+                            item.IsPreviewGeoJson = true;
+                        }
 
                         item.GeoJson = json;
                     }
@@ -393,6 +395,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
 
             return item;
+        }
+
+        private static string GetGeoJson(FeatureCollection fc)
+        {
+            var jsonSerializer = GeoJsonSerializer.Create();
+            StringBuilder sb = new StringBuilder();
+            TextWriter tw = new StringWriter(sb);
+            jsonSerializer.Serialize(tw, fc);
+            tw.Flush();
+            var json = sb.ToString();
+            return json;
         }
 
         public async Task<MapBrowseItem> DeleteMap(string mapName)
