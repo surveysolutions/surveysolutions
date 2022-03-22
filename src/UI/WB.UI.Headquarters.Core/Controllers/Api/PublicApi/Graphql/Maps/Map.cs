@@ -34,6 +34,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
                         .ToList();
                 })
                 .Type<ListType<UserMapObjectType>>();
+            descriptor.Ignore(m => m.HasGeoJson);
+            descriptor.Ignore(m => m.GeoJson);
+            descriptor.Ignore(m => m.IsPreviewGeoJson);
+            descriptor.Ignore(m => m.DuplicateLabels);
         }
     }
 }
