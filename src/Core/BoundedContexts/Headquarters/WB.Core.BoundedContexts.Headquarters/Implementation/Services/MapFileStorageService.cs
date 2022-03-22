@@ -367,7 +367,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             item.DuplicateLabels.Add(new DuplicateMapLabel()
                             {
                                 Label = duplicateLabel.Key,
-                                Count = duplicateLabel.Value
+                                Count = duplicateLabel.Value,
+                                Map = item,
                             });
                         }
 

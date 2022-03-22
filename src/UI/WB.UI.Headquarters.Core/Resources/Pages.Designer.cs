@@ -3175,6 +3175,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Warning! Shapefile contains duplicate labels.
+        /// </summary>
+        public static string MapDetails_DuplicateLabelsWarning {
+            get {
+                return ResourceManager.GetString("MapDetails_DuplicateLabelsWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Imported on.
         /// </summary>
         public static string MapDetails_ImportedOn {

@@ -25,7 +25,13 @@ namespace WB.UI.Headquarters.Models.Maps
         public string MapPreviewUrl { get; set; }
         public string MapsUrl { get; set; }
         public string DeleteMapUserLinkUrl { get; set; }
-        public DuplicateMapLabel[] DuplicateMapLabels { get; set; }
+        public DuplicateLabelModel[] DuplicateMapLabels { get; set; }
         public bool IsPreviewGeoJson { get; set; }
+    }
+
+    public class DuplicateLabelModel
+    {
+        public string Label { get; set; }
+        public int Count { get; set; }
     }
 }

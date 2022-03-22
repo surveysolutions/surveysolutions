@@ -34,12 +34,15 @@
                 </div>
                 <div class="row"
                     v-if="$config.model.duplicateMapLabels.length > 0">
-                    <ul class="list-unstyled">
-                        <li v-for="item in $config.model.duplicateMapLabels"
-                            :key="item.label">
-                            <b>{{ item.label }}:</b> <span>{{ item.count }}</span>
-                        </li>
-                    </ul>
+                    <div class="col-md-12 col-sm-12 questionnaire-statistics">
+                        <p style="color:red">{{ $t("Pages.MapDetails_DuplicateLabelsWarning") }} </p>
+                        <ul class="list-unstyled">
+                            <li v-for="item in $config.model.duplicateMapLabels"
+                                :key="item.label">
+                                <b>{{ item.label }}</b> - <span>{{ item.count }}</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <iframe width="100%"
                     height="550px"
