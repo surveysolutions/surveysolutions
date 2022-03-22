@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Value = value;
             this.Title = sTitle;
             this.IsProtected = isProtected;
-            this.ItemTag = $"{questionState.Header.Identity}_Opt_{sTitle}";
+            this.ItemTag = $"{questionState.Header.Identity}_Opt_{value}";
 
             this.setAnswer = setAnswer;
         }

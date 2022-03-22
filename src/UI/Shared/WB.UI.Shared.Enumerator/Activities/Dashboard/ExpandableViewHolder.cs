@@ -78,7 +78,7 @@ namespace WB.UI.Shared.Enumerator.Activities.Dashboard
                 popup.MenuItemClick += (s, e) =>
                     {
                         var action = dashboardItem.ContextMenu.SingleOrDefault(a => a.Tag == e.Item.GetHashCode());
-                        action?.Command.Execute();
+                        action?.Command?.Execute();
                     };
 
                 popup.Show();
