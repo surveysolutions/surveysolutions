@@ -21,6 +21,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         public int Orientation = 0;
         public bool DebugDraw = false;
 
+        private bool subscribed = false;
+
         public FlowLayout(Context context)
             : this(context, null)
         {
@@ -42,7 +44,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 this.Adapter = adapter;
                 this.Adapter.ItemTemplateId = num;
             }
-            this.ChildViewRemoved += new EventHandler<ViewGroup.ChildViewRemovedEventArgs>(this.OnChildViewRemoved);
+
+            subscribed = true;
+            this.ChildViewRemoved += this.OnChildViewRemoved;
         }
 
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
@@ -239,7 +243,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     return;
                 if (withChangedEvent != null)
                 {
-                    withChangedEvent.DataSetChanged -= new EventHandler<NotifyCollectionChangedEventArgs>(this.AdapterOnDataSetChanged);
+                    withChangedEvent.DataSetChanged -= this.AdapterOnDataSetChanged;
                     if (value != null)
                     {
                         value.ItemsSource = withChangedEvent.ItemsSource;
@@ -248,9 +252,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 }
                 this._adapter = value;
                 if (this._adapter != null)
-                    this._adapter.DataSetChanged += new EventHandler<NotifyCollectionChangedEventArgs>(this.AdapterOnDataSetChanged);
-                if (this._adapter != null)
-                    return;
+                    this._adapter.DataSetChanged += this.AdapterOnDataSetChanged;
             }
         }
 
@@ -439,6 +441,30 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     a.Recycle();
                 }
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (subscribed)
+                {
+                    this.ChildViewRemoved -= this.OnChildViewRemoved;
+                    subscribed = false;
+                }
+                
+                IMvxAdapterWithChangedEvent withChangedEvent = this._adapter;
+                if (withChangedEvent != null)
+                {
+                    withChangedEvent.DataSetChanged -= this.AdapterOnDataSetChanged;
+                }
+
+                if (this._adapter != null)
+                {
+                    this._adapter.Dispose();
+                }
+            }
+            base.Dispose(disposing);
         }
     }
 }

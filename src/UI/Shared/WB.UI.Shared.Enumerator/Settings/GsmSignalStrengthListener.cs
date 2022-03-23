@@ -1,3 +1,4 @@
+using System;
 using Android.Telephony;
 
 namespace WB.UI.Shared.Enumerator.Settings
@@ -7,12 +8,14 @@ namespace WB.UI.Shared.Enumerator.Settings
         private readonly TelephonyManager telephonyManager;
         public int SignalStrength { get; private set; }
 
+        [Obsolete]
         public GsmSignalStrengthListener(TelephonyManager telephonyManager)
         {
             this.telephonyManager = telephonyManager;
             this.telephonyManager.Listen(this, PhoneStateListenerFlags.SignalStrengths);
         }
 
+        [Obsolete]
         public override void OnSignalStrengthsChanged(SignalStrength newSignalStrength)
         {
             if (newSignalStrength.IsGsm)

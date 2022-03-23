@@ -28,12 +28,14 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 this.owner = owner;
             }
 
+            private int localFilerSetCounter = -1;
             #region Overrides of Filter
 
             protected override FilterResults PerformFiltering(ICharSequence constraint)
             {
                 lock (owner._syncLock)
                 {
+                    localFilerSetCounter = owner.FilterSetCounter;
                     var filteredValues = owner.FilterValues(constraint?.ToString());
 
                     return new FilterResults
@@ -51,8 +53,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
                 lock (owner._syncLock)
                 {
-                    owner.FilteredItemsSource = items.Object as IEnumerable;
-                    owner.NotifyDataSetChanged();
+                    if (localFilerSetCounter == owner.FilterSetCounter)
+                    {
+                        owner.FilteredItemsSource = items.Object as IEnumerable;
+                        owner.NotifyDataSetChanged();
+                    }
                 }
             }
 
@@ -74,6 +79,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         public override bool IsEnabled(int position) => !Loading;
 
+        public int FilterSetCounter = 0;
+        
         public override IEnumerable ItemsSource
         {
             get => base.ItemsSource;
@@ -81,6 +88,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {
                 lock (_syncLock)
                 {
+                    FilterSetCounter++;
                     FilteredItemsSource = value;
                 }
                 base.ItemsSource = value;

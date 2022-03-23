@@ -21,10 +21,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         protected override void SetValueToView(MaterialButton control, GroupStateViewModel value)
         {
             var resourceColorId = GetTextColorId(value?.SimpleStatus);
-
             var colorResourceId = ContextCompat.GetColor(control.Context, resourceColorId);
-            
-            
             var color = new Color(colorResourceId);
             control.SetTextColor(color);
             control.StrokeColor = ColorStateList.ValueOf(color);

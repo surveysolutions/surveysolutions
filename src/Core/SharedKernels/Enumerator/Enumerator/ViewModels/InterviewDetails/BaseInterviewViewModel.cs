@@ -360,7 +360,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private IReadOnlyCollection<string> availableLanguages;
         public override IReadOnlyCollection<string> AvailableLanguages => this.availableLanguages;
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
+        public IMvxAsyncCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();

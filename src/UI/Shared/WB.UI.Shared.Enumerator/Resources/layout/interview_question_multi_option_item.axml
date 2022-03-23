@@ -6,7 +6,7 @@
               local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutOptionBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false, IsProtected, CanBeChecked))">
   <TextView
     style="@style/Interview_Question_MultiOptionOrder"
-    local:MvxBind="Text CheckedOrder; Visible CheckedOrder; Tag Format('tv_Order_', ItemTag)"/>
+    local:MvxBind="Text CheckedOrder; Visible CheckedOrder; Tag Format('tv_Order_{0}', ItemTag)"/>
 
   <CheckBox 
     style="@style/Interview_Question_Answer_Option_Input"
@@ -19,6 +19,6 @@
                    Tag ItemTag;" />
 
     <ImageView style="@style/Interview_Question_ProtectedAnswerIcon"
-               local:MvxBind="Visible IsProtected; Tag Format('iv_Lock_', ItemTag)" 
+               local:MvxBind="Visible IsProtected; Tag Format('iv_Lock_{0}', ItemTag)" 
                local:srcCompat="@drawable/lock_icon" />
 </LinearLayout>

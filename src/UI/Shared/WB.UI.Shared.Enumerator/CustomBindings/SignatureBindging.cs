@@ -1,12 +1,16 @@
 ﻿using System;
 using System.IO;
 using MvvmCross.Binding;
+using MvvmCross.WeakSubscription;
 using Xamarin.Controls;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class SignatureBinding : BaseBinding<SignaturePadView, byte[]>
     {
+        private IDisposable strokeCompletedSubscription;
+        private IDisposable clearedSubscription;
+        
         public override MvxBindingMode DefaultMode => MvxBindingMode.TwoWay;
 
         public SignatureBinding(SignaturePadView androidControl) : base(androidControl)
@@ -17,8 +21,16 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             base.SubscribeToEvents();
 
-            Target.SignaturePadCanvas.StrokeCompleted += SignaturePadCanvasOnStrokeCompleted;
-            Target.SignaturePadCanvas.Cleared += SignaturePadCanvasOnStrokeCompleted;
+            if(this.Target == null)
+                return;
+
+            strokeCompletedSubscription = this.Target.SignaturePadCanvas.WeakSubscribe(
+                nameof(this.Target.SignaturePadCanvas.StrokeCompleted),
+                SignaturePadCanvasOnStrokeCompleted);
+
+            clearedSubscription = Target.SignaturePadCanvas.WeakSubscribe(
+                nameof(this.Target.SignaturePadCanvas.Cleared),
+                SignaturePadCanvasOnStrokeCompleted);
         }
 
         private async void SignaturePadCanvasOnStrokeCompleted(object sender, EventArgs eventArgs)
@@ -54,13 +66,13 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            if (IsDisposed)
-                return;
-
-            if (Target?.SignaturePadCanvas != null && Target?.SignaturePadCanvas.Handle != IntPtr.Zero)
+            if (isDisposing)
             {
-                Target.SignaturePadCanvas.StrokeCompleted -= SignaturePadCanvasOnStrokeCompleted;
-                Target.SignaturePadCanvas.Cleared -= SignaturePadCanvasOnStrokeCompleted;
+                clearedSubscription?.Dispose();
+                clearedSubscription = null;
+                
+                strokeCompletedSubscription?.Dispose();
+                strokeCompletedSubscription = null;
             }
 
             base.Dispose(isDisposing);

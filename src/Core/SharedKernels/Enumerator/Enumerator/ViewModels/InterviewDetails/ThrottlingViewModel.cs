@@ -53,9 +53,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            FinishThrottledAction();
-
+            if (isDisposed)
+                return;
+            
             isDisposed = true;
+            
+            FinishThrottledAction();
             callbackAction = null;
             timer?.Dispose();
         }

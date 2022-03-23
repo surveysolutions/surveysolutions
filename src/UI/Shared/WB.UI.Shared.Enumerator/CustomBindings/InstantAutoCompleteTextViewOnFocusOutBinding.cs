@@ -10,7 +10,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
     public class InstantAutoCompleteTextViewOnFocusOutBinding : BaseBinding<InstantAutoCompleteTextView, ICommand>
     {
         private ICommand command;
-        private IDisposable subscribtion;
+        private IDisposable subscription;
 
         public InstantAutoCompleteTextViewOnFocusOutBinding(InstantAutoCompleteTextView androidControl) : base(androidControl)
         {
@@ -32,7 +32,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (autoComplete == null)
                 return;
 
-            subscribtion = autoComplete.WeakSubscribe<InstantAutoCompleteTextView, View.FocusChangeEventArgs>(nameof(autoComplete.FocusChange), this.OnFocusChange);
+            subscription = autoComplete.WeakSubscribe<InstantAutoCompleteTextView, View.FocusChangeEventArgs>
+                (nameof(autoComplete.FocusChange), this.OnFocusChange);
         }
 
         private void OnFocusChange(object sender, View.FocusChangeEventArgs e)
@@ -45,12 +46,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            if (IsDisposed)
-                return;
-
             if (isDisposing)
             {
-                this.subscribtion.Dispose();
+                this.subscription?.Dispose();
+                this.subscription = null;
             }
             base.Dispose(isDisposing);
         }
