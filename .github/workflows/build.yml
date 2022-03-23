@@ -46,7 +46,7 @@ jobs:
 
   mobile:
     needs: [prepare, tests]
-    runs-on: windows-2019
+    runs-on: windows-2022
     environment: ${{ needs.prepare.outputs.environment }}
 
     strategy:
