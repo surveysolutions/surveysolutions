@@ -13,22 +13,22 @@
                 <div class="row">
                     <div class="col-md-4 col-sm-4 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li v-if="!$config.model.shapeType"><b>{{ $t("Pages.MapDetails_MaxScale") }}:</b> <span>{{$config.model.maxScale}}</span></li>
-                            <li v-if="!$config.model.shapesCount"><b>{{ $t("Pages.MapDetails_MinScale") }}:</b> <span>{{$config.model.minScale}}</span></li>
-                            <li v-if="$config.model.shapeType"><b>{{ $t("Pages.MapDetails_ShapeType") }}:</b> <span>{{$config.model.shapeType}}</span></li>
-                            <li v-if="$config.model.shapesCount"><b>{{ $t("Pages.MapDetails_ShapesCount") }}:</b> <span>{{$config.model.shapesCount}}</span></li>
+                            <li v-if="!$config.model.shapeType"><strong>{{ $t("Pages.MapDetails_MaxScale") }}:</strong> <span>{{$config.model.maxScale}}</span></li>
+                            <li v-if="!$config.model.shapesCount"><strong>{{ $t("Pages.MapDetails_MinScale") }}:</strong> <span>{{$config.model.minScale}}</span></li>
+                            <li v-if="$config.model.shapeType"><strong>{{ $t("Pages.MapDetails_ShapeType") }}:</strong> <span>{{$config.model.shapeType}}</span></li>
+                            <li v-if="$config.model.shapesCount"><strong>{{ $t("Pages.MapDetails_ShapesCount") }}:</strong> <span>{{$config.model.shapesCount}}</span></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-4 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li><b>{{ $t("Pages.MapDetails_Size") }} :</b> <span>{{$config.model.size}}</span></li>
-                            <li><b>Wkid:</b> <span>{{$config.model.wkid}}</span></li>
+                            <li><strong>{{ $t("Pages.MapDetails_Size") }} :</strong> <span>{{$config.model.size}}</span></li>
+                            <li><strong>Wkid:</strong> <span>{{$config.model.wkid}}</span></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-4 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li><b>{{ $t("Pages.MapDetails_ImportedOn") }}:</b> <span>{{$config.model.importDate}}</span></li>
-                            <li v-if="$config.model.uploadedBy"><b>{{ $t("Pages.MapDetails_UploadedBy") }}:</b> <span>{{$config.model.uploadedBy}}</span></li>
+                            <li><strong>{{ $t("Pages.MapDetails_ImportedOn") }}:</strong> <span>{{$config.model.importDate}}</span></li>
+                            <li v-if="$config.model.uploadedBy"><strong>{{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{$config.model.uploadedBy}}</span></li>
                         </ul>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                         <ul class="list-unstyled">
                             <li v-for="item in $config.model.duplicateMapLabels"
                                 :key="item.label">
-                                <b>{{ item.label }}</b> - <span>{{ item.count }}</span>
+                                <strong>{{ item.label }}</strong> - <span>{{ item.count }}</span>
                             </li>
                         </ul>
                     </div>
@@ -47,7 +47,7 @@
                 <iframe width="100%"
                     height="550px"
                     :src="$config.model.mapPreviewUrl"></iframe>
-                <p>{{ $t("Pages.MapDetails_MapDisclaimer") }} </p>
+                <p>{{ mapDisclaimer }} </p>
             </div>
 
             <div id="list"
@@ -195,6 +195,15 @@ export default {
                 order: [[0, 'asc']],
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
+        },
+        mapDisclaimer() {
+            if (this.$config.model.shapesCount)
+            {
+                return this.$config.model.isPreviewGeoJson
+                    ? this.$t('Pages.MapDetails_SimplifiedShapefilesDisclaimer')
+                    : this.$t('Pages.MapDetails_FullShapefilesDisclaimer')
+            }
+            return this.$t('Pages.MapDetails_MapDisclaimer')
         },
     },
 

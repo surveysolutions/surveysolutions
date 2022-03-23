@@ -3184,6 +3184,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This preview shows the uploaded shapefile superimposed on the satellite image base layer..
+        /// </summary>
+        public static string MapDetails_FullShapefilesDisclaimer {
+            get {
+                return ResourceManager.GetString("MapDetails_FullShapefilesDisclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Imported on.
         /// </summary>
         public static string MapDetails_ImportedOn {
@@ -3202,7 +3211,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This preview shows the loaded map superimposed on the world map.
+        ///   Looks up a localized string similar to This preview shows the loaded map superimposed on the world map..
         /// </summary>
         public static string MapDetails_MapDisclaimer {
             get {
@@ -3252,6 +3261,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string MapDetails_ShapeType {
             get {
                 return ResourceManager.GetString("MapDetails_ShapeType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This preview shows a reduced version of the uploaded shapefile superimposed on the satellite image base layer. The original uploaded shapefile is not shown in this preview due to its large size..
+        /// </summary>
+        public static string MapDetails_SimplifiedShapefilesDisclaimer {
+            get {
+                return ResourceManager.GetString("MapDetails_SimplifiedShapefilesDisclaimer", resourceCulture);
             }
         }
         
