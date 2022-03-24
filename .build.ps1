@@ -220,7 +220,10 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
 
 #endregion
 task frontend {
-    $env:NODE_OPTIONS="--openssl-legacy-provider"
+    $nodever = (node --version).replace("v", "").split(".")[0]
+    if ($nodever -ge 17) {
+        $env:NODE_OPTIONS="--openssl-legacy-provider"
+    }
     exec { 
         Set-Location ./src/UI/WB.UI.Frontend
         npm ci
