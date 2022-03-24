@@ -114,7 +114,7 @@
     ],
     "jest": {
         "verbose": true,
-        "testEnvironment": "JsDom",
+        "testEnvironment": "jsdom",
         "setupFiles": [
             "./tests/setup-jest.js"
         ],
