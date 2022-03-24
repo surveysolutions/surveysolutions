@@ -19,7 +19,8 @@ param(
     [string] $releaseBranch = 'release', # Docker builds will push to release 
     [switch] $noDockerPush,
     [switch] $signapk ,
-    [string] $apkFolder = "artifacts" # where should docker build look for apk artifacts
+    [string] $apkFolder = "artifacts", # where should docker build look for apk artifacts
+    [string] $runtime = "win-x64"
 )
 
 #region Bootstrap
@@ -48,7 +49,14 @@ if ($null -eq $RevisionId) {
     $RevisionId = (git rev-parse HEAD)
 }
 
-$tmp = $ENV:TEMP + "/.build"
+if ($null -ne $ENV:TEMP) {
+    $tmp = $ENV:TEMP + "/.build"
+}
+else {
+    # most likely we're not on Windows
+    $tmp = [System.IO.Path]::GetTempPath() + ".build"
+}
+
 $gitBranch = $ENV:GIT_BRANCH
 if($null -eq $gitBranch) {
     $gitBranch = (git branch --show-current)
@@ -212,6 +220,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
 
 #endregion
 task frontend {
+    $env:NODE_OPTIONS="--openssl-legacy-provider"
     exec { 
         Set-Location ./src/UI/WB.UI.Frontend
         npm ci
@@ -221,9 +230,17 @@ task frontend {
 
 task PackageHq frontend, {
     exec {
-        dotnet publish ./src/UI/WB.UI.Headquarters.Core `
-            --self-contained  `
-            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/hq
+        dotnet publish @(
+            "./src/UI/WB.UI.Headquarters.Core",
+            "-c", "Release",
+            "-p:Version=$VERSION",
+            "-p:InformationalVersion=$infoVersion",
+            "-o", "$tmp/hq"
+            if ($runtime) {
+                "-r", $runtime,
+                "--self-contained"
+            }
+        )
     }
     Compress $tmp/hq $output/WB.UI.Headquarters.zip
 }
@@ -234,17 +251,35 @@ task PackageHqOffline frontend, {
     }    
 
     exec {
-        dotnet publish ./src/Services/Export/WB.Services.Export.Host `
-            -c Release -r win-x64 --no-self-contained  `
-            -p:Version=$VERSION -p:InformationalVersion=$infoVersion `
-            -o ./src/UI/WB.UI.Headquarters.Core/Export.Service
+        dotnet publish @(
+            "./src/Services/Export/WB.Services.Export.Host",
+            "-c", "Release",
+            "--no-self-contained",
+            "-p:Version=$VERSION",
+            "-p:InformationalVersion=$infoVersion",
+            "-o", "./src/UI/WB.UI.Headquarters.Core/Export.Service"
+            if ($runtime) {
+                "-r", $runtime
+            }
+        )
     }
      
     exec {
-        dotnet publish ./src/UI/WB.UI.Headquarters.Core `
-            /p:PublishSingleFile=true /p:SelfContained=False /p:AspNetCoreHostingModel=outofprocess `
-            /p:IncludeAllContentForSelfExtract=true `
-            -c Release -r win-x64 --no-self-contained    -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/hq-offline
+        dotnet publish @(
+            "./src/UI/WB.UI.Headquarters.Core",
+            "/p:SelfContained=False",
+            "/p:AspNetCoreHostingModel=outofprocess",
+            "/p:IncludeAllContentForSelfExtract=true",
+            "-p:Version=$VERSION",
+            "-p:InformationalVersion=$infoVersion",
+            "-c", "Release",
+            "-o", "$tmp/hq-offline",
+            "--no-self-contained"
+            if ($runtime) {
+                "/p:PublishSingleFile=true",
+                "-r", $runtime
+            }
+        )
     }
 
     New-Item -Type Directory $tmp/hq-prepare -ErrorAction SilentlyContinue | Out-Null
@@ -257,16 +292,32 @@ task PackageHqOffline frontend, {
 
 task PackageExport {
     exec {
-        dotnet publish ./src/Services/Export/WB.Services.Export.Host `
-            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/export
+        dotnet publish @(
+            "./src/Services/Export/WB.Services.Export.Host",
+            "-c", "Release",
+            "-p:Version=$VERSION",
+            "-p:InformationalVersion=$infoVersion",
+            "-o", "$tmp/export"
+            if ($runtime) {
+                "-r", $runtime
+            }
+        )
     }
     Compress $tmp/export $output/WB.Services.Export.zip
 }
 
 task PackageWebTester frontend, {
     exec {
-        dotnet publish ./src/UI/WB.UI.WebTester `
-            -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$infoVersion -o $tmp/webtester
+        dotnet publish @(
+            "./src/UI/WB.UI.WebTester",
+            "-c", "Release",
+            "-p:Version=$VERSION",
+            "-p:InformationalVersion=$infoVersion",
+            "-o", "$tmp/webtester"
+            if ($runtime) {
+                "-r", $runtime
+            }    
+        )
     }
     Compress $tmp/webtester $output/WB.UI.WebTester.zip
 }
