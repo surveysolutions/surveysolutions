@@ -18,10 +18,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
         }
 
-        public override MvxBindingMode DefaultMode
-        {
-            get { return MvxBindingMode.OneWay; }
-        } 
+        public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
         protected override void SetValueToView(TextView control, GroupNavigationViewModel.GroupStatistics value)
         {
@@ -40,9 +37,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             var groupStatisticsText = unansweredQuestionsFormatString.FormatString(statistics.UnansweredQuestionsCount);
             groupStatisticsText = groupStatisticsText.ToUpper();
 
-            var paternToInsertUnansweredCount = "{0}";
-            var indexOfStartAnswersCount = unansweredQuestionsFormatString.IndexOf(paternToInsertUnansweredCount, StringComparison.InvariantCultureIgnoreCase);
-            var countCharsAfterFormatMask = unansweredQuestionsFormatString.Length - indexOfStartAnswersCount - paternToInsertUnansweredCount.Length;
+            var patternToInsertUnansweredCount = "{0}";
+            var indexOfStartAnswersCount = unansweredQuestionsFormatString.IndexOf(patternToInsertUnansweredCount, StringComparison.InvariantCultureIgnoreCase);
+            var countCharsAfterFormatMask = unansweredQuestionsFormatString.Length - indexOfStartAnswersCount - patternToInsertUnansweredCount.Length;
             var indexOfEndAnswersCount = groupStatisticsText.Length - countCharsAfterFormatMask;
             
             var spannableText = new SpannableString(groupStatisticsText);

@@ -251,14 +251,16 @@ namespace WB.UI.Headquarters.Controllers
                 ? this.pdfStorage.GetById($"{translation:N}_{id}")
                 : this.pdfStorage.GetById(questionnaireIdentity.ToString());
 
-            var fileName = Path.ChangeExtension(questionnaire.VariableName, ".pdf");
+            string fileType = (pdf.Content.Length > 0 && pdf.Content[0] != 37) ? "html" : "pdf";
+            
+            var fileName = Path.ChangeExtension(questionnaire.VariableName, $".{fileType}");
             if (translation != null)
             {
                 var translationName = questionnaire.Translations.First(x => x.Id == translation).Name;
                 fileName = translationName + " " + fileName;
             }
 
-            return File(pdf.Content, "application/pdf", fileName);
+            return File(pdf.Content, $"application/{fileType}", fileName);
         }
 
         private void FillStats(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDetailsModel model)

@@ -4,12 +4,14 @@ using Android.Content;
 using Android.Views.InputMethods;
 using Android.Widget;
 using MvvmCross.Binding;
+using MvvmCross.WeakSubscription;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class TextViewOnDoneBinding : BaseBinding<TextView, ICommand>
     {
         private ICommand command;
+        private IDisposable subscription;
 
         public TextViewOnDoneBinding(TextView androidControl) : base(androidControl)
         {
@@ -49,18 +51,17 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (textView == null)
                 return;
 
-            textView.EditorAction += this.OnDone;
+            subscription = textView.WeakSubscribe<TextView, TextView.EditorActionEventArgs>(
+                nameof(textView.EditorAction),
+                OnDone);
         }
 
         protected override void Dispose(bool isDisposing)
         {
-            if (IsDisposed)
-                return;
-
             if (isDisposing)
             {
-                if (this.Target != null && this.Target.Handle != IntPtr.Zero)
-                    this.Target.EditorAction -= this.OnDone;
+                subscription?.Dispose();
+                subscription = null;
             }
             base.Dispose(isDisposing);
         }

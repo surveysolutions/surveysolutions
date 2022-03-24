@@ -87,7 +87,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             var interviewId = id.FormatGuid();
             var interview = this.statefulInterviewRepository.Get(interviewId);
+            if(interview == null)
+                return NotFound();
+            
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+            if(questionnaire == null)
+                return NotFound();
 
             if (questionnaire.GetPrefilledEntities().Any()
                 || !string.IsNullOrEmpty(interview.SupervisorRejectComment)

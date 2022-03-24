@@ -13,11 +13,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(View control, string value)
         {
-            if (value != null)
-            {
-                control.Tag = value;
-                control.ContentDescription = value;
-            }
+            if (value == null || control.Tag != null || string.IsNullOrEmpty(value)) return;
+            
+            control.Tag = value;
+            control.ContentDescription = value;
         }
     }
 }

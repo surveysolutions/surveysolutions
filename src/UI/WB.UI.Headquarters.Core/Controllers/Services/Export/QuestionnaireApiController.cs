@@ -71,7 +71,9 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
 
             if (pdf == null) return NotFound("Questionnaire not found");
 
-            return File(pdf.Content, "application/pdf");
+            string fileType = (pdf.Content.Length > 0 && pdf.Content[0] != 37) ? "html" : "pdf";
+            
+            return File(pdf.Content, $"application/{fileType}");
         }
 
         [Route("{id}/category/{categoryId}")]

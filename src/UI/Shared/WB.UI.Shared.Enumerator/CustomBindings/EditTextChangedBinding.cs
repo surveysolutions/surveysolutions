@@ -1,27 +1,36 @@
 ﻿using System;
+using Android.Text;
 using Android.Widget;
 using MvvmCross.Commands;
 using MvvmCross.Platforms.Android.Binding.Target;
+using MvvmCross.WeakSubscription;
 
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class EditTextChangedBinding : MvxAndroidTargetBinding
     {
-        private IMvxCommand Command;
+        private IMvxCommand command;
+        private IDisposable subscription;
 
         protected new EditText Target => (EditText)base.Target;
 
         public EditTextChangedBinding(EditText androidControl) : base(androidControl)
         {
-            this.Target.TextChanged += Target_TextChanged;
+            var target = Target;
+            if (target == null)
+                return;
+            
+            subscription = target.WeakSubscribe<EditText, TextChangedEventArgs>(
+                nameof(target.TextChanged),
+                Target_TextChanged);
         }
-
-        private void Target_TextChanged(object sender, Android.Text.TextChangedEventArgs e)
+        
+        private void Target_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (this.Target != null)
             {
-                this.Command?.Execute(string.Concat(e.Text));
+                this.command?.Execute(string.Concat(e.Text));
             }
         }
 
@@ -29,19 +38,18 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            base.Dispose(isDisposing);
             if (isDisposing)
             {
-                if (this.Target != null)
-                {
-                    this.Target.TextChanged -= this.Target_TextChanged;
-                }
+                this.subscription?.Dispose();
+                this.subscription = null;
             }
+            
+            base.Dispose(isDisposing);
         }
 
         protected override void SetValueImpl(object target, object value)
         {
-            this.Command = (IMvxCommand)value;
+            this.command = (IMvxCommand)value;
         }
     }
 }

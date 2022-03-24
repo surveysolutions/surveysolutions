@@ -67,7 +67,7 @@
                             <td>{{model.comment}}</td>
                         </tr>
                         <tr v-if="model.mainPdfUrl">
-                            <td>PDF</td>
+                            <td>{{$t('Dashboard.QuestionnairePreview')}}</td>
                             <td>
                                 <ul class="list-unstyled">
                                     <li>

@@ -47,11 +47,13 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             var activity = (FragmentActivity)frameLayout.Context;
             var transaction = activity.SupportFragmentManager.BeginTransaction();
 
-            SetCustomAnimations(transaction, stageViewModel.Direction);
+            transaction = SetCustomAnimations(transaction, stageViewModel.Direction);
             transaction.Replace(frameLayout.Id, mvxFragment);
             transaction.Commit();
 
             activity.SupportFragmentManager.ExecutePendingTransactions();
+
+            transaction.Dispose();
         }
 
         private static FragmentTransaction SetCustomAnimations(FragmentTransaction transaction, NavigationDirection direction)

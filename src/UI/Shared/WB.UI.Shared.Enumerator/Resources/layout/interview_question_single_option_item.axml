@@ -6,9 +6,15 @@
               android:orientation="horizontal">
   <RadioButton
     style="@style/Interview_Question_Answer_Option_Input"
-    local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Selected; Bold Selected; Tag ItemTag" />
+    local:MvxBind="HideKeyboardOnClick .; Text Title; 
+                    Checked Selected; 
+                    Bold Selected; 
+                    Tag ItemTag" />
     
   <ImageButton style="@style/Interview_Question_OptionRemoveAnswer" 
-               local:MvxBind="HideKeyboardOnClick .;Click RemoveAnswerCommand; Visible Selected; Tag Format('ib_RemoveAnswer_{0}', ItemTag)" 
+               local:MvxBind="HideKeyboardOnClick .;
+               Click RemoveAnswerCommand; 
+               Visible Selected; 
+               Tag Format('ib_RemoveAnswer_{0}', ItemTag)" 
                local:srcCompat="@drawable/delete_button"/>
 </LinearLayout>

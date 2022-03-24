@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private List<OptionWithSearchTerm> autoCompleteSuggestions = new List<OptionWithSearchTerm>();
         public List<OptionWithSearchTerm> AutoCompleteSuggestions
         {
-            get => this.autoCompleteSuggestions ??= GetLazySuggestions(FilterText);
+            get => this.autoCompleteSuggestions ??= GetLazySuggestions();
             set => this.SetProperty(ref this.autoCompleteSuggestions, value);
         }
 
@@ -72,18 +72,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => SetProperty(ref loading, value);
         }
 
-        private List<OptionWithSearchTerm> GetLazySuggestions(string filterText)
+        private bool firstInit = true;
+
+        private List<OptionWithSearchTerm> GetLazySuggestions()
         {
             loadSuggestionsToken.Cancel();
             loadSuggestionsToken.Dispose();
             loadSuggestionsToken = new CancellationTokenSource();
-            
-            LoadOptionsAsync(filterText, loadSuggestionsToken.Token);
+
+            if (firstInit)
+                firstInit = false;
+            else
+                LoadOptionsAsync(FilterText, loadSuggestionsToken.Token);
             return null;
         }
 
         internal Task LoadOptionsAsync(string filterText, CancellationToken cancellationToken = default)
         {
+            //TaskCreationOptions.LongRunning avoiding UI Thread to be used
             return Task.Factory.StartNew(async () =>
             {
                 var suggestions = GetSuggestions(filterText);
@@ -95,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     
                     AutoCompleteSuggestions = suggestions;
                 });
-            }, cancellationToken);
+            }, cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
