@@ -13,9 +13,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models
         public List<Macro> Macros { get; set; } = new List<Macro>();
         public List<LookupTable> LookupTables { get; set; } = new List<LookupTable>();
         public List<Attachment> Attachments { get; set; } = new List<Attachment>();
-        public List<Translation> Translations { get; set; } = new List<Translation>();
+        public Translations Translations { get; set; } = new Translations();
         public List<Categories> Categories { get; set; } = new List<Categories>();
-        public string? DefaultTranslation { get; set; }
         public bool HideIfDisabled { get; set; }
         public string? Title { get; set; }
         public string Description { get; set; } = String.Empty;

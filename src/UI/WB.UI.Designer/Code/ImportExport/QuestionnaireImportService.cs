@@ -151,7 +151,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 importStructure.LookupTables.Add(lookupTableId, fileContent);
             }
 
-            foreach (var translationInfo in questionnaire.Translations)
+            foreach (var translationInfo in questionnaire.Translations.Items)
             {
                 var translation = questionnaireDocument.Translations.Single(s =>
                     s.Name == translationInfo.Name);

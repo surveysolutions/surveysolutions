@@ -43,22 +43,13 @@
       }
     },
     "Translations": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Translation"
-      }
+      "$ref": "#/definitions/Translations"
     },
     "Categories": {
       "type": "array",
       "items": {
         "$ref": "#/definitions/Categories"
       }
-    },
-    "DefaultTranslation": {
-      "type": [
-        "null",
-        "string"
-      ]
     },
     "HideIfDisabled": {
       "type": "boolean"
@@ -884,6 +875,30 @@
         },
         "ContentType": {
           "type": "string"
+        }
+      }
+    },
+    "Translations": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "DefaultTranslation": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "DefaultTranslationDisplayName": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Translation"
+          }
         }
       }
     },

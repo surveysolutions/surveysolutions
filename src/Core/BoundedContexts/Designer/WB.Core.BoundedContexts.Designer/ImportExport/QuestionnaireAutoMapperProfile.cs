@@ -54,10 +54,13 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                     s.Children.Count > 0 && s.Children[0].PublicKey == s.CoverPageSectionId
                         ? s.Children.Skip(1)
                         : s.Children))
-                .ForMember(x => x.DefaultTranslation, x => x.MapFrom(s => 
+                .ForPath(x => x.Translations.DefaultTranslation, x => x.MapFrom(s => 
                     s.DefaultTranslation.HasValue 
                         ? (s.Translations.FirstOrDefault(t => t.Id == s.DefaultTranslation.Value) != null ? s.Translations.First(t => t.Id == s.DefaultTranslation.Value).Name : null) 
-                        : null));
+                        : null))
+                .ForPath(x => x.Translations.DefaultTranslationDisplayName, x => 
+                    x.MapFrom(s => s.DefaultLanguageName))
+                .ForPath(x => x.Translations.Items, x => x.MapFrom(t => t.Translations));
             this.CreateMap<Questionnaire, QuestionnaireDocument>()
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
                 .ForMember(s => s.Id, opt => opt.MapFrom(t => t.Id.FormatGuid()))
@@ -73,11 +76,13 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 .ForMember(x => x.DefaultTranslation, x => x.Ignore()) 
                 .AfterMap((s, d, context) =>
                 {
-                    if (!string.IsNullOrWhiteSpace(s.DefaultTranslation))
+                    if (!string.IsNullOrWhiteSpace(s.Translations?.DefaultTranslation))
                     {
-                        d.DefaultTranslation = d.Translations.FirstOrDefault(t => t.Name == s.DefaultTranslation)?.Id;
+                        d.DefaultTranslation = d.Translations.FirstOrDefault(t => t.Name == s.Translations.DefaultTranslation)?.Id;
                     }
-                });
+                })
+                .ForMember(x => x.DefaultLanguageName, x => x.MapFrom(t => t.Translations.DefaultTranslationDisplayName)) 
+                .ForMember(x => x.Translations, x => x.MapFrom(t => t.Translations.Items));
             
             this.CreateMap<WB.Core.SharedKernels.Questionnaire.Documents.QuestionnaireMetaInfo, Models.QuestionnaireMetaInfo>();
             this.CreateMap<Models.QuestionnaireMetaInfo, WB.Core.SharedKernels.Questionnaire.Documents.QuestionnaireMetaInfo>();

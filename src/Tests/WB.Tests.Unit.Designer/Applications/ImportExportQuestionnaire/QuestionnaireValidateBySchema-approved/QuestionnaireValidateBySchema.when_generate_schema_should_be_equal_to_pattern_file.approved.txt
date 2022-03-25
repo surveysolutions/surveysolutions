@@ -366,6 +366,34 @@
         "Name",
         "FileName"
       ]
+    },
+    "Translations": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "DefaultTranslation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "DefaultTranslationDisplayName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Items": {
+          "$ref": "#/definitions/List<Translation>"
+        }
+      },
+      "required": [
+        "DefaultTranslation",
+        "DefaultTranslationDisplayName",
+        "Items"
+      ]
     }
   },
   "type": "object",
@@ -389,16 +417,10 @@
       "$ref": "#/definitions/List<Attachment>"
     },
     "Translations": {
-      "$ref": "#/definitions/List<Translation>"
+      "$ref": "#/definitions/Translations"
     },
     "Categories": {
       "$ref": "#/definitions/List<Categories>"
-    },
-    "DefaultTranslation": {
-      "type": [
-        "string",
-        "null"
-      ]
     },
     "HideIfDisabled": {
       "type": "boolean"
@@ -434,7 +456,6 @@
     "Attachments",
     "Translations",
     "Categories",
-    "DefaultTranslation",
     "HideIfDisabled",
     "Title",
     "Description",

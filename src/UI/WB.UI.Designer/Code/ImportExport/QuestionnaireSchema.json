@@ -39,12 +39,7 @@
         "$ref": "#/definitions/Attachment"
       }
     },
-    "Translations": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Translation"
-      }
-    },
+    "Translations": { "$ref": "#/definitions/Translations" },
     "Categories": {
       "type": "array",
       "items": {
@@ -578,6 +573,22 @@
       "required": ["Type"]
     },
 
+    "Translations": {
+      "type": "object",
+      "properties": {
+        "DefaultTranslation": { "type": "string", "maxLength": 32 },
+        "DefaultTranslationDisplayName": { "type": "string" },
+
+        "Items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Translation"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    
     "Translation": {
       "type": "object",
       "properties": {
