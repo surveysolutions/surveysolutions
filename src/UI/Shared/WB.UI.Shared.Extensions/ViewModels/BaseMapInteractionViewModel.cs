@@ -1,7 +1,10 @@
-﻿using System;
+﻿using System.Linq;
+
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
@@ -138,7 +141,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.userInteractionService.ShowToast(UIResources.AreaMap_LocationDataSourceFailed);
         }
 
-        protected void LocationDisplayOnLocationChanged(object sender, Location e)
+        protected async void LocationDisplayOnLocationChanged(object sender, Location e)
         {
             //show only once
             this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
@@ -154,6 +157,29 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (!GeometryEngine.Contains(extent, point))
             {
                 this.userInteractionService.ShowToast(UIResources.AreaMap_LocationOutOfBoundaries);
+            }
+
+            if (ShowedBoundaries)
+            {
+                var shapeLayer = this.Map?.OperationalLayers[0];
+                var shapeExtent = shapeLayer?.FullExtent;
+                var sPoint = GeometryEngine.Project(e.Position, shapeExtent.SpatialReference);
+                if (GeometryEngine.Contains(shapeExtent, sPoint))
+                {
+                    var featureLayer = (FeatureLayer)shapeLayer;
+                    var shapefileFeatureTable = (ShapefileFeatureTable)featureLayer?.FeatureTable;
+                    var labelFieldIndex = shapefileFeatureTable.Fields.ToList().FindIndex(f => string.Compare(f.Name, "label", StringComparison.OrdinalIgnoreCase) == 0);
+                    if (labelFieldIndex < 0)
+                        return;
+                    var features = await shapefileFeatureTable.QueryFeaturesAsync(new QueryParameters()
+                    {
+                        Geometry = sPoint,
+                        
+                    });
+                    var featuresField = features.Fields[labelFieldIndex];
+                    var featuresFieldName = featuresField.Name;
+                    this.userInteractionService.ShowToast(featuresFieldName);
+                }
             }
         }
 
