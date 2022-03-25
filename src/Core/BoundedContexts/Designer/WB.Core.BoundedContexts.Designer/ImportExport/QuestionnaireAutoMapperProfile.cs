@@ -324,9 +324,9 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             
             this.CreateMap<Answer, Models.Answer>()
                 .ForMember(a => a.Code, opt => 
-                    opt.MapFrom(x => x.AnswerCode ?? decimal.Parse(x.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture)))
+                    opt.MapFrom(x => x.HasValue() ? (int)x.GetParsedValue() : (int?)null))
                 .ForMember(a => a.ParentCode, opt => 
-                    opt.MapFrom((answer, mAnswer) => answer.ParentCode ?? (decimal.TryParse(answer.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal parentValue) ? parentValue : (decimal?)null)))
+                    opt.MapFrom(answer => answer.GetParsedParentValue()))
                 .ForMember(a => a.Text, opt => 
                     opt.MapFrom(answer => answer.AnswerText));
             this.CreateMap<Models.Answer, Answer>()

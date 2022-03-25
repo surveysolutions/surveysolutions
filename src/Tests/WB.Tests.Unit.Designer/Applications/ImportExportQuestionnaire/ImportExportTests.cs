@@ -685,7 +685,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         }
                    
         [Test]
-        public void when_export_mutioptions_question_should_be_equals_after_import()
+        public void when_export_multioptions_question_should_be_equals_after_import()
         {
             var question = new MultyOptionsQuestion()
             {
@@ -703,6 +703,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 CategoriesId = Guid.NewGuid(),
                 Answers = new List<Answer>()
                 {
+                    new Answer(),
+                    new Answer(),
                     new Answer() { AnswerText = "text1", AnswerValue = "111", },
                     new Answer() { AnswerText = "text2", AnswerValue = "222", ParentValue = "111"},
                 },

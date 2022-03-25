@@ -509,7 +509,10 @@
           "type": "string"
         },
         "Code": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "format": "int32"
         },
         "ParentCode": {
