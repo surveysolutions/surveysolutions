@@ -116,36 +116,47 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxAsyncCommand<string> FilterCommand => new MvxAsyncCommand<string>(x => this.UpdateFilter(x));
         public IMvxCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOption);
-        public IMvxAsyncCommand ShowErrorIfNoAnswerCommand => new MvxAsyncCommand(this.ShowErrorIfNoAnswer);
+        public IMvxAsyncCommand<bool> OnFocusChangeCommand => new MvxAsyncCommand<bool>(this.OnFocusChange);
 
-        private async Task ShowErrorIfNoAnswer()
+        private async Task OnFocusChange(bool hasFocus)
         {
-            await InvokeAllHandlers(this.OnShowErrorIfNoAnswer, EventArgs.Empty).ConfigureAwait(false);
-
-            if (string.IsNullOrEmpty(this.FilterText)) return;
-
-            var selectedOption = this.filteredOptionsViewModel.GetOptionByTextValue(this.FilterText);
-
-            var isValidOption =
-                selectedOption?.Title.Equals(this.FilterText, StringComparison.CurrentCultureIgnoreCase) == true
-                && !this.excludedOptions.Contains(selectedOption.Value);
-
-            if (isValidOption)
+            if (!hasFocus)
             {
-                await InvokeAllHandlers<int>(this.OnItemSelected, selectedOption.Value).ConfigureAwait(false);
-                if (displaySelectedValue)
+                await InvokeAllHandlers(this.OnShowErrorIfNoAnswer, EventArgs.Empty).ConfigureAwait(false);
+
+                if (string.IsNullOrEmpty(this.FilterText)) return;
+
+                var selectedOption = this.filteredOptionsViewModel.GetOptionByTextValue(this.FilterText);
+
+                var isValidOption =
+                    selectedOption?.Title.Equals(this.FilterText, StringComparison.CurrentCultureIgnoreCase) == true
+                    && !this.excludedOptions.Contains(selectedOption.Value);
+
+                if (isValidOption)
                 {
-                    await this.UpdateFilter(selectedOption.Title).ConfigureAwait(false);
+                    await InvokeAllHandlers<int>(this.OnItemSelected, selectedOption.Value).ConfigureAwait(false);
+                    if (displaySelectedValue)
+                    {
+                        await this.UpdateFilter(selectedOption.Title).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await this.ResetFilterAndOptions();
+                    }
                 }
                 else
                 {
-                    await this.ResetFilterAndOptions();    
+                    var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(this.FilterText);
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage)
+                        .ConfigureAwait(false);
                 }
             }
             else
             {
-                var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(this.FilterText);
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage).ConfigureAwait(false);
+                if (String.IsNullOrEmpty(this.FilterText))
+                {
+                    await UpdateFilter("", true);
+                }
             }
         }
 

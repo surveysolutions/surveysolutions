@@ -137,7 +137,7 @@
     <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
     <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
     <Compile Include="CustomBindings\ImageButtonPlaybackToggleBinding.cs" />
-    <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnFocusOutBinding.cs" />
+    <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnFocusChangeBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnPartialTextChangedBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnItemSelectedBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewPartialTextTargetBinding.cs" />
