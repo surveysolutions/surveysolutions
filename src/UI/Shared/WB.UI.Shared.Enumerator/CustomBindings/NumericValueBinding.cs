@@ -1,12 +1,13 @@
 ﻿using System;
 using MvvmCross.Binding;
+using MvvmCross.WeakSubscription;
 using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class NumericValueBinding : BaseBinding<NumericEditText, decimal?>
     {
-        private bool subscribed;
+        private IDisposable subscription;
 
         public NumericValueBinding(NumericEditText target)
             : base(target)
@@ -15,9 +16,13 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         public override void SubscribeToEvents()
         {
-            this.Target.NumericValueChanged += Target_NumericValueChanged;
-
-            this.subscribed = true;
+            var target = Target;
+            if (target == null)
+                return;
+            
+            subscription = target.WeakSubscribe<NumericEditText, NumericValueChangedEventArgs>(
+                nameof(target.NumericValueChanged),
+                Target_NumericValueChanged);
         }
 
         private void Target_NumericValueChanged(object sender, NumericValueChangedEventArgs e)
@@ -34,17 +39,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            if (IsDisposed)
-                return;
-
             if (isDisposing)
             {
-                var editText = this.Target;
-                if (editText != null && this.subscribed && editText.Handle != IntPtr.Zero)
-                {
-                    editText.NumericValueChanged -= this.Target_NumericValueChanged;
-                    this.subscribed = false;
-                }
+                subscription?.Dispose();
+                subscription = null;
             }
             base.Dispose(isDisposing);
         }

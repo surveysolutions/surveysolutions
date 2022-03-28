@@ -12,7 +12,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         public event Func<object, EventArgs, Task> BeforeSelected;
         public event Func<object, EventArgs, Task> AnswerRemoved;
-        public EnablementViewModel Enablement { get; set; }
 
         public int Value { get; set; }
 
@@ -49,7 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void OnBeforeSelected()
         {
-            this.BeforeSelected?.Invoke(this, EventArgs.Empty);
+            var handler = this.BeforeSelected;
+            handler?.Invoke(this, EventArgs.Empty);
         }
 
         protected virtual void OnAnswerRemoved()

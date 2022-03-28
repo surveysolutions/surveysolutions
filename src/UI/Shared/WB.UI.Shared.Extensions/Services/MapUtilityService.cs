@@ -10,7 +10,7 @@ using Esri.ArcGISRuntime.Symbology;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 
-namespace WB.UI.Shared.Extensions.CustomServices
+namespace WB.UI.Shared.Extensions.Services
 {
     public class MapUtilityService
     {

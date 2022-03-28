@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Guid? attachmentId;
         public Identity Identity { get; private set; }
 
-        public string Tag => Identity.ToString();
+        public string Tag => "attachment_" + Identity.ToString();
 
         private const string ImageMimeType = "image/";
         private const string VideoMimeType = "video/";

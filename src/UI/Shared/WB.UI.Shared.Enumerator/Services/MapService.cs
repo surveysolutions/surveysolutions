@@ -13,15 +13,17 @@ namespace WB.UI.Shared.Enumerator.Services
 {
     public class MapService : IMapService
     {
-        private const string TempSuffix = ".part";
-        
-        private readonly string[] mapFilesToSearch = { "*.tpk", "*.tpkx", "*.mmpk", "*.mmpkx",  "*.tif" };
-        private readonly string[] shapefilesToSearch = { "*.shp"};
-        
         private readonly IFileSystemAccessor fileSystemAccessor;
+
         private readonly string mapsLocationCommon;
         private readonly string shapefilesLocationCommon;
+        
         private readonly ILogger logger;
+
+        private readonly string[] mapFilesToSearch = { "*.tpk", "*.tpkx", "*.mmpk", "*.mmpkx",  "*.tif" };
+        private readonly string[] shapefilesToSearch = { "*.shp"};
+        private string tempSuffix = ".part";
+
         private readonly string? workspaceName = null;
         
         public MapService(
@@ -222,7 +224,7 @@ namespace WB.UI.Shared.Enumerator.Services
         private string GetTempFileName(string mapName)
         {
             var fileName = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
-            var tempFileName = fileName + TempSuffix;
+            var tempFileName = fileName + tempSuffix;
             return tempFileName;
         }
     }

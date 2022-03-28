@@ -10,7 +10,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(RecyclerView control, int? value)
         {
-            
             if (value.HasValue)
             {
                 control.ScrollToPosition(value.Value);

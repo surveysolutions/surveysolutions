@@ -84,9 +84,9 @@
         "graphql-tag": "^2.12.4",
         "jest": "^27.4.0",
         "mini-css-extract-plugin": "^0.9.0",
-        "node-sass": "5.0.0",
         "npm-force-resolutions": "0.0.10",
         "rimraf": "3.0.2",
+        "sass": "^1.49.7",
         "sass-loader": "10.1.0",
         "stats-webpack-plugin": "^0.7.0",
         "vue-cli-plugin-apollo": "~0.22.2",
@@ -114,7 +114,7 @@
     ],
     "jest": {
         "verbose": true,
-        "testEnvironment": "JsDom",
+        "testEnvironment": "jsdom",
         "setupFiles": [
             "./tests/setup-jest.js"
         ],

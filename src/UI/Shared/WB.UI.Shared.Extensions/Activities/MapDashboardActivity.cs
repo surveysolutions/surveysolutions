@@ -7,8 +7,9 @@ using AndroidX.AppCompat.Widget;
 using AndroidX.DrawerLayout.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Extensions.ViewModels;
 
-namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
+namespace WB.UI.Shared.Extensions.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden,
         Theme = "@style/AppTheme",

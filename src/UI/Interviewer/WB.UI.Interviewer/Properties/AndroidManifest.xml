@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" package="org.worldbank.solutions.interviewer" android:versionCode="26988" android:versionName="21.04 (build 26988)">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" package="org.worldbank.solutions.interviewer" android:versionCode="29820" android:versionName="21.04 (build 29820)">
 	<application android:label="Interviewer" 
                  android:icon="@drawable/icon" 
                  android:theme="@android:style/Theme.DeviceDefault.Light" 
