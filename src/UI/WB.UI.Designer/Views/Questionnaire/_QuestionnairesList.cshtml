@@ -77,9 +77,9 @@
                             var itemId = listViewModel.Id;
                             var itemType = listViewModel.GetLabel();
                             var itemName = Uri.EscapeDataString(listViewModel.GetName());
-                            var pdfDownloadUrl = Url.Action("download", "Pdf", routevalues.AddArea("Pdf"));
+                            var pdfDownloadUrl = Url.Action("downloadPdf", "Pdf", routevalues.AddArea("Pdf"));
                             var htmlDownloadUrl = Url.Action("PrintPreview", "Pdf", routevalues.AddArea("Pdf"));
-                            var pdfStatusUrl = Url.Action("status", "Pdf", routevalues.AddArea("Pdf"));
+                            var pdfStatusUrl = Url.Action("statusPdf", "Pdf", routevalues.AddArea("Pdf"));
                             var pdfRetryUrl = Url.Action("Retry", "Pdf", routevalues.AddArea("Pdf"));
                             var getLanguagesUrl = Url.Action("GetLanguages", "Questionnaire", routevalues);
                             var openActionName = listViewModel.IsFolder ? "Public" : "Details";

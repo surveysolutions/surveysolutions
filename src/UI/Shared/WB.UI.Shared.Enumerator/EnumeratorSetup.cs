@@ -226,8 +226,8 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("DisableDefaultSearch",
                 (ctrl) => new InstantAutoCompleteTextViewDisableDefaultSearchBinding(ctrl));
 
-            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("OnFocusOut",
-                (ctrl) => new InstantAutoCompleteTextViewOnFocusOutBinding(ctrl));
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("OnFocusChange",
+                (ctrl) => new InstantAutoCompleteTextViewOnFocusChangeBinding(ctrl));
         }
 
         protected override IEnumerable<Assembly> AndroidViewAssemblies =>
