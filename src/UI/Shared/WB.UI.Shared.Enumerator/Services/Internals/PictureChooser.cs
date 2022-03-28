@@ -35,19 +35,19 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 MaxWidthHeight = 1024
             };
 
-            var photo = await MediaPicker.CapturePhotoAsync();
+            var photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
             if (photo == null)
                 return null;
             
             //process image
             //using Media plugin
             MediaImplementation androidMedia = new MediaImplementation();
-            var originalMetadata = new ExifInterface(photo.FullPath);
-            androidMedia.FixOrientationAndResizeAsync(photo.FullPath, storeCameraMediaOptions, originalMetadata)
-                .WaitAndUnwrapException();
-            
-            originalMetadata?.Dispose();
-            
+            using (var originalMetadata = new ExifInterface(photo.FullPath))
+            {
+                androidMedia.FixOrientationAndResizeAsync(photo.FullPath, storeCameraMediaOptions, originalMetadata)
+                    .WaitAndUnwrapException();    
+            }
+
             return await photo.OpenReadAsync();
         }
 
@@ -57,7 +57,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             await this.permissions.AssureHasPermissionOrThrow<CameraPermission>().ConfigureAwait(false);
             await this.media.Initialize().ConfigureAwait(false);
 
-            var photo = await MediaPicker.PickPhotoAsync();
+            var photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
             return photo == null ? null : await photo.OpenReadAsync();
         }
     }
