@@ -1,9 +1,14 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Android.Media;
+using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using Xamarin.Essentials;
+using StoragePermission = Plugin.Permissions.StoragePermission;
+using Stream = System.IO.Stream;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
 {
@@ -23,14 +28,27 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
             await this.permissions.AssureHasPermissionOrThrow<CameraPermission>().ConfigureAwait(false);
             await this.media.Initialize().ConfigureAwait(false);
-            var storeCameraMediaOptions = new StoreCameraMediaOptions
+            var storeCameraMediaOptions = new StoreCameraMediaOptions()
             {
                 CompressionQuality = 70,
                 PhotoSize = PhotoSize.MaxWidthHeight,
                 MaxWidthHeight = 1024
             };
-            var photo = await this.media.TakePhotoAsync(storeCameraMediaOptions).ConfigureAwait(false);
-            return photo?.GetStream();
+
+            var photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
+            if (photo == null)
+                return null;
+            
+            //process image
+            //using Media plugin
+            MediaImplementation androidMedia = new MediaImplementation();
+            using (var originalMetadata = new ExifInterface(photo.FullPath))
+            {
+                androidMedia.FixOrientationAndResizeAsync(photo.FullPath, storeCameraMediaOptions, originalMetadata)
+                    .WaitAndUnwrapException();    
+            }
+
+            return await photo.OpenReadAsync();
         }
 
         public async Task<Stream> ChoosePictureGallery()
@@ -39,8 +57,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             await this.permissions.AssureHasPermissionOrThrow<CameraPermission>().ConfigureAwait(false);
             await this.media.Initialize().ConfigureAwait(false);
 
-            MediaFile result = await this.media.PickPhotoAsync().ConfigureAwait(false);
-            return result?.GetStream();
+            var photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
+            return photo == null ? null : await photo.OpenReadAsync();
         }
     }
 }

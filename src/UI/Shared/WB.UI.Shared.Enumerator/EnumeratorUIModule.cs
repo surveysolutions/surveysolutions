@@ -78,7 +78,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<IEnumeratorArchiveUtils, ZipArchiveUtils>();
             registry.BindAsSingleton<IFileSystemAccessor, FileSystemService>();
             registry.Bind<IQRBarcodeScanService, QRBarcodeScanService>();
-            registry.Bind<IPictureChooser, PictureChooser>();
+            registry.BindAsSingleton<IPictureChooser, PictureChooser>();
             registry.BindAsSingleton<IGpsLocationService, GpsLocationService>();
             
             registry.BindAsSingleton<IAttachmentContentStorage, AttachmentContentStorage>();
