@@ -17,6 +17,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
                 .Description("Map file name");
             descriptor.Field(x => x.Size).Description("Size of map in bytes");
             descriptor.Field(x => x.ImportDate)
+                .Type<DateTimeType>()
                 .Name("importDateUtc")
                 .Description("Utc date when map was imported on HQ");
             descriptor.Field(x => x.UploadedBy)

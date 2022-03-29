@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-md-4 col-sm-4 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li><strong>{{ $t("Pages.MapDetails_ImportedOn") }}:</strong> <span>{{$config.model.importDate}}</span></li>
+                            <li><strong>{{ $t("Pages.MapDetails_ImportedOn") }}:</strong> <span>{{importDate}}</span></li>
                             <li v-if="$config.model.uploadedBy"><strong>{{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{$config.model.uploadedBy}}</span></li>
                         </ul>
                     </div>
@@ -73,6 +73,8 @@
 import {orderBy} from 'lodash'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
+import {DateFormats} from '~/shared/helpers'
+import moment from 'moment-timezone'
 
 export default {
     mounted() {
@@ -204,6 +206,10 @@ export default {
                     : this.$t('Pages.MapDetails_FullShapefilesDisclaimer')
             }
             return this.$t('Pages.MapDetails_MapDisclaimer')
+        },
+        importDate() {
+            var date = moment.utc(this.$config.model.importDate)
+            return date.local().format(DateFormats.dateTime)
         },
     },
 

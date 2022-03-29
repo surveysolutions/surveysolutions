@@ -1,5 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using NHibernate.Type;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
@@ -16,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
 
             Property(x => x.FileName);
             Property(x => x.Size);
-            Property(x => x.ImportDate);
+            Property(x => x.ImportDate, pm => pm.Type<UtcDateTimeType>());
             Property(x => x.UploadedBy);
             Property(x=> x.Wkid);
             Property(x=> x.XMaxVal);
