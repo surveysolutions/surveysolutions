@@ -41,13 +41,13 @@
     "gulp-sourcemaps": "^3.0.0",
     "gulp-terser": "^2.0.1",
     "gulp-uglify": "^3.0.2",
-    "gulp-vue-single-file-component": "^1.1.6",
+    "gulp-vue-single-file-component": "^1.2.3",
     "jshint": "^2.13.4",
     "merge2": "^1.4.1",
     "node-sass": "^7.0.0",
     "npm-force-resolutions": "0.0.10",
     "plugin-error": "^1.0.1",
-    "postcss": "^8.2.15",
+    "postcss": "^8.4.12",
     "rimraf": "^3.0.2",
     "through2": "^4.0.2",
     "xmldoc": "^1.1.2"
@@ -123,6 +123,7 @@
     "lodash.template": ">=4.5.0",
     "merge": ">=2.1.1",
     "minimist": ">=1.2.6",
+    "postcss": ">=8.4.12",
     "set-value": ">=4.0.1",
     "trim-newlines": ">=3.0.1"
   }
