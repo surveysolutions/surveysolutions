@@ -36,16 +36,69 @@ jobs:
           echo "::set-output name=build_number::${build_number}"
           echo "::set-output name=environment::${environment}"
 
-  tests:
-    uses: surveysolutions/surveysolutions/.github/workflows/tests.yml@master
-    with:
-      runs_on: 'ubuntu-latest'
-      run_analysis: false
-    secrets:
-      sonar-token: ${{ secrets.SONAR_TOKEN }}
+  tests-unit-web:
+    name: Unit and web tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+      - name: Headquarters unit tests
+        run: dotnet test src/Tests/WB.Tests.Unit
+      - name: Headquarters web tests
+        run: dotnet test src/Tests/WB.Tests.Web
+      - name: Designer unit tests
+        run: dotnet test src/Tests/WB.Tests.Unit.Designer
+
+  tests-integration:
+    name: Integration tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    env:
+      PG_USER: postgres
+      PG_PASSWORD: P@$$w0rd
+
+    services:
+      postgres:
+        image: postgres:13.1
+        env:
+          POSTGRES_USER: ${{ env.PG_USER }}
+          POSTGRES_PASSWORD: ${{ env.PG_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+ 
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+
+      - name: Create db connection string
+        run: echo "DB_CONN=Server=postgres;Port=${{ job.services.postgres.ports[5432] }};User Id=${{ env.PG_USER }};Password=${{ env.PG_PASSWORD }};" >> $GITHUB_ENV
+
+      - name: Headquarters tests
+        run: |
+          echo "[ConnectionStrings]\nTestConnection=\"${{ env.DB_CONN }}Database=postgres;CommandTimeout=60;\"" >> appsettings.ini
+          dotnet test src/Tests/WB.Tests.Integration
+      - name: Designer tests
+        run: |
+          echo "[ConnectionSettings]\nTestConnectionStringFormat=\"${{ env.DB_CONN }}Database=testdb_{0};CommandTimeout=60;\"" > appsettings.ini
+          dotnet test src/Tests/WB.Tests.Integration.Designer
 
   mobile:
-    needs: [prepare, tests]
+    needs: [prepare, tests-unit-web, tests-integration]
     runs-on: windows-2022
     environment: ${{ needs.prepare.outputs.environment }}
 
