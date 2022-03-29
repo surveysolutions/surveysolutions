@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestionWithChildren,
         IDisposable
     {
+		//this value determines a number of suggestions shown in combo-box
         protected const int SuggestionsMaxCount = 50;
         protected readonly FilteredOptionsViewModel filteredOptionsViewModel;
 

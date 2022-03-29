@@ -531,7 +531,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
             await combo.FilterCommand.ExecuteAsync("oooo");
-            await combo.ShowErrorIfNoAnswerCommand.ExecuteAsync(null);
+            await combo.OnFocusChangeCommand.ExecuteAsync(false);
 
             AnsweringViewModelMock.Verify(x => x.SendQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Never);
             QuestionStateMock.Verify(x => x.Validity.MarkAnswerAsNotSavedWithMessage(Moq.It.IsAny<string>()), Times.Once);
