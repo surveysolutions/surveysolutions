@@ -24,12 +24,12 @@ namespace WB.UI.Designer.Controllers
 {
     public partial class QuestionnaireController
     {
-        public ActionResult<EditOptionsViewModel> GetCategoryOptions(QuestionnaireRevision id, Guid categoriesId)
+        public EditOptionsViewModel? GetCategoryOptions(QuestionnaireRevision id, Guid categoriesId)
         {
             var categoriesView = this.questionnaireInfoFactory.GetCategoriesView(id, categoriesId);
 
             if (categoriesView == null)
-                return NotFound();
+                return null;
 
             var categories =
                 this.categoriesService.GetCategoriesById(id.QuestionnaireId, categoriesId).
@@ -269,17 +269,17 @@ namespace WB.UI.Designer.Controllers
 
                 var model = this.GetCategoryOptions(id, entityId);
 
-                if (model.Value == null)
+                if (model == null)
                 {
-                    return model.Result;
+                    return NotFound();
                 }
 
                 var command = new AddOrUpdateCategories(
                     questionnaireId,
                     this.User.GetId(),
                     categoriesId,
-                    model.Value.CategoriesName ?? "",
-                    model.Value.CategoriesId);
+                    model.CategoriesName ?? "",
+                    model.CategoriesId);
 
                 var categoriesCommandResult = await this.ExecuteCommand(command);
                 return Json(categoriesCommandResult);

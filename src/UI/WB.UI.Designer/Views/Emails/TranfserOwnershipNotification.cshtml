@@ -1,7 +1,6 @@
-@using WB.UI.Designer.Resources
 @model WB.UI.Designer.Models.SharingNotificationModel
 
-@Html.Raw(string.Format(NotificationResources.TranfserOwnershipNotification, @Model.UserCallName, @Model.ActionPersonCallName, @Model.ShareTypeName))
+@Html.Raw(string.Format(NotificationResources.TranfserOwnershipNotification, @Model!.UserCallName, @Model.ActionPersonCallName, @Model.ShareTypeName))
 
 <a href="@Model.QuestionnaireLink">
     @Model.QuestionnaireDisplayTitle

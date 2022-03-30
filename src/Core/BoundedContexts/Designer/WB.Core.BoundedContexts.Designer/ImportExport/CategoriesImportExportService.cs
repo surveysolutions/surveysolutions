@@ -51,6 +51,9 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             {
                 var items = questionnaireSerializer.Deserialize<CategoriesItem>(json);
                 
+                if(items == null)
+                   throw new Exception("Invalid format. Categories cannot be processed.");
+                
                 this.dbContext.CategoriesInstances.AddRange(items.Select((item, i) => new CategoriesInstance
                 {
                     SortIndex = i,

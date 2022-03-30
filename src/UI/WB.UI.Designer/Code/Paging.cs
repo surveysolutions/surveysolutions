@@ -32,7 +32,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
     {
         public static IHtmlContent Pager(this IHtmlHelper helper,
             int currentPage, int totalPages, 
-            Func<int, string> pageUrl, 
+            Func<int, string?> pageUrl, 
             int pageSlides,
             string additionalPagerCssClass = "")
         {
@@ -122,7 +122,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             root.InnerHtml.AppendHtml(li);
         }
 
-        private static void MakePagingItem(bool isActive, string text, string htmlTitle, TagBuilder root)
+        private static void MakePagingItem(bool isActive, string? text, string htmlTitle, TagBuilder root)
         {
             var li = new TagBuilder("li");
 
@@ -138,7 +138,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             else
             {
                 var a = new TagBuilder("a");
-                a.MergeAttribute("href", text);
+                a.MergeAttribute("href", text ?? string.Empty);
                 a.InnerHtml.AppendHtml(htmlTitle);
                 li.InnerHtml.AppendHtml(a);
             }

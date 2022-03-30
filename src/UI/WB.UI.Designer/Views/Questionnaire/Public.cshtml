@@ -6,10 +6,10 @@
     ViewBag.TableCssClass = "page-with-breadcrumbs";
     Layout = "Layout";
 
-    bool isSupportAssignFolders = Model.IsSupportAssignFolders;
+    bool? isSupportAssignFolders = Model!.IsSupportAssignFolders;
 }
 @section Scripts {
-    @if (isSupportAssignFolders)
+    @if (isSupportAssignFolders == true)
     {
         <!-- folders:css -->
         <link rel="stylesheet" href="~/css/folders.css">
@@ -69,7 +69,7 @@
     <div>
         <partial name="_ExportHtmlModalDialog" />
     </div>
-    @if (isSupportAssignFolders)
+    @if (isSupportAssignFolders == true)
     {
     <div>
         <partial name="_AssignFolderDialog" />

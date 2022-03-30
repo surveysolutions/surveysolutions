@@ -63,7 +63,7 @@
                 </div>
             }
 
-            @if (Model.TotalCount == 0)
+            @if (Model!.TotalCount == 0)
             {
                 <p class="text-center" style="line-height: 10em">@QuestionnaireController.EmptyList</p>
             }
@@ -169,7 +169,7 @@
 
 @functions
 {
-    private string ActionWithOrderField(string sortField)
+    private string? ActionWithOrderField(string sortField)
     {
         var sortOrder = (int?)ViewBag.SortOrder;
         return Url.Action(
@@ -183,5 +183,4 @@
                 id = ViewBag.FolderId
             });
     }
-
 }

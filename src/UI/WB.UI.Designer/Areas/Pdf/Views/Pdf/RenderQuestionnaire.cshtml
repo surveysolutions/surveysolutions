@@ -1,16 +1,14 @@
-@using System.Collections.Generic
 @using System.Linq
 @using Main.Core.Entities.SubEntities
 @using WB.Core.BoundedContexts.Designer.Implementation.Services
 @using WB.Core.BoundedContexts.Designer.Resources
-@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 @using WB.UI.Designer.Code
 @using WB.UI.Designer.Utils
 @model WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfQuestionnaireModel
 
 @{
     Layout = null;
-    var questionnaire = Model;
+    var questionnaire = Model!;
     ViewBag.Questionnaire = questionnaire;
 }
 <!DOCTYPE html>
@@ -27,7 +25,7 @@
 	<header>
 		<div class="column_header authors">
 			<ul>
-				<li>@string.Format(PdfStrings.GeneratedBy, Model.Requested.By), <span>@Model.Requested.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
+				<li>@string.Format(PdfStrings.GeneratedBy, questionnaire.Requested.By), <span>@questionnaire.Requested.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
 				<li>@string.Format(PdfStrings.CreatedBy, questionnaire.Created.By), <span>@questionnaire.Created.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
 				@if (questionnaire.LastModified != null)
 				{
@@ -379,8 +377,8 @@
 					</a>
 					<p>
 						@PdfStrings.EnablementCondition
-						<pre>@item.EnablementCondition</pre>
-					</p>
+                        <pre>@item.EnablementCondition</pre>
+                    </p>
 				</div>
 			</li>
 			}

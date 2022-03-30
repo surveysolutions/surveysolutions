@@ -22,7 +22,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         {
             var attachment = this.attachmentService.GetContent(id);
 
-            if (attachment == null) return NotFound();
+            if (attachment?.Content == null) return NotFound();
 
             string? fileName = null;
             if (attachmentId.HasValue)

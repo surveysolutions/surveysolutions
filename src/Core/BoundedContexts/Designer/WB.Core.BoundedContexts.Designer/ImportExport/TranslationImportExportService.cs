@@ -65,6 +65,9 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             try
             {
                 var items = questionnaireSerializer.Deserialize<TranslationItem>(json);
+                
+                if(items == null)
+                    throw new Exception("Invalid format. Translations cannot be processed.");
             
                 Dictionary<Guid, bool> idsOfAllQuestionnaireEntities = questionnaire.Children.TreeToEnumerable(x => x.Children)
                     .ToDictionary(composite => composite.PublicKey, x => x is Group);

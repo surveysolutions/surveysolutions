@@ -159,7 +159,7 @@ namespace WB.UI.Designer
             
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Latest)
+                //.SetCompatibilityVersion(CompatibilityVersion.Latest)
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

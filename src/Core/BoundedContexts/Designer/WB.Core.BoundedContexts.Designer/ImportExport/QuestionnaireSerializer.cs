@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             return json;
         }
 
-        public Questionnaire Deserialize(string json)
+        public Questionnaire? Deserialize(string json)
         {
             var questionnaire = JsonConvert.DeserializeObject<Questionnaire>(json);
             return questionnaire;
@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             return json;
         }
         
-        public List<T> Deserialize<T>(string json)
+        public List<T>? Deserialize<T>(string json)
         {
             var list = JsonConvert.DeserializeObject<List<T>>(json);
             return list;
