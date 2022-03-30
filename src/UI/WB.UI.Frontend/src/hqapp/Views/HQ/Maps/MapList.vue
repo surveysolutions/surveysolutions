@@ -205,7 +205,8 @@ export default {
                         class: 'parameters',
                         title: this.$t('Pages.MapList_MapType'),
                         render(data) {
-                            return data.endsWith('.shp') ? 'V' : ''
+                            const icon_name = data.endsWith('.shp') ? 'shapefile_icon.svg' : 'map_icon.svg'
+                            return `<img src="/img/${icon_name}" width="20px"></img>`
                         },
                     },
                     {
