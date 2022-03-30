@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Designer.ImportExport.Models;
 
 public class Translations
 {
-    public string? DefaultTranslation { get; set; }
-    public string? DefaultTranslationDisplayName { get; set; }
+    public Guid? DefaultTranslation { get; set; }
+    public string? OriginalDisplayName { get; set; }
 
     public List<Translation> Items { get; set; } = new List<Translation>();
 }

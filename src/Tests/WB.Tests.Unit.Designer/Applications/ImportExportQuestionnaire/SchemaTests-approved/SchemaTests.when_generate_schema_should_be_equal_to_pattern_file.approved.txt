@@ -886,9 +886,10 @@
           "type": [
             "null",
             "string"
-          ]
+          ],
+          "format": "guid"
         },
-        "DefaultTranslationDisplayName": {
+        "OriginalDisplayName": {
           "type": [
             "null",
             "string"
@@ -906,6 +907,13 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "Id": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "guid"
+        },
         "Name": {
           "type": "string"
         },

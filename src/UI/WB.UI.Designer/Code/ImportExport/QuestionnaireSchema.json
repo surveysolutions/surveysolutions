@@ -576,8 +576,8 @@
     "Translations": {
       "type": "object",
       "properties": {
-        "DefaultTranslation": { "type": "string", "maxLength": 32 },
-        "DefaultTranslationDisplayName": { "type": "string" },
+        "DefaultTranslation": { "$ref": "#/definitions/GUID" },
+        "OriginalDisplayName": { "type": "string" },
 
         "Items": {
           "type": "array",
@@ -592,6 +592,7 @@
     "Translation": {
       "type": "object",
       "properties": {
+        "Id": { "$ref": "#/definitions/GUID" },
         "Name": { "type": "string", "maxLength": 32 },
         "FileName": { "type": "string" }
       },

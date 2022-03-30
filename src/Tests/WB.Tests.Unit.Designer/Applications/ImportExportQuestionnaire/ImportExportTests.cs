@@ -283,19 +283,21 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             );
             questionnaireDocument.Translations = new List<Translation>()
             {
+                new Translation() { Id = Guid.NewGuid() },
                 new Translation() { Name = "Translation #1", Id = Guid.NewGuid() },
                 new Translation() { Name = "Translation #2", Id = Guid.NewGuid() },
             };
             questionnaireDocument.DefaultLanguageName = "Custom name";
-            //questionnaireDocument.DefaultTranslation = questionnaireDocument.Translations.First().Id;
+            questionnaireDocument.DefaultTranslation = questionnaireDocument.Translations.Last().Id;
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions(mi => mi.Name == nameof(Translation.Id)));
-            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions(mi => mi.Name == nameof(Translation.Id)));
-            errors.Count.Should().Be(2);
-            errors.First().Should().Be("Required properties are missing from object: FileName.");
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
+            errors.Count.Should().Be(3);
+            errors.First().Should().Be("Required properties are missing from object: Name, FileName.");
             errors.Second().Should().Be("Required properties are missing from object: FileName.");
+            errors.Last().Should().Be("Required properties are missing from object: FileName.");
         }
         
         [Test]
