@@ -21,7 +21,7 @@
         }
     </style>
     
-        <link rel="stylesheet" href="https://js.arcgis.com/4.3/esri/css/main.css">
+        <link rel="stylesheet" href="https://js.arcgis.com/4.22/esri/css/main.css">
         <script src="https://js.arcgis.com/4.22/"></script>
         <script>
             require([
@@ -38,9 +38,11 @@
                     "esri/symbols/SimpleLineSymbol",
                     "esri/symbols/SimpleFillSymbol",
                     "esri/geometry/support/webMercatorUtils",
+                    "dojo/on",
+                    "dojo/dom",
                     "dojo/domReady!"
                 ],
-                function (Map, MapView, Graphic, Geometry, Polygon, Extent, FeatureLayer, GeoJSONLayer, Field, LabelClass, SimpleLineSymbol, SimpleFillSymbol, webMercatorUtils) {
+                function (Map, MapView, Graphic, Geometry, Polygon, Extent, FeatureLayer, GeoJSONLayer, Field, LabelClass, SimpleLineSymbol, SimpleFillSymbol, webMercatorUtils, on, dom) {
 
                     var startExtent = new Extent({
                         "xmin":@Model.XMinVal,"ymin":@Model.YMinVal,"xmax":@Model.XMaxVal,"ymax":@Model.YMaxVal,
@@ -54,7 +56,7 @@
                         basemap: "hybrid",
                         extent: startExtent,
                     });
-
+                    
                     var polygon = Polygon.fromExtent(startExtent);
                     
                     var fillSymbol = new SimpleFillSymbol({
@@ -98,6 +100,20 @@
                             labelingInfo : labelClass,
                             labelsVisible: true,
                           });
+                        
+                        var loading = dom.byId("loadingImg")
+          
+                        function layerviewCreate(evt) {
+                            loading.style.display = 'block'
+                            evt.layerView.watch('updating', (e) => {
+                                if (e === false) {
+                                    loading.style.display = 'none'
+                                }
+                            });
+                        }
+                        
+                        on(geojsonlayer, "layerview-create", layerviewCreate);
+                        
                         map.add(geojsonlayer);
                     }
                     else {
@@ -109,6 +125,8 @@
     
 </head>
 <body>
-    <div id="viewDiv"></div>
+    <div id="viewDiv">
+    </div>
+    <img id="loadingImg" src="/img/loader.gif" style="position:relative; display: none; z-index:100; margin: 0 auto; margin-top: -300px;" />
 </body>
 </html>
