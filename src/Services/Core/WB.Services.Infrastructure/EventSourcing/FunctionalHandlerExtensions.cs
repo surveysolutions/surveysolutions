@@ -66,10 +66,12 @@ namespace WB.Services.Infrastructure.EventSourcing
                 {
                     if (method.ReturnType == typeof(Task))
                     {
-                        await (Task) method.Invoke(eventsHandler, new[]
-                        {
-                            ev.AsPublishedEvent(), token
-                        });
+                        var task = method.Invoke(eventsHandler, new[]
+                            {
+                                ev.AsPublishedEvent(), token
+                            });
+                        if (task != null)
+                            await (Task)task;
                     }
                     else
                     {

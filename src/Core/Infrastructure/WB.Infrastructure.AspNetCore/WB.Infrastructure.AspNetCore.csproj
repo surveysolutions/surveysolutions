@@ -9,14 +9,14 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />        
-        <PackageReference Include="Dapper" Version="2.0.78" />
+        <PackageReference Include="Dapper" Version="2.0.123" />
         <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
-        <PackageReference Include="Npgsql" Version="5.0.5" />
-        <PackageReference Include="refit" Version="6.0.24" />
-        <PackageReference Include="Refit.HttpClientFactory" Version="6.0.24" />
+        <PackageReference Include="Npgsql" Version="6.0.3" />
+        <PackageReference Include="refit" Version="6.3.2" />
+        <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
         <PackageReference Include="Serilog" Version="2.10.0" />
         <PackageReference Include="Serilog.AspNetCore" Version="4.0.0" />
         <PackageReference Include="Serilog.Exceptions" Version="6.1.0" />

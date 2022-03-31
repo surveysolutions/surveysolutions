@@ -106,7 +106,9 @@ namespace WB.Services.Scheduler.Services.Implementation
         public async Task<bool> HasMostRecentFinishedJobIdWithSameTag(long jobId, TenantInfo tenant)
         {
             var job = await this.GetJobAsync(jobId);
-            
+            if (job == null)
+                return false;
+
             if(job.Tenant != tenant.Id.Id) 
                 throw new ArgumentException("Cannot found job id: " + jobId, nameof(jobId));
 
@@ -117,7 +119,7 @@ namespace WB.Services.Scheduler.Services.Implementation
             return hasMoreRecentJob;
         }
 
-        public ValueTask<JobItem> GetJobAsync(long id)
+        public ValueTask<JobItem?> GetJobAsync(long id)
         {
             return db.Jobs.FindAsync(id);
         }
@@ -127,7 +129,7 @@ namespace WB.Services.Scheduler.Services.Implementation
             return db.Jobs.Where(j => ids.Contains(j.Id)).ToListAsync();
         }
 
-        public Task<JobItem> GetJobAsync(TenantInfo tenant, string tag)
+        public Task<JobItem?> GetJobAsync(TenantInfo tenant, string tag)
         {
             return db.Jobs
                 .Where(j => j.Tenant == tenant.Id.Id && j.Tag == tag)

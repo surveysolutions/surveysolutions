@@ -59,7 +59,7 @@
     <PackageReference Include="MvvmCross.Tests" Version="8.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NHibernate" Version="5.3.10" />
-    <PackageReference Include="Npgsql" Version="5.0.5" />
+    <PackageReference Include="Npgsql" Version="6.0.3" />
     <PackageReference Include="NUnit" Version="3.13.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0">
       <PrivateAssets>all</PrivateAssets>
