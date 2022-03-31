@@ -66,10 +66,6 @@
                         }
                     });
 
-                    var polygonGraphic = new Graphic({
-                        geometry: polygon,
-                        symbol: fillSymbol
-                    });
                     var view = new MapView({
                         spatialReference: {"wkid":102100},
                         container: "viewDiv",
@@ -78,6 +74,7 @@
                     
                     view.extent = startExtent;
 
+                    var loading = dom.byId("loadingImg")
 
                     var hasGeoJson = @(Model.HasGeoJson ? "true" : "false")
 
@@ -101,7 +98,6 @@
                             labelsVisible: true,
                           });
                         
-                        var loading = dom.byId("loadingImg")
           
                         function layerviewCreate(evt) {
                             loading.style.display = 'block'
@@ -117,7 +113,18 @@
                         map.add(geojsonlayer);
                     }
                     else {
+                        var polygonGraphic = new Graphic({
+                            geometry: polygon,
+                            symbol: fillSymbol
+                        });
+
                         view.graphics.addMany([polygonGraphic]);
+                        
+                        view.watch('updating', function(evt){
+                            if(evt === false){
+                                loading.style.display = 'none'
+                            }
+                        })
                     }
                     
                 });
@@ -127,6 +134,6 @@
 <body>
     <div id="viewDiv">
     </div>
-    <img id="loadingImg" src="/img/loader.gif" style="position:relative; display: none; z-index:100; margin: 0 auto; margin-top: -300px;" />
+    <img id="loadingImg" src="/img/loader.gif" style="position:relative; display: block; z-index:100; margin: 0 auto; margin-top: -300px;" />
 </body>
 </html>
