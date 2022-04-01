@@ -241,7 +241,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var combobox = vm.Children.OfType<CategoricalComboboxAutocompleteViewModel>().First();
             await combobox.FilterCommand.ExecuteAsync(string.Empty);
             // act
-            await combobox.ShowErrorIfNoAnswerCommand.ExecuteAsync();
+            await combobox.OnFocusChangeCommand.ExecuteAsync(false);
             // assert
             Assert.That(vm.QuestionState.Validity.Error.ValidationErrors, Has.One.Items);
         }

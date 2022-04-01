@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => SetProperty(ref filterText, value);
         }
 
-        public IMvxAsyncCommand ShowErrorIfNoAnswerCommand => new MvxAsyncCommand(SendAnswer);
+        public IMvxAsyncCommand<bool> OnFocusChangeCommand => new MvxAsyncCommand<bool>(OnFocusChange);
         public IMvxCommand<string> FilterCommand => new MvxCommand<string>(Filter);
 
         private void Filter(string filter)
@@ -123,35 +123,39 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.FilterText = option.Title;
         }
 
-        private async Task SendAnswer()
+        private async Task OnFocusChange(bool hasFocus)
         {
-            if (string.IsNullOrEmpty(this.FilterText))
-                return;
-            
-            var selectedOption = this.AutoCompleteSuggestions.FirstOrDefault(x => x.Title.Equals(this.FilterText));
-
-            if (selectedOption == null)
+            if (!hasFocus)
             {
-                var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(this.FilterText);
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage).ConfigureAwait(false);
-                return;
-            }
+                if (string.IsNullOrEmpty(this.FilterText))
+                    return;
 
-            var command = new AnswerSingleOptionLinkedQuestionCommand(
-                Guid.Parse(this.interviewId),
-                this.principal.CurrentUserIdentity.UserId,
-                this.Identity.Id,
-                this.Identity.RosterVector,
-                selectedOption.RosterVector);
+                var selectedOption = this.AutoCompleteSuggestions.FirstOrDefault(x => x.Title.Equals(this.FilterText));
 
-            try
-            {
-                await this.Answering.SendQuestionCommandAsync(command).ConfigureAwait(false);
-                await this.QuestionState.Validity.ExecutedWithoutExceptions();
-            }
-            catch (InterviewException ex)
-            {
-                await this.QuestionState.Validity.ProcessException(ex);
+                if (selectedOption == null)
+                {
+                    var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(this.FilterText);
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage)
+                        .ConfigureAwait(false);
+                    return;
+                }
+
+                var command = new AnswerSingleOptionLinkedQuestionCommand(
+                    Guid.Parse(this.interviewId),
+                    this.principal.CurrentUserIdentity.UserId,
+                    this.Identity.Id,
+                    this.Identity.RosterVector,
+                    selectedOption.RosterVector);
+
+                try
+                {
+                    await this.Answering.SendQuestionCommandAsync(command).ConfigureAwait(false);
+                    await this.QuestionState.Validity.ExecutedWithoutExceptions();
+                }
+                catch (InterviewException ex)
+                {
+                    await this.QuestionState.Validity.ProcessException(ex);
+                }
             }
         }
 

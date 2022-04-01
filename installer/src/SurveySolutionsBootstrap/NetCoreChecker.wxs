@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
   <Fragment>
-    <Variable Name="WindowsDotNetHosting501InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\5.0.2" />
+    <Variable Name="WindowsDotNetHosting501InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\5.0.15" />
     <util:DirectorySearch Id="WindowsDotNetHosting501Installed" Path="[WindowsDotNetHosting501InstallDir]" Variable="WindowsDotNetHosting501Installed" Result="exists" />
 
     <WixVariable Id="WindowsDotNetHosting501InstalledDetectCondition" Value="WindowsDotNetHosting501Installed" Overridable="yes" />
@@ -10,7 +10,7 @@
 
     <PackageGroup Id="WindowsDotNetHosting501">
       <ExePackage
-          Name="dotnet-hosting-5.0.12-win.exe"
+          Name="dotnet-hosting-5.0.15-win.exe"
           InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
@@ -20,18 +20,18 @@
           Vital="yes"
           Permanent="yes"
           Protocol="burn"
-          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/bf3abcc3-5461-451c-9dd6-b74491cf0eed/84775adc7e46888289477b5c72e691fd/dotnet-hosting-5.0.12-win.exe"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/d7d20e41-4bee-4f8a-a32c-278f0ef8ce1a/f5a0c59b42d01b9fc2115615c801866c/dotnet-hosting-5.0.15-win.exe"
           LogPathVariable="WindowsDotNetHosting501Log"
           Compressed="no">
         <!-- heat.exe payload "dotnet-hosting-3.1.1-win.exe" -o "dotnet-hosting.wxs" -->
-        <RemotePayload 
-          CertificatePublicKey="F49F9B33E25E33CCA0BFB15A62B7C29FFAB3880B" 
-          CertificateThumbprint="ABDCA79AF9DD48A0EA702AD45260B3C03093FB4B" 
-          Description="Microsoft .NET 5.0.12 - Windows Server Hosting" 
-          Hash="BEB2DC69DB16704FF1672E3A0720BC22E07ADEE6" 
-          ProductName="Microsoft .NET 5.0.12 - Windows Server Hosting" 
-          Size="67142760" 
-          Version="5.0.12.21524" />
+		<RemotePayload 
+			CertificatePublicKey="147F281C42AEA0B9A46BF92128B9537B53C97E73" 
+			CertificateThumbprint="8740DF4ACB749640AD318E4BE842F72EC651AD80" 
+			Description="Microsoft .NET 5.0.15 - Windows Server Hosting" 
+			Hash="3374BDC42319BE90CAA8A8CBCD30519935B81B50" 
+			ProductName="Microsoft .NET 5.0.15 - Windows Server Hosting" 
+			Size="67645600" 
+			Version="5.0.15.22116" />        
       </ExePackage>
     </PackageGroup>
   </Fragment>
