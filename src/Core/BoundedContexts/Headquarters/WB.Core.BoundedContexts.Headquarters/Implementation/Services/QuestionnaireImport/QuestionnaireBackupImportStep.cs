@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
@@ -18,7 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire;
 
-namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.QuestionnaireImport
+namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     public class QuestionnaireBackupImportStep : IQuestionnaireImportStep
     {
@@ -52,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
 
         public async Task DownloadFromDesignerAsync(IProgress<int> progress)
         {
-            logger.LogInformation($"Downloading Questionnaire Backup.", questionnaireIdentity);
+            logger.LogInformation("Downloading Questionnaire Backup for {questionnaireIdentity}", questionnaireIdentity);
 
             backupFile = await designerApi.DownloadQuestionnaireBackup(questionnaireIdentity.QuestionnaireId);
 
@@ -93,8 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
                 {
                     if (!attachmentContentService.HasAttachmentContent(questionnaireAttachment.ContentId))
                     {
-                        this.logger.LogInformation("Saving attachment.", questionnaireIdentity, 
-                            questionnaireAttachment.AttachmentId, questionnaireAttachment.ContentId);
+                        this.logger.LogInformation($"Saving attachment. For  questionnaire: {questionnaireIdentity}, AttachmentId: {questionnaireAttachment.AttachmentId}, ContentId:{questionnaireAttachment.ContentId}");
                         
                         var attachmentName = questionnaireAttachment.AttachmentId.FormatGuid();
                         var attachmentFiles = 
@@ -145,7 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
             {
                 var lookupTablesStorage = serviceLocator.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>();
 
-                this.logger.LogInformation("Saving lookup table.", questionnaireIdentity, lookupId.Key);
+                this.logger.LogInformation($"Saving lookup table. For questionnaire: {questionnaireIdentity}, key: {lookupId.Key}");
 
                 var lookupName = lookupId.Key.FormatGuid();
 
@@ -182,7 +180,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
 
             foreach (var category in questionnaire.Categories)
             {
-                this.logger.LogInformation("Saving reusable category.", questionnaireIdentity, category.Id);
+                this.logger.LogInformation($"Saving reusable category. For questionnaire: {questionnaireIdentity}, key: {category.Id}");
 
                 var categoryName = category.Id.FormatGuid();
 
@@ -211,7 +209,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
 
                 foreach (var translation in questionnaire.Translations)
                 {
-                    this.logger.LogInformation("Saving translation.", questionnaireIdentity, translation.Id);
+                    this.logger.LogInformation($"Saving translation. For questionnaire: {questionnaireIdentity}, key: {translation.Id}");
 
                     var translationName = translation.Id.FormatGuid();
 

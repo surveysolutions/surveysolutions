@@ -7,7 +7,6 @@ using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Designer;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.QuestionnaireImport;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
