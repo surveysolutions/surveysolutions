@@ -284,7 +284,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             await synchronizationStep.ExecuteAsync();
 
             synchronizationService.Verify(s => s.UploadInterviewAsync(interviewId,
-                    It.Is<InterviewPackageApiView>(p => p.IsFullEventStream == false),
+                    It.Is<InterviewPackageApiView>(p => p.FullEventStreamRequested == false),
                     It.IsAny<IProgress<TransferProgress>>(),
                     It.IsAny<CancellationToken>()),
                 Times.Once);
@@ -337,7 +337,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             await synchronizationStep.ExecuteAsync();
 
             synchronizationService.Verify(s => s.UploadInterviewAsync(interviewId,
-                    It.Is<InterviewPackageApiView>(p => p.IsFullEventStream == true),
+                    It.Is<InterviewPackageApiView>(p => p.FullEventStreamRequested == true),
                     It.IsAny<IProgress<TransferProgress>>(),
                     It.IsAny<CancellationToken>()),
                 Times.Once);

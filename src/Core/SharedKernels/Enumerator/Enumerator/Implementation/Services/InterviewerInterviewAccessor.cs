@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 InterviewId = interview.InterviewId,
                 Events = this.synchronizationSerializer.Serialize(eventsToSend),
                 MetaInfo = metadata,
-                IsFullEventStream = syncInfoPackageResponse.NeedSendFullStream && syncInfoPackageResponse.HasInterview,
+                FullEventStreamRequested = syncInfoPackageResponse.NeedSendFullStream && syncInfoPackageResponse.HasInterview,
             };
         }
 

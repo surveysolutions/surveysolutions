@@ -344,7 +344,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             if (lastCommonEventId == default)
                 return tabletEvents;
             
-            var filteredHqEvents = tabletEvents.SkipWhile(e => e.EventIdentifier != lastCommonEventId).Skip(1).ToArray();
+            var filteredHqEvents = hqEvents.SkipWhile(e => e.EventIdentifier != lastCommonEventId).Skip(1).ToArray();
             if (filteredHqEvents.Any(e => ChangeEventsState.Contains(e.Payload.GetType().Name)))
             {
                 throw new InterviewException(

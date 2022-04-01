@@ -124,6 +124,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
                 if (firstEvent != null &&
                     firstEvent.Payload.GetType() != typeof(SynchronizationMetadataApplied) &&
+                    !request.Interview.FullEventStreamRequested && 
                     eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1,
                         interview.InterviewId, EventsThatChangeAnswersStateProvider.GetTypeNames()))
                 {
@@ -133,7 +134,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
                 AssertPackageNotDuplicated(aggregateRootEvents);
 
-                if (request.Interview.IsFullEventStream)
+                if (request.Interview.FullEventStreamRequested)
                 {
                     var svEvents = eventStore.Read(request.Interview.InterviewId, 0).ToList();
                     if (svEvents.Count > 0)
@@ -221,8 +222,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             if (lastCommonEventId == default)
                 return tabletEvents;
             
-            var filteredHqEvents = tabletEvents.SkipWhile(e => e.EventIdentifier != lastCommonEventId).Skip(1).ToArray();
-            if (filteredHqEvents.Any(e => ChangeEventsState.Contains(e.Payload.GetType().Name)))
+            var filteredSvEvents = svEvents.SkipWhile(e => e.EventIdentifier != lastCommonEventId).Skip(1).ToArray();
+            if (filteredSvEvents.Any(e => ChangeEventsState.Contains(e.Payload.GetType().Name)))
             {
                 throw new InterviewException(
                     "Found active event on supervisor side. Can not merge streams",

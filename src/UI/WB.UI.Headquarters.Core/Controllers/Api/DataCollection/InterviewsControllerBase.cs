@@ -254,7 +254,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 IsCensusInterview = package.MetaInfo.CreatedOnClient ?? false,
                 IncomingDate = DateTime.UtcNow,
                 Events = package.Events,
-                IsFullEventStream = package.IsFullEventStream
+                IsFullEventStream = package.FullEventStreamRequested
             };
 
             this.packagesService.StoreOrProcessPackage(interviewPackage);

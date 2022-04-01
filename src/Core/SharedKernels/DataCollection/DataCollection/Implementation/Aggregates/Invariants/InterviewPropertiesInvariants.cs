@@ -162,7 +162,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                         InterviewStatus.RejectedBySupervisor,
                         InterviewStatus.Restarted,
                         InterviewStatus.Completed,
-                        InterviewStatus.ApprovedBySupervisor);
+                        InterviewStatus.ApprovedBySupervisor,
+                        InterviewStatus.RejectedByHeadquarters);
                     return;
                 case InterviewStatus.InterviewerAssigned:
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(
