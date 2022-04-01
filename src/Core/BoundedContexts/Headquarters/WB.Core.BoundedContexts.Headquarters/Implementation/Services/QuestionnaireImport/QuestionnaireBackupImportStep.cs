@@ -93,7 +93,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
                 {
                     if (!attachmentContentService.HasAttachmentContent(questionnaireAttachment.ContentId))
                     {
-                        this.logger.LogInformation($"Saving attachment.", questionnaireIdentity, 
+                        this.logger.LogInformation("Saving attachment.", questionnaireIdentity, 
                             questionnaireAttachment.AttachmentId, questionnaireAttachment.ContentId);
                         
                         var attachmentName = questionnaireAttachment.AttachmentId.FormatGuid();
@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
             {
                 var lookupTablesStorage = serviceLocator.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>();
 
-                this.logger.LogInformation($"Saving lookup table.", questionnaireIdentity, lookupId.Key);
+                this.logger.LogInformation("Saving lookup table.", questionnaireIdentity, lookupId.Key);
 
                 var lookupName = lookupId.Key.FormatGuid();
 
@@ -182,7 +182,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
 
             foreach (var category in questionnaire.Categories)
             {
-                this.logger.LogInformation($"Saving reusable category.", questionnaireIdentity, category.Id);
+                this.logger.LogInformation("Saving reusable category.", questionnaireIdentity, category.Id);
 
                 var categoryName = category.Id.FormatGuid();
 
@@ -211,7 +211,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
 
                 foreach (var translation in questionnaire.Translations)
                 {
-                    this.logger.LogInformation($"Saving translation.", questionnaireIdentity, translation.Id);
+                    this.logger.LogInformation("Saving translation.", questionnaireIdentity, translation.Id);
 
                     var translationName = translation.Id.FormatGuid();
 
