@@ -38,7 +38,7 @@
       <EmbeddedResource Include="Migrations\ReadSide\M001-100\interview_update.sql" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Dapper" Version="2.0.78" />
+      <PackageReference Include="Dapper" Version="2.0.123" />
       <PackageReference Include="FluentMigrator" Version="3.2.15" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
       <PackageReference Include="Npgsql" Version="6.0.3" />

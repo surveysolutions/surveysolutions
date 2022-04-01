@@ -45,8 +45,8 @@
     <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.2.4" />
     <PackageReference Include="Quartz.Serialization.Json" Version="3.2.4" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
-    <PackageReference Include="Refit.HttpClientFactory" Version="6.0.24" />
-    <PackageReference Include="Refit.Newtonsoft.Json" Version="6.0.24" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
+    <PackageReference Include="Refit.Newtonsoft.Json" Version="6.3.2" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.80.2" />
 
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2" />
