@@ -15,6 +15,9 @@ namespace WB.Services.Export.Tests.WithDatabase
         [OneTimeSetUp]
         public void Setup()
         {
+            //legacy
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            
             var builder = new NpgsqlConnectionStringBuilder(TestConfig.GetConnectionString());
             builder.Database = "postgres";
 

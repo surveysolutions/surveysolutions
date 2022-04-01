@@ -64,6 +64,7 @@ namespace WB.UI.Designer
         {
             this.hostingEnvironment = hostingEnvironment;
             Configuration = configuration;
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         public IConfiguration Configuration { get; }

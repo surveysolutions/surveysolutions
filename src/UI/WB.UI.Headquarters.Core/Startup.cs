@@ -90,6 +90,7 @@ namespace WB.UI.Headquarters
             this.environment = environment;
             Configuration = configuration;
             AppDomain.CurrentDomain.AssemblyResolve += ResolveDataCollectionFix;
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
         
         private static Assembly ResolveDataCollectionFix(object sender, ResolveEventArgs args)
