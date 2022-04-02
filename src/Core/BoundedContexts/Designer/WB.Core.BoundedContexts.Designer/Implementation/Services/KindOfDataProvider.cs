@@ -22,12 +22,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var codes = GetKindOfDataCodes();
             return codes.Select(code =>
             {
-                var item = new KindOfDataItem(code, GetKindOfDataTitleByCode(code));
+                var item = new KindOfDataItem(code, GetKindOfDataTitleByCode(code) ?? "Unknown");
                 return item;
             }).ToList();
         }
 
-        public static string GetKindOfDataTitleByCode(string code)
+        public static string? GetKindOfDataTitleByCode(string code)
         {
             return Resources.KindOfData.ResourceManager.GetString(code);
         }

@@ -28,7 +28,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             if (attachmentId.HasValue)
             {
                 var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentId.Value);
-                fileName = attachmentMeta.FileName;
+                fileName = attachmentMeta?.FileName;
             }
 
             return File(attachment.Content, attachment.ContentType, fileName, null,

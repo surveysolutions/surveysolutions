@@ -217,11 +217,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             var record = await this.dbContext.QuestionnaireChangeRecords
                 .SingleOrDefaultAsync(r => r.QuestionnaireId == questionnaire.FormatGuid()
                     && r.Sequence == revision);
-
-            if (record.Meta == null)
-            {
-                record.Meta = new QuestionnaireChangeRecordMetadata();
-            }
+            
+            if (record == null) return;
+            
+            record.Meta ??= new QuestionnaireChangeRecordMetadata();
 
             record.Meta.Hq.HostName = metaData.HqHost ?? record.Meta.Hq.HostName;
             record.Meta.Comment = metaData.Comment;

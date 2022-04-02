@@ -85,11 +85,14 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             else
             {
                 var instance = Activator.CreateInstance(QueryType);
-                var store = (KeyValueEntity)instance;
-                store.Id = id;
-                store.Value = this.serializer.Serialize(entity);
+                if (instance != null)
+                {
+                    var store = (KeyValueEntity)instance;
+                    store.Id = id;
+                    store.Value = this.serializer.Serialize(entity);
                 
-                dbContext.Add(instance);
+                    dbContext.Add(instance);
+                }
             }
 
             memoryCache.Remove(CacheKey(id));
@@ -106,9 +109,11 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                 if (_queryType == null)
                 {
                     if (typeof(T) == typeof(QuestionnaireDocument)) return typeof(StoredQuestionnaireDocument);
-                    StoredInAttribute storedInAttribute =
-                        (StoredInAttribute)Attribute.GetCustomAttribute(typeof(T), typeof(StoredInAttribute));
 
+                    var attribute = Attribute.GetCustomAttribute(typeof(T), typeof(StoredInAttribute));
+                    if (attribute == null) throw new Exception("Attribute was not found");
+                    
+                    StoredInAttribute storedInAttribute = (StoredInAttribute)attribute;
                     _queryType = storedInAttribute.StoredIn;
                 }
 

@@ -22,12 +22,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var codes = GetCountryCodes();
             return codes.Select(code =>
             {
-                var item = new CountryItem (code, Resources.Country.ResourceManager.GetString(code));
+                var item = new CountryItem (code, Resources.Country.ResourceManager.GetString(code) ?? "Unknown");
                 return item;
             }).ToList();
         }
 
-        public static string GetCountryTitleByCode(string code)
+        public static string? GetCountryTitleByCode(string code)
         {
             return Resources.Country.ResourceManager.GetString(code);
         }

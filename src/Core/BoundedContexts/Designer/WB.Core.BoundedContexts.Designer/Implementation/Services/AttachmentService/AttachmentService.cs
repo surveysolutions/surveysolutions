@@ -52,12 +52,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             return this.dbContext.AttachmentMetas.Where(attachment => attachment.QuestionnaireId == questionnaireId).ToList();
         }
 
-        public AttachmentMeta GetAttachmentMeta(Guid attachmentId)
+        public AttachmentMeta? GetAttachmentMeta(Guid attachmentId)
         {
             return this.dbContext.AttachmentMetas.Find(attachmentId);
         }
 
-        public AttachmentContent GetContent(string contentId)
+        public AttachmentContent? GetContent(string contentId)
         {
             return this.dbContext.AttachmentContents.Find(contentId);
         }
@@ -138,7 +138,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             }
         }
 
-        public AttachmentContent GetContentDetails(string attachmentContentId)
+        public AttachmentContent? GetContentDetails(string attachmentContentId)
         {
             return this.dbContext.AttachmentContents.AsNoTracking().Select(content => new AttachmentContent
             {

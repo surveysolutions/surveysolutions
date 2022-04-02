@@ -85,8 +85,11 @@ namespace WB.Core.BoundedContexts.Designer.Comments
         public async Task ResolveCommentAsync(Guid commentId)
         {
             var comment = await dbContext.CommentInstances.FindAsync(commentId);
-            comment.ResolveDate = DateTime.UtcNow;
-            dbContext.CommentInstances.Update(comment);
+            if (comment != null)
+            {
+                comment.ResolveDate = DateTime.UtcNow;
+                dbContext.CommentInstances.Update(comment);
+            }
         }
 
         public List<CommentThread> LoadCommentThreads(Guid questionnaireId)

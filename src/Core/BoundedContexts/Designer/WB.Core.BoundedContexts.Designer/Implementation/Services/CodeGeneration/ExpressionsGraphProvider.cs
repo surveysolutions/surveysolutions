@@ -108,7 +108,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             return allStaticTextsWithAttachedVariables.ToDictionary(s => s.PublicKey, s => new List<Guid>
             {
-                questionnaire.FirstOrDefault<IVariable>(v => v.VariableName == s.AttachmentName).PublicKey
+                questionnaire.FirstOrDefault<IVariable>(v => v.VariableName == s.AttachmentName)?.PublicKey 
+                    ?? throw new Exception("Variable nor found")
             });
         }
 
@@ -270,7 +271,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var conditionExpression = this.macrosSubstitutionService.InlineMacros(expression, allMacros);
             var idsOfEntitiesInvolvedInExpression = GetIdsOfEntitiesInvolvedInExpression(variableNamesByEntitiyIds, conditionExpression, entityId, ignoreReferenceOnSelf).ToList();
 
-            if (!dependencies.TryGetValue(entityId, out List<Guid> depsList))
+            if (!dependencies.TryGetValue(entityId, out List<Guid>? depsList))
             {
                 depsList = new List<Guid>();
             }

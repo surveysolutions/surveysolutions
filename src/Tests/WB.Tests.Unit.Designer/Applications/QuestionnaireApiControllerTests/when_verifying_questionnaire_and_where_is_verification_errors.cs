@@ -72,7 +72,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 
             verifierMock = new Mock<IQuestionnaireVerifier>();
 
-            string _;
             verifierMock
                 .Setup(x => x.GetAllErrors(questionnaireView, 
                     Moq.It.IsAny<bool>()))

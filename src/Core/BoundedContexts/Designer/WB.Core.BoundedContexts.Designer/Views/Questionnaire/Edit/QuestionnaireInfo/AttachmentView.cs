@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 {
     public class AttachmentView
     {
-        public AttachmentView(string attachmentId, string name, AttachmentContent content, AttachmentMeta? meta)
+        public AttachmentView(string attachmentId, string name, AttachmentContent? content, AttachmentMeta? meta)
         {
             AttachmentId = attachmentId;
             Name = name;
@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
         public string AttachmentId { get; set; }
         public string Name { get; set; }
-        public AttachmentContent Content { get; set; }
+        public AttachmentContent? Content { get; set; }
         public AttachmentMeta? Meta { get; set; }
     }
 }

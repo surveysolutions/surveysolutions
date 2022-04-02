@@ -115,15 +115,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.QuestionsCount = questionsCount;
             questionnaireInfoView.GroupsCount = groupsCount;
             questionnaireInfoView.RostersCount = rostersCount;
-
+            
             var listItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons)
                 .FirstOrDefault(x => x.QuestionnaireId == questionnaireRevision.QuestionnaireId.FormatGuid());
-
+            
+            if (listItem == null) 
+                return null;
+            
             var sharedPersons = listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First())
                         .Select(x => new SharedPersonView
                         {
                             Email = x.Email,
-                            Login = this.dbContext.Users.Find(x.UserId).UserName,
+                            Login = this.dbContext.Users.Find(x.UserId)?.UserName ?? String.Empty,
                             UserId = x.UserId,
                             IsOwner = x.IsOwner,
                             ShareType = x.ShareType

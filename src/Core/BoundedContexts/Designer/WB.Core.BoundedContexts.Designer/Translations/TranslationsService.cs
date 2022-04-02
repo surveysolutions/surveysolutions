@@ -232,6 +232,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private TranslationInstance? GetQuestionnaireTranslation(Guid questionnaireId, Guid translationId, TranslationRow importedTranslation,
             Dictionary<Guid, bool> idsOfAllQuestionnaireEntities)
         {
+            if (importedTranslation.EntityId == null) throw new InvalidOperationException("Invalid EntityId.");
+            if (importedTranslation.Type == null) throw new InvalidOperationException("Invalid Entity type.");
+
             var questionnaireEntityId = Guid.Parse(importedTranslation.EntityId);
             if (!idsOfAllQuestionnaireEntities.Keys.Contains(questionnaireEntityId)) return null;
 
