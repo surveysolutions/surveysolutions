@@ -908,7 +908,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         class EqualityArray : IEqualityComparer<int[]>
         {
-            public bool Equals(int[] x, int[] y) => x.SequenceEqual(y);
+            public bool Equals(int[]? x, int[]? y) => x.SequenceEqual(y);
             public int GetHashCode(int[] obj) => obj.Aggregate(0, (current, i) => current ^ i.GetHashCode());
         }
 

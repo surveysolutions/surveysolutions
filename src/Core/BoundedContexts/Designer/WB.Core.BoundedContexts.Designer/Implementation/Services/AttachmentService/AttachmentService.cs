@@ -89,10 +89,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         public string CreateAttachmentContentId(byte[] binaryContent)
         {
-            using (var sha1Service = new SHA1CryptoServiceProvider())
-            {
-                return BitConverter.ToString(sha1Service.ComputeHash(binaryContent)).Replace("-", string.Empty);
-            }
+            //old hashes in db
+            //check before replacing SHA1CryptoServiceProvider
+#pragma warning disable SYSLIB0021
+            using var sha1Service = new SHA1CryptoServiceProvider();
+            return BitConverter.ToString(sha1Service.ComputeHash(binaryContent)).Replace("-", string.Empty);
+#pragma warning restore SYSLIB0021
         }
 
         public void SaveContent(string contentId, string contentType, byte[] binaryContent)

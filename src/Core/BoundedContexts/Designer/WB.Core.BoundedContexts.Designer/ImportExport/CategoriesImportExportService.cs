@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             return json;
         }
 
-        public void StoreCategoriesFromJson(Guid questionnaireId, Guid categoriesId, string json)
+        public void StoreCategoriesFromJson(Guid? questionnaireId, Guid? categoriesId, string? json)
         {
             if (questionnaireId == null) throw new ArgumentNullException(nameof(questionnaireId));
             if (categoriesId == null) throw new ArgumentNullException(nameof(categoriesId));
@@ -60,8 +60,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                     Text = CommandUtils.SanitizeHtml(item.Text, true),
                     Value = item.Value,
                     ParentId = item.ParentValue,
-                    CategoriesId = categoriesId,
-                    QuestionnaireId = questionnaireId,
+                    CategoriesId = categoriesId.Value,
+                    QuestionnaireId = questionnaireId.Value,
                 }));
             }
             catch (COMException e)

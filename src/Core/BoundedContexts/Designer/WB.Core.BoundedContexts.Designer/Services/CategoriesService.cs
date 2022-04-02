@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         public void Store(Guid questionnaireId, Guid categoriesId, Stream file, CategoriesFileType fileType)
         {
-            if (categoriesId == null) throw new ArgumentNullException(nameof(categoriesId));
+            //if (categoriesId == null) throw new ArgumentNullException(nameof(categoriesId));
             
             try
             {
