@@ -20,6 +20,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
     {
         public static string CreateAndInitializeDb(params DbType[] dbType)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             var TestConnectionString = TestsConfigurationManager.ConnectionString;
             var databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
             var connectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)
@@ -46,6 +47,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
         public static void InitializeDb(string connectionString, IWorkspaceContextAccessor workspaceContextAccessor, params DbType[] dbType)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             DatabaseManagement.InitDatabase(connectionString, "events");
             DbMigrationsRunner.MigrateToLatest(connectionString, "events",
                 new DbUpgradeSettings(typeof(M201812181520_AddedGlobalSequenceSequence).Assembly, typeof(M201812181520_AddedGlobalSequenceSequence).Namespace));
