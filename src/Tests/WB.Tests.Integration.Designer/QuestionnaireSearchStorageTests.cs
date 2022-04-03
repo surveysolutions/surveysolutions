@@ -87,12 +87,13 @@ namespace WB.Tests.Integration.Designer
 
             var parentFolderId = Guid.NewGuid();
             var folderId = Guid.NewGuid();
+            var folderTitle = "it is folder";
 
             RunActionInScope(sl =>
             {
                 var dbContext = sl.GetInstance<DesignerDbContext>();
                 dbContext.QuestionnaireFolders.Add(Create.Questionnaire.ListViewFolder(parentFolderId, "parent folder", null, 1));
-                dbContext.QuestionnaireFolders.Add(Create.Questionnaire.ListViewFolder(folderId, "it is folder", parentFolderId, 2));
+                dbContext.QuestionnaireFolders.Add(Create.Questionnaire.ListViewFolder(folderId, folderTitle, parentFolderId, 2, path: $"\\{parentFolderId}\\"));
                 dbContext.Questionnaires.Add(Create.Questionnaire.ListViewItem(questionnaireId, questionnaireTitle, folderId: parentFolderId));
                 dbContext.SaveChanges();
 
@@ -132,6 +133,7 @@ namespace WB.Tests.Integration.Designer
                 var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
                 searchStorage.AddOrUpdateEntity(questionnaireId, 
                     new TextQuestion() {QuestionText = "test car dog question text", PublicKey = questionId });
+                
             });
 
             RunActionInScope(sl =>
