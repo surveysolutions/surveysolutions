@@ -93,6 +93,8 @@ namespace WB.Tests.Integration.Designer
             {
                 var dbContext = sl.GetInstance<DesignerDbContext>();
                 dbContext.QuestionnaireFolders.Add(Create.Questionnaire.ListViewFolder(parentFolderId, "parent folder", null, 1));
+                dbContext.SaveChanges();
+                
                 dbContext.QuestionnaireFolders.Add(Create.Questionnaire.ListViewFolder(folderId, folderTitle, parentFolderId, 2, path: $"\\{parentFolderId}\\"));
                 dbContext.Questionnaires.Add(Create.Questionnaire.ListViewItem(questionnaireId, questionnaireTitle, folderId: parentFolderId));
                 dbContext.SaveChanges();
@@ -126,6 +128,7 @@ namespace WB.Tests.Integration.Designer
             {
                 var dbContext = sl.GetInstance<DesignerDbContext>();
                 dbContext.QuestionnaireFolders.Add(Create.Questionnaire.ListViewFolder(parentFolderId, "parent folder", null, 1));
+                dbContext.SaveChanges();
                 dbContext.QuestionnaireFolders.Add(Create.Questionnaire.ListViewFolder(folderId, folderTitle, parentFolderId, 2, path: $"\\{parentFolderId}\\"));
                 dbContext.Questionnaires.Add(Create.Questionnaire.ListViewItem(questionnaireId, questionnaireTitle, folderId: folderId));
                 dbContext.SaveChanges();
