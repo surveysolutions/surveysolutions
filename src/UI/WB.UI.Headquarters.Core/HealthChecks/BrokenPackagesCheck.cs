@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.HealthChecks
                         data: new Dictionary<string, object>
                         {
                             ["url"] = linkGenerator.GetPathByAction(this.contextAccessor.HttpContext,
-                                "InterviewPackages", "ControlPanel")
+                                "InterviewPackages", "Diagnostics")
                         }));
             }
 
