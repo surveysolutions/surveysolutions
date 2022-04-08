@@ -52,6 +52,6 @@
         Workspaces = 47,
         ServerAdministration = 48,
         UsersManagement = 49,
-        MapDashboard = 50,
+        MapDashboard = 50
     }
 }

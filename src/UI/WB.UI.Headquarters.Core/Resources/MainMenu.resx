@@ -123,11 +123,20 @@
   <data name="Assignments" xml:space="preserve">
     <value>Assignments</value>
   </data>
+  <data name="AuditLog" xml:space="preserve">
+    <value>Audit Log</value>
+  </data>
   <data name="CumulativeChart" xml:space="preserve">
     <value>Cumulative Interview Chart</value>
   </data>
   <data name="DataExport" xml:space="preserve">
     <value>Data Export</value>
+  </data>
+  <data name="DeviceLogs" xml:space="preserve">
+    <value>Device Logs</value>
+  </data>    
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Diagnostics</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
     <value>Headquarters</value>
@@ -138,6 +147,9 @@
   <data name="Interviewers" xml:space="preserve">
     <value>Interviewers</value>
   </data>
+  <data name="InterviewPackages" xml:space="preserve">
+    <value>Interview Packages</value>
+  </data>    
   <data name="Interviews" xml:space="preserve">
     <value>Interviews</value>
   </data>
@@ -192,6 +204,9 @@
   <data name="SurveysAndStatuses" xml:space="preserve">
     <value>Surveys and Statuses</value>
   </data>
+  <data name="TabletInfos" xml:space="preserve">
+    <value>Tablet Infos</value>
+  </data>
   <data name="TeamAndRoles" xml:space="preserve">
     <value>Team and Roles</value>
   </data>
@@ -220,7 +235,7 @@
     <value>Questionnaires</value>
   </data>
   <data name="Administration" xml:space="preserve">
-    <value>Administration</value>
+    <value>Admin</value>
   </data>
   <data name="Workspaces" xml:space="preserve">
       <value>Workspaces</value>

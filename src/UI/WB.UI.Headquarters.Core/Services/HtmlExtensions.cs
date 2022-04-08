@@ -91,6 +91,7 @@ namespace WB.UI.Headquarters.Services
                 case MenuItem.Docs: return @MainMenu.Interviews;
                 case MenuItem.Headquarters: return @MainMenu.Headquarters;
                 case MenuItem.Interviewers: return @MainMenu.Interviewers;
+                case MenuItem.Interviews: return @MainMenu.Interviews;
                 case MenuItem.InterviewsChart: return @MainMenu.CumulativeChart;
                 case MenuItem.ManageAccount: return Strings.SurverManagement_MainMenu_ManageAccount;
                 case MenuItem.MapReport: return @MainMenu.MapReport;
@@ -118,6 +119,16 @@ namespace WB.UI.Headquarters.Services
                 case MenuItem.Maps: return MainMenu.Maps;
                 case MenuItem.SurveyStatistics: return MainMenu.SurveyStatistics;
                 case MenuItem.ChangePassword: return Strings.SurverManagement_MainMenu_ChangePassword;
+                case MenuItem.Workspaces: return MainMenu.Workspaces;
+                case MenuItem.UsersManagement: return MainMenu.Users;
+                case MenuItem.TeamMembersAndStatuses: return MainMenu.TeamMembersAndStatuses;
+                case MenuItem.TabletLogs : return MainMenu.DeviceLogs;
+                case MenuItem.Administration_Config: return Pages.Configuration;
+                case MenuItem.Administration_TabletInfo : return MainMenu.TabletInfos;
+                case MenuItem.Administration_AppUpdates : return Pages.AppUpdates;
+                case MenuItem.Administration_Exceptions : return Pages.Exceptions;
+                case MenuItem.Administration_ReevaluateInterview : return Pages.ReevaluateInterview;
+
                 default: return String.Empty;
             }
         }

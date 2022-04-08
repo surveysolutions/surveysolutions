@@ -79,6 +79,8 @@ namespace WB.UI.Headquarters.Controllers
             
             var browseItem = browseViewFactory.GetById(questionnaireIdentity);
 
+            ViewBag.SpecificPageCaption = $"{questionnaire.Title} (ver. {questionnaire.Version})";
+            
             var model = new QuestionnaireDetailsModel
             {
                 QuestionnaireId = questionnaire.QuestionnaireId,
