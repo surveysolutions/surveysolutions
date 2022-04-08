@@ -138,7 +138,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 {
                     var svEvents = eventStore.Read(request.Interview.InterviewId, 0).ToList();
                     if (svEvents.Count > 0)
-                        aggregateRootEvents = FilterDuplicateEvents(aggregateRootEvents, svEvents);
+                        aggregateRootEvents = aggregateRootEvents.FilterDuplicateEvents(svEvents);
                 }
 
                 var serializedEvents = aggregateRootEvents
@@ -210,30 +210,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             return Task.FromResult(new OkResponse());
         }
         
-        private static HashSet<string> ChangeEventsState = EventsThatChangeAnswersStateProvider.GetTypeNames()
-            .Concat(EventsThatAssignInterviewToResponsibleProvider.GetTypeNames())
-            .ToHashSet();
-
-        private AggregateRootEvent[] FilterDuplicateEvents(AggregateRootEvent[] tabletEvents, List<CommittedEvent> svEvents)
-        {
-            var tabletEventIds = tabletEvents.Select(e => e.EventIdentifier).Reverse();
-            var hqEventIds = svEvents.Select(e => e.EventIdentifier).Reverse();
-            var lastCommonEventId = tabletEventIds.Intersect(hqEventIds).FirstOrDefault();
-            if (lastCommonEventId == default)
-                return tabletEvents;
-            
-            var filteredSvEvents = svEvents.SkipWhile(e => e.EventIdentifier != lastCommonEventId).Skip(1).ToArray();
-            if (filteredSvEvents.Any(e => ChangeEventsState.Contains(e.Payload.GetType().Name)))
-            {
-                throw new InterviewException(
-                    "Found active event on supervisor side. Can not merge streams",
-                    exceptionType: InterviewDomainExceptionType.InterviewHasIncompatibleMode);
-            }
-
-            var filteredTabletEvents = tabletEvents.SkipWhile(e => e.EventIdentifier != lastCommonEventId).Skip(1).ToArray();
-            return filteredTabletEvents;
-        }
-
         private void UpdateAssignmentQuantityByInterview(Guid interviewId)
         {
             var interviewView = this.interviews.GetById(interviewId.FormatGuid());

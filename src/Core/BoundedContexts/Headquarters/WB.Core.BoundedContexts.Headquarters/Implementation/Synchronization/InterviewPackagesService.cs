@@ -234,7 +234,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     {
                         var hqEvents = headquartersEventStore.Read(interview.InterviewId, 0).ToList();
                         if (hqEvents.Count > 0)
-                            aggregateRootEvents = FilterDuplicateEvents(aggregateRootEvents, hqEvents);
+                            aggregateRootEvents = aggregateRootEvents.FilterDuplicateEvents(hqEvents);
                     }
 
                     var serializedEvents = aggregateRootEvents
@@ -332,30 +332,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             innerwatch.Stop();
         }
         
-        HashSet<string> ChangeEventsState = EventsThatChangeAnswersStateProvider.GetTypeNames()
-            .Concat(EventsThatAssignInterviewToResponsibleProvider.GetTypeNames())
-            .ToHashSet();
-
-        private AggregateRootEvent[] FilterDuplicateEvents(AggregateRootEvent[] tabletEvents, List<CommittedEvent> hqEvents)
-        {
-            var tabletEventIds = tabletEvents.Select(e => e.EventIdentifier).Reverse();
-            var hqEventIds = hqEvents.Select(e => e.EventIdentifier).Reverse();
-            var lastCommonEventId = tabletEventIds.Intersect(hqEventIds).FirstOrDefault();
-            if (lastCommonEventId == default)
-                return tabletEvents;
-            
-            var filteredHqEvents = hqEvents.SkipWhile(e => e.EventIdentifier != lastCommonEventId).Skip(1).ToArray();
-            if (filteredHqEvents.Any(e => ChangeEventsState.Contains(e.Payload.GetType().Name)))
-            {
-                throw new InterviewException(
-                    "Found active event on hq side. Can not merge streams",
-                    exceptionType: InterviewDomainExceptionType.InterviewHasIncompatibleMode);
-            }
-
-            var filteredTabletEvents = tabletEvents.SkipWhile(e => e.EventIdentifier != lastCommonEventId).Skip(1).ToArray();
-            return filteredTabletEvents;
-        }
-
         private void RecordProcessedPackageInfo(IPlainStorageAccessor<ReceivedPackageLogEntry> packageTrackr, AggregateRootEvent[] aggregateRootEvents)
         {
             if (aggregateRootEvents.Length > 0)

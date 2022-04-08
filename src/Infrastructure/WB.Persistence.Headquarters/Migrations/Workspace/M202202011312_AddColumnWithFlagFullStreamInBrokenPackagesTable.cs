@@ -5,7 +5,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
 {
     [Localizable(false)]
     [Migration(202202011312)]
-    public class M202202011312_AddColumnWithFlagFullStreamInBrokenPackagesTable : Migration
+    public class M202202011312_AddColumnWithFlagFullStreamInBrokenPackagesTable : ForwardOnlyMigration
     {
         public override void Up()
         {
@@ -21,12 +21,6 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
                 .NotNullable()
                 .WithDefaultValue(false)
                 .SetExistingRowsTo(false);
-        }
-
-        public override void Down()
-        {
-            Delete.Column("isfulleventstream").FromTable("brokeninterviewpackages");
-            Delete.Column("isfulleventstream").FromTable("interviewpackages");
         }
     }
 }

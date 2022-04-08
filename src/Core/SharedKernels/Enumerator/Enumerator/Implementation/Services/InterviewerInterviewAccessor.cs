@@ -168,9 +168,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public InterviewSyncInfoPackage GetInterviewSyncInfoPackage(Guid interviewId)
         {
+            var firstEventId = this.eventStore.GetFirstEventId(interviewId);
+            if (!firstEventId.HasValue)
+                throw new ArgumentNullException($"Event stream for interview {interviewId} isn't exist");
+                
             return new InterviewSyncInfoPackage()
             {
-                FirstEventId = this.eventStore.GetFirstEventId(interviewId)!.Value,
+                FirstEventId = firstEventId.Value,
                 LastEventIdFromPreviousSync = this.eventStore.GetLastEventIdUploadedToHq(interviewId),
             };
         }
