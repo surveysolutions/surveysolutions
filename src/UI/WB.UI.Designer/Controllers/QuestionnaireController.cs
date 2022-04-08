@@ -23,6 +23,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ImportExport;
+using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Resources;
@@ -31,6 +32,7 @@ namespace WB.UI.Designer.Controllers
 {
     [Authorize]
     [ResponseCache(NoStore = true)]
+    [QuestionnairePermissions]
     public partial class QuestionnaireController : Controller
     {
         public class QuestionnaireCloneModel

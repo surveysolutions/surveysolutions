@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId);
         bool HasUserAccessToEditComments(QuestionnaireChangeRecord changeRecord, QuestionnaireDocument questionnaire, Guid userId);
         bool HasUserAccessToEditComments(Guid revisionId, Guid userId);
+        bool IsAnonymousQuestionnaire(Guid questionnaireId, out Guid? originQuestionnaireId);
     }
 
     public class QuestionnaireViewFactory : IQuestionnaireViewFactory
@@ -55,7 +56,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             var questionnaire = this.questionnaireStorage.Get(questionnaireId);
             if (questionnaire == null || questionnaire.IsDeleted)
+            {
                 return false;
+            }
 
             if (questionnaire.CreatedBy == userId)
                 return true;
@@ -138,6 +141,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var questionnaire = this.questionnaireStorage.Get(Guid.Parse(changeRecord.QuestionnaireId));
             
             return questionnaire != null && HasUserAccessToEditComments(changeRecord, questionnaire, userId);
+        }
+
+        public bool IsAnonymousQuestionnaire(Guid questionnaireId, out Guid? originQuestionnaireId)
+        {
+            var questionnaire = this.dbContext.AnonymousQuestionnaires
+                .FirstOrDefault(x => x.AnonymousQuestionnaireId == questionnaireId && x.IsActive == true);
+            originQuestionnaireId = questionnaire?.QuestionnaireId;
+            return questionnaire != null;
         }
 
         public bool HasUserAccessToEditComments(
