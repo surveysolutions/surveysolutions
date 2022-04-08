@@ -105,7 +105,7 @@ namespace WB.UI.Headquarters.Controllers
                     FileName = mapName,
                     Size = FileSizeUtils.SizeInMegabytes(map.Size),
                     Wkid = map.Wkid,
-                    ImportDate = map.ImportDate.HasValue ? map.ImportDate.Value.FormatDateWithTime() : "",
+                    ImportDate = map.ImportDate,
                     UploadedBy = uploadedBy,
                     MaxScale = map.MaxScale,
                     MinScale = map.MinScale,

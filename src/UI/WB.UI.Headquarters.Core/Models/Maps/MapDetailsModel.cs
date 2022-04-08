@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Headquarters.Views.Maps;
+﻿using System;
+using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 
 namespace WB.UI.Headquarters.Models.Maps
 {
@@ -8,7 +9,7 @@ namespace WB.UI.Headquarters.Models.Maps
 
         public double Size { get; set; }
         public string FileName { get; set; }
-        public string ImportDate { get; set; }
+        public DateTime? ImportDate { get; set; }
         public string UploadedBy { get; set; }
         public double XMaxVal { set; get; }
         public double YMaxVal { set; get; }
