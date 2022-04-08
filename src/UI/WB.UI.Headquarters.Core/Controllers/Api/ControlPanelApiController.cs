@@ -121,6 +121,8 @@ namespace WB.UI.Headquarters.Controllers.Api
         public ActionResult<List<ApkInfo>> AppUpdates()
         {
             var folder = clientApkProvider.ApkClientsFolder();
+            if (!Directory.Exists(folder))
+                return new List<ApkInfo>();
             var appFiles = Directory.EnumerateFiles(folder);
 
             var enumerable = appFiles
