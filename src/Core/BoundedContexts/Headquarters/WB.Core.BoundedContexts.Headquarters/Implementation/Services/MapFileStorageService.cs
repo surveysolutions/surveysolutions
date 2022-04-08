@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     public class MapFileStorageService : IMapStorageService
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
+        private readonly IPlainStorageAccessor<DuplicateMapLabel> duplicateMapLabelPlainStorageAccessor;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
         private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
@@ -64,7 +65,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IExternalFileStorage externalFileStorage,
             IOptions<GeospatialConfig> geospatialConfig,
             IAuthorizedUser authorizedUser,
-            ILogger<MapFileStorageService> logger)
+            ILogger<MapFileStorageService> logger, 
+            IPlainStorageAccessor<DuplicateMapLabel> duplicateMapLabelPlainStorageAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -76,6 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.externalFileStorage = externalFileStorage;
             this.authorizedUser = authorizedUser;
             this.logger = logger;
+            this.duplicateMapLabelPlainStorageAccessor = duplicateMapLabelPlainStorageAccessor;
             this.geospatialConfig = geospatialConfig;
 
             this.path = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, TempFolderName);
@@ -123,7 +126,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
                 }
 
+                this.duplicateMapLabelPlainStorageAccessor.Remove(l => l.Where(d => d.Map.Id == mapItem.Id));
                 this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
+                this.duplicateMapLabelPlainStorageAccessor.Store(mapItem.DuplicateLabels);
                 return mapItem;
             }
             catch
@@ -362,6 +367,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             fc.Add(feature);
                         }
 
+                        item.DuplicateLabels.Clear();
                         foreach (var duplicateLabel in duplicateLabels)
                         {
                             item.DuplicateLabels.Add(new DuplicateMapLabel()
