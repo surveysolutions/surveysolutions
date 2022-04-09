@@ -41,7 +41,7 @@
         "jquery-mask-plugin": "^1.14.16",
         "lodash": "^4.17.21",
         "marked": "^4.0.10",
-        "moment": "^2.24.0",
+        "moment": "^2.29.2",
         "moment-duration-format": "^2.3.2",
         "moment-timezone": "^0.5.33",
         "pnotify": "^3.2.1",
