@@ -25,7 +25,7 @@ namespace WB.UI.Tester.ServiceLocation
 
             registry.Bind<ISideBarSectionViewModelsFactory, SideBarSectionViewModelFactory>();
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
-            registry.Bind<IMapService, MapService>();
+            registry.BindWithConstructorArgument<IMapService, MapService>("webOnlyMode", true);
             registry.Bind<TesterSettings>();
             registry.Bind<PhotoViewViewModel>();
             registry.BindAsSingleton<IInterviewViewModelFactory, TesterInterviewViewModelFactory>();
