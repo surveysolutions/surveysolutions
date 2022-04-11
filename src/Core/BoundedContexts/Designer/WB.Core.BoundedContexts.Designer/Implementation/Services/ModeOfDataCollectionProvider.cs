@@ -25,7 +25,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public static string GetModeOfDataCollectionTitleByCode(ModeOfDataCollection code)
         {
-            return Resources.ModeOfDataCollection.ResourceManager.GetString(code.ToString()) ?? String.Empty;
+            var codeName = code.ToString();
+            return Resources.ModeOfDataCollection.ResourceManager.GetString(codeName) 
+                   ?? throw new InvalidOperationException($"Mode not found for {codeName}");
         }
 
         public static List<ModeOfDataCollection> GetModeOfDataCollectionCodes()

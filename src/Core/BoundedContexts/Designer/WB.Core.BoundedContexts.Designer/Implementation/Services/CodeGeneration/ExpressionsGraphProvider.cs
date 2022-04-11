@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return allStaticTextsWithAttachedVariables.ToDictionary(s => s.PublicKey, s => new List<Guid>
             {
                 questionnaire.FirstOrDefault<IVariable>(v => v.VariableName == s.AttachmentName)?.PublicKey 
-                    ?? throw new Exception("Variable nor found")
+                    ?? throw new Exception("Variable not found")
             });
         }
 

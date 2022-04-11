@@ -169,7 +169,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 SortIndex = i,
                 QuestionnaireId = questionnaireId,
                 CategoriesId = categoriesId,
-                Value = int.TryParse(x.Id,out int result) ? result : -1,
+                Value = int.TryParse(x.Id, out int result) ? result : throw new InvalidOperationException($"Invalid category value {x.Id}"),
                 Text = x.Text,
                 ParentId = string.IsNullOrEmpty(x.ParentId)
                     ? (int?)null

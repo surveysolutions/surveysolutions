@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Main.Core.Documents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -85,14 +84,12 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             else
             {
                 var instance = Activator.CreateInstance(QueryType);
-                if (instance != null)
-                {
-                    var store = (KeyValueEntity)instance;
-                    store.Id = id;
-                    store.Value = this.serializer.Serialize(entity);
+                if (instance == null) throw new Exception($"Activation error of {QueryType}");
                 
-                    dbContext.Add(instance);
-                }
+                var store = (KeyValueEntity)instance;
+                store.Id = id;
+                store.Value = this.serializer.Serialize(entity);
+                dbContext.Add(instance);
             }
 
             memoryCache.Remove(CacheKey(id));
@@ -101,12 +98,12 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
         private string CacheKey(string id) => QueryType.Name + id;
 
-        private static Type? _queryType = null;
+        private static Type? queryType = null;
         private static Type QueryType
         {
             get
             {
-                if (_queryType == null)
+                if (queryType == null)
                 {
                     if (typeof(T) == typeof(QuestionnaireDocument)) return typeof(StoredQuestionnaireDocument);
 
@@ -114,10 +111,10 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                     if (attribute == null) throw new Exception("Attribute was not found");
                     
                     StoredInAttribute storedInAttribute = (StoredInAttribute)attribute;
-                    _queryType = storedInAttribute.StoredIn;
+                    queryType = storedInAttribute.StoredIn;
                 }
 
-                return _queryType;
+                return queryType;
             }
         }
 

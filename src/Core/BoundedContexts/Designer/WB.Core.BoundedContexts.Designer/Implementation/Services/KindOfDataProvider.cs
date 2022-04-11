@@ -5,14 +5,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class KindOfDataItem
     {
-        public KindOfDataItem(string code, string title)
+        public KindOfDataItem(string code, string? title)
         {
             Code = code;
             Title = title;
         }
 
         public string Code { get; set; }
-        public string Title { get; set; }
+        public string? Title { get; set; }
     }
 
     public static class KindOfDataProvider
@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var codes = GetKindOfDataCodes();
             return codes.Select(code =>
             {
-                var item = new KindOfDataItem(code, GetKindOfDataTitleByCode(code) ?? "Unknown");
+                var item = new KindOfDataItem(code, Resources.KindOfData.ResourceManager.GetString(code));
                 return item;
             }).ToList();
         }

@@ -27,7 +27,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
                 rng.GetBytes(bytes);
             }
             
-            //new RNGCryptoServiceProvider().GetBytes(bytes);
             var result = new char[length];
             for (int i = 0; i < length; i++)
             {

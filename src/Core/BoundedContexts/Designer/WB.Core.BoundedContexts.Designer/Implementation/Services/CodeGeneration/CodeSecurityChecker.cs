@@ -38,6 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             foreach (var namedTypeSymbol in allUsedTypes.Where(x => x.ContainingAssembly?.Name != compilation.AssemblyName))
             {
                 var containingNamespace = namedTypeSymbol.ContainingNamespace.ToString();
+                if(containingNamespace == null) continue;
                 var symbol = namedTypeSymbol.ToString();
                 if(symbol == null) continue;
                 
@@ -53,8 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                     continue;
                 }
-
-                if(containingNamespace == null) continue;
+                
                 if (!AllowedNamespaces.Contains(containingNamespace))
                 {
                     if (!containingNamespace.StartsWith("WB.Core.SharedKernels.DataCollection", StringComparison.InvariantCulture))

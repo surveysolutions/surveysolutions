@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         {
             public bool Equals(TranslationInstance? x, TranslationInstance? y)
             {
+                if (x == null && y == null) return true;
                 if (ReferenceEquals(x, y)) return true;
                 if (ReferenceEquals(x, null)) return false;
                 if (ReferenceEquals(y, null)) return false;

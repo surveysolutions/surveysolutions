@@ -24,12 +24,12 @@ namespace WB.UI.Designer.Controllers
 {
     public partial class QuestionnaireController
     {
-        public EditOptionsViewModel? GetCategoryOptions(QuestionnaireRevision id, Guid categoriesId)
+        public ActionResult<EditOptionsViewModel> GetCategoryOptions(QuestionnaireRevision id, Guid categoriesId)
         {
             var categoriesView = this.questionnaireInfoFactory.GetCategoriesView(id, categoriesId);
 
             if (categoriesView == null)
-                return null;
+                return NotFound();
 
             var categories =
                 this.categoriesService.GetCategoriesById(id.QuestionnaireId, categoriesId).
@@ -232,7 +232,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ApplyOptions(QuestionnaireRevision id, Guid entityId,
+        public async Task<IActionResult?> ApplyOptions(QuestionnaireRevision id, Guid entityId,
             bool isCascading, bool isCategory,
             [FromBody] UpdateCategoriesModel? categoriesModel)
         {
@@ -269,17 +269,17 @@ namespace WB.UI.Designer.Controllers
 
                 var model = this.GetCategoryOptions(id, entityId);
 
-                if (model == null)
+                if (model.Value == null)
                 {
-                    return NotFound();
+                    return model.Result;
                 }
 
                 var command = new AddOrUpdateCategories(
                     questionnaireId,
                     this.User.GetId(),
                     categoriesId,
-                    model.CategoriesName ?? "",
-                    model.CategoriesId);
+                    model.Value.CategoriesName ?? "",
+                    model.Value.CategoriesId);
 
                 var categoriesCommandResult = await this.ExecuteCommand(command);
                 return Json(categoriesCommandResult);

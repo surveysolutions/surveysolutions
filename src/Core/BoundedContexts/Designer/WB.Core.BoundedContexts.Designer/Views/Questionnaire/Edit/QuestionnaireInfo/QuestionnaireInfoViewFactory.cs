@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 hideIfDisabled : questionnaireDocument.HideIfDisabled,
                 defaultLanguageName : questionnaireDocument.DefaultLanguageName,
                 isCoverPageSupported : questionnaireDocument.IsCoverPageSupported,
-                countries: CountryListProvider.GetCounryItems()
+                countries: CountryListProvider.GetCountryItems()
             );
 
             if (!questionnaireDocument.IsCoverPageSupported)

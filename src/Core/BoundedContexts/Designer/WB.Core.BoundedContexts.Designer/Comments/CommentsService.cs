@@ -7,7 +7,6 @@ using Main.Core.Entities.Composite;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
@@ -78,18 +77,16 @@ namespace WB.Core.BoundedContexts.Designer.Comments
         public async Task DeleteCommentAsync(Guid id)
         {
             var commentInstance = await dbContext.CommentInstances.FindAsync(id);
-
             if (commentInstance != null) dbContext.CommentInstances.Remove(commentInstance);
         }
 
         public async Task ResolveCommentAsync(Guid commentId)
         {
             var comment = await dbContext.CommentInstances.FindAsync(commentId);
-            if (comment != null)
-            {
-                comment.ResolveDate = DateTime.UtcNow;
-                dbContext.CommentInstances.Update(comment);
-            }
+            if (comment == null) throw new InvalidOperationException("Comment was not found");
+            
+            comment.ResolveDate = DateTime.UtcNow;
+            dbContext.CommentInstances.Update(comment);
         }
 
         public List<CommentThread> LoadCommentThreads(Guid questionnaireId)

@@ -137,8 +137,10 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             }
             else
             {
+                if (text == null) throw new InvalidOperationException("Page text is null");
+                
                 var a = new TagBuilder("a");
-                a.MergeAttribute("href", text ?? string.Empty);
+                a.MergeAttribute("href", text);
                 a.InnerHtml.AppendHtml(htmlTitle);
                 li.InnerHtml.AppendHtml(a);
             }

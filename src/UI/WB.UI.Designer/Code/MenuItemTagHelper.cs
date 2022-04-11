@@ -63,7 +63,10 @@ namespace WB.UI.Designer.Code
                 href = url.GetUrlHelper(ViewContext)
                     .Action(Action, Controller, new {area = Area, id = (Guid?) null});
             }
-            anchor.Attributes.Add("href", href ?? "");
+
+            if (href == null) 
+                throw new InvalidOperationException($"Invalid href for IsPageTag: {IsPageTag}, Area: {Area}, Page: {Page}, Action: {Action}, Controller: {Controller}");
+            anchor.Attributes.Add("href", href);
 
             anchor.InnerHtml.Append(childContent);
             output.Content.SetHtmlContent(anchor);

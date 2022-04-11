@@ -1768,8 +1768,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (this.innerDocument.Categories.Exists(x => x.Id == categoricalQuestion.CategoriesId.Value)) return;
 
             var sourceCategories = sourceQuestionnaire.Categories.Find(x => x.Id == categoricalQuestion.CategoriesId);
-            if(sourceCategories != null)
-                this.innerDocument.Categories.Add(sourceCategories);
+            if (sourceCategories == null)
+                throw new QuestionnaireException(ExceptionMessages.Questionnaire_CategoriesWereNotFound);
+            
+            this.innerDocument.Categories.Add(sourceCategories);
         }
 
         #endregion

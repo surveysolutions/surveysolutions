@@ -211,7 +211,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                           }
                       }
 
-                      if (allImportedOptions.Any(y =>y.ValueWithParentValues!= null &&  y.ValueWithParentValues.SequenceEqual(valueWithParentValues)))
+                      if (allImportedOptions.Any(y => 
+                                 y.ValueWithParentValues == null 
+                              || (y.ValueWithParentValues!= null &&  y.ValueWithParentValues.SequenceEqual(valueWithParentValues))))
                           throw new CsvReaderException(x.Context.Row, 0, string.Format(ExceptionMessages.ImportOptions_ValueIsNotUnique, title, value));
 
                       return valueWithParentValues.ToArray();
