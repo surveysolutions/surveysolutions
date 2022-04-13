@@ -117,6 +117,7 @@
     "zebra_datepicker": "^1.9.12"
   },
   "resolutions": {
+    "async": ">=3.2.3",
     "glob-parent": ">=5.1.2",
     "gulp-footer": "2.1.0",
     "json-schema": ">=0.4.0",
