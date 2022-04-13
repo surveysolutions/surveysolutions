@@ -1507,10 +1507,27 @@
                     text-decoration: none;
                     margin: 0;
                     .questionnarie-chapter-list-fontstyle();
-                    padding: 14px 18px 16px 0;
+                    padding: 14px 23px 16px 0;
                     display: block;
                     min-height: @chapter-item-height;
                     font-weight: bold;
+                }
+                > .chapter-panel-item-condition{
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    right: 40px;
+                    margin: 0;
+                    padding: 0;
+                    z-index: 100;
+                    height: 100%;
+                    
+                    > .conditions-block{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 100%;
+                    }
                 }
             }
         }
@@ -1616,6 +1633,16 @@
                 font-style: italic;
             }
         }
+       
+       .chapter-condition-block{
+           display: block;
+           position: absolute;
+           top: 0;
+           right: 40px;
+           margin: 0;
+           padding: 0 5px 0 0;
+           z-index: 100;
+       }
 
         ul.controls-right {
             display: block;
