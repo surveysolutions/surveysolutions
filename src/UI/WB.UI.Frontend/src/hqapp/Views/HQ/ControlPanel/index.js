@@ -1,6 +1,5 @@
 const ControlPanelLayout = () => import( /*  webpackChunkName: "controlpanel" */ './ControlPanelLayout')
 const AppUpdates = () => import( /*  webpackChunkName: "controlpanel" */ './AppUpdates')
-const InterviewPackages = () => import( /*  webpackChunkName: "controlpanel" */ './InterviewPackages')
 const ReevaluateInterview = () => import( /*  webpackChunkName: "controlpanel" */ './ReevaluateInterview')
 
 export default class MapComponent {
@@ -19,16 +18,12 @@ export default class MapComponent {
                         component: AppUpdates,
                     },
                     {
-                        path: 'InterviewPackages',
-                        component: InterviewPackages,
-                    },
-                    {
                         path: 'ReevaluateInterview',
                         component: ReevaluateInterview,
                     },
                     {
                         path: '',
-                        component: InterviewPackages,
+                        component: AppUpdates,
                     },
                 ],
             },

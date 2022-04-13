@@ -4,6 +4,7 @@ import Settings from './Settings'
 import Vue from 'vue'
 import AuditLog from './AuditLog'
 import TabletInfos from './TabletInfos'
+const InterviewPackages = () => import( /*  webpackChunkName: "controlpanel" */ './InterviewPackages')
 
 export default class AdminComponent {
     constructor(rootStore) {
@@ -30,6 +31,10 @@ export default class AdminComponent {
         {
             path: '/Settings',
             component: Settings,
+        },
+        {
+            path: '/Diagnostics/InterviewPackages',
+            component: InterviewPackages,
         },
         ]
     }
