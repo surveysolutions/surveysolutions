@@ -15,8 +15,13 @@
                 <span ng-bind-html="currentChapter.title | escape"></span>
                 <span ng-if="currentChapter.isCover && currentChapter.isReadOnly" class="warning-message" ng-i18next>VirtualCoverPage</span>
                 <help ng-if="currentChapter.isCover && currentChapter.isReadOnly" key="virtualCoverPage" />
-                <a ng-if="!questionnaire.isReadOnlyForUser && currentChapter.isCover && currentChapter.isReadOnly" href="javascript:void(0);" ng-click="migrateToNewVersion();$event.stopPropagation()" ng-i18next>MigrateToNewCover</a>
+                <a ng-if="!questionnaire.isReadOnlyForUser && currentChapter.isCover && currentChapter.isReadOnly" href="javascript:void(0);" ng-click="migrateToNewVersion();$event.stopPropagation()" ng-i18next>MigrateToNewCover</a>                
             </a>
+            <div class="qname-block chapter-condition-block">
+                <div class="conditions-block">
+                    <div class="enabling-group-marker" ng-class="{'hide-if-disabled': currentChapter.hideIfDisabled}" ng-if="currentChapter.hasCondition"></div>
+                </div>
+            </div>
             <ul class="controls-right">
                 <li>
                     <a href="javascript:void(0);" ng-click="showSearch();$event.stopPropagation()" class="search" ng-i18next="[title]ToggleSearch"></a>

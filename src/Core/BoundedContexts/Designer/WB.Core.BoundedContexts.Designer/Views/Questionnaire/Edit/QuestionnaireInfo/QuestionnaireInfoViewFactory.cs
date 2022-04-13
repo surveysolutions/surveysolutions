@@ -68,6 +68,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     isReadOnly: true,
                     groupsCount: 0,
                     rostersCount: 0,
+                    hasCondition: false,
+                    hideIfDisabled: false,
                     questionsCount: questionnaireDocument.Children
                         .TreeToEnumerable(item => item.Children)
                         .Where(c => c is IQuestion)
@@ -86,7 +88,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     isReadOnly: false,
                     groupsCount : 0,
                     rostersCount : 0,
-                    questionsCount : 0
+                    questionsCount : 0,
+                    hasCondition : !string.IsNullOrWhiteSpace(chapter.ConditionExpression),
+                    hideIfDisabled : chapter.HideIfDisabled
                 ));
             }
 
