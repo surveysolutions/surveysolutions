@@ -144,14 +144,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
             //show only once
             this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
 
-            if (e.Position == null) { return; }
-
+            if (e?.Position == null) return;
             if (this.Map?.Basemap?.BaseLayers.Count <= 0) return;
-            
-            var extent = this.MapView.Map.Basemap.BaseLayers[0].FullExtent;
+            var extent = this.MapView.Map?.Basemap?.BaseLayers[0].FullExtent;
 
+            if (extent == null) return;
             var point = GeometryEngine.Project(e.Position, extent.SpatialReference);
 
+            
             if (!GeometryEngine.Contains(extent, point))
             {
                 this.userInteractionService.ShowToast(UIResources.AreaMap_LocationOutOfBoundaries);
@@ -173,7 +173,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     {
                         Geometry = sPoint,
                         
-                    });
+                    }).ConfigureAwait(false);
                     var featuresField = features.Fields[labelFieldIndex];
                     var featuresFieldName = featuresField.Name;
                     this.userInteractionService.ShowToast(featuresFieldName);
