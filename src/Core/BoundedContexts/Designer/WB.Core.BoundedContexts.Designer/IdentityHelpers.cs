@@ -23,9 +23,21 @@ namespace WB.Core.BoundedContexts.Designer
             return Guid.Parse(userId);
         }
 
+        public static Guid? GetIdOrNull(this ClaimsPrincipal identity)
+        {
+            var userId = identity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return userId != null ? Guid.Parse(userId) : null;
+        }
+        
         public static string GetUserName(this ClaimsPrincipal identity)
         {
             var userName = identity.FindFirst(ClaimTypes.Name).Value;
+            return userName;
+        }
+
+        public static string? GetUserNameOrNull(this ClaimsPrincipal identity)
+        {
+            var userName = identity.FindFirst(ClaimTypes.Name)?.Value;
             return userName;
         }
     }

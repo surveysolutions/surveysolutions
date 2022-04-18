@@ -43,6 +43,11 @@
                 });
             };
 
+            shareService.updateAnonymousQuestionnaireSettings = function(questionnaireId, isActive) {
+                var baseUrl = '../../questionnaire/updateAnonymousQuestionnaireSettings/' + questionnaireId;
+                return $http.post(baseUrl, { isActive: isActive });
+            };
+
             return shareService;
         }
     ]);

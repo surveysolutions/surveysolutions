@@ -27,8 +27,9 @@
         $scope.passConfirmationOpen = null;
         $scope.questionnaire.editedTitle = questionnaire.title;
         $scope.questionnaire.editedVariable = questionnaire.variable;
-        $scope.questionnaire.editedHideIfDisabled =
-            questionnaire.hideIfDisabled;
+        $scope.questionnaire.editedHideIfDisabled = questionnaire.hideIfDisabled;
+        $scope.questionnaire.isShareQuestionnaireAsAnonymous = questionnaire.isShareQuestionnaireAsAnonymous;
+        $scope.questionnaire.anonymousQuestionnaireId = questionnaire.anonymousQuestionnaireId;
 
         $scope.shareTypeOptions = [
             { text: $i18next.t('SettingsShareEdit'), name: 'Edit' },
@@ -174,6 +175,20 @@
                 $scope.questionnaire.isPublic = !$scope.questionnaire.isPublic;
             });
         };
+
+        $scope.updateAnonymousQuestionnaireSettings = function() {
+            var updateRequest = shareService.updateAnonymousQuestionnaireSettings(
+                $scope.questionnaire.questionnaireId,
+                !$scope.questionnaire.isShareQuestionnaireAsAnonymous
+            );
+
+            updateRequest.then(function(result) {
+                var data = result.data
+                $scope.questionnaire.isShareQuestionnaireAsAnonymous = data.isActive;
+                $scope.questionnaire.anonymousQuestionnaireId = data.isActive ? data.anonymousQuestionnaireId : null;
+            });
+        };
+        
 
         $scope.changeShareType = function(shareType) {
             $scope.viewModel.shareType = shareType;

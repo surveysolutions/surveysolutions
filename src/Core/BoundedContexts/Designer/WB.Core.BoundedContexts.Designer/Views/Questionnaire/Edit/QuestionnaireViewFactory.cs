@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         QuestionnaireView? Load(QuestionnaireViewInputModel input);
         QuestionnaireView? Load(QuestionnaireRevision revision);
 
-        bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId);
+        bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid? userId);
 
         bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId);
         bool HasUserAccessToEditComments(QuestionnaireChangeRecord changeRecord, QuestionnaireDocument questionnaire, Guid userId);
@@ -52,13 +52,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return doc == null ? null : new QuestionnaireView(doc, sharedPersons);
         }
 
-        public bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId)
+        public bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid? userId)
         {
             var questionnaire = this.questionnaireStorage.Get(questionnaireId);
             if (questionnaire == null || questionnaire.IsDeleted)
             {
+                if (IsAnonymousQuestionnaire(questionnaireId, out var originQuestionnaireId))
+                {
+                    return true;
+                }
+                
                 return false;
             }
+
+            if (!userId.HasValue)
+                return false;
 
             if (questionnaire.CreatedBy == userId)
                 return true;

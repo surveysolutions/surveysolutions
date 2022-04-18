@@ -16,15 +16,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.users = users;
         }
 
-        [Authorize]
+        [AuthorizeOrAnonymousQuestionnaire]
         [Route("api/users/CurrentLogin")]
         public async Task<IActionResult> CurrentLogin()
         {
             var user = await this.users.GetUserAsync(User);
             var response = new
             {
-                UserName = User.GetUserName(),
-                Email = user.Email
+                UserName = User.GetUserNameOrNull(),
+                Email = user?.Email
             };
             return Ok(response);
         }

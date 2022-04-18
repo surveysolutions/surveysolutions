@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
@@ -79,5 +80,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public string? DefaultLanguageName { get; set; }
 
         public bool IsCoverPageSupported { get; set; }
+        public bool IsShareQuestionnaireAsAnonymous { get; set; }
+        public Guid? AnonymousQuestionnaireId { get; set; }
     }
 }

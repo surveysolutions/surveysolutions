@@ -1,13 +1,18 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
+using SkiaSharp;
+using SkiaSharp.QrCode.Image;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -30,7 +35,7 @@ using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers
 {
-    [Authorize]
+    [AuthorizeOrAnonymousQuestionnaire]
     [ResponseCache(NoStore = true)]
     [QuestionnairePermissions]
     public partial class QuestionnaireController : Controller
@@ -132,6 +137,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [AntiForgeryFilter]
+        [AuthorizeOrAnonymousQuestionnaireAttribute]
         [Route("questionnaire/details/{id}")]
         [Route("questionnaire/details/{id}/chapter/{chapterId}/{entityType}/{entityId}")]
         public IActionResult Details(QuestionnaireRevision? id, Guid? chapterId, string entityType, Guid? entityid)
@@ -146,7 +152,7 @@ namespace WB.UI.Designer.Controllers
 
         private bool UserHasAccessToEditOrViewQuestionnaire(Guid id)
         {
-            return this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, User.GetId());
+            return this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, User.GetIdOrNull());
         }
 
         public IActionResult Clone(QuestionnaireRevision id)
@@ -398,5 +404,45 @@ namespace WB.UI.Designer.Controllers
                     : File(stream, "application/zip", $"{questionnaireFileName}.zip");
             
         }*/
+
+        public class UpdateAnonymousQuestionnaireSettingsModel
+        {
+            public bool IsActive { get; set; }
+        }
+        [HttpPost]
+        [Route("questionnaire/updateAnonymousQuestionnaireSettings/{id}")]
+        public IActionResult UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
+        {
+            bool isActive = postModel.IsActive;
+            var anonymousQuestionnaire = dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.QuestionnaireId == id);
+            if (anonymousQuestionnaire == null)
+            {
+                anonymousQuestionnaire = new AnonymousQuestionnaire()
+                    { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = isActive };
+                dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
+                dbContext.SaveChanges();
+            }
+
+            anonymousQuestionnaire.IsActive = isActive;
+            dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
+            dbContext.SaveChanges();
+            
+            return Json(new { AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, IsActive = isActive });
+        }
+        
+        [HttpGet]
+        public IActionResult PublicUrl(Guid id, int height = 250, int width = 250)
+        {
+            var url = Url.Action("Details", new{ id = id });
+            
+            // generate QRCode
+            var qrCode = new QrCode(url, new Vector2Slim(height, width), SKEncodedImageFormat.Png);
+
+            // output to file
+            using var output = new MemoryStream();
+            qrCode.GenerateImage(output);
+            return File(output.ToArray(), "image/png", id.FormatGuid() + ".png",
+                null, new EntityTagHeaderValue("\"" + id + "\""), false);
+        }
     }
 }

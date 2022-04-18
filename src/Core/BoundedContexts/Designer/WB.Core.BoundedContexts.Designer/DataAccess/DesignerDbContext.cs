@@ -93,6 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.DataAccess
             builder.ApplyConfiguration(new ProductVersionChangeTypeConfig());
             builder.ApplyConfiguration(new StoredScenarioTypeConfig());
             builder.ApplyConfiguration(new CategoriesInstanceTypeConfig());
+            builder.ApplyConfiguration(new AnonymousQuestionnaireTypeConfig());
 
             // Key value
             builder.ApplyConfiguration(new KeyValueTableTypeConfig<StoredLookupTable>("lookuptablecontents"));

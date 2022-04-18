@@ -130,6 +130,20 @@
                     <i class="text-muted">({{(questionnaire.isPublic ? 'SettingsVisibleToOwner' :
                         'SettingsVisibleToEveryone') | i18next}})</i>
                 </div>
+                <hr />
+                <div>
+                    <h2 ng-i18next="PublicAccessSettings"></h2>
+                    <button class="btn btn-link answer" ng-click="updateAnonymousQuestionnaireSettings()">
+                        {{'SettingsQuestionnaireSharing' | i18next }}
+                        {{(questionnaire.isShareQuestionnaireAsAnonymous ? 'SettingsPrivate' : 'SettingsPublic') | i18next}}
+                    </button>
+                    <i class="text-muted">({{(questionnaire.isShareQuestionnaireAsAnonymous ? 'SettingsVisibleToOwner' :
+                            'SettingsVisibleToEveryone') | i18next}})</i>
+                    <br />
+                    <input type="text" disabled="disabled" ng-model="questionnaire.anonymousQuestionnaireId" ng-if="questionnaire.isShareQuestionnaireAsAnonymous" />
+                    <img alt="qr code" ng-if="questionnaire.isShareQuestionnaireAsAnonymous" 
+                         ng-src='{{"/questionnaire/publicurl/" + questionnaire.anonymousQuestionnaireId}}' />
+                </div>
             </div>
         </div>
     </div>

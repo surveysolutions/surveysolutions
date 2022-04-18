@@ -22,6 +22,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+            if (!context.ActionArguments.ContainsKey("id"))
+                return;
+                
             var id = context.ActionArguments["id"];
 
             Guid questionnaireid;
