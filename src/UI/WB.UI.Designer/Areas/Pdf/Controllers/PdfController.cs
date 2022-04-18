@@ -16,13 +16,15 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.Resources;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Areas.Pdf.Controllers
 {
     [Area("Pdf")]
     [Route("pdf")]
-    [Authorize]
+    [AuthorizeOrAnonymousQuestionnaire]
+    [QuestionnairePermissions]
     public class PdfController : Controller
     {
         #region Subclasses
@@ -115,7 +117,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         [Route("printpreview/{id}")]
         public IActionResult PrintPreview(QuestionnaireRevision id, Guid? translation)
         {
-            PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation: translation, useDefaultTranslation: true);
+            PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(id, User.GetIdOrNull(), User.GetUserNameOrNull(), translation: translation, useDefaultTranslation: true);
             if (questionnaire == null)
             {
                 return StatusCode((int)HttpStatusCode.NotFound);
@@ -359,7 +361,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             return await this.viewRenderingService.RenderToStringAsync(viewName, model, webRoot, routeData);
         }
 
-        private PdfQuestionnaireModel? LoadQuestionnaire(QuestionnaireRevision id, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
+        private PdfQuestionnaireModel? LoadQuestionnaire(QuestionnaireRevision id, Guid? requestedByUserId, string? requestedByUserName, Guid? translation, bool useDefaultTranslation)
         {
             return this.pdfFactory.Load(id, requestedByUserId, requestedByUserName, translation, useDefaultTranslation);
         }
