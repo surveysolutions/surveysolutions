@@ -13,7 +13,7 @@
                 <a class="btn"  ng-if="questionnaire.questionnaireRevision" href="../../questionnaire/clone/{{questionnaire.questionnaireId}}${{questionnaire.questionnaireRevision}}" target="_blank" ng-i18next>CopyTo</a>
                 <button class="btn" type="button" ng-disabled="questionnaire.isReadOnlyForUser && !questionnaire.hasViewerAdminRights && !questionnaire.isSharedWithUser" ng-click="showShareInfo()" ng-i18next>Settings</button>
 
-                <div class="btn-group">
+                <div class="btn-group" ng-if="currentUserIsAuthenticated">
                     <a class="btn btn-default" ng-i18next="[i18next]({currentUserName: '{{ currentUserName }}' })HellowMessageBtn"></a>
                     <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="caret"></span>
@@ -24,6 +24,7 @@
                         <li><a href="../../identity/account/logout" ng-i18next>LogOut</a></li>
                     </ul>
                 </div>
+                <a class="btn" href="/" type="button" ng-if="!currentUserIsAuthenticated" ng-i18next>Register</a>
             </div>
         </div>
         <div class="questionnarie-title">

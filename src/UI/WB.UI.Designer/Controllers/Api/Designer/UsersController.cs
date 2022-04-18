@@ -24,7 +24,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             var response = new
             {
                 UserName = User.GetUserNameOrNull(),
-                Email = user?.Email
+                Email = user?.Email,
+                IsAuthenticated = User.Identity?.IsAuthenticated ?? false
             };
             return Ok(response);
         }
