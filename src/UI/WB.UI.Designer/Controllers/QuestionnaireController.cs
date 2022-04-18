@@ -82,8 +82,6 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private readonly ICategoricalOptionsImportService categoricalOptionsImportService;
         private readonly DesignerDbContext dbContext;
-        private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IPublicFoldersStorage publicFoldersStorage;
         private readonly ICategoriesService categoriesService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
 
@@ -99,8 +97,6 @@ namespace WB.UI.Designer.Controllers
             ICategoricalOptionsImportService categoricalOptionsImportService,
             ICommandService commandService,
             DesignerDbContext dbContext,
-            IQuestionnaireHelper questionnaireHelper,
-            IPublicFoldersStorage publicFoldersStorage,
             ICategoriesService categoriesService)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -113,8 +109,6 @@ namespace WB.UI.Designer.Controllers
             this.categoricalOptionsImportService = categoricalOptionsImportService;
             this.commandService = commandService;
             this.dbContext = dbContext;
-            this.questionnaireHelper = questionnaireHelper;
-            this.publicFoldersStorage = publicFoldersStorage;
             this.categoriesService = categoriesService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
         }
@@ -143,7 +137,7 @@ namespace WB.UI.Designer.Controllers
         public IActionResult Details(QuestionnaireRevision? id, Guid? chapterId, string entityType, Guid? entityid)
         {
             if(id == null)
-                return this.RedirectToAction("Index");
+                return this.RedirectToAction("Index", "QuestionnaireList");
 
             return (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id.QuestionnaireId))
                 ? this.View("~/questionnaire/index.cshtml")
@@ -273,7 +267,7 @@ namespace WB.UI.Designer.Controllers
                     this.Success(string.Format(Resources.QuestionnaireController.SuccessDeleteMessage, model.Title));
                 }
             }
-            return this.RedirectToAction("Index");
+            return this.RedirectToAction("Index", "QuestionnaireList");
         }
 
         [HttpPost]
@@ -286,7 +280,7 @@ namespace WB.UI.Designer.Controllers
             if (!hasAccess)
             {
                 this.Error(Resources.QuestionnaireController.ForbiddenRevert);
-                return this.RedirectToAction("Index");
+                return this.RedirectToAction("Index", "QuestionnaireList");
             }
 
             var command = new RevertVersionQuestionnaire(id, historyReferenceId, this.User.GetId());
@@ -321,7 +315,7 @@ namespace WB.UI.Designer.Controllers
             if (!hasAccess)
             {
                 this.Error(ErrorMessages.NoAccessToQuestionnaire);
-                return this.RedirectToAction("Index");
+                return this.RedirectToAction("Index", "QuestionnaireList");
             }
             var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(new QuestionnaireRevision(id), this.User.GetId());
             if (questionnaireInfoView == null) return NotFound();
@@ -351,7 +345,7 @@ namespace WB.UI.Designer.Controllers
         public IActionResult LackOfPermits()
         {
             this.Error(Resources.QuestionnaireController.Forbidden);
-            return this.RedirectToAction("Index");
+            return this.RedirectToAction("Index", "QuestionnaireList");
         }
 
         [HttpPost]

@@ -1,0 +1,33 @@
+﻿<div class="modal fade" id="mExportPdf">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close close-pdf-dialog" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    @Html.Raw(string.Format(QuestionnaireController.GeneratingPdf, "<span id=\"export-pdf-modal-questionnaire-title\">?</span>"))
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="start-pdf-generation" id="startPdf">
+                    <p>@QuestionnaireController.ChooseLanguageTitle</p>
+
+                    <div class="dropdown clearfix">
+                        <button class="btn btn-default dropdown-toggle" type="button" title="@QuestionnaireController.ChooseLanguage" id="dropdownMenuButton" data-toggle="dropdown" 
+                                aria-haspopup="true" aria-expanded="true">
+                        </button>
+                        <ul class="dropdown-menu languages-combobox" aria-labelledby="dropdownMenuButton">
+                        </ul>
+                        <button id="pdfGenerateButton" class="btn btn-default" type="button">@QuestionnaireController.GeneratePdf</button>
+                    </div>
+
+                </div>
+                <pre id="export-pdf-modal-status" style="display: none" >@QuestionnaireController.Initializing...</pre>
+            </div>
+            <div class="modal-footer">
+                <button id="pdfDownloadButton" class="btn btn-primary pull-left">@QuestionnaireController.DownloadPdf</button>
+                <button id="pdfRetryGenerate" class="btn btn-primary" onclick="questionnaireActionModel.retryPdfExport()">@QuestionnaireController.RetryExportPDF</button>
+                <button id="pdfCancelButton" class="btn pull-right close-pdf-dialog" data-dismiss="modal" aria-hidden="true">@QuestionnaireController.Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

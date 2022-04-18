@@ -25,8 +25,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
     {
         internal static QuestionnaireController CreateQuestionnaireController(
             ICommandService commandService = null,
-            IQuestionnaireVerifier questionnaireVerifier = null,
-            IQuestionnaireHelper questionnaireHelper = null,
             IQuestionnaireViewFactory questionnaireViewFactory = null,
             ILogger<QuestionnaireController> logger = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null,
@@ -45,8 +43,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 categoricalOptionsImportService ?? Mock.Of<ICategoricalOptionsImportService>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 dbContext ?? Create.InMemoryDbContext(),
-                questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
-                Mock.Of<IPublicFoldersStorage>(),
                 categoriesService: Mock.Of<ICategoriesService>());
             questionnaireController.ControllerContext = new ControllerContext
             {
