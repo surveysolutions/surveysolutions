@@ -14,7 +14,6 @@ using WB.UI.Designer.Models;
 namespace WB.UI.Designer.Controllers
 {
     [Authorize]
-    [Route("questionnaire")]
     public class QuestionnaireListController : Controller
     {
         private readonly IPublicFoldersStorage publicFoldersStorage;
@@ -26,13 +25,16 @@ namespace WB.UI.Designer.Controllers
             this.publicFoldersStorage = publicFoldersStorage;
             this.questionnaireHelper = questionnaireHelper;
         }
+
         public IActionResult Index() => this.RedirectToAction("My");
         
+        [Route("questionnaire/my")]
         [AntiForgeryFilter]
         public ActionResult My(int? p, string sb, int? so, string f)
             => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, type: QuestionnairesType.My, folderId: null));
 
         [AntiForgeryFilter]
+        [Route("questionnaire/public")]
         public ActionResult Public(int? p, string sb, int? so, string f, Guid? id)
         {
             var questionnaires = this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f,
@@ -56,6 +58,7 @@ namespace WB.UI.Designer.Controllers
             return this.View(model);
         }
 
+        [Route("questionnaire/shared")]
         [AntiForgeryFilter]
         public ActionResult Shared(int? p, string sb, int? so, string f)
             => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, type: QuestionnairesType.Shared, folderId: null));

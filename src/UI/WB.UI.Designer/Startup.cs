@@ -40,6 +40,7 @@ using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Code.Vue;
 using WB.UI.Designer.CommonWeb;
+using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
@@ -136,6 +137,13 @@ namespace WB.UI.Designer
                 })
                 .AddScheme<BasicAuthenticationSchemeOptions, BasicAuthenticationHandler>("basic",
                     opts => { opts.Realm = "mysurvey.solutions"; });
+            
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AuthorizeOrAnonymousQuestionnaire", 
+                    policy => policy.Requirements.Add(new AuthorizeOrAnonymousQuestionnaireRequirement()));
+            });
+
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -334,7 +342,7 @@ namespace WB.UI.Designer
 
                 routes.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Questionnaire}/{action=Index}/{id?}");
+                    pattern: "{controller=QuestionnaireList}/{action=Index}/{id?}");
                 routes.MapRazorPages();
 
                 if (env.IsDevelopment())

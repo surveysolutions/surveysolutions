@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,9 +14,16 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
-    public class AuthorizeOrAnonymousQuestionnaireAttribute : TypeFilterAttribute
+    public class AuthorizeOrAnonymousQuestionnaireAttribute : AuthorizeAttribute
     {
-        public AuthorizeOrAnonymousQuestionnaireAttribute() : base(typeof(AuthorizeOrAnonymousQuestionnaireFilter))
+        public AuthorizeOrAnonymousQuestionnaireAttribute() : base("AuthorizeOrAnonymousQuestionnaire")
+        {
+        }
+    }
+
+    public class AuthorizeOrAnonymousQuestionnaire3Attribute : TypeFilterAttribute
+    {
+        public AuthorizeOrAnonymousQuestionnaire3Attribute() : base(typeof(AuthorizeOrAnonymousQuestionnaireFilter))
         {
         }
     }
@@ -69,36 +77,37 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     
     public class AuthorizeOrAnonymousQuestionnaireRequirement : AuthorizationHandler<AuthorizeOrAnonymousQuestionnaireRequirement>, IAuthorizationRequirement
     {
-        private readonly IHttpContextAccessor httpContextAccessor;
-
-        public AuthorizeOrAnonymousQuestionnaireRequirement(IHttpContextAccessor httpContextAccessor)
-        {
-            this.httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
-        }
-
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AuthorizeOrAnonymousQuestionnaireRequirement requirement)
         {
-            if (context.User.Identity != null)
+            if (context.User.Identity != null && context.User.Identity.IsAuthenticated)
             {
                 context.Succeed(requirement);
                 return Task.CompletedTask;
             }
+
+            var httpContext = context.Resource as HttpContext;
+            if (httpContext == null)
+            {
+                context.Fail();
+                return Task.CompletedTask;
+            }
             
-            var routeData = httpContextAccessor.HttpContext?.GetRouteData();
+            
+            var routeData = httpContext.GetRouteData();
             var id = routeData?.Values["id"];
-            Guid questionnaireid;
+            Guid questionnaireId;
             if (id != null && id is QuestionnaireRevision rev)
             {
-                questionnaireid = rev.QuestionnaireId;
+                questionnaireId = rev.QuestionnaireId;
             }
-            else if (id == null || !Guid.TryParse(id.ToString(), out questionnaireid))
+            else if (id == null || !Guid.TryParse(id.ToString(), out questionnaireId))
             {
                 context.Fail();
                 return Task.CompletedTask;
             }
 
-            var viewFactory = httpContextAccessor.HttpContext?.RequestServices.GetRequiredService<IQuestionnaireViewFactory>();
-            bool isAnonymousQuestionnaire = viewFactory?.IsAnonymousQuestionnaire(questionnaireid, out var originQuestionnaireId) ?? false;
+            var viewFactory = httpContext.RequestServices.GetRequiredService<IQuestionnaireViewFactory>();
+            bool isAnonymousQuestionnaire = viewFactory?.IsAnonymousQuestionnaire(questionnaireId, out var originQuestionnaireId) ?? false;
 
             if (!isAnonymousQuestionnaire)
             {

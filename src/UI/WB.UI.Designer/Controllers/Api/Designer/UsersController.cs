@@ -16,7 +16,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.users = users;
         }
 
-        [AuthorizeOrAnonymousQuestionnaire]
         [Route("api/users/CurrentLogin")]
         public async Task<IActionResult> CurrentLogin()
         {

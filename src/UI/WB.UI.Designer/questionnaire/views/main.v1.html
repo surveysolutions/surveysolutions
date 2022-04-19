@@ -6,7 +6,8 @@
                 <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank" ng-i18next>Help</a>
                 <a class="btn" href="https://forum.mysurvey.solutions" target="_blank" ng-i18next>Forum</a>
             
-                <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank" ng-i18next>History</a>
+                <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank"
+                   ng-if="!questionnaire.isReadOnlyForUser && (questionnaire.hasViewerAdminRights || questionnaire.isSharedWithUser)" ng-i18next>History</a>
                 <button class="btn" type="button" ng-click="showDownloadPdf()" ng-i18next>DownloadPdf</button>
                 <a class="btn" type="button" ng-show="questionnaire.hasViewerAdminRights" ng-click="exportQuestionnaire()" ng-i18next>SaveAs</a>
 
@@ -24,7 +25,8 @@
                         <li><a href="../../identity/account/logout" ng-i18next>LogOut</a></li>
                     </ul>
                 </div>
-                <a class="btn" href="/" type="button" ng-if="!currentUserIsAuthenticated" ng-i18next>Register</a>
+                <a class="btn" href="/" type="button" ng-if="!currentUserIsAuthenticated" ng-i18next>Login</a>
+                <a class="btn" href="/identity/account/register" type="button" ng-if="!currentUserIsAuthenticated" ng-i18next>Register</a>
             </div>
         </div>
         <div class="questionnarie-title">
