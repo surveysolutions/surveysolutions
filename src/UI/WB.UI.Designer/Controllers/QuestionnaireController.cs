@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
@@ -31,7 +33,9 @@ using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Filters;
+using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -83,6 +87,9 @@ namespace WB.UI.Designer.Controllers
         private readonly ICategoricalOptionsImportService categoricalOptionsImportService;
         private readonly DesignerDbContext dbContext;
         private readonly ICategoriesService categoriesService;
+        private readonly IEmailSender emailSender;
+        private readonly IViewRenderService viewRenderService;
+        private readonly UserManager<DesignerIdentityUser> users;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
 
         public QuestionnaireController(
@@ -97,7 +104,10 @@ namespace WB.UI.Designer.Controllers
             ICategoricalOptionsImportService categoricalOptionsImportService,
             ICommandService commandService,
             DesignerDbContext dbContext,
-            ICategoriesService categoriesService)
+            ICategoriesService categoriesService,
+            IEmailSender emailSender,
+            IViewRenderService viewRenderService,
+            UserManager<DesignerIdentityUser> users)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -110,6 +120,9 @@ namespace WB.UI.Designer.Controllers
             this.commandService = commandService;
             this.dbContext = dbContext;
             this.categoriesService = categoriesService;
+            this.emailSender = emailSender;
+            this.viewRenderService = viewRenderService;
+            this.users = users;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
         }
 
@@ -403,9 +416,11 @@ namespace WB.UI.Designer.Controllers
         {
             public bool IsActive { get; set; }
         }
+        
+        [Authorize]
         [HttpPost]
         [Route("questionnaire/updateAnonymousQuestionnaireSettings/{id}")]
-        public IActionResult UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
+        public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
             bool isActive = postModel.IsActive;
             var anonymousQuestionnaire = dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.QuestionnaireId == id);
@@ -414,16 +429,39 @@ namespace WB.UI.Designer.Controllers
                 anonymousQuestionnaire = new AnonymousQuestionnaire()
                     { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = isActive };
                 dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
 
             anonymousQuestionnaire.IsActive = isActive;
             dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
+
+            if (isActive)
+                await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
             
             return Json(new { AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, IsActive = isActive });
         }
-        
+
+        private async Task SendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId)
+        {
+            var questionnaireView = GetQuestionnaireView(id);
+            if (questionnaireView == null)
+                throw new ArgumentException($"Questionnaire not found {id}");
+            
+            var userName = User.GetUserName();
+            var questionnaire = questionnaireView.Title;
+            var sharingLink = Url.Action("Details", "Questionnaire", new { id = anonymousQuestionnaireId }, Request.Scheme);
+
+            var model = new AnonymousSharingEmailModel(userName, sharingLink, questionnaire);
+
+            var messageBody = await viewRenderService.RenderToStringAsync("Emails/AnonymousSharingEmail", model);
+
+            var user = await this.users.GetUserAsync(User);
+            await emailSender.SendEmailAsync(user.Email,
+                NotificationResources.SystemMailer_AnonymousSharingEmail_Subject,
+                messageBody);
+        }
+
         [HttpGet]
         public IActionResult PublicUrl(Guid id, int height = 250, int width = 250)
         {
