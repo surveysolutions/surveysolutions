@@ -703,6 +703,12 @@
   <data name="SettingsPublic" xml:space="preserve">
     <value>Public</value>
   </data>
+  <data name="SettingsAnonymous" xml:space="preserve">
+    <value>Anonymous</value>
+  </data>
+  <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
+    <value>Generate new link</value>
+  </data>
   <data name="SettingsQuestionnaireName" xml:space="preserve">
       <value>Questionnaire title</value>
   </data>
@@ -1276,6 +1282,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="PublicAccessSettings" xml:space="preserve">
     <value>Public access</value>
+  </data>
+  <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+    <value>Anonymous questionnaire access</value>
   </data>
   <data name="QuestionnaireSettings" xml:space="preserve">
     <value>Questionnaire settings</value>

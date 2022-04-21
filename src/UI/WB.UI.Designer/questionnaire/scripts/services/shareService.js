@@ -48,6 +48,11 @@
                 return $http.post(baseUrl, { isActive: isActive });
             };
 
+            shareService.regenerateAnonymousQuestionnaireLink = function(questionnaireId) {
+                var baseUrl = '../../questionnaire/regenerateAnonymousQuestionnaireLink/' + questionnaireId;
+                return $http.post(baseUrl);
+            };
+
             return shareService;
         }
     ]);

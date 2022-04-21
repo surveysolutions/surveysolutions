@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using NHibernate.Linq;
 using SkiaSharp;
 using SkiaSharp.QrCode.Image;
 using WB.Core.BoundedContexts.Designer;
@@ -439,7 +440,33 @@ namespace WB.UI.Designer.Controllers
             if (isActive)
                 await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
             
-            return Json(new { AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, IsActive = isActive });
+            return Json(new
+            {
+                AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, 
+                IsActive = isActive,
+            });
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("questionnaire/regenerateAnonymousQuestionnaireLink/{id}")]
+        public async Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
+        {
+            var existedRecord = dbContext.AnonymousQuestionnaires.First(a => a.QuestionnaireId == id);
+            dbContext.Remove(existedRecord);
+           
+            var anonymousQuestionnaire = new AnonymousQuestionnaire()
+                { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = true };
+            await dbContext.AnonymousQuestionnaires.AddAsync(anonymousQuestionnaire);
+            await dbContext.SaveChangesAsync();
+
+            await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
+            
+            return Json(new
+            {
+                AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, 
+                IsActive = true,
+            });
         }
 
         private async Task SendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId)
@@ -465,7 +492,7 @@ namespace WB.UI.Designer.Controllers
         [HttpGet]
         public IActionResult PublicUrl(Guid id, int height = 250, int width = 250)
         {
-            var url = Url.Action("Details", new{ id = id });
+            var url = Url.Action("Details", "Questionnaire", new{ id = id }, Request.Scheme);
             
             // generate QRCode
             var qrCode = new QrCode(url, new Vector2Slim(height, width), SKEncodedImageFormat.Png);

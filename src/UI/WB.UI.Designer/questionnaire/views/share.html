@@ -120,7 +120,7 @@
                         </div>
                     </div>
                 </form>
-                <hr />
+                <hr ng-if="questionnaire.hasViewerAdminRights" />
                 <div ng-if="questionnaire.hasViewerAdminRights">
                     <h2 ng-i18next="PublicAccessSettings"></h2>
                     <button class="btn btn-link answer" ng-click="togglePublicity()">
@@ -131,18 +131,35 @@
                         'SettingsVisibleToEveryone') | i18next}})</i>
                 </div>
                 <hr />
-                <div>
-                    <h2 ng-i18next="PublicAccessSettings"></h2>
+                <div ng-if="isQuestionnaireOwner()">
+                    <h2 ng-i18next="AnonymousQuestionnaireSettings"></h2>
                     <button class="btn btn-link answer" ng-click="updateAnonymousQuestionnaireSettings()">
                         {{'SettingsQuestionnaireSharing' | i18next }}
-                        {{(questionnaire.isShareQuestionnaireAsAnonymous ? 'SettingsPrivate' : 'SettingsPublic') | i18next}}
+                        {{(questionnaire.isShareQuestionnaireAsAnonymous ? 'SettingsPrivate' : 'SettingsAnonymous') | i18next}}
                     </button>
                     <i class="text-muted">({{(questionnaire.isShareQuestionnaireAsAnonymous ? 'SettingsVisibleToOwner' :
                             'SettingsVisibleToEveryone') | i18next}})</i>
                     <br />
-                    <input type="text" disabled="disabled" ng-model="questionnaire.anonymousQuestionnaireId" ng-if="questionnaire.isShareQuestionnaireAsAnonymous" />
-                    <img alt="qr code" ng-if="questionnaire.isShareQuestionnaireAsAnonymous" 
-                         ng-src='{{"/questionnaire/publicurl/" + questionnaire.anonymousQuestionnaireId}}' />
+                    <div ng-if="questionnaire.isShareQuestionnaireAsAnonymous" class="row">
+                        <div class="col-xs-7">
+                            <div class="input-group" style="padding-top: 20px;">
+                                <input type="text" class="form-control" id="anonymousQuestionnaireLink" ng-value="getAnonymousQuestionnaireLink()" />
+                                <div class="input-group-btn dropup share-type">
+                                    <button type="button" class="btn btn-default" ng-click="copyAnonymousQuestionnaireLink()" i18next>
+                                        Copy
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-link answer" ng-click="regenerateAnonymousQuestionnaireLink()">
+                                {{'RegenerateQuestionnaireSharingLink' | i18next }}
+                            </button>
+                        </div>
+                        <div class="col-xs-5">
+                            <img alt="qr code" ng-if="questionnaire.isShareQuestionnaireAsAnonymous"
+                                 ng-src='{{"/questionnaire/publicurl/" + questionnaire.anonymousQuestionnaireId}}' />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

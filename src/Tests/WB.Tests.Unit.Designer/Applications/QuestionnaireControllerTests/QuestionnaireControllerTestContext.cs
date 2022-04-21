@@ -1,5 +1,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
@@ -18,6 +20,7 @@ using WB.Tests.Unit.Designer.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Controllers;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 {
@@ -43,7 +46,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 categoricalOptionsImportService ?? Mock.Of<ICategoricalOptionsImportService>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 dbContext ?? Create.InMemoryDbContext(),
-                categoriesService: Mock.Of<ICategoriesService>());
+                categoriesService: Mock.Of<ICategoriesService>(),
+                Mock.Of<IEmailSender>(),
+                Mock.Of<IViewRenderService>(),
+                Mock.Of<UserManager<DesignerIdentityUser>>());
             questionnaireController.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext

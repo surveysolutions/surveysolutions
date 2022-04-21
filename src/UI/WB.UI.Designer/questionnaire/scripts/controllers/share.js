@@ -189,6 +189,18 @@
             });
         };
         
+        $scope.regenerateAnonymousQuestionnaireLink = function() {
+            var updateRequest = shareService.regenerateAnonymousQuestionnaireLink(
+                $scope.questionnaire.questionnaireId,
+            );
+
+            updateRequest.then(function(result) {
+                var data = result.data
+                $scope.questionnaire.isShareQuestionnaireAsAnonymous = data.isActive;
+                $scope.questionnaire.anonymousQuestionnaireId = data.isActive ? data.anonymousQuestionnaireId : null;
+            });
+        };
+        
 
         $scope.changeShareType = function(shareType) {
             $scope.viewModel.shareType = shareType;
@@ -199,6 +211,17 @@
             var sharedPersons = _.sortBy(_.without($scope.questionnaire.sharedPersons, owner), ['email']);
 
             $scope.questionnaire.sharedPersons = [owner].concat(sharedPersons);
+        };
+
+        $scope.getAnonymousQuestionnaireLink = function () {
+            return window.location.origin + '/questionnaire/details/' + questionnaire.anonymousQuestionnaireId
+        };
+
+        $scope.copyAnonymousQuestionnaireLink = function () {
+            var copyText = document.getElementById("anonymousQuestionnaireLink");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
         };
 
         $scope.sortSharedPersons();

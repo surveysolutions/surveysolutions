@@ -526,6 +526,12 @@
   <data name="SettingsPublic" xml:space="preserve">
     <value>Общим</value>
   </data>
+  <data name="SettingsAnonymous" xml:space="preserve">
+    <value>Анонимным</value>
+  </data>
+  <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
+    <value>Сгенерировать новый линк</value>
+  </data>
   <data name="SettingsQuestionnaireSharing" xml:space="preserve">
     <value>Сделать опросник </value>
   </data>
@@ -1167,6 +1173,9 @@
   </data>
   <data name="PublicAccessSettings" xml:space="preserve">
     <value>Публичный доступ</value>
+  </data>
+  <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+    <value>Анонимный доступ к опроснику</value>
   </data>
   <data name="QuestionnaireSettings" xml:space="preserve">
     <value>Настройки опросника</value>
