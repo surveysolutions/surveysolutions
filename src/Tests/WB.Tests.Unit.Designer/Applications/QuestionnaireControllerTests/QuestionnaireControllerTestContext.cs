@@ -1,10 +1,15 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -16,6 +21,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Unit.Designer.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ImportExport;
@@ -49,7 +55,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 categoriesService: Mock.Of<ICategoriesService>(),
                 Mock.Of<IEmailSender>(),
                 Mock.Of<IViewRenderService>(),
-                Mock.Of<UserManager<DesignerIdentityUser>>());
+                null!);
             questionnaireController.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext
