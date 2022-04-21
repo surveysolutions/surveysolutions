@@ -101,10 +101,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 InterviewStatus.RejectedBySupervisor
             });
 
-        [NUnit.Framework.Test] public void should_interview_in_status_RejectedByHeadquarters_be_allowed_to_change_on_ApprovedBySupervisor_recheck_this_one () =>
+        [NUnit.Framework.Test] public void should_interview_in_status_RejectedByHeadquarters_be_allowed_to_change_on_ApprovedBySupervisor_RejectedBySupervisor_recheck_this_one () =>
             interviewStatusesWhichWasChangedWithoutException[InterviewStatus.RejectedByHeadquarters].Should().BeEquivalentTo(new[]
             {
-                InterviewStatus.ApprovedBySupervisor
+                InterviewStatus.ApprovedBySupervisor,
+                InterviewStatus.RejectedBySupervisor,
             });
 
         private static EventContext eventContext;

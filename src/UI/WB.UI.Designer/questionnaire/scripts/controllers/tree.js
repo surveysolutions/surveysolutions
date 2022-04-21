@@ -740,6 +740,10 @@
                         $scope.currentChapter = data.chapter;
                         $scope.currentChapter.isCover = data.isCover;
                         $scope.currentChapter.isReadOnly = data.isReadOnly;
+
+                        $scope.currentChapter.hideIfDisabled = data.hideIfDisabled;
+                        $scope.currentChapter.hasCondition = data.hasCondition;
+                        
                         $rootScope.updateVariableNames(data.variableNames);
                         connectTree();
                     });
@@ -797,6 +801,8 @@
             $rootScope.$on('groupUpdated', function (event, data) {
                 if ($scope.currentChapter.itemId === data.itemId) {
                     $scope.currentChapter.title = data.title;
+                    $scope.currentChapter.hasCondition = data.hasCondition;
+                    $scope.currentChapter.hideIfDisabled = data.hideIfDisabled;
                 }
 
                 var group = questionnaireService.findItem($scope.items, data.itemId);

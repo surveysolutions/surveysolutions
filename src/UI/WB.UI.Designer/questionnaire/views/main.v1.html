@@ -97,8 +97,13 @@
                                         <a class="handler" ui-tree-handle ng-if="!questionnaire.isReadOnlyForUser && !chapter.isCover"><span></span></a>
                                         <a class="chapter-panel-item-body" ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})">
                                             <span ng-bind-html="chapter.title | escape"></span>
-                                            <help key="coverPage" ng-if="chapter.isCover" />
+                                            <help key="coverPage" ng-if="chapter.isCover" />                                            
                                         </a>
+                                        <div class="qname-block chapter-panel-item-condition">
+                                            <div class="conditions-block">
+                                                <div class="enabling-group-marker" ng-class="{'hide-if-disabled': chapter.hideIfDisabled}" ng-if="chapter.hasCondition"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="dropdown position-fixed" id="chapter-context-menu-{{ chapter.itemId }}">

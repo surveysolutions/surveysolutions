@@ -229,14 +229,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public Guid? GetParentRoster(Guid questionId)
         {
             var question = this.FindOrThrow<IComposite>(questionId);
-            IComposite? parent = null;
-            do
+            IComposite? parent = question.GetParent();
+            while (parent != null)
             {
-                parent = question.GetParent();
                 if (parent is IGroup { IsRoster: true })
                     return parent.PublicKey;
-            } while (parent != null);
-            
+                parent = parent?.GetParent();
+            }
             return null;
         }
 

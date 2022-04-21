@@ -6,9 +6,12 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
     public interface IInterviewerInterviewAccessor
     {
         void RemoveInterview(Guid interviewId);
-        InterviewPackageApiView GetInterviewEventsPackageOrNull(InterviewPackageContainer packageContainer);
+        InterviewPackageApiView GetInterviewEventsPackageOrNull(InterviewPackageContainer packageContainer,
+            SyncInfoPackageResponse syncInfoPackageResponse);
         
-        InterviewPackageContainer GetInterviewEventStreamContainer(Guid interviewId, bool needCompress);
+        InterviewPackageContainer GetInterviewEventStreamContainer(Guid interviewId, bool needCompress,
+            SyncInfoPackageResponse syncInfoPackageResponse);
+        InterviewSyncInfoPackage GetInterviewSyncInfoPackage(Guid interviewId);
 
         void CheckAndProcessInterviewsToFixViews();
 
