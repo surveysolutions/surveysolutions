@@ -71,6 +71,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 InterviewKey = interviewKey
             },token, transferProgress);
         }
+        
+        
+        public async Task<SyncInfoPackageResponse> GetSyncInfoPackageResponse(Guid interviewId, InterviewSyncInfoPackage interviewSyncInfoPackage,
+            CancellationToken token = default)
+        {
+            var response = await syncClient.SendAsync<GetInterviewSyncInfoPackageRequest, InterviewSyncInfoPackageResponse>(
+                new GetInterviewSyncInfoPackageRequest
+                {
+                    InterviewId = interviewId,
+                    SyncInfoPackage = interviewSyncInfoPackage,
+                },
+                token);
+
+            return response.SyncInfoPackageResponse;
+        }
 
         public Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData,
             IProgress<TransferProgress> transferProgress,
@@ -260,7 +275,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     },
                     token);
         }
-
+        
         public async Task<List<CommittedEvent>> GetCalendarEventStreamAsync(Guid calendarEventId, int? sequence, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             var response = await

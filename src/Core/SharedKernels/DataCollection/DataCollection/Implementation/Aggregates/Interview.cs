@@ -1713,10 +1713,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(command.UserId);
                 }
 
+                var lastInterviewStatus = command.InterviewStatus;
+
+                if (lastInterviewStatus == InterviewStatus.Completed 
+                    && this.properties.Status == InterviewStatus.RejectedByHeadquarters)
+                {
+                    var statusChangeEvent = command.SynchronizedEvents.FirstOrDefault(e => e.Payload.GetType() == typeof(InterviewStatusChanged));
+                    if (statusChangeEvent?.Payload is InterviewStatusChanged statusChanged && statusChanged.Status == InterviewStatus.RejectedBySupervisor)
+                    {
+                        lastInterviewStatus = InterviewStatus.RejectedBySupervisor;
+                    }
+                }
+                
                 if (this.properties.Status == InterviewStatus.Deleted)
                     this.Restore(command.UserId, command.OriginDate);
-                else
-                    propertiesInvariants.ThrowIfStatusNotAllowedToBeChangedWithMetadata(command.InterviewStatus);
+                else 
+                    propertiesInvariants.ThrowIfStatusNotAllowedToBeChangedWithMetadata(lastInterviewStatus);
 
                 propertiesInvariants.ThrowIfInterviewIsInCawiMode();
             }

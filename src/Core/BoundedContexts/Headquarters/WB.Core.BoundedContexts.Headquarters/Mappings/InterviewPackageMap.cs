@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.QuestionnaireVersion);
             Property(x => x.ResponsibleId);
             Property(x => x.ProcessAttemptsCount);
+            Property(x => x.IsFullEventStream);
         }
     }
 }
