@@ -1,8 +1,8 @@
 @using WB.UI.Designer.Resources
 @model WB.UI.Designer.Models.EmailConfirmationModel
 
-@Html.Raw(string.Format(NotificationResources.ConfirmationEmail, Model.UserName))
+@Html.Raw(string.Format(NotificationResources.ConfirmationEmail, Model?.UserName))
 
-<a href="@Model.ConfirmationLink">
+<a href="@Model?.ConfirmationLink">
     @NotificationResources.CompleteRegistration
 </a>

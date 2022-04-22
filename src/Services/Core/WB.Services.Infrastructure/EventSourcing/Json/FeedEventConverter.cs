@@ -38,7 +38,7 @@ namespace WB.Services.Infrastructure.EventSourcing.Json
                                     @event.EventTypeName = reader.ReadAsString()!;
                                     break;
                                 case nameof(Event.EventSourceId):
-                                    @event.EventSourceId = Guid.Parse(reader.ReadAsString());
+                                    @event.EventSourceId = Guid.Parse(reader.ReadAsString()!);
                                     break;
                                 case nameof(Event.GlobalSequence):
                                     reader.Read();
@@ -95,7 +95,7 @@ namespace WB.Services.Infrastructure.EventSourcing.Json
         {
             var type = typeof(IEvent);
             var types = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(a => a.FullName.Contains("WB.Services"))
+                .Where(a => a.FullName != null && a.FullName.Contains("WB.Services"))
                 .SelectMany(s => s.GetTypes())
                 .Where(p => type.IsAssignableFrom(p));
 

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Events.Assignment;
 using WB.Services.Export.Events.Assignment.Base;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Assignment
@@ -72,10 +69,14 @@ namespace WB.Services.Export.Assignment
         public void Handle(PublishedEvent<AssignmentReassigned> @event)
         {
             var assignment = GetAssignment(@event.EventSourceId);
+            if (assignment == null) return;
+            
             assignment.ResponsibleId = @event.Event.ResponsibleId;
             assignment.Comment = @event.Event.Comment;
-
+                
             AddRecord(@event, AssignmentExportedAction.Reassigned, null, null, @event.Event.Comment);
+
+
         }
 
         public void Handle(PublishedEvent<AssignmentReceivedByTablet> @event)
@@ -86,7 +87,8 @@ namespace WB.Services.Export.Assignment
         public void Handle(PublishedEvent<AssignmentAudioRecordingChanged> @event)
         {
             var assignment = GetAssignment(@event.EventSourceId);
-
+            if (assignment == null) return;
+            
             AddRecord(@event, AssignmentExportedAction.AudioRecordingChanged, 
                 ToAudioRecordingString(assignment.AudioRecording), ToAudioRecordingString(@event.Event.AudioRecording), null);
 
@@ -96,7 +98,8 @@ namespace WB.Services.Export.Assignment
         public void Handle(PublishedEvent<AssignmentWebModeChanged> @event)
         {
             var assignment = GetAssignment(@event.EventSourceId);
-
+            if (assignment == null) return;
+            
             AddRecord(@event, AssignmentExportedAction.WebModeChanged,
                 ToWebModeString(assignment.WebMode), ToWebModeString(@event.Event.WebMode), null);
 
@@ -106,7 +109,8 @@ namespace WB.Services.Export.Assignment
         public void Handle(PublishedEvent<AssignmentQuantityChanged> @event)
         {
             var assignment = GetAssignment(@event.EventSourceId);
-
+            if (assignment == null) return;
+            
             AddRecord(@event, AssignmentExportedAction.QuantityChanged,
                 ToQuantityString(assignment.Quantity), ToQuantityString(@event.Event.Quantity), null);
 
@@ -118,6 +122,7 @@ namespace WB.Services.Export.Assignment
             where T : AssignmentEvent
         {
             var assignment = GetAssignment(@event.EventSourceId);
+            if (assignment == null) return;
 
             var assignmentAction = new AssignmentAction
             {
@@ -135,7 +140,7 @@ namespace WB.Services.Export.Assignment
             dbContext.AssignmentActions.Add(assignmentAction);
         }
 
-        private Assignment GetAssignment(Guid publicKey)
+        private Assignment? GetAssignment(Guid publicKey)
         {
             return dbContext.Assignments.Find(publicKey);
         }

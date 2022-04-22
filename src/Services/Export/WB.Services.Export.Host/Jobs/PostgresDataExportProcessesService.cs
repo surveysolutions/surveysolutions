@@ -99,6 +99,11 @@ namespace WB.Services.Export.Host.Jobs
         DataExportProcessArgs AsDataExportProcessArgs(JobItem job)
         {
             var args = JsonConvert.DeserializeObject<DataExportProcessArgs>(job.Args);
+            
+            if (args == null)
+            {
+                throw new Exception("Job args are not correct");
+            }
 
             var eta = job.GetData<string>(EtaField);
             var statusValue = job.GetData<string>(StatusField);

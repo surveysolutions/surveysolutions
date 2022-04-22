@@ -9,12 +9,12 @@ namespace WB.Core.BoundedContexts.Designer.Services
         string CreateAttachmentContentId(byte[] binaryContent);
         void SaveContent(string contentId, string contentType, byte[] binaryContent);
         void SaveMeta(Guid attachmentId, Guid questionnaireId, string attachmentContentId, string fileName);
-        AttachmentContent GetContentDetails(string attachmentContentId);
+        AttachmentContent? GetContentDetails(string attachmentContentId);
         void CloneMeta(Guid sourceAttachmentId, Guid newAttachmentId, Guid newQuestionnaireId);
         void DeleteAllByQuestionnaireId(Guid questionnaireId);
         List<AttachmentMeta> GetAttachmentsByQuestionnaire(Guid questionnaireId);
-        AttachmentMeta GetAttachmentMeta(Guid attachmentId);
-        AttachmentContent GetContent(string contentId);
+        AttachmentMeta? GetAttachmentMeta(Guid attachmentId);
+        AttachmentContent? GetContent(string contentId);
         List<AttachmentSize> GetAttachmentSizesByQuestionnaire(Guid questionnaireId);
         string? GetAttachmentContentId(Guid attachmentId);
     }

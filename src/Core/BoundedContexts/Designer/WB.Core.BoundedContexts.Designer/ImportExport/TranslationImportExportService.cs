@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             return json;
         }
 
-        public void StoreTranslationsFromJson(QuestionnaireDocument questionnaire, Guid translationId, string json)
+        public void StoreTranslationsFromJson(QuestionnaireDocument? questionnaire, Guid? translationId, string json)
         {
             if (questionnaire == null) throw new ArgumentNullException(nameof(questionnaire));
             if (translationId == null) throw new ArgumentNullException(nameof(translationId));
@@ -65,6 +65,9 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             try
             {
                 var items = questionnaireSerializer.Deserialize<TranslationItem>(json);
+                
+                if(items == null)
+                    throw new Exception("Invalid format. Translations cannot be processed.");
             
                 Dictionary<Guid, bool> idsOfAllQuestionnaireEntities = questionnaire.Children.TreeToEnumerable(x => x.Children)
                     .ToDictionary(composite => composite.PublicKey, x => x is Group);
@@ -73,7 +76,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 List<TranslationInstance> translationInstances = new List<TranslationInstance>();
                 foreach (var translation in items)
                 {
-                    var translationInstance = GetQuestionnaireTranslation(questionnaire, translationId, translation, idsOfAllQuestionnaireEntities);
+                    var translationInstance = GetQuestionnaireTranslation(questionnaire, translationId.Value, translation, idsOfAllQuestionnaireEntities);
                     if (translationInstance != null)
                         translationInstances.Add(translationInstance);
                 }

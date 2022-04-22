@@ -28,6 +28,9 @@ namespace WB.Services.Export.Storage
             var prefix = GetPath(interviewId);
             var files = await this.externalArtifactsStorage.ListAsync(prefix);
 
+            if (files == null)
+                return new List<InterviewBinaryDataDescriptor>();
+            
             return files.Select(file =>
             {
                 var filename = file.Path.Substring(prefix.Length);

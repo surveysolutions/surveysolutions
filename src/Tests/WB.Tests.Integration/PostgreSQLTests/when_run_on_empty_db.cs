@@ -24,6 +24,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
         [OneTimeSetUp]
         public void create_empty_database()
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             var TestConnectionString = TestsConfigurationManager.ConnectionString;
             var databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
             var connectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)

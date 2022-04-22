@@ -86,6 +86,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         protected static Guid docId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
         protected static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("11111111111111111111111111111111");
-
     }
 }

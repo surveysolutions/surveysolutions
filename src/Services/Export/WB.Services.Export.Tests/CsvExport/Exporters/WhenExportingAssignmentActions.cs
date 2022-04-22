@@ -139,7 +139,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(fileData[3],
                 Is.EqualTo(new[]
                 {
-                    AssignmentId.ToString(), "2019-09-20", "11:15:30", "3", "supervisor", "2", "interviewer", "1", null,
+                    AssignmentId.ToString(), "2019-09-20", "11:15:30", "7", "supervisor", "2", "interviewer", "1", null,
                     null, "do it"
                 }));
         }
@@ -166,7 +166,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(fileData[5],
                 Is.EqualTo(new[]
                 {
-                    AssignmentId.ToString(), "2019-09-20", "11:15:30", "7", "headquarters", "3", "interviewer", "1",
+                    AssignmentId.ToString(), "2019-09-20", "11:15:30", "6", "headquarters", "3", "interviewer", "1",
                     "0", "1", null
                 }));
         }
@@ -179,7 +179,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(fileData[6],
                 Is.EqualTo(new[]
                 {
-                    AssignmentId.ToString(), "2019-09-20", "11:15:30", "5", "headquarters", "3", "interviewer", "1",
+                    AssignmentId.ToString(), "2019-09-20", "11:15:30", "2", "headquarters", "3", "interviewer", "1",
                     null, null, null
                 }));
         }
@@ -192,7 +192,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(fileData[7],
                 Is.EqualTo(new[]
                 {
-                    AssignmentId.ToString(), "2019-09-20", "11:15:30", "6", "headquarters", "3", "interviewer", "1",
+                    AssignmentId.ToString(), "2019-09-20", "11:15:30", "5", "headquarters", "3", "interviewer", "1",
                     null, null, null
                 }));
         }
@@ -217,7 +217,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(fileData[9],
                 Is.EqualTo(new[]
                 {
-                    AssignmentId.ToString(), "2019-09-20", "11:15:30", "2", "headquarters", "3", "interviewer", "1",
+                    AssignmentId.ToString(), "2019-09-20", "11:15:30", "3", "headquarters", "3", "interviewer", "1",
                     null, null, null
                 }));
         }

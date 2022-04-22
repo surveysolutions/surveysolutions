@@ -232,7 +232,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ApplyOptions(QuestionnaireRevision id, Guid entityId,
+        public async Task<IActionResult?> ApplyOptions(QuestionnaireRevision id, Guid entityId,
             bool isCascading, bool isCategory,
             [FromBody] UpdateCategoriesModel? categoriesModel)
         {

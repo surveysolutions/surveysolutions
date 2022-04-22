@@ -137,8 +137,18 @@ namespace WB.Services.Export.Host.Controllers
         {
             var job = await this.jobService.GetJobAsync(id);
 
+            if (job?.Args == null)
+            {
+                throw new Exception("Job settings are not correct");
+            }
+            
             var settings = JsonConvert.DeserializeObject<DataExportProcessArgs>(job.Args);
 
+            if (settings == null)
+            {
+                throw new Exception("Job settings are not correct");
+            }
+            
             var exportSettings = settings.ExportSettings;
             exportSettings.JobId = job.Id;
             exportSettings.Tenant = tenantContext.Tenant;
@@ -154,6 +164,11 @@ namespace WB.Services.Export.Host.Controllers
             {
                 Response.Headers.Add("NewLocation", result.Redirect);
                 return Ok();
+            }
+            
+            if (result.Data == null)
+            {
+                return NotFound();
             }
 
             return new FileStreamResult(result.Data, "application/octet-stream")
@@ -201,6 +216,11 @@ namespace WB.Services.Export.Host.Controllers
                 return Ok();
             }
 
+            if (result.Data == null)
+            {
+                return NotFound();
+            }
+            
             return new FileStreamResult(result.Data, "application/octet-stream")
             {
                 FileDownloadName = WebUtility.UrlEncode(result.FileName)

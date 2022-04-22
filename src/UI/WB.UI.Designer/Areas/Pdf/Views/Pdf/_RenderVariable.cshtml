@@ -5,7 +5,7 @@
 
 @{
     PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
-    var variable = Model;
+    var variable = Model!;
 }
 
 <div class="question-container" id="@questionnaire.GetItemRef(variable.PublicKey)">

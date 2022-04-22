@@ -109,9 +109,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             return translationsExportService.GenerateTranslationFile(questionnaire, translationId ?? Guid.Empty, translation, categoriesService);
         }
 
-        public void Store(Guid questionnaireId, Guid translationId, byte[] excelRepresentation)
+        public void Store(Guid questionnaireId, Guid translationId, byte[]? excelRepresentation)
         {
-            if (translationId == null) throw new ArgumentNullException(nameof(translationId));
+            //if (translationId == null) throw new ArgumentNullException(nameof(translationId));
             if (excelRepresentation == null) throw new ArgumentNullException(nameof(excelRepresentation));
 
             using MemoryStream stream = new MemoryStream(excelRepresentation);
@@ -232,6 +232,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private TranslationInstance? GetQuestionnaireTranslation(Guid questionnaireId, Guid translationId, TranslationRow importedTranslation,
             Dictionary<Guid, bool> idsOfAllQuestionnaireEntities)
         {
+            if (importedTranslation.EntityId == null) throw new InvalidOperationException("Invalid EntityId.");
+            if (importedTranslation.Type == null) throw new InvalidOperationException("Invalid Entity type.");
+
             var questionnaireEntityId = Guid.Parse(importedTranslation.EntityId);
             if (!idsOfAllQuestionnaireEntities.Keys.Contains(questionnaireEntityId)) return null;
 

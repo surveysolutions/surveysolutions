@@ -158,7 +158,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             return storageInfo.StorageQuota.Limit - storageInfo.StorageQuota.Usage ?? 0;
         }
 
-        private Task<File> GetFileIdAsync(string filename, string parentFolderId = "")
+        private Task<File?> GetFileIdAsync(string filename, string parentFolderId = "")
         {
             var query = SearchQuery(filename, parentFolderId);
             return SearchForFirstOccurenceAsync(query);
@@ -192,14 +192,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             });
         }
 
-        private Task<File> GetFolderIdAsync(string folderName, string parentFolderId = "")
+        private Task<File?> GetFolderIdAsync(string folderName, string parentFolderId = "")
         {
             var query = SearchQuery(folderName, parentFolderId);
             query += $" and mimeType = \'{GoogleDriveFolderMimeType}'";
             return SearchForFirstOccurenceAsync(query);
         }
 
-        private async Task<File> SearchForFirstOccurenceAsync(string query) =>
+        private async Task<File?> SearchForFirstOccurenceAsync(string query) =>
             (await retry.ExecuteAsync(() =>
             {
                 var listRequest = this.DriveService.Files.List();

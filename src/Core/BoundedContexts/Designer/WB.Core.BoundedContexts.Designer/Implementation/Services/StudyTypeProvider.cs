@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }).ToList();
         }
 
-        public static string GetStudyTypeTitleByCode(StudyType code)
+        public static string? GetStudyTypeTitleByCode(StudyType code)
         {
             return Resources.StudyType.ResourceManager.GetString(code.ToString());
         }

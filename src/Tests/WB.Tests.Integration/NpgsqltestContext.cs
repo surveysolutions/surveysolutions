@@ -18,6 +18,7 @@ namespace WB.Tests.Integration
         [OneTimeSetUp]
         public void Context()
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             TestConnectionString = TestsConfigurationManager.ConnectionString;
             databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
             connectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)

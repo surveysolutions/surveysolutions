@@ -129,8 +129,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         {
             state.ArchiveFilePath = await this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedDataAsync(state.Settings);
             state.QuestionnaireName = await this.exportFileNameService.GetQuestionnaireDirectoryName(state.Settings, cancellationToken);
-            
-            this.fileSystemAccessor.CreateDirectory(Path.GetDirectoryName(state.ArchiveFilePath));
+
+            var directoryName = Path.GetDirectoryName(state.ArchiveFilePath);
+            if(directoryName != null)
+                this.fileSystemAccessor.CreateDirectory(directoryName);
         }
 
         private void RecreateExportTempDirectory(ExportState state)

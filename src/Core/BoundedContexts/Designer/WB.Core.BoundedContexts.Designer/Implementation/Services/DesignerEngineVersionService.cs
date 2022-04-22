@@ -258,7 +258,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private bool IsNonImageAttachment(string contentId) =>
-            !this.attachmentService.GetContent(contentId).IsImage();
+            !(this.attachmentService.GetContent(contentId)?.IsImage() == true);
 
         public int LatestSupportedVersion => this.questionnaireContentVersions.OrderBy(x => x.Version).Last().Version;
 

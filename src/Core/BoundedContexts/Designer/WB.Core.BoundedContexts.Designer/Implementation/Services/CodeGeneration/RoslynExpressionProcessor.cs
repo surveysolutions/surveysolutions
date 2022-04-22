@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private bool IsMemberAccessor(SyntaxNodeOrToken nodeOrToken)
         {
-            if (nodeOrToken.Kind() != SyntaxKind.SimpleMemberAccessExpression) return false;
+            if (!nodeOrToken.IsKind(SyntaxKind.SimpleMemberAccessExpression)) return false;
             var childNodesAndTokens = nodeOrToken.ChildNodesAndTokens().ToList();
             var right = childNodesAndTokens.Last();
 
@@ -60,12 +60,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             //    +--- . ---+   Now
             // System    DateTime
 
-            if (right.Kind() != SyntaxKind.IdentifierName ||
+            if (!right.IsKind(SyntaxKind.IdentifierName) ||
                 !ForbiddenDateTimeStaticProperties.Contains(right.ToFullString().Trim()))
                 return false;
 
             var left = childNodesAndTokens.First();
-            var dateTimeNode = left.Kind() == SyntaxKind.SimpleMemberAccessExpression
+            var dateTimeNode = left.IsKind(SyntaxKind.SimpleMemberAccessExpression)
                 ? left.ChildNodesAndTokens().Last()
                 : childNodesAndTokens.First();
 
@@ -103,15 +103,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private static string WrapToClass(string expression) => $"class a {{ bool b() {{ return ({expression}); }} }} ";
 
         private static bool IsBitwiseAndExpression(SyntaxNodeOrToken nodeOrToken)
-            => nodeOrToken.Kind() == SyntaxKind.BitwiseAndExpression;
+            => nodeOrToken.IsKind(SyntaxKind.BitwiseAndExpression);
 
         private static bool IsBitwiseOrExpression(SyntaxNodeOrToken nodeOrToken)
-            => nodeOrToken.Kind() == SyntaxKind.BitwiseOrExpression;
+            => nodeOrToken.IsKind(SyntaxKind.BitwiseOrExpression);
 
         private static bool IsIdentifierToken(SyntaxNodeOrToken nodeOrToken)
             => nodeOrToken.IsToken
-               && nodeOrToken.Kind() == SyntaxKind.IdentifierToken
-               && nodeOrToken.Parent?.Kind() == SyntaxKind.IdentifierName;
+               && nodeOrToken.IsKind(SyntaxKind.IdentifierToken)
+               && (nodeOrToken.Parent?.IsKind(SyntaxKind.IdentifierName) == true);
 
         private static bool IsFunction(SyntaxNodeOrToken identifierToken)
             => identifierToken.Parent?.Parent is InvocationExpressionSyntax;
@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             IEnumerable<string> lambdaParameters = lambdaNode
                 .ChildNodesAndTokens()
-                .Where(nodeOrToken => nodeOrToken.IsNode && nodeOrToken.Kind() == SyntaxKind.Parameter)
+                .Where(nodeOrToken => nodeOrToken.IsNode && nodeOrToken.IsKind(SyntaxKind.Parameter))
                 .Select(parameterNode => parameterNode.ToString());
 
             return lambdaParameters.Contains(identifierToken.ToString());
@@ -149,7 +149,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .ChildNodesAndTokens()
                 .First()
                 .ChildNodesAndTokens()
-                .Where(nodeOrToken => nodeOrToken.IsNode && nodeOrToken.Kind() == SyntaxKind.Parameter)
+                .Where(nodeOrToken => nodeOrToken.IsNode && nodeOrToken.IsKind(SyntaxKind.Parameter))
                 .Select(parameterNode => parameterNode.ToString());
 
             return lambdaParameters.Contains(identifierToken.ToString());

@@ -22,13 +22,13 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         {
             var attachment = this.attachmentService.GetContent(id);
 
-            if (attachment == null) return NotFound();
+            if (attachment?.Content == null) return NotFound();
 
             string? fileName = null;
             if (attachmentId.HasValue)
             {
                 var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentId.Value);
-                fileName = attachmentMeta.FileName;
+                fileName = attachmentMeta?.FileName;
             }
 
             return File(attachment.Content, attachment.ContentType, fileName, null,

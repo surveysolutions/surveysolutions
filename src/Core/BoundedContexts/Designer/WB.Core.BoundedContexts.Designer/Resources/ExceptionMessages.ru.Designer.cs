@@ -656,6 +656,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Категории не найдены.
+        /// </summary>
+        public static string Questionnaire_CategoriesWereNotFound {
+            get {
+                return ResourceManager.GetString("Questionnaire_CategoriesWereNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Опросник уже поддерживает обложку.
         /// </summary>
         public static string QuestionnaireAlreadySupportedCover {

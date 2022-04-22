@@ -20,26 +20,29 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var compilationVersion in Model)
+    @if (Model != null)
+    {
+        foreach (var compilationVersion in Model)
         {
-            RouteValueDictionary routeValues = new RouteValueDictionary {{"id", compilationVersion.QuestionnaireId.FormatGuid()}};
-        <tr>
-            <td>
-                @Html.ActionLink(compilationVersion.QuestionnaireId.FormatGuid(), "Details", "Questionnaire", routeValues, null)
-            </td>
-            <td><span title="Version that is going to be used when compiling">@compilationVersion.Version</span> / <span title="Questionnaire content version">@ApiVersion.MaxQuestionnaireVersion</span></td>
-            <td>@compilationVersion.Description</td>
-            <td>
-                <a href="@Url.Action("EditCompilationVersion", "ControlPanel", new {id = compilationVersion.QuestionnaireId})" class="btn btn-link">Edit</a>
-            </td>
-            <td>
-                <form asp-action="RemoveCompilationVersion" asp-controller="ControlPanel" method="post">
-                    @Html.AntiForgeryToken()
-                    @Html.Hidden("QuestionnaireId", compilationVersion.QuestionnaireId)
-                    <button type="submit" class="btn btn-link">Remove</button>
-                </form>
-            </td>
-        </tr>
+            RouteValueDictionary routeValues = new RouteValueDictionary { { "id", compilationVersion.QuestionnaireId.FormatGuid() } };
+            <tr>
+                <td>
+                    @Html.ActionLink(compilationVersion.QuestionnaireId.FormatGuid(), "Details", "Questionnaire", routeValues, null)
+                </td>
+                <td><span title="Version that is going to be used when compiling">@compilationVersion.Version</span> / <span title="Questionnaire content version">@ApiVersion.MaxQuestionnaireVersion</span></td>
+                <td>@compilationVersion.Description</td>
+                <td>
+                    <a href="@Url.Action("EditCompilationVersion", "ControlPanel", new { id = compilationVersion.QuestionnaireId })" class="btn btn-link">Edit</a>
+                </td>
+                <td>
+                    <form asp-action="RemoveCompilationVersion" asp-controller="ControlPanel" method="post">
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("QuestionnaireId", compilationVersion.QuestionnaireId)
+                        <button type="submit" class="btn btn-link">Remove</button>
+                    </form>
+                </td>
+            </tr>
         }
+    }
     </tbody>
 </table>
