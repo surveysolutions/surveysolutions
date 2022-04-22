@@ -164,7 +164,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public string? LoadQuestionnaireTitle(Guid questionnaireId)
         {
-            return this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid()).Title;
+            return this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid())?.Title;
         }
 
         public IEnumerable<T> Find<T>(IEnumerable<IComposite> allItems, Func<T, bool> condition) where T : IComposite

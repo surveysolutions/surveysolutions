@@ -171,8 +171,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private class CascadingOptionMap : CategoricalOptionMap
         {
-            public CascadingOptionMap(): this(null, null) { }
-            public CascadingOptionMap(Dictionary<string, (int value, int? parentValue)[]>? allValuesByAllParents, List<QuestionnaireCategoricalOption>? allImportedOptions)
+            public CascadingOptionMap(): this(null, new List<QuestionnaireCategoricalOption>()) { }
+            public CascadingOptionMap(Dictionary<string, (int value, int? parentValue)[]>? allValuesByAllParents, List<QuestionnaireCategoricalOption> allImportedOptions)
             {
                 var values = allValuesByAllParents?.Values?.FirstOrDefault()?.Select(x => x.value);
                 var nearestParentValues = values == null ? new HashSet<int>() : new HashSet<int>(values);
@@ -211,7 +211,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                           }
                       }
 
-                      if (allImportedOptions.Any(y => y.ValueWithParentValues.SequenceEqual(valueWithParentValues)))
+                      if (allImportedOptions.Any(y => 
+                                 y.ValueWithParentValues == null 
+                              || (y.ValueWithParentValues!= null &&  y.ValueWithParentValues.SequenceEqual(valueWithParentValues))))
                           throw new CsvReaderException(x.Context.Row, 0, string.Format(ExceptionMessages.ImportOptions_ValueIsNotUnique, title, value));
 
                       return valueWithParentValues.ToArray();

@@ -5,7 +5,7 @@
 @model Main.Core.Entities.SubEntities.IStaticText
 @{
     PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
-    var staticText = Model;
+    var staticText = Model!;
 }
 <div class="static-text">
     <div class="static-text_container">

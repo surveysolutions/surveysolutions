@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
             => this.Find<T>().Where(condition);
 
-        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        public T? FirstOrDefault<T>(Func<T, bool> condition) where T : class
             => this.Find(condition).FirstOrDefault();
 
         public IEnumerable<QuestionnaireItemTypeReference> GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()

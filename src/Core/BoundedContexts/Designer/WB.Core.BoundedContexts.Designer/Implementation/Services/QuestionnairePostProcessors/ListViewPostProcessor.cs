@@ -241,7 +241,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             if (questionnaireListViewItem == null) return;
 
             var newOwner = this.dbContext.Users.SingleOrDefault(u => u.Id == command.NewOwnerId);
-                        
+            if (newOwner == null) return;
+            
             questionnaireListViewItem.Owner = newOwner.UserName;
             questionnaireListViewItem.CreatedBy = newOwner.Id;
 

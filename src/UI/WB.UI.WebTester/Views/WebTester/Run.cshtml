@@ -10,6 +10,6 @@
 }
 @section footer{
     <script>
-        window.location = '@Html.Raw(Url.Content("~/WebTester/Loading/" + Model.Id))'
+        window.location = '@Html.Raw(Url.Content("~/WebTester/Loading/" + Model?.Id))'
     </script>
 }

@@ -42,7 +42,8 @@ namespace WB.Services.Infrastructure.Logging
                 {
                     foreach (var key in logEvent.Exception.Data.Keys)
                     {
-                        attachment.AddField(key.ToString(), logEvent.Exception.Data[key].ToString());
+                        if(key!=null)
+                            attachment.AddField(key.ToString(), logEvent.Exception.Data[key]?.ToString());
                     }
                     
                     attachment.AddField("Stack Trace", $"```\r\n{logEvent.Exception.ToStringDemystified()}\r\n```", false);

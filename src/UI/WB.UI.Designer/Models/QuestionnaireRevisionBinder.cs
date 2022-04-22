@@ -76,7 +76,7 @@ namespace WB.UI.Designer.Models
             int sequence = 0;
             if (parts.Length == 2)
             {
-                QuestionnaireChangeRecord history;
+                QuestionnaireChangeRecord? history;
                 if (int.TryParse(parts[1], out sequence))
                 {
                     history = await db.QuestionnaireChangeRecords.SingleOrDefaultAsync(r =>

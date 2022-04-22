@@ -1768,6 +1768,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (this.innerDocument.Categories.Exists(x => x.Id == categoricalQuestion.CategoriesId.Value)) return;
 
             var sourceCategories = sourceQuestionnaire.Categories.Find(x => x.Id == categoricalQuestion.CategoriesId);
+            if (sourceCategories == null)
+                throw new QuestionnaireException(ExceptionMessages.Questionnaire_CategoriesWereNotFound);
+            
             this.innerDocument.Categories.Add(sourceCategories);
         }
 
@@ -2346,14 +2349,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             question.Answers?.Clear();
             if (linkedToQuestionId.HasValue || answers == null) return;
-            question.Answers = answers.Where(x=> x != null).Select(x=> x).ToList();
+            question.Answers = answers.Select(x=> x).ToList();
         }
 
         private static IGroup CreateGroup(Guid id, string? title, string variableName, string description, string enablingCondition, bool hideIfDisabled)
         {
             return new Group
             {
-                Title = System.Web.HttpUtility.HtmlDecode(title),
+                Title = System.Web.HttpUtility.HtmlDecode(title) ?? String.Empty,
                 VariableName = variableName,
                 PublicKey = id,
                 Description = description,

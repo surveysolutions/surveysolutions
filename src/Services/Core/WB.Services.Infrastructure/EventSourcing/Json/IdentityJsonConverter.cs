@@ -49,7 +49,7 @@ namespace WB.Services.Infrastructure.EventSourcing.Json
 
                             if (string.Equals(propertyName, "id", StringComparison.OrdinalIgnoreCase))
                             {
-                                id = Guid.Parse(reader.ReadAsString());
+                                id = Guid.Parse(reader.ReadAsString()!);
                                 continue;
                             }
 

@@ -4,7 +4,7 @@
 # IMPORTANT: SDK version used for building must correspond to the runtime version here
 
 
-ARG DOTNET_VERSION=5.0
+ARG DOTNET_VERSION=6.0
  
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}
 

@@ -272,6 +272,11 @@ namespace WB.UI.Designer.Code.ImportExport
             }
 
             var questionnaire = questionnaireSerializer.Deserialize(textContent);
+            if (questionnaire == null)
+            {
+                throw new Exception("Invalid format. Questionnaire cannot be processed.");
+            }
+
             return questionnaire;
         }
 

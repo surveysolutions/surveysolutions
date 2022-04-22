@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
 
         public class CodeAndReferencesAndTranslationComparer : IEqualityComparer<QuestionnaireVerificationMessage>
         {
-            public bool Equals(QuestionnaireVerificationMessage first, QuestionnaireVerificationMessage second)
+            public bool Equals(QuestionnaireVerificationMessage? first, QuestionnaireVerificationMessage? second)
                 => HaveSameCodeAndReferencesAndTranslation(first, second);
 
             public int GetHashCode(QuestionnaireVerificationMessage message) => message.Code.GetHashCode();
@@ -62,9 +62,17 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
             ? $"{this.Code}: {this.Message}"
             : $"{this.Code} ({TranslationName}): {this.Message}";
 
-        public static bool HaveSameCodeAndReferencesAndTranslation(QuestionnaireVerificationMessage first, QuestionnaireVerificationMessage second)
-            => first.Code == second.Code
-            && first.References.SequenceEqual(second.References)
-            && first.TranslationName == second.TranslationName;
+        public static bool HaveSameCodeAndReferencesAndTranslation(QuestionnaireVerificationMessage? x,
+            QuestionnaireVerificationMessage? y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+            if (ReferenceEquals(x, null)) return false;
+            if (ReferenceEquals(y, null)) return false;
+
+            return x.Code == y.Code
+                   && x.References.SequenceEqual(y.References)
+                   && x.TranslationName == y.TranslationName;
+        }
+
     }
 }
