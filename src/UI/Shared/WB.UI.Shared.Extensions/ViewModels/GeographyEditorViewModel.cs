@@ -102,36 +102,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     distanceToEditor = GeometryEngine.Distance(result, point);
                 }
 
-                //project to geocoordinates
-                SpatialReference reference = new SpatialReference(4326);
-                var projectedGeometry = GeometryEngine.Project(result, reference);
-
-                string coordinates = string.Empty;
-                if (projectedGeometry != null)
-                {
-                    switch (projectedGeometry.GeometryType)
-                    {
-                        case Esri.ArcGISRuntime.Geometry.GeometryType.Polygon:
-                            var polygon = projectedGeometry as Polygon;
-                            var polygonCoordinates = polygon.Parts[0].Points.Select(coordinate => $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
-                            coordinates = string.Join(";", polygonCoordinates);
-                            break;
-                        case Esri.ArcGISRuntime.Geometry.GeometryType.Point:
-                            var point = projectedGeometry as MapPoint;
-                            coordinates = $"{point.X.ToString(CultureInfo.InvariantCulture)},{point.Y.ToString(CultureInfo.InvariantCulture)}";
-                            break;
-                        case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
-                            var polyline = projectedGeometry as Polyline;
-                            coordinates = string.Join(";", polyline.Parts[0].Points.Select(coordinate => $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList());
-                            break;
-                    }
-                }
-
                 var resultArea = new AreaEditorResult()
                 {
                     Geometry = result?.ToJson(),
                     MapName = this.SelectedMap,
-                    Coordinates = coordinates,
+                    Coordinates = GetProjectedCoordinates(result),
                     Area = GetGeometryArea(result),
                     Length = GetGeometryLength(result),
                     DistanceToEditor = distanceToEditor,
@@ -151,7 +126,39 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 await this.navigationService.Close(this);
             }
         }
-        
+
+        private string GetProjectedCoordinates(Geometry result)
+        {
+            string coordinates = string.Empty;
+            if(result == null)
+                return coordinates;
+            
+            //project to geocoordinates
+            SpatialReference reference = new SpatialReference(4326);
+
+            switch (result.GeometryType)
+            {
+                case Esri.ArcGISRuntime.Geometry.GeometryType.Polygon:
+                    var polygonCoordinates = (result as Polygon).Parts[0].Points
+                        .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
+                        .Select(coordinate => $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
+                    coordinates = string.Join(";", polygonCoordinates);
+                    break;
+                case Esri.ArcGISRuntime.Geometry.GeometryType.Point:
+                    var projected = GeometryEngine.Project(result as MapPoint, reference) as MapPoint;
+                    coordinates = $"{projected.X.ToString(CultureInfo.InvariantCulture)},{projected.Y.ToString(CultureInfo.InvariantCulture)}";
+                    break;
+                case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
+                    var polylineCoordinates = (result as Polyline).Parts[0].Points
+                        .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
+                        .Select(coordinate => $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
+                    coordinates = string.Join(";", polylineCoordinates);
+                    break;
+            }
+
+            return coordinates;
+        }
+
         private double GetGeometryArea(Geometry geometry)
         {
             bool doesGeometrySupportDimensionsCalculation = DoesGeometrySupportAreaCalculation(geometry);

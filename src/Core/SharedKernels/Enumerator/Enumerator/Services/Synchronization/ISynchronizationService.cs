@@ -77,5 +77,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
             IProgress<TransferProgress> transferProgress, CancellationToken token);
         
         Task<List<CalendarEventApiView>> GetCalendarEventsAsync(CancellationToken token = default);
+        Task<SyncInfoPackageResponse> GetSyncInfoPackageResponse(Guid interviewId, InterviewSyncInfoPackage interviewSyncInfoPackage, CancellationToken cancellationToken);
     }
 }

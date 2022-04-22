@@ -78,6 +78,26 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<UploadInterviewRequest, OkResponse>(UploadInterview);
             requestHandler.RegisterHandler<SupervisorIdRequest, SupervisorIdResponse>(GetSupervisorId);
             requestHandler.RegisterHandler<ApplicationSettingsRequest, ApplicationSettingsResponse>(GetApplicationSettings);
+            requestHandler.RegisterHandler<GetInterviewSyncInfoPackageRequest, InterviewSyncInfoPackageResponse>(GetInterviewSyncInfoPackageRequest);
+        }
+
+        private Task<InterviewSyncInfoPackageResponse> GetInterviewSyncInfoPackageRequest(GetInterviewSyncInfoPackageRequest request)
+        {
+            var response = new InterviewSyncInfoPackageResponse()
+            {
+                SyncInfoPackageResponse = new SyncInfoPackageResponse()
+            };
+            
+            var svEvents = eventStore.Read(request.InterviewId, 0).ToList();
+            response.SyncInfoPackageResponse.HasInterview = svEvents.Count != 0;
+            if (svEvents.Count == 0)
+                return Task.FromResult(response);
+
+            if (request.SyncInfoPackage.LastEventIdFromPreviousSync.HasValue)
+                response.SyncInfoPackageResponse.NeedSendFullStream = svEvents.All(e => 
+                    e.EventIdentifier != request.SyncInfoPackage.LastEventIdFromPreviousSync.Value);
+
+            return Task.FromResult(response);
         }
 
         private Task<ApplicationSettingsResponse> GetApplicationSettings(ApplicationSettingsRequest arg)
@@ -104,6 +124,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
                 if (firstEvent != null &&
                     firstEvent.Payload.GetType() != typeof(SynchronizationMetadataApplied) &&
+                    !request.Interview.FullEventStreamRequested && 
                     eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1,
                         interview.InterviewId, EventsThatChangeAnswersStateProvider.GetTypeNames()))
                 {
@@ -112,6 +133,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 }
 
                 AssertPackageNotDuplicated(aggregateRootEvents);
+
+                if (request.Interview.FullEventStreamRequested)
+                {
+                    var svEvents = eventStore.Read(request.Interview.InterviewId, 0).ToList();
+                    if (svEvents.Count > 0)
+                        aggregateRootEvents = aggregateRootEvents.FilterDuplicateEvents(svEvents);
+                }
 
                 var serializedEvents = aggregateRootEvents
                     .Select(e => e.Payload)
@@ -181,7 +209,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
             return Task.FromResult(new OkResponse());
         }
-
+        
         private void UpdateAssignmentQuantityByInterview(Guid interviewId)
         {
             var interviewView = this.interviews.GetById(interviewId.FormatGuid());

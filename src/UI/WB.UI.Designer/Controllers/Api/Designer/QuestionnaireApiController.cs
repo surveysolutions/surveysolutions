@@ -34,7 +34,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private readonly IWebTesterService webTesterService;
-        private const int MaxCountOfOptionForFileredCombobox = 200;
+        private const int MaxCountOfOptionForFilteredCombobox = 200;
         public const int MaxVerificationErrors = 100;
 
         public QuestionnaireApiController(IChapterInfoViewFactory chapterInfoViewFactory,
@@ -126,8 +126,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if ((editQuestionView.IsFilteredCombobox == true || !string.IsNullOrWhiteSpace(editQuestionView.CascadeFromQuestionId))
                 && editQuestionView.Options != null)
             {
-                editQuestionView.WereOptionsTruncated = editQuestionView.Options.Length > MaxCountOfOptionForFileredCombobox;
-                editQuestionView.Options = editQuestionView.Options.Take(MaxCountOfOptionForFileredCombobox).ToArray();   
+                editQuestionView.WereOptionsTruncated = editQuestionView.Options.Length > MaxCountOfOptionForFilteredCombobox;
+                editQuestionView.Options = editQuestionView.Options.Take(MaxCountOfOptionForFilteredCombobox).ToArray();   
             }
 
             return Ok(editQuestionView);

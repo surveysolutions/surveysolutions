@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     public class ChapterInfoView : IQuestionnaireItem
     {
         public ChapterInfoView(string itemId, string title, int questionsCount, int groupsCount, int rostersCount,
-            bool isCover, bool isReadOnly)
+            bool isCover, bool isReadOnly, bool hasCondition, bool hideIfDisabled)
         {
             ItemId = itemId;
             Title = title;
@@ -15,6 +15,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             RostersCount = rostersCount;
             IsCover = isCover;
             IsReadOnly = isReadOnly;
+            HasCondition = hasCondition;
+            HideIfDisabled = hideIfDisabled;
+
         }
 
         public string ItemId { get; set; }
@@ -37,14 +40,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
         public bool HasCondition
         {
-            get => false;
-            set { }
+            get;
+            set;
         }
 
         public bool HideIfDisabled
         {
-            get => false;
-            set { }
+            get;
+            set;
         }
     }
 }

@@ -88,7 +88,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         continue;
                     }
 
-                    var interviewEventStreamContainer = this.interviewFactory.GetInterviewEventStreamContainer(interview.InterviewId, isNeedCompress);
+                    var interviewSyncInfoPackage = this.interviewFactory.GetInterviewSyncInfoPackage(interview.InterviewId);
+
+                    var syncInfoPackageResponse = await this.synchronizationService.GetSyncInfoPackageResponse(interview.InterviewId,
+                        interviewSyncInfoPackage, Context.CancellationToken);
+
+                    var interviewEventStreamContainer = this.interviewFactory.GetInterviewEventStreamContainer(interview.InterviewId, isNeedCompress, syncInfoPackageResponse);
 
                     var uploadState = await this.synchronizationService.GetInterviewUploadState(interview.InterviewId,
                         interviewEventStreamContainer.Tag, Context.CancellationToken);
@@ -111,7 +116,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                     if (!uploadState.IsEventsUploaded)
                     {
-                        var interviewPackage = this.interviewFactory.GetInterviewEventsPackageOrNull(interviewEventStreamContainer);
+                        var interviewPackage = this.interviewFactory.GetInterviewEventsPackageOrNull(interviewEventStreamContainer, syncInfoPackageResponse);
 
                         if (interviewPackage != null)
                         {
