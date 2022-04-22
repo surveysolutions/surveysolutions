@@ -46,7 +46,9 @@ namespace Main.Core.Entities.SubEntities
         {
             return obj is Answer answer &&
                    AnswerText == answer.AnswerText &&
-                   EqualityComparer<decimal?>.Default.Equals(GetParsedValue(), answer.GetParsedValue()) &&
+                   EqualityComparer<decimal?>.Default.Equals(
+                       HasValue() ? GetParsedValue() : null, 
+                       answer.HasValue() ? answer.GetParsedValue() : null) &&
                    EqualityComparer<decimal?>.Default.Equals(GetParsedParentValue(), answer.GetParsedParentValue());
         }
 
