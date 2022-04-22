@@ -817,7 +817,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(
-            Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null)
+            Guid? id = null, string title = "qqq", IEnumerable<IComposite> children = null, Guid? userId = null)
         {
             return QuestionnaireDocument("questionnaire", id, title, children, userId);
         }
@@ -1810,7 +1810,7 @@ namespace WB.Tests.Unit.Designer
         };
 
         public static CategoriesInstance CategoriesInstance(Guid questionnaireId, Guid categoriesId, int value,
-            int sortIndex = 0, string text = null) =>
+            int sortIndex = 0, string text = "") =>
             new CategoriesInstance
             {
                 QuestionnaireId = questionnaireId,

@@ -1,6 +1,6 @@
 ﻿@model WB.UI.Designer.Models.Mails.EmailChangeConfirmationModel
 
-@Html.Raw(string.Format(NotificationResources.EmailChange, Model.UserName))
+@Html.Raw(string.Format(NotificationResources.EmailChange, Model!.UserName))
 
 <a href="@Model.ConfirmationLink">
     @NotificationResources.EmailChangeLink

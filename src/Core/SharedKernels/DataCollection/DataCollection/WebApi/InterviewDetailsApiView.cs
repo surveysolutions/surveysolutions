@@ -30,6 +30,19 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public Guid InterviewId { get; set; }
         public InterviewMetaInfo MetaInfo { get; set; }
         public string Events { get; set; }
+        public bool FullEventStreamRequested { get; set; }
+    }
+
+    public class InterviewSyncInfoPackage
+    {
+        public Guid FirstEventId { get; set; }
+        public Guid? LastEventIdFromPreviousSync { get; set; }
+    }
+
+    public class SyncInfoPackageResponse
+    {
+        public bool HasInterview { get; set; } 
+        public bool NeedSendFullStream { get; set; } 
     }
 
     public class InterviewPackageContainer

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 
 namespace WB.Tests.Integration
 {
@@ -8,7 +9,10 @@ namespace WB.Tests.Integration
         
         static TestsConfigurationManager()
         {
-            Config = new ConfigurationBuilder().AddIniFile("appsettings.ini").Build();
+            Config = new ConfigurationBuilder()
+                .AddIniFile("appsettings.ini")
+                .AddIniFile($"appsettings.{Environment.MachineName.ToLower()}.ini", true)
+                .Build();
         }
 
         public static string ConnectionString => Config["ConnectionStrings:TestConnection"];

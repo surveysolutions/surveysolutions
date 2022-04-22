@@ -71,7 +71,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             var questionnaire = this.webTesterService.GetQuestionnaire(token);
             if (questionnaire == null) return Forbid("Token expired");
 
-            StoredScenario scenario = await this.dbContext.Scenarios.FindAsync(scenarioId);
+            StoredScenario? scenario = await this.dbContext.Scenarios.FindAsync(scenarioId);
             if (scenario == null)
                 return NotFound(new {Message = "Scenario not found"});
             if (questionnaire != scenario.QuestionnaireId)

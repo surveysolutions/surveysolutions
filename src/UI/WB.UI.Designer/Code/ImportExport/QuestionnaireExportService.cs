@@ -86,13 +86,11 @@ namespace WB.UI.Designer.Code.ImportExport
                 try
                 {
                     var attachmentReference = questionnaireDocument.Attachments[attachmentIndex];
-
                     var attachmentContent = this.attachmentService.GetContent(attachmentReference.ContentId);
+                    var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentReference.AttachmentId);
 
-                    if (attachmentContent?.Content != null)
+                    if (attachmentContent?.Content != null && attachmentMeta != null)
                     {
-                        var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentReference.AttachmentId);
-
                         //var attachmentFileName = attachmentMeta?.FileName ?? "unknown-file-name";
                         var attachmentFileName = attachmentMeta.AttachmentId.FormatGuid() + Path.GetExtension(attachmentMeta.FileName);
                         zipStream.PutFileEntry($"Attachments/{attachmentFileName}", attachmentContent.Content);

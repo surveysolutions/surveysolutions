@@ -135,6 +135,8 @@ namespace WB.Services.Export.Interview
         private void FillAnswerToQuestion(Question question, InterviewEntity entity, object? answer)
         {
             if (answer == null) return;
+            var answerAsString = answer.ToString();
+            
             switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
@@ -145,11 +147,11 @@ namespace WB.Services.Export.Interview
                     }
                     else if (multiOption.YesNoView)
                     {
-                        entity.AsYesNo = JsonConvert.DeserializeObject<AnsweredYesNoOption[]>(answer.ToString());
+                        entity.AsYesNo = answerAsString != null ? JsonConvert.DeserializeObject<AnsweredYesNoOption[]>(answerAsString) : null;
                     }
                     else if (multiOption.IsQuestionLinked())
                     {
-                        entity.AsIntMatrix = JsonConvert.DeserializeObject<int[][]>(answer.ToString());
+                        entity.AsIntMatrix = answerAsString != null ? JsonConvert.DeserializeObject<int[][]>(answerAsString) : null;
                     }
 
                     break;
@@ -180,16 +182,16 @@ namespace WB.Services.Export.Interview
 
                     break;
                 case QuestionType.GpsCoordinates:
-                    entity.AsGps = JsonConvert.DeserializeObject<GeoPosition>(answer.ToString());
+                    entity.AsGps = answerAsString != null ? JsonConvert.DeserializeObject<GeoPosition>(answerAsString) : null;
                     break;
                 case QuestionType.Audio:
-                    entity.AsAudio = JsonConvert.DeserializeObject<AudioAnswer>(answer.ToString());
+                    entity.AsAudio = answerAsString != null ? JsonConvert.DeserializeObject<AudioAnswer>(answerAsString) : null;
                     break;
                 case QuestionType.TextList:
-                    entity.AsList = JsonConvert.DeserializeObject<InterviewTextListAnswer[]>(answer.ToString());
+                    entity.AsList = answerAsString != null ? JsonConvert.DeserializeObject<InterviewTextListAnswer[]>(answerAsString) : null;
                     break;
                 case QuestionType.Area:
-                    entity.AsArea = JsonConvert.DeserializeObject<Area>(answer.ToString());
+                    entity.AsArea = answerAsString != null ? JsonConvert.DeserializeObject<Area>(answerAsString) : null;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"Question {question.QuestionType} is not supported by export");
@@ -302,7 +304,10 @@ namespace WB.Services.Export.Interview
                         if (answer.Type == MultimediaType.Audio)
                         {
                             var objectAnswer = JsonConvert.DeserializeObject<AudioAnswer>(stringAnswer);
-                            answer.Answer = objectAnswer.FileName;
+                            if (objectAnswer != null)
+                            {
+                                answer.Answer = objectAnswer.FileName;
+                            }
                         }
                         else if(answer.Type == MultimediaType.Image)
                         {

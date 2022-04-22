@@ -50,6 +50,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             synchronizationService
                 .Setup(s => s.GetInterviewUploadState(interviewId, It.IsAny<EventStreamSignatureTag>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(remoteInterviewUploadState));
+            synchronizationService
+                .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new SyncInfoPackageResponse()));
 
             var eventStore = Create.Storage.InMemorySqliteMultiFilesEventStorage();
             eventStore.Store(new UncommittedEventStream(null, new []{ 
@@ -99,6 +102,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             synchronizationService
                 .Setup(s => s.GetInterviewUploadState(interviewId, It.IsAny<EventStreamSignatureTag>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(remoteInterviewUploadState));
+            synchronizationService
+                .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new SyncInfoPackageResponse()));
 
             var eventStore = Create.Storage.InMemorySqliteMultiFilesEventStorage();
             eventStore.Store(new UncommittedEventStream(null, new[]{
@@ -155,8 +161,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
                 Create.Event.CommittedEvent(eventSourceId: interviewId));
             var package = new InterviewPackageApiView();
             var interviewFactory = Mock.Of<IInterviewerInterviewAccessor>(f =>
-                f.GetInterviewEventStreamContainer(interviewId, false) == eventsContainer &&
-                f.GetInterviewEventsPackageOrNull(eventsContainer) == package);
+                f.GetInterviewEventStreamContainer(interviewId, false, It.IsAny<SyncInfoPackageResponse>()) == eventsContainer &&
+                f.GetInterviewEventsPackageOrNull(eventsContainer, It.IsAny<SyncInfoPackageResponse>()) == package);
 
             var synchronizationStep = CreateInterviewerUploadInterviews(responsibleId, localInterviews, synchronizationService.Object, eventStore, interviewFactory);
 
@@ -195,8 +201,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
                 Create.Event.CommittedEvent(eventSourceId: interviewId));
             var package = new InterviewPackageApiView();
             var interviewFactory = Mock.Of<IInterviewerInterviewAccessor>(f =>
-                f.GetInterviewEventStreamContainer(interviewId, false) == eventsContainer &&
-                f.GetInterviewEventsPackageOrNull(eventsContainer) == package);
+                f.GetInterviewEventStreamContainer(interviewId, false, It.IsAny<SyncInfoPackageResponse>()) == eventsContainer &&
+                f.GetInterviewEventsPackageOrNull(eventsContainer, It.IsAny<SyncInfoPackageResponse>()) == package);
 
             var synchronizationStep = CreateInterviewerUploadInterviews(responsibleId, localInterviews, synchronizationService.Object, eventStore, interviewFactory);
 
@@ -236,8 +242,169 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
                     It.IsAny<IProgress<TransferProgress>>(),
                     It.IsAny<CancellationToken>()),
                 Times.Never);
-            interviewFactory.Verify(f => f.GetInterviewEventStreamContainer(interviewId, It.IsAny<bool>()), Times.Never);
+            interviewFactory.Verify(f => f.GetInterviewEventStreamContainer(interviewId, It.IsAny<bool>(), It.IsAny<SyncInfoPackageResponse>()), Times.Never);
         }
+        
+        [Test]
+        public async Task when_local_interview_has_flag_about_sync_but_server_unknown_it_should_upload_all_stream()
+        {
+            var interviewId = Id.g1;
+            var responsibleId = Id.g2;
+
+            InterviewView localInterview = Create.Entity.InterviewView(interviewId: interviewId, status: InterviewStatus.Completed);
+            var localInterviewStorage = Create.Storage.SqliteInmemoryStorage<InterviewView>();
+            localInterviewStorage.Store(localInterview);
+
+            var eventStore = Create.Storage.InMemorySqliteMultiFilesEventStorage();
+            eventStore.Store(new UncommittedEventStream(null, new []{ 
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:1, payload: Create.Event.InterviewCreated(Guid.NewGuid(), 1)),
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:2, payload: Create.Event.InterviewerAssigned(Guid.NewGuid(), interviewId)),
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InteviewCompleted()),
+            }));
+            eventStore.MarkAllEventsAsReceivedByHq(interviewId);
+
+            InterviewUploadState remoteInterviewUploadState = Create.Entity.InterviewUploadState(responsibleId);
+            var synchronizationService = new Mock<ISynchronizationService>();
+            synchronizationService
+                .Setup(s => s.GetInterviewUploadState(interviewId, It.IsAny<EventStreamSignatureTag>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(remoteInterviewUploadState));
+            synchronizationService
+                .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new SyncInfoPackageResponse() { HasInterview = false }));
+
+            var interviewFactory = Create.Service.InterviewerInterviewAccessor(localInterviewStorage, eventStore,
+                prefilledQuestions: Create.Storage.InMemorySqlitePlainStorage<PrefilledQuestionView>(),
+                interviewMultimediaViewRepository: Stub<IPlainStorage<InterviewMultimediaView>>.WithNotEmptyValues);
+
+            var principal = Mock.Of<IPrincipal>(p => p.CurrentUserIdentity == Mock.Of<IUserIdentity>(i => i.UserId == responsibleId));
+
+            var synchronizationStep = CreateInterviewerUploadInterviews(synchronizationService.Object,
+                localInterviewStorage, interviewFactory, eventStorage: eventStore, principal: principal);
+
+            await synchronizationStep.ExecuteAsync();
+
+            synchronizationService.Verify(s => s.UploadInterviewAsync(interviewId,
+                    It.Is<InterviewPackageApiView>(p => p.FullEventStreamRequested == false),
+                    It.IsAny<IProgress<TransferProgress>>(),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
+            Assert.That(synchronizationStep.Context.Statistics.SuccessfullyPartialUploadedInterviewsCount, Is.EqualTo(0));
+            Assert.That(synchronizationStep.Context.Statistics.SuccessfullyUploadedInterviewsCount, Is.EqualTo(1));
+
+            var hasEventsWithoutHqFlag = eventStore.HasEventsWithoutHqFlag(interviewId);
+            Assert.That(hasEventsWithoutHqFlag, Is.False);
+
+            var interviewAfterSynch = localInterviewStorage.GetById(interviewId.FormatGuid());
+            Assert.That(interviewAfterSynch, Is.Null);
+        }
+
+        [Test]
+        public async Task when_local_interview_has_flag_about_sync_but_server__return_request_on_all_stream_should_upload_all_stream()
+        {
+            var interviewId = Id.g1;
+            var responsibleId = Id.g2;
+
+            InterviewView localInterview = Create.Entity.InterviewView(interviewId: interviewId, status: InterviewStatus.Completed);
+            var localInterviewStorage = Create.Storage.SqliteInmemoryStorage<InterviewView>();
+            localInterviewStorage.Store(localInterview);
+
+            var eventStore = Create.Storage.InMemorySqliteMultiFilesEventStorage();
+            eventStore.Store(new UncommittedEventStream(null, new []{ 
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:1, payload: Create.Event.InterviewCreated(Guid.NewGuid(), 1)),
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:2, payload: Create.Event.InterviewerAssigned(Guid.NewGuid(), interviewId)),
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InteviewCompleted()),
+            }));
+            eventStore.MarkAllEventsAsReceivedByHq(interviewId);
+
+            InterviewUploadState remoteInterviewUploadState = Create.Entity.InterviewUploadState(responsibleId);
+            var synchronizationService = new Mock<ISynchronizationService>();
+            synchronizationService
+                .Setup(s => s.GetInterviewUploadState(interviewId, It.IsAny<EventStreamSignatureTag>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(remoteInterviewUploadState));
+            synchronizationService
+                .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new SyncInfoPackageResponse() { HasInterview = true, NeedSendFullStream = true }));
+
+            var interviewFactory = Create.Service.InterviewerInterviewAccessor(localInterviewStorage, eventStore,
+                prefilledQuestions: Create.Storage.InMemorySqlitePlainStorage<PrefilledQuestionView>(),
+                interviewMultimediaViewRepository: Stub<IPlainStorage<InterviewMultimediaView>>.WithNotEmptyValues);
+
+            var principal = Mock.Of<IPrincipal>(p => p.CurrentUserIdentity == Mock.Of<IUserIdentity>(i => i.UserId == responsibleId));
+
+            var synchronizationStep = CreateInterviewerUploadInterviews(synchronizationService.Object,
+                localInterviewStorage, interviewFactory, eventStorage: eventStore, principal: principal);
+
+            await synchronizationStep.ExecuteAsync();
+
+            synchronizationService.Verify(s => s.UploadInterviewAsync(interviewId,
+                    It.Is<InterviewPackageApiView>(p => p.FullEventStreamRequested == true),
+                    It.IsAny<IProgress<TransferProgress>>(),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
+            Assert.That(synchronizationStep.Context.Statistics.SuccessfullyPartialUploadedInterviewsCount, Is.EqualTo(0));
+            Assert.That(synchronizationStep.Context.Statistics.SuccessfullyUploadedInterviewsCount, Is.EqualTo(1));
+
+            var hasEventsWithoutHqFlag = eventStore.HasEventsWithoutHqFlag(interviewId);
+            Assert.That(hasEventsWithoutHqFlag, Is.False);
+
+            var interviewAfterSynch = localInterviewStorage.GetById(interviewId.FormatGuid());
+            Assert.That(interviewAfterSynch, Is.Null);
+        }
+
+        [Test]
+        public async Task when_local_interview_has_flag_about_sync_should_do_not_upload_any_events()
+        {
+            var interviewId = Id.g1;
+            var responsibleId = Id.g2;
+
+            InterviewView localInterview = Create.Entity.InterviewView(interviewId: interviewId, status: InterviewStatus.Completed);
+            var localInterviewStorage = Create.Storage.SqliteInmemoryStorage<InterviewView>();
+            localInterviewStorage.Store(localInterview);
+
+            var eventStore = Create.Storage.InMemorySqliteMultiFilesEventStorage();
+            eventStore.Store(new UncommittedEventStream(null, new []{ 
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:1, payload: Create.Event.InterviewCreated(Guid.NewGuid(), 1)),
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:2, payload: Create.Event.InterviewerAssigned(Guid.NewGuid(), interviewId)),
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InteviewCompleted()),
+            }));
+            eventStore.MarkAllEventsAsReceivedByHq(interviewId);
+
+            InterviewUploadState remoteInterviewUploadState = Create.Entity.InterviewUploadState(responsibleId, true);
+            var synchronizationService = new Mock<ISynchronizationService>();
+            synchronizationService
+                .Setup(s => s.GetInterviewUploadState(interviewId, It.IsAny<EventStreamSignatureTag>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(remoteInterviewUploadState));
+            synchronizationService
+                .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new SyncInfoPackageResponse() { HasInterview = true, NeedSendFullStream = false }));
+
+            var interviewFactory = Create.Service.InterviewerInterviewAccessor(localInterviewStorage, eventStore,
+                prefilledQuestions: Create.Storage.InMemorySqlitePlainStorage<PrefilledQuestionView>(),
+                interviewMultimediaViewRepository: Stub<IPlainStorage<InterviewMultimediaView>>.WithNotEmptyValues);
+
+            var principal = Mock.Of<IPrincipal>(p => p.CurrentUserIdentity == Mock.Of<IUserIdentity>(i => i.UserId == responsibleId));
+
+            var synchronizationStep = CreateInterviewerUploadInterviews(synchronizationService.Object,
+                localInterviewStorage, interviewFactory, eventStorage: eventStore, principal: principal);
+
+            await synchronizationStep.ExecuteAsync();
+
+            synchronizationService.Verify(s => s.UploadInterviewAsync(interviewId,
+                    It.IsAny<InterviewPackageApiView>(),
+                    It.IsAny<IProgress<TransferProgress>>(),
+                    It.IsAny<CancellationToken>()),
+                Times.Never);
+            Assert.That(synchronizationStep.Context.Statistics.SuccessfullyPartialUploadedInterviewsCount, Is.EqualTo(0));
+            Assert.That(synchronizationStep.Context.Statistics.SuccessfullyUploadedInterviewsCount, Is.EqualTo(1));
+
+            var hasEventsWithoutHqFlag = eventStore.HasEventsWithoutHqFlag(interviewId);
+            Assert.That(hasEventsWithoutHqFlag, Is.False);
+
+            var interviewAfterSynch = localInterviewStorage.GetById(interviewId.FormatGuid());
+            Assert.That(interviewAfterSynch, Is.Null);
+        }
+
+
 
         private SynchronizationStep CreateInterviewerUploadInterviews(
             Guid responsibleId,

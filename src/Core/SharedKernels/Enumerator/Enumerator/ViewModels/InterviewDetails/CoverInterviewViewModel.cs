@@ -225,13 +225,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             isDisposed = true;
             
-            var prefilledQuestionsLocal = PrefilledReadOnlyEntities;
+            var prefilledQuestionsLocal = PrefilledReadOnlyEntities.ToArray();
             prefilledQuestionsLocal.ForEach(viewModel => viewModel?.DisposeIfDisposable());
 
-            var prefilledEditable = PrefilledEditableEntities;
+            var prefilledEditable = PrefilledEditableEntities.ToArray();
             prefilledEditable.ForEach(viewModel => viewModel?.DisposeIfDisposable());
             
-            var commentedEntities = CommentedEntities;
+            var commentedEntities = CommentedEntities.ToArray();
             commentedEntities.ForEach(viewModel => viewModel?.DisposeIfDisposable());
             
             NextGroupNavigationViewModel?.Dispose();

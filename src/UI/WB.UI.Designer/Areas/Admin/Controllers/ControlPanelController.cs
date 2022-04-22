@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Schema.Generation;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
@@ -97,6 +92,11 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         public ActionResult EditCompilationVersion(Guid id)
         {
             var compilationVersion = this.questionnaireCompilationVersionService.GetById(id);
+            if (compilationVersion == null)
+            {
+                return NotFound();
+            }
+
             return this.View("CompilationVersionsViews/EditCompilationVersion", new CompilationVersionModel
             {
                 QuestionnaireId = compilationVersion.QuestionnaireId,

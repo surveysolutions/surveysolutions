@@ -55,7 +55,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         private IActionResult CreateAttachmentResponse(Guid attachmentId, int? sizeToScale = null, bool thumbnail = false)
         {
-            AttachmentMeta attachment = this.attachmentService.GetAttachmentMeta(attachmentId);
+            AttachmentMeta? attachment = this.attachmentService.GetAttachmentMeta(attachmentId);
 
             if (attachment == null) return NotFound();
 
@@ -64,7 +64,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (requestHeaders.IfNoneMatch?.Any(x => x.Tag.ToString().Trim('"') == attachment.ContentId) ?? false)
                 return base.StatusCode((int)HttpStatusCode.NotModified);
 
-            AttachmentContent attachmentContent = this.attachmentService.GetContent(attachment.ContentId);
+            AttachmentContent? attachmentContent = this.attachmentService.GetContent(attachment.ContentId);
+            if (attachmentContent == null) return NotFound();
 
             if (thumbnail)
             {

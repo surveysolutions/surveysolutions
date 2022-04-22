@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public PdfSettings Settings { get; }
 
         public ModificationStatisticsByUser Created { get; set; }
-        public ModificationStatisticsByUser LastModified { get; set; }
+        public ModificationStatisticsByUser? LastModified { get; set; }
         public ModificationStatisticsByUser Requested { get; set; }
 
         public QuestionnaireStatistics Statistics { get; set; } = new QuestionnaireStatistics();
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public PdfQuestionnaireModel(QuestionnaireDocument questionnaire, PdfSettings settings, 
             List<IComposite> allItems, ModificationStatisticsByUser created,
-            ModificationStatisticsByUser lastModified,
+            ModificationStatisticsByUser? lastModified,
             ModificationStatisticsByUser requested
             )
         {
@@ -229,14 +229,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public Guid? GetParentRoster(Guid questionId)
         {
             var question = this.FindOrThrow<IComposite>(questionId);
-            IComposite? parent = null;
-            do
+            IComposite? parent = question.GetParent();
+            while (parent != null)
             {
-                parent = question.GetParent();
                 if (parent is IGroup { IsRoster: true })
                     return parent.PublicKey;
-            } while (parent != null);
-            
+                parent = parent?.GetParent();
+            }
             return null;
         }
 
@@ -446,7 +445,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     else
                     {
                         var categories = CategoriesList.Find(x => x.Id == question.CategoriesId.Value);
-                        return CategoriesList.IndexOf(categories) + 1;
+                        return categories == null ? -1 : CategoriesList.IndexOf(categories) + 1;
                     }
                 }
                 case "VE":

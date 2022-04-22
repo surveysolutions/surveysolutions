@@ -8,10 +8,10 @@ namespace WB.Services.Export
     {
         public static bool IsPreReleaseVersion(this FileVersionInfo fvi)
         {
-            // we consider as prereleased any version that contain letters in product version, i.e.
-            // 18.12.0-dev.322 is considered prereleased version
+            // we consider as pre-released any version that contain letters in product version, i.e.
+            // 18.12.0-dev.322 is considered pre-released version
             // 18.12.0.322 - is release version
-            return fvi.ProductVersion.Any(Char.IsLetter);
+            return fvi.ProductVersion != null && fvi.ProductVersion.Any(char.IsLetter);
         }
     }
 }

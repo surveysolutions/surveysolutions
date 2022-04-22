@@ -1,7 +1,7 @@
 @using WB.UI.Designer.Resources
 @model WB.UI.Designer.Models.SharingNotificationModel
 
-@Html.Raw(string.Format(NotificationResources.TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_, @Model.UserCallName, @Model.ActionPersonCallName, @Model.ShareTypeName))
+@Html.Raw(string.Format(NotificationResources.TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_, @Model!.UserCallName, @Model.ActionPersonCallName, @Model.ShareTypeName))
 
 <a href="@Model.QuestionnaireLink">
     @Model.QuestionnaireDisplayTitle

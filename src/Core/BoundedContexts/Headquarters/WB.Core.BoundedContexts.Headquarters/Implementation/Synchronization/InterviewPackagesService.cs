@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Main.Core.Events;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -14,7 +15,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Domain;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -27,6 +27,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {
@@ -87,7 +88,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     QuestionnaireId = brokenInterviewPackage.QuestionnaireId,
                     QuestionnaireVersion = brokenInterviewPackage.QuestionnaireVersion,
                     Events = brokenInterviewPackage.Events,
-                    ProcessAttemptsCount = brokenInterviewPackage.ReprocessAttemptsCount + 1
+                    ProcessAttemptsCount = brokenInterviewPackage.ReprocessAttemptsCount + 1,
+                    IsFullEventStream = brokenInterviewPackage.IsFullEventStream
                 };
 
                 this.ProcessPackage(interviewPackage);
@@ -208,9 +210,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                         .Deserialize<AggregateRootEvent[]>(interview.Events.Replace(@"\u0000", ""));
 
                     var firstEvent = aggregateRootEvents.FirstOrDefault();
+                    var headquartersEventStore = serviceLocator.GetInstance<IHeadquartersEventStore>();
                     if (firstEvent != null &&
                         firstEvent.Payload.GetType() != typeof(SynchronizationMetadataApplied) &&
-                        serviceLocator.GetInstance<IHeadquartersEventStore>()
+                        headquartersEventStore
                             .HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1,
                                 interview.InterviewId,
                                 EventsThatChangeAnswersStateProvider.GetTypeNames()))
@@ -224,13 +227,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                     AssertPackageNotDuplicated(packageTrackr, aggregateRootEvents);
 
+                    this.logger.Debug(
+                        $"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
+
+                    if (interview.IsFullEventStream)
+                    {
+                        var hqEvents = headquartersEventStore.Read(interview.InterviewId, 0).ToList();
+                        if (hqEvents.Count > 0)
+                            aggregateRootEvents = aggregateRootEvents.FilterDuplicateEvents(hqEvents);
+                    }
+
                     var serializedEvents = aggregateRootEvents
                         .Select(e => e.Payload)
                         .ToArray();
 
                     this.logger.Debug(
-                        $"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
+                        $"Interview events filtered duplicates by {interview.InterviewId}. Took {innerwatch.Elapsed:g}.");
                     innerwatch.Restart();
+
 
                     bool shouldChangeInterviewKey =
                         CheckIfInterviewKeyNeedsToBeChanged(interviewsLocal, interview.InterviewId, serializedEvents);
@@ -306,6 +320,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                         ExceptionStackTrace = string.Join(Environment.NewLine,
                             exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}")),
                         ReprocessAttemptsCount = interview.ProcessAttemptsCount,
+                        IsFullEventStream = interview.IsFullEventStream,
                     });
                     unitOfWork.AcceptChanges();
                 });
@@ -316,7 +331,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             }
             innerwatch.Stop();
         }
-
+        
         private void RecordProcessedPackageInfo(IPlainStorageAccessor<ReceivedPackageLogEntry> packageTrackr, AggregateRootEvent[] aggregateRootEvents)
         {
             if (aggregateRootEvents.Length > 0)

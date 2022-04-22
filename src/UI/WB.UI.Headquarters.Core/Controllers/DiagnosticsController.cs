@@ -46,6 +46,9 @@ namespace WB.UI.Headquarters.Controllers
             
             return View(model);
         }
+        
+        [ActivePage(MenuItem.Administration_InterviewPackages)]
+        public IActionResult InterviewPackages() => View();
 
         [ActivePage(MenuItem.Administration_TabletInfo)]
         public IActionResult TabletInfos() => View();

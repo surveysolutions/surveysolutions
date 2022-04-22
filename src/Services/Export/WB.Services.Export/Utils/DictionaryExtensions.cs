@@ -11,7 +11,7 @@ namespace WB.Services.Export
             return dictionary.TryGetValue(key, out var value) ? value : null;
         }
 
-        public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, Func<TValue> valueInit)
+        public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, Func<TValue> valueInit) where TKey : notnull
         {
             if (dict.TryGetValue(key, out var value))
                 return value;

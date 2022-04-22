@@ -86,6 +86,17 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public EventStreamSignatureTag Check { get; set; }
     }
 
+    public class GetInterviewSyncInfoPackageRequest : ICommunicationMessage
+    {
+        public Guid InterviewId { get; set; }
+        public InterviewSyncInfoPackage SyncInfoPackage { get; set; }
+    }
+
+    public class InterviewSyncInfoPackageResponse : ICommunicationMessage
+    {
+        public SyncInfoPackageResponse SyncInfoPackageResponse { get; set; }
+    }
+
     public class GetInterviewUploadStateResponse : ICommunicationMessage
     {
         public Guid InterviewId { get; set; }

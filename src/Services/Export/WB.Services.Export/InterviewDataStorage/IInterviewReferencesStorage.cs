@@ -6,7 +6,7 @@ namespace WB.Services.Export.InterviewDataStorage
 {
     public interface IInterviewReferencesStorage
     {
-        ValueTask<InterviewReference> FindAsync(Guid interviewId);
+        ValueTask<InterviewReference?> FindAsync(Guid interviewId);
     }
 
     class InterviewReferencesStorage : IInterviewReferencesStorage
@@ -18,7 +18,7 @@ namespace WB.Services.Export.InterviewDataStorage
             this.tenantDbContext = tenantDbContext;
         }
 
-        public ValueTask<InterviewReference> FindAsync(Guid interviewId)
+        public ValueTask<InterviewReference?> FindAsync(Guid interviewId)
         {
             return this.tenantDbContext.InterviewReferences.FindAsync(interviewId);
         }
