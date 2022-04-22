@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
-using NHibernate.Linq;
 using SkiaSharp;
 using SkiaSharp.QrCode.Image;
 using WB.Core.BoundedContexts.Designer;
@@ -25,12 +24,9 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Filters;
@@ -163,6 +159,7 @@ namespace WB.UI.Designer.Controllers
             return this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, User.GetIdOrNull());
         }
 
+        [Authorize]
         public IActionResult Clone(QuestionnaireRevision id)
         {
             QuestionnaireView? questionnaire = this.GetQuestionnaireView(id.QuestionnaireId);
@@ -179,6 +176,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Clone(QuestionnaireCloneModel model)
         {
@@ -224,11 +222,13 @@ namespace WB.UI.Designer.Controllers
             return this.View(model);
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             return this.View(new QuestionnaireViewModel());
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(QuestionnaireViewModel model)
@@ -261,6 +261,7 @@ namespace WB.UI.Designer.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -284,6 +285,7 @@ namespace WB.UI.Designer.Controllers
             return this.RedirectToAction("Index", "QuestionnaireList");
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Revert(Guid id, Guid commandId)
@@ -304,6 +306,7 @@ namespace WB.UI.Designer.Controllers
             return this.RedirectToAction("Details", new { id = sid });
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<bool>> SaveComment(Guid id, Guid historyItemId, string comment)
@@ -322,6 +325,7 @@ namespace WB.UI.Designer.Controllers
                 historyItemId.FormatGuid(), comment);
         }
 
+        [Authorize]
         [AntiForgeryFilter]
         public async Task<IActionResult> QuestionnaireHistory(QuestionnaireRevision id, int? p)
         {
@@ -344,6 +348,7 @@ namespace WB.UI.Designer.Controllers
             return this.View(questionnairePublicListViewModels);
         }
 
+        [Authorize]
         public IActionResult ExpressionGeneration(Guid? id)
         {
             ViewBag.QuestionnaireId = id ?? Guid.Empty;
@@ -356,6 +361,7 @@ namespace WB.UI.Designer.Controllers
             return questionnaire;
         }
 
+        [Authorize]
         public IActionResult LackOfPermits()
         {
             this.Error(Resources.QuestionnaireController.Forbidden);
@@ -384,6 +390,7 @@ namespace WB.UI.Designer.Controllers
             return this.Json(comboBoxItems);
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AssignFolder(Guid id, Guid folderId)
@@ -489,6 +496,7 @@ namespace WB.UI.Designer.Controllers
                 messageBody);
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult PublicUrl(Guid id, int height = 250, int width = 250)
         {
