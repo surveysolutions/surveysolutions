@@ -162,7 +162,8 @@ namespace WB.UI.Designer.Controllers
         [Authorize]
         public IActionResult Clone(QuestionnaireRevision id)
         {
-            QuestionnaireView? questionnaire = this.GetQuestionnaireView(id.QuestionnaireId);
+            var questionnaireId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
+            QuestionnaireView? questionnaire = this.GetQuestionnaireView(questionnaireId);
             if (questionnaire == null) return NotFound();
 
             QuestionnaireView model = questionnaire;
@@ -170,7 +171,7 @@ namespace WB.UI.Designer.Controllers
                     new QuestionnaireCloneModel
                     {
                         Title = $"Copy of {model.Title}",
-                        QuestionnaireId = id.QuestionnaireId,
+                        QuestionnaireId = questionnaireId,
                         Revision = id.Revision
                     });
         }
