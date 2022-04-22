@@ -125,6 +125,8 @@
                 var chapter = questionnaireService.findItem($scope.questionnaire.chapters, data.itemId);
                 if (chapter !== null) {
                     chapter.title = data.title;
+                    chapter.hideIfDisabled = data.hideIfDisabled;
+                    chapter.hasCondition = data.hasCondition;
                 }
             });
 

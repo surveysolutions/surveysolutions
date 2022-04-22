@@ -65,7 +65,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 chapter : ConvertToChapterView(chapter),
                 variableNames : this.CollectVariableNames(document),
                 isCover: document.IsCoverPage(chapterPublicKey),
-                isReadOnly: false
+                isReadOnly: false,
+                hasCondition : !string.IsNullOrWhiteSpace(chapter.ConditionExpression),
+                hideIfDisabled : chapter.HideIfDisabled
             );
         }
 

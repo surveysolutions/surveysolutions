@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             this.Property(x => x.ExceptionStackTrace);
             this.Property(x => x.InterviewKey);
             this.Property(x => x.ReprocessAttemptsCount);
+            this.Property(x => x.IsFullEventStream);
         }
     }
 }

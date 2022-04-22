@@ -266,6 +266,21 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 return @event?.EventId;
             }
         }
+        
+        public Guid? GetFirstEventId(Guid eventSourceId)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
+            using (connection.Lock())
+            {
+                var @event = connection
+                    .Table<EventView>()
+                    .Where(ev => ev.EventSourceId == eventSourceId)
+                    .OrderBy(ev => ev.EventSequence)
+                    .FirstOrDefault();
+
+                return @event?.EventId;
+            }
+        }
 
         public List<CommittedEvent> GetPendingEvents(Guid interviewId)
         {
