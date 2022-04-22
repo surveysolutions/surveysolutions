@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.Headquarters.Services.Maps;
 
@@ -18,17 +20,27 @@ class UploadMapsService : IUploadMapsService
     private readonly IArchiveUtils archiveUtils;
     private readonly IMapStorageService mapStorageService;
 
+    private const string TempFolderName = "TempMapsData";
+
+    private readonly string path;
+
     public UploadMapsService(IFileSystemAccessor fileSystemAccessor,
         IUploadPackageAnalyzer uploadPackageAnalyzer,
         ILogger<UploadMapsService> logger,
         IArchiveUtils archiveUtils,
-        IMapStorageService mapStorageService)
+        IMapStorageService mapStorageService,
+        IOptions<FileStorageConfig> fileStorageConfig
+        )
     {
         this.fileSystemAccessor = fileSystemAccessor;
         this.uploadPackageAnalyzer = uploadPackageAnalyzer;
         this.logger = logger;
         this.archiveUtils = archiveUtils;
         this.mapStorageService = mapStorageService;
+        
+        this.path = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, TempFolderName);
+        if (!fileSystemAccessor.IsDirectoryExists(this.path))
+            fileSystemAccessor.CreateDirectory(this.path);
     }
 
     public async Task<UploadMapsResult> Upload(string filename, Stream content)
@@ -68,9 +80,11 @@ class UploadMapsService : IUploadMapsService
         }
 
         var invalidMaps = new List<Tuple<string, Exception>>();
+        string mapsInTempDirectory = null;
+        
         try
         {
-            var mapsInTempDirectory = mapStorageService.ExtractMapsToTempDirectory(content);
+            mapsInTempDirectory = ExtractMapsToTempDirectory(content);
 
             foreach (var map in analyzeResult.Maps)
             {
@@ -85,9 +99,6 @@ class UploadMapsService : IUploadMapsService
                 }
             }
 
-            if (fileSystemAccessor.IsDirectoryExists(mapsInTempDirectory))
-                fileSystemAccessor.DeleteDirectory(mapsInTempDirectory);
-
             if (invalidMaps.Count > 0)
                 result.Errors.AddRange(invalidMaps.Select(x => String.Format(Resources.Maps.MapLoadingInvalidFile, x.Item1, x.Item2.Message)).ToList());
             else
@@ -99,7 +110,23 @@ class UploadMapsService : IUploadMapsService
             result.Errors.Add(Resources.Maps.MapsLoadingError);
             return result;
         }
+        finally
+        {
+            if (mapsInTempDirectory != null && fileSystemAccessor.IsDirectoryExists(mapsInTempDirectory))
+                fileSystemAccessor.DeleteDirectory(mapsInTempDirectory);
+        }
 
         return result;
+    }
+    
+    private string ExtractMapsToTempDirectory(Stream content)
+    {
+        var tempFileStore = Guid.NewGuid().FormatGuid();
+        var pathToSave = this.fileSystemAccessor.CombinePath(this.path, tempFileStore);
+        if (!this.fileSystemAccessor.IsDirectoryExists(pathToSave))
+            this.fileSystemAccessor.CreateDirectory(pathToSave);
+
+        archiveUtils.Unzip(content, pathToSave);
+        return pathToSave;
     }
 }

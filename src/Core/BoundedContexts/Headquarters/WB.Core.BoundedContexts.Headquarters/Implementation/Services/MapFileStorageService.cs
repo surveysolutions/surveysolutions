@@ -48,9 +48,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IArchiveUtils archiveUtils;
 
         private const int WGS84Wkid = 4326; //https://epsg.io/4326
-        private const string TempFolderName = "TempMapsData";
         private const string MapsFolderName = "MapsData";
-        private readonly string path;
+        private const string LabelFieldName = "label";
 
         private readonly string mapsFolderPath;
 
@@ -81,10 +80,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.duplicateMapLabelPlainStorageAccessor = duplicateMapLabelPlainStorageAccessor;
             this.geospatialConfig = geospatialConfig;
 
-            this.path = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, TempFolderName);
-            if (!fileSystemAccessor.IsDirectoryExists(this.path))
-                fileSystemAccessor.CreateDirectory(this.path);
-
             this.mapsFolderPath = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, MapsFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.mapsFolderPath))
                 fileSystemAccessor.CreateDirectory(this.mapsFolderPath);
@@ -101,11 +96,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 if (mapFiles.IsShapeFile)
                 {
-                    var zipName = fileSystemAccessor.CombinePath(mapsDirectory, mapFiles.Name + ".shp.zip");
+                    tempFile = fileSystemAccessor.CombinePath(mapsDirectory, mapFiles.Name + ".shp.zip");
                     var entities = mapFiles.Files.Select(f =>
                         fileSystemAccessor.CombinePath(mapsDirectory, f)
                     );
-                    tempFile = archiveUtils.CompressStream(zipName, entities);
+                    archiveUtils.ZipFiles(entities, tempFile);
                 }
                 else
                 {
@@ -330,29 +325,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         var readHeader = rd.DbaseHeader;
                         item.ShapesCount = readHeader.NumRecords;
 
-                        List<string> fieldNames = new List<string>(readHeader.NumFields);
                         FeatureCollection fc = new FeatureCollection();
 
+                        int? labelIndexOf = null;
+                        
                         for (int i = 0; i < readHeader.NumFields; i++)
                         {
                             // +1 because the first field is the geometry.
-                            fieldNames.Add(rd.GetName(i + 1));
+                            if (rd.GetName(i + 1) == LabelFieldName)
+                            {
+                                labelIndexOf = i + 1;
+                                break;
+                            }
                         }
 
-                        var labelIndexOf = fieldNames.ToList().IndexOf("label");
                         HashSet<string> checkOnUnique = new HashSet<string>();
                         Dictionary<string, int> duplicateLabels = new Dictionary<string, int>();
                         while (rd.Read())
                         {
                             AttributesTable attribs = new AttributesTable();
 
-                            if (labelIndexOf >= 0)
+                            if (labelIndexOf.HasValue)
                             {
-                                var labelValue = rd.GetValue(labelIndexOf + 1).ToString();
+                                var labelValue = rd.GetValue(labelIndexOf.Value).ToString();
 
                                 if (!string.IsNullOrWhiteSpace(labelValue))
                                 {
-                                    attribs.Add("label", labelValue);
+                                    attribs.Add(LabelFieldName, labelValue);
 
                                     if (!checkOnUnique.Add(labelValue))
                                     {
@@ -362,7 +361,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                 }
                             }   
 
-                            //attribs.Add("id", rd.MarketId);
                             IFeature feature = new Feature(rd.Geometry, attribs);
                             fc.Add(feature);
                         }
@@ -408,7 +406,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             var jsonSerializer = GeoJsonSerializer.Create();
             StringBuilder sb = new StringBuilder();
-            TextWriter tw = new StringWriter(sb);
+            using TextWriter tw = new StringWriter(sb);
             jsonSerializer.Serialize(tw, fc);
             tw.Flush();
             var json = sb.ToString();
@@ -629,17 +627,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }, null);
 
             return this.mapPlainStorageAccessor.GetById(id);
-        }
-
-        public string ExtractMapsToTempDirectory(Stream content)
-        {
-            var tempFileStore = Guid.NewGuid().FormatGuid();
-            var pathToSave = this.fileSystemAccessor.CombinePath(this.path, tempFileStore);
-            if (!this.fileSystemAccessor.IsDirectoryExists(pathToSave))
-                this.fileSystemAccessor.CreateDirectory(pathToSave);
-
-            archiveUtils.Unzip(content, pathToSave);
-            return pathToSave;
         }
 
         public async Task<byte[]> GetMapContentAsync(string mapName)

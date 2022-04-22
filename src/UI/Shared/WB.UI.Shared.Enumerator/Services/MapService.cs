@@ -185,8 +185,9 @@ namespace WB.UI.Shared.Enumerator.Services
                 var mapFolder = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
                 try
                 {
-                    if (!fileSystemAccessor.IsDirectoryExists(mapFolder))
-                        fileSystemAccessor.CreateDirectory(mapFolder);
+                    if (fileSystemAccessor.IsDirectoryExists(mapFolder))
+                        fileSystemAccessor.DeleteDirectory(mapFolder);
+                    fileSystemAccessor.CreateDirectory(mapFolder);
                     archiveUtils.Unzip(tempFileName, mapFolder);
                 }
                 catch

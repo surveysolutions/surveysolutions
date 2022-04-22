@@ -157,7 +157,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.userInteractionService.ShowToast(UIResources.AreaMap_LocationOutOfBoundaries);
             }
 
-            if (ShowedBoundaries)
+            if (ShapeFileLoaded)
             {
                 var shapeLayer = this.Map?.OperationalLayers[0];
                 var shapeExtent = shapeLayer?.FullExtent;
@@ -254,7 +254,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private MapView mapView;
         private bool isDisposed;
-        private bool showedBoundaries;
+        private bool shapeFileLoaded;
 
         public MapView MapView
         {
@@ -313,7 +313,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 // Zoom the map to the extent of the shapefile
                 await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
 
-                ShowedBoundaries = true;
+                ShapeFileLoaded = true;
             }
             catch (Exception e)
             {
@@ -322,21 +322,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         });
 
-        public bool ShowedBoundaries
+        public bool ShapeFileLoaded
         {
-            get => showedBoundaries;
-            set => this.RaiseAndSetIfChanged(ref showedBoundaries, value);
+            get => shapeFileLoaded;
+            set => this.RaiseAndSetIfChanged(ref shapeFileLoaded, value);
         }
 
         public IMvxCommand HideShapefile => new MvxCommand(() =>
         {
-            if (!ShowedBoundaries)
+            if (!ShapeFileLoaded)
                 return;
 
             try
             {
                 this.MapView.Map.OperationalLayers.Clear();
-                ShowedBoundaries = false;
+                ShapeFileLoaded = false;
             }
             catch (Exception e)
             {

@@ -85,15 +85,6 @@ namespace WB.UI.Shared.Extensions.Services
                         }
                         break;
                     }
-                    case ".shp":
-                    {
-                        var shapefileLayer = await GetShapefileAsFeatureLayer(existingMap.MapFullPath);
-                        if (shapefileLayer.LoadError == null)
-                        {
-                            return new Basemap(shapefileLayer);
-                        }
-                        break;
-                    }
                     default:
                         throw new Exception($"Unsupported map type {fileExtension}");
                 }

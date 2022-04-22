@@ -16,7 +16,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             return new IonicZipArchive(outputStream, password);
         }
 
-        public byte[] CompressStream(Stream uncompressedDataStream, string entryName)
+        public byte[] ZipFiles(Stream uncompressedDataStream, string entryName)
         {
             byte[] compressedBytes;
             using (MemoryStream memoryStream = new MemoryStream())
@@ -31,37 +31,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             }
             return compressedBytes;
         }
-
-        public byte[] CompressStream(IEnumerable<ExtractedFile> entities)
-        {
-            byte[] compressedBytes;
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                using (ZipFile zip = new ZipFile())
-                {
-                    foreach (var entity in entities)
-                    {
-                        zip.AddEntry(entity.Name, entity.Bytes);
-                    }
-                    zip.Save(memoryStream);
-                }
-
-                compressedBytes = memoryStream.ToArray();
-            }
-            return compressedBytes;
-        }
-        
-        public string CompressStream(string newZipPath, IEnumerable<string> paths)
-        {
-            using (ZipFile zip = new ZipFile())
-            {
-                
-                zip.AddFiles(paths, "");
-                zip.Save(newZipPath);
-            }
-            return newZipPath;
-        }
-
 
         public void ZipDirectory(string directory, string archiveFile, string password, IProgress<int> progress = null)
         {
@@ -212,37 +181,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             return null;
         }
         
-        public ExtractedStream GetFileFromArchive(Stream inputStream, string fileName)
-        {
-            inputStream.Seek(0, SeekOrigin.Begin);
-            
-            using (ZipFile zip = ZipFile.Read(inputStream))
-            {
-                foreach (var zipEntry in zip.Entries)
-                {
-                    if (zipEntry.IsDirectory) continue;
-                    if (!zipEntry.FileName.Contains(fileName)) continue;
-
-                    try
-                    {
-                        return new ExtractedStream
-                        {
-                            Name = zipEntry.FileName,
-                            Size = zipEntry.UncompressedSize,
-                            Content = zipEntry.OpenReader(),
-                        };
-                    }
-                    catch (BadPasswordException ex)
-                    {
-                        throw new Core.Infrastructure.FileSystem.ZipException("Password required", ex);
-                    }
-                }
-            }
-
-            return null;
-        }
-
-
         public ExtractedFile GetFileFromArchive(byte[] archivedFileAsArray, string fileName)
         {
             using (var archiveStream = new MemoryStream(archivedFileAsArray))
@@ -267,20 +205,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                         }
                     }
                 }
-            }
-
-            return null;
-        }
-
-        public Stream GetFileStream(string zipFilePath, string fileName)
-        {
-            using var zips = ZipFile.Read(zipFilePath);
-            foreach (var zip in zips)
-            {
-                if (zip.IsDirectory) continue;
-                if (!zip.FileName.Contains(fileName)) continue;
-
-                return zip.InputStream;
             }
 
             return null;

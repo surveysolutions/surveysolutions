@@ -11,7 +11,6 @@ namespace WB.Core.Infrastructure.FileSystem
         
         IEnumerable<ExtractedFile> GetFilesFromArchive(byte[] archivedFileAsArray);
         ExtractedFile GetFileFromArchive(string archiveFilePath, string fileName);
-        ExtractedStream GetFileFromArchive(Stream inputStream, string fileName);
         ExtractedFile GetFileFromArchive(byte[] archivedFileAsArray, string fileName);
 
         bool IsZipFile(string filePath);
@@ -24,8 +23,7 @@ namespace WB.Core.Infrastructure.FileSystem
         string CompressString(string stringToCompress);
         string DecompressString(string stringToDecompress);
         IEnumerable<ExtractedFile> GetFilesFromArchive(Stream inputStream);
-        byte[] CompressStream(Stream uncompressedDataStream, string entryName);
-        byte[] CompressStream(IEnumerable<ExtractedFile> entities);
-        string CompressStream(string newZipPath, IEnumerable<string> paths);
+        byte[] ZipFiles(Stream uncompressedDataStream, string entryName);
+        void ZipFiles(IEnumerable<string> files, string archiveFilePath);
     }
 }
