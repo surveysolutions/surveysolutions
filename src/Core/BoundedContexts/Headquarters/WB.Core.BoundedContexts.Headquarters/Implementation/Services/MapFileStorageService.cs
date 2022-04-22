@@ -147,32 +147,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 i.YMaxVal = _.fullExtent.ymax;
                 i.YMinVal = _.fullExtent.ymin;
                 i.MaxScale = _.maxScale;
-                i.MinScale = _.minScal;
+                i.MinScale = _.minScale;
             };
 
             switch (this.fileSystemAccessor.GetFileExtension(tempFile))
             {
                 case ".tpk":
                     {
-                        var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "conf.cdi");
+                        var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "mapserver.json");
                         if (unzippedFile != null)
                         {
-                            XmlDocument doc = new XmlDocument();
-                            doc.LoadXml(Encoding.UTF8.GetString(unzippedFile.Bytes));
-                            var envelope = doc["EnvelopeN"];
-                            item.Wkid = int.Parse(envelope["SpatialReference"]["WKID"].InnerText);
-                            item.XMaxVal = double.Parse(envelope["XMax"].InnerText);
-                            item.XMinVal = double.Parse(envelope["XMin"].InnerText);
-                            item.YMaxVal = double.Parse(envelope["YMax"].InnerText);
-                            item.YMinVal = double.Parse(envelope["YMin"].InnerText);
+                            var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                            SetMapProperties(jsonObject.contents, item);
                         }
                         else
                         {
-                            unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "mapserver.json");
+                            unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "conf.cdi");
                             if (unzippedFile != null)
                             {
-                                var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
-                                SetMapProperties(jsonObject.contents, item);
+                                XmlDocument doc = new XmlDocument();
+                                doc.LoadXml(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                                var envelope = doc["EnvelopeN"];
+                                item.Wkid = int.Parse(envelope["SpatialReference"]["WKID"].InnerText);
+                                item.XMaxVal = double.Parse(envelope["XMax"].InnerText);
+                                item.XMinVal = double.Parse(envelope["XMin"].InnerText);
+                                item.YMaxVal = double.Parse(envelope["YMax"].InnerText);
+                                item.YMinVal = double.Parse(envelope["YMin"].InnerText);
                             }
                         }
                     }
