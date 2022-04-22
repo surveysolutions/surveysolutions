@@ -191,7 +191,7 @@
         
         $scope.regenerateAnonymousQuestionnaireLink = function() {
             var updateRequest = shareService.regenerateAnonymousQuestionnaireLink(
-                $scope.questionnaire.questionnaireId,
+                $scope.questionnaire.questionnaireId
             );
 
             updateRequest.then(function(result) {
