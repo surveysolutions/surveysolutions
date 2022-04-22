@@ -35,6 +35,19 @@
         </ul>
     </li>
     @Html.MainMenuItem("New", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
+    
+    <li class="dropdown  @(page == MenuItem.AuditLog || page == MenuItem.Administration_InterviewPackages ? "active" : "")">
+            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Diagnostics">
+                @MainMenu.Diagnostics <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                @Html.MainMenuItem("AuditLog", "Diagnostics", @MainMenu.AuditLog, MenuItem.AuditLog)
+                @Html.MainMenuItem("InterviewPackages", "Diagnostics", @MainMenu.InterviewPackages, MenuItem.Administration_InterviewPackages)
+                @Html.MainMenuItem("Logs", "Diagnostics", @MainMenu.DeviceLogs, MenuItem.TabletLogs)
+                @Html.MainMenuItem("TabletInfos", "Diagnostics", @MainMenu.TabletInfos, MenuItem.Administration_TabletInfo)
+            </ul>
+    </li>
+    
     @if (ViewContext.RouteData.Values["controller"].ToString() == "ControlPanel")
     {
         <li class="dropdown  @(new[] { MenuItem.Administration_AppUpdates, MenuItem.Administration_Config, MenuItem.Administration_InterviewPackages, MenuItem.Administration_Exceptions, MenuItem.Administration_ChangePassword, MenuItem.Administration_ReevaluateInterview }.Contains((MenuItem)page) ? "active" : "")">

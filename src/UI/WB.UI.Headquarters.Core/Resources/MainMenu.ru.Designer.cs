@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Администрирование.
+        ///   Looks up a localized string similar to Админ.
         /// </summary>
         public static string Administration {
             get {
@@ -84,6 +84,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Assignments {
             get {
                 return ResourceManager.GetString("Assignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Аудит.
+        /// </summary>
+        public static string AuditLog {
+            get {
+                return ResourceManager.GetString("AuditLog", resourceCulture);
             }
         }
         
@@ -124,11 +133,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Логи устройств.
+        /// </summary>
+        public static string DeviceLogs {
+            get {
+                return ResourceManager.GetString("DeviceLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Устройства/Интервьюеры.
         /// </summary>
         public static string DevicesInterviewers {
             get {
                 return ResourceManager.GetString("DevicesInterviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Диагностика.
+        /// </summary>
+        public static string Diagnostics {
+            get {
+                return ResourceManager.GetString("Diagnostics", resourceCulture);
             }
         }
         
@@ -156,6 +183,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Interviewers {
             get {
                 return ResourceManager.GetString("Interviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Интервью пакеты.
+        /// </summary>
+        public static string InterviewPackages {
+            get {
+                return ResourceManager.GetString("InterviewPackages", resourceCulture);
             }
         }
         
@@ -318,6 +354,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string SurveyStatistics {
             get {
                 return ResourceManager.GetString("SurveyStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Информация об устройствах.
+        /// </summary>
+        public static string TabletInfos {
+            get {
+                return ResourceManager.GetString("TabletInfos", resourceCulture);
             }
         }
         
