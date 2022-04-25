@@ -283,18 +283,21 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             );
             questionnaireDocument.Translations = new List<Translation>()
             {
+                new Translation() { Id = Guid.NewGuid() },
                 new Translation() { Name = "Translation #1", Id = Guid.NewGuid() },
                 new Translation() { Name = "Translation #2", Id = Guid.NewGuid() },
             };
-            //questionnaireDocument.DefaultTranslation = questionnaireDocument.Translations.First().Id;
+            questionnaireDocument.DefaultLanguageName = "Custom name";
+            questionnaireDocument.DefaultTranslation = questionnaireDocument.Translations.Last().Id;
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions(mi => mi.Name == nameof(Translation.Id)));
-            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions(mi => mi.Name == nameof(Translation.Id)));
-            errors.Count.Should().Be(2);
-            errors.First().Should().Be("Required properties are missing from object: FileName.");
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
+            errors.Count.Should().Be(3);
+            errors.First().Should().Be("Required properties are missing from object: Name, FileName.");
             errors.Second().Should().Be("Required properties are missing from object: FileName.");
+            errors.Last().Should().Be("Required properties are missing from object: FileName.");
         }
         
         [Test]
@@ -685,7 +688,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         }
                    
         [Test]
-        public void when_export_mutioptions_question_should_be_equals_after_import()
+        public void when_export_multioptions_question_should_be_equals_after_import()
         {
             var question = new MultyOptionsQuestion()
             {
@@ -703,6 +706,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 CategoriesId = Guid.NewGuid(),
                 Answers = new List<Answer>()
                 {
+                    new Answer(),
+                    new Answer(),
                     new Answer() { AnswerText = "text1", AnswerValue = "111", },
                     new Answer() { AnswerText = "text2", AnswerValue = "222", ParentValue = "111"},
                 },

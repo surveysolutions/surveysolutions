@@ -72,13 +72,17 @@ namespace WB.UI.Headquarters.Controllers
 
         public IActionResult Details(string id)
         {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+            
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
             if (questionnaire == null)
                 return NotFound(string.Format(HQ.QuestionnaireNotFoundFormat, questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
             
             var browseItem = browseViewFactory.GetById(questionnaireIdentity);
 
+            ViewBag.SpecificPageCaption = $"{questionnaire.Title} (ver. {questionnaire.Version})";
+            
             var model = new QuestionnaireDetailsModel
             {
                 QuestionnaireId = questionnaire.QuestionnaireId,

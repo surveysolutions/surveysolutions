@@ -128,7 +128,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 var json = this.translationsService.GetTranslationsJson(questionnaireDocument, translation.Id);
                 var fileName = translation.Id.FormatGuid() + ".json";
                 zipStream.PutTextFileEntry($"Translations/{fileName}", json);
-                questionnaire.Translations.Single(t => t.Name == translation.Name).FileName = fileName;
+                questionnaire.Translations.Items.Single(t => t.Name == translation.Name).FileName = fileName;
             }
 
             foreach (var categories in questionnaireDocument.Categories)

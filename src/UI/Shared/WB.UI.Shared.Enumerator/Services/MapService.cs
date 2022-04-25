@@ -27,17 +27,20 @@ namespace WB.UI.Shared.Enumerator.Services
         private string tempSuffix = ".part";
 
         private readonly string? workspaceName = null;
-        
+        private readonly bool webOnlyMode;
+
         public MapService(
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
             IWorkspaceAccessor workspaceAccessor,
-            IEnumeratorArchiveUtils archiveUtils)
+            IEnumeratorArchiveUtils archiveUtils,
+            bool webOnlyMode = false)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.archiveUtils = archiveUtils;
             this.workspaceName = workspaceAccessor.GetCurrentWorkspaceName();
+            this.webOnlyMode = webOnlyMode;
             
             this.mapsLocationCommon = fileSystemAccessor.CombinePath(
                 AndroidPathUtils.GetPathToExternalDirectory(), 
@@ -113,6 +116,9 @@ namespace WB.UI.Shared.Enumerator.Services
                 mapList.Add(new MapDescription(MapType.OnlineImageryWithLabels, "Online: Imagery with labels"));
                 mapList.Add(new MapDescription(MapType.OnlineOpenStreetMap, "Online: Open Street Map"));
             }
+
+            if (this.webOnlyMode)
+                return mapList;
 
             void AddMapsFromFolder(string folder)
             {
@@ -221,6 +227,9 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public List<ShapefileDescription> GetAvailableShapefiles()
         {
+            if (this.webOnlyMode)
+                return new List<ShapefileDescription>();
+            
             List<ShapefileDescription> GetShapesInFolder(string path)
             {
                 if (!this.fileSystemAccessor.IsDirectoryExists(path))
