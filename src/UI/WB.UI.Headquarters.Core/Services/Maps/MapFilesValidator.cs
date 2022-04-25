@@ -19,8 +19,6 @@ public class ValidatorError
 
 public class MapFilesValidator
 {
-    private readonly HashSet<string> shapeMapFileExtensions = new HashSet<string>() { ".dbf", ".shp", ".shx", ".cpg", ".prj" };
-
     private IEnumerable<Func<AnalyzeResult, IEnumerable<ValidatorError>>> ErrorsVerifiers => new[]
     {
         (Func<AnalyzeResult, IEnumerable<ValidatorError>>)CheckFileStructureForShapeFile,
