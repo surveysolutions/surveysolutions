@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
 
             var attachmentContent = this.attachmentService.GetContent(id);
 
-            if (attachmentContent == null) return NotFound();
+            if (attachmentContent?.Content == null) return NotFound();
 
             return File(attachmentContent.Content, attachmentContent.ContentType,
                 null,

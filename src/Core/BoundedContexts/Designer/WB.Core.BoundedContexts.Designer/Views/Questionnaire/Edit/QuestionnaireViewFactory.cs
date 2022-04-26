@@ -99,11 +99,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var listViewItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons)
                 .FirstOrDefault(x => x.QuestionnaireId == questionnaireId.FormatGuid());
 
+            if (listViewItem == null) return false;
+            
             var sharedPersons = listViewItem.SharedPersons;
-            if (sharedPersons.Any(x => x.UserId == userId && x.ShareType == ShareType.Edit))
-                return true;
-
-            return false;
+            return sharedPersons.Any(x => x.UserId == userId && x.ShareType == ShareType.Edit);
         }
 
         private List<SharedPersonView> GetSharedPersons(Guid questionnaireId)

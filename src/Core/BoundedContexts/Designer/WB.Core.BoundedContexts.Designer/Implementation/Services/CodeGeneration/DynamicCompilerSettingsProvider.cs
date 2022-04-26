@@ -32,11 +32,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private List<MetadataReference> GetAssembliesToReferenceImpl()
         {
             var references = new List<MetadataReference>();
-            var designerContextModule = Assembly.GetAssembly(typeof(DesignerBoundedContextModule));
-
+            var designerContextModuleAssembly = Assembly.GetAssembly(typeof(DesignerBoundedContextModule));
+            if (designerContextModuleAssembly == null) throw new InvalidOperationException("Assembly is null.");
+            
             foreach (var assembly in assemblies)
             {
-                var stream = designerContextModule.GetManifestResourceStream($"WB.Core.BoundedContexts.Designer.{assembly}.dll");
+                var stream = designerContextModuleAssembly.GetManifestResourceStream($"WB.Core.BoundedContexts.Designer.{assembly}.dll");
                 if (stream == null)
                 {
                     throw new Exception($"Cannot find {assembly} in WB.Core.BoundedContexts.Designer.ReferencedAssemblies");

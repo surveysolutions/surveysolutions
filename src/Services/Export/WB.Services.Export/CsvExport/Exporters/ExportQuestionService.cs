@@ -229,7 +229,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 yield return ExportFormatSettings.MissingNumericQuestionValue;
         }
 
-        private IEnumerable<string> GetMultiLinkedToRosterAnswers(int[][] answers, ExportedQuestionHeaderItem header, int expectedColumnCount)
+        private IEnumerable<string> GetMultiLinkedToRosterAnswers(int[][]? answers, ExportedQuestionHeaderItem header, int expectedColumnCount)
         {
             if (answers != null)
             {
@@ -253,7 +253,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 }
                 else
                 {
-                    int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
+                    int checkedOptionIndex = Array.IndexOf(answers!, header.ColumnValues[i]);
                     yield return checkedOptionIndex > -1 ? "1" : "0";
                 }
             }
@@ -271,7 +271,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 }
                 else
                 {
-                    int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
+                    int checkedOptionIndex = Array.IndexOf(answers!, header.ColumnValues[i]);
                     yield return checkedOptionIndex > -1 ? (checkedOptionIndex + 1).ToString(ExportCulture) : "0";
                 }
             }
@@ -289,9 +289,11 @@ namespace WB.Services.Export.CsvExport.Exporters
         {
             for (int i = 0; i < expectedColumnCount; i++)
             {
-                decimal columnValue = header.ColumnValues[i];
+                if(answers == null)
+                    yield return ExportFormatSettings.MissingNumericQuestionValue;
 
-                var selectedOption = answers.FirstOrDefault(x => x.OptionValue == columnValue);
+                decimal columnValue = header.ColumnValues[i];
+                var selectedOption = answers!.FirstOrDefault(x => x.OptionValue == columnValue);
 
                 if (selectedOption != null)
                 {
@@ -299,11 +301,15 @@ namespace WB.Services.Export.CsvExport.Exporters
                     {
                         if (ordered)
                         {
-                            var selectedItemIndex = answers
+                            var selectedItemIndex = answers!
                                 .Where(x => x.Yes)
                                 .Select((item, index) => new { item, index })
                                 .FirstOrDefault(x => x.item.OptionValue == columnValue);
-                            yield return (selectedItemIndex.index + 1).ToString(ExportCulture);
+                            
+                            if(selectedItemIndex == null)
+                                yield return ExportFormatSettings.MissingNumericQuestionValue;
+                            
+                            yield return (selectedItemIndex!.index + 1).ToString(ExportCulture);
                         }
                         else
                         {
@@ -344,7 +350,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                 return (obj as InterviewTextListAnswer)?.Answer.Replace(answersSeparator, String.Empty) ?? String.Empty;
             }
 
-            return obj.ToString().Replace(answersSeparator, string.Empty);
+            var asString = obj.ToString();
+            return asString == null ? string.Empty : asString.Replace(answersSeparator, string.Empty);
         }
     }
 }

@@ -26,6 +26,10 @@ namespace WB.Services.Scheduler.Services.Implementation
 
             await using var tr = await db.Database.BeginTransactionAsync(stoppingToken);
             var job = await db.Jobs.FindAsync(task.Id);
+            if (job == null)
+            {
+                return;
+            }
 
             job.Handle(task);
             db.Jobs.Update(job);

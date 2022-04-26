@@ -20,6 +20,7 @@ namespace WB.Core.BoundedContexts.Designer
         public static Guid GetId(this ClaimsPrincipal identity)
         {
             var userId = identity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null) throw new InvalidOperationException($"Claim {ClaimTypes.NameIdentifier} was not found");
             return Guid.Parse(userId);
         }
 
@@ -31,8 +32,10 @@ namespace WB.Core.BoundedContexts.Designer
         
         public static string GetUserName(this ClaimsPrincipal identity)
         {
-            var userName = identity.FindFirst(ClaimTypes.Name).Value;
-            return userName;
+            var userName = identity.FindFirst(ClaimTypes.Name);
+            if (userName == null) throw new InvalidOperationException($"Claim {ClaimTypes.Name} was not found");
+            
+            return userName.Value;
         }
 
         public static string? GetUserNameOrNull(this ClaimsPrincipal identity)

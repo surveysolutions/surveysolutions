@@ -72,7 +72,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 
             verifierMock = new Mock<IQuestionnaireVerifier>();
 
-            string _;
             verifierMock
                 .Setup(x => x.GetAllErrors(questionnaireView, 
                     Moq.It.IsAny<bool>()))
@@ -122,6 +121,5 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         private static VerificationMessage[] mappedAndEnrichedVerificationErrors;
         private static VerificationMessage[] mappedAndEnrichedVerificationWarnings;
         private static VerificationResult result;
-        private static string _;
     }
 }

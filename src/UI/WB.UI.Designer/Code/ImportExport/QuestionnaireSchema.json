@@ -39,12 +39,7 @@
         "$ref": "#/definitions/Attachment"
       }
     },
-    "Translations": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Translation"
-      }
-    },
+    "Translations": { "$ref": "#/definitions/Translations" },
     "Categories": {
       "type": "array",
       "items": {
@@ -61,8 +56,8 @@
       "type": "object",
       "properties": {
         "Text": { "type": "string" },
-        "Code": { "type": "number" },
-        "ParentCode": { "type": "number" }
+        "Code": { "type": [ "integer", "null" ]},
+        "ParentCode": { "type": [ "integer", "null" ] }
       },
       "additionalProperties": false,
       "required": []
@@ -506,7 +501,7 @@
       "type": "object",
       "properties": {
         "Text": { "type": "string" },
-        "Code": { "type": "number" },
+        "Code": { "type": "number" }
       },
       "additionalProperties": false,
       "required": []
@@ -578,9 +573,26 @@
       "required": ["Type"]
     },
 
+    "Translations": {
+      "type": "object",
+      "properties": {
+        "DefaultTranslation": { "$ref": "#/definitions/GUID" },
+        "OriginalDisplayName": { "type": "string" },
+
+        "Items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Translation"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    
     "Translation": {
       "type": "object",
       "properties": {
+        "Id": { "$ref": "#/definitions/GUID" },
         "Name": { "type": "string", "maxLength": 32 },
         "FileName": { "type": "string" }
       },

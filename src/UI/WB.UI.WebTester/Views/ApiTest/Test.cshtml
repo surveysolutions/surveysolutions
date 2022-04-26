@@ -3,12 +3,15 @@
 @{
     Layout = null;
 }
-<h2>@Model.Title <sup>@Model.Id</sup></h2>
-<h3>@Model.LastUpdated</h3>
-<p>Translations: @Model.NumOfTranslations</p>
+<h2>@Model?.Title <sup>@Model?.Id</sup></h2>
+<h3>@Model?.LastUpdated</h3>
+<p>Translations: @Model?.NumOfTranslations</p>
 <ul>
-    @foreach (var attach in Model.Attaches)
+    @if (Model != null)
     {
-        <li><img src="data:image/png;base64, @attach" /></li>
+        foreach (var attach in Model.Attaches)
+        {
+            <li><img src="data:image/png;base64, @attach"/></li>
+        }
     }
 </ul>

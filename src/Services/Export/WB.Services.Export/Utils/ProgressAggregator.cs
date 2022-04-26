@@ -19,8 +19,11 @@ namespace WB.Services.Export
             {
                 lock (state)
                 {
-                    WeightedProgress weightedProgress = this.progresses[(ExportProgress) sender];
-                    weightedProgress.LastReportedProgress = progressArg;
+                    if (sender != null)
+                    {
+                        WeightedProgress weightedProgress = this.progresses[(ExportProgress) sender];
+                        weightedProgress.LastReportedProgress = progressArg;
+                    }
 
                     state.Percent = (int) this.progresses.Values.Sum(x => (x.LastReportedProgress?.Percent ?? 0) * x.ProgressWeight);
 

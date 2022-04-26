@@ -223,6 +223,11 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
             var listItem = this.listItemStorage.Questionnaires.Find(id.FormatGuid());
 
+            if (listItem == null)
+            {
+                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, id));
+            }
+
             QuestionnaireInfo result = new QuestionnaireInfo
             {
                 Id = questionnaire.PublicKey,

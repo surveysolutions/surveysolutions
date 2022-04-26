@@ -14,12 +14,15 @@
                 <th>Key</th>
                 <th>Value</th>
             </tr>
-            @foreach (var setting in Model)
+            @if (Model != null)
             {
-                <tr>
-                    <td>@setting.Key</td>
-                    <td>@setting.Value</td>
-                </tr>
+                foreach (var setting in Model)
+                {
+                    <tr>
+                        <td>@setting.Key</td>
+                        <td>@setting.Value</td>
+                    </tr>
+                }
             }
         </table>
     </div>

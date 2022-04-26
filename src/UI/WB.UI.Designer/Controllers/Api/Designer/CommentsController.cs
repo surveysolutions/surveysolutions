@@ -77,7 +77,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 return Json(new
                 {
-                    Error = string.Join(", ", ModelState.SelectMany(x => x.Value.Errors).Select(x => x.ErrorMessage))
+                    Error = string.Join(", ", 
+                        ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))
                 });
             }
             bool hasAccess = User.IsAdmin() 

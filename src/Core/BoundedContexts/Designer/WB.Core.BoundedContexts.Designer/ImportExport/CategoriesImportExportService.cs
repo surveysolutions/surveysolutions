@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             return json;
         }
 
-        public void StoreCategoriesFromJson(Guid questionnaireId, Guid categoriesId, string json)
+        public void StoreCategoriesFromJson(Guid? questionnaireId, Guid? categoriesId, string? json)
         {
             if (questionnaireId == null) throw new ArgumentNullException(nameof(questionnaireId));
             if (categoriesId == null) throw new ArgumentNullException(nameof(categoriesId));
@@ -51,14 +51,17 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             {
                 var items = questionnaireSerializer.Deserialize<CategoriesItem>(json);
                 
+                if(items == null)
+                   throw new Exception("Invalid format. Categories cannot be processed.");
+                
                 this.dbContext.CategoriesInstances.AddRange(items.Select((item, i) => new CategoriesInstance
                 {
                     SortIndex = i,
                     Text = CommandUtils.SanitizeHtml(item.Text, true),
                     Value = item.Value,
                     ParentId = item.ParentValue,
-                    CategoriesId = categoriesId,
-                    QuestionnaireId = questionnaireId,
+                    CategoriesId = categoriesId.Value,
+                    QuestionnaireId = questionnaireId.Value,
                 }));
             }
             catch (COMException e)

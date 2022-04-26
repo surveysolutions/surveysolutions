@@ -6,7 +6,7 @@ namespace WB.Services.Export
 {
     public static class HeadquartersApiExtensions
     {
-        public static string BaseUrl(this IHeadquartersApi api)
+        public static string? BaseUrl(this IHeadquartersApi api)
         {
             var apiType = api.GetType();
             var httpClientProperty = apiType.GetProperty("Client");
@@ -14,7 +14,7 @@ namespace WB.Services.Export
             {
                 if (httpClientProperty.GetValue(api) is HttpClient httpClient)
                 {
-                    return httpClient.BaseAddress.ToString();
+                    return httpClient.BaseAddress?.ToString();
                 }
             }
 

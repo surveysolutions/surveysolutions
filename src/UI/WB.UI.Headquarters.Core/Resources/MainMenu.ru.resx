@@ -120,11 +120,20 @@
   <data name="ApiUsers" xml:space="preserve">
     <value>API пользователи</value>
   </data>
+  <data name="AuditLog" xml:space="preserve">
+    <value>Аудит</value>
+  </data>
   <data name="CumulativeChart" xml:space="preserve">
     <value>График</value>
   </data>
   <data name="DataExport" xml:space="preserve">
     <value>Экспорт данных</value>
+  </data>
+  <data name="DeviceLogs" xml:space="preserve">
+    <value>Логи устройств</value>
+  </data>
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Диагностика</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
     <value>Хедквотеры</value>
@@ -134,6 +143,9 @@
   </data>
   <data name="Interviewers" xml:space="preserve">
     <value>Интервьюеры</value>
+  </data>
+  <data name="InterviewPackages" xml:space="preserve">
+    <value>Интервью пакеты</value>
   </data>
   <data name="Interviews" xml:space="preserve">
     <value>Интервью</value>
@@ -225,13 +237,16 @@
     <value>Статистика обследования</value>
   </data>
   <data name="Administration" xml:space="preserve">
-      <value>Администрирование</value>
-      <comment>Администрирование</comment>
+      <value>Админ</value>
+      <comment>Админ</comment>
   </data>
   <data name="Workspaces" xml:space="preserve">
       <value>Рабочие области</value>
   </data>
   <data name="ServerAdministration">
       <value>Администрирование</value>
+  </data>
+  <data name="TabletInfos" xml:space="preserve">
+    <value>Информация об устройствах</value>
   </data>
 </root>

@@ -14,6 +14,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
         [OneTimeSetUp]
         protected void Context()
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             workspace = Create.Service.WorkspaceContextAccessor();
             TestConnectionString = TestsConfigurationManager.ConnectionString;
             databaseName = "testdb_" + Guid.NewGuid().FormatGuid();

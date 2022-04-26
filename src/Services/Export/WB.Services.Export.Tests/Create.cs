@@ -611,7 +611,7 @@ namespace WB.Services.Export.Tests
             string questionnaireId = null,
             Guid? interviewId = null,
             InterviewStatus? status = null,
-            string key = null,
+            string key = "",
             DateTime? updateDateUtc = null)
         {
             return new InterviewReference

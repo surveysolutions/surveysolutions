@@ -29,7 +29,7 @@ namespace WB.Services.Infrastructure.Logging
             public string? footer { get; set; }
             public int ts { get; set; }
 
-            public void AddField(string name, string value, bool @short = true) => fields.Add(new Field
+            public void AddField(string? name, string? value, bool @short = true) => fields.Add(new Field
             {
                 title = name, value = value, @short = @short
             });

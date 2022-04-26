@@ -70,7 +70,7 @@ namespace WB.UI.Shared.Web.Captcha
             // removed j,0, O,v,I
             const string alphabet = "abcdefghikmnopqrstuwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789";
             var res = new StringBuilder(length);
-            using (var rng = new RNGCryptoServiceProvider())
+            using (var rng = RandomNumberGenerator.Create())
             {
                 int count = (int)Math.Ceiling(Math.Log(alphabet.Length, 2) / 8.0);
                 Debug.Assert(count <= sizeof(uint));

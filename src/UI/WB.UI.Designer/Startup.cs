@@ -65,6 +65,7 @@ namespace WB.UI.Designer
         {
             this.hostingEnvironment = hostingEnvironment;
             Configuration = configuration;
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         public IConfiguration Configuration { get; }
@@ -167,7 +168,7 @@ namespace WB.UI.Designer
             
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Latest)
+                //.SetCompatibilityVersion(CompatibilityVersion.Latest)
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

@@ -31,8 +31,10 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             var list = await dbContext.ClassificationEntities.Where(x => x.Type == ClassificationEntityType.Classification)
                 .Where(x => x.Parent!=null)
                 .GroupBy(x => x.Parent)
-                .Select(x => new {Id = x.Key, Count = x.Count()})
+                .Where(x=> x.Key != null)
+                .Select(x => new {Id = x.Key!.Value, Count = x.Count()})
                 .ToListAsync();
+            
             var classificationCounts = list
                 .ToDictionary(x => x.Id, x => x.Count);
 
@@ -87,7 +89,8 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
             var items = dbContext.ClassificationEntities.Where(x => x.Parent != null && classificationIds.Contains(x.Parent.Value))
                 .GroupBy(x => x.Parent)
-                .Select(x => new {Id = x.Key, Count = x.Count()});
+                .Where(x=> x.Key != null)
+                .Select(x => new {Id = x.Key!.Value, Count = x.Count()});
 
             var categoriesCounts = items.ToList().ToDictionary(x => x.Id, x => x.Count);
 
@@ -189,6 +192,8 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         public async Task UpdateClassification(Classification classification, Guid userId, bool isAdmin)
         {
             var entity = await this.dbContext.ClassificationEntities.FindAsync(classification.Id);
+            if(entity == null) throw new ClassificationException(ClassificationExceptionType.Undefined, "Classification was not found.");            
+            
             ThrowIfUserDoesNotHaveAccessToPublicEntity(entity, isAdmin);
             ThrowIfUserDoesNotHaveAccessToPrivate(entity, userId);
 
@@ -202,6 +207,9 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         public async Task DeleteClassificationAsync(Guid classificationId, Guid userId, bool isAdmin)
         {
             var classification = await this.dbContext.ClassificationEntities.FindAsync(classificationId);
+            if(classification == null)
+                throw new ClassificationException(ClassificationExceptionType.Undefined, "Classification was not found.");
+            
             ThrowIfUserDoesNotHaveAccessToPublicEntity(classification, isAdmin);
             ThrowIfUserDoesNotHaveAccessToPrivate(classification, userId);
             
@@ -229,6 +237,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 throw new ClassificationException(ClassificationExceptionType.NoAccess, "Cannot change public records");
 
             var entity = await this.dbContext.ClassificationEntities.FindAsync(group.Id);
+            if(entity == null) throw new ClassificationException(ClassificationExceptionType.Undefined, "Classification was not found.");
             entity.Title = group.Title;
             this.dbContext.ClassificationEntities.Update(entity);
             await this.dbContext.SaveChangesAsync();
@@ -246,6 +255,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             }
 
             var classification = await this.dbContext.ClassificationEntities.FindAsync(groupId);
+            if(classification == null) throw new ClassificationException(ClassificationExceptionType.Undefined, "Classification was not found.");
             this.dbContext.ClassificationEntities.Remove(classification);
 
             await this.dbContext.SaveChangesAsync();
@@ -261,7 +271,8 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         public async Task UpdateCategories(Guid classificationId, Category[] categories, Guid userId, bool isAdmin)
         {
             var classification = await this.dbContext.ClassificationEntities.FindAsync(classificationId);
-
+            if(classification == null) throw new ClassificationException(ClassificationExceptionType.Undefined, "Classification was not found.");
+            
             ThrowIfUserDoesNotHaveAccessToPublicEntity(classification, isAdmin);
             ThrowIfUserDoesNotHaveAccessToPrivate(classification, userId);
 

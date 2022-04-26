@@ -66,6 +66,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
         public void RenameFolder(Guid id, string newName)
         {
             var folder = dbContext.QuestionnaireFolders.Find(id);
+            if (folder == null) throw new InvalidOperationException($"Folder not found {id}");
+                
             folder.Title = newName;
             dbContext.SaveChanges();
         }
@@ -73,13 +75,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
         public void RemoveFolder(Guid id)
         {
             var folder = dbContext.QuestionnaireFolders.Find(id);
-            dbContext.Remove(folder);
+            if(folder != null)
+                dbContext.Remove(folder);
             dbContext.SaveChanges();
         }
 
         public void AssignFolderToQuestionnaire(Guid questionnaireId, Guid? folderId)
         {
             var item = dbContext.Questionnaires.Find(questionnaireId.FormatGuid());
+            if (item == null) throw new InvalidOperationException($"Questionnaire not found {questionnaireId} to assign folder");
             item.FolderId = folderId;
             dbContext.SaveChanges();
         }
@@ -90,8 +94,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             while (folderId.HasValue)
             {
                 var folder = dbContext.QuestionnaireFolders.Find(folderId.Value);
-                folders.Add(folder);
-                folderId = folder.Parent;
+                if (folder != null)
+                {
+                    folders.Add(folder);
+                }
+                folderId = folder?.Parent;
             }
 
             folders.Add(publicQuestionnairesFolder);

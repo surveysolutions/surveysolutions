@@ -553,17 +553,16 @@ namespace WB.Services.Export.InterviewDataStorage
             if (columnType == NpgsqlDbType.Double && value is string stringValue)
                 value = Double.Parse(stringValue, CultureInfo.InvariantCulture);
 
-            if (columnType == NpgsqlDbType.Double && !(value is double))
+            switch (columnType)
             {
-                if (value is BigInteger)
-                    value = double.Parse(value.ToString());
-                else
-                    value = Convert.ToDouble(value);
-            }
-
-            if (columnType == NpgsqlDbType.Bigint && !(value is long))
-            {
-                value = Convert.ToInt64(value);
+                case NpgsqlDbType.Double when !(value is double):
+                {
+                    value = value is BigInteger ? double.Parse(value.ToString()!) : Convert.ToDouble(value);
+                    break;
+                }
+                case NpgsqlDbType.Bigint when !(value is long):
+                    value = Convert.ToInt64(value);
+                    break;
             }
 
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, value, columnType);

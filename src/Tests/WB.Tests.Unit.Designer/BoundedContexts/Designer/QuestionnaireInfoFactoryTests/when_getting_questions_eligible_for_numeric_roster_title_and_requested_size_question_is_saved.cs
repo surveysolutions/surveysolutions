@@ -47,7 +47,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         private static List<DropdownEntityView> result;
         private static QuestionnaireDocument questionnaireView;
         private static readonly Mock<IDesignerQuestionnaireStorage> questionDetailsReaderMock = new Mock<IDesignerQuestionnaireStorage>();
-        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("11111111111111111111111111111111");
         private static readonly Guid roster1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid roster2Id = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
