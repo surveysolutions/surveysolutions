@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
             }
 
-            PdfQuestionnaireModel.ModificationStatisticsByUser lastModified = new();
+            PdfQuestionnaireModel.ModificationStatisticsByUser? lastModified = new();
             PdfQuestionnaireModel.ModificationStatisticsByUser statisticsByUser = new();
             IEnumerable<PdfQuestionnaireModel.ModificationStatisticsByUser> statisticsByUsers = Enumerable.Empty<PdfQuestionnaireModel.ModificationStatisticsByUser>();
                 
@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     Date = questionnaire.CreationDate
                 };
                 
-                lastModified = modificationStatisticsByUsers.OrderByDescending(x => x.Date).FirstOrDefault();
+                lastModified = modificationStatisticsByUsers.MaxBy(x => x.Date);
                 statisticsByUsers = sharedPersons.Select(person => new PdfQuestionnaireModel.ModificationStatisticsByUser
                 {
                     UserId = person.UserId,

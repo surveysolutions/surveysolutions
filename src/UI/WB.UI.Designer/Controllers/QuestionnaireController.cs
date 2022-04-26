@@ -486,6 +486,8 @@ namespace WB.UI.Designer.Controllers
             var userName = User.GetUserName();
             var questionnaire = questionnaireView.Title;
             var sharingLink = Url.Action("Details", "Questionnaire", new { id = anonymousQuestionnaireId }, Request.Scheme);
+            if (sharingLink == null)
+                throw new ArgumentNullException("sharingLink is null");
 
             var model = new AnonymousSharingEmailModel(userName, sharingLink, questionnaire);
 
