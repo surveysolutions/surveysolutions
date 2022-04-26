@@ -1,7 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using System;
 using System.Threading.Tasks;
 using Android.App;
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
@@ -31,6 +32,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private readonly IFileSystemAccessor fileSystemAccessor;
         protected readonly IMvxNavigationService navigationService;
         private readonly IEnumeratorSettings enumeratorSettings;
+        private readonly IMapUtilityService mapUtilityService;
 
         protected BaseMapInteractionViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -38,7 +40,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IUserInteractionService userInteractionService,
             ILogger logger,
             IFileSystemAccessor fileSystemAccessor,
-            IEnumeratorSettings enumeratorSettings) 
+            IEnumeratorSettings enumeratorSettings,
+            IMapUtilityService mapUtilityService) 
             : base(principal, viewModelNavigationService)
         {
             this.userInteractionService = userInteractionService;
@@ -47,6 +50,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.fileSystemAccessor = fileSystemAccessor;
             this.navigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
             this.enumeratorSettings = enumeratorSettings;
+            this.mapUtilityService = mapUtilityService;
         }
 
         public override async Task Initialize()
@@ -71,7 +75,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
                 var mapToDisplay = GetSelectedMap(this.AvailableMaps);
                 
-                var defaultBaseMap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, mapToDisplay).ConfigureAwait(false);
+                var defaultBaseMap = await mapUtilityService.GetBaseMap(mapToDisplay).ConfigureAwait(false);
                 //var basemap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, mapToDisplay).ConfigureAwait(false);
                 this.Map = new Map(defaultBaseMap);
 
@@ -135,22 +139,45 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.userInteractionService.ShowToast(UIResources.AreaMap_LocationDataSourceFailed);
         }
 
-        protected void LocationDisplayOnLocationChanged(object sender, Location e)
+        protected async void LocationDisplayOnLocationChanged(object sender, Location e)
         {
             //show only once
             this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
 
-            if (e.Position == null) { return; }
-
+            if (e?.Position == null) return;
             if (this.Map?.Basemap?.BaseLayers.Count <= 0) return;
-            
-            var extent = this.MapView.Map.Basemap.BaseLayers[0].FullExtent;
+            var extent = this.MapView.Map?.Basemap?.BaseLayers[0].FullExtent;
 
+            if (extent == null) return;
             var point = GeometryEngine.Project(e.Position, extent.SpatialReference);
 
+            
             if (!GeometryEngine.Contains(extent, point))
             {
                 this.userInteractionService.ShowToast(UIResources.AreaMap_LocationOutOfBoundaries);
+            }
+
+            if (ShapeFileLoaded)
+            {
+                var shapeLayer = this.Map?.OperationalLayers[0];
+                var shapeExtent = shapeLayer?.FullExtent;
+                var sPoint = GeometryEngine.Project(e.Position, shapeExtent.SpatialReference);
+                if (GeometryEngine.Contains(shapeExtent, sPoint))
+                {
+                    var featureLayer = (FeatureLayer)shapeLayer;
+                    var shapefileFeatureTable = (ShapefileFeatureTable)featureLayer?.FeatureTable;
+                    var labelFieldIndex = shapefileFeatureTable.Fields.ToList().FindIndex(f => string.Compare(f.Name, "label", StringComparison.OrdinalIgnoreCase) == 0);
+                    if (labelFieldIndex < 0)
+                        return;
+                    var features = await shapefileFeatureTable.QueryFeaturesAsync(new QueryParameters()
+                    {
+                        Geometry = sPoint,
+                        
+                    }).ConfigureAwait(false);
+                    var featuresField = features.Fields[labelFieldIndex];
+                    var featuresFieldName = featuresField.Name;
+                    this.userInteractionService.ShowToast(featuresFieldName);
+                }
             }
         }
 
@@ -161,6 +188,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             await UpdateBaseMap().ConfigureAwait(false);
             await OnMapLoaded().ConfigureAwait(false);
+
+            //if (AvailableShapefiles.Count == 1)
+            //    await LoadShapefile.ExecuteAsync().ConfigureAwait(false);
         }
 
         public abstract MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom);
@@ -192,7 +222,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             if (existingMap != null)
             {
-                var baseMap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, existingMap);
+                var baseMap = await mapUtilityService.GetBaseMap(existingMap);
                 if (baseMap != null)
                 {
                     this.Map.Basemap = baseMap;
@@ -224,6 +254,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private MapView mapView;
         private bool isDisposed;
+        private bool shapeFileLoaded;
 
         public MapView MapView
         {
@@ -258,9 +289,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (AvailableShapefiles.Count < 1)
                 return;
 
+            var fullPathToShapefile = AvailableShapefiles.First().FullPath;
+            if (AvailableShapefiles.Count > 1)
+            {
+                var options = AvailableShapefiles.Select(s =>
+                    new Tuple<string, string>(s.ShapefileName,
+                        s.FullPath)
+                ).ToArray();
+                fullPathToShapefile = await userInteractionService.SelectOneOptionFromList(UIResources.AreaMap_SelectShapefile, options);
+                if (string.IsNullOrEmpty(fullPathToShapefile))
+                    return;
+            }
+
             try
             {
-                var newFeatureLayer = await MapUtilityService.GetShapefileAsFeatureLayer(AvailableShapefiles.First().FullPath);
+                var newFeatureLayer = await mapUtilityService.GetShapefileAsFeatureLayer(fullPathToShapefile);
                 
                 this.MapView.Map.OperationalLayers.Clear();
 
@@ -270,6 +313,30 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 // Zoom the map to the extent of the shapefile
                 await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
 
+                ShapeFileLoaded = true;
+            }
+            catch (Exception e)
+            {
+                logger.Error("Error on shapefile loading", e);
+                userInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
+            }
+        });
+
+        public bool ShapeFileLoaded
+        {
+            get => shapeFileLoaded;
+            set => this.RaiseAndSetIfChanged(ref shapeFileLoaded, value);
+        }
+
+        public IMvxCommand HideShapefile => new MvxCommand(() =>
+        {
+            if (!ShapeFileLoaded)
+                return;
+
+            try
+            {
+                this.MapView.Map.OperationalLayers.Clear();
+                ShapeFileLoaded = false;
             }
             catch (Exception e)
             {

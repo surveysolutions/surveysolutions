@@ -17,8 +17,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
                 .Description("Map file name");
             descriptor.Field(x => x.Size).Description("Size of map in bytes");
             descriptor.Field(x => x.ImportDate)
+                .Type<DateTimeType>()
                 .Name("importDateUtc")
                 .Description("Utc date when map was imported on HQ");
+            descriptor.Field(x => x.UploadedBy)
+                .Name("uploadedBy")
+                .Description("User which uploaded map on HQ");
             descriptor.Field(x => x.Users)
                 .Description("List of users assigned to map")
                 .Type<NonNullType<ListType<NonNullType<UserMapObjectType>>>>()
@@ -31,6 +35,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
                         .ToList();
                 })
                 .Type<ListType<UserMapObjectType>>();
+            descriptor.Ignore(m => m.HasGeoJson);
+            descriptor.Ignore(m => m.GeoJson);
+            descriptor.Ignore(m => m.IsPreviewGeoJson);
+            descriptor.Ignore(m => m.DuplicateLabels);
         }
     }
 }

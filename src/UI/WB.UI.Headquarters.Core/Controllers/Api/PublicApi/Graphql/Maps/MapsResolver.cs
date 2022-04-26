@@ -4,11 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using HotChocolate;
+using HotChocolate.Types;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.UI.Headquarters.Services.Maps;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
 {
@@ -28,5 +31,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
 
         public MapBrowseItem AddUserToMap(string fileName, string userName,[Service] IMapStorageService mapStorageService) =>
             mapStorageService.AddUserToMap(fileName, userName);
+
+        [RequestSizeLimit(500 * 1024 * 1024)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 500 * 1024 * 1024)]
+        public async Task<MapBrowseItem[]> UploadMap(IFile file, [Service] IUploadMapsService mapUploadService)
+        {
+            var uploadMap = await mapUploadService.Upload(file.Name, file.OpenReadStream());
+            if (uploadMap.IsSuccess)
+                return uploadMap.Maps.ToArray();
+            else
+                throw new Exception(uploadMap.Errors.First());
+        }
     }
 }

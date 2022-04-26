@@ -89,6 +89,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<WB.UI.Shared.Extensions.ViewModels.MapDashboardViewModel>();
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
             registry.Bind<IMapInteractionService, WB.UI.Shared.Extensions.Services.MapInteractionService>();
+            registry.Bind<WB.UI.Shared.Extensions.Services.IMapUtilityService, WB.UI.Shared.Extensions.Services.MapUtilityService>();
 #endif
             registry.BindAsSingleton<InterviewDashboardEventHandler, InterviewDashboardEventHandler>();
             registry.BindAsSingleton<CalendarEventEventHandler, CalendarEventEventHandler>();

@@ -60,7 +60,6 @@ const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip
   maps(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
-    filteredCount
     nodes {
       fileName
       importDateUtc
@@ -199,6 +198,16 @@ export default {
                         name: 'FileName',
                         class: 'title',
                         title: this.$t('Pages.MapList_MapName'),
+                    },
+                    {
+                        data: 'fileName',
+                        name: 'MapType',
+                        class: 'parameters',
+                        title: this.$t('Pages.MapList_MapType'),
+                        render(data) {
+                            const icon_name = data.endsWith('.shp') ? 'shapefile_icon.svg' : 'map_icon.svg'
+                            return `<img src="/img/${icon_name}" width="20px"></img>`
+                        },
                     },
                     {
                         data: 'size',
