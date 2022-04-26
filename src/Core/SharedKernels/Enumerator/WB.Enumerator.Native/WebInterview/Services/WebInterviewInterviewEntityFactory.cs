@@ -226,10 +226,19 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                             var typedResult = this.autoMapper.Map<InterviewMutliOptionQuestion>(question);
 
-                            var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
-                            var answeredOptions = questionnaire.GetCategoricalMultiOptionsByValues(question.Identity.Id, typedResult.Answer);
+                            var allOptions = questionnaire.GetCategoricalMultiOptionsByValues(question.Identity.Id,
+                                    typedResult.Answer).ToList();
+                            
+                            //load options only for non combobox UI
+                            if (!questionnaire.IsQuestionFilteredCombobox(identity.Id))
+                            {
+                                var options =
+                                    callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
 
-                            typedResult.Options = options.Union(answeredOptions).Distinct().ToList();
+                                allOptions = allOptions.Union(options).Distinct().ToList();
+                            }
+
+                            typedResult.Options = allOptions;
                             typedResult.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                             typedResult.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                             typedResult.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
