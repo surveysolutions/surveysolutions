@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 xmlns:local="http://schemas.android.com/apk/res-auto"
+                 style="@style/VerticalFullWidthWrappingLayout">
+    <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="wrap_content"
+                                       android:background="?attr/colorPrimary"
+                                       android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                                       local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <RelativeLayout
+            style="@style/ToolbarTitle_Container"
+            local:MvxBind="Visible Not(IsSearchVisible)">
+            <TextView style="@style/ToolbarTitle"
+                      android:id="@+id/dashboadr_page_title"
+                      local:MvxBind="Text Localization('Dashboard_ToolbarText');" />
+        </RelativeLayout>
+        <ImageButton style="@style/Dashboard_SearchView_SearchButton"
+          local:MvxBind="Click ShowSearchCommand; Visible Not(IsSearchVisible)"
+                   local:srcCompat="@drawable/dashboard_search_icon"/>
+
+
+        <LinearLayout style="@style/Dashboard_SearchView_Container"
+                         local:MvxBind="Visible IsSearchVisible;">
+            <EditText style="@style/Dashboard_SearchView_FilterInput"
+                local:MvxBind="Text SearchText; SetFocus IsSearchVisible; TextChanged SearchCommand" />
+            <ImageButton style="@style/Dashboard_SearchView_DeleteButton"
+                         local:MvxBind="Click ClearSearchCommand;"
+                         local:srcCompat="@drawable/delete_button"/>
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+    <ProgressBar style="@style/Progress_Indicator"
+                 local:MvxBind="ShowProgress IsInProgress; Visibility VisibleOrInvisible(IsInProgress)" />
+    <LinearLayout style="@style/Dashboard_Questionnaires_Header">
+        <ImageButton
+                style="@style/Dashboard_SearchView_SearchButton"
+                local:MvxBind="Click ScanQrCodeCommand;"
+                local:srcCompat="@drawable/refresh" />
+                
+    </LinearLayout>
+    <LinearLayout style="@style/Dashboard_Questionnaires_Header">
+        <LinearLayout  style="@style/Dashboard_Questionnaires_Header_Body">
+        </LinearLayout>
+        <View style="@style/Dashboard_Filters_Divider"></View>
+    </LinearLayout>
+    <MvxRecyclerView android:id="@+id/questionnairesList"
+                 style="@style/Dashboard_QuestionnairesList"
+                 local:MvxBind="ItemsSource Questionnaires; ItemClick LoadQuestionnaireCommand; Visible Not(IsListEmpty)"
+                 local:MvxItemTemplate="@layout/questionnaire_list_item" />
+    <!-- empty view -->
+    <MvxLinearLayout android:id="@+id/emptyView"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  local:MvxBind="Visible IsListEmpty">
+
+        <TextView  style="@style/Dashboard_EmptyQuestionnaireListText"
+                   local:MvxBind="Text Localization('Dashboard_EmptySearchResult'); Visible IsSearchVisible"/>
+
+        <TextView  style="@style/Dashboard_EmptyQuestionnaireListText"
+                   local:MvxBind="Text Localization('Dashboard_EmptyQuestionnairesList'); Visible Not(IsSearchVisible)"/>
+    </MvxLinearLayout>
+</LinearLayout>
+

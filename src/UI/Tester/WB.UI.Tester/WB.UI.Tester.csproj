@@ -90,6 +90,7 @@
     <Compile Include="..\..\Interviewer\WB.UI.Interviewer\LinkerPleaseInclude.cs">
       <Link>LinkerPleaseInclude.cs</Link>
     </Compile>
+    <Compile Include="Activities\AnonymousQuestionnairesActivity.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
@@ -115,6 +116,11 @@
     <Compile Include="Activities\SplashActivity.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\layout\anonymousquestionnaires.axml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\menu\anonymousquestionnaires.xml" />
     <AndroidResource Include="Resources\xml\preferences.xml">
       <SubType>Designer</SubType>
     </AndroidResource>

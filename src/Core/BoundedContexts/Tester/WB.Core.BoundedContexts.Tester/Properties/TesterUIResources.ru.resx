@@ -138,8 +138,14 @@
   <data name="MenuItem_Title_Settings" xml:space="preserve">
     <value>Настройки</value>
   </data>
+  <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
+    <value>Анонимные опросники</value>
+  </data>
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Выход</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Войти</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
     <value>Количество секунд, в течении которых будет ожидаться получение GPS координат</value>

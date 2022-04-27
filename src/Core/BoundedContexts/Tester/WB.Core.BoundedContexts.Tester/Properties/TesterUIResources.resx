@@ -165,11 +165,17 @@
   <data name="MenuItem_Title_Reload" xml:space="preserve">
     <value>Reload questionnaire</value>
   </data>
+  <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
+    <value>Anonymous Questionnaires</value>
+  </data>
   <data name="MenuItem_Title_Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Sign out</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Login</value>
   </data>
   <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
     <value>Disable SSL certificate validation</value>

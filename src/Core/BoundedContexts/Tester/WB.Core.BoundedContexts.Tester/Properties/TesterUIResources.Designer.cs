@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t open the questionnaire &quot;{0}&quot;. Your Designer user account is not authorized. Please check your login and password.
+        ///   Looks up a localized string similar to Can&apos;t open the questionnaire &quot;{0}&quot;. Your Designer user account is not authorized. Please check your login and password..
         /// </summary>
         public static string ImportQuestionnaire_Error_Forbidden {
             get {
@@ -169,6 +169,15 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anonymous Questionnaires.
+        /// </summary>
+        public static string MenuItem_Title_AnonymousQuestionnaires {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_AnonymousQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaires.
         /// </summary>
         public static string MenuItem_Title_Dashboard {
@@ -192,6 +201,15 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         public static string MenuItem_Title_Language_Original {
             get {
                 return ResourceManager.GetString("MenuItem_Title_Language_Original", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string MenuItem_Title_Login {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Login", resourceCulture);
             }
         }
         
