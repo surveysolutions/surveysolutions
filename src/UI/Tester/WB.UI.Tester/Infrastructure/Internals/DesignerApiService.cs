@@ -28,11 +28,20 @@ namespace WB.UI.Tester.Infrastructure.Internals
         private readonly IRestService restService;
         private readonly IPrincipal principal;
 
-        private RestCredentials RestCredentials => new RestCredentials
+        private RestCredentials RestCredentials
         {
-            Login = this.principal.CurrentUserIdentity.Name,
-            Password = ((TesterUserIdentity)this.principal.CurrentUserIdentity).Password
-        };
+            get
+            {
+                if (this.principal?.CurrentUserIdentity == null)
+                    return null;
+                
+                return new RestCredentials
+                {
+                    Login = this.principal.CurrentUserIdentity.Name,
+                    Password = ((TesterUserIdentity)this.principal.CurrentUserIdentity).Password
+                };
+            }
+        }
 
         public DesignerApiService(
             IRestService restService, 

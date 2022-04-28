@@ -51,7 +51,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
                 {
-                    StatusCode = StatusCodes.Status401Unauthorized
+                    StatusCode = StatusCodes.Status403Forbidden
                 };
                 return;
             }

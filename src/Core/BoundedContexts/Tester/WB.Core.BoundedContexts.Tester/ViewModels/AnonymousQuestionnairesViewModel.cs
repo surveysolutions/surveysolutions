@@ -40,7 +40,7 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel
         ILogger logger,
         QuestionnaireDownloadViewModel questionnaireDownloader,
         IQRBarcodeScanService qrBarcodeScanService)
-        : base(principal, viewModelNavigationService)
+        : base(principal, viewModelNavigationService, false)
     {
         this.userInteractionService = userInteractionService;
         this.questionnaireListStorage = questionnaireListStorage;
@@ -225,12 +225,11 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel
                     var idFromUrl = scannedUrl.ToString().Trim('/').Split('/').Last();
                     if (Guid.TryParse(idFromUrl, out var qId))
                     {
-                        var questionnaireListItem = new QuestionnaireListItemViewModel()
-                        {
-                            Id = qId.FormatGuid(),
-                            Title = idFromUrl
-                        };
-                        await LoadQuestionnaireAsync(questionnaireListItem);
+                        this.tokenSource = new CancellationTokenSource();
+                        var progress = new Progress<string>();
+                        await this.QuestionnaireDownloader
+                            .LoadQuestionnaireAsync(qId.FormatGuid(), idFromUrl, progress,
+                                this.tokenSource.Token);
                     }
                 }
             }

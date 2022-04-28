@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Code.Attributes;
+using WB.UI.Designer.Controllers.Api.Designer;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
-    [Authorize]
+    [AuthorizeOrAnonymousQuestionnaire]
     [Route("api/v{version:int}/attachment")]
     public class AttachmentController : ControllerBase
     {
