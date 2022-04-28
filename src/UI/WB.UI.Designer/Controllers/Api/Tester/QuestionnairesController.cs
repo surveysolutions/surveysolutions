@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -78,6 +79,9 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             string resultAssembly;
             try
             {
+                questionnaireView.Source.Id = id.QuestionnaireId.FormatGuid();
+                questionnaireView.Source.PublicKey = id.QuestionnaireId;
+                
                 var verificationResult = 
                     this.questionnaireVerifier.CompileAndVerify(questionnaireView,
                       versionToCompileAssembly,

@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class QuestionnaireDownloadViewModel : MvxNotifyPropertyChanged
     {
-        private readonly IPrincipal principal;
+        private readonly ITesterPrincipal principal;
         private readonly IDesignerApiService designerApiService;
         private readonly ICommandService commandService;
         private readonly IQuestionnaireImportService questionnaireImportService;
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IQuestionnaireStorage questionnaireRepository;
 
         public QuestionnaireDownloadViewModel(
-            IPrincipal principal,
+            ITesterPrincipal principal,
             IDesignerApiService designerApiService,
             ICommandService commandService,
             IQuestionnaireImportService questionnaireImportService,
@@ -75,6 +75,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
             if (questionnaireIdentity != null)
             {
+                if (principal.CurrentUserIdentity == null)
+                    principal.UseFakeIdentity();
+                
                 var interviewId = await this.CreateInterview(questionnaireIdentity, progress).ConfigureAwait(false);
                 var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
                 if (questionnaire.GetPrefilledEntities().Count == 0)
@@ -142,8 +145,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
-                var questionnairePackage =
-                    await this.DownloadQuestionnaire(questionnaireId, progress, cancellationToken);
+                var questionnairePackage = await this.DownloadQuestionnaire(questionnaireId, progress, cancellationToken);
 
                 if (questionnairePackage != null)
                 {
@@ -209,7 +211,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             progress.Report(TesterUIResources.ImportQuestionnaire_CreateInterview);
 
             var interviewId = Guid.NewGuid();
-
+            
             await this.commandService.ExecuteAsync(new CreateInterview(
                 interviewId: interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,

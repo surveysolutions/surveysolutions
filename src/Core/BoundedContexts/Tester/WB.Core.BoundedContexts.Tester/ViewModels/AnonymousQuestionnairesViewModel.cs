@@ -20,10 +20,11 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels;
 
-public class AnonymousQuestionnairesViewModel : BaseViewModel
+public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
 {
     private CancellationTokenSource tokenSource;
 
+    private readonly ITesterPrincipal principal;
     private readonly IUserInteractionService userInteractionService;
     private IReadOnlyCollection<AnonymousQuestionnaireListItem> localQuestionnaires = new List<AnonymousQuestionnaireListItem>();
     private readonly IPlainStorage<AnonymousQuestionnaireListItem> questionnaireListStorage;
@@ -33,7 +34,7 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel
     private QuestionnaireDownloadViewModel QuestionnaireDownloader { get; }
 
     public AnonymousQuestionnairesViewModel(
-        IPrincipal principal,
+        ITesterPrincipal principal,
         IViewModelNavigationService viewModelNavigationService,
         IUserInteractionService userInteractionService,
         IPlainStorage<AnonymousQuestionnaireListItem> questionnaireListStorage, 
@@ -42,6 +43,7 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel
         IQRBarcodeScanService qrBarcodeScanService)
         : base(principal, viewModelNavigationService, false)
     {
+        this.principal = principal;
         this.userInteractionService = userInteractionService;
         this.questionnaireListStorage = questionnaireListStorage;
         this.logger = logger;
@@ -60,6 +62,9 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel
 
         this.ShowEmptyQuestionnaireListText = true;
         this.IsSearchVisible = false;
+        
+        if (principal.IsFakeIdentity)
+            principal.RemoveFakeIdentity();;
     }
    
     private void SearchByLocalQuestionnaires(string searchTerm = null)
@@ -243,5 +248,14 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel
         {
             this.IsInProgress = false;
         }
+    }
+
+    public void Dispose()
+    {
+        if (principal.IsFakeIdentity)
+            principal.UseFakeIdentity();
+        
+        tokenSource?.Dispose();
+        questionnaireListStorage?.Dispose();
     }
 }
