@@ -58,8 +58,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
             });
 
             var items = await this.synchronizationService.GetMapList(cancellationToken).ConfigureAwait(false);
+            var availableMaps = this.mapService.GetAvailableMaps(false);
 
-            foreach (var map in this.mapService.GetAvailableMaps(false))
+            foreach (var map in availableMaps)
             {
                 if (items.Exists(x => string.Compare(x.MapName, map.MapFileName, StringComparison.InvariantCultureIgnoreCase) == 0))
                     continue;

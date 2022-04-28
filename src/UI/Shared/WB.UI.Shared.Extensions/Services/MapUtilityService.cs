@@ -7,18 +7,41 @@ using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Symbology;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Implementation.Utils;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 
 namespace WB.UI.Shared.Extensions.Services
 {
-    public class MapUtilityService
+    public interface IMapUtilityService
     {
-        private static async Task<Basemap> GetLocalMap(IFileSystemAccessor fileSystemAccessor, MapDescription existingMap)
+        Task<Basemap> GetBaseMap(MapDescription existingMap);
+        Task<FeatureLayer> GetShapefileAsFeatureLayer(string fullPathToShapefile);
+    }
+
+    public class MapUtilityService : IMapUtilityService
+    {
+        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IEnumeratorArchiveUtils archiveUtils;
+        private readonly ILogger logger;
+
+        public MapUtilityService(IFileSystemAccessor fileSystemAccessor,
+            IEnumeratorArchiveUtils archiveUtils,
+            ILogger logger)
+        {
+            this.fileSystemAccessor = fileSystemAccessor;
+            this.archiveUtils = archiveUtils;
+            this.logger = logger;
+        }
+
+        private async Task<Basemap> GetLocalMap(MapDescription existingMap)
         {
             try
             {
-                switch (fileSystemAccessor.GetFileExtension(existingMap.MapFullPath))
+                var fileExtension = fileSystemAccessor.GetFileExtension(existingMap.MapFullPath);
+                switch (fileExtension)
                 {
                     case ".mmpk":
                     {
@@ -62,16 +85,19 @@ namespace WB.UI.Shared.Extensions.Services
                         }
                         break;
                     }
+                    default:
+                        throw new Exception($"Unsupported map type {fileExtension}");
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.Error($"Can't load map {existingMap.MapFullPath}", e);
             }
 
             return null;
         }
 
-        public static async Task<Basemap> GetBaseMap(IFileSystemAccessor fileSystemAccessor, MapDescription existingMap)
+        public async Task<Basemap> GetBaseMap(MapDescription existingMap)
         {
             if (existingMap == null) return null;
 
@@ -84,16 +110,16 @@ namespace WB.UI.Shared.Extensions.Services
                 case MapType.OnlineOpenStreetMap:
                     return Basemap.CreateOpenStreetMap();
                 case MapType.LocalFile:
-                    return await GetLocalMap(fileSystemAccessor, existingMap);
+                    return await GetLocalMap(existingMap);
                 default:
                     return null;
             }
         }
 
-        public static async Task<FeatureLayer> GetShapefileAsFeatureLayer(string fullPattToFSapefile)
+        public async Task<FeatureLayer> GetShapefileAsFeatureLayer(string fullPathToShapefile)
         {
             // Open the shapefile
-            ShapefileFeatureTable myShapefile = await ShapefileFeatureTable.OpenAsync(fullPattToFSapefile);
+            ShapefileFeatureTable myShapefile = await ShapefileFeatureTable.OpenAsync(fullPathToShapefile);
             // Create a feature layer to display the shapefile
             FeatureLayer newFeatureLayer = new FeatureLayer(myShapefile);
 

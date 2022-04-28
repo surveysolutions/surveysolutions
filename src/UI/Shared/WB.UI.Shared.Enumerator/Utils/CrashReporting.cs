@@ -81,7 +81,7 @@ namespace WB.UI.Shared.Enumerator.Utils
                         
                         
                         Log.Info("CrashReporting", "Starting ANRWatchDog");
-                        new ANRWatchDog().SetANRListener(new ANRListener()).Start();
+                        new ANRWatchDog(10000).SetANRListener(new ANRListener()).Start();
                         
                         Log.Info("CrashReporting", "Initialized appcenter");
                     }

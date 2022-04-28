@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -13,6 +15,7 @@ using WB.UI.Headquarters.Models.Maps;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -20,15 +23,17 @@ namespace WB.UI.Headquarters.Controllers
     public class MapsController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;
-
+        private readonly IUserViewFactory userViewFactory;
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
 
         public MapsController(
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser,
+            IUserViewFactory userViewFactory)
         {
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
             this.authorizedUser = authorizedUser;
+            this.userViewFactory = userViewFactory;
         }
 
         [ActivePage(MenuItem.Maps)]
@@ -88,20 +93,31 @@ namespace WB.UI.Headquarters.Controllers
             if (map == null)
                 return NotFound();
 
+            var uploadedBy = map.UploadedBy.HasValue
+                ? userViewFactory.GetUser(map.UploadedBy.Value)?.UserName
+                : (string)null;
             return this.View("Details",
                 new MapDetailsModel
                 {
-
                     DataUrl = Url.Action("MapUserList", "MapsApi"),
                     MapPreviewUrl = Url.Action("MapPreview", "Maps", new { mapName = map.Id }),
                     MapsUrl = Url.Action("Index", "Maps"),
                     FileName = mapName,
                     Size = FileSizeUtils.SizeInMegabytes(map.Size),
                     Wkid = map.Wkid,
-                    ImportDate = map.ImportDate.HasValue ? map.ImportDate.Value.FormatDateWithTime() : "",
+                    ImportDate = map.ImportDate,
+                    UploadedBy = uploadedBy,
                     MaxScale = map.MaxScale,
                     MinScale = map.MinScale,
+                    ShapeType = map.ShapeType,
+                    ShapesCount = map.ShapesCount,
                     DeleteMapUserLinkUrl = Url.Action("DeleteMapUser", "MapsApi"),
+                    DuplicateMapLabels = map.DuplicateLabels?.Select(l => new DuplicateLabelModel()
+                    {
+                        Label = l.Label,
+                        Count = l.Count
+                    }).ToArray() ?? Array.Empty<DuplicateLabelModel>(),
+                    IsPreviewGeoJson = map.IsPreviewGeoJson,
                 });
         }
 
@@ -115,6 +131,18 @@ namespace WB.UI.Headquarters.Controllers
                 return NotFound();
 
             return View(map);
+        }
+        
+        [HttpGet]
+        [ActivePage(MenuItem.Maps)]
+        [ExtraHeaderPermissions(HeaderPermissionType.Esri)]
+        public ActionResult MapPreviewJson(string mapName)
+        {
+            var map = mapPlainStorageAccessor.GetById(mapName);
+            if (map == null)
+                return NotFound();
+
+            return this.Content(map.GeoJson, "application/json");
         }
     }
 }
