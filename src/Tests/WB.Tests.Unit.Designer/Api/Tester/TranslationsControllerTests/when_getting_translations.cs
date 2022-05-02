@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
                 
 
             var questionnaireView = Create.QuestionnaireView(questionnaireDocument);
-            var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == questionnaireView);
+            var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => x.Load(Moq.It.IsAny<QuestionnaireRevision>()) == questionnaireView);
 
             var controller = CreateTranslationsController(dbContext: translationsStorage, questionnaireViewFactory: questionnaireViewFactory);
 
