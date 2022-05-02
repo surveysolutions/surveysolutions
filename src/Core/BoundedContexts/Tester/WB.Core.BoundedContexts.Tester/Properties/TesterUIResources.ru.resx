@@ -183,6 +183,9 @@
   <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
     <value>Невозможно открыть опросник. Опросник не найден.</value>
   </data>
+  <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
+    <value>Невозможно открыть опросник. Удалить его из списка?</value>
+  </data>
 
   <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
     <value>Скачиваем опросник - {0}%</value>

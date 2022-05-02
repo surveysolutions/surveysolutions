@@ -147,6 +147,9 @@
   <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
     <value>Can't open the questionnaire. The questionnaire cannot be found.</value>
   </data>
+  <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
+    <value>Can't open the questionnaire. Remove it from list?</value>
+  </data>
 
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
     <value>Can't open the questionnaire "{0}". The questionnaire cannot be found. Please refresh the list of questionnaires.</value>

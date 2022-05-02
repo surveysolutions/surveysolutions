@@ -204,6 +204,15 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
                 .LoadQuestionnaireAsync(questionnaireListItem.Id, questionnaireListItem.Title, progress,
                     this.tokenSource.Token);
         }
+        catch
+        {
+            var confirm = await userInteractionService.ConfirmAsync(TesterUIResources.AnonymousQuestionnaires_Error_Confirm);
+            if (confirm)
+            {
+                questionnaireListStorage.Remove(questionnaireListItem.Id);
+                Questionnaires = Questionnaires.Where(i => i.Id != questionnaireListItem.Id).ToList();
+            }
+        }
         finally
         {
             this.IsInProgress = false;

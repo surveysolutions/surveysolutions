@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t open the questionnaire. Remove it from list?.
+        /// </summary>
+        public static string AnonymousQuestionnaires_Error_Confirm {
+            get {
+                return ResourceManager.GetString("AnonymousQuestionnaires_Error_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t open the questionnaire. The questionnaire cannot be found..
         /// </summary>
         public static string AnonymousQuestionnaires_Error_NotFound {
