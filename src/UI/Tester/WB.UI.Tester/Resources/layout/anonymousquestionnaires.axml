@@ -31,16 +31,47 @@
     </androidx.appcompat.widget.Toolbar>
     <ProgressBar style="@style/Progress_Indicator"
                  local:MvxBind="ShowProgress IsInProgress; Visibility VisibleOrInvisible(IsInProgress)" />
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/Dashboard_Questionnaires_Header"
+                  android:orientation="horizontal">
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/AnonymousQuestionnaires_Text_Url_margin"
+                android:layout_marginRight="@dimen/AnonymousQuestionnaires_Text_Url_margin"
+                local:layout_constraintEnd_toStartOf="@+id/anonymous_questionnaires_open_button"
+                local:layout_constraintHorizontal_bias="0.5"
+                local:layout_constraintStart_toStartOf="parent"
+                local:layout_constraintTop_toTopOf="parent"
+                local:passwordToggleEnabled="true"
+                local:hintEnabled="true"
+                local:errorEnabled="true"
+                local:endIconMode="custom"
+                local:endIconDrawable="@drawable/scan_icon"
+                android:id="@+id/AnonymousQuestionnaires_QuestionnaireUrl"
+                local:MvxBind="Hint Localization('AnonymousQuestionnaires_QuestionnaireUrl'); EndIconClick ScanQrCodeCommand;">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri|textNoSuggestions"
+                    android:id="@+id/Questionnaire_url"
+                    android:imeOptions="actionNext"
+                    local:MvxBind="Text QuestionnaireUrl;"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:id="@+id/anonymous_questionnaires_open_button"
+                android:paddingTop="@dimen/AnonymousQuestionnaires_Open_margin_top"
+                android:paddingBottom="@dimen/AnonymousQuestionnaires_Open_margin_bottom"
+                android:layout_marginLeft="@dimen/AnonymousQuestionnaires_Text_Button_margin"
+                android:layout_marginRight="@dimen/AnonymousQuestionnaires_Text_Button_margin"
+                local:layout_constraintBaseline_toBaselineOf="@+id/AnonymousQuestionnaires_QuestionnaireUrl"
+                local:layout_constraintEnd_toEndOf="parent"
+                local:layout_constraintHorizontal_bias="0.5"
+                local:layout_constraintStart_toEndOf="@+id/AnonymousQuestionnaires_QuestionnaireUrl"
+                local:MvxBind="Click OpenCommand; Text Localization('AnonymousQuestionnaires_Open')"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout style="@style/Dashboard_Questionnaires_Header">
-        <ImageButton
-                style="@style/Dashboard_SearchView_SearchButton"
-                local:MvxBind="Click ScanQrCodeCommand;"
-                local:srcCompat="@drawable/refresh" />
-                
-    </LinearLayout>
-    <LinearLayout style="@style/Dashboard_Questionnaires_Header">
-        <LinearLayout  style="@style/Dashboard_Questionnaires_Header_Body">
-        </LinearLayout>
         <View style="@style/Dashboard_Filters_Divider"></View>
     </LinearLayout>
     <MvxRecyclerView android:id="@+id/questionnairesList"

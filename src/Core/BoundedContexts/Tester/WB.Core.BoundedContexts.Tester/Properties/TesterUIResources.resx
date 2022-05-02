@@ -138,6 +138,16 @@
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
     <value>Can't open the questionnaire "{0}". Your Designer user account is not authorized. Please check your login and password.</value>
   </data>
+  <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
+    <value>Anonymous questionnaire url</value>
+  </data>
+  <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
+    <value>Can't open the questionnaire. The questionnaire cannot be found.</value>
+  </data>
+
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
     <value>Can't open the questionnaire "{0}". The questionnaire cannot be found. Please refresh the list of questionnaires.</value>
   </data>

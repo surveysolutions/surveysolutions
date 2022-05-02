@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireRepository = questionnaireRepository;
         }
 
-        public async Task LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
+        public async Task<QuestionnaireIdentity> LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
             IProgress<string> progress, CancellationToken cancellationToken)
         {
             var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
@@ -91,6 +91,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         .ConfigureAwait(false);
                 }
             }
+
+            return questionnaireIdentity;
         }
 
         public async Task<bool> ReloadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,

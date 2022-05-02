@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
@@ -34,7 +35,7 @@ namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
             var controller = CreateTranslationsController(dbContext: translationsStorage, questionnaireViewFactory: questionnaireViewFactory);
 
             // Act
-            expectedTranslations = (TranslationDto[]) (await controller.Get(questionnaireId, version: ApiVersion.CurrentTesterProtocolVersion) as OkObjectResult)?.Value;
+            expectedTranslations = (TranslationDto[]) (await controller.Get(new QuestionnaireRevision(questionnaireId), version: ApiVersion.CurrentTesterProtocolVersion) as OkObjectResult)?.Value;
 
             // Assert
             Assert.That(expectedTranslations, Has.Length.EqualTo(1));

@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -30,6 +31,7 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
     private readonly IPlainStorage<AnonymousQuestionnaireListItem> questionnaireListStorage;
     private readonly ILogger logger;
     private readonly IQRBarcodeScanService qrBarcodeScanService;
+    private readonly IQuestionnaireStorage questionnaireRepository;
 
     private QuestionnaireDownloadViewModel QuestionnaireDownloader { get; }
 
@@ -40,7 +42,8 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
         IPlainStorage<AnonymousQuestionnaireListItem> questionnaireListStorage, 
         ILogger logger,
         QuestionnaireDownloadViewModel questionnaireDownloader,
-        IQRBarcodeScanService qrBarcodeScanService)
+        IQRBarcodeScanService qrBarcodeScanService,
+        IQuestionnaireStorage questionnaireRepository)
         : base(principal, viewModelNavigationService, false)
     {
         this.principal = principal;
@@ -48,6 +51,7 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
         this.questionnaireListStorage = questionnaireListStorage;
         this.logger = logger;
         this.qrBarcodeScanService = qrBarcodeScanService;
+        this.questionnaireRepository = questionnaireRepository;
         this.QuestionnaireDownloader = questionnaireDownloader;
     }
 
@@ -146,6 +150,13 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
         set => this.SetProperty(ref this.searchText, value);
     }
 
+    private string questionnaireUrl;
+    public string QuestionnaireUrl
+    {
+        get => this.questionnaireUrl;
+        set => this.SetProperty(ref this.questionnaireUrl, value);
+    }
+
     public IMvxCommand ClearSearchCommand => new MvxCommand(this.ClearSearch);
 
     public IMvxCommand ShowSearchCommand => new MvxCommand(this.ShowSearch);
@@ -227,15 +238,7 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
             {
                 if (Uri.TryCreate(scanCode.Code, UriKind.Absolute, out var scannedUrl) && scannedUrl != null)
                 {
-                    var idFromUrl = scannedUrl.ToString().Trim('/').Split('/').Last();
-                    if (Guid.TryParse(idFromUrl, out var qId))
-                    {
-                        this.tokenSource = new CancellationTokenSource();
-                        var progress = new Progress<string>();
-                        await this.QuestionnaireDownloader
-                            .LoadQuestionnaireAsync(qId.FormatGuid(), idFromUrl, progress,
-                                this.tokenSource.Token);
-                    }
+                    QuestionnaireUrl = scannedUrl.ToString();
                 }
             }
         }
@@ -243,6 +246,55 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
         {
             this.logger.Error("Qrbarcode reader error: ", e);
             userInteractionService.ShowToast(EnumeratorUIResources.FinishInstallation_QrBarcodeReaderErrorMessage);
+        }
+        finally
+        {
+            this.IsInProgress = false;
+        }
+    }
+
+    private IMvxAsyncCommand openCommand;
+    
+    public IMvxAsyncCommand OpenCommand
+    {
+        get { return this.openCommand ??= new MvxAsyncCommand(this.OpenQuestionnaireAsync, () => !IsInProgress); }
+    }
+
+    private async Task OpenQuestionnaireAsync()
+    {
+        this.IsInProgress = true;
+
+        try
+        {
+            var url = QuestionnaireUrl;
+
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                if (Uri.TryCreate(url, UriKind.Absolute, out var scannedUrl) && scannedUrl != null)
+                {
+                    var idFromUrl = scannedUrl.ToString().Trim('/').Split('/').Last();
+                    if (Guid.TryParse(idFromUrl, out var qId))
+                    {
+                        this.tokenSource = new CancellationTokenSource();
+                        var progress = new Progress<string>();
+                        var questionnaireIdentity = await this.QuestionnaireDownloader
+                            .LoadQuestionnaireAsync(qId.FormatGuid(), idFromUrl, progress, this.tokenSource.Token);
+
+                        var questionnaireDocument = questionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity);
+                        questionnaireListStorage.Store(new AnonymousQuestionnaireListItem()
+                        {
+                            Id = questionnaireDocument.Id,
+                            LastEntryDate = questionnaireDocument.LastEntryDate,
+                            Title = questionnaireDocument.Title,
+                        });
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            this.logger.Error("Open anonymous questionnaire reader error: ", e);
+            userInteractionService.ShowToast(TesterUIResources.AnonymousQuestionnaires_Error_NotFound);
         }
         finally
         {
