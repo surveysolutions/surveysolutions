@@ -39,6 +39,11 @@ namespace WB.UI.Tester.Activities
                 this.ViewModel.ReloadQuestionnaireCommand
             },
             {
+                Resource.Id.interview_login,
+                TesterUIResources.MenuItem_Title_Login,
+                this.ViewModel.NavigateToLoginCommand
+            },
+            {
                 Resource.Id.interview_signout,
                 TesterUIResources.MenuItem_Title_SignOut,
                 this.ViewModel.SignOutCommand
@@ -52,6 +57,17 @@ namespace WB.UI.Tester.Activities
                 this.ViewModel.DefaultLanguageName ?? TesterUIResources.MenuItem_Title_Language_Original
             },
         };
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            var onCreateOptionsMenu = base.OnCreateOptionsMenu(menu);
+
+            var isAuthenticated = this.ViewModel.IsAuthenticated;
+            menu.VisibleMenuItem(Resource.Id.interview_login, !isAuthenticated);
+            menu.VisibleMenuItem(Resource.Id.interview_signout, isAuthenticated);
+            
+            return onCreateOptionsMenu;
+        }
 
         protected override void OnResume()
         {

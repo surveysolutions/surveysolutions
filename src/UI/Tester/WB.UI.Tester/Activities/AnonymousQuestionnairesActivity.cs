@@ -41,6 +41,11 @@ public class AnonymousQuestionnairesActivity : BaseActivity<AnonymousQuestionnai
 
         menu.LocalizeMenuItem(Resource.Id.anonymousquestionnaires_settings, TesterUIResources.MenuItem_Title_Settings);
         menu.LocalizeMenuItem(Resource.Id.anonymousquestionnaires_login, TesterUIResources.MenuItem_Title_Login);
+        menu.LocalizeMenuItem(Resource.Id.anonymousquestionnaires_signout, TesterUIResources.MenuItem_Title_SignOut);
+
+        var isAuthenticated = ViewModel.IsAuthenticated;
+        menu.VisibleMenuItem(Resource.Id.anonymousquestionnaires_login, !isAuthenticated);
+        menu.VisibleMenuItem(Resource.Id.anonymousquestionnaires_signout, isAuthenticated);
 
         return base.OnCreateOptionsMenu(menu);
     }
@@ -51,6 +56,9 @@ public class AnonymousQuestionnairesActivity : BaseActivity<AnonymousQuestionnai
         {
             case Resource.Id.anonymousquestionnaires_login:
                 this.StartActivity(new Intent(this, typeof(LoginActivity)));
+                break;
+            case Resource.Id.anonymousquestionnaires_signout:
+                this.ViewModel.SignOutCommand.Execute();
                 break;
             case Resource.Id.anonymousquestionnaires_settings:
                 this.StartActivity(new Intent(this, typeof(PrefsActivity)));
