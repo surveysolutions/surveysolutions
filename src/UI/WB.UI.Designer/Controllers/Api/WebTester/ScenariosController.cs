@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Scenarios;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Services;
 
@@ -49,12 +50,13 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             return Ok();
         }
 
-        [Route("{id:Guid}")]
+        [Route("{id}")]
         [QuestionnairePermissions]
         [HttpGet]
-        public async Task<IActionResult> Get(Guid id)
+        public async Task<IActionResult> Get(QuestionnaireRevision id)
         {
-            var scenarios = await this.dbContext.Scenarios.Where(x => x.QuestionnaireId == id)
+            var qId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
+            var scenarios = await this.dbContext.Scenarios.Where(x => x.QuestionnaireId == qId)
                                                           .OrderBy(x => x.Title)
                                                           .Select(x => new
                                                           {
@@ -75,7 +77,16 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             if (scenario == null)
                 return NotFound(new {Message = "Scenario not found"});
             if (questionnaire != scenario.QuestionnaireId)
-                return Forbid("Scenario from other questionnaire");
+            {
+                var anonymousQuestionnaire = this.dbContext.AnonymousQuestionnaires
+                    .FirstOrDefault(a => a.AnonymousQuestionnaireId == questionnaire 
+                                         && a.QuestionnaireId == scenario.QuestionnaireId 
+                                         && a.IsActive == true);
+                if (anonymousQuestionnaire == null)
+                    return Forbid("Scenario from other questionnaire");
+
+                scenario.QuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId;
+            }
 
             return Ok(scenario.Steps);
         }
