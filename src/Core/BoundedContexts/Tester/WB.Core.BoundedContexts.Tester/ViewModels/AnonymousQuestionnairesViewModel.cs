@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -68,9 +69,11 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
         this.IsSearchVisible = false;
         
         if (principal.IsFakeIdentity)
-            principal.RemoveFakeIdentity();;
+            principal.RemoveFakeIdentity();
     }
-   
+
+    public bool IsAuthenticated => principal.IsAuthenticated;
+
     private void SearchByLocalQuestionnaires(string searchTerm = null)
     {
         var filteredBySearchTerm = this.localQuestionnaires.Where(x => this.HasSearchTerm(searchTerm, x)).ToArray();
@@ -293,13 +296,7 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
                         var questionnaireIdentity = await this.QuestionnaireDownloader
                             .LoadQuestionnaireAsync(qId.FormatGuid(), idFromUrl, progress, this.tokenSource.Token);
 
-                        var questionnaireDocument = questionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity);
-                        questionnaireListStorage.Store(new AnonymousQuestionnaireListItem()
-                        {
-                            Id = questionnaireDocument.Id,
-                            LastEntryDate = questionnaireDocument.LastEntryDate,
-                            Title = questionnaireDocument.Title,
-                        });
+                        SaveAnonymousQuestionnaireListItem(questionnaireIdentity);
                     }
                 }
             }
@@ -312,6 +309,25 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
         finally
         {
             this.IsInProgress = false;
+        }
+    }
+
+    private void SaveAnonymousQuestionnaireListItem(QuestionnaireIdentity questionnaireIdentity)
+    {
+        var questionnaireDocument = questionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity);
+        questionnaireListStorage.Store(new AnonymousQuestionnaireListItem()
+        {
+            Id = questionnaireDocument.Id,
+            LastEntryDate = questionnaireDocument.LastEntryDate,
+            Title = questionnaireDocument.Title,
+        });
+        var items = questionnaireListStorage.LoadAll();
+        if (items.Count > 10)
+        {
+            var itemsToRemove = items
+                .OrderByDescending(i => i.LastEntryDate)
+                .Skip(10);
+            questionnaireListStorage.Remove(itemsToRemove);
         }
     }
 
