@@ -21,60 +21,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
     }
 
-    public class AuthorizeOrAnonymousQuestionnaire3Attribute : TypeFilterAttribute
-    {
-        public AuthorizeOrAnonymousQuestionnaire3Attribute() : base(typeof(AuthorizeOrAnonymousQuestionnaireFilter))
-        {
-        }
-    }
-
-    public class AuthorizeOrAnonymousQuestionnaireFilter : IAuthorizationFilter
-    {
-        public void OnAuthorization(AuthorizationFilterContext context)
-        {
-            var httpContextUser = context.HttpContext.User;
-
-            if (httpContextUser.Identity?.IsAuthenticated == true)
-            {
-                return;
-            }
-
-            if (context.HttpContext.Request.Method != "GET")
-            {
-                context.Result = new NotFoundResult();
-                return;
-            }
-            
-            var id = context.HttpContext.GetRouteData()?.Values["id"];
-            Guid questionnaireId;
-            if (id != null && id is QuestionnaireRevision rev)
-            {
-                questionnaireId = rev.QuestionnaireId;
-            }
-            else if (id == null || !Guid.TryParse(id.ToString(), out questionnaireId))
-            {
-                //context.Result = new NotFoundResult();
-                return;
-            }
-
-            var viewFactory = context.HttpContext.RequestServices.GetRequiredService<IQuestionnaireViewFactory>();
-            bool isAnonymousQuestionnaire =
-                viewFactory.IsAnonymousQuestionnaire(questionnaireId, out var originQuestionnaireId);
-
-            if (!isAnonymousQuestionnaire)
-            {
-                context.Result = new NotFoundResult();
-            }
-        }
-    }
-    
-    public class AuthorizeOrAnonymousQuestionnaire2Attribute : TypeFilterAttribute
-    {
-        public AuthorizeOrAnonymousQuestionnaire2Attribute() : base(typeof(AuthorizeOrAnonymousQuestionnaireRequirement))
-        {
-        }
-    }
-    
     public class AuthorizeOrAnonymousQuestionnaireRequirement : AuthorizationHandler<AuthorizeOrAnonymousQuestionnaireRequirement>, IAuthorizationRequirement
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AuthorizeOrAnonymousQuestionnaireRequirement requirement)
@@ -94,7 +40,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             
             
             var routeData = httpContext.GetRouteData();
-            var id = routeData?.Values["id"];
+            var id = routeData?.Values["questionnaireId"] ?? routeData?.Values["id"];
             Guid questionnaireId;
             if (id != null && id is QuestionnaireRevision rev)
             {
