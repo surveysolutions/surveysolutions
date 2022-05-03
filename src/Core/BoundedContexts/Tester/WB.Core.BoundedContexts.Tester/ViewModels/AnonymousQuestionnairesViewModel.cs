@@ -90,6 +90,10 @@ public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
             Title = item.Title,
             LastEntryDate = item.LastEntryDate,
             SearchTerm = searchTerm,
+            IsPublic = true,
+            Type = QuestionnairesType.SharedWithMe,
+            IsOwner = false,
+            IsShared = true,
         };
 
     private bool HasSearchTerm(string searchTerm, AnonymousQuestionnaireListItem x)
