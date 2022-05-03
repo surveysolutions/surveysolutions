@@ -137,8 +137,8 @@
                         {{'SettingsQuestionnaireSharing' | i18next }}
                         {{(questionnaire.isShareQuestionnaireAsAnonymous ? 'SettingsPrivate' : 'SettingsAnonymous') | i18next}}
                     </button>
-                    <i class="text-muted">({{(questionnaire.isShareQuestionnaireAsAnonymous ? 'SettingsVisibleToOwner' :
-                            'SettingsVisibleToEveryone') | i18next}})</i>
+                    <em class="text-muted">({{(questionnaire.isShareQuestionnaireAsAnonymous ? 'SettingsVisibleToOwner' :
+                            'SettingsVisibleToEveryone') | i18next}})</em>
                     <br />
                     <div ng-if="questionnaire.isShareQuestionnaireAsAnonymous" class="row">
                         <div class="col-xs-7">
