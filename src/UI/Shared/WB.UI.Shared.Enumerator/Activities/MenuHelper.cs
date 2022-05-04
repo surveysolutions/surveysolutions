@@ -1,11 +1,12 @@
 ﻿using Android.Views;
 
-namespace WB.UI.Shared.Enumerator.Activities;
-
-public static class MenuHelper
+namespace WB.UI.Shared.Enumerator.Activities
 {
-    public static void VisibleMenuItem(this IMenu menu, int menuItemId, bool visible)
+    public static class MenuHelper
     {
-        menu.FindItem(menuItemId)?.SetVisible(visible);
+        public static void VisibleMenuItem(this IMenu menu, int menuItemId, bool visible)
+        {
+            menu.FindItem(menuItemId)?.SetVisible(visible);
+        }
     }
 }

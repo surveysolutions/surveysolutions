@@ -33,6 +33,7 @@ public class AnonymousQuestionnairesActivity : BaseActivity<AnonymousQuestionnai
 
     public override void OnBackPressed()
     {
+        this.Finish();
     }
 
     public override bool OnCreateOptionsMenu(IMenu menu)
