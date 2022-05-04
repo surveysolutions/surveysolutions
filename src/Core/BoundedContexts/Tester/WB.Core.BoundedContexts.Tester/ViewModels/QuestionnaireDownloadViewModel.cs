@@ -272,6 +272,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 if (!isExistsContent)
                 {
                     var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(
+                        questionnaire.Document.Id,
                         attachmentContentId,
                         new Progress<TransferProgress>(downloadProgress
                             => progress.Report(string.Format(
