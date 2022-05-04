@@ -19,45 +19,50 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="questionnaireSettingsTab">
-            <div class="well-sm">
-                <form role="form" name="questionnaireForm">
-                    <div class="form-group">
-                        <label class="control-label" for="questionnaireTitle" ng-i18next="SettingsQuestionnaireName"></label>
-                        <input id="questionnaireTitle"
-                               type="text" 
-                               class="form-control questionaire-title"
-                               ng-disabled="questionnaire.isReadOnlyForUser"
-                               ng-model="questionnaire.editedTitle"
-                               maxlength="500">
-                    </div>
-                
-                    <div class="form-group input-variable-name"> 
-                        <label class="control-label" for="questionnaireTitle">{{'SettingsQuestionnaireVariable' | i18next }}
-                            <help key="questionnaireVariableName" />
-                        </label>
-                        <input id="questionnaireVariable" 
-                               ng-disabled="questionnaire.isReadOnlyForUser"
-                               type="text" class="form-control questionaire-title" ng-model="questionnaire.editedVariable"
-                            maxlength="32" spellcheck="false">
-                    </div>
-                
-                    <!--i know this is horrible, but i cannot remove paddings from checkbox image so that visually they inputs are aligned-->
-                    <div class="form-group" style="margin-left: -8px;">
-                        <input id="questionnaireHideIdDisabled" type="checkbox" class="wb-checkbox" 
-                               ng-disabled="questionnaire.isReadOnlyForUser"
-                               ng-model="questionnaire.editedHideIfDisabled"/>
-                        <label for="questionnaireHideIdDisabled"><span></span>{{'SettingsHideIfDisabled' | i18next}}</label>
-                        <help key="hideIfDisabled" />
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-lg update-button" ng-class="{ 'btn-primary': questionnaireForm.$dirty }"
-                            unsaved-warning-clear ng-if="!questionnaire.isReadOnlyForUser" ng-disabled="!questionnaireForm.$dirty" ng-click="updateTitle()" ng-i18next>
-                            Update
-                        </button>
-                    </div>
-                </form>
+            <div class="row well-sm">
+                <div class="col-xs-7">
+                    <form role="form" name="questionnaireForm">
+                        <div class="form-group">
+                            <label class="control-label" for="questionnaireTitle" ng-i18next="SettingsQuestionnaireName"></label>
+                            <input id="questionnaireTitle"
+                                   type="text" 
+                                   class="form-control questionaire-title"
+                                   ng-disabled="questionnaire.isReadOnlyForUser"
+                                   ng-model="questionnaire.editedTitle"
+                                   maxlength="500">
+                        </div>
+                    
+                        <div class="form-group input-variable-name"> 
+                            <label class="control-label" for="questionnaireTitle">{{'SettingsQuestionnaireVariable' | i18next }}
+                                <help key="questionnaireVariableName" />
+                            </label>
+                            <input id="questionnaireVariable" 
+                                   ng-disabled="questionnaire.isReadOnlyForUser"
+                                   type="text" class="form-control questionaire-title" ng-model="questionnaire.editedVariable"
+                                maxlength="32" spellcheck="false">
+                        </div>
+                    
+                        <!--i know this is horrible, but i cannot remove paddings from checkbox image so that visually they inputs are aligned-->
+                        <div class="form-group" style="margin-left: -8px;">
+                            <input id="questionnaireHideIdDisabled" type="checkbox" class="wb-checkbox" 
+                                   ng-disabled="questionnaire.isReadOnlyForUser"
+                                   ng-model="questionnaire.editedHideIfDisabled"/>
+                            <label for="questionnaireHideIdDisabled"><span></span>{{'SettingsHideIfDisabled' | i18next}}</label>
+                            <help key="hideIfDisabled" />
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-lg update-button" ng-class="{ 'btn-primary': questionnaireForm.$dirty }"
+                                unsaved-warning-clear ng-if="!questionnaire.isReadOnlyForUser" ng-disabled="!questionnaireForm.$dirty" ng-click="updateTitle()" ng-i18next>
+                                Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-xs-5">
+                    <img alt="qr code"
+                         ng-src='{{"/questionnaire/publicurl/" + questionnaire.questionnaireId}}' />
+                </div>
             </div>
-
         </div>
         <div role="tabpanel" class="tab-pane" id="shareTab">
             <div class="well-sm">
