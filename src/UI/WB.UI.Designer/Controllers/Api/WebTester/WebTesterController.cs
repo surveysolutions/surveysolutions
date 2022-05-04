@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Api;
@@ -76,11 +77,10 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         {
             var questionnaireId = this.webTesterService.GetQuestionnaire(token);
             if (questionnaireId == null) return NotFound();
-            var qId = GetOriginalQuestionnaireId(questionnaireId);
 
             try
             {
-                var composeQuestionnaire = this.questionnairePackageComposer.ComposeQuestionnaire(qId);
+                var composeQuestionnaire = this.questionnairePackageComposer.ComposeQuestionnaire(questionnaireId.Value);
                 return Ok(this.serializer.Serialize(composeQuestionnaire));
             }
             catch (ComposeException )
