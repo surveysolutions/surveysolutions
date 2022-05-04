@@ -134,11 +134,10 @@
                 <div ng-if="isQuestionnaireOwner()">
                     <h2 ng-i18next="AnonymousQuestionnaireSettings"></h2>
                     <button class="btn btn-link answer" ng-click="updateAnonymousQuestionnaireSettings()">
-                        {{'SettingsQuestionnaireSharing' | i18next }}
-                        {{(questionnaire.isShareQuestionnaireAsAnonymous ? 'SettingsPrivate' : 'SettingsAnonymous') | i18next}}
+                        {{(questionnaire.isShareQuestionnaireAsAnonymous ? 'SettingsDontAllowAnonymousAccess' : 'SettingsAllowAnonymousAccess') | i18next}}
                     </button>
                     <em class="text-muted">({{(questionnaire.isShareQuestionnaireAsAnonymous ? 'SettingsVisibleToOwner' :
-                            'SettingsVisibleToEveryone') | i18next}})</em>
+                            'SettingsAccessibleToEveryone') | i18next}})</em>
                     <br />
                     <div ng-if="questionnaire.isShareQuestionnaireAsAnonymous" class="row">
                         <div class="col-xs-7">

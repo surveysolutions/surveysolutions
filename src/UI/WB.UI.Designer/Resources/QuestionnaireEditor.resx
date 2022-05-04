@@ -724,6 +724,15 @@
   <data name="SettingsVisibleToEveryone" xml:space="preserve">
     <value>visible to everyone in read only mode</value>
   </data>
+  <data name="SettingsAccessibleToEveryone" xml:space="preserve">
+    <value>accessible in read-only mode to anyone with link</value>
+  </data>
+  <data name="SettingsAllowAnonymousAccess" xml:space="preserve">
+    <value>Allow anonymous access to this questionnaire</value>
+  </data>
+  <data name="SettingsDontAllowAnonymousAccess" xml:space="preserve">
+    <value>Turn off anonymous access to this questionnaire</value>
+  </data>
   <data name="SettingsVisibleToOwner" xml:space="preserve">
     <value>visible to owner only</value>
   </data>

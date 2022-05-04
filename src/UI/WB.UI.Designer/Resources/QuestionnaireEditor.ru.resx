@@ -544,6 +544,15 @@
   <data name="SettingsVisibleToEveryone" xml:space="preserve">
     <value>видим всем в режиме только чтение</value>
   </data>
+  <data name="SettingsAccessibleToEveryone" xml:space="preserve">
+    <value>доступен в режиме только чтения по ссылке</value>
+  </data>
+  <data name="SettingsAllowAnonymousAccess" xml:space="preserve">
+    <value>Разрешить анонимный доступ к этому опроснику</value>
+  </data>
+  <data name="SettingsDontAllowAnonymousAccess" xml:space="preserve">
+    <value>Анонимный доступ не разрешен</value>
+  </data>
   <data name="SettingsVisibleToOwner" xml:space="preserve">
     <value>доступен только для владельца</value>
   </data>
