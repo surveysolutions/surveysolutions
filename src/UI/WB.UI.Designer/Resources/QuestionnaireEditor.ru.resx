@@ -532,6 +532,9 @@
   <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
     <value>Сгенерировать новый линк</value>
   </data>
+  <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
+    <value>ссылка сгенерированна в {{datetime}}</value>
+  </data>
   <data name="SettingsQuestionnaireSharing" xml:space="preserve">
     <value>Сделать опросник </value>
   </data>

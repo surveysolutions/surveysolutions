@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
             builder.Property(e => e.QuestionnaireId).HasColumnName("questionnaireid");
 
             builder.Property(e => e.IsActive).HasColumnName("isactive");
+            builder.Property(e => e.GeneratedAtUtc).HasColumnName("generatedatutc");
         }
     }
 }

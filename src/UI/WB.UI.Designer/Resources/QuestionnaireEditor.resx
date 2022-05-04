@@ -709,6 +709,9 @@
   <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
     <value>Generate new link</value>
   </data>
+  <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
+    <value>link generated at {{datetime}}</value>
+  </data>
   <data name="SettingsQuestionnaireName" xml:space="preserve">
       <value>Questionnaire title</value>
   </data>

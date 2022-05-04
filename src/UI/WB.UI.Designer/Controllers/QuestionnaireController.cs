@@ -436,7 +436,7 @@ namespace WB.UI.Designer.Controllers
             if (anonymousQuestionnaire == null)
             {
                 anonymousQuestionnaire = new AnonymousQuestionnaire()
-                    { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = isActive };
+                    { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = isActive, GeneratedAtUtc = DateTime.UtcNow };
                 dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
                 await dbContext.SaveChangesAsync();
             }
@@ -452,6 +452,7 @@ namespace WB.UI.Designer.Controllers
             {
                 AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, 
                 IsActive = isActive,
+                GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
             });
         }
 
@@ -464,7 +465,7 @@ namespace WB.UI.Designer.Controllers
             dbContext.Remove(existedRecord);
            
             var anonymousQuestionnaire = new AnonymousQuestionnaire()
-                { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = true };
+                { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = true, GeneratedAtUtc = DateTime.UtcNow };
             await dbContext.AnonymousQuestionnaires.AddAsync(anonymousQuestionnaire);
             await dbContext.SaveChangesAsync();
 
@@ -474,6 +475,7 @@ namespace WB.UI.Designer.Controllers
             {
                 AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, 
                 IsActive = true,
+                GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
             });
         }
 

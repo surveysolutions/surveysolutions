@@ -81,6 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
         public bool IsCoverPageSupported { get; set; }
         public bool IsShareQuestionnaireAsAnonymous { get; set; }
+        public DateTime AnonymousQuestionnaireShareDateUtc { get; set; }
         public Guid? AnonymousQuestionnaireId { get; set; }
     }
 }

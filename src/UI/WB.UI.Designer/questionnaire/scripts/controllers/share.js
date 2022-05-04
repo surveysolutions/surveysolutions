@@ -7,7 +7,8 @@
         $uibModalInstance,
         questionnaire,
         currentUser,
-        shareService
+        shareService,
+        moment
     ) {
         'use strict';
 
@@ -24,12 +25,18 @@
             return isowner;
         };
 
+        $scope.toLocalDateTime = function (utc) {
+            return moment.utc(utc).local().format('YYYY-MM-DD HH:mm');
+        };
+
+
         $scope.passConfirmationOpen = null;
         $scope.questionnaire.editedTitle = questionnaire.title;
         $scope.questionnaire.editedVariable = questionnaire.variable;
         $scope.questionnaire.editedHideIfDisabled = questionnaire.hideIfDisabled;
         $scope.questionnaire.isShareQuestionnaireAsAnonymous = questionnaire.isShareQuestionnaireAsAnonymous;
         $scope.questionnaire.anonymousQuestionnaireId = questionnaire.anonymousQuestionnaireId;
+        $scope.questionnaire.anonymousQuestionnaireShareDate = $scope.toLocalDateTime(questionnaire.anonymousQuestionnaireShareDateUtc);
 
         $scope.shareTypeOptions = [
             { text: $i18next.t('SettingsShareEdit'), name: 'Edit' },
@@ -186,6 +193,7 @@
                 var data = result.data
                 $scope.questionnaire.isShareQuestionnaireAsAnonymous = data.isActive;
                 $scope.questionnaire.anonymousQuestionnaireId = data.isActive ? data.anonymousQuestionnaireId : null;
+                $scope.questionnaire.anonymousQuestionnaireShareDate = $scope.toLocalDateTime(data.anonymousQuestionnaireShareDateUtc);
             });
         };
         
@@ -198,10 +206,10 @@
                 var data = result.data
                 $scope.questionnaire.isShareQuestionnaireAsAnonymous = data.isActive;
                 $scope.questionnaire.anonymousQuestionnaireId = data.isActive ? data.anonymousQuestionnaireId : null;
+                $scope.questionnaire.anonymousQuestionnaireShareDate = $scope.toLocalDateTime(data.anonymousQuestionnaireShareDateUtc);
             });
         };
         
-
         $scope.changeShareType = function(shareType) {
             $scope.viewModel.shareType = shareType;
         };
