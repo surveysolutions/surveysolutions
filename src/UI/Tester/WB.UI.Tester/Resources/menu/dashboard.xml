@@ -3,6 +3,9 @@
 	  xmlns:local="http://schemas.android.com/apk/res-auto"
       android:id="@+id/menu">
  <item
+      android:id="@+id/dashboard_anonymous_questionnaire"
+      local:showAsAction="never" />
+ <item
       android:id="@+id/dashboard_settings"
       local:showAsAction="never" />
   <item
