@@ -6,6 +6,9 @@
       android:id="@+id/interview_dashboard"
       local:showAsAction="never" />
   <item
+      android:id="@+id/interview_anonymous_questionnaire"
+      local:showAsAction="never" />
+  <item
       android:id="@+id/interview_language"
       local:showAsAction="never">
     <menu>

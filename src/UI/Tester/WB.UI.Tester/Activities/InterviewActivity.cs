@@ -24,6 +24,11 @@ namespace WB.UI.Tester.Activities
         protected override MenuDescription MenuDescriptor => new MenuDescription
         {
             {
+                Resource.Id.interview_anonymous_questionnaire,
+                TesterUIResources.MenuItem_Title_AnonymousQuestionnaires,
+                this.ViewModel.NavigateToAnonymousQuestionnairesCommand
+            },
+            {
                 Resource.Id.interview_dashboard,
                 TesterUIResources.MenuItem_Title_Dashboard,
                 this.ViewModel.NavigateToDashboardCommand
@@ -65,6 +70,8 @@ namespace WB.UI.Tester.Activities
             var isAuthenticated = this.ViewModel.IsAuthenticated;
             menu.VisibleMenuItem(Resource.Id.interview_login, !isAuthenticated);
             menu.VisibleMenuItem(Resource.Id.interview_signout, isAuthenticated);
+            menu.VisibleMenuItem(Resource.Id.interview_anonymous_questionnaire, !isAuthenticated);
+            menu.VisibleMenuItem(Resource.Id.interview_dashboard, isAuthenticated);
             
             return onCreateOptionsMenu;
         }
