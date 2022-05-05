@@ -407,8 +407,17 @@ namespace WB.Services.Export.Questionnaire
 
             foreach (MultyOptionsQuestion? rosterSizeMultyOptionQuestion in rosterSizeMultyOptionQuestions)
             {
-                if(rosterSizeMultyOptionQuestion != null)
-                    collectedMaxValues.Add(rosterSizeMultyOptionQuestion.PublicKey, rosterSizeMultyOptionQuestion.Answers.Count);
+                if (rosterSizeMultyOptionQuestion != null)
+                {
+                    if (rosterSizeMultyOptionQuestion.CategoriesId.HasValue)
+                    {
+                        collectedMaxValues.Add(rosterSizeMultyOptionQuestion.PublicKey,
+                            document.Categories.First(c => c.Id == rosterSizeMultyOptionQuestion.CategoriesId.Value)
+                                .Values.Length);
+                    }
+                    else
+                        collectedMaxValues.Add(rosterSizeMultyOptionQuestion.PublicKey, rosterSizeMultyOptionQuestion.Answers.Count);
+                }
             }
 
             foreach (TextListQuestion? rosterSizeTextListQuestion in rosterSizeTextListQuestions)
