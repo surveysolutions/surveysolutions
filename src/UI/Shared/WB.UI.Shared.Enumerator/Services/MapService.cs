@@ -126,7 +126,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     return;
 
                 var localMaps = this.mapFilesToSearch
-                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(folder, i, true))
+                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(folder, i))
                     .OrderBy(x => x)
                     .Select(x =>
                         new MapDescription(MapType.LocalFile, this.fileSystemAccessor.GetFileNameWithoutExtension(x))
@@ -236,7 +236,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     return new List<ShapefileDescription>();
 
                 return this.shapefilesToSearch
-                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(path, i, true))
+                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(path, i))
                     .OrderBy(x => x)
                     .Select(x => new ShapefileDescription()
                     {
