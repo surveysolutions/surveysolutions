@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private bool DoesOtherQuestionnaireHasSameQuestionnaireVariable(Guid questionnaireId, string variableName)
         {
             var questionnairesWithSameVariable = this.questionnaireBrowseItemStorage.Query(_ => _
-                .Where(questionnaire => !questionnaire.IsDeleted && !(questionnaire.Variable == null || questionnaire.Variable.Trim() == string.Empty))
+                .Where(questionnaire => !(questionnaire.Variable == null || questionnaire.Variable.Trim() == string.Empty))
                 .Where(questionnaire => questionnaire.Variable.ToLower() == variableName.ToLower())
                 .ToList());
 
