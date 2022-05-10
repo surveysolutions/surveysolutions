@@ -235,7 +235,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                                 var options =
                                     callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
 
-                                allOptions = allOptions.Union(options).Distinct().ToList();
+                                allOptions = options.Union(allOptions).Distinct().ToList();
                             }
 
                             typedResult.Options = allOptions;
