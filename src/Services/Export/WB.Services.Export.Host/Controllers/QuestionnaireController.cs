@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
+using WB.Services.Scheduler.Services;
 
 namespace WB.Services.Export.Host.Controllers
 {
@@ -12,13 +14,19 @@ namespace WB.Services.Export.Host.Controllers
     {
         private readonly IDatabaseSchemaService databaseSchemaService;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IJobsArchiver archiver;
+        private readonly ITenantContext tenantContext;
 
         public QuestionnaireController(
             IDatabaseSchemaService databaseSchemaService,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            IJobsArchiver archiver,
+            ITenantContext tenantContext)
         {
             this.databaseSchemaService = databaseSchemaService;
             this.questionnaireStorage = questionnaireStorage;
+            this.archiver = archiver;
+            this.tenantContext = tenantContext;
         }
 
 
@@ -33,9 +41,13 @@ namespace WB.Services.Export.Host.Controllers
 
             var result = databaseSchemaService.TryDropQuestionnaireDbStructure(questionnaireDocument);
 
+            var tenantName = tenantContext.Tenant.Name;
+            var jobsCount = await this.archiver.ArchiveJobs(tenantName, questionnaire);
+            
             return Ok(new
             {
-                result = result
+                result = result,
+                archivedJobs = jobsCount
             });
         }
     }
