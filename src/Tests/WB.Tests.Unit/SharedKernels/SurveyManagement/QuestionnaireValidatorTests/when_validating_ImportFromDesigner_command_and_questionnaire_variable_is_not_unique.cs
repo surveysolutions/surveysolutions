@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireValidatorTes
 
             var validator = Create.Service.QuestionnaireNameValidator(questionnaireBrowseItemStorage);
 
-            Assert.DoesNotThrow(() => validator.Validate(null, Create.Command.ImportFromDesigner(variable: "qvar", questionnaireId: Id.g1)));
+            Assert.Throws<QuestionnaireException>(() => validator.Validate(null, Create.Command.ImportFromDesigner(variable: "qvar", questionnaireId: Id.g1)));
         }
     }
 }
