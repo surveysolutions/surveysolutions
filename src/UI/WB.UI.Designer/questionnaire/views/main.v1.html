@@ -292,7 +292,7 @@
                         <button class="btn btn-default btn-lg pull-left" ng-class="{'btn-primary': !isReadOnlyForUser}"
                                 ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()"
                                 ngf-accept="'.pdf,image/*,video/*,audio/*'" ngf-max-size="100MB" type="file" ngf-select-disabled="isReadOnlyForUser"
-                                ngf-drop-disabled="isReadOnlyForUser"
+                                ngf-drop-disabled="isReadOnlyForUser" ng-disabled="isReadOnlyForUser"
                                 ng-i18next="SideBarAttachmentsUpload">
                             Upload new
                         </button>
@@ -558,7 +558,8 @@
                                    ngf-max-size="10MB"
                                    accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab"
                                    ngf-select-disabled="isReadOnlyForUser"
-                                   ngf-drop-disabled="isReadOnlyForUser"/>
+                                   ngf-drop-disabled="isReadOnlyForUser"
+                                   ng-disabled="isReadOnlyForUser" />
                         </p>
                     </div>
                 </perfect-scrollbar>
