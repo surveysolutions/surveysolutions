@@ -89,7 +89,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        protected IActionResult RenderQuestionnaire(QuestionnaireRevision id, Guid requestedByUserId, string requestedByUserName, Guid? translation, string cultureCode, int timezoneOffsetMinutes)
+        protected IActionResult RenderQuestionnaire(QuestionnaireRevision id, Guid? requestedByUserId, string? requestedByUserName, Guid? translation, string cultureCode, int timezoneOffsetMinutes)
         {
             if (!string.IsNullOrWhiteSpace(cultureCode))
             {
@@ -304,7 +304,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         private string GetHtmlContent(QuestionnaireRevision id, PdfGenerationProgress generationProgress, Guid? translation, int timezoneOffsetMinutes)
         {
-            PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation, false);
+            PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(id, User.GetIdOrNull(), User.GetUserNameOrNull(), translation, false);
             if (questionnaire == null)
             {
                 generationProgress.Fail();
