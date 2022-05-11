@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using SkiaSharp;
@@ -141,7 +142,6 @@ namespace WB.UI.Designer.Controllers
         }
 
         [AntiForgeryFilter]
-        [AuthorizeOrAnonymousQuestionnaireAttribute]
         [Route("questionnaire/details/{id}")]
         [Route("questionnaire/details/{id}/chapter/{chapterId}/{entityType}/{entityId}")]
         public IActionResult Details(QuestionnaireRevision? id, Guid? chapterId, string entityType, Guid? entityid)
@@ -149,9 +149,49 @@ namespace WB.UI.Designer.Controllers
             if(id == null)
                 return this.RedirectToAction("Index", "QuestionnaireList");
 
+            if (ShouldRedirectToOriginalId(id))
+            {
+                return RedirectToAction("Details", new RouteValueDictionary
+                {
+                    { "id", id.ToString() }, { "chapterId", chapterId?.FormatGuid() }, { "entityType", entityType }, { "entityid", entityid?.FormatGuid() }
+                });
+            }
+
             return (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id.QuestionnaireId))
                 ? this.View("~/questionnaire/index.cshtml")
                 : this.LackOfPermits();
+        }
+
+        private bool ShouldRedirectToOriginalId(QuestionnaireRevision id)
+        {
+            if (!id.OriginalQuestionnaireId.HasValue || id.QuestionnaireId == id.OriginalQuestionnaireId)
+                return false;
+
+            if (User.Identity?.IsAuthenticated != true)
+                return false;
+
+            var userId = User.GetIdOrNull();
+            if (!userId.HasValue)
+                return false;
+
+            var questionnaireId = id.OriginalQuestionnaireId.Value;
+            var questionnaireListItem = this.dbContext.Questionnaires
+                .Where(x => x.QuestionnaireId == questionnaireId.FormatGuid())
+                .Include(x => x.SharedPersons).FirstOrDefault();
+
+            if (questionnaireListItem == null)
+                return false;
+
+            if (questionnaireListItem.CreatedBy == userId)
+                return true;
+
+            if (questionnaireListItem.IsPublic)
+                return true;
+
+            if (questionnaireListItem.SharedPersons.Any(x => x.UserId == userId))
+                return true;
+
+            return false;
         }
 
         private bool UserHasAccessToEditOrViewQuestionnaire(Guid id)
