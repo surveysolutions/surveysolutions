@@ -80,8 +80,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public string? DefaultLanguageName { get; set; }
 
         public bool IsCoverPageSupported { get; set; }
-        public bool IsShareQuestionnaireAsAnonymous { get; set; }
-        public DateTime AnonymousQuestionnaireShareDateUtc { get; set; }
+        public bool IsAnonymouslyShared { get; set; }
+        public DateTime AnonymouslySharedAtUtc { get; set; }
         public Guid? AnonymousQuestionnaireId { get; set; }
     }
 }

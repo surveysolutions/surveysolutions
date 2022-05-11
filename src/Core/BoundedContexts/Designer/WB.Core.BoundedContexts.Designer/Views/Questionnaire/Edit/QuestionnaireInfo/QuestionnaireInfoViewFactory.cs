@@ -260,11 +260,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             if (anonymousQuestionnaire != null)
             {
-                questionnaireInfoView.IsShareQuestionnaireAsAnonymous = anonymousQuestionnaire.IsActive;
+                questionnaireInfoView.IsAnonymouslyShared = anonymousQuestionnaire.IsActive;
                 if (anonymousQuestionnaire.IsActive)
                 {
                     questionnaireInfoView.AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId;
-                    questionnaireInfoView.AnonymousQuestionnaireShareDateUtc = anonymousQuestionnaire.GeneratedAtUtc;
+                    questionnaireInfoView.AnonymouslySharedAtUtc = anonymousQuestionnaire.GeneratedAtUtc;
                 }
             }
 

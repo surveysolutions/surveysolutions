@@ -139,12 +139,12 @@
                 <div ng-if="isQuestionnaireOwner()">
                     <h2 ng-i18next="AnonymousQuestionnaireSettings"></h2>
                     <button class="btn btn-link answer" ng-click="updateAnonymousQuestionnaireSettings()">
-                        {{(questionnaire.isShareQuestionnaireAsAnonymous ? 'SettingsDontAllowAnonymousAccess' : 'SettingsAllowAnonymousAccess') | i18next}}
+                        {{(questionnaire.isAnonymouslyShared ? 'SettingsDontAllowAnonymousAccess' : 'SettingsAllowAnonymousAccess') | i18next}}
                     </button>
-                    <em class="text-muted">({{(questionnaire.isShareQuestionnaireAsAnonymous ? 'SettingsVisibleToOwner' :
+                    <em class="text-muted">({{(questionnaire.isAnonymouslyShared ? 'SettingsVisibleToOwner' :
                             'SettingsAccessibleToEveryone') | i18next}})</em>
                     <br />
-                    <div ng-if="questionnaire.isShareQuestionnaireAsAnonymous" class="row">
+                    <div ng-if="questionnaire.isAnonymouslyShared" class="row">
                         <div class="col-xs-7">
                             <div class="input-group" style="padding-top: 20px;">
                                 <input type="text" class="form-control" id="anonymousQuestionnaireLink" ng-value="getAnonymousQuestionnaireLink()" />
@@ -162,7 +162,7 @@
                             </button>
                         </div>
                         <div class="col-xs-5">
-                            <img alt="qr code" ng-if="questionnaire.isShareQuestionnaireAsAnonymous"
+                            <img alt="qr code" ng-if="questionnaire.isAnonymouslyShared"
                                  ng-src='{{"/questionnaire/publicurl/" + questionnaire.anonymousQuestionnaireId}}' />
                         </div>
                     </div>

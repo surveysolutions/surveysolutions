@@ -34,9 +34,9 @@
         $scope.questionnaire.editedTitle = questionnaire.title;
         $scope.questionnaire.editedVariable = questionnaire.variable;
         $scope.questionnaire.editedHideIfDisabled = questionnaire.hideIfDisabled;
-        $scope.questionnaire.isShareQuestionnaireAsAnonymous = questionnaire.isShareQuestionnaireAsAnonymous;
+        $scope.questionnaire.isAnonymouslyShared = questionnaire.isAnonymouslyShared;
         $scope.questionnaire.anonymousQuestionnaireId = questionnaire.anonymousQuestionnaireId;
-        $scope.questionnaire.anonymousQuestionnaireShareDate = $scope.toLocalDateTime(questionnaire.anonymousQuestionnaireShareDateUtc);
+        $scope.questionnaire.anonymousQuestionnaireShareDate = $scope.toLocalDateTime(questionnaire.anonymouslySharedAtUtc);
 
         $scope.shareTypeOptions = [
             { text: $i18next.t('SettingsShareEdit'), name: 'Edit' },
@@ -186,14 +186,14 @@
         $scope.updateAnonymousQuestionnaireSettings = function() {
             var updateRequest = shareService.updateAnonymousQuestionnaireSettings(
                 $scope.questionnaire.questionnaireId,
-                !$scope.questionnaire.isShareQuestionnaireAsAnonymous
+                !$scope.questionnaire.isAnonymouslyShared
             );
 
             updateRequest.then(function(result) {
                 var data = result.data
-                $scope.questionnaire.isShareQuestionnaireAsAnonymous = data.isActive;
+                $scope.questionnaire.isAnonymouslyShared = data.isActive;
                 $scope.questionnaire.anonymousQuestionnaireId = data.isActive ? data.anonymousQuestionnaireId : null;
-                $scope.questionnaire.anonymousQuestionnaireShareDate = $scope.toLocalDateTime(data.anonymousQuestionnaireShareDateUtc);
+                $scope.questionnaire.anonymousQuestionnaireShareDate = $scope.toLocalDateTime(data.anonymouslySharedAtUtc);
             });
         };
         
@@ -204,9 +204,9 @@
 
             updateRequest.then(function(result) {
                 var data = result.data
-                $scope.questionnaire.isShareQuestionnaireAsAnonymous = data.isActive;
+                $scope.questionnaire.isAnonymouslyShared = data.isActive;
                 $scope.questionnaire.anonymousQuestionnaireId = data.isActive ? data.anonymousQuestionnaireId : null;
-                $scope.questionnaire.anonymousQuestionnaireShareDate = $scope.toLocalDateTime(data.anonymousQuestionnaireShareDateUtc);
+                $scope.questionnaire.anonymousQuestionnaireShareDate = $scope.toLocalDateTime(data.anonymouslySharedAtUtc);
             });
         };
         
