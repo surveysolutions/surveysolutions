@@ -45,12 +45,12 @@
 
             shareService.updateAnonymousQuestionnaireSettings = function(questionnaireId, isActive) {
                 var baseUrl = '../../questionnaire/updateAnonymousQuestionnaireSettings/' + questionnaireId;
-                return $http.post(baseUrl, { isActive: isActive });
+                return $http.post(baseUrl, { isActive: isActive }, { headers: { 'X-CSRF-TOKEN': getCsrfCookie()} });
             };
 
             shareService.regenerateAnonymousQuestionnaireLink = function(questionnaireId) {
                 var baseUrl = '../../questionnaire/regenerateAnonymousQuestionnaireLink/' + questionnaireId;
-                return $http.post(baseUrl);
+                return $http.post(baseUrl, null, { headers: { 'X-CSRF-TOKEN': getCsrfCookie()} });
             };
 
             return shareService;

@@ -469,6 +469,7 @@ namespace WB.UI.Designer.Controllers
         [Authorize]
         [HttpPost]
         [Route("questionnaire/updateAnonymousQuestionnaireSettings/{id}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
             bool isActive = postModel.IsActive;
@@ -499,6 +500,7 @@ namespace WB.UI.Designer.Controllers
         [Authorize]
         [HttpPost]
         [Route("questionnaire/regenerateAnonymousQuestionnaireLink/{id}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
         {
             var existedRecord = dbContext.AnonymousQuestionnaires.First(a => a.QuestionnaireId == id);
