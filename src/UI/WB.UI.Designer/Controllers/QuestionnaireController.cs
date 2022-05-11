@@ -153,7 +153,7 @@ namespace WB.UI.Designer.Controllers
             {
                 return RedirectToAction("Details", new RouteValueDictionary
                 {
-                    { "id", id.ToString() }, { "chapterId", chapterId?.FormatGuid() }, { "entityType", entityType }, { "entityid", entityid?.FormatGuid() }
+                    { "id", id.OriginalQuestionnaireId.FormatGuid() }, { "chapterId", chapterId?.FormatGuid() }, { "entityType", entityType }, { "entityid", entityid?.FormatGuid() }
                 });
             }
 
