@@ -9,10 +9,6 @@ namespace WB.UI.Designer.Migrations.PlainStore
     {
         public override void Up()
         {
-            this.Create.UniqueConstraint("questionnairelistviewitems_publicid_unique")
-                .OnTable("questionnairelistviewitems")
-                .Column("publicid");
-            
             this.Create.Table("anonymous_questionnaires")
                 .WithColumn("anonymous_questionnaire_id").AsGuid().PrimaryKey()
                 .WithColumn("questionnaire_id").AsGuid().NotNullable()
