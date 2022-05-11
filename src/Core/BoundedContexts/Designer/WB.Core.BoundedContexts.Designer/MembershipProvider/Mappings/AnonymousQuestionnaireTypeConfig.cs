@@ -9,17 +9,17 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
     {
         public void Configure(EntityTypeBuilder<AnonymousQuestionnaire> builder)
         {
-            builder.ToTable("anonymousquestionnaires", "plainstore");
+            builder.ToTable("anonymous_questionnaires", "plainstore");
 
             builder.HasKey(x => x.AnonymousQuestionnaireId);
 
             builder.Property(e => e.AnonymousQuestionnaireId)
-                .HasColumnName("anonymousquestionnaireid").ValueGeneratedNever();
+                .HasColumnName("anonymous_questionnaire_id").ValueGeneratedNever();
 
-            builder.Property(e => e.QuestionnaireId).HasColumnName("questionnaireid");
+            builder.Property(e => e.QuestionnaireId).HasColumnName("questionnaire_id");
 
-            builder.Property(e => e.IsActive).HasColumnName("isactive");
-            builder.Property(e => e.GeneratedAtUtc).HasColumnName("generatedatutc");
+            builder.Property(e => e.IsActive).HasColumnName("is_active");
+            builder.Property(e => e.GeneratedAtUtc).HasColumnName("generated_at_utc");
         }
     }
 }
