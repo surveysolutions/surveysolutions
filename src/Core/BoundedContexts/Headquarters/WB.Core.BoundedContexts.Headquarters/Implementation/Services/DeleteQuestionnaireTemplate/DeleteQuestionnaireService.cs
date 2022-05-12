@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
@@ -48,6 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly IScheduledTask<DeleteQuestionnaireJob, DeleteQuestionnaireRequest> deleteQuestionnaireTask;
 
         private readonly IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage;
+        private readonly IExportServiceApi exportServiceApi;
 
         public DeleteQuestionnaireService(IInterviewsToDeleteFactory interviewsToDeleteFactory,
             ICommandService commandService,
@@ -62,7 +64,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             IInvitationsDeletionService invitationsDeletionService,
             IAggregateRootCache aggregateRootCache,
             IAssignmentsToDeleteFactory assignmentsToDeleteFactory,
-            IReusableCategoriesStorage reusableCategoriesStorage, IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage)
+            IReusableCategoriesStorage reusableCategoriesStorage, 
+            IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage,
+            IExportServiceApi exportServiceApi)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
@@ -79,6 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.assignmentsToDeleteFactory = assignmentsToDeleteFactory;
             this.reusableCategoriesStorage = reusableCategoriesStorage;
             this.questionnaireBackupStorage = questionnaireBackupStorage;
+            this.exportServiceApi = exportServiceApi;
         }
 
         public async Task DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid userId)
@@ -151,6 +156,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                     this.DeleteInvitations(questionnaireIdentity);
                     await this.DeleteAssignmentsAsync(questionnaireIdentity);
                     this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId));
+
+                    await exportServiceApi.DeleteQuestionnaire(questionnaireIdentity.Id);
                 }
             }
             catch (Exception e)

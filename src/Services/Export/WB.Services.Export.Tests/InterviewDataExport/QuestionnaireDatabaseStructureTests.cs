@@ -145,5 +145,65 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             Assert.That(group.EnablementTableName, Is.EqualTo("questionnaire$5$1-e"));
             Assert.That(group.ValidityTableName, Is.EqualTo("questionnaire$5$1-v"));
         }
+        
+        [Ignore("bug with collision questionnaire variable, the same variable name now declined on HQ")]
+        [Test]
+        public void when_two_questionnaires_have_same_variable_should_generate_different_table_names()
+        {
+            var questionnaire1 = Create.QuestionnaireDocument(id: Id.gA, version: 1, variableName: "questionnaire",
+                children: new[]
+                {
+                    Create.Roster(Id.g1, variable: "group"),
+                });
+
+            var questionnaire2 = Create.QuestionnaireDocument(id: Id.gB, version: 1, variableName: "questionnaire",
+                children: new[]
+                {
+                    Create.Roster(Id.g1, variable: "group"),
+                });
+
+            // Act 
+            var group1 = questionnaire1.GetGroup(Id.g1);
+            var group2 = questionnaire2.GetGroup(Id.g1);
+
+            // Assert
+            Assert.That(group1.TableName, Is.EqualTo("questionnaire$1_group"));
+            Assert.That(group1.EnablementTableName, Is.EqualTo("questionnaire$1_group-e"));
+            Assert.That(group1.ValidityTableName, Is.EqualTo("questionnaire$1_group-v"));
+            Assert.That(group2.TableName, Is.EqualTo("questionnaire$1_group"));
+            Assert.That(group2.EnablementTableName, Is.EqualTo("questionnaire$1_group-e"));
+            Assert.That(group2.ValidityTableName, Is.EqualTo("questionnaire$1_group-v"));
+            Assert.That(group1.TableName, Is.Not.EqualTo(group2.TableName));
+            Assert.That(group1.EnablementTableName, Is.Not.EqualTo(group2.EnablementTableName));
+            Assert.That(group1.ValidityTableName, Is.Not.EqualTo(group2.ValidityTableName));
+        }
+        
+        [Ignore("bug with collision table name")]
+        [Test]
+        public void when_generate_tables_should_have_unique_names()
+        {
+            var questionnaire = Create.QuestionnaireDocument(id: Id.gA, version: 1, variableName: "questionnaire",
+                children: new[]
+                {
+                    Create.Roster(Id.g1, variable: "very long variable name for use guid as part of table name"),
+                    Create.Roster(Id.g2, variable: "EREREREREREREREREREREQ")
+                });
+
+            // Act 
+            var group1 = questionnaire.GetGroup(Id.g1);
+            var group2 = questionnaire.GetGroup(Id.g2);
+
+            // Assert
+            Assert.That(group1.TableName, Is.EqualTo("questionnaire$1_EREREREREREREREREREREQ"));
+            Assert.That(group1.EnablementTableName, Is.EqualTo("questionnaire$1_EREREREREREREREREREREQ-e"));
+            Assert.That(group1.ValidityTableName, Is.EqualTo("questionnaire$1_EREREREREREREREREREREQ-v"));
+            Assert.That(group2.TableName, Is.EqualTo("questionnaire$1_EREREREREREREREREREREQ"));
+            Assert.That(group2.EnablementTableName, Is.EqualTo("questionnaire$1_EREREREREREREREREREREQ-e"));
+            Assert.That(group2.ValidityTableName, Is.EqualTo("questionnaire$1_EREREREREREREREREREREQ-v"));
+            Assert.That(group1.TableName, Is.Not.EqualTo(group2.TableName));
+            Assert.That(group1.EnablementTableName, Is.Not.EqualTo(group2.EnablementTableName));
+            Assert.That(group1.ValidityTableName, Is.Not.EqualTo(group2.ValidityTableName));
+        }
+
     }
 }
