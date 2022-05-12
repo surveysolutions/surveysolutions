@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                     tempFile = fileSystemAccessor.CombinePath(mapsDirectory, mapFiles.Name + ".shp.zip");
                     var entities = mapFiles.Files.Select(f =>
-                        fileSystemAccessor.CombinePath(mapsDirectory, f)
+                        fileSystemAccessor.CombinePath(mapsDirectory, f.Name)
                     );
                     archiveUtils.ZipFiles(entities, tempFile);
                 }
@@ -364,6 +364,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             IFeature feature = new Feature(rd.Geometry, attribs);
                             fc.Add(feature);
                         }
+
+                        if (fc.Count == 0)
+                            throw new ArgumentException($"Can't read any coordinates from {mapFile.Name}.shp file");
 
                         item.DuplicateLabels.Clear();
                         foreach (var duplicateLabel in duplicateLabels)

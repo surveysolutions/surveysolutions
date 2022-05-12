@@ -97,6 +97,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File {0} bigger that existed limit {1}.
+        /// </summary>
+        public static string MapFileSizeLimit {
+            get {
+                return ResourceManager.GetString("MapFileSizeLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File &apos;{0}&apos; contains data the system can&apos;t process. Error: {1}.
         /// </summary>
         public static string MapLoadingInvalidFile {

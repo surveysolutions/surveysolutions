@@ -177,4 +177,7 @@
   <data name="DbfIsMissingInArchive" xml:space="preserve">
     <value>File {0}.dbf is missing for {0}.shp</value>
   </data>
+  <data name="MapFileSizeLimit" xml:space="preserve">
+    <value>File {0} bigger that existed limit {1}</value>
+  </data>
 </root>
