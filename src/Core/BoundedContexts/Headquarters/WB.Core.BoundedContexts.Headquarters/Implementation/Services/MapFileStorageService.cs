@@ -14,6 +14,7 @@ using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using NetTopologySuite.Operation.Union;
+using NetTopologySuite.Simplify;
 using Newtonsoft.Json;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Maps;
@@ -383,10 +384,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         var byteCount = Encoding.Unicode.GetByteCount(json);
                         if (byteCount > geospatialConfig.Value.GeoJsonMaxSize)
                         {
-                            UnaryUnionOp unionOp = new UnaryUnionOp(fc.Select(f => f.Geometry));
-                            var union = unionOp.Union();
+                            UnaryUnionOp c = new UnaryUnionOp(fc.Select(f => f.Geometry).ToArray());
+                            var geometryCollection = c.Union();
+                            //DouglasPeuckerSimplifier simplifier = new DouglasPeuckerSimplifier(geometryCollection);
+                            TopologyPreservingSimplifier simplifier = new TopologyPreservingSimplifier(geometryCollection);
+                            var simplifierGeometry = simplifier.GetResultGeometry();
+
                             FeatureCollection unionFc = new FeatureCollection();
-                            unionFc.Add(new Feature(union, new AttributesTable()));
+                            unionFc.Add(new Feature(simplifierGeometry, new AttributesTable()));
                             json = GetGeoJson(unionFc);
                             item.IsPreviewGeoJson = true;
                         }
