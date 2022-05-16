@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File {0} bigger that existed limit {1}.
+        ///   Looks up a localized string similar to The size of file {0} is larger than applicable limit {1}.
         /// </summary>
         public static string MapFileSizeLimit {
             get {
