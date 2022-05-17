@@ -18,6 +18,7 @@ jobs:
     # The type of runner that the job will run on
     permissions:
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+    runs-on: windows-2019
     steps:
 
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it and copies all sources into ZIP file for submitting for analysis. Replace this section with your applications build steps
