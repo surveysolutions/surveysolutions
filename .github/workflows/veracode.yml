@@ -17,9 +17,7 @@ jobs:
   build-and-pipeline-scan:
     # The type of runner that the job will run on
     permissions:
-      contents: read # for actions/checkout to fetch code
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
-    runs-on: ubuntu-latest
     steps:
 
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it and copies all sources into ZIP file for submitting for analysis. Replace this section with your applications build steps
