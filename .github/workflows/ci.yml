@@ -82,13 +82,13 @@ jobs:
 
       - name: Headquarters tests
         run: |
-          echo "[ConnectionStrings]\nTestConnection=\"${{ env.DB_CONN }}Database=postgres;CommandTimeout=60;\"" > src/Tests/WB.Tests.Integration/appsettings.ini
+          echo "[ConnectionStrings]\nTestConnection=\"${{ env.DB_CONN }}Database=postgres;CommandTimeout=60;\"" > appsettings.ini
           dotnet test src/Tests/WB.Tests.Integration \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Designer tests
         run: |
-          echo "[ConnectionSettings]\nTestConnectionStringFormat=\"${{ env.DB_CONN }}Database=testdb_{0};CommandTimeout=60;\"" > src/Tests/WB.Tests.Integration.Designer/appsettings.ini
+          echo "[ConnectionSettings]\nTestConnectionStringFormat=\"${{ env.DB_CONN }}Database=testdb_{0};CommandTimeout=60;\"" > appsettings.ini
           dotnet test src/Tests/WB.Tests.Integration.Designer \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
@@ -101,7 +101,7 @@ jobs:
           TEST_DB: ${{ env.DB_CONN }}
       - name: Scheduler service tests
         run: |
-          echo "{ \"ConnectionStrings\": { \"DefaultConnection\": \"${{ env.DB_CONN }}Database=export_service_tests;\" }}" > src/Services/Core/WB.Services.Scheduler.Tests/appsettings.json
+          echo "{ \"ConnectionStrings\": { \"DefaultConnection\": \"${{ env.DB_CONN }}Database=export_service_tests;\" }}" > appsettings.json
           dotnet test src/Services/Core/WB.Services.Scheduler.Tests \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
