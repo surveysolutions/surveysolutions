@@ -84,7 +84,7 @@
         "graphql-tag": "^2.12.4",
         "jest": "^27.5.1",
         "mini-css-extract-plugin": "^0.9.0",
-        "npm-force-resolutions": "0.0.10",
+        "npm-force-resolutions": "0.0.6",
         "rimraf": "3.0.2",
         "sass": "^1.49.7",
         "sass-loader": "10.1.0",
