@@ -73,10 +73,7 @@
             "error",
             {
                 "singleline": 1,
-                "multiline": {
-                    "max": 1,
-                    "allowFirstLine": true
-                }
+                "multiline": 1
             }
         ],
         "no-trailing-spaces": "error",
