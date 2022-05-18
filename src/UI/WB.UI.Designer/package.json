@@ -108,6 +108,7 @@
     "perfect-scrollbar": "^0.8.1",
     "pnotify": "^3.2.1",
     "roboto-fontface": "^0.10.0",
+    "sass": "~1.32.13",
     "underscore": "^1.9.1",
     "vee-validate": "2.2.2",
     "vue": "^2.6.14",
