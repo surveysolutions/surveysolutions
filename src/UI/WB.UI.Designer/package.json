@@ -50,6 +50,7 @@
     "postcss": "^8.4.12",
     "rimraf": "^3.0.2",
     "through2": "^4.0.2",
+    "sass": "~1.32.13",
     "xmldoc": "^1.1.2"
   },
   "scripts": {
@@ -57,8 +58,7 @@
     "build": "gulp --production",
     "preproduction": "bower install --force",
     "testDeploy": "powershell New-Item -Path ./bin/WB.UI.Designer/app_offline.htm; rimraf ./bin/WB.UI.Designer; New-Item -Path ./bin/WB.UI.Designer/app_offline.htm -ErrorAction SilentlyIgnore;gulp --production; dotnet publish --self-contained -r win-x64 -o ./bin/WB.UI.Designer -c Release; Remove-Item ./bin/WB.UI.Designer/app_offline.htm",
-    "preinstall": "npx force-resolutions",
-    "inst:dbg": "npm install"
+    "preinstall": "npx force-resolutions"
   },
   "author": "",
   "license": "ISC",
@@ -109,7 +109,6 @@
     "perfect-scrollbar": "^0.8.1",
     "pnotify": "^3.2.1",
     "roboto-fontface": "^0.10.0",
-    "sass": "~1.32.13",
     "underscore": "^1.9.1",
     "vee-validate": "2.2.2",
     "vue": "^2.6.14",
