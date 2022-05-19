@@ -30,13 +30,12 @@ namespace WB.Services.Export.Tests.WithDatabase
             checkDbExistsCommand.Parameters.AddWithValue("dbName", DataBaseName);
             var dbExists = checkDbExistsCommand.ExecuteScalar();
 
-            if (dbExists == null)
-            {
-                var createCommand = connection.CreateCommand();
-                createCommand.CommandText = $@"CREATE DATABASE ""{DataBaseName}"" ENCODING = 'UTF8'";
-                // unfortunately there is no way to use parameters based syntax here 
-                createCommand.ExecuteNonQuery();
-            }
+            if (dbExists != null) return;
+            
+            var createCommand = connection.CreateCommand();
+            createCommand.CommandText = $@"CREATE DATABASE ""{DataBaseName}"" ENCODING = 'UTF8'";
+            // unfortunately there is no way to use parameters based syntax here 
+            createCommand.ExecuteNonQuery();
         }
 
         [OneTimeTearDown]
