@@ -121,6 +121,8 @@
   "resolutions": {
     "async": ">=3.2.3",
     "browserslist": ">=4.20.3",
+    "chokidar": ">=3.5.3",
+    "html-webpack-plugin": ">=5.5.0",
     "glob-parent": ">=5.1.2",
     "gulp-footer": "2.1.0",
     "json-schema": ">=0.4.0",
@@ -128,6 +130,8 @@
     "minimist": ">=1.2.6",
     "postcss": ">=8.4.12",
     "set-value": ">=4.0.1",
-    "trim-newlines": ">=3.0.1"
+    "svgo": "2.8.0",
+    "trim-newlines": ">=3.0.1",
+    "uuid": ">=8.3.2"
   }
 }
