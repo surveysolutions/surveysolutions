@@ -177,4 +177,8 @@
   <data name="DbfIsMissingInArchive" xml:space="preserve">
     <value>Файл {0}.dbf отсутствует для {0}.shp</value>
   </data>
+  <data name="MapFileSizeLimit" xml:space="preserve">
+    <value>Размер файла {0} превышает допустимый лимит {1}</value>
+  </data>
+
 </root>
