@@ -34,6 +34,7 @@
 
                     <iframe width="100%"
                         height="250px"
+                        title="geography"
                         frameborder="0"
                         :src="answerUrl"></iframe>
                 </div>
