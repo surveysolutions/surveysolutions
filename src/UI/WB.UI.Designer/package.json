@@ -57,7 +57,8 @@
     "build": "gulp --production",
     "preproduction": "bower install --force",
     "testDeploy": "powershell New-Item -Path ./bin/WB.UI.Designer/app_offline.htm; rimraf ./bin/WB.UI.Designer; New-Item -Path ./bin/WB.UI.Designer/app_offline.htm -ErrorAction SilentlyIgnore;gulp --production; dotnet publish --self-contained -r win-x64 -o ./bin/WB.UI.Designer -c Release; Remove-Item ./bin/WB.UI.Designer/app_offline.htm",
-    "preinstall": "npx force-resolutions"
+    "preinstall": "npx force-resolutions",
+    "inst:dbg": "npm install"
   },
   "author": "",
   "license": "ISC",
@@ -119,10 +120,10 @@
   },
   "resolutions": {
     "async": ">=3.2.3",
+    "browserslist": ">=4.20.3",
     "glob-parent": ">=5.1.2",
     "gulp-footer": "2.1.0",
     "json-schema": ">=0.4.0",
-    "lodash.template": ">=4.5.0",
     "merge": ">=2.1.1",
     "minimist": ">=1.2.6",
     "postcss": ">=8.4.12",
