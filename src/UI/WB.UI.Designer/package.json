@@ -44,6 +44,7 @@
     "gulp-vue-single-file-component": "^1.2.3",
     "jshint": "^2.13.4",
     "merge2": "^1.4.1",
+    "sass": "~1.32.13",
     "node-sass": "^7.0.0",
     "force-resolutions": "1.0.10",
     "plugin-error": "^1.0.1",
@@ -57,7 +58,8 @@
     "build": "gulp --production",
     "preproduction": "bower install --force",
     "testDeploy": "powershell New-Item -Path ./bin/WB.UI.Designer/app_offline.htm; rimraf ./bin/WB.UI.Designer; New-Item -Path ./bin/WB.UI.Designer/app_offline.htm -ErrorAction SilentlyIgnore;gulp --production; dotnet publish --self-contained -r win-x64 -o ./bin/WB.UI.Designer -c Release; Remove-Item ./bin/WB.UI.Designer/app_offline.htm",
-    "preinstall": "npx force-resolutions"
+    "preinstall": "npx force-resolutions",
+	"inst:dbg": "npm install"
   },
   "author": "",
   "license": "ISC",
@@ -113,7 +115,6 @@
     "vue": "^2.6.14",
     "vuetify": "^2.6.6",
     "vuex": "^3.1.1",
-    "sass": "~1.32.13",
     "xss": "^1.0.6",
     "zebra_datepicker": "^1.9.12"
   },
