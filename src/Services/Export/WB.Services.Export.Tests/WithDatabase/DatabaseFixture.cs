@@ -13,7 +13,7 @@ namespace WB.Services.Export.Tests.WithDatabase
         public const string DataBaseName = "export_service_tests";
         public static string TenantName = "schema_" + Guid.NewGuid().ToString().Replace("-", "");
 
-        /*[OneTimeSetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             //legacy
@@ -45,7 +45,6 @@ namespace WB.Services.Export.Tests.WithDatabase
             await using var db = new NpgsqlConnection(TestConfig.GetConnectionString());
             await db.OpenAsync();
             await db.ExecuteAsync($"DROP SCHEMA if exists " + TenantName + " CASCADE");
-        }*/
-
+        }
     }
 }
