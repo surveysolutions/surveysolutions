@@ -12,7 +12,7 @@
         "styles": "vue-cli-service build --css",
         "styles:dev": "vue-cli-service build --css --mode development",
         "test": "jest",
-        "preinstall": "npx npm-force-resolutions"
+        "preinstall": "npx force-resolutions"
     },
     "dependencies": {
         "@google/markerclustererplus": "^4.0.1",
@@ -79,12 +79,12 @@
         "cross-env": "^6.0.3",
         "eslint": "^6.8.0",
         "eslint-plugin-graphql": "^3.1.1",
-        "eslint-plugin-vue": "^6.1.2",
+        "eslint-plugin-vue": "^9.0.1",
         "extra-watch-webpack-plugin": "^1.0.3",
+        "force-resolutions": "1.0.10",
         "graphql-tag": "^2.12.4",
         "jest": "^27.5.1",
         "mini-css-extract-plugin": "^0.9.0",
-        "npm-force-resolutions": "0.0.10",
         "rimraf": "3.0.2",
         "sass": "^1.49.7",
         "sass-loader": "10.1.0",

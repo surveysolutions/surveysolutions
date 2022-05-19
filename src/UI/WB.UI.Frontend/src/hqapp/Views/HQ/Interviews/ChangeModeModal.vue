@@ -12,7 +12,7 @@
             <input
                 type="checkbox"
                 :id="'switchModeReceivedByInterviewer_' + modalId"
-                v-model="confirmReceivedByInterviewer"
+                v-model="internalConfirmReceivedByInterviewer"
                 class="checkbox-filter"/>
             <label :for="'switchModeReceivedByInterviewer_' + modalId"
                 style="font-weight: normal">
@@ -20,7 +20,7 @@
                 {{$t("Interviews.AssignReceivedConfirm", receivedByInterviewerItemsCount)}}
             </label>
             <br />
-            <span v-if="confirmReceivedByInterviewer"
+            <span v-if="internalConfirmReceivedByInterviewer"
                 class="text-danger">
                 {{$t("Interviews.SwitchToCawiReceivedWarning")}}
             </span>
@@ -44,6 +44,11 @@
 
 <script>
 export default {
+    data() {
+        return {
+            internalConfirmReceivedByInterviewer: this.confirmReceivedByInterviewer,
+        }
+    },
     props: {
         filteredCount: {
             type: Number,
@@ -70,7 +75,6 @@ export default {
             require: true,
         },
     },
-
     methods: {
         modal() {
             this.$refs.modal.modal()
@@ -78,7 +82,7 @@ export default {
 
         confirm() {
             this.$refs.modal.hide()
-            this.$emit('confirm', this.confirmReceivedByInterviewer)
+            this.$emit('confirm', this.internalConfirmReceivedByInterviewer)
         },
     },
 }

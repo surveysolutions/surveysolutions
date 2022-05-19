@@ -17,8 +17,9 @@
                 <router-link :to="to"
                     :disabled="isDisabled"
                     :class="{'disabled':isDisabled}"
-                    v-if="this.panel"
-                    v-html="title"></router-link>
+                    v-if="this.panel">
+                    <span v-html="title"/>
+                </router-link>
             </h3>
         </div>
         <div class="panel-collapse collapse"
