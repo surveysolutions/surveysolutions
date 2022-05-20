@@ -28,8 +28,8 @@ public class UploadMapsServiceTests
                 IsValid = true,
                 Maps = new List<MapFiles>()
                 {
-                    new MapFiles() { Name = "map1.tpk" },
-                    new MapFiles() { Name = "map2.tpk" },
+                    new MapFiles() { Name = "map1.tpk", Files  = new List<MapFile>() },
+                    new MapFiles() { Name = "map2.tpk", Files  = new List<MapFile>()  },
                 }
             });
         var mapStorageService = new Mock<IMapStorageService>();

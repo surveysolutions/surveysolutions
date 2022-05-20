@@ -22,19 +22,19 @@ public class MapFilesValidatorTests
                 {
                     IsShapeFile = true,
                     Name = "map1",
-                    Files = new List<string>() { "map1.shx", "map1.dbf", }
+                    Files = new List<MapFile>() { MapFile("map1.shx"), MapFile("map1.dbf"), }
                 },
                 new MapFiles()
                 {
                     IsShapeFile = true,
                     Name = "map2",
-                    Files = new List<string>() { "map2.shp", "map2.dbf", }
+                    Files = new List<MapFile>() { MapFile("map2.shp"), MapFile("map2.dbf"), }
                 },
                 new MapFiles()
                 {
                     IsShapeFile = true,
                     Name = "map3",
-                    Files = new List<string>() { "map3.shp", "map3.shx", }
+                    Files = new List<MapFile>() { MapFile("map3.shp"), MapFile("map3.shx"), }
                 },
             }
         };
@@ -49,6 +49,37 @@ public class MapFilesValidatorTests
     }
 
     [Test]
+    public void when_validate_file_size_limit()
+    {
+        var analyzeResults = new AnalyzeResult()
+        {
+            IsValid = false,
+            Maps = new List<MapFiles>()
+            {
+                new MapFiles()
+                {
+                    IsShapeFile = true,
+                    Name = "map1",
+                    Files = new List<MapFile>() { MapFile("map1.shp"), MapFile("map1.shx"), MapFile("map1.dbf", 512 * 1024 * 1024 + 1), }
+                },
+                new MapFiles()
+                {
+                    IsShapeFile = false,
+                    Name = "map2",
+                    Files = new List<MapFile>() { MapFile("map2.tif", 512 * 1024 * 1024 + 1), }
+                },
+            }
+        };
+        var service = CreateMapFilesValidator();
+
+        var validatorErrors = service.Verify(analyzeResults).ToList();
+        
+        Assert.That(validatorErrors.Count, Is.EqualTo(2));
+        Assert.That(validatorErrors[0].Message, Is.EqualTo(string.Format(Maps.MapFileSizeLimit, "map1.dbf", "512 MB")));
+        Assert.That(validatorErrors[1].Message, Is.EqualTo(string.Format(Maps.MapFileSizeLimit, "map2.tif", "512 MB")));
+    }
+
+    [Test]
     public void when_validate_incorrect_maps_file()
     {
         var service = CreateMapFilesValidator();
@@ -57,6 +88,8 @@ public class MapFilesValidatorTests
         
         Assert.That(validatorErrors.Any(), Is.False);
     }
+
+    private MapFile MapFile(string name, int size = 5000) => new MapFile() { Name = name, Size = size };
 
     private MapFilesValidator CreateMapFilesValidator()
     {
