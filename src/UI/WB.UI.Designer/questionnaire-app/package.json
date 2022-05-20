@@ -7,7 +7,7 @@
     "build": "vue-cli-service build --modern --mode production",
     "lint": "vue-cli-service lint",
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
-    "preinstall": "npx force-resolutions"
+    "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
     "axios": "^0.21.2",
@@ -36,7 +36,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "extra-watch-webpack-plugin": "^1.0.3",
     "glob-parent": "^6.0.0",
-    "force-resolutions": "1.0.10",
+    "npm-force-resolutions": "0.0.6",
     "is-svg": "^4.2.2",
     "mini-css-extract-plugin": "^1.6.0",
     "normalize-url": "^4.5.1",
