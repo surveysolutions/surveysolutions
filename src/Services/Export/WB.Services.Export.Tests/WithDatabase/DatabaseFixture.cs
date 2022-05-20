@@ -13,7 +13,7 @@ namespace WB.Services.Export.Tests.WithDatabase
         public const string DataBaseName = "export_service_tests";
         public static string TenantName = "schema_" + Guid.NewGuid().ToString().Replace("-", "");
 
-        /*[OneTimeSetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             //legacy
@@ -30,13 +30,12 @@ namespace WB.Services.Export.Tests.WithDatabase
             checkDbExistsCommand.Parameters.AddWithValue("dbName", DataBaseName);
             var dbExists = checkDbExistsCommand.ExecuteScalar();
 
-            if (dbExists == null)
-            {
-                var createCommand = connection.CreateCommand();
-                createCommand.CommandText = $@"CREATE DATABASE ""{DataBaseName}"" ENCODING = 'UTF8'";
-                // unfortunately there is no way to use parameters based syntax here 
-                createCommand.ExecuteNonQuery();
-            }
+            if (dbExists != null) return;
+            
+            var createCommand = connection.CreateCommand();
+            createCommand.CommandText = $@"CREATE DATABASE ""{DataBaseName}"" ENCODING = 'UTF8'";
+            // unfortunately there is no way to use parameters based syntax here 
+            createCommand.ExecuteNonQuery();
         }
 
         [OneTimeTearDown]
@@ -45,7 +44,6 @@ namespace WB.Services.Export.Tests.WithDatabase
             await using var db = new NpgsqlConnection(TestConfig.GetConnectionString());
             await db.OpenAsync();
             await db.ExecuteAsync($"DROP SCHEMA if exists " + TenantName + " CASCADE");
-        }*/
-
+        }
     }
 }

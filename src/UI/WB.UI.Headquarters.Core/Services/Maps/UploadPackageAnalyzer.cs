@@ -69,7 +69,7 @@ Other files
                 result.Maps.Add(new MapFiles() 
                 { 
                     Name = fileName,
-                    Files = new List<string>() { fileName }, 
+                    Files = new List<MapFile>() { new() { Name = fileName, Size = fileInArchive.Value } }, 
                     Size = fileInArchive.Value 
                 });
             }
@@ -82,14 +82,14 @@ Other files
                     {
                         Name = mapName, 
                         IsShapeFile = true, 
-                        Files = new List<string>() { fileName },
+                        Files = new List<MapFile>() { new() { Name = fileName, Size = fileInArchive.Value } },
                         Size = fileInArchive.Value,
                     });
                 }
                 else
                 {
                     mapFiles.Size += fileInArchive.Value;
-                    mapFiles.Files.Add(fileName);
+                    mapFiles.Files.Add(new() { Name = fileName, Size = fileInArchive.Value });
                 }
             }
         }
