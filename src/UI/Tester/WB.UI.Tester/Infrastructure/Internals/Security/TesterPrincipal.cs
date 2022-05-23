@@ -72,7 +72,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
         {
             this.currentUserIdentity = new TesterUserIdentity
             {
-                Name = "Anonim",
+                Name = "Anonymous",
                 Password = "fake",
                 UserId = Guid.NewGuid(),
             };
