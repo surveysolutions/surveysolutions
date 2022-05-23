@@ -31,7 +31,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
                 UserRole = x.UserRole,
                 CommentTimeUtc = x.CommentTime.UtcDateTime,
                 Resolved = x.Resolved,
-                EntityId = x.QuestionIdentity.ToString()
+                EntityId = x.QuestionIdentity.ToString(),
+                CommentOnPreviousAnswer = x.CommentOnPreviousAnswer
             });
         }
 

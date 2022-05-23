@@ -128,7 +128,8 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             var response = new JsonMapResponse();
 
-            var result = await uploadMapsService.Upload(file.FileName, file.OpenReadStream());
+            await using var stream = file.OpenReadStream();
+            var result = await uploadMapsService.Upload(file.FileName, stream);
             if (result.Errors.Any())
             {
                 result.Errors.ForEach(error => response.Errors.Add(error));

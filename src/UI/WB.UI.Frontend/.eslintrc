@@ -66,14 +66,13 @@
                 ]
             }
         ],
+        "vue/multi-word-component-names": "off",
+        "vue/no-reserved-component-names": "warn",
         "vue/max-attributes-per-line": [
             "error",
             {
                 "singleline": 1,
-                "multiline": {
-                    "max": 1,
-                    "allowFirstLine": true
-                }
+                "multiline": 1
             }
         ],
         "no-trailing-spaces": "error",

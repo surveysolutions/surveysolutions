@@ -260,7 +260,7 @@ export default {
 
                 if (onDone) onDone.apply(this);
             } catch (e) {
-                console.error(e);
+                //console.error(e);
                 this.snacks.ajaxError = true;
             } finally {
                 this.ajax = false;

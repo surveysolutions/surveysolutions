@@ -26,7 +26,7 @@ export default {
 
     data() {
         return {
-            value: this.state,
+            value: '',
         }
     },
 
@@ -34,6 +34,10 @@ export default {
         state(value) {
             this.value = value
         },
+    },
+
+    created(){
+        this.value = this.state
     },
 
     methods: {

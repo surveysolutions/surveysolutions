@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace WB.Core.BoundedContexts.Designer.ImportExport.Models.Question
 {
-    [DebuggerDisplay("{GetType().Name} {VariableName} {PublicKey}")]
+    [DebuggerDisplay("{GetType().Name} {VariableName} {Id}")]
     public abstract class AbstractQuestion : QuestionnaireEntity, IQuestion
     {
         public string? VariableName { get; set; } = string.Empty;

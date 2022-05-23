@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireValidatorTes
             var questionnaireBrowseItemStorage = Create.Storage.InMemoryPlainStorage<QuestionnaireBrowseItem>();
 
             var deletedQuestionnaireBrowseItem = Create.Entity.QuestionnaireBrowseItem(title: title,
-                questionnaireId: differentQuestionnaireId, deleted: true);
+                questionnaireId: differentQuestionnaireId, deleted: true, variable: "deleted");
 
             questionnaireBrowseItemStorage.Store(deletedQuestionnaireBrowseItem, differentQuestionnaireId);
 

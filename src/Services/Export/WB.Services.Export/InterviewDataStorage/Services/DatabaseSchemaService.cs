@@ -30,7 +30,7 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             questionnaireSchemaGenerator.CreateQuestionnaireDbStructure(questionnaireDocument);
         }
 
-        private bool TryDropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
+        public bool TryDropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
             var reference = this.dbContext.GeneratedQuestionnaires.Find(questionnaireDocument.QuestionnaireId.ToString());
 
