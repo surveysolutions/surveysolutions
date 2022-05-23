@@ -231,7 +231,7 @@ task frontend {
     }
 }
 
-task PackageHq frontend, {
+task PackageHq {
     exec {
         dotnet publish @(
             "./src/UI/WB.UI.Headquarters.Core",
