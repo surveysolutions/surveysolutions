@@ -130,7 +130,6 @@
     "postcss": ">=8.4.12",
     "set-value": ">=4.0.1",
     "svgo": "2.8.0",
-    "trim-newlines": ">=3.0.1",
-    "uuid": ">=8.3.2"
+    "trim-newlines": ">=3.0.1"
   }
 }
