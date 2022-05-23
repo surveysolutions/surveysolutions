@@ -238,10 +238,10 @@ task PackageHq frontend, {
             "-c", "Release",
             "-p:Version=$VERSION",
             "-p:InformationalVersion=$infoVersion",
-            "-o", "$tmp/hq"
+            "-o", "$tmp/hq",
+            "--no-self-contained"
             if ($runtime) {
-                "-r", $runtime,
-                "--self-contained"
+                "-r", $runtime
             }
         )
     }
@@ -300,7 +300,8 @@ task PackageExport {
             "-c", "Release",
             "-p:Version=$VERSION",
             "-p:InformationalVersion=$infoVersion",
-            "-o", "$tmp/export"
+            "-o", "$tmp/export",
+            "--no-self-contained"
             if ($runtime) {
                 "-r", $runtime
             }
@@ -316,7 +317,8 @@ task PackageWebTester frontend, {
             "-c", "Release",
             "-p:Version=$VERSION",
             "-p:InformationalVersion=$infoVersion",
-            "-o", "$tmp/webtester"
+            "-o", "$tmp/webtester",
+            "--no-self-contained"
             if ($runtime) {
                 "-r", $runtime
             }    
@@ -335,7 +337,7 @@ task PackageDesigner {
     
     Set-location $BuildRoot
     dotnet publish ./src/UI/WB.UI.Designer `
-        -c Release -r win-x64 `
+        -c Release -r win-x64 --no-self-contained `
         -p:Version=$VERSION -p:InformationalVersion=$infoVersion `
         -p:SkipSpaBuild=True -o $tmp/Designer
 
