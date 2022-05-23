@@ -71,6 +71,11 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                     else
                         d.CoverPageSectionId = Guid.NewGuid();
                 })
+                .AfterMap((s, d, context) =>
+                {
+                    if (s.CoverPage != null)
+                        d.Children[0].Children.OfType<IQuestion>().ForEach(q => q.Featured = true);
+                })
                 .ForMember(x => x.DefaultTranslation, x => x.Ignore()) 
                 .AfterMap((s, d, context) =>
                 {

@@ -7,8 +7,10 @@
             :key="link.target"
             active-class=""
             :to="{ name: 'section', params: { sectionId: search.sectionId }, hash: '#' + link.target}"
-            class="question short-row"
-            v-html="link.title"></router-link>
+            class="question short-row">
+            <span
+                v-html="link.title"/>
+        </router-link>
     </div>
 </template>
 
