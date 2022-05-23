@@ -63,7 +63,7 @@ html {
 	}
 }
 .container, .container-fluid{
-	padding: 0  ($margin-container/2) 0 ($margin-container);
+	padding: 0  ($margin-container*0.5) 0 ($margin-container);
 }
 main{
 	.container{
