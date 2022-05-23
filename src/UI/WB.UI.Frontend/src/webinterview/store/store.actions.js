@@ -228,6 +228,10 @@ export default {
                 dispatch('navigeToRoute', loc)
             } else {
                 commit('SET_SECTION_DATA', prefilledPageData.entities)
+                commit('SET_ENTITIES_DETAILS', {
+                    entities: prefilledPageData.details,
+                    lastActivityTimestamp: new Date(),
+                })
             }
         } else {
             try {
