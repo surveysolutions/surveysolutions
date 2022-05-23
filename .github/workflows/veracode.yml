@@ -28,6 +28,7 @@ jobs:
         dotnet-version: '6.0.x'
     - name: Build Headquarters
       run: ./.build.ps1 PackageHq -BuildNumber 12345
+      shell: pwsh
 
     - run: curl --silent --show-error --fail -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
     - run: unzip -o pipeline-scan-LATEST.zip
