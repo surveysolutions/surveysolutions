@@ -61,6 +61,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hello {0}, &lt;br/&gt;&lt;br/&gt; You share questionnaire &apos;{1}&apos; to anonymous access by this link:.
+        /// </summary>
+        public static string AnonymousSharingEmail {
+            get {
+                return ResourceManager.GetString("AnonymousSharingEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to complete registration.
         /// </summary>
         public static string CompleteRegistration {
@@ -170,6 +179,15 @@ namespace WB.UI.Designer.Resources {
         public static string ResetPasswordEmail {
             get {
                 return ResourceManager.GetString("ResetPasswordEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anonymous sharing link.
+        /// </summary>
+        public static string SystemMailer_AnonymousSharingEmail_Subject {
+            get {
+                return ResourceManager.GetString("SystemMailer_AnonymousSharingEmail_Subject", resourceCulture);
             }
         }
         

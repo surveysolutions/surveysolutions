@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
     public class DashboardViewModel : BaseViewModel
     {
         private CancellationTokenSource tokenSource;
+        private readonly ITesterPrincipal principal;
         private readonly IDesignerApiService designerApiService;
 
         private readonly IUserInteractionService userInteractionService;
@@ -35,7 +36,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private QuestionnairesType showedQuestionnairesType = QuestionnairesType.My;
 
         public DashboardViewModel(
-            IPrincipal principal,
+            ITesterPrincipal principal,
             IDesignerApiService designerApiService,
             IViewModelNavigationService viewModelNavigationService,
             IFriendlyErrorMessageService friendlyErrorMessageService,
@@ -46,6 +47,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             QuestionnaireDownloadViewModel questionnaireDownloader)
             : base(principal, viewModelNavigationService)
         {
+            this.principal = principal;
             this.designerApiService = designerApiService;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
             this.userInteractionService = userInteractionService;
@@ -332,6 +334,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 this.tokenSource.Cancel();
             }
+        }
+        
+        public override void ViewAppearing()
+        {
+            base.ViewAppearing();
+            
+            if (principal.IsFakeIdentity)
+                ViewModelNavigationService.NavigateToLoginAsync();
         }
     }
 }

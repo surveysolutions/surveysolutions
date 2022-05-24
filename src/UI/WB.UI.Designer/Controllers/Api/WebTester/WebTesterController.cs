@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Api;
@@ -86,14 +89,24 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             }
         }
 
+        private Guid GetOriginalQuestionnaireId([DisallowNull] Guid? questionnaireId)
+        {
+            var anonymousQuestionnaire = designerDbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.IsActive == true
+                && a.AnonymousQuestionnaireId == questionnaireId.Value);
+
+            var qId = anonymousQuestionnaire?.QuestionnaireId ?? questionnaireId.Value;
+            return qId;
+        }
+
         [Route("{token:Guid}/attachment/{attachmentContentId}")]
         [HttpGet]
         public IActionResult AttachmentContentAsync(string token, string attachmentContentId)
         {
             var questionnaireId = this.webTesterService.GetQuestionnaire(token);
             if (questionnaireId == null) return NotFound();
+            var qId = GetOriginalQuestionnaireId(questionnaireId);
 
-            if (this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId.Value)) == null)
+            if (this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(qId)) == null)
             {
                 return NotFound();
             }
@@ -121,14 +134,15 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             {
                 return NotFound();
             }
+            var qId = GetOriginalQuestionnaireId(questionnaireId);
 
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId.Value));
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(qId));
             if (questionnaireView == null) return NotFound();
 
             var actualTranslations = questionnaireView.Source.Translations.Select(x => x.Id).ToList();
 
             var model = this.designerDbContext.TranslationInstances
-                .Where(x => x.QuestionnaireId == questionnaireId && actualTranslations.Contains(x.TranslationId))
+                .Where(x => x.QuestionnaireId == qId && actualTranslations.Contains(x.TranslationId))
                 .Select(x => new TranslationDto
                 {
                     Value = x.Value,
@@ -150,14 +164,15 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             {
                 return NotFound();
             }
+            var qId = GetOriginalQuestionnaireId(questionnaireId);
 
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId.Value));
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(qId));
             if (questionnaireView == null) return NotFound();
 
             var actualCategories = questionnaireView.Source.Categories.Select(x => x.Id).ToList();
 
             var model = this.designerDbContext.CategoriesInstances
-                .Where(x => x.QuestionnaireId == questionnaireId && actualCategories.Contains(x.CategoriesId))
+                .Where(x => x.QuestionnaireId == qId && actualCategories.Contains(x.CategoriesId))
                 .OrderBy(x => x.SortIndex)
                 .Select(x => new CategoriesDto
                 {

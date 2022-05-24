@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
     public interface IQuestionnaireInfoViewFactory
     {
-        QuestionnaireInfoView? Load(QuestionnaireRevision questionnaireRevision, Guid viewerId);
+        QuestionnaireInfoView? Load(QuestionnaireRevision questionnaireRevision, Guid? viewerId);
     }
 }

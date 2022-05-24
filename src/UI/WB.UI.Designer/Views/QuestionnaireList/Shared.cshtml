@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = QuestionnaireController.SharedQuestionnaires;
+    Layout = "Layout";
+}
+<partial name="_QuestionnairesList" />
+
+
+@section Modal
+{
+    <div>
+        <partial name="_IE11Modal" />
+    </div>
+
+    <div>
+        <partial name="_DeleteModalDialog" />
+    </div>
+    <div>
+        <partial name="_ExportPdfModalDialog" />
+    </div>
+    <div>
+        <partial name="_ExportHtmlModalDialog" />
+    </div>
+}
