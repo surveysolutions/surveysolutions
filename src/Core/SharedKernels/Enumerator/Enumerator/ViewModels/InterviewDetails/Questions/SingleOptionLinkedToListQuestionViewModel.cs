@@ -389,7 +389,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var option = new SingleOptionQuestionOptionViewModel
             {
-                Enablement = this.QuestionState.Enablement,
                 Title = optionValue.Text,
                 Value = optionValue.Value,
                 QuestionState = this.QuestionState

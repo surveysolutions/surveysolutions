@@ -10,7 +10,7 @@ namespace WB.UI.Shared.Enumerator.Converters
         {
             if (string.IsNullOrEmpty(value)) return value;
 
-            var searchTerm = (string) parameter;
+            var searchTerm = parameter as string;
             if (string.IsNullOrEmpty(searchTerm)) return value;
 
             var lastIndex = value.LastIndexOf(searchTerm, StringComparison.OrdinalIgnoreCase);

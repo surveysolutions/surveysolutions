@@ -25,12 +25,19 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         internal class IdentityComparer : IEqualityComparer<TranslationInstance>
         {
-            public bool Equals(TranslationInstance x, TranslationInstance y)
-                => x.QuestionnaireId == y.QuestionnaireId &&
-                   x.QuestionnaireEntityId == y.QuestionnaireEntityId &&
-                   x.TranslationIndex == y.TranslationIndex &&
-                   x.Type == y.Type;
-
+            public bool Equals(TranslationInstance? x, TranslationInstance? y)
+            {
+                if (x == null && y == null) return true;
+                if (ReferenceEquals(x, y)) return true;
+                if (ReferenceEquals(x, null)) return false;
+                if (ReferenceEquals(y, null)) return false;
+                
+                return x.QuestionnaireId == y.QuestionnaireId &&
+                       x.QuestionnaireEntityId == y.QuestionnaireEntityId &&
+                       x.TranslationIndex == y.TranslationIndex &&
+                       x.Type == y.Type;
+            }
+            
             public int GetHashCode(TranslationInstance obj)
             {
                 unchecked

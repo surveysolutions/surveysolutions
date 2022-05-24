@@ -145,6 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private string comment;
         private bool requestWebInterview;
         private bool canSwitchToWebMode;
+        private bool isDisposed;
 
         private async Task CompleteInterviewAsync()
         {
@@ -187,13 +188,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            this.Name.Dispose();
-            var entitiesWithErrors = this.EntitiesWithErrors;
-            foreach (var entityWithErrorsViewModel in entitiesWithErrors)
+            if (isDisposed)
+                return;
+
+            isDisposed = true;
+            
+            this.Name?.Dispose();
+
+            if (EntitiesWithErrors != null)
             {
-                entityWithErrorsViewModel.DisposeIfDisposable();
+                var entitiesWithErrors = EntitiesWithErrors.ToArray();
+                foreach (var entityWithErrorsViewModel in entitiesWithErrors)
+                {
+                    entityWithErrorsViewModel?.DisposeIfDisposable();
+                }
             }
-            this.InterviewState.DisposeIfDisposable();
+
+            this.InterviewState?.DisposeIfDisposable();
         }
     }
 }

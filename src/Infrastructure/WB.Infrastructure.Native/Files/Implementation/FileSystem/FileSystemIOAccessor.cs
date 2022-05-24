@@ -53,8 +53,8 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 ? Directory.GetFiles(pathToDirectory, "*.*", searchInSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly)
                 : new string[0];
 
-        public string[] GetFilesInDirectory(string pathToDirectory, string pattern)
-            => this.IsDirectoryExists(pathToDirectory) ? Directory.GetFiles(pathToDirectory, pattern) : new string[0];
+        public string[] GetFilesInDirectory(string pathToDirectory, string pattern, bool searchInSubdirectories = false)
+            => this.IsDirectoryExists(pathToDirectory) ? Directory.GetFiles(pathToDirectory, pattern, searchInSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly) : new string[0];
         
 
         public void MarkFileAsReadonly(string pathToFile) => File.SetAttributes(pathToFile, FileAttributes.ReadOnly);

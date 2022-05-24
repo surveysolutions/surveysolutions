@@ -45,8 +45,10 @@ namespace WB.Services.Scheduler.Services.Implementation
 
             if (existingJob != null) return existingJob;
 
-            job.CreatedAt = DateTime.UtcNow;
-
+            var now = DateTime.UtcNow;
+            job.CreatedAt = now;
+            job.LastUpdateAt = now;
+            
             var newItem = await db.Jobs.AddAsync(job);
             await db.SaveChangesAsync();
             logger.LogTrace("Added new job with id: {jobId}- {jobTag}", newItem.Entity.Id,  job.Tag);
@@ -106,8 +108,7 @@ namespace WB.Services.Scheduler.Services.Implementation
         public async Task<bool> HasMostRecentFinishedJobIdWithSameTag(long jobId, TenantInfo tenant)
         {
             var job = await this.GetJobAsync(jobId);
-            
-            if(job.Tenant != tenant.Id.Id) 
+            if(job == null || job.Tenant != tenant.Id.Id) 
                 throw new ArgumentException("Cannot found job id: " + jobId, nameof(jobId));
 
             bool hasMoreRecentJob = await db.Jobs
@@ -117,7 +118,7 @@ namespace WB.Services.Scheduler.Services.Implementation
             return hasMoreRecentJob;
         }
 
-        public ValueTask<JobItem> GetJobAsync(long id)
+        public ValueTask<JobItem?> GetJobAsync(long id)
         {
             return db.Jobs.FindAsync(id);
         }
@@ -127,7 +128,7 @@ namespace WB.Services.Scheduler.Services.Implementation
             return db.Jobs.Where(j => ids.Contains(j.Id)).ToListAsync();
         }
 
-        public Task<JobItem> GetJobAsync(TenantInfo tenant, string tag)
+        public Task<JobItem?> GetJobAsync(TenantInfo tenant, string tag)
         {
             return db.Jobs
                 .Where(j => j.Tenant == tenant.Id.Id && j.Tag == tag)

@@ -115,9 +115,9 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
         public string[] GetFilesInDirectory(string pathToDirectory, bool searchInSubdirectories = false)
             => Directory.GetFiles(pathToDirectory, "*.*", searchInSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToArray();
 
-        public string[] GetFilesInDirectory(string pathToDirectory, string pattern)
+        public string[] GetFilesInDirectory(string pathToDirectory, string pattern, bool searchInSubdirectories = false)
         {
-            return Directory.GetFiles(pathToDirectory, pattern).ToArray();
+            return Directory.GetFiles(pathToDirectory, pattern, searchInSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToArray();
         }
         
         public void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll = false, string[] fileExtentionsFilter = null)

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
+using NetTopologySuite.IO.Streams;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
@@ -19,6 +22,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Services.Maps;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Headquarters.Controllers.Api
@@ -27,22 +31,20 @@ namespace WB.UI.Headquarters.Controllers.Api
     [Route("api/[controller]/[action]")]
     public class MapsApiController : ControllerBase
     {
-        private readonly string[] permittedMapFileExtensions = { ".tpk", ".mmpk", ".tif" };
-
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IMapBrowseViewFactory mapBrowseViewFactory;
         private readonly ILogger logger;
         private readonly IMapStorageService mapStorageService;
         private readonly IExportFactory exportFactory;
         private readonly ICsvReader recordsAccessorFactory;
-        private readonly IArchiveUtils archiveUtils;
+        private readonly IUploadMapsService uploadMapsService;
 
         public MapsApiController(
             IMapBrowseViewFactory mapBrowseViewFactory, ILogger logger,
             IMapStorageService mapStorageService, IExportFactory exportFactory,
             IFileSystemAccessor fileSystemAccessor,
             ICsvReader recordsAccessorFactory,
-            IArchiveUtils archiveUtils)
+            IUploadMapsService uploadMapsService)
         {
             this.mapBrowseViewFactory = mapBrowseViewFactory;
             this.logger = logger;
@@ -50,7 +52,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.exportFactory = exportFactory;
             this.fileSystemAccessor = fileSystemAccessor;
             this.recordsAccessorFactory = recordsAccessorFactory;
-            this.archiveUtils = archiveUtils;
+            this.uploadMapsService = uploadMapsService;
         }
 
         [HttpGet]
@@ -126,74 +128,15 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             var response = new JsonMapResponse();
 
-            if (file == null)
+            await using var stream = file.OpenReadStream();
+            var result = await uploadMapsService.Upload(file.FileName, stream);
+            if (result.Errors.Any())
             {
-                response.Errors.Add(Maps.MapsLoadingError);
+                result.Errors.ForEach(error => response.Errors.Add(error));
                 return response;
             }
-
-            if (".zip" != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
-            {
-                response.Errors.Add(Maps.MapLoadingNotZipError);
-                return response;
-            }
-
-            try
-            {
-                var filesInArchive = archiveUtils.GetArchivedFileNamesAndSize(file.OpenReadStream());
-                
-                var validMapFilesCount = filesInArchive.Keys.Count(x =>
-                    permittedMapFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(x)));
-
-                if (validMapFilesCount == 0)
-                {
-                    response.Errors.Add(Maps.MapLoadingNoMapsInArchive);
-                    return response;
-                }
-                if (filesInArchive.Count > validMapFilesCount)
-                {
-                    response.Errors.Add(Maps.MapLoadingUnsupportedFilesInArchive);
-                    return response;
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.Error($"Invalid map archive", ex);
-
-                response.Errors.Add(Maps.MapsLoadingError);
-                return response;
-            }
-
-            var invalidMaps = new List<Tuple<string, Exception>>();
-            try
-            {
-                var extractedFiles = archiveUtils.GetFilesFromArchive(file.OpenReadStream());
-                foreach (var map in extractedFiles)
-                {
-                    try
-                    {
-                        await mapStorageService.SaveOrUpdateMapAsync(map);
-                    }
-
-                    catch (Exception e)
-                    {
-                        logger.Error($"Error on maps import map {map.Name}", e);
-                        invalidMaps.Add(new Tuple<string, Exception>(map.Name, e));
-                    }
-                }
-
-                if (invalidMaps.Count > 0)
-                    response.Errors.AddRange(invalidMaps.Select(x => String.Format(Maps.MapLoadingInvalidFile, x.Item1, x.Item2.Message)).ToList());
-                else
-                    response.IsSuccess = true;
-            }
-            catch (Exception e)
-            {
-                logger.Error("Error on maps import", e);
-                response.Errors.Add(Maps.MapsLoadingError);
-                return response;
-            }
-
+            
+            response.IsSuccess = true;
             return response;
         }
 

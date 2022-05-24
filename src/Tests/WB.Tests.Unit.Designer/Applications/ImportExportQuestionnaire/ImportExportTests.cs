@@ -283,18 +283,21 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             );
             questionnaireDocument.Translations = new List<Translation>()
             {
+                new Translation() { Id = Guid.NewGuid() },
                 new Translation() { Name = "Translation #1", Id = Guid.NewGuid() },
                 new Translation() { Name = "Translation #2", Id = Guid.NewGuid() },
             };
-            //questionnaireDocument.DefaultTranslation = questionnaireDocument.Translations.First().Id;
+            questionnaireDocument.DefaultLanguageName = "Custom name";
+            questionnaireDocument.DefaultTranslation = questionnaireDocument.Translations.Last().Id;
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
-            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions(mi => mi.Name == nameof(Translation.Id)));
-            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions(mi => mi.Name == nameof(Translation.Id)));
-            errors.Count.Should().Be(2);
-            errors.First().Should().Be("Required properties are missing from object: FileName.");
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
+            errors.Count.Should().Be(3);
+            errors.First().Should().Be("Required properties are missing from object: Name, FileName.");
             errors.Second().Should().Be("Required properties are missing from object: FileName.");
+            errors.Last().Should().Be("Required properties are missing from object: FileName.");
         }
         
         [Test]
@@ -356,6 +359,39 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                     children: new [] { textQuestion }
                 )
             );
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void when_export_identified_text_question_should_be_equals_after_import()
+        {
+            var textQuestion = Create.TextQuestion(
+                questionId: Guid.NewGuid(),
+                text: "Title",
+                enablementCondition: "enablementCondition",
+                mask: "mask",
+                variable: "variable",
+                scope: QuestionScope.Supervisor,
+                preFilled: true,
+                label: "label",
+                instruction: "instruction",
+                validationConditions: new ValidationCondition[] { Create.ValidationCondition() },
+                hideIfDisabled: true
+                );
+            
+            var questionnaireDocument = Create.QuestionnaireDocumentWithCoverPage(Id.g1,
+                children: new IComposite [] { textQuestion }
+            );
+            var cover = (Group)questionnaireDocument.Children[0];
+            cover.VariableName = "cover";
+            cover.ConditionExpression = null!;
+            questionnaireDocument.Add(Create.Chapter(), null);
+
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
             
@@ -685,7 +721,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         }
                    
         [Test]
-        public void when_export_mutioptions_question_should_be_equals_after_import()
+        public void when_export_multioptions_question_should_be_equals_after_import()
         {
             var question = new MultyOptionsQuestion()
             {
@@ -703,6 +739,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 CategoriesId = Guid.NewGuid(),
                 Answers = new List<Answer>()
                 {
+                    new Answer(),
+                    new Answer(),
                     new Answer() { AnswerText = "text1", AnswerValue = "111", },
                     new Answer() { AnswerText = "text2", AnswerValue = "222", ParentValue = "111"},
                 },

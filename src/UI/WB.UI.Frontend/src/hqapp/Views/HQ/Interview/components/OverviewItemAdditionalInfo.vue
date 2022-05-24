@@ -35,7 +35,8 @@
                         :text="comment.text"
                         :isOwnComment="comment.isOwnComment"
                         :resolved="comment.resolved"
-                        :key="comment.commentTimeUtc" />
+                        :key="comment.commentTimeUtc"
+                        :commentOnPreviousAnswer="comment.commentOnPreviousAnswer" />
                 </template>
                 <div class="comment"
                     v-if="isCommentFormIsVisible">
@@ -122,7 +123,7 @@ export default {
                 return
 
             await this.$store.dispatch('sendNewComment', { identity: this.item.id, comment: com.trim() })
-
+            this.$store.dispatch('loadOverviewData')
             this.$store.dispatch('loadAdditionalInfo', { id: this.item.id })
 
             this.comment = ''
@@ -130,7 +131,6 @@ export default {
                 evnt.target.blur()
             }
 
-            this.item.hasComment = true
             this.isCommentFormIsVisible = false
             this.postingComment = false
         },

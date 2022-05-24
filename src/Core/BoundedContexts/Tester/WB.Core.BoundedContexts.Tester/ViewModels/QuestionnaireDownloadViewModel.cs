@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class QuestionnaireDownloadViewModel : MvxNotifyPropertyChanged
     {
-        private readonly IPrincipal principal;
+        private readonly ITesterPrincipal principal;
         private readonly IDesignerApiService designerApiService;
         private readonly ICommandService commandService;
         private readonly IQuestionnaireImportService questionnaireImportService;
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IQuestionnaireStorage questionnaireRepository;
 
         public QuestionnaireDownloadViewModel(
-            IPrincipal principal,
+            ITesterPrincipal principal,
             IDesignerApiService designerApiService,
             ICommandService commandService,
             IQuestionnaireImportService questionnaireImportService,
@@ -69,12 +69,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireRepository = questionnaireRepository;
         }
 
-        public async Task LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
+        public async Task<QuestionnaireIdentity> LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
             IProgress<string> progress, CancellationToken cancellationToken)
         {
             var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
             if (questionnaireIdentity != null)
             {
+                if (principal.CurrentUserIdentity == null)
+                    principal.UseFakeIdentity();
+                
                 var interviewId = await this.CreateInterview(questionnaireIdentity, progress).ConfigureAwait(false);
                 var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
                 if (questionnaire.GetPrefilledEntities().Count == 0)
@@ -88,6 +91,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         .ConfigureAwait(false);
                 }
             }
+
+            return questionnaireIdentity;
         }
 
         public async Task<bool> ReloadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
@@ -142,8 +147,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
-                var questionnairePackage =
-                    await this.DownloadQuestionnaire(questionnaireId, progress, cancellationToken);
+                var questionnairePackage = await this.DownloadQuestionnaire(questionnaireId, progress, cancellationToken);
 
                 if (questionnairePackage != null)
                 {
@@ -209,7 +213,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             progress.Report(TesterUIResources.ImportQuestionnaire_CreateInterview);
 
             var interviewId = Guid.NewGuid();
-
+            
             await this.commandService.ExecuteAsync(new CreateInterview(
                 interviewId: interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
@@ -268,6 +272,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 if (!isExistsContent)
                 {
                     var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(
+                        questionnaire.Document.Id,
                         attachmentContentId,
                         new Progress<TransferProgress>(downloadProgress
                             => progress.Report(string.Format(

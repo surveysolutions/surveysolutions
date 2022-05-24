@@ -20,7 +20,7 @@
                     </div>
                     <component
                         v-for="entity in entities"
-                        :key="entity.identity"
+                        :key="`${entity.identity}-${entity.entityType}`"
                         :is="entity.entityType"
                         :id="entity.identity"
                         fetchOnMount
@@ -290,7 +290,7 @@ import { Validator } from 'vee-validate'
 import * as toastr from 'toastr'
 import http from '~/webinterview/api/http'
 import {RoleNames} from '~/shared/constants'
-
+import { filter } from 'lodash'
 import '@/assets/css/markup-web-interview.scss'
 
 const validationTranslations = {
@@ -439,7 +439,8 @@ export default {
             }
         },
         entities() {
-            return this.$store.state.takeNew.takeNew.entities
+            var filteredSectionData = filter(this.$store.state.webinterview.entities, d => d.identity != 'NavigationButton')
+            return filteredSectionData
         },
         isLoaded() {
             return this.$store.state.takeNew.takeNew.isLoaded

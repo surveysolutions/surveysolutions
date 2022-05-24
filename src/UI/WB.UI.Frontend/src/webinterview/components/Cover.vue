@@ -49,22 +49,22 @@
             </div>
         </div>
 
-        <template v-for="entity in identifyingEntities">
+        <template v-for="entity in entities">
             <div class="wrapper-info"
                 v-if="entity.isReadonly"
-                :key="entity.id">
+                :key="entity.identity">
                 <div class="container-info"
                     :id="entity.identity">
                     <h5 v-html="entity.title"></h5>
                     <p>
-                        <b v-if="entity.type == 'Gps'">
+                        <b v-if="entity.entityType == 'Gps'">
                             <a :href="getGpsUrl(entity)"
                                 target="_blank">{{entity.answer}}</a>
                             <br/>
                             <img v-bind:src="googleMapPosition(entity.answer)"
                                 draggable="false" />
                         </b>
-                        <b v-else-if="entity.type == 'DateTime'"
+                        <b v-else-if="entity.entityType == 'DateTime'"
                             v-dateTimeFormatting
                             v-html="entity.answer">
                         </b>
@@ -73,15 +73,10 @@
                 </div>
             </div>
             <component v-else
-                :key="entity.identity"
-                v-bind:is="entity.type"
-                v-bind:id="entity.identity"
-                fetchOnMount></component>
+                :key="`${entity.identity}-${entity.entityType}`"
+                :is="entity.entityType"
+                :id="entity.identity"></component>
         </template>
-
-        <NavigationButton id="NavigationButton"
-            :target="firstSectionId"
-            fetchOnMount></NavigationButton>
     </div>
 </template>
 
@@ -123,14 +118,11 @@ export default {
                 ? this.$t('WebInterviewUI.CoverFirstComments', { count: this.$store.state.webinterview.coverInfo.entitiesWithComments.length})
                 : this.$t('WebInterviewUI.CoverComments')
         },
-        identifyingEntities() {
-            return this.$store.state.webinterview.coverInfo.identifyingEntities
+        entities() {
+            return this.$store.state.webinterview.entities
         },
         commentedQuestions() {
             return this.$store.state.webinterview.coverInfo.entitiesWithComments || []
-        },
-        firstSectionId() {
-            return this.$store.state.webinterview.firstSectionId
         },
         supervisorComment() {
             return this.$store.state.webinterview.coverInfo.supervisorRejectComment
@@ -177,6 +169,7 @@ export default {
         fetch() {
             this.$store.dispatch('fetchCoverInfo')
             this.$store.dispatch('fetchBreadcrumbs')
+            this.$store.dispatch('fetchSectionEntities')
         },
         getGpsUrl(question) {
             return `http://maps.google.com/maps?q=${question.answer}`

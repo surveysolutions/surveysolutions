@@ -315,11 +315,11 @@ namespace WB.Tests.Unit.Designer
 
         public static LookupTableService LookupTableService(
             IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage = null,
-            IPlainKeyValueStorage<QuestionnaireDocument> documentStorage = null)
+            IDesignerQuestionnaireStorage documentStorage = null)
         {
             return new LookupTableService(
                 lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
-                documentStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>());
+                documentStorage ?? Mock.Of<IDesignerQuestionnaireStorage>());
         }
 
         public static Macro Macro(string name, string content = null, string description = null)
@@ -817,7 +817,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(
-            Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null)
+            Guid? id = null, string title = "qqq", IEnumerable<IComposite> children = null, Guid? userId = null)
         {
             return QuestionnaireDocument("questionnaire", id, title, children, userId);
         }
@@ -862,11 +862,13 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? questionnaireId = null, Guid? chapterId = null, Attachment[] attachments = null, 
             Translation[] translations = null, IEnumerable<Macro> macros = null, params IComposite[] children)
         {
+            var publicKey = questionnaireId ?? Guid.NewGuid();
             var result = new QuestionnaireDocument
             {
                 Title = "Q",
                 VariableName = "Q",
-                PublicKey = questionnaireId ?? Guid.NewGuid(),
+                Id = publicKey.FormatGuid(),
+                PublicKey = publicKey,
                 Children = new IComposite[]
                 {
                     new Group("Chapter")
@@ -1810,7 +1812,7 @@ namespace WB.Tests.Unit.Designer
         };
 
         public static CategoriesInstance CategoriesInstance(Guid questionnaireId, Guid categoriesId, int value,
-            int sortIndex = 0, string text = null) =>
+            int sortIndex = 0, string text = "") =>
             new CategoriesInstance
             {
                 QuestionnaireId = questionnaireId,

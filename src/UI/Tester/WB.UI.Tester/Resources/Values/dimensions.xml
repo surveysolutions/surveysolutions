@@ -31,5 +31,10 @@
   <dimen name="Dashboard_QuestionnairesList_EmptyText_margin_right">46dp</dimen>
   <dimen name="Dashboard_QuestionnairesListItem_Marker_Width">14dp</dimen>
   <dimen name="Dashboard_QuestionnairesListItem_Title_margin_left">14dp</dimen>
-
+  
+  
+  <dimen name="AnonymousQuestionnaires_Open_margin_top">20dp</dimen>
+  <dimen name="AnonymousQuestionnaires_Open_margin_bottom">18dp</dimen>
+  <dimen name="AnonymousQuestionnaires_Text_Url_margin">3dp</dimen>
+  <dimen name="AnonymousQuestionnaires_Text_Button_margin">3dp</dimen>
 </resources>

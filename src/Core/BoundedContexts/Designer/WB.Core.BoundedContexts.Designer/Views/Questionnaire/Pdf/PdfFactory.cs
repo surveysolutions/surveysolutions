@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -21,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public interface IPdfFactory
     {
-        PdfQuestionnaireModel? Load(QuestionnaireRevision questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation);
+        PdfQuestionnaireModel? Load(QuestionnaireRevision questionnaireId, Guid? requestedByUserId, string? requestedByUserName, Guid? translation, bool useDefaultTranslation);
         string? LoadQuestionnaireTitle(Guid questionnaireId);
     }
 
@@ -50,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
-        public PdfQuestionnaireModel? Load(QuestionnaireRevision questionnaireRevision, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
+        public PdfQuestionnaireModel? Load(QuestionnaireRevision questionnaireRevision, Guid? requestedByUserId, string? requestedByUserName, Guid? translation, bool useDefaultTranslation)
         {
             var questionnaire = this.questionnaireViewFactory.Load(questionnaireRevision)?.Source;
             
@@ -58,7 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             {
                 return null;
             }
-
+            
             ITranslation? translationData = null;
 
             if (translation.HasValue)
@@ -76,25 +77,50 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
             }
 
-            var questionnaireId = questionnaireRevision.QuestionnaireId.FormatGuid();
-            var listItem = this.dbContext.Questionnaires
-                .Where(x => x.QuestionnaireId == questionnaireId)
-                .Include(x => x.SharedPersons)
-                .First();
-            var sharedPersons =  listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First());
+            PdfQuestionnaireModel.ModificationStatisticsByUser? lastModified = new();
+            PdfQuestionnaireModel.ModificationStatisticsByUser statisticsByUser = new();
+            IEnumerable<PdfQuestionnaireModel.ModificationStatisticsByUser> statisticsByUsers = Enumerable.Empty<PdfQuestionnaireModel.ModificationStatisticsByUser>();
+                
+            if (requestedByUserId.HasValue && !questionnaireRevision.OriginalQuestionnaireId.HasValue)
+            {
+                var questionnaireId = questionnaireRevision.QuestionnaireId.FormatGuid();
+                var listItem = this.dbContext.Questionnaires
+                    .Where(x => x.QuestionnaireId == questionnaireId)
+                    .Include(x => x.SharedPersons)
+                    .First();
+                var sharedPersons = listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First());
+                
+                var modificationStatisticsByUsers = this.dbContext.QuestionnaireChangeRecords
+                    .Where(x => x.QuestionnaireId == questionnaireId)
+                    .GroupBy(x => new { x.UserId, x.UserName })
+                    .Select(grouping => new PdfQuestionnaireModel.ModificationStatisticsByUser
+                    {
+                        UserId = grouping.Key.UserId,
+                        Date = grouping.Max(x => x.Timestamp),
+                        Name = grouping.Key.UserName,
+                    }).ToList();
 
-            var modificationStatisticsByUsers = this.dbContext.QuestionnaireChangeRecords
-                .Where(x => x.QuestionnaireId == questionnaireId)
-                .GroupBy(x => new { x.UserId, x.UserName })
-                .Select(grouping => new PdfQuestionnaireModel.ModificationStatisticsByUser
+                statisticsByUser = new PdfQuestionnaireModel.ModificationStatisticsByUser
                 {
-                    UserId = grouping.Key.UserId,
-                    Date = grouping.Max(x => x.Timestamp),
-                    Name = grouping.Key.UserName,
-                }).ToList();
+                    UserId = questionnaire.CreatedBy,
+                    Name = questionnaire.CreatedBy.HasValue
+                        ? this.dbContext.Users.Find(questionnaire.CreatedBy.Value)?.UserName
+                        : string.Empty,
+                    Date = questionnaire.CreationDate
+                };
+                
+                lastModified = modificationStatisticsByUsers.MaxBy(x => x.Date);
+                statisticsByUsers = sharedPersons.Select(person => new PdfQuestionnaireModel.ModificationStatisticsByUser
+                {
+                    UserId = person.UserId,
+                    Name = this.dbContext.Users.Find(person.UserId)?.UserName,
+                    Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.UserId)?.Date
+                });
 
-            var allItems = questionnaire.Children.SelectMany(x => x.TreeToEnumerable(g => g.Children)).ToList();
-
+                if (questionnaire.CreatedBy == requestedByUserId)
+                    statisticsByUsers = statisticsByUsers.Where(sharedPerson => sharedPerson.Name != requestedByUserName);
+            }
+            
             var modificationStatisticsByUser = new PdfQuestionnaireModel.ModificationStatisticsByUser
             {
                 UserId = requestedByUserId,
@@ -102,24 +128,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 Date = DateTime.UtcNow
             };
 
-            var statisticsByUser = new PdfQuestionnaireModel.ModificationStatisticsByUser
-            {
-                UserId = questionnaire.CreatedBy ?? Guid.Empty,
-                Name = questionnaire.CreatedBy.HasValue
-                    ? this.dbContext.Users.Find(questionnaire.CreatedBy.Value)?.UserName
-                    : string.Empty,
-                Date = questionnaire.CreationDate
-            };
-            var lastModified = modificationStatisticsByUsers.OrderByDescending(x => x.Date).FirstOrDefault();
-            var statisticsByUsers = sharedPersons.Select(person => new PdfQuestionnaireModel.ModificationStatisticsByUser
-            {
-                UserId = person.UserId,
-                Name = this.dbContext.Users.Find(person.UserId)?.UserName,
-                Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.UserId)?.Date
-            });
-
-            if (questionnaire.CreatedBy == requestedByUserId)
-                statisticsByUsers = statisticsByUsers.Where(sharedPerson => sharedPerson.Name != requestedByUserName);
+            var allItems = questionnaire.Children.SelectMany(x => x.TreeToEnumerable(g => g.Children)).ToList();
 
             var pdfView = new PdfQuestionnaireModel(questionnaire, pdfSettings, allItems,
                 created:statisticsByUser, requested: modificationStatisticsByUser, lastModified: lastModified
@@ -164,7 +173,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public string? LoadQuestionnaireTitle(Guid questionnaireId)
         {
-            return this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid()).Title;
+            return this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid())?.Title;
         }
 
         public IEnumerable<T> Find<T>(IEnumerable<IComposite> allItems, Func<T, bool> condition) where T : IComposite

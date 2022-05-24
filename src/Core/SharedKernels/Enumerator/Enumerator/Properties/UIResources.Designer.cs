@@ -151,6 +151,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide boundaries.
+        /// </summary>
+        public static string AreaMap_HideBoundaries {
+            get {
+                return ResourceManager.GetString("AreaMap_HideBoundaries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Length: {0:0.00} m.
         /// </summary>
         public static string AreaMap_LengthFormat {
@@ -255,6 +264,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string AreaMap_Save {
             get {
                 return ResourceManager.GetString("AreaMap_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select boundaries file.
+        /// </summary>
+        public static string AreaMap_SelectShapefile {
+            get {
+                return ResourceManager.GetString("AreaMap_SelectShapefile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show boundaries.
+        /// </summary>
+        public static string AreaMap_ShowBoundaries {
+            get {
+                return ResourceManager.GetString("AreaMap_ShowBoundaries", resourceCulture);
             }
         }
         

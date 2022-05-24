@@ -72,13 +72,17 @@ namespace WB.UI.Headquarters.Controllers
 
         public IActionResult Details(string id)
         {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+            
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
             if (questionnaire == null)
                 return NotFound(string.Format(HQ.QuestionnaireNotFoundFormat, questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
             
             var browseItem = browseViewFactory.GetById(questionnaireIdentity);
 
+            ViewBag.SpecificPageCaption = $"{questionnaire.Title} (ver. {questionnaire.Version})";
+            
             var model = new QuestionnaireDetailsModel
             {
                 QuestionnaireId = questionnaire.QuestionnaireId,
@@ -251,14 +255,16 @@ namespace WB.UI.Headquarters.Controllers
                 ? this.pdfStorage.GetById($"{translation:N}_{id}")
                 : this.pdfStorage.GetById(questionnaireIdentity.ToString());
 
-            var fileName = Path.ChangeExtension(questionnaire.VariableName, ".pdf");
+            string fileType = (pdf.Content.Length > 0 && pdf.Content[0] != 37) ? "html" : "pdf";
+            
+            var fileName = Path.ChangeExtension(questionnaire.VariableName, $".{fileType}");
             if (translation != null)
             {
                 var translationName = questionnaire.Translations.First(x => x.Id == translation).Name;
                 fileName = translationName + " " + fileName;
             }
 
-            return File(pdf.Content, "application/pdf", fileName);
+            return File(pdf.Content, $"application/{fileType}", fileName);
         }
 
         private void FillStats(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDetailsModel model)

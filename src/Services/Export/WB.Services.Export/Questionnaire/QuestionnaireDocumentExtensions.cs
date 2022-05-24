@@ -18,7 +18,7 @@ namespace WB.Services.Export.Questionnaire
                 .Where(child => child is T)
                 .Cast<T>();
 
-        public static T FirstOrDefault<T>(this QuestionnaireDocument questionnaire, Func<T, bool> condition) where T : class
+        public static T? FirstOrDefault<T>(this QuestionnaireDocument questionnaire, Func<T, bool> condition) where T : class
             => questionnaire.Find(condition).FirstOrDefault();
     }
 }

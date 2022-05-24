@@ -82,5 +82,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
 
         [Delete("/api/v1/deleteTenant")]
         Task DeleteTenant();
+
+        [Delete("/api/v1/deleteQuestionnaire")]
+        Task DeleteQuestionnaire(string questionnaire);
     }
 }

@@ -69,8 +69,8 @@ namespace WB.UI.Supervisor
                 {typeof(PhotoViewViewModel), typeof(PhotoViewActivity) },
                 {typeof(SearchViewModel), typeof(SupervisorSearchActivity)}
 #if !EXCLUDEEXTENSIONS
-                , {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
-                ,{typeof (Shared.Extensions.CustomServices.MapDashboard.MapDashboardViewModel), typeof (Shared.Extensions.CustomServices.MapDashboard.MapDashboardActivity)}
+                , {typeof (Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (Shared.Extensions.Activities.GeographyEditorActivity)}
+                ,{typeof (Shared.Extensions.ViewModels.MapDashboardViewModel), typeof (Shared.Extensions.Activities.MapDashboardActivity)}
 #endif
             };
 

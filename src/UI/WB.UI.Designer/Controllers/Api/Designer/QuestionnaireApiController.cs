@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -20,7 +22,7 @@ using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
-    [Authorize]
+    [AuthorizeOrAnonymousQuestionnaire]
     [QuestionnairePermissions]
     [ResponseCache(NoStore = true)]
     [Route("api/questionnaire")]
@@ -34,7 +36,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private readonly IWebTesterService webTesterService;
-        private const int MaxCountOfOptionForFileredCombobox = 200;
+        private readonly DesignerDbContext dbContext;
+        private const int MaxCountOfOptionForFilteredCombobox = 200;
         public const int MaxVerificationErrors = 100;
 
         public QuestionnaireApiController(IChapterInfoViewFactory chapterInfoViewFactory,
@@ -44,7 +47,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IVerificationErrorsMapper verificationErrorsMapper,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IOptions<WebTesterSettings> webTesterSettings,
-            IWebTesterService webTesterService)
+            IWebTesterService webTesterService,
+            DesignerDbContext dbContext)
         {
             this.chapterInfoViewFactory = chapterInfoViewFactory;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
@@ -54,6 +58,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.webTesterSettings = webTesterSettings;
             this.webTesterService = webTesterService;
+            this.dbContext = dbContext;
         }
 
         public IActionResult Details(string id)
@@ -65,7 +70,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("get/{id}")]
         public IActionResult Get(QuestionnaireRevision id)
         {
-            var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id, User.GetId());
+            var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id, User.GetIdOrNull());
 
             if (questionnaireInfoView == null)
             {
@@ -126,8 +131,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if ((editQuestionView.IsFilteredCombobox == true || !string.IsNullOrWhiteSpace(editQuestionView.CascadeFromQuestionId))
                 && editQuestionView.Options != null)
             {
-                editQuestionView.WereOptionsTruncated = editQuestionView.Options.Length > MaxCountOfOptionForFileredCombobox;
-                editQuestionView.Options = editQuestionView.Options.Take(MaxCountOfOptionForFileredCombobox).ToArray();   
+                editQuestionView.WereOptionsTruncated = editQuestionView.Options.Length > MaxCountOfOptionForFilteredCombobox;
+                editQuestionView.Options = editQuestionView.Options.Take(MaxCountOfOptionForFilteredCombobox).ToArray();   
             }
 
             return Ok(editQuestionView);

@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
@@ -310,8 +311,8 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 Mock.Of<IAggregateRootCache>(),
                 new AssignmentsToDeleteFactory(unitOfWork, Mock.Of<ILogger<AssignmentsToDeleteFactory>>()),
                 new ReusableCategoriesStorage(new PostgresPlainStorageRepository<ReusableCategoricalOptions>(unitOfWork)),
-                questionnaireBackupStorage
-            );
+                questionnaireBackupStorage,
+                Mock.Of<IExportServiceApi>());
             return service;
         }
 

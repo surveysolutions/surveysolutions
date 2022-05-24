@@ -123,7 +123,7 @@ namespace WB.UI.Tester
                 {typeof (CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
 #if !EXCLUDEEXTENSIONS
-                { typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
+                { typeof (WB.UI.Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (WB.UI.Shared.Extensions.Activities.GeographyEditorActivity)}
 #endif
             };
 
@@ -136,6 +136,7 @@ namespace WB.UI.Tester
             base.FillValueConverters(registry);
 
             registry.AddOrOverwrite("QuestionnaireTypeToBackground", new QuestionnaireTypeToBackgroundConverter());
+            registry.AddOrOverwrite("Localization", new TesterLocalizationValueConverter());
         }
 
         public override IEnumerable<Assembly> GetViewModelAssemblies()
@@ -145,7 +146,7 @@ namespace WB.UI.Tester
                 typeof(TesterBoundedContextModule).Assembly,
 
 #if !EXCLUDEEXTENSIONS
-                typeof(WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
+                typeof(WB.UI.Shared.Extensions.ViewModels.GeographyEditorViewModel).Assembly
 #endif
             });
         }

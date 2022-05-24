@@ -46,7 +46,7 @@ namespace WB.Services.Export.Questionnaire
                         continue;
                     }
 
-                    InterviewReference reference;
+                    InterviewReference? reference;
 
                     switch (@event.Payload)
                     {
@@ -62,8 +62,11 @@ namespace WB.Services.Export.Questionnaire
                         case InterviewDeleted _:
                         case InterviewHardDeleted _:
                             reference = await this.dbContext.InterviewReferences.FindAsync(@event.EventSourceId);
-                            reference.DeletedAtUtc = @event.EventTimeStamp;
-                            questionnaireStorage.InvalidateQuestionnaire(new QuestionnaireId(reference.QuestionnaireId));
+                            if (reference != null)
+                            {
+                                reference.DeletedAtUtc = @event.EventTimeStamp;
+                                questionnaireStorage.InvalidateQuestionnaire(new QuestionnaireId(reference.QuestionnaireId));
+                            }
                             break;
                         default:
                             reference = await this.dbContext.InterviewReferences.FindAsync(@event.EventSourceId);
@@ -113,7 +116,7 @@ namespace WB.Services.Export.Questionnaire
 
         private async Task<InterviewReference> AddInterviewReferenceAsync(Event @event, string questionnaireIdentity, CancellationToken cancellationToken)
         {
-            InterviewReference reference = await this.dbContext.InterviewReferences.FindAsync(new object[] { @event.EventSourceId}, cancellationToken);
+            InterviewReference? reference = await this.dbContext.InterviewReferences.FindAsync(new object[] { @event.EventSourceId}, cancellationToken);
             if (reference == null)
             {
                 reference = new InterviewReference { QuestionnaireId = questionnaireIdentity, InterviewId = @event.EventSourceId };

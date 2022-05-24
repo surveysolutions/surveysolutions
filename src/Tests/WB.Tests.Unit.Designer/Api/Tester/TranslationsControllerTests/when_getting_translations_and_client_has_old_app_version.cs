@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Tests.Abc;
 
@@ -14,7 +15,7 @@ namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
         {
             var controller = CreateTranslationsController();
             var statusCodeResult = 
-                await controller.Get(Id.g1, version: ApiVersion.CurrentTesterProtocolVersion - 1);
+                await controller.Get(new QuestionnaireRevision(Id.g1), version: ApiVersion.CurrentTesterProtocolVersion - 1);
 
             Assert.That(statusCodeResult,
                 Has.Property(nameof(StatusCodeResult.StatusCode))

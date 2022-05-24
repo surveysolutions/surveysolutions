@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 
@@ -20,9 +21,11 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
                 .WithMany(x => x.SharedPersons)
                 .HasForeignKey(x => x.QuestionnaireId);
             
-            builder.Metadata
-                .FindNavigation(nameof(SharedPerson.Questionnaire))
-                .SetPropertyAccessMode(PropertyAccessMode.Field);
+            var meta= builder.Metadata
+                .FindNavigation(nameof(SharedPerson.Questionnaire));
+
+            if (meta == null) throw new InvalidOperationException("Invalid meta state.");
+            meta.SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

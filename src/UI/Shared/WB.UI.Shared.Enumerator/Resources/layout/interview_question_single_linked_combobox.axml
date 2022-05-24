@@ -15,7 +15,7 @@
                      PartialText FilterText;  
                      OnPartialTextChanged FilterCommand;
                      OnItemSelected SaveAnswerBySelectedOptionCommand;
-                     OnFocusOut ShowErrorIfNoAnswerCommand;
+                     OnFocusChange OnFocusChangeCommand;
                      Watermark Localization('FilteredComboboxQuestion_Hint');
                      Tag Format('Answer_{0}', Identity)" />
       <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible IsStringNotEmpty(FilterText)"

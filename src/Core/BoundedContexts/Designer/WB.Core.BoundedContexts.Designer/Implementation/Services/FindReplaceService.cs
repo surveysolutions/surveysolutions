@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if (target.IsNullOrEmpty()) return false;
 
-            return searchRegex.IsMatch(target);
+            return searchRegex.IsMatch(target!);
         }
 
         private static string ReplaceUsingSearchTerm(string? target, Regex searchFor, string? replaceWith)

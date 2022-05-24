@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
@@ -55,9 +56,9 @@ namespace WB.UI.Designer.Code.ImportExport
             this.questionnaireSerializer = questionnaireSerializer;
         }
         
-        public Stream? GetBackupQuestionnaire(Guid id, out string questionnaireFileName)
+        public Stream? GetBackupQuestionnaire(QuestionnaireRevision id, out string questionnaireFileName)
         {
-            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            var questionnaireView = questionnaireViewFactory.Load(id);
             if (questionnaireView == null)
             {
                 questionnaireFileName = String.Empty;
@@ -68,8 +69,9 @@ namespace WB.UI.Designer.Code.ImportExport
             
             var questionnaireDocument = questionnaireView.Source;
             
-            var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.QuestionnaireChangeRecords
-                .Where(y => y.QuestionnaireId == id.FormatGuid())
+            var maxSequenceByQuestionnaire = id.Version ?? 
+                this.questionnaireChangeItemStorage.QuestionnaireChangeRecords
+                .Where(y => y.QuestionnaireId == id.QuestionnaireId.FormatGuid())
                 .Select(y => (int?)y.Sequence)
                 .Max();
             
@@ -84,13 +86,11 @@ namespace WB.UI.Designer.Code.ImportExport
                 try
                 {
                     var attachmentReference = questionnaireDocument.Attachments[attachmentIndex];
-
                     var attachmentContent = this.attachmentService.GetContent(attachmentReference.ContentId);
+                    var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentReference.AttachmentId);
 
-                    if (attachmentContent?.Content != null)
+                    if (attachmentContent?.Content != null && attachmentMeta != null)
                     {
-                        var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentReference.AttachmentId);
-
                         //var attachmentFileName = attachmentMeta?.FileName ?? "unknown-file-name";
                         var attachmentFileName = attachmentMeta.AttachmentId.FormatGuid() + Path.GetExtension(attachmentMeta.FileName);
                         zipStream.PutFileEntry($"Attachments/{attachmentFileName}", attachmentContent.Content);
@@ -128,7 +128,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 var json = this.translationsService.GetTranslationsJson(questionnaireDocument, translation.Id);
                 var fileName = translation.Id.FormatGuid() + ".json";
                 zipStream.PutTextFileEntry($"Translations/{fileName}", json);
-                questionnaire.Translations.Single(t => t.Name == translation.Name).FileName = fileName;
+                questionnaire.Translations.Items.Single(t => t.Name == translation.Name).FileName = fileName;
             }
 
             foreach (var categories in questionnaireDocument.Categories)

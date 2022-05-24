@@ -16,7 +16,7 @@ using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
-    [Authorize]
+    [AuthorizeOrAnonymousQuestionnaire]
     [QuestionnairePermissions]
     [ResponseCache(NoStore = true)]
     [Route("questionnaire/{id}")]
@@ -43,6 +43,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("commentThreads")]
         public List<CommentThread> commentThreads(QuestionnaireRevision id)
         {
+            if (!User.Identity?.IsAuthenticated ?? true)
+                return new List<CommentThread>();
+            
             bool hasAccess = User.IsAdmin() || 
                              this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id.QuestionnaireId, this.User.GetId());
 
@@ -53,14 +56,18 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("entity/{itemId:Guid}/comments")]
         public async Task<List<CommentView>> Get(QuestionnaireRevision id, Guid itemId)
         {
+            if (!User.Identity?.IsAuthenticated ?? true)
+                return new List<CommentView>();
+
             bool hasAccess = User.IsAdmin() 
-                || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id.QuestionnaireId, User.GetId());
+                             || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id.QuestionnaireId, User.GetId());
 
             return hasAccess 
                 ? await this.commentsService.LoadCommentsForEntity(id.QuestionnaireId, itemId) 
                 : new List<CommentView>();
         }
 
+        [Authorize]
         [HttpPost]
         [Route("entity/addComment")]
         [ValidateAntiForgeryToken]
@@ -70,7 +77,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 return Json(new
                 {
-                    Error = string.Join(", ", ModelState.SelectMany(x => x.Value.Errors).Select(x => x.ErrorMessage))
+                    Error = string.Join(", ", 
+                        ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))
                 });
             }
             bool hasAccess = User.IsAdmin() 
@@ -99,6 +107,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             return Ok();
         }
 
+        [Authorize]
         [HttpPatch]
         [Route("comment/resolve/{commentId:Guid}")]
         [ValidateAntiForgeryToken]
@@ -110,6 +119,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             return Ok();
         }
 
+        [Authorize]
         [HttpDelete]
         [ValidateAntiForgeryToken]
         [Route("comment/{commentId:Guid}")]

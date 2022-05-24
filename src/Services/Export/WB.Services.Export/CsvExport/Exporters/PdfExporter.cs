@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -36,7 +37,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             var targetFolder = Path.Combine(basePath, "Questionnaire");
             Directory.CreateDirectory(targetFolder);
             
-            targetFolder = Path.Combine(targetFolder, "Pdf");
+            targetFolder = Path.Combine(targetFolder, "Preview");
             IHeadquartersApi hqApi = tenantApi.For(tenant);
 
             this.logger.LogDebug("Loading main pdf for {questionnaire}", questionnaire.QuestionnaireId);
@@ -46,6 +47,10 @@ namespace WB.Services.Export.CsvExport.Exporters
             try
             {
                 var mainPdf = await hqApi.GetPdfAsync(questionnaire.QuestionnaireId);
+
+                if (mainPdf.Headers.ContentType?.MediaType != null &&  mainPdf.Headers.ContentType.MediaType.Contains("html"))
+                    targetFileName = Path.ChangeExtension(targetFileName, ".html");
+                 
                 if (cancellationToken.IsCancellationRequested) return;
                 
                 var defaultTranslationName = string.IsNullOrEmpty(questionnaire.DefaultLanguageName)
@@ -80,6 +85,10 @@ namespace WB.Services.Export.CsvExport.Exporters
                     this.logger.LogDebug("Loading pdf for {questionnaire} {translationId}", questionnaire.QuestionnaireId, translation.Id);
                     var translatedPdf = await hqApi.GetPdfAsync(questionnaire.QuestionnaireId, translation.Id);
                     var fileName = this.fileSystemAccessor.MakeValidFileName(translation.Name.Unidecode() + " " + targetFileName);
+                    
+                    if (translatedPdf.Headers.ContentType?.MediaType != null && translatedPdf.Headers.ContentType.MediaType.Contains("html"))
+                        targetFileName = Path.ChangeExtension(targetFileName, ".html");
+                    
                     var translatedFilePath = Path.Combine(targetFolder, fileName);
 
                     for (int i = 1; fileSystemAccessor.IsFileExists(translatedFilePath); i++)

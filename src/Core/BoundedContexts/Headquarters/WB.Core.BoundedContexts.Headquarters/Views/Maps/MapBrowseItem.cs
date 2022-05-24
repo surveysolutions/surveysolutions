@@ -8,12 +8,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
         public MapBrowseItem()
         {
             this.Users = new HashSet<UserMap>();
+            this.DuplicateLabels = new List<DuplicateMapLabel>();
         }
         public virtual string Id { get; set; }
 
         public virtual long Size { get; set; }
         public virtual string FileName { get; set; }
         public virtual DateTime? ImportDate { get; set; }
+        public virtual Guid? UploadedBy { get; set; }
         public virtual double XMaxVal { set; get; }
         public virtual double YMaxVal { set; get; }
         public virtual double XMinVal { set; get; }
@@ -23,5 +25,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
         public virtual double MaxScale { set; get; }
         public virtual double MinScale { set; get; }
         public virtual ICollection<UserMap> Users { get; set; }
+        public virtual string ShapeType { get; set; }
+        public virtual int? ShapesCount { get; set; }
+        public virtual string GeoJson { get; set; }
+        public virtual bool HasGeoJson => !string.IsNullOrEmpty(GeoJson);
+        public virtual bool IsPreviewGeoJson { get; set; }
+        public virtual ICollection<DuplicateMapLabel> DuplicateLabels { get; set; }
     }
 }

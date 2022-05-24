@@ -198,6 +198,9 @@
   <data name="RecordAudio" xml:space="preserve">
     <value>Record audio</value>
   </data>
+  <data name="QuestionnairePreview" xml:space="preserve">
+    <value>Questionnaire preview</value>
+  </data>    
   <data name="UploadAssignments" xml:space="preserve">
     <value>Upload assignments</value>
   </data>

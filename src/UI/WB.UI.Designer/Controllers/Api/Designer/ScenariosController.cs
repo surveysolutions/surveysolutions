@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -57,7 +58,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (!hasUserAccess)
                 return Forbid();
 
-            StoredScenario scenario = await this.dbContext.Scenarios.FindAsync(scenarioId);
+            StoredScenario? scenario = await this.dbContext.Scenarios.FindAsync(scenarioId);
             if (scenario == null)
                 return NotFound(new { Message = "Scenario not found" });
 
@@ -93,9 +94,17 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return Forbid();
 
             var scenario = await dbContext.Scenarios.FindAsync(id);
-            if (scenario == null || scenario.QuestionnaireId != questionnaireId)
+            if (scenario == null)
                 return NotFound();
-
+                    
+            if (scenario.QuestionnaireId != questionnaireId)
+            {
+                var anonymousQuestionnaire = this.dbContext.AnonymousQuestionnaires
+                    .FirstOrDefault(a => a.AnonymousQuestionnaireId == questionnaireId && a.IsActive == true);
+                if (anonymousQuestionnaire == null)
+                    return NotFound();
+            }
+            
             return Ok(scenario.Steps);
         }
     }

@@ -515,7 +515,7 @@
     <value>Может </value>
   </data>
   <data name="SettingsInviteCollaborators" xml:space="preserve">
-    <value>Пригласить участников по e-mail:</value>
+    <value>Приглашайте больше пользователей по логину или зарегестрированному e-mail</value>
   </data>
   <data name="SettingsOwner" xml:space="preserve">
     <value>владелец</value>
@@ -525,6 +525,15 @@
   </data>
   <data name="SettingsPublic" xml:space="preserve">
     <value>Общим</value>
+  </data>
+  <data name="SettingsAnonymous" xml:space="preserve">
+    <value>Анонимным</value>
+  </data>
+  <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
+    <value>Перегенерировать линк</value>
+  </data>
+  <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
+    <value>Ссылка сгенерированна: {{datetime}}</value>
   </data>
   <data name="SettingsQuestionnaireSharing" xml:space="preserve">
     <value>Сделать опросник </value>
@@ -537,6 +546,21 @@
   </data>
   <data name="SettingsVisibleToEveryone" xml:space="preserve">
     <value>видим всем в режиме только чтение</value>
+  </data>
+  <data name="SettingsAccessibleToEveryone" xml:space="preserve">
+    <value>доступен в режиме только чтения по ссылке</value>
+  </data>
+  <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
+    <value>Анонимный доступ разрешен.</value>
+  </data>
+  <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
+    <value>AАнонимный доступ не разрешен.</value>
+  </data>
+  <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
+    <value>Разрешить анонимный доступ.</value>
+  </data>
+  <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
+    <value>Запретить анонимный доступ.</value>
   </data>
   <data name="SettingsVisibleToOwner" xml:space="preserve">
     <value>доступен только для владельца</value>
@@ -1165,8 +1189,41 @@
   <data name="CollaboratorsSettings" xml:space="preserve">
     <value>Совместная работа</value>
   </data>
+  <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
+    <value>данные пользователи имеют доступ к опроснику</value>
+  </data>
+  <data name="AccessSettings" xml:space="preserve">
+    <value>Доступ</value>
+  </data>
   <data name="PublicAccessSettings" xml:space="preserve">
     <value>Публичный доступ</value>
+  </data>
+  <data name="PublicAccessDescriptionSettings" xml:space="preserve">
+    <value>Публичные опросники доступны всем пользователя с аккаунтами в системе в режиме только для чтения.</value>
+  </data>
+  <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
+    <value>Опросник достуен как публичный.</value>
+  </data>
+  <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
+    <value>Опросник не доступен как публичный.</value>
+  </data>
+  <data name="PublicAccessSettingsOn" xml:space="preserve">
+    <value>Дать публичный доступ.</value>
+  </data>
+  <data name="PublicAccessSettingsOff" xml:space="preserve">
+    <value>Запретить публичный доступ.</value>
+  </data>
+  <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+    <value>Доступ по ссылке</value>
+  </data>
+  <data name="AnonymousLink" xml:space="preserve">
+    <value>Анонимная ссылка:</value>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Копировать ссылку</value>
+  </data>
+  <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
+    <value>Пользователи будут иметь возможность открыть опросник по данной ссылке</value>
   </data>
   <data name="QuestionnaireSettings" xml:space="preserve">
     <value>Настройки опросника</value>
@@ -1369,6 +1426,9 @@
   </data>
   <data name="SaveAs" xml:space="preserve">
     <value>Сохранить как</value>
+  </data>
+  <data name="CopyTo" xml:space="preserve">
+    <value>Копировать в</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Просмотр ревизии №{{revision}}</value>

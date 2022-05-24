@@ -135,6 +135,8 @@ namespace WB.UI.Headquarters.Controllers
             if (assignment == null) 
                 return NotFound();
 
+            ViewBag.SpecificPageCaption = assignmentId;
+            
             var calendarEvent = calendarEventService.GetActiveCalendarEventForAssignmentId(assignment.Id);
             
             return View("Details", new

@@ -360,17 +360,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private IReadOnlyCollection<string> availableLanguages;
         public override IReadOnlyCollection<string> AvailableLanguages => this.availableLanguages;
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
+        public IMvxAsyncCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
         });
 
+        public IMvxCommand NavigateToLoginCommand => new MvxAsyncCommand(async () =>
+        {
+            await this.ViewModelNavigationService.NavigateToLoginAsync();
+            this.Dispose();
+        });
+        
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
             this.Dispose();
         });
+        
         public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.ViewModelNavigationService.NavigateToSettings);
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 

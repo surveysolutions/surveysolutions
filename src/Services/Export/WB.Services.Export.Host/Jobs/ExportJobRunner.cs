@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WB.Services.Export.Jobs;
@@ -22,6 +23,11 @@ namespace WB.Services.Export.Host.Jobs
         public Task ExecuteAsync(string arg, JobExecutingContext ctx, CancellationToken token)
         {
             var jobArg = JsonConvert.DeserializeObject<DataExportProcessArgs>(arg);
+            if (jobArg == null)
+            {
+                throw new Exception("Invalid Job state");
+            }
+
             jobArg.ProcessId = ctx.Job.Id;
             jobArg.ShouldDropTenantSchema = ctx.Job.ShouldDropTenantSchema;
             return this.exportJob.ExecuteAsync(jobArg, token);

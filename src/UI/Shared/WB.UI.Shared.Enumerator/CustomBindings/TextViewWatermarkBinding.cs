@@ -5,18 +5,28 @@ using Android.Graphics;
 using Android.Text;
 using Android.Widget;
 using MvvmCross.Binding;
+using MvvmCross.WeakSubscription;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class TextViewWatermarkBinding : BaseBinding<TextView, string>
     {
-        private bool subscribed;
-
+        private IDisposable subscription;
         public TextViewWatermarkBinding(TextView target)
             : base(target)
         {
-            this.Target.TextChanged += this.TextChangedHandler;
-            this.subscribed = true;
+        }
+        
+        public override void SubscribeToEvents()
+        {
+            base.SubscribeToEvents();
+
+            if (this.Target == null)
+                return;
+
+            subscription = this.Target.WeakSubscribe<TextView, TextChangedEventArgs>(
+                nameof(this.Target.TextChanged),
+                TextChangedHandler);
         }
 
         protected override void SetValueToView(TextView view, string value)
@@ -52,17 +62,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            if (IsDisposed)
-                return;
-
             if (isDisposing)
             {
-                var editText = this.Target;
-                if (editText != null && this.subscribed && editText.Handle != IntPtr.Zero)
-                {
-                    editText.TextChanged -= this.TextChangedHandler;
-                    this.subscribed = false;
-                }
+                subscription?.Dispose();
+                subscription = null;
             }
 
             base.Dispose(isDisposing);

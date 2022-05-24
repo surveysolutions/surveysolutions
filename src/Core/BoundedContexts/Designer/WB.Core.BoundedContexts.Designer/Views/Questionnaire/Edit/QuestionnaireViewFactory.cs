@@ -17,11 +17,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         QuestionnaireView? Load(QuestionnaireViewInputModel input);
         QuestionnaireView? Load(QuestionnaireRevision revision);
 
-        bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId);
+        bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid? userId);
 
         bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId);
         bool HasUserAccessToEditComments(QuestionnaireChangeRecord changeRecord, QuestionnaireDocument questionnaire, Guid userId);
         bool HasUserAccessToEditComments(Guid revisionId, Guid userId);
+        bool IsAnonymousQuestionnaire(Guid questionnaireId, out Guid? originQuestionnaireId);
     }
 
     public class QuestionnaireViewFactory : IQuestionnaireViewFactory
@@ -51,10 +52,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return doc == null ? null : new QuestionnaireView(doc, sharedPersons);
         }
 
-        public bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId)
+        public bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid? userId)
         {
             var questionnaire = this.questionnaireStorage.Get(questionnaireId);
             if (questionnaire == null || questionnaire.IsDeleted)
+            {
+                if (IsAnonymousQuestionnaire(questionnaireId, out var originQuestionnaireId))
+                {
+                    return true;
+                }
+                
+                return false;
+            }
+
+            if (!userId.HasValue)
                 return false;
 
             if (questionnaire.CreatedBy == userId)
@@ -88,11 +99,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var listViewItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons)
                 .FirstOrDefault(x => x.QuestionnaireId == questionnaireId.FormatGuid());
 
+            if (listViewItem == null) return false;
+            
             var sharedPersons = listViewItem.SharedPersons;
-            if (sharedPersons.Any(x => x.UserId == userId && x.ShareType == ShareType.Edit))
-                return true;
-
-            return false;
+            return sharedPersons.Any(x => x.UserId == userId && x.ShareType == ShareType.Edit);
         }
 
         private List<SharedPersonView> GetSharedPersons(Guid questionnaireId)
@@ -138,6 +148,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var questionnaire = this.questionnaireStorage.Get(Guid.Parse(changeRecord.QuestionnaireId));
             
             return questionnaire != null && HasUserAccessToEditComments(changeRecord, questionnaire, userId);
+        }
+
+        public bool IsAnonymousQuestionnaire(Guid questionnaireId, out Guid? originQuestionnaireId)
+        {
+            var questionnaire = this.dbContext.AnonymousQuestionnaires
+                .FirstOrDefault(x => x.AnonymousQuestionnaireId == questionnaireId && x.IsActive == true);
+            originQuestionnaireId = questionnaire?.QuestionnaireId;
+            return questionnaire != null;
         }
 
         public bool HasUserAccessToEditComments(

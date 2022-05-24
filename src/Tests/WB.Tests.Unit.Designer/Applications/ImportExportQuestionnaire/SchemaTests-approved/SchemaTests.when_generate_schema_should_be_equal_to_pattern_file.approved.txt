@@ -43,22 +43,13 @@
       }
     },
     "Translations": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Translation"
-      }
+      "$ref": "#/definitions/Translations"
     },
     "Categories": {
       "type": "array",
       "items": {
         "$ref": "#/definitions/Categories"
       }
-    },
-    "DefaultTranslation": {
-      "type": [
-        "null",
-        "string"
-      ]
     },
     "HideIfDisabled": {
       "type": "boolean"
@@ -509,7 +500,10 @@
           "type": "string"
         },
         "Code": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "format": "int32"
         },
         "ParentCode": {
@@ -884,10 +878,42 @@
         }
       }
     },
+    "Translations": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "DefaultTranslation": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "guid"
+        },
+        "OriginalDisplayName": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Translation"
+          }
+        }
+      }
+    },
     "Translation": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "Id": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "guid"
+        },
         "Name": {
           "type": "string"
         },

@@ -22,6 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void InsertEventsFromHqInEventsStream(Guid interviewId, CommittedEventStream events);
         bool IsLastEventInSequence(Guid interviewId, Guid eventId);
         Guid? GetLastEventIdUploadedToHq(Guid interviewId);
+        Guid? GetFirstEventId(Guid interviewId);
         bool HasEventsWithoutHqFlag(Guid interviewId);
     }
 }

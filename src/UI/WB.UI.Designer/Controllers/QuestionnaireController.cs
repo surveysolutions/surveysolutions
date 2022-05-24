@@ -1,13 +1,21 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
+using SkiaSharp;
+using SkiaSharp.QrCode.Image;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -17,20 +25,21 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Code.ImportExport;
+using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Filters;
+using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Controllers
 {
-    [Authorize]
+    [AuthorizeOrAnonymousQuestionnaire]
     [ResponseCache(NoStore = true)]
+    [QuestionnairePermissions]
     public partial class QuestionnaireController : Controller
     {
         public class QuestionnaireCloneModel
@@ -75,9 +84,10 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private readonly ICategoricalOptionsImportService categoricalOptionsImportService;
         private readonly DesignerDbContext dbContext;
-        private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IPublicFoldersStorage publicFoldersStorage;
         private readonly ICategoriesService categoriesService;
+        private readonly IEmailSender emailSender;
+        private readonly IViewRenderService viewRenderService;
+        private readonly UserManager<DesignerIdentityUser> users;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
 
         public QuestionnaireController(
@@ -92,9 +102,10 @@ namespace WB.UI.Designer.Controllers
             ICategoricalOptionsImportService categoricalOptionsImportService,
             ICommandService commandService,
             DesignerDbContext dbContext,
-            IQuestionnaireHelper questionnaireHelper,
-            IPublicFoldersStorage publicFoldersStorage,
-            ICategoriesService categoriesService)
+            ICategoriesService categoriesService,
+            IEmailSender emailSender,
+            IViewRenderService viewRenderService,
+            UserManager<DesignerIdentityUser> users)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -106,9 +117,10 @@ namespace WB.UI.Designer.Controllers
             this.categoricalOptionsImportService = categoricalOptionsImportService;
             this.commandService = commandService;
             this.dbContext = dbContext;
-            this.questionnaireHelper = questionnaireHelper;
-            this.publicFoldersStorage = publicFoldersStorage;
             this.categoriesService = categoriesService;
+            this.emailSender = emailSender;
+            this.viewRenderService = viewRenderService;
+            this.users = users;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
         }
 
@@ -135,21 +147,66 @@ namespace WB.UI.Designer.Controllers
         public IActionResult Details(QuestionnaireRevision? id, Guid? chapterId, string entityType, Guid? entityid)
         {
             if(id == null)
-                return this.RedirectToAction("Index");
+                return this.RedirectToAction("Index", "QuestionnaireList");
+
+            if (ShouldRedirectToOriginalId(id))
+            {
+                return RedirectToAction("Details", new RouteValueDictionary
+                {
+                    { "id", id.OriginalQuestionnaireId.FormatGuid() }, { "chapterId", chapterId?.FormatGuid() }, { "entityType", entityType }, { "entityid", entityid?.FormatGuid() }
+                });
+            }
 
             return (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id.QuestionnaireId))
                 ? this.View("~/questionnaire/index.cshtml")
                 : this.LackOfPermits();
         }
 
-        private bool UserHasAccessToEditOrViewQuestionnaire(Guid id)
+        private bool ShouldRedirectToOriginalId(QuestionnaireRevision id)
         {
-            return this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, User.GetId());
+            if (!id.OriginalQuestionnaireId.HasValue || id.QuestionnaireId == id.OriginalQuestionnaireId)
+                return false;
+
+            if (User.Identity?.IsAuthenticated != true)
+                return false;
+
+            var userId = User.GetIdOrNull();
+            if (!userId.HasValue)
+                return false;
+
+            if (User.IsAdmin())
+                return true;
+
+            var questionnaireId = id.OriginalQuestionnaireId.Value;
+            var questionnaireListItem = this.dbContext.Questionnaires
+                .Where(x => x.QuestionnaireId == questionnaireId.FormatGuid())
+                .Include(x => x.SharedPersons).FirstOrDefault();
+
+            if (questionnaireListItem == null)
+                return false;
+
+            if (questionnaireListItem.CreatedBy == userId)
+                return true;
+
+            if (questionnaireListItem.IsPublic)
+                return true;
+
+            if (questionnaireListItem.SharedPersons.Any(x => x.UserId == userId))
+                return true;
+
+            return false;
         }
 
+        private bool UserHasAccessToEditOrViewQuestionnaire(Guid id)
+        {
+            return this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, User.GetIdOrNull());
+        }
+
+        [Authorize]
         public IActionResult Clone(QuestionnaireRevision id)
         {
-            QuestionnaireView? questionnaire = this.GetQuestionnaireView(id.QuestionnaireId);
+            var questionnaireId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
+            QuestionnaireView? questionnaire = this.GetQuestionnaireView(questionnaireId);
             if (questionnaire == null) return NotFound();
 
             QuestionnaireView model = questionnaire;
@@ -157,12 +214,13 @@ namespace WB.UI.Designer.Controllers
                     new QuestionnaireCloneModel
                     {
                         Title = $"Copy of {model.Title}",
-                        QuestionnaireId = id.QuestionnaireId,
+                        QuestionnaireId = questionnaireId,
                         Revision = id.Revision
                     });
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Clone(QuestionnaireCloneModel model)
         {
@@ -208,11 +266,13 @@ namespace WB.UI.Designer.Controllers
             return this.View(model);
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             return this.View(new QuestionnaireViewModel());
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(QuestionnaireViewModel model)
@@ -245,6 +305,7 @@ namespace WB.UI.Designer.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -265,9 +326,10 @@ namespace WB.UI.Designer.Controllers
                     this.Success(string.Format(Resources.QuestionnaireController.SuccessDeleteMessage, model.Title));
                 }
             }
-            return this.RedirectToAction("Index");
+            return this.RedirectToAction("Index", "QuestionnaireList");
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Revert(Guid id, Guid commandId)
@@ -278,7 +340,7 @@ namespace WB.UI.Designer.Controllers
             if (!hasAccess)
             {
                 this.Error(Resources.QuestionnaireController.ForbiddenRevert);
-                return this.RedirectToAction("Index");
+                return this.RedirectToAction("Index", "QuestionnaireList");
             }
 
             var command = new RevertVersionQuestionnaire(id, historyReferenceId, this.User.GetId());
@@ -288,6 +350,7 @@ namespace WB.UI.Designer.Controllers
             return this.RedirectToAction("Details", new { id = sid });
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<bool>> SaveComment(Guid id, Guid historyItemId, string comment)
@@ -306,20 +369,21 @@ namespace WB.UI.Designer.Controllers
                 historyItemId.FormatGuid(), comment);
         }
 
+        [Authorize]
         [AntiForgeryFilter]
-        public async Task<IActionResult> QuestionnaireHistory(Guid id, int? p)
+        public async Task<IActionResult> QuestionnaireHistory(QuestionnaireRevision id, int? p)
         {
-            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.User.GetId());
+            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id.QuestionnaireId, this.User.GetIdOrNull());
             if (!hasAccess)
             {
                 this.Error(ErrorMessages.NoAccessToQuestionnaire);
-                return this.RedirectToAction("Index");
+                return this.RedirectToAction("Index", "QuestionnaireList");
             }
-            var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(new QuestionnaireRevision(id), this.User.GetId());
+            var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id, this.User.GetIdOrNull());
             if (questionnaireInfoView == null) return NotFound();
 
             QuestionnaireChangeHistory? questionnairePublicListViewModels = 
-                await questionnaireChangeHistoryFactory.LoadAsync(id, p ?? 1, GlobalHelper.GridPageItemsCount, this.User);
+                await questionnaireChangeHistoryFactory.LoadAsync(id.QuestionnaireId, p ?? 1, GlobalHelper.GridPageItemsCount, this.User);
             if (questionnairePublicListViewModels == null)
                 return NotFound();
 
@@ -328,6 +392,7 @@ namespace WB.UI.Designer.Controllers
             return this.View(questionnairePublicListViewModels);
         }
 
+        [Authorize]
         public IActionResult ExpressionGeneration(Guid? id)
         {
             ViewBag.QuestionnaireId = id ?? Guid.Empty;
@@ -340,10 +405,11 @@ namespace WB.UI.Designer.Controllers
             return questionnaire;
         }
 
+        [Authorize]
         public IActionResult LackOfPermits()
         {
             this.Error(Resources.QuestionnaireController.Forbidden);
-            return this.RedirectToAction("Index");
+            return this.RedirectToAction("Index", "QuestionnaireList");
         }
 
         [HttpPost]
@@ -368,6 +434,7 @@ namespace WB.UI.Designer.Controllers
             return this.Json(comboBoxItems);
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AssignFolder(Guid id, Guid folderId)
@@ -396,5 +463,103 @@ namespace WB.UI.Designer.Controllers
                     : File(stream, "application/zip", $"{questionnaireFileName}.zip");
             
         }*/
+
+        public class UpdateAnonymousQuestionnaireSettingsModel
+        {
+            public bool IsActive { get; set; }
+        }
+        
+        [Authorize]
+        [HttpPost]
+        [Route("questionnaire/updateAnonymousQuestionnaireSettings/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
+        {
+            bool isActive = postModel.IsActive;
+            var anonymousQuestionnaire = dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.QuestionnaireId == id);
+            if (anonymousQuestionnaire == null)
+            {
+                anonymousQuestionnaire = new AnonymousQuestionnaire()
+                    { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = isActive, GeneratedAtUtc = DateTime.UtcNow };
+                dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
+                await dbContext.SaveChangesAsync();
+            }
+
+            anonymousQuestionnaire.IsActive = isActive;
+            dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
+            await dbContext.SaveChangesAsync();
+
+            if (isActive)
+                await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
+            
+            return Json(new
+            {
+                AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, 
+                IsActive = isActive,
+                GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
+            });
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("questionnaire/regenerateAnonymousQuestionnaireLink/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
+        {
+            var existedRecord = dbContext.AnonymousQuestionnaires.First(a => a.QuestionnaireId == id);
+            dbContext.Remove(existedRecord);
+           
+            var anonymousQuestionnaire = new AnonymousQuestionnaire()
+                { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = true, GeneratedAtUtc = DateTime.UtcNow };
+            await dbContext.AnonymousQuestionnaires.AddAsync(anonymousQuestionnaire);
+            await dbContext.SaveChangesAsync();
+
+            await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
+            
+            return Json(new
+            {
+                AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, 
+                IsActive = true,
+                GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
+            });
+        }
+
+        private async Task SendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId)
+        {
+            var questionnaireView = GetQuestionnaireView(id);
+            if (questionnaireView == null)
+                throw new ArgumentException($"Questionnaire not found {id}");
+            
+            var userName = User.GetUserName();
+            var questionnaire = questionnaireView.Title;
+            var sharingLink = Url.Action("Details", "Questionnaire", new { id = anonymousQuestionnaireId }, Request.Scheme);
+            if (sharingLink == null)
+                throw new ArgumentNullException("sharingLink is null");
+
+            var model = new AnonymousSharingEmailModel(userName, sharingLink, questionnaire);
+
+            var messageBody = await viewRenderService.RenderToStringAsync("Emails/AnonymousSharingEmail", model);
+
+            var user = await this.users.GetUserAsync(User);
+            await emailSender.SendEmailAsync(user.Email,
+                NotificationResources.SystemMailer_AnonymousSharingEmail_Subject,
+                messageBody);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult PublicUrl(Guid id, int height = 250, int width = 250)
+        {
+            var url = Url.Action("Details", "Questionnaire", new{ id = id }, Request.Scheme);
+            
+            // generate QRCode
+            var qrCode = new QrCode(url, new Vector2Slim(height, width), SKEncodedImageFormat.Png);
+
+            // output to file
+            using var output = new MemoryStream();
+            qrCode.GenerateImage(output);
+            return File(output.ToArray(), "image/png", id.FormatGuid() + ".png",
+                null, new EntityTagHeaderValue("\"" + id + "\""), false);
+        }
     }
 }

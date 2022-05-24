@@ -151,7 +151,7 @@
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
-    height: $graphic-height/2;
+    height: $graphic-height*0.5;
     padding-bottom: 3px;
     & {
         .uploaded, .downloaded, .census-template, .successful-connection, .failed-connection{
@@ -162,7 +162,7 @@
 }
 .unfinished-assignments{
     border-top: 2px solid #f0f0f0;
-    height: $graphic-height/2;
+    height: $graphic-height*0.5;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;

@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
                     writeAllBytesCallback);
 
             if (fileNamesInDirectory != null)
-                fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(It.IsAny<string>(), It.IsAny<string>())).Returns(() => fileNamesInDirectory);
+                fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>())).Returns(() => fileNamesInDirectory);
 
             var archiveUtils = Mock.Of<IArchiveUtils>(x =>
                 x.GetArchivedFileNamesAndSize(It.IsAny<byte[]>()) == new Dictionary<string, long>());

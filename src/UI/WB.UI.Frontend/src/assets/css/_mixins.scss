@@ -203,12 +203,12 @@
         background-color: $gray_light;
         @include rotate(45deg);
         position: relative;
-        top: ($width - $height)/2;
+        top: ($width - $height)*0.5;
         @include transition(background, 0.2s);
     }
     &:after{
         @include rotate(-45deg);
-        top: ($width/2 - $height - 1px);
+        top: ($width*0.5 - $height - 1px);
     }
     &:hover, &:focus, &:active{
         &:before, &:after{

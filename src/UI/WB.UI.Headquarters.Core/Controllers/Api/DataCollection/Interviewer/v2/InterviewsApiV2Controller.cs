@@ -56,7 +56,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
                 ResponsibleId = package.MetaInfo.ResponsibleId,
                 IsCensusInterview = package.MetaInfo.CreatedOnClient ?? false,
                 IncomingDate = DateTime.UtcNow,
-                Events = package.Events
+                Events = package.Events,
+                IsFullEventStream = package.FullEventStreamRequested
             };
 
             this.packagesService.StoreOrProcessPackage(interviewPackage);

@@ -168,4 +168,16 @@
   <data name="MapLoadingInvalidFile" xml:space="preserve">
     <value>File '{0}' contains data the system can't process. Error: {1}</value>
   </data>
+  <data name="ShpIsMissingInArchive" xml:space="preserve">
+    <value>File {0}.shp is missing for {0}</value>
+  </data>
+  <data name="ShxIsMissingInArchive" xml:space="preserve">
+    <value>File {0}.shx is missing for {0}.shp</value>
+  </data>
+  <data name="DbfIsMissingInArchive" xml:space="preserve">
+    <value>File {0}.dbf is missing for {0}.shp</value>
+  </data>
+  <data name="MapFileSizeLimit" xml:space="preserve">
+    <value>The size of file {0} is larger than applicable limit {1}</value>
+  </data>
 </root>

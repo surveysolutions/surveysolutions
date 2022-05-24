@@ -78,6 +78,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         protected static readonly Guid userId = Id.gF;
         protected static readonly string userName = "Vasya";
-        protected static readonly Mock<IPrincipal> mockOfPrincipal = new Mock<IPrincipal>();
+        protected static readonly Mock<ITesterPrincipal> mockOfPrincipal = new Mock<ITesterPrincipal>();
     }
 }

@@ -5,19 +5,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class CountryItem
     {
-        public CountryItem(string code, string title)
+        public CountryItem(string code, string? title)
         {
             Code = code;
             Title = title;
         }
 
         public string Code { get; set; }
-        public string Title { get; set; }
+        public string? Title { get; set; }
     }
 
     public static class CountryListProvider
     {
-        public static List<CountryItem> GetCounryItems()
+        public static List<CountryItem> GetCountryItems()
         {
             var codes = GetCountryCodes();
             return codes.Select(code =>
@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }).ToList();
         }
 
-        public static string GetCountryTitleByCode(string code)
+        public static string? GetCountryTitleByCode(string code)
         {
             return Resources.Country.ResourceManager.GetString(code);
         }

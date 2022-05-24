@@ -53,15 +53,19 @@ namespace WB.UI.Designer.Code
             HandleActiveFlag(output);
             
             var anchor = new TagBuilder("a");
-            string href;
+            string? href;
             if (IsPageTag)
             {
                 href = ViewContext.HttpContext.Request.PathBase + (string.IsNullOrWhiteSpace(Area) ? Page : "/" + Area + Page);
             }
             else
             {
-                href = url.GetUrlHelper(ViewContext).Action(Action, Controller, new {area = Area, id = (Guid?) null});
+                href = url.GetUrlHelper(ViewContext)
+                    .Action(Action, Controller, new {area = Area, id = (Guid?) null});
             }
+
+            if (href == null) 
+                throw new InvalidOperationException($"Invalid href for IsPageTag: {IsPageTag}, Area: {Area}, Page: {Page}, Action: {Action}, Controller: {Controller}");
             anchor.Attributes.Add("href", href);
 
             anchor.InnerHtml.Append(childContent);

@@ -10,9 +10,9 @@ namespace WB.Services.Export.Services.Implementation
             version = fvi.ProductVersion;
         }
 
-        private readonly string version;
+        private readonly string? version;
 
-        public override string ToString()
+        public override string? ToString()
         {
             return version;
         }

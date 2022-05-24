@@ -120,7 +120,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             streamWriter.Flush();
 
             resultStream.Seek(0, SeekOrigin.Begin);
-            return File(archiveUtils.CompressStream(resultStream, "notSentInvitations.tab"),
+            return File(archiveUtils.ZipFiles(resultStream, "notSentInvitations.tab"),
                 "application/octet-stream",
                 "notSentInvitations.zip",
                 null, null);

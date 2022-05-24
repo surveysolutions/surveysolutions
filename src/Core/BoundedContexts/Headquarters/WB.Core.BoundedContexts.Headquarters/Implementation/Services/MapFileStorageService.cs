@@ -9,6 +9,12 @@ using System.Xml;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NetTopologySuite.Dissolve;
+using NetTopologySuite.Features;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
+using NetTopologySuite.Operation.Union;
+using NetTopologySuite.Simplify;
 using Newtonsoft.Json;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Maps;
@@ -31,6 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     public class MapFileStorageService : IMapStorageService
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
+        private readonly IPlainStorageAccessor<DuplicateMapLabel> duplicateMapLabelPlainStorageAccessor;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
         private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
@@ -42,9 +49,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IArchiveUtils archiveUtils;
 
         private const int WGS84Wkid = 4326; //https://epsg.io/4326
-        private const string TempFolderName = "TempMapsData";
         private const string MapsFolderName = "MapsData";
-        private readonly string path;
+        private const string LabelFieldName = "label";
 
         private readonly string mapsFolderPath;
 
@@ -59,7 +65,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IExternalFileStorage externalFileStorage,
             IOptions<GeospatialConfig> geospatialConfig,
             IAuthorizedUser authorizedUser,
-            ILogger<MapFileStorageService> logger)
+            ILogger<MapFileStorageService> logger, 
+            IPlainStorageAccessor<DuplicateMapLabel> duplicateMapLabelPlainStorageAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -71,11 +78,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.externalFileStorage = externalFileStorage;
             this.authorizedUser = authorizedUser;
             this.logger = logger;
+            this.duplicateMapLabelPlainStorageAccessor = duplicateMapLabelPlainStorageAccessor;
             this.geospatialConfig = geospatialConfig;
-
-            this.path = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, TempFolderName);
-            if (!fileSystemAccessor.IsDirectoryExists(this.path))
-                fileSystemAccessor.CreateDirectory(this.path);
 
             this.mapsFolderPath = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, MapsFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.mapsFolderPath))
@@ -84,36 +88,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public string GetExternalStoragePath(string name) => $"maps/" + name;
 
-        public async Task SaveOrUpdateMapAsync(ExtractedFile mapFile)
+        public async Task<MapBrowseItem> SaveOrUpdateMapAsync(MapFiles mapFiles, string mapsDirectory)
         {
-            var tempFileStore = Guid.NewGuid().FormatGuid();
-            var pathToSave = this.fileSystemAccessor.CombinePath(this.path, tempFileStore);
-            if (!this.fileSystemAccessor.IsDirectoryExists(pathToSave))
-                this.fileSystemAccessor.CreateDirectory(pathToSave);
-
-            var tempFile = this.fileSystemAccessor.CombinePath(pathToSave, mapFile.Name);
-
-            await this.fileSystemAccessor.WriteAllBytesAsync(tempFile, mapFile.Bytes)
-                .ConfigureAwait(false);
-
+            string tempFile = null;
             try
             {
-                var mapItem = this.ToMapBrowseItem(tempFile, mapFile);
+                var mapItem = this.ToMapBrowseItem(mapFiles, mapsDirectory);
 
+                if (mapFiles.IsShapeFile)
+                {
+                    tempFile = fileSystemAccessor.CombinePath(mapsDirectory, mapFiles.Name + ".shp.zip");
+                    var entities = mapFiles.Files.Select(f =>
+                        fileSystemAccessor.CombinePath(mapsDirectory, f.Name)
+                    );
+                    archiveUtils.ZipFiles(entities, tempFile);
+                }
+                else
+                {
+                    tempFile = this.fileSystemAccessor.CombinePath(mapsDirectory, mapFiles.Name);
+                }
+
+                var mapName = mapFiles.IsShapeFile ? mapFiles.Name + ".shp" : mapFiles.Name; 
                 if (externalFileStorage.IsEnabled())
                 {
                     await using FileStream file = File.OpenRead(tempFile);
-                    var name = this.fileSystemAccessor.GetFileName(tempFile);
+                    var name = this.fileSystemAccessor.GetFileName(mapName);
                     await this.externalFileStorage.StoreAsync(GetExternalStoragePath(name), file, "application/zip")
                         .ConfigureAwait(false);
                 }
                 else
                 {
-                    var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapFile.Name);
+                    var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
                 }
 
+                this.duplicateMapLabelPlainStorageAccessor.Remove(l => l.Where(d => d.Map.Id == mapItem.Id));
                 this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
+                this.duplicateMapLabelPlainStorageAccessor.Store(mapItem.DuplicateLabels);
+                return mapItem;
             }
             catch
             {
@@ -121,22 +133,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     fileSystemAccessor.DeleteFile(tempFile);
                 throw;
             }
-            finally
-            {
-                if (this.fileSystemAccessor.IsDirectoryExists(pathToSave))
-                    fileSystemAccessor.DeleteDirectory(pathToSave);
-            }
         }
 
-        private MapBrowseItem ToMapBrowseItem(string tempFile, ExtractedFile mapFile)
+        private MapBrowseItem ToMapBrowseItem(MapFiles mapFile, string mapsDirectory)
         {
+            var mapName = mapFile.IsShapeFile ? mapFile.Name + ".shp" : mapFile.Name; 
             var item = new MapBrowseItem
             {
-                Id = mapFile.Name,
+                Id = mapName,
                 ImportDate = DateTime.UtcNow,
-                FileName = mapFile.Name,
+                FileName = mapName,
                 Size = mapFile.Size,
-                Wkid = 102100
+                Wkid = 102100,
+                UploadedBy = authorizedUser.Id,
             };
 
             void SetMapProperties(dynamic _, MapBrowseItem i)
@@ -147,38 +156,40 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 i.YMaxVal = _.fullExtent.ymax;
                 i.YMinVal = _.fullExtent.ymin;
                 i.MaxScale = _.maxScale;
-                i.MinScale = _.minScal;
+                i.MinScale = _.minScale;
             };
 
-            switch (this.fileSystemAccessor.GetFileExtension(tempFile))
+            switch (this.fileSystemAccessor.GetFileExtension(mapName))
             {
                 case ".tpk":
                     {
-                        var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "conf.cdi");
+                        var tempFile = this.fileSystemAccessor.CombinePath(mapsDirectory, mapFile.Name);
+                        var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "mapserver.json");
                         if (unzippedFile != null)
                         {
-                            XmlDocument doc = new XmlDocument();
-                            doc.LoadXml(Encoding.UTF8.GetString(unzippedFile.Bytes));
-                            var envelope = doc["EnvelopeN"];
-                            item.Wkid = int.Parse(envelope["SpatialReference"]["WKID"].InnerText);
-                            item.XMaxVal = double.Parse(envelope["XMax"].InnerText);
-                            item.XMinVal = double.Parse(envelope["XMin"].InnerText);
-                            item.YMaxVal = double.Parse(envelope["YMax"].InnerText);
-                            item.YMinVal = double.Parse(envelope["YMin"].InnerText);
+                            var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                            SetMapProperties(jsonObject.contents, item);
                         }
                         else
                         {
-                            unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "mapserver.json");
+                            unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "conf.cdi");
                             if (unzippedFile != null)
                             {
-                                var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
-                                SetMapProperties(jsonObject.contents, item);
+                                XmlDocument doc = new XmlDocument();
+                                doc.LoadXml(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                                var envelope = doc["EnvelopeN"];
+                                item.Wkid = int.Parse(envelope["SpatialReference"]["WKID"].InnerText);
+                                item.XMaxVal = double.Parse(envelope["XMax"].InnerText);
+                                item.XMinVal = double.Parse(envelope["XMin"].InnerText);
+                                item.YMaxVal = double.Parse(envelope["YMax"].InnerText);
+                                item.YMinVal = double.Parse(envelope["YMin"].InnerText);
                             }
                         }
                     }
                     break;
                 case ".mmpk":
                     {
+                        var tempFile = this.fileSystemAccessor.CombinePath(mapsDirectory, mapFile.Name);
                         var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "iteminfo.xml");
                         if (unzippedFile != null)
                         {
@@ -193,8 +204,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                                 if (jsonObject != null && jsonObject.maps?.Count > 0)
                                 {
-                                    var mapName = jsonObject.maps[0];
-                                    unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{mapName}.mmap");
+                                    var jsonMapName = jsonObject.maps[0];
+                                    unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{jsonMapName}.mmap");
                                     jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
 
                                     item.Wkid = WGS84Wkid;
@@ -232,6 +243,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     {
                         try
                         {
+                            var tempFile = this.fileSystemAccessor.CombinePath(mapsDirectory, mapFile.Name);
+
                             var fullPath = Path.GetFullPath(tempFile);
 
                             var valueGdalHome = this.geospatialConfig.Value.GdalHome;
@@ -295,9 +308,117 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         }
                     }
                     break;
+                case ".shp": // shape file
+                {
+                    try
+                    {
+                        var shapeFile = fileSystemAccessor.CombinePath(mapsDirectory, mapName);
+
+                        using ShapefileDataReader rd = new ShapefileDataReader(shapeFile, GeometryFactory.Default);
+                        var headerBounds = rd.ShapeHeader.Bounds;
+                        item.XMinVal = headerBounds.MinX;
+                        item.YMinVal = headerBounds.MinY;
+                        item.XMaxVal = headerBounds.MaxX;
+                        item.YMaxVal = headerBounds.MaxY;
+                        item.ShapeType = rd.ShapeHeader.ShapeType.ToString();
+                        item.Wkid = 4326; //geographic coordinates Wgs84
+
+                        var readHeader = rd.DbaseHeader;
+                        item.ShapesCount = readHeader.NumRecords;
+
+                        FeatureCollection fc = new FeatureCollection();
+
+                        int? labelIndexOf = null;
+                        
+                        for (int i = 0; i < readHeader.NumFields; i++)
+                        {
+                            // +1 because the first field is the geometry.
+                            if (rd.GetName(i + 1) == LabelFieldName)
+                            {
+                                labelIndexOf = i + 1;
+                                break;
+                            }
+                        }
+
+                        HashSet<string> checkOnUnique = new HashSet<string>();
+                        Dictionary<string, int> duplicateLabels = new Dictionary<string, int>();
+                        while (rd.Read())
+                        {
+                            AttributesTable attribs = new AttributesTable();
+
+                            if (labelIndexOf.HasValue)
+                            {
+                                var labelValue = rd.GetValue(labelIndexOf.Value).ToString();
+
+                                if (!string.IsNullOrWhiteSpace(labelValue))
+                                {
+                                    attribs.Add(LabelFieldName, labelValue);
+
+                                    if (!checkOnUnique.Add(labelValue))
+                                    {
+                                        if (!duplicateLabels.TryAdd(labelValue, 2))
+                                            duplicateLabels[labelValue] += 1;
+                                    }
+                                }
+                            }   
+
+                            IFeature feature = new Feature(rd.Geometry, attribs);
+                            fc.Add(feature);
+                        }
+
+                        if (fc.Count == 0)
+                            throw new ArgumentException($"Can't read any coordinates from {mapFile.Name}.shp file");
+
+                        item.DuplicateLabels.Clear();
+                        foreach (var duplicateLabel in duplicateLabels)
+                        {
+                            item.DuplicateLabels.Add(new DuplicateMapLabel()
+                            {
+                                Label = duplicateLabel.Key,
+                                Count = duplicateLabel.Value,
+                                Map = item,
+                            });
+                        }
+
+                        var json = GetGeoJson(fc);
+                        var byteCount = Encoding.Unicode.GetByteCount(json);
+                        if (byteCount > geospatialConfig.Value.GeoJsonMaxSize)
+                        {
+                            UnaryUnionOp c = new UnaryUnionOp(fc.Select(f => f.Geometry).ToArray());
+                            var geometryCollection = c.Union();
+                            //DouglasPeuckerSimplifier simplifier = new DouglasPeuckerSimplifier(geometryCollection);
+                            TopologyPreservingSimplifier simplifier = new TopologyPreservingSimplifier(geometryCollection);
+                            var simplifierGeometry = simplifier.GetResultGeometry();
+
+                            FeatureCollection unionFc = new FeatureCollection();
+                            unionFc.Add(new Feature(simplifierGeometry, new AttributesTable()));
+                            json = GetGeoJson(unionFc);
+                            item.IsPreviewGeoJson = true;
+                        }
+
+                        item.GeoJson = json;
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, "Can't read {MapName}.shp file", mapFile.Name);
+                        throw new InvalidOperationException($"Can't read {mapFile.Name}.shp file. File is corrupt.", ex);
+                    }
+                }
+                break;
             }
 
             return item;
+        }
+
+        private static string GetGeoJson(FeatureCollection fc)
+        {
+            var jsonSerializer = GeoJsonSerializer.Create();
+            StringBuilder sb = new StringBuilder();
+            using TextWriter tw = new StringWriter(sb);
+            jsonSerializer.Serialize(tw, fc);
+            tw.Flush();
+            var json = sb.ToString();
+            return json;
         }
 
         public async Task<MapBrowseItem> DeleteMap(string mapName)

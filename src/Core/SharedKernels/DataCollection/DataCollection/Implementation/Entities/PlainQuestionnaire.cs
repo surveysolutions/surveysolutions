@@ -1857,14 +1857,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return variable;
         }
 
-        private static IComposite GetEntityOrThrow(Dictionary<Guid, IComposite> entities, Guid entityId)
+        private IComposite GetEntityOrThrow(Dictionary<Guid, IComposite> entities, Guid entityId)
         {
             IComposite entity = GetEntity(entities, entityId);
 
             if (entity == null)
-                throw new QuestionnaireException($"Entity is not found.")
+                throw new QuestionnaireException($"Entity is not found. entityId: {entityId} in {QuestionnaireIdentity}")
                 {
-                    Data = {{"entityId", entityId}}
+                    Data =
+                    {
+                        {"entityId", entityId},
+                        { "questionnaire", QuestionnaireIdentity}
+                    }
                 };
 
             return entity;

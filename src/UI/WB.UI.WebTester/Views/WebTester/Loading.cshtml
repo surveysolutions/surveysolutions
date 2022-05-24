@@ -22,7 +22,7 @@
                         setTimeout(function() { checkStatus() }, 3 * 1000);
                 }
             }
-            xhr.open('GET', '@Url.Action("GetStatus", "WebTester", new {id = Model.Id})', true);
+            xhr.open('GET', '@Url.Action("GetStatus", "WebTester", new {id = Model?.Id})', true);
             xhr.send(null);
         }
     

@@ -81,9 +81,10 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IMapInteractionService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyMapInteractionService>();
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
 #else
-            registry.Bind<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel>();
+            registry.Bind<WB.UI.Shared.Extensions.ViewModels.GeographyEditorViewModel>();
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
-            registry.Bind<IMapInteractionService,  WB.UI.Shared.Extensions.CustomServices.MapInteractionService>();
+            registry.Bind<IMapInteractionService,  WB.UI.Shared.Extensions.Services.MapInteractionService>();
+            registry.Bind<WB.UI.Shared.Extensions.Services.IMapUtilityService, WB.UI.Shared.Extensions.Services.MapUtilityService>();
 #endif
 
             registry.BindAsSingleton<InterviewDashboardEventHandler, InterviewDashboardEventHandler>();

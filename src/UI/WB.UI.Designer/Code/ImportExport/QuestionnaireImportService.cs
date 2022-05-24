@@ -151,7 +151,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 importStructure.LookupTables.Add(lookupTableId, fileContent);
             }
 
-            foreach (var translationInfo in questionnaire.Translations)
+            foreach (var translationInfo in questionnaire.Translations.Items)
             {
                 var translation = questionnaireDocument.Translations.Single(s =>
                     s.Name == translationInfo.Name);
@@ -272,6 +272,11 @@ namespace WB.UI.Designer.Code.ImportExport
             }
 
             var questionnaire = questionnaireSerializer.Deserialize(textContent);
+            if (questionnaire == null)
+            {
+                throw new Exception("Invalid format. Questionnaire cannot be processed.");
+            }
+
             return questionnaire;
         }
 

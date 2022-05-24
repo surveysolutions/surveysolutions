@@ -4,7 +4,7 @@
 @model Main.Core.Entities.SubEntities.IGroup
 @{
     PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
-    var group = Model;
+    var group = Model!;
 }
 <div class="group">
     <div class="group_container">
@@ -32,3 +32,4 @@
     </div>
 </div>
 @await Html.PartialAsync("_RenderChildren", group.PublicKey)
+<div class="group_footer"></div>

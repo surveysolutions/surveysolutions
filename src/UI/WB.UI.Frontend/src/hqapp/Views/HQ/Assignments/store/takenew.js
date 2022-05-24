@@ -5,9 +5,6 @@ Vue.use(Vuex)
 
 export default {
     state: {
-        entities: [
-            // { id: id, ...}
-        ],
         interview: {},
         isLoaded: false,
     },
@@ -20,6 +17,7 @@ export default {
                 })
 
             const question = Vue.$api.interview.get('getPrefilledQuestions', { interviewId }).then(data => {
+                commit('SET_SECTION_DATA', data)
                 commit('SET_TAKENEW_RESPONSE', data)
             })
 
@@ -30,7 +28,6 @@ export default {
 
     mutations: {
         SET_TAKENEW_RESPONSE(state, data) {
-            state.entities = data
             state.isLoaded = true
         },
         SET_INTERVIEW_DETAILS(state, data) {

@@ -36,17 +36,70 @@ jobs:
           echo "::set-output name=build_number::${build_number}"
           echo "::set-output name=environment::${environment}"
 
-  tests:
-    uses: surveysolutions/surveysolutions/.github/workflows/tests.yml@master
-    with:
-      runs_on: 'ubuntu-latest'
-      run_analysis: false
-    secrets:
-      sonar-token: ${{ secrets.SONAR_TOKEN }}
+  tests-unit-web:
+    name: Unit and web tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+      - name: Headquarters unit tests
+        run: dotnet test src/Tests/WB.Tests.Unit
+      - name: Headquarters web tests
+        run: dotnet test src/Tests/WB.Tests.Web
+      - name: Designer unit tests
+        run: dotnet test src/Tests/WB.Tests.Unit.Designer
+
+  tests-integration:
+    name: Integration tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    env:
+      PG_USER: postgres
+      PG_PASSWORD: P@$$w0rd
+
+    services:
+      postgres:
+        image: postgres:13.1
+        env:
+          POSTGRES_USER: ${{ env.PG_USER }}
+          POSTGRES_PASSWORD: ${{ env.PG_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+ 
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Create db connection string
+        run: echo "DB_CONN=Server=postgres;Port=${{ job.services.postgres.ports[5432] }};User Id=${{ env.PG_USER }};Password=${{ env.PG_PASSWORD }};" >> $GITHUB_ENV
+
+      - name: Headquarters tests
+        run: |
+          echo "[ConnectionStrings]\nTestConnection=\"${{ env.DB_CONN }}Database=postgres;CommandTimeout=60;\"" >> appsettings.ini
+          dotnet test src/Tests/WB.Tests.Integration
+      - name: Designer tests
+        run: |
+          echo "[ConnectionSettings]\nTestConnectionStringFormat=\"${{ env.DB_CONN }}Database=testdb_{0};CommandTimeout=60;\"" > appsettings.ini
+          dotnet test src/Tests/WB.Tests.Integration.Designer
 
   mobile:
-    needs: [prepare, tests]
-    runs-on: windows-latest
+    needs: [prepare, tests-unit-web, tests-integration]
+    runs-on: windows-2022
     environment: ${{ needs.prepare.outputs.environment }}
 
     strategy:
@@ -54,12 +107,22 @@ jobs:
         task: [AndroidInterviewer, AndroidInterviewerWithMaps, AndroidSupervisor]
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Support longpaths
+      run: |
+        git config --system core.longpaths true
+        New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
+          -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
 
-    - name: Setup .NET Core SDK 5.0.x
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v2
+      with:
+        distribution: 'microsoft'
+        java-version: '11'
+
+    - name: Setup .NET Core SDK 6.0.x
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: '6.0.x'
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.3
 
@@ -132,9 +195,20 @@ jobs:
 
   installer:
     needs: [prepare, mobile]
-    runs-on: windows-latest
+    runs-on: windows-2019
+    environment: ${{ needs.prepare.outputs.environment }}
 
     steps:
+      - name: Support longpaths
+        run: |
+          git config --system core.longpaths true
+          New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
+            -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - uses: actions/checkout@v2
 
       - name: Setup WIX
@@ -171,9 +245,21 @@ jobs:
           $FileName = Get-ChildItem ./installer/src/SurveySolutionsBootstrap/bin/Release/SurveySolutions*.exe `
             | Select-Object -ExpandProperty FullName
           Write-Host "::set-output name=filename::$FileName"
+
       - name: Sign the installer
         if: ${{ needs.prepare.outputs.environment == 'release' }}
         run: |
+          & installer/wix314-binaries/insignia.exe `
+            -ib ${{ steps.build-installer.outputs.filename }} `
+            -o engine.exe
+          & 'C:/Program Files (x86)/Windows Kits/10/bin/x86/signtool.exe' sign `
+            /f certificate\certificate.pfx `
+            /p '${{ secrets.CODESIGNING_CERTIFICATE_PASSPHRASE }}' `
+            /tr http://timestamp.sectigo.com /td sha256 /fd sha256 `
+            engine.exe
+          & installer/wix314-binaries/insignia `
+            -ab engine.exe ${{ steps.build-installer.outputs.filename }} `
+            -o ${{ steps.build-installer.outputs.filename }}
           & 'C:/Program Files (x86)/Windows Kits/10/bin/x86/signtool.exe' sign `
             /f certificate\certificate.pfx `
             /p '${{ secrets.CODESIGNING_CERTIFICATE_PASSPHRASE }}' `
@@ -191,7 +277,7 @@ jobs:
           --title "$Title" `
           --notes '""' `
           --repo ${{ github.repository }} `
-          "${{ steps.file.outputs.filename }}"
+          "${{ steps.build-installer.outputs.filename }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

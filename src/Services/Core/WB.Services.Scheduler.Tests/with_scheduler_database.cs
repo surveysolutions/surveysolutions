@@ -83,7 +83,9 @@ namespace WB.Services.Scheduler.Tests
 
         [SetUp]
         public async Task Init()
-        {            
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            
             this.SchemaName = "test_schema";
 
             Console.WriteLine(SchemaName);

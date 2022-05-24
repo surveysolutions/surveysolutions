@@ -20,7 +20,6 @@ const store = safeStore({
         },
         coverInfo: {
             entitiesWithComments: [],
-            identifyingEntities: [],
         },
         interviewCompleted: false,
         interviewShutdown: false,

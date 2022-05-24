@@ -7,6 +7,7 @@ namespace WB.Core.Infrastructure.FileSystem
     {
         void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath);
         void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
+        void Unzip(Stream archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
         
         IEnumerable<ExtractedFile> GetFilesFromArchive(byte[] archivedFileAsArray);
         ExtractedFile GetFileFromArchive(string archiveFilePath, string fileName);
@@ -22,6 +23,7 @@ namespace WB.Core.Infrastructure.FileSystem
         string CompressString(string stringToCompress);
         string DecompressString(string stringToDecompress);
         IEnumerable<ExtractedFile> GetFilesFromArchive(Stream inputStream);
-        byte[] CompressStream(Stream uncompressedDataStream, string entryName);
+        byte[] ZipFiles(Stream uncompressedDataStream, string entryName);
+        void ZipFiles(IEnumerable<string> files, string archiveFilePath);
     }
 }

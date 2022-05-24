@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private List<OptionWithSearchTerm> autoCompleteSuggestions = new List<OptionWithSearchTerm>();
         public List<OptionWithSearchTerm> AutoCompleteSuggestions
         {
-            get => this.autoCompleteSuggestions ??= GetLazySuggestions(FilterText);
+            get => this.autoCompleteSuggestions ??= GetLazySuggestions();
             set => this.SetProperty(ref this.autoCompleteSuggestions, value);
         }
 
@@ -72,29 +72,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => SetProperty(ref loading, value);
         }
 
-        private List<OptionWithSearchTerm> GetLazySuggestions(string filterText)
+        private bool firstInit = true;
+
+        private List<OptionWithSearchTerm> GetLazySuggestions()
         {
             loadSuggestionsToken.Cancel();
             loadSuggestionsToken.Dispose();
             loadSuggestionsToken = new CancellationTokenSource();
-            
-            LoadOptionsAsync(filterText, loadSuggestionsToken.Token);
+
+            if (firstInit)
+                firstInit = false;
+            else
+                LoadOptionsAsync(FilterText, loadSuggestionsToken.Token);
             return null;
         }
 
         internal Task LoadOptionsAsync(string filterText, CancellationToken cancellationToken = default)
         {
+            //TaskCreationOptions.LongRunning avoiding UI Thread to be used
             return Task.Factory.StartNew(async () =>
             {
                 var suggestions = GetSuggestions(filterText);
 
                 await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
-                    if (isDisposed)
+                    if (isDisposed || cancellationToken.IsCancellationRequested)
                         return;
+                    
                     AutoCompleteSuggestions = suggestions;
                 });
-            }, cancellationToken);
+            }, cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
@@ -109,36 +116,47 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxAsyncCommand<string> FilterCommand => new MvxAsyncCommand<string>(x => this.UpdateFilter(x));
         public IMvxCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOption);
-        public IMvxAsyncCommand ShowErrorIfNoAnswerCommand => new MvxAsyncCommand(this.ShowErrorIfNoAnswer);
+        public IMvxAsyncCommand<bool> OnFocusChangeCommand => new MvxAsyncCommand<bool>(this.OnFocusChange);
 
-        private async Task ShowErrorIfNoAnswer()
+        private async Task OnFocusChange(bool hasFocus)
         {
-            await InvokeAllHandlers(this.OnShowErrorIfNoAnswer, EventArgs.Empty).ConfigureAwait(false);
-
-            if (string.IsNullOrEmpty(this.FilterText)) return;
-
-            var selectedOption = this.filteredOptionsViewModel.GetOptionByTextValue(this.FilterText);
-
-            var isValidOption =
-                selectedOption?.Title.Equals(this.FilterText, StringComparison.CurrentCultureIgnoreCase) == true
-                && !this.excludedOptions.Contains(selectedOption.Value);
-
-            if (isValidOption)
+            if (!hasFocus)
             {
-                await InvokeAllHandlers<int>(this.OnItemSelected, selectedOption.Value).ConfigureAwait(false);
-                if (displaySelectedValue)
+                await InvokeAllHandlers(this.OnShowErrorIfNoAnswer, EventArgs.Empty).ConfigureAwait(false);
+
+                if (string.IsNullOrEmpty(this.FilterText)) return;
+
+                var selectedOption = this.filteredOptionsViewModel.GetOptionByTextValue(this.FilterText);
+
+                var isValidOption =
+                    selectedOption?.Title.Equals(this.FilterText, StringComparison.CurrentCultureIgnoreCase) == true
+                    && !this.excludedOptions.Contains(selectedOption.Value);
+
+                if (isValidOption)
                 {
-                    await this.UpdateFilter(selectedOption.Title).ConfigureAwait(false);
+                    await InvokeAllHandlers<int>(this.OnItemSelected, selectedOption.Value).ConfigureAwait(false);
+                    if (displaySelectedValue)
+                    {
+                        await this.UpdateFilter(selectedOption.Title).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await this.ResetFilterAndOptions();
+                    }
                 }
                 else
                 {
-                    await this.ResetFilterAndOptions();    
+                    var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(this.FilterText);
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage)
+                        .ConfigureAwait(false);
                 }
             }
             else
             {
-                var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(this.FilterText);
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage).ConfigureAwait(false);
+                if (String.IsNullOrEmpty(this.FilterText))
+                {
+                    await UpdateFilter("", true);
+                }
             }
         }
 
@@ -197,7 +215,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
-            this.InvokeOnMainThread(() =>
+            await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.AutoCompleteSuggestions = null;
                 this.RaisePropertyChanged(nameof(this.FilterText));
@@ -229,12 +247,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private static OptionWithSearchTerm ToOptionWithSearchTerm(string filter, CategoricalOption model) => new OptionWithSearchTerm
+        private static OptionWithSearchTerm ToOptionWithSearchTerm(string filter, CategoricalOption model)
         {
-            Value = model.Value,
-            Title = model.Title,
-            SearchTerm = filter
-        };
+            return new OptionWithSearchTerm
+            {
+                Value = model.Value,
+                Title = model.Title,
+                SearchTerm = filter
+            };
+        }
 
         public void ExcludeOptions(int[] optionsToExclude) => this.excludedOptions = optionsToExclude ?? Array.Empty<int>();
 
@@ -246,6 +267,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.isDisposed = true;
             
+            this.loadSuggestionsToken?.Cancel();
             this.QuestionState?.Dispose();
             this.filteredOptionsViewModel?.Dispose();
             this.throttlingModel?.Dispose();

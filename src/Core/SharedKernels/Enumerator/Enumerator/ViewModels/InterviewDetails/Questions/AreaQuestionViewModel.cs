@@ -162,7 +162,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering.StartInProgressIndicator();
             try
             {
-                var answerArea = await this.mapInteractionService.EditAreaAsync(this.answer, geometryType);
+                var answerArea = await this.mapInteractionService.EditAreaAsync(this.answer, geometryType)
+                    .ConfigureAwait(false);
 
                 if (answerArea != null)
                 {
