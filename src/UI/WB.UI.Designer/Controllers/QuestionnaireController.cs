@@ -174,6 +174,9 @@ namespace WB.UI.Designer.Controllers
             if (!userId.HasValue)
                 return false;
 
+            if (User.IsAdmin())
+                return true;
+
             var questionnaireId = id.OriginalQuestionnaireId.Value;
             var questionnaireListItem = this.dbContext.Questionnaires
                 .Where(x => x.QuestionnaireId == questionnaireId.FormatGuid())
