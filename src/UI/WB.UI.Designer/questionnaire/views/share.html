@@ -144,7 +144,7 @@
                         <div class="col-xs-7">
 
                             <div ng-i18next="AnonymousLink" style="margin-top: 15px"></div>
-                            <a href="#" title="link">
+                            <a ng-href="{{ getAnonymousQuestionnaireLink() }}" title="link" onclick="return false;">
                                 {{ getAnonymousQuestionnaireLink() }}
                             </a>
                             <br/>
