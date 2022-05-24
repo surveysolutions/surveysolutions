@@ -12,7 +12,7 @@
             <a role="tab" data-toggle="tab" href="#questionnaireSettingsTab">{{'QuestionnaireSettings' | i18next }}</a>
         </li>
         <li role="presentation">
-            <a role="tab" data-toggle="tab" href="#shareTab" ng-if="!questionnaire.isReadOnlyForUser || questionnaire.hasViewerAdminRights">{{'CollaboratorsSettings' | i18next }}</a>
+            <a role="tab" data-toggle="tab" href="#shareTab" ng-if="!questionnaire.isReadOnlyForUser || questionnaire.hasViewerAdminRights">{{'AccessSettings' | i18next }}</a>
         </li>
     </ul>
 
@@ -66,7 +66,9 @@
         </div>
         <div role="tabpanel" class="tab-pane" id="shareTab">
             <div class="well-sm">
-                <h2 ng-i18next="SettingsWhoHasAccess"> </h2>
+                <h2 ng-i18next="CollaboratorsSettings"> </h2>
+                <i class="text-muted">{{ 'CollaboratorsDescriptionSettings' | i18next}}</i>
+                <br/>
                 <ul class="accounts">
                     <li ng-repeat="s in questionnaire.sharedPersons">
                         <a href="mailto:{{s.email}}">{{s.email}}</a> ({{s.login}}) -
@@ -125,24 +127,18 @@
                         </div>
                     </div>
                 </form>
-                <hr ng-if="questionnaire.hasViewerAdminRights" />
-                <div ng-if="questionnaire.hasViewerAdminRights">
-                    <h2 ng-i18next="PublicAccessSettings"></h2>
-                    <button class="btn btn-link answer" ng-click="togglePublicity()">
-                        {{'SettingsQuestionnaireSharing' | i18next }}
-                        {{(questionnaire.isPublic ? 'SettingsPrivate' : 'SettingsPublic') | i18next}}
-                    </button>
-                    <i class="text-muted">({{(questionnaire.isPublic ? 'SettingsVisibleToOwner' :
-                        'SettingsVisibleToEveryone') | i18next}})</i>
-                </div>
+                
                 <hr />
                 <div ng-if="isQuestionnaireOwner()">
                     <h2 ng-i18next="AnonymousQuestionnaireSettings"></h2>
+                    <i class="text-muted">{{ 'AnonymousQuestionnaireDescriptionSettings' | i18next}}</i>
+                    <br/>
+                    <span>
+                        {{ (questionnaire.isAnonymouslyShared ? 'SettingsStatusAllowAnonymousAccess' : 'SettingsStatusDontAllowAnonymousAccess') | i18next }}
+                    </span>
                     <button class="btn btn-link answer" ng-click="updateAnonymousQuestionnaireSettings()">
-                        {{(questionnaire.isAnonymouslyShared ? 'SettingsDontAllowAnonymousAccess' : 'SettingsAllowAnonymousAccess') | i18next}}
+                        {{(questionnaire.isAnonymouslyShared ? 'SettingsTurnOffAnonymousAccess' : 'SettingsTurnOnAnonymousAccess') | i18next}}
                     </button>
-                    <em class="text-muted">({{(questionnaire.isAnonymouslyShared ? 'SettingsVisibleToOwner' :
-                            'SettingsAccessibleToEveryone') | i18next}})</em>
                     <br />
                     <div ng-if="questionnaire.isAnonymouslyShared" class="row">
                         <div class="col-xs-7">
@@ -166,6 +162,19 @@
                                  ng-src='{{"/questionnaire/publicurl/" + questionnaire.anonymousQuestionnaireId}}' />
                         </div>
                     </div>
+                </div>
+
+                <hr ng-if="questionnaire.hasViewerAdminRights" />
+                <div ng-if="questionnaire.hasViewerAdminRights">
+                    <h2 ng-i18next="PublicAccessSettings"></h2>
+                    <i class="text-muted">{{ 'PublicAccessDescriptionSettings' | i18next}}</i>
+                    <br/>
+                    <span>
+                        {{ (questionnaire.isPublic ? 'PublicAccessSettingsStatusOn' : 'PublicAccessSettingsStatusOff') | i18next }}
+                    </span>
+                    <button class="btn btn-link answer" ng-click="togglePublicity()">
+                        {{(questionnaire.isPublic ? 'PublicAccessSettingsOff' : 'PublicAccessSettingsOn') | i18next}}
+                    </button>
                 </div>
             </div>
         </div>
