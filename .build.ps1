@@ -243,8 +243,7 @@ task PackageHq frontend, {
             "-o", "$tmp/hq",
             "--no-self-contained"
             if ($runtime) {
-                "-r", $runtime,
-                "--self-contained"
+                "-r", $runtime
             }
         )
     }
