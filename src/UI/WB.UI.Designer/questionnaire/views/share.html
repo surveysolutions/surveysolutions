@@ -67,7 +67,7 @@
         <div role="tabpanel" class="tab-pane" id="shareTab">
             <div class="well-sm">
                 <h2 ng-i18next="CollaboratorsSettings"> </h2>
-                <i class="text-muted">{{ 'CollaboratorsDescriptionSettings' | i18next}}</i>
+                <em class="text-muted">{{ 'CollaboratorsDescriptionSettings' | i18next}}</em>
                 <br/>
                 <ul class="accounts">
                     <li ng-repeat="s in questionnaire.sharedPersons">
@@ -131,7 +131,7 @@
                 <hr />
                 <div ng-if="isQuestionnaireOwner()">
                     <h2 ng-i18next="AnonymousQuestionnaireSettings"></h2>
-                    <i class="text-muted">{{ 'AnonymousQuestionnaireDescriptionSettings' | i18next}}</i>
+                    <em class="text-muted">{{ 'AnonymousQuestionnaireDescriptionSettings' | i18next}}</em>
                     <br/>
                     <span>
                         {{ (questionnaire.isAnonymouslyShared ? 'SettingsStatusAllowAnonymousAccess' : 'SettingsStatusDontAllowAnonymousAccess') | i18next }}
@@ -169,7 +169,7 @@
                 <hr ng-if="questionnaire.hasViewerAdminRights" />
                 <div ng-if="questionnaire.hasViewerAdminRights">
                     <h2 ng-i18next="PublicAccessSettings"></h2>
-                    <i class="text-muted">{{ 'PublicAccessDescriptionSettings' | i18next}}</i>
+                    <em class="text-muted">{{ 'PublicAccessDescriptionSettings' | i18next}}</em>
                     <br/>
                     <span>
                         {{ (questionnaire.isPublic ? 'PublicAccessSettingsStatusOn' : 'PublicAccessSettingsStatusOff') | i18next }}
