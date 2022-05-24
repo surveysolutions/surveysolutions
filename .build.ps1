@@ -20,7 +20,8 @@ param(
     [switch] $noDockerPush,
     [switch] $signapk ,
     [string] $apkFolder = "artifacts", # where should docker build look for apk artifacts
-    [string] $runtime = "win-x64"
+    [string] $runtime = "win-x64",
+    [String] $nodeVersion = '16'
 )
 
 #region Bootstrap
@@ -133,6 +134,7 @@ function Build-Docker($dockerfile, $tags, $arguments = @()) {
         '--build-arg', "VERSION=$version", 
         "--build-arg", "INFO_VERSION=$infoVersion"
         "--build-arg", "APK_FILES=$apkFolder"
+        "--build-arg", " NODE=$nodeVersion"
         "--file", $dockerfile
         "--iidfile", "$output\headquarters.id"
         "--label", "org.opencontainers.image.revision=$RevisionId"
