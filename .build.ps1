@@ -238,7 +238,8 @@ task PackageHq frontend, {
             "-c", "Release",
             "-p:Version=$VERSION",
             "-p:InformationalVersion=$infoVersion",
-            "-o", "$tmp/hq"
+            "-o", "$tmp/hq",
+            "--no-self-contained"
             if ($runtime) {
                 "-r", $runtime,
                 "--self-contained"
@@ -257,10 +258,10 @@ task PackageHqOffline frontend, {
         dotnet publish @(
             "./src/Services/Export/WB.Services.Export.Host",
             "-c", "Release",
-            "--no-self-contained",
             "-p:Version=$VERSION",
             "-p:InformationalVersion=$infoVersion",
-            "-o", "./src/UI/WB.UI.Headquarters.Core/Export.Service"
+            "-o", "./src/UI/WB.UI.Headquarters.Core/Export.Service",
+            "--no-self-contained"
             if ($runtime) {
                 "-r", $runtime
             }
@@ -270,14 +271,12 @@ task PackageHqOffline frontend, {
     exec {
         dotnet publish @(
             "./src/UI/WB.UI.Headquarters.Core",
-            "/p:SelfContained=False",
-            "/p:AspNetCoreHostingModel=outofprocess",
-            "/p:IncludeAllContentForSelfExtract=true",
             "-p:Version=$VERSION",
             "-p:InformationalVersion=$infoVersion",
             "-c", "Release",
             "-o", "$tmp/hq-offline",
-            "--no-self-contained"
+            "--no-self-contained",
+            "/p:IncludeAllContentForSelfExtract=true"
             if ($runtime) {
                 "/p:PublishSingleFile=true",
                 "-r", $runtime
@@ -286,7 +285,15 @@ task PackageHqOffline frontend, {
     }
 
     New-Item -Type Directory $tmp/hq-prepare -ErrorAction SilentlyContinue | Out-Null
-    copy-item $tmp/hq-offline/WB.UI.Headquarters.exe $tmp/hq-prepare
+    if (Test-Path $tmp/hq-offline/WB.UI.Headquarters.exe) { # Windows target
+        copy-item $tmp/hq-offline/WB.UI.Headquarters.exe $tmp/hq-prepare
+    }
+    elseif (Test-Path $tmp/hq-offline/WB.UI.Headquarters) {
+        copy-item $tmp/hq-offline/WB.UI.Headquarters $tmp/hq-prepare
+    }
+    else {
+        Write-Error "No executable was found"
+    }
     copy-item $tmp/hq-offline/web.config $tmp/hq-prepare/Web.config
     copy-item $tmp/hq-offline/appsettings.ini $tmp/hq-prepare
 
@@ -300,7 +307,8 @@ task PackageExport {
             "-c", "Release",
             "-p:Version=$VERSION",
             "-p:InformationalVersion=$infoVersion",
-            "-o", "$tmp/export"
+            "-o", "$tmp/export",
+            "--no-self-contained"
             if ($runtime) {
                 "-r", $runtime
             }
@@ -316,7 +324,8 @@ task PackageWebTester frontend, {
             "-c", "Release",
             "-p:Version=$VERSION",
             "-p:InformationalVersion=$infoVersion",
-            "-o", "$tmp/webtester"
+            "-o", "$tmp/webtester",
+            "--no-self-contained"
             if ($runtime) {
                 "-r", $runtime
             }    
@@ -335,7 +344,7 @@ task PackageDesigner {
     
     Set-location $BuildRoot
     dotnet publish ./src/UI/WB.UI.Designer `
-        -c Release -r win-x64 `
+        -c Release -r win-x64 --no-self-contained `
         -p:Version=$VERSION -p:InformationalVersion=$infoVersion `
         -p:SkipSpaBuild=True -o $tmp/Designer
 
