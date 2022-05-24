@@ -1324,6 +1324,12 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
     <value>Link sharing</value>
+  </data>  
+  <data name="AnonymousLink" xml:space="preserve">
+    <value>Anonymous link:</value>
+  </data>  
+  <data name="CopyLink" xml:space="preserve">
+    <value>Copy link</value>
   </data>
   <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
     <value>Users having this link will be able to open this questionnaire</value>

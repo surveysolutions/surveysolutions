@@ -226,10 +226,8 @@
         };
 
         $scope.copyAnonymousQuestionnaireLink = function () {
-            var copyText = document.getElementById("anonymousQuestionnaireLink");
-            copyText.select();
-            copyText.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(copyText.value);
+            var link = $scope.getAnonymousQuestionnaireLink() ;
+            navigator.clipboard.writeText(link);
         };
 
         $scope.sortSharedPersons();

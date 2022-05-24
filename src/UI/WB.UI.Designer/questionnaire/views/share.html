@@ -142,18 +142,20 @@
                     <br />
                     <div ng-if="questionnaire.isAnonymouslyShared" class="row">
                         <div class="col-xs-7">
-                            <div class="input-group" style="padding-top: 20px;">
-                                <input type="text" class="form-control" id="anonymousQuestionnaireLink" ng-value="getAnonymousQuestionnaireLink()" readonly />
-                                <div class="input-group-btn dropup share-type">
-                                    <button type="button" class="btn btn-default" ng-click="copyAnonymousQuestionnaireLink()" i18next>
-                                        Copy
-                                    </button>
-                                </div>
-                            </div>
-                            <div style="padding-left: 6px" ng-i18next="({datetime: questionnaire.anonymousQuestionnaireShareDate})AnonymousQuestionnaireGeneratedDate">
-                            </div>
 
-                            <button class="btn btn-link answer" style="padding-top: 15px" ng-click="regenerateAnonymousQuestionnaireLink()">
+                            <div ng-i18next="AnonymousLink" style="margin-top: 15px"></div>
+                            <a href="#" title="link">
+                                {{ getAnonymousQuestionnaireLink() }}
+                            </a>
+                            <br/>
+                            <div ng-i18next="({datetime: questionnaire.anonymousQuestionnaireShareDate})AnonymousQuestionnaireGeneratedDate">
+                            </div>
+                            <button class="btn btn-link answer" ng-i18next="CopyLink" ng-click="copyAnonymousQuestionnaireLink()">
+                            </button>
+                            
+                            <span> | </span>
+
+                            <button class="btn btn-link answer"  ng-click="regenerateAnonymousQuestionnaireLink()">
                                 {{'RegenerateQuestionnaireSharingLink' | i18next }}
                             </button>
                         </div>

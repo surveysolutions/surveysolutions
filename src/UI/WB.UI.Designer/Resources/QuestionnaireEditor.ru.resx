@@ -1216,6 +1216,12 @@
   <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
     <value>Доступ по ссылке</value>
   </data>
+  <data name="AnonymousLink" xml:space="preserve">
+    <value>Анонимная ссылка:</value>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Копировать ссылку</value>
+  </data>
   <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
     <value>Пользователи будут иметь возможность открыть опросник по данной ссылке</value>
   </data>
