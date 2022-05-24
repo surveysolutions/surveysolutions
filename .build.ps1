@@ -328,10 +328,12 @@ task PackageWebTester frontend, {
 task PackageDesigner {
     
     @("$BuildRoot/src/UI/WB.UI.Designer", "$BuildRoot/src/UI/WB.UI.Designer/questionnaire-app") | ForEach-Object {
-        Set-Location $_
-        npm i | Out-Host
-        npm run build | Out-Host
-    }
+		exec {
+			Set-Location $_
+			npm i
+			npm run build
+		}
+	}
     
     Set-location $BuildRoot
     dotnet publish ./src/UI/WB.UI.Designer `

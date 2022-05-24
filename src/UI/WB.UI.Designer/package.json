@@ -44,7 +44,7 @@
     "gulp-vue-single-file-component": "^1.2.3",
     "jshint": "^2.13.4",
     "merge2": "^1.4.1",    
-    "force-resolutions": "1.0.10",
+    "npm-force-resolutions": "0.0.6",
     "plugin-error": "^1.0.1",
     "postcss": "^8.4.12",
     "rimraf": "^3.0.2",
@@ -57,8 +57,7 @@
     "build": "gulp --production",
     "preproduction": "bower install --force",
     "testDeploy": "powershell New-Item -Path ./bin/WB.UI.Designer/app_offline.htm; rimraf ./bin/WB.UI.Designer; New-Item -Path ./bin/WB.UI.Designer/app_offline.htm -ErrorAction SilentlyIgnore;gulp --production; dotnet publish --self-contained -r win-x64 -o ./bin/WB.UI.Designer -c Release; Remove-Item ./bin/WB.UI.Designer/app_offline.htm",
-    "preinstall": "npx force-resolutions",
-	"inst:dbg": "npm install"
+    "preinstall": "npx npm-force-resolutions"
   },
   "author": "",
   "license": "ISC",
@@ -130,7 +129,6 @@
     "postcss": ">=8.4.12",
     "set-value": ">=4.0.1",
     "svgo": "2.8.0",
-    "trim-newlines": ">=3.0.1",
-    "uuid": ">=8.3.2"
+    "trim-newlines": ">=3.0.1"
   }
 }
