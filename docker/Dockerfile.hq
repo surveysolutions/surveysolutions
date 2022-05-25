@@ -1,7 +1,7 @@
 ARG DOTNET_VERSION=6.0
 ARG VERSION=21.01
 ARG INFO_VERSION=21.01
-ARG NODE=14
+ARG NODE=16
 ARG APK_FILES=build
 ARG FONTS="NotoSans-hinted.zip;NotoSansMyanmar-hinted.zip"
 
