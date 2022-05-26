@@ -11,9 +11,16 @@ jobs:
 
     strategy:
       matrix:
-        task: [Headquarters, Export, Designer]
-        package: [PackageHq, PackageExport, PackageDesigner]
-        output: [WB.UI.Headquarters.zip, WB.Services.Export.zip, WB.UI.Designer.zip]
+        include:
+          - task: Headquarters
+            package: PackageHq
+            output: WB.UI.Headquarters.zip
+          - task: Export
+            package: PackageExport
+            output: WB.Services.Export.zip
+          - task: Designer
+            package: PackageDesigner
+            output: WB.UI.Designer.zip
 
     steps:
 
