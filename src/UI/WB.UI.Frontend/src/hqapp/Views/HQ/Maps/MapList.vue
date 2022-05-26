@@ -97,6 +97,12 @@ export default {
                 this.$refs.table.reload()
         },
         onFileChange(e){
+            const files = e.target.files || e.dataTransfer.files
+
+            if (!files.length) {
+                return
+            }
+
             const statusupdater = this.updateStatus
             const reloader = this.reload
             const uploadingMessage = this.$t('Pages.Map_Uploading')
