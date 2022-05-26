@@ -17,17 +17,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    strategy:
+      matrix:
+        task:    [Headquarters, Export, Designer]
+        package: [PackageHq, PackageExport, PackageDesigner]
+        output:  [WB.UI.Headquarters.zip, WB.Services.Export.zip, WB.UI.Designer.zip]
+
     - uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: '16'
 
     - uses: actions/checkout@v3
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '6.0.x'
-    - name: Build Headquarters
-      run: ./.build.ps1 PackageHq
+    - name: Build ${{ matrix.task }}
+      run: ./.build.ps1 ${{ matrix.package }}
       shell: pwsh
 
     - run: curl --silent --show-error --fail -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
@@ -37,14 +43,21 @@ jobs:
       with:
         java-version: 8
         distribution: 'temurin'
-    - run: java -jar pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" --fail_on_severity="Very High, High" --file ./artifacts/WB.UI.Headquarters.zip
+    - run: |
+        java -jar pipeline-scan.jar \
+             --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" \
+             --fail_on_severity="Very High, High" \
+             --file ./artifacts/${{ matrix.output }}
+             --json_output_file results-${{ matrix.task }}.json
       continue-on-error: true
     - name: Convert pipeline scan output to SARIF format
       id: convert
       uses: veracode/veracode-pipeline-scan-results-to-sarif@ff08ae5b45d5384cb4679932f184c013d34da9be
       with:
-        pipeline-results-json: results.json
+        pipeline-results-json: results-${{ matrix.task }}.json
+        output-results-sarif: veracode-results-${{ matrix.task }}.sarif
+        source-base-path-1: "^home/runner/work/scancopy/scancopy/src:src"
+        finding-rule-level: "4:3:0"
     - uses: github/codeql-action/upload-sarif@v2
       with:
-        # Path to SARIF file relative to the root of the repository
-        sarif_file: veracode-results.sarif
+        sarif_file: veracode-results-${{ matrix.task }}.sarif
