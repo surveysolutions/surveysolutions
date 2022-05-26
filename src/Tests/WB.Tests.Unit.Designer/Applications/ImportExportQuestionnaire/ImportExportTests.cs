@@ -368,6 +368,39 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         }
 
         [Test]
+        public void when_export_identified_text_question_should_be_equals_after_import()
+        {
+            var textQuestion = Create.TextQuestion(
+                questionId: Guid.NewGuid(),
+                text: "Title",
+                enablementCondition: "enablementCondition",
+                mask: "mask",
+                variable: "variable",
+                scope: QuestionScope.Supervisor,
+                preFilled: true,
+                label: "label",
+                instruction: "instruction",
+                validationConditions: new ValidationCondition[] { Create.ValidationCondition() },
+                hideIfDisabled: true
+                );
+            
+            var questionnaireDocument = Create.QuestionnaireDocumentWithCoverPage(Id.g1,
+                children: new IComposite [] { textQuestion }
+            );
+            var cover = (Group)questionnaireDocument.Children[0];
+            cover.VariableName = "cover";
+            cover.ConditionExpression = null!;
+            questionnaireDocument.Add(Create.Chapter(), null);
+
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
         public void when_export_empty_numeric_question_should_be_equals_after_import()
         {
             var questionnaireDocument = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,

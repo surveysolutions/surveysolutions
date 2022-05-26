@@ -1,8 +1,15 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -14,10 +21,12 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Unit.Designer.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Controllers;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 {
@@ -25,8 +34,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
     {
         internal static QuestionnaireController CreateQuestionnaireController(
             ICommandService commandService = null,
-            IQuestionnaireVerifier questionnaireVerifier = null,
-            IQuestionnaireHelper questionnaireHelper = null,
             IQuestionnaireViewFactory questionnaireViewFactory = null,
             ILogger<QuestionnaireController> logger = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null,
@@ -45,9 +52,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 categoricalOptionsImportService ?? Mock.Of<ICategoricalOptionsImportService>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 dbContext ?? Create.InMemoryDbContext(),
-                questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
-                Mock.Of<IPublicFoldersStorage>(),
-                categoriesService: Mock.Of<ICategoriesService>());
+                categoriesService: Mock.Of<ICategoriesService>(),
+                Mock.Of<IEmailSender>(),
+                Mock.Of<IViewRenderService>(),
+                null!);
             questionnaireController.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext

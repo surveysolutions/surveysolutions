@@ -308,12 +308,12 @@ input.radio-row{
 			span{
 				$cross-height: 16px;
 				@include cancel($cross-height);
-				padding: ($input-height-base - 2*1px /*border*/ - 2*$padding-base-vertical - $cross-height)/2 0;
+				padding: ($input-height-base - 2*1px /*border*/ - 2*$padding-base-vertical - $cross-height)*0.5 0;
 				&:before{
-					top: (($cross-height - 2px)/2 - 1px);
+					top: (($cross-height - 2px)*0.5 - 1px);
 				}
 				&:after{
-					top: ($cross-height/2 - 4px);
+					top: ($cross-height*0.5 - 4px);
 				}
 			}
 		}

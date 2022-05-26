@@ -8,6 +8,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Options;
 using Moq;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -40,7 +41,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 verificationErrorsMapper ?? Mock.Of<IVerificationErrorsMapper>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 Mock.Of<IOptions<WebTesterSettings>>(),
-                webTesterService ?? Mock.Of<IWebTesterService>());
+                webTesterService ?? Mock.Of<IWebTesterService>(),
+                Mock.Of<DesignerDbContext>());
 
             return questionnaireController;
         }

@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         public QuestionnaireDocument? Get(QuestionnaireRevision questionnaire)
         {
             return questionnaire.Revision == null
-                ? this.questionnaireDocumentReader.GetById(questionnaire.QuestionnaireId.FormatGuid())
+                ? this.questionnaireDocumentReader.GetById((questionnaire.OriginalQuestionnaireId ?? questionnaire.QuestionnaireId).FormatGuid())
                 : this.questionnaireHistoryVersionsService.GetByHistoryVersion(questionnaire.Revision.Value);
         }
 

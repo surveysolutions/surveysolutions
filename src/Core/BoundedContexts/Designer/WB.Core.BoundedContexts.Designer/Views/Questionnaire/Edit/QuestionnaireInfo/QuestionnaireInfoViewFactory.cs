@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             this.loggedInUser = loggedInUser;
         }
 
-        public QuestionnaireInfoView? Load(QuestionnaireRevision questionnaireRevision, Guid viewerId)
+        public QuestionnaireInfoView? Load(QuestionnaireRevision questionnaireRevision, Guid? viewerId)
         {
             var questionnaireDocument = this.questionnaireStorage.Get(questionnaireRevision);
 
@@ -121,7 +121,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.RostersCount = rostersCount;
             
             var listItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons)
-                .FirstOrDefault(x => x.QuestionnaireId == questionnaireRevision.QuestionnaireId.FormatGuid());
+                .FirstOrDefault(x => x.QuestionnaireId == (questionnaireRevision.OriginalQuestionnaireId ?? questionnaireRevision.QuestionnaireId).FormatGuid());
             
             if (listItem == null) 
                 return null;
@@ -253,6 +253,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     Title = s.Title
                 })
                 .ToList();
+
+            
+            var anonymousQuestionnaire = dbContext.AnonymousQuestionnaires
+                .FirstOrDefault(a => a.QuestionnaireId == questionnaireRevision.QuestionnaireId);
+
+            if (anonymousQuestionnaire != null)
+            {
+                questionnaireInfoView.IsAnonymouslyShared = anonymousQuestionnaire.IsActive;
+                if (anonymousQuestionnaire.IsActive)
+                {
+                    questionnaireInfoView.AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId;
+                    questionnaireInfoView.AnonymouslySharedAtUtc = anonymousQuestionnaire.GeneratedAtUtc;
+                }
+            }
 
             return questionnaireInfoView;
         }

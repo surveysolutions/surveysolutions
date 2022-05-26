@@ -24,36 +24,39 @@
 <body>
 	<header>
 		<div class="column_header authors">
-			<ul>
-				<li>@string.Format(PdfStrings.GeneratedBy, questionnaire.Requested.By), <span>@questionnaire.Requested.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
-				<li>@string.Format(PdfStrings.CreatedBy, questionnaire.Created.By), <span>@questionnaire.Created.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
-				@if (questionnaire.LastModified != null)
-				{
-				<li>@string.Format(PdfStrings.LastModifiedBy, questionnaire.LastModified.By), <span>@questionnaire.LastModified.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
-				}
-			</ul>
-			@if (questionnaire.SharedPersons.Count() != 0)
+			@if (questionnaire.Created.UserId.HasValue)
 			{
-			<div>@PdfStrings.SharedWith</div>
-			<ul>
-				@foreach (var person in questionnaire.SharedPersons)
+				<ul>
+					<li>@string.Format(PdfStrings.GeneratedBy, questionnaire.Requested.By), <span>@questionnaire.Requested.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
+					<li>@string.Format(PdfStrings.CreatedBy, questionnaire.Created.By), <span>@questionnaire.Created.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
+					@if (questionnaire.LastModified != null)
+					{
+						<li>@string.Format(PdfStrings.LastModifiedBy, questionnaire.LastModified.By), <span>@questionnaire.LastModified.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
+					}
+				</ul>
+				@if (questionnaire.SharedPersons.Count() != 0)
 				{
-				<li>
-					@if (person.Date.HasValue)
-					{
-					<span>@string.Format(PdfStrings.LastEdited, person.Name, person.Date)</span>
-					}
-					else
-					{
-					<span>@string.Format(PdfStrings.NeverEdited, person.Name)</span>
-					}
-				</li>
+					<div>@PdfStrings.SharedWith</div>
+					<ul>
+						@foreach (var person in questionnaire.SharedPersons)
+						{
+							<li>
+								@if (person.Date.HasValue)
+								{
+									<span>@string.Format(PdfStrings.LastEdited, person.Name, person.Date)</span>
+								}
+								else
+								{
+									<span>@string.Format(PdfStrings.NeverEdited, person.Name)</span>
+								}
+							</li>
+						}
+					</ul>
 				}
-			</ul>
-			}
-			else
-			{
-			<div>@PdfStrings.NotShared</div>
+				else
+				{
+					<div>@PdfStrings.NotShared</div>
+				}
 			}
 		</div>
 		<div class="column_header">

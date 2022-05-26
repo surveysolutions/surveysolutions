@@ -30,6 +30,8 @@
     <PackageReference Include="FluentMigrator.Runner.Core" Version="3.2.15" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
     <PackageReference Include="NJsonSchema" Version="10.5.2" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.80.3" />
+    <PackageReference Include="SkiaSharp.QrCode" Version="0.4.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.3" />

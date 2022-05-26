@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
     {
         public class ModificationStatisticsByUser
         {
-            public Guid UserId { get; set; }
+            public Guid? UserId { get; set; }
             public string? Name { get; set; }
             public DateTime? Date { get; set; }
 

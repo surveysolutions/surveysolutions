@@ -74,7 +74,7 @@ namespace WB.UI.Tester.Infrastructure
 
             registry.Bind<IStringCompressor, JsonCompressor>();
             registry.BindAsSingleton<IDesignerApiService, DesignerApiService>();
-            registry.BindAsSingleton<IPrincipal, TesterPrincipal>();
+            registry.BindAsSingleton<IPrincipal, ITesterPrincipal, TesterPrincipal>();
 
             registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, TesterQuestionnaireAssemblyAccessor>(
                 "assemblyStorageDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory(this.questionnaireAssembliesFolder));

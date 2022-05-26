@@ -138,6 +138,19 @@
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
     <value>Can't open the questionnaire "{0}". Your Designer user account is not authorized. Please check your login and password.</value>
   </data>
+  <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
+    <value>Anonymous questionnaire url</value>
+  </data>
+  <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
+    <value>Can't open the questionnaire. The questionnaire cannot be found.</value>
+  </data>
+  <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
+    <value>Can't open the questionnaire. Remove it from list?</value>
+  </data>
+
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
     <value>Can't open the questionnaire "{0}". The questionnaire cannot be found. Please refresh the list of questionnaires.</value>
   </data>
@@ -165,11 +178,17 @@
   <data name="MenuItem_Title_Reload" xml:space="preserve">
     <value>Reload questionnaire</value>
   </data>
+  <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
+    <value>Anonymous Questionnaires</value>
+  </data>
   <data name="MenuItem_Title_Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Sign out</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Login</value>
   </data>
   <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
     <value>Disable SSL certificate validation</value>

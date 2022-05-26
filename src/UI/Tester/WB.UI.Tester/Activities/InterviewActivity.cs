@@ -24,6 +24,11 @@ namespace WB.UI.Tester.Activities
         protected override MenuDescription MenuDescriptor => new MenuDescription
         {
             {
+                Resource.Id.interview_anonymous_questionnaire,
+                TesterUIResources.MenuItem_Title_AnonymousQuestionnaires,
+                this.ViewModel.NavigateToAnonymousQuestionnairesCommand
+            },
+            {
                 Resource.Id.interview_dashboard,
                 TesterUIResources.MenuItem_Title_Dashboard,
                 this.ViewModel.NavigateToDashboardCommand
@@ -39,6 +44,11 @@ namespace WB.UI.Tester.Activities
                 this.ViewModel.ReloadQuestionnaireCommand
             },
             {
+                Resource.Id.interview_login,
+                TesterUIResources.MenuItem_Title_Login,
+                this.ViewModel.NavigateToLoginCommand
+            },
+            {
                 Resource.Id.interview_signout,
                 TesterUIResources.MenuItem_Title_SignOut,
                 this.ViewModel.SignOutCommand
@@ -52,6 +62,19 @@ namespace WB.UI.Tester.Activities
                 this.ViewModel.DefaultLanguageName ?? TesterUIResources.MenuItem_Title_Language_Original
             },
         };
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            var onCreateOptionsMenu = base.OnCreateOptionsMenu(menu);
+
+            var isAuthenticated = this.ViewModel.IsAuthenticated;
+            menu.VisibleMenuItem(Resource.Id.interview_login, !isAuthenticated);
+            menu.VisibleMenuItem(Resource.Id.interview_signout, isAuthenticated);
+            menu.VisibleMenuItem(Resource.Id.interview_anonymous_questionnaire, !isAuthenticated);
+            menu.VisibleMenuItem(Resource.Id.interview_dashboard, isAuthenticated);
+            
+            return onCreateOptionsMenu;
+        }
 
         protected override void OnResume()
         {

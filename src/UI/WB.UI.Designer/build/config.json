@@ -25,7 +25,7 @@
     "Areas/Identity/Pages/Layout.Account.cshtml",
     "Areas/Pdf/Views/Pdf/RenderQuestionnaire.cshtml",
     "Views/Classifications/Index.cshtml",
-    "Views/Questionnaire/Public.cshtml",
+    "Views/QuestionnaireList/Public.cshtml",
     "Views/Shared/_ValidationScriptsPartial.cshtml",
     "Views/Shared/Layout.cshtml",
     "Views/Error/Layout.Error.cshtml",

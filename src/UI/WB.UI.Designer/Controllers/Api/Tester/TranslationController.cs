@@ -7,13 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.UI.Designer.Controllers.Api.Designer;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
-    [Authorize]
+    [AuthorizeOrAnonymousQuestionnaire]
     [Route("api/v{version:int}/translation")]
     public class TranslationController : ControllerBase
     {
@@ -26,21 +28,24 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
+        [QuestionnairePermissions]
         [HttpGet]
-        [Route("{id:Guid}")]
-        public async Task<IActionResult> Get(Guid id, int version)
+        [Route("{id}")]
+        public async Task<IActionResult> Get(QuestionnaireRevision id, int version)
         {
             if (version < ApiVersion.CurrentTesterProtocolVersion)
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
 
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            var questionnaireView = this.questionnaireViewFactory.Load(id);
 
             if(questionnaireView == null)
                 return NotFound();
 
+            var questionnaireId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
+
             var translationsIds = questionnaireView.Source.Translations.Select(x => x.Id).ToList();
 
-            var translationInstances = await this.dbContext.TranslationInstances.Where(x => x.QuestionnaireId == id && translationsIds.Contains(x.TranslationId))
+            var translationInstances = await this.dbContext.TranslationInstances.Where(x => x.QuestionnaireId == questionnaireId && translationsIds.Contains(x.TranslationId))
                                                      .ToListAsync();
             var result = translationInstances
                 .Select(x => new TranslationDto

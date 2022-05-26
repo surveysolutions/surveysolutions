@@ -60,6 +60,7 @@
     <Compile Include="Activities\Dashboard\ExpandableViewHolder.cs" />
     <Compile Include="Activities\Dashboard\MenuItemOnMenuItemClickListener.cs" />
     <Compile Include="Activities\EnumeratorSplashScreenAppCompatActivity.cs" />
+    <Compile Include="Activities\MenuHelper.cs" />
     <Compile Include="Activities\SearchActivity.cs" />
     <Compile Include="Activities\SecureStorage.cs" />
     <Compile Include="Activities\SelectResponsibleForInterviewFragment.cs" />

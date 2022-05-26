@@ -136,6 +136,7 @@ namespace WB.UI.Tester
             base.FillValueConverters(registry);
 
             registry.AddOrOverwrite("QuestionnaireTypeToBackground", new QuestionnaireTypeToBackgroundConverter());
+            registry.AddOrOverwrite("Localization", new TesterLocalizationValueConverter());
         }
 
         public override IEnumerable<Assembly> GetViewModelAssemblies()

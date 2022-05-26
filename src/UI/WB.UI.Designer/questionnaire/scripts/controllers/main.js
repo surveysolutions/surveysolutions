@@ -562,6 +562,7 @@ angular.module('designerApp')
                             return {
                                 name: $scope.currentUserName,
                                 email: $scope.currentUserEmail,
+                                isAuthenticated: $scope.currentUserIsAuthenticated
                             }
                         },
                         questionnaire: function() {
@@ -706,6 +707,7 @@ angular.module('designerApp')
             userService.getCurrentUserName().then(function(result) {
                 $scope.currentUserName = result.data.userName;
                 $scope.currentUserEmail = result.data.email;
+                $scope.currentUserIsAuthenticated = result.data.isAuthenticated;
             });
 
             getQuestionnaire();

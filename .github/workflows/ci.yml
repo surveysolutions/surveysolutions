@@ -78,11 +78,11 @@ jobs:
           dotnet-version: '6.0.x'
 
       - name: Create db connection string
-        run: echo "DB_CONN=Server=postgres;Port=${{ job.services.postgres.ports[5432] }};User Id=${{ env.PG_USER }};Password=${{ env.PG_PASSWORD }};" >> $GITHUB_ENV
+        run: echo "DB_CONN=Server=127.0.0.1;Port=${{ job.services.postgres.ports[5432] }};User Id=${{ env.PG_USER }};Password=${{ env.PG_PASSWORD }};" >> $GITHUB_ENV
 
       - name: Headquarters tests
         run: |
-          echo "[ConnectionStrings]\nTestConnection=\"${{ env.DB_CONN }}Database=postgres;CommandTimeout=60;\"" >> appsettings.ini
+          echo "[ConnectionStrings]\nTestConnection=\"${{ env.DB_CONN }}Database=postgres;CommandTimeout=60;\"" > appsettings.ini
           dotnet test src/Tests/WB.Tests.Integration \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
@@ -92,6 +92,18 @@ jobs:
           dotnet test src/Tests/WB.Tests.Integration.Designer \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Export service tests
+        run: |
+          dotnet test src/Services/Export/WB.Services.Export.Tests \
+            --collect:"XPlat Code Coverage" \
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Scheduler service tests
+        run: |
+          echo "{ \"ConnectionStrings\": { \"DefaultConnection\": \"${{ env.DB_CONN }}Database=export_service_tests;\" }}" > appsettings.json
+          dotnet test src/Services/Core/WB.Services.Scheduler.Tests \
+            --collect:"XPlat Code Coverage" \
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+
       - name: Test coverage artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -100,6 +112,8 @@ jobs:
           path: |
             src/Tests/WB.Tests.Integration/TestResults/**/*.xml
             src/Tests/WB.Tests.Integration.Designer/TestResults/**/*.xml
+            src/Services/Export/WB.Services.Export.Tests/TestResults/**/*.xml
+            src/Services/Core/WB.Services.Scheduler.Tests/TestResults/**/*.xml
 
   code-analysis:
     if: |

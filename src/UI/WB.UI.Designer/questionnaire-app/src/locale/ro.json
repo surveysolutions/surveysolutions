@@ -452,6 +452,9 @@
     "TableView": "Vizualizare în tabel",
     "ValidationIntValue": "Valoarea este prea mare",
     "CopyTo": "Copy to",
-    "EditorShowComments": "Show comments ({{count}})"
+    "SettingsAnonymous": "Anonymous",
+    "RegenerateQuestionnaireSharingLink": "Generate new link",
+    "EditorShowComments": "Show comments ({{count}})",
+    "AnonymousQuestionnaireSettings": "Anonymous questionnaire access"
   }
 }

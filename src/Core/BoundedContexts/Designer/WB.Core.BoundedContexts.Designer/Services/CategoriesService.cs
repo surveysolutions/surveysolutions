@@ -109,13 +109,13 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             var items = this.dbContext.CategoriesInstances
                 .Where(x => x.QuestionnaireId == questionnaireId && x.CategoriesId == categoriesId)
+                .OrderBy(x => x.SortIndex)
                 .Select(i => new CategoriesItem()
                 {
                     Id = i.Value,
                     ParentId = i.ParentId,
                     Text = i.Text
-                })
-                .OrderBy(x => x.Id);
+                });
             return categoriesExportService.GetAsExcelFile(items);
         }
 

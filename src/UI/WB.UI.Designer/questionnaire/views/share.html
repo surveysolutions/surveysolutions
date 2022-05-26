@@ -12,56 +12,63 @@
             <a role="tab" data-toggle="tab" href="#questionnaireSettingsTab">{{'QuestionnaireSettings' | i18next }}</a>
         </li>
         <li role="presentation">
-            <a role="tab" data-toggle="tab" href="#shareTab" ng-if="!questionnaire.isReadOnlyForUser || questionnaire.hasViewerAdminRights">{{'CollaboratorsSettings' | i18next }}</a>
+            <a role="tab" data-toggle="tab" href="#shareTab" ng-if="!questionnaire.isReadOnlyForUser || questionnaire.hasViewerAdminRights">{{'AccessSettings' | i18next }}</a>
         </li>
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="questionnaireSettingsTab">
-            <div class="well-sm">
-                <form role="form" name="questionnaireForm">
-                    <div class="form-group">
-                        <label class="control-label" for="questionnaireTitle" ng-i18next="SettingsQuestionnaireName"></label>
-                        <input id="questionnaireTitle"
-                               type="text" 
-                               class="form-control questionaire-title"
-                               ng-disabled="questionnaire.isReadOnlyForUser"
-                               ng-model="questionnaire.editedTitle"
-                               maxlength="500">
-                    </div>
-                
-                    <div class="form-group input-variable-name"> 
-                        <label class="control-label" for="questionnaireTitle">{{'SettingsQuestionnaireVariable' | i18next }}
-                            <help key="questionnaireVariableName" />
-                        </label>
-                        <input id="questionnaireVariable" 
-                               ng-disabled="questionnaire.isReadOnlyForUser"
-                               type="text" class="form-control questionaire-title" ng-model="questionnaire.editedVariable"
-                            maxlength="32" spellcheck="false">
-                    </div>
-                
-                    <!--i know this is horrible, but i cannot remove paddings from checkbox image so that visually they inputs are aligned-->
-                    <div class="form-group" style="margin-left: -8px;">
-                        <input id="questionnaireHideIdDisabled" type="checkbox" class="wb-checkbox" 
-                               ng-disabled="questionnaire.isReadOnlyForUser"
-                               ng-model="questionnaire.editedHideIfDisabled"/>
-                        <label for="questionnaireHideIdDisabled"><span></span>{{'SettingsHideIfDisabled' | i18next}}</label>
-                        <help key="hideIfDisabled" />
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-lg update-button" ng-class="{ 'btn-primary': questionnaireForm.$dirty }"
-                            unsaved-warning-clear ng-if="!questionnaire.isReadOnlyForUser" ng-disabled="!questionnaireForm.$dirty" ng-click="updateTitle()" ng-i18next>
-                            Update
-                        </button>
-                    </div>
-                </form>
+            <div class="row well-sm">
+                <div class="col-xs-7">
+                    <form role="form" name="questionnaireForm">
+                        <div class="form-group">
+                            <label class="control-label" for="questionnaireTitle" ng-i18next="SettingsQuestionnaireName"></label>
+                            <input id="questionnaireTitle"
+                                   type="text" 
+                                   class="form-control questionaire-title"
+                                   ng-disabled="questionnaire.isReadOnlyForUser"
+                                   ng-model="questionnaire.editedTitle"
+                                   maxlength="500">
+                        </div>
+                    
+                        <div class="form-group input-variable-name"> 
+                            <label class="control-label" for="questionnaireTitle">{{'SettingsQuestionnaireVariable' | i18next }}
+                                <help key="questionnaireVariableName" />
+                            </label>
+                            <input id="questionnaireVariable" 
+                                   ng-disabled="questionnaire.isReadOnlyForUser"
+                                   type="text" class="form-control questionaire-title" ng-model="questionnaire.editedVariable"
+                                maxlength="32" spellcheck="false">
+                        </div>
+                    
+                        <!--i know this is horrible, but i cannot remove paddings from checkbox image so that visually they inputs are aligned-->
+                        <div class="form-group" style="margin-left: -8px;">
+                            <input id="questionnaireHideIdDisabled" type="checkbox" class="wb-checkbox" 
+                                   ng-disabled="questionnaire.isReadOnlyForUser"
+                                   ng-model="questionnaire.editedHideIfDisabled"/>
+                            <label for="questionnaireHideIdDisabled"><span></span>{{'SettingsHideIfDisabled' | i18next}}</label>
+                            <help key="hideIfDisabled" />
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-lg update-button" ng-class="{ 'btn-primary': questionnaireForm.$dirty }"
+                                unsaved-warning-clear ng-if="!questionnaire.isReadOnlyForUser" ng-disabled="!questionnaireForm.$dirty" ng-click="updateTitle()" ng-i18next>
+                                Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-xs-5">
+                    <img alt="qr code"
+                         ng-src='{{"/questionnaire/publicurl/" + questionnaire.questionnaireId}}' />
+                </div>
             </div>
-
         </div>
         <div role="tabpanel" class="tab-pane" id="shareTab">
             <div class="well-sm">
-                <h2 ng-i18next="SettingsWhoHasAccess"> </h2>
+                <h2 ng-i18next="CollaboratorsSettings"> </h2>
+                <em class="text-muted">{{ 'CollaboratorsDescriptionSettings' | i18next}}</em>
+                <br/>
                 <ul class="accounts">
                     <li ng-repeat="s in questionnaire.sharedPersons">
                         <a href="mailto:{{s.email}}">{{s.email}}</a> ({{s.login}}) -
@@ -120,15 +127,56 @@
                         </div>
                     </div>
                 </form>
+                
                 <hr />
+                <div ng-if="isQuestionnaireOwner()">
+                    <h2 ng-i18next="AnonymousQuestionnaireSettings"></h2>
+                    <em class="text-muted">{{ 'AnonymousQuestionnaireDescriptionSettings' | i18next}}</em>
+                    <br/>
+                    <span>
+                        {{ (questionnaire.isAnonymouslyShared ? 'SettingsStatusAllowAnonymousAccess' : 'SettingsStatusDontAllowAnonymousAccess') | i18next }}
+                    </span>
+                    <button class="btn btn-link answer" ng-click="updateAnonymousQuestionnaireSettings()">
+                        {{(questionnaire.isAnonymouslyShared ? 'SettingsTurnOffAnonymousAccess' : 'SettingsTurnOnAnonymousAccess') | i18next}}
+                    </button>
+                    <br />
+                    <div ng-if="questionnaire.isAnonymouslyShared" class="row">
+                        <div class="col-xs-7">
+
+                            <div ng-i18next="AnonymousLink" style="margin-top: 15px"></div>
+                            <a ng-href="{{ getAnonymousQuestionnaireLink() }}" title="link" onclick="return false;">
+                                {{ getAnonymousQuestionnaireLink() }}
+                            </a>
+                            <br/>
+                            <div ng-i18next="({datetime: questionnaire.anonymousQuestionnaireShareDate})AnonymousQuestionnaireGeneratedDate">
+                            </div>
+                            <button class="btn btn-link answer" style="padding-left: 0px;" ng-i18next="CopyLink" ng-click="copyAnonymousQuestionnaireLink()">
+                            </button>
+                            
+                            <span> | </span>
+
+                            <button class="btn btn-link answer"  ng-click="regenerateAnonymousQuestionnaireLink()">
+                                {{'RegenerateQuestionnaireSharingLink' | i18next }}
+                            </button>
+                        </div>
+                        <div class="col-xs-5">
+                            <img alt="qr code" ng-if="questionnaire.isAnonymouslyShared"
+                                 ng-src='{{"/questionnaire/publicurl/" + questionnaire.anonymousQuestionnaireId}}' />
+                        </div>
+                    </div>
+                </div>
+
+                <hr ng-if="questionnaire.hasViewerAdminRights" />
                 <div ng-if="questionnaire.hasViewerAdminRights">
                     <h2 ng-i18next="PublicAccessSettings"></h2>
+                    <em class="text-muted">{{ 'PublicAccessDescriptionSettings' | i18next}}</em>
+                    <br/>
+                    <span>
+                        {{ (questionnaire.isPublic ? 'PublicAccessSettingsStatusOn' : 'PublicAccessSettingsStatusOff') | i18next }}
+                    </span>
                     <button class="btn btn-link answer" ng-click="togglePublicity()">
-                        {{'SettingsQuestionnaireSharing' | i18next }}
-                        {{(questionnaire.isPublic ? 'SettingsPrivate' : 'SettingsPublic') | i18next}}
+                        {{(questionnaire.isPublic ? 'PublicAccessSettingsOff' : 'PublicAccessSettingsOn') | i18next}}
                     </button>
-                    <i class="text-muted">({{(questionnaire.isPublic ? 'SettingsVisibleToOwner' :
-                        'SettingsVisibleToEveryone') | i18next}})</i>
                 </div>
             </div>
         </div>

@@ -3,6 +3,9 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
       android:id="@+id/menu">
   <item
+      android:id="@+id/login_anonymous_questionnaire"
+      local:showAsAction="never" />
+  <item
       android:id="@+id/login_settings"
       local:showAsAction="never" />
 </menu>

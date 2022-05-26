@@ -28,11 +28,20 @@ namespace WB.UI.Tester.Infrastructure.Internals
         private readonly IRestService restService;
         private readonly IPrincipal principal;
 
-        private RestCredentials RestCredentials => new RestCredentials
+        private RestCredentials RestCredentials
         {
-            Login = this.principal.CurrentUserIdentity.Name,
-            Password = ((TesterUserIdentity)this.principal.CurrentUserIdentity).Password
-        };
+            get
+            {
+                if (this.principal?.CurrentUserIdentity == null)
+                    return null;
+                
+                return new RestCredentials
+                {
+                    Login = this.principal.CurrentUserIdentity.Name,
+                    Password = ((TesterUserIdentity)this.principal.CurrentUserIdentity).Password
+                };
+            }
+        }
 
         public DesignerApiService(
             IRestService restService, 
@@ -84,12 +93,13 @@ namespace WB.UI.Tester.Infrastructure.Internals
             return downloadedQuestionnaire;
         }
 
-        public async Task<AttachmentContent> GetAttachmentContentAsync(string attachmentContentId,
+        public async Task<AttachmentContent> GetAttachmentContentAsync(string questionnaireId, 
+            string attachmentContentId,
             IProgress<TransferProgress> transferProgress, 
             CancellationToken token)
         {
             var restFile = await this.restService.DownloadFileAsync(
-                url: $"{this.apiPrefix}/attachment/{attachmentContentId}",
+                url: $"{this.apiPrefix}/attachment/{questionnaireId}/{attachmentContentId}",
                 credentials: this.RestCredentials,
                 transferProgress: transferProgress,
                 token: token).ConfigureAwait(false);

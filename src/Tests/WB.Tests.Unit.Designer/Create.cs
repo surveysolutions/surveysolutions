@@ -862,11 +862,13 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? questionnaireId = null, Guid? chapterId = null, Attachment[] attachments = null, 
             Translation[] translations = null, IEnumerable<Macro> macros = null, params IComposite[] children)
         {
+            var publicKey = questionnaireId ?? Guid.NewGuid();
             var result = new QuestionnaireDocument
             {
                 Title = "Q",
                 VariableName = "Q",
-                PublicKey = questionnaireId ?? Guid.NewGuid(),
+                Id = publicKey.FormatGuid(),
+                PublicKey = publicKey,
                 Children = new IComposite[]
                 {
                     new Group("Chapter")

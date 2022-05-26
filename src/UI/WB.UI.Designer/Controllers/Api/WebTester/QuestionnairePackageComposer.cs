@@ -21,7 +21,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
     public class QuestionnairePackageComposer : IQuestionnairePackageComposer
     {
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
-        private readonly DesignerDbContext questionnaireChangeItemStorage;
+        private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IDesignerEngineVersionService engineVersionService;
@@ -30,7 +30,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         private readonly IQuestionnaireCacheStorage questionnaireCacheStorage;
 
         public QuestionnairePackageComposer(IExpressionProcessorGenerator expressionProcessorGenerator,
-            DesignerDbContext questionnaireChangeItemStorage,
+            DesignerDbContext dbContext,
             IQuestionnaireViewFactory questionnaireViewFactory,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
             IDesignerEngineVersionService engineVersionService,
@@ -39,7 +39,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             IQuestionnaireCacheStorage questionnaireCacheStorage)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
-            this.questionnaireChangeItemStorage = questionnaireChangeItemStorage;
+            this.dbContext = dbContext;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.engineVersionService = engineVersionService;
@@ -51,8 +51,12 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
 
         public Questionnaire ComposeQuestionnaire(Guid questionnaireId)
         {
-            var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.QuestionnaireChangeRecords
-                .Where(y => y.QuestionnaireId == questionnaireId.FormatGuid())
+            var anonymousQuestionnaire = this.dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.IsActive
+                && a.AnonymousQuestionnaireId == questionnaireId);
+            var originalQuestionnaireId = anonymousQuestionnaire?.QuestionnaireId ?? questionnaireId;
+
+            var maxSequenceByQuestionnaire = this.dbContext.QuestionnaireChangeRecords
+                .Where(y => y.QuestionnaireId == originalQuestionnaireId.FormatGuid())
                 .Select(y => (int?)y.Sequence)
                 .Max();
 
@@ -60,7 +64,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
 
             try
             {
-                return questionnaireCacheStorage.GetOrCreate(questionnaireKey, questionnaireId, ComposeQuestionnaireImpl);
+                return questionnaireCacheStorage.GetOrCreate(questionnaireKey, questionnaireId, id => ComposeQuestionnaireImpl(originalQuestionnaireId, id));
             }
             catch
             {
@@ -69,7 +73,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             }
         }
 
-        private Questionnaire ComposeQuestionnaireImpl(Guid questionnaireId)
+        private Questionnaire ComposeQuestionnaireImpl(Guid questionnaireId, Guid fakeQuestionnaireId)
         {
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
             if (questionnaireView == null)
@@ -80,6 +84,11 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             var versionToCompileAssembly = specifiedCompilationVersion ?? Math.Max(20,
                                                this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source));
 
+            var questionnaire = questionnaireView.Source.Clone();
+            questionnaire.Id = fakeQuestionnaireId.FormatGuid();
+            questionnaire.PublicKey = fakeQuestionnaireId;
+            questionnaireView = new QuestionnaireView(questionnaire, questionnaireView.SharedPersons);
+            
             string resultAssembly;
             List<QuestionnaireVerificationMessage> verificationResult;
             try
@@ -96,8 +105,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             if (verificationResult.Any(x => x.MessageLevel != VerificationMessageLevel.Warning))
                 throw new ComposeException();
 
-            var questionnaire = questionnaireView.Source.Clone();
-            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaireView.Source);
+            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaire);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
 
             questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);

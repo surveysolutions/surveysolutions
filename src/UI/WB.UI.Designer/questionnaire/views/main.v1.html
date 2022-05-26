@@ -6,14 +6,15 @@
                 <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank" ng-i18next>Help</a>
                 <a class="btn" href="https://forum.mysurvey.solutions" target="_blank" ng-i18next>Forum</a>
             
-                <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank" ng-i18next>History</a>
+                <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank"
+                   ng-if="!questionnaire.isReadOnlyForUser && (questionnaire.hasViewerAdminRights || questionnaire.isSharedWithUser)" ng-i18next>History</a>
                 <button class="btn" type="button" ng-click="showDownloadPdf()" ng-i18next>DownloadPdf</button>
                 <a class="btn" type="button" ng-show="questionnaire.hasViewerAdminRights" ng-click="exportQuestionnaire()" ng-i18next>SaveAs</a>
 
-                <a class="btn"  ng-if="questionnaire.questionnaireRevision" href="../../questionnaire/clone/{{questionnaire.questionnaireId}}${{questionnaire.questionnaireRevision}}" target="_blank" ng-i18next>CopyTo</a>
+                <a class="btn"  ng-if="questionnaire.questionnaireRevision || questionnaire.isReadOnlyForUser" href="../../questionnaire/clone/{{questionnaire.questionnaireId}}{{questionnaire.questionnaireRevision ? '$' + questionnaire.questionnaireRevision : ''}}" target="_blank" ng-i18next>CopyTo</a>
                 <button class="btn" type="button" ng-disabled="questionnaire.isReadOnlyForUser && !questionnaire.hasViewerAdminRights && !questionnaire.isSharedWithUser" ng-click="showShareInfo()" ng-i18next>Settings</button>
 
-                <div class="btn-group">
+                <div class="btn-group" ng-if="currentUserIsAuthenticated">
                     <a class="btn btn-default" ng-i18next="[i18next]({currentUserName: '{{ currentUserName }}' })HellowMessageBtn"></a>
                     <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="caret"></span>
@@ -24,6 +25,8 @@
                         <li><a href="../../identity/account/logout" ng-i18next>LogOut</a></li>
                     </ul>
                 </div>
+                <a class="btn" href="/" type="button" ng-if="!currentUserIsAuthenticated" ng-i18next>Login</a>
+                <a class="btn" href="/identity/account/register" type="button" ng-if="!currentUserIsAuthenticated" ng-i18next>Register</a>
             </div>
         </div>
         <div class="questionnarie-title">
@@ -289,7 +292,7 @@
                         <button class="btn btn-default btn-lg pull-left" ng-class="{'btn-primary': !isReadOnlyForUser}"
                                 ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()"
                                 ngf-accept="'.pdf,image/*,video/*,audio/*'" ngf-max-size="100MB" type="file" ngf-select-disabled="isReadOnlyForUser"
-                                ngf-drop-disabled="isReadOnlyForUser"
+                                ngf-drop-disabled="isReadOnlyForUser" ng-disabled="isReadOnlyForUser"
                                 ng-i18next="SideBarAttachmentsUpload">
                             Upload new
                         </button>
@@ -555,7 +558,8 @@
                                    ngf-max-size="10MB"
                                    accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab"
                                    ngf-select-disabled="isReadOnlyForUser"
-                                   ngf-drop-disabled="isReadOnlyForUser"/>
+                                   ngf-drop-disabled="isReadOnlyForUser"
+                                   ng-disabled="isReadOnlyForUser" />
                         </p>
                     </div>
                 </perfect-scrollbar>

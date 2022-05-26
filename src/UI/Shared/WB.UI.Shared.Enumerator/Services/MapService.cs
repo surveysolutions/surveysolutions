@@ -120,13 +120,13 @@ namespace WB.UI.Shared.Enumerator.Services
             if (this.webOnlyMode)
                 return mapList;
 
-            void AddMapsFromFolder(string folder)
+            void AddMapsFromFolder(string folder, bool searchInSubdirectories)
             {
                 if (!this.fileSystemAccessor.IsDirectoryExists(folder))
                     return;
 
                 var localMaps = this.mapFilesToSearch
-                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(folder, i))
+                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(folder, i, searchInSubdirectories))
                     .OrderBy(x => x)
                     .Select(x =>
                         new MapDescription(MapType.LocalFile, this.fileSystemAccessor.GetFileNameWithoutExtension(x))
@@ -143,9 +143,9 @@ namespace WB.UI.Shared.Enumerator.Services
             }
             
             if(!string.IsNullOrEmpty(workspaceName))
-                AddMapsFromFolder(GetMapsLocationOrThrow());
+                AddMapsFromFolder(GetMapsLocationOrThrow(), true);
 
-            AddMapsFromFolder(this.mapsLocationCommon);
+            AddMapsFromFolder(this.mapsLocationCommon, false);
 
             return mapList;
         }
@@ -230,13 +230,13 @@ namespace WB.UI.Shared.Enumerator.Services
             if (this.webOnlyMode)
                 return new List<ShapefileDescription>();
             
-            List<ShapefileDescription> GetShapesInFolder(string path)
+            List<ShapefileDescription> GetShapesInFolder(string path, bool searchInSubdirectories)
             {
                 if (!this.fileSystemAccessor.IsDirectoryExists(path))
                     return new List<ShapefileDescription>();
 
                 return this.shapefilesToSearch
-                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(path, i))
+                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(path, i, searchInSubdirectories))
                     .OrderBy(x => x)
                     .Select(x => new ShapefileDescription()
                     {
@@ -253,15 +253,15 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!string.IsNullOrEmpty(workspaceName))
             {
                 var shapesInFolder = GetShapesInFolder(fileSystemAccessor.CombinePath(
-                    this.shapefilesLocationCommon, workspaceName));
+                    this.shapefilesLocationCommon, workspaceName), true);
                 shapefileDescriptions.AddRange(shapesInFolder);
 
                 var shapesInMapFolder = GetShapesInFolder(fileSystemAccessor.CombinePath(
-                    this.mapsLocationCommon, workspaceName));
+                    this.mapsLocationCommon, workspaceName), true);
                 shapefileDescriptions.AddRange(shapesInMapFolder);
             }
 
-            var shapesInCommonFolder = GetShapesInFolder(this.shapefilesLocationCommon);
+            var shapesInCommonFolder = GetShapesInFolder(this.shapefilesLocationCommon, false);
             shapefileDescriptions.AddRange(shapesInCommonFolder);
 
             return shapefileDescriptions;

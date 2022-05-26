@@ -14,7 +14,6 @@ namespace WB.UI.Tester.Activities
         Exported = false)]
     public class LoginActivity : BaseActivity<LoginViewModel>
     {
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -32,6 +31,7 @@ namespace WB.UI.Tester.Activities
         {
             this.MenuInflater.Inflate(Resource.Menu.login, menu);
 
+            menu.LocalizeMenuItem(Resource.Id.login_anonymous_questionnaire, TesterUIResources.MenuItem_Title_AnonymousQuestionnaires);
             menu.LocalizeMenuItem(Resource.Id.login_settings, TesterUIResources.MenuItem_Title_Settings);
 
             return base.OnCreateOptionsMenu(menu);
@@ -41,9 +41,11 @@ namespace WB.UI.Tester.Activities
         {
             switch (item.ItemId)
             {
+                case Resource.Id.login_anonymous_questionnaire:
+                    this.StartActivity(new Intent(this, typeof(AnonymousQuestionnairesActivity)));
+                    break;
                 case Resource.Id.login_settings:
-                    Intent intent = new Intent(this, typeof(PrefsActivity));
-                    this.StartActivity(intent);
+                    this.StartActivity(new Intent(this, typeof(PrefsActivity)));
                     break;
                 default: break;
             }
