@@ -27,7 +27,7 @@ jobs:
       with:
         dotnet-version: '6.0.x'
     - name: Build Headquarters
-      run: ./.build.ps1 PackageHq -BuildNumber 12345
+      run: ./.build.ps1 PackageHq
       shell: pwsh
 
     - run: curl --silent --show-error --fail -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
@@ -37,7 +37,7 @@ jobs:
       with:
         java-version: 8
         distribution: 'temurin'
-    - run: java -jar pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" --fail_on_severity="Very High, High" --file ./artifacts/WB.UI.Headquarters.Offline.zip
+    - run: java -jar pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" --fail_on_severity="Very High, High" --file ./artifacts/WB.UI.Headquarters.zip
       continue-on-error: true
     - name: Convert pipeline scan output to SARIF format
       id: convert
