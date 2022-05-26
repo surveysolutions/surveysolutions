@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Plugin.Permissions;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -23,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
     {
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
+        private readonly IPermissionsService permissionsService;
         private readonly IMapService mapService;
 
         protected MapSyncProviderBase(IMapService mapService,
@@ -36,12 +38,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
             IUserInteractionService userInteractionService,
             IDeviceInformationService deviceInformationService,
             IServiceLocator serviceLocator,
-            IAssignmentDocumentsStorage assignmentsStorage)
+            IAssignmentDocumentsStorage assignmentsStorage,
+            IPermissionsService permissionsService)
             : base(synchronizationService, logger, httpStatistician, principal, interviewViewRepository,
                 auditLogService, enumeratorSettings, serviceLocator, deviceInformationService, userInteractionService, assignmentsStorage)
         {
             this.synchronizationService = synchronizationService;
             this.logger = logger;
+            this.permissionsService = permissionsService;
             this.mapService = mapService;
         }
 
@@ -56,6 +60,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                 Title = EnumeratorUIResources.MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server,
                 Status = SynchronizationStatus.Started
             });
+            
+            await this.permissionsService.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
 
             var items = await this.synchronizationService.GetMapList(cancellationToken).ConfigureAwait(false);
             var availableMaps = this.mapService.GetAvailableMaps(false);
