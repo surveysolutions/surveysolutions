@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services.Maps;
 
@@ -88,11 +89,36 @@ public class MapFilesValidatorTests
         
         Assert.That(validatorErrors.Any(), Is.False);
     }
+    
+    [Test]
+    public void when_validate_incorrect_map_name()
+    {
+        var analyzeResults = new AnalyzeResult()
+        {
+            IsValid = false,
+            Maps = new List<MapFiles>()
+            {
+                new MapFiles()
+                {
+                    IsShapeFile = false,
+                    Name = "map1",
+                    Files = new List<MapFile>() { MapFile("map\\1.shp") }
+                },
+            }
+        };
+        
+        var service = CreateMapFilesValidator();
+
+        var validatorErrors = service.Verify(analyzeResults).ToList();
+        
+        Assert.That(validatorErrors.Any(), Is.True);
+        Assert.That(validatorErrors.Count(), Is.EqualTo(1));
+    }
 
     private MapFile MapFile(string name, int size = 5000) => new MapFile() { Name = name, Size = size };
 
     private MapFilesValidator CreateMapFilesValidator()
     {
-        return new MapFilesValidator();
+        return new MapFilesValidator(new FileSystemIOAccessor());
     }
 }

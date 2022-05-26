@@ -180,5 +180,10 @@
   <data name="MapFileSizeLimit" xml:space="preserve">
     <value>Размер файла {0} превышает допустимый лимит {1}</value>
   </data>
-
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve">
+    <value>Имя файл {0} содержит не валидные символы.</value>
+  </data>
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve">
+    <value>Имя файл {0} содержит не UTF-8 символы.</value>
+  </data>
 </root>
