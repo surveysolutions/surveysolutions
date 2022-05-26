@@ -48,7 +48,7 @@ jobs:
         java -jar pipeline-scan.jar \
              --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" \
              --fail_on_severity="Very High, High" \
-             --file ./artifacts/${{ matrix.output }}
+             --file ./artifacts/${{ matrix.output }} \
              --json_output_file results-${{ matrix.task }}.json
       continue-on-error: true
     - name: Convert pipeline scan output to SARIF format
