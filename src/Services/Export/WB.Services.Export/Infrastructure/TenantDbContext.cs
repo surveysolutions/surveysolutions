@@ -55,11 +55,12 @@ namespace WB.Services.Export.Infrastructure
                     if (tenantContext.Tenant == null)
                         throw new ArgumentException($"{nameof(TenantDbContext)} cannot be resolved outside of configured ITenantContext");
 
-                var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection)
-                {
-                    Enlist = false,
-                    SearchPath = tenantContext.Tenant.SchemaName()
-                };
+                    var connectionStringBuilder =
+                        new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection)
+                        {
+                            Enlist = false,
+                            SearchPath = tenantContext.Tenant.SchemaName()
+                        };
 
                     return connectionStringBuilder.ToString();
                 });
@@ -122,18 +123,14 @@ namespace WB.Services.Export.Infrastructure
 
         private async Task CheckSchemaVersionAndMigrate(CancellationToken cancellationToken)
         {
-            if (await DoesSchemaExist(cancellationToken))
+            if (await DoesSchemaVersionTableExists(cancellationToken))
             {
                 long schemaVersion = 0;
-                try
+                schemaVersion = SchemaVersion.AsLong;
+                
+                if (schemaVersion < ContextSchemaVersion)
                 {
-                    schemaVersion = SchemaVersion.AsLong;
-                }
-                catch (PostgresException postgressException)
-                {
-                    //if relation doesn't exist or incorrect for old schema
-                    //ignoring and dropping schema
-                    logger?.LogWarning("Version Check failed. {messageText}", postgressException.MessageText);
+                    await DropTenantSchemaAsync(this.TenantContext.Tenant.Name, cancellationToken);
                 }
 
                 if (schemaVersion < ContextSchemaVersion)
@@ -142,7 +139,26 @@ namespace WB.Services.Export.Infrastructure
                 }
             }
 
+            var s = this.Database.GetConnectionString();
             await this.Database.MigrateAsync(cancellationToken: cancellationToken);
+        }
+
+        private async Task<bool> DoesSchemaVersionTableExists(CancellationToken cancellationToken)
+        {
+            await using var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection);
+
+            await db.OpenAsync(cancellationToken);
+            var name = TenantContext.Tenant.SchemaName();
+            var exists = await db.QueryFirstAsync<bool>(
+                @"SELECT EXISTS (SELECT FROM information_schema.tables 
+                    WHERE  table_schema = @schemaName
+                    AND    table_name   = @tableName)",
+                new
+                {
+                    schemaName = name,
+                    tableName = "metadata"
+                });
+            return exists;
         }
 
         private async Task SetContextSchema(CancellationToken cancellationToken)
@@ -162,8 +178,9 @@ namespace WB.Services.Export.Infrastructure
             string? schema = null;
             if (!this.TenantContext.Tenant.Id.Equals(TenantId.None))
             {
-                modelBuilder.HasDefaultSchema(TenantContext.Tenant.SchemaName());
-                schema = TenantContext.Tenant.SchemaName();
+                var schemaName = TenantContext.Tenant.SchemaName();
+                modelBuilder.HasDefaultSchema(schemaName);
+                schema = schemaName;
             }
 
             modelBuilder.ApplyConfiguration(new InterviewReferenceEntityTypeConfiguration(schema));
@@ -180,7 +197,7 @@ namespace WB.Services.Export.Infrastructure
             await using var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection);
             await db.OpenAsync(cancellationToken);
 
-            //logger.LogInformation("Start drop tenant scheme: {tenant}", tenant);
+            logger?.LogInformation("Start drop tenant schema: {Tenant}", tenant);
 
             var schemas = (await db.QueryAsync<string>(
                 "select nspname from pg_catalog.pg_namespace n " +
@@ -209,7 +226,7 @@ namespace WB.Services.Export.Infrastructure
                 foreach (var table in tables)
                 {
                     await db.ExecuteAsync($@"drop table if exists {table}");
-                    //logger.LogInformation("Dropped {table}", table);
+                    logger?.LogInformation("Dropped {Table}", table);
                 }
 
                 await tr.CommitAsync(cancellationToken);
@@ -220,26 +237,11 @@ namespace WB.Services.Export.Infrastructure
                 foreach (var schema in schemas)
                 {
                     await db.ExecuteAsync($@"drop schema if exists ""{schema}""");
-                    //logger.LogInformation("Dropped schema {schema}.", schema);
+                    logger?.LogInformation("Dropped schema {Schema}", schema);
                 }
 
                 await tr.CommitAsync(cancellationToken);
             }
-        }
-
-        private async Task<bool> DoesSchemaExist(CancellationToken cancellationToken)
-        {
-            await using var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection);
-
-            await db.OpenAsync(cancellationToken);
-            var name = TenantContext.Tenant.SchemaName();
-            var exists = await db.QueryFirstAsync<bool>(
-                "SELECT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname = @name);",
-                new
-                {
-                    name
-                });
-            return exists;
         }
 
         public async Task EnsureMigrated(CancellationToken cancellationToken)
