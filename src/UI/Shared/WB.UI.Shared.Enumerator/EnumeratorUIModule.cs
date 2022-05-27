@@ -11,8 +11,6 @@ using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -88,7 +86,7 @@ namespace WB.UI.Shared.Enumerator
 
             registry.BindToMethod<IGeolocator>(() => CrossGeolocator.Current);
             registry.BindToMethod<IMedia>(() => CrossMedia.Current);
-            registry.BindToMethod<IPermissions>(() => CrossPermissions.Current);
+            //registry.BindToMethod<IPermissions>(() => CrossPermissions.Current);
 
             registry.Bind<InterviewEntitiesListFragment>();
             registry.Bind<CompleteInterviewFragment>();

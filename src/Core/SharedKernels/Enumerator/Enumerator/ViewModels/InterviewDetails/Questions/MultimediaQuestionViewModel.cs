@@ -3,8 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -18,6 +16,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using Xamarin.Essentials;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
@@ -205,12 +204,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         }
                     }
                 }
-                catch (MissingPermissionsException e) when (e.PermissionType == typeof(CameraPermission))
+                catch (MissingPermissionsException e) when (e.PermissionType == typeof(Permissions.Camera))
                 {
                     await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                         .MissingPermissions_Camera);
                 }
-                catch (MissingPermissionsException e) when (e.PermissionType == typeof(StoragePermission))
+                catch (MissingPermissionsException e) when (e.PermissionType == typeof(Permissions.StorageWrite))
                 {
                     await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                         .MissingPermissions_Storage);
