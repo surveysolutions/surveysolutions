@@ -7,8 +7,6 @@ using Ncqrs.Eventing.Storage;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
-using Plugin.Geolocator;
-using Plugin.Geolocator.Abstractions;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using WB.Core.GenericSubdomains.Portable;
@@ -84,9 +82,7 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<IPasswordHasher, DevicePasswordHasher>();
             registry.BindAsSingleton<IHttpStatistician, HttpStatistician>();
 
-            registry.BindToMethod<IGeolocator>(() => CrossGeolocator.Current);
             registry.BindToMethod<IMedia>(() => CrossMedia.Current);
-            //registry.BindToMethod<IPermissions>(() => CrossPermissions.Current);
 
             registry.Bind<InterviewEntitiesListFragment>();
             registry.Bind<CompleteInterviewFragment>();
