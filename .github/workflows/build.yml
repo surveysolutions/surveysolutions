@@ -11,6 +11,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  NODE_VERSION: 16
+  DOTNET_VERSION: '6.0.x'
 
 jobs:
   prepare:
@@ -45,9 +47,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Headquarters unit tests
         run: dotnet test src/Tests/WB.Tests.Unit
       - name: Headquarters web tests
@@ -81,9 +83,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Create db connection string
         run: echo "DB_CONN=Server=postgres;Port=${{ job.services.postgres.ports[5432] }};User Id=${{ env.PG_USER }};Password=${{ env.PG_PASSWORD }};" >> $GITHUB_ENV
@@ -119,10 +121,10 @@ jobs:
         distribution: 'microsoft'
         java-version: '11'
 
-    - name: Setup .NET Core SDK 6.0.x
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: ${{ env.DOTNET_VERSION }}
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.3
 
@@ -191,7 +193,8 @@ jobs:
           ./.build.ps1 ${{ matrix.task }} `
             -BuildNumber ${{ needs.prepare.outputs.build_number }} `
             -dockerRegistry ${{ env.REGISTRY }}/${{ github.repository }} `
-            -apkFolder "artifacts"
+            -apkFolder "artifacts" `
+            -nodeVersion "${{ env.NODE_VERSION }}"
 
   installer:
     needs: [prepare, mobile]
@@ -207,9 +210,14 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: ${{ env.NODE_VERSION }}
 
       - uses: actions/checkout@v2
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Setup WIX
         run: |
