@@ -21,18 +21,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         
         public override HttpStatusCode GetStatusCode(IExecutionResult result)
         {
-            var baseStatusCode = base.GetStatusCode(result);
-
-            if (result is IQueryResult && baseStatusCode == HttpStatusCode.InternalServerError && result.Errors?.Count > 0)
-            {
-                if (result.Errors.Any(e => e.Code == ErrorCodes.Authentication.NotAuthorized || e.Code == ErrorCodes.Authentication.NotAuthenticated))
-                    return HttpStatusCode.Forbidden;    
-
-                return HttpStatusCode.BadRequest;    
-
-            }
-
-            return baseStatusCode;
+            return HttpStatusCode.OK;
         }
     }
 }
