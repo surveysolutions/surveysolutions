@@ -39,4 +39,9 @@ namespace WB.Core.SharedKernels.Questionnaire.Api
         public DateTime LastUpdateDate { get; set; }
     }
 
+    public class QuestionnaireSettings
+    {
+        public bool CanSaveScenario { get; set; }
+    }
+
 }

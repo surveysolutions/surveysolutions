@@ -3,8 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -68,6 +70,25 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             {
                 Id = questionnaireView.PublicKey,
                 LastUpdateDate = questionnaireView.Source.LastEntryDate
+            });
+        }
+        
+        [Route("{token:Guid}/settings")]
+        [HttpGet]
+        public IActionResult Settings(string token)
+        {
+            var questionnaireId = this.webTesterService.GetQuestionnaire(token);
+            if (questionnaireId == null)
+            {
+                return NotFound();
+            }
+            
+            var anonymousQuestionnaire = this.designerDbContext.AnonymousQuestionnaires.FirstOrDefault(a =>
+                a.AnonymousQuestionnaireId == questionnaireId);
+
+            return Ok(new QuestionnaireSettings
+            {
+                CanSaveScenario = anonymousQuestionnaire == null
             });
         }
 

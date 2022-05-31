@@ -30,5 +30,8 @@ namespace WB.UI.WebTester.Services
 
         [Get("/.hc")]
         Task<string> HealthCheck();
+        
+        [Get("/api/webtester/{token}/settings")]
+        Task<QuestionnaireSettings> GetQuestionnaireSettingsAsync(string token);
     }
 }

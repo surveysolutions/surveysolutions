@@ -12,8 +12,10 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Infrastructure.Native.Monitoring;
 using WB.UI.WebTester.Infrastructure;
+using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
@@ -26,7 +28,8 @@ namespace WB.UI.WebTester.Services.Implementation
         public RemoteInterviewContainer(ILifetimeScope rootScope,
             Guid interviewId,
             QuestionnaireIdentity identity,
-            string supportingAssembly)
+            string supportingAssembly,
+            QuestionnaireSettings questionnaireSettings)
         {
             this.scope = rootScope.BeginLifetimeScope();
 
@@ -41,9 +44,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
             ((WebTesterQuestionnaireAssemblyAccessor)questionnaireAssemblyAccessor).Assembly = assembly;
 
-            var questionnaire =
-                questionnaireStorage.GetQuestionnaire(
-                    identity, null);
+            var questionnaire = questionnaireStorage.GetQuestionnaire(identity, null);
             var prototype =  new InterviewExpressionStorageProvider(questionnaireAssemblyAccessor,
                 this.scope.Resolve<ILoggerProvider>());
 
@@ -51,6 +52,8 @@ namespace WB.UI.WebTester.Services.Implementation
                 throw new InvalidOperationException("Questionnaire must not be null.");
 
             questionnaire.ExpressionStorageType = prototype.GetExpressionStorageType(identity);
+            var webTesterPlainQuestionnaire = (WebTesterPlainQuestionnaire)questionnaire;
+            webTesterPlainQuestionnaire.CanSaveScenario = questionnaireSettings.CanSaveScenario;
 
             statefulInterview = this.scope.Resolve<WebTesterStatefulInterview>();
             statefulInterview.SetId(interviewId);
