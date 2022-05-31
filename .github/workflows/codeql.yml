@@ -34,19 +34,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Initialize CodeQL for javascript
+    - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
-        languages: javascript
+        languages: javascript, csharp
 
-    - name: Perform Analysis for javascript
-      uses: github/codeql-action/analyze@v2
-  
-    - name: Initialize CodeQL for C#
-      uses: github/codeql-action/init@v2
-      with:
-        languages: csharp
-        
     - run: |
         dotnet build 'src/WB without Xamarin.sln'
 
