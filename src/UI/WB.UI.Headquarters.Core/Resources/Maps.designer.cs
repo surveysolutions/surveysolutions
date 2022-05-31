@@ -97,6 +97,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file {0} name includes invalid characters..
+        /// </summary>
+        public static string MapFileNameHasInvalidChars {
+            get {
+                return ResourceManager.GetString("MapFileNameHasInvalidChars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file {0} name includes non-UTF-8 characters..
+        /// </summary>
+        public static string MapFileNameHasNonUtf8Chars {
+            get {
+                return ResourceManager.GetString("MapFileNameHasNonUtf8Chars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The size of file {0} is larger than applicable limit {1}.
         /// </summary>
         public static string MapFileSizeLimit {

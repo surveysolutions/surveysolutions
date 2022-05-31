@@ -75,6 +75,12 @@ export default {
             this.statusMessage = this.$t('Pages.Map_Status') + ': ' + newMessage
         },
         onFileChange(e){
+            const files = e.target.files || e.dataTransfer.files
+
+            if (!files.length) {
+                return
+            }
+
             const statusupdater = this.updateStatus
             const uploadingMessage = this.$t('Pages.Map_Uploading')
             const uploadingErrorMessage = this.$t('Pages.Map_UploadingError')

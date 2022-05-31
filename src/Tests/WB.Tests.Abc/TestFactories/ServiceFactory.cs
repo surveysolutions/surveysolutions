@@ -1041,7 +1041,8 @@ namespace WB.Tests.Abc.TestFactories
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 Mock.Of<IServiceLocator>(),
                 Mock.Of<IDeviceInformationService>(),
-                Mock.Of<IAssignmentDocumentsStorage>());
+                Mock.Of<IAssignmentDocumentsStorage>(),
+                Mock.Of<IPermissionsService>());
         }
 
         public MapReport MapReport(IInterviewFactory interviewFactory = null,

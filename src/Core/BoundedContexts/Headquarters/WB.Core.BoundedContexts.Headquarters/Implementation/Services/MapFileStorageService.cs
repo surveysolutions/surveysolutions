@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -13,6 +14,7 @@ using NetTopologySuite.Dissolve;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
+using NetTopologySuite.IO.Streams;
 using NetTopologySuite.Operation.Union;
 using NetTopologySuite.Simplify;
 using Newtonsoft.Json;
@@ -31,6 +33,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Utils;
+using IStreamProvider = NetTopologySuite.IO.Streams.IStreamProvider;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
@@ -314,34 +317,48 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     {
                         var shapeFile = fileSystemAccessor.CombinePath(mapsDirectory, mapName);
 
-                        using ShapefileDataReader rd = new ShapefileDataReader(shapeFile, GeometryFactory.Default);
-                        var headerBounds = rd.ShapeHeader.Bounds;
-                        item.XMinVal = headerBounds.MinX;
-                        item.YMinVal = headerBounds.MinY;
-                        item.XMaxVal = headerBounds.MaxX;
-                        item.YMaxVal = headerBounds.MaxY;
-                        item.ShapeType = rd.ShapeHeader.ShapeType.ToString();
-                        item.Wkid = 4326; //geographic coordinates Wgs84
-
-                        var readHeader = rd.DbaseHeader;
-                        item.ShapesCount = readHeader.NumRecords;
-
-                        FeatureCollection fc = new FeatureCollection();
-
-                        int? labelIndexOf = null;
+                        var streamProviderRegistry = new ShapefileStreamProviderRegistry(shapeFile,
+                            validateDataPath: true,
+                            validateIndexPath: true, validateShapePath: true);
                         
+                        var dbfReader = new DbaseFileReader(streamProviderRegistry);
+                        var readHeader = dbfReader.GetHeader();
+                        ThrowIdInvalidFileData(mapFile.Name + ".dbf", dbfReader);
+
+                        var geometryFactory = GeometryFactory.Default;
+                        var shpReader = new ShapefileReader(streamProviderRegistry, geometryFactory);
+                        var shapeType = shpReader.Header.ShapeType;
+                        var shapeHandler = Shapefile.GetShapeHandler(shapeType);
+                        if (shapeHandler == null)
+                            throw new ArgumentException($"Can't read {mapFile.Name}.shp file. Unsupported shape type {shapeType}");
+                        
+                        ThrowIdInvalidFileData(mapFile.Name + ".shp", shpReader);
+                            
+                        int? labelIndexOf = null;
+
                         for (int i = 0; i < readHeader.NumFields; i++)
                         {
-                            // +1 because the first field is the geometry.
-                            if (rd.GetName(i + 1) == LabelFieldName)
+                            if (readHeader.Fields[i].Name == LabelFieldName)
                             {
                                 labelIndexOf = i + 1;
                                 break;
                             }
                         }
 
+                        var headerBounds = shpReader.Header.Bounds;
+                        item.XMinVal = headerBounds.MinX;
+                        item.YMinVal = headerBounds.MinY;
+                        item.XMaxVal = headerBounds.MaxX;
+                        item.YMaxVal = headerBounds.MaxY;
+                        item.ShapeType = shapeType.ToString();
+                        item.Wkid = 4326; //geographic coordinates Wgs84
+                        item.ShapesCount = readHeader.NumRecords;
+                        
+                        FeatureCollection fc = new FeatureCollection();
                         HashSet<string> checkOnUnique = new HashSet<string>();
                         Dictionary<string, int> duplicateLabels = new Dictionary<string, int>();
+
+                        using var rd = new ShapefileDataReader(streamProviderRegistry, geometryFactory);
                         while (rd.Read())
                         {
                             AttributesTable attribs = new AttributesTable();
@@ -360,7 +377,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                             duplicateLabels[labelValue] += 1;
                                     }
                                 }
-                            }   
+                            }
 
                             IFeature feature = new Feature(rd.Geometry, attribs);
                             fc.Add(feature);
@@ -387,7 +404,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             UnaryUnionOp c = new UnaryUnionOp(fc.Select(f => f.Geometry).ToArray());
                             var geometryCollection = c.Union();
                             //DouglasPeuckerSimplifier simplifier = new DouglasPeuckerSimplifier(geometryCollection);
-                            TopologyPreservingSimplifier simplifier = new TopologyPreservingSimplifier(geometryCollection);
+                            TopologyPreservingSimplifier simplifier =
+                                new TopologyPreservingSimplifier(geometryCollection);
                             var simplifierGeometry = simplifier.GetResultGeometry();
 
                             FeatureCollection unionFc = new FeatureCollection();
@@ -398,6 +416,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                         item.GeoJson = json;
                     }
+                    catch (ArgumentException ex)
+                    {
+                        logger.LogError(ex, "Can't read {MapName}.shp file", mapFile.Name);
+                        throw;
+                    }                    
                     catch (Exception ex)
                     {
                         logger.LogError(ex, "Can't read {MapName}.shp file", mapFile.Name);
@@ -408,6 +431,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
 
             return item;
+        }
+
+        private void ThrowIdInvalidFileData(string mapFile, IEnumerable reader)
+        {
+            IEnumerator enumerator = null;
+
+            try
+            {
+                enumerator = reader.GetEnumerator();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Can't read {MapName} file", mapFile);
+                throw new ArgumentException($"Can't read {mapFile} file. File is corrupt.", ex);
+            }
+            finally
+            {
+                (enumerator as IDisposable)?.Dispose();
+            }
         }
 
         private static string GetGeoJson(FeatureCollection fc)
