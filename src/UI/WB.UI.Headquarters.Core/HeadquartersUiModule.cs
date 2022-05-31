@@ -56,6 +56,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IViewRenderService, ViewRenderService>();
             registry.Bind<IUploadPackageAnalyzer, UploadPackageAnalyzer>();
             registry.Bind<IUploadMapsService, UploadMapsService>();
+            registry.Bind<IMapFilesValidator, MapFilesValidator>();
             //registry.Bind<IUrlHelperFactory, WorkspaceUrlHelperFactory>();
 
             registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();
