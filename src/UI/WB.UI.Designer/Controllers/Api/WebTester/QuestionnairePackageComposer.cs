@@ -75,7 +75,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
 
         private Questionnaire ComposeQuestionnaireImpl(Guid questionnaireId, Guid fakeQuestionnaireId)
         {
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId, fakeQuestionnaireId));
             if (questionnaireView == null)
                 throw new InvalidOperationException("Questionnaire not found.");
 
@@ -84,10 +84,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             var versionToCompileAssembly = specifiedCompilationVersion ?? Math.Max(20,
                                                this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source));
 
-            var questionnaire = questionnaireView.Source.Clone();
-            questionnaire.Id = fakeQuestionnaireId.FormatGuid();
-            questionnaire.PublicKey = fakeQuestionnaireId;
-            questionnaireView = new QuestionnaireView(questionnaire, questionnaireView.SharedPersons);
+            var questionnaire = questionnaireView.Source;
             
             string resultAssembly;
             List<QuestionnaireVerificationMessage> verificationResult;
