@@ -129,14 +129,14 @@
                 </form>
                 
                 <hr />
-                <div ng-if="isQuestionnaireOwner()">
+                <div ng-if="isQuestionnaireOwner() || questionnaire.hasViewerAdminRights">
                     <h2 ng-i18next="AnonymousQuestionnaireSettings"></h2>
                     <em class="text-muted">{{ 'AnonymousQuestionnaireDescriptionSettings' | i18next}}</em>
                     <br/>
                     <span>
                         {{ (questionnaire.isAnonymouslyShared ? 'SettingsStatusAllowAnonymousAccess' : 'SettingsStatusDontAllowAnonymousAccess') | i18next }}
                     </span>
-                    <button class="btn btn-link answer" ng-click="updateAnonymousQuestionnaireSettings()">
+                    <button ng-if="isQuestionnaireOwner()" class="btn btn-link answer" ng-click="updateAnonymousQuestionnaireSettings()">
                         {{(questionnaire.isAnonymouslyShared ? 'SettingsTurnOffAnonymousAccess' : 'SettingsTurnOnAnonymousAccess') | i18next}}
                     </button>
                     <br />
@@ -153,9 +153,9 @@
                             <button class="btn btn-link answer" style="padding-left: 0px;" ng-i18next="CopyLink" ng-click="copyAnonymousQuestionnaireLink()">
                             </button>
                             
-                            <span> | </span>
+                            <span ng-if="isQuestionnaireOwner()"> | </span>
 
-                            <button class="btn btn-link answer"  ng-click="regenerateAnonymousQuestionnaireLink()">
+                            <button ng-if="isQuestionnaireOwner()" class="btn btn-link answer"  ng-click="regenerateAnonymousQuestionnaireLink()">
                                 {{'RegenerateQuestionnaireSharingLink' | i18next }}
                             </button>
                         </div>
