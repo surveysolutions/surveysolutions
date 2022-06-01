@@ -84,11 +84,11 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             }
             
             var anonymousQuestionnaire = this.designerDbContext.AnonymousQuestionnaires.FirstOrDefault(a =>
-                a.AnonymousQuestionnaireId == questionnaireId);
+                a.AnonymousQuestionnaireId == questionnaireId && a.IsActive == true);
 
             return Ok(new QuestionnaireSettings
             {
-                CanSaveScenario = anonymousQuestionnaire == null
+                IsAnonymousMode = anonymousQuestionnaire == null
             });
         }
 

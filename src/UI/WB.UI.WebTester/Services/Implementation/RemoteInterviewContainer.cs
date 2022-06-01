@@ -53,7 +53,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
             questionnaire.ExpressionStorageType = prototype.GetExpressionStorageType(identity);
             var webTesterPlainQuestionnaire = (WebTesterPlainQuestionnaire)questionnaire;
-            webTesterPlainQuestionnaire.CanSaveScenario = questionnaireSettings.CanSaveScenario;
+            webTesterPlainQuestionnaire.CanSaveScenario = questionnaireSettings.IsAnonymousMode;
 
             statefulInterview = this.scope.Resolve<WebTesterStatefulInterview>();
             statefulInterview.SetId(interviewId);
