@@ -11,6 +11,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
             bool includeWarnings = false);
         IEnumerable<QuestionnaireVerificationMessage> CompileAndVerify(QuestionnaireView questionnaireView, 
             int? version, 
+            out string assembly);
+        IEnumerable<QuestionnaireVerificationMessage> CompileAndVerify(QuestionnaireView questionnaireView, 
+            int? version, 
             Guid? newQuestionnaireId,
             out string assembly);
     }

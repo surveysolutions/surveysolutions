@@ -74,6 +74,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         public IEnumerable<QuestionnaireVerificationMessage> CompileAndVerify(QuestionnaireView questionnaireView,
+            int? targetCompilationVersion, out string resultAssembly)
+            => CompileAndVerify(questionnaireView, targetCompilationVersion, null, out resultAssembly);
+        
+        public IEnumerable<QuestionnaireVerificationMessage> CompileAndVerify(QuestionnaireView questionnaireView,
             int? targetCompilationVersion, Guid? newQuestionnaireId, out string resultAssembly)
         {
             resultAssembly = string.Empty;
