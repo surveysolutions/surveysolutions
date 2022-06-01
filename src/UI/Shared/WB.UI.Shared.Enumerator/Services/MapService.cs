@@ -194,7 +194,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     if (fileSystemAccessor.IsDirectoryExists(mapFolder))
                         fileSystemAccessor.DeleteDirectory(mapFolder);
                     fileSystemAccessor.CreateDirectory(mapFolder);
-                    archiveUtils.Unzip(tempFileName, mapFolder);
+                    archiveUtils.Unzip(tempFileName, mapFolder, ignoreRootDirectory: true);
                 }
                 catch
                 {

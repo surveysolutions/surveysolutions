@@ -179,5 +179,11 @@
   </data>
   <data name="MapFileSizeLimit" xml:space="preserve">
     <value>The size of file {0} is larger than applicable limit {1}</value>
+  </data>  
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve">
+    <value>The file {0} name includes non-UTF-8 characters.</value>
+  </data>
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve">
+    <value>The file {0} name includes invalid characters.</value>
   </data>
 </root>

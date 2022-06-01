@@ -34,9 +34,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IUserInteractionService userInteractionService,
             IServiceLocator serviceLocator,
             IDeviceInformationService deviceInformationService,
-            IAssignmentDocumentsStorage assignmentsStorage)
+            IAssignmentDocumentsStorage assignmentsStorage,
+            IPermissionsService permissionsService)
             : base(mapService, synchronizationService, logger, httpStatistician,
-                principal, interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, deviceInformationService, serviceLocator, assignmentsStorage)
+                principal, interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, deviceInformationService, serviceLocator, assignmentsStorage, permissionsService)
         {
             this.passwordHasher = passwordHasher;
             this.interviewerPrincipal = principal;

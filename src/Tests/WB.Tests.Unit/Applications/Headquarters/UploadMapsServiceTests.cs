@@ -67,6 +67,7 @@ public class UploadMapsServiceTests
             new NullLogger<UploadMapsService>(),
             Mock.Of<IArchiveUtils>(),
             mapStorageService ?? Mock.Of<IMapStorageService>(),
-            Mock.Of<IOptions<FileStorageConfig>>(o => o.Value == new FileStorageConfig()));
+            Mock.Of<IOptions<FileStorageConfig>>(o => o.Value == new FileStorageConfig()),
+            Mock.Of<IMapFilesValidator>());
     }
 }
