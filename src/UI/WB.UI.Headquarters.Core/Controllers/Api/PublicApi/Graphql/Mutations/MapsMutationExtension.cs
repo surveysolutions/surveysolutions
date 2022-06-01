@@ -61,7 +61,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
                     nameof(UserRoles.ApiUser)
                 })
                 .HasWorkspace()
-                .Argument("file", a => a.Type<UploadType>());
+                .Type<Map>()
+                .Argument("file", a => a.Type<NonNullType<UploadType>>());
         }
     }
 }
