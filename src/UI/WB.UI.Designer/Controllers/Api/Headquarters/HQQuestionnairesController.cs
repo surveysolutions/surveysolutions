@@ -148,7 +148,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             try
             {
                 var questionnaireErrors = 
-                    this.questionnaireVerifier.CompileAndVerify(questionnaireView, versionToCompileAssembly, null, out resultAssembly);
+                    this.questionnaireVerifier.CompileAndVerify(questionnaireView, versionToCompileAssembly, out resultAssembly);
                 
                 if (questionnaireErrors.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
                 {

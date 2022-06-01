@@ -65,7 +65,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(id)?.Version;
 
             var generated = this.questionnaireVerifier.CompileAndVerify(questionnaire,
-                specifiedCompilationVersion ?? this.engineVersionService.LatestSupportedVersion, null, out _);
+                specifiedCompilationVersion ?? this.engineVersionService.LatestSupportedVersion, out _);
             if (generated.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
             {
                 //var errorLocations = generated.Diagnostics.Select(x => x.Location).Distinct().Aggregate("Errors: \r\n", (current, location) => current + (current + "\r\n" + location));
@@ -86,7 +86,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             var supervisorVersion = version ?? this.engineVersionService.LatestSupportedVersion;
             var questionnaire = this.GetQuestionnaire(id);
             string assembly;
-            var generated = this.questionnaireVerifier.CompileAndVerify(questionnaire, supervisorVersion, null, out assembly);
+            var generated = this.questionnaireVerifier.CompileAndVerify(questionnaire, supervisorVersion, out assembly);
             if (generated.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
             {
                 //var errorLocations = generated.Diagnostics.Select(x => x.Location).Distinct().Aggregate("Errors: \r\n", (current, location) => current + (current + "\r\n" + location));

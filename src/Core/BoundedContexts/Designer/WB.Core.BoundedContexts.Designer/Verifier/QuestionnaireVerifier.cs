@@ -73,12 +73,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             };
         }
 
+       
         public IEnumerable<QuestionnaireVerificationMessage> CompileAndVerify(QuestionnaireView questionnaireView,
             int? targetCompilationVersion, out string resultAssembly)
-            => CompileAndVerify(questionnaireView, targetCompilationVersion, null, out resultAssembly);
-        
-        public IEnumerable<QuestionnaireVerificationMessage> CompileAndVerify(QuestionnaireView questionnaireView,
-            int? targetCompilationVersion, Guid? newQuestionnaireId, out string resultAssembly)
         {
             resultAssembly = string.Empty;
             var questionnaire = questionnaireView.Source;
@@ -124,14 +121,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 ?? ( this.questionnaireCompilationVersionService.GetById(questionnaire.PublicKey)?.Version
                      ?? Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire)));
 
-            if (newQuestionnaireId.HasValue)
-            {
-                questionnaire.Id = newQuestionnaireId.Value.FormatGuid();
-                questionnaire.PublicKey = newQuestionnaireId.Value;
-            }
+            var compiledReadyDocument = questionnaireView.GetCompiledReadyDocument();
 
             var compilationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                questionnaire, questionnaireVersionToCompileAssembly, out resultAssembly);
+                compiledReadyDocument, questionnaireVersionToCompileAssembly, out resultAssembly);
 
             if (!compilationResult.Success)
             {
@@ -161,9 +154,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             bool includeWarnings = false)
         {
             if (includeWarnings)
-                return this.CompileAndVerify(questionnaireView, null, null, out string assembly);
+                return this.CompileAndVerify(questionnaireView, null, out string assembly);
             else
-                return this.CompileAndVerify(questionnaireView, null, null, out string assembly)
+                return this.CompileAndVerify(questionnaireView, null, out string assembly)
                     .Where(x => x.MessageLevel != VerificationMessageLevel.Warning);
         }
 
