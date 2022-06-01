@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
 
             string assembly;
             questionnaireVerifier
-                .Verify(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), out assembly), Times.Once);
+                .Verify(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), Id.gA, out assembly), Times.Once);
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
             string assembly;
             // should still generate assembly only once
             questionnaireVerifier
-                .Verify(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), out assembly), Times.Once);
+                .Verify(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), Id.gA, out assembly), Times.Once);
 
             Assert.That(result, Is.EqualTo(result1));
             Assert.That(result, Is.EqualTo(result2));
@@ -116,7 +116,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
             string assembly;
             // should still generate assembly only once
             questionnaireVerifier
-                .Verify(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), out assembly), Times.Once);
+                .Verify(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), Id.gA, out assembly), Times.Once);
            
             // Change questionnaire to invalidate cache
             var questionnaireChangeRecord = Create.QuestionnaireChangeRecord(questionnaireId: document.PublicKey.FormatGuid(), sequence: 2);
@@ -129,7 +129,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
             subj.ComposeQuestionnaire(Id.gA);
 
             questionnaireVerifier
-                .Verify(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), out assembly), Times.Once);
+                .Verify(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), Id.gA, out assembly), Times.Once);
         }
 
         [Test]
@@ -138,19 +138,19 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
             string assembly;
 
             questionnaireVerifier
-                .Setup(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), out assembly))
+                .Setup(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), Id.gA, out assembly))
                 .Throws<Exception>();
 
             // Act
             Assert.Throws<ComposeException>(() => result = subj.ComposeQuestionnaire(Id.gA));
 
             // ensure that generate processor were called
-            questionnaireVerifier.Verify(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), out assembly), Times.Once);
+            questionnaireVerifier.Verify(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), Id.gA, out assembly), Times.Once);
             questionnaireVerifier.Invocations.Clear();
 
             // should not cache error, and throw again and try to generate assembly
             Assert.Throws<ComposeException>(() => result = subj.ComposeQuestionnaire(Id.gA));
-            questionnaireVerifier.Verify(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), out assembly), Times.Once);
+            questionnaireVerifier.Verify(m => m.CompileAndVerify(It.IsAny<QuestionnaireView>(), It.IsAny<int>(), Id.gA, out assembly), Times.Once);
         }
     }
 }
