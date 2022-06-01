@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Questionnaire.Api;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
@@ -28,7 +29,8 @@ namespace WB.UI.WebTester.Services.Implementation
         
         public void SetupForInterview(Guid interviewId,
             QuestionnaireIdentity questionnaireIdentity,
-            string supportingAssembly)
+            string supportingAssembly,
+            QuestionnaireSettings questionnaireSettings)
         {
             logger.LogDebug($"[SetupForInterview]Creating remote interview: {interviewId} for q: [{questionnaireIdentity}]");
             appDomains.GetOrAdd(interviewId, new Lazy<RemoteInterviewContainer>(() =>
@@ -38,7 +40,8 @@ namespace WB.UI.WebTester.Services.Implementation
                     rootScope,
                     interviewId, 
                     questionnaireIdentity, 
-                    supportingAssembly);
+                    supportingAssembly,
+                    questionnaireSettings);
             }));
         }
         
