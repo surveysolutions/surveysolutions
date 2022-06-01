@@ -132,11 +132,6 @@ namespace WB.Services.Export.Infrastructure
                 {
                     await DropTenantSchemaAsync(this.TenantContext.Tenant.Name, cancellationToken);
                 }
-
-                if (schemaVersion < ContextSchemaVersion)
-                {
-                    await DropTenantSchemaAsync(this.TenantContext.Tenant.Name, cancellationToken);
-                }
             }
 
             var s = this.Database.GetConnectionString();
