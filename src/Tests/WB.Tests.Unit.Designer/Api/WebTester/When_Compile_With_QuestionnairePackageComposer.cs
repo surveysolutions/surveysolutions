@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
 
             questionnaireVerifier = fixture.Freeze<Mock<IQuestionnaireVerifier>>();
             questionnaireVerifier
-                .Setup(m => m.CompileAndVerify(questionnaireView, It.IsAny<int>(), out assembly))
+                .Setup(m => m.CompileAndVerify(questionnaireView, It.IsAny<int>(), null, out assembly))
                 .Returns(new List<QuestionnaireVerificationMessage>());
 
             subj = fixture.Create<QuestionnairePackageComposer>();

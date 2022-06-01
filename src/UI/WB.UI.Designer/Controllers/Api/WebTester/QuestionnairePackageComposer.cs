@@ -85,8 +85,6 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                                                this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source));
 
             var questionnaire = questionnaireView.Source.Clone();
-            questionnaire.Id = fakeQuestionnaireId.FormatGuid();
-            questionnaire.PublicKey = fakeQuestionnaireId;
             questionnaireView = new QuestionnaireView(questionnaire, questionnaireView.SharedPersons);
             
             string resultAssembly;
@@ -95,6 +93,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             {
                 verificationResult = this.questionnaireVerifier.CompileAndVerify(questionnaireView,
                     versionToCompileAssembly,
+                    fakeQuestionnaireId,
                     out resultAssembly).ToList();
             }
             catch (Exception)
