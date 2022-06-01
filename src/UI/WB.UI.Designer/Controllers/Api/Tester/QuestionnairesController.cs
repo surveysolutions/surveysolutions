@@ -79,10 +79,6 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             string resultAssembly;
             try
             {
-                questionnaireView = new QuestionnaireView(questionnaireView.Source.Clone(), questionnaireView.SharedPersons);
-                questionnaireView.Source.Id = id.QuestionnaireId.FormatGuid();
-                questionnaireView.Source.PublicKey = id.QuestionnaireId;
-                
                 var verificationResult = 
                     this.questionnaireVerifier.CompileAndVerify(questionnaireView,
                       versionToCompileAssembly,

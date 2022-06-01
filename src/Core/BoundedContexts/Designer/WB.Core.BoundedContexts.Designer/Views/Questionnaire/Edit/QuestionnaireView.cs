@@ -7,8 +7,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public class QuestionnaireView
     {
-        public QuestionnaireView(QuestionnaireDocument doc, IEnumerable<SharedPersonView> sharedPersons)
+        private readonly Guid? compileQuestionnaireId;
+
+        public QuestionnaireView(QuestionnaireDocument doc, IEnumerable<SharedPersonView> sharedPersons, Guid? compileQuestionnaireId = null)
         {
+            this.compileQuestionnaireId = compileQuestionnaireId;
             this.Source = doc;
             this.SharedPersons = sharedPersons.ToReadOnlyCollection();
         }
@@ -23,6 +26,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string Title => this.Source.Title;
 
         public bool IsPublic => this.Source.IsPublic;
+
+        public QuestionnaireDocument GetCompiledReadyDocument()
+        {
+            if (!compileQuestionnaireId.HasValue)
+                return Source;
+
+            var clone = Source.Clone();
+            clone.PublicKey = compileQuestionnaireId.Value;
+            clone.Id = compileQuestionnaireId.Value.FormatGuid();
+            return clone;
+        }
     }
 }
 
