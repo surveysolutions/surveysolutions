@@ -2,14 +2,14 @@ import gql from 'graphql-tag'
 import * as toastr from 'toastr'
 
 const deleteCalendarEventMutation =
-    gql`mutation deleteCalendarEvent($workspace: String!, $publicKey: Uuid!) {
+    gql`mutation deleteCalendarEvent($workspace: String!, $publicKey: UUID!) {
             deleteCalendarEvent(workspace: $workspace, publicKey: $publicKey) {
                 publicKey
             }
         }`
 
 const updateCalendarEventMutation =
-    gql`mutation updateCalendarEvent($workspace: String!, $publicKey: Uuid!, $newStart: DateTime!, $comment: String, $startTimezone: String!) {
+    gql`mutation updateCalendarEvent($workspace: String!, $publicKey: UUID!, $newStart: DateTime!, $comment: String, $startTimezone: String!) {
         updateCalendarEvent(workspace: $workspace, publicKey: $publicKey, newStart: $newStart, comment: $comment, startTimezone: $startTimezone) {
                 publicKey
             }
@@ -23,7 +23,7 @@ const addAssignmentCalendarEventMutation =
             }`
 
 const addInterviewCalendarEventMutation =
-    gql`mutation addInterviewCalendarEvent($workspace: String!, $interviewId: Uuid!, $newStart: DateTime!, $comment: String, $startTimezone: String!) {
+    gql`mutation addInterviewCalendarEvent($workspace: String!, $interviewId: UUID!, $newStart: DateTime!, $comment: String, $startTimezone: String!) {
         addInterviewCalendarEvent(workspace: $workspace, interviewId: $interviewId, newStart: $newStart, comment: $comment, startTimezone: $startTimezone) {
                 publicKey
             }
