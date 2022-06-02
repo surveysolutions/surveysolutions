@@ -81,6 +81,7 @@ export default {
             searchTerm: '',
             options: [],
             isLoading: false,
+            lastFilter: '',
         }
     },
     methods: {
@@ -101,10 +102,13 @@ export default {
         },
         loadOptions(filter) {
             this.isLoading = true
+            this.lastFilter = filter
+            const currentFilter = filter
 
             return this.optionsSource(filter).then((options) => {
                 this.isLoading = false
-                this.options = options || []
+                if(this.lastFilter === currentFilter)
+                    this.options = options || []
             })
         },
         selectOption(value) {
