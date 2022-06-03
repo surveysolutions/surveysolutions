@@ -103,11 +103,11 @@ export default {
         loadOptions(filter) {
             this.isLoading = true
             this.lastFilter = filter
-            const currentFilter = filter
+            const requestFilter = filter
 
             return this.optionsSource(filter).then((options) => {
                 this.isLoading = false
-                if(this.lastFilter === currentFilter)
+                if(this.lastFilter === requestFilter)
                     this.options = options || []
             })
         },
