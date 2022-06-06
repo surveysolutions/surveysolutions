@@ -84,8 +84,6 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             var versionToCompileAssembly = specifiedCompilationVersion ?? Math.Max(20,
                                                this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source));
 
-            var questionnaire = questionnaireView.Source;
-            
             string resultAssembly;
             List<QuestionnaireVerificationMessage> verificationResult;
             try
@@ -102,6 +100,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             if (verificationResult.Any(x => x.MessageLevel != VerificationMessageLevel.Warning))
                 throw new ComposeException();
 
+            var questionnaire = questionnaireView.GetClientReadyClone();
             var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaire);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
 
