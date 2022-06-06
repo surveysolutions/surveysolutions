@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -45,10 +46,10 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     IntegrationCreate.LookupTableRow(3, new decimal?[] { 6.3m, null})
                 );
 
-                var lookupTableServiceMock = new Mock<ILookupTableService>();
+                var lookupTableServiceMock = new Mock<ICodeGenerationLookupTableService>();
                 lookupTableServiceMock.SetReturnsDefault(lookupTableContent);
 
-                SetUp.InstanceToMockedServiceLocator<ILookupTableService>(lookupTableServiceMock.Object);
+                SetUp.InstanceToMockedServiceLocator<ICodeGenerationLookupTableService>(lookupTableServiceMock.Object);
 
                 var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {

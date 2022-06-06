@@ -177,7 +177,7 @@ namespace WB.Tests.Unit.Designer
         {
             return new CodeGeneratorV2(new CodeGenerationModelsFactory(
                 DefaultMacrosSubstitutionService(),
-                Create.LookupTableService(), 
+                Create.CodeGenerationLookupTableService(), 
                 new QuestionTypeToCSharpTypeMapper()));
         }
 
@@ -320,6 +320,14 @@ namespace WB.Tests.Unit.Designer
             return new LookupTableService(
                 lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
                 documentStorage ?? Mock.Of<IDesignerQuestionnaireStorage>());
+        }
+        public static CodeGenerationLookupTableService CodeGenerationLookupTableService(
+            IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage = null,
+            DesignerDbContext dbContext = null)
+        {
+            return new CodeGenerationLookupTableService(
+                lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
+                dbContext ?? Create.InMemoryDbContext());
         }
 
         public static Macro Macro(string name, string content = null, string description = null)

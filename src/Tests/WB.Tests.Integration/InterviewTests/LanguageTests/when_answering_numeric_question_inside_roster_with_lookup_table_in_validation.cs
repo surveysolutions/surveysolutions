@@ -5,6 +5,7 @@ using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -37,10 +38,10 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     IntegrationCreate.LookupTableRow(3, new decimal?[] { 1, 10})
                 );
 
-                var lookupTableServiceMock = new Mock<ILookupTableService>();
+                var lookupTableServiceMock = new Mock<ICodeGenerationLookupTableService>();
                 lookupTableServiceMock.SetReturnsDefault(lookupTableContent);
 
-                SetUp.InstanceToMockedServiceLocator<ILookupTableService>(lookupTableServiceMock.Object);
+                SetUp.InstanceToMockedServiceLocator<ICodeGenerationLookupTableService>(lookupTableServiceMock.Object);
 
                 var assetsTitles = new[]
                 {

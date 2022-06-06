@@ -65,7 +65,7 @@ namespace WB.Tests.Web.TestFactories
         {
             return new CodeGenerationModelsFactory(
                 DefaultMacrosSubstitutionService(),
-                new LookupTableService(new TestInMemoryKeyValueStorage<LookupTableContent>(), null),
+                new CodeGenerationLookupTableService(new TestInMemoryKeyValueStorage<LookupTableContent>(), Create.Storage.InMemoryDbContext()),
                 new QuestionTypeToCSharpTypeMapper());
         }
 
