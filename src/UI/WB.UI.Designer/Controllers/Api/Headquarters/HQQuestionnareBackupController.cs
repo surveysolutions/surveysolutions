@@ -111,6 +111,9 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         [Route("package/{questionnaireRevision}")]
         public IActionResult GetQuestionnairePackage(QuestionnaireRevision questionnaireRevision)
         {
+            if (questionnaireRevision.OriginalQuestionnaireId.HasValue)
+                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireRevision.QuestionnaireId));
+            
             var questionnaireView = this.questionnaireViewFactory.Load(questionnaireRevision);
             if (questionnaireView == null)
             {

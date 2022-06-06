@@ -37,6 +37,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             clone.Id = compileQuestionnaireId.Value.FormatGuid();
             return clone;
         }
+
+        public QuestionnaireDocument GetClientReadyClone()
+        {
+            var clone = Source.Clone();
+            if (compileQuestionnaireId.HasValue)
+            {
+                clone.PublicKey = compileQuestionnaireId.Value;
+                clone.Id = compileQuestionnaireId.Value.FormatGuid();
+            }
+
+            return clone;
+        }
     }
 }
 
