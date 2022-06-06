@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         {
             var questionnaire = this.documentStorage.Get(questionnaireId);
             if (questionnaire == null)
-                throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
+                throw new ArgumentException(string.Format(ExceptionMessages.QuestionnaireCantBeFound, questionnaireId));
 
             if (!questionnaire.LookupTables.ContainsKey(lookupTableId))
                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTableIsMissing, lookupTableId));
@@ -80,9 +80,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             var lookupTableStorageId = this.GetLookupTableStorageId(questionnaire.PublicKey, lookupTableId);
 
             var lookupTableContent = this.lookupTableContentStorage.GetById(lookupTableStorageId);
-            /*if (lookupTableContent == null)
-                throw new ArgumentException(string.Format(ExceptionMessages.LookupTableHasEmptyContent, questionnaireId));*/
-
             return lookupTableContent;
         }
 

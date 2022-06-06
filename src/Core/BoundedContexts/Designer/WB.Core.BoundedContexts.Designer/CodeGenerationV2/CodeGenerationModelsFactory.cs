@@ -16,12 +16,12 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
     public class CodeGenerationModelsFactory : ICodeGenerationModelsFactory
     {
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
-        private readonly ILookupTableService lookupTableService;
+        private readonly ICodeGenerationLookupTableService lookupTableService;
         private readonly IQuestionTypeToCSharpTypeMapper questionTypeMapper;
 
         public CodeGenerationModelsFactory(
             IMacrosSubstitutionService macrosSubstitutionService, 
-            ILookupTableService lookupTableService, 
+            ICodeGenerationLookupTableService lookupTableService, 
             IQuestionTypeToCSharpTypeMapper questionTypeMapper)
         {
             this.macrosSubstitutionService = macrosSubstitutionService;
@@ -270,7 +270,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         {
             foreach (var table in questionnaire.LookupTables)
             {
-                var lookupTableData = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, table.Key);
+                var lookupTableData = this.lookupTableService.GetLookupTableContent(questionnaire, table.Key);
 
                 if (lookupTableData == null)
                     throw new InvalidOperationException("Lookup table is empty.");

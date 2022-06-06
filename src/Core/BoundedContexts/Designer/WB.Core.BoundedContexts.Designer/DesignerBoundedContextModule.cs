@@ -94,6 +94,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<ICodeGeneratorV2, CodeGeneratorV2>();
             registry.Bind<IQuestionTypeToCSharpTypeMapper, QuestionTypeToCSharpTypeMapper>();
             registry.Bind<ICodeGenerationModelsFactory, CodeGenerationModelsFactory>();
+            registry.Bind<ICodeGenerationLookupTableService, CodeGenerationLookupTableService>();
             registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
             
             registry.Bind(typeof(IPlainKeyValueStorage<>), typeof(DesignerKeyValueStorage<>));
