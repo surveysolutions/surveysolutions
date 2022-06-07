@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -25,6 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IDesignerEngineVersionService engineVersionService;
+        private readonly ILookupTableService lookupTableService;
         private readonly ITranslationsService translationService;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
@@ -51,6 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.engineVersionService = engineVersionService;
+            this.lookupTableService = lookupTableService;
             this.translationService = translationService;
             this.questionnaireTranslator = questionnaireTranslator;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
@@ -121,10 +125,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 ?? ( this.questionnaireCompilationVersionService.GetById(questionnaire.PublicKey)?.Version
                      ?? Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire)));
 
+            var lookupTables = GetLookupTables(questionnaire); 
             var compiledReadyDocument = questionnaireView.GetCompiledReadyDocument();
+            var package = new QuestionnaireCodeGenerationPackage(compiledReadyDocument, lookupTables);
 
             var compilationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                compiledReadyDocument, questionnaireVersionToCompileAssembly, out resultAssembly);
+                package, questionnaireVersionToCompileAssembly, out resultAssembly);
 
             if (!compilationResult.Success)
             {
@@ -139,6 +145,21 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             }
 
             return verificationMessagesByQuestionnaire.Concat(verificationMessagesByCompiler);
+        }
+
+        private Dictionary<Guid, LookupTableContent> GetLookupTables(QuestionnaireDocument questionnaire)
+        {
+            var questionnaireId = questionnaire.PublicKey;
+            Dictionary<Guid, LookupTableContent> tables = new();
+            foreach (var table in questionnaire.LookupTables)
+            {
+                var lookupTableContent = lookupTableService.GetLookupTableContent(questionnaireId, table.Key);
+                if (lookupTableContent == null)
+                    throw new InvalidOperationException("Lookup table is empty.");
+                tables.Add(table.Key, lookupTableContent);
+            }
+
+            return tables;
         }
 
         private List<QuestionnaireVerificationMessage> PreVerify(ReadOnlyQuestionnaireDocument readOnlyQuestionnaireDocument)

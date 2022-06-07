@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
@@ -16,16 +17,13 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
     public class CodeGenerationModelsFactory : ICodeGenerationModelsFactory
     {
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
-        private readonly ILookupTableService lookupTableService;
         private readonly IQuestionTypeToCSharpTypeMapper questionTypeMapper;
 
         public CodeGenerationModelsFactory(
             IMacrosSubstitutionService macrosSubstitutionService, 
-            ILookupTableService lookupTableService, 
             IQuestionTypeToCSharpTypeMapper questionTypeMapper)
         {
             this.macrosSubstitutionService = macrosSubstitutionService;
-            this.lookupTableService = lookupTableService;
             this.questionTypeMapper = questionTypeMapper;
         }
 
@@ -266,11 +264,11 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             }
         }
 
-        public IEnumerable<LookupTableTemplateModel> CreateLookupModels(ReadOnlyQuestionnaireDocument questionnaire)
+        public IEnumerable<LookupTableTemplateModel> CreateLookupModels(QuestionnaireCodeGenerationPackage package)
         {
-            foreach (var table in questionnaire.LookupTables)
+            foreach (var table in package.QuestionnaireDocument.LookupTables)
             {
-                var lookupTableData = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, table.Key);
+                var lookupTableData = package.LookupTables[table.Key];
 
                 if (lookupTableData == null)
                     throw new InvalidOperationException("Lookup table is empty.");
