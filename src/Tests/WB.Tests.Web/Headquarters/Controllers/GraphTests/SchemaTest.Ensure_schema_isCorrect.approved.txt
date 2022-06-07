@@ -89,7 +89,7 @@ type HeadquartersMutation {
   deleteMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String!): Map @authorize(roles: [ "Administrator", "Headquarter", "ApiUser" ], apply: BEFORE_RESOLVER)
   deleteUserFromMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String! userName: String!): Map @authorize(roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ], apply: BEFORE_RESOLVER)
   addUserToMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String! userName: String!): Map @authorize(roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ], apply: BEFORE_RESOLVER)
-  uploadMap("Workspace name" workspace: String! = "primary" file: Upload!): Map @authorize(roles: [ "Administrator", "Headquarter", "ApiUser" ], apply: BEFORE_RESOLVER)
+  uploadMap("Workspace name" workspace: String! = "primary" file: Upload!): [Map] @authorize(roles: [ "Administrator", "Headquarter", "ApiUser" ], apply: BEFORE_RESOLVER)
 }
 
 type HeadquartersQuery {
