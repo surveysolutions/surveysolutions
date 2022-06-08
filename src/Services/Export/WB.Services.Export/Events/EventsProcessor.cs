@@ -38,6 +38,8 @@ namespace WB.Services.Export.Events
 
         long? maximumSequenceToQuery;
         private const double ExpectedBatchDurationInSeconds = 4;
+        private const int MaxEventsProducerSize = 50;
+        private const int SleepLengthOnLimitReachingInMilliseconds = 3000;
 
         private async Task EnsureMigrated(CancellationToken cancellationToken)
         {
@@ -156,6 +158,13 @@ namespace WB.Services.Export.Events
                 {
                     if (maximumSequenceToQuery.HasValue
                         && readingSequence >= maximumSequenceToQuery) break;
+
+                    //keeping out of memory overconsumption
+                    if (eventsProducer.Count > MaxEventsProducerSize)
+                    {
+                        Thread.Sleep(SleepLengthOnLimitReachingInMilliseconds);
+                        continue;
+                    }
 
                     apiTrack.Restart();
 

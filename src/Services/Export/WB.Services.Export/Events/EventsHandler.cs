@@ -83,6 +83,7 @@ namespace WB.Services.Export.Events
                     globalSequence.AsLong = feed.Events.Last().GlobalSequence;
                 }
 
+                logger.LogInformation($"Saving changes ending at {feed.Events.LastOrDefault()?.GlobalSequence ?? -1} for tenant {dbContext.TenantContext.Tenant.Id} and sequence {dbContext.GlobalSequence.AsLong}");
                 await dbContext.SaveChangesAsync(token);
                 tr.Commit();
                     
