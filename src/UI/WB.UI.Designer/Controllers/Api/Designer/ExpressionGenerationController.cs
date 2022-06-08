@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using Main.Core.Documents;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -16,7 +19,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     [QuestionnairePermissions]
     public class ExpressionGenerationController : ControllerBase
     {
-        private readonly IQuestionnaireVerifier questionnaireVerifier; 
+        private readonly IQuestionnaireVerifier questionnaireVerifier;
+        private readonly IQuestionnaireCodeGenerationPackageFactory generationPackageFactory;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IDesignerEngineVersionService engineVersionService;
@@ -26,23 +30,24 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IQuestionnaireViewFactory questionnaireViewFactory, 
             IDesignerEngineVersionService engineVersionService, 
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
-            IQuestionnaireVerifier questionnaireVerifier)
+            IQuestionnaireVerifier questionnaireVerifier,
+            IQuestionnaireCodeGenerationPackageFactory generationPackageFactory)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.engineVersionService = engineVersionService;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.questionnaireVerifier = questionnaireVerifier;
+            this.generationPackageFactory = generationPackageFactory;
         }
 
         [HttpGet]
         public IActionResult GetAllClassesForLatestVersion(Guid id, int? version)
         {
             var questionnaire = this.GetQuestionnaire(id).Source;
-
             var supervisorVersion = version ?? this.engineVersionService.LatestSupportedVersion;
-
-            var generated = this.expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire, supervisorVersion, inSingleFile: true);
+            var package = generationPackageFactory.Generate(questionnaire);
+            var generated = this.expressionProcessorGenerator.GenerateProcessorStateClasses(package, supervisorVersion, inSingleFile: true);
             
             var resultBuilder = new StringBuilder();
             
@@ -54,8 +59,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             return Ok(resultBuilder.ToString());
         }
-
-
+        
         [HttpGet]
         public IActionResult GetCompilationResultForLatestVersion(Guid id)
         {
