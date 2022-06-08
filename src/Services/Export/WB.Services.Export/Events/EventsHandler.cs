@@ -43,12 +43,12 @@ namespace WB.Services.Export.Events
         {
             if (saveEventsPageSize.HasValue)
                 foreach (var eventsBatch in feed.Events.Batch(saveEventsPageSize.Value))
-                    await HandleEventsFeedAsync(eventsBatch.ToList(), token);
+                    await HandleEventsFeedAsync(eventsBatch.ToList(), token, 0);
             else        
-                await HandleEventsFeedAsync(feed.Events, token);
+                await HandleEventsFeedAsync(feed.Events, token, 0);
         }
         
-        private async Task HandleEventsFeedAsync(List<Event> events, CancellationToken token = default)
+        private async Task HandleEventsFeedAsync(List<Event> events, CancellationToken token, int attempt)
         {
             try
             {
@@ -105,6 +105,17 @@ namespace WB.Services.Export.Events
             catch (OperationCanceledException)
             {
                 throw;
+            }
+            catch (TimeoutException te)
+            {
+                logger.LogCritical(te, $"Attempt:#{attempt}. exception: {te.Message}");
+
+                if (attempt > 2)
+                    throw;
+
+                logger.LogCritical($"Attempt:#{attempt}. Will try next attempt.");
+                await Task.Delay(TimeSpan.FromSeconds(10), token);
+                await HandleEventsFeedAsync(events, token, attempt + 1);
             }
             catch (PostgresException pe) when (pe.SqlState == "57014")
             {
