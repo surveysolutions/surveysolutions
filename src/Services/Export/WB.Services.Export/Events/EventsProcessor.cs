@@ -31,15 +31,15 @@ namespace WB.Services.Export.Events
             this.serviceProvider = serviceProvider;
             this.logger = logger;
             this.dataExportProcessesService = dataExportProcessesService;
-            pageSize = settings.Value.DefaultEventQueryPageSize;
+            queryEventsPageSize = settings.Value.DefaultEventQueryPageSize;
+            maxEventsPageSize = settings.Value.MaxEventQueryPageSize;
         }
 
-        private int pageSize;
+        private int queryEventsPageSize;
+        private int? maxEventsPageSize;
 
         long? maximumSequenceToQuery;
         private const double ExpectedBatchDurationInSeconds = 4;
-        private const int MaxEventsProducerSize = 50;
-        private const int SleepLengthOnLimitReachingInMilliseconds = 3000;
 
         private async Task EnsureMigrated(CancellationToken cancellationToken)
         {
@@ -114,7 +114,7 @@ namespace WB.Services.Export.Events
 
                 // setting next batch size to be equal average processing speed per second * expected duration
                 var size = (int)runningAverage.Add(thisBatchProcessingSpeed);
-                pageSize = (int)(size * ExpectedBatchDurationInSeconds);
+                queryEventsPageSize = (int)(size * ExpectedBatchDurationInSeconds);
 
                 // estimation by average processing speed, seconds
                 var estimatedAverage = runningAverage.Eta(totalEventsToRead - eventsProcessed ?? 0);
@@ -149,7 +149,7 @@ namespace WB.Services.Export.Events
             try
             {
                 var readingAvg = new SimpleRunningAverage(5);
-                readingAvg.Add(pageSize);
+                readingAvg.Add(queryEventsPageSize);
 
                 var readingSequence = sequenceToStartFrom;
                 var apiTrack = Stopwatch.StartNew();
@@ -159,17 +159,12 @@ namespace WB.Services.Export.Events
                     if (maximumSequenceToQuery.HasValue
                         && readingSequence >= maximumSequenceToQuery) break;
 
-                    //keeping out of memory overconsumption
-                    if (eventsProducer.Count > MaxEventsProducerSize)
-                    {
-                        Thread.Sleep(SleepLengthOnLimitReachingInMilliseconds);
-                        continue;
-                    }
-
                     apiTrack.Restart();
 
                     // just to make sure that we will not query too much data while skipping deleted questionnaires
-                    var amount = Math.Max(100, Math.Min((int)(readingAvg.Average * ExpectedBatchDurationInSeconds), pageSize));
+                    var amount = Math.Max(100, Math.Min((int)(readingAvg.Average * ExpectedBatchDurationInSeconds), queryEventsPageSize));
+                    if (maxEventsPageSize.HasValue && amount > maxEventsPageSize.Value)
+                        amount = maxEventsPageSize.Value;
 
                     var feed = await tenant.Api.GetInterviewEvents(readingSequence, amount);
                     apiTrack.Stop();
