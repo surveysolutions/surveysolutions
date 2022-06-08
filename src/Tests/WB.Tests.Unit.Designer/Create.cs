@@ -1657,7 +1657,8 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<IQuestionnaireCompilationVersionService>(), 
                 Mock.Of<IDynamicCompilerSettingsProvider>(x => x.GetAssembliesToReference() == DynamicCompilerSettingsProvider().GetAssembliesToReference()),
                 expressionsPlayOrderProvider,
-                categoriesService ?? Mock.Of<ICategoriesService>());
+                categoriesService ?? Mock.Of<ICategoriesService>(),
+                new QuestionnaireCodeGenerationPackageFactory(lookupTableService ?? lookupTableServiceMock.Object));
         }
 
         public static IQuestionTypeToCSharpTypeMapper QuestionTypeToCSharpTypeMapper()

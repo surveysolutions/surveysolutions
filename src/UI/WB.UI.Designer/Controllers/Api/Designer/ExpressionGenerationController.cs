@@ -20,7 +20,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     public class ExpressionGenerationController : ControllerBase
     {
         private readonly IQuestionnaireVerifier questionnaireVerifier;
-        private readonly ILookupTableService lookupTableService;
+        private readonly IQuestionnaireCodeGenerationPackageFactory generationPackageFactory;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IDesignerEngineVersionService engineVersionService;
@@ -31,14 +31,14 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IDesignerEngineVersionService engineVersionService, 
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
             IQuestionnaireVerifier questionnaireVerifier,
-            ILookupTableService lookupTableService)
+            IQuestionnaireCodeGenerationPackageFactory generationPackageFactory)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.engineVersionService = engineVersionService;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.questionnaireVerifier = questionnaireVerifier;
-            this.lookupTableService = lookupTableService;
+            this.generationPackageFactory = generationPackageFactory;
         }
 
         [HttpGet]
@@ -46,9 +46,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         {
             var questionnaire = this.GetQuestionnaire(id).Source;
             var supervisorVersion = version ?? this.engineVersionService.LatestSupportedVersion;
-            var lookupTables = GetLookupTables(questionnaire);
-            var package = new QuestionnaireCodeGenerationPackage(questionnaire, lookupTables);
-
+            var package = generationPackageFactory.Generate(questionnaire);
             var generated = this.expressionProcessorGenerator.GenerateProcessorStateClasses(package, supervisorVersion, inSingleFile: true);
             
             var resultBuilder = new StringBuilder();
@@ -62,22 +60,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             return Ok(resultBuilder.ToString());
         }
         
-        private Dictionary<Guid, LookupTableContent> GetLookupTables(QuestionnaireDocument questionnaire)
-        {
-            var questionnaireId = questionnaire.PublicKey;
-            Dictionary<Guid, LookupTableContent> tables = new();
-            foreach (var table in questionnaire.LookupTables)
-            {
-                var lookupTableContent = lookupTableService.GetLookupTableContent(questionnaireId, table.Key);
-                if (lookupTableContent == null)
-                    throw new InvalidOperationException("Lookup table is empty.");
-                tables.Add(table.Key, lookupTableContent);
-            }
-
-            return tables;
-        }
-
-
         [HttpGet]
         public IActionResult GetCompilationResultForLatestVersion(Guid id)
         {

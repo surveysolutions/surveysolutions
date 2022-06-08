@@ -27,12 +27,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IDesignerEngineVersionService engineVersionService;
-        private readonly ILookupTableService lookupTableService;
         private readonly ITranslationsService translationService;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly ITopologicalSorter<Guid> topologicalSorter;
         private readonly IExpressionsPlayOrderProvider graphProvider;
+        private readonly IQuestionnaireCodeGenerationPackageFactory generationPackageFactory;
 
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, 
@@ -50,16 +50,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, 
             IDynamicCompilerSettingsProvider compilerSettings,
             IExpressionsPlayOrderProvider graphProvider,
-            ICategoriesService categoriesService)
+            ICategoriesService categoriesService,
+            IQuestionnaireCodeGenerationPackageFactory generationPackageFactory)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.engineVersionService = engineVersionService;
-            this.lookupTableService = lookupTableService;
             this.translationService = translationService;
             this.questionnaireTranslator = questionnaireTranslator;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.topologicalSorter = topologicalSorter;
             this.graphProvider = graphProvider;
+            this.generationPackageFactory = generationPackageFactory;
 
             verifiers = new IPartialVerifier[]
             {
@@ -125,9 +126,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 ?? ( this.questionnaireCompilationVersionService.GetById(questionnaire.PublicKey)?.Version
                      ?? Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire)));
 
-            var lookupTables = GetLookupTables(questionnaire); 
             var compiledReadyDocument = questionnaireView.GetCompiledReadyDocument();
-            var package = new QuestionnaireCodeGenerationPackage(compiledReadyDocument, lookupTables);
+            var package = generationPackageFactory.Generate(compiledReadyDocument, questionnaire.PublicKey);
 
             var compilationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
                 package, questionnaireVersionToCompileAssembly, out resultAssembly);
@@ -145,21 +145,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             }
 
             return verificationMessagesByQuestionnaire.Concat(verificationMessagesByCompiler);
-        }
-
-        private Dictionary<Guid, LookupTableContent> GetLookupTables(QuestionnaireDocument questionnaire)
-        {
-            var questionnaireId = questionnaire.PublicKey;
-            Dictionary<Guid, LookupTableContent> tables = new();
-            foreach (var table in questionnaire.LookupTables)
-            {
-                var lookupTableContent = lookupTableService.GetLookupTableContent(questionnaireId, table.Key);
-                if (lookupTableContent == null)
-                    throw new InvalidOperationException("Lookup table is empty.");
-                tables.Add(table.Key, lookupTableContent);
-            }
-
-            return tables;
         }
 
         private List<QuestionnaireVerificationMessage> PreVerify(ReadOnlyQuestionnaireDocument readOnlyQuestionnaireDocument)
