@@ -36,12 +36,12 @@ namespace WB.Services.Export.Events
             saveEventsPageSize = settings.Value.MaxSaveEventsPageSize;
         }
 
-        readonly int? saveEventsPageSize;
+        private readonly int? saveEventsPageSize;
 
 
         public async Task HandleEventsFeedAsync(EventsFeed feed, CancellationToken token = default)
         {
-            if (saveEventsPageSize.HasValue)
+            if (saveEventsPageSize.HasValue && (saveEventsPageSize.Value < feed.Events.Count))
                 foreach (var eventsBatch in feed.Events.Batch(saveEventsPageSize.Value))
                     await HandleEventsFeedAsync(eventsBatch.ToList(), token, 0);
             else        
