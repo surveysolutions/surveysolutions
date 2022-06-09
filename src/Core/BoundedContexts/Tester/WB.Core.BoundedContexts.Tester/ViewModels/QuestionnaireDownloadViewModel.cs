@@ -75,24 +75,29 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
             if (questionnaireIdentity != null)
             {
-                if (principal.CurrentUserIdentity == null)
-                    principal.UseFakeIdentity();
-                
-                var interviewId = await this.CreateInterview(questionnaireIdentity, progress).ConfigureAwait(false);
-                var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
-                if (questionnaire.GetPrefilledEntities().Count == 0)
-                {
-                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), null)
-                        .ConfigureAwait(false);
-                }
-                else
-                {
-                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid())
-                        .ConfigureAwait(false);
-                }
+                await CreateAndOpenInterview(questionnaireIdentity, progress);
             }
 
             return questionnaireIdentity;
+        }
+
+        public async Task CreateAndOpenInterview(QuestionnaireIdentity questionnaireIdentity, IProgress<string> progress)
+        {
+            if (principal.CurrentUserIdentity == null)
+                principal.UseFakeIdentity();
+
+            var interviewId = await this.CreateInterview(questionnaireIdentity, progress).ConfigureAwait(false);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
+            if (questionnaire.GetPrefilledEntities().Count == 0)
+            {
+                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), null)
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid())
+                    .ConfigureAwait(false);
+            }
         }
 
         public async Task<bool> ReloadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
@@ -140,7 +145,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             return questionnaireIdentity != null;
         }
 
-        private async Task<QuestionnaireIdentity> DownloadQuestionnaireWithAllDependencisAsync(string questionnaireId, string questionnaireTitle,
+        public async Task<QuestionnaireIdentity> DownloadQuestionnaireWithAllDependencisAsync(string questionnaireId, string questionnaireTitle,
             IProgress<string> progress, CancellationToken cancellationToken)
         {
             progress.Report(TesterUIResources.ImportQuestionnaire_CheckConnectionToServer);
