@@ -34,21 +34,32 @@ namespace WB.Services.Export.Events
             this.tenantContext = tenantContext;
             this.dbContext = dbContext;
             saveEventsPageSize = settings.Value.MaxSaveEventsPageSize;
+            saveEventsPageSizeWhenTimeoutException = settings.Value.MaxSaveEventsPageSize.HasValue
+                ? Math.Min(saveEventsPageSizeWhenTimeoutExceptionDefault, settings.Value.MaxSaveEventsPageSize.Value)
+                : saveEventsPageSizeWhenTimeoutExceptionDefault;
         }
 
         private readonly int? saveEventsPageSize;
+        
+        private readonly int saveEventsPageSizeWhenTimeoutExceptionDefault = 1000;
+        private readonly int saveEventsPageSizeWhenTimeoutException;
 
 
         public async Task HandleEventsFeedAsync(EventsFeed feed, CancellationToken token = default)
         {
-            if (saveEventsPageSize.HasValue && (saveEventsPageSize.Value < feed.Events.Count))
-                foreach (var eventsBatch in feed.Events.Batch(saveEventsPageSize.Value))
-                    await HandleEventsFeedAsync(eventsBatch.ToList(), token, 0);
-            else        
-                await HandleEventsFeedAsync(feed.Events, token, 0);
+             await HandleEventsFeedWithBatchAsync(feed.Events, saveEventsPageSize, 1, token);
         }
-        
-        private async Task HandleEventsFeedAsync(List<Event> events, CancellationToken token, int attempt)
+
+        private async Task HandleEventsFeedWithBatchAsync(List<Event> events, int? batch, int attempt, CancellationToken token = default)
+        {
+            if (batch.HasValue && (batch.Value < events.Count))
+                foreach (var eventsBatch in events.Batch(batch.Value))
+                    await HandleEventsFeedAsync(eventsBatch.ToList(), attempt, token);
+            else        
+                await HandleEventsFeedAsync(events, attempt, token);
+        }
+
+        private async Task HandleEventsFeedAsync(List<Event> events, int attempt, CancellationToken token)
         {
             try
             {
@@ -110,12 +121,12 @@ namespace WB.Services.Export.Events
             {
                 logger.LogCritical(te, $"Attempt:#{attempt}. exception: {te.Message}");
 
-                if (attempt > 2)
+                if (attempt > 3)
                     throw;
 
-                logger.LogCritical($"Attempt:#{attempt}. Will try next attempt.");
-                await Task.Delay(TimeSpan.FromSeconds(10), token);
-                await HandleEventsFeedAsync(events, token, attempt + 1);
+                await Task.Delay(TimeSpan.FromSeconds(10 * attempt), token);
+                logger.LogCritical($"Attempt:#{attempt}. Will try next attempt with batch size {saveEventsPageSizeWhenTimeoutException}.");
+                await HandleEventsFeedWithBatchAsync(events, saveEventsPageSizeWhenTimeoutException, attempt + 1, token);
             }
             catch (PostgresException pe) when (pe.SqlState == "57014")
             {
