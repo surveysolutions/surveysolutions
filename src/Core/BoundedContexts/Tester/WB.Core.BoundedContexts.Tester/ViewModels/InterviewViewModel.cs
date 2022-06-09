@@ -88,5 +88,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 this.IsInProgress = false;
             }
         }
+
+        public override void Dispose()
+        {
+            if (testerPrincipal.IsFakeIdentity)
+                testerPrincipal.RemoveFakeIdentity();
+            
+            base.Dispose();
+        }
     }
 }
