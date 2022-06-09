@@ -350,7 +350,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 principal.UseFakeIdentity();
 
             tokenSource?.Dispose();
-            questionnaireListStorage?.Dispose();
         }
     }
 }
