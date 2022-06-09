@@ -5,6 +5,7 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
@@ -30,7 +31,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             questionnireExpressionProcessorGeneratorMock = new Mock<IExpressionProcessorGenerator>();
             string generationResult;
             questionnireExpressionProcessorGeneratorMock.Setup(
-                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>(), out generationResult))
+                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireCodeGenerationPackage>(), Moq.It.IsAny<int>(), out generationResult))
                 .Returns(new GenerationResult() { Success = true, Diagnostics = new List<GenerationDiagnostic>() });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: questionnireExpressionProcessorGeneratorMock.Object);
@@ -58,7 +59,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.First().References.First().Id.Should().Be(staticTextId);
 
         [NUnit.Framework.Test] public void should_not_call_GenerateProcessorStateAssembly () =>
-            questionnireExpressionProcessorGeneratorMock.Verify(x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>(), out generationResult), Times.Never);
+            questionnireExpressionProcessorGeneratorMock.Verify(x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireCodeGenerationPackage>(), Moq.It.IsAny<int>(), out generationResult), Times.Never);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

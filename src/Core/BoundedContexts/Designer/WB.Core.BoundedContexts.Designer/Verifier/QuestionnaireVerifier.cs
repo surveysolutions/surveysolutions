@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -30,6 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly ITopologicalSorter<Guid> topologicalSorter;
         private readonly IExpressionsPlayOrderProvider graphProvider;
+        private readonly IQuestionnaireCodeGenerationPackageFactory generationPackageFactory;
 
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, 
@@ -47,7 +50,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, 
             IDynamicCompilerSettingsProvider compilerSettings,
             IExpressionsPlayOrderProvider graphProvider,
-            ICategoriesService categoriesService)
+            ICategoriesService categoriesService,
+            IQuestionnaireCodeGenerationPackageFactory generationPackageFactory)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.engineVersionService = engineVersionService;
@@ -56,6 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.topologicalSorter = topologicalSorter;
             this.graphProvider = graphProvider;
+            this.generationPackageFactory = generationPackageFactory;
 
             verifiers = new IPartialVerifier[]
             {
@@ -122,9 +127,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                      ?? Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire)));
 
             var compiledReadyDocument = questionnaireView.GetCompiledReadyDocument();
+            var package = generationPackageFactory.Generate(compiledReadyDocument, questionnaire.PublicKey);
 
             var compilationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                compiledReadyDocument, questionnaireVersionToCompileAssembly, out resultAssembly);
+                package, questionnaireVersionToCompileAssembly, out resultAssembly);
 
             if (!compilationResult.Success)
             {

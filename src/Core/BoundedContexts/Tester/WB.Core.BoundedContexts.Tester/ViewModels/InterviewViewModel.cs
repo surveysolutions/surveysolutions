@@ -58,7 +58,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public override async Task NavigateBack()
         {
-            await this.ViewModelNavigationService.NavigateToDashboardAsync();
+            if (IsAuthenticated)
+                await this.ViewModelNavigationService.NavigateToDashboardAsync();
+            else
+                await this.ViewModelNavigationService.NavigateToAsync<AnonymousQuestionnairesViewModel>();
             this.Dispose();
         }
 
@@ -84,6 +87,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 this.IsInProgress = false;
             }
+        }
+
+        public override void Dispose()
+        {
+            if (testerPrincipal.IsFakeIdentity)
+                testerPrincipal.RemoveFakeIdentity();
+            
+            base.Dispose();
         }
     }
 }

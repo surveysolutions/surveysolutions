@@ -306,10 +306,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         {
                             this.tokenSource = new CancellationTokenSource();
                             var progress = new Progress<string>();
-                            var questionnaireIdentity = await this.QuestionnaireDownloader
-                                .LoadQuestionnaireAsync(qId.FormatGuid(), idFromUrl, progress, this.tokenSource.Token);
-
+                            var questionnaireIdentity = await this.QuestionnaireDownloader.DownloadQuestionnaireWithAllDependencisAsync(qId.FormatGuid(), idFromUrl, progress, tokenSource.Token);
                             SaveAnonymousQuestionnaireListItem(questionnaireIdentity);
+                            await this.QuestionnaireDownloader.CreateAndOpenInterview(questionnaireIdentity, progress);
                         }
                     }
                 }
@@ -350,7 +349,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 principal.UseFakeIdentity();
 
             tokenSource?.Dispose();
-            questionnaireListStorage?.Dispose();
         }
     }
 }
