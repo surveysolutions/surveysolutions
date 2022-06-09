@@ -70,11 +70,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         public async Task<QuestionnaireIdentity> LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
-            IProgress<string> progress, CancellationToken cancellationToken)
+            IProgress<string> progress, CancellationToken cancellationToken, Action<QuestionnaireIdentity> actionAfterDownload = null)
         {
             var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
             if (questionnaireIdentity != null)
             {
+                actionAfterDownload?.Invoke(questionnaireIdentity);
+            
                 if (principal.CurrentUserIdentity == null)
                     principal.UseFakeIdentity();
                 
