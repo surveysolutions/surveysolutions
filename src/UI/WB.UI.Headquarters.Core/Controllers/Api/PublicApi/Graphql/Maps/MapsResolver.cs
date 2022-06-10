@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             if (uploadMap.IsSuccess)
                 return uploadMap.Maps.ToArray();
             else
-                throw new Exception(uploadMap.Errors.First());
+                throw new GraphQLException(uploadMap.Errors.Select(message => new Error(message)));
         }
     }
 }
