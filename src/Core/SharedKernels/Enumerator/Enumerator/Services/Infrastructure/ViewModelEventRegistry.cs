@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 
             logger.Debug("Count of active subscribers: " + vm.Count);
             logger.Debug("Active subscribers: " + string.Join(", ", vm.Select(e => e.GetType().Name).Distinct()));
-            logger.Debug("Same identities: " + String.Join(", ", vm.OfType<IInterviewEntityViewModel>().Select(s => s.Identity.ToString()).Distinct()));
+            logger.Debug("Same identities: " + String.Join(", ", vm.OfType<IInterviewEntityViewModel>().Select(s => s.Identity?.ToString()).Distinct()));
         }
         
         public void Subscribe(IViewModelEventHandler handler, string aggregateRootId)
