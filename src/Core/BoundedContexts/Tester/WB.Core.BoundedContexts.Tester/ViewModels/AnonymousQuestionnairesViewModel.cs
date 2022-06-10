@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 Id = item.Id,
                 Title = item.Title,
-                LastEntryDate = item.LastEntryDate,
+                LastEntryDate = DateTime.SpecifyKind(item.LoadDateUtc, DateTimeKind.Utc).ToLocalTime(),
                 SearchTerm = searchTerm,
                 IsPublic = true,
                 Type = QuestionnairesType.SharedWithMe,
@@ -332,12 +332,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 Id = questionnaireDocument.Id,
                 LastEntryDate = questionnaireDocument.LastEntryDate,
                 Title = questionnaireDocument.Title,
+                LoadDateUtc = DateTime.UtcNow, 
             });
             var items = questionnaireListStorage.LoadAll();
             if (items.Count > 10)
             {
                 var itemsToRemove = items
-                    .OrderByDescending(i => i.LastEntryDate)
+                    .OrderByDescending(i => i.LoadDateUtc)
                     .Skip(10);
                 questionnaireListStorage.Remove(itemsToRemove);
             }

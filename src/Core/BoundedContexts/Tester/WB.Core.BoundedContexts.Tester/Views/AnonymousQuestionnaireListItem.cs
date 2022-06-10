@@ -10,5 +10,6 @@ namespace WB.Core.BoundedContexts.Tester.Views
         public string Id { get; set; }
         public string Title { get; set; }
         public DateTime LastEntryDate { get; set; }
+        public DateTime LoadDateUtc { get; set; }
     }
 }
