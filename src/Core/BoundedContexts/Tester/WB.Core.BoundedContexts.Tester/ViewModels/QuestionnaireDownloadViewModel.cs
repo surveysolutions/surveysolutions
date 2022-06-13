@@ -243,7 +243,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             var questionnaireDocument = questionnairePackage.Document;
             questionnaireDocument.PublicKey = questionnaireIdentity.QuestionnaireId;
-            questionnaireDocument.Id = questionnaireIdentity.QuestionnaireId.FormatGuid();
 
             var supportingAssembly = questionnairePackage.Assembly;
 
