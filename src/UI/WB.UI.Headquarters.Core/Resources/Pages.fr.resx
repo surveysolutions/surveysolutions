@@ -1087,7 +1087,7 @@
     <value>Rendre le superviseur d’origine responsable des affectations existantes et des entretiens des enquêteurs déplacés.</value>
   </data>
   <data name="Map_DiscardConfirm" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer la carte?</value>
+    <value>Êtes-vous sûr de vouloir supprimer la carte "{{map}}"?</value>
   </data>
   <data name="Map_Status" xml:space="preserve">
     <value>Statut</value>

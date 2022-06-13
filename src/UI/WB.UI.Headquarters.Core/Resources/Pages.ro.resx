@@ -811,7 +811,7 @@
     <value>Repornește ...</value>
   </data>
   <data name="Map_DiscardConfirm" xml:space="preserve">
-    <value>Sigur doriți să ștergeți harta?</value>
+    <value>Sigur doriți să ștergeți harta "{{map}}"?</value>
   </data>
   <data name="Map_Status" xml:space="preserve">
     <value>Stare</value>

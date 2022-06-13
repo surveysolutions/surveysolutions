@@ -44,8 +44,10 @@
 
         <Confirm ref="confirmDiscard"
             id="discardConfirm"
+            :okTitle="$t('Common.Delete')"
+            okClass="btn-danger"
             slot="modals">
-            {{ $t("Pages.Map_DiscardConfirm") }}
+            {{ deleteDialogBody }}
         </Confirm>
     </HqLayout>
 </template>
@@ -73,6 +75,7 @@ export default {
         return {
             statusMessage: '',
             errorList: [],
+            deleteMapName: '',
         }
     },
     mounted() {
@@ -164,6 +167,7 @@ export default {
         },
         confirmDeleteMap(fileName) {
             const self = this
+            this.deleteMapName = fileName
             this.$refs.confirmDiscard.promt(ok => {
                 if (ok) {
                     self.$apollo.mutate({
@@ -297,6 +301,9 @@ export default {
                 order: [[0, 'asc']],
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
+        },
+        deleteDialogBody() {
+            return this.$t('Pages.Map_DiscardConfirm', { map: this.deleteMapName })
         },
     },
 }

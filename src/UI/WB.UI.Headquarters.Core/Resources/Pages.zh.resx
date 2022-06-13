@@ -997,7 +997,7 @@
     <value>设备/调查员</value>
   </data>
   <data name="Map_DiscardConfirm" xml:space="preserve">
-    <value>确定要放弃地图？</value>
+    <value>确定要放弃地图 "{{map}}"？</value>
   </data>
   <data name="MapDetails_DelinkUser" xml:space="preserve">
     <value>切断用户来自地图的连接</value>
