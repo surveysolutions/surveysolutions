@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         ? NavigationIdentity.CreateForGroup(navigationIdentity.TargetGroup)
                         : null;
                     await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(),
-                        targetGroup);
+                        targetGroup).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {

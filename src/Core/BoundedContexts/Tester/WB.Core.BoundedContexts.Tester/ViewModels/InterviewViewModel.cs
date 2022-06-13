@@ -42,9 +42,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             this.testerPrincipal = testerPrincipal;
             this.QuestionnaireDownloader = questionnaireDownloader;
+            
+            if (testerPrincipal.CurrentUserIdentity == null)
+                testerPrincipal.UseFakeIdentity();
         }
 
-        public bool IsAuthenticated => testerPrincipal.IsAuthenticated && !testerPrincipal.IsFakeIdentity;
+        public bool IsRealUserAuthenticated => testerPrincipal.IsAuthenticated && !testerPrincipal.IsFakeIdentity;
         
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.NavigationState.CurrentNavigationIdentity));
 
@@ -58,7 +61,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public override async Task NavigateBack()
         {
-            if (IsAuthenticated)
+            if (IsRealUserAuthenticated)
                 await this.ViewModelNavigationService.NavigateToDashboardAsync();
             else
                 await this.ViewModelNavigationService.NavigateToAsync<AnonymousQuestionnairesViewModel>();
