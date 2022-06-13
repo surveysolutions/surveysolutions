@@ -24,6 +24,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
     {
+        private const int CountRowsInHistory = 10;
+
         private CancellationTokenSource tokenSource;
 
         private readonly ITesterPrincipal principal;
@@ -64,13 +66,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             await base.Initialize().ConfigureAwait(false);
 
             this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
-
             if (localQuestionnaires.Any())
                 this.SearchByLocalQuestionnaires();
-
-            this.ShowEmptyQuestionnaireListText = true;
+            
             this.IsSearchVisible = false;
+        }
 
+        public override void ViewAppearing()
+        {
+            base.ViewAppearing();
+            
             if (principal.IsFakeIdentity)
                 principal.RemoveFakeIdentity();
         }
@@ -120,13 +125,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             set => this.SetProperty(ref this.questionnaires, value);
         }
 
-        private bool showEmptyQuestionnaireListText;
-
-        public bool ShowEmptyQuestionnaireListText
-        {
-            get => this.showEmptyQuestionnaireListText;
-            set => this.SetProperty(ref this.showEmptyQuestionnaireListText, value);
-        }
 
         private bool isInProgress;
 
@@ -335,13 +333,17 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 LoadDateUtc = DateTime.UtcNow, 
             });
             var items = questionnaireListStorage.LoadAll();
-            if (items.Count > 10)
+            if (items.Count > CountRowsInHistory)
             {
                 var itemsToRemove = items
                     .OrderByDescending(i => i.LoadDateUtc)
-                    .Skip(10);
+                    .Skip(CountRowsInHistory);
                 questionnaireListStorage.Remove(itemsToRemove);
             }
+
+            this.localQuestionnaires = items.OrderByDescending(i => i.LoadDateUtc)
+                .Take(CountRowsInHistory).ToReadOnlyCollection();
+            SearchByLocalQuestionnaires(SearchText);
         }
 
         public void Dispose()
