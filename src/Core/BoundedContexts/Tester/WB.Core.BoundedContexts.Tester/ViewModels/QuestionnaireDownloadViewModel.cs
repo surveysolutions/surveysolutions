@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         ? NavigationIdentity.CreateForGroup(navigationIdentity.TargetGroup)
                         : null;
                     await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(),
-                        targetGroup);
+                        targetGroup).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
@@ -243,7 +243,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             var questionnaireDocument = questionnairePackage.Document;
             questionnaireDocument.PublicKey = questionnaireIdentity.QuestionnaireId;
-            questionnaireDocument.Id = questionnaireIdentity.QuestionnaireId.FormatGuid();
 
             var supportingAssembly = questionnairePackage.Assembly;
 
@@ -277,7 +276,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 if (!isExistsContent)
                 {
                     var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(
-                        questionnaire.Document.Id,
+                        questionnaire.Document.PublicKey.FormatGuid(),
                         attachmentContentId,
                         new Progress<TransferProgress>(downloadProgress
                             => progress.Report(string.Format(

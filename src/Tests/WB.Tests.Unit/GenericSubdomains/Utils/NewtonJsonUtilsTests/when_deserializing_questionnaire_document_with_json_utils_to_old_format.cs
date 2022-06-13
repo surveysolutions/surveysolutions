@@ -14,7 +14,6 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
                 Create.Entity.NumericQuestion(questionId: Guid.Parse("55555555555555555555555555555555"), variableName: "DUNo", prefilled: true, isInteger: true),
                 Create.Entity.TextQuestion(questionId: Guid.Parse("33333333333333333333333333333333"), variable: "Prov", preFilled: true)
             );
-            questionnaire.Id = "questionnaireId";
             questionnaire.CreationDate = new DateTime(2015, 03, 22, 12, 55, 30);
             questionnaire.LastEntryDate = new DateTime(2015, 03, 22, 12, 57, 30);
             questionnaire.PublicKey = Guid.Parse("11111111111111111111111111111111");

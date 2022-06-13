@@ -95,7 +95,6 @@ namespace WB.UI.Designer.Code.ImportExport
             if (createNew)
             {
                 var publicKey = Guid.NewGuid();
-                questionnaireDocument.Id = publicKey.FormatGuid();
                 questionnaireDocument.PublicKey = publicKey;
                 questionnaireDocument.CreationDate = DateTime.UtcNow;
                 questionnaireDocument.CreatedBy = responsibleId;

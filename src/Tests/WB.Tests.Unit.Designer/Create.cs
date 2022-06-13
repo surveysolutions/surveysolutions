@@ -828,7 +828,6 @@ namespace WB.Tests.Unit.Designer
             return new QuestionnaireDocument
             {
                 PublicKey = publicKey,
-                Id = publicKey.FormatGuid(),
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
                 Title = title,
                 VariableName = variable,
@@ -866,7 +865,6 @@ namespace WB.Tests.Unit.Designer
             {
                 Title = "Q",
                 VariableName = "Q",
-                Id = publicKey.FormatGuid(),
                 PublicKey = publicKey,
                 Children = new IComposite[]
                 {
