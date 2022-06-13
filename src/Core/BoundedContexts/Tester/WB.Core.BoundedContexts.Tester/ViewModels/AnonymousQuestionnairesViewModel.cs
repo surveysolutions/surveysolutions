@@ -304,7 +304,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         {
                             this.tokenSource = new CancellationTokenSource();
                             var progress = new Progress<string>();
-                            var questionnaireIdentity = await this.QuestionnaireDownloader.DownloadQuestionnaireWithAllDependencisAsync(qId.FormatGuid(), idFromUrl, progress, tokenSource.Token);
+                            var questionnaireIdentity = await this.QuestionnaireDownloader.DownloadQuestionnaireWithAllDependenciesAsync(qId.FormatGuid(), idFromUrl, progress, tokenSource.Token);
                             SaveAnonymousQuestionnaireListItem(questionnaireIdentity);
                             await this.QuestionnaireDownloader.CreateAndOpenInterview(questionnaireIdentity, progress);
                         }

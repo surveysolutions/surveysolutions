@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public override async Task Initialize()
         {
             await base.Initialize().ConfigureAwait(false);
-
+            
             this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
             
             if (!localQuestionnaires.Any())

@@ -61,10 +61,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public override async Task NavigateBack()
         {
-            if (IsRealUserAuthenticated)
-                await this.ViewModelNavigationService.NavigateToDashboardAsync();
-            else
-                await this.ViewModelNavigationService.NavigateToAsync<AnonymousQuestionnairesViewModel>();
+            await this.ViewModelNavigationService.NavigateToDashboardAsync();
             this.Dispose();
         }
 
