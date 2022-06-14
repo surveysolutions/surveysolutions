@@ -68,7 +68,9 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             using (var zip = new ZipFile
             {
                 CompressionLevel = CompressionLevel.Default,
-                UseZip64WhenSaving = Zip64Option.AsNecessary
+                UseZip64WhenSaving = Zip64Option.AsNecessary,
+                AlternateEncoding = Encoding.UTF8,
+                AlternateEncodingUsage = ZipOption.AsNecessary,
             })
             {
                 if (password != null)
