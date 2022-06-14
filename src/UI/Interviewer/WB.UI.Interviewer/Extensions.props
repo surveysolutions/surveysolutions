@@ -6,7 +6,7 @@
           <Name>WB.UI.Shared.Extensions</Name>
       </ProjectReference>
       <PackageReference Include="Esri.ArcGISRuntime">
-          <Version>100.13.1</Version>
+          <Version>100.14.0</Version>
       </PackageReference>
   </ItemGroup>
 </Project>
