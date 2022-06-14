@@ -44,7 +44,7 @@ namespace Main.Core.Documents
             }
         }
         
-        public string Id { get; set; }
+        public string Id { get; private set; }
         public int Revision { get; set; }
 
         private List<IComposite> children;
@@ -107,7 +107,16 @@ namespace Main.Core.Documents
             this.childrenWereConnected = false;
         }
 
-        public Guid PublicKey { get; set; }
+        private Guid publicKey;
+        public Guid PublicKey
+        {
+            get => publicKey;
+            set
+            {
+                Id = value.FormatGuid();
+                publicKey = value;
+            }
+        }
 
         public string Title { get; set; }
 

@@ -1108,7 +1108,7 @@
     <value>Вы уверены в том,что хотите удалить интервью?</value>
   </data>
   <data name="Map_DiscardConfirm" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить карту?</value>
+    <value>Вы уверены, что хотите удалить карту "{{map}}"?</value>
   </data>
   <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите отменить назначение на пользователя?</value>

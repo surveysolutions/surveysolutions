@@ -238,6 +238,12 @@ jobs:
           Set-Content -Path certificate\certificate.txt -Value '${{ secrets.CODESIGNING_CERTIFICATE }}'
           certutil -decode certificate\certificate.txt certificate\certificate.pfx
 
+      - name: Cache Frontend node modules
+        uses: actions/cache@v3
+        with:
+          path: src/UI/WB.UI.Frontend/node_modules
+          key: frontend-cache-node-modules-${{ hashFiles('src/UI/WB.UI.Frontend/package-lock.json') }}
+
       - name: Build Headquarters
         run: ./.build.ps1 PackageHqOffline -BuildNumber ${{ needs.prepare.outputs.build_number }}
 

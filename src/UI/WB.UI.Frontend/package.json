@@ -82,7 +82,7 @@
         "eslint-plugin-vue": "^9.0.1",
         "extra-watch-webpack-plugin": "^1.0.3",
         "npm-force-resolutions": "0.0.6",
-        "graphql-tag": "^2.12.4",
+        "graphql-tag": "^2.12.6",
         "jest": "^27.5.1",
         "mini-css-extract-plugin": "^0.9.0",
         "rimraf": "3.0.2",
@@ -146,6 +146,7 @@
         ]
     },
     "resolutions": {
+        "@apollo/client": ">=3.6.8",
         "async": ">=3.2.3",
         "braces": ">=2.3.1",
         "chokidar": ">=3.5.2",

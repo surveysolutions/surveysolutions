@@ -34,7 +34,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             var clone = Source.Clone();
             clone.PublicKey = compileQuestionnaireId.Value;
-            clone.Id = compileQuestionnaireId.Value.FormatGuid();
             return clone;
         }
 
@@ -44,7 +43,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (compileQuestionnaireId.HasValue)
             {
                 clone.PublicKey = compileQuestionnaireId.Value;
-                clone.Id = compileQuestionnaireId.Value.FormatGuid();
             }
 
             return clone;

@@ -220,6 +220,8 @@ namespace WB.UI.Designer
                 opt.Password.RequireNonAlphanumeric = membershipSection.GetValue("RequireNonAlphanumeric", false);
                 opt.Password.RequiredLength = membershipSection.GetValue("RequiredLength", 6);
                 opt.User.RequireUniqueEmail = membershipSection.GetValue("RequireUniqueEmail", true);
+
+                opt.Lockout.AllowedForNewUsers = true;
             });
 
             services.Configure<MailSettings>(Configuration.GetSection("Mail"));

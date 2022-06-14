@@ -1225,7 +1225,7 @@
     <value>Are You sure that You want to discard interview data?</value>
   </data>
   <data name="Map_DiscardConfirm" xml:space="preserve">
-    <value>Are You sure You want to delete the map?</value>
+    <value>Are you sure you want to delete the map "{{map}}"?</value>
   </data>
   <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
     <value>Are You sure You want to delink user from the map?</value>

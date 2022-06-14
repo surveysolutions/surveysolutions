@@ -34,7 +34,6 @@ namespace WB.UI.Tester.Activities
 
         public override void OnBackPressed()
         {
-            this.Finish();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

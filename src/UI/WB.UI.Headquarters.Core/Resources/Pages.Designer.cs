@@ -3094,7 +3094,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are You sure You want to delete the map?.
+        ///   Looks up a localized string similar to Are you sure you want to delete the map &quot;{{map}}&quot;?.
         /// </summary>
         public static string Map_DiscardConfirm {
             get {

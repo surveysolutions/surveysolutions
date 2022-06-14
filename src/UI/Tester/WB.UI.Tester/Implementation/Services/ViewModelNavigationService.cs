@@ -4,6 +4,7 @@ using Android.Content;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Plugin.Messenger;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -30,11 +31,18 @@ namespace WB.UI.Tester.Implementation.Services
                 userInterfaceStateService,
                 principal, log)
         {
+            this.testerPrincipal = principal as ITesterPrincipal;
         }
 
+        private readonly ITesterPrincipal testerPrincipal; 
+
+        private bool IsRealUserAuthenticated => testerPrincipal.IsAuthenticated && !testerPrincipal.IsFakeIdentity;
+        
         public override async Task<bool> NavigateToDashboardAsync(string interviewId = null)
         {
-            return await NavigationService.Navigate<DashboardViewModel>();
+            return IsRealUserAuthenticated 
+                ? await NavigationService.Navigate<DashboardViewModel>()
+                : await NavigationService.Navigate<AnonymousQuestionnairesViewModel>();
         }
 
         public override void NavigateToSplashScreen()
