@@ -22,7 +22,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
             synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<MapView>()
                 {
-                    new MapView(){MapName = "test"}
+                    new MapView(){MapName = "test"},
+                    new MapView(){MapName = "test3"}
                 });
 
             var mapService = new Mock<IMapService>();
@@ -51,9 +52,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
                 new SynchronizationStatistics());
             
             // assert
+            mapService.Verify(x => x.RemoveMap("test"), Times.Never);
             mapService.Verify(x => x.RemoveMap("test1"), Times.Once);
             mapService.Verify(x => x.RemoveMap("test2"), Times.Once);
-            mapService.Verify(x => x.RemoveMap("test3"), Times.Once);
+            mapService.Verify(x => x.RemoveMap("test3"), Times.Never);
             
             //Assert.That(token, Is.EqualTo("offline sync token"));
         }
