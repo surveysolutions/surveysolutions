@@ -127,7 +127,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
                 return new IdentifyingVariable()
                 {
-                    Type = entityType.ToString(),
+                    EntityType = entityType.ToString(),
                     Identity = entityIdentity.ToString(),
                     Title = variable.Title.BrowserReadyText,
                 };
@@ -138,14 +138,14 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 var staticText = interview.GetStaticText(entityIdentity);
                 return new IdentifyingStaticText()
                 {
-                    Type = entityType.ToString(),
+                    EntityType = entityType.ToString(),
                     Identity = entityIdentity.ToString(),
                     Title = staticText.Title.BrowserReadyText,
                 };
             }
 
             var result = new IdentifyingQuestion();
-            result.Type = entityType.ToString();
+            result.EntityType = entityType.ToString();
             var questionIdentity = entityIdentity;
             result.Identity = questionIdentity.ToString();
             var interviewQuestion = interview.GetQuestion(questionIdentity);
@@ -199,8 +199,10 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (statefulInterview == null) return null;
             var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity);
 
-            InterviewEntityWithType[] interviewEntityWithTypes = GetInterviewEntitiesWithTypes(interviewId)
-                .Union(ActionButtonsDefinition)
+            var interviewEntityWithTypes = questionnaire
+                .GetPrefilledEntities()
+                .Select(x => this.GetIdentifyingEntity(x, statefulInterview, questionnaire))
+                .Concat(ActionButtonsDefinition)
                 .ToArray();
 
             var details = GetEntitiesDetails(interviewId, interviewEntityWithTypes.Select(e => e.Identity).ToArray());
@@ -602,18 +604,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             }).ToArray();
 
-            var interviewEntityWithTypes = questionnaire
-                .GetPrefilledEntities()
-                .Select(x => this.GetIdentifyingEntity(x, interview, questionnaire))
-                .ToList();
-
             var coverInfo = new CoverInfo
             {
                 Title = questionnaire.IsCoverPageSupported 
                     ? interview.GetTitleText(new Identity(questionnaire.CoverPageSectionId, RosterVector.Empty))
                     : null,
                 EntitiesWithComments = entitiesWithComments,
-                IdentifyingEntities = interviewEntityWithTypes,
                 CommentedQuestionsCount = commentedQuestionsCount,
                 SupervisorRejectComment = interview.SupervisorRejectComment
             };

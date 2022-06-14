@@ -145,7 +145,7 @@
                     }
                     </tbody>
                 </table>
-                @Html.Pager(Model.List.PageIndex + 1, Model.List.TotalPages, x => Url.Action(ViewContext.CurrentAction(), ViewContext.CurrentController(), new {p = x, sb = Model.SortBy, so = Model.SortOrder, f = Model.Filter}), 2)
+                @Html.Pager(Model.List.PageIndex + 1, Model.List.TotalPages, x => Url.Action(ViewContext.CurrentAction(), ViewContext.CurrentController(), new {p = x, sb = Model!.SortBy, so = Model.SortOrder, f = Model.Filter}), 2)
             }
         }
     </div>

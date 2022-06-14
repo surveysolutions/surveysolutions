@@ -3,11 +3,9 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Enumerator.Native.WebInterview.Models
 {
-    public class IdentifyingEntity
+    public class IdentifyingEntity : InterviewEntityWithType
     {
-        public string Identity { get; set; }
         public string Title { get; set; }
-        public string Type { get; set; }
     }
 
     public class IdentifyingStaticText : IdentifyingEntity

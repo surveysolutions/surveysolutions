@@ -1,10 +1,12 @@
 ﻿using System;
+using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Security
 {
-    internal class TesterPrincipal : IPrincipal
+    internal class TesterPrincipal : ITesterPrincipal
     {
         private readonly IPlainStorage<TesterUserIdentity> usersStorage;
         private TesterUserIdentity currentUserIdentity;
@@ -65,5 +67,22 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
             this.currentUserIdentity = this.usersStorage.GetById(userId);
             return this.IsAuthenticated;
         }
+
+        public void UseFakeIdentity()
+        {
+            this.currentUserIdentity = new TesterUserIdentity
+            {
+                Name = "Anonymous",
+                Password = "fake",
+                UserId = Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"),
+            };
+        }
+
+        public void RemoveFakeIdentity()
+        {
+            this.currentUserIdentity = null;
+        }
+
+        public bool IsFakeIdentity => this.currentUserIdentity?.Password == "fake";
     }
 }

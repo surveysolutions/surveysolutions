@@ -39,6 +39,7 @@ namespace WB.UI.Tester.Activities
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
 
+            menu.LocalizeMenuItem(Resource.Id.dashboard_anonymous_questionnaire, TesterUIResources.MenuItem_Title_AnonymousQuestionnaires);
             menu.LocalizeMenuItem(Resource.Id.dashboard_settings, TesterUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.dashboard_signout, TesterUIResources.MenuItem_Title_SignOut);
 
@@ -49,6 +50,10 @@ namespace WB.UI.Tester.Activities
         {
             switch (item.ItemId)
             {
+                case Resource.Id.dashboard_anonymous_questionnaire:
+                    Intent intentAnonymousQuestionnaire = new Intent(this, typeof(AnonymousQuestionnairesActivity));
+                    this.StartActivity(intentAnonymousQuestionnaire);
+                    break;
                 case Resource.Id.dashboard_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);

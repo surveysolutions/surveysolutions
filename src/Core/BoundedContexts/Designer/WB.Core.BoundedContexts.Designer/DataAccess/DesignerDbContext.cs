@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Comments;
@@ -66,6 +67,8 @@ namespace WB.Core.BoundedContexts.Designer.DataAccess
         public DbSet<ProductVersionChange> ProductVersionChanges { get; set; }
 
         public DbSet<StoredScenario> Scenarios { get; set; }
+        
+        public DbSet<AnonymousQuestionnaire> AnonymousQuestionnaires { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -90,6 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.DataAccess
             builder.ApplyConfiguration(new ProductVersionChangeTypeConfig());
             builder.ApplyConfiguration(new StoredScenarioTypeConfig());
             builder.ApplyConfiguration(new CategoriesInstanceTypeConfig());
+            builder.ApplyConfiguration(new AnonymousQuestionnaireTypeConfig());
 
             // Key value
             builder.ApplyConfiguration(new KeyValueTableTypeConfig<StoredLookupTable>("lookuptablecontents"));

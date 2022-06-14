@@ -57,6 +57,7 @@ namespace WB.Tests.Integration.Designer
                 catch
                 {
                     transaction.Rollback();
+                    throw;
                 }
             }
         }

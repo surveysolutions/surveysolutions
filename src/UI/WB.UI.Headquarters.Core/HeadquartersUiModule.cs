@@ -25,6 +25,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
+using WB.UI.Headquarters.Services.Maps;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Services;
 
@@ -53,6 +54,9 @@ namespace WB.UI.Headquarters
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();
             registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
             registry.Bind<IViewRenderService, ViewRenderService>();
+            registry.Bind<IUploadPackageAnalyzer, UploadPackageAnalyzer>();
+            registry.Bind<IUploadMapsService, UploadMapsService>();
+            registry.Bind<IMapFilesValidator, MapFilesValidator>();
             //registry.Bind<IUrlHelperFactory, WorkspaceUrlHelperFactory>();
 
             registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();

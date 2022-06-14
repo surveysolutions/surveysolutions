@@ -86,13 +86,11 @@ namespace WB.UI.Designer.Code.ImportExport
                 try
                 {
                     var attachmentReference = questionnaireDocument.Attachments[attachmentIndex];
-
                     var attachmentContent = this.attachmentService.GetContent(attachmentReference.ContentId);
+                    var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentReference.AttachmentId);
 
-                    if (attachmentContent?.Content != null)
+                    if (attachmentContent?.Content != null && attachmentMeta != null)
                     {
-                        var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentReference.AttachmentId);
-
                         //var attachmentFileName = attachmentMeta?.FileName ?? "unknown-file-name";
                         var attachmentFileName = attachmentMeta.AttachmentId.FormatGuid() + Path.GetExtension(attachmentMeta.FileName);
                         zipStream.PutFileEntry($"Attachments/{attachmentFileName}", attachmentContent.Content);
@@ -130,7 +128,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 var json = this.translationsService.GetTranslationsJson(questionnaireDocument, translation.Id);
                 var fileName = translation.Id.FormatGuid() + ".json";
                 zipStream.PutTextFileEntry($"Translations/{fileName}", json);
-                questionnaire.Translations.Single(t => t.Name == translation.Name).FileName = fileName;
+                questionnaire.Translations.Items.Single(t => t.Name == translation.Name).FileName = fileName;
             }
 
             foreach (var categories in questionnaireDocument.Categories)

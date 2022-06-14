@@ -38,12 +38,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             foreach (var namedTypeSymbol in allUsedTypes.Where(x => x.ContainingAssembly?.Name != compilation.AssemblyName))
             {
                 var containingNamespace = namedTypeSymbol.ContainingNamespace.ToString();
-
+                if(containingNamespace == null) continue;
+                var symbol = namedTypeSymbol.ToString();
+                if(symbol == null) continue;
+                
                 if (namedTypeSymbol.Kind == SymbolKind.NamedType &&
                     string.Compare(containingNamespace, "System", StringComparison.InvariantCulture) == 0 &&
-                    ForbiddenClassesFromSystemNamespace.Contains(namedTypeSymbol.ToString()))
+                    ForbiddenClassesFromSystemNamespace.Contains(symbol))
                 {
-                    var symbol = namedTypeSymbol.ToString();
+                    
                     if (!foundForbiddenTypes.Contains(symbol))
                     {
                         foundForbiddenTypes.Add(symbol);
@@ -51,12 +54,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                     continue;
                 }
-
+                
                 if (!AllowedNamespaces.Contains(containingNamespace))
                 {
                     if (!containingNamespace.StartsWith("WB.Core.SharedKernels.DataCollection", StringComparison.InvariantCulture))
                     {
-                        var symbol = namedTypeSymbol.ToString();
                         if (!foundForbiddenTypes.Contains(symbol))
                         {
                             foundForbiddenTypes.Add(symbol);

@@ -21,21 +21,28 @@
         }
     </style>
     
-        <link rel="stylesheet" href="https://js.arcgis.com/4.3/esri/css/main.css">
-        <script src="https://js.arcgis.com/4.3/"></script>
+        <link rel="stylesheet" href="https://js.arcgis.com/4.22/esri/css/main.css">
+        <script src="https://js.arcgis.com/4.22/"></script>
         <script>
             require([
                     "esri/Map",
                     "esri/views/MapView",
                     "esri/Graphic",
+                    "esri/geometry/Geometry",
                     "esri/geometry/Polygon",
                     "esri/geometry/Extent",
+                    "esri/layers/FeatureLayer",
+                    "esri/layers/GeoJSONLayer",
+                    "esri/layers/support/Field",
+                    "esri/layers/support/LabelClass",
                     "esri/symbols/SimpleLineSymbol",
-                "esri/symbols/SimpleFillSymbol",
-                "esri/geometry/support/webMercatorUtils",
+                    "esri/symbols/SimpleFillSymbol",
+                    "esri/geometry/support/webMercatorUtils",
+                    "dojo/on",
+                    "dojo/dom",
                     "dojo/domReady!"
                 ],
-                function (Map, MapView, Graphic, Polygon, Extent, SimpleLineSymbol, SimpleFillSymbol, webMercatorUtils) {
+                function (Map, MapView, Graphic, Geometry, Polygon, Extent, FeatureLayer, GeoJSONLayer, Field, LabelClass, SimpleLineSymbol, SimpleFillSymbol, webMercatorUtils, on, dom) {
 
                     var startExtent = new Extent({
                         "xmin":@Model.XMinVal,"ymin":@Model.YMinVal,"xmax":@Model.XMaxVal,"ymax":@Model.YMaxVal,
@@ -47,9 +54,9 @@
 
                     var map = new Map({
                         basemap: "hybrid",
-                        extent: startExtent
+                        extent: startExtent,
                     });
-
+                    
                     var polygon = Polygon.fromExtent(startExtent);
                     
                     var fillSymbol = new SimpleFillSymbol({
@@ -59,24 +66,74 @@
                         }
                     });
 
-                    var polygonGraphic = new Graphic({
-                        geometry: polygon,
-                        symbol: fillSymbol
-                    });
                     var view = new MapView({
                         spatialReference: {"wkid":102100},
                         container: "viewDiv",
                         map: map
                     });
-
-                    view.graphics.addMany([polygonGraphic]);
+                    
                     view.extent = startExtent;
 
+                    var loading = dom.byId("loadingImg")
+
+                    var hasGeoJson = @(Model.HasGeoJson ? "true" : "false")
+
+                    if (hasGeoJson)
+                    {
+                        const labelClass = new LabelClass({
+                          labelExpressionInfo: { expression: "$feature.label" },
+                          symbol: {
+                            type: "text",  // autocasts as new TextSymbol()
+                            color: "black",
+                            haloSize: 1,
+                            haloColor: "white"
+                          }
+                        });
+                        
+                        var geojsonurl = "@Url.Action("MapPreviewJson", "Maps", new { mapName = Model.FileName })"
+                        const geojsonlayer = new GeoJSONLayer({
+                            url: geojsonurl,
+                            //geometryType: "polygon",
+                            labelingInfo : labelClass,
+                            labelsVisible: true,
+                          });
+                        
+          
+                        function layerviewCreate(evt) {
+                            loading.style.display = 'block'
+                            evt.layerView.watch('updating', (e) => {
+                                if (e === false) {
+                                    loading.style.display = 'none'
+                                }
+                            });
+                        }
+                        
+                        on(geojsonlayer, "layerview-create", layerviewCreate);
+                        
+                        map.add(geojsonlayer);
+                    }
+                    else {
+                        var polygonGraphic = new Graphic({
+                            geometry: polygon,
+                            symbol: fillSymbol
+                        });
+
+                        view.graphics.addMany([polygonGraphic]);
+                        
+                        view.watch('updating', function(evt){
+                            if(evt === false){
+                                loading.style.display = 'none'
+                            }
+                        })
+                    }
+                    
                 });
         </script>
     
 </head>
 <body>
-    <div id="viewDiv"></div>
+    <div id="viewDiv">
+    </div>
+    <img id="loadingImg" alt="@Common.Loading" src="/img/loader.gif" style="position:relative; display: block; z-index:100; margin: 0 auto; margin-top: -300px;" />
 </body>
 </html>

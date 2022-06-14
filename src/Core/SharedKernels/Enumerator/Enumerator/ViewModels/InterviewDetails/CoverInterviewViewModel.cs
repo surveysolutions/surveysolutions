@@ -224,16 +224,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 return;
 
             isDisposed = true;
-            
-            var prefilledQuestionsLocal = PrefilledReadOnlyEntities.ToArray();
-            prefilledQuestionsLocal.ForEach(viewModel => viewModel?.DisposeIfDisposable());
 
-            var prefilledEditable = PrefilledEditableEntities.ToArray();
-            prefilledEditable.ForEach(viewModel => viewModel?.DisposeIfDisposable());
-            
-            var commentedEntities = CommentedEntities.ToArray();
-            commentedEntities.ForEach(viewModel => viewModel?.DisposeIfDisposable());
-            
+            if (PrefilledReadOnlyEntities != null)
+            {
+                var prefilledQuestionsLocal = PrefilledReadOnlyEntities.ToArray();
+                prefilledQuestionsLocal.ForEach(viewModel => viewModel?.DisposeIfDisposable());
+            }
+
+            if (PrefilledEditableEntities != null)
+            {
+                var prefilledEditable = PrefilledEditableEntities.ToArray();
+                prefilledEditable.ForEach(viewModel => viewModel?.DisposeIfDisposable());
+            }
+
+            if (CommentedEntities != null)
+            {
+                var commentedEntities = CommentedEntities.ToArray();
+                commentedEntities.ForEach(viewModel => viewModel?.DisposeIfDisposable());
+            }
+
             NextGroupNavigationViewModel?.Dispose();
             
             Name?.Dispose();

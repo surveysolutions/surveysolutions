@@ -22,7 +22,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
                 throw new ArgumentException("characterSet must not be empty", "characterSet");
 
             var bytes = new byte[length * 8];
-            new RNGCryptoServiceProvider().GetBytes(bytes);
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(bytes);
+            }
+            
             var result = new char[length];
             for (int i = 0; i < length; i++)
             {

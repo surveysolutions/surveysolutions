@@ -41,6 +41,9 @@ namespace WB.UI.Designer.Code.Implementation
             ShareType shareType,
             string? actionPersonEmail)
         {
+            if (contextAccessor?.ActionContext == null)
+                throw new Exception("Invalid context");
+            
             IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(contextAccessor.ActionContext);
 
             var sharingNotificationModel = new SharingNotificationModel
@@ -73,6 +76,9 @@ namespace WB.UI.Designer.Code.Implementation
 
         public void NotifyOwnerAboutShareChange(ShareChangeType shareChangeType, string email, string userName, string questionnaireId, string questionnaireTitle, ShareType shareType, string? actionPersonEmail, string sharedWithPersonEmail)
         {
+            if (contextAccessor?.ActionContext == null)
+                throw new Exception("Invalid context");
+            
             IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(contextAccessor.ActionContext);
             var sharingNotificationModel = new SharingNotificationModel
             {

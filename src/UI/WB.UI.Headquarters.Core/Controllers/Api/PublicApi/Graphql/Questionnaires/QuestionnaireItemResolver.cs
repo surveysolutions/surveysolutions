@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             string language,
             [Service] IUnitOfWork unitOfWork,
             [Service] IQuestionnaireStorage storage, 
-            [Service] IResolverContext resolverContext)
+            IResolverContext resolverContext)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 

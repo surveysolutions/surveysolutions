@@ -6,7 +6,7 @@ $width-right-menu-small: 380px;
 
 .navbar{
 	.container, .container-fluid{
-		padding: 0 ($margin-container/2) 0 ($margin-container/2);
+		padding: 0 ($margin-container*0.5) 0 ($margin-container*0.5);
 	}
 	min-width: 300px;
 	min-height: 70px;

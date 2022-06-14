@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .btn{
 	font: 12px/14px $trebuchet_bold;
 	text-transform: uppercase;
@@ -68,18 +70,18 @@ a.disabled{
 		display: inline-block;
 		@include size(20px, 2px); 
 		background-color: rgba(0, 0, 0, 0.5);
-		@include absolute((($height-foldback-button)/2 + 5px), 10px);
+		@include absolute((($height-foldback-button)*0.5 + 5px), 10px);
 		@include rotate(45deg);
 		&:first-of-type{
 			@include rotate(-45deg);
-			top: ($height-foldback-button/3);
+			top: math.div($height-foldback-button, 3);
 		}
 	}
 	.glyphicon{
 		display: none;
 		color: rgba(0, 0, 0, 0.5);
 		font-size: 18px;
-		top: ($height-foldback-button/3);
+		top: math.div($height-foldback-button, 3);
 		left: 10px;
 	}
 }
@@ -97,7 +99,7 @@ a.disabled{
 		content: "";
 		display: block;
 		@include size(22px, 2px); 
-		@include absolute(((42px)/2 + 4px), 10px);
+		@include absolute(((42px)*0.5 + 4px), 10px);
 		@include rotate(45deg);
 		background-color: rgba(63,63,63, 0.5);
 	}
@@ -105,7 +107,7 @@ a.disabled{
 		display: block;
 		@include size(22px, 2px); 
 		background-color: rgba(63,63,63, 0.5);
-		@include absolute(((42px)/2), null, null, 10px);
+		@include absolute(((42px)*0.5), null, null, 10px);
 		visibility: hidden;
 	}
 	&:after{

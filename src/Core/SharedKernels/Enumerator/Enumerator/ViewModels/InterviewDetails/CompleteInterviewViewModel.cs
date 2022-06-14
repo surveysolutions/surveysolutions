@@ -194,11 +194,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             isDisposed = true;
             
             this.Name?.Dispose();
-            var entitiesWithErrors = this.EntitiesWithErrors.ToArray();
-            foreach (var entityWithErrorsViewModel in entitiesWithErrors)
+
+            if (EntitiesWithErrors != null)
             {
-                entityWithErrorsViewModel?.DisposeIfDisposable();
+                var entitiesWithErrors = EntitiesWithErrors.ToArray();
+                foreach (var entityWithErrorsViewModel in entitiesWithErrors)
+                {
+                    entityWithErrorsViewModel?.DisposeIfDisposable();
+                }
             }
+
             this.InterviewState?.DisposeIfDisposable();
         }
     }

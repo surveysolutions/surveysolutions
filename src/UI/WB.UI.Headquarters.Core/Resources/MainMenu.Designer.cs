@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Administration.
+        ///   Looks up a localized string similar to Admin.
         /// </summary>
         public static string Administration {
             get {
@@ -84,6 +84,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Assignments {
             get {
                 return ResourceManager.GetString("Assignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audit Log.
+        /// </summary>
+        public static string AuditLog {
+            get {
+                return ResourceManager.GetString("AuditLog", resourceCulture);
             }
         }
         
@@ -124,11 +133,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Device Logs.
+        /// </summary>
+        public static string DeviceLogs {
+            get {
+                return ResourceManager.GetString("DeviceLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Devices/Interviewers.
         /// </summary>
         public static string DevicesInterviewers {
             get {
                 return ResourceManager.GetString("DevicesInterviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Diagnostics.
+        /// </summary>
+        public static string Diagnostics {
+            get {
+                return ResourceManager.GetString("Diagnostics", resourceCulture);
             }
         }
         
@@ -156,6 +183,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Interviewers {
             get {
                 return ResourceManager.GetString("Interviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview Packages.
+        /// </summary>
+        public static string InterviewPackages {
+            get {
+                return ResourceManager.GetString("InterviewPackages", resourceCulture);
             }
         }
         
@@ -318,6 +354,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string SurveyStatistics {
             get {
                 return ResourceManager.GetString("SurveyStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tablet Infos.
+        /// </summary>
+        public static string TabletInfos {
+            get {
+                return ResourceManager.GetString("TabletInfos", resourceCulture);
             }
         }
         

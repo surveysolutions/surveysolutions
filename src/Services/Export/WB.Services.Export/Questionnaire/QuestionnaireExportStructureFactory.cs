@@ -473,7 +473,12 @@ namespace WB.Services.Export.Questionnaire
 
             foreach (var rootGroup in rootGroupsForLevel)
             {
-                yield return questionnaire.FirstOrDefault<Group>(group => group.PublicKey == rootGroup);
+                var group = questionnaire.FirstOrDefault<Group>(group => group.PublicKey == rootGroup);
+
+                if (group == null)
+                    throw new InvalidOperationException($"level {rootGroup} is absent in template");
+
+                yield return group;
             }
         }
 
@@ -501,7 +506,7 @@ namespace WB.Services.Export.Questionnaire
             else if (@group.IsRoster && headerStructureForLevel.LevelLabels == null)
             {
                 var trigger = questionnaire.FirstOrDefault<Question>(x => x.PublicKey == @group.RosterSizeQuestionId);
-                if (trigger.QuestionType == QuestionType.MultyOption)
+                if (trigger != null && trigger.QuestionType == QuestionType.MultyOption)
                 {
                     headerStructureForLevel.LevelLabels =
                         trigger.Answers.Select(title => new LabelItem(title.AnswerValue, title.AnswerText))
@@ -525,7 +530,7 @@ namespace WB.Services.Export.Questionnaire
                         {
                             var linkToQuestion = questionnaire.FirstOrDefault<Question>(x => x.PublicKey == question.LinkedToQuestionId.Value);
 
-                            if (linkToQuestion.QuestionType == QuestionType.TextList)
+                            if (linkToQuestion != null && linkToQuestion.QuestionType == QuestionType.TextList)
                                 this.AddHeadersForLinkedToListMultiOptions(headerStructureForLevel, question, linkToQuestion, questionnaire);
                             else
                                 this.AddHeadersForLinkedMultiOptions(headerStructureForLevel, question, questionnaire, maxValuesForRosterSizeQuestions);

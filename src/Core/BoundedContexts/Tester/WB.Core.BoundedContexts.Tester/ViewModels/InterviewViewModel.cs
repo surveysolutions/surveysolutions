@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -15,10 +16,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class InterviewViewModel : BaseInterviewViewModel
     {
+        private readonly ITesterPrincipal testerPrincipal;
         private QuestionnaireDownloadViewModel QuestionnaireDownloader { get; }
 
         public InterviewViewModel(
-            IPrincipal principal,
+            ITesterPrincipal testerPrincipal,
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             SideBarSectionsViewModel sectionsViewModel,
@@ -35,15 +37,27 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IEnumeratorSettings enumeratorSettings,
             QuestionnaireDownloadViewModel questionnaireDownloader)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
-                breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
+                breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, testerPrincipal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
         {
+            this.testerPrincipal = testerPrincipal;
             this.QuestionnaireDownloader = questionnaireDownloader;
+            
+            if (testerPrincipal.CurrentUserIdentity == null)
+                testerPrincipal.UseFakeIdentity();
         }
 
+        public bool IsRealUserAuthenticated => testerPrincipal.IsAuthenticated && !testerPrincipal.IsFakeIdentity;
+        
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.NavigationState.CurrentNavigationIdentity));
 
         public IMvxAsyncCommand ReloadQuestionnaireCommand => new MvxAsyncCommand(this.ReloadQuestionnaire, () => !this.IsInProgress);
+
+        public IMvxAsyncCommand NavigateToAnonymousQuestionnairesCommand => new MvxAsyncCommand(async () =>
+        {
+            await this.ViewModelNavigationService.NavigateToAsync<AnonymousQuestionnairesViewModel>();
+            this.Dispose();
+        });
 
         public override async Task NavigateBack()
         {
@@ -73,6 +87,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 this.IsInProgress = false;
             }
+        }
+
+        public override void Dispose()
+        {
+            if (testerPrincipal.IsFakeIdentity)
+                testerPrincipal.RemoveFakeIdentity();
+            
+            base.Dispose();
         }
     }
 }

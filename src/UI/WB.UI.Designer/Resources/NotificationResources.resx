@@ -137,6 +137,12 @@ To complete the registration process click on this link:</value>
   <data name="CompleteRegistration" xml:space="preserve">
     <value>complete registration</value>
   </data>
+  <data name="AnonymousSharingEmail" xml:space="preserve">
+    <value>Hello {0}, &lt;br/&gt;&lt;br/&gt; You have enabled read-only access to your questionnaire "{1}" for anonymous users via the following link: </value>
+  </data>
+  <data name="EmailSendInfo" xml:space="preserve">
+    <value>This message was automatically sent by the Survey Solutions Designer tool.</value>
+  </data>
   <data name="ResetPasswordEmail" xml:space="preserve">
     <value>Hello {0}, &lt;br/&gt;&lt;br/&gt; To complete the password reset process click on this link:</value>
   </data>
@@ -157,6 +163,9 @@ To complete the registration process click on this link:</value>
   </data>
   <data name="SystemMailer_ConfirmationEmail_Complete_Registration_Process" xml:space="preserve">
     <value>Complete Registration Process</value>
+  </data>
+  <data name="SystemMailer_AnonymousSharingEmail_Subject" xml:space="preserve">
+    <value>Anonymous sharing link</value>
   </data>
   <data name="SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification" xml:space="preserve">
     <value>Your questionnaire sharing notification</value>

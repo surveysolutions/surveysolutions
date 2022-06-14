@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 
@@ -39,9 +40,12 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
                 .HasForeignKey(x => x.QuestionnaireId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Metadata
-                .FindNavigation(nameof(QuestionnaireListViewItem.SharedPersons))
-                .SetPropertyAccessMode(PropertyAccessMode.Field);
+            var meta = builder.Metadata
+                .FindNavigation(nameof(QuestionnaireListViewItem.SharedPersons));
+            if (meta == null)
+                throw new Exception("Invalid state. Metadata was not found");
+                
+            meta.SetPropertyAccessMode(PropertyAccessMode.Field);
 
              // builder.UsePropertyAccessMode(PropertyAccessMode.PreferField);
             

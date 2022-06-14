@@ -70,8 +70,9 @@ namespace WB.Tests.Integration
                     new DynamicCompilerSettingsProvider());
 
             var latestSupportedVersion = DesignerEngineVersionService().LatestSupportedVersion;
+            var package = new QuestionnaireCodeGenerationPackage(questionnaireDocument, null);
             var emitResult = 
-                expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,  
+                expressionProcessorGenerator.GenerateProcessorStateAssembly(package,  
                     latestSupportedVersion, 
                     out var resultAssembly);
 
@@ -91,7 +92,6 @@ namespace WB.Tests.Integration
         {
             return new CodeGenerationModelsFactory(
                     DefaultMacrosSubstitutionService(),
-                    ServiceLocator.Current.GetInstance<ILookupTableService>(),
                     new QuestionTypeToCSharpTypeMapper());
         }
 

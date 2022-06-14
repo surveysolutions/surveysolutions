@@ -51,6 +51,18 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
                 .Type<Map>()
                 .Argument("fileName", a => a.Description("Map file name").Type<NonNullType<StringType>>())
                 .Argument("userName", a => a.Type<NonNullType<StringType>>());
+            
+            descriptor.Field<MapsResolver>(t => t.UploadMap(default!, default!))
+                .Use<TransactionMiddleware>()
+                .Authorize(roles: new[]
+                {
+                    nameof(UserRoles.Administrator),
+                    nameof(UserRoles.Headquarter),
+                    nameof(UserRoles.ApiUser)
+                })
+                .HasWorkspace()
+                .Type<ListType<Map>>()
+                .Argument("file", a => a.Type<NonNullType<UploadType>>());
         }
     }
 }

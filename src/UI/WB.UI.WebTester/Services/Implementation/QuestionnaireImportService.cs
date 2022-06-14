@@ -119,10 +119,13 @@ namespace WB.UI.WebTester.Services.Implementation
                     TranslationId = x.TranslationId
                 }));
             }
+            
+            var settings = await webTesterApi.GetQuestionnaireSettingsAsync(designerToken.ToString());
 
             this.appdomainsPerInterviewManager.SetupForInterview(designerToken,
                 questionnaireIdentity,
-                questionnaire.Assembly);
+                questionnaire.Assembly,
+                settings);
 
             return questionnaireIdentity;
         }

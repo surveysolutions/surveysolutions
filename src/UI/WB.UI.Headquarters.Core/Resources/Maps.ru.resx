@@ -168,4 +168,22 @@
   <data name="MapLoadingInvalidFile" xml:space="preserve">
     <value>Файл '{0}' содержит данные, которые не могут быть обработаны. Ошибка: {1}</value>
   </data>
+  <data name="ShpIsMissingInArchive" xml:space="preserve">
+    <value>Файл {0}.shp отсутствует для {0}</value>
+  </data>
+  <data name="ShxIsMissingInArchive" xml:space="preserve">
+    <value>Файл {0}.shx отсутствует для {0}.shp</value>
+  </data>
+  <data name="DbfIsMissingInArchive" xml:space="preserve">
+    <value>Файл {0}.dbf отсутствует для {0}.shp</value>
+  </data>
+  <data name="MapFileSizeLimit" xml:space="preserve">
+    <value>Размер файла {0} превышает допустимый лимит {1}</value>
+  </data>
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve">
+    <value>Имя файл {0} содержит не валидные символы.</value>
+  </data>
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve">
+    <value>Имя файл {0} содержит не UTF-8 символы.</value>
+  </data>
 </root>

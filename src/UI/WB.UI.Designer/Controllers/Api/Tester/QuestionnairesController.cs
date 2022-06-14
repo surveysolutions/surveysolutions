@@ -12,17 +12,20 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Controllers.Api.WebTester;
 using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
-    [Authorize]
+    [AuthorizeOrAnonymousQuestionnaire]
     [Route("api/v{version:int}/questionnaires")]
     public class QuestionnairesController : Controller
     {
@@ -55,25 +58,21 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             this.serializer = serializer;
         }
 
+        [QuestionnairePermissions]
         [HttpGet]
-        [Route("{id:Guid}")]
-        public IActionResult Get(Guid id, int version)
+        [Route("{id}")]
+        public IActionResult Get(QuestionnaireRevision id, int version)
         {
             if(version < ApiVersion.CurrentTesterProtocolVersion)
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
 
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            var questionnaireView = this.questionnaireViewFactory.Load(id);
             if (questionnaireView == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
 
-            if (!this.ValidateAccessPermissions(questionnaireView))
-            {
-                return StatusCode(StatusCodes.Status403Forbidden);
-            }
-
-            var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(id)?.Version;
+            var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(id.QuestionnaireId)?.Version;
 
             var versionToCompileAssembly = specifiedCompilationVersion ?? Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source));
 
@@ -93,8 +92,8 @@ namespace WB.UI.Designer.Controllers.Api.Tester
                 return StatusCode(StatusCodes.Status412PreconditionFailed);
             }
 
-            var questionnaire = questionnaireView.Source.Clone();
-            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaireView.Source);
+            var questionnaire = questionnaireView.GetClientReadyClone();
+            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaire);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
             questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
             questionnaire.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument).ToDictionary(x => x.Key, x => x.Value.ToArray());
@@ -110,6 +109,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             return Content(response, MediaTypeNames.Application.Json);
         }
 
+        [Authorize]
         [HttpGet]
         [Route("")] 
         [ResponseCache(NoStore = true)]
@@ -136,15 +136,6 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             });
 
             return Ok(questionnaires);
-        }
-
-        private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
-        {
-            if (questionnaireView.IsPublic || questionnaireView.CreatedBy == User.GetId() || this.User.IsAdmin())
-                return true;
-
-
-            return questionnaireView.SharedPersons.Any(x => x.UserId == User.GetId());
         }
     }
 }

@@ -1,0 +1,43 @@
+# A simple dockerfile to create an image using pre-built Headquarters app.
+# BUILT_APP folder must contain hq, and export binaries, as well as
+# Client folder with the Android APKs
+# IMPORTANT: SDK version used for building must correspond to the runtime version here
+
+
+ARG DOTNET_VERSION=6.0
+ 
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}
+
+ARG BUILT_APP=hq
+ARG FONTS=fonts
+
+COPY $FONTS /usr/share/fonts
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    gdal-bin \
+    ffmpeg \
+    curl \
+    libfontconfig1 \
+    libgdiplus \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY $BUILT_APP /app
+
+ENV HQ_Headquarters__BaseUrl=http://localhost
+ENV HQ_Headquarters__TenantName=survey
+ENV HQ_FileStorage__FFmpegExecutablePath=/usr/bin
+ENV HQ_Geospatial__GdalHome=/usr/bin
+ENV HQ_Apks__ClientApkPath=/app/Client
+ENV HQ_Logging__LogsLocation=/app/AppData/logs
+ENV HQ_Scheduler__InstanceId=AUTO
+ENV HQ_Scheduler__IsClustered=true
+
+WORKDIR /app
+EXPOSE 80
+HEALTHCHECK --interval=5s --timeout=30s --start-period=2s --retries=3 CMD curl -l http://localhost:80/.hc/ready
+
+LABEL org.opencontainers.image.title="Survey Solutions"
+
+ENTRYPOINT ["dotnet", "WB.UI.Headquarters.dll"]

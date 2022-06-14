@@ -191,7 +191,6 @@
   </data>
   <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
     <value>Questionnaire already supports cover page.</value>
-
   </data>
   <data name="SubSectionCantBeFound" xml:space="preserve">
     <value>Sub-section with public key {0} can't be found.</value>
@@ -396,5 +395,8 @@
   </data>
   <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
     <value>Questionnaire already supports cover</value>
+  </data>
+  <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+    <value>Categories were not found</value>
   </data>
 </root>

@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
     {
         public class ModificationStatisticsByUser
         {
-            public Guid UserId { get; set; }
+            public Guid? UserId { get; set; }
             public string? Name { get; set; }
             public DateTime? Date { get; set; }
 
@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public PdfSettings Settings { get; }
 
         public ModificationStatisticsByUser Created { get; set; }
-        public ModificationStatisticsByUser LastModified { get; set; }
+        public ModificationStatisticsByUser? LastModified { get; set; }
         public ModificationStatisticsByUser Requested { get; set; }
 
         public QuestionnaireStatistics Statistics { get; set; } = new QuestionnaireStatistics();
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public PdfQuestionnaireModel(QuestionnaireDocument questionnaire, PdfSettings settings, 
             List<IComposite> allItems, ModificationStatisticsByUser created,
-            ModificationStatisticsByUser lastModified,
+            ModificationStatisticsByUser? lastModified,
             ModificationStatisticsByUser requested
             )
         {
@@ -445,7 +445,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     else
                     {
                         var categories = CategoriesList.Find(x => x.Id == question.CategoriesId.Value);
-                        return CategoriesList.IndexOf(categories) + 1;
+                        return categories == null ? -1 : CategoriesList.IndexOf(categories) + 1;
                     }
                 }
                 case "VE":

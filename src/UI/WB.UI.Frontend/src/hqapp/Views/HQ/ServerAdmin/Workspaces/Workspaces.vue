@@ -354,7 +354,7 @@ export default {
                         name: this.$t('Pages.InterviewPackages'),
                         className: 'suso-interview-packages',
                         callback: (_, opt) => {
-                            window.location = this.workspacePath(rowData.Name) + 'ControlPanel/InterviewPackages'
+                            window.location = this.workspacePath(rowData.Name) + 'Diagnostics/InterviewPackages'
                         },
                     }
                 )

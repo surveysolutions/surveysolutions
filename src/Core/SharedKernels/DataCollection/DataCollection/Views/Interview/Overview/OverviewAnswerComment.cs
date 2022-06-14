@@ -11,5 +11,6 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
         public DateTime CommentTimeUtc { get; set; }
         public string EntityId { get; set; }
         public bool Resolved { get; set; }
+        public bool CommentOnPreviousAnswer { get; set; }
     }
 }

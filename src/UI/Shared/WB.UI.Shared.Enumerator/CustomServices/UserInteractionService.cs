@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -100,8 +101,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             return tcs.Task;
         }
 
-        public Task<string> SelectOneOptionFromList(string message,
-            string[] options)
+        public Task<string> SelectOneOptionFromList(string message, string[] options)
         {
             var tcs = new TaskCompletionSource<string>();
 
@@ -121,6 +121,29 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
             return tcs.Task;
         }
+        
+        public Task<string> SelectOneOptionFromList(string message, Tuple<string, string>[] options)
+        {
+            var tcs = new TaskCompletionSource<string>();
+
+            var builder = new MaterialAlertDialogBuilder(this.mvxCurrentTopActivity.Activity);
+
+            builder.SetTitle(message);
+            var optionsTexts = options.Select(o => o.Item1).ToArray();
+            builder.SetItems(optionsTexts, (sender, args) =>
+            {
+                tcs.TrySetResult(options[args.Which].Item2);
+            });
+            builder.SetCancelable(false);
+            builder.SetNegativeButton(UIResources.Cancel, (sender, args) =>
+            {
+                tcs.TrySetResult(null);
+            });
+            builder.Show();
+
+            return tcs.Task;
+        }
+
 
         public Task AskDateAsync(EventHandler<DateTime> okCallback, DateTime date, DateTime? minDate = null)
         {

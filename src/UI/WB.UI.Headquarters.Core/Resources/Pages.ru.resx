@@ -1108,7 +1108,7 @@
     <value>Вы уверены в том,что хотите удалить интервью?</value>
   </data>
   <data name="Map_DiscardConfirm" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить карту?</value>
+    <value>Вы уверены, что хотите удалить карту "{{map}}"?</value>
   </data>
   <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите отменить назначение на пользователя?</value>
@@ -1201,11 +1201,23 @@
   <data name="MapDetails_MapDisclaimer" xml:space="preserve">
     <value>Загруженная карта нанесена на карту мира</value>
   </data>
+  <data name="MapDetails_FullShapefilesDisclaimer" xml:space="preserve">
+    <value>Предпросмотр показывает закруженный шейпфайл на спутниковой карте.</value>
+  </data>
+  <data name="MapDetails_SimplifiedShapefilesDisclaimer" xml:space="preserve">
+    <value>Предпросмотр показывает сжатую версию закруженного шейпфайла на спутниковой карте. Оригинальный загруженный шейпфайл не показан в предпросмотре из-за большого размера.</value>
+  </data>
+  <data name="MapDetails_DuplicateLabelsWarning" xml:space="preserve">
+    <value>Внимание! Шейпфайл содержит дубликаты меток</value>
+  </data>
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Карта</value>
   </data>
   <data name="MapDetails_ImportedOn" xml:space="preserve">
     <value>Карта загружена</value>
+  </data>
+  <data name="MapDetails_UploadedBy" xml:space="preserve">
+    <value>Загружен на сервер пользователем</value>
   </data>
   <data name="MapDetails_Size" xml:space="preserve">
     <value>Размер(МБ)</value>
@@ -1215,6 +1227,12 @@
   </data>
   <data name="MapDetails_MaxScale" xml:space="preserve">
     <value>Максимальный масштаб</value>
+  </data>
+  <data name="MapDetails_ShapeType" xml:space="preserve">
+    <value>Тип шейпа</value>
+  </data>
+  <data name="MapDetails_ShapesCount" xml:space="preserve">
+    <value>Количество шейпов</value>
   </data>
   <data name="MapList_Title" xml:space="preserve">
     <value>Файлы карт</value>
@@ -1236,6 +1254,9 @@
   </data>
   <data name="MapList_MapName" xml:space="preserve">
     <value>Файл карты</value>
+  </data>
+  <data name="MapList_MapType" xml:space="preserve">
+    <value>Тип</value>
   </data>
   <data name="MapList_Name" xml:space="preserve">
     <value>Имя</value>
@@ -1272,6 +1293,9 @@
   </data>
   <data name="Map_Status" xml:space="preserve">
     <value>Статус</value>
+  </data>
+  <data name="Map_NoUsers" xml:space="preserve">
+    <value>Карта не назначена ни на одного интервьювера</value>
   </data>
   <data name="Map_Uploaded" xml:space="preserve">
     <value>Файл загружен. Обработка.</value>

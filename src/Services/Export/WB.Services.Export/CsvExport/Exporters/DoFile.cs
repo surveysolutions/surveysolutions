@@ -31,17 +31,18 @@ namespace WB.Services.Export.CsvExport.Exporters
         {
             if (string.IsNullOrEmpty(doFileHeader))
             {
-                var assembly = Assembly.GetAssembly(typeof(DoFile));
                 var resourceName = "WB.Services.Export.CsvExport.Exporters.DoFileHeader.txt";
+                var assembly = Assembly.GetAssembly(typeof(DoFile));
 
-                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                if (assembly != null)
                 {
-                    using (StreamReader reader = new StreamReader(stream))
+                    using Stream? stream = assembly.GetManifestResourceStream(resourceName);
+                    if (stream != null)
                     {
+                        using StreamReader reader = new StreamReader(stream);
                         doFileHeader = reader.ReadToEnd();
                     }
                 }
-
             }
 
             doContent.Append(doFileHeader);

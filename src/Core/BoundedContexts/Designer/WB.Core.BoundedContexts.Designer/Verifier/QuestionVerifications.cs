@@ -536,14 +536,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool SpecialValuesCountMoreThanMaxOptionCount(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return question.Answers != null && question.Answers.Count > MaxOptionsCountInCategoricalOptionQuestion;
+            return question.Answers.Count > MaxOptionsCountInCategoricalOptionQuestion;
         }
 
         private static bool SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!questionnaire.Questionnaire.IsRosterSizeQuestion(question))
                 return false;
-            if ((question.Answers?.Count ?? 0) == 0)
+            if (question.Answers.Count == 0)
                 return false;
 
             var rosterLimit = questionnaire.Questionnaire.IsTriggerForLongRoster(question) ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
@@ -615,7 +615,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             var referencedEntities = new HashSet<SingleQuestion>();
 
-            SingleQuestion GetParentCascadingQuestion(SingleQuestion x)
+            SingleQuestion? GetParentCascadingQuestion(SingleQuestion x)
             {
                 return questionnaire
                     .Find<SingleQuestion>(q => q.CascadeFromQuestionId.HasValue &&
@@ -908,7 +908,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         class EqualityArray : IEqualityComparer<int[]>
         {
-            public bool Equals(int[] x, int[] y) => x.SequenceEqual(y);
+            public bool Equals(int[]? x, int[]? y) => x.SequenceEqual(y);
             public int GetHashCode(int[] obj) => obj.Aggregate(0, (current, i) => current ^ i.GetHashCode());
         }
 

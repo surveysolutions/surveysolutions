@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             Title = string.Empty;
         }
 
-        public Classification(Guid id, string title, ClassificationGroup @group, int categoriesCount, Guid? parent = null, Guid? userId = null)
+        public Classification(Guid id, string title, ClassificationGroup? @group, int categoriesCount, Guid? parent = null, Guid? userId = null)
         {
             Id = id;
             Title = title;

@@ -7,7 +7,8 @@
         $uibModalInstance,
         questionnaire,
         currentUser,
-        shareService
+        shareService,
+        moment
     ) {
         'use strict';
 
@@ -24,11 +25,18 @@
             return isowner;
         };
 
+        $scope.toLocalDateTime = function (utc) {
+            return moment.utc(utc).local().format('YYYY-MM-DD HH:mm');
+        };
+
+
         $scope.passConfirmationOpen = null;
         $scope.questionnaire.editedTitle = questionnaire.title;
         $scope.questionnaire.editedVariable = questionnaire.variable;
-        $scope.questionnaire.editedHideIfDisabled =
-            questionnaire.hideIfDisabled;
+        $scope.questionnaire.editedHideIfDisabled = questionnaire.hideIfDisabled;
+        $scope.questionnaire.isAnonymouslyShared = questionnaire.isAnonymouslyShared;
+        $scope.questionnaire.anonymousQuestionnaireId = questionnaire.anonymousQuestionnaireId;
+        $scope.questionnaire.anonymousQuestionnaireShareDate = $scope.toLocalDateTime(questionnaire.anonymouslySharedAtUtc);
 
         $scope.shareTypeOptions = [
             { text: $i18next.t('SettingsShareEdit'), name: 'Edit' },
@@ -175,6 +183,33 @@
             });
         };
 
+        $scope.updateAnonymousQuestionnaireSettings = function() {
+            var updateRequest = shareService.updateAnonymousQuestionnaireSettings(
+                $scope.questionnaire.questionnaireId,
+                !$scope.questionnaire.isAnonymouslyShared
+            );
+
+            updateRequest.then(function(result) {
+                var data = result.data
+                $scope.questionnaire.isAnonymouslyShared = data.isActive;
+                $scope.questionnaire.anonymousQuestionnaireId = data.isActive ? data.anonymousQuestionnaireId : null;
+                $scope.questionnaire.anonymousQuestionnaireShareDate = $scope.toLocalDateTime(data.anonymouslySharedAtUtc);
+            });
+        };
+        
+        $scope.regenerateAnonymousQuestionnaireLink = function() {
+            var updateRequest = shareService.regenerateAnonymousQuestionnaireLink(
+                $scope.questionnaire.questionnaireId
+            );
+
+            updateRequest.then(function(result) {
+                var data = result.data
+                $scope.questionnaire.isAnonymouslyShared = data.isActive;
+                $scope.questionnaire.anonymousQuestionnaireId = data.isActive ? data.anonymousQuestionnaireId : null;
+                $scope.questionnaire.anonymousQuestionnaireShareDate = $scope.toLocalDateTime(data.anonymouslySharedAtUtc);
+            });
+        };
+        
         $scope.changeShareType = function(shareType) {
             $scope.viewModel.shareType = shareType;
         };
@@ -184,6 +219,15 @@
             var sharedPersons = _.sortBy(_.without($scope.questionnaire.sharedPersons, owner), ['email']);
 
             $scope.questionnaire.sharedPersons = [owner].concat(sharedPersons);
+        };
+
+        $scope.getAnonymousQuestionnaireLink = function () {
+            return window.location.origin + '/questionnaire/details/' + questionnaire.anonymousQuestionnaireId
+        };
+
+        $scope.copyAnonymousQuestionnaireLink = function () {
+            var link = $scope.getAnonymousQuestionnaireLink() ;
+            navigator.clipboard.writeText(link);
         };
 
         $scope.sortSharedPersons();

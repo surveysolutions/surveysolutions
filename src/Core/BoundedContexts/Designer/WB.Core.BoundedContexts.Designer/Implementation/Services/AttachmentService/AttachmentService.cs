@@ -52,12 +52,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             return this.dbContext.AttachmentMetas.Where(attachment => attachment.QuestionnaireId == questionnaireId).ToList();
         }
 
-        public AttachmentMeta GetAttachmentMeta(Guid attachmentId)
+        public AttachmentMeta? GetAttachmentMeta(Guid attachmentId)
         {
             return this.dbContext.AttachmentMetas.Find(attachmentId);
         }
 
-        public AttachmentContent GetContent(string contentId)
+        public AttachmentContent? GetContent(string contentId)
         {
             return this.dbContext.AttachmentContents.Find(contentId);
         }
@@ -89,10 +89,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         public string CreateAttachmentContentId(byte[] binaryContent)
         {
-            using (var sha1Service = new SHA1CryptoServiceProvider())
-            {
-                return BitConverter.ToString(sha1Service.ComputeHash(binaryContent)).Replace("-", string.Empty);
-            }
+            //old hashes in db
+            //check before replacing SHA1CryptoServiceProvider
+#pragma warning disable SYSLIB0021
+            using var sha1Service = new SHA1CryptoServiceProvider();
+            return BitConverter.ToString(sha1Service.ComputeHash(binaryContent)).Replace("-", string.Empty);
+#pragma warning restore SYSLIB0021
         }
 
         public void SaveContent(string contentId, string contentType, byte[] binaryContent)
@@ -138,7 +140,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             }
         }
 
-        public AttachmentContent GetContentDetails(string attachmentContentId)
+        public AttachmentContent? GetContentDetails(string attachmentContentId)
         {
             return this.dbContext.AttachmentContents.AsNoTracking().Select(content => new AttachmentContent
             {

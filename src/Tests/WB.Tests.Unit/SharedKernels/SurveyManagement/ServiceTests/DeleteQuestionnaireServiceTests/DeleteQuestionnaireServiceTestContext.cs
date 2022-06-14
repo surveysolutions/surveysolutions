@@ -3,6 +3,7 @@ using Moq;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -51,7 +52,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     Mock.Of<IAggregateRootCache>(),
                     assignmentsToDeleteFactory ?? Mock.Of<IAssignmentsToDeleteFactory>(),
                     Mock.Of<IReusableCategoriesStorage>(),
-                    questionnaireBackupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireBackup>>());
+                    questionnaireBackupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireBackup>>(),
+                    Mock.Of<IExportServiceApi>());
         }
     }
 }

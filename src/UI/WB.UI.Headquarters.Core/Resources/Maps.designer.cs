@@ -61,6 +61,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File {0}.dbf is missing for {0}.shp.
+        /// </summary>
+        public static string DbfIsMissingInArchive {
+            get {
+                return ResourceManager.GetString("DbfIsMissingInArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error occurred. File is not a .tab.
         /// </summary>
         public static string FileLoadingNotTsvError {
@@ -84,6 +93,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string MapEngineIsNotInitialized {
             get {
                 return ResourceManager.GetString("MapEngineIsNotInitialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file {0} name includes invalid characters..
+        /// </summary>
+        public static string MapFileNameHasInvalidChars {
+            get {
+                return ResourceManager.GetString("MapFileNameHasInvalidChars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file {0} name includes non-UTF-8 characters..
+        /// </summary>
+        public static string MapFileNameHasNonUtf8Chars {
+            get {
+                return ResourceManager.GetString("MapFileNameHasNonUtf8Chars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The size of file {0} is larger than applicable limit {1}.
+        /// </summary>
+        public static string MapFileSizeLimit {
+            get {
+                return ResourceManager.GetString("MapFileSizeLimit", resourceCulture);
             }
         }
         
@@ -174,6 +210,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File {0}.shp is missing for {0}.
+        /// </summary>
+        public static string ShpIsMissingInArchive {
+            get {
+                return ResourceManager.GetString("ShpIsMissingInArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File {0}.shx is missing for {0}.shp.
+        /// </summary>
+        public static string ShxIsMissingInArchive {
+            get {
+                return ResourceManager.GetString("ShxIsMissingInArchive", resourceCulture);
             }
         }
         

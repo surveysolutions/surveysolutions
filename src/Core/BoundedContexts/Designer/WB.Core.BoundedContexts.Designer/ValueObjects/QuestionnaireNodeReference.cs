@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -30,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
             && Type == other.Type
             && IndexOfEntityInProperty == other.IndexOfEntityInProperty;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;

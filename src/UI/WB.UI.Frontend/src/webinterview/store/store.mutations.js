@@ -20,7 +20,7 @@ export default {
         e.answer = answer
     },
     SET_SECTION_DATA(state, sectionData) {
-        var entitiesToDelete = differenceBy(state.entities, sectionData, 'identity')
+        var entitiesToDelete = differenceBy(state.entities, sectionData, f => f.identity + f.entityType)
         forEach(entitiesToDelete, entity => {
             Vue.delete(state.entityDetails, entity.identity)
             Vue.delete(state.fetch.state, entity.identity)

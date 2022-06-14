@@ -3094,11 +3094,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are You sure You want to delete the map?.
+        ///   Looks up a localized string similar to Are you sure you want to delete the map &quot;{{map}}&quot;?.
         /// </summary>
         public static string Map_DiscardConfirm {
             get {
                 return ResourceManager.GetString("Map_DiscardConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The map is not assigned to any interviewer.
+        /// </summary>
+        public static string Map_NoUsers {
+            get {
+                return ResourceManager.GetString("Map_NoUsers", resourceCulture);
             }
         }
         
@@ -3166,6 +3175,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Warning! Shapefile contains duplicate labels.
+        /// </summary>
+        public static string MapDetails_DuplicateLabelsWarning {
+            get {
+                return ResourceManager.GetString("MapDetails_DuplicateLabelsWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This preview shows the uploaded shapefile superimposed on the satellite image base layer..
+        /// </summary>
+        public static string MapDetails_FullShapefilesDisclaimer {
+            get {
+                return ResourceManager.GetString("MapDetails_FullShapefilesDisclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Imported on.
         /// </summary>
         public static string MapDetails_ImportedOn {
@@ -3184,7 +3211,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This preview shows the loaded map superimposed on the world map.
+        ///   Looks up a localized string similar to This preview shows the loaded map superimposed on the world map..
         /// </summary>
         public static string MapDetails_MapDisclaimer {
             get {
@@ -3220,11 +3247,47 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shapes count.
+        /// </summary>
+        public static string MapDetails_ShapesCount {
+            get {
+                return ResourceManager.GetString("MapDetails_ShapesCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shape type.
+        /// </summary>
+        public static string MapDetails_ShapeType {
+            get {
+                return ResourceManager.GetString("MapDetails_ShapeType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This preview shows a reduced version of the uploaded shapefile superimposed on the satellite image base layer. The original uploaded shapefile is not shown in this preview due to its large size..
+        /// </summary>
+        public static string MapDetails_SimplifiedShapefilesDisclaimer {
+            get {
+                return ResourceManager.GetString("MapDetails_SimplifiedShapefilesDisclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Size(MB).
         /// </summary>
         public static string MapDetails_Size {
             get {
                 return ResourceManager.GetString("MapDetails_Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploaded by.
+        /// </summary>
+        public static string MapDetails_UploadedBy {
+            get {
+                return ResourceManager.GetString("MapDetails_UploadedBy", resourceCulture);
             }
         }
         
@@ -3315,6 +3378,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string MapList_MapName {
             get {
                 return ResourceManager.GetString("MapList_MapName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string MapList_MapType {
+            get {
+                return ResourceManager.GetString("MapList_MapType", resourceCulture);
             }
         }
         

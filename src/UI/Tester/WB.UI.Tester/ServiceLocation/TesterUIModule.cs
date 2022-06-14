@@ -36,8 +36,9 @@ namespace WB.UI.Tester.ServiceLocation
 #if EXCLUDEEXTENSIONS
             registry.Bind<IMapInteractionService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyMapInteractionService>();
 #else
-            registry.Bind<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel>();
-            registry.Bind<IMapInteractionService, WB.UI.Shared.Extensions.CustomServices.MapInteractionService>();
+            registry.Bind<WB.UI.Shared.Extensions.ViewModels.GeographyEditorViewModel>();
+            registry.Bind<IMapInteractionService, WB.UI.Shared.Extensions.Services.MapInteractionService>();
+            registry.Bind<WB.UI.Shared.Extensions.Services.IMapUtilityService, WB.UI.Shared.Extensions.Services.MapUtilityService>();
 #endif
         }
 

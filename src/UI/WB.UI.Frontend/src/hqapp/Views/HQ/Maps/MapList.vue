@@ -44,8 +44,10 @@
 
         <Confirm ref="confirmDiscard"
             id="discardConfirm"
+            :okTitle="$t('Common.Delete')"
+            okClass="btn-danger"
             slot="modals">
-            {{ $t("Pages.Map_DiscardConfirm") }}
+            {{ deleteDialogBody }}
         </Confirm>
     </HqLayout>
 </template>
@@ -60,7 +62,6 @@ const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip
   maps(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
-    filteredCount
     nodes {
       fileName
       importDateUtc
@@ -74,6 +75,7 @@ export default {
         return {
             statusMessage: '',
             errorList: [],
+            deleteMapName: '',
         }
     },
     mounted() {
@@ -98,6 +100,12 @@ export default {
                 this.$refs.table.reload()
         },
         onFileChange(e){
+            const files = e.target.files || e.dataTransfer.files
+
+            if (!files.length) {
+                return
+            }
+
             const statusupdater = this.updateStatus
             const reloader = this.reload
             const uploadingMessage = this.$t('Pages.Map_Uploading')
@@ -159,6 +167,7 @@ export default {
         },
         confirmDeleteMap(fileName) {
             const self = this
+            this.deleteMapName = fileName
             this.$refs.confirmDiscard.promt(ok => {
                 if (ok) {
                     self.$apollo.mutate({
@@ -199,6 +208,16 @@ export default {
                         name: 'FileName',
                         class: 'title',
                         title: this.$t('Pages.MapList_MapName'),
+                    },
+                    {
+                        data: 'fileName',
+                        name: 'MapType',
+                        class: 'parameters',
+                        title: this.$t('Pages.MapList_MapType'),
+                        render(data) {
+                            const icon_name = data.endsWith('.shp') ? 'shapefile_icon.svg' : 'map_icon.svg'
+                            return `<img src="/img/${icon_name}" width="20px"></img>`
+                        },
                     },
                     {
                         data: 'size',
@@ -282,6 +301,9 @@ export default {
                 order: [[0, 'asc']],
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
+        },
+        deleteDialogBody() {
+            return this.$t('Pages.Map_DiscardConfirm', { map: this.deleteMapName })
         },
     },
 }

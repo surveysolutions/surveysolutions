@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersion
             this.dbContext.SaveChanges();
         }
 
-        public QuestionnaireCompilationVersion GetById(Guid questionnaireId)
+        public QuestionnaireCompilationVersion? GetById(Guid questionnaireId)
         {
             return this.dbContext.QuestionnaireCompilationVersions.Find(questionnaireId);
         }

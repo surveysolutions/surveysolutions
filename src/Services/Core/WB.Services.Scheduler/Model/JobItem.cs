@@ -23,9 +23,9 @@ namespace WB.Services.Scheduler.Model
         public DateTime? ScheduleAt { get; set; }
         public string? WorkerId { get; set; }
 
-        public Dictionary<string, object?> Data { get; set; } = new Dictionary<string, object?>();
+        public Dictionary<string, object?>? Data { get; set; } = new Dictionary<string, object?>();
 
-        public T? GetData<T>(string key) where T: class => Data.TryGetValue(key, out var val) ? (T?)val : default;
+        public T? GetData<T>(string key) where T: class => Data == null ? default : Data.TryGetValue(key, out var val) ? (T?)val : default;
 
         public void Handle(IJobEvent @event)
         {
@@ -88,8 +88,8 @@ namespace WB.Services.Scheduler.Model
 
         public object? this[string key]
         {
-            get => Data.TryGetValue(key, out var res) ? res : null;
-            set => Data[key] = value;
+            get => Data == null ? null : Data.TryGetValue(key, out var res) ? res : null;
+            set { if (Data != null) Data[key] = value; }
         }
 
         private void Apply(FailJobEvent ev)
@@ -120,7 +120,7 @@ namespace WB.Services.Scheduler.Model
 
         private void Apply(UpdateDataEvent ev)
         {
-            this.Data[ev.Key] = ev.Value;
+            if (Data != null) Data[ev.Key] = ev.Value;
         }
 
         public JobItem Start(string workerId)

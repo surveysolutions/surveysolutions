@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Plugin.Permissions;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -23,6 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
     {
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
+        private readonly IPermissionsService permissionsService;
         private readonly IMapService mapService;
 
         protected MapSyncProviderBase(IMapService mapService,
@@ -36,12 +39,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
             IUserInteractionService userInteractionService,
             IDeviceInformationService deviceInformationService,
             IServiceLocator serviceLocator,
-            IAssignmentDocumentsStorage assignmentsStorage)
+            IAssignmentDocumentsStorage assignmentsStorage,
+            IPermissionsService permissionsService)
             : base(synchronizationService, logger, httpStatistician, principal, interviewViewRepository,
                 auditLogService, enumeratorSettings, serviceLocator, deviceInformationService, userInteractionService, assignmentsStorage)
         {
             this.synchronizationService = synchronizationService;
             this.logger = logger;
+            this.permissionsService = permissionsService;
             this.mapService = mapService;
         }
 
@@ -56,17 +61,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                 Title = EnumeratorUIResources.MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server,
                 Status = SynchronizationStatus.Started
             });
+            
+            await this.permissionsService.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
 
             var items = await this.synchronizationService.GetMapList(cancellationToken).ConfigureAwait(false);
+            var availableMapFiles = this.mapService.GetAvailableMaps(false);
+            var availableShapefiles = this.mapService.GetAvailableShapefiles();
+            var mapFileNames = availableMapFiles.Select(m => m.MapFileName)
+                .Concat(availableShapefiles.Select(s => s.ShapefileFileName));
 
-            foreach (var map in this.mapService.GetAvailableMaps(false))
+            foreach (var mapFileName in mapFileNames)
             {
-                if (items.Exists(x => string.Compare(x.MapName, map.MapFileName, StringComparison.InvariantCultureIgnoreCase) == 0))
+                if (items.Exists(x => string.Compare(x.MapName, mapFileName, StringComparison.InvariantCultureIgnoreCase) == 0))
                     continue;
 
                 try
                 {
-                    this.mapService.RemoveMap(map.MapFileName);
+                    this.mapService.RemoveMap(mapFileName);
                 }
                 catch (Exception ex)
                 {

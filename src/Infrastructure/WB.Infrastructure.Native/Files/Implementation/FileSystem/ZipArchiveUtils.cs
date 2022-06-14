@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using Ionic.Zip;
 using Ionic.Zlib;
@@ -15,7 +16,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             return new IonicZipArchive(outputStream, password);
         }
 
-        public byte[] CompressStream(Stream uncompressedDataStream, string entryName)
+        public byte[] ZipFiles(Stream uncompressedDataStream, string entryName)
         {
             byte[] compressedBytes;
             using (MemoryStream memoryStream = new MemoryStream())
@@ -67,7 +68,9 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             using (var zip = new ZipFile
             {
                 CompressionLevel = CompressionLevel.Default,
-                UseZip64WhenSaving = Zip64Option.AsNecessary
+                UseZip64WhenSaving = Zip64Option.AsNecessary,
+                AlternateEncoding = Encoding.UTF8,
+                AlternateEncodingUsage = ZipOption.AsNecessary,
             })
             {
                 if (password != null)
@@ -86,6 +89,15 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         public void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
         {
             using (ZipFile decompress = ZipFile.Read(archivedFile))
+            {
+                decompress.ExtractAll(extractToFolder, ExtractExistingFileAction.OverwriteSilently);
+            }
+        }
+
+        public void Unzip(Stream fileStream, string extractToFolder, bool ignoreRootDirectory = false)
+        {
+            fileStream.Seek(0, SeekOrigin.Begin);
+            using (ZipFile decompress = ZipFile.Read(fileStream))
             {
                 decompress.ExtractAll(extractToFolder, ExtractExistingFileAction.OverwriteSilently);
             }
@@ -170,7 +182,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
             return null;
         }
-
+        
         public ExtractedFile GetFileFromArchive(byte[] archivedFileAsArray, string fileName)
         {
             using (var archiveStream = new MemoryStream(archivedFileAsArray))

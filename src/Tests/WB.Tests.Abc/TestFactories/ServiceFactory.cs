@@ -1041,7 +1041,8 @@ namespace WB.Tests.Abc.TestFactories
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 Mock.Of<IServiceLocator>(),
                 Mock.Of<IDeviceInformationService>(),
-                Mock.Of<IAssignmentDocumentsStorage>());
+                Mock.Of<IAssignmentDocumentsStorage>(),
+                Mock.Of<IPermissionsService>());
         }
 
         public MapReport MapReport(IInterviewFactory interviewFactory = null,
@@ -1267,7 +1268,8 @@ namespace WB.Tests.Abc.TestFactories
              externalFileStorage ?? Mock.Of<IExternalFileStorage>(),
              geospatialConfig ?? Mock.Of<IOptions<GeospatialConfig>>(),
              authorizedUser ?? Mock.Of<IAuthorizedUser>(),
-             Mock.Of<ILogger<MapFileStorageService>>()); 
+             Mock.Of<ILogger<MapFileStorageService>>(),
+             Mock.Of<IPlainStorageAccessor<DuplicateMapLabel>>()); 
         }
 
         public ResponsibleAssignmentValidator WebModeResponsibleAssignmentValidator(IUserViewFactory userViewFactory = null)

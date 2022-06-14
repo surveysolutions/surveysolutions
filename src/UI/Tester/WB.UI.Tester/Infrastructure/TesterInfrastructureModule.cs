@@ -57,7 +57,8 @@ namespace WB.UI.Tester.Infrastructure
                 PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
             });
 
-            registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>)); // TODO Move to generic module between IN, T
+            registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>)); 
+            registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
 
             registry.Bind<ILoggerProvider, NLogLoggerProvider>();
             registry.BindAsSingleton<ILogger, NLogLogger>();
@@ -74,7 +75,7 @@ namespace WB.UI.Tester.Infrastructure
 
             registry.Bind<IStringCompressor, JsonCompressor>();
             registry.BindAsSingleton<IDesignerApiService, DesignerApiService>();
-            registry.BindAsSingleton<IPrincipal, TesterPrincipal>();
+            registry.BindAsSingleton<IPrincipal, ITesterPrincipal, TesterPrincipal>();
 
             registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, TesterQuestionnaireAssemblyAccessor>(
                 "assemblyStorageDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory(this.questionnaireAssembliesFolder));

@@ -109,13 +109,13 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             var items = this.dbContext.CategoriesInstances
                 .Where(x => x.QuestionnaireId == questionnaireId && x.CategoriesId == categoriesId)
+                .OrderBy(x => x.SortIndex)
                 .Select(i => new CategoriesItem()
                 {
                     Id = i.Value,
                     ParentId = i.ParentId,
                     Text = i.Text
-                })
-                .OrderBy(x => x.Id);
+                });
             return categoriesExportService.GetAsExcelFile(items);
         }
 
@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         public void Store(Guid questionnaireId, Guid categoriesId, Stream file, CategoriesFileType fileType)
         {
-            if (categoriesId == null) throw new ArgumentNullException(nameof(categoriesId));
+            //if (categoriesId == null) throw new ArgumentNullException(nameof(categoriesId));
             
             try
             {
@@ -169,7 +169,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 SortIndex = i,
                 QuestionnaireId = questionnaireId,
                 CategoriesId = categoriesId,
-                Value = int.Parse(x.Id),
+                Value = int.TryParse(x.Id, out int result) ? result : throw new InvalidOperationException($"Invalid category value {x.Id}"),
                 Text = x.Text,
                 ParentId = string.IsNullOrEmpty(x.ParentId)
                     ? (int?)null

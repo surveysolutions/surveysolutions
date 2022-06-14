@@ -55,7 +55,7 @@ namespace WB.Infrastructure.AspNetCore.DataProtection
 
                 if (hasError && errorResolved == false)
                 {
-                    Logger.LogWarning("Postgres data protection xml repository functionality restored");
+                    Logger?.LogWarning("Postgres data protection xml repository functionality restored");
                     errorResolved = true;
                 }
                 return result;

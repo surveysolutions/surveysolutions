@@ -61,6 +61,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hello {0}, &lt;br/&gt;&lt;br/&gt; You have enabled read-only access to your questionnaire &quot;{1}&quot; for anonymous users via the following link: .
+        /// </summary>
+        public static string AnonymousSharingEmail {
+            get {
+                return ResourceManager.GetString("AnonymousSharingEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to complete registration.
         /// </summary>
         public static string CompleteRegistration {
@@ -96,6 +105,15 @@ namespace WB.UI.Designer.Resources {
         public static string EmailChangeLink {
             get {
                 return ResourceManager.GetString("EmailChangeLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This message was automatically sent by the Survey Solutions Designer tool..
+        /// </summary>
+        public static string EmailSendInfo {
+            get {
+                return ResourceManager.GetString("EmailSendInfo", resourceCulture);
             }
         }
         
@@ -170,6 +188,15 @@ namespace WB.UI.Designer.Resources {
         public static string ResetPasswordEmail {
             get {
                 return ResourceManager.GetString("ResetPasswordEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anonymous sharing link.
+        /// </summary>
+        public static string SystemMailer_AnonymousSharingEmail_Subject {
+            get {
+                return ResourceManager.GetString("SystemMailer_AnonymousSharingEmail_Subject", resourceCulture);
             }
         }
         

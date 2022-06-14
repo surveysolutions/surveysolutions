@@ -138,8 +138,14 @@
   <data name="MenuItem_Title_Settings" xml:space="preserve">
     <value>Настройки</value>
   </data>
+  <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
+    <value>Анонимные опросники</value>
+  </data>
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Выход</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Войти</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
     <value>Количество секунд, в течении которых будет ожидаться получение GPS координат</value>
@@ -168,6 +174,19 @@
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
     <value>Невозможно открыть опросник "{0}". Ваша учетная запись не авторизирована. Пожалуйста, проверьте ваши логин и пароль.</value>
   </data>
+  <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
+    <value>Адрес публичного опросника</value>
+  </data>
+  <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
+    <value>Невозможно открыть опросник. Опросник не найден.</value>
+  </data>
+  <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
+    <value>Невозможно открыть опросник. Удалить его из списка?</value>
+  </data>
+
   <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
     <value>Скачиваем опросник - {0}%</value>
   </data>

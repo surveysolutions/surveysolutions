@@ -407,4 +407,7 @@
   <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
     <value>Секция "Обложка" может содержать только вопросы, статические тексты и переменные</value>
   </data>
+  <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+    <value>Категории не найдены</value>
+  </data>
 </root>

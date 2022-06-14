@@ -990,7 +990,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             UpdateFullQuestionnaireState(aggregate.QuestionnaireDocument, command.QuestionnaireId, creatorId);
 
             var itemToRevert = this.dbContext.QuestionnaireChangeRecords.Find(command.HistoryReferenceId.FormatGuid());
-
+            if(itemToRevert == null) return;
+            
             AddQuestionnaireChangeItem(command.QuestionnaireId,
                 command.ResponsibleId,
                 QuestionnaireActionType.Revert,

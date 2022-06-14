@@ -31,7 +31,7 @@ namespace WB.Core.Infrastructure.FileSystem
 
         string[] GetDirectoriesInDirectory(string pathToDirectory);
         string[] GetFilesInDirectory(string pathToDirectory, bool searchInSubdirectories = false);
-        string[] GetFilesInDirectory(string pathToDirectory, string pattern);
+        string[] GetFilesInDirectory(string pathToDirectory, string pattern, bool searchInSubdirectories = false);
 
         void WriteAllText(string pathToFile, string content);
         void WriteAllBytes(string pathToFile, byte[] content);

@@ -34,6 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 }),
                 assembly : "assembly"
             );
+            downloadedQuestionnaire.Document.PublicKey = Guid.Parse(selectedQuestionnaire.Id);
 
             mockOfAttachmentContentStorage.Setup(_ => _.Exists("1")).Returns(false);
             mockOfAttachmentContentStorage.Setup(_ => _.Exists("2")).Returns(false);
@@ -46,10 +47,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 .Setup(_ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(downloadedQuestionnaire));
             mockOfDesignerApiService
-                .Setup(_ => _.GetAttachmentContentAsync("1", Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()))
+                .Setup(_ => _.GetAttachmentContentAsync(selectedQuestionnaire.Id, "1", Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(Create.Entity.AttachmentContent_Enumerator("1")));
             mockOfDesignerApiService
-                .Setup(_ => _.GetAttachmentContentAsync("2", Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()))
+                .Setup(_ => _.GetAttachmentContentAsync(selectedQuestionnaire.Id, "2", Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(Create.Entity.AttachmentContent_Enumerator("2")));
             
 

@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using NHibernate.Event.Default;
 
 namespace WB.UI.Designer.Code
 {
@@ -13,12 +13,16 @@ namespace WB.UI.Designer.Code
             string root = "";
             if (htmlHelper.ViewData.ContainsKey("webRoot"))
             {
-                root = htmlHelper.ViewData["webRoot"].ToString() ?? "";
+                root = htmlHelper.ViewData["webRoot"]?.ToString() ?? "";
             }
             else
             {
                 var urlHelperFactory = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>();
                 var actionContextAccessor = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<IActionContextAccessor>();
+                
+                if (actionContextAccessor?.ActionContext == null)
+                    throw new Exception("Invalid context");
+                
                 var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
                 root = urlHelper.Content("~")!;
             }

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <GenerateAssemblyInformationalVersionAttribute>true</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
@@ -52,24 +52,26 @@
     <PackageReference Include="AWSSDK.S3" Version="3.7.0.28" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.7.0.26" />
     <PackageReference Include="CsvHelper" Version="19.0.0" />
-    <PackageReference Include="Dapper" Version="2.0.78" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="GeoJSON.Net" Version="1.2.19" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="5.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
     <PackageReference Include="MimeKitLite" Version="2.11.0" />
+    <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="2.0.4" />
+    <PackageReference Include="NetTopologySuite.IO.ShapeFile" Version="2.0.0" />
     <PackageReference Include="NewId" Version="3.0.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NHibernate" Version="5.3.10" />
     <PackageReference Include="NodaTime" Version="3.0.5" />
     <PackageReference Include="PasswordGenerator" Version="2.0.5" />
     <PackageReference Include="Polly" Version="7.2.1" />
     <PackageReference Include="Quartz" Version="3.2.4" />
-    <PackageReference Include="refit" Version="6.0.24" />
+    <PackageReference Include="refit" Version="6.3.2" />
     <PackageReference Include="Sendgrid" Version="9.22.0" />
     <PackageReference Include="SuperclusterBox" Version="0.1.18" />
     <PackageReference Include="MigraDocCore.DocumentObjectModel" Version="0.1.1" />

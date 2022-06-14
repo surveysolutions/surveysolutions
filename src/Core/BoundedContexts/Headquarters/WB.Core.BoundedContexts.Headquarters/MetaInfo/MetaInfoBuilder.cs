@@ -38,7 +38,7 @@ namespace WB.Core.Synchronization.MetaInfo
                 CreatedOnClient = doc.CreatedOnClient,
                 Comments = doc.Comments,
                 RejectDateTime = doc.RejectDateTime,
-                InterviewerAssignedDateTime = doc.InterviewerAssignedDateTime
+                InterviewerAssignedDateTime = doc.InterviewerAssignedDateTime,
             };
         }
 

@@ -9,7 +9,6 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Classifications;
@@ -48,6 +47,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public void ImportQuestionnaires()
         {
             var foldersAndQuestionnaires = NewMethod();
+            if (foldersAndQuestionnaires == null)
+                return;
+            
             var questionnairesIds = foldersAndQuestionnaires.Select(x => x.Id)
                 .Except(foldersAndQuestionnaires.Select(x => x.Pid))
                 .ToHashSet();
@@ -61,12 +63,20 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             );
 
             var mysqlAllQuestions = NewMethod1();
+            if (mysqlAllQuestions == null)
+                return;
 
             var mysqlAllSections = NewMethod2();
+            if (mysqlAllSections == null)
+                return;
 
             var sectionToQuestionnaires = NewMethod3();
+            if (sectionToQuestionnaires == null)
+                return;
 
             var mysqlOptions = NewMethod4();
+            if (mysqlOptions == null)
+                return;
 
             var mysqlQuestionnaires = foldersAndQuestionnaires.Where(x => questionnairesIds.Contains(x.Id));
             var varNumber = 1;
@@ -196,53 +206,53 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
         }
 
-        private List<MySqlFoldersAndQuestionnaires> NewMethod()
+        private List<MySqlFoldersAndQuestionnaires>? NewMethod()
         {
             var foldersAndQuestionnairesJson =
                 System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/qbank/FoldersAndQuestionnaires.json"));
             var foldersAndQuestionnaires = JsonConvert
-                .DeserializeObject<MySqlFoldersAndQuestionnaires[]>(foldersAndQuestionnairesJson)
+                .DeserializeObject<MySqlFoldersAndQuestionnaires[]>(foldersAndQuestionnairesJson)?
                 .Where(x => x.Published == 1)
                 .ToList();
             return foldersAndQuestionnaires;
         }
 
-        private List<MySqlOptions> NewMethod4()
+        private List<MySqlOptions>? NewMethod4()
         {
             var questionsWithOptionsJson =
                 System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/qbank/Options.json"));
 
             var questionsWithOptions = JsonConvert
-                .DeserializeObject<MySqlOptions[]>(questionsWithOptionsJson)
+                .DeserializeObject<MySqlOptions[]>(questionsWithOptionsJson)?
                 .ToList();
             return questionsWithOptions;
         }
 
-        private List<MySqlSectionToQuestionnaires> NewMethod3()
+        private List<MySqlSectionToQuestionnaires>? NewMethod3()
         {
             var sectionToQuestionnairesJson =
                 System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/qbank/SectionToQuestionnaires.json"));
 
 
             var sectionToQuestionnaires = JsonConvert
-                .DeserializeObject<MySqlSectionToQuestionnaires[]>(sectionToQuestionnairesJson)
+                .DeserializeObject<MySqlSectionToQuestionnaires[]>(sectionToQuestionnairesJson)?
                 .ToList();
             return sectionToQuestionnaires;
         }
 
-        private List<MySqlSections> NewMethod2()
+        private List<MySqlSections>? NewMethod2()
         {
             var sectionsJson = System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/qbank/Sections.json"));
-            var sections = JsonConvert.DeserializeObject<MySqlSections[]>(sectionsJson)
+            var sections = JsonConvert.DeserializeObject<MySqlSections[]>(sectionsJson)?
                 .Where(x => x.Published == 1)
                 .ToList();
             return sections;
         }
 
-        private List<MySqlQuestions> NewMethod1()
+        private List<MySqlQuestions>? NewMethod1()
         {
             var questionsJson = System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/qbank/Questions.json"));
-            var questions = JsonConvert.DeserializeObject<MySqlQuestions[]>(questionsJson).ToList();
+            var questions = JsonConvert.DeserializeObject<MySqlQuestions[]>(questionsJson)?.ToList();
             return questions;
         }
 
@@ -251,6 +261,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public void Init()
         {
             var entities = ReadAndParseClassifications();
+            if (entities == null)
+                return;
+            
             foreach (var entity in entities)
             {
                 entity.IdGuid = Guid.NewGuid();
@@ -290,7 +303,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             classificationsStorage.Store(bdEntities);
         }
 
-        private MysqlClassificationEntity[] ReadAndParseClassifications()
+        private MysqlClassificationEntity[]? ReadAndParseClassifications()
         {
             var json = System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/qbank/QbankClassifications.json"));
             var entities = JsonConvert.DeserializeObject<MysqlClassificationEntity[]>(json);

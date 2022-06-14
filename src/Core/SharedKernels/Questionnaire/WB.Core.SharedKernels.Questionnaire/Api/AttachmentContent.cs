@@ -32,11 +32,4 @@ namespace WB.Core.SharedKernels.Questionnaire.Api
             return this.ContentType.StartsWith("audio/", StringComparison.OrdinalIgnoreCase);
         }
     }
-
-    public class QuestionnaireLiteInfo
-    {
-        public Guid Id { get; set; }
-        public DateTime LastUpdateDate { get; set; }
-    }
-
 }
