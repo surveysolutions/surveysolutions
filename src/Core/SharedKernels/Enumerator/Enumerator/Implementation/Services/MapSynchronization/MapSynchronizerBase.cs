@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Plugin.Permissions;
@@ -64,16 +65,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
             await this.permissionsService.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
 
             var items = await this.synchronizationService.GetMapList(cancellationToken).ConfigureAwait(false);
-            var availableMaps = this.mapService.GetAvailableMaps(false);
+            var availableMapFiles = this.mapService.GetAvailableMaps(false);
+            var availableShapefiles = this.mapService.GetAvailableShapefiles();
+            var mapFileNames = availableMapFiles.Select(m => m.MapFileName)
+                .Concat(availableShapefiles.Select(s => s.ShapefileFileName));
 
-            foreach (var map in availableMaps)
+            foreach (var mapFileName in mapFileNames)
             {
-                if (items.Exists(x => string.Compare(x.MapName, map.MapFileName, StringComparison.InvariantCultureIgnoreCase) == 0))
+                if (items.Exists(x => string.Compare(x.MapName, mapFileName, StringComparison.InvariantCultureIgnoreCase) == 0))
                     continue;
 
                 try
                 {
-                    this.mapService.RemoveMap(map.MapFileName);
+                    this.mapService.RemoveMap(mapFileName);
                 }
                 catch (Exception ex)
                 {
