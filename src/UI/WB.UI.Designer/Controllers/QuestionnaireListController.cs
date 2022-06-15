@@ -34,7 +34,7 @@ namespace WB.UI.Designer.Controllers
             => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, type: QuestionnairesType.My, folderId: null));
 
         [AntiForgeryFilter]
-        [Route("questionnaire/public")]
+        [Route("questionnaire/public/{id?}")]
         public ActionResult Public(int? p, string sb, int? so, string f, Guid? id)
         {
             var questionnaires = this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f,
