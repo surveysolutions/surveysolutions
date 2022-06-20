@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SoftCircuits.Collections;
 using WB.Services.Export.Interview;
 
 namespace WB.Services.Export.Questionnaire
@@ -54,7 +55,7 @@ namespace WB.Services.Export.Questionnaire
                 result[scopeVector] =
                     new RosterScopeDescription(scopeVector,
                         string.Empty, RosterScopeType.Fixed,
-                        new Dictionary<Guid, RosterTitleQuestionDescription?> { { fixedRosterGroup.PublicKey, null } });
+                        new OrderedDictionary<Guid, RosterTitleQuestionDescription?> { { fixedRosterGroup.PublicKey, null } });
             }
 
             return result;
@@ -107,13 +108,13 @@ namespace WB.Services.Export.Questionnaire
             return new ValueVector<Guid>(result);
         }
 
-        private Dictionary<Guid, RosterTitleQuestionDescription?> GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(
+        private OrderedDictionary<Guid, RosterTitleQuestionDescription?> GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(
             Dictionary<Guid, Question> questionsByPublicKeyDictionary,
             IEnumerable<Group> groupsFromRosterSizeQuestionScope)
         {
             return
                 groupsFromRosterSizeQuestionScope
-                    .ToDictionary(roster => roster.PublicKey,
+                    .ToOrderedDictionary(roster => roster.PublicKey,
                         roster => CreateRosterTitleQuestionDescription(questionsByPublicKeyDictionary, roster.RosterTitleQuestionId));
         }
 
