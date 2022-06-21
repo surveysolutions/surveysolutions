@@ -64,7 +64,6 @@
     <PackageReference Include="Refit" Version="6.3.2" />
     <PackageReference Include="prometheus-net" Version="4.1.1" />
     <PackageReference Include="Scrutor" Version="4.1.0" />
-    <PackageReference Include="SoftCircuits.OrderedDictionary" Version="2.1.0" />
     <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="System.Runtime.Caching" Version="6.0.0" />
