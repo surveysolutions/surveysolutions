@@ -233,5 +233,29 @@ namespace WB.Services.Export.Tests.Questionnaire
 
             Assert.That(rosterStructureForLevel.LevelName, Is.EqualTo("firstRoster"));
         }
+        
+        [Test]
+        public void when_two_rosters_with_same_roster_source_on_different_levels_then_roster_level_should_have_name_of_first_roster()
+        {
+            // arrange
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(new IQuestionnaireEntity[] {
+                Create.NumericIntegerQuestion(Id.g1, variable: "int"),
+                Create.Group(children: 
+                    Create.Roster(rosterId: Id.g2, variable: "firstRoster", rosterSizeQuestionId: Id.g1, rosterSizeSourceType: RosterSizeSourceType.Question)
+                ),
+                Create.Roster(rosterId: Id.g3, variable: "secondRoster", rosterSizeQuestionId: Id.g1, rosterSizeSourceType: RosterSizeSourceType.Question),
+            });
+
+            var questionnaireExportStructureFactory = CreateExportViewFactory();
+
+
+            // act
+            var questionnaireExportStructure = questionnaireExportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
+
+            // assert
+            HeaderStructureForLevel rosterStructureForLevel = questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>(new[] { Id.g1 })];
+
+            Assert.That(rosterStructureForLevel.LevelName, Is.EqualTo("firstRoster"));
+        }
     }
 }
