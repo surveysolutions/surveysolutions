@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 }),
                 assembly : "assembly"
             );
-            downloadedQuestionnaire.Document.Id = selectedQuestionnaire.Id;
+            downloadedQuestionnaire.Document.PublicKey = Guid.Parse(selectedQuestionnaire.Id);
 
             mockOfAttachmentContentStorage.Setup(_ => _.Exists("1")).Returns(false);
             mockOfAttachmentContentStorage.Setup(_ => _.Exists("2")).Returns(false);

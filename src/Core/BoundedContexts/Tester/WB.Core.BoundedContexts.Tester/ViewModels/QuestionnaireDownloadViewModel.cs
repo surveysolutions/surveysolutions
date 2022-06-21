@@ -72,33 +72,38 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public async Task<QuestionnaireIdentity> LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
             IProgress<string> progress, CancellationToken cancellationToken)
         {
-            var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
+            var questionnaireIdentity = await DownloadQuestionnaireWithAllDependenciesAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
             if (questionnaireIdentity != null)
             {
-                if (principal.CurrentUserIdentity == null)
-                    principal.UseFakeIdentity();
-                
-                var interviewId = await this.CreateInterview(questionnaireIdentity, progress).ConfigureAwait(false);
-                var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
-                if (questionnaire.GetPrefilledEntities().Count == 0)
-                {
-                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), null)
-                        .ConfigureAwait(false);
-                }
-                else
-                {
-                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid())
-                        .ConfigureAwait(false);
-                }
+                await CreateAndOpenInterview(questionnaireIdentity, progress);
             }
 
             return questionnaireIdentity;
         }
 
+        public async Task CreateAndOpenInterview(QuestionnaireIdentity questionnaireIdentity, IProgress<string> progress)
+        {
+            if (principal.CurrentUserIdentity == null)
+                principal.UseFakeIdentity();
+
+            var interviewId = await this.CreateInterview(questionnaireIdentity, progress).ConfigureAwait(false);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
+            if (questionnaire.GetPrefilledEntities().Count == 0)
+            {
+                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), null)
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid())
+                    .ConfigureAwait(false);
+            }
+        }
+
         public async Task<bool> ReloadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
             IStatefulInterview interview, NavigationIdentity navigationIdentity, IProgress<string> progress, CancellationToken cancellationToken)
         {
-            var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
+            var questionnaireIdentity = await DownloadQuestionnaireWithAllDependenciesAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
             if (questionnaireIdentity != null)
             {
                 try
@@ -122,7 +127,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         ? NavigationIdentity.CreateForGroup(navigationIdentity.TargetGroup)
                         : null;
                     await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(),
-                        targetGroup);
+                        targetGroup).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
@@ -140,7 +145,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             return questionnaireIdentity != null;
         }
 
-        private async Task<QuestionnaireIdentity> DownloadQuestionnaireWithAllDependencisAsync(string questionnaireId, string questionnaireTitle,
+        public async Task<QuestionnaireIdentity> DownloadQuestionnaireWithAllDependenciesAsync(string questionnaireId, string questionnaireTitle,
             IProgress<string> progress, CancellationToken cancellationToken)
         {
             progress.Report(TesterUIResources.ImportQuestionnaire_CheckConnectionToServer);
@@ -238,7 +243,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             var questionnaireDocument = questionnairePackage.Document;
             questionnaireDocument.PublicKey = questionnaireIdentity.QuestionnaireId;
-            questionnaireDocument.Id = questionnaireIdentity.QuestionnaireId.FormatGuid();
 
             var supportingAssembly = questionnairePackage.Assembly;
 
@@ -272,7 +276,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 if (!isExistsContent)
                 {
                     var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(
-                        questionnaire.Document.Id,
+                        questionnaire.Document.PublicKey.FormatGuid(),
                         attachmentContentId,
                         new Progress<TransferProgress>(downloadProgress
                             => progress.Report(string.Format(

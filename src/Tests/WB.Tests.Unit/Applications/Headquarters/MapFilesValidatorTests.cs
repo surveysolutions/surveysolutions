@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -93,6 +94,7 @@ public class MapFilesValidatorTests
     [Test]
     public void when_validate_incorrect_map_name()
     {
+        var mapName = string.Concat(Path.GetInvalidPathChars()) + ".shp";
         var analyzeResults = new AnalyzeResult()
         {
             IsValid = false,
@@ -102,7 +104,7 @@ public class MapFilesValidatorTests
                 {
                     IsShapeFile = false,
                     Name = "map1",
-                    Files = new List<MapFile>() { MapFile("map\\1.shp") }
+                    Files = new List<MapFile>() { MapFile( mapName) }
                 },
             }
         };

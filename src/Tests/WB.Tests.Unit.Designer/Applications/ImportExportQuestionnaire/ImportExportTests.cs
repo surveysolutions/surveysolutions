@@ -52,7 +52,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             questionnaireDocument.Title = "test";
             questionnaireDocument.Description = "desc";
             var documentPublicKey = Guid.NewGuid();
-            questionnaireDocument.Id = documentPublicKey.FormatGuid();
             questionnaireDocument.PublicKey = documentPublicKey;
             //questionnaireDocument.Revision = 17;
             //questionnaireDocument.CloseDate = DateTime.Now;

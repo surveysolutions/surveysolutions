@@ -74,7 +74,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
             {
                 Name = "Anonymous",
                 Password = "fake",
-                UserId = Guid.NewGuid(),
+                UserId = Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"),
             };
         }
 

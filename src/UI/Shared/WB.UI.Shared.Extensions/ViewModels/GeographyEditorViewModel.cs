@@ -134,7 +134,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 return coordinates;
             
             //project to geocoordinates
-            SpatialReference reference = new SpatialReference(4326);
+            SpatialReference reference = SpatialReference.Create(4326);
 
             switch (result.GeometryType)
             {

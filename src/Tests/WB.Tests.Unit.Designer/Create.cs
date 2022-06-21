@@ -177,7 +177,6 @@ namespace WB.Tests.Unit.Designer
         {
             return new CodeGeneratorV2(new CodeGenerationModelsFactory(
                 DefaultMacrosSubstitutionService(),
-                Create.LookupTableService(), 
                 new QuestionTypeToCSharpTypeMapper()));
         }
 
@@ -829,7 +828,6 @@ namespace WB.Tests.Unit.Designer
             return new QuestionnaireDocument
             {
                 PublicKey = publicKey,
-                Id = publicKey.FormatGuid(),
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
                 Title = title,
                 VariableName = variable,
@@ -867,7 +865,6 @@ namespace WB.Tests.Unit.Designer
             {
                 Title = "Q",
                 VariableName = "Q",
-                Id = publicKey.FormatGuid(),
                 PublicKey = publicKey,
                 Children = new IComposite[]
                 {
@@ -1623,7 +1620,7 @@ namespace WB.Tests.Unit.Designer
             var questionnireExpressionProcessorGeneratorMock = new Mock<IExpressionProcessorGenerator>();
             string generationResult;
             questionnireExpressionProcessorGeneratorMock.Setup(
-                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>(), out generationResult))
+                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireCodeGenerationPackage>(), Moq.It.IsAny<int>(), out generationResult))
                 .Returns(new GenerationResult( success : true, diagnostics : new List<Diagnostic>() ));
 
             var substitutionServiceInstance = new SubstitutionService();
@@ -1658,7 +1655,8 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<IQuestionnaireCompilationVersionService>(), 
                 Mock.Of<IDynamicCompilerSettingsProvider>(x => x.GetAssembliesToReference() == DynamicCompilerSettingsProvider().GetAssembliesToReference()),
                 expressionsPlayOrderProvider,
-                categoriesService ?? Mock.Of<ICategoriesService>());
+                categoriesService ?? Mock.Of<ICategoriesService>(),
+                new QuestionnaireCodeGenerationPackageFactory(lookupTableService ?? lookupTableServiceMock.Object));
         }
 
         public static IQuestionTypeToCSharpTypeMapper QuestionTypeToCSharpTypeMapper()
