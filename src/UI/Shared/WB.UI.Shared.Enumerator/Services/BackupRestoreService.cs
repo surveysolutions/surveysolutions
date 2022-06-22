@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using SQLite;
 using SQLitePCL;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -20,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using Xamarin.Essentials;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
@@ -28,7 +27,7 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly IEnumeratorArchiveUtils archiver;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
-        private readonly IPermissions permissions;
+        private readonly IPermissionsService permissions;
         private readonly IDeviceSettings deviceSettings;
         private readonly IRestService restService;
         private readonly IPrincipal principal;
@@ -44,7 +43,7 @@ namespace WB.UI.Shared.Enumerator.Services
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
             string privateStorage, 
-            IPermissions permissions,
+            IPermissionsService permissions,
             IDeviceSettings deviceSettings,
             IRestService restService,
             IPrincipal principal,
@@ -71,13 +70,13 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public async Task<string> BackupAsync()
         {
-            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
             return await this.BackupAsync(this.privateStorage).ConfigureAwait(false);
         }
 
         public async Task<string> BackupAsync(string backupToFolderPath)
         {
-            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
 
             if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
@@ -123,7 +122,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public async Task<RestorePackageInfo> GetRestorePackageInfo(string restoreFolder)
         {
-            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
 
             if (!this.fileSystemAccessor.IsDirectoryExists(restoreFolder))
                 this.fileSystemAccessor.CreateDirectory(restoreFolder);
@@ -271,7 +270,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public async Task RestoreAsync(string backupFilePath)
         {
-            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
 
             if (this.fileSystemAccessor.IsFileExists(backupFilePath))
             {

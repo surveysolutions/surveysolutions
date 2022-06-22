@@ -72,8 +72,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                 {
                     gpsQuestion.Latitude.ToString(ExportCulture),
                     gpsQuestion.Longitude.ToString(ExportCulture),
-                    gpsQuestion.Accuracy.ToString(ExportCulture),
-                    gpsQuestion.Altitude.ToString(ExportCulture),
+                    gpsQuestion.Accuracy?.ToString(ExportCulture) ?? string.Empty,
+                    gpsQuestion.Altitude?.ToString(ExportCulture) ?? string.Empty,
                     gpsQuestion.Timestamp.DateTime.ToString(ExportFormatSettings.ExportDateTimeFormat, ExportCulture)
                 };
             }

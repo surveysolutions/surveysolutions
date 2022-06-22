@@ -6,26 +6,27 @@ using AndroidX.Core.App;
 using MvvmCross;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Plugin.Messenger;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.UI.Shared.Enumerator.Services;
+using Xamarin.Essentials;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class PermissionsService : IPermissionsService
     {
-        private readonly IPermissions permissions;
         private MvxSubscriptionToken token;
 
-        public PermissionsService(IPermissions permissions)
+        public async Task AssureHasPermissionOrThrow<T>() where T : Permissions.BasePermission, new()
         {
-            this.permissions = permissions;
-        }
+            if (Build.VERSION.SdkInt < BuildVersionCodes.M) return;
+            if (await Permissions.CheckStatusAsync<T>().ConfigureAwait(false) == PermissionStatus.Granted) return;
 
-        public async Task AssureHasPermissionOrThrow<T>() where T : BasePermission, new() 
-            => await this.permissions.AssureHasPermissionOrThrow<T>();
+            var permissionsRequest = await Permissions.RequestAsync<T>().ConfigureAwait(false);
+            if (permissionsRequest != PermissionStatus.Granted)
+                throw new MissingPermissionsException(UIResources.MissingPermission, typeof(T));
+        }
 
         public Task EnsureHasPermissionToInstallFromUnknownSourcesAsync()
         {
@@ -77,5 +78,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             return Task.FromResult(true);
         }
 
+        public async Task<PermissionStatus> CheckPermissionStatusAsync<T>() where T : Permissions.BasePermission, new()
+        {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.M) return PermissionStatus.Unknown;
+            return await Permissions.CheckStatusAsync<T>().ConfigureAwait(false);
+        }
     }
 }

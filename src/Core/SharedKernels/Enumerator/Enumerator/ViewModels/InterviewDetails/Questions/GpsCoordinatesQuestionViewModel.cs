@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using Plugin.Geolocator.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -15,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using Xamarin.Essentials;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -141,17 +141,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.userInterfaceStateService.NotifyRefreshFinished();
                 await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
             }
-            catch (GeolocationException e)
+            catch (PermissionException)
             {
-                switch (e.Error)
-                {
-                    case GeolocationError.PositionUnavailable:
-                        await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
-                        break;
-                    case GeolocationError.Unauthorized:
-                        await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_MissingPermissions);
-                        break;
-                }
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_MissingPermissions);
             }
             catch (MissingPermissionsException)
             {
