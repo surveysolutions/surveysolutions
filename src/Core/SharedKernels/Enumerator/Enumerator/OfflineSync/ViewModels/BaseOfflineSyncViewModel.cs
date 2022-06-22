@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
-using Plugin.Permissions;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -11,6 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using Xamarin.Essentials;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 {
@@ -75,7 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
             try
             {
-                await this.permissions.AssureHasPermissionOrThrow<LocationPermission>().ConfigureAwait(false);
+                await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
             }
             catch (MissingPermissionsException)
             {

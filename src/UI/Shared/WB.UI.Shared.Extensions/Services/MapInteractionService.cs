@@ -1,13 +1,12 @@
 using System;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Extensions.Activities;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.ViewModels;
+using Xamarin.Essentials;
 using AreaEditResult = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.AreaEditResult;
 
 namespace WB.UI.Shared.Extensions.Services
@@ -31,10 +30,10 @@ namespace WB.UI.Shared.Extensions.Services
             #endregion Properties
         }
 
-        private readonly IPermissions permissions;
+        private readonly IPermissionsService permissions;
         private readonly IViewModelNavigationService viewModelNavigationService;
 
-        public MapInteractionService(IPermissions permissions,
+        public MapInteractionService(IPermissionsService permissions,
             IViewModelNavigationService viewModelNavigationService)
         {
             this.permissions = permissions;
@@ -43,16 +42,16 @@ namespace WB.UI.Shared.Extensions.Services
 
         public async Task<AreaEditResult> EditAreaAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
         {
-            await this.permissions.AssureHasPermissionOrThrow<LocationPermission>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
 
             return await this.EditAreaImplAsync(area, geometryType);
         }
 
         public async Task OpenMapDashboardAsync()
         {
-            await this.permissions.AssureHasPermissionOrThrow<LocationPermission>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
 
             await this.viewModelNavigationService.NavigateToAsync<MapDashboardViewModel, MapDashboardViewModelArgs>(
                 new MapDashboardViewModelArgs()).ConfigureAwait(false);

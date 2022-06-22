@@ -1,13 +1,12 @@
 ﻿using System.Threading.Tasks;
 using NLog.Common;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Shared.Enumerator.Services;
+using Xamarin.Essentials;
 
 namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
 {
@@ -16,12 +15,12 @@ namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPrincipal principal;
-        private readonly IPermissions permissions;
+        private readonly IPermissionsService permissions;
         private readonly ILogger logger;
 
         public M202103291222_MoveMapsFiles(IFileSystemAccessor fileSystemAccessor,
             IPrincipal principal,
-            IPermissions permissions,
+            IPermissionsService permissions,
             ILogger logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -64,7 +63,7 @@ namespace WB.UI.Shared.Enumerator.Migrations.Workspaces
 
             var task = Task.Run(async () =>
             {
-                var status = await this.permissions.CheckPermissionStatusAsync<StoragePermission>();
+                var status = await this.permissions.CheckPermissionStatusAsync<Permissions.StorageWrite>();
                 hasPermissions = status == PermissionStatus.Granted;
             });
             task.Wait();
