@@ -97,7 +97,9 @@ export default {
             required: value =>
                 !!value || this.$t('QuestionnaireEditor.RequiredField'),
             maxValue: v =>
-                (/^\d+$/.test(v) && Math.abs(parseInt(v)) < 2147483647) ||
+                (/^[-+]?\d+$/.test(v) &&
+                    Math.abs(parseInt(v)) <= 2147483647 &&
+                    Math.abs(parseInt(v)) >= -2147483648) ||
                 this.$t('QuestionnaireEditor.ValidationIntValue'),
 
             valid: true
