@@ -53,7 +53,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading
             foreach (var id in playOrder)
             {
                 if (answersDictionary.TryGetValue(id, out var answer))
+                {
                     result.Add(answer);
+                    answersDictionary.Remove(id);
+                }
+            }
+
+            foreach (var answerWithoutPlayOrder in answersDictionary.Values)
+            {
+                result.Add(answerWithoutPlayOrder);
             }
 
             return result;
