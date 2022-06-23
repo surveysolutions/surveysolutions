@@ -48,20 +48,22 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading
             if (playOrder.Count == 0)
                 return answers;
 
-            var answersDictionary = answers.ToDictionary(a => a.Identity.Id);
+            var answersDictionary = answers
+                .GroupBy(answer => answer.Identity.Id)
+                .ToDictionary(a => a.Key, v => v.ToList());
             List<InterviewAnswer> result = new();
             foreach (var id in playOrder)
             {
-                if (answersDictionary.TryGetValue(id, out var answer))
+                if (answersDictionary.TryGetValue(id, out var listAnswer))
                 {
-                    result.Add(answer);
+                    result.AddRange(listAnswer);
                     answersDictionary.Remove(id);
                 }
             }
 
-            foreach (var answerWithoutPlayOrder in answersDictionary.Values)
+            foreach (var listAnswerWithoutPlayOrder in answersDictionary.Values)
             {
-                result.Add(answerWithoutPlayOrder);
+                result.AddRange(listAnswerWithoutPlayOrder);
             }
 
             return result;

@@ -70,7 +70,7 @@ public class InterviewDashboardEventHandlerTests
         Assert.That(allPrefilledQuestions[1].QuestionId, Is.EqualTo(prefilledQ2));
 
         Assert.That(allPrefilledQuestions[2].SortIndex, Is.EqualTo(2));
-        Assert.That(allPrefilledQuestions[2].Id, Is.EqualTo(prefilledQ3.FormatGuid()));
+        Assert.That(allPrefilledQuestions[2].QuestionId, Is.EqualTo(prefilledQ3));
 
         Assert.That(allPrefilledQuestions[3].SortIndex, Is.EqualTo(3));
         Assert.That(allPrefilledQuestions[3].QuestionId, Is.EqualTo(prefilledQ4));
