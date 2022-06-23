@@ -126,7 +126,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
                 foreach (var answersInLevel in answersGroupedByLevels)
                 {
-                    foreach (InterviewAnswer answer in answersInLevel)
+                    var orderedAnswers = answersInLevel.SortByDependencies(questionnaire);
+
+                    foreach (InterviewAnswer answer in orderedAnswers)
                     {
                         var interviewTreeQuestion = tree.GetQuestion(answer.Identity);
                         if (interviewTreeQuestion == null)
