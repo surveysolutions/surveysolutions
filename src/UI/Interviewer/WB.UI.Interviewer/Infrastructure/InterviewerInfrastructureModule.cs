@@ -66,7 +66,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
             registry.Bind<IAudioAuditService, AudioAuditService>();
             
-            registry.Bind<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
+            registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();
 
             registry.BindToConstant(() => new SqliteSettings
