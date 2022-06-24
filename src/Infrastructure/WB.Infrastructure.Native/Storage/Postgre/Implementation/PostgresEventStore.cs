@@ -58,7 +58,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public IEnumerable<CommittedEvent> Read(Guid aggregateRootId, params string[] typeNames)
         {
             if (typeNames.Length == 0)
-                yield break;
+                throw new ArgumentException("typeNames argument is empty collection");
 
             var rawEvents = sessionProvider.Session.Connection.Query<RawEvent>(
                  $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
