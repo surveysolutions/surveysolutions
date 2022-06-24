@@ -165,7 +165,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
 
             this.CreateMap<Documents.FixedRosterTitle, Models.FixedRosterTitle>();
             this.CreateMap<Models.FixedRosterTitle, Documents.FixedRosterTitle>()
-                .ConstructUsing(c => new Documents.FixedRosterTitle(c.Value, c.Title));
+                .ConstructUsing(c => new Documents.FixedRosterTitle(c.Value ?? 0, c.Title));
             
             //this.CreateMap<Main.Core.Entities.SubEntities.RosterDisplayMode, Models.RosterDisplayMode>()
                 //.ConvertUsingEnumMapping(o => o.MapByName())

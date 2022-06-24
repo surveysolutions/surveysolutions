@@ -155,10 +155,17 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!string.IsNullOrEmpty(workspaceName))
             {
                 var filename = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
-                if (this.fileSystemAccessor.IsFileExists(filename))
-                    return true;
-                if (this.fileSystemAccessor.IsDirectoryExists(filename))
-                    return true;
+                var isShapeFile = IsShapeFile(mapName);
+                if (!isShapeFile)
+                {
+                    if (this.fileSystemAccessor.IsFileExists(filename))
+                        return true;
+                }
+                else
+                {
+                    if (this.fileSystemAccessor.IsDirectoryExists(filename))
+                        return true;
+                }
             }
 
             var filenameInCommonFolder = this.fileSystemAccessor.CombinePath(this.mapsLocationCommon, mapName);
@@ -185,8 +192,8 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!this.fileSystemAccessor.IsFileExists(tempFileName))
                 return;
 
-            var fileExtension = fileSystemAccessor.GetFileExtension(mapName);
-            if (fileExtension == ".shp") // shape file package
+            var isShapeFile = IsShapeFile(mapName);
+            if (isShapeFile) // shape file package
             {
                 var mapFolder = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
                 try
@@ -209,6 +216,12 @@ namespace WB.UI.Shared.Enumerator.Services
                 var newName = this.fileSystemAccessor.ChangeExtension(tempFileName, null);
                 this.fileSystemAccessor.MoveFile(tempFileName, newName);
             }            
+        }
+
+        private bool IsShapeFile(string mapName)
+        {
+            var fileExtension = fileSystemAccessor.GetFileExtension(mapName);
+            return fileExtension == ".shp";
         }
 
         public void RemoveMap(string mapName)
