@@ -97,7 +97,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => enumeratorSettings.LastOpenedMapName;
         }
 
-        private bool isLocationServiceSwitchEnabled = true;
+        private bool isLocationServiceSwitchEnabled = false;
         public bool IsLocationServiceSwitchEnabled
         {
             get => this.isLocationServiceSwitchEnabled;
