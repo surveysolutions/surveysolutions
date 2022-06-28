@@ -288,10 +288,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             foreach (var variable in @event.Payload.ChangedVariables.Where(x=> reportQuestionIdentities.Contains(x.Identity.Id)))
             {
                 var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
-                var identifyingValue = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == variable.Identity.Id);
+                var id = questionnaire.GetEntityIdMapValue(variable.Identity.Id);
+                
+                var identifyingValue = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.Id == id);
                 if (identifyingValue == null)
                 {
-                    var id = questionnaire.GetEntityIdMapValue(variable.Identity.Id);
                     identifyingValue = new IdentifyEntityValue()
                     {
                         Entity = new QuestionnaireCompositeItem
