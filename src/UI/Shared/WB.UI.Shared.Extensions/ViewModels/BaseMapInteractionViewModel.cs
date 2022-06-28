@@ -97,7 +97,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => enumeratorSettings.LastOpenedMapName;
         }
 
-        private bool isLocationServiceSwitchEnabled = false;
+        private bool isLocationServiceSwitchEnabled = true;
         public bool IsLocationServiceSwitchEnabled
         {
             get => this.isLocationServiceSwitchEnabled;
@@ -106,14 +106,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
         
         public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async () =>
         {
-            if (IsLocationServiceSwitchEnabled)
+            if (!IsLocationServiceSwitchEnabled)
                 return;
 
             //try to workaround Esri crash with location service
             //Esri case 02209395
             try
             {
-                IsLocationServiceSwitchEnabled = true;
+                IsLocationServiceSwitchEnabled = false;
 
                 if (!this.MapView.LocationDisplay.IsEnabled)
                     this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
