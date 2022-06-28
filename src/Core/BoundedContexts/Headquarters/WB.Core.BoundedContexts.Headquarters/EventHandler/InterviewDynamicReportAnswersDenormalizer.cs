@@ -287,21 +287,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             foreach (var variable in @event.Payload.ChangedVariables.Where(x=> reportQuestionIdentities.Contains(x.Identity.Id)))
             {
-                var answer = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == variable.Identity.Id);
-
-                if (answer != null)
+                var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+                var identifyingValue = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == variable.Identity.Id);
+                if (identifyingValue == null)
                 {
-                    answer.IsEnabled = true;
-                    //TODO: set property value depending of the type
-                    answer.Value = variable.NewValue.ToString();
-                }
-                else
-                {
-                    var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
                     var id = questionnaire.GetEntityIdMapValue(variable.Identity.Id);
-                    var varType = questionnaire.GetVariableVariableType(variable.Identity.Id);
-
-                    var identifyingValue = new IdentifyEntityValue()
+                    identifyingValue = new IdentifyEntityValue()
                     {
                         Entity = new QuestionnaireCompositeItem
                         {
@@ -311,27 +302,30 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                         IsEnabled = true,
                         Position = id
                     };
-
-                    switch (varType)
-                    {
-                        case VariableType.Boolean:
-                            identifyingValue.ValueBool = Convert.ToBoolean(variable.NewValue);
-                            break;
-                        case VariableType.DateTime:
-                            identifyingValue.ValueDate = variable.NewValue as DateTime?;
-                            break;
-                        case VariableType.Double:
-                            identifyingValue.ValueDouble = Convert.ToDouble(variable.NewValue);
-                            break;
-                        case VariableType.LongInteger:
-                            identifyingValue.ValueLong = Convert.ToInt64(variable.NewValue);
-                            break;
-                        case VariableType.String:
-                            identifyingValue.Value = variable.NewValue as string;
-                            break;
-                    }
-
                     state.IdentifyEntitiesValues.Add(identifyingValue);
+                }
+                
+                identifyingValue.IsEnabled = true;
+                identifyingValue.Value = variable.NewValue.ToString();
+                
+                var varType = questionnaire.GetVariableVariableType(variable.Identity.Id);
+                switch (varType)
+                {
+                    case VariableType.Boolean:
+                        identifyingValue.ValueBool = Convert.ToBoolean(variable.NewValue);
+                        break;
+                    case VariableType.DateTime:
+                        identifyingValue.ValueDate = variable.NewValue as DateTime?;
+                        break;
+                    case VariableType.Double:
+                        identifyingValue.ValueDouble = Convert.ToDouble(variable.NewValue);
+                        break;
+                    case VariableType.LongInteger:
+                        identifyingValue.ValueLong = Convert.ToInt64(variable.NewValue);
+                        break;
+                    case VariableType.String:
+                        identifyingValue.Value = variable.NewValue as string;
+                        break;
                 }
             }
 
