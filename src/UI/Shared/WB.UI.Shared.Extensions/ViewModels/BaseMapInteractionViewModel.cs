@@ -227,13 +227,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     this.Map.Basemap = baseMap;
 
-                    if (baseMap?.BaseLayers.Count > 0 && baseMap?.BaseLayers[0]?.FullExtent != null && this.MapView?.VisibleArea != null)
+                    if (baseMap?.BaseLayers.Count > 0 && baseMap?.BaseLayers[0]?.FullExtent != null)
                     {
-                        var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea,
-                            baseMap.BaseLayers[0].SpatialReference);
+                        await InvokeOnMainThreadAsync(() =>
+                        {
+                            if (this.MapView?.VisibleArea != null)
+                            {
+                                var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea,
+                                    baseMap.BaseLayers[0].SpatialReference);
 
-                        if (projectedArea!= null && !GeometryEngine.Intersects(baseMap.BaseLayers[0].FullExtent, projectedArea))
-                            this.userInteractionService.ShowToast(UIResources.AreaMap_MapIsOutOfVisibleBoundaries);
+                                if (projectedArea != null &&
+                                    !GeometryEngine.Intersects(baseMap.BaseLayers[0].FullExtent, projectedArea))
+                                    this.userInteractionService.ShowToast(UIResources
+                                        .AreaMap_MapIsOutOfVisibleBoundaries);
+                            }
+                        });
                     }
 
                     /*if (basemap?.BaseLayers[0]?.FullExtent != null)
