@@ -258,10 +258,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private async Task SetViewExtentToItems()
         {
             Envelope graphicExtent = null;
-            if (graphicsOverlay.Graphics.Count > 0)
+            var geometries = graphicsOverlay.Graphics
+                .Where(graphic => graphic.Geometry != null && !graphic.Geometry.IsEmpty)
+                .Select(graphic => graphic.Geometry)
+                .ToList();
+            if (geometries.Count > 0)
             {
-                EnvelopeBuilder eb = new EnvelopeBuilder(GeometryEngine.CombineExtents(
-                    graphicsOverlay.Graphics.Select(graphic => graphic.Geometry)));
+                EnvelopeBuilder eb = new EnvelopeBuilder(GeometryEngine.CombineExtents(geometries));
                 eb.Expand(1.2);
                 graphicExtent = eb.Extent;
             }
