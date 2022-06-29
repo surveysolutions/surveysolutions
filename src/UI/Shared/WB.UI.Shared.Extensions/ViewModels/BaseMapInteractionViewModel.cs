@@ -247,7 +247,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     /*if (basemap?.BaseLayers[0]?.FullExtent != null)
                         await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);*/
                     
-                    LastMap = this.SelectedMap;
+                    if (LastMap != existingMap.MapName)
+                        LastMap = existingMap.MapName;
                 }
             }
         }
