@@ -358,18 +358,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (isDisposed)
                 return;
+            
             isDisposed = true;
             
             base.Dispose();
             
-            if(this.MapView?.LocationDisplay!= null )
+            if (this.MapView?.LocationDisplay != null)
                 this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
             
             if (this.MapView?.LocationDisplay?.DataSource != null)
                 this.MapView.LocationDisplay.DataSource.StatusChanged -= DataSourceOnStatusChanged;
             
-            if(this.Map != null)
+            if (this.Map != null)
                 this.Map.Loaded -= MapOnLoaded;
+            
+            this.MapView?.Dispose();
         }
     }
 }
