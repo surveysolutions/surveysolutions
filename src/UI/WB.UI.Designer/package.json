@@ -43,7 +43,7 @@
     "gulp-uglify": "^3.0.2",
     "gulp-vue-single-file-component": "^1.2.3",
     "jshint": "^2.13.4",
-    "merge2": "^1.4.1",    
+    "merge2": "^1.4.1",
     "npm-force-resolutions": "0.0.6",
     "plugin-error": "^1.0.1",
     "postcss": "^8.4.12",
@@ -56,8 +56,7 @@
     "dev": "gulp",
     "build": "gulp --production",
     "preproduction": "bower install --force",
-    "testDeploy": "powershell New-Item -Path ./bin/WB.UI.Designer/app_offline.htm; rimraf ./bin/WB.UI.Designer; New-Item -Path ./bin/WB.UI.Designer/app_offline.htm -ErrorAction SilentlyIgnore;gulp --production; dotnet publish --self-contained -r win-x64 -o ./bin/WB.UI.Designer -c Release; Remove-Item ./bin/WB.UI.Designer/app_offline.htm",
-    "preinstall": "npx npm-force-resolutions"
+    "testDeploy": "powershell New-Item -Path ./bin/WB.UI.Designer/app_offline.htm; rimraf ./bin/WB.UI.Designer; New-Item -Path ./bin/WB.UI.Designer/app_offline.htm -ErrorAction SilentlyIgnore;gulp --production; dotnet publish --self-contained -r win-x64 -o ./bin/WB.UI.Designer -c Release; Remove-Item ./bin/WB.UI.Designer/app_offline.htm"
   },
   "author": "",
   "license": "ISC",
@@ -106,7 +105,7 @@
     "ng-file-upload": "^12.2.13",
     "ng-i18next": "^1.0.6",
     "perfect-scrollbar": "^0.8.1",
-    "pnotify": "^3.2.1",    
+    "pnotify": "^3.2.1",
     "roboto-fontface": "^0.10.0",
     "underscore": "^1.13.4",
     "vee-validate": "2.2.15",
@@ -116,7 +115,7 @@
     "xss": "^1.0.13",
     "zebra_datepicker": "^1.9.19"
   },
-  "resolutions": {
+  "overrides": {
     "async": ">=3.2.3",
     "browserslist": ">=4.20.3",
     "chokidar": ">=3.5.3",
@@ -126,7 +125,7 @@
     "json-schema": ">=0.4.0",
     "merge": ">=2.1.1",
     "minimist": ">=1.2.6",
-    "postcss": ">=8.4.12",
+    "postcss": "^8.4.12",
     "set-value": ">=4.1.0",
     "svgo": "2.8.0",
     "trim-newlines": ">=3.0.1"
