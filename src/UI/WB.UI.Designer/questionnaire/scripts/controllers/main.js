@@ -622,12 +622,17 @@ angular.module('designerApp')
                     enableLiveAutocompletion: true
                 });
                 $scope.aceEditorUpdateMode(editor, editorType);
-                
-                $rootScope.$on('variablesChanged', function () {
+
+                const unbindEventHandler = $rootScope.$on('variablesChanged', function () {
                     $scope.aceEditorUpdateMode(editor, editorType);
                 });
 
                 setCommonAceOptions(editor);
+
+                // remove subscription on delete editor element
+                $(editor.container).on('$destroy', function () {
+                    unbindEventHandler();
+                });
             };
 
             $scope.getVariablesNames = function () {
