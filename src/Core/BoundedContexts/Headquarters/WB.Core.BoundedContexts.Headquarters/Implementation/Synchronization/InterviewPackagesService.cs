@@ -209,8 +209,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     var aggregateRootEvents = serviceLocator.GetInstance<IJsonAllTypesSerializer>()
                         .Deserialize<AggregateRootEvent[]>(interview.Events.Replace(@"\u0000", ""));
 
-                    var firstEvent = aggregateRootEvents.FirstOrDefault();
+                    this.logger.Debug($"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
+
+                    var packageTrackr = serviceLocator.GetInstance<IPlainStorageAccessor<ReceivedPackageLogEntry>>();
+                    AssertPackageNotDuplicated(packageTrackr, aggregateRootEvents);
+
+                    this.logger.Debug($"Interview events filtered duplicates by {interview.InterviewId}. Took {innerwatch.Elapsed:g}.");
+
                     var headquartersEventStore = serviceLocator.GetInstance<IHeadquartersEventStore>();
+                    if (interview.IsFullEventStream)
+                    {
+                        var hqEvents = headquartersEventStore.Read(interview.InterviewId, 0).ToList();
+                        if (hqEvents.Count > 0)
+                            aggregateRootEvents = aggregateRootEvents.FilterDuplicateEvents(hqEvents);
+                    }
+
+                    var firstEvent = aggregateRootEvents.FirstOrDefault();
                     if (firstEvent != null &&
                         firstEvent.Payload.GetType() != typeof(SynchronizationMetadataApplied) &&
                         headquartersEventStore
@@ -223,28 +237,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                             InterviewDomainExceptionType.PackageIsOudated);
                     }
 
-                    var packageTrackr = serviceLocator.GetInstance<IPlainStorageAccessor<ReceivedPackageLogEntry>>();
-
-                    AssertPackageNotDuplicated(packageTrackr, aggregateRootEvents);
-
-                    this.logger.Debug(
-                        $"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
-
-                    if (interview.IsFullEventStream)
-                    {
-                        var hqEvents = headquartersEventStore.Read(interview.InterviewId, 0).ToList();
-                        if (hqEvents.Count > 0)
-                            aggregateRootEvents = aggregateRootEvents.FilterDuplicateEvents(hqEvents);
-                    }
-
                     var serializedEvents = aggregateRootEvents
                         .Select(e => e.Payload)
                         .ToArray();
 
-                    this.logger.Debug(
-                        $"Interview events filtered duplicates by {interview.InterviewId}. Took {innerwatch.Elapsed:g}.");
                     innerwatch.Restart();
-
 
                     bool shouldChangeInterviewKey =
                         CheckIfInterviewKeyNeedsToBeChanged(interviewsLocal, interview.InterviewId, serializedEvents);

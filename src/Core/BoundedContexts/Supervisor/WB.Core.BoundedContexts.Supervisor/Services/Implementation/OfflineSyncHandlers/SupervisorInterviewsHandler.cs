@@ -120,18 +120,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             {
                 var aggregateRootEvents = this.serializer.Deserialize<AggregateRootEvent[]>(interview.Events);
 
-                var firstEvent = aggregateRootEvents.FirstOrDefault();
-
-                if (firstEvent != null &&
-                    firstEvent.Payload.GetType() != typeof(SynchronizationMetadataApplied) &&
-                    !request.Interview.FullEventStreamRequested && 
-                    eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1,
-                        interview.InterviewId, EventsThatChangeAnswersStateProvider.GetTypeNames()))
-                {
-                    throw new InterviewException("Provided interview package is outdated. New answers were given to the interview while interviewer had interview on a tablet", 
-                        InterviewDomainExceptionType.PackageIsOudated);
-                }
-
                 AssertPackageNotDuplicated(aggregateRootEvents);
 
                 if (request.Interview.FullEventStreamRequested)
@@ -139,6 +127,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     var svEvents = eventStore.Read(request.Interview.InterviewId, 0).ToList();
                     if (svEvents.Count > 0)
                         aggregateRootEvents = aggregateRootEvents.FilterDuplicateEvents(svEvents);
+                }
+
+                var firstEvent = aggregateRootEvents.FirstOrDefault();
+                if (firstEvent != null &&
+                    firstEvent.Payload.GetType() != typeof(SynchronizationMetadataApplied) &&
+                    eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1,
+                        interview.InterviewId, EventsThatChangeAnswersStateProvider.GetTypeNames()))
+                {
+                    throw new InterviewException("Provided interview package is outdated. New answers were given to the interview while interviewer had interview on a tablet", 
+                        InterviewDomainExceptionType.PackageIsOudated);
                 }
 
                 var serializedEvents = aggregateRootEvents

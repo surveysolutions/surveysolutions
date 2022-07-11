@@ -272,6 +272,7 @@ task PackageHqOffline frontend, {
     exec {
         dotnet publish @(
             "./src/UI/WB.UI.Headquarters.Core",
+			"/p:AspNetCoreHostingModel=outofprocess",
             "-p:Version=$VERSION",
             "-p:InformationalVersion=$infoVersion",
             "-c", "Release",
