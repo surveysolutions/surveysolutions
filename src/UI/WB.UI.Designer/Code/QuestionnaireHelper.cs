@@ -130,20 +130,20 @@ namespace WB.UI.Designer.Code
                 Title = x.Title,
                 IsDeleted = x.IsDeleted,
                 IsPublic = showPublic,
-                CanDelete = x.CreatedBy == viewerId && !x.IsDeleted,
+                CanDelete = x.OwnerId == viewerId && !x.IsDeleted,
                 CanExport = true,
                 CanCopy = true,
                 CanAssignFolder = showPublic && isAdmin,
-                CanOpen = (showPublic || x.CreatedBy == viewerId || x.SharedPersons.Any(s => s.UserId == viewerId)) && !x.IsDeleted,
+                CanOpen = (showPublic || x.OwnerId == viewerId || x.SharedPersons.Any(s => s.UserId == viewerId)) && !x.IsDeleted,
                 CanSynchronize = isAdmin,
                 CanExportToPdf = true,
                 CanExportToHtml = true,
                 Location = location != null
                            ? x.Title + "\r\n" + @QuestionnaireController.Location + QuestionnaireController.PublicQuestionnaires + " / " + location
                            : null,
-                Owner = x.CreatedBy == null
+                CreatedBy = x.CreatedBy == null
                     ? GlobalHelper.EmptyString
-                    : (x.CreatedBy == viewerId ? QuestionnaireController.You : x.CreatorName)
+                    : (x.CreatedBy == viewerId ? QuestionnaireController.You : x.CreatorName ?? x.Owner)
             };
 
         private QuestionnaireListViewModel GetFolder(QuestionnaireListViewFolder x, bool showPublic, string? location)
@@ -164,7 +164,7 @@ namespace WB.UI.Designer.Code
                 CanExportToPdf = false,
                 CanExportToHtml = false,
                 Location = location != null ? QuestionnaireController.Location + QuestionnaireController.PublicQuestionnaires + " / " + location : null,
-                Owner = GlobalHelper.EmptyString
+                CreatedBy = GlobalHelper.EmptyString
             };
 
 

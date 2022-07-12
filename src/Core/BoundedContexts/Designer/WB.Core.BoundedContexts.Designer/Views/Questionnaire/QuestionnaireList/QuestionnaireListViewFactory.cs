@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             return isAdmin
                 ? notDeletedQuestionnaires
                 : notDeletedQuestionnaires.Where(questionnaire =>
-                    questionnaire.CreatedBy == userId ||
+                    questionnaire.OwnerId == userId ||
                     questionnaire.SharedPersons.Any(person => person.UserId == userId) ||
                     questionnaire.IsPublic);
         }
@@ -51,13 +51,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                 FilterQuestionnaires(this.dbContext.Questionnaires.AsQueryable(), input, isSupportFolders: false)
                     .Select(x => new QuestionnaireListViewItem()
                     {
-                        CreatedBy = x.CreatedBy,
                         CreationDate = x.CreationDate,
+                        CreatedBy = x.CreatedBy,
                         CreatorName = x.CreatorName,
+                        OwnerId = x.OwnerId,
+                        Owner = x.Owner,
                         IsDeleted = x.IsDeleted,
                         IsPublic = x.IsPublic,
                         LastEntryDate = x.LastEntryDate,
-                        Owner = x.Owner,
                         PublicId = x.PublicId,
                         QuestionnaireId = x.QuestionnaireId,
                         Title = x.Title
@@ -111,6 +112,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                     questionnaireListViewItems
                         .Select(x => new QuestionnaireListViewItem
                         {
+                            OwnerId = x.OwnerId,
                             CreatedBy = x.CreatedBy,
                             CreationDate = x.CreationDate,
                             CreatorName = x.CreatorName,
@@ -207,10 +209,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
             result = result.Where(x =>
                    input.Type.HasFlag(QuestionnairesType.My) 
-                        && x.CreatedBy == input.ViewerId || 
+                        && x.OwnerId == input.ViewerId || 
                    
                    input.Type.HasFlag(QuestionnairesType.Shared) 
-                        && x.CreatedBy != input.ViewerId 
+                        && x.OwnerId != input.ViewerId 
                         && x.SharedPersons.Any(person => person.UserId == input.ViewerId) ||
                    
                    input.Type.HasFlag(QuestionnairesType.Public) 
