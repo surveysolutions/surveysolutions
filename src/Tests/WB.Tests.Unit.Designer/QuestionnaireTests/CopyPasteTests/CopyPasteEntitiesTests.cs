@@ -156,5 +156,73 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
             Assert.That(object.ReferenceEquals(copy.ValidationConditions[0], staticText.ValidationConditions[0]), Is.False);
         }
         
+        [Test]
+        public void when_copy_variable_from_cover_to_cover_page()
+        {
+            var responsibleId = Id.gA;
+            var questionnaireId = Id.gC;
+            var variableId = Id.g1;
+            var secondVariableId = Id.g2;
+
+            var questionnaire = CreateQuestionnaireWithCover(questionnaireId: questionnaireId, responsibleId: responsibleId,
+                children: new IComposite[]
+                {
+                    Create.Variable(variableId),
+                });
+
+            var command = Create.Command.PasteInto(
+                questionnaireId: questionnaireId,
+                entityId: secondVariableId, 
+                sourceItemId: variableId,
+                responsibleId: responsibleId,
+                sourceQuestionnaireId: questionnaireId,
+                targetParentId: questionnaire.QuestionnaireDocument.CoverPageSectionId);
+
+            command.SourceDocument = questionnaire.QuestionnaireDocument;
+            
+            questionnaire.PasteInto(command);
+
+            var cover = questionnaire.QuestionnaireDocument.Children.First();
+            Assert.That(cover, Is.Not.Null);
+            Assert.That(cover.Children.Count, Is.EqualTo(2));
+            Assert.That(cover.Children.Count(e => e is IVariable), Is.EqualTo(2));
+            Assert.That(cover.Children[0].PublicKey, Is.EqualTo(variableId));
+            Assert.That(cover.Children[1].PublicKey, Is.EqualTo(secondVariableId));
+        }
+        
+        [Test]
+        public void when_copy_variable_from_chapter_to_cover_page()
+        {
+            var responsibleId = Id.gA;
+            var questionnaireId = Id.gC;
+            var variableId = Id.g1;
+            var secondVariableId = Id.g2;
+
+            var questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: questionnaireId, 
+                responsibleId: responsibleId);
+            questionnaire.QuestionnaireDocument.Add(
+                Create.Chapter(children: new List<IComposite>
+                {
+                    Create.Variable(variableId),
+                }), questionnaireId);
+
+            var command = Create.Command.PasteInto(
+                questionnaireId: questionnaireId,
+                entityId: secondVariableId, 
+                sourceItemId: variableId,
+                responsibleId: responsibleId,
+                sourceQuestionnaireId: questionnaireId,
+                targetParentId: questionnaire.QuestionnaireDocument.CoverPageSectionId);
+
+            command.SourceDocument = questionnaire.QuestionnaireDocument;
+            
+            questionnaire.PasteInto(command);
+
+            var cover = questionnaire.QuestionnaireDocument.Children.First();
+            Assert.That(cover, Is.Not.Null);
+            Assert.That(cover.Children.Count, Is.EqualTo(1));
+            Assert.That(cover.Children.Count(e => e is IVariable), Is.EqualTo(1));
+            Assert.That(cover.Children[0].PublicKey, Is.EqualTo(secondVariableId));
+        }
     }
 }
