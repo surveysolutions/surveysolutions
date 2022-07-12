@@ -69,7 +69,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.BindAsSingleton<ICalendarEventStorage, CalendarEventStorage>();
             registry.Bind<ICalendarEventRemoval, CalendarEventRemoval>();
             
-            registry.Bind<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
+            registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();
 
             registry.BindToConstant(() => new SqliteSettings

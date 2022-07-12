@@ -319,7 +319,10 @@
           "type": "string"
         },
         "Code": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "format": "int32"
         }
       }
@@ -730,8 +733,11 @@
       "additionalProperties": false,
       "properties": {
         "Value": {
-          "type": "number",
-          "format": "decimal"
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "int32"
         },
         "Title": {
           "type": [

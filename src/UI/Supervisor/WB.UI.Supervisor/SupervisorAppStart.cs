@@ -47,29 +47,7 @@ namespace WB.UI.Supervisor
 
             this.migrationRunner.MigrateUp("Supervisor", this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
-            this.CheckAndProcessInterviews();
             return base.ApplicationStartup(hint);
-        }
-
-        private void CheckAndProcessInterviews()
-        {
-            var workspaces = workspaceService.GetAll();
-            foreach (var workspace in workspaces)
-            {
-                var workspaceAccessor = new SingleWorkspaceAccessor(workspace.Name);
-                using var workspaceLifetimeScope = lifetimeScope.BeginLifetimeScope(cb =>
-                {
-                    cb.Register(c => workspaceAccessor).As<IWorkspaceAccessor>().SingleInstance();
-                });
-
-                var settings = workspaceLifetimeScope.Resolve<IEnumeratorSettings>();
-                if (settings.DashboardViewsUpdated) return;
-
-                var interviewsAccessor = workspaceLifetimeScope.Resolve<IInterviewerInterviewAccessor>();
-                interviewsAccessor.CheckAndProcessInterviewsToFixViews();
-
-                settings.SetDashboardViewsUpdated(true);
-            }
         }
 
         protected override Task NavigateToFirstViewModel(object hint = null)

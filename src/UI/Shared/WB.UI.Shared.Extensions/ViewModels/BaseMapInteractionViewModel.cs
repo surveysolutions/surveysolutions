@@ -106,14 +106,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
         
         public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async () =>
         {
-            if (IsLocationServiceSwitchEnabled)
+            if (!IsLocationServiceSwitchEnabled)
                 return;
 
             //try to workaround Esri crash with location service
             //Esri case 02209395
             try
             {
-                IsLocationServiceSwitchEnabled = true;
+                IsLocationServiceSwitchEnabled = false;
 
                 if (!this.MapView.LocationDisplay.IsEnabled)
                     this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
@@ -227,19 +227,28 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     this.Map.Basemap = baseMap;
 
-                    if (baseMap?.BaseLayers.Count > 0 && baseMap?.BaseLayers[0]?.FullExtent != null && this.MapView?.VisibleArea != null)
+                    if (baseMap?.BaseLayers.Count > 0 && baseMap?.BaseLayers[0]?.FullExtent != null)
                     {
-                        var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea,
-                            baseMap.BaseLayers[0].SpatialReference);
+                        await InvokeOnMainThreadAsync(() =>
+                        {
+                            if (this.MapView?.VisibleArea != null)
+                            {
+                                var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea,
+                                    baseMap.BaseLayers[0].SpatialReference);
 
-                        if (projectedArea!= null && !GeometryEngine.Intersects(baseMap.BaseLayers[0].FullExtent, projectedArea))
-                            this.userInteractionService.ShowToast(UIResources.AreaMap_MapIsOutOfVisibleBoundaries);
+                                if (projectedArea != null &&
+                                    !GeometryEngine.Intersects(baseMap.BaseLayers[0].FullExtent, projectedArea))
+                                    this.userInteractionService.ShowToast(UIResources
+                                        .AreaMap_MapIsOutOfVisibleBoundaries);
+                            }
+                        });
                     }
 
                     /*if (basemap?.BaseLayers[0]?.FullExtent != null)
                         await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);*/
                     
-                    LastMap = this.SelectedMap;
+                    if (LastMap != existingMap.MapName)
+                        LastMap = existingMap.MapName;
                 }
             }
         }
@@ -349,18 +358,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (isDisposed)
                 return;
+            
             isDisposed = true;
             
             base.Dispose();
             
-            if(this.MapView?.LocationDisplay!= null )
+            if (this.MapView?.LocationDisplay != null)
                 this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
             
             if (this.MapView?.LocationDisplay?.DataSource != null)
                 this.MapView.LocationDisplay.DataSource.StatusChanged -= DataSourceOnStatusChanged;
             
-            if(this.Map != null)
+            if (this.Map != null)
                 this.Map.Loaded -= MapOnLoaded;
+            
+            this.MapView?.Dispose();
         }
     }
 }

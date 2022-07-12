@@ -73,6 +73,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             return questionnaire;
         }
 
+        public static Questionnaire CreateQuestionnaireWithCover(Guid responsibleId, Guid? questionnaireId = null, string text = "text of questionnaire",
+            params IComposite[] children)
+        {
+            var id = questionnaireId ?? Guid.NewGuid();
+            var questionnaireDocument = Create.QuestionnaireDocumentWithCoverPage(id, children);
+            var questionnaire = Create.Questionnaire(responsibleId, questionnaireDocument);
+            return questionnaire;
+        }
+
         public static Questionnaire CreateQuestionnaireWithOneQuestionAndOneImage(Guid questionKey, Guid imageKey, Guid responsibleId)
         {
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: questionKey,
