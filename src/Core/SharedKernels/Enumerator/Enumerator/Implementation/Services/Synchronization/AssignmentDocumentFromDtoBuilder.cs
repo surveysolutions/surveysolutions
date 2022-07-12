@@ -54,18 +54,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         private void FillAnswers(AssignmentApiDocument remote, IQuestionnaire questionnaire, AssignmentDocument local)
         {
-            var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
+            var identifyingQuestionIds = questionnaire.GetPrefilledQuestions();
 
             local.LocationLatitude = remote.LocationLatitude;
             local.LocationLongitude = remote.LocationLongitude;
             local.LocationQuestionId = remote.LocationQuestionId;
 
             var answers = new List<AssignmentDocument.AssignmentAnswer>();
-            var identiAnswers = new List<AssignmentDocument.AssignmentAnswer>();
+            var identifyingAnswers = new List<AssignmentDocument.AssignmentAnswer>();
 
             foreach (var answer in remote.Answers)
             {
-                var isIdentifying = identifyingQuestionIds.Contains(answer.Identity.Id);
+                var indexOfIdentifying = identifyingQuestionIds.IndexOf(answer.Identity.Id);
+                var isIdentifying = indexOfIdentifying >= 0;
 
                 var assignmentAnswer = new AssignmentDocument.AssignmentAnswer
                 {
@@ -73,7 +74,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Identity = answer.Identity,
                     SerializedAnswer = answer.SerializedAnswer,
                     Question = isIdentifying ? questionnaire.GetQuestionTitle(answer.Identity.Id) : null,
-                    IsIdentifying = isIdentifying
+                    IsIdentifying = isIdentifying,
+                    SortOrder = isIdentifying ? indexOfIdentifying : null,
                 };
 
                 if (isIdentifying && questionnaire.GetQuestionType(answer.Identity.Id) != QuestionType.GpsCoordinates)
@@ -82,14 +84,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     var answerAsString = this.answerToStringConverter.Convert(abstractAnswer?.ToString(), answer.Identity.Id, questionnaire);
                     assignmentAnswer.AnswerAsString = answerAsString;
 
-                    identiAnswers.Add(assignmentAnswer);
+                    identifyingAnswers.Add(assignmentAnswer);
                 }
 
                 answers.Add(assignmentAnswer);
             }
 
             local.Answers = answers;
-            local.IdentifyingAnswers = identiAnswers;
+            local.IdentifyingAnswers = identifyingAnswers.OrderBy(a => a.SortOrder).ToList();
         }
     }
 }

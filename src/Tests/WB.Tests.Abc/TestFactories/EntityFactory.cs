@@ -842,6 +842,24 @@ namespace WB.Tests.Abc.TestFactories
             Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
         }.WithEntityMap();
         
+        public QuestionnaireDocument QuestionnaireDocumentWithCover(Guid? id = null,
+            Guid? coverId = null,
+            params IComposite[] children)
+        {
+            var document = new QuestionnaireDocument
+            {
+                HideIfDisabled = true,
+                PublicKey = id ?? Guid.NewGuid(),
+                Title = "<Untitled>",
+                Children = children?.ToReadOnlyCollection() ??
+                                                     new ReadOnlyCollection<IComposite>(new List<IComposite>())
+            }.WithEntityMap();
+            var cover = document.Children.First();
+            ((Group)cover).PublicKey = coverId ?? Guid.NewGuid();
+            document.CoverPageSectionId = cover.PublicKey;
+            return document;
+        }
+
         public QuestionnaireDocument QuestionnaireDocumentWithHideIfDisabled(Guid? id = null, bool hideIfDisabled = true, params IComposite[] children) => new QuestionnaireDocument
         {
             HideIfDisabled = hideIfDisabled,
@@ -1856,7 +1874,7 @@ namespace WB.Tests.Abc.TestFactories
                 _entity = entity;
             }
 
-            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false, string serializedAnswer = null)
+            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false, string serializedAnswer = null, int? sortOrder = null)
             {
                 this._entity.Answers = this._entity.Answers ?? new List<AssignmentDocument.AssignmentAnswer>();
                 this._entity.IdentifyingAnswers = this._entity.IdentifyingAnswers ?? new List<AssignmentDocument.AssignmentAnswer>();
@@ -1867,7 +1885,8 @@ namespace WB.Tests.Abc.TestFactories
                     AnswerAsString = answer,
                     IsIdentifying = identifying,
                     SerializedAnswer = serializedAnswer,
-                    Identity = identity
+                    Identity = identity,
+                    SortOrder = sortOrder
                 };
 
                 this._entity.Answers.Add(assignmentAnswer);
