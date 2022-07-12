@@ -109,7 +109,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaireListViewItem.CreationDate = creationDate ?? document.CreationDate;
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
             questionnaireListViewItem.OwnerId = creatorId.GetValueOrDefault();
-            questionnaireListViewItem.CreatedBy = creatorId.GetValueOrDefault();
             questionnaireListViewItem.IsPublic = isPublic ?? document.IsPublic;
             questionnaireListViewItem.Owner = null;
             questionnaireListViewItem.CreatorName = string.Empty;
@@ -159,7 +158,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 CreationDate = creationDate,
                 LastEntryDate = creationDate,
                 OwnerId = command.ResponsibleId,
-                CreatedBy = command.ResponsibleId,
                 CreatorName = userName,
                 Owner = userName,
                 IsPublic = command.IsPublic,

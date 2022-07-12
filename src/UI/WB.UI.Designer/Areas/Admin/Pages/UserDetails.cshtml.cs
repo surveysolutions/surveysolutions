@@ -80,10 +80,10 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             var account = await this.users.FindByIdAsync(id.FormatGuid());
             if (account == null) return NotFound();
 
-            var ownedQuestionnaires = this.questionnaireHelper.GetMyQuestionnairesByViewerId(viewerId: id,
+            var ownedQuestionnaires = this.questionnaireHelper.GetMyQuestionnairesByViewerId(account,
                 isAdmin: User.IsAdmin(), folderId: null);
 
-            var sharedQuestionnaires = this.questionnaireHelper.GetSharedQuestionnairesByViewerId(viewerId: id,
+            var sharedQuestionnaires = this.questionnaireHelper.GetSharedQuestionnairesByViewer(account,
                 isAdmin: User.IsAdmin(), folderId: null);
 
             ownedQuestionnaires.ToList().ForEach(x =>

@@ -19,8 +19,6 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
 
             builder.Property(e => e.OwnerId).IsRequired(false).HasColumnName("ownerid");
             
-            builder.Property(e => e.CreatedBy).IsRequired(false).HasColumnName("createdby");
-
             builder.Property(e => e.CreationDate).HasColumnName("creationdate");
 
             builder.Property(e => e.CreatorName).HasColumnName("creatorname");

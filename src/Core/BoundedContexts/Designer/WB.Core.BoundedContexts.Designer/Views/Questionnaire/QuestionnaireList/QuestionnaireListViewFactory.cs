@@ -52,7 +52,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                     .Select(x => new QuestionnaireListViewItem()
                     {
                         CreationDate = x.CreationDate,
-                        CreatedBy = x.CreatedBy,
                         CreatorName = x.CreatorName,
                         OwnerId = x.OwnerId,
                         Owner = x.Owner,
@@ -113,7 +112,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                         .Select(x => new QuestionnaireListViewItem
                         {
                             OwnerId = x.OwnerId,
-                            CreatedBy = x.CreatedBy,
                             CreationDate = x.CreationDate,
                             CreatorName = x.CreatorName,
                             IsDeleted = x.IsDeleted,

@@ -63,12 +63,12 @@ namespace WB.UI.Designer.Code
             this.importExportQuestionnaireMapper = importExportQuestionnaireMapper;
         }
 
-        public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(Guid viewerId, bool isAdmin, QuestionnairesType type, Guid? folderId,
+        public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(DesignerIdentityUser viewer, bool isAdmin, QuestionnairesType type, Guid? folderId,
             int? pageIndex = null, string? sortBy = null, int? sortOrder = null, string? searchFor = null)
         {
             QuestionnaireListView model = this.viewFactory.LoadFoldersAndQuestionnaires(new QuestionnaireListInputModel
             {
-                ViewerId = viewerId,
+                ViewerId = viewer.Id,
                 Type = type,
                 IsAdminMode = isAdmin,
                 Page = pageIndex ?? 1,
@@ -88,7 +88,7 @@ namespace WB.UI.Designer.Code
                         var questLocation = item.Folder != null && locations.ContainsKey(item.Folder.PublicId) 
                                             ? locations[item.Folder.PublicId] 
                                             : null;
-                        return this.GetQuestionnaire(item, viewerId, isAdmin, showPublic, questLocation);
+                        return this.GetQuestionnaire(item, viewer.Id, viewer.UserName, isAdmin, showPublic, questLocation);
                     }
 
                     var folderLocation = locations.ContainsKey(x.PublicId) ? locations[x.PublicId] : null;
@@ -114,13 +114,13 @@ namespace WB.UI.Designer.Code
             return locations.ToDictionary(k => k.PublicId, v => v.Location);
         }
 
-        public IPagedList<QuestionnaireListViewModel> GetMyQuestionnairesByViewerId(Guid viewerId, bool isAdmin, Guid? folderId = null)
-            => GetQuestionnaires(viewerId: viewerId, isAdmin: isAdmin, type: QuestionnairesType.My, folderId: folderId);
+        public IPagedList<QuestionnaireListViewModel> GetMyQuestionnairesByViewerId(DesignerIdentityUser viewer, bool isAdmin, Guid? folderId = null)
+            => GetQuestionnaires(viewer: viewer, isAdmin: isAdmin, type: QuestionnairesType.My, folderId: folderId);
 
-        public IPagedList<QuestionnaireListViewModel> GetSharedQuestionnairesByViewerId(Guid viewerId, bool isAdmin, Guid? folderId)
-            => this.GetQuestionnaires(viewerId: viewerId, isAdmin: isAdmin, type: QuestionnairesType.Shared, folderId: folderId);
+        public IPagedList<QuestionnaireListViewModel> GetSharedQuestionnairesByViewer(DesignerIdentityUser viewer, bool isAdmin, Guid? folderId)
+            => this.GetQuestionnaires(viewer: viewer, isAdmin: isAdmin, type: QuestionnairesType.Shared, folderId: folderId);
 
-        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, 
+        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, string viewerName,
             bool isAdmin, bool showPublic, string? location)
             => new QuestionnaireListViewModel
             {
@@ -141,9 +141,9 @@ namespace WB.UI.Designer.Code
                 Location = location != null
                            ? x.Title + "\r\n" + @QuestionnaireController.Location + QuestionnaireController.PublicQuestionnaires + " / " + location
                            : null,
-                CreatedBy = x.CreatedBy == null
+                CreatedBy = string.IsNullOrEmpty(x.CreatorName)
                     ? GlobalHelper.EmptyString
-                    : (x.CreatedBy == viewerId ? QuestionnaireController.You : x.CreatorName ?? x.Owner)
+                    : (x.CreatorName == viewerName ? QuestionnaireController.You : x.CreatorName)
             };
 
         private QuestionnaireListViewModel GetFolder(QuestionnaireListViewFolder x, bool showPublic, string? location)
