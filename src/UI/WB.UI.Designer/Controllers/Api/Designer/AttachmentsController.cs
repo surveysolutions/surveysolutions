@@ -39,6 +39,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [Route("thumbnail/{id:Guid}", Name = "AttachmentThumbnail")]
         public IActionResult Thumbnail(Guid id)
         {
