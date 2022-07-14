@@ -61,49 +61,58 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 bool shouldEncode = true;
 
                 var treeEntity = tree.FindEntityInQuestionBranch(substitution.Id, this.identity);
-                if (treeEntity != null && !treeEntity.IsDisabled())
+                if (treeEntity != null)
                 {
-                    switch (treeEntity)
+                    var isDisabled = treeEntity.IsDisabled();
+                    if (isDisabled && treeEntity is InterviewTreeRoster interviewTreeRoster)
                     {
-                        case InterviewTreeRoster roster:
-                            plainSubstitutionResult = roster.RosterTitle;
-                            browserSubstitutionResult = plainSubstitutionResult;
-                            break;
+                        plainSubstitutionResult = interviewTreeRoster.RosterTitle;
+                        browserSubstitutionResult = plainSubstitutionResult;
+                    }
+                    else if (!isDisabled)
+                    {
+                        switch (treeEntity)
+                        {
+                            case InterviewTreeRoster roster:
+                                plainSubstitutionResult = roster.RosterTitle;
+                                browserSubstitutionResult = plainSubstitutionResult;
+                                break;
 
-                        case InterviewTreeVariable variable:
-                            plainSubstitutionResult = this.variableToUiStringService.VariableToUIString(variable.Value);
-                            browserSubstitutionResult = plainSubstitutionResult;
-                            break;
+                            case InterviewTreeVariable variable:
+                                plainSubstitutionResult = this.variableToUiStringService.VariableToUIString(variable.Value);
+                                browserSubstitutionResult = plainSubstitutionResult;
+                                break;
 
-                        case InterviewTreeQuestion question:
-                            string answerString = question.GetAnswerAsString(CultureInfo.CurrentCulture);
-                            shouldEncode = false;
+                            case InterviewTreeQuestion question:
+                                string answerString = question.GetAnswerAsString(CultureInfo.CurrentCulture);
+                                shouldEncode = false;
 
-                            plainSubstitutionResult = SubstitutionResult(false);
-                            browserSubstitutionResult = SubstitutionResult(true);
+                                plainSubstitutionResult = SubstitutionResult(false);
+                                browserSubstitutionResult = SubstitutionResult(true);
 
-                            string SubstitutionResult(bool shouldAddBrowserTags)
-                            {
-                                string result;
-
-                                if (shouldAddBrowserTags && question.IsDateTime && question.IsAnswered())
+                                string SubstitutionResult(bool shouldAddBrowserTags)
                                 {
-                                    var asDateTime = question.GetAsInterviewTreeDateTimeQuestion();
-                                    var dateTime = asDateTime.GetAnswer().Value;
+                                    string result;
 
-                                    result = asDateTime.IsTimestamp
-                                        ? $"<time datetime=\"{dateTime:O}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>"
-                                        : $"<time date=\"{dateTime:yyyy-MM-dd}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>";
+                                    if (shouldAddBrowserTags && question.IsDateTime && question.IsAnswered())
+                                    {
+                                        var asDateTime = question.GetAsInterviewTreeDateTimeQuestion();
+                                        var dateTime = asDateTime.GetAnswer().Value;
+
+                                        result = asDateTime.IsTimestamp
+                                            ? $"<time datetime=\"{dateTime:O}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>"
+                                            : $"<time date=\"{dateTime:yyyy-MM-dd}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>";
+                                    }
+                                    else
+                                    {
+                                        result = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString ?? string.Empty) : answerString;
+                                    }
+
+                                    return result;
                                 }
-                                else
-                                {
-                                    result = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString ?? string.Empty) : answerString;
-                                }
 
-                                return result;
-                            }
-
-                            break;
+                                break;
+                        }
                     }
                 }
                 
