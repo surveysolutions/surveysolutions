@@ -1574,7 +1574,7 @@ namespace WB.Tests.Unit.Designer
             SharedPerson[] sharedPersons = null)
         {
             return new QuestionnaireListViewItem() {
-                CreatedBy = createdBy.GetValueOrDefault(),
+                OwnerId = createdBy.GetValueOrDefault(),
                 IsPublic = isPublic,
                 PublicId = id,
                 Title = title,

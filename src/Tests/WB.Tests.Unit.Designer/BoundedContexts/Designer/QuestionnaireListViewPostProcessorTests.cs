@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireListViewItem, Is.Not.Null);
             Assert.That(questionnaireListViewItem.Title, Is.EqualTo(command.Title));
             Assert.That(questionnaireListViewItem.IsPublic, Is.EqualTo(command.IsPublic));
-            Assert.That(questionnaireListViewItem.CreatedBy, Is.EqualTo(command.ResponsibleId));
+            Assert.That(questionnaireListViewItem.OwnerId, Is.EqualTo(command.ResponsibleId));
             Assert.That(questionnaireListViewItem.CreatorName, Is.EqualTo(userName));
         }
 
@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireListViewItem, Is.Not.Null);
             Assert.That(questionnaireListViewItem.Title, Is.EqualTo(command.Title));
             Assert.That(questionnaireListViewItem.IsPublic, Is.EqualTo(command.IsPublic));
-            Assert.That(questionnaireListViewItem.CreatedBy, Is.EqualTo(command.ResponsibleId));
+            Assert.That(questionnaireListViewItem.OwnerId, Is.EqualTo(command.ResponsibleId));
         }
 
         [Test]
@@ -239,7 +239,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             // assert
             var questionnaireListViewItem = dbContext.Questionnaires.Find(questionnaireIdFormatted);
 
-            Assert.That(questionnaireListViewItem.CreatedBy, Is.EqualTo(sharedWith.Id));
+            Assert.That(questionnaireListViewItem.OwnerId, Is.EqualTo(sharedWith.Id));
 
             Assert.That(questionnaireListViewItem.SharedPersons.Single(), Has.Property(nameof(SharedPerson.UserId)).EqualTo(questionnaireOwner.Id));
             Assert.That(questionnaireListViewItem.SharedPersons.Single(), Has.Property(nameof(SharedPerson.ShareType)).EqualTo(ShareType.Edit));
@@ -382,7 +382,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             // assert
             var questionnaireListViewItem = dbContext.Questionnaires.Find(questionnaireId.FormatGuid());
             Assert.That(questionnaireListViewItem, Is.Not.Null);
-            Assert.That(questionnaireListViewItem.CreatedBy, Is.EqualTo(command.ResponsibleId));
+            Assert.That(questionnaireListViewItem.OwnerId, Is.EqualTo(command.ResponsibleId));
             Assert.That(questionnaireListViewItem.CreatorName, Is.EqualTo(userName2));
             Assert.That(questionnaireListViewItem.SharedPersons.Count(p => p.IsOwner), Is.EqualTo(1));
             Assert.That(questionnaireListViewItem.SharedPersons.Single(p => p.IsOwner).UserId, Is.EqualTo(userId2));

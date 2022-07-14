@@ -185,7 +185,7 @@ namespace WB.UI.Designer.Controllers
             if (questionnaireListItem == null)
                 return false;
 
-            if (questionnaireListItem.CreatedBy == userId)
+            if (questionnaireListItem.OwnerId == userId)
                 return true;
 
             if (questionnaireListItem.IsPublic)
