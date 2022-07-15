@@ -281,6 +281,9 @@ namespace WB.UI.Designer
             }
 
             app.UseResponseCompression();
+            
+            app.UsePdfCssResolver();
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -294,8 +297,6 @@ namespace WB.UI.Designer
             });
             app.UseSpaStaticFiles();
             
-            app.UsePdfCssResolver();
-
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
