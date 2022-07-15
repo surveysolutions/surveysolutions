@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.SpaServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +35,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Files;
+using WB.UI.Designer.Areas.Pdf.Controllers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Code.Implementation;
@@ -287,10 +289,13 @@ namespace WB.UI.Designer
                     {
                         ctx.Context.Response.Headers.Append("Cache-Control", "public, max-age=31536000");
                     }
-                }
+                },
+                
             });
             app.UseSpaStaticFiles();
             
+            app.UsePdfCssResolver();
+
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
