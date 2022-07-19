@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (value is string stringValue)
             {
-                this.Value = WebUtility.HtmlEncode(stringValue.RemoveControlChars());
+                this.Value = stringValue.RemoveControlChars();
             }
             else
             {
@@ -58,5 +58,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return AnswerUtils.AnswerToString(Value, isTimestamp: false);
         }
+        
+        public string GetValueAsStringBrowserReady()
+        {
+            var valueAsString = GetValueAsString();
+            return valueAsString == null? null : WebUtility.HtmlEncode(valueAsString);
+        }
+        
     }
 }
