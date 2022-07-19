@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Net;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
@@ -27,7 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (value is string stringValue)
             {
-                this.Value = stringValue.RemoveControlChars();
+                this.Value = WebUtility.HtmlEncode(stringValue.RemoveControlChars());
             }
             else
             {
