@@ -1998,7 +1998,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             markdownTransformationCache.GetOrAdd(text, s =>
             {
                 if (s == null) return null;
-                var singleLined = s.Replace("\n", "<br>").Replace("\r", "");
+                var singleLined = s.Replace("\n", " ").Replace("\r", "");
                 var transform = QuestionnaireMarkdown.ToHtml(singleLined);
                 if (singleLined.Equals(transform, StringComparison.Ordinal))
                 {
