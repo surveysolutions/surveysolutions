@@ -325,7 +325,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
                 return NewButtonState(new ButtonState
                 {
-                    Title = firstSection.Title.Text,
+                    Title = firstSection.Title.BrowserReadyText,
                     Type = ButtonType.Start
                 }, firstSection);
             }
@@ -340,7 +340,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
                 return NewButtonState(new ButtonState
                 {
-                    Title = parentGroup.Title.Text,
+                    Title = parentGroup.Title.BrowserReadyText,
                     RosterTitle = callerQuestionnaire.HasCustomRosterTitle(parent.Id) ? null : parentRoster?.RosterTitle,
                     Type = ButtonType.Parent
                 }, parentGroup);
@@ -361,7 +361,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             return NewButtonState(new ButtonState
             {
-                Title = statefulInterview.GetGroup(nextSectionId).Title.Text,
+                Title = statefulInterview.GetGroup(nextSectionId).Title.BrowserReadyText,
                 Type = ButtonType.Next
             }, statefulInterview.GetGroup(nextSectionId));
         }
@@ -395,7 +395,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     var treeGroup = statefulInterview.GetGroup(itemIdentity);
                     var breadCrumb = new Breadcrumb
                     {
-                        Title = treeGroup.Title.Text,
+                        Title = treeGroup.Title.BrowserReadyText,
                         RosterTitle = (treeGroup as InterviewTreeRoster)?.RosterTitle,
                         Target = itemIdentity.ToString(),
                         IsRoster = true,
@@ -415,7 +415,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
                     var breadCrumb = new Breadcrumb
                     {
-                        Title = statefulInterview.GetGroup(itemIdentity).Title.Text,
+                        Title = statefulInterview.GetGroup(itemIdentity).Title.BrowserReadyText,
                         Target = itemIdentity.ToString()
                     };
 
@@ -444,7 +444,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             var info = new BreadcrumbInfo
             {
-                Title = currentTreeGroup.Title.Text,
+                Title = currentTreeGroup.Title.BrowserReadyText,
                 RosterTitle = (currentTreeGroupAsRoster)?.RosterTitle,
                 Breadcrumbs = breadCrumbs.ToArray(),
                 Status = this.interviewEntityFactory.CalculateSimpleStatus(currentTreeGroup, IsReviewMode(), statefulInterview, questionnaire),
