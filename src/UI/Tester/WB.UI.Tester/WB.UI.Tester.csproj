@@ -262,7 +262,7 @@
       <Version>2.8.26</Version>
     </PackageReference>
     <PackageReference Include="Markdig">
-      <Version>0.23.0</Version>
+      <Version>0.30.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Analytics">
       <Version>4.4.0</Version>

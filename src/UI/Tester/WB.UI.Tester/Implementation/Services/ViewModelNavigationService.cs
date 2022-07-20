@@ -1,9 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Android.Content;
-using MvvmCross.Navigation;
-using MvvmCross.Platforms.Android;
-using MvvmCross.Plugin.Messenger;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -12,7 +9,6 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Tester.Activities;
 
