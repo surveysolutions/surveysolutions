@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.VariableName = CommandUtils.SanitizeHtml(commonQuestionParameters.VariableName, removeAllTags: true);
             this.EnablementCondition = commonQuestionParameters.EnablementCondition ?? string.Empty;
             this.HideIfDisabled = commonQuestionParameters.HideIfDisabled;
-            this.Instructions = CommandUtils.SanitizeHtml(commonQuestionParameters.Instructions, removeAllTags: true);
+            this.Instructions = CommandUtils.SanitizeHtml(commonQuestionParameters.Instructions);
             this.Properties = new QuestionProperties(commonQuestionParameters.HideInstructions, false)
             {
                 OptionsFilterExpression = commonQuestionParameters.OptionsFilterExpression,
