@@ -130,10 +130,10 @@
     <value>Nastavení účtu</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Schváleno garantem</value>
+    <value>Schváleno Garantem</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
-    <value>Dokončeno</value>
+    <value>Dokončené</value>
   </data>
   <data name="InterviewStatus_Created" xml:space="preserve">
     <value>Vytvořeno</value>
@@ -142,12 +142,144 @@
     <value>Smazáno</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>Zamítnuto garantem</value>
+    <value>Vráceno Garantem</value>
   </data>
   <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
     <value>Změna hesla</value>
   </data>
   <data name="WithErrors" xml:space="preserve">
     <value>S chybami</value>
+  </data>
+  <data name="AllInterviewers" xml:space="preserve">
+    <value>Všichni tazatelé</value>
+  </data>
+  <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+    <value>Neschváleno Ústředím</value>
+  </data>
+  <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+    <value>Nepřiřazeno tazateli</value>
+  </data>
+  <data name="AllPeriods" xml:space="preserve">
+    <value>Všechna období</value>
+  </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>Všechny typy</value>
+  </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>Všechny týmy</value>
+  </data>
+  <data name="AnyHeadquarters" xml:space="preserve">
+    <value>jakékoli Ústředí</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Dotazníky</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Průměr</value>
+  </data>
+  <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+    <value>Odpověď na otázku nelze analyzovat</value>
+  </data>
+  <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+    <value>Stav nastavený týmem podpory Survey Solutions</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Počet dní</value>
+  </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+    <value>Heslo pro účet &lt;b&gt;{0}&lt;/b&gt; bylo úspěšně aktualizováno</value>
+  </data>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
+    <value>Informace o účtu byly úspěšně aktualizovány</value>
+  </data>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+    <value>Informace o &lt;b&gt;{0}&lt;/b&gt; byly úspěšně aktualizovány</value>
+  </data>
+  <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
+    <value>Deaktivace dvoufaktorového ověření</value>
+  </data>
+  <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
+    <value>Nastavit aplikaci k ověření</value>
+  </data>
+  <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
+    <value>Resetovat ověřovací klíč</value>
+  </data>
+  <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
+    <value>Resetovat obnovovací kódy</value>
+  </data>
+  <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
+    <value>Obnovovací kódy</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
+    <value>Dvoufaktorové ověření je pokročilá bezpečnostní funkce, která hackerovi ztěžuje přihlášení k Vašemu účtu pouze pomocí odcizeného hesla.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
+    <value>Deaktivace dvoufaktorového ověření, což zanechá účet chráněný pouze heslem.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
+    <value>neaktivní</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
+    <value>aktivní</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
+    <value>Pokud dojde ke ztrátě nebo odcizení některého z Vašich zařízení používaných pro dvoufaktorové ověření, proveďte reset k získání nového tajného kódu.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
+    <value>Zrušte platnost všech nepoužitých obnovovacích kódů a vygenerujte 10 nových.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
+    <value>Nastavení nového zařízení pro dvoufaktorové ověření. Můžete nastavit i několik zařízení současně.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
+    <value>Dvoufaktorové ověření</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Rozhovory</value>
+  </data>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Schváleno Ústředím</value>
+  </data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Tazatel přidělen</value>
+  </data>
+  <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
+    <value>Připraven na rozhovor</value>
+  </data>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Vráceno Ústředím</value>
+  </data>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Restartováno</value>
+  </data>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Obnoveno</value>
+  </data>
+  <data name="InterviewStatus_SentToCapi" xml:space="preserve">
+    <value>Odeslat do Capi</value>
+  </data>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Přidělených Garantů</value>
+  </data>
+  <data name="NoPermissionsToExecute" xml:space="preserve">
+    <value>Uživatel nemá oprávnění k provedení zadané akce</value>
+  </data>
+  <data name="ObserverNotAllowed" xml:space="preserve">
+    <value>Pozorovatel tuto akci nemůže provést</value>
+  </data>
+  <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
+    <value>Spravovat účet</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Týmy</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Celkem</value>
+  </data>
+  <data name="UnexpectedErrorOccurred" xml:space="preserve">
+    <value>Došlo k neočekávané chybě</value>
+  </data>
+  <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+    <value>Neplatná vlastnost</value>
   </data>
 </root>

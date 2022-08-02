@@ -117,88 +117,70 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InterviewStatus_Completed" xml:space="preserve">
-    <value>Dokončené</value>
+  <data name="broken_packages_check" xml:space="preserve">
+    <value>Kontrola rozbitých balíčků</value>
   </data>
-  <data name="MenuItem_Completed" xml:space="preserve">
-    <value>Dokončené</value>
+  <data name="Connectivity" xml:space="preserve">
+    <value>Web socket connectivity</value>
   </data>
-  <data name="UserRoles_Administrator" xml:space="preserve">
-    <value>Administrátor</value>
+  <data name="database_connection_check" xml:space="preserve">
+    <value>Kontrola připojení k databázi</value>
   </data>
-  <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>Ústředí</value>
+  <data name="database_connection_check_Healthy" xml:space="preserve">
+    <value>Úspěšné připojení k databázi</value>
   </data>
-  <data name="UserRoles_Supervisor" xml:space="preserve">
-    <value>Garant</value>
+  <data name="database_connection_check_Unhealty" xml:space="preserve">
+    <value>Chyba připojení k databázi: {0}</value>
   </data>
-  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
-    <value>Uzamknout</value>
+  <data name="embedded_export_service_check" xml:space="preserve">
+    <value>Embedded Export Service Host</value>
   </data>
-  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Poznámka pro Garanta</value>
+  <data name="embedded_export_service_check_Degraded" xml:space="preserve">
+    <value>Služba Export nefunguje</value>
   </data>
-  <data name="InterviewerFacet_None" xml:space="preserve">
-    <value>Žádné</value>
+  <data name="embedded_export_service_check_Healty" xml:space="preserve">
+    <value>Export je funkční</value>
   </data>
-  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Schváleno Ústředím</value>
+  <data name="export_service_check" xml:space="preserve">
+    <value>Kontrola služby Export</value>
   </data>
-  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Schváleno Garantem</value>
+  <data name="export_service_check_Healthy" xml:space="preserve">
+    <value>Služba Export v {0} odpověděla verzí: v{1}</value>
   </data>
-  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
-    <value>Tazatel přidělen</value>
+  <data name="export_service_connectivity_check" xml:space="preserve">
+    <value>Kontrola připojení Exportu</value>
   </data>
-  <data name="MenuItem_Profile" xml:space="preserve">
-    <value>Profil</value>
+  <data name="export_service_connectivity_check_Degraded" xml:space="preserve">
+    <value>Žádné připojení ke službě Export na {0}</value>
   </data>
-  <data name="MenuItem_Rejected" xml:space="preserve">
-    <value>Vráceno</value>
+  <data name="export_service_connectivity_check_Healthy" xml:space="preserve">
+    <value>Služba Export v {0} odpověděla stavem {1}</value>
   </data>
-  <data name="MenuItem_Started" xml:space="preserve">
-    <value>Rozpracované</value>
+  <data name="export_service_connectivity_check_Unhealthy" xml:space="preserve">
+    <value>Služba Export v {0} odpověděla stavem {1}</value>
   </data>
-  <data name="UserRoles_ApiUser" xml:space="preserve">
-    <value>ApiUživatel</value>
+  <data name="HealthCheckStatus" xml:space="preserve">
+    <value>Health status: {{status}}</value>
   </data>
-  <data name="UserRoles_Interviewer" xml:space="preserve">
-    <value>Tazatel</value>
+  <data name="hq_baseurl_check" xml:space="preserve">
+    <value>Kontrola konfigurace BaseUrl</value>
   </data>
-  <data name="UserRoles_Observer" xml:space="preserve">
-    <value>Pozorovatel</value>
+  <data name="hq_baseurl_check_Degraded" xml:space="preserve">
+    <value>Ústředí nakonfigurováno pomocí Headquarters:BaseUrl: {0} se liší od aktuální adresy URL v adresním řádku prohlížeče. To může způsobit problémy s e-mailovými odkazy a funkcí exportní služby</value>
   </data>
-  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
-    <value>Dokončit text</value>
+  <data name="hq_baseurl_check_Healthy" xml:space="preserve">
+    <value>Ústředí nakonfigurováno pomocí Headquarters:BaseUrl: {0} je stejné jako aktuální adresa URL v adresním řádku prohlížeče.</value>
   </data>
-  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
-    <value>Uvítací pozvánka</value>
+  <data name="ServerMetrics" xml:space="preserve">
+    <value>Server metrics</value>
   </data>
-  <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
-    <value>Pozvánka</value>
+  <data name="UnexpectedBrokenPackages" xml:space="preserve">
+    <value>Bylo zjištěno {0} neočekávaně poškozených balíčků</value>
   </data>
-  <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
-    <value>Úvítací záhlaví</value>
+  <data name="WaitForHealthcheck" xml:space="preserve">
+    <value>Čekání na výsledky kontroly ohledně zdraví</value>
   </data>
-  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
-    <value>Pokračovat</value>
-  </data>
-  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
-    <value>Pokračovat v pozvánce</value>
-  </data>
-  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
-    <value>Pokračovat v záhlaví</value>
-  </data>
-  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
-    <value>Zahájení nového rozhovoru</value>
-  </data>
-  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
-    <value>Název průzkumu</value>
-  </data>
-  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
-    <value>Dokončit záhlaví</value>
-  </data>
-  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
-    <value>Úvítací záhlaví</value>
+  <data name="WaitingForMetrics" xml:space="preserve">
+    <value>Výpočet metrik</value>
   </data>
 </root>

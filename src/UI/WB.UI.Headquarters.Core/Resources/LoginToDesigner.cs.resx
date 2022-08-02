@@ -117,88 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InterviewStatus_Completed" xml:space="preserve">
-    <value>Dokončené</value>
+  <data name="AccessForbidden" xml:space="preserve">
+    <value>Server není registrován u aplikace Designer dotazníků. Odešlete žádost o registraci serveru s vlastním hostitelem na portálu Survey Solutions https://mysurvey.solutions/NewServerRequest</value>
   </data>
-  <data name="MenuItem_Completed" xml:space="preserve">
-    <value>Dokončené</value>
+  <data name="DesignerAppDescription" xml:space="preserve">
+    <value>Toto je bezplatný nástroj pro vytváření typů dotazníků pro platformu CAPI Světové banky. Lze jej nalézt na</value>
   </data>
-  <data name="UserRoles_Administrator" xml:space="preserve">
-    <value>Administrátor</value>
+  <data name="InvalidCredentials" xml:space="preserve">
+    <value>Uživatel nemá oprávnění. Zkontrolujte prosím své přihlašovací jméno a heslo.</value>
   </data>
-  <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>Ústředí</value>
+  <data name="LoginWatermark" xml:space="preserve">
+    <value>Přihlášení nebo email</value>
   </data>
-  <data name="UserRoles_Supervisor" xml:space="preserve">
-    <value>Garant</value>
+  <data name="PageHeader" xml:space="preserve">
+    <value>Pro přístup ke svým dotazníkům použijte své přihlašovací údaje do aplikace Designer.</value>
   </data>
-  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
-    <value>Uzamknout</value>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Typ dotazníku</value>
   </data>
-  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Poznámka pro Garanta</value>
+  <data name="SessionExpired" xml:space="preserve">
+    <value>Platnost relace vypršela, přihlaste se znovu</value>
   </data>
-  <data name="InterviewerFacet_None" xml:space="preserve">
-    <value>Žádné</value>
+  <data name="UnableToImportNewQuestionnaire" xml:space="preserve">
+    <value>Nelze importovat nový typ dotazníku:</value>
   </data>
-  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Schváleno Ústředím</value>
-  </data>
-  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Schváleno Garantem</value>
-  </data>
-  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
-    <value>Tazatel přidělen</value>
-  </data>
-  <data name="MenuItem_Profile" xml:space="preserve">
-    <value>Profil</value>
-  </data>
-  <data name="MenuItem_Rejected" xml:space="preserve">
-    <value>Vráceno</value>
-  </data>
-  <data name="MenuItem_Started" xml:space="preserve">
-    <value>Rozpracované</value>
-  </data>
-  <data name="UserRoles_ApiUser" xml:space="preserve">
-    <value>ApiUživatel</value>
-  </data>
-  <data name="UserRoles_Interviewer" xml:space="preserve">
-    <value>Tazatel</value>
-  </data>
-  <data name="UserRoles_Observer" xml:space="preserve">
-    <value>Pozorovatel</value>
-  </data>
-  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
-    <value>Dokončit text</value>
-  </data>
-  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
-    <value>Uvítací pozvánka</value>
-  </data>
-  <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
-    <value>Pozvánka</value>
-  </data>
-  <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
-    <value>Úvítací záhlaví</value>
-  </data>
-  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
-    <value>Pokračovat</value>
-  </data>
-  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
-    <value>Pokračovat v pozvánce</value>
-  </data>
-  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
-    <value>Pokračovat v záhlaví</value>
-  </data>
-  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
-    <value>Zahájení nového rozhovoru</value>
-  </data>
-  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
-    <value>Název průzkumu</value>
-  </data>
-  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
-    <value>Dokončit záhlaví</value>
-  </data>
-  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
-    <value>Úvítací záhlaví</value>
+  <data name="UserDesignerCredentials" xml:space="preserve">
+    <value>Přihlaste se pomocí přihlašovacích údajů, které běžně používáte pro přístup k dotazníkům na webu Designer a v aplikaci Testr</value>
   </data>
 </root>

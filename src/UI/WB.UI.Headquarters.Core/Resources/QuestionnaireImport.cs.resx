@@ -118,6 +118,72 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="QuestionsWithConditions" xml:space="preserve">
-    <value>{{count}} z nich s podmínkou</value>
+    <value>{{count}} z nich s podmínkami</value>
+  </data>
+  <data name="BeforeSignInToDesigner" xml:space="preserve">
+    <value>Před přihlášením se prosím ujistěte, že jsou dostupné webové stránky 'Designer'</value>
+  </data>
+  <data name="Chapters" xml:space="preserve">
+    <value>Sekce</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Vytvořeno dne</value>
+  </data>
+  <data name="DesignerQuestionnaires" xml:space="preserve">
+    <value>Typy dotazníků aplikace Designer</value>
+  </data>
+  <data name="Gropus" xml:space="preserve">
+    <value>Podsekce</value>
+  </data>
+  <data name="ImportAsNewVersion" xml:space="preserve">
+    <value>Vytvořit novou verzi (#{{version}})</value>
+  </data>
+  <data name="Importing" xml:space="preserve">
+    <value>Import {{percent}} %</value>
+  </data>
+  <data name="ImportModePageTitle" xml:space="preserve">
+    <value>Import dtypu otazníku:</value>
+  </data>
+  <data name="ImportModeTitle" xml:space="preserve">
+    <value>Režim importu typu dotazníku</value>
+  </data>
+  <data name="LastModifiedAt" xml:space="preserve">
+    <value>Naposledy upraveno dne</value>
+  </data>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve">
+    <value>seznam mých typů dotazníků</value>
+  </data>
+  <data name="LoginToDesignerError" xml:space="preserve">
+    <value>Nelze se připojit k aplikace Designer. Zkontrolujte, zda je Designer k dispozici, a zkuste to &lt;a href='{0}'&gt;znovu&lt;/a&gt;</value>
+  </data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve">
+    <value>Designer: Moje dotazníky</value>
+  </data>
+  <data name="Prepare" xml:space="preserve">
+    <value>Příjem údajů z typu dotazníku</value>
+  </data>
+  <data name="QuestionnaireExists" xml:space="preserve">
+    <value>Tento dotazník jste již importovali</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Otázky</value>
+  </data>
+  <data name="RegularImportSubTitle" xml:space="preserve">
+    <value>Toto Vám umožní vytvářet individuální dotazníky, které mohou obsahovat identifikační údaje. Na zařízeních tazatele se zobrazí pouze tyto dotazníky.</value>
+  </data>
+  <data name="RegularImportTitle" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="Rosters" xml:space="preserve">
+    <value>Roster</value>
+  </data>
+  <data name="SignInToDesigner" xml:space="preserve">
+    <value>Přihlaste se prosím do aplikace Designer</value>
+  </data>
+  <data name="SignInToDesignerTitle" xml:space="preserve">
+    <value>Přihlášení do aplikace Designer</value>
+  </data>
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>Aktualizace dotazníků</value>
   </data>
 </root>

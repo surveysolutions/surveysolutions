@@ -121,16 +121,16 @@
     <value>Stažení ({{count}})</value>
   </data>
   <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>Můžete si stáhnout seznam vytvořených tazatelských přiřazení, které budou respondentům dodávat webové odkazy</value>
+    <value>Můžete si stáhnout seznam vytvořených dotazníků, které  jsou přiděleny tazateli pro dodání webových odkazů respondentům</value>
   </data>
   <data name="Invitations_Sent" xml:space="preserve">
-    <value>{{count}} pozvánek bylo již posláno.</value>
+    <value>Již odeslaných pozvánek - {{count}}.</value>
   </data>
   <data name="Invitations_ToSend" xml:space="preserve">
-    <value>{{count}} pozvánek bylo posláno.</value>
+    <value>Pozvánek k odeslání - {{count}}.</value>
   </data>
   <data name="Invitations_TotalInvitations" xml:space="preserve">
-    <value>{{count}} celkových pozvánek.</value>
+    <value>Celkem pozvánek - {{count}}.</value>
   </data>
   <data name="SaveAll" xml:space="preserve">
     <value>Uložit vše</value>
@@ -139,9 +139,129 @@
     <value>Uzamknout</value>
   </data>
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
-    <value>Poznámka pro garanta</value>
+    <value>Poznámka pro Garanta</value>
   </data>
   <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
     <value>Text se zobrazí na poslední stránce po ukončení dotazníku</value>
+  </data>
+  <data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
+    <value>Povolit tazateli přepnout do režimu CAWI</value>
+  </data>
+  <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
+    <value>Přiložte přepis PDF</value>
+  </data>
+  <data name="BackToQuestionnaires" xml:space="preserve">
+    <value>Zpět na Nastavení průzkumu</value>
+  </data>
+  <data name="CustomMessageTooLong" xml:space="preserve">
+    <value>Vlastní zpráva by neměla obsahovat více než {0} znaků (včetně html)</value>
+  </data>
+  <data name="CustomText" xml:space="preserve">
+    <value>Použít vlastní text</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Hotovo</value>
+  </data>
+  <data name="EmailOnComplete" xml:space="preserve">
+    <value>Odešlete e-mail po dokončení webového rozhovoru</value>
+  </data>
+  <data name="Invitations" xml:space="preserve">
+    <value>Pozvánky</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
+    <value>Tato nastavení můžete změnit na stránce &lt;a href="{{url}}"&gt;'Poskytovatelé e-mailu'&lt;/a&gt;.</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
+    <value>Řekněte svému Administrátorovi, aby tato nastavení změnil na stránce „Poskytovatelé e-mailu“.</value>
+  </data>
+  <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
+    <value>Poskytovatel e-mailu není nastaven.</value>
+  </data>
+  <data name="Invitations_NothingSent" xml:space="preserve">
+    <value>Dosud nebyly odeslány žádné pozvánky.</value>
+  </data>
+  <data name="Invitations_NothingToSend" xml:space="preserve">
+    <value>Žádné pozvánky k odeslání v tuto chvíli.</value>
+  </data>
+  <data name="Invitations_SendAction" xml:space="preserve">
+    <value>Poslat {{count}} pozvánek</value>
+  </data>
+  <data name="Invitations_SetupError" xml:space="preserve">
+    <value>Pozvánky nelze odeslat.</value>
+  </data>
+  <data name="Invitations_SuccessfulSetup" xml:space="preserve">
+    <value>Webové šetření bylo spuštěno a poskytovatel e-mailu byl nastaven správně. Systém je připraven k odeslání pozvánky.</value>
+  </data>
+  <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
+    <value>Webové šetření není spuštěno. Před odesláním pozvánek nastavte a poté &lt;a href="{{url}}"&gt;spusťte webové šetření&lt;/a&gt;.</value>
+  </data>
+  <data name="SelectInterviwer" xml:space="preserve">
+    <value>Vyberte tazatele</value>
+  </data>
+  <data name="SingleResponse" xml:space="preserve">
+    <value>Omezit na jeden rozhovor na respondenta</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Zahájit</value>
+  </data>
+  <data name="Started_Title" xml:space="preserve">
+    <value>Webový dotazník začal</value>
+  </data>
+  <data name="StartInfo" xml:space="preserve">
+    <value>Zahajování webového dotazníku pro {{name}}</value>
+  </data>
+  <data name="StopWebInterview" xml:space="preserve">
+    <value>Zastavit webový dotazník</value>
+  </data>
+  <data name="TextCustomize" xml:space="preserve">
+    <value>Text zasílaný respondentům lze přizpůsobit</value>
+  </data>
+  <data name="TextsUpdated" xml:space="preserve">
+    <value>Texty aktualizovány</value>
+  </data>
+  <data name="UseCaptcha" xml:space="preserve">
+    <value>Před začátkem rozhovoru použijte CAPTCHA</value>
+  </data>
+  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
+    <value>Nastavení webového rozhovoru</value>
+  </data>
+  <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
+    <value>Poslat pozvánky</value>
+  </data>
+  <data name="WebInterviewSetup_Title" xml:space="preserve">
+    <value>Nastavení webového rozhovoru</value>
+  </data>
+  <data name="WebInterviewStarted" xml:space="preserve">
+    <value>Začal webový dotazník pro {{name}}</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
+    <value>Text pozvánky prezentovaný uživateli na úvodní stránce. %QUESTIONNAIRE% je nahrazeno názvem dotazníku</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
+    <value>Text, který se zobrazí uživateli, když přejde na odkaz na rozhovor, který ještě není synchronizován se serverem</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
+    <value>Uvítací text záhlaví na vstupní stránce na webový rozhovor</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
+    <value>Pokračovat</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
+    <value>Text zobrazený vracejícímu se uživateli, když je rozhovor obnoven. %QUESTIONNAIRE% je nahrazeno názvem typu dotazníku</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
+    <value>Text záhlaví se zobrazí vracejícímu se uživateli před pokračováním v rozhovoru</value>
+  </data>
+  <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
+    <value>Zahájení nového rozhovoru</value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
+    <value>Název provedeného šetření. %QUESTIONNAIRE% je nahrazen názvem typu dotazníku</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
+    <value>Text záhlaví se zobrazí po dokončení rozhovoru</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
+    <value>Uvítací text záhlaví na úvodní stránce</value>
   </data>
 </root>

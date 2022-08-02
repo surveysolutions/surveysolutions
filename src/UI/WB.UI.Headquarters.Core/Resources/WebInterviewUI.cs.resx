@@ -121,19 +121,19 @@
     <value>Zrušit</value>
   </data>
   <data name="CommentSupervisor" xml:space="preserve">
-    <value>Poznámka garanta</value>
+    <value>Poznámka Garanta</value>
   </data>
   <data name="Complete" xml:space="preserve">
     <value>Uzamknout</value>
   </data>
   <data name="CompleteAbout" xml:space="preserve">
-    <value>Chystáte se dokončit tento dotazník</value>
+    <value>Chystáte se dokončit tento rozhovor</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Poznámka pro garanta</value>
+    <value>Poznámka pro Garanta</value>
   </data>
   <data name="CoverSupervisorNote" xml:space="preserve">
-    <value>Poznámka garanta:</value>
+    <value>Poznámka Garanta:</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Chyba</value>
@@ -157,9 +157,347 @@
     <value>{{progress}}% Dokončeno</value>
   </data>
   <data name="SaveScenarioName" xml:space="preserve">
-    <value>Jméno</value>
+    <value>Název</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Ano</value>
+  </data>
+  <data name="AnswerIsInvalid" xml:space="preserve">
+    <value>Odpověď je neplatná</value>
+  </data>
+  <data name="AnswerWasNotSaved" xml:space="preserve">
+    <value>Odpověď nebyla uložena</value>
+  </data>
+  <data name="AreaRecord" xml:space="preserve">
+    <value>Upravit oblast</value>
+  </data>
+  <data name="AudioClickRecord" xml:space="preserve">
+    <value>Klikněte k nahrání zvuku</value>
+  </data>
+  <data name="AudioInitializationFailed" xml:space="preserve">
+    <value>Inicializace zvuku se nezdařila</value>
+  </data>
+  <data name="AudioRecording" xml:space="preserve">
+    <value>Záznam zvuku</value>
+  </data>
+  <data name="AudioRecordingDuration" xml:space="preserve">
+    <value>{{humanizedLength}} ({{formattedLength}}) zvukové nahrávky</value>
+  </data>
+  <data name="AudioRecordNew" xml:space="preserve">
+    <value>Záznam nový</value>
+  </data>
+  <data name="ClickToAnswer" xml:space="preserve">
+    <value>Kliknětě k odpovězení</value>
+  </data>
+  <data name="CloseInterviewMessage" xml:space="preserve">
+    <value>&lt;p&gt;Webový rozhovor podporuje pouze jednu aktivní kartu s rozhovorem.&lt;/p&gt;&lt;p&gt;Chcete-li tuto kartu nadále používat, znovu načtěte tuto stránku nebo ji zavřete.&lt;/p&gt;</value>
+  </data>
+  <data name="CloseInterviewTitle" xml:space="preserve">
+    <value>Tento rozhovor se otevře na jiné kartě nebo prohlížeči</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Poznámka</value>
+  </data>
+  <data name="CommentAdd" xml:space="preserve">
+    <value>Přidat poznámku</value>
+  </data>
+  <data name="CommentAdmin" xml:space="preserve">
+    <value>Poznámka Admina</value>
+  </data>
+  <data name="CommentEnter" xml:space="preserve">
+    <value>Zadejte svoji poznámku</value>
+  </data>
+  <data name="CommentHeadquarters" xml:space="preserve">
+    <value>Poznámka od Ústředí</value>
+  </data>
+  <data name="CommentHide" xml:space="preserve">
+    <value>Skrýt poznámku</value>
+  </data>
+  <data name="CommentInterviewer" xml:space="preserve">
+    <value>Poznámka od tazatele</value>
+  </data>
+  <data name="CommentOnPreviousAnswer" xml:space="preserve">
+    <value>Na předchozí odpověď</value>
+  </data>
+  <data name="CommentPost" xml:space="preserve">
+    <value>Odeslat</value>
+  </data>
+  <data name="CommentPosting" xml:space="preserve">
+    <value>Odesílání...</value>
+  </data>
+  <data name="CommentYours" xml:space="preserve">
+    <value>Vaše poznámka</value>
+  </data>
+  <data name="CompleteErrors" xml:space="preserve">
+    <value>Otázky s chybami:</value>
+  </data>
+  <data name="CompleteFirstErrors" xml:space="preserve">
+    <value>Prvních {{count}} entit s chybami:</value>
+  </data>
+  <data name="CompleteQuestionsAnswered" xml:space="preserve">
+    <value>Vyplněno</value>
+  </data>
+  <data name="CompleteQuestionsStatus" xml:space="preserve">
+    <value>Stav otázek:</value>
+  </data>
+  <data name="CompleteQuestionsUnanswered" xml:space="preserve">
+    <value>Nezodpovězeno</value>
+  </data>
+  <data name="ConfirmRosterRemove" xml:space="preserve">
+    <value>Opravdu chcete odstranit související seznam (roster)?</value>
+  </data>
+  <data name="ConnectionLostMessage" xml:space="preserve">
+    <value>Znovu načtěte stránku pro obnovení připojení a pokračování v tomto rozhovoru.</value>
+  </data>
+  <data name="ConnectionLostTitle" xml:space="preserve">
+    <value>Připojení k serveru je ztraceno.</value>
+  </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Úvod</value>
+  </data>
+  <data name="CoverBrokenPackegeText" xml:space="preserve">
+    <value>Pozor! Tento rozhovor obsahuje poškozená data, &lt;br /&gt;
+je k dispozici pouze předchozí verze rozhovoru. &lt;br /&gt;
+Požádejte o pomoc svého Garanta.</value>
+  </data>
+  <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+    <value>Chyba: Tento rozhovor je poškozen</value>
+  </data>
+  <data name="CoverComments" xml:space="preserve">
+    <value>Otázky s poznámkou:</value>
+  </data>
+  <data name="CoverFirstComments" xml:space="preserve">
+    <value>První {{count}} entity s poznámkami:</value>
+  </data>
+  <data name="DecimalCannotParse" xml:space="preserve">
+    <value>Zadanou hodnotu nelze analyzovat jako desítkovou hodnotu</value>
+  </data>
+  <data name="DecimalEnter" xml:space="preserve">
+    <value>Zadejte desetinné číslo</value>
+  </data>
+  <data name="DecimalTooBig" xml:space="preserve">
+    <value>Zadaná hodnota je příliš velká. Je povoleno méně než 15 číslic</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Odpojeno</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Hotovo</value>
+  </data>
+  <data name="EmailLink_EmailResumeLink" xml:space="preserve">
+    <value>E-mailový odkaz pro pokračování</value>
+  </data>
+  <data name="EmailLink_Header" xml:space="preserve">
+    <value>Vložte svou e-mailovou adresu</value>
+  </data>
+  <data name="EmailLink_InvalidEmail" xml:space="preserve">
+    <value>{{email}} není platná e-mailová adresa</value>
+  </data>
+  <data name="EmailLink_Message" xml:space="preserve">
+    <value>Pokud budete chtít pokračovat později, zašleme vám zprávu s odkazem na obnovení rozhovoru.</value>
+  </data>
+  <data name="EmailLink_Placeholder" xml:space="preserve">
+    <value>Zadejte email</value>
+  </data>
+  <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
+    <value>Nyní můžete zrušit a pokračovat v rozhovoru. A můžete jej odeslat později kliknutím na e-mailový odkaz pro pokračování v horním menu.</value>
+  </data>
+  <data name="EnterDate" xml:space="preserve">
+    <value>Zadejte datum</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Zadejte heslo</value>
+  </data>
+  <data name="Error_plural" xml:space="preserve">
+    <value>Chyby</value>
+  </data>
+  <data name="GPSError" xml:space="preserve">
+    <value>Pozici nebylo možné určit kvůli neznámé chybě (kód: {{strErrorCode}}).</value>
+  </data>
+  <data name="GPSNotAvailable" xml:space="preserve">
+    <value>Váš prohlížeč nepodporuje geolokaci</value>
+  </data>
+  <data name="GPSPermissionDenied" xml:space="preserve">
+    <value>Tento web nemá oprávnění používat Geolocation API</value>
+  </data>
+  <data name="GPSPositionUnavailable" xml:space="preserve">
+    <value>Aktuální pozici nebylo možné určit.</value>
+  </data>
+  <data name="GPSRecord" xml:space="preserve">
+    <value>Záznam GPS</value>
+  </data>
+  <data name="GPSTimeout" xml:space="preserve">
+    <value>Aktuální pozici nebylo možné určit během zadaného časového limitu.</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Pomoc</value>
+  </data>
+  <data name="HideResolved" xml:space="preserve">
+    <value>Skrýt vyřešené</value>
+  </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>Instrukce</value>
+  </data>
+  <data name="InstructionShow" xml:space="preserve">
+    <value>Zobrazit instrukce</value>
+  </data>
+  <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
+    <value>Další informace k otázce</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Nezodpovězeno</value>
+  </data>
+  <data name="Interview_Overview_NoValue" xml:space="preserve">
+    <value>Bez hodnoty</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>Opravdu chcete odstranit související seznam (roster) '{{rosterTitle}}'?</value>
+  </data>
+  <data name="InterviewReceivedCantModify" xml:space="preserve">
+    <value>Rozhovor je stažen tazatelem a nelze jej upravovat</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Načítání...</value>
+  </data>
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>Načítání typu dotazníku. Prosím, čekejte...</value>
+  </data>
+  <data name="LoadingWait" xml:space="preserve">
+    <value>Načítání, prosím čekejte</value>
+  </data>
+  <data name="MaxAnswersCountSelected" xml:space="preserve">
+    <value>Byl proveden maximální počet výběrů ({{value}}) v této otázce</value>
+  </data>
+  <data name="Network" xml:space="preserve">
+    <value>Síť</value>
+  </data>
+  <data name="NoQuestionnaireAccess" xml:space="preserve">
+    <value>Nemáte přístup k dotazníku</value>
+  </data>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>Nic nebylo nalezeno</value>
+  </data>
+  <data name="NotCalculated" xml:space="preserve">
+    <value>Nevypočítano</value>
+  </data>
+  <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
+    <value>Zadaná hodnota nemůže být menší než chráněná odpověď</value>
+  </data>
+  <data name="NumberCannotParse" xml:space="preserve">
+    <value>Zadanou hodnotu nelze analyzovat jako celočíselnou hodnotu</value>
+  </data>
+  <data name="NumberEnter" xml:space="preserve">
+    <value>Vložit číslo</value>
+  </data>
+  <data name="NumberRosterError" xml:space="preserve">
+    <value>Odpověď '{{answer}}' je nesprávná, protože otázka je použita jako velikost seznamu (rosteru) a zadaná odpověď je záporná</value>
+  </data>
+  <data name="NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>Opravdu chcete odebrat {{amountOfRostersToRemove}} řádků z každého souvisejícího seznamu (rosteru)?</value>
+  </data>
+  <data name="NumberRosterUpperBound" xml:space="preserve">
+    <value>Odpověď '{{answer}}' je nesprávná, protože odpověď je větší než maximální limit seznamu (rosteru) {{answerMaxValue}}.</value>
+  </data>
+  <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
+    <value>Kategorie budou dostupné po zodpovězení uvedené otázky</value>
+  </data>
+  <data name="PickLocation" xml:space="preserve">
+    <value>Vybrat z mapy</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Stav</value>
+  </data>
+  <data name="QuestionUnsupported" xml:space="preserve">
+    <value>Nepodporovaný typ otázky</value>
+  </data>
+  <data name="RecordCurrentTime" xml:space="preserve">
+    <value>Zaznamenejte aktuální čas</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Znovu načíst</value>
+  </data>
+  <data name="ReloadQuestionnaire" xml:space="preserve">
+    <value>Znovu načíst typ dotazníku</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Vyřešit</value>
+  </data>
+  <data name="ResolveHint" xml:space="preserve">
+    <value>Vyřešené poznámky jsou ve výchozím nastavení skryté, ale mohou být prohíženy všechny účastníky dotazníku</value>
+  </data>
+  <data name="SaveScenario" xml:space="preserve">
+    <value>Uložit scénář</value>
+  </data>
+  <data name="SaveScenarioDesignerLogin" xml:space="preserve">
+    <value>Platnost relace v aplikaci Designer vypršela. Přihlaste se do aplikace Designer, abyste mohli ukládat.</value>
+  </data>
+  <data name="SaveScenarioGoToDesigner" xml:space="preserve">
+    <value>Otevřete aplikaci Designer</value>
+  </data>
+  <data name="SaveScenarioOptions" xml:space="preserve">
+    <value>Vyberte scénář, který chcete nahradit</value>
+  </data>
+  <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
+    <value>Nahradit existující</value>
+  </data>
+  <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
+    <value>Uložit nové</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Vyhledat</value>
+  </data>
+  <data name="SessionTimeoutMessage" xml:space="preserve">
+    <value>Chcete-li v rozhovoru pokračovat, znovu načtěte stránku.</value>
+  </data>
+  <data name="SessionTimeoutMessageTitle" xml:space="preserve">
+    <value>Vaše relace vypršela, protože jste 15 minut neprovedli žádnou akci.</value>
+  </data>
+  <data name="SessionTimeoutTitle" xml:space="preserve">
+    <value>Vaše relace vypršela</value>
+  </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Zobrazit na mapě</value>
+  </data>
+  <data name="ShowResolved" xml:space="preserve">
+    <value>Zobrazit vyřešené</value>
+  </data>
+  <data name="SlowConnection" xml:space="preserve">
+    <value>Síťové připojení je pomalé</value>
+  </data>
+  <data name="SwitchingLanguage" xml:space="preserve">
+    <value>Přepínání jazyka. Prosím, čekejte...</value>
+  </data>
+  <data name="SwitchToWebMode" xml:space="preserve">
+    <value>Přepnout na dotazník ve webovém režimu</value>
+  </data>
+  <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
+    <value>K pokračování tohoto rozhovoru lze použít následující odkaz</value>
+  </data>
+  <data name="TextEnter" xml:space="preserve">
+    <value>Zadejte text</value>
+  </data>
+  <data name="TextEnterMasked" xml:space="preserve">
+    <value>Zadejte text {{userFriendlyMask}}</value>
+  </data>
+  <data name="TextEnterNewItem" xml:space="preserve">
+    <value>Zadejte novou položku</value>
+  </data>
+  <data name="TextRequired" xml:space="preserve">
+    <value>Vyplňte prosím všechny požadované hodnoty</value>
+  </data>
+  <data name="ToggleNavigation" xml:space="preserve">
+    <value>Přepnout navigaci</value>
+  </data>
+  <data name="WarningsHeader" xml:space="preserve">
+    <value>Upozornění</value>
+  </data>
+  <data name="WebInterview" xml:space="preserve">
+    <value>Webový dotazník</value>
+  </data>
+  <data name="WebTesterSessionOver" xml:space="preserve">
+    <value>Relace testeru skončila</value>
+  </data>
+  <data name="WebTesterSessionOverMessage" xml:space="preserve">
+    <value>Zavřete prosím tuto stránku. Můžete otevřít novou návratem na webovou stránku Designer</value>
   </data>
 </root>

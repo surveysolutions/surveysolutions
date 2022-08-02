@@ -117,88 +117,109 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InterviewStatus_Completed" xml:space="preserve">
-    <value>Dokončené</value>
+  <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
+    <value>seznam nebyl aktualizován</value>
   </data>
-  <data name="MenuItem_Completed" xml:space="preserve">
-    <value>Dokončené</value>
+  <data name="Dashboard_LastUpdated" xml:space="preserve">
+    <value>seznam byl aktualizován {0}</value>
   </data>
-  <data name="UserRoles_Administrator" xml:space="preserve">
-    <value>Administrátor</value>
+  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
+    <value>Připojení k serveru</value>
   </data>
-  <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>Ústředí</value>
+  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
+    <value>Vytvořit rozhovor</value>
   </data>
-  <data name="UserRoles_Supervisor" xml:space="preserve">
-    <value>Garant</value>
+  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
+    <value>Stahování dotazníku – {0} %</value>
   </data>
-  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
-    <value>Uzamknout</value>
+  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
+    <value>Dotazník „{0}“ nelze otevřít. Váš uživatelský účet v aplikaci Designer není autorizován. Zkontrolujte prosím své přihlašovací jméno a heslo.</value>
   </data>
-  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Poznámka pro Garanta</value>
+  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
+    <value>Dotazník „{0}“ nelze otevřít. Dotazník nelze najít. Obnovte prosím seznam dotazníků.</value>
   </data>
-  <data name="InterviewerFacet_None" xml:space="preserve">
-    <value>Žádné</value>
+  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
+    <value>Dotazník „{0}“ nelze otevřít. Dotazník obsahuje chyby. Opravte ho prosím v aplikaci Designer.</value>
   </data>
-  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Schváleno Ústředím</value>
+  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
+    <value>Ukládání dotazníku do místního úložiště</value>
   </data>
-  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Schváleno Garantem</value>
+  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
+    <value>Stahování příloh dotazníku – {0} %</value>
   </data>
-  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
-    <value>Tazatel přidělen</value>
+  <data name="Login_Error_EmptyName" xml:space="preserve">
+    <value>Zadejte prosím správné přihlašovací údaje</value>
   </data>
-  <data name="MenuItem_Profile" xml:space="preserve">
-    <value>Profil</value>
+  <data name="Login_Error_NotFound" xml:space="preserve">
+    <value>Webová aplikace Designer není v tuto chvíli přístupná. Zkontrolujte nastavení připojení nebo to zkuste znovu později</value>
   </data>
-  <data name="MenuItem_Rejected" xml:space="preserve">
-    <value>Vráceno</value>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Dotazníky</value>
   </data>
-  <data name="MenuItem_Started" xml:space="preserve">
-    <value>Rozpracované</value>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Jazyk</value>
   </data>
-  <data name="UserRoles_ApiUser" xml:space="preserve">
-    <value>ApiUživatel</value>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Originál</value>
   </data>
-  <data name="UserRoles_Interviewer" xml:space="preserve">
-    <value>Tazatel</value>
+  <data name="MenuItem_Title_Reload" xml:space="preserve">
+    <value>Znovu načíst dotazník</value>
   </data>
-  <data name="UserRoles_Observer" xml:space="preserve">
-    <value>Pozorovatel</value>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>Nastavení</value>
   </data>
-  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
-    <value>Dokončit text</value>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>Odhlásit se</value>
   </data>
-  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
-    <value>Uvítací pozvánka</value>
+  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
+    <value>Zakázat ověření certifikátu SSL</value>
   </data>
-  <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
-    <value>Pozvánka</value>
+  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
+    <value>Přijmout všechny certifikáty SSL</value>
   </data>
-  <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
-    <value>Úvítací záhlaví</value>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>Nastavení připojení</value>
   </data>
-  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
-    <value>Pokračovat</value>
+  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
+    <value>URL, která se používá ke komunikaci s aplikací Designer</value>
   </data>
-  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
-    <value>Pokračovat v pozvánce</value>
+  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
+    <value>URL aplikace Designer</value>
   </data>
-  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
-    <value>Pokračovat v záhlaví</value>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>Několik vteřin vyčkejte na souřadnice</value>
   </data>
-  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
-    <value>Zahájení nového rozhovoru</value>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>Časový limit příjmu GPS</value>
   </data>
-  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
-    <value>Název průzkumu</value>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>Několik vteřin vyčkejte na odpověď serveru</value>
   </data>
-  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
-    <value>Dokončit záhlaví</value>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>Časový limit odpovědi serveru</value>
   </data>
-  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
-    <value>Úvítací záhlaví</value>
+  <data name="Prefs_ShowAnswerTime" xml:space="preserve">
+    <value>Zobrazit uplynulý čas na odpověď</value>
+  </data>
+  <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
+    <value>Měří dobu aktivace, validace a šíření seznamu. Příjem GPS dat nebo doba pořízení snímku nejsou zahrnuty.</value>
+  </data>
+  <data name="Prefs_ShowVariables" xml:space="preserve">
+    <value>Zobrazit proměnné</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
+    <value>Proměnné jsou v rozhovoru uvedeny s hodnotou a popisem</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
+    <value>Proměnné jsou skryté</value>
+  </data>
+  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
+    <value>Verze: {0}</value>
+  </data>
+  <data name="Prefs_VersionTitle" xml:space="preserve">
+    <value>Verze aplikace</value>
+  </data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>Údaje z rozhovoru nelze použít na novou verzi dotazníku. Bude otevřen prázdný rozhovor</value>
   </data>
 </root>

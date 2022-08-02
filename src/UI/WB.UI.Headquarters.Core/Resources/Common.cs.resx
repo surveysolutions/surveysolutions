@@ -58,16 +58,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-    <data name="Approve" xml:space="preserve">
+  <data name="Approve" xml:space="preserve">
     <value>Schválit</value>
   </data>
-    <data name="Cancel" xml:space="preserve">
+  <data name="Cancel" xml:space="preserve">
     <value>Zrušit</value>
   </data>
-    <data name="Create" xml:space="preserve">
-    <value>Create</value>
+  <data name="Create" xml:space="preserve">
+    <value>Vytvořit</value>
   </data>
-    <data name="Delete" xml:space="preserve">
+  <data name="Delete" xml:space="preserve">
     <value>Smazat</value>
   </data>
   <data name="Download" xml:space="preserve">
@@ -76,28 +76,253 @@
   <data name="DownloadSupervisor" xml:space="preserve">
     <value>Stáhnout aplikaci Garant</value>
   </data>
-    <data name="Name" xml:space="preserve">
-    <value>Jméno</value>
+  <data name="Name" xml:space="preserve">
+    <value>Název</value>
   </data>
-    <data name="No" xml:space="preserve">
+  <data name="No" xml:space="preserve">
     <value>Ne</value>
   </data>
-    <data name="Open" xml:space="preserve">
+  <data name="Open" xml:space="preserve">
     <value>Otevřít</value>
   </data>
-    <data name="Refresh" xml:space="preserve">
+  <data name="Refresh" xml:space="preserve">
     <value>Obnovit</value>
   </data>
-    <data name="Save" xml:space="preserve">
+  <data name="Save" xml:space="preserve">
     <value>Uložit</value>
   </data>
   <data name="SaveChanges" xml:space="preserve">
     <value>Uložit změny</value>
   </data>
-    <data name="Settings" xml:space="preserve">
+  <data name="Settings" xml:space="preserve">
     <value>Nastavení</value>
   </data>
-    <data name="Yes" xml:space="preserve">
+  <data name="Yes" xml:space="preserve">
     <value>Ano</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Přidat</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Všechny dotazníky</value>
+  </data>
+  <data name="AllGpsQuestions" xml:space="preserve">
+    <value>Všechny dotazy ohledně GPS</value>
+  </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>Všechny typy</value>
+  </data>
+  <data name="AllResponsible" xml:space="preserve">
+    <value>Jakýkoli zodpovědný</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>Všechny statusy</value>
+  </data>
+  <data name="AllSupervisors" xml:space="preserve">
+    <value>Všichni Garanti</value>
+  </data>
+  <data name="AllVersions" xml:space="preserve">
+    <value>Všechny verze</value>
+  </data>
+  <data name="AlRightsReserved" xml:space="preserve">
+    <value>Všechna práva vyhrazena.</value>
+  </data>
+  <data name="Any" xml:space="preserve">
+    <value>Cokoli</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Aplikovat</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Neaktivní</value>
+  </data>
+  <data name="Assign" xml:space="preserve">
+    <value>Přiřadit</value>
+  </data>
+  <data name="Assignment" xml:space="preserve">
+    <value>ID dotazníku</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Dotazníky</value>
+  </data>
+  <data name="AuditLog" xml:space="preserve">
+    <value>Protokol auditu</value>
+  </data>
+  <data name="CalendarEvent" xml:space="preserve">
+    <value>Plánovaná schůzka</value>
+  </data>
+  <data name="Capi" xml:space="preserve">
+    <value>CAPI</value>
+  </data>
+  <data name="Cawi" xml:space="preserve">
+    <value>CAWI</value>
+  </data>
+  <data name="ChangeToCAPI" xml:space="preserve">
+    <value>Změna na CAPI</value>
+  </data>
+  <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
+    <value>Vybraný režim {{count}} rozhovorů bude změněn na CAPI</value>
+  </data>
+  <data name="ChangeToCAWI" xml:space="preserve">
+    <value>Změna na CAWI</value>
+  </data>
+  <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
+    <value>Vybraný režim {{count}} rozhovorů bude změněn na CAWI</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Potvrdit</value>
+  </data>
+  <data name="CreatedOnClient" xml:space="preserve">
+    <value>Vytvořeno na tabletu</value>
+  </data>
+  <data name="CreateNewAssignment" xml:space="preserve">
+    <value>Vytvořit nový dotazník</value>
+  </data>
+  <data name="EditCalendarEvent" xml:space="preserve">
+    <value>Upravit schůzku na jindy</value>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Poskytovatelé e-mailu</value>
+  </data>
+  <data name="EqualValues" xml:space="preserve">
+    <value>Se rovná</value>
+  </data>
+  <data name="ErrorsLog" xml:space="preserve">
+    <value>Protokol chyb</value>
+  </data>
+  <data name="GetInterviewerApp" xml:space="preserve">
+    <value>Získejte aplikaci pro tazatele</value>
+  </data>
+  <data name="HideIdentifying" xml:space="preserve">
+    <value>Skrýt</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>ID rozhovoru</value>
+  </data>
+  <data name="InterviewMode" xml:space="preserve">
+    <value>Režim rozhovoru</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Rozhovory</value>
+  </data>
+  <data name="LastUpdate" xml:space="preserve">
+    <value>Upraveno dne</value>
+  </data>
+  <data name="Legal" xml:space="preserve">
+    <value>Legal</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Načítání. Prosím, čekejte</value>
+  </data>
+  <data name="Logoff" xml:space="preserve">
+    <value>Odhlásit se</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Mapa šetření</value>
+  </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>Nová verze k dispozici:</value>
+  </data>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>Nic nebylo nalezeno</value>
+  </data>
+  <data name="NotEquals" xml:space="preserve">
+    <value>Ne rovná se</value>
+  </data>
+  <data name="NothingSelected" xml:space="preserve">
+    <value>Není nic vybráno</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="OpenAssignment" xml:space="preserve">
+    <value>Otevřít dotazník</value>
+  </data>
+  <data name="OpenResponsiblesProfile" xml:space="preserve">
+    <value>Otevřít profil zodpovědného uživatele</value>
+  </data>
+  <data name="PrefilledQuestions" xml:space="preserve">
+    <value>Technické údaje</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Zpracovává se…</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Typ dotazníku</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Typy dotazníků</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>Verze typu dotazníku</value>
+  </data>
+  <data name="ReceivedByInterviewer" xml:space="preserve">
+    <value>Staženo do tabletu</value>
+  </data>
+  <data name="Reject" xml:space="preserve">
+    <value>Vrátit</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Odstranit</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Responsible" xml:space="preserve">
+    <value>Zodpovědný uživatel</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>Vrátit se</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Vyhledat</value>
+  </data>
+  <data name="SelectOption" xml:space="preserve">
+    <value>Vyberte možnost</value>
+  </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>Vybrat typ dotazníku</value>
+  </data>
+  <data name="ShowIdentifying" xml:space="preserve">
+    <value>Zobrazit identifikaci</value>
+  </data>
+  <data name="ShowStatusHistory" xml:space="preserve">
+    <value>Zobrazit historii statusů</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Přihlásit se</value>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Začíná na</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>Šablona</value>
+  </data>
+  <data name="TheWorldBankGroup" xml:space="preserve">
+    <value>The World Bank Group</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titul</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Celkem</value>
+  </data>
+  <data name="Unapprove" xml:space="preserve">
+    <value>Neschválit</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Neznámý</value>
+  </data>
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+    <value>Zobrazit podrobnosti dotazníku</value>
+  </data>
+  <data name="НasErrors" xml:space="preserve">
+    <value>Obsahuje Chyby</value>
   </data>
 </root>

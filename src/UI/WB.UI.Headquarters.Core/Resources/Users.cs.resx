@@ -118,15 +118,198 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddSupervisor" xml:space="preserve">
-    <value>Zadat garanta</value>
+    <value>Zadat Garanta</value>
   </data>
   <data name="AddUser" xml:space="preserve">
     <value>Zadat uživatele</value>
   </data>
   <data name="CreateAdmin" xml:space="preserve">
-    <value>Vytvořte nového administrátora, chcete-li instalaci dokončit</value>
+    <value>Vytvořte nového Administrátora, chcete-li instalaci dokončit</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
     <value>Garant</value>
+  </data>
+  <data name="AccountCreationDateTooltip" xml:space="preserve">
+    <value>Datum vytvoření účtu</value>
+  </data>
+  <data name="AddAPIUser" xml:space="preserve">
+    <value>Přidat uživatele API</value>
+  </data>
+  <data name="AddHeadquarters" xml:space="preserve">
+    <value>Přidat Ústředí</value>
+  </data>
+  <data name="AddInterviewer" xml:space="preserve">
+    <value>Přidat tazatele</value>
+  </data>
+  <data name="AddObserver" xml:space="preserve">
+    <value>Přidejte Pozorovatele</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="APIUsers" xml:space="preserve">
+    <value>API Uživatelé</value>
+  </data>
+  <data name="ApiUsersCountDescription" xml:space="preserve">
+    <value>API Uživatelé ({{count}})</value>
+  </data>
+  <data name="ArchivedSupervisors" xml:space="preserve">
+    <value>Neaktivní Garanti</value>
+  </data>
+  <data name="ArchivingStatusTitle" xml:space="preserve">
+    <value>Stav účtu</value>
+  </data>
+  <data name="ClickToReturn" xml:space="preserve">
+    <value>Klikněte pro návrat do svého účtu.</value>
+  </data>
+  <data name="CreateAdministrator" xml:space="preserve">
+    <value>Vytvořit Administrátora</value>
+  </data>
+  <data name="CreateAndTryLogin" xml:space="preserve">
+    <value>Vytvořit a pokusit se přihlásit</value>
+  </data>
+  <data name="CreateAPIUser" xml:space="preserve">
+    <value>Vytvořit API uživatele</value>
+  </data>
+  <data name="CreateHeadquarters" xml:space="preserve">
+    <value>Vytvořit Ústředí</value>
+  </data>
+  <data name="CreateObserver" xml:space="preserve">
+    <value>Vytvořte Pozorovatele</value>
+  </data>
+  <data name="CreateSupervisor" xml:space="preserve">
+    <value>Vytvořit Garanta</value>
+  </data>
+  <data name="CreationDate" xml:space="preserve">
+    <value>Účet vytvořen dne</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Upravit</value>
+  </data>
+  <data name="EditFormat" xml:space="preserve">
+    <value>Upravit: {0}</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Filter_AllUsers" xml:space="preserve">
+    <value>Všichni uživatelé</value>
+  </data>
+  <data name="Filter_Archived" xml:space="preserve">
+    <value>Neaktivní uživatelé</value>
+  </data>
+  <data name="Filter_Locked" xml:space="preserve">
+    <value>Uzamčení uživatelé</value>
+  </data>
+  <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
+    <value>Pouze se zakázanými úlohami</value>
+  </data>
+  <data name="Filter_WithMissingWorkspace" xml:space="preserve">
+    <value>Chybí úloha</value>
+  </data>
+  <data name="FinishInstallation" xml:space="preserve">
+    <value>Dokončit instalaci</value>
+  </data>
+  <data name="HeadquarterAccountCreationDate" xml:space="preserve">
+    <value>Datum vytvoření účetu Ústředí</value>
+  </data>
+  <data name="Headquarters" xml:space="preserve">
+    <value>Ústředí</value>
+  </data>
+  <data name="HeadquartersCountDescription" xml:space="preserve">
+    <value>Ústředí ({{count}})</value>
+  </data>
+  <data name="HeadquartersEmail" xml:space="preserve">
+    <value>Email Ústředí</value>
+  </data>
+  <data name="ImpersonateAsUser" xml:space="preserve">
+    <value>Zobrazit jako tento uživatel v režimu pouze pro čtení</value>
+  </data>
+  <data name="Interviewer" xml:space="preserve">
+    <value>Tazatel</value>
+  </data>
+  <data name="InterviewerIssues" xml:space="preserve">
+    <value>Problémy tazatele</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Tazatelé</value>
+  </data>
+  <data name="InterviewersCountDescription" xml:space="preserve">
+    <value>Počet tazatelů ({{count}})</value>
+  </data>
+  <data name="Locked" xml:space="preserve">
+    <value>Zamčeno</value>
+  </data>
+  <data name="NotLinkedToDevice" xml:space="preserve">
+    <value>Není propojeno se zařízením</value>
+  </data>
+  <data name="NotLinkedToDeviceTitle" xml:space="preserve">
+    <value>Počet tazatelů, kteří dosud úspěšně nesynchronizovali své tablety se serverem</value>
+  </data>
+  <data name="NumberOfInterviewersInTeam" xml:space="preserve">
+    <value>Počet tazatelů v týmu</value>
+  </data>
+  <data name="Observer" xml:space="preserve">
+    <value>Pozorovatel</value>
+  </data>
+  <data name="ObserverDisclaimerFormat" xml:space="preserve">
+    <value>Toto je obsah, který &lt;b&gt;{0}&lt;/b&gt; vidí.</value>
+  </data>
+  <data name="Observers" xml:space="preserve">
+    <value>Pozorovatelé</value>
+  </data>
+  <data name="ObserversCountDescription" xml:space="preserve">
+    <value>Pozorovatelé ({{count}})</value>
+  </data>
+  <data name="ObserversEmail" xml:space="preserve">
+    <value>E-mail Pozorovatele</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Heslo uživatele {0} změněno</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Odstranit</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Obnovit heslo</value>
+  </data>
+  <data name="ResetPasswordTitle" xml:space="preserve">
+    <value>Obnovit uživatelské heslo</value>
+  </data>
+  <data name="SupervisorAccountCreationDate" xml:space="preserve">
+    <value>Datum vytvoření účetu Garanta</value>
+  </data>
+  <data name="SupervisorEmail" xml:space="preserve">
+    <value>E-mail Garanta</value>
+  </data>
+  <data name="Supervisors" xml:space="preserve">
+    <value>Garanti</value>
+  </data>
+  <data name="Supervisors_Edit" xml:space="preserve">
+    <value>Upravit Garanta</value>
+  </data>
+  <data name="SupervisorsCountDescription" xml:space="preserve">
+    <value>Garanti ({{count}})</value>
+  </data>
+  <data name="SupervisorsInTeam" xml:space="preserve">
+    <value>Garanti ve Vašem týmu</value>
+  </data>
+  <data name="TotalInterviewers" xml:space="preserve">
+    <value>Celkem tazatelů</value>
+  </data>
+  <data name="TryLater" xml:space="preserve">
+    <value>Prosím zkuste to znovu později</value>
+  </data>
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Nahrát uživatele</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Přihlašovací jméno</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Uživatel nenalezen</value>
+  </data>
+  <data name="UsersTitle" xml:space="preserve">
+    <value>Uživatelé</value>
   </data>
 </root>

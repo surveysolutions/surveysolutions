@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Completed" xml:space="preserve">
-    <value>Dokončeno</value>
+    <value>Dokončené</value>
   </data>
   <data name="DataExport" xml:space="preserve">
     <value>Export dat</value>
@@ -128,5 +128,104 @@
   </data>
   <data name="UserBatchUpload" xml:space="preserve">
     <value>Dávkové nahrání uživatelů</value>
+  </data>
+  <data name="Administration" xml:space="preserve">
+    <value>Správa</value>
+  </data>
+  <data name="ApiUsers" xml:space="preserve">
+    <value>API Uživatelé</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Dotazníky</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Nové dotazníky</value>
+  </data>
+  <data name="CumulativeChart" xml:space="preserve">
+    <value>Graf - kumulativní počet rozhovorů</value>
+  </data>
+  <data name="DevicesInterviewers" xml:space="preserve">
+    <value>Zařízení/Tazatelé</value>
+  </data>
+  <data name="Headquarters" xml:space="preserve">
+    <value>Ústředí</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Pomoc</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Tazatelé</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Rozhovory</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Mapa šetření</value>
+  </data>
+  <data name="MapReport" xml:space="preserve">
+    <value>Mapa šetření</value>
+  </data>
+  <data name="Observers" xml:space="preserve">
+    <value>Pozorovatelé</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Množství</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Typy dotazníků</value>
+  </data>
+  <data name="QueueSizeTitle" xml:space="preserve">
+    <value>Počet synchronizovaných, ale dosud nezpracovaných rozhovorů</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Vrácené</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Přehled</value>
+  </data>
+  <data name="ServerAdministration" xml:space="preserve">
+    <value>Správa</value>
+  </data>
+  <data name="Speed" xml:space="preserve">
+    <value>Rychlost</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>Rozpracované</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Doba trvání statusu</value>
+  </data>
+  <data name="Supervisors" xml:space="preserve">
+    <value>Garanti</value>
+  </data>
+  <data name="SurveysAndStatuses" xml:space="preserve">
+    <value>Typy dotazníků (status)</value>
+  </data>
+  <data name="SurveySetup" xml:space="preserve">
+    <value>Nastavení průzkumu</value>
+  </data>
+  <data name="SurveyStatistics" xml:space="preserve">
+    <value>Statistika šetření</value>
+  </data>
+  <data name="TeamAndRoles" xml:space="preserve">
+    <value>Seznam tazatelů</value>
+  </data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve">
+    <value>Tazatelé (status)</value>
+  </data>
+  <data name="TeamsAndRoles" xml:space="preserve">
+    <value>Týmy a role</value>
+  </data>
+  <data name="TeamsAndStatuses" xml:space="preserve">
+    <value>Týmy a statusy</value>
+  </data>
+  <data name="Troubleshooting" xml:space="preserve">
+    <value>Odstraňování problémů</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Uživatelé</value>
+  </data>
+  <data name="Workspaces" xml:space="preserve">
+    <value>Úlohy</value>
   </data>
 </root>
