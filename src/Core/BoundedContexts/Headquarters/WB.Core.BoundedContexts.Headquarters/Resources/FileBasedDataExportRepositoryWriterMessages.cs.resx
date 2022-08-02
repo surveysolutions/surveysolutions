@@ -123,4 +123,25 @@
   <data name="Supervisor" xml:space="preserve">
     <value>Garant</value>
   </data>
+  <data name="Administrator" xml:space="preserve">
+    <value>Administrátor</value>
+  </data>
+  <data name="ApiUser" xml:space="preserve">
+    <value>Api Uživatel</value>
+  </data>
+  <data name="FileContentIsMissingForFileNameAndInterviewFormat" xml:space="preserve">
+    <value>Chybí obsah souboru {0} rozhovor {1}</value>
+  </data>
+  <data name="Interviewer" xml:space="preserve">
+    <value>Tazatel</value>
+  </data>
+  <data name="InterviewWithIdIsAbsentFormat" xml:space="preserve">
+    <value>Chybí rozhovor s ID '{0}'</value>
+  </data>
+  <data name="UnknownRole" xml:space="preserve">
+    <value>&lt;NEZNÁMÁ ROLE&gt;</value>
+  </data>
+  <data name="UnknownUser" xml:space="preserve">
+    <value>&lt;NEZNÁMÝ UŽIVATEL&gt;</value>
+  </data>
 </root>

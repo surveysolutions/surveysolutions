@@ -148,9 +148,129 @@
     <value>%question_variable:qrcode% - zobraz odpověď jako QR Code</value>
   </data>
   <data name="NoteToSupervisor" xml:space="preserve">
-    <value>Poznámka pro garanta</value>
+    <value>Poznámka pro Garanta</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Uložit</value>
+  </data>
+  <data name="AdditionalSettings" xml:space="preserve">
+    <value>Další nastavení</value>
+  </data>
+  <data name="AnswerOn" xml:space="preserve">
+    <value>odpověď na {{variable}}</value>
+  </data>
+  <data name="CustomizeDisplayedText" xml:space="preserve">
+    <value>Přizpůsobte zobrazený text pro respondenty</value>
+  </data>
+  <data name="CustomizeEmailsText" xml:space="preserve">
+    <value>Přizpůsobit text e-mailů</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Popis:</value>
+  </data>
+  <data name="DescriptionForPassword" xml:space="preserve">
+    <value>Popis hesla:</value>
+  </data>
+  <data name="DoNotSend" xml:space="preserve">
+    <value>Nezasílat</value>
+  </data>
+  <data name="EmailMessage" xml:space="preserve">
+    <value>Zpráva:</value>
+  </data>
+  <data name="EmailSubject" xml:space="preserve">
+    <value>Předmět:</value>
+  </data>
+  <data name="EmailTemplateDescription" xml:space="preserve">
+    <value>Jako název průzkumu můžete v textu použít náhradu %SURVEYNAME%.</value>
+  </data>
+  <data name="ExampleFinishPage" xml:space="preserve">
+    <value>Příklad konečné stránky</value>
+  </data>
+  <data name="ExampleInvitationEmailMessage" xml:space="preserve">
+    <value>Příklad e-mailové zprávy s pozvánkou</value>
+  </data>
+  <data name="ExampleRejectEmailMessage" xml:space="preserve">
+    <value>Příklad e-mailové zpráva (vrácení dotazníku)</value>
+  </data>
+  <data name="ExampleReminderEmailMessage" xml:space="preserve">
+    <value>Příklad e-mailové zprávy s připomenutím</value>
+  </data>
+  <data name="ExampleResumePage" xml:space="preserve">
+    <value>Příklad pokračující stránky</value>
+  </data>
+  <data name="ExampleWelcomePage" xml:space="preserve">
+    <value>Příklad úvodní stránky</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Pole je povinné.</value>
+  </data>
+  <data name="FinishPage" xml:space="preserve">
+    <value>Dokončit stránku</value>
+  </data>
+  <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
+    <value>V této e-mailové šambolně můžete použít zástupný symbol %question_variable% v textu jako odpověď na otázku v rozhovoru. Otázka musí být z nejvyšší úrovně typu dotazníku (ne uvnitř rosteru).</value>
+  </data>
+  <data name="Invitation" xml:space="preserve">
+    <value>Pozvánka</value>
+  </data>
+  <data name="InvitationEmailMessage" xml:space="preserve">
+    <value>Pozvánka</value>
+  </data>
+  <data name="LinkToInterviewPage" xml:space="preserve">
+    <value>Hlavní stránka webového dotazníku</value>
+  </data>
+  <data name="MainText" xml:space="preserve">
+    <value>Hlavní text:</value>
+  </data>
+  <data name="Reject" xml:space="preserve">
+    <value>Vrátit</value>
+  </data>
+  <data name="RejectEmailMessage" xml:space="preserve">
+    <value>Vrátit</value>
+  </data>
+  <data name="Reminder" xml:space="preserve">
+    <value>Připomínka</value>
+  </data>
+  <data name="ReminderNoResponseEmailMessage" xml:space="preserve">
+    <value>Bez odpovědi</value>
+  </data>
+  <data name="ReminderPartialResponseEmailMessage" xml:space="preserve">
+    <value>Částečná odezva</value>
+  </data>
+  <data name="ReminderSetting" xml:space="preserve">
+    <value>Nastavení připomenutí</value>
+  </data>
+  <data name="Resume" xml:space="preserve">
+    <value>Pokračovat</value>
+  </data>
+  <data name="ResumeEmailMessage" xml:space="preserve">
+    <value>Pokračovat</value>
+  </data>
+  <data name="ResumePage" xml:space="preserve">
+    <value>Pokračovat stránku</value>
+  </data>
+  <data name="SendWithNoResponse" xml:space="preserve">
+    <value>Odeslat připomenutí lidem s bez odpovědi</value>
+  </data>
+  <data name="SendWithPartialResponse" xml:space="preserve">
+    <value>Odeslat připomenutí lidem s částečnou odpovědí</value>
+  </data>
+  <data name="ShownPasswordIsRequired" xml:space="preserve">
+    <value>Zobrazí se pouze v případě, že je vyžadováno a nastaveno heslo</value>
+  </data>
+  <data name="StartInterviewButton" xml:space="preserve">
+    <value>Tlačítko Zahájit rozhovor</value>
+  </data>
+  <data name="StartNew" xml:space="preserve">
+    <value>Zahájení nového rozhovoru</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titul:</value>
+  </data>
+  <data name="WebInterviewSetupFor_Title" xml:space="preserve">
+    <value>Nastavení webového rozhovoru pro</value>
+  </data>
+  <data name="WelcomePage" xml:space="preserve">
+    <value>Uvítací stránka</value>
   </data>
 </root>

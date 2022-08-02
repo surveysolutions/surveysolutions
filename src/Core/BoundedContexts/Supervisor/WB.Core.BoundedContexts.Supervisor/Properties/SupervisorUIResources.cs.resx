@@ -122,16 +122,16 @@
   </data>
   <data name="OfflineSync_NoDevicesDetectedFormat" xml:space="preserve">
     <value>Tazatelské zařízení nebylo nalezeno.
-Číslo tvého zařízení '{0}'</value>
+Číslo Vašeho zařízení '{0}'</value>
   </data>
   <data name="OfflineSync_ReceivingInterviews" xml:space="preserve">
-    <value>Přijímání dotazníků</value>
+    <value>Přijímání rozhovorů</value>
   </data>
   <data name="OfflineSync_ReceivingInterviewsFromDevices" xml:space="preserve">
-    <value>Přijímání dotazníků ze zařízení tazatele</value>
+    <value>Přijímání rozhovorů ze zařízení tazatele</value>
   </data>
   <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
-    <value>Čekání na činnost tazatelského zařízení</value>
+    <value>Čekání na činnost z tabletu tazatele</value>
   </data>
   <data name="Synchronization_Download_Interviewer_Apps" xml:space="preserve">
     <value>Probíhá stahování aktualizace pro aplikaci Tazatel</value>
@@ -140,19 +140,19 @@
     <value>Probíhá stahování aktualizace. {0} z {1} staženo</value>
   </data>
   <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
-    <value>Synchronizace s ústředím</value>
+    <value>Synchronizace s Ústředím</value>
   </data>
   <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
     <value>Synchronizace s tazateli</value>
   </data>
   <data name="Synchronization_UploadBrokenInterviewPackages" xml:space="preserve">
-    <value>Nahrání chybného tazatelského souboru</value>
+    <value>Nahrávání poškozených tazatelských souborů</value>
   </data>
   <data name="Synchronization_UploadExceptions" xml:space="preserve">
-    <value>Nahrání chybových hlášek</value>
+    <value>Nahrávání chybových hlášek tazatele</value>
   </data>
   <data name="Synchronization_UploadStatistics" xml:space="preserve">
-    <value>Nahrání přehledu o synchronizaci</value>
+    <value>Nahrávání synchronizačních statistik tazatelů</value>
   </data>
   <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
     <value>Nahráno {0} z {1}</value>

@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CompleteInterview" xml:space="preserve">
-    <value>Rozhovor {0} byl dokončen</value>
+    <value>Rozhovor {0} dokončen</value>
   </data>
   <data name="DownloadTabLog" xml:space="preserve">
-    <value>Stáhněte si kompletní log ve formátu Tab</value>
+    <value>Stáhnout kompletní protokol akcí ve formátu Tab</value>
   </data>
   <data name="FinishInstallation" xml:space="preserve">
     <value>Instalace dokončena</value>
@@ -133,24 +133,93 @@
     <value>Synchronizace dokončena: </value>
   </data>
   <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve">
-    <value>{0} stažených nových přiřazení</value>
+    <value>Nově stažených dotazníků - {0}</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve">
-    <value>{0} stažených nových dotazníků</value>
+    <value>Nově stažených rozhovorů - {0}</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
-    <value>{0} dotazníků částečně nahráno</value>
+    <value>Částečně nahraných rozhovorů - {0}</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
-    <value>{0} dotazníků vráceno</value>
+    <value>Vrácených rozhovorů - {0}</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve">
-    <value>{0} dotazníků odstraněno</value>
+    <value>Odstraněných rozhovorů - {0}</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve">
-    <value>{0} dotazníků nahráno</value>
+    <value>Nahraných rozhovorů - {0}</value>
   </data>
   <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve">
     <value>nic k synchronizaci</value>
+  </data>
+  <data name="ApproveInterview" xml:space="preserve">
+    <value>Rozhovor {0} schválen</value>
+  </data>
+  <data name="AssignResponsibleToAssignment" xml:space="preserve">
+    <value>Přiřadit zodpovědnou osobu {0} k dotazníku #{1}</value>
+  </data>
+  <data name="AssignResponsibleToInterview" xml:space="preserve">
+    <value>Přiřadit zodpovědného uživatele {0} k rozhovoru {1}</value>
+  </data>
+  <data name="CloseInterview" xml:space="preserve">
+    <value>Rozhovor {0} uzavřen</value>
+  </data>
+  <data name="CreateInterviewFromAssignment" xml:space="preserve">
+    <value>Rozhovor {0} vytvořen z dotazníku {1}</value>
+  </data>
+  <data name="DeleteInterview" xml:space="preserve">
+    <value>Rozhovor {0} smazán</value>
+  </data>
+  <data name="DetailedActionLog" xml:space="preserve">
+    <value>Podrobný protokol akcí</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Uživatel {0} přihlášený k aplikaci</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Uživatel {0} se odhlásil z aplikace</value>
+  </data>
+  <data name="OpenApplication" xml:space="preserve">
+    <value>Aplikace otevřena</value>
+  </data>
+  <data name="OpenInterview" xml:space="preserve">
+    <value>Rozhovor {0} otevřen</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Záznam akcí</value>
+  </data>
+  <data name="RecordsMissing" xml:space="preserve">
+    <value>Zatím žádné záznamy</value>
+  </data>
+  <data name="RejectInterview" xml:space="preserve">
+    <value>Rozhovor {0} vrácen</value>
+  </data>
+  <data name="Relink" xml:space="preserve">
+    <value>Uživatel přeřazený k novému tabletu</value>
+  </data>
+  <data name="RestartInterview" xml:space="preserve">
+    <value>Rozhovor {0} restartován</value>
+  </data>
+  <data name="ShowPrevious7Days" xml:space="preserve">
+    <value>Zobrazit předchozích 7 aktivních dnů</value>
+  </data>
+  <data name="SwitchInterviewMode" xml:space="preserve">
+    <value>Rozhovor {0} přepnut do režimu {1}</value>
+  </data>
+  <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve">
+    <value>Odebraných dotazníků - {0}</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
+    <value>Upravených rozhovorů z Ústředí - {0}</value>
+  </data>
+  <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
+    <value>Opětovně otevřených rozhovorů po obdržení poznámky - {0}</value>
+  </data>
+  <data name="SynchronizationFailed" xml:space="preserve">
+    <value>Synchronizace se nezdařila</value>
+  </data>
+  <data name="SynchronizationStarted" xml:space="preserve">
+    <value>Synchronizace zahájena ({0})</value>
   </data>
 </root>

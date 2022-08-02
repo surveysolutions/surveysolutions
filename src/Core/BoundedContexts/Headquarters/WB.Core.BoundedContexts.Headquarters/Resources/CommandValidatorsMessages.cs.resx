@@ -117,88 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InterviewStatus_Completed" xml:space="preserve">
-    <value>Dokončené</value>
+  <data name="AssignmentResponsibleNotFound" xml:space="preserve">
+    <value>Zodpovědný uživatel nebyl nalezen</value>
   </data>
-  <data name="MenuItem_Completed" xml:space="preserve">
-    <value>Dokončené</value>
+  <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
+    <value>Typ dotazníku '{0}' již existuje. Vyberte prosím jiný název.</value>
   </data>
-  <data name="UserRoles_Administrator" xml:space="preserve">
-    <value>Administrátor</value>
+  <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
+    <value>Již jste importovali jiný dotazník s proměnnou dotazníku '{0}' z Designeru. Pokud stále chcete importovat tento konkrétní, zadejte mu prosím jinou proměnnou dotazníku v Designeru.</value>
   </data>
-  <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>Ústředí</value>
+  <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
+    <value>Na otázky Garanta může odpovídat pouze Garant zodpovědný za tento dotazník.</value>
   </data>
-  <data name="UserRoles_Supervisor" xml:space="preserve">
-    <value>Garant</value>
-  </data>
-  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
-    <value>Uzamknout</value>
-  </data>
-  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Poznámka pro Garanta</value>
-  </data>
-  <data name="InterviewerFacet_None" xml:space="preserve">
-    <value>Žádné</value>
-  </data>
-  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Schváleno Ústředím</value>
-  </data>
-  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Schváleno Garantem</value>
-  </data>
-  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
-    <value>Tazatel přidělen</value>
-  </data>
-  <data name="MenuItem_Profile" xml:space="preserve">
-    <value>Profil</value>
-  </data>
-  <data name="MenuItem_Rejected" xml:space="preserve">
-    <value>Vráceno</value>
-  </data>
-  <data name="MenuItem_Started" xml:space="preserve">
-    <value>Rozpracované</value>
-  </data>
-  <data name="UserRoles_ApiUser" xml:space="preserve">
-    <value>ApiUživatel</value>
-  </data>
-  <data name="UserRoles_Interviewer" xml:space="preserve">
-    <value>Tazatel</value>
-  </data>
-  <data name="UserRoles_Observer" xml:space="preserve">
-    <value>Pozorovatel</value>
-  </data>
-  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
-    <value>Dokončit text</value>
-  </data>
-  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
-    <value>Uvítací pozvánka</value>
-  </data>
-  <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
-    <value>Pozvánka</value>
-  </data>
-  <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
-    <value>Úvítací záhlaví</value>
-  </data>
-  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
-    <value>Pokračovat</value>
-  </data>
-  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
-    <value>Pokračovat v pozvánce</value>
-  </data>
-  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
-    <value>Pokračovat v záhlaví</value>
-  </data>
-  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
-    <value>Zahájení nového rozhovoru</value>
-  </data>
-  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
-    <value>Název průzkumu</value>
-  </data>
-  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
-    <value>Dokončit záhlaví</value>
-  </data>
-  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
-    <value>Úvítací záhlaví</value>
+  <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
+    <value>Každý dotazník pro webový rozhovor musí mít tazatele, který je za něj zodpovědný</value>
   </data>
 </root>

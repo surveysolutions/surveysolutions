@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Complete" xml:space="preserve">
-    <value>Uzamknuté (Odeslané)</value>
+    <value>Dokončené (uzamčené)</value>
   </data>
   <data name="CompleteInterview" xml:space="preserve">
-    <value>Uzamknutý dotazník</value>
+    <value>Dokončený dotazník</value>
   </data>
   <data name="CompletionText" xml:space="preserve">
-    <value>Dotazník byl dokončen</value>
+    <value>Rozhovor byl dokončen</value>
   </data>
   <data name="DiscardAndStart" xml:space="preserve">
     <value>Znovu otevřít</value>
@@ -156,7 +156,7 @@ Děkujeme za spolupráci!</value>
     <value>Připomínáme, nezapomeňte se zúčastnit %SURVEYNAME%</value>
   </data>
   <data name="Email_PartialResponse_Message" xml:space="preserve">
-    <value>Pozor nedokončili jste začatý rozhovor %SURVEYNAME%.
+    <value>Pozor nedokončili jste začatý dotazník %SURVEYNAME%.
 
 Pro pokračování v šetření klikněte na následující odkaz: %SURVEYLINK% a zadejte Vaše heslo: %PASSWORD%.
 
@@ -197,7 +197,7 @@ Děkujeme za spolupráci!</value>
     <value>Platnost odkazu vypršela</value>
   </data>
   <data name="Error_NoActionsNeeded" xml:space="preserve">
-    <value>Informace byly zaznamenány. Nejsou potřeba žádné další kroky.</value>
+    <value>Informace rozhovoru byly zaznamenány. Nejsou potřeba žádné další kroky.</value>
   </data>
   <data name="Error_NotFound" xml:space="preserve">
     <value>Rozhovor nebyl nalezen</value>
@@ -206,7 +206,7 @@ Děkujeme za spolupráci!</value>
     <value>Uživatel nemá oprávnění</value>
   </data>
   <data name="Filters_Answered" xml:space="preserve">
-    <value>Odpovězeno</value>
+    <value>Vyplněno</value>
   </data>
   <data name="Filters_ClearSelection" xml:space="preserve">
     <value>Vymazat všechny filtry</value>
@@ -218,7 +218,7 @@ Děkujeme za spolupráci!</value>
     <value>Pro tazatele</value>
   </data>
   <data name="Filters_ForSupervisor" xml:space="preserve">
-    <value>Pro garanta</value>
+    <value>Pro Garanta</value>
   </data>
   <data name="Filters_Invalid" xml:space="preserve">
     <value>Neplatný</value>
@@ -248,19 +248,19 @@ Děkujeme za spolupráci!</value>
     <value>V procesu</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
-    <value>{{value}} odpověď</value>
+    <value>Odpovědí - {{value}}</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
     <value>jedna odpověď</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
-    <value>{{value}} chyba</value>
+    <value>Chyb - {{value}}</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
     <value>jedna chyba</value>
   </data>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
-    <value>Dokončené sekce: {{value}}</value>
+    <value>Dokončená sekce: {{value}}</value>
   </data>
   <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
     <value>Sekce nebyla zahájena</value>
@@ -269,7 +269,7 @@ Děkujeme za spolupráci!</value>
     <value>Zahájené sekce: {{value}}</value>
   </data>
   <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
-    <value>{{value}} podsekce</value>
+    <value>Podsekcí - {{value}}</value>
   </data>
   <data name="Interview_Group_Subgroups_One" xml:space="preserve">
     <value>jedna podsekce</value>
@@ -281,10 +281,10 @@ Děkujeme za spolupráci!</value>
     <value>Datum dokončení rozhovoru:</value>
   </data>
   <data name="InterviewIdFormatText" xml:space="preserve">
-    <value>IČ rozhovoru: {0}</value>
+    <value>ID rozhovoru: {0}</value>
   </data>
   <data name="InterviewReceivedByInterviewer" xml:space="preserve">
-    <value>Nelze upravit rozhovor, který byl přijat zařízením</value>
+    <value>Nelze upravit rozhovor, který byl stažen do tabletu</value>
   </data>
   <data name="InterviewSizeLimitReached" xml:space="preserve">
     <value>V dotazníku je překročen limit pro celkový počet seznamů a otázek.</value>
@@ -302,10 +302,10 @@ Děkujeme za spolupráci!</value>
     <value>Byli jste pozváni k účasti v následujícím šetření: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Poznámka pro garanta</value>
+    <value>Poznámka pro Garanta</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
-    <value>Ještě nezačal</value>
+    <value>Ještě nezačnuté</value>
   </data>
   <data name="Original_Language" xml:space="preserve">
     <value>Původní</value>
@@ -326,7 +326,7 @@ Děkujeme za spolupráci!</value>
     <value>Šetření vyžaduje internetové připojení, není potřeba další programové vybavení</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>Může přejít k rozhovoru v následujícím šetření: "%QUESTIONNAIRE%"</value>
+    <value>Můžete přejít k rozhovoru v následujícím šetření: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
     <value>Vítejte v Survey Solutions webovém šetření</value>
@@ -341,7 +341,7 @@ Děkujeme za spolupráci!</value>
     <value>Začít nový rozhovor</value>
   </data>
   <data name="StartedInterviewText" xml:space="preserve">
-    <value>Dotazník není hotový</value>
+    <value>Rozhovor nebyl dokončený</value>
   </data>
   <data name="StartPageTitle" xml:space="preserve">
     <value>Webové šetření</value>
@@ -350,7 +350,7 @@ Děkujeme za spolupráci!</value>
     <value>Šetření: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="ToInterview" xml:space="preserve">
-    <value>K šetření</value>
+    <value>Do rozhovoru</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Upozornění</value>
@@ -362,9 +362,15 @@ Děkujeme za spolupráci!</value>
     <value>Vítejte v Survey Solutions webovém šetření</value>
   </data>
   <data name="InterviewNotFound" xml:space="preserve">
-    <value>Dotazník nebyl nalezen.</value>
+    <value>Rozhovor nebyl nalezen.</value>
   </data>
   <data name="LinkToWebInterviewExample" xml:space="preserve">
     <value>Odkaz na vstupní stránku webového dotazníku</value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>Powered by</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
   </data>
 </root>

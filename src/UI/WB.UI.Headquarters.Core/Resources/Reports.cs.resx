@@ -118,24 +118,279 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApprovedByHQ" xml:space="preserve">
-    <value>Schváleno ústředím</value>
+    <value>Schváleno Ústředím</value>
   </data>
   <data name="ApprovedBySupervisor" xml:space="preserve">
-    <value>Schváleno garantem</value>
+    <value>Schváleno Garantem</value>
   </data>
   <data name="Completed" xml:space="preserve">
     <value>Dokončeno</value>
   </data>
   <data name="QuestionText" xml:space="preserve">
-    <value>Text otázky</value>
+    <value>Znění otázky</value>
   </data>
   <data name="Report_Number_of_Completed_Interviews" xml:space="preserve">
-    <value>Počet hotových dotazníků</value>
+    <value>Počet dokončených rozhovorů</value>
   </data>
   <data name="SaveAsImage" xml:space="preserve">
     <value>Uložit jako obrázek</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
     <value>Garant</value>
+  </data>
+  <data name="AllData" xml:space="preserve">
+    <value>Všechna data</value>
+  </data>
+  <data name="AssignReceivedConfirm" xml:space="preserve">
+    <value>Rozuměl jsem tomuto rozhovoru, který jsem již stáhnul na tabletu</value>
+  </data>
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Pokud tazatel již na rozhovoru začal pracovat, budou veškerá data, která tazatel zadal před další synchronizací, VYMAZÁNY!</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Průměr</value>
+  </data>
+  <data name="ByAnswerValue" xml:space="preserve">
+    <value>Filtrovat podle číselné hodnoty</value>
+  </data>
+  <data name="ClusterInfo" xml:space="preserve">
+    <value>Tato oblast obsahuje</value>
+  </data>
+  <data name="CompletionDate" xml:space="preserve">
+    <value>Datum dokončení</value>
+  </data>
+  <data name="ConditionQuestion" xml:space="preserve">
+    <value>Za podmínky</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Počet</value>
+  </data>
+  <data name="CumulativeInterviewChart" xml:space="preserve">
+    <value>Graf - kumulativní počet rozhovorů</value>
+  </data>
+  <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+    <value>Graf kumulativních rozhovorů ukazuje vývoj počtu rozhovorů v každém stavu v průběhu času</value>
+  </data>
+  <data name="DatesRange" xml:space="preserve">
+    <value>Rozsah dat</value>
+  </data>
+  <data name="HeatMapView" xml:space="preserve">
+    <value>Zobrazit termální mapu</value>
+  </data>
+  <data name="HeatRadius" xml:space="preserve">
+    <value>Termální radius</value>
+  </data>
+  <data name="ImportUsersTemplate" xml:space="preserve">
+    <value>Import šablony uživatelů</value>
+  </data>
+  <data name="InterviewChart" xml:space="preserve">
+    <value>Tabulka rozhovoru</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Tazatel přidělen</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Tazatelé</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Minulý měsíc</value>
+  </data>
+  <data name="LastNDays" xml:space="preserve">
+    <value>Posledních {{days}} dnů</value>
+  </data>
+  <data name="LastUpdatedDate" xml:space="preserve">
+    <value>Upraveno dne</value>
+  </data>
+  <data name="LastWeek" xml:space="preserve">
+    <value>Minulý týden</value>
+  </data>
+  <data name="MapDataLoading" xml:space="preserve">
+    <value>Data map se načítají</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  <data name="Median" xml:space="preserve">
+    <value>Medián</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="Percentile05" xml:space="preserve">
+    <value>Percentil 05</value>
+  </data>
+  <data name="Percentile50" xml:space="preserve">
+    <value>Percentil 50</value>
+  </data>
+  <data name="Percentile95" xml:space="preserve">
+    <value>Percentil 95</value>
+  </data>
+  <data name="PivotView" xml:space="preserve">
+    <value>Zobrazit dvou parametrovou tabulku</value>
+  </data>
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>Minulý měsíc</value>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>Minulý týden</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Otázka</value>
+  </data>
+  <data name="QuestionLabel" xml:space="preserve">
+    <value>Označení otázky</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Typ dotazníku</value>
+  </data>
+  <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
+    <value>Mezi verzemi typu dotazníku jsou problémy s kompatibilitou. Odpovědi v dřívějších verzích typu dotazníku, které již v nejnovější verzi typu dotazníku neexistují, byly ignorovány.</value>
+  </data>
+  <data name="QuickRanges" xml:space="preserve">
+    <value>Rychlá období</value>
+  </data>
+  <data name="RangeRelativeToData" xml:space="preserve">
+    <value>Rozsah vzhledem k datům</value>
+  </data>
+  <data name="RejectedByHQ" xml:space="preserve">
+    <value>Vráceno Ústředím</value>
+  </data>
+  <data name="RejectedBySupervisor" xml:space="preserve">
+    <value>Vráceno Garantem</value>
+  </data>
+  <data name="Report_Average_case_assignment_duration" xml:space="preserve">
+    <value>Průměrná doba trvání dotazníku</value>
+  </data>
+  <data name="Report_Average_HQ_processing_time" xml:space="preserve">
+    <value>Průměrná doba zpracování Ústředím</value>
+  </data>
+  <data name="Report_Average_Interview_Duration" xml:space="preserve">
+    <value>Průměrná délka rozhovoru</value>
+  </data>
+  <data name="Report_Average_overall_case_processing_time" xml:space="preserve">
+    <value>Průměrná celková doba zpracování případu</value>
+  </data>
+  <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
+    <value>Průměrná doba zpracování Garantem</value>
+  </data>
+  <data name="Report_Days_by_Interview_Status" xml:space="preserve">
+    <value>Dny podle stavu rozhovoru</value>
+  </data>
+  <data name="Report_Devices_and_Interviewers" xml:space="preserve">
+    <value>Zařízení a tazatelé</value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
+    <value>Počet rozhovorů schválených/vrácených Ústředím</value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
+    <value>Počet rozhovorů schválených/vrácených Garantem</value>
+  </data>
+  <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
+    <value>Počet rozhovorů schválených Ústředím</value>
+  </data>
+  <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
+    <value>Množství podle tazatelů</value>
+  </data>
+  <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
+    <value>Množství podle Garantů</value>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
+    <value>Rychlost mezi statusy podle tazatelů</value>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
+    <value>Rychlost mezi statusy podle Garantů</value>
+  </data>
+  <data name="Report_Speed_By_Interviewers" xml:space="preserve">
+    <value>Rychlost podle tazatelů</value>
+  </data>
+  <data name="Report_Speed_By_Supervisors" xml:space="preserve">
+    <value>Rychlost podle Garantů</value>
+  </data>
+  <data name="Report_Status_Duration" xml:space="preserve">
+    <value>Doba trvání statusu</value>
+  </data>
+  <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
+    <value>Garanti a stavy</value>
+  </data>
+  <data name="Report_Surveys_and_Statuses" xml:space="preserve">
+    <value>Typy dotazníků (status)</value>
+  </data>
+  <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
+    <value>Tazatelé (status)</value>
+  </data>
+  <data name="Report_Teams_and_Statuses" xml:space="preserve">
+    <value>Týmy a statusy</value>
+  </data>
+  <data name="Restarted" xml:space="preserve">
+    <value>Restartováno</value>
+  </data>
+  <data name="SelectConditionQuestion" xml:space="preserve">
+    <value>Vyberte podmínkovou otázku</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>Vybrat otázku</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Počet dní rozhovoru ve statusu</value>
+  </data>
+  <data name="Sum" xml:space="preserve">
+    <value>Součet</value>
+  </data>
+  <data name="SupervisorAssigned" xml:space="preserve">
+    <value>Přidělených Garantů</value>
+  </data>
+  <data name="SupervisorsAndSurveys" xml:space="preserve">
+    <value>Garanti a šetření</value>
+  </data>
+  <data name="SurveyName" xml:space="preserve">
+    <value>Název typu dotazníku</value>
+  </data>
+  <data name="SurveysAndStatuses" xml:space="preserve">
+    <value>Typy dotazníků (status)</value>
+  </data>
+  <data name="TeamLeadsOnly" xml:space="preserve">
+    <value>Podle Týmů</value>
+  </data>
+  <data name="TeamsAndStatuses" xml:space="preserve">
+    <value>Týmy a statusy</value>
+  </data>
+  <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+    <value>U každého tazatele je uveden počet rozhovorů podle jejich statusu</value>
+  </data>
+  <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+    <value>U každého tazatele je uveden počet rozhovorů podle jejich statusu</value>
+  </data>
+  <data name="TemplateVersion" xml:space="preserve">
+    <value>Verze typu dotazníku</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>Tento měsíc</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>Tento týden</value>
+  </data>
+  <data name="ToAllQuestionnaires" xml:space="preserve">
+    <value>Zpět k typům dotazníků</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Upraveno {0}</value>
+  </data>
+  <data name="UpdateNow" xml:space="preserve">
+    <value>Nyní aktualizovat</value>
+  </data>
+  <data name="Updating" xml:space="preserve">
+    <value>Probíhá aktualizace</value>
+  </data>
+  <data name="Variables" xml:space="preserve">
+    <value>Proměnné</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Verze</value>
+  </data>
+  <data name="ViewOptions" xml:space="preserve">
+    <value>Zobrazit možnosti</value>
+  </data>
+  <data name="WithInterviewers" xml:space="preserve">
+    <value>Podle Tazatelů</value>
   </data>
 </root>
