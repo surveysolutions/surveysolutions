@@ -121,15 +121,45 @@
     <value>Uzamknout</value>
   </data>
   <data name="FinishInterviewText" xml:space="preserve">
-    <value>Dotazník byl dokončen</value>
+    <value>Rozhovor byl dokončen</value>
   </data>
   <data name="LinkToInterviewPage" xml:space="preserve">
-    <value>Webové šetření</value>
+    <value>Webový dotazník</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Poznámka pro garanta</value>
+    <value>Poznámka pro Garanta</value>
   </data>
   <data name="StartNewInterview" xml:space="preserve">
-    <value>Začít nový rozhovor</value>
+    <value>Zahájení nového rozhovoru</value>
+  </data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>Nelze upravit rozhovor, který byl stažen do tabletu</value>
+  </data>
+  <data name="InvitationText" xml:space="preserve">
+    <value>Byli jste pozváni k účasti v následujícím šetření: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="LinkInvitation" xml:space="preserve">
+    <value>Byli jste pozváni k účasti v následujícím šetření: "%QUESTIONNAIRE%". Váš rozhovor ještě není připraven.</value>
+  </data>
+  <data name="LinkWelcome" xml:space="preserve">
+    <value>Vítejte v Survey Solutions webovém šetření</value>
+  </data>
+  <data name="Resume_InvitationText" xml:space="preserve">
+    <value>Můžete přejít na rozhovor v následujícím průzkumu: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="Resume_WelcomeText" xml:space="preserve">
+    <value>Vítejte v Survey Solutions webovém šetření</value>
+  </data>
+  <data name="ResumeInterview" xml:space="preserve">
+    <value>Pokračovat v rozhovoru</value>
+  </data>
+  <data name="SurveyFormatText" xml:space="preserve">
+    <value>Šetření: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="WebSurvey" xml:space="preserve">
+    <value>Survey Solutions webové šetření</value>
+  </data>
+  <data name="WelcomeText" xml:space="preserve">
+    <value>Vítejte v Survey Solutions webovém šetření</value>
   </data>
 </root>

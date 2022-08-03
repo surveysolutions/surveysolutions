@@ -124,34 +124,34 @@
     <value>Zkontrolujte, zda je v zařízení garanta zapnut WiFi a Bluetooth a zda jste v těsné blízkosti</value>
   </data>
   <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
-    <value>Jsou tazatelské a garantské zařízení v těsné blízkosti; WiFi a Bluetooth by měly být povoleny na obou zařízeních; Aplikace Garant by měla být otevřena na garantském zařízení</value>
+    <value>Jsou tazatelské a garantské zařízení v těsné blízkosti; WiFi a Bluetooth by měly být povoleny na obou zařízeních; Aplikace Garant by měla být otevřena na Garantském zařízení</value>
   </data>
   <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
     <value>Připojeno ke garantskému zařízení</value>
   </data>
   <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
-    <value>Počkejte na schválení připojení garantem</value>
+    <value>Počkejte na schválení připojení Garantem</value>
   </data>
   <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
-    <value>Bylo nalezeno garantské zařízení. Žádost o připojení</value>
+    <value>Bylo nalezeno Garantské zařízení. Probíhá žádost o připojení</value>
   </data>
   <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
-    <value>Hledá se garantské zařízení</value>
+    <value>Hledá se Garantské zařízení</value>
   </data>
   <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků garantovi</value>
+    <value>Přesun všech uzamčených rozhovorů do garantského tabletu</value>
   </data>
   <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků '{0}'</value>
+    <value>Přesun všech dokončenných rozhovorů '{0}'</value>
   </data>
   <data name="SendToSupervisor_Note" xml:space="preserve">
-    <value>Poznámka: Tato akce bude trvat déle než obvykle, nevypínejte toto zařízení</value>
+    <value>Pozor: Tato akce bude trvat déle než obvykle, nevypínejte toto zařízení</value>
   </data>
   <data name="SendToSupervisor_Retry" xml:space="preserve">
     <value>Opakovat</value>
   </data>
   <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
-    <value>Některé dotazníky jsou nyní na jiném zařízení</value>
+    <value>Některé rozhovory jsou nyní na jiném zařízení</value>
   </data>
   <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
     <value>Přenos dat nebyl zahájen.
@@ -164,7 +164,7 @@ Garantské zařízení nelze nalézt"</value>
     <value>Přenos dat je dokončen. Všechny dokončené rozhovory jsou přesunuty na jiné zařízení</value>
   </data>
   <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
-    <value>Přenos dat je dokončen. Nepodařilo se synchronizovat {0} rozhovorů</value>
+    <value>Přenos dat je dokončen. Nepodařilo se synchronizovat některé rozhovory - {0}</value>
   </data>
   <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
     <value>Probíhá přenos dat</value>

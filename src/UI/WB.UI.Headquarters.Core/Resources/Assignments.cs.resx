@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-    <!-- 
+  <!-- 
       Microsoft ResX Schema 
       
       Version 2.0
@@ -59,106 +59,465 @@
               : using a System.ComponentModel.TypeConverter
               : and then encoded with base64 encoding.
       -->
-    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
-                xmlns="">
-        <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
-        <xsd:element name="root" msdata:IsDataSet="true">
+  <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
             <xsd:complexType>
-                <xsd:choice maxOccurs="unbounded">
-                    <xsd:element name="metadata">
-                        <xsd:complexType>
-                            <xsd:sequence>
-                                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
-                            </xsd:sequence>
-                            <xsd:attribute name="name" use="required" type="xsd:string"/>
-                            <xsd:attribute name="type" type="xsd:string"/>
-                            <xsd:attribute name="mimetype" type="xsd:string"/>
-                            <xsd:attribute ref="xml:space"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                    <xsd:element name="assembly">
-                        <xsd:complexType>
-                            <xsd:attribute name="alias" type="xsd:string"/>
-                            <xsd:attribute name="name" type="xsd:string"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                    <xsd:element name="data">
-                        <xsd:complexType>
-                            <xsd:sequence>
-                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
-                            </xsd:sequence>
-                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-                            <xsd:attribute ref="xml:space"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                    <xsd:element name="resheader">
-                        <xsd:complexType>
-                            <xsd:sequence>
-                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                            </xsd:sequence>
-                            <xsd:attribute name="name" type="xsd:string" use="required"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                </xsd:choice>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
-        </xsd:element>
-    </xsd:schema>
-    <resheader name="resmimetype">
-        <value>text/microsoft-resx</value>
-    </resheader>
-    <resheader name="version">
-        <value>2.0</value>
-    </resheader>
-    <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
             PublicKeyToken=b77a5c561934e089
         </value>
-    </resheader>
-    <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
             PublicKeyToken=b77a5c561934e089
         </value>
-    </resheader>
-    <data name="Action_Created" xml:space="preserve">
+  </resheader>
+  <data name="Action_Created" xml:space="preserve">
     <value>Vytvořeno</value>
   </data>
-    <data name="Action_Deleted" xml:space="preserve">
+  <data name="Action_Deleted" xml:space="preserve">
     <value>Smazáno</value>
   </data>
-    <data name="AssignmentsSelected" xml:space="preserve">
-    <value>{{count}} Vybraná položka k přiřazení</value>
+  <data name="AssignmentsSelected" xml:space="preserve">
+    <value>{{count}} Vybraný dotazník</value>
   </data>
-    <data name="AssignmentsSelected_plural" xml:space="preserve">
-    <value>{{count}} Vybraných položek k přiřazení</value>
+  <data name="AssignmentsSelected_plural" xml:space="preserve">
+    <value>Vybraných dotazníků - {{count}}</value>
   </data>
-    <data name="Date" xml:space="preserve">
+  <data name="Date" xml:space="preserve">
     <value>Datum</value>
   </data>
-    <data name="LinkToWebInterviewExample" xml:space="preserve">
-    <value>Swich to Web Interview link sample</value>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Přepnout na příklad odkazu webového dotazníku</value>
   </data>
-    <data name="NumberOfAssignmentsAffected" xml:space="preserve">
-    <value>{{count}} Přiřazená položka se bude měnit</value>
+  <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+    <value>{{count}} Dotazník bude změněn</value>
   </data>
-    <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
-    <value>{{count}} Přiřazených položek se bude měnit</value>
+  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+    <value>Počet dotazníků, které budou změněny - {{count}}</value>
   </data>
-    <data name="Password" xml:space="preserve">
-    <value>Helo</value>
+  <data name="Password" xml:space="preserve">
+    <value>Heslo</value>
   </data>
-    <data name="ReceivedByTablet_All" xml:space="preserve">
-    <value>Ukázat vše</value>
+  <data name="ReceivedByTablet_All" xml:space="preserve">
+    <value>Zobrazit vše</value>
   </data>
-    <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
-    <value>Počet dotazníků potřebných k dokončení Vaší práce.</value>
+  <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+    <value>Počet rozhovorů potřebných k dokončení tohoto dotazníku.</value>
   </data>
-    <data name="UpgradeDownloadFailed" xml:space="preserve">
+  <data name="UpgradeDownloadFailed" xml:space="preserve">
     <value>Seznam ke stažení</value>
   </data>
-    <data name="UpgradeProgressDone" xml:space="preserve">
+  <data name="UpgradeProgressDone" xml:space="preserve">
     <value>Hotovo</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Akce</value>
+  </data>
+  <data name="Action_Archived" xml:space="preserve">
+    <value>Neaktivní</value>
+  </data>
+  <data name="Action_AudioRecordingChanged" xml:space="preserve">
+    <value>Záznam zvuku změněn</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+    <value>Záznam zvuku zakázán</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+    <value>Záznam zvuku povolen</value>
+  </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>Poznámka: {{comment}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>Přiřazeno uživateli {{responsible}}</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Velikost změněna</value>
+  </data>
+  <data name="Action_QuantityChanged_To" xml:space="preserve">
+    <value>Velikost změněna na {{quantity}}</value>
+  </data>
+  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
+    <value>Velikost změněna na Neomezená</value>
+  </data>
+  <data name="Action_Reassigned" xml:space="preserve">
+    <value>Přeřazeno</value>
+  </data>
+  <data name="Action_Reassigned_To" xml:space="preserve">
+    <value>Přeřazeno na {{newResponsible}}</value>
+  </data>
+  <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+    <value>Poznámka: {{comment}}</value>
+  </data>
+  <data name="Action_ReceivedByTablet" xml:space="preserve">
+    <value>Staženo do tabletu</value>
+  </data>
+  <data name="Action_UnArchived" xml:space="preserve">
+    <value>zaktivovat</value>
+  </data>
+  <data name="Action_WebModeChanged" xml:space="preserve">
+    <value>Webový režim se změnil</value>
+  </data>
+  <data name="Action_WebModeChanged_False" xml:space="preserve">
+    <value>Webový režim deaktivován</value>
+  </data>
+  <data name="Action_WebModeChanged_True" xml:space="preserve">
+    <value>Webový režim povolen</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>Aktivováno</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Aktivní</value>
+  </data>
+  <data name="Actor" xml:space="preserve">
+    <value>Zadáno</value>
+  </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Všechny dotazníky</value>
+  </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Deaktivovat</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Neaktivní</value>
+  </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>Dotazník {{id}} nelze zavřít, protože má povolený webový režim</value>
+  </data>
+  <data name="AssignmentHistory" xml:space="preserve">
+    <value>Historie</value>
+  </data>
+  <data name="AssignmentId" xml:space="preserve">
+    <value>ID dotazníku</value>
+  </data>
+  <data name="AssignmentInfo" xml:space="preserve">
+    <value>Podrobné informace o dotazníku</value>
+  </data>
+  <data name="AssignmentsHeader" xml:space="preserve">
+    <value>Dotazníky</value>
+  </data>
+  <data name="AssignmentSizeInWebMode" xml:space="preserve">
+    <value>Velikost nelze změnit pro dotazník v režimu Web.</value>
+  </data>
+  <data name="AssignTo" xml:space="preserve">
+    <value>Přiřadit uživateli</value>
+  </data>
+  <data name="AudioRecordingEnable" xml:space="preserve">
+    <value>Povolit nahrávání zvuku</value>
+  </data>
+  <data name="AudioRecordingExplanation" xml:space="preserve">
+    <value>Aplikace Tazatel zaznamená zvuk rozhovoru, když je povoleno nahrávání zvuku v aplikaci. Pozor: Uložená data budou výrazně větší.</value>
+  </data>
+  <data name="CawiActivated" xml:space="preserve">
+    <value>CAWI aktivováno</value>
+  </data>
+  <data name="CawiModeEnable" xml:space="preserve">
+    <value>Povolit režim CAWI</value>
+  </data>
+  <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+    <value>Nastavení nahrávání zvuku pro dotazník {{id}}</value>
+  </data>
+  <data name="ChangeModeModalTitle" xml:space="preserve">
+    <value>Změnit režim pro dotazník {{assignmentId}}</value>
+  </data>
+  <data name="ChangeSizeModalTitle" xml:space="preserve">
+    <value>Upravit velikost dotazníku {{assignmentId}}</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Zavřít</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Poznámka</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Shromážděno</value>
+  </data>
+  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+    <value>Vyplňte všechna nebo některá identifikační pole</value>
+  </data>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>Vyberte zodpovědného uživatele (Ústředí nebo Garant nebo tazatel) za tento dotazník</value>
+  </data>
+  <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+    <value>Tento dotazník bude použit u webového režimu</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Vytvořeno dne</value>
+  </data>
+  <data name="CreateInterview" xml:space="preserve">
+    <value>Zahájení nového rozhovoru</value>
+  </data>
+  <data name="CreatingNewAssignment" xml:space="preserve">
+    <value>Vytvořit novdý otazník pro typ {{questionnaire}}</value>
+  </data>
+  <data name="DateFromPast" xml:space="preserve">
+    <value>Vybrané datum je v minulosti</value>
+  </data>
+  <data name="Details_Column" xml:space="preserve">
+    <value>Podrobnosti</value>
+  </data>
+  <data name="DetailsComments" xml:space="preserve">
+    <value>Poznámka</value>
+  </data>
+  <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+    <value>Heslo podle dotazníku pro webový režim s množstvím 1 by mělo být jedinečné</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="EmailExplanation" xml:space="preserve">
+    <value>E-mail bude použit při komunikaci s příjemcem dotazníku</value>
+  </data>
+  <data name="EnterComments" xml:space="preserve">
+    <value>Zde zadejte svoji poznámku</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>Zadejte email</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Zadejte heslo</value>
+  </data>
+  <data name="ErrorToCreateAssignment" xml:space="preserve">
+    <value>Dotazník nelze vytvořit.</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Technické údaje</value>
+  </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>Počet</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>E-mail je neplatný</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Heslo je neplatné</value>
+  </data>
+  <data name="InvalidSize" xml:space="preserve">
+    <value>Pole Velikost musí být -1 nebo více.</value>
+  </data>
+  <data name="InvalidSizeMessage" xml:space="preserve">
+    <value>Velikost je neplatná</value>
+  </data>
+  <data name="InvalidSizeWithEmail" xml:space="preserve">
+    <value>U dotazníků se zadaným e-mailem je povolená velikost 1</value>
+  </data>
+  <data name="IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Záznam zvuku</value>
+  </data>
+  <data name="ModeExplanation" xml:space="preserve">
+    <value>Režim CAWI umožňuje sbírat data přímo od respondentů</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>Vybraných dotazníků, které budou uzavřeny - {{count}}. Velikost bude nastavena podle aktuálního počtu shromážděných rozhovorů.</value>
+  </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>Nový dotazník</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>(bez poznámky)</value>
+  </data>
+  <data name="PasswordExplanation" xml:space="preserve">
+    <value>Heslo bude použito k ochraně dotazníku</value>
+  </data>
+  <data name="PasswordInstructions" xml:space="preserve">
+    <value>Alespoň 6 číslic a velká písmena nebo jeden symbol '?' pro vygenerování hesla</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Typ dotazníku</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>ver. {{version}}</value>
+  </data>
+  <data name="ReceivedByTablet" xml:space="preserve">
+    <value>Staženo do tabletu</value>
+  </data>
+  <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+    <value>Nebylo staženo do tabletu</value>
+  </data>
+  <data name="ReceivedByTablet_Received" xml:space="preserve">
+    <value>Staženo do tabletu</value>
+  </data>
+  <data name="ResponsibleRequired" xml:space="preserve">
+    <value>Zodpovědný uživatel je vyžadován</value>
+  </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>Vyberte existující typ dotazníku, u kterého chcete aktualizovat dotazník</value>
+  </data>
+  <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+    <value>Vybrat typ dotazníku, ze kterého chcete upgradovat</value>
+  </data>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>Vyberte zodpovědné uživatele</value>
+  </data>
+  <data name="ShowArchived" xml:space="preserve">
+    <value>Stav účtu</value>
+  </data>
+  <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>Velikost vybraného dotazníku {{id}} bude změněna z {{quantity}} na {{collected}} (počet aktuálně shromážděných rozhovorů)</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Očekávaný</value>
+  </data>
+  <data name="SizeExplanation" xml:space="preserve">
+    <value>Určete maximální počet rozhovorů pro daný dotazník. Povolené hodnoty: -1 je pro Neomezený dotazník, 0 je pro Prázdný dotazník, čísla jsou pro velikost dotazníku</value>
+  </data>
+  <data name="SizeForWebMode" xml:space="preserve">
+    <value>Dotazník s velikostí 1 pro webový režim by měl obsahovat e-mail nebo heslo</value>
+  </data>
+  <data name="SizeInstructions" xml:space="preserve">
+    <value>Musí to být číslo, -1 pro neomezené, 1, pokud je zadán e-mail</value>
+  </data>
+  <data name="StartWebInterview" xml:space="preserve">
+    <value>Začít nový webový dotazník</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+    <value>Indikátor, zda je dotazník aktivní nebo byl deaktivován.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Výběrem typu dotazníku zobrazíte související dotazníky. Vyberte „Všechny typy“, chcete-li zobrazit dotazníky jakéhokoli typu.</value>
+  </data>
+  <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+    <value>Výběrem verze typu dotazníku zobrazíte související dotazníky. Vyberte „Všechny verze", chcete-li zobrazit dotazníky jakéhokoli verze.</value>
+  </data>
+  <data name="Tooltip_Filter_Received" xml:space="preserve">
+    <value>Indikátor, zda byl dotazník stažen do tabletu či ne</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>Zodpovědný uživatel. Klikněte do pole k vybrání uživatelského jména buď přímým výběrem, nebo zadáním jména pro další filtrování v seznamu uživatelských jmen.</value>
+  </data>
+  <data name="Tooltip_Table_Count" xml:space="preserve">
+    <value>Počet aktuálně odeslaných rozhovorů pro tento dotazník. Mohlo být vytvořeno více rozhovorů, ale ještě nebyly synchronizovány. Kliknutím na libovolnou buňku zobrazíte související rozhovory. Kliknutím na ikonu řazení seřadíte podle počtu.</value>
+  </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>Kdy byl dotazník původně vytvořen. Kliknutím na ikonu řazení seřadíte podle času.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Informace, které identifikují každý dotazník. Toto jsou odpovědi na otázky označené v aplikaci Designer jako identifikační.</value>
+  </data>
+  <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Zaznamenejte proces rozhovoru</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>Uživatel aktuálně zodpovědný za dotazník. Kliknutím na ikonu řazení seřadíte podle uživatelského jména.</value>
+  </data>
+  <data name="Tooltip_Table_Size" xml:space="preserve">
+    <value>Maximální počet rozhovorů, které lze pro u tohoto dotazníku provést. Klikněte na libovolnou buňku pro změnu tohoto čísla. Klikněte na ikonu řazení pro seřazení podle velikosti.</value>
+  </data>
+  <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+    <value>Kdy byl dotazník naposledy aktualizován. Kliknutím na ikonu řazení seřadíte podle času.</value>
+  </data>
+  <data name="Tooltip_Table_WebMode" xml:space="preserve">
+    <value>Režim dotazníku</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Zrušit archivaci</value>
+  </data>
+  <data name="Unlimited" xml:space="preserve">
+    <value>Neomezený</value>
+  </data>
+  <data name="UpdatedAt" xml:space="preserve">
+    <value>Upraveno dne</value>
+  </data>
+  <data name="UpgradeBtn" xml:space="preserve">
+    <value>Vylepšit</value>
+  </data>
+  <data name="UpgradeCancelled" xml:space="preserve">
+    <value>Upgrade zastaven</value>
+  </data>
+  <data name="UpgradeDescription" xml:space="preserve">
+    <value>Když jsou dotazníky upraveny a aktualizovány, budou aktualizoovány i všechny zbývající dotazníky.</value>
+  </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>Vyskytla se chyba. Zkuste to později.</value>
+  </data>
+  <data name="UpgradePreparation" xml:space="preserve">
+    <value>Čeká se na dokončení dalších úprav</value>
+  </data>
+  <data name="UpgradeProgressDoneCount" xml:space="preserve">
+    <value>Upgradováno úspěšně: {{processed}}</value>
+  </data>
+  <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+    <value>Upgrade z {{from}} na {{to}} je dokončen</value>
+  </data>
+  <data name="UpgradeProgressErrorCount" xml:space="preserve">
+    <value>Neaktualizováno: {{count}}</value>
+  </data>
+  <data name="UpgradeProgressErrors" xml:space="preserve">
+    <value>S chybami {{errorCount}}</value>
+  </data>
+  <data name="UpgradeProgressNumbers" xml:space="preserve">
+    <value>Upgrade {{processed}} z {{totalCount}}</value>
+  </data>
+  <data name="UpgradeProgressTitle" xml:space="preserve">
+    <value>Aktualizace dotazníku z {{from}} na {{to}}</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Režim</value>
+  </data>
+  <data name="WebModeEnabledWarning" xml:space="preserve">
+    <value>Dotazník nelze dokončit. Má webový režim aktivován, zatímco typ dotazníku má webový sběrný režim deaktivován.</value>
+  </data>
+  <data name="WebModeNonInterviewer" xml:space="preserve">
+    <value>Všechny dotazníky pro webové dotazníky musí být zadány tazateli</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+    <value>Přidělujete webový dotazník uživateli, který není TAZATEL. Pokud jste již odeslali odkaz na tento dotazník, respondenti nebudou moci na Váše šetření reagovat, dokud nebude dotazník vrácen uživateli v roli TAZATEL.</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer_plural" xml:space="preserve">
+    <value>Přidělujete webové dotazníky uživateli, který není TAZATEL. Pokud jste již odeslali odkazy na tyto dotazníky, respondenti nebudou moci na Váše šetření reagovat, dokud nebudou dotazníky vráceny uživateli v roli TAZATEL.</value>
   </data>
 </root>

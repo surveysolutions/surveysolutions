@@ -118,15 +118,219 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="LogoSettings_Description" xml:space="preserve">
-    <value>Logo společnosti zobrazuje vlastní obrázek na přihlašovací stránce serveru a na přihlašovací stránce aplikace Tazatel. Kliknutím na tlačítko Vybrat soubor nahrajete obrázek z počítače na server.</value>
+    <value>Logo společnosti zobrazuje vlastní obrázek na přihlašovací stránce serveru a na přihlašovací stránce aplikace Tazatel. </value>
   </data>
   <data name="PartialSynchronizationDescription" xml:space="preserve">
-    <value>Je-li povoleno, bude tazatelský tablet odesílat i rozšetřené dotazníky do ústředí</value>
+    <value>Pokud povoleno, bude tazatelský tablet odesílat i rozšetřené rozhovory do Ústředí</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Helo</value>
+    <value>Heslo</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
     <value>Nastavení</value>
+  </data>
+  <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
+    <value>Úprava profilu sčítače</value>
+  </data>
+  <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
+    <value>Povolte sčítacím komisařům aktualizaci kontaktních údajů v jejich profilu </value>
+  </data>
+  <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
+    <value>E-mailová upozornění na webový rozhovor</value>
+  </data>
+  <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
+    <value>Povolte respondentům webových dotazníků požadovat e-maily s odkazy na pokračování v zahájených dotaznících (možné, pokud je nastaven poskytovatel hromadných e-mailových služeb)</value>
+  </data>
+  <data name="AutoUpdateDescription" xml:space="preserve">
+    <value>Pokud zaškrtnuto, pouze nejnovější verze aplikace Tazatel/Garant se může synchronizovat s Ústředím</value>
+  </data>
+  <data name="ChangeStateConfirm" xml:space="preserve">
+    <value>Opravdu chcete změnit nastavení zabezpečení exportovaného souboru? Všechny exportované datové soubory budou chráněny heslem.</value>
+  </data>
+  <data name="ChangeStateDisabledConfirm" xml:space="preserve">
+    <value>Opravdu chcete změnit nastavení zabezpečení exportovaného souboru? Exportované datové soubory již nebudou chráněny heslem.</value>
+  </data>
+  <data name="CurrentLogo" xml:space="preserve">
+    <value>Aktuální logo</value>
+  </data>
+  <data name="DeviceNotifications" xml:space="preserve">
+    <value>Povolit oznámení na zařízení</value>
+  </data>
+  <data name="DeviceNotificationsDescription" xml:space="preserve">
+    <value>Když je zařízení povoleno, upozorní vlastníky na změny a akce, které je třeba provést</value>
+  </data>
+  <data name="EmailProvider_Address" xml:space="preserve">
+    <value>Poštovní adresa odesílatele</value>
+  </data>
+  <data name="EmailProvider_AddressHelp" xml:space="preserve">
+    <value>Aktuální poštovní adresa odesílatele.</value>
+  </data>
+  <data name="EmailProvider_Amazon" xml:space="preserve">
+    <value>Amazon Simple Email Service (SES)</value>
+  </data>
+  <data name="EmailProvider_AmazonDescription" xml:space="preserve">
+    <value>Níže nakonfigurujte parametry pro přístup k Amazon SES. Další informace o použití Amazon SES s Survey Solutions jsou k dispozici</value>
+  </data>
+  <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
+    <value>ID přístupového klíče</value>
+  </data>
+  <data name="EmailProvider_AwsAccessKeyIdHelp" xml:space="preserve">
+    <value>ID účtu AWS najdete v místě pro správu AWS</value>
+  </data>
+  <data name="EmailProvider_AwsRegion" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve">
+    <value>Vybraná neznámá oblast. Prosím zkontrolujte to.</value>
+  </data>
+  <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
+    <value>Region pro AWS Management Console</value>
+  </data>
+  <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
+    <value>Tajný přístupový klíč</value>
+  </data>
+  <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
+    <value>Nalezeno v Security Credentials v AWS Management Console</value>
+  </data>
+  <data name="EmailProvider_GeneralError" xml:space="preserve">
+    <value>Došlo k obecné chybě</value>
+  </data>
+  <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+    <value>zde</value>
+  </data>
+  <data name="EmailProvider_None" xml:space="preserve">
+    <value>Žádné</value>
+  </data>
+  <data name="EmailProvider_NoneDescription" xml:space="preserve">
+    <value>Pozvánky na webové dotazníky nejsou respondentům zasílany od Survey Solutions</value>
+  </data>
+  <data name="EmailProvider_PageDesc" xml:space="preserve">
+    <value>Nastavte poskytovatele hromadných e-mailových služeb. Nakonfigurujte, jak se budou zasílat pozvánky na webové rozhovory.</value>
+  </data>
+  <data name="EmailProvider_ReplyAddress" xml:space="preserve">
+    <value>Adresa (komu)</value>
+  </data>
+  <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve">
+    <value>E-mailová adresa, na kterou mohou být zasílány odpovědi od pozvaných osob (výchozí je e-mailová adresa odesílatele.)</value>
+  </data>
+  <data name="EmailProvider_SenderAddress" xml:space="preserve">
+    <value>E-mailová adresa odesílatele</value>
+  </data>
+  <data name="EmailProvider_SenderHeader" xml:space="preserve">
+    <value>Informace o odesílateli</value>
+  </data>
+  <data name="EmailProvider_SenderHelp" xml:space="preserve">
+    <value>E-mailová adresa odesílatele, která se objeví v poli OD v příchozích zprávách.</value>
+  </data>
+  <data name="EmailProvider_SenderName" xml:space="preserve">
+    <value>Jméno odesílatele</value>
+  </data>
+  <data name="EmailProvider_SenderNameHelp" xml:space="preserve">
+    <value>Jméno odesílatele, které se objeví v poli OD v příchozích zprávách.</value>
+  </data>
+  <data name="EmailProvider_Sendgrid" xml:space="preserve">
+    <value>Služba doručování e-mailů SendGrid</value>
+  </data>
+  <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
+    <value>API klíč</value>
+  </data>
+  <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
+    <value>Najdete jej na stránce API Keys pod položkou nabídky SendGrid nastavení</value>
+  </data>
+  <data name="EmailProvider_SendgridDescription" xml:space="preserve">
+    <value>Níže nakonfigurujte parametry pro přístup k SendGrid. Další informace o použití SendGrid s Survey Solutions jsou k dispozici</value>
+  </data>
+  <data name="EmailProvider_SendTestEmail" xml:space="preserve">
+    <value>Poslat email</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
+    <value>Odeslat zkušební e-mail</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
+    <value>Pošlete si zkušební e-mailovou zprávu, abyste si ověřili, že je služba hromadného e-mailu funkční, a abyste získali náhled na to, co respondenti obdrží.</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
+    <value>Příklad e-mailu s pozvánkou byl úspěšně odeslán</value>
+  </data>
+  <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve">
+    <value>Zadejte poskytovatele hromadných e-mailových služeb</value>
+  </data>
+  <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve">
+    <value>Konfigurace e-mailové služby byla úspěšně uložena.</value>
+  </data>
+  <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
+    <value>E-mailová adresa</value>
+  </data>
+  <data name="EnableEncryption" xml:space="preserve">
+    <value>Povolit šifrování</value>
+  </data>
+  <data name="ExportEncryption_Description" xml:space="preserve">
+    <value>Zaškrtněte políčko „Povolit šifrování“, chcete-li chránit archivy exportovaných dat jejich zašifrováním pomocí poskytnutého hesla. Změňte heslo stisknutím kruhového tlačítka se šipkou. Po zašifrování mohou exportovaná data otevřít pouze lidé, kteří znají heslo.</value>
+  </data>
+  <data name="ExportEncryption_Title" xml:space="preserve">
+    <value>Šifrování exportu</value>
+  </data>
+  <data name="ExportEncryptionSettings" xml:space="preserve">
+    <value>Nastavení šifrování exportu</value>
+  </data>
+  <data name="GlobalNoteClearingConfirm" xml:space="preserve">
+    <value>Opravdu chcete smazat globální poznámku?</value>
+  </data>
+  <data name="GlobalNoteSaved" xml:space="preserve">
+    <value>Poznámka uložena</value>
+  </data>
+  <data name="GlobalNoteSettings" xml:space="preserve">
+    <value>Globální poznámka</value>
+  </data>
+  <data name="GlobalNoteSettings_Description" xml:space="preserve">
+    <value>Zadejte text do pole 'Globální poznámka', který se zobrazí v horní části každé obrazovky na serveru.</value>
+  </data>
+  <data name="GlobalNotice" xml:space="preserve">
+    <value>Globální poznámka</value>
+  </data>
+  <data name="InterviewerAutoUpdate" xml:space="preserve">
+    <value>Povolit automatické aktualizace</value>
+  </data>
+  <data name="InterviewerAutoUpdateDisabled" xml:space="preserve">
+    <value>Automatické aktualizace aplikací pro Android zakázány</value>
+  </data>
+  <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
+    <value>Automatické aktualizace aplikací pro Android povoleny</value>
+  </data>
+  <data name="InterviewerPartialSynchronization" xml:space="preserve">
+    <value>Povolit částečnou synchronizaci</value>
+  </data>
+  <data name="Logo" xml:space="preserve">
+    <value>Firemní logo</value>
+  </data>
+  <data name="LogoNotUpdated" xml:space="preserve">
+    <value>Firemní logo nebylo aktualizováno. Přidejte prosím platný obrázek</value>
+  </data>
+  <data name="LogoSettings" xml:space="preserve">
+    <value>Firemní logo</value>
+  </data>
+  <data name="LogoSettings_Description1" xml:space="preserve">
+    <value>Klikněte na tlačítko „Vybrat soubor“ pro nahrání obrázeku ze svého počítače na server, který bude použit jako obrázek loga. Poté klikněte na tlačítko 'Uložit'.</value>
+  </data>
+  <data name="LogoUpdated" xml:space="preserve">
+    <value>Firemní logo aktualizováno</value>
+  </data>
+  <data name="MobileAppSettings_Description" xml:space="preserve">
+    <value>Některá konkrétní nastavení podle Android verze aplikace Tazatel/Garant</value>
+  </data>
+  <data name="MobileAppSettings_Title" xml:space="preserve">
+    <value>Nastavení aplikace Tazatel/Garant</value>
+  </data>
+  <data name="RegeneratePasswordConfirm" xml:space="preserve">
+    <value>Opravdu chcete vytvořit nové heslo? Nové heslo bude od této chvíle použito pro všechny exportované datové soubory.</value>
+  </data>
+  <data name="RemoveLogo" xml:space="preserve">
+    <value>Odstranit logo</value>
+  </data>
+  <data name="UserProfileSettings_Title" xml:space="preserve">
+    <value>Nastavení uživatelského profilu</value>
+  </data>
+  <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
+    <value>Nastavení webového rozhovoru</value>
   </data>
 </root>
