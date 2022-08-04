@@ -145,15 +145,15 @@
     <value>Rozhovory můžete schvalovat pouze s následujícími statusy: {{status1}}, {{status2}} a {{status3}}.</value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů co bude schváleno.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Schvalovat můžete pouze rozhovory s následujícím statusem: &lt;i&gt;{ {status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů co bude schváleno.&lt;/h3&gt;
+&lt;b&gt;Pozor!&lt;/b&gt; Schvalovat můžete pouze rozhovory s následujícím statusem: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="ApproveReceivedWarning" xml:space="preserve">
     <value>Pokud tazatel již na rozhovoru začal pracovat, budou veškerá data, která tazatel zadal před další synchronizací, VYMAZÁNY!</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů vybraných k přeřazení.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Můžete přiřadit pouze rozhovory s následujícími statusy: &lt;i&gt;{ {status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (pouze u jiného tazatele)&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů vybraných k přeřazení.&lt;/h3&gt;
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete přiřadit pouze rozhovory s následujícími statusy: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (pouze u jiného tazatele)&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.
 </value>
   </data>
   <data name="Assignment" xml:space="preserve">
@@ -228,12 +228,12 @@
     <value>Filtr technických údajů</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; rozhovory, které budou vráceny.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícími statusy: &lt;i&gt;{ {status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; rozhovory, které budou vráceny.&lt;/h3&gt;
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícími statusy: &lt;i&gt;{{status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; rozhovory, které budou vráceny.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícím statusem: &lt;i&gt;{ {status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; rozhovory, které budou vráceny.&lt;/h3&gt;
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícím statusem: &lt;i&gt;{{status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="RejectToNewResponsible" xml:space="preserve">
     <value>Vrátit a vybrat nového zodpovědného uživatele</value>
@@ -281,7 +281,7 @@
     <value>Stav rozhovoru v pracovním postupu šetření. Kliknutím na ikonu řazení seřadíte podle stavu.</value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů co nebude schváleno.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Můžete zrušit schválení rozhovoru pouze s následujícím statusem: &lt;i&gt;{ {status1}}&lt;/i&gt;.</value>
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů co nebude schváleno.&lt;/h3&gt;
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete zrušit schválení rozhovoru pouze s následujícím statusem: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
   </data>
 </root>
