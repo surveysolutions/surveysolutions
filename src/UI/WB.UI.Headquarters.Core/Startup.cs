@@ -444,7 +444,8 @@ namespace WB.UI.Headquarters
                     new CultureInfo("id"),
                     new CultureInfo("pt"),
                     new CultureInfo("zh"),
-                    new CultureInfo("ro")
+                    new CultureInfo("ro"),
+                    new CultureInfo("cs")
                 };
             });
 
