@@ -771,7 +771,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Heslo musí být stejné</value>
   </data>
   <data name="AreaMap_PerimeterFormat" xml:space="preserve">
-    <value>Obvod: {0:0,00} m</value>
+    <value>Obvod: {0:0.00} m</value>
   </data>
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>

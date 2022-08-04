@@ -1186,7 +1186,7 @@
     <value>Probíhá údržba...</value>
   </data>
   <data name="Map_DiscardConfirm" xml:space="preserve">
-    <value>Opravdu chcete smazat mapu?</value>
+      <value>Opravdu chcete smazat mapu "{{map}}"?</value>
   </data>
   <data name="Map_Status" xml:space="preserve">
     <value>Status</value>
