@@ -560,6 +560,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                         this.AddOrUpdateQuestionState(questionnaireId, question.PublicKey, question.QuestionText, targetParentId);
                     else if (composite is IStaticText staticText)
                         this.AddOrUpdateStaticTextState(questionnaireId, staticText.PublicKey, staticText.Text, targetParentId);
+                    else if (composite is IVariable variable)
+                        this.AddOrUpdateVariableState(questionnaireId, variable.PublicKey, variable.Name, targetParentId);
                     else
                         throw new ArgumentException("Unsupported type of entity on cover:" + composite.GetType());
                 }
@@ -588,45 +590,33 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             foreach (var entity in entities)
             {
                 var parentId = entity.GetParent()?.PublicKey;
-
-                var entityAsStaticText = entity as IStaticText;
-                var entityAsVariable = entity as IVariable;
-                var entityAsGroup = entity as IGroup;
-                var entityAsQuestion = entity as IQuestion;
-
-                if (entityAsGroup != null)
+                
+                switch (entity)
                 {
-                    entityType = entityAsGroup.IsRoster ? QuestionnaireItemType.Roster : QuestionnaireItemType.Section;
-                    entityTitle = entityAsGroup.Title ?? entityAsGroup.VariableName;
-                    this.AddOrUpdateGroupState(questionnaireId, entityAsGroup.PublicKey, entityTitle, parentId);
-                    continue;
+                    case IGroup entityAsGroup:
+                        entityType = entityAsGroup.IsRoster ? QuestionnaireItemType.Roster : QuestionnaireItemType.Section;
+                        entityTitle = entityAsGroup.Title ?? entityAsGroup.VariableName;
+                        this.AddOrUpdateGroupState(questionnaireId, entityAsGroup.PublicKey, entityTitle, parentId);
+                        continue;
+                    case IStaticText entityAsStaticText:
+                        entityType = QuestionnaireItemType.StaticText;
+                        entityTitle = entityAsStaticText.Text;
+                        this.AddOrUpdateStaticTextState(questionnaireId, entityAsStaticText.PublicKey, entityTitle, parentId);
+                        continue;
+                    case IQuestion entityAsQuestion:
+                        entityType = QuestionnaireItemType.Question;
+                        entityTitle = entityAsQuestion.QuestionText ?? entityAsQuestion.StataExportCaption;
+                        this.AddOrUpdateQuestionState(questionnaireId, entityAsQuestion.PublicKey, entityTitle, parentId);
+                        continue;
+                    case IVariable entityAsVariable:
+                        entityType = QuestionnaireItemType.Variable;
+                        entityTitle = entityAsVariable.Name;
+                        this.AddOrUpdateVariableState(questionnaireId, entityAsVariable.PublicKey, entityTitle, parentId);
+                        continue;
+                    default:
+                        this.AddOrUpdateGroupState(questionnaireId, targetEntityId, entityTitle, parentId);
+                        break;
                 }
-
-                if (entityAsStaticText != null)
-                {
-                    entityType = QuestionnaireItemType.StaticText;
-                    entityTitle = entityAsStaticText.Text;
-                    this.AddOrUpdateStaticTextState(questionnaireId, entityAsStaticText.PublicKey, entityTitle, parentId);
-                    continue;
-                }
-
-                if (entityAsQuestion != null)
-                {
-                    entityType = QuestionnaireItemType.Question;
-                    entityTitle = entityAsQuestion.QuestionText ?? entityAsQuestion.StataExportCaption;
-                    this.AddOrUpdateQuestionState(questionnaireId, entityAsQuestion.PublicKey, entityTitle, parentId);
-                    continue;
-                }
-
-                if (entityAsVariable != null)
-                {
-                    entityType = QuestionnaireItemType.Variable;
-                    entityTitle = entityAsVariable.Name;
-                    this.AddOrUpdateVariableState(questionnaireId, entityAsVariable.PublicKey, entityTitle, parentId);
-                    continue;
-                }
-
-                this.AddOrUpdateGroupState(questionnaireId, targetEntityId, entityTitle, parentId);
             }
 
             var linkToEntity = this.CreateQuestionnaireChangeReference(entityType, sourceEntityId, entityTitle);
