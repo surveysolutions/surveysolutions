@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static bool GroupTitleIsTooLong(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-            => group.Title?.Length > 500;
+            => group.Title?.Length > MaxTitleLength;
 
         private static bool GroupTitleIsEmpty(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => string.IsNullOrWhiteSpace(group.Title);
