@@ -92,9 +92,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
 
             var cover = questionnaire.QuestionnaireDocument.Children.First();
             Assert.That(cover, Is.Not.Null);
-            Assert.That(cover.Children.Count, Is.EqualTo(6));
+            Assert.That(cover.Children.Count, Is.EqualTo(7));
             Assert.That(cover.Children.Count(e => e is IQuestion), Is.EqualTo(5));
             Assert.That(cover.Children.Count(e => e is IStaticText), Is.EqualTo(1));
+            Assert.That(cover.Children.Count(e => e is Variable), Is.EqualTo(1));
             Assert.That(cover.Children.OfType<IQuestion>().Select(q => q.Featured), Is.All.True);
         }
 
