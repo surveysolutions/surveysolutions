@@ -9,6 +9,8 @@ using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Abc;
@@ -40,8 +42,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             translationsStorage.AddRange(storedTranslations);
             translationsStorage.SaveChanges();
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             service = Create.TranslationsService(translationsStorage, questionnaires.Object);
             BecauseOf();
@@ -53,7 +55,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private void BecauseOf()
         {
-            var excelFile = service.GetAsExcelFile(questionnaireId, translationId);
+            var excelFile = service.GetAsExcelFile(new QuestionnaireRevision(questionnaireId), translationId);
             workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile));
             cells = workbook.Worksheets.First();
         }

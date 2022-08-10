@@ -8,14 +8,13 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.DataAccess;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
 {
@@ -51,12 +50,12 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         };
         
         private readonly DesignerDbContext dbContext;
-        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
+        private readonly IQuestionnaireViewFactory questionnaireStorage;
         private readonly ITranslationsExportService translationsExportService;
         private readonly ICategoriesService categoriesService;
 
         public TranslationsService(DesignerDbContext dbContext,
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
+            IQuestionnaireViewFactory questionnaireStorage,
             ITranslationsExportService translationsExportService,
             ICategoriesService categoriesService)
         {
@@ -77,10 +76,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             return new QuestionnaireTranslation(storedTranslations);
         }
 
-        public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid translationId) =>
+        public TranslationFile GetAsExcelFile(QuestionnaireRevision questionnaireId, Guid translationId) =>
             this.GetTranslationFile(questionnaireId, translationId);
 
-        public TranslationFile GetTemplateAsExcelFile(Guid questionnaireId) =>
+        public TranslationFile GetTemplateAsExcelFile(QuestionnaireRevision questionnaireId) =>
             this.GetTranslationFile(questionnaireId);
 
         public bool HasTranslatedTitle(QuestionnaireDocument questionnaire)
@@ -95,18 +94,18 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             return hasTranslatedTitle;
         }
 
-        private TranslationFile GetTranslationFile(Guid questionnaireId, Guid? translationId = null)
+        private TranslationFile GetTranslationFile(QuestionnaireRevision questionnaireId, Guid? translationId = null)
         {
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaire = this.questionnaireStorage.Load(questionnaireId);
             if(questionnaire == null) throw new InvalidOperationException("Questionnaire was not found.");
             
             var translation = translationId.HasValue
-                ? this.Get(questionnaireId, translationId.Value)
+                ? this.Get(questionnaire.PublicKey, translationId.Value)
                 : new QuestionnaireTranslation(new List<TranslationDto>());
 
-            var categoriesService = new CategoriesService(questionnaireId, this.categoriesService);
+            var categoriesService = new CategoriesService(questionnaire.PublicKey, this.categoriesService);
 
-            return translationsExportService.GenerateTranslationFile(questionnaire, translationId ?? Guid.Empty, translation, categoriesService);
+            return translationsExportService.GenerateTranslationFile(questionnaire.Source, translationId ?? Guid.Empty, translation, categoriesService);
         }
 
         public void Store(Guid questionnaireId, Guid translationId, byte[]? excelRepresentation)
@@ -123,7 +122,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 if (package.Worksheets.Count == 0)
                     throw new InvalidFileException(ExceptionMessages.TranslationFileIsEmpty);
 
-                var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+                var questionnaire = this.questionnaireStorage.Load(new QuestionnaireRevision(questionnaireId));
                 if (questionnaire == null)
                     throw new InvalidFileException(ExceptionMessages.QuestionnaireCantBeFound);
 
@@ -131,7 +130,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     .Where(x => x.Name == TranslationExcelOptions.WorksheetName ||
                                 x.Name.StartsWith(TranslationExcelOptions.OptionsWorksheetPreffix) ||
                                 (x.Name.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix) &&
-                                 questionnaire.Categories.Any(y =>
+                                 questionnaire.Source.Categories.Any(y =>
                                      y.Name.ToLower() == x.Name.ToLower().TrimStart(TranslationExcelOptions.CategoriesWorksheetPreffix))))
                     .ToList();
 
@@ -139,7 +138,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     throw new InvalidFileException(ExceptionMessages.TranslationWorksheetIsMissing);
 
                 var translationsWithHeaderMap = sheetsWithTranslation.Select(CreateHeaderMap).ToList();
-                Dictionary<Guid, bool> idsOfAllQuestionnaireEntities = questionnaire.Children.TreeToEnumerable(x => x.Children)
+                Dictionary<Guid, bool> idsOfAllQuestionnaireEntities = questionnaire.Source.Children.TreeToEnumerable(x => x.Children)
                     .ToDictionary(composite => composite.PublicKey, x => x is Group);
                 idsOfAllQuestionnaireEntities[questionnaireId] = true;
                 
@@ -147,7 +146,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 foreach (var translationWithHeaderMap in translationsWithHeaderMap)
                 {
                     var worksheetTranslations = GetWorksheetTranslations(translationWithHeaderMap,
-                        questionnaire, idsOfAllQuestionnaireEntities, questionnaireId, translationId);
+                        questionnaire.Source, idsOfAllQuestionnaireEntities, questionnaireId, translationId);
                     translationInstances.AddRange(worksheetTranslations);
                 }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code.ImportExport;
@@ -24,6 +25,6 @@ namespace WB.UI.Designer.Code
 
         IPagedList<QuestionnaireListViewModel> GetSharedQuestionnairesByViewer(DesignerIdentityUser viewer, bool isAdmin, Guid? folderId);
         
-        Stream? GetBackupQuestionnaire(Guid id, out string questionnaireFileName);
+        Stream? GetBackupQuestionnaire(QuestionnaireRevision id, out string questionnaireFileName);
     }
 }

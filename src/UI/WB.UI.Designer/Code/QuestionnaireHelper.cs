@@ -8,6 +8,8 @@ using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
@@ -30,7 +32,7 @@ namespace WB.UI.Designer.Code
         private readonly ISerializer serializer;
         private readonly IAttachmentService attachmentService;
         private readonly ILookupTableService lookupTableService;
-        private readonly ITranslationsService translationsService;
+        private readonly IDesignerTranslationService translationsService;
         private readonly ICategoriesService categoriesService;
         private readonly ILogger<QuestionnaireHelper> logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -43,7 +45,7 @@ namespace WB.UI.Designer.Code
             ISerializer serializer, 
             IAttachmentService attachmentService, 
             ILookupTableService lookupTableService, 
-            ITranslationsService translationsService, 
+            IDesignerTranslationService translationsService, 
             ICategoriesService categoriesService, 
             ILogger<QuestionnaireHelper> logger, 
             IFileSystemAccessor fileSystemAccessor,
@@ -168,9 +170,9 @@ namespace WB.UI.Designer.Code
             };
 
 
-        public Stream? GetBackupQuestionnaire(Guid id, out string questionnaireFileName)
+        public Stream? GetBackupQuestionnaire(QuestionnaireRevision id, out string questionnaireFileName)
         {
-            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            var questionnaireView = questionnaireViewFactory.Load(id);
             if (questionnaireView == null)
             {
                 questionnaireFileName = String.Empty;
@@ -182,7 +184,7 @@ namespace WB.UI.Designer.Code
             var questionnaireDocument = questionnaireView.Source;
             
             var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.QuestionnaireChangeRecords
-                .Where(y => y.QuestionnaireId == id.FormatGuid())
+                .Where(y => y.QuestionnaireId == questionnaireView.PublicKey.FormatGuid())
                 .Select(y => (int?)y.Sequence)
                 .Max();
             
