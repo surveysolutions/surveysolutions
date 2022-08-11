@@ -43,7 +43,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             {
                 Create.SingleQuestion(id: comboboxId, variable:"combobox", isFilteredCombobox: true, options: new List<Answer> {Create.Option("1", "Option")}),
                 Create.SingleQuestion(id: cascadingQustionId, variable:"cascading", cascadeFromQuestionId: comboboxId, options: new List<Answer> {Create.Option("1", "Cascading Option", "1")})
-            });
+            },
+                questionnaireId:questionnaireId);
 
             var translationsStorage = Create.InMemoryDbContext();
             translationsStorage.TranslationInstances.AddRange(storedTranslations);

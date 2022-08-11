@@ -74,7 +74,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                         {
                             Create.ValidationCondition(message: "non translated validation 1")
                         })
-                });
+                },
+                questionnaireId: questionnaireId);
 
             var translationsStorage = Create.InMemoryDbContext();
             translationsStorage.AddRange(storedTranslations);

@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                         title: "non translated title",
                         fixedRosterTitles: new[] {Create.FixedRosterTitle(42, "invariant option title")}
                        )
-                });
+                },questionnaireId:questionnaireId);
 
             var translationsStorage = Create.InMemoryDbContext();
             translationsStorage.TranslationInstances.AddRange(storedTranslations);

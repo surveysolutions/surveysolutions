@@ -36,7 +36,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Question(questionId: questionId, title: $"В скобках символ без графического отобажения ({non_printable})")
-            });
+            },
+                questionnaireId:questionnaireId);
 
             var translationsStorage = Create.InMemoryDbContext();
             translationsStorage.AddRange(storedTranslations);
