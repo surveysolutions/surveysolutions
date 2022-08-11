@@ -153,7 +153,7 @@
                                     </div>
                                     <div class="divider"></div>
                                     <button type="button" class="btn lighter-hover" ng-click="runScenario(scenario)" ng-i18next>Run</button>
-                                    <button type="button" class="btn lighter-hover" ng-click="showScenarioEditor(scenario.id)" ng-i18next>View</button>
+                                    <button type="button" class="btn lighter-hover" ng-click="showScenarioEditor(scenario.id, scenario.title)" ng-i18next>View</button>
                                     <div class="actions" ng-show="scenario.form.$dirty" ng-if="!questionnaire.isReadOnlyForUser">
                                         <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || scenario.form.$invalid" class="btn lighter-hover" ng-click="saveScenario(scenario)" ng-i18next>Save</button>
                                         <button type="button" class="btn lighter-hover" ng-click="cancel(scenario)" ng-i18next>Cancel</button>
