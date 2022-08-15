@@ -1675,7 +1675,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var clonedGroup = entityToInsertAsGroup.Clone();
             var targetIsCoverPage = IsCoverPage(targetToPasteIn.PublicKey);
             var elementsToCopy = targetIsCoverPage
-                ? clonedGroup.Children.Where(el => el is IQuestion || el is StaticText)
+                ? clonedGroup.Children.Where(el => el is IQuestion or StaticText or Variable)
                 : clonedGroup.TreeToEnumerable(x => x.Children);
             elementsToCopy.ForEach(c =>
             {

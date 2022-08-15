@@ -86,16 +86,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             return lookupTableContent;
         }
 
-        public LookupTableContentFile? GetLookupTableContentFile(Guid questionnaireId, Guid lookupTableId)
-        {
-            var questionnaire = this.documentStorage.Get(questionnaireId);
-
-            if (questionnaire == null)
-                throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
-
-            return GetLookupTableContentFileImpl(questionnaire, lookupTableId);
-        }
-
         public LookupTableContentFile? GetLookupTableContentFile(QuestionnaireRevision questionnaireId, Guid lookupTableId)
         {
             var questionnaire = this.documentStorage.Get(questionnaireId);
