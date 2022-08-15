@@ -25,6 +25,6 @@ namespace WB.UI.Designer.Code
 
         IPagedList<QuestionnaireListViewModel> GetSharedQuestionnairesByViewer(DesignerIdentityUser viewer, bool isAdmin, Guid? folderId);
         
-        Stream? GetBackupQuestionnaire(Guid id, out string questionnaireFileName);
+        Stream? GetBackupPackageForQuestionnaire(Guid id, out string questionnaireFileName);
     }
 }
