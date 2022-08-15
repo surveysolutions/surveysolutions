@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
@@ -38,7 +39,7 @@ public class CategoriesServiceTests
         
         var service = CreateCategoriesService(documentStorage, categoriesDb, categoriesExportService.Object);
 
-        var excelFile = service.GetAsExcelFile(Id.g1, Id.g2);
+        var excelFile = service.GetAsExcelFile(new QuestionnaireRevision(Id.g1), Id.g2);
         
         categoriesExportService.Verify(m => 
             m.GetAsExcelFile(It.Is<IEnumerable<CategoriesItem>>(list =>
