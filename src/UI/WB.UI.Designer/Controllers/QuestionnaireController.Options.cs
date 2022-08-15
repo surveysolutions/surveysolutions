@@ -68,10 +68,8 @@ namespace WB.UI.Designer.Controllers
             if (!userId.HasValue)
                 return true;
 
-            if (User.IsAdmin())
-                return false;
-            
-            return !questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(questionnaireRevision.OriginalQuestionnaireId ?? questionnaireRevision.QuestionnaireId, userId.Value);
+            var hasUserAccessToEdit = questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(questionnaireRevision.OriginalQuestionnaireId ?? questionnaireRevision.QuestionnaireId, userId.Value);
+            return !hasUserAccessToEdit;
         }
 
         public EditOptionsViewModel GetOptions(QuestionnaireRevision id, Guid questionId, bool isCascading)
