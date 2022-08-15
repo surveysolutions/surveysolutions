@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
@@ -76,8 +77,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
         }
 
-        public CategoriesFile? GetAsExcelFile(Guid questionnaireId, Guid categoriesId)
+        public CategoriesFile? GetAsExcelFile(QuestionnaireRevision questionnaireRevision, Guid categoriesId)
         {
+            var questionnaireId = questionnaireRevision.OriginalQuestionnaireId ?? questionnaireRevision.QuestionnaireId;
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.ToString("N"));
             if (questionnaire == null)
                 return null;

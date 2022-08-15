@@ -383,7 +383,7 @@ namespace WB.UI.Designer.Controllers
         {
             if (isCategory)
             {
-                var categoriesFile = this.categoriesService.GetAsExcelFile(id.QuestionnaireId, entityId);
+                var categoriesFile = this.categoriesService.GetAsExcelFile(id, entityId);
 
                 if (categoriesFile?.Content == null) return NotFound();
 

@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.UI.Designer.Resources;
@@ -8,6 +9,8 @@ using WB.UI.Designer.Resources;
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Route("categories")]
+    [QuestionnairePermissions]
+    [AuthorizeOrAnonymousQuestionnaire]
     public class CategoriesController : Controller
     {
         private readonly ICategoriesService categoriesService;
@@ -32,8 +35,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
-        [Route("{id:Guid}/xlsx/{categoriesId:Guid}")]
-        public IActionResult Get(Guid id, Guid categoriesId)
+        [Route("{id}/xlsx/{categoriesId:Guid}")]
+        public IActionResult Get(QuestionnaireRevision id, Guid categoriesId)
         {
             var categoriesFile = this.categoriesService.GetAsExcelFile(id, categoriesId);
 

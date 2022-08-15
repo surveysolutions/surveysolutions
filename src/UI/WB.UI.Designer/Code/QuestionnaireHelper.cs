@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
@@ -241,7 +242,7 @@ namespace WB.UI.Designer.Code
 
             foreach (var categories in questionnaireDocument.Categories)
             {
-                var excelFile = this.categoriesService.GetAsExcelFile(id, categories.Id);
+                var excelFile = this.categoriesService.GetAsExcelFile(new QuestionnaireRevision(id), categories.Id);
                 if (excelFile?.Content == null)
                     continue;
                 zipStream.PutFileEntry($"Categories/{categories.Id.FormatGuid()}.xlsx", excelFile.Content);
