@@ -185,8 +185,9 @@ namespace WB.UI.Designer.Code
             }
 
             questionnaireFileName = fileSystemAccessor.MakeValidFileName(questionnaireView.Title);
+            questionnaireView.Source.Revision = maxSequenceByQuestionnaire;
+            
             var questionnaireDocument = questionnaireView.Source;
-
             string questionnaireJson = this.serializer.Serialize(questionnaireDocument);
 
             var output = new MemoryStream();
