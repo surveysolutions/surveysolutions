@@ -170,9 +170,9 @@ namespace WB.UI.Designer.Code
             };
 
 
-        public Stream? GetBackupQuestionnaire(QuestionnaireRevision id, out string questionnaireFileName)
+        public Stream? GetBackupQuestionnaire(Guid id, out string questionnaireFileName)
         {
-            var questionnaireView = questionnaireViewFactory.Load(id);
+            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             if (questionnaireView == null)
             {
                 questionnaireFileName = String.Empty;

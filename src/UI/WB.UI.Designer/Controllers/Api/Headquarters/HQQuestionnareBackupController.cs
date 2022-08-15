@@ -88,9 +88,9 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
         [HttpGet]
         [Route("{questionnaireRevision}")]
-        public IActionResult Get(QuestionnaireRevision questionnaireRevision)
+        public IActionResult Get(Guid questionnaireRevision)
         {
-            var questionnaireView = this.questionnaireViewFactory.Load(questionnaireRevision);
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireRevision));
             if (questionnaireView == null)
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, questionnaireRevision));
