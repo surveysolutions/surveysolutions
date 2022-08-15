@@ -345,7 +345,7 @@ namespace WB.UI.Designer.Controllers
             return commandResult;
         }
 
-        public IActionResult ExportLookupTable(Guid id, Guid lookupTableId)
+        public IActionResult ExportLookupTable(QuestionnaireRevision id, Guid lookupTableId)
         {
             var lookupTableContentFile = this.lookupTableService.GetLookupTableContentFile(id, lookupTableId);
             if (lookupTableContentFile == null)
@@ -358,7 +358,7 @@ namespace WB.UI.Designer.Controllers
         {
             if (isCategory)
             {
-                var categoriesFile = this.categoriesService.GetAsExcelFile(id.QuestionnaireId, entityId);
+                var categoriesFile = this.categoriesService.GetAsExcelFile(id, entityId);
 
                 if (categoriesFile?.Content == null) return NotFound();
 
