@@ -8,6 +8,8 @@ using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
@@ -16,7 +18,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
-using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
@@ -30,7 +31,7 @@ namespace WB.UI.Designer.Code
         private readonly ISerializer serializer;
         private readonly IAttachmentService attachmentService;
         private readonly ILookupTableService lookupTableService;
-        private readonly ITranslationsService translationsService;
+        private readonly IDesignerTranslationService translationsService;
         private readonly ICategoriesService categoriesService;
         private readonly ILogger<QuestionnaireHelper> logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -43,7 +44,7 @@ namespace WB.UI.Designer.Code
             ISerializer serializer, 
             IAttachmentService attachmentService, 
             ILookupTableService lookupTableService, 
-            ITranslationsService translationsService, 
+            IDesignerTranslationService translationsService, 
             ICategoriesService categoriesService, 
             ILogger<QuestionnaireHelper> logger, 
             IFileSystemAccessor fileSystemAccessor,
@@ -168,9 +169,15 @@ namespace WB.UI.Designer.Code
             };
 
 
-        public Stream? GetBackupQuestionnaire(Guid id, out string questionnaireFileName)
+        public Stream? GetBackupPackageForQuestionnaire(Guid id, out string questionnaireFileName)
         {
-            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.QuestionnaireChangeRecords
+                .Where(y => y.QuestionnaireId == id.FormatGuid())
+                .Select(y => (int?)y.Sequence)
+                .Max() ?? 0;
+
+            var questionnaireRevision = new QuestionnaireRevision(id, version: maxSequenceByQuestionnaire);
+            var questionnaireView = questionnaireViewFactory.Load(questionnaireRevision);
             if (questionnaireView == null)
             {
                 questionnaireFileName = String.Empty;
@@ -178,15 +185,9 @@ namespace WB.UI.Designer.Code
             }
 
             questionnaireFileName = fileSystemAccessor.MakeValidFileName(questionnaireView.Title);
+            questionnaireView.Source.Revision = maxSequenceByQuestionnaire;
             
             var questionnaireDocument = questionnaireView.Source;
-            
-            var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.QuestionnaireChangeRecords
-                .Where(y => y.QuestionnaireId == id.FormatGuid())
-                .Select(y => (int?)y.Sequence)
-                .Max();
-            
-            questionnaireDocument.Revision = maxSequenceByQuestionnaire ?? 0;
             string questionnaireJson = this.serializer.Serialize(questionnaireDocument);
 
             var output = new MemoryStream();
@@ -235,13 +236,13 @@ namespace WB.UI.Designer.Code
 
             foreach (var translation in questionnaireDocument.Translations)
             {
-                TranslationFile excelFile = this.translationsService.GetAsExcelFile(id, translation.Id);
+                TranslationFile excelFile = this.translationsService.GetAsExcelFile(questionnaireRevision, translation.Id);
                 zipStream.PutFileEntry($"Translations/{translation.Id.FormatGuid()}.xlsx", excelFile.ContentAsExcelFile);
             }
 
             foreach (var categories in questionnaireDocument.Categories)
             {
-                var excelFile = this.categoriesService.GetAsExcelFile(id, categories.Id);
+                var excelFile = this.categoriesService.GetAsExcelFile(questionnaireRevision, categories.Id);
                 if (excelFile?.Content == null)
                     continue;
                 zipStream.PutFileEntry($"Categories/{categories.Id.FormatGuid()}.xlsx", excelFile.Content);
