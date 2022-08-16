@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             descriptor.Field(x => x.Email).Type<StringType>();
             descriptor.Field(x => x.PhoneNumber).Type<StringType>();
             descriptor.Field(x => x.CreationDate).Type<DateType>();
-            descriptor.Field(x => x.IsLockedByHeadquaters).Name("isLocked").Type<BooleanType>();
+            descriptor.Field(x => x.IsLocked).Type<BooleanType>();
             descriptor.Field(x => x.IsArchived).Type<BooleanType>();
         }
     }
