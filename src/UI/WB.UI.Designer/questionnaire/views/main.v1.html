@@ -381,7 +381,7 @@
                                        ng-disabled="questionnaire.isReadOnlyForUser" 
                                        class="btn delete-btn" 
                                        tabindex="-1"
-                                       ng-show="!translation.isOriginalTranslation"></a>
+                                       ng-show="!translation.isOriginalTranslation && !questionnaire.isReadOnlyForUser"></a>
                                     <div class="translation-content">
                                         <input focus-on-out="focusTranslation{{translation.translationId}}"
                                                required=""
