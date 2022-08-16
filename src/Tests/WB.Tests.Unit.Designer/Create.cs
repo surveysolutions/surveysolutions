@@ -1552,10 +1552,10 @@ namespace WB.Tests.Unit.Designer
 
         public static TranslationsService TranslationsService(
             DesignerDbContext dbContext = null,
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
+            IQuestionnaireViewFactory questionnaireStorage = null)
             => new TranslationsService(
                 dbContext ?? Create.InMemoryDbContext(),
-                questionnaireStorage ?? Stub<IPlainKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()),
+                questionnaireStorage ?? Stub<IQuestionnaireViewFactory>.Returning(Create.QuestionnaireView()),
                 new TranslationsExportService(),
                 Mock.Of<ICategoriesService>()
             );
@@ -1793,11 +1793,11 @@ namespace WB.Tests.Unit.Designer
             new CopyPastePreProcessor(categoriesService);
 
         public static ICategoriesService CategoriesService(DesignerDbContext dbContext = null,
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null,
+            IQuestionnaireViewFactory questionnaireStorage = null,
             ICategoriesExportService categoriesExportService = null,
             ICategoriesExtractFactory categoriesExtractFactory = null)
             => new CategoriesService(dbContext ?? Mock.Of<DesignerDbContext>(),
-                questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
                 categoriesExportService ?? Mock.Of<ICategoriesExportService>(),
                 categoriesExtractFactory ?? Mock.Of<ICategoriesExtractFactory>());
 

@@ -368,7 +368,7 @@ namespace WB.UI.Designer.Controllers
             return commandResult;
         }
 
-        public IActionResult ExportLookupTable(Guid id, Guid lookupTableId)
+        public IActionResult ExportLookupTable(QuestionnaireRevision id, Guid lookupTableId)
         {
             var lookupTableContentFile = this.lookupTableService.GetLookupTableContentFile(id, lookupTableId);
             if (lookupTableContentFile == null)
