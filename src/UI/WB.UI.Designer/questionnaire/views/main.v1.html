@@ -191,7 +191,7 @@
                         <ul ng-model="macros">
                             <li class="macros-panel-item" ng-repeat="macro in macros">
                                 <ng-form name="macro.form">
-                                    <a href ng-click="deleteMacro($index)" ng-disabled="questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href ng-click="deleteMacro($index)" ng-disabled="questionnaire.isReadOnlyForUser" ng-if="!questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="input-group macros-name">
                                         <span class="input-group-addon">$</span>
                                         <input focus-on-out="focusMacro{{macro.itemId}}" ng-i18next="[placeholder]SideBarMacroName" maxlength="32" spellcheck="false" ng-model="macro.name" name="name" class="form-control" type="text" />
@@ -239,7 +239,7 @@
                         <ul ng-model="lookupTables">
                             <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file)" ngf-max-size="1MB" accept=".tab,.txt" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                 <ng-form name="table.form">
-                                    <a href="javascript:void(0);" ng-click="deleteLookupTable($index)" ng-disabled="questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href="javascript:void(0);" ng-click="deleteLookupTable($index)" ng-disabled="questionnaire.isReadOnlyForUser" ng-if="!questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
                                     <input focus-on-out="focusLookupTable{{table.itemId}}" required="" ng-i18next="[placeholder]SideBarLookupTableName"
                                            maxlength="32" spellcheck="false" autocomplete="off"
                                            ng-model="table.name" name="name" class="form-control table-name" type="text" />
@@ -311,7 +311,7 @@
                         <div class="attachment-list">
                             <ng-form name="attachment.form" ng-repeat="attachment in attachments">
                                 <div class="attachments-panel-item" ng-class="{'has-error': attachment.form.name.$error.pattern}" ngf-drop="" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                                    <a href ng-click="deleteAttachment($index)" ng-disabled="questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href ng-click="deleteAttachment($index)" ng-disabled="questionnaire.isReadOnlyForUser" ng-if="!questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="attachment">
                                         <div class="attachment-preview">
                                             <div class="attachment-preview-cover clearfix">
@@ -491,7 +491,7 @@
                                 <div class="categories-panel-item" ng-class="{'has-error': categories.form.name.$error.pattern}"
                                      ngf-drop="" ngf-change="fileSelected(categories, $file)"
                                      ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                                    <a href ng-click="deleteCategories($index)" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href ng-click="deleteCategories($index)" class="btn delete-btn" tabindex="-1" ng-if="!questionnaire.isReadOnlyForUser"></a>
                                     <div class="categories-content">
                                         <input focus-on-out="focusCategories{{categories.categoriesId}}"
                                                required=""
