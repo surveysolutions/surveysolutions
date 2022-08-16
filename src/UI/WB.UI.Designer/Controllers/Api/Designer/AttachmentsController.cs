@@ -44,27 +44,48 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
-        [Route("{id}/thumbnail/{attachmentId:Guid}", Name = "AttachmentThumbnail")]
+        [Route("{id}/thumbnail/{attachmentId:Guid}")]
         public IActionResult Thumbnail(QuestionnaireRevision id, Guid attachmentId)
         {
             return this.CreateAttachmentResponse(id, attachmentId, defaultImageSizeToScale, true);
         }
 
         [HttpGet]
-        [Route("{id}/thumbnail/{attachmentId:Guid}/{size:int}", Name = "AttachmentThumbnailWithSize")]
+        [Route("{id}/thumbnail/{attachmentId:Guid}/{size:int}")]
         public IActionResult Thumbnail(QuestionnaireRevision id, Guid attachmentId, int size)
         {
             return this.CreateAttachmentResponse(id, attachmentId, size, true);
         }
-
-        private IActionResult CreateAttachmentResponse(QuestionnaireRevision questionnaireRevision, Guid attachmentId, int? sizeToScale = null, bool thumbnail = false)
+        
+        [HttpGet]
+        [Obsolete]
+        [AllowAnonymous]
+        [Route("thumbnail/{attachmentId:Guid}", Name = "AttachmentThumbnail")]
+        public IActionResult Thumbnail(Guid attachmentId)
         {
-            var questionnaire = questionnaireStorage.Get(questionnaireRevision);
-            if (questionnaire == null) return NotFound();
+            return this.CreateAttachmentResponse(null, attachmentId, defaultImageSizeToScale, true);
+        }
 
-            var hasAttachment = questionnaire.Attachments.Any(a => a.AttachmentId == attachmentId);
-            if (!hasAttachment) return NotFound();
-            
+        [HttpGet]
+        [Obsolete]
+        [AllowAnonymous]
+        [Route("thumbnail/{attachmentId:Guid}/{size:int}", Name = "AttachmentThumbnailWithSize")]
+        public IActionResult Thumbnail(Guid attachmentId, int size)
+        {
+            return this.CreateAttachmentResponse(null, attachmentId, size, true);
+        }
+
+        private IActionResult CreateAttachmentResponse(QuestionnaireRevision? questionnaireRevision, Guid attachmentId, int? sizeToScale = null, bool thumbnail = false)
+        {
+            if (questionnaireRevision != null)
+            {
+                var questionnaire = questionnaireStorage.Get(questionnaireRevision);
+                if (questionnaire == null) return NotFound();
+
+                var hasAttachment = questionnaire.Attachments.Any(a => a.AttachmentId == attachmentId);
+                if (!hasAttachment) return NotFound();
+            }
+
             AttachmentMeta? attachment = this.attachmentService.GetAttachmentMeta(attachmentId);
             if (attachment == null) return NotFound();
 
