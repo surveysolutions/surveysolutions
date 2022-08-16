@@ -194,6 +194,7 @@
         padding-bottom: 15px;
 		p{
             white-space: pre-wrap;
+			margin: 10px 0;
         }
     }
     &.text-info{
@@ -379,6 +380,11 @@
 			}
 		}
 	}
+	&.text-question{
+		p{
+			margin: 10px 0;
+        }
+    }
 }
 .question-editor{
 	.options-group{
