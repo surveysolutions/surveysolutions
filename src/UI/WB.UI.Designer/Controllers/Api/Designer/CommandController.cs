@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -199,7 +200,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
                 if (string.IsNullOrWhiteSpace(fileStreamContent) && updateLookupTableCommand.OldLookupTableId.HasValue)
                 {
-                    var lookupContent = this.lookupTableService.GetLookupTableContentFile(updateLookupTableCommand.QuestionnaireId, updateLookupTableCommand.OldLookupTableId.Value);
+                    var lookupContent = this.lookupTableService.GetLookupTableContentFile(
+                        new QuestionnaireRevision(updateLookupTableCommand.QuestionnaireId), 
+                        updateLookupTableCommand.OldLookupTableId.Value);
 
                     if (lookupContent != null)
                     {

@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Tests.Abc;
@@ -27,12 +28,12 @@ namespace WB.Tests.Unit.Designer.Services
     internal class CategoriesServiceTests
     {
         private static CategoriesService CreateCategoriesService(DesignerDbContext dbContext = null, 
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null, 
+            IQuestionnaireViewFactory questionnaireStorage = null, 
             ICategoriesExportService categoriesExportService = null)
         {
             return new CategoriesService(
                 dbContext: dbContext ?? Mock.Of<DesignerDbContext>(),
-                questionnaireStorage: questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
+                questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
                 categoriesExportService: categoriesExportService ?? Mock.Of<ICategoriesExportService>(), 
                 categoriesExtractFactory: new CategoriesExtractFactory(new CategoriesVerifier()));
         }
