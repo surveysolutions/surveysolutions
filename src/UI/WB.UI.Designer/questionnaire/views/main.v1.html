@@ -342,7 +342,7 @@
                                                     <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-accept="'.pdf,image/*,video/*,audio/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file);$event.stopPropagation()" type="file">
                                                         <span ng-i18next>Update</span>
                                                     </button>
-                                                    <a href="{{downloadLookupFileBaseUrl  + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank" ng-i18next>Download</a>
+                                                    <a href="{{downloadLookupFileBaseUrl + '/' + questionnaire.questionnaireId + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank" ng-i18next>Download</a>
                                                 </div>
                                             </div>
                                         </div>
