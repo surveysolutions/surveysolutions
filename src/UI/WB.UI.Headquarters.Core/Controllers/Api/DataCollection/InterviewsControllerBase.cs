@@ -131,6 +131,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
+        [RequestSizeLimit(1L * 1024 * 1024 * 1024)]
         public virtual IActionResult PostAudio([FromBody] PostFileRequest request)
         {
             this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
@@ -138,6 +139,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
+        [RequestSizeLimit(1L * 1024 * 1024 * 1024)]
         public virtual IActionResult PostAudioAudit([FromBody] PostFileRequest request)
         {
             this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
