@@ -4,6 +4,7 @@ using Android.Content;
 using Android.OS;
 using AndroidX.Core.App;
 using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -16,6 +17,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class PermissionsService : IPermissionsService
     {
+        private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
+
+        public PermissionsService(IMvxMainThreadAsyncDispatcher asyncDispatcher)
+        {
+            this.asyncDispatcher = asyncDispatcher;
+        }
+
         private MvxSubscriptionToken token;
 
         public async Task AssureHasPermissionOrThrow<T>() where T : Permissions.BasePermission, new()
@@ -23,6 +31,18 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             if (Build.VERSION.SdkInt < BuildVersionCodes.M) return;
             if (await Permissions.CheckStatusAsync<T>().ConfigureAwait(false) == PermissionStatus.Granted) return;
 
+            if (asyncDispatcher.IsOnMainThread)
+            {
+                await RequestPermission<T>();
+            }
+            else
+            {
+                await asyncDispatcher.ExecuteOnMainThreadAsync(RequestPermission<T>, maskExceptions: false);
+            }
+        }
+
+        private static async Task RequestPermission<T>() where T : Permissions.BasePermission, new()
+        {
             var permissionsRequest = await Permissions.RequestAsync<T>().ConfigureAwait(false);
             if (permissionsRequest != PermissionStatus.Granted)
                 throw new MissingPermissionsException(UIResources.MissingPermission, typeof(T));
