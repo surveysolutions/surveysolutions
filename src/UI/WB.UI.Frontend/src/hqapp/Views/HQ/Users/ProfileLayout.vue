@@ -98,7 +98,7 @@ export default {
             type:Boolean,
             require: false,
             default: false,
-        }
+        },
     },
     computed:{
         model() {
