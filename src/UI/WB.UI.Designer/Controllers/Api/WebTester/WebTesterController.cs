@@ -86,13 +86,9 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             var anonymousQuestionnaire = this.designerDbContext.AnonymousQuestionnaires.FirstOrDefault(a =>
                 a.AnonymousQuestionnaireId == questionnaireId && a.IsActive == true);
 
-            var canSaveScenario = anonymousQuestionnaire == null
-                                  && User.Identity is { IsAuthenticated: true } 
-                                  && questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(questionnaireId.Value, User.GetId());
             return Ok(new QuestionnaireSettings
             {
-                IsAnonymousMode = anonymousQuestionnaire == null,
-                CanSaveScenario = canSaveScenario
+                IsAnonymousMode = anonymousQuestionnaire == null
             });
         }
 
