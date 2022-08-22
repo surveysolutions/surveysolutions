@@ -332,7 +332,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static bool ValidationMessageIsTooLong(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
-            => validationCondition.Message?.Length > MaxTitleLength;
+            => validationCondition.Message?.Length > MaxValidationMessageLength;
 
         private static IEnumerable<QuestionnaireVerificationMessage> WarningByValueAndTitleNumbersIsNotEqualsInCategoricalQuestions(MultiLanguageQuestionnaireDocument document)
         {
