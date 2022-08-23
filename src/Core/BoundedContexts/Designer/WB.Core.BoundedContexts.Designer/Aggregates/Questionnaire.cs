@@ -2123,7 +2123,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             AnswerText = option.Title,
             ParentCode = option.ParentValue,
             ParentValue = option.ParentValue?.ToString(),
-            AnswerValue = option.Value.ToString()
+            AnswerValue = option.Value.ToString(),
+            AttachmentName = option.AttachmentName,
         };
 
         private static Answer[]? ConvertOptionsToAnswers(Option[]? options) 
@@ -2133,7 +2134,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             AnswerValue = option.Value,
             AnswerText = option.Title,
-            ParentValue = option.ParentValue
+            ParentValue = option.ParentValue,
+            AttachmentName = option.AttachmentName
         };
 
         private IQuestion? GetQuestion(Guid questionId)

@@ -9,6 +9,8 @@ namespace WB.Core.SharedKernels.Questionnaire.Categories
         public int Id { get; set; }
         public int? ParentId { get; set; }
         public string Text { get; set; } = String.Empty;
+        
+        public string? AttachmentName { get; set; }
 
         public override bool Equals(object obj)
         {

@@ -1145,6 +1145,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="OptionsUploadValue" xml:space="preserve">
     <value>Value</value>
   </data>
+  <data name="AttachmentName" xml:space="preserve">
+    <value>Attachment name</value>
+  </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>Parent value</value>
   </data>

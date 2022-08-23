@@ -912,6 +912,9 @@
   <data name="OptionsUploadValue" xml:space="preserve">
     <value>Значение</value>
   </data>
+  <data name="AttachmentName" xml:space="preserve">
+    <value>Имя файла вложения</value>
+  </data>
   <data name="SideBarMacroNoName" xml:space="preserve">
     <value>Макрос без имени</value>
   </data>

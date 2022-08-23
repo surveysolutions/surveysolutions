@@ -10,6 +10,10 @@
                     <label class="wb-label" ng-i18next="OptionsUploadTitle"></label>
                     <help key="HelpOptionTitle" />
                 </div>
+                <div class="column-2">
+                    <label class="wb-label" ng-i18next="StaticTextAttachmentName"></label>
+                    <help key="attachmentName" />
+                </div>
             </div>
             <div class="table-row question-options-editor" ng-repeat="option in activeQuestion.options">
                 <div class="column-2">
@@ -25,6 +29,9 @@
                 </div>
                 <div class="column-3">
                     <input ng-attr-id="{{'option-title-' + $index}}" type="text" ng-model="option.title" ng-keypress="onKeyPressInOptions($event)" class="form-control"/>
+                </div>
+                <div class="column-2">
+                    <input ng-attr-id="{{'option-attachmentName-' + $index}}" type="text" ng-model="option.attachmentName" ng-keypress="onKeyPressInOptions($event)" class="form-control"/>
                 </div>
                 <div class="column-4">
                     <a href="javascript:void(0);" ng:click="removeOption($index)" class="btn" tabindex="-1"></a>

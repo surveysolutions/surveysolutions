@@ -44,6 +44,7 @@ namespace WB.Infrastructure.Native.Questionnaire.Impl
                                     ParentCode = option.ParentId,
                                     ParentValue = option.ParentId?.ToString(),
                                     AnswerValue = option.Id.ToString(),
+                                    AttachmentName = option.AttachmentName
                                 }).ToList();
                             });
 

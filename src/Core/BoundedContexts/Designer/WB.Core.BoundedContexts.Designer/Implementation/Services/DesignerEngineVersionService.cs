@@ -237,17 +237,38 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-            Version = ApiVersion.MaxQuestionnaireVersion,
-            NewFeatures = new []
+                Version = 32,
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire => 
+                            questionnaire.FirstOrDefault<IQuestion>(x => x.IsFilteredCombobox == true && (x.LinkedToQuestionId != null || x.LinkedToRosterId != null)) != null,
+                        description: "Linked question displayed as combobox"
+                    ),
+                }
+            },
+            new QuestionnaireContentVersion
             {
-                new QuestionnaireFeature
-                (
-                    hasQuestionnaire: questionnaire => 
-                        questionnaire.FirstOrDefault<IQuestion>(x => x.IsFilteredCombobox == true && (x.LinkedToQuestionId != null || x.LinkedToRosterId != null)) != null,
-                    description: "Linked question displayed as combobox"
-                ),
-            }
-        },
+                Version = ApiVersion.MaxQuestionnaireVersion,
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire =>
+                        {
+                            if(questionnaire.Find<ICategoricalQuestion>(x => x.Answers.Any(y => !string.IsNullOrWhiteSpace(y.AttachmentName))).Any())
+                                return true;
+
+                            if(questionnaire.Categories.Any(y => !string.IsNullOrWhiteSpace(y.AttachmentName)))
+                                return true;
+                            
+                            return false;
+                        },
+                        description: "Attachment name is used in options or categories"
+                    ),
+                }
+            },
         };
 
         private bool HasTranslatedTitle(QuestionnaireDocument questionnaire)

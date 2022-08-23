@@ -640,6 +640,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     option.Value = answerValue;
                 }
                 option.ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) || !x.ParentValue.IsDecimal() ? (decimal?)null : Convert.ToDecimal(x.ParentValue);
+                option.AttachmentName = x.AttachmentName;
+                
                 return option;
             }).ToArray()
                    ?? new CategoricalOption[0];
