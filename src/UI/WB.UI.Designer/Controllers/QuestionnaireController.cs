@@ -149,6 +149,10 @@ namespace WB.UI.Designer.Controllers
             if(id == null)
                 return this.RedirectToAction("Index", "QuestionnaireList");
 
+            var questionnaire = questionnaireViewFactory.Load(id);
+            if (questionnaire == null || questionnaire.Source.IsDeleted)
+                return NotFound();
+
             if (ShouldRedirectToOriginalId(id))
             {
                 return RedirectToAction("Details", new RouteValueDictionary
