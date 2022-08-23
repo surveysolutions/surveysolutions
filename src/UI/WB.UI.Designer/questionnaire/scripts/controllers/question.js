@@ -840,6 +840,14 @@
 
             };
 
+            $scope.doesQuestionSupportQuestionScope = function () {
+                return $scope.activeQuestion &&
+                    $scope.activeQuestion.allQuestionScopeOptions &&
+                    $scope.activeQuestion.allQuestionScopeOptions.length > 0 &&
+                    $scope.questionnaire &&
+                    (!$scope.questionnaire.isCoverPageSupported || !$scope.activeQuestion.parentIsCover);
+            };
+
             $scope.doesQuestionSupportOptionsFilters = function () {
                 if ($scope.activeQuestion) {
                     if ($scope.activeQuestion.type === 'MultyOption' || $scope.activeQuestion.type === 'SingleOption') {
