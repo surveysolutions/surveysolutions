@@ -139,20 +139,22 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             if (!question.CategoriesId.HasValue)
             {
-                var allAttachmentsRefs = question.Answers.Select(x => x.AttachmentName)
-                    .Where(x => !string.IsNullOrWhiteSpace(x)).Distinct();
+                var allAttachmentsRefs = question.Answers
+                    .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
+                    .Select(x => x.AttachmentName).Distinct();
 
-                if (allAttachmentsRefs.Any(x => !questionnaire.Attachments.Contains(x)))
+                if (allAttachmentsRefs.Any(x => questionnaire.Attachments.All(y => y.Name != x)))
                     return true;
             }
             else
             {
                 var categories = GetCategoriesItem(questionnaire.PublicKey, question.CategoriesId.Value);
 
-                var allAttachmentsRefs = categories.Select(x => x.AttachmentName)
-                    .Where(x => !string.IsNullOrWhiteSpace(x)).Distinct();
+                var allAttachmentsRefs = categories
+                    .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
+                    .Select(x => x.AttachmentName).Distinct();
 
-                if (allAttachmentsRefs.Any(x => !questionnaire.Attachments.Contains(x)))
+                if (allAttachmentsRefs.Any(x => questionnaire.Attachments.All(y => y.Name != x)))
                     return true;
             }
 
