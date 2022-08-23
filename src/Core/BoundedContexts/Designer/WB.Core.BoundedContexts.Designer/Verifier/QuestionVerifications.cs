@@ -119,8 +119,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             if (!question.CategoriesId.HasValue)
             {
-                var allAttachmentsRefs = question.Answers.Select(x => x.AttachmentName)
-                    .Where(x => !string.IsNullOrWhiteSpace(x));
+                var allAttachmentsRefs = question.Answers
+                    .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
+                    .Select(x => x.AttachmentName!.ToLower());
 
                 return allAttachmentsRefs.Count() != allAttachmentsRefs.Distinct().Count();
             }
@@ -128,8 +129,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 var categories = GetCategoriesItem(questionnaire.PublicKey, question.CategoriesId.Value);
 
-                var allAttachmentsRefs = categories.Select(x => x.AttachmentName)
-                    .Where(x => !string.IsNullOrWhiteSpace(x)).Distinct();
+                var allAttachmentsRefs = categories
+                    .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
+                    .Select(x => x.AttachmentName!.ToLower());
 
                 return allAttachmentsRefs.Count() != allAttachmentsRefs.Distinct().Count();
             }
@@ -143,7 +145,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
                     .Select(x => x.AttachmentName).Distinct();
 
-                if (allAttachmentsRefs.Any(x => questionnaire.Attachments.All(y => y.Name != x)))
+                if (allAttachmentsRefs.Any(x => 
+                        questionnaire.Attachments.All(y => 
+                            string.Compare(x, y.Name, StringComparison.OrdinalIgnoreCase) != 0)))
                     return true;
             }
             else
@@ -154,7 +158,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
                     .Select(x => x.AttachmentName).Distinct();
 
-                if (allAttachmentsRefs.Any(x => questionnaire.Attachments.All(y => y.Name != x)))
+                if (allAttachmentsRefs.Any(x => questionnaire.Attachments.All(y => 
+                        string.Compare(x, y.Name, StringComparison.OrdinalIgnoreCase) != 0)))
                     return true;
             }
 

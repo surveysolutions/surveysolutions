@@ -2131,7 +2131,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question option refers non existent attachment.
+        ///   Looks up a localized string similar to Question option refers to non existent attachment.
         /// </summary>
         public static string WB0313_QuestionOptionReferenceToNonExistentAttachment {
             get {
@@ -2145,6 +2145,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0314_NonUniqueAttachment {
             get {
                 return ResourceManager.GetString("WB0314_NonUniqueAttachment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attachment name should contain only letters, digits and underscore character. Starting from letter, no consecutive underscores..
+        /// </summary>
+        public static string WB0315_AttachmentHasInvalidName {
+            get {
+                return ResourceManager.GetString("WB0315_AttachmentHasInvalidName", resourceCulture);
             }
         }
         

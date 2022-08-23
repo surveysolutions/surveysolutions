@@ -821,9 +821,12 @@
       <value>Categories must have at least two options</value>
   </data>
   <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
-      <value>Question option refers non existent attachment</value>
+      <value>Question option refers to non existent attachment</value>
   </data>
   <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
       <value>Question contains options refers non unique attachment</value>
-  </data>    
+  </data>
+  <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
+    <value>Attachment name should contain only letters, digits and underscore character. Starting from letter, no consecutive underscores.</value>
+  </data>
 </root>
