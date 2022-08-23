@@ -60,8 +60,8 @@ const inject = () =>
     transform(filepath, file) {
       
       if (filepath.endsWith(".css") && filepath.indexOf("pdf") > 0) {
-        const href= filepath = '@Html.ContentAbsolute("' + filepath + '")'
-        return "<link rel='stylesheet' href='" + href + "'>"
+        const cssContent= filepath = '@Html.Raw(System.IO.File.ReadAllText("wwwroot' + filepath.replace('~', '') + '"))'
+        return "<style>" + cssContent + "</style>"
       }
 
       return gulpInject.transform.apply(gulpInject.transform,arguments);
