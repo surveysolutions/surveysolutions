@@ -65,6 +65,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<ICategoricalQuestion>("WB0073", OptionValuesMustBeUniqueForCategoricalQuestion, VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
             Error<ICategoricalQuestion>("WB0076", CategoricalOptionsCountMoreThanMaxOptionCount, string.Format(VerificationMessages.WB0076_CategoricalOptionsCountMoreThan200, MaxOptionsCountInCategoricalOptionQuestion)),
             Error<ICategoricalQuestion>("WB0307", QuestionMustHaveLinkToExistedReusableCategories, VerificationMessages.WB0307_QuestionReferancedToIncorrectCategories),
+            Error<ICategoricalQuestion>("WB0313", QuestionOptionRefersAbsentAttachment, VerificationMessages.WB0313_QuestionOptionReferenceToNonExistentAttachment),
+            Error<ICategoricalQuestion>("WB0314", QuestionOptionsReferNonUniqueAttachment, VerificationMessages.WB0314_NonUniqueAttachment),
             Error<IMultyOptionsQuestion>("WB0007", MultiOptionQuestionYesNoQuestionCantBeLinked, VerificationMessages.WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked),
             Error<IMultyOptionsQuestion>("WB0061", CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, string.Format(VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, MinOptionsCount)),
             Error<IMultyOptionsQuestion>("WB0021", CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
@@ -112,6 +114,50 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             WarningByValueAndTitleNumbersIsNotEqualsInCategoricalQuestions,
             WarningForCollection(QuestionsHasSameCategories, "WB0296", VerificationMessages.WB0296)
         };
+
+        private bool QuestionOptionsReferNonUniqueAttachment(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (!question.CategoriesId.HasValue)
+            {
+                var allAttachmentsRefs = question.Answers.Select(x => x.AttachmentName)
+                    .Where(x => !string.IsNullOrWhiteSpace(x));
+
+                return allAttachmentsRefs.Count() != allAttachmentsRefs.Distinct().Count();
+            }
+            else
+            {
+                var categories = GetCategoriesItem(questionnaire.PublicKey, question.CategoriesId.Value);
+
+                var allAttachmentsRefs = categories.Select(x => x.AttachmentName)
+                    .Where(x => !string.IsNullOrWhiteSpace(x)).Distinct();
+
+                return allAttachmentsRefs.Count() != allAttachmentsRefs.Distinct().Count();
+            }
+        }
+
+        private bool QuestionOptionRefersAbsentAttachment(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (!question.CategoriesId.HasValue)
+            {
+                var allAttachmentsRefs = question.Answers.Select(x => x.AttachmentName)
+                    .Where(x => !string.IsNullOrWhiteSpace(x)).Distinct();
+
+                if (allAttachmentsRefs.Any(x => !questionnaire.Attachments.Contains(x)))
+                    return true;
+            }
+            else
+            {
+                var categories = GetCategoriesItem(questionnaire.PublicKey, question.CategoriesId.Value);
+
+                var allAttachmentsRefs = categories.Select(x => x.AttachmentName)
+                    .Where(x => !string.IsNullOrWhiteSpace(x)).Distinct();
+
+                if (allAttachmentsRefs.Any(x => !questionnaire.Attachments.Contains(x)))
+                    return true;
+            }
+
+            return false;
+        }
 
         private bool IdentifyingQuestionInSectionWithEnablingCondition(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {

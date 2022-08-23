@@ -820,4 +820,10 @@
   <data name="WB0312" xml:space="preserve">
       <value>Categories must have at least two options</value>
   </data>
+  <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
+      <value>Question option refers non existent attachment</value>
+  </data>
+  <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+      <value>Question contains options refers non unique attachment</value>
+  </data>    
 </root>

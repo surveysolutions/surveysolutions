@@ -833,4 +833,10 @@
   <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
     <value>Переменные на обложке должны иметь описание</value>
   </data>
+  <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
+      <value>Вопрос содержит категорию, ссылающуюся на несуществующий файл</value>
+  </data>
+    <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+      <value>Вопрос содержит категории, ссылающиеся на неуникальные файлы</value>
+  </data>
 </root>
