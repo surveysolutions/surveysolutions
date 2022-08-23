@@ -31,19 +31,6 @@
                                     required
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="12" :sm="showParentValue ? 6 : 12">
-                                <v-text-field
-                                    v-model="itemAttachmentName"
-                                    :label="
-                                        $t(
-                                            'QuestionnaireEditor.AttachmentName'
-                                        ) + '*'
-                                    "
-                                    :rules="[required, maxValue]"
-                                    type="number"
-                                    required
-                                ></v-text-field>
-                            </v-col>
                             <v-col v-if="showParentValue" cols="12" sm="6">
                                 <v-autocomplete
                                     v-if="
@@ -88,8 +75,6 @@
 </template>
 
 <script>
-import { timeStamp } from 'console';
-
 export default {
     props: {
         title: { type: String, required: true },
@@ -108,7 +93,6 @@ export default {
             itemTitle: this.item.title,
             itemValue: this.item.value,
             itemParentValue: this.item.parentValue,
-            itemAttachmentName: this.item.attachmentName,
 
             required: value =>
                 !!value || this.$t('QuestionnaireEditor.RequiredField'),
@@ -129,8 +113,7 @@ export default {
                 this.$emit('change', {
                     title: this.itemTitle,
                     value: this.itemValue,
-                    parentValue: this.itemParentValue,
-                    attachmentName: this.itemAttachmentName,
+                    parentValue: this.itemParentValue
                 });
             }
         },
