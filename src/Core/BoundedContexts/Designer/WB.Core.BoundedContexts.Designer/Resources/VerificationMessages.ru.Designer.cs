@@ -2151,6 +2151,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Имя файла должно содержать только английские буквы, цифры и символы подчеркивания. Начинаться с буквы, без последовательных символов подчеркивания, не закаечиваться на символ подчеркивания и не быть зарезервированныи словом, пустым или более 32 символов..
+        /// </summary>
+        public static string WB0315_AttachmentHasInvalidName {
+            get {
+                return ResourceManager.GetString("WB0315_AttachmentHasInvalidName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Только строковая переменная может быть использована как источник имени вложения.
         /// </summary>
         public static string WB0390_OnlyStringVariableAllowedAsAttachmentName {

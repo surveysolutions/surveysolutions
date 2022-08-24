@@ -162,6 +162,7 @@
                         var attachmentFileNameLength = attachment.meta.fileName.length;
 
                         attachment.name = attachment.meta.fileName.replace(/\.[^/.]+$/, "")
+                            .replace(" ", "_")
                             .substring(0, attachmentFileNameLength < maxAttachmentNameLength ?
                                 attachmentFileNameLength :
                                 maxAttachmentNameLength);

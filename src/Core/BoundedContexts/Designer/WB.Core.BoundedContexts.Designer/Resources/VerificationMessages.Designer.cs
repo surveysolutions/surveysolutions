@@ -2149,7 +2149,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attachment name should contain only letters, digits and underscore character. Starting from letter, no consecutive underscores..
+        ///   Looks up a localized string similar to Attachment name should contain only letters, digits and underscore character. Is starting with letter, no consecutive underscores, not ending with underscore and is not a reserved word. Not empty and less than 32 characters..
         /// </summary>
         public static string WB0315_AttachmentHasInvalidName {
             get {

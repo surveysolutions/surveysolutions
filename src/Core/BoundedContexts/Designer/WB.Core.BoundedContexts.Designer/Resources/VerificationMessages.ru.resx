@@ -836,7 +836,10 @@
   <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
       <value>Вопрос содержит категорию, ссылающуюся на несуществующий файл</value>
   </data>
-    <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+  <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
       <value>Вопрос содержит категории, ссылающиеся на неуникальные файлы</value>
   </data>
+  <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
+    <value>Имя файла должно содержать только английские буквы, цифры и символы подчеркивания. Начинаться с буквы, без последовательных символов подчеркивания, не закаечиваться на символ подчеркивания и не быть зарезервированныи словом, пустым или более 32 символов.</value>
+  </data>  
 </root>
