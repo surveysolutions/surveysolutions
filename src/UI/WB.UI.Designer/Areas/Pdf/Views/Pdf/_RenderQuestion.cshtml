@@ -160,6 +160,9 @@
                             <input type="radio" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
                             <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
                         </div>
+                        <div class="option-attachment-name">
+                            <span>@option.AttachmentName</span>
+                        </div>
                     </div>
                 }
                 @if (singleCategories.Count > questionnaire.Settings.OptionsExcerptCount)
@@ -194,12 +197,18 @@
                                 <label for="@question.StataExportCaption-@option.AnswerValue-no"></label>
                             </div>
                             <div class="yes_no-option-text">@option.AnswerText</div>
+                            <div class="option-attachment-name">
+                                <span>@option.AttachmentName</span>
+                            </div>
                         }
                         else
                         {
                             <div class="option-text">
                                 <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
                                 <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                            </div>
+                            <div class="option-attachment-name">
+                                <span>@option.AttachmentName</span>
                             </div>
                         }
                     </div>

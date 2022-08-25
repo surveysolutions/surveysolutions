@@ -367,6 +367,8 @@ article {
 
 .option {
     margin-top: 2px;
+    display:flex;
+    flex-wrap:nowrap;
 }
 
 .option:first-of-type {
@@ -385,6 +387,7 @@ article {
     display: inline-block;
     float:left;
     line-height: 18px;
+    flex:0 0 60px;
 }
 
 .points {
@@ -420,6 +423,7 @@ article {
 }
 
 .yes_no_multiselect {
+  flex: 0 0 55px;
   display: inline-block;
   width: 53px;
   vertical-align: top;
@@ -439,18 +443,29 @@ article {
 }
 
 .option .yes_no-option-text {
+  flex: 1 0 auto;
   margin-left: 5px;
-  width: 65%;
+  width: 60%;
   vertical-align: top;
 }
 .option .option-text {
-  width: 65%;
+  flex: 1 0 auto;
+  width: 60%;
   display: inline-block;
   margin-left: 10px;
   line-height: 18px;
   vertical-align: top; 
 }
-
+.option .option-attachment-name {
+  flex: 0 0 auto;
+  max-width: 100px;
+  display: inline-block;
+  float: right;
+  margin-left: 5px;
+  line-height: 18px;
+  vertical-align: top;
+  overflow: hidden;
+}
 input[type=date] {
     line-height: 20px;
     outline: 0;
