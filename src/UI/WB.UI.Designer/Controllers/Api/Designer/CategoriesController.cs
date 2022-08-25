@@ -8,9 +8,9 @@ using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
-    [AuthorizeOrAnonymousQuestionnaire]
-    [QuestionnairePermissions]
     [Route("categories")]
+    [QuestionnairePermissions]
+    [AuthorizeOrAnonymousQuestionnaire]
     public class CategoriesController : Controller
     {
         private readonly ICategoriesService categoriesService;
@@ -35,7 +35,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
-        [Route("{id:Guid}/xlsx/{categoriesId:Guid}")]
+        [Route("{id}/xlsx/{categoriesId:Guid}")]
         public IActionResult Get(QuestionnaireRevision id, Guid categoriesId)
         {
             var categoriesFile = this.categoriesService.GetAsExcelFile(id, categoriesId);

@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid? userId);
 
-        bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId);
+        bool HasUserChangeAccessToQuestionnaire(Guid questionnaireId, Guid userId);
         bool HasUserAccessToEditComments(QuestionnaireChangeRecord changeRecord, QuestionnaireDocument questionnaire, Guid userId);
         bool HasUserAccessToEditComments(Guid revisionId, Guid userId);
         bool IsAnonymousQuestionnaire(Guid questionnaireId, out Guid? originQuestionnaireId);
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return false;
         }
 
-        public bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId)
+        public bool HasUserChangeAccessToQuestionnaire(Guid questionnaireId, Guid userId)
         {
             var questionnaire = this.questionnaireStorage.Get(questionnaireId);
             if (questionnaire == null || questionnaire.IsDeleted)
