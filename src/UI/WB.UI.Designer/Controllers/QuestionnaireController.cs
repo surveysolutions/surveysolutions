@@ -340,7 +340,7 @@ namespace WB.UI.Designer.Controllers
         {
             var historyReferenceId = commandId;
 
-            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId());
+            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id, this.User.GetId());
             if (!hasAccess)
             {
                 this.Error(Resources.QuestionnaireController.ForbiddenRevert);
@@ -360,7 +360,7 @@ namespace WB.UI.Designer.Controllers
         public async Task<ActionResult<bool>> SaveComment(Guid id, Guid historyItemId, string comment)
         {
             bool hasAccess = this.User.IsAdmin() 
-                || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId());
+                || this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id, this.User.GetId());
 
             if (!hasAccess)
                 return false;
