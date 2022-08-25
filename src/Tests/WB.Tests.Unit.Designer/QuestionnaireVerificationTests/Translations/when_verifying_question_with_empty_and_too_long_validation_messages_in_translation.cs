@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Translations
                 {
                     Create.TextQuestion(validationConditions: new[]
                     {
-                        Create.ValidationCondition(expression: "Expression", message: "Message very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long"),
+                        Create.ValidationCondition(expression: "Expression", message: "Message very long " + Enumerable.Range(1, 1000).Select(_ => " very long").Aggregate(string.Empty, (current, delta) => current + delta)),
                     }),
 
                 });
