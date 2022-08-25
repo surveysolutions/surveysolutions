@@ -176,7 +176,7 @@ namespace WB.UI.Headquarters.Controllers
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+            if (!HasPermissionsToSetupTwoFactorAuthentication(user)) return this.Forbid();
 
             return View(await GetUserInfo(user));
         }
@@ -197,7 +197,7 @@ namespace WB.UI.Headquarters.Controllers
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+            if (!HasPermissionsToSetupTwoFactorAuthentication(user)) return this.Forbid();
 
             return View(await GetUserInfo(user));
         }
@@ -231,7 +231,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
-            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+            if (!HasPermissionsToSetupTwoFactorAuthentication(user)) return this.Forbid();
             
             return View(await GetUserInfo(user));
         }
@@ -266,7 +266,8 @@ namespace WB.UI.Headquarters.Controllers
                     CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
                     RecoveryCodes = "",
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
-                    TokenIssued = await this.tokenProvider.DoesTokenExist(user)
+                    TokenIssued = await this.tokenProvider.DoesTokenExist(user),
+                    CanSetupTwoFactorAuthentication = tokenProvider.CanGenerate && HasPermissionsToSetupTwoFactorAuthentication(user),
                 },
                 Api = new
                 {
@@ -301,7 +302,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
-            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+            if (!HasPermissionsToSetupTwoFactorAuthentication(user)) return this.Forbid();
 
             return View(await GetUserInfo(user));
         }
@@ -320,7 +321,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
-            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+            if (!HasPermissionsToSetupTwoFactorAuthentication(user)) return this.Forbid();
 
             if (RecoveryCodes == null || RecoveryCodes.Length == 0)
             {
@@ -352,8 +353,8 @@ namespace WB.UI.Headquarters.Controllers
                     CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
                     CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
-                    RecoveryCodes = string.Join(" ", RecoveryCodes)
-
+                    RecoveryCodes = string.Join(" ", RecoveryCodes),
+                    CanSetupTwoFactorAuthentication =  tokenProvider.CanGenerate && HasPermissionsToSetupTwoFactorAuthentication(user),
                 },
                 Api = new
                 {
@@ -385,7 +386,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
-            if (!HasPermissionsToManageUser(user)) return this.Forbid();            
+            if (!HasPermissionsToSetupTwoFactorAuthentication(user)) return this.Forbid();            
 
             if(!user.TwoFactorEnabled)
                 return RedirectToAction("TwoFactorAuthentication", new { id = id });
@@ -408,7 +409,7 @@ namespace WB.UI.Headquarters.Controllers
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+            if (!HasPermissionsToSetupTwoFactorAuthentication(user)) return this.Forbid();
 
             var unformattedKey = await userManager.GetAuthenticatorKeyAsync(user);
             if (string.IsNullOrEmpty(unformattedKey))
@@ -453,6 +454,7 @@ namespace WB.UI.Headquarters.Controllers
                     CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
                     CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
+                    CanSetupTwoFactorAuthentication = tokenProvider.CanGenerate && HasPermissionsToSetupTwoFactorAuthentication(user),
                 },
                 Api = new
                 {
@@ -810,8 +812,7 @@ namespace WB.UI.Headquarters.Controllers
             var currentUser = await this.userManager.FindByIdAsync(editModel.UserId.FormatGuid());
             if (currentUser == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
-
+            if (!HasPermissionsToSetupTwoFactorAuthentication(currentUser)) return this.Forbid();
 
             if (this.ModelState.IsValid)
             {
@@ -833,8 +834,7 @@ namespace WB.UI.Headquarters.Controllers
             var currentUser = await this.userManager.FindByIdAsync(editModel.UserId.FormatGuid());
             if (currentUser == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
-
+            if (!HasPermissionsToSetupTwoFactorAuthentication(currentUser)) return this.Forbid();
 
             if (this.ModelState.IsValid)
             {
@@ -860,7 +860,7 @@ namespace WB.UI.Headquarters.Controllers
             var currentUser = await this.userManager.FindByIdAsync(editModel.UserId.FormatGuid());
             if (currentUser == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+            if (!HasPermissionsToSetupTwoFactorAuthentication(currentUser)) return this.Forbid();
 
             if (this.ModelState.IsValid)
             {
@@ -892,7 +892,7 @@ namespace WB.UI.Headquarters.Controllers
             var currentUser = await this.userManager.FindByIdAsync(editModel.UserId.FormatGuid());
             if (currentUser == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+            if (!HasPermissionsToSetupTwoFactorAuthentication(currentUser)) return this.Forbid();
 
             if (currentUser.Role != UserRoles.ApiUser && currentUser.Role != UserRoles.Administrator)
             {
@@ -918,7 +918,7 @@ namespace WB.UI.Headquarters.Controllers
             var currentUser = await this.userManager.FindByIdAsync(editModel.UserId.FormatGuid());
             if (currentUser == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+            if (!HasPermissionsToSetupTwoFactorAuthentication(currentUser)) return this.Forbid();
 
             await this.tokenProvider.InvalidateBearerTokenAsync(currentUser);
 
@@ -1025,6 +1025,26 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         private bool HasPermissionsToChangeUserPassword(HqUser user)
+        {
+            if (this.authorizedUser.IsAdministrator)
+                return true;
+
+            if (this.authorizedUser.IsHeadquarter && user.Id == this.authorizedUser.Id)
+                return true;
+
+            if (this.authorizedUser.IsSupervisor && user.Id == this.authorizedUser.Id)
+                return true;
+
+            if (this.authorizedUser.IsInterviewer && user.Id == this.authorizedUser.Id)
+                return true;
+
+            if (this.authorizedUser.IsObserver && user.Id == this.authorizedUser.Id)
+                return true;
+
+            return false;
+        }
+
+        private bool HasPermissionsToSetupTwoFactorAuthentication(HqUser user)
         {
             if (this.authorizedUser.IsAdministrator)
                 return true;

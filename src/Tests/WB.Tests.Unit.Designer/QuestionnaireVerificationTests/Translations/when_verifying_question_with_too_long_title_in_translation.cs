@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Translations
                 children: new IComposite[] { Create.TextQuestion(text: "normal title"), });
             var translatedQuestionnaire = Create.QuestionnaireDocumentWithOneChapter(
                 translations: new[] { Create.Translation(name: "normal name") },
-                children: new IComposite[] { Create.TextQuestion(text: "long title" + new string('l', 500)), });
+                children: new IComposite[] { Create.TextQuestion(text: "long title" + new string('l', 2000)), });
 
             var questionnaireTranslator = Setup.QuestionnaireTranslator(questionnaire, null, translatedQuestionnaire);
             verifier = CreateQuestionnaireVerifier(questionnaireTranslator: questionnaireTranslator);

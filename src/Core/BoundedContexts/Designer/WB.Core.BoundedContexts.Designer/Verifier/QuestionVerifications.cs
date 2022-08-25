@@ -332,7 +332,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static bool ValidationMessageIsTooLong(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
-            => validationCondition.Message?.Length > 250;
+            => validationCondition.Message?.Length > MaxValidationMessageLength;
 
         private static IEnumerable<QuestionnaireVerificationMessage> WarningByValueAndTitleNumbersIsNotEqualsInCategoricalQuestions(MultiLanguageQuestionnaireDocument document)
         {
@@ -574,7 +574,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static bool QuestionTitleIsTooLong(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-            => question.QuestionText?.Length > 500;
+            => question.QuestionText?.Length > MaxTitleLength;
 
         private static bool QuestionWithOptionsFilterCannotBePrefilled(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
