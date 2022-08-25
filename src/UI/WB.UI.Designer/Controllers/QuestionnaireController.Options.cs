@@ -38,7 +38,8 @@ namespace WB.UI.Designer.Controllers
                         {
                             Value = option.Id,
                             ParentValue = option.ParentId != null ? (int)option.ParentId.Value : (int?)null,
-                            Title = option.Text
+                            Title = option.Text,
+                            AttachmentName = option.AttachmentName
                         });
 
             return new EditOptionsViewModel
@@ -62,7 +63,8 @@ namespace WB.UI.Designer.Controllers
                               {
                                   Value = option.Value != null ? (int)option.Value : throw new InvalidOperationException("Option Value must be not null."),
                                   ParentValue = option.ParentValue != null ? (int)option.ParentValue.Value : (int?)null,
-                                  Title = option.Title
+                                  Title = option.Title,
+                                  AttachmentName = option.AttachmentName
                               })
                 : new QuestionnaireCategoricalOption[0];
 
@@ -113,7 +115,9 @@ namespace WB.UI.Designer.Controllers
                         {
                             ParentValue = c.ParentValue,
                             Title = c.Title,
-                            Value = c.Value
+                            Value = c.Value,
+                            AttachmentName = c.AttachmentName
+                            
                         }).ToArray()
                     };
                 }
@@ -186,7 +190,8 @@ namespace WB.UI.Designer.Controllers
                             Value = int.Parse(x.Id!),
                             ParentValue = string.IsNullOrEmpty(x.ParentId)
                                 ? (int?)null
-                                : int.Parse(x.ParentId)
+                                : int.Parse(x.ParentId),
+                            AttachmentName = x.AttachmentName
                         })
                         .ToArray()
                 };
@@ -218,6 +223,8 @@ namespace WB.UI.Designer.Controllers
             public int Value { set; get; }
             public int? ParentValue { set; get; }
             public string Title { set; get; } = String.Empty;
+
+            public string? AttachmentName { get; set; }
         }
 
         public class UpdateCategoriesModel
@@ -253,7 +260,8 @@ namespace WB.UI.Designer.Controllers
                             Id = x.Value.ToString(),
                             Text = x.Title,
                             ParentId = x.ParentValue == null ? "" : x.ParentValue.ToString(),
-                            RowId = i
+                            RowId = i,
+                            AttachmentName = x.AttachmentName
                         }).ToList());
                 }
                 catch (Exception e)

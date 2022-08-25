@@ -139,7 +139,13 @@ export default {
                     text: this.$t('QuestionnaireEditor.OptionsUploadTitle'),
                     sortable: false,
                     value: 'title',
-                    width: this.isCascading ? '60%' : '70%'
+                    width: this.isCascading ? '45%' : '55%'
+                },
+                {
+                    text: this.$t('QuestionnaireEditor.AttachmentName'),
+                    sortable: false,
+                    width: '15%',
+                    value: 'attachmentName'
                 }
             ];
 

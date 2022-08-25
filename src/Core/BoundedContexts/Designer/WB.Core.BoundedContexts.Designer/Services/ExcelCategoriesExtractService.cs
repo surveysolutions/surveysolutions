@@ -111,7 +111,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
             Id = worksheet.Cell($"{headers.IdIndex}{rowNumber}").GetString(),
             Text = worksheet.Cell($"{headers.TextIndex}{rowNumber}").GetString(),
             ParentId = worksheet.Cell($"{headers.ParentIdIndex}{rowNumber}").GetString(),
-            RowId = rowNumber
+            RowId = rowNumber,
+            AttachmentName = worksheet.Cell($"{headers.AttachmentName}{rowNumber}").GetString(),
         };
     }
 }

@@ -101,6 +101,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     case "text":     headerMap.TextIndex     = i.ToString(); break;
                     case "id":       headerMap.IdIndex       = i.ToString(); break;
                     case "parentid": headerMap.ParentIdIndex = i.ToString(); break;
+                    case "attachmentName": headerMap.AttachmentName = i.ToString(); break;
                     default:
                         return null;
                 }
@@ -117,7 +118,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
             Id = GetRowValue(row, headerMap.IdIndex),
             Text = GetRowValue(row, headerMap.TextIndex) ?? String.Empty,
             ParentId = GetRowValue(row, headerMap.ParentIdIndex),
-            RowId = rowNumber
+            RowId = rowNumber,
+            AttachmentName = GetRowValue(row, headerMap.AttachmentName)
         };
 
         private string? GetRowValue(List<string> row, string? index)

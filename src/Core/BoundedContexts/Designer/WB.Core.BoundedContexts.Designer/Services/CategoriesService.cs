@@ -175,7 +175,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 Text = x.Text,
                 ParentId = string.IsNullOrEmpty(x.ParentId)
                     ? (int?)null
-                    : int.Parse(x.ParentId)
+                    : int.Parse(x.ParentId),
+                AttachmentName = x.AttachmentName
             }));
         }
     }
