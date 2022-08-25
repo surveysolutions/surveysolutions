@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
@@ -18,16 +19,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly FilteredOptionsViewModel optionsViewModel;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IInterviewViewModelFactory viewModelFactory;
 
         protected SpecialValuesViewModel(){}
 
         public SpecialValuesViewModel(
             FilteredOptionsViewModel optionsViewModel,
-            IStatefulInterviewRepository interviewRepository) 
+            IStatefulInterviewRepository interviewRepository,
+            IInterviewViewModelFactory viewModelFactory) 
         {
             this.optionsViewModel = optionsViewModel;
             this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
             this.interviewRepository = interviewRepository;
+            this.viewModelFactory = viewModelFactory;
         }
 
         private bool? isSpecialValue;
@@ -139,13 +143,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private SingleOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, bool isSelected)
         {
-            var optionViewModel = new SingleOptionQuestionOptionViewModel
-            {
-                Value = model.Value,
-                Title = model.Title,
-                Selected = isSelected,
-                QuestionState = this.questionState
-            };
+            var optionViewModel = viewModelFactory.GetNew<SingleOptionQuestionOptionViewModel>();
+            optionViewModel.Value = model.Value;
+            optionViewModel.Title = model.Title;
+            optionViewModel.Selected = isSelected;
+            optionViewModel.QuestionState = questionState;
+
+            optionViewModel.Attachment.InitAsStatic(interviewId, model.AttachmentName);
             optionViewModel.BeforeSelected += this.SpecialValueSelected;
             optionViewModel.AnswerRemoved += this.RemoveAnswerHandler;
 

@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -39,9 +40,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             FilteredOptionsViewModel filteredOptionsViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering, 
-            ThrottlingViewModel throttlingModel):  base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
+            ThrottlingViewModel throttlingModel,
+            IInterviewViewModelFactory viewModelFactory):  base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
             instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
-            eventRegistry: eventRegistry, filteredOptionsViewModel)
+            eventRegistry: eventRegistry, filteredOptionsViewModel,viewModelFactory)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
 
@@ -387,12 +389,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private SingleOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue)
         {
+            var option = viewModelFactory.GetNew<SingleOptionQuestionOptionViewModel>();
+            option.Value = optionValue.Value;
+            option.Title = optionValue.Text;
+            option.QuestionState = this.QuestionState;
+
+            /*
             var option = new SingleOptionQuestionOptionViewModel
             {
                 Title = optionValue.Text,
                 Value = optionValue.Value,
                 QuestionState = this.QuestionState
             };
+            */
 
             option.BeforeSelected += this.OptionSelected;
             option.AnswerRemoved += this.RemoveAnswer;

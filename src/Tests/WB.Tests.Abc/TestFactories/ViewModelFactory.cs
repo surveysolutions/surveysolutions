@@ -140,7 +140,8 @@ namespace WB.Tests.Abc.TestFactories
                 Abc.SetUp.FilteredOptionsViewModel(),
                 Mock.Of<QuestionInstructionViewModel>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
-                Create.ViewModel.ThrottlingViewModel());
+                Create.ViewModel.ThrottlingViewModel(),
+                Create.Service.InterviewViewModelFactory());
 
         public CategoricalMultiLinkedToListViewModel MultiOptionLinkedToListQuestionQuestionViewModel(
             IQuestionnaire questionnaire = null,
@@ -446,7 +447,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public SingleOptionQuestionOptionViewModel SingleOptionQuestionOptionViewModel(int? value = null)
         {
-            return new SingleOptionQuestionOptionViewModel()
+            return new SingleOptionQuestionOptionViewModel(Mock.Of<AttachmentViewModel>())
             {
                 Value = value ?? 0
             };
@@ -459,7 +460,8 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new SpecialValuesViewModel(
                 optionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(), 
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                Create.Service.InterviewViewModelFactory());
         }
 
         public SideBarCompleteSectionViewModel SideBarCompleteSectionViewModel()
@@ -612,7 +614,8 @@ namespace WB.Tests.Abc.TestFactories
                 principal ?? Mock.Of<IPrincipal>(),
                 questionStateViewModel ?? Create.ViewModel.QuestionState<SingleOptionQuestionAnswered>(interviewRepository: interviewRepository),
                 answering ?? Create.ViewModel.AnsweringViewModel(),
-                instructionViewModel ?? Create.ViewModel.QuestionInstructionViewModel());
+                instructionViewModel ?? Create.ViewModel.QuestionInstructionViewModel(),
+                Create.Service.InterviewViewModelFactory());
         }
 
         public TimestampQuestionViewModel TimestampQuestionViewModel(

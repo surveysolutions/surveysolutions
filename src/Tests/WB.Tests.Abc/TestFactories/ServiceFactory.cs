@@ -396,10 +396,10 @@ namespace WB.Tests.Abc.TestFactories
                 Create.Service.VariableToUIStringService());
         }
 
-        public InterviewViewModelFactory InterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository,
-            IStatefulInterviewRepository interviewRepository,
-            IServiceLocator serviceLocator,
-            IEnumeratorSettings settings)
+        public InterviewViewModelFactory InterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository = null,
+            IStatefulInterviewRepository interviewRepository = null,
+            IServiceLocator serviceLocator = null,
+            IEnumeratorSettings settings = null)
         {
             return new InterviewerInterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),

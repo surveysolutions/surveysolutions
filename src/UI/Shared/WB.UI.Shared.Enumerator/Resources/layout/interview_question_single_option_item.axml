@@ -10,11 +10,14 @@
                     Checked Selected; 
                     Bold Selected; 
                     Tag ItemTag" />
-    
-  <ImageButton style="@style/Interview_Question_OptionRemoveAnswer" 
+
+    <ImageButton style="@style/Interview_Question_OptionRemoveAnswer" 
                local:MvxBind="HideKeyboardOnClick .;
                Click RemoveAnswerCommand; 
                Visible Selected; 
                Tag Format('ib_RemoveAnswer_{0}', ItemTag)" 
                local:srcCompat="@drawable/delete_button"/>
+
+  <include layout="@layout/interview__attachment" />
+
 </LinearLayout>
