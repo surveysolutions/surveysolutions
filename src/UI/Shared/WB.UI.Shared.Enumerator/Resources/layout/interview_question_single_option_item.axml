@@ -3,21 +3,29 @@
               xmlns:local="http://schemas.android.com/apk/res-auto"
               style="@style/Interview_Question_Answer_Option_Background"
               local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false))"
-              android:orientation="horizontal">
-  <RadioButton
-    style="@style/Interview_Question_Answer_Option_Input"
-    local:MvxBind="HideKeyboardOnClick .; Text Title; 
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+        <RadioButton
+            style="@style/Interview_Question_Answer_Option_Input"
+            local:MvxBind="HideKeyboardOnClick .; Text Title; 
                     Checked Selected; 
                     Bold Selected; 
                     Tag ItemTag" />
-
-    <ImageButton style="@style/Interview_Question_OptionRemoveAnswer" 
-               local:MvxBind="HideKeyboardOnClick .;
+      
+        <ImageButton style="@style/Interview_Question_OptionRemoveAnswer" 
+                     local:MvxBind="HideKeyboardOnClick .;
                Click RemoveAnswerCommand; 
                Visible Selected; 
                Tag Format('ib_RemoveAnswer_{0}', ItemTag)" 
-               local:srcCompat="@drawable/delete_button"/>
+                     local:srcCompat="@drawable/delete_button" />
+    </LinearLayout>
 
-  <include layout="@layout/interview__attachment" />
+    <include layout="@layout/interview__attachment" />
+
 
 </LinearLayout>
