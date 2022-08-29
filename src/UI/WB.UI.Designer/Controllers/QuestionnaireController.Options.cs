@@ -68,7 +68,7 @@ namespace WB.UI.Designer.Controllers
             if (!userId.HasValue)
                 return true;
 
-            var hasUserAccessToEdit = questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(questionnaireRevision.OriginalQuestionnaireId ?? questionnaireRevision.QuestionnaireId, userId.Value);
+            var hasUserAccessToEdit = questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(questionnaireRevision.OriginalQuestionnaireId ?? questionnaireRevision.QuestionnaireId, userId.Value);
             return !hasUserAccessToEdit;
         }
 
