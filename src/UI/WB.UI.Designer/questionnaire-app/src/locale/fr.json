@@ -392,6 +392,7 @@
     "OptionsUploadRevert": "Revert changes",
     "OptionsWindowTitle": "Edit categories",
     "CascadingOptionsWindowTitle": "Edit cascading categories",
+    "AttachmentName": "Attachment name",
     "SideBarCategoriesNoName": "categories with no name",
     "EditorShowComments": "Show comments ({{count}})",
     "JumpToEdit": "Jump to edit",

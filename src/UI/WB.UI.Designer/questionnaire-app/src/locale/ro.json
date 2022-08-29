@@ -460,6 +460,7 @@
     "SettingsStatusDontAllowAnonymousAccess": "Anonymous sharing is currently turned off.",
     "SettingsTurnOnAnonymousAccess": "Turn on anonymous sharing.",
     "SettingsTurnOffAnonymousAccess": "Turn off anonymous sharing.",
+    "AttachmentName": "Attachment name",
     "EditorShowComments": "Show comments ({{count}})",
     "CollaboratorsDescriptionSettings": "the following users have access to this questionnaire",
     "AccessSettings": "Access",
