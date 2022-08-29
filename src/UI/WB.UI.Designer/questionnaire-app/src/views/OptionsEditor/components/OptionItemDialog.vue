@@ -60,7 +60,11 @@
                             <v-col cols="12">
                                 <v-text-field
                                     v-model="itemAttachmentName"
-                                    :label="$t('QuestionnaireEditor.AttachmentName') + '*'"                                    
+                                    :label="
+                                        $t(
+                                            'QuestionnaireEditor.AttachmentName'
+                                        ) + '*'
+                                    "
                                 ></v-text-field>
                             </v-col>
 
