@@ -67,7 +67,6 @@
                                     "
                                 ></v-text-field>
                             </v-col>
-
                         </v-row>
                     </v-form>
                 </v-container>
@@ -126,7 +125,7 @@ export default {
                     title: this.itemTitle,
                     value: this.itemValue,
                     parentValue: this.itemParentValue,
-                    attachmentName: this.itemAttachmentName,
+                    attachmentName: this.itemAttachmentName
                 });
             }
         },
