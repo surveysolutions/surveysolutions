@@ -23,10 +23,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            IInterviewViewModelFactory viewModelFactory) :
+            IInterviewViewModelFactory viewModelFactory,
+            AttachmentViewModel attachment) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository, 
-                eventRegistry: eventRegistry, filteredOptionsViewModel, viewModelFactory)
+                eventRegistry: eventRegistry, filteredOptionsViewModel, viewModelFactory, attachment)
         {
         }
 

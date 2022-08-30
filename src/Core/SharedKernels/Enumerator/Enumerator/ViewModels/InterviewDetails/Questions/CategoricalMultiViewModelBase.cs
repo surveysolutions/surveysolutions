@@ -164,8 +164,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         protected void InitViewModel(string title, TOptionValue value, IStatefulInterview interview,
-            CategoricalMultiOptionViewModel<TOptionValue> vm, bool isAnswerProtected = false)
-            => vm.Init(this.QuestionState, title, value, isAnswerProtected, async () => await this.ToggleAnswerAsync(vm));
+            CategoricalMultiOptionViewModel<TOptionValue> vm, string attachmentName, bool isAnswerProtected = false)
+            => vm.Init(this.QuestionState, title, value, isAnswerProtected, async () => await this.ToggleAnswerAsync(vm), attachmentName);
 
         protected async Task ToggleAnswerAsync(CategoricalMultiOptionViewModel<TOptionValue> optionViewModel)
         {

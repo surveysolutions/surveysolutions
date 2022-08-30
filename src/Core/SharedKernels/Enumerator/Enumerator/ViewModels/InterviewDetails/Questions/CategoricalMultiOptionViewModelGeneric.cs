@@ -1,12 +1,13 @@
 using System;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CategoricalMultiOptionViewModel<T> : MvxNotifyPropertyChanged, ICompositeEntity
     {
-        public virtual void Init(IQuestionStateViewModel questionState, string sTitle, T value, bool isProtected, Action setAnswer)
+        public virtual void Init(IQuestionStateViewModel questionState, string sTitle, T value, bool isProtected, Action setAnswer, string attachmentName)
         {
             this.QuestionState = questionState;
             this.IsProtected = isProtected;
@@ -16,7 +17,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.ItemTag = $"{questionState.Header.Identity}_Opt_{value}";
 
             this.setAnswer = setAnswer;
+            this.Attachment.InitAsStatic(questionState.Header.InterviewId, attachmentName);
         }
+
+        public AttachmentViewModel Attachment { get; }
+
 
         private Action setAnswer;
 
@@ -51,6 +56,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private bool canBeChecked = true;
+
+        public CategoricalMultiOptionViewModel(AttachmentViewModel attachment)
+        {
+            Attachment = attachment;
+        }
+
         public bool CanBeChecked
         {
             get => this.canBeChecked;

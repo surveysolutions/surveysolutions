@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -13,15 +14,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private readonly IUserInteractionService userInteraction;
 
-        public CategoricalMultiOptionViewModel(IUserInteractionService userInteraction)
+        public CategoricalMultiOptionViewModel(IUserInteractionService userInteraction, AttachmentViewModel attachmentViewModel)
+            : base(attachmentViewModel)
         {
             this.userInteraction = userInteraction;
         }
 
-        public override void Init(IQuestionStateViewModel questionState, string sTitle, int value, bool isProtected, Action setAnswer)
+        public override void Init(IQuestionStateViewModel questionState, string sTitle, int value, bool isProtected, Action setAnswer, string attachmentName)
         {
             this.setAnswer = setAnswer;
-            base.Init(questionState, sTitle, value, isProtected, async () => await this.SetAnswerAsync());
+            base.Init(questionState, sTitle, value, isProtected, async () => await this.SetAnswerAsync(), attachmentName);
         }
 
         public void MakeRosterSize() => this.isRosterSizeQuestion = true;

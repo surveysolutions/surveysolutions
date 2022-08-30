@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected const int SuggestionsMaxCount = 50;
         protected readonly FilteredOptionsViewModel filteredOptionsViewModel;
         protected readonly IInterviewViewModelFactory viewModelFactory;
+        public AttachmentViewModel Attachment { get; }
 
         protected readonly IPrincipal principal;
         protected readonly IStatefulInterviewRepository interviewRepository;
@@ -42,7 +43,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IViewModelEventRegistry eventRegistry,
             FilteredOptionsViewModel filteredOptionsViewModel,
-            IInterviewViewModelFactory viewModelFactory)
+            IInterviewViewModelFactory viewModelFactory,
+            AttachmentViewModel attachment)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -53,6 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel = instructionViewModel;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.viewModelFactory = viewModelFactory;
+            this.Attachment = attachment;
 
             this.optionsTopBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
             this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
@@ -96,6 +99,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             comboboxCollection.Add(comboboxViewModel);
 
+            this.ChangeAttachment(Answer);
+
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
@@ -130,6 +135,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
                 this.Answer = optionValue;
+
+                ChangeAttachment(optionValue);
             }
             catch (InterviewException ex)
             {
@@ -138,7 +145,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        
+        protected virtual void ChangeAttachment(int? optionValue)
+        {
+            string attachmentName = null;
+            if (optionValue.HasValue)
+            {
+                var interview = this.interviewRepository.GetOrThrow(this.interviewId);
+                attachmentName = interview.GetAttachmentForEntityOption(Identity, optionValue.Value, null);
+            }
+
+            this.Attachment.InitAsStatic(interviewId, attachmentName);
+        }
+
+
         protected async Task ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)
         {
             await SaveAnswerAsync(selectedOptionCode);
@@ -165,6 +184,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         this.Identity));
 
                 await this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                ChangeAttachment(null);
             }
             catch (InterviewException exception)
             {

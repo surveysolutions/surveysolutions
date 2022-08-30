@@ -41,10 +41,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionInstructionViewModel instructionViewModel,
             FilteredOptionsViewModel filteredOptionsViewModel,
             ThrottlingViewModel throttlingModel,
-            IInterviewViewModelFactory viewModelFactory) :
+            IInterviewViewModelFactory viewModelFactory,
+            AttachmentViewModel attachment) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
-                eventRegistry: eventRegistry, filteredOptionsViewModel, viewModelFactory)
+                eventRegistry: eventRegistry, filteredOptionsViewModel, viewModelFactory, attachment)
         {
             this.questionnaireRepository = questionnaireRepository ??
                                            throw new ArgumentNullException(nameof(questionnaireRepository));
@@ -87,6 +88,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             await base.SaveAnswerAsync(optionValue);
         }
+
+        protected override void ChangeAttachment(int? optionValue)
+        {
+            string? attachmentName = null;
+            if (optionValue.HasValue)
+            {
+                var interview = this.interviewRepository.GetOrThrow(this.interviewId);
+                attachmentName = interview.GetAttachmentForEntityOption(Identity, optionValue.Value, this.answerOnParentQuestion);
+            }
+
+            this.Attachment.InitAsStatic(interviewId, attachmentName);
+        }
+
 
         public async Task HandleAsync(SingleOptionQuestionAnswered @event)
         {

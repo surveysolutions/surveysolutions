@@ -1,36 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
               style="@style/Interview_Question_Answer_Option_Background"
-              android:orientation="horizontal"
+              android:orientation="vertical"
               local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutOptionBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false, IsProtected, CanBeChecked));
                              LongClick QuestionState.ShowCommentEditorCommand">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
 
-  <TextView
-    style="@style/Interview_Question_MultiOptionOrder"
-    local:MvxBind="Text CheckedOrder; Visible CheckedOrder"/>
-  
-  <RadioButton
-    style="@style/Interview_Question_Answer_YesNo_Option"
-    local:MvxBind="HideKeyboardOnClick .; Checked Checked; Click CheckAnswerCommand; Tag Add(ItemTag, '_Yes'); Enabled And(CanBeChecked, Not(IsProtected))" />
+      <TextView
+        style="@style/Interview_Question_MultiOptionOrder"
+        local:MvxBind="Text CheckedOrder; Visible CheckedOrder"/>
+      
+      <RadioButton
+        style="@style/Interview_Question_Answer_YesNo_Option"
+        local:MvxBind="HideKeyboardOnClick .; Checked Checked; Click CheckAnswerCommand; Tag Add(ItemTag, '_Yes'); Enabled And(CanBeChecked, Not(IsProtected))" />
 
-  <TextView style="@style/Interview_Question_Answer_YesNo_Option" android:text="/" />
-  
-  <RadioButton
-    style="@style/Interview_Question_Answer_YesNo_Option"
-    local:MvxBind="HideKeyboardOnClick .; Checked NoSelected; Click SetNoAnswerCommand; Tag Add(ItemTag, '_No'); Enabled Not(IsProtected)" />
+      <TextView style="@style/Interview_Question_Answer_YesNo_Option" android:text="/" />
+      
+      <RadioButton
+        style="@style/Interview_Question_Answer_YesNo_Option"
+        local:MvxBind="HideKeyboardOnClick .; Checked NoSelected; Click SetNoAnswerCommand; Tag Add(ItemTag, '_No'); Enabled Not(IsProtected)" />
 
-  <TextView style="@style/Interview_Question_Answer_Option_Input"
-    local:MvxBind="HideKeyboardOnClick .; Text Title; Bold Or(Checked, NoSelected); IsSelectedYesNoOptionColor Or(Checked, NoSelected);"/>
+      <TextView style="@style/Interview_Question_Answer_Option_Input"
+        local:MvxBind="HideKeyboardOnClick .; Text Title; Bold Or(Checked, NoSelected); IsSelectedYesNoOptionColor Or(Checked, NoSelected);"/>
 
-    <ImageView style="@style/Interview_Question_ProtectedAnswerIcon"
-               local:MvxBind="Visible IsProtected" 
-               local:srcCompat="@drawable/lock_icon" />
+        <ImageView style="@style/Interview_Question_ProtectedAnswerIcon"
+                   local:MvxBind="Visible IsProtected" 
+                   local:srcCompat="@drawable/lock_icon" />
 
-  <ImageButton style="@style/Interview_Question_OptionRemoveAnswer" 
-    local:MvxBind="HideKeyboardOnClick .; 
-                   Click RemoveAnswerCommand;
-                   Visible And(Or(Checked, NoSelected), Not(IsProtected));
-                   Tag Format('ib_RemoveAnswer_{0}', ItemTag)" 
-               local:srcCompat="@drawable/delete_button"/>
+      <ImageButton style="@style/Interview_Question_OptionRemoveAnswer" 
+        local:MvxBind="HideKeyboardOnClick .; 
+                       Click RemoveAnswerCommand;
+                       Visible And(Or(Checked, NoSelected), Not(IsProtected));
+                       Tag Format('ib_RemoveAnswer_{0}', ItemTag)" 
+                   local:srcCompat="@drawable/delete_button"/>
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/Interview_Question_Answer_Option_Attachment" >
+        <include layout="@layout/interview__attachment" />
+    </LinearLayout>
 
 </LinearLayout>

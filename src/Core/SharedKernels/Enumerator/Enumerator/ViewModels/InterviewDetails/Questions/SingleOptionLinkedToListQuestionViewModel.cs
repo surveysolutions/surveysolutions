@@ -41,9 +41,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering, 
             ThrottlingViewModel throttlingModel,
-            IInterviewViewModelFactory viewModelFactory):  base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
+            IInterviewViewModelFactory viewModelFactory,
+            AttachmentViewModel attachment) : 
+            base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
             instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
-            eventRegistry: eventRegistry, filteredOptionsViewModel,viewModelFactory)
+            eventRegistry: eventRegistry, filteredOptionsViewModel,viewModelFactory, attachment)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
 

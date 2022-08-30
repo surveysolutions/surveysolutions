@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
             var mockOfViewModelFactory = new Mock<IInterviewViewModelFactory>();
             mockOfViewModelFactory.Setup(x => x.GetNew<CategoricalYesNoOptionViewModel>()).Returns(() =>
-                new CategoricalYesNoOptionViewModel(userInteraction));
+                new CategoricalYesNoOptionViewModel(userInteraction, Mock.Of<AttachmentViewModel>()));
 
             var liteEventRegistry = eventRegistry ?? Mock.Of<IViewModelEventRegistry>();
 
@@ -47,7 +47,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 answeringViewModel ?? Mock.Of<AnsweringViewModel>(),
                 Create.ViewModel.QuestionInstructionViewModel(),
                 throttlingModel ?? Create.ViewModel.ThrottlingViewModel(),
-                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>());
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
+                Create.Service.InterviewViewModelFactory());
         }
     }
 }

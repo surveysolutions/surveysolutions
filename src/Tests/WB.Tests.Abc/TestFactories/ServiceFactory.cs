@@ -401,10 +401,25 @@ namespace WB.Tests.Abc.TestFactories
             IServiceLocator serviceLocator = null,
             IEnumeratorSettings settings = null)
         {
+            var locator = serviceLocator;
+            if (locator == null)
+            {
+                var mockLocator = new Mock<IServiceLocator>() { DefaultValue = DefaultValue.Mock };
+                /*
+                mockLocator.Setup(pa => pa.GetInstance<It.IsAnyType>())
+                    .Callback<T>(() => new Mock<T>().Object)
+                    .Returns(new Mock<T>());
+                mockLocator.Setup(pa => pa.GetInstance<T>())
+                    .Returns(new Mock<T>().Object);
+                mockLocator.Setup(s => s.GetInstance<It.IsAnyType>())
+                    .Returns(t => Mock.Of<It.IsAnyType>());
+                */
+                locator = mockLocator.Object;
+            }
             return new InterviewerInterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 settings ?? Mock.Of<IEnumeratorSettings>(),
-                serviceLocator ?? Mock.Of<IServiceLocator>());
+                locator);
         }
 
         public SupervisorInterviewViewModelFactory SupervisorInterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository = null,
