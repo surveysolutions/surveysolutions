@@ -50,7 +50,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<SingleOptionQuestionAnswered>>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
-                Create.Service.InterviewViewModelFactory());
+                Create.Service.InterviewViewModelFactory(),
+                Mock.Of<AttachmentViewModel>());
         }
         
         protected static ReadOnlyCollection<CategoricalOption> Options = new List<CategoricalOption>

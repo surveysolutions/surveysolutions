@@ -60,7 +60,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 Mock.Of<QuestionInstructionViewModel>(),
                 filteredOptionsViewModel ??  Abc.SetUp.FilteredOptionsViewModel(),
                 Create.ViewModel.ThrottlingViewModel(),
-                Create.Service.InterviewViewModelFactory());
+                Create.Service.InterviewViewModelFactory(),
+                Mock.Of<AttachmentViewModel>());
 
             return cascadingSingleOptionQuestionViewModel;
         }

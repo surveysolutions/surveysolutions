@@ -62,7 +62,8 @@ namespace WB.Tests.Abc.TestFactories
                 Create.Service.LiteEventRegistry(),
                 attachmentContentStorage, 
                 () => new MediaAttachment(),
-                Mock.Of<IInterviewPdfService>());
+                Mock.Of<IInterviewPdfService>(),
+                Mock.Of<IViewModelNavigationService>());
 
         public DynamicTextViewModel DynamicTextViewModel(
             IViewModelEventRegistry eventRegistry = null, 

@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly Func<IMediaAttachment> attachmentFactory;
         private readonly IInterviewPdfService pdfService;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         private AttachmentContentMetadata attachmentContentMetadata;
         private string interviewId;
@@ -37,13 +38,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private const string AudioMimeType = "audio/";
         private const string PdfMimeType = "application/pdf";
 
+        private bool supportPreview = false;
+
         public AttachmentViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IViewModelEventRegistry eventRegistry,
             IAttachmentContentStorage attachmentContentStorage,
             Func<IMediaAttachment> attachmentFactory,
-            IInterviewPdfService pdfService)
+            IInterviewPdfService pdfService,
+            IViewModelNavigationService viewModelNavigationService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
@@ -51,6 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.attachmentContentStorage = attachmentContentStorage;
             this.attachmentFactory = attachmentFactory;
             this.pdfService = pdfService;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -62,9 +67,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.eventRegistry.Subscribe(this, interviewId);
             BindAttachment().WaitAndUnwrapException();
+            this.supportPreview = false;
         }
 
-        public void InitAsStatic(string interviewId, string attachmentName)
+        public void InitAsStatic(string interviewId, string attachmentName, bool supportPreview = true)
         {
             if (attachmentName == null) 
                 return;
@@ -75,7 +81,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interviewId;
             
             BindAttachment(attachmentName).WaitAndUnwrapException();
+            this.supportPreview = supportPreview;
         }
+
+        public IMvxAsyncCommand ShowPhotoView => new MvxAsyncCommand(async () =>
+        {
+            await this.viewModelNavigationService.NavigateToAsync<PhotoViewViewModel, PhotoViewViewModelArgs>(
+                new PhotoViewViewModelArgs
+                {
+                    InterviewId = Guid.Parse(this.interviewId),
+                    AttachmentId = this.attachmentId
+                });
+        }, () => this.supportPreview);
+
 
         private Task BindAttachment(string attachmentName)
         {
