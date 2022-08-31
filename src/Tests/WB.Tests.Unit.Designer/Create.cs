@@ -466,31 +466,36 @@ namespace WB.Tests.Unit.Designer
             return options.Select(x => new Option(x.GetParsedValue().ToString(CultureInfo.InvariantCulture), x.AnswerText)).ToArray();
         }
 
-        public static QuestionnaireCategoricalOption QuestionnaireCategoricalOption(int code, string text = null, int? parentValue = null) =>
+        public static QuestionnaireCategoricalOption QuestionnaireCategoricalOption(int code, string text = null, 
+            int? parentValue = null, string attachmentName = null) =>
             new QuestionnaireCategoricalOption
             {
                 Title = text ?? "text",
                 ParentValue = parentValue,
-                Value = code
+                Value = code,
+                AttachmentName = attachmentName
             };
 
-        public static Answer Option(int code, string text = null, string parentValue = null)
+        public static Answer Option(int code, string text = null, string parentValue = null, string attachmentName = null)
         {
             return new Answer
             {
                 AnswerText = text ?? "text",
                 ParentValue = parentValue,
-                AnswerCode = code
+                AnswerCode = code,
+                AttachmentName = attachmentName
             };
         }
 
-        public static Answer Option(string value = null, string text = null, string parentValue = null)
+        public static Answer Option(string value = null, string text = null, 
+            string parentValue = null, string attachmentName = null)
         {
             return new Answer
             {
                 AnswerText = text ?? "text",
                 AnswerValue = value ?? "1",
-                ParentValue = parentValue
+                ParentValue = parentValue,
+                AttachmentName = attachmentName
             };
         }
 

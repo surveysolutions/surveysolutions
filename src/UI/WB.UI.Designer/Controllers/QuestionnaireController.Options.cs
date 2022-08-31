@@ -298,7 +298,8 @@ namespace WB.UI.Designer.Controllers
                 {
                     Value = x.Value,
                     ParentValue = x.ParentValue,
-                    Title = x.Title
+                    Title = x.Title,
+                    AttachmentName = x.AttachmentName
                 }).ToArray();
 
                 var command = isCascading
@@ -402,7 +403,8 @@ namespace WB.UI.Designer.Controllers
                 string? categoriesName = null)
             {
                 if (questionId == null && categoriesId == null)
-                    throw new InvalidOperationException($"{nameof(categoriesId)} or {nameof(questionId)} should not be empty");
+                    throw new InvalidOperationException(
+                        $"{nameof(categoriesId)} or {nameof(questionId)} should not be empty");
 
                 QuestionnaireId = questionnaireId;
                 if (questionId != null)

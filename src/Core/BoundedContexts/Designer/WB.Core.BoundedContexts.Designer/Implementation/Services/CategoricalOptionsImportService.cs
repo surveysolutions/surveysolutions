@@ -140,7 +140,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 Value = (int) option.GetParsedValue(),
                 ParentValue = option.GetParsedParentValue(),
-                Title = option.AnswerText
+                Title = option.AnswerText,
+                AttachmentName = option.AttachmentName
             }) ?? Enumerable.Empty<QuestionnaireCategoricalOption>();
 
             var sb = new StringBuilder();
