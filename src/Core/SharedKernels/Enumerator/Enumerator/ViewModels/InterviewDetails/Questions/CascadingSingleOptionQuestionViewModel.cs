@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AttachmentViewModel attachment) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
-                eventRegistry: eventRegistry, filteredOptionsViewModel, viewModelFactory, attachment)
+                eventRegistry: eventRegistry, filteredOptionsViewModel, viewModelFactory)
         {
             this.questionnaireRepository = questionnaireRepository ??
                                            throw new ArgumentNullException(nameof(questionnaireRepository));
@@ -53,6 +53,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
             this.throttlingModel = throttlingModel;
             this.throttlingModel.Init(SaveAnswer);
+
+            this.attachmentViewModel = new QuestionAttachmentViewModel(attachment);
         }
 
         public override void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -79,6 +81,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             UpdateOptions().WaitAndUnwrapException();
+
+            this.comboboxCollection.Add(attachmentViewModel);
         }
 
         public override async Task SaveAnswerAsync(int optionValue)
@@ -98,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 attachmentName = interview.GetAttachmentForEntityOption(Identity, optionValue.Value, this.answerOnParentQuestion);
             }
 
-            this.Attachment.InitAsStatic(interviewId, attachmentName);
+            this.attachmentViewModel.Attachment.InitAsStatic(interviewId, attachmentName);
         }
 
 
@@ -231,6 +235,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private int? previousOptionToReset;
         private int? selectedOptionToSave;
+        private readonly QuestionAttachmentViewModel attachmentViewModel;
 
         private async Task SaveAnswer()
         {

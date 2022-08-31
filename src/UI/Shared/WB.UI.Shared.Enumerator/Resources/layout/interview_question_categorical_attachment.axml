@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/Interview_Question_Answer_Option_Background"
+    android:orientation="vertical"
+    local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutOptionBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false, false, true));
+                             LongClick QuestionState.ShowCommentEditorCommand">
+
+    <LinearLayout style="@style/Interview_Question_Answer_Option_Attachment" >
+        <include layout="@layout/interview__attachment" />
+    </LinearLayout>
+</LinearLayout>

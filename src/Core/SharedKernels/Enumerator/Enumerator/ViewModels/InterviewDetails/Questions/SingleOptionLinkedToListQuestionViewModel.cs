@@ -41,11 +41,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering, 
             ThrottlingViewModel throttlingModel,
-            IInterviewViewModelFactory viewModelFactory,
-            AttachmentViewModel attachment) : 
+            IInterviewViewModelFactory viewModelFactory) : 
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
             instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
-            eventRegistry: eventRegistry, filteredOptionsViewModel,viewModelFactory, attachment)
+            eventRegistry: eventRegistry, filteredOptionsViewModel,viewModelFactory)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
 
@@ -112,6 +111,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var interview = this.interviewRepository.GetOrThrow(interviewId);
             return interview.GetSingleOptionLinkedToListQuestion(this.Identity).GetAnswer()?.SelectedValue;
+        }
+
+        protected override void ChangeAttachment(int? optionValue)
+        {
+            // not supported
         }
 
         public bool RenderAsCombobox { get; private set; }

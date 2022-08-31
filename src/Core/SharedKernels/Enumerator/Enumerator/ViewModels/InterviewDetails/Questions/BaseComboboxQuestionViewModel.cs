@@ -26,8 +26,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected const int SuggestionsMaxCount = 50;
         protected readonly FilteredOptionsViewModel filteredOptionsViewModel;
         protected readonly IInterviewViewModelFactory viewModelFactory;
-        public AttachmentViewModel Attachment { get; }
-
         protected readonly IPrincipal principal;
         protected readonly IStatefulInterviewRepository interviewRepository;
         private readonly IViewModelEventRegistry eventRegistry;
@@ -43,8 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IViewModelEventRegistry eventRegistry,
             FilteredOptionsViewModel filteredOptionsViewModel,
-            IInterviewViewModelFactory viewModelFactory,
-            AttachmentViewModel attachment)
+            IInterviewViewModelFactory viewModelFactory)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -55,14 +52,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel = instructionViewModel;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.viewModelFactory = viewModelFactory;
-            this.Attachment = attachment;
 
             this.optionsTopBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
             this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
             
-            this.comboboxViewModel = 
-                new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, 
-                    true);
+            this.comboboxViewModel = new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, true);
         }
 
         protected string interviewId;
@@ -145,17 +139,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        protected virtual void ChangeAttachment(int? optionValue)
-        {
-            string attachmentName = null;
-            if (optionValue.HasValue)
-            {
-                var interview = this.interviewRepository.GetOrThrow(this.interviewId);
-                attachmentName = interview.GetAttachmentForEntityOption(Identity, optionValue.Value, null);
-            }
-
-            this.Attachment.InitAsStatic(interviewId, attachmentName);
-        }
+        protected abstract void ChangeAttachment(int? optionValue);
 
 
         protected async Task ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)
