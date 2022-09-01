@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:local="http://schemas.android.com/apk/res-auto"
+                                                   style="@style/Interview_Question_Answer_Option_Attachment">
+    <LinearLayout style="@style/Interview_Question_Answer_Option_Attachment"
+                  local:layout_constraintHeight_max="@dimen/Interview_Question_Answer_Option_Attachment_max_height"
+                  local:layout_constrainedHeight="true">
+        <include layout="@layout/interview__attachment" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,11 +7,5 @@
     local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutOptionBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false, false, true));
                              LongClick QuestionState.ShowCommentEditorCommand">
 
-    <androidx.constraintlayout.widget.ConstraintLayout  style="@style/Interview_Question_Answer_Option_Attachment">
-        <LinearLayout style="@style/Interview_Question_Answer_Option_Attachment"
-                      local:layout_constraintHeight_max="@dimen/Interview_Question_Answer_Option_Attachment_max_height"
-                      local:layout_constrainedHeight="true">
-            <include layout="@layout/interview__attachment" />
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <include layout="@layout/interview_question__attachment" />
 </LinearLayout>
