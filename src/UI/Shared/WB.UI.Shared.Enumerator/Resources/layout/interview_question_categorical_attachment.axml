@@ -13,4 +13,5 @@
                       local:layout_constrainedHeight="true">
             <include layout="@layout/interview__attachment" />
         </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout></LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

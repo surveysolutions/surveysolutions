@@ -15,8 +15,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class FilteredSingleOptionQuestionViewModel : BaseComboboxQuestionViewModel
     {
-        private readonly QuestionAttachmentViewModel attachmentViewModel;
-
         public FilteredSingleOptionQuestionViewModel(
             IStatefulInterviewRepository interviewRepository,
             IViewModelEventRegistry eventRegistry,
@@ -31,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository, 
                 eventRegistry: eventRegistry, filteredOptionsViewModel, viewModelFactory)
         {
-            this.attachmentViewModel = new QuestionAttachmentViewModel(attachmentViewModel);
+            this.comboboxViewModel = new CategoricalComboboxAutocompleteWithAttachmentViewModel(questionStateViewModel, filteredOptionsViewModel, true, attachmentViewModel);
         }
 
         public override void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -39,8 +37,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             base.Init(interviewId, entityIdentity, navigationState);
 
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
-
-            this.comboboxCollection.Add(attachmentViewModel);
         }
 
         protected override void ChangeAttachment(int? optionValue)
@@ -52,7 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 attachmentName = interview.GetAttachmentForEntityOption(Identity, optionValue.Value, null);
             }
 
-            this.attachmentViewModel.Attachment.InitAsStatic(interviewId, attachmentName);
+            var comboWithAttachment = (CategoricalComboboxAutocompleteWithAttachmentViewModel)this.comboboxViewModel;
+            comboWithAttachment.Attachment.InitAsStatic(interviewId, attachmentName);
         }
 
         private async Task FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
