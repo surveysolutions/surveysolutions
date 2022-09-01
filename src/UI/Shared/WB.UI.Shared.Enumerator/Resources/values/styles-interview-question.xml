@@ -244,7 +244,14 @@
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     
+    <item name="android:gravity">center</item>
+    <!--
+    <item name="local:layout_constraintHeight_max">@dimen/Interview_Question_Answer_Option_Attachment_max_height</item>
+    -->
+    
+    <!--
     <item name="android:background">@drawable/shape</item>
+  -->
   </style>
 
   <style name="Interview_Question_Answer_Option_Corner" parent="Interview_Question_Answer_Option_Background">

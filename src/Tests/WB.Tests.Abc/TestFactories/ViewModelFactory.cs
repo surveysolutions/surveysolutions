@@ -142,8 +142,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<QuestionInstructionViewModel>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Create.ViewModel.ThrottlingViewModel(),
-                Create.Service.InterviewViewModelFactory(),
-                Mock.Of<AttachmentViewModel>());
+                Create.Service.InterviewViewModelFactory());
 
         public CategoricalMultiLinkedToListViewModel MultiOptionLinkedToListQuestionQuestionViewModel(
             IQuestionnaire questionnaire = null,
