@@ -29,6 +29,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (AutoCompleteSingleOptionLinkedQuestionViewModel), Resource.Layout.interview_question_single_linked_combobox},
             {typeof (SingleOptionLinkedToListQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionRosterLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
+            {typeof (CategoricalComboboxAutocompleteViewModel), Resource.Layout.interview_question_categorical_combobox},
             {typeof (CategoricalComboboxAutocompleteWithAttachmentViewModel), Resource.Layout.interview_question_categorical_combobox},
             {typeof (CategoricalMultiComboboxViewModel), Resource.Layout.interview_question_multi_combobox},
             {typeof (CategoricalMultiComboboxOptionViewModel), Resource.Layout.interview_question_multi_combobox_option_item},
@@ -63,7 +64,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (AudioQuestionViewModel), Resource.Layout.interview_question_audio},
             {typeof (OptionBorderViewModel), Resource.Layout.interview_question_option_rounded_corner},
             {typeof (FlatRosterTitleViewModel), Resource.Layout.interview_group_flat_roster_title},
-            //{typeof (QuestionAttachmentViewModel), Resource.Layout.interview_question_categorical_attachment},
         };
         
         HashSet<Type> disabledViewModelTypes = new HashSet<Type>()
