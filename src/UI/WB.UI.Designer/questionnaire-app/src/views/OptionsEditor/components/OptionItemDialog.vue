@@ -61,9 +61,7 @@
                                 <v-text-field
                                     v-model="itemAttachmentName"
                                     :label="
-                                        $t(
-                                            'QuestionnaireEditor.AttachmentName'
-                                        ) + '*'
+                                        $t('QuestionnaireEditor.AttachmentName')
                                     "
                                 ></v-text-field>
                             </v-col>

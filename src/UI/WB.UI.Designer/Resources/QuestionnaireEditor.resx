@@ -602,7 +602,7 @@
     <value>Error or warning message</value>
   </data>
   <data name="OptionsListError" xml:space="preserve">
-    <value>You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.</value>
+    <value>You entered an invalid input. Each line should follow the format: 'Title...Value[...Attachment name]'. 'Value' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.</value>
   </data>
   <data name="QuestionAddInstruction" xml:space="preserve">
     <value>Add Interviewer Instruction</value>
@@ -1524,7 +1524,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>Data changes reverted</value>
   </data>
   <data name="OptionsSizeLimit" xml:space="preserve">
-    <value>Maximum {{ max }} rows allowed</value>
+    <value>Maximum {{max}} rows allowed</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
     <value>Network error</value>
@@ -1537,7 +1537,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="OptionsCascadingListError" xml:space="preserve">
     <value>
-You entered an invalid input. Each line should follow the format: "Title...ParentValue/Value". 'Value' and 'ParentValue' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.</value>
+You entered an invalid input. Each line should follow the format: "Title...ParentValue/Value[...Attachment name]". 'Value' and 'ParentValue' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.</value>
   </data>
   <data name="ShowParentValues" xml:space="preserve">
     <value>Show Parent values</value>

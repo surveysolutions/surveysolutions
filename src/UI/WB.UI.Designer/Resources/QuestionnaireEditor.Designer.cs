@@ -1713,7 +1713,7 @@ namespace WB.UI.Designer.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to 
-        ///You entered an invalid input. Each line should follow the format: &quot;Title...ParentValue/Value&quot;. &apos;Value&apos; and &apos;ParentValue&apos; must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed..
+        ///You entered an invalid input. Each line should follow the format: &quot;Title...ParentValue/Value[...Attachment name]&quot;. &apos;Value&apos; and &apos;ParentValue&apos; must be an integer number. &apos;Title&apos; must be an alpha-numeric string. &apos;Attachment name&apos; is optional. No empty lines are allowed..
         /// </summary>
         public static string OptionsCascadingListError {
             get {
@@ -1731,7 +1731,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You entered an invalid input. Each line should follow the format: &quot;Title...Value&quot;. &apos;Value&apos; must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed..
+        ///   Looks up a localized string similar to You entered an invalid input. Each line should follow the format: &apos;Title...Value[...Attachment name]&apos;. &apos;Value&apos; must be an integer number. &apos;Title&apos; must be an alpha-numeric string. &apos;Attachment name&apos; is optional. No empty lines are allowed..
         /// </summary>
         public static string OptionsListError {
             get {
@@ -1740,7 +1740,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum {{ max }} rows allowed.
+        ///   Looks up a localized string similar to Maximum {{max}} rows allowed.
         /// </summary>
         public static string OptionsSizeLimit {
             get {

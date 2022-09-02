@@ -95,7 +95,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
             {
                 new Tuple<string, string>(worksheet.Cell("A1").GetString(), "A"),
                 new Tuple<string, string>(worksheet.Cell("B1").GetString(), "B"),
-                new Tuple<string, string>(worksheet.Cell("C1").GetString(), "C")
+                new Tuple<string, string>(worksheet.Cell("C1").GetString(), "C"),
+                new Tuple<string, string>(worksheet.Cell("D1").GetString(), "D")
             }.Where(kv => kv.Item1 != null).ToDictionary(k => k.Item1.Trim(), v => v.Item2);
 
             return new CategoriesHeaderMap()
@@ -103,6 +104,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 IdIndex = headers.GetOrNull("id"),
                 ParentIdIndex = headers.GetOrNull("parentid"),
                 TextIndex = headers.GetOrNull("text"),
+                AttachmentNameIndex = headers.GetOrNull("attachmentname"),
             };
         }
 
@@ -112,7 +114,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             Text = worksheet.Cell($"{headers.TextIndex}{rowNumber}").GetString(),
             ParentId = worksheet.Cell($"{headers.ParentIdIndex}{rowNumber}").GetString(),
             RowId = rowNumber,
-            AttachmentName = worksheet.Cell($"{headers.AttachmentName}{rowNumber}").GetString(),
+            AttachmentName = worksheet.Cell($"{headers.AttachmentNameIndex}{rowNumber}").GetString(),
         };
     }
 }
