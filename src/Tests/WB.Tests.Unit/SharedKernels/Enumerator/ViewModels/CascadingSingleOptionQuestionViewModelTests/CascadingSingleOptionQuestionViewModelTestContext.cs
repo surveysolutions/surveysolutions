@@ -49,6 +49,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(s => s.GetInstance<SingleOptionQuestionOptionViewModel>())
+                .Returns(() => Create.ViewModel.SingleOptionQuestionOptionViewModel());
 
             var cascadingSingleOptionQuestionViewModel = new CascadingSingleOptionQuestionViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
@@ -60,8 +63,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 Mock.Of<QuestionInstructionViewModel>(),
                 filteredOptionsViewModel ??  Abc.SetUp.FilteredOptionsViewModel(),
                 Create.ViewModel.ThrottlingViewModel(),
-                Create.Service.InterviewViewModelFactory(),
-                Mock.Of<AttachmentViewModel>());
+                Create.Service.InterviewViewModelFactory(serviceLocator: serviceLocator.Object),
+                Create.ViewModel.AttachmentViewModel());
 
             return cascadingSingleOptionQuestionViewModel;
         }

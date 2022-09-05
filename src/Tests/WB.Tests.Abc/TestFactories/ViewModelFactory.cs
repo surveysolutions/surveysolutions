@@ -54,11 +54,11 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public AttachmentViewModel AttachmentViewModel(
-            IQuestionnaireStorage questionnaireRepository,
-            IStatefulInterviewRepository interviewRepository,
+            IQuestionnaireStorage questionnaireRepository = null,
+            IStatefulInterviewRepository interviewRepository = null,
             IAttachmentContentStorage attachmentContentStorage = null)
-            => new AttachmentViewModel(questionnaireRepository, 
-                interviewRepository, 
+            => new AttachmentViewModel(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(), 
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(), 
                 Create.Service.LiteEventRegistry(),
                 attachmentContentStorage, 
                 () => new MediaAttachment(),
@@ -451,7 +451,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public SingleOptionQuestionOptionViewModel SingleOptionQuestionOptionViewModel(int? value = null)
         {
-            return new SingleOptionQuestionOptionViewModel(Mock.Of<AttachmentViewModel>())
+            return new SingleOptionQuestionOptionViewModel(Create.ViewModel.AttachmentViewModel())
             {
                 Value = value ?? 0
             };
@@ -462,10 +462,14 @@ namespace WB.Tests.Abc.TestFactories
             IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher = null,
             IStatefulInterviewRepository interviewRepository = null)
         {
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(s => s.GetInstance<SingleOptionQuestionOptionViewModel>())
+                .Returns(() => Create.ViewModel.SingleOptionQuestionOptionViewModel());
+
             return new SpecialValuesViewModel(
                 optionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(), 
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                Create.Service.InterviewViewModelFactory());
+                Create.Service.InterviewViewModelFactory(serviceLocator: serviceLocator.Object));
         }
 
         public SideBarCompleteSectionViewModel SideBarCompleteSectionViewModel()
@@ -588,10 +592,10 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public CategoricalYesNoOptionViewModel YesNoQuestionOptionViewModel(IUserInteractionService userInteractionService)
-            => new CategoricalYesNoOptionViewModel(userInteractionService, Mock.Of<AttachmentViewModel>());
+            => new CategoricalYesNoOptionViewModel(userInteractionService, Create.ViewModel.AttachmentViewModel());
 
         public CategoricalMultiOptionViewModel CategoricalMultiOptionViewModel(IUserInteractionService userInteractionService = null)
-            => new CategoricalMultiOptionViewModel(userInteractionService ?? Mock.Of<IUserInteractionService>(), Mock.Of<AttachmentViewModel>());
+            => new CategoricalMultiOptionViewModel(userInteractionService ?? Mock.Of<IUserInteractionService>(), Create.ViewModel.AttachmentViewModel());
 
         public CategoricalComboboxAutocompleteViewModel CategoricalComboboxAutocompleteViewModel(
             FilteredOptionsViewModel filteredOptionsViewModel, IQuestionStateViewModel questionState = null) =>
@@ -620,7 +624,7 @@ namespace WB.Tests.Abc.TestFactories
                 answering ?? Create.ViewModel.AnsweringViewModel(),
                 instructionViewModel ?? Create.ViewModel.QuestionInstructionViewModel(),
                 Create.Service.InterviewViewModelFactory(),
-                Mock.Of<AttachmentViewModel>());
+                Create.ViewModel.AttachmentViewModel());
         }
 
         public TimestampQuestionViewModel TimestampQuestionViewModel(
