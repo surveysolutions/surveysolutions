@@ -11,6 +11,7 @@
           android:layout_height="match_parent"
           android:background="@drawable/overview_background_commented"
           local:MvxBind="Visible HasComment"/>
+
     <LinearLayout android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
@@ -25,8 +26,13 @@
                    style="@style/Overview_Question_Answer"
                    local:MvxBind="Text Answer; TextViewAnswerState State; Visible Not(IsAnswered)"/>
 
-        <ImageView style="@style/Overview_Question_Answer_Multimedia"
-                   local:MvxBind="Bitmap Image,Converter=InMemoryImageValueWithDefault;Click ShowPhotoView; Visible IsAnswered "/>
+        <MvxLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            local:MvxBind="ItemsSource Answers;"
+            local:MvxItemTemplate="@layout/interview_overview_question_multi_item" />
 
     </LinearLayout>
+
 </FrameLayout>

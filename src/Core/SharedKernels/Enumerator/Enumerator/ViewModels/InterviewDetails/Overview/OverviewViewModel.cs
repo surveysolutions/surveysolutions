@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
         private readonly DynamicTextViewModel nameViewModel;
         private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly IAttachmentContentStorage attachmentContentStorage;
+        private readonly IInterviewViewModelFactory interviewViewModelFactory;
 
         public OverviewViewModel(IStatefulInterviewRepository interviewRepository,
             IImageFileStorage fileStorage,
@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             IDynamicTextViewModelFactory dynamicTextViewModelFactory,
             DynamicTextViewModel nameViewModel,
             IQuestionnaireStorage questionnaireRepository,
-            IAttachmentContentStorage attachmentContentStorage)
+            IInterviewViewModelFactory interviewViewModelFactory)
         {
             this.interviewRepository = interviewRepository;
             this.fileStorage = fileStorage;
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
             this.nameViewModel = nameViewModel;
             this.questionnaireRepository = questionnaireRepository;
-            this.attachmentContentStorage = attachmentContentStorage;
+            this.interviewViewModelFactory = interviewViewModelFactory;
         }
 
         public void Configure(string interviewId, NavigationState navigationState)
@@ -101,7 +101,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
                 if (question.IsSingleFixedOption || question.IsCascading)
                 {
-                    return new OverviewSingleCategoricalQuestionViewModel(question, interview, userInteractionService, navigationService, attachmentContentStorage, questionnaire);
+                    return new OverviewSingleCategoricalQuestionViewModel(question, interview, userInteractionService,
+                        questionnaire, interviewViewModelFactory);
+                }
+
+                if (question.IsMultiFixedOption || question.IsYesNo)
+                {
+                    return new OverviewMultiCategoricalQuestionViewModel(question, interview, userInteractionService,
+                        interviewViewModelFactory, questionnaire);
                 }
 
                 return new OverviewQuestionViewModel(question, interview,userInteractionService);
