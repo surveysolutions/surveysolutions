@@ -195,7 +195,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void OpenPdf()
         {
-            pdfService.Open(interviewId, this.Identity);
+            if (this.attachmentId.HasValue)
+                pdfService.OpenAttachment(interviewId, this.attachmentId.Value);
+            else
+                pdfService.Open(interviewId, this.Identity);
         }
 
         public override void ViewDestroy(bool viewFinishing = true)
