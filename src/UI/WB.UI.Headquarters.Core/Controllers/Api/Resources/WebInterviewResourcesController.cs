@@ -23,19 +23,22 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IImageProcessingService imageProcessingService;
         private readonly IPlainStorageAccessor<AttachmentContent> attachmentStorage;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public WebInterviewResourcesController(
             IAuthorizedUser authorizedUser,
             IImageFileStorage imageFileStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
             IImageProcessingService imageProcessingService,
-            IPlainStorageAccessor<AttachmentContent> attachmentStorage)
+            IPlainStorageAccessor<AttachmentContent> attachmentStorage,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.authorizedUser = authorizedUser;
             this.imageFileStorage = imageFileStorage;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.imageProcessingService = imageProcessingService;
             this.attachmentStorage = attachmentStorage;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         [HttpHead]
@@ -128,6 +131,27 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
                 : this.imageProcessingService.ResizeImage(file, 200, 1920);
 
             return this.BinaryResponseMessageWithEtag(resultFile);
+        }
+        
+        [HttpGet]
+        public IActionResult Attachment([FromQuery] string interviewId, [FromQuery] string attachment)
+        {
+            var interview = this.statefulInterviewRepository.Get(interviewId);
+
+            if (interview == null)
+            {
+                return NotFound();
+            }
+
+            var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
+            var attachmentId = questionnaire.GetAttachmentIdByName(attachment);
+            if (!attachmentId.HasValue)
+            {
+                return NotFound();
+            }
+
+            var attachmentObj = questionnaire.GetAttachmentById(attachmentId.Value);
+            return Content(interviewId, attachmentObj.ContentId);
         }
 
         private string GetQueryStringValue(string key)

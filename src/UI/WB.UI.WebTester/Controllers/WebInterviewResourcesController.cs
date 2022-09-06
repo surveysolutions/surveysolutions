@@ -17,17 +17,20 @@ namespace WB.UI.WebTester.Controllers
         private readonly IImageProcessingService imageProcessingService;
         private readonly ICacheStorage<MultimediaFile, string> mediaStorage;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public WebInterviewResourcesController(
             ICacheStorage<QuestionnaireAttachment, string> attachmentStorage,
             IImageProcessingService imageProcessingService,
             ICacheStorage<MultimediaFile, string> mediaStorage,
-            IStatefulInterviewRepository statefulInterviewRepository)
+            IStatefulInterviewRepository statefulInterviewRepository,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.attachmentStorage = attachmentStorage ?? throw new ArgumentNullException(nameof(attachmentStorage));
             this.imageProcessingService = imageProcessingService ?? throw new ArgumentNullException(nameof(imageProcessingService));
             this.mediaStorage = mediaStorage ?? throw new ArgumentNullException(nameof(mediaStorage));
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
+            this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
         }
 
         [HttpHead]
@@ -93,6 +96,28 @@ namespace WB.UI.WebTester.Controllers
                 : this.imageProcessingService.ResizeImage(file!.Data, 200, 1920);
             
             return this.BinaryResponseMessageWithEtag(resultFile);
+        }
+
+        [HttpGet]
+        [Route("attachment")]
+        public IActionResult GetAttachment([FromQuery] string interviewId, [FromQuery] string attachment)
+        {
+            var interview = this.statefulInterviewRepository.Get(interviewId);
+
+            if (interview == null)
+            {
+                return NotFound();
+            }
+
+            var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
+            var attachmentId = questionnaire.GetAttachmentIdByName(attachment);
+            if (!attachmentId.HasValue)
+            {
+                return NotFound();
+            }
+
+            var attachmentObj = questionnaire.GetAttachmentById(attachmentId.Value);
+            return GetContent(interviewId, attachmentObj.ContentId);
         }
 
         private string GetQueryStringValue(string key)

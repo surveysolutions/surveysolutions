@@ -91,6 +91,10 @@ export default {
             type: String,
             required: false,
         },
+        attachmentName: {
+            type: String,
+            required: false,
+        },
         interviewId: {
             type: String,
             required: false,
@@ -139,6 +143,7 @@ export default {
             if (this.thumb) return this.thumb
             if (this.filename) return `${this.$config.imageGetBase}/Image/${this.filename}`
             if (this.contentId) return `${this.$config.imageGetBase}/Content?interviewId=${this.interviewId}&contentId=${this.contentId}`
+            if (this.attachmentName) return `${this.$config.imageGetBase}/Attachment?interviewId=${this.interviewId}&attachment=${this.attachmentName}`
             return null
         },
         isPreview() {
@@ -177,7 +182,7 @@ export default {
     },
     methods: {
         async fetchContentType() {
-            if(this.thumb || this.filename) {
+            if(this.thumb || this.filename || this.attachmentName) {
                 this.contentType = 'image'
             }
             else {

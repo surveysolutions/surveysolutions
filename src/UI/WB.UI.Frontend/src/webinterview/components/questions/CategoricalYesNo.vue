@@ -58,6 +58,11 @@
                         </div>
                         <div class="lock"></div>
                     </div>
+                    <wb-attachment :attachmentName="option.attachmentName"
+                        :interviewId="interviewId"
+                        customCssClass="static-text-image"
+                        v-if="option.attachmentName" />
+
                 </div>
                 <button
                     type="button"
