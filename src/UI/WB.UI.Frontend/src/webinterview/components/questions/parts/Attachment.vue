@@ -131,7 +131,9 @@ export default {
     },
     computed: {
         contentUrl() {
-            return `${this.$config.imageGetBase}/Content?interviewId=${this.interviewId}&contentId=${this.contentId}`
+            if (this.contentId) return `${this.$config.imageGetBase}/Content?interviewId=${this.interviewId}&contentId=${this.contentId}`
+            if (this.attachmentName) return `${this.$config.imageGetBase}/Attachment?interviewId=${this.interviewId}&attachment=${this.attachmentName}`
+            return null
         },
         thumbPath() {
             if (this.isPreview) return this.imageThumb
@@ -184,7 +186,7 @@ export default {
     },
     methods: {
         async fetchContentType() {
-            if(this.thumb || this.filename || this.attachmentName) {
+            if(this.thumb || this.filename) {
                 this.contentType = 'image'
             }
             else {
