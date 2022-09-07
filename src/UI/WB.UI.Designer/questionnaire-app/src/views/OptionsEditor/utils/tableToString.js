@@ -67,8 +67,8 @@ export function convertToText(items, isCascading) {
 
 export function convertToTable(stringified, isCascading) {
     const regex = isCascading
-        ? /(.+?)[….\s]+([-+]?\d+)\/([-+]?\d+)(\.\.\.)?(.+?)?\s*/
-        : /(.+?)[….\s]+([-+]?\d+)(\.\.\.)?(.+?)?\s*$/;
+        ? /(.+?)[….\s]+([-+]?\d+)\/([-+]?\d+)(\.\.\.(.+?))?\s*/
+        : /(.+?)[….\s]+([-+]?\d+)(\.\.\.(.+?))?\s*$/;
 
     var optionsStringList = (stringified || '').split('\n');
     optionsStringList = optionsStringList.filter(function(line) {
@@ -112,8 +112,8 @@ export function validateText(value, isCascading) {
     var options = (value || '').split(/\r\n|\r|\n/);
 
     const regex = isCascading
-        ? /(.+?)[….\s]+([-+]?\d+)\/([-+]?\d+)(\.\.\.)?(.+?)?$/
-        : /(.+?)[….\s]+([-+]?\d+)(\.\.\.)?(.+?)?$/;
+        ? /(.+?)[….\s]+([-+]?\d+)\/([-+]?\d+)(\.\.\.(.+?))?$/
+        : /(.+?)[….\s]+([-+]?\d+)(\.\.\.(.+?))?$/;
 
     const diff = [];
     for (var i = 0; i < options.length; i++) {
