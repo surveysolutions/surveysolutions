@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="attachment">
         <div
             v-if="localContentType === 'image'"
             class="image-zoom-box image-wrapper"
@@ -10,15 +10,17 @@
                 class="zoomImg"
                 @click="showModal(true)"
                 :style="previewStyle"/>
-            <div class="modal-img"
-                :style="modalView"
-                @click="showModal(false)">
-                <span class="close-zoomming-img">×</span>
-                <img class="modal-img-content"
-                    :src="fullPath"
-                    alt />
-                <span class="caption"></span>
-            </div>
+            <portal to="body">
+                <div class="modal-img"
+                    :style="modalView"
+                    @click="showModal(false)">
+                    <span class="close-zoomming-img">×</span>
+                    <img class="modal-img-content"
+                        :src="fullPath"
+                        alt />
+                    <span class="caption"></span>
+                </div>
+            </portal>
         </div>
         <div v-if="localContentType === 'audio'">
             <div class="instructions-wrapper">

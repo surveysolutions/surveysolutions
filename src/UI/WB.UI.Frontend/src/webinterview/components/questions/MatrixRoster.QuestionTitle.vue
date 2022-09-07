@@ -10,6 +10,10 @@
                 :key="question.id + '_' + option.value"
                 style="width:180px!important;max-width:180px;" >
                 <span>{{option.title}}</span>
+                <wb-attachment :attachmentName="option.attachmentName"
+                    :interviewId="interviewId"
+                    customCssClass="static-text-image"
+                    v-if="option.attachmentName" />
             </div>
         </div>
     </div>
@@ -26,6 +30,7 @@ export default {
             instruction: null,
             hasInstructions: false,
             question: null,
+            interviewId: null,
         }
     },
     computed: {
@@ -40,6 +45,7 @@ export default {
         this.instruction = this.params.instruction
         //this.hasInstructions = this.instruction != undefined && this.instruction != null && this.instruction != ''
         this.question = this.params.question
+        this.interviewId =  this.$route.params.interviewId
     },
 }
 </script>
