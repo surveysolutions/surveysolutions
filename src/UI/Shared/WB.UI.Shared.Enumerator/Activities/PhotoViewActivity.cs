@@ -9,6 +9,7 @@ namespace WB.UI.Shared.Enumerator.Activities
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
         Theme = "@style/AppTheme", 
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
+        HardwareAccelerated = false,
         Exported = false)]
     public class PhotoViewActivity : BaseActivity<PhotoViewViewModel>
     {
