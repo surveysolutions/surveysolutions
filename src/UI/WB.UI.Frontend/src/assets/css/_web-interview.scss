@@ -476,6 +476,11 @@
         .form-group {
             border-color: #eeeff0;
         }
+
+        .attachment {
+            display: flex;
+            justify-content: center;
+        }
     }
 
     &.answered {
