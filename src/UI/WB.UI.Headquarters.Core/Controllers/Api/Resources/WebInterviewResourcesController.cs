@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
 
@@ -134,24 +135,38 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         }
         
         [HttpGet]
+        [Route("attachment")]
         public IActionResult Attachment([FromQuery] string interviewId, [FromQuery] string attachment)
         {
+            if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
+                return Content(interviewId, attachmentObj.ContentId);
+            return NotFound();
+        }
+
+        private bool GetAttachmentById(string interviewId, string attachment, out Attachment attachmentObj)
+        {
+            attachmentObj = null;
             var interview = this.statefulInterviewRepository.Get(interviewId);
 
             if (interview == null)
-            {
-                return NotFound();
-            }
+                return false;
 
             var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
             var attachmentId = questionnaire.GetAttachmentIdByName(attachment);
             if (!attachmentId.HasValue)
-            {
-                return NotFound();
-            }
+                return false;
 
-            var attachmentObj = questionnaire.GetAttachmentById(attachmentId.Value);
-            return Content(interviewId, attachmentObj.ContentId);
+            attachmentObj = questionnaire.GetAttachmentById(attachmentId.Value);
+            return true;
+        }
+
+        [HttpHead]
+        [Route("attachment")]
+        public IActionResult AttachmentHead([FromQuery] string interviewId, [FromQuery] string attachment)
+        {
+            if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
+                return ContentHead(interviewId, attachmentObj.ContentId);
+            return NotFound();
         }
 
         private string GetQueryStringValue(string key)
