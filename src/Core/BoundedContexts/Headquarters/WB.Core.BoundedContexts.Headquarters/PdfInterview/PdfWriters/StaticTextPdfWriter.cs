@@ -37,6 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
             {
                 new AttachmentPdfWriter(attachmentId, interview, questionnaire, attachmentContentService)
                     .Write(paragraph);
+                paragraph.AddLineBreak();
             }
         }
     }

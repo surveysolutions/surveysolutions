@@ -121,8 +121,8 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                                 paragraph.AddWrapFormattedText($"#{index++} ", PdfStyles.YesNoTitle);
                             paragraph.AddWrapFormattedText($"{optionAnswer}: ", PdfStyles.YesNoTitle);
                             paragraph.AddWrapFormattedText(option.Title, answerStyle, textColor);
-                            paragraph.AddLineBreak();
                             WriteOptionAttachmentIfNeed(paragraph, option);
+                            paragraph.AddLineBreak();
                         }
                     }
                 }
@@ -137,8 +137,8 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                         if (order)
                             paragraph.AddWrapFormattedText($"#{index++}: ", PdfStyles.YesNoTitle);
                         paragraph.AddWrapFormattedText(option.Title, answerStyle, textColor);
-                        paragraph.AddLineBreak();
                         WriteOptionAttachmentIfNeed(paragraph, option);
+                        paragraph.AddLineBreak();
                     }
                 }
                 else if (question.IsMultiLinkedOption)
@@ -195,6 +195,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                     var option = questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, selectedValue, null);
                     paragraph.AddWrapFormattedText(option.Title, PdfStyles.QuestionAnswer, textColor);
                     WriteOptionAttachmentIfNeed(paragraph, option);
+                    paragraph.AddLineBreak();
                 }
                 else if (question.IsCascading)
                 {
@@ -204,6 +205,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                     var option = questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, selectedValue, parentValue);
                     paragraph.AddWrapFormattedText(option.Title, PdfStyles.QuestionAnswer, textColor);
                     WriteOptionAttachmentIfNeed(paragraph, option);
+                    paragraph.AddLineBreak();
                 }
                 else
                 {
@@ -224,7 +226,6 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                 var attachmentId = questionnaire.GetAttachmentIdByName(option.AttachmentName);
                 new AttachmentPdfWriter(attachmentId, interview, questionnaire, attachmentContentService)
                     .Write(paragraph);
-                paragraph.AddLineBreak();
             }
         }
 
