@@ -67,8 +67,8 @@ export function convertToText(items, isCascading) {
 
 export function convertToTable(stringified, isCascading) {
     const regex = isCascading
-        ? /(.+?)[….\s]+([-+]?\d+)\/([-+]?\d+)(\.\.\.(.+?))?\s*/
-        : /(.+?)[….\s]+([-+]?\d+)(\.\.\.(.+?))?\s*$/;
+        ? /(.+?)[….\s]+([-+]?\d+)\/([-+]?\d+)((\.\.\.)(.+?))?\s*$/
+        : /(.+?)[….\s]+([-+]?\d+)((\.\.\.)(.+?))?\s*$/;
 
     var optionsStringList = (stringified || '').split('\n');
     optionsStringList = optionsStringList.filter(function(line) {
@@ -81,7 +81,7 @@ export function convertToTable(stringified, isCascading) {
             return {};
         }
         if (isCascading) {
-            var attachmentC = matches.length > 4 ? matches[5] : '';
+            var attachmentC = matches.length > 5 ? matches[6] : '';
             if (matches.length > 3) {
                 return {
                     value: matches[3] * 1,
@@ -95,7 +95,7 @@ export function convertToTable(stringified, isCascading) {
                     title: matches[1]
                 };
         } else {
-            var attachment = matches.length > 3 ? matches[4] : '';
+            var attachment = matches.length > 4 ? matches[5] : '';
             return {
                 value: matches[2] * 1,
                 title: matches[1],
@@ -112,8 +112,8 @@ export function validateText(value, isCascading) {
     var options = (value || '').split(/\r\n|\r|\n/);
 
     const regex = isCascading
-        ? /(.+?)[….\s]+([-+]?\d+)\/([-+]?\d+)(\.\.\.(.+?))?$/
-        : /(.+?)[….\s]+([-+]?\d+)(\.\.\.(.+?))?$/;
+        ? /(.+?)[….\s]+([-+]?\d+)\/([-+]?\d+)((\.\.\.)(.+?))?$/
+        : /(.+?)[….\s]+([-+]?\d+)((\.\.\.)(.+?))?$/;
 
     const diff = [];
     for (var i = 0; i < options.length; i++) {

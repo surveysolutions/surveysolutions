@@ -119,22 +119,21 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             if (!question.CategoriesId.HasValue)
             {
-                var allAttachmentsRefs = question.Answers
+                var duplicates = question.Answers
                     .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
-                    .Select(x => x.AttachmentName!.ToLower());
+                    .GroupBy(x => new {x.AttachmentName, x.ParentCode})
+                    .Where(x => x.Count() > 1);
 
-                return allAttachmentsRefs.Count() != allAttachmentsRefs.Distinct().Count();
+                return duplicates.Any();
             }
             else
             {
                 var categories = GetCategoriesItem(questionnaire.PublicKey, question.CategoriesId.Value);
 
-                var allAttachmentsRefs = categories
+                return categories
                     .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
-                    
-                    .Select(x => x.AttachmentName!.ToLower());
-
-                return allAttachmentsRefs.Count() != allAttachmentsRefs.Distinct().Count();
+                    .GroupBy(x => new {x.AttachmentName, x.ParentId})
+                    .Any(x => x.Count() > 1);
             }
         }
 
