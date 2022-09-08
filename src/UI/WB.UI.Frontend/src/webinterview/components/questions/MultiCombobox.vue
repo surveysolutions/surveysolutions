@@ -22,7 +22,6 @@
                     </div>
                     <wb-attachment :attachmentName="row.attachmentName"
                         :interviewId="interviewId"
-                        customCssClass="static-text-image"
                         v-if="row.attachmentName" />
                 </div>
 

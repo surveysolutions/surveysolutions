@@ -17,7 +17,6 @@
                     </div>
                     <wb-attachment :attachmentName="$me.answer.attachmentName"
                         :interviewId="interviewId"
-                        customCssClass="static-text-image"
                         v-if="$me.isAnswered && $me.answer.attachmentName" />
                 </div>
                 <wb-lock />
