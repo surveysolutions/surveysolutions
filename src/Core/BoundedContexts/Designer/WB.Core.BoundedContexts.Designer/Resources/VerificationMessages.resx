@@ -824,7 +824,7 @@
       <value>Question option refers to non existent attachment</value>
   </data>
   <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
-      <value>Question contains options refers non unique attachment</value>
+      <value>Question contains multiple options that refer to the same attachment</value>
   </data>
   <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
     <value>Attachment name should contain only letters, digits and underscore character. Is starting with letter, no consecutive underscores, not ending with underscore and is not a reserved word. Not empty and less than 32 characters.</value>

@@ -2140,7 +2140,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question contains options refers non unique attachment.
+        ///   Looks up a localized string similar to Question contains multiple options that refer to the same attachment.
         /// </summary>
         public static string WB0314_NonUniqueAttachment {
             get {

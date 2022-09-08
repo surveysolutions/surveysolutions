@@ -2142,7 +2142,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Вопрос содержит категории, ссылающиеся на неуникальные файлы.
+        ///   Looks up a localized string similar to Вопрос содержит несколько категорий, ссылающихся на одинаковый файл.
         /// </summary>
         public static string WB0314_NonUniqueAttachment {
             get {
