@@ -274,6 +274,7 @@ article {
     font-size: @font-size-medium;
     line-height: 18px;
     margin-bottom: 10px;
+    word-break: break-all;
 }
 
 .answer {
@@ -357,7 +358,7 @@ article {
     border-radius: 100%;
     display: none;
     top: 4px;
-    left: 2px;
+    left: 3px;
     background-color: #000;
 }
 
@@ -368,6 +369,8 @@ article {
 .option {
     margin-top: 2px;
     display:flex;
+    flex-direction: row;
+    //justify-content: flex-end;
     flex-wrap:nowrap;
 }
 
@@ -423,7 +426,6 @@ article {
 }
 
 .yes_no_multiselect {
-  flex: 0 0 55px;
   display: inline-block;
   width: 53px;
   vertical-align: top;
@@ -432,7 +434,7 @@ article {
 }
 
 .answer-editor .yes_no_multiselect label {
-    padding-left: 5px;
+    padding-left: 17px;
     width: 13px;
 }
 
@@ -443,27 +445,32 @@ article {
 }
 
 .option .yes_no-option-text {
-  flex: 1 0 auto;
-  margin-left: 5px;
+  flex: 1 1 auto;
   width: 60%;
+  margin-left: 5px;
+  margin-right: 20px;
+  display: inline-block;
   vertical-align: top;
+  word-break: break-all;  
 }
 .option .option-text {
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   width: 60%;
   display: inline-block;
+  vertical-align: top;
   margin-left: 10px;
-  line-height: 18px;
-  vertical-align: top; 
+  margin-right: 20px;
+  word-break: break-all;  
 }
 .option .option-attachment-name {
-  flex: 0 0 auto;
+  flex: 0 0 90px;
+  width: 90px;
   display: inline-block;
-  float: right;
-  margin-left: 5px;
-  line-height: 18px;
   vertical-align: top;
-  overflow: hidden;
+  //margin-left: auto;
+  line-height: 18px;
+  word-break: break-all;
+  margin-left: 5px;
 }
 input[type=date] {
     line-height: 20px;

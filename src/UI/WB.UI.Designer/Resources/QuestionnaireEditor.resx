@@ -1524,7 +1524,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>Data changes reverted</value>
   </data>
   <data name="OptionsSizeLimit" xml:space="preserve">
-    <value>Maximum {{max_rows}} rows allowed</value>
+    <value>Maximum {max_rows} rows allowed</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
     <value>Network error</value>

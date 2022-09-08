@@ -1539,7 +1539,7 @@
     <value>Data changes reverted</value>
   </data>
   <data name="OptionsSizeLimit" xml:space="preserve">
-    <value>Максимально допустимо только {{ max }} строк</value>
+    <value>Максимально допустимо только {max_rows} строк</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
     <value>Ошибка сети</value>

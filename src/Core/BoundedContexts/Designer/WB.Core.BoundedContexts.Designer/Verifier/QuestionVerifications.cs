@@ -131,6 +131,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
                 var allAttachmentsRefs = categories
                     .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
+                    
                     .Select(x => x.AttachmentName!.ToLower());
 
                 return allAttachmentsRefs.Count() != allAttachmentsRefs.Distinct().Count();
