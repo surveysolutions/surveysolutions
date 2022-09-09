@@ -863,7 +863,7 @@
 
 <script type="text/ng-template" id="Image-attachment-info-template.html">
     <p>
-        <span class="file-name">{{attachment.meta.fileName}}</span>, &nbsp;
+        <span class="file-name">{{attachment.meta.fileName}}</span><br>
         <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}" ng-if="attachment.content.details.width" ng-i18next="({width: attachment.content.details.width, height: attachment.content.details.height})SideBarAttachmentDetailsResolution"></span>{{attachment.content.details.width ? ',&nbsp;' : ''}}
         <span ng-i18next="({type: attachment.content.type})SideBarAttachmentDetailsFormat"></span>,
         <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}" ng-i18next="({size: formatBytes(attachment.content.size)})SideBarAttachmentDetailsSize"></span>
