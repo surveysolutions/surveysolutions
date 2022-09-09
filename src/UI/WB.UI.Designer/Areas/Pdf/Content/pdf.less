@@ -427,15 +427,23 @@ article {
 
 .yes_no_multiselect {
   display: inline-block;
-  width: 53px;
+  flex: 0 0 45px;
+  //width: 44px;
   vertical-align: top;
   margin-left: 10px;
   line-height: 18px;
+  
 }
 
 .answer-editor .yes_no_multiselect label {
-    padding-left: 17px;
+    padding-left: 0px;
     width: 13px;
+    display: inline-block;
+}
+
+.answer-editor .yes_no_multiselect label::before {
+  display: inline-block;
+  position: relative;
 }
 
 .yes_no_multiselect span {
@@ -446,7 +454,7 @@ article {
 
 .option .yes_no-option-text {
   flex: 1 1 auto;
-  width: 60%;
+  width: 50%;
   margin-left: 5px;
   margin-right: 20px;
   display: inline-block;
