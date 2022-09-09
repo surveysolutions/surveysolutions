@@ -18,6 +18,16 @@
                     text-overflow: clip;
                     white-space: normal;
                 }
+
+                .attachment {
+                    .zoomImg {
+                        max-height: 130px;
+                    }
+
+                    display: flex;
+                    justify-content: center;
+                }
+
                 text-overflow: clip;
                 overflow: visible;
                 white-space: normal !important;

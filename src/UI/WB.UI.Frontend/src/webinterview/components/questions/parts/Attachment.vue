@@ -8,6 +8,7 @@
                 :src="thumbPath"
                 alt="custom photo"
                 class="zoomImg"
+                @load="imageLoaded"
                 @click="showModal(true)"
                 :style="previewStyle"/>
             <portal to="body">
@@ -79,6 +80,7 @@ function appendSearchParam(uri, name, value) {
 }
 
 export default {
+    emits: ['imageLoaded'],
     data() {
         return {
             modal: false,
@@ -201,6 +203,9 @@ export default {
             if (this.previewOnly)
                 return
             this.modal = show
+        },
+        imageLoaded() {
+            this.$emit('imageLoaded')
         },
     },
     name: 'wb-attachment',

@@ -12,6 +12,7 @@
                 <div>{{option.title}}</div>
                 <wb-attachment :attachmentName="option.attachmentName"
                     :interviewId="interviewId"
+                    @imageLoaded="imageLoaded"
                     v-if="option.attachmentName" />
             </div>
         </div>
@@ -30,6 +31,7 @@ export default {
             hasInstructions: false,
             question: null,
             interviewId: null,
+            attachmentImageLoadedCallback: null,
         }
     },
     computed: {
@@ -38,6 +40,12 @@ export default {
         },
     },
     methods: {
+        imageLoaded() {
+            this.$emit('attachmentImageLoaded')
+
+            if (this.attachmentImageLoadedCallback)
+                this.attachmentImageLoadedCallback()
+        },
     },
     created() {
         this.title = this.params.title
@@ -45,6 +53,7 @@ export default {
         //this.hasInstructions = this.instruction != undefined && this.instruction != null && this.instruction != ''
         this.question = this.params.question
         this.interviewId =  this.$route.params.interviewId
+        this.attachmentImageLoadedCallback =  this.params.attachmentImageLoadedCallback
     },
 }
 </script>
