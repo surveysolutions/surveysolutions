@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
@@ -21,25 +22,31 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             this.attachmentService = attachmentService;
             this.keywordsProvider = keywordsProvider;
         }
-        private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
+
+        private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>>
+            ErrorsVerifiers => new[]
         {
-            ErrorForAttachment(AttachmentHasEmptyContent, "WB0111", VerificationMessages.WB0111_AttachmentHasEmptyContent),
-            ErrorForAttachment(AttachmentHasInvalidName, "WB0315", VerificationMessages.WB0315_AttachmentHasInvalidName),
+            ErrorForAttachment(AttachmentHasEmptyContent, "WB0111",
+                VerificationMessages.WB0111_AttachmentHasEmptyContent),
+            ErrorForAttachment(AttachmentHasInvalidName, "WB0315",
+                VerificationMessages.WB0315_AttachmentHasInvalidName),
             ErrorsByAttachmentsWithDuplicateName,
-            Warning(AttachmentSizeIsMoreThan5Mb, "WB0213", string.Format(VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb, MaxAttachmentSizeInMb)),
-            Warning(TotalAttachmentsSizeIsMoreThan50Mb, "WB0214", string.Format(VerificationMessages.WB0214_TotalAttachmentsSizeIsMoreThan50Mb, MaxAttachmentsSizeInMb)),
+            Warning(AttachmentSizeIsMoreThan5Mb, "WB0213",
+                string.Format(VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb, MaxAttachmentSizeInMb)),
+            Warning(TotalAttachmentsSizeIsMoreThan50Mb, "WB0214",
+                string.Format(VerificationMessages.WB0214_TotalAttachmentsSizeIsMoreThan50Mb, MaxAttachmentsSizeInMb)),
             Warning(UnusedAttachments, "WB0215", VerificationMessages.WB0215_UnusedAttachments),
         };
 
         private bool AttachmentHasInvalidName(Attachment attachment, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var name = attachment.Name;
-            
+
             if (string.IsNullOrWhiteSpace(name))
                 return true;
 
             if (name.Length > DefaultVariableLengthLimit
-                || name[^1] == '_' 
+                || name[^1] == '_'
                 || name.Contains("__")
                 || keywordsProvider.IsReservedKeyword(name)
                 || Char.IsDigit(name[0]) || name[0] == '_')
@@ -50,7 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 if (c != '_' && !Char.IsDigit(c) && !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')))
                     return true;
             }
-            
+
             return false;
         }
 
@@ -63,15 +70,29 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     : Enumerable.Empty<QuestionnaireVerificationMessage>();
         }
 
-        private static bool AttachmentSizeIsMoreThan5Mb(AttachmentSize attachmentSize, MultiLanguageQuestionnaireDocument questionnaire)
-            => questionnaire.Attachments.Any(x => x.AttachmentId == attachmentSize.AttachmentId) && attachmentSize.Size > 5 * 1024 * 1024;
+        private static bool AttachmentSizeIsMoreThan5Mb(AttachmentSize attachmentSize,
+            MultiLanguageQuestionnaireDocument questionnaire)
+            => questionnaire.Attachments.Any(x => x.AttachmentId == attachmentSize.AttachmentId) &&
+               attachmentSize.Size > 5 * 1024 * 1024;
 
         private static bool UnusedAttachments(Attachment attachment, MultiLanguageQuestionnaireDocument questionnaire)
-            => !questionnaire
-                .Find<IStaticText>(t => t.AttachmentName == attachment.Name)
-                .Any();
+        {
+            if (questionnaire.Find<IStaticText>(t => t.AttachmentName == attachment.Name).Any())
+                return false;
 
-        private bool TotalAttachmentsSizeIsMoreThan50Mb(MultiLanguageQuestionnaireDocument questionnaire)
+            if (questionnaire.Categories.Any(t => t.AttachmentName == attachment.Name))
+                return false;
+
+            if (questionnaire.Categories.Any(t => t.AttachmentName == attachment.Name))
+                return false;
+
+            if (questionnaire.Find<ICategoricalQuestion>(t => t.Answers.Any(x => x.AttachmentName == attachment.Name)).Any())
+                return false;
+
+            return true;
+        }
+
+    private bool TotalAttachmentsSizeIsMoreThan50Mb(MultiLanguageQuestionnaireDocument questionnaire)
             => this.attachmentService
                    .GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
                    .Sum(x => x.Size) > 50 * 1024 * 1024;
