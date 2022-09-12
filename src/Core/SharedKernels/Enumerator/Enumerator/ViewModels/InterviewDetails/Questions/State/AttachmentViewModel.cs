@@ -72,8 +72,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void InitAsStatic(string interviewId, string attachmentName, bool supportPreview = true)
         {
-            if (attachmentName == null) 
+            if (attachmentName == null)
+            {
+                this.BindNoAttachment().WaitAndUnwrapException();
                 return;
+            }
             
             if (interviewId == null) 
                 throw new ArgumentNullException(nameof(interviewId));
