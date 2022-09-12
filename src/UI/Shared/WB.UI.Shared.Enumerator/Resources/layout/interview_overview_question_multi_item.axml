@@ -10,6 +10,8 @@
                style="@style/Overview_Question_Answer"
                local:MvxBind="Text Answer; TextViewAnswerState State" />
 
-    <include layout="@layout/interview_overview__attachment" />
+    <LinearLayout style="@style/Interview_Question_Answer_Option_Attachment">
+        <include layout="@layout/interview_overview__attachment" />
+    </LinearLayout>
 
 </LinearLayout>

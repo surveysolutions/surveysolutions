@@ -75,5 +75,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             if (this.Answer == null)
                 throw new ArgumentException(nameof(Answer));
         }
+
+        public override void Dispose()
+        {
+            answer = null;
+
+            base.Dispose();
+        }
     }
 }
