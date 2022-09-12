@@ -135,7 +135,6 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         }
         
         [HttpGet]
-        [Route("attachment")]
         public IActionResult Attachment([FromQuery] string interviewId, [FromQuery] string attachment)
         {
             if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
@@ -161,7 +160,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         }
 
         [HttpHead]
-        [Route("attachment")]
+        [ActionName("Attachment")]
         public IActionResult AttachmentHead([FromQuery] string interviewId, [FromQuery] string attachment)
         {
             if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
