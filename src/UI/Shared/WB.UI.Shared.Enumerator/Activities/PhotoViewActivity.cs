@@ -1,7 +1,12 @@
 ﻿using Android.App;
 using Android.Content.PM;
+using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Views;
+using Android.Widget;
+using Autofac.Core;
+using ImageViews.Photo;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.UI.Shared.Enumerator.Activities
@@ -24,10 +29,43 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             this.Finish();
         }
-        
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+        }
+
+        private bool disposed;
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing && !disposed)
+            {
+                disposed = true;
+
+                PhotoView i = FindViewById<PhotoView>(Resource.Id.image);
+                if (i != null)
+                {
+                    if (i.Drawable is BitmapDrawable d)
+                    {
+                        Bitmap bitmap = d.Bitmap;
+                        if (bitmap != null)
+                        {
+                            bitmap.Recycle();
+                            bitmap.Dispose();
+                        }
+                    }
+
+                    i.SetImageBitmap(null);
+                    i.SetImageDrawable(null);
+                }
+            }
         }
     }
 }
