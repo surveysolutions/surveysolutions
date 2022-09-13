@@ -57,6 +57,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private bool canBeChecked = true;
 
+        protected CategoricalMultiOptionViewModel()
+        {
+        }
+        
         public CategoricalMultiOptionViewModel(AttachmentViewModel attachment)
         {
             Attachment = attachment;
