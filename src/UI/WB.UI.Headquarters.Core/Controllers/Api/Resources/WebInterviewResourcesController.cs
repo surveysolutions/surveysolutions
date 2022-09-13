@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
 
@@ -23,19 +24,22 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IImageProcessingService imageProcessingService;
         private readonly IPlainStorageAccessor<AttachmentContent> attachmentStorage;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public WebInterviewResourcesController(
             IAuthorizedUser authorizedUser,
             IImageFileStorage imageFileStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
             IImageProcessingService imageProcessingService,
-            IPlainStorageAccessor<AttachmentContent> attachmentStorage)
+            IPlainStorageAccessor<AttachmentContent> attachmentStorage,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.authorizedUser = authorizedUser;
             this.imageFileStorage = imageFileStorage;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.imageProcessingService = imageProcessingService;
             this.attachmentStorage = attachmentStorage;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         [HttpHead]
@@ -128,6 +132,40 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
                 : this.imageProcessingService.ResizeImage(file, 200, 1920);
 
             return this.BinaryResponseMessageWithEtag(resultFile);
+        }
+        
+        [HttpGet]
+        public IActionResult Attachment([FromQuery] string interviewId, [FromQuery] string attachment)
+        {
+            if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
+                return Content(interviewId, attachmentObj.ContentId);
+            return NotFound();
+        }
+
+        private bool GetAttachmentById(string interviewId, string attachment, out Attachment attachmentObj)
+        {
+            attachmentObj = null;
+            var interview = this.statefulInterviewRepository.Get(interviewId);
+
+            if (interview == null)
+                return false;
+
+            var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
+            var attachmentId = questionnaire.GetAttachmentIdByName(attachment);
+            if (!attachmentId.HasValue)
+                return false;
+
+            attachmentObj = questionnaire.GetAttachmentById(attachmentId.Value);
+            return true;
+        }
+
+        [HttpHead]
+        [ActionName("Attachment")]
+        public IActionResult AttachmentHead([FromQuery] string interviewId, [FromQuery] string attachment)
+        {
+            if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
+                return ContentHead(interviewId, attachmentObj.ContentId);
+            return NotFound();
         }
 
         private string GetQueryStringValue(string key)

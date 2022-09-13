@@ -308,7 +308,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 AnswerText = a.Text,
                 ParentValue = a.ParentId.ToString(),
-                AnswerValue = a.Id.ToString()
+                AnswerValue = a.Id.ToString(),
+                AttachmentName = a.AttachmentName,
             }).ToList();
             StoreOptionsImpl(questionnaireIdentity, null, categoryId, answers, translations);
         }
