@@ -166,8 +166,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             IgnoreQuotes = false,
             Delimiter = "\t",
             // Skip if all fields are empty.
-            ShouldSkipRecord = record => record.All(string.IsNullOrEmpty)
-
+            ShouldSkipRecord = record => record.All(string.IsNullOrEmpty),
+            MissingFieldFound = (strings, i, arg3) => { }
         };
 
         private class CascadingOptionMap : CategoricalOptionMap
