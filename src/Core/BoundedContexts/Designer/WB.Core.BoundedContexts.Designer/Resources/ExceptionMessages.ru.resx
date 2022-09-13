@@ -340,6 +340,9 @@
   <data name="ImportOptions_TitleTooLong" xml:space="preserve">
     <value>Название слишком длинное. Название должно быть не больше {0} символов</value>
   </data>
+  <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+    <value>Имя файла слишком длинное. Имя должно быть не больше {0} символов</value>
+  </data>    
   <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
     <value>Дубликат категории '{0}' со значением '{1}'</value>
   </data>

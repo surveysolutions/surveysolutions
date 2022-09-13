@@ -250,6 +250,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 Map(m => m.Value).Index(0).TypeConverter<ConvertToInt32OrThrowConverter>();
                 Map(m => m.Title).Index(1).TypeConverter<ValidateTitleOrThrowConverter>();
+                Map(m => m.AttachmentName).Index(2).TypeConverter<ValidateAttachmentNameOrThrowConverter>();
+
             }
 
             private class ValidateTitleOrThrowConverter : DefaultTypeConverter
@@ -262,6 +264,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     if (text.Length > AbstractVerifier.MaxOptionLength)
                         throw new CsvReaderException(row.Context.Row, memberMapData.Index,
                             string.Format(ExceptionMessages.ImportOptions_TitleTooLong, AbstractVerifier.MaxOptionLength));
+
+                    return text;
+                }
+            }
+            
+            private class ValidateAttachmentNameOrThrowConverter : DefaultTypeConverter
+            {
+                public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+                {
+                    if (string.IsNullOrEmpty(text))
+                        return text;
+
+                    if (text.Length > AbstractVerifier.DefaultVariableLengthLimit)
+                        throw new CsvReaderException(row.Context.Row, memberMapData.Index,
+                            string.Format(ExceptionMessages.ImportOptions_AttachmentNameTooLong, AbstractVerifier.DefaultVariableLengthLimit));
 
                     return text;
                 }

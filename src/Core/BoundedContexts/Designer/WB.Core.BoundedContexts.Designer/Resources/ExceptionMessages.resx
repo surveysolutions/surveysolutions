@@ -360,6 +360,9 @@
   <data name="ImportOptions_TitleTooLong" xml:space="preserve">
     <value>Title is too long. Title length should be less than {0}</value>
   </data>
+  <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+    <value>Attachment name is too long. Attachment name should be less than {0}</value>
+  </data>
   <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
     <value>Duplicated category '{0}' with value '{1}'</value>
   </data>
