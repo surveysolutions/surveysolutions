@@ -5,7 +5,7 @@
                 $provide.factory('optionsService', function (utilityService) {
                     var optionsService = {};
 
-                    var regex = new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)((\.\.\.)(.+?))?\s*$/);
+                    var regex = new RegExp(/^(.+?)(\.)+([-+]?\d+)((\.\.\.)(.+?))?\s*$/);
 
                     optionsService.validateOptionAsText = function (option) {
                         return regex.test((option || ""));
@@ -33,10 +33,10 @@
 
                         var options = _.map(optionsStringList, function(item) {
                             var matches = item.match(regex);
-                            var attachment = matches.length > 3 ? matches[4]: '';                                 
+                            var attachment = matches.length > 5 ? matches[6]: '';                                 
                             return {
                                 id: utilityService.guid(),
-                                value: matches[2] * 1,
+                                value: matches[3] * 1,
                                 title: matches[1],
                                 attachmentName: attachment
                             };
