@@ -128,7 +128,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     {
                         Id = o.Value,
                         ParentId = o.ParentValue,
-                        Text = o.Title
+                        Text = o.Title,
+                        AttachmentName = o.AttachmentName
                     }).ToList()
             });
 
