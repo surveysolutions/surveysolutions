@@ -119,6 +119,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             if (!question.CategoriesId.HasValue)
             {
+                if (question.Answers == null)
+                    return false;
+                
                 var duplicates = question.Answers
                     .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
                     .GroupBy(x => new {x.AttachmentName, x.ParentCode})
@@ -141,6 +144,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             if (!question.CategoriesId.HasValue)
             {
+                if (question.Answers == null)
+                    return false;
+                
                 var allAttachmentsRefs = question.Answers
                     .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
                     .Select(x => x.AttachmentName).Distinct();

@@ -257,7 +257,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     (
                         hasQuestionnaire: questionnaire =>
                         {
-                            if(questionnaire.Find<ICategoricalQuestion>(x => x.Answers.Any(y => !string.IsNullOrWhiteSpace(y.AttachmentName))).Any())
+                            if(questionnaire.Find<ICategoricalQuestion>(x => 
+                                   x.Answers != null && x.Answers.Any(y => !string.IsNullOrWhiteSpace(y.AttachmentName))).Any())
                                 return true;
 
                             if(questionnaire.Categories.Any(y => !string.IsNullOrWhiteSpace(y.AttachmentName)))
