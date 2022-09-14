@@ -81,11 +81,11 @@ export function convertToTable(stringified, isCascading) {
             return {};
         }
         if (isCascading) {
-            var attachmentC = matches.length > 5 ? matches[6] : '';
+            var attachmentC = matches.length > 6 ? matches[7] : '';
             if (matches.length > 3) {
                 return {
-                    value: matches[3] * 1,
-                    parentValue: matches[2] * 1,
+                    value: matches[4] * 1,
+                    parentValue: matches[3] * 1,
                     title: matches[1],
                     attachmentName: attachmentC
                 };
@@ -95,9 +95,9 @@ export function convertToTable(stringified, isCascading) {
                     title: matches[1]
                 };
         } else {
-            var attachment = matches.length > 4 ? matches[5] : '';
+            var attachment = matches.length > 5 ? matches[6] : '';
             return {
-                value: matches[2] * 1,
+                value: matches[3] * 1,
                 title: matches[1],
                 attachmentName: attachment
             };
