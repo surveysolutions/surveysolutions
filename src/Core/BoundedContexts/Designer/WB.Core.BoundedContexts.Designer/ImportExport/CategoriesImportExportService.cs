@@ -35,7 +35,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 {
                     Value = t.Value,
                     Text = t.Text,
-                    ParentValue = t.ParentId
+                    ParentValue = t.ParentId,
+                    AttachmentName = t.AttachmentName
                 }).ToList();
             var json = questionnaireSerializer.Serialize(items);
             return json;
