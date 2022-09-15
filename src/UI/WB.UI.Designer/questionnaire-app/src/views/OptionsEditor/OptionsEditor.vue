@@ -46,6 +46,7 @@
                                 :loading="loading"
                                 :is-category="isCategory"
                                 :is-cascading="isCascading"
+                                :readonly="isReadonly"
                                 @setCascading="setCascadingCategory"
                             />
                         </v-tab-item>
@@ -56,6 +57,7 @@
                                 :loading="loading"
                                 :show-parent-value="isCascading"
                                 :categories="categories"
+                                :readonly="isReadonly"
                                 @valid="v => (stringsIsValid = v)"
                                 @change="v => (categories = v)"
                                 @editing="v => (inEditMode = v)"
@@ -68,6 +70,7 @@
         </v-row>
         <v-footer fixed min-width="680">
             <v-btn
+                v-if="!readonly"
                 class="ma-2"
                 color="success"
                 :disabled="!canApplyChanges"
@@ -75,12 +78,16 @@
                 @click="apply"
                 >{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn
             >
-            <v-btn @click="resetChanges">{{
+            <v-btn v-if="!readonly" @click="resetChanges">{{
                 $t('QuestionnaireEditor.OptionsUploadRevert')
+            }}</v-btn>
+            <v-btn v-if="readonly" @click="close">{{
+                $t('QuestionnaireEditor.Close')
             }}</v-btn>
             <v-spacer />
 
             <v-file-input
+                v-if="!readonly"
                 ref="file"
                 v-model="file"
                 class="pt-2"
@@ -129,6 +136,7 @@ export default {
             options: null,
 
             ajax: false,
+            readonly: true,
             convert: false,
             inEditMode: false,
 
@@ -155,6 +163,10 @@ export default {
 
         isCascading() {
             return this.cascading === true || this.isCascadingCategory === true;
+        },
+
+        isReadonly() {
+            return this.readonly;
         },
 
         formTitle() {
@@ -238,6 +250,7 @@ export default {
 
                 const data = await query;
                 this.categories = data.options;
+                this.readonly = data.isReadonly;
 
                 if (
                     this.isCategory &&

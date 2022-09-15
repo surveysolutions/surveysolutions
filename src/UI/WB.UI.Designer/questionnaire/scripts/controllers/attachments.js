@@ -256,7 +256,7 @@
                         };
 
                         $scope.attachmentUrl = function () {
-                            return baseURL + "/thumbnail/" + $scope.attachment.attachmentId + '/568';
+                            return baseURL + "/" + $state.params.questionnaireId + "/thumbnail/" + $scope.attachment.attachmentId + '/568';
                         }
 
                     },

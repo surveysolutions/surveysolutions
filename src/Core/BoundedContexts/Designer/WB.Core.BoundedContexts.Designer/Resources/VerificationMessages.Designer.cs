@@ -1690,7 +1690,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question title is too long. It should be no longer than {0} characters..
+        ///   Looks up a localized string similar to Question text is too long. It should be no longer than {0} characters..
         /// </summary>
         public static string WB0259_QuestionTitleIsTooLong {
             get {

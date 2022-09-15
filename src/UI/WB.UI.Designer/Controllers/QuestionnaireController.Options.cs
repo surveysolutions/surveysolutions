@@ -31,8 +31,9 @@ namespace WB.UI.Designer.Controllers
             if (categoriesView == null)
                 return NotFound();
 
+            var questionnaireId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
             var categories =
-                this.categoriesService.GetCategoriesById(id.QuestionnaireId, categoriesId).
+                this.categoriesService.GetCategoriesById(questionnaireId, categoriesId).
                     Select(
                         option => new QuestionnaireCategoricalOption
                         {
@@ -42,6 +43,8 @@ namespace WB.UI.Designer.Controllers
                             AttachmentName = option.AttachmentName
                         });
 
+            var isReadonly = IsReadOnly(id);
+
             return new EditOptionsViewModel
             (
                 questionnaireId: id.QuestionnaireId.FormatGuid(),
@@ -49,8 +52,25 @@ namespace WB.UI.Designer.Controllers
                 categoriesName: categoriesView.Name,
                 options: categories.ToList(),
                 isCascading: false,
-                isCategories: true
+                isCategories: true,
+                isReadonly: isReadonly
             );
+        }
+
+        private bool IsReadOnly(QuestionnaireRevision questionnaireRevision)
+        {
+            if (questionnaireRevision.Revision != null)
+                return true;
+            
+            if (questionnaireRevision.OriginalQuestionnaireId.HasValue)
+                return true;
+
+            var userId = User.GetIdOrNull();
+            if (!userId.HasValue)
+                return true;
+
+            var hasUserAccessToEdit = questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(questionnaireRevision.OriginalQuestionnaireId ?? questionnaireRevision.QuestionnaireId, userId.Value);
+            return !hasUserAccessToEdit;
         }
 
         public EditOptionsViewModel GetOptions(QuestionnaireRevision id, Guid questionId, bool isCascading)
@@ -67,6 +87,8 @@ namespace WB.UI.Designer.Controllers
                                   AttachmentName = option.AttachmentName
                               })
                 : new QuestionnaireCategoricalOption[0];
+            
+            var isReadonly = IsReadOnly(id);
 
             return new EditOptionsViewModel
             (
@@ -74,7 +96,8 @@ namespace WB.UI.Designer.Controllers
                 questionId: questionId,
                 questionTitle: editQuestionView?.Title,
                 options: options.ToList(),
-                isCascading: isCascading
+                isCascading: isCascading,
+                isReadonly: isReadonly
             )
             {
                 CascadeFromQuestionId = editQuestionView?.CascadeFromQuestionId
@@ -400,7 +423,8 @@ namespace WB.UI.Designer.Controllers
                 string? questionTitle = null,
                 bool? isCascading = null,
                 bool? isCategories = null,
-                string? categoriesName = null)
+                string? categoriesName = null,
+                bool? isReadonly = true)
             {
                 if (questionId == null && categoriesId == null)
                     throw new InvalidOperationException(
@@ -419,6 +443,7 @@ namespace WB.UI.Designer.Controllers
                 QuestionTitle = questionTitle;
                 IsCascading = isCascading ?? false;
                 IsCategories = isCategories ?? false;
+                IsReadonly = isReadonly ?? true;
             }
 
             public string QuestionnaireId { get; set; }
@@ -433,6 +458,7 @@ namespace WB.UI.Designer.Controllers
 
             public bool IsCategories { get; set; }
             public string? CascadeFromQuestionId { get; set; }
+            public bool IsReadonly { get; set; }
         }
     }
 }

@@ -76,7 +76,6 @@ src/UI/Designer/WB.UI.Designer/questionnaire/build/*.css
 
 src/Tools/k6/k6.exe
 /src/UI/Designer/WB.UI.Designer/questionnaire/build/resources/*.*
-/src/UI/Designer/WB.UI.Designer/web.config
 /src/UI/Headquarters/WB.UI.Headquarters/Views/Shared/partial.hq.cshtml
 /src/UI/Headquarters/WB.UI.Headquarters/Views/Shared/partial.webInterview.cshtml
 
@@ -103,7 +102,7 @@ Elmah/
 /src/Services/Export/WB.Services.Export.Host/.temp
 *.received.txt
 .idea/
-/src/UI/WB.UI.Designer/web.config
+
 /src/UI/WB.UI.Frontend/.resources
 /src/UI/WB.UI.Frontend/dist
 /src/UI/WB.UI.Frontend/locale

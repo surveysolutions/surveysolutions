@@ -124,6 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public List<Categories> CategoriesList { get; internal set; } = new List<Categories>();
 
         public string Title => this.questionnaire.Title;
+        public string Id => this.questionnaire.PublicKey.FormatGuid();
         public QuestionnaireMetaInfo Metadata { get; internal set; }
         public List<Guid> SectionIds { get; }
         public IEnumerable<ModificationStatisticsByUser> SharedPersons { get; set; } = new List<ModificationStatisticsByUser>();

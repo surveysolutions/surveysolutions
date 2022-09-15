@@ -240,6 +240,9 @@
     <PackageReference Include="Humanizer.Core">
       <Version>2.14.1</Version>
     </PackageReference>
+    <PackageReference Include="Humanizer.Core.cs">
+      <Version>2.14.1</Version>
+    </PackageReference>
     <PackageReference Include="Humanizer.Core.es">
       <Version>2.14.1</Version>
     </PackageReference>

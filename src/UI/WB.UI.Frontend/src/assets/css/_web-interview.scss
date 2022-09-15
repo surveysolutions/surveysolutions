@@ -249,6 +249,7 @@
 
         p {
             white-space: pre-wrap;
+			margin: 10px 0;
         }
     }
 
@@ -498,6 +499,11 @@
             .form-group {
                 border-color: #f6d6d0;
             }
+        }
+    }
+    &.text-question{
+	    p{
+		    margin: 10px 0;
         }
     }
 }

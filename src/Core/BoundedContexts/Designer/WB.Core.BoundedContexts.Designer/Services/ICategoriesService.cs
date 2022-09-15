@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         List<CategoriesRow> GetRowsFromFile(Stream file, CategoriesFileType fileType);
         byte[] GetTemplateAsExcelFile();
         IQueryable<CategoriesItem> GetCategoriesById(Guid questionnaireId, Guid id);
-        CategoriesFile? GetAsExcelFile(QuestionnaireRevision questionnaireId, Guid categoriesId);
+        CategoriesFile? GetAsExcelFile(QuestionnaireRevision questionnaireRevision, Guid categoriesId);
         void DeleteAllByQuestionnaireId(Guid questionnaireId);
     }
 }

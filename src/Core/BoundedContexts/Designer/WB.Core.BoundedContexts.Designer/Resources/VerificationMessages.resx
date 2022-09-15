@@ -517,7 +517,7 @@
     <value>Translations have duplicate names</value>
   </data>
   <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
-    <value>Question title is too long. It should be no longer than {0} characters.</value>
+    <value>Question text is too long. It should be no longer than {0} characters.</value>
   </data>
   <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
     <value>Title is too long. It should be no longer than {0} characters.</value>

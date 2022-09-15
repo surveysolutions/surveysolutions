@@ -128,7 +128,7 @@
             <button type="button" class="btn btn-lg btn-link" ng-click="addValidationCondition()" ng-i18next="AddValidationRule"></button>
         </div>
 
-        <div class="form-group" ng-if="!questionnaire.isCoverPageSupported || !activeQuestion.parentIsCover">
+        <div class="form-group" ng-if="doesQuestionSupportQuestionScope()">
             <div class="form-group pull-right">
                 <label for="Question-scope">{{'QuestionScope' | i18next }}&nbsp;</label>
 
