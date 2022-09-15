@@ -1,12 +1,15 @@
 using System;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CategoricalMultiOptionViewModel<T> : MvxNotifyPropertyChanged, ICompositeEntity
     {
+        public readonly IUserInteractionService userInteraction;
+        
         public virtual void Init(IQuestionStateViewModel questionState, string sTitle, T value, bool isProtected, Action setAnswer, string attachmentName)
         {
             this.QuestionState = questionState;
@@ -61,8 +64,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
         }
         
-        public CategoricalMultiOptionViewModel(AttachmentViewModel attachment)
+        public CategoricalMultiOptionViewModel(IUserInteractionService userInteraction, AttachmentViewModel attachment)
         {
+            this.userInteraction = userInteraction;
             Attachment = attachment;
         }
 

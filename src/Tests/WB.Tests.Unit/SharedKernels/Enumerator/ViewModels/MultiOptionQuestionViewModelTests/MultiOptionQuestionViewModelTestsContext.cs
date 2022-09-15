@@ -25,12 +25,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewmodel = null,
             FilteredOptionsViewModel filteredOptionsViewModel = null,
             QuestionInstructionViewModel instructionViewModel = null,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null,
+            IUserInteractionService userInteraction = null)
         {
             var questionnaireRepository = questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>();
             var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
 
             var liteEventRegistry = eventRegistry ?? Mock.Of<IViewModelEventRegistry>();
+            
+            userInteraction = userInteraction ?? Mock.Of<IUserInteractionService>();
+            var mockOfViewModelFactory = new Mock<IInterviewViewModelFactory>();
+            mockOfViewModelFactory.Setup(x => x.GetNew<CategoricalMultiOptionViewModel>()).Returns(() =>
+                new CategoricalMultiOptionViewModel(userInteraction, Create.ViewModel.AttachmentViewModel()));
 
             return new CategoricalMultiViewModel(
                 questionStateViewmodel ?? Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(liteEventRegistry, statefulInterviewRepository, questionnaireStorage),
@@ -43,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
                 instructionViewModel ?? Mock.Of<QuestionInstructionViewModel>(),
                 Create.ViewModel.ThrottlingViewModel(),
-                Create.Service.InterviewViewModelFactory());
+                mockOfViewModelFactory.Object);
         }
     }
 }

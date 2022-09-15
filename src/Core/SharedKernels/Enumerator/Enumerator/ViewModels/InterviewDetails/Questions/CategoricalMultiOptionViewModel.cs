@@ -12,12 +12,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private bool isRosterSizeQuestion;
         private bool wasChecked;
 
-        private readonly IUserInteractionService userInteraction;
 
         public CategoricalMultiOptionViewModel(IUserInteractionService userInteraction, AttachmentViewModel attachmentViewModel)
-            : base(attachmentViewModel)
+            : base(userInteraction, attachmentViewModel)
         {
-            this.userInteraction = userInteraction;
         }
 
         public override void Init(IQuestionStateViewModel questionState, string sTitle, int value, bool isProtected, Action setAnswer, string attachmentName)

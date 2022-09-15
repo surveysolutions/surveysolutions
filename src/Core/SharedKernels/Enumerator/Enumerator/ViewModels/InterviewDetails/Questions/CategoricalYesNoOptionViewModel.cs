@@ -9,12 +9,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CategoricalYesNoOptionViewModel : CategoricalMultiOptionViewModel<decimal>
     {
-        private readonly IUserInteractionService userInteraction;
 
         public CategoricalYesNoOptionViewModel(IUserInteractionService userInteraction, AttachmentViewModel attachmentViewModel)
-            : base(attachmentViewModel)
+            : base(userInteraction, attachmentViewModel)
         {
-            this.userInteraction = userInteraction;
         }
 
         public override void Init(IQuestionStateViewModel questionState, string sTitle, decimal value, bool isProtected, Action setAnswer, string attachmentName)

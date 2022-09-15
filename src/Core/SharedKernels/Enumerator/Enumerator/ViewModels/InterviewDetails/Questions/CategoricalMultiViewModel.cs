@@ -50,8 +50,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             foreach (var categoricalOption in this.filteredOptionsViewModel.GetOptions())
             {
                 var vm = interviewViewModelFactory.GetNew<CategoricalMultiOptionViewModel>();
-                base.InitViewModel(categoricalOption.Title, categoricalOption.Value, interview, vm, categoricalOption.AttachmentName,
-                    interview.IsAnswerProtected(this.Identity, categoricalOption.Value));
+                base.InitViewModel(categoricalOption.Title, categoricalOption.Value, interview, vm, 
+                    categoricalOption.AttachmentName, interview.IsAnswerProtected(this.Identity, categoricalOption.Value));
 
                 if(this.isRosterSizeQuestion) vm.MakeRosterSize();
 
