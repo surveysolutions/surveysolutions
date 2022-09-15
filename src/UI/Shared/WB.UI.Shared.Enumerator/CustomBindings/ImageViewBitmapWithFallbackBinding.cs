@@ -2,6 +2,7 @@
 using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
@@ -119,6 +120,28 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             }
 
             return inSampleSize;
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            base.Dispose(isDisposing);
+
+            var i = Target;
+            if (i != null)
+            {
+                if (i.Drawable is BitmapDrawable d)
+                {
+                    Bitmap bitmap = d.Bitmap;
+                    if (bitmap != null)
+                    {
+                        bitmap.Recycle();
+                        bitmap.Dispose();
+                    }
+                }
+
+                i.SetImageBitmap(null);
+                i.SetImageDrawable(null);
+            }
         }
     }
 }
