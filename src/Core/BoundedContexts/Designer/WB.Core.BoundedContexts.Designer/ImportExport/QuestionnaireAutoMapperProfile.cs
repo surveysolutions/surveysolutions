@@ -365,7 +365,11 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
         {
             if (!id.HasValue)
                 return null;
-            var varName = ((Dictionary<Guid, string>)context.Items[ImportExportQuestionnaireConstants.MapCollectionName])[id.Value];
+
+            var holder =
+                ((Dictionary<Guid, string>) context.Items[ImportExportQuestionnaireConstants.MapCollectionName]);
+            
+            var varName = holder.ContainsKey(id.Value) ? holder[id.Value] : null;
             if (varName?.Trim().IsNullOrEmpty() ?? true)
                 return null;
             return varName;
