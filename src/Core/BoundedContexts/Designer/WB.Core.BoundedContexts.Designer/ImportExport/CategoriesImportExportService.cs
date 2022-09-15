@@ -63,6 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                     ParentId = item.ParentValue,
                     CategoriesId = categoriesId.Value,
                     QuestionnaireId = questionnaireId.Value,
+                    AttachmentName = item.AttachmentName,
                 }));
             }
             catch (COMException e)
