@@ -13,4 +13,12 @@ public class CategoricalComboboxAutocompleteWithAttachmentViewModel : Categorica
     {
         Attachment = attachment;
     }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        
+        Attachment?.ViewDestroy();
+        Attachment?.Dispose();
+    }
 }

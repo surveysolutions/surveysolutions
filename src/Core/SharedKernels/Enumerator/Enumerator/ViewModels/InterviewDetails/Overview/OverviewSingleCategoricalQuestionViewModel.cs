@@ -45,4 +45,12 @@ public class OverviewSingleCategoricalQuestionViewModel : OverviewQuestionViewMo
             }
         }
     }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        
+        Attachment?.ViewDestroy();
+        Attachment?.Dispose();
+    }
 }

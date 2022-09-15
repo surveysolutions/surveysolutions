@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class SingleOptionQuestionOptionViewModel : MvxNotifyPropertyChanged,
-        ICompositeEntity
+        ICompositeEntity, IDisposable
     {
         public SingleOptionQuestionOptionViewModel(AttachmentViewModel attachment)
         {
@@ -63,6 +63,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var handler = this.AnswerRemoved;
             handler?.Invoke(this, EventArgs.Empty);
+        }
+        
+        public void Dispose()
+        {
+            Attachment?.ViewDestroy();
+            Attachment?.Dispose();
         }
     }
 

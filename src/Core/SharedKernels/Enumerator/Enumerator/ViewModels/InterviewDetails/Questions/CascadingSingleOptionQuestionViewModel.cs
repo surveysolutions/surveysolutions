@@ -295,7 +295,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             this.throttlingModel.Dispose();
             this.Options.ForEach(x => x.DisposeIfDisposable());
-
+            
+            this.comboboxViewModel.Dispose();
+            
             base.Dispose();
         }
     }

@@ -62,6 +62,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             base.Dispose();
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
             this.filteredOptionsViewModel.Dispose();
+            
+            this.comboboxViewModel.Dispose();
         }
         
         public override IObservableCollection<ICompositeEntity> Children

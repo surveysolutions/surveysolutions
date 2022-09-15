@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
@@ -11,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 
 public class OverviewMultiCategoricalQuestionViewModel : OverviewQuestionViewModel
 {
-    public class OverviewMultiCategoricalQuestionAnswer
+    public class OverviewMultiCategoricalQuestionAnswer : IDisposable
     {
         public OverviewMultiCategoricalQuestionAnswer(AttachmentViewModel attachment)
         {
@@ -21,6 +22,12 @@ public class OverviewMultiCategoricalQuestionViewModel : OverviewQuestionViewMod
         public string Answer { get; set; }
         public AttachmentViewModel Attachment { get; set; }
         public OverviewNodeState State { get; set; }
+
+        public void Dispose()
+        {
+            Attachment?.ViewDestroy();
+            Attachment?.Dispose();
+        }
     }
 
     public OverviewMultiCategoricalQuestionViewModel(InterviewTreeQuestion treeQuestion, IStatefulInterview interview, 

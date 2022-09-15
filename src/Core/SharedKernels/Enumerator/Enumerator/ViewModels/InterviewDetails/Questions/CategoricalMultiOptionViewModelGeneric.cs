@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class CategoricalMultiOptionViewModel<T> : MvxNotifyPropertyChanged, ICompositeEntity
+    public class CategoricalMultiOptionViewModel<T> : MvxNotifyPropertyChanged, ICompositeEntity, IDisposable
     {
         public readonly IUserInteractionService userInteraction;
         
@@ -85,5 +85,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public virtual bool IsAnswered() => this.Checked;
         public virtual bool IsOrdered() => this.Checked;
+        
+        public virtual void Dispose()
+        {
+            Attachment?.ViewDestroy();
+            Attachment?.Dispose();
+        }
     }
 }
