@@ -123,11 +123,26 @@ export default {
             default: false,
         },
     },
+    created() {
+        const self = this
+        const onEscape = (e) => {
+            if (self.modal && e.keyCode === 27) {
+                self.showModal(false)
+            }
+        }
+        document.addEventListener('keydown', onEscape)
+        this.$once('hook:destroyed', () => {
+            document.removeEventListener('keydown', onEscape)
+        })
+    },
     mounted() {
         return this.fetchContentType()
     },
     watch: {
         contentId(){
+            this.fetchContentType()
+        },
+        attachmentName(){
             this.fetchContentType()
         },
     },
