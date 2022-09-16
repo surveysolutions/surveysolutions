@@ -122,6 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             await this.RaisePropertyChanged(nameof(Options));
             await this.RaisePropertyChanged(nameof(Children));
+            await this.RaisePropertyChanged("Attachment");
         }
 
         private bool RenderAsComboBox
@@ -285,6 +286,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 ? this.Options.FirstOrDefault(x => x.Value == value.Value)
                 : null;
         }
+        
+        public override async Task HandleAsync(AnswersRemoved @event)
+        {
+            await base.HandleAsync(@event);
+            
+            if (!@event.Questions.Contains(this.parentQuestionIdentity)) return;
+
+            this.Answer = null;
+
+            var comboWithAttachment = (CategoricalComboboxAutocompleteWithAttachmentViewModel)this.comboboxViewModel;
+            comboWithAttachment.Attachment.InitAsStatic(interviewId, null);
+        }
+
 
         public override void Dispose()
         {
