@@ -35,19 +35,15 @@ namespace WB.UI.Shared.Enumerator.Activities
             base.OnCreate(bundle);
         }
 
+        private bool imageCleared;
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
-        }
-
-        private bool disposed;
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-
-            if (disposing && !disposed)
+            
+            if (!imageCleared)
             {
-                disposed = true;
+                imageCleared = true;
 
                 PhotoView i = FindViewById<PhotoView>(Resource.Id.image);
                 if (i != null)
