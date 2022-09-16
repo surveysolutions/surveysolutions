@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public override void Dispose()
         {
-            answer = null;
+            Answer = null;
 
             base.Dispose();
         }
