@@ -791,7 +791,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
-            => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X", variable: "questionnaire");
+            => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X", variable: "questionnaire_doc");
 
         public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? id, params IComposite[] children)
             => Create.QuestionnaireDocumentWithCoverPage(id, null, children: children);
