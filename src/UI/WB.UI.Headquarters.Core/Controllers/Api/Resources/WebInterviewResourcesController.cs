@@ -71,7 +71,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         [HttpGet]
         public new IActionResult Content([FromQuery] string interviewId, [FromQuery] string contentId)
         {
-            return GetAttachmentContentByContentId(interviewId, contentIdб 200);
+            return GetAttachmentContentByContentId(interviewId, contentId, 200);
         }
 
         private IActionResult GetAttachmentContentByContentId(string interviewId, string contentId, int thumbSize)
