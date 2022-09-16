@@ -24,7 +24,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (value != null)
             {
                 var displayMetrics = GetDisplayMetrics();
-                var minSize = Math.Min(displayMetrics.WidthPixels, displayMetrics.HeightPixels);
+                var displayMinSize = Math.Min(displayMetrics.WidthPixels, displayMetrics.HeightPixels);
+                var controlMinSize = Math.Min(control.MaxHeight, control.MaxWidth);
+                var minSize = Math.Min(displayMinSize, controlMinSize);
 
                 // Calculate inSampleSize
                 BitmapFactory.Options boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true, InPurgeable = true };
