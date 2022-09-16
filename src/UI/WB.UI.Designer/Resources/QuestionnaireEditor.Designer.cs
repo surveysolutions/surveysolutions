@@ -204,6 +204,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dimensions are too big.
+        /// </summary>
+        public static string AttachmentDimensionsAreTooBig {
+            get {
+                return ResourceManager.GetString("AttachmentDimensionsAreTooBig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attachment name.
         /// </summary>
         public static string AttachmentName {
@@ -1740,7 +1749,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum {{max_rows}} rows allowed.
+        ///   Looks up a localized string similar to Maximum {max_rows} rows allowed.
         /// </summary>
         public static string OptionsSizeLimit {
             get {

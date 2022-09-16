@@ -1352,6 +1352,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="NotSupportedAttachment" xml:space="preserve">
     <value>Selected file is not supported as attachment</value>
   </data>
+  <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+    <value>Dimensions are too big</value>
+  </data>
   <data name="SettingsHideIfDisabled" xml:space="preserve">
     <value>Hide element when it is disabled</value>
   </data>

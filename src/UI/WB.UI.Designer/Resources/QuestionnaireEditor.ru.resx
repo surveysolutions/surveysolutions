@@ -1249,6 +1249,9 @@
   <data name="NotSupportedAttachment" xml:space="preserve">
     <value>Выбранный файл не поддерживается во вложениях</value>
   </data>
+  <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+    <value>Размер слишком большой</value>
+  </data>  
   <data name="HelpDefaultDate" xml:space="preserve">
     <value>Эта дата будет показана как начальная дата для выбора на планшете</value>
   </data>

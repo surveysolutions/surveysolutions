@@ -78,6 +78,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image dimensions are too big.
+        /// </summary>
+        public static string Attachments_uploaded_file_image_is_too_big {
+            get {
+                return ResourceManager.GetString("Attachments_uploaded_file_image_is_too_big", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uploaded file is not an image.
         /// </summary>
         public static string Attachments_uploaded_file_is_not_image {

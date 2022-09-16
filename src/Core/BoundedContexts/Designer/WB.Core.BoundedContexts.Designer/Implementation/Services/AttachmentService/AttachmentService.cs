@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
     {
         private readonly DesignerDbContext dbContext;
         private readonly IVideoConverter videoConverter;
+        private static readonly int maxImageDimension = 4096; 
 
         public AttachmentService(
             DesignerDbContext dbContext,
@@ -195,10 +196,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         private static AttachmentDetails GetImageAttachmentDetails(byte[] binaryContent)
         {
+            AttachmentDetails details;
             try
             {
                 using var image = SixLabors.ImageSharp.Image.Load(binaryContent);
-                return new AttachmentDetails
+                details = new AttachmentDetails
                 {
                     Height = image.Height,
                     Width = image.Width
@@ -208,6 +210,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             {
                 throw new FormatException(ExceptionMessages.Attachments_uploaded_file_is_not_image, e);
             }
+            
+            if (details.Height > maxImageDimension || details.Width > maxImageDimension)
+            {
+                throw new FormatException(ExceptionMessages.Attachments_uploaded_file_image_is_too_big);
+            }
+
+            return details;
         }
     }
 }

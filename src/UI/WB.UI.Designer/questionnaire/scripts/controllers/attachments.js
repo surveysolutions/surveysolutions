@@ -7,6 +7,7 @@
             $scope.benchmarkDownloadSpeed = 20;
             $scope.isReadOnlyForUser = false;
             var recommendedMaxResolution = 1024;
+            var allowedMaxResolution = 4096;
             var KB = 1024;
             var MB = KB * KB;
 
@@ -128,13 +129,17 @@
                 };
 
                 $scope.fileSelected(attachment, file, function () {
-                    commandService.updateAttachment($state.params.questionnaireId, attachment.attachmentId, attachment).then(function () {
-                        dataBind(attachment.checkpoint, attachment);
-                        attachment.file = null;
-                        $scope.attachments.push(attachment);
-                        setTimeout(function () {
-                            utilityService.focus("focusAttachment" + attachment.attachmentId);
-                        }, 500);
+                    commandService.updateAttachment($state.params.questionnaireId, attachment.attachmentId, attachment)
+                        .then(function (result) {
+                            if(result && result.status == 200)
+                            {
+                                dataBind(attachment.checkpoint, attachment);
+                                attachment.file = null;
+                                $scope.attachments.push(attachment);
+                                setTimeout(function () {
+                                    utilityService.focus("focusAttachment" + attachment.attachmentId);
+                                }, 500);                                
+                            }                            
                     });
                 });
             };
@@ -189,14 +194,19 @@
                 }
 
                 if (file.type.startsWith('image')) {
-                    Upload.imageDimensions(file).then(function (dimensions) {
+                    Upload.imageDimensions(file)
+                        .then(function (dimensions) {
+                            if(((dimensions.height || 0) > allowedMaxResolution)
+                                || ((dimensions.width || 0) > allowedMaxResolution))
+                            {
+                                notificationService.error($i18next.t('AttachmentDimensionsAreTooBig'));
+                                return;                            
+                            }
                             fillFileMetaInfo();
                             attachment.content.details.height = dimensions.height;
-                            attachment.content.details.width = dimensions.width;
-                        })
+                            attachment.content.details.width = dimensions.width;})
                         .catch(function () {
-                            notificationService.error($i18next.t('NotSupportedAttachment'));
-                        });
+                            notificationService.error($i18next.t('NotSupportedAttachment'));});
                 }
             }
 
