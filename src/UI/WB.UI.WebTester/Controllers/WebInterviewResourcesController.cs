@@ -52,6 +52,11 @@ namespace WB.UI.WebTester.Controllers
         [Route("content")]
         public IActionResult GetContent([FromQuery] string interviewId, [FromQuery] string contentId)
         {
+            return GetAttachmentByContentId(interviewId, contentId, 200);
+        }
+
+        private IActionResult GetAttachmentByContentId(string interviewId, string contentId, int thumbSize)
+        {
             var attachment = attachmentStorage.Get(contentId, Guid.Parse(interviewId));
             if (attachment?.Content?.Content == null)
             {
@@ -64,8 +69,8 @@ namespace WB.UI.WebTester.Controllers
 
                 var resultFile = fullSize
                     ? attachment.Content.Content
-                    : this.imageProcessingService.ResizeImage(attachment.Content.Content, 200, 1920);
-                
+                    : this.imageProcessingService.ResizeImage(attachment.Content.Content, thumbSize, 1920);
+
                 return this.BinaryResponseMessageWithEtag(resultFile);
             }
 
@@ -104,7 +109,7 @@ namespace WB.UI.WebTester.Controllers
         public IActionResult GetAttachment([FromQuery] string interviewId, [FromQuery] string attachment)
         {
             if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
-                return GetContent(interviewId, attachmentObj.ContentId);
+                return GetAttachmentByContentId(interviewId, attachmentObj.ContentId, 100);
             return NotFound();
         }
 
