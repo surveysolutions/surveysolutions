@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:local="http://schemas.android.com/apk/res-auto"
-                                                   style="@style/Interview_Question_Answer_Option_Attachment">
-    <LinearLayout style="@style/Interview_Question_Answer_Option_Attachment"
-                  local:layout_constraintHeight_max="@dimen/Interview_Question_Answer_Option_Attachment_max_height"
-                  local:layout_constrainedHeight="true">
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:local="http://schemas.android.com/apk/res-auto"
+           style="@style/Interview_Question_Answer_Option_Attachment">
         <ImageView style="@style/Interview_Attachment_Picture"
-                   android:scaleType="centerCrop"
+                   android:scaleType="fitCenter"
                    android:adjustViewBounds="true"
+                   android:maxHeight="@dimen/Interview_Question_Answer_Option_Attachment_max_height"
                    local:MvxBind="BitmapWithFallback Attachment.Image; 
                     Tag Attachment.Tag;
                     Click Attachment.ShowPhotoView;
@@ -45,5 +42,5 @@
                      Click Attachment.ShowPdf; 
                      Visible Attachment.IsPdf;
                      Tag Format('Show_Pdf_{0}', Identity)"/>
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
