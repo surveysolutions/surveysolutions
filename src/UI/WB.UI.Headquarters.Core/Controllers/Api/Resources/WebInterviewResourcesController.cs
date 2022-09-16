@@ -71,6 +71,11 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         [HttpGet]
         public new IActionResult Content([FromQuery] string interviewId, [FromQuery] string contentId)
         {
+            return GetAttachmentContentByContentId(interviewId, contentIdб 200);
+        }
+
+        private IActionResult GetAttachmentContentByContentId(string interviewId, string contentId, int thumbSize)
+        {
             var interview = this.statefulInterviewRepository.Get(interviewId);
 
             if (interview == null)
@@ -95,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
 
                 var resultFile = fullSize
                     ? attachment.Content
-                    : this.imageProcessingService.ResizeImage(attachment.Content, 200, 1920);
+                    : this.imageProcessingService.ResizeImage(attachment.Content, thumbSize, 1920);
 
                 return this.BinaryResponseMessageWithEtag(resultFile);
             }
@@ -138,7 +143,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         public IActionResult Attachment([FromQuery] string interviewId, [FromQuery] string attachment)
         {
             if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
-                return Content(interviewId, attachmentObj.ContentId);
+                return GetAttachmentContentByContentId(interviewId, attachmentObj.ContentId, 100);
             return NotFound();
         }
 
