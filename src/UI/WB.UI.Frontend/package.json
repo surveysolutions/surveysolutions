@@ -172,6 +172,7 @@
         "svgo": ">=2.8.0",
         "trim-newlines": ">=3.0.1",
         "ts-node": "10.8.0",
+        "jest-config": "29.0.3",
         "jest-environment-jsdom": "29.0.3",
         "vue-jest": ">=3.0.7",
         "webpack-dev-server": ">=3.11.3",
