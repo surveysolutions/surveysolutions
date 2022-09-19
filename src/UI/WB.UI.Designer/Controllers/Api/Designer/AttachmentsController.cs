@@ -11,53 +11,82 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Route("attachments")]
-    [Authorize]
+    [AuthorizeOrAnonymousQuestionnaire]
+    [QuestionnairePermissions]
     public class AttachmentsController : Controller
     {
         private const int defaultImageSizeToScale = 156;
 
         private readonly IAttachmentService attachmentService;
         private readonly IWebHostEnvironment environment;
+        private readonly IDesignerQuestionnaireStorage questionnaireStorage;
 
         public AttachmentsController(IAttachmentService attachmentService,
-            IWebHostEnvironment environment)
+            IWebHostEnvironment environment,
+            IDesignerQuestionnaireStorage questionnaireStorage)
         {
             this.attachmentService = attachmentService;
             this.environment = environment;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         [HttpGet]
-        [Route("{id:Guid}")]
-        public IActionResult Get(Guid id)
+        [Route("{id}/{attachmentId:Guid}")]
+        public IActionResult Get(QuestionnaireRevision id, Guid attachmentId)
         {
-            return this.CreateAttachmentResponse(id);
+            return this.CreateAttachmentResponse(id, attachmentId);
         }
 
         [HttpGet]
+        [Route("{id}/thumbnail/{attachmentId:Guid}")]
+        public IActionResult Thumbnail(QuestionnaireRevision id, Guid attachmentId)
+        {
+            return this.CreateAttachmentResponse(id, attachmentId, defaultImageSizeToScale, true);
+        }
+
+        [HttpGet]
+        [Route("{id}/thumbnail/{attachmentId:Guid}/{size:int}")]
+        public IActionResult Thumbnail(QuestionnaireRevision id, Guid attachmentId, int size)
+        {
+            return this.CreateAttachmentResponse(id, attachmentId, size, true);
+        }
+        
+        [HttpGet]
+        [Obsolete]
         [AllowAnonymous]
-        [Route("thumbnail/{id:Guid}", Name = "AttachmentThumbnail")]
-        public IActionResult Thumbnail(Guid id)
+        [Route("thumbnail/{attachmentId:Guid}", Name = "AttachmentThumbnail")]
+        public IActionResult Thumbnail(Guid attachmentId)
         {
-            return this.CreateAttachmentResponse(id, defaultImageSizeToScale, true);
+            return this.CreateAttachmentResponse(null, attachmentId, defaultImageSizeToScale, true);
         }
 
         [HttpGet]
+        [Obsolete]
         [AllowAnonymous]
-        [Route("thumbnail/{id:Guid}/{size:int}", Name = "AttachmentThumbnailWithSize")]
-        public IActionResult Thumbnail(Guid id, int size)
+        [Route("thumbnail/{attachmentId:Guid}/{size:int}", Name = "AttachmentThumbnailWithSize")]
+        public IActionResult Thumbnail(Guid attachmentId, int size)
         {
-            return this.CreateAttachmentResponse(id, size, true);
+            return this.CreateAttachmentResponse(null, attachmentId, size, true);
         }
 
-        private IActionResult CreateAttachmentResponse(Guid attachmentId, int? sizeToScale = null, bool thumbnail = false)
+        private IActionResult CreateAttachmentResponse(QuestionnaireRevision? questionnaireRevision, Guid attachmentId, int? sizeToScale = null, bool thumbnail = false)
         {
+            if (questionnaireRevision != null)
+            {
+                var questionnaire = questionnaireStorage.Get(questionnaireRevision);
+                if (questionnaire == null) return NotFound();
+
+                var hasAttachment = questionnaire.Attachments.Any(a => a.AttachmentId == attachmentId);
+                if (!hasAttachment) return NotFound();
+            }
+
             AttachmentMeta? attachment = this.attachmentService.GetAttachmentMeta(attachmentId);
-
             if (attachment == null) return NotFound();
 
             var requestHeaders = new RequestHeaders(this.Request.Headers);

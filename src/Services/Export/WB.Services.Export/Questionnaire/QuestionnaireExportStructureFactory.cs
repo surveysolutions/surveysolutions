@@ -161,13 +161,13 @@ namespace WB.Services.Export.Questionnaire
                         ? QuestionSubtype.MultiOptionYesNoOrdered
                         : QuestionSubtype.MultiOptionYesNo;
                 }
-                else if (multiOptionQuestion.AreAnswersOrdered)
-                {
-                    exportedHeaderItem.QuestionSubType = QuestionSubtype.MultiOptionOrdered;
-                }
                 else if (multiOptionQuestion.IsFilteredCombobox ?? false)
                 {
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_Combobox;
+                }
+                else if (multiOptionQuestion.AreAnswersOrdered)
+                {
+                    exportedHeaderItem.QuestionSubType = QuestionSubtype.MultiOptionOrdered;
                 }
             }
 
