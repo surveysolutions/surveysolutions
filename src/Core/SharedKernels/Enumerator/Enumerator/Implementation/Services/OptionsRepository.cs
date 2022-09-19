@@ -32,6 +32,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             public decimal? ParentValue { get; set; }
 
             public string TranslationId { get; set; }
+
+            public string AttachmentName { get; set; }
         }
 
         [DebuggerDisplay("{Value}")]
@@ -90,6 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             Title = @select.Title,
                             ParentValue = @select.ParentValue,
                             TranslationId = @select.TranslationId,
+                            AttachmentName = @select.AttachmentName,
                         },
                         take, skip)
                     .ToList();
@@ -124,6 +127,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         ParentValue = option.ParentValue.HasValue ? Convert.ToInt32(option.ParentValue) : (int?) null,
                         Value = Convert.ToInt32(option.Value),
                         Title = option.Title,
+                        AttachmentName = option.AttachmentName,
                     };
                 }
 
