@@ -48,7 +48,8 @@ namespace WB.Tests.Web.TestFactories
                     new DynamicCompilerSettingsProvider());
 
             var latestSupportedVersion = new DesignerEngineVersionService(Mock.Of<IAttachmentService>(),
-                Mock.Of<IDesignerTranslationService>()).LatestSupportedVersion;
+                Mock.Of<IDesignerTranslationService>(),
+                Mock.Of<ICategoriesService>()).LatestSupportedVersion;
             var package = new QuestionnaireCodeGenerationPackage(questionnaireDocument, null);
             var emitResult = 
                 expressionProcessorGenerator.GenerateProcessorStateAssembly(package,  
