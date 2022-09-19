@@ -79,4 +79,11 @@ public class OverviewMultiCategoricalQuestionViewModel : OverviewQuestionViewMod
         }
     }
     public List<OverviewMultiCategoricalQuestionAnswer> Answers { get; set; }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+
+        this.Answers.ForEach(a => a.Dispose());
+    }
 }
