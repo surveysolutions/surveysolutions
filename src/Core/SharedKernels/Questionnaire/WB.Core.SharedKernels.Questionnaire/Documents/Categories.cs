@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.SurveySolutions.Documents
         public Categories Clone() => new Categories
         {
             Id = this.Id,
-            Name = this.Name
+            Name = this.Name,
         };
     }
 }

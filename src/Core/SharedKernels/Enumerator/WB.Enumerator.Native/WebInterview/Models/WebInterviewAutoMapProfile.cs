@@ -187,7 +187,15 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
         private static DropdownItem GetSingleFixedOptionAnswerAsDropdownItem(InterviewTreeQuestion question)
         {
-            return new DropdownItem(question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue, question.GetAnswerAsString());
+            var singleOptionAnswer = question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer();
+            var selectedValue = singleOptionAnswer.SelectedValue;
+            int? parentAnswer = null;
+
+            if (question.IsCascading && question.InterviewQuestion is InterviewTreeCascadingQuestion cascading)
+                parentAnswer = cascading.GetCascadingParentQuestion()?.GetAnswer()?.SelectedValue;
+
+            var attachmentName = question.Tree.GetAttachmentNameForQuestionOptionByOptionValue(question.Identity.Id, selectedValue, parentAnswer);
+            return new DropdownItem(selectedValue, question.GetAnswerAsString(), attachmentName);
         }
     }
 }

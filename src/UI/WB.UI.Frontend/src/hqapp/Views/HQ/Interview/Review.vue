@@ -16,6 +16,9 @@
             </div>
         </div>
         <IdleTimeoutService />
+        <portal-target name="body"
+            multiple >
+        </portal-target>
         <span id="loadingPixel"
             style="display:none"
             :data-loading="isLoading"></span>

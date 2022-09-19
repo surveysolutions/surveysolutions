@@ -3,34 +3,41 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_Question_Answer_Option_Background"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutOptionBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false, false, true));
                              LongClick QuestionState.ShowCommentEditorCommand">
 
-    <InstantAutoCompleteTextView
-        style="@style/Interview_Question_Answer_FilteredComboBox"
-        android:completionThreshold="1"
-        android:inputType="textVisiblePassword"
-        android:imeOptions="actionDone"
-        android:layout_weight="1"
-        local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
-        local:MvxBind="ItemsSource AutoCompleteSuggestions;
-                     PartialText FilterText; 
-                     DisableDefaultSearch true;
-                     Loading Loading;
-                     OnPartialTextChanged FilterCommand;
-                     OnItemSelected SaveAnswerBySelectedOptionCommand;                     
-                     OnFocusChange OnFocusChangeCommand;
-                     Watermark Localization('FilteredComboboxQuestion_Hint');
-                     Tag Format('Answer_{0}', Identity)" />
-    <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible IsStringNotEmpty(FilterText)"
-                  style="@style/Interview_Question_Answer_Input_RemoveAnswerWrapper">
-        <ImageButton style="@style/Interview_Question_RemoveAnswer"
-                     android:layout_gravity="right" android:duplicateParentState="true"
-                     local:MvxBind="HideKeyboardOnClick .;
-                                    Click RemoveAnswerCommand; 
-                                    Tag Format('ib_RemoveAnswer_{0}', Identity);"
-                     local:srcCompat="@drawable/delete_button"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+
+        <InstantAutoCompleteTextView
+            style="@style/Interview_Question_Answer_FilteredComboBox"
+            android:completionThreshold="1"
+            android:inputType="textVisiblePassword"
+            android:imeOptions="actionDone"
+            android:layout_weight="1"
+            local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
+            local:MvxBind="ItemsSource AutoCompleteSuggestions;
+                         PartialText FilterText; 
+                         DisableDefaultSearch true;
+                         Loading Loading;
+                         OnPartialTextChanged FilterCommand;
+                         OnItemSelected SaveAnswerBySelectedOptionCommand;                     
+                         OnFocusChange OnFocusChangeCommand;
+                         Watermark Localization('FilteredComboboxQuestion_Hint');
+                         Tag Format('Answer_{0}', Identity)" />
+        <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible IsStringNotEmpty(FilterText)"
+                      style="@style/Interview_Question_Answer_Input_RemoveAnswerWrapper">
+            <ImageButton style="@style/Interview_Question_RemoveAnswer"
+                         android:layout_gravity="right" android:duplicateParentState="true"
+                         local:MvxBind="HideKeyboardOnClick .;
+                                        Click RemoveAnswerCommand; 
+                                        Tag Format('ib_RemoveAnswer_{0}', Identity);"
+                         local:srcCompat="@drawable/delete_button"/>
+        </LinearLayout>
+
     </LinearLayout>
 
+    <include layout="@layout/interview_question__attachment" />
 </LinearLayout>

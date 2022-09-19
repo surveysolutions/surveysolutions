@@ -515,6 +515,12 @@
             "null"
           ],
           "format": "int32"
+        },
+        "AttachmentName": {
+          "type": [
+            "null",
+            "string"
+          ]
         }
       }
     },

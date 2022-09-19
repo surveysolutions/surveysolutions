@@ -18,7 +18,8 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
                 Value = Convert.ToInt32(answer.GetParsedValue()),
                 ParentValue = answer.ParentCode.HasValue ? 
                             Convert.ToInt32(answer.ParentCode):
-                            ParseValue(answer.ParentValue)
+                            ParseValue(answer.ParentValue),
+                AttachmentName = answer.AttachmentName
             };
         }
 

@@ -54,15 +54,16 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public AttachmentViewModel AttachmentViewModel(
-            IQuestionnaireStorage questionnaireRepository,
-            IStatefulInterviewRepository interviewRepository,
+            IQuestionnaireStorage questionnaireRepository = null,
+            IStatefulInterviewRepository interviewRepository = null,
             IAttachmentContentStorage attachmentContentStorage = null)
-            => new AttachmentViewModel(questionnaireRepository, 
-                interviewRepository, 
+            => new AttachmentViewModel(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(), 
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(), 
                 Create.Service.LiteEventRegistry(),
                 attachmentContentStorage, 
                 () => new MediaAttachment(),
-                Mock.Of<IInterviewPdfService>());
+                Mock.Of<IInterviewPdfService>(),
+                Mock.Of<IViewModelNavigationService>());
 
         public DynamicTextViewModel DynamicTextViewModel(
             IViewModelEventRegistry eventRegistry = null, 
@@ -124,15 +125,23 @@ namespace WB.Tests.Abc.TestFactories
 
             return new ErrorMessagesViewModel(dynamicTextViewModelFactory);
         }
-        
+
         public SingleOptionLinkedToListQuestionViewModel SingleOptionLinkedToListQuestionViewModel(
             IQuestionnaire questionnaire = null,
             IStatefulInterview interview = null,
             IViewModelEventRegistry eventRegistry = null,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionState = null,
-            AnsweringViewModel answering = null)
-            => new SingleOptionLinkedToListQuestionViewModel(
-                Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
+            AnsweringViewModel answering = null,
+            IUserInteractionService userInteraction = null)
+        {
+            userInteraction = userInteraction ?? Mock.Of<IUserInteractionService>();
+            var mockOfViewModelFactory = new Mock<IInterviewViewModelFactory>();
+            mockOfViewModelFactory.Setup(x => x.GetNew<SingleOptionQuestionOptionViewModel>()).Returns(() =>
+                new SingleOptionQuestionOptionViewModel(Create.ViewModel.AttachmentViewModel()));
+            
+           return new SingleOptionLinkedToListQuestionViewModel(
+                Mock.Of<IPrincipal>(_ =>
+                    _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 Create.Storage.QuestionnaireStorage(questionnaire ?? Mock.Of<IQuestionnaire>()),
                 Create.Storage.InterviewRepository(interview ?? Mock.Of<IStatefulInterview>()),
                 eventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
@@ -140,19 +149,27 @@ namespace WB.Tests.Abc.TestFactories
                 Abc.SetUp.FilteredOptionsViewModel(),
                 Mock.Of<QuestionInstructionViewModel>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
-                Create.ViewModel.ThrottlingViewModel());
+                Create.ViewModel.ThrottlingViewModel(),
+                mockOfViewModelFactory.Object);
+        }
 
         public CategoricalMultiLinkedToListViewModel MultiOptionLinkedToListQuestionQuestionViewModel(
             IQuestionnaire questionnaire = null,
             IStatefulInterview interview = null,
             IViewModelEventRegistry eventRegistry = null,
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionState = null,
-            AnsweringViewModel answering = null)
+            AnsweringViewModel answering = null,
+            IUserInteractionService userInteraction = null)
         {
             var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire ?? Mock.Of<IQuestionnaire>());
 
             var statefulInterviewRepository = SetUp.StatefulInterviewRepository(interview ?? Mock.Of<IStatefulInterview>());
 
+            userInteraction = userInteraction ?? Mock.Of<IUserInteractionService>();
+            var mockOfViewModelFactory = new Mock<IInterviewViewModelFactory>();
+            mockOfViewModelFactory.Setup(x => x.GetNew<CategoricalMultiOptionViewModel<int>>()).Returns(() =>
+                new CategoricalMultiOptionViewModel<int>(userInteraction, Create.ViewModel.AttachmentViewModel()));
+            
             return new CategoricalMultiLinkedToListViewModel(
                 questionState ?? Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(eventRegistry, statefulInterviewRepository, questionnaireRepository),
                 questionnaireRepository,
@@ -161,7 +178,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
-                Create.ViewModel.ThrottlingViewModel());
+                Create.ViewModel.ThrottlingViewModel(),
+                mockOfViewModelFactory.Object);
         }
 
         public SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
@@ -411,7 +429,8 @@ namespace WB.Tests.Abc.TestFactories
                     _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
-                Create.ViewModel.ThrottlingViewModel());
+                Create.ViewModel.ThrottlingViewModel(),
+                Create.Service.InterviewViewModelFactory());
         }
 
         public CategoricalMultiLinkedToRosterTitleViewModel MultiOptionLinkedToRosterTitleViewModel(
@@ -419,12 +438,18 @@ namespace WB.Tests.Abc.TestFactories
             IStatefulInterview interview = null,
             IViewModelEventRegistry eventRegistry = null,
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null,
-            AnsweringViewModel answering = null)
+            AnsweringViewModel answering = null,
+            IUserInteractionService userInteraction = null)
         {
             var statefulInterviewRepository = SetUp.StatefulInterviewRepository(interview ?? Mock.Of<IStatefulInterview>());
 
             var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire ?? Mock.Of<IQuestionnaire>());
 
+            userInteraction = userInteraction ?? Mock.Of<IUserInteractionService>();
+            var mockOfViewModelFactory = new Mock<IInterviewViewModelFactory>();
+            mockOfViewModelFactory.Setup(x => x.GetNew<CategoricalMultiOptionViewModel<RosterVector>>()).Returns(() =>
+                new CategoricalMultiOptionViewModel<RosterVector>(userInteraction, Create.ViewModel.AttachmentViewModel()));
+            
             return new CategoricalMultiLinkedToRosterTitleViewModel(
                 questionState ?? Create.ViewModel.QuestionState<MultipleOptionsLinkedQuestionAnswered>(eventRegistry, statefulInterviewRepository, questionnaireRepository),
                 questionnaireRepository,
@@ -434,7 +459,8 @@ namespace WB.Tests.Abc.TestFactories
                     _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
-                Create.ViewModel.ThrottlingViewModel());
+                Create.ViewModel.ThrottlingViewModel(),
+                mockOfViewModelFactory.Object);
         }
 
         public VibrationViewModel VibrationViewModel(IViewModelEventRegistry eventRegistry = null,
@@ -446,7 +472,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public SingleOptionQuestionOptionViewModel SingleOptionQuestionOptionViewModel(int? value = null)
         {
-            return new SingleOptionQuestionOptionViewModel()
+            return new SingleOptionQuestionOptionViewModel(Create.ViewModel.AttachmentViewModel())
             {
                 Value = value ?? 0
             };
@@ -457,9 +483,14 @@ namespace WB.Tests.Abc.TestFactories
             IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher = null,
             IStatefulInterviewRepository interviewRepository = null)
         {
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(s => s.GetInstance<SingleOptionQuestionOptionViewModel>())
+                .Returns(() => Create.ViewModel.SingleOptionQuestionOptionViewModel());
+
             return new SpecialValuesViewModel(
                 optionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(), 
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                Create.Service.InterviewViewModelFactory(serviceLocator: serviceLocator.Object));
         }
 
         public SideBarCompleteSectionViewModel SideBarCompleteSectionViewModel()
@@ -582,10 +613,10 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public CategoricalYesNoOptionViewModel YesNoQuestionOptionViewModel(IUserInteractionService userInteractionService)
-            => new CategoricalYesNoOptionViewModel(userInteractionService);
+            => new CategoricalYesNoOptionViewModel(userInteractionService, Create.ViewModel.AttachmentViewModel());
 
         public CategoricalMultiOptionViewModel CategoricalMultiOptionViewModel(IUserInteractionService userInteractionService = null)
-            => new CategoricalMultiOptionViewModel(userInteractionService ?? Mock.Of<IUserInteractionService>());
+            => new CategoricalMultiOptionViewModel(userInteractionService ?? Mock.Of<IUserInteractionService>(), Create.ViewModel.AttachmentViewModel());
 
         public CategoricalComboboxAutocompleteViewModel CategoricalComboboxAutocompleteViewModel(
             FilteredOptionsViewModel filteredOptionsViewModel, IQuestionStateViewModel questionState = null) =>
@@ -612,7 +643,9 @@ namespace WB.Tests.Abc.TestFactories
                 principal ?? Mock.Of<IPrincipal>(),
                 questionStateViewModel ?? Create.ViewModel.QuestionState<SingleOptionQuestionAnswered>(interviewRepository: interviewRepository),
                 answering ?? Create.ViewModel.AnsweringViewModel(),
-                instructionViewModel ?? Create.ViewModel.QuestionInstructionViewModel());
+                instructionViewModel ?? Create.ViewModel.QuestionInstructionViewModel(),
+                Create.Service.InterviewViewModelFactory(),
+                Create.ViewModel.AttachmentViewModel());
         }
 
         public TimestampQuestionViewModel TimestampQuestionViewModel(

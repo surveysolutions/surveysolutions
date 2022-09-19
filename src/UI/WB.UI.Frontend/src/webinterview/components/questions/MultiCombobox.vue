@@ -20,6 +20,9 @@
                         </button>
                         <div class="lock"></div>
                     </div>
+                    <wb-attachment :attachmentName="row.attachmentName"
+                        :interviewId="interviewId"
+                        v-if="row.attachmentName" />
                 </div>
 
                 <div class="form-group">
@@ -58,9 +61,11 @@ export default {
         selectedOptions() {
             var self = this
             return map(self.$me.answer, (val) => {
+                const option = find(self.$me.options, (opt) => { return opt.value === val })
                 return {
-                    title: find(self.$me.options, (opt) => { return opt.value === val }).title,
+                    title: option.title,
                     value: val,
+                    attachmentName: option.attachmentName,
                 }
             })
         },

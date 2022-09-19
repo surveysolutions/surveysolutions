@@ -58,6 +58,10 @@
                         </div>
                         <div class="lock"></div>
                     </div>
+                    <wb-attachment :attachmentName="option.attachmentName"
+                        :interviewId="interviewId"
+                        v-if="option.attachmentName" />
+
                 </div>
                 <button
                     type="button"

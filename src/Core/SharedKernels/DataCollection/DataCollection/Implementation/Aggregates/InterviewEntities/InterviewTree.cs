@@ -539,6 +539,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return option.Title;
         }
         
+        public string GetAttachmentNameForQuestionOptionByOptionValue(Guid questionId, decimal answerOptionValue, int? parentValue)
+        {
+            var option = this.Questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue, parentValue);
+            if(Questionnaire.GetQuestionType(questionId) == QuestionType.Numeric && option == null)
+                return null;
+
+            return option.AttachmentName;
+        }
+        
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter) 
             => this.Questionnaire.GetOptionsForQuestion(questionId, parentQuestionValue, filter, null);
 

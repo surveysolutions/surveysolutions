@@ -444,6 +444,7 @@
     "SettingsTurnOffAnonymousAccess": "Turn off anonymous sharing.",
     "Filter": "Filter",
     "OptionsUploadRevert": "Revert changes",
+    "AttachmentName": "Attachment name",
     "EditorShowComments": "Show comments ({{count}})",
     "CollaboratorsDescriptionSettings": "the following users have access to this questionnaire",
     "AccessSettings": "Access",

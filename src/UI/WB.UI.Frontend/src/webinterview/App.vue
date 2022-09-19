@@ -9,6 +9,9 @@
             </section>
             <IdleTimeoutService />
         </div>
+        <portal-target name="body"
+            multiple >
+        </portal-target>
     </Layout>
 </template>
 

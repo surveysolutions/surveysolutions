@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -38,12 +39,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel, 
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            
             FilteredOptionsViewModel filteredOptionsViewModel,
-            ThrottlingViewModel throttlingModel) :
+            ThrottlingViewModel throttlingModel,
+            IInterviewViewModelFactory viewModelFactory,
+            AttachmentViewModel attachment) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
-                eventRegistry: eventRegistry, filteredOptionsViewModel)
+                eventRegistry: eventRegistry, filteredOptionsViewModel, viewModelFactory)
         {
             this.questionnaireRepository = questionnaireRepository ??
                                            throw new ArgumentNullException(nameof(questionnaireRepository));
@@ -51,6 +53,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
             this.throttlingModel = throttlingModel;
             this.throttlingModel.Init(SaveAnswer);
+
+            this.comboboxViewModel = new CategoricalComboboxAutocompleteWithAttachmentViewModel(questionStateViewModel, filteredOptionsViewModel, true, attachment);
         }
 
         public override void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -87,6 +91,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await base.SaveAnswerAsync(optionValue);
         }
 
+        protected override void ChangeAttachment(int? optionValue)
+        {
+            string? attachmentName = null;
+            if (optionValue.HasValue)
+            {
+                var interview = this.interviewRepository.GetOrThrow(this.interviewId);
+                attachmentName = interview.GetAttachmentForEntityOption(Identity, optionValue.Value, this.answerOnParentQuestion);
+            }
+
+            var comboWithAttachment = (CategoricalComboboxAutocompleteWithAttachmentViewModel)this.comboboxViewModel;
+            comboWithAttachment.Attachment.InitAsStatic(interviewId, attachmentName);
+        }
+
+
         public async Task HandleAsync(SingleOptionQuestionAnswered @event)
         {
             if (!this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector)) return;
@@ -104,6 +122,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             await this.RaisePropertyChanged(nameof(Options));
             await this.RaisePropertyChanged(nameof(Children));
+            await this.RaisePropertyChanged("Attachment");
+        }
+        public override async Task HandleAsync(AnswersRemoved @event)
+        {
+            await base.HandleAsync(@event);
+            
+            if (!@event.Questions.Contains(this.parentQuestionIdentity)) return;
+
+            this.Answer = null;
+
+            var comboWithAttachment = (CategoricalComboboxAutocompleteWithAttachmentViewModel)this.comboboxViewModel;
+            comboWithAttachment.Attachment.InitAsStatic(interviewId, null);
         }
 
         private bool RenderAsComboBox
@@ -166,13 +196,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private SingleOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, bool isSelected)
         {
-            var optionViewModel = new SingleOptionQuestionOptionViewModel
-            {
-                Value = model.Value,
-                Title = model.Title,
-                Selected = isSelected,
-                QuestionState = this.QuestionState,
-            };
+            var optionViewModel = viewModelFactory.GetNew<SingleOptionQuestionOptionViewModel>();
+            optionViewModel.Value = model.Value;
+            optionViewModel.Title = model.Title;
+            optionViewModel.Selected = isSelected;
+            optionViewModel.QuestionState = this.QuestionState;
+
+            optionViewModel.Attachment.InitAsStatic(interviewId, model.AttachmentName);
             optionViewModel.BeforeSelected += this.OptionSelected;
             optionViewModel.AnswerRemoved += this.RemoveAnswer;
 
@@ -277,7 +307,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             this.throttlingModel.Dispose();
             this.Options.ForEach(x => x.DisposeIfDisposable());
-
+            
+            this.comboboxViewModel.Dispose();
+            
             base.Dispose();
         }
     }

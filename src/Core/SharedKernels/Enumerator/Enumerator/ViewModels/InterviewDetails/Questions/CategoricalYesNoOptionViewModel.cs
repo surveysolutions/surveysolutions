@@ -3,22 +3,22 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CategoricalYesNoOptionViewModel : CategoricalMultiOptionViewModel<decimal>
     {
-        private readonly IUserInteractionService userInteraction;
 
-        public CategoricalYesNoOptionViewModel(IUserInteractionService userInteraction)
+        public CategoricalYesNoOptionViewModel(IUserInteractionService userInteraction, AttachmentViewModel attachmentViewModel)
+            : base(userInteraction, attachmentViewModel)
         {
-            this.userInteraction = userInteraction;
         }
 
-        public override void Init(IQuestionStateViewModel questionState, string sTitle, decimal value, bool isProtected, Action setAnswer)
+        public override void Init(IQuestionStateViewModel questionState, string sTitle, decimal value, bool isProtected, Action setAnswer, string attachmentName)
         {
             this.setAnswer = setAnswer;
-            base.Init(questionState, sTitle, value, isProtected, SetYes);
+            base.Init(questionState, sTitle, value, isProtected, SetYes, attachmentName);
         }
 
         public void MakeRosterSize() => this.isRosterSizeQuestion = true;

@@ -263,6 +263,7 @@
     "OptionsUploadLimit": "Категории не найдены. Выберите файл разделённый табуляцией. Файл может содержать до {limit} категорий.",
     "OptionsUploadTitle": "Название",
     "OptionsUploadValue": "Значение",
+    "AttachmentName": "Имя файла вложения",
     "SideBarMacroNoName": "Макрос без имени",
     "Upload": "Загрузить",
     "SideBarLookupTableNoName": "таблица без имени",

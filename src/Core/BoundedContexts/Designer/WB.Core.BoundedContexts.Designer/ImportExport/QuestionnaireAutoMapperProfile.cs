@@ -336,14 +336,18 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 .ForMember(a => a.ParentCode, opt => 
                     opt.MapFrom(answer => answer.GetParsedParentValue()))
                 .ForMember(a => a.Text, opt => 
-                    opt.MapFrom(answer => answer.AnswerText));
+                    opt.MapFrom(answer => answer.AnswerText))
+                .ForMember(answer=> answer.AttachmentName,opt =>
+                    opt.MapFrom(x=>x.AttachmentName));
             this.CreateMap<Models.Answer, Answer>()
                 .ForMember(a => a.AnswerValue, opt => 
                     opt.MapFrom(x => x.Code.ToString()))
                 .ForMember(a => a.ParentValue, opt => 
                     opt.MapFrom(answer => answer.ParentCode.ToString()))
                 .ForMember(a => a.AnswerText, opt => 
-                    opt.MapFrom(answer => answer.Text));
+                    opt.MapFrom(answer => answer.Text))
+                .ForMember(a => a.AttachmentName, opt => 
+                    opt.MapFrom(answer => answer.AttachmentName));
             
             this.CreateMap<Answer, Models.SpecialValue>()
                 .ForMember(a => a.Code, opt => 
