@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 string.Format(VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb, MaxAttachmentSizeInMb)),
             Warning(TotalAttachmentsSizeIsMoreThan50Mb, "WB0214",
                 string.Format(VerificationMessages.WB0214_TotalAttachmentsSizeIsMoreThan50Mb, MaxAttachmentsSizeInMb)),
-            Warning(UnusedAttachments, "WB0215", VerificationMessages.WB0215_UnusedAttachments),
+            //Warning(UnusedAttachments, "WB0215", VerificationMessages.WB0215_UnusedAttachments),
         };
 
         private bool AttachmentHasInvalidName(Attachment attachment, MultiLanguageQuestionnaireDocument questionnaire)
@@ -75,24 +75,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             => questionnaire.Attachments.Any(x => x.AttachmentId == attachmentSize.AttachmentId) &&
                attachmentSize.Size > 5 * 1024 * 1024;
 
-        private static bool UnusedAttachments(Attachment attachment, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            if (questionnaire.Find<IStaticText>(t => t.AttachmentName == attachment.Name).Any())
-                return false;
-
-            if (questionnaire.Categories.Any(t => t.AttachmentName == attachment.Name))
-                return false;
-
-            if (questionnaire.Categories.Any(t => t.AttachmentName == attachment.Name))
-                return false;
-
-            if (questionnaire.Find<ICategoricalQuestion>(t => t.Answers.Any(x => x.AttachmentName == attachment.Name)).Any())
-                return false;
-
-            return true;
-        }
-
-    private bool TotalAttachmentsSizeIsMoreThan50Mb(MultiLanguageQuestionnaireDocument questionnaire)
+        private bool TotalAttachmentsSizeIsMoreThan50Mb(MultiLanguageQuestionnaireDocument questionnaire)
             => this.attachmentService
                    .GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
                    .Sum(x => x.Size) > 50 * 1024 * 1024;

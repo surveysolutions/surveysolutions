@@ -219,7 +219,9 @@ namespace WB.Tests.Unit.Designer
 
         public static IDesignerEngineVersionService DesignerEngineVersionService()
         {
-            return new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), Mock.Of<IDesignerTranslationService>());
+            return new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), 
+                Mock.Of<IDesignerTranslationService>(), 
+                Mock.Of<ICategoriesService>());
         }
 
         public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
@@ -1650,7 +1652,8 @@ namespace WB.Tests.Unit.Designer
                 expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object,
                 new DesignerEngineVersionService(
                     Mock.Of<IAttachmentService>(a => a.GetContent(It.IsAny<string>()) == new AttachmentContent(){ContentType = "image/png"})
-                    , Mock.Of<IDesignerTranslationService>()),
+                    , Mock.Of<IDesignerTranslationService>(),
+                    Mock.Of<ICategoriesService>()),
                 macrosSubstitutionServiceImp,
                 lookupTableService ?? lookupTableServiceMock.Object,
                 attachmentService ?? attachmentServiceMock,
