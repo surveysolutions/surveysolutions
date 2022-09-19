@@ -95,6 +95,15 @@
             { "const": "Multipoint", "description": "Multipoint" }
           ],
           "default": "Polygon"
+        },
+        "GeometryInputMode": {
+          "type": "string",
+          "oneOf": [
+            { "const": "Manual",    "description": "Manual" },
+            { "const": "Automatic",   "description": "Automatic" },
+            { "const": "Semiautomatic",      "description": "Semiautomatic" }
+          ],
+          "default": "Manual"
         }
       },
       "additionalProperties": false,

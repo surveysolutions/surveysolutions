@@ -107,6 +107,9 @@
                 $scope.activeQuestion.defaultDate = question.defaultDate;
                 $scope.activeQuestion.categoricalMultiKinds = dictionnaires.categoricalMultiKinds;
 
+                $scope.activeQuestion.geometryInputModeOptions = question.geometryInputModeOptions;
+                $scope.activeQuestion.geometryInputMode = question.geometryInputMode;
+
                 var options = question.options || [];  
                 _.each(options, function(option) {
                     option.id = utilityService.guid();
@@ -420,9 +423,14 @@
                 if (type === "Area") {
                     if($scope.activeQuestion.geometryType === null)
                         $scope.activeQuestion.geometryType = $scope.activeQuestion.geometryTypeOptions[0].value;
+
+                    if($scope.activeQuestion.geometryInputMode === null)
+                        $scope.activeQuestion.geometryInputMode = $scope.activeQuestion.geometryInputModeOptions[0].value;
                 }
-                else
+                else {
                     $scope.activeQuestion.geometryType = null;
+                    $scope.activeQuestion.geometryInputMode = null;
+                }
 
                 markFormAsChanged();
             };
@@ -582,7 +590,12 @@
                 markFormAsChanged();
             };
 
+            $scope.changeGeometryInputMode = function (mode) {
+                $scope.activeQuestion.geometryInputMode = mode;
 
+                markFormAsChanged();
+            };
+            
             $scope.getQuestionScopes = function (currentQuestion) {
                 if (!currentQuestion)
                     return [];

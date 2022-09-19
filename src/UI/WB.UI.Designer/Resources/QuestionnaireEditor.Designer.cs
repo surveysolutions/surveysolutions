@@ -1023,6 +1023,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Input mode.
+        /// </summary>
+        public static string GeometryInputMode {
+            get {
+                return ResourceManager.GetString("GeometryInputMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Geometry type.
         /// </summary>
         public static string GeometryType {

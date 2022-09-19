@@ -255,7 +255,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion,
+                Version = 33,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -273,6 +273,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                 .Any(x => !string.IsNullOrWhiteSpace(x.AttachmentName)));
                         },
                         description: "Attachment name is used in options or categories"
+                    ),
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion,
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire =>
+                        {
+                            return questionnaire.Find<AreaQuestion>(x => 
+                                x.Properties?.GeometryInputMode != null 
+                                && x.Properties?.GeometryInputMode != GeometryInputMode.Manual).Any();
+                        },
+                        description: "Geography question non manual input mode"
                     ),
                 }
             },

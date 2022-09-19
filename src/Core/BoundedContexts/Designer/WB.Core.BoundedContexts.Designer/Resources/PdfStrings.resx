@@ -272,6 +272,12 @@
   </data>
   <data name="SpecialValues" xml:space="preserve">
     <value>Special values</value>
+  </data>  
+  <data name="GeographyType" xml:space="preserve">
+    <value>Geography type</value>
+  </data>
+  <data name="GeographyInputMode" xml:space="preserve">
+    <value>Geography input mode</value>
   </data>
   <data name="StaticText" xml:space="preserve">
     <value>Static text</value>

@@ -22,6 +22,8 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
 
         public GeometryType? GeometryType { get; set; }
 
+        public GeometryInputMode? GeometryInputMode { get; set; }
+
         // for date question
         public DateTime? DefaultDate { get; set; }
     }

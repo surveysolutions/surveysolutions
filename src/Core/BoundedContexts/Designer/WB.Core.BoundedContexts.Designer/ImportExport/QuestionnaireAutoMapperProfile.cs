@@ -17,6 +17,7 @@ using DateTimeQuestion = Main.Core.Entities.SubEntities.Question.DateTimeQuestio
 using Group = Main.Core.Entities.SubEntities.Group;
 using Documents = WB.Core.SharedKernels.SurveySolutions.Documents;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
+using GeometryInputMode = WB.Core.SharedKernels.Questionnaire.Documents.GeometryInputMode;
 using GpsCoordinateQuestion = Main.Core.Entities.SubEntities.Question.GpsCoordinateQuestion;
 using IQuestion = Main.Core.Entities.SubEntities.IQuestion;
 using IQuestionnaireEntity = WB.Core.BoundedContexts.Designer.ImportExport.Models.IQuestionnaireEntity;
@@ -225,10 +226,13 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             
             this.CreateMap<AreaQuestion, Models.Question.AreaQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
-                .ForMember(s => s.GeometryType, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryType : GeometryType.Point));
+                .ForMember(s => s.GeometryType, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryType : GeometryType.Point))
+                .ForMember(s => s.GeometryInputMode, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryInputMode : GeometryInputMode.Manual));
+            
             this.CreateMap<Models.Question.AreaQuestion, AreaQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .AfterMap((s, d) => d.Properties!.GeometryType = (GeometryType?)(s.GeometryType ?? null));
+                .AfterMap((s, d) => d.Properties!.GeometryType = (GeometryType?)(s.GeometryType ?? null))
+                .AfterMap((s, d) => d.Properties!.GeometryInputMode = (GeometryInputMode?)(s.GeometryInputMode ?? null));
 
             this.CreateMap<AudioQuestion, Models.Question.AudioQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();

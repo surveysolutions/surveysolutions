@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             bool useFormatting = false,
             bool hideInstructions = false,
             GeometryType geometryType = 0,
+            GeometryInputMode geometryInputMode = 0,
             bool isTimestamp = false,
             string? optionsFilterExpression = null,  string? variableName = null, 
             string? variableLabel = null, string? title = null,  
@@ -43,7 +44,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             int? maxAllowedAnswers = null,
             int? showAsListThreshold = null, Guid[]? parentGroupsIds = null, Guid[]? rosterScopeIds = null,
             string? categoriesId = null, string? mask = null, int? countOfDecimalPlaces = null, int? maxAnswerCount = null, 
-            List<ValidationCondition>? validationConditions = null, CategoricalOption[]? options = null, bool? areAnswersOrdered = null)
+            List<ValidationCondition>? validationConditions = null, CategoricalOption[]? options = null, bool? areAnswersOrdered = null,
+            QuestionnaireInfoFactory.SelectOption[]? geometryInputModeOptions = null)
         {
 
             this.SourceOfLinkedEntities = sourceOfLinkedEntities ?? new List<DropdownEntityView>();
@@ -52,6 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.Options = options ?? new CategoricalOption[0];
             this.AllQuestionScopeOptions = allQuestionScopeOptions ?? new QuestionnaireInfoFactory.SelectOption[0];
             this.GeometryTypeOptions = geometryTypeOptions ?? new QuestionnaireInfoFactory.SelectOption[0];
+            this.GeometryInputModeOptions = geometryInputModeOptions ?? new QuestionnaireInfoFactory.SelectOption[0];
             this.Breadcrumbs = breadcrumbs ?? new Breadcrumb[0];
             QualityOptions = qualityOptions?? new List<QualityOption>();
             Id = id;
@@ -94,6 +97,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             ShowAsList = showAsList;
             ShowAsListThreshold = showAsListThreshold;
             CategoriesId = categoriesId;
+            
+            GeometryInputMode = geometryInputMode;
         }
 
         public Guid Id { get; set; }
@@ -151,5 +156,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public bool? ShowAsList { get; set; }
         public int? ShowAsListThreshold { get; set; }
         public string? CategoriesId { get; set; }
+        public QuestionnaireInfoFactory.SelectOption[] GeometryInputModeOptions { get; set; }
+
+        public GeometryInputMode GeometryInputMode { get; set; }
     }
 }

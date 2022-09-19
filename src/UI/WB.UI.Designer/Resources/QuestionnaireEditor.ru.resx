@@ -1189,7 +1189,10 @@
     <value>Тип геометрии</value>
     <comment>Тип геометрии</comment>
   </data>
-  <data name="CollaboratorsSettings" xml:space="preserve">
+  <data name="GeometryInputMode" xml:space="preserve">
+    <value>Режим ввода</value>
+  </data>
+    <data name="CollaboratorsSettings" xml:space="preserve">
     <value>Совместная работа</value>
   </data>
   <data name="CollaboratorsDescriptionSettings" xml:space="preserve">

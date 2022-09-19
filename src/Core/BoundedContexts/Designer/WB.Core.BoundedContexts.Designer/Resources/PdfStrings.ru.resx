@@ -381,6 +381,13 @@
   <data name="SpecialValues" xml:space="preserve">
     <value>Специальные значения</value>
   </data>
+  <data name="GeographyType" xml:space="preserve">
+    <value>Тип географии</value>
+  </data>
+    <data name="GeographyInputMode" xml:space="preserve">
+    <value>Режим ввода географии</value>
+  </data>
+
   <data name="SideBarMetadataBasicInfo" xml:space="preserve">
     <value>Базовая информация</value>
   </data>

@@ -818,6 +818,9 @@
   <data name="GeometryType" xml:space="preserve">
     <value>Geometry type</value>
   </data>
+  <data name="GeometryInputMode" xml:space="preserve">
+    <value>Input mode</value>
+  </data>
   <data name="QuestionDecimalPlaces" xml:space="preserve">
     <value>Number of decimal places</value>
   </data>
