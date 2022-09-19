@@ -35,14 +35,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             userInteractionService = new Mock<IUserInteractionService>();
             userInteractionService
-                .Setup(x => x.ConfirmAsync(It.IsAny<string>(), "", null, null, true))
+                .Setup(x => x.ConfirmAsync(It.IsAny<string>(), It.IsAny<string>(), null, null, true))
                 .ReturnsAsync(true);
 
             viewModel = CreateViewModel(
                 questionnaireStorage: questionnaireStorage,
                 interviewRepository: interviewRepository,
                 filteredOptionsViewModel: filteredOptionsViewModel,
-                userInteractionService: userInteractionService.Object);
+                userInteraction: userInteractionService.Object);
 
             interview.AnswerMultipleOptionsQuestion(Id.gF, Id.g1, RosterVector.Empty, DateTimeOffset.UtcNow, new [] { 1, 2 });
             

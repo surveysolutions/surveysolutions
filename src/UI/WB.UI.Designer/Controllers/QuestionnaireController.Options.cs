@@ -31,15 +31,19 @@ namespace WB.UI.Designer.Controllers
             if (categoriesView == null)
                 return NotFound();
 
+            var questionnaireId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
             var categories =
-                this.categoriesService.GetCategoriesById(id.QuestionnaireId, categoriesId).
+                this.categoriesService.GetCategoriesById(questionnaireId, categoriesId).
                     Select(
                         option => new QuestionnaireCategoricalOption
                         {
                             Value = option.Id,
                             ParentValue = option.ParentId != null ? (int)option.ParentId.Value : (int?)null,
-                            Title = option.Text
+                            Title = option.Text,
+                            AttachmentName = option.AttachmentName
                         });
+
+            var isReadonly = IsReadOnly(id);
 
             return new EditOptionsViewModel
             (
@@ -48,8 +52,25 @@ namespace WB.UI.Designer.Controllers
                 categoriesName: categoriesView.Name,
                 options: categories.ToList(),
                 isCascading: false,
-                isCategories: true
+                isCategories: true,
+                isReadonly: isReadonly
             );
+        }
+
+        private bool IsReadOnly(QuestionnaireRevision questionnaireRevision)
+        {
+            if (questionnaireRevision.Revision != null)
+                return true;
+            
+            if (questionnaireRevision.OriginalQuestionnaireId.HasValue)
+                return true;
+
+            var userId = User.GetIdOrNull();
+            if (!userId.HasValue)
+                return true;
+
+            var hasUserAccessToEdit = questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(questionnaireRevision.OriginalQuestionnaireId ?? questionnaireRevision.QuestionnaireId, userId.Value);
+            return !hasUserAccessToEdit;
         }
 
         public EditOptionsViewModel GetOptions(QuestionnaireRevision id, Guid questionId, bool isCascading)
@@ -62,9 +83,12 @@ namespace WB.UI.Designer.Controllers
                               {
                                   Value = option.Value != null ? (int)option.Value : throw new InvalidOperationException("Option Value must be not null."),
                                   ParentValue = option.ParentValue != null ? (int)option.ParentValue.Value : (int?)null,
-                                  Title = option.Title
+                                  Title = option.Title,
+                                  AttachmentName = option.AttachmentName
                               })
                 : new QuestionnaireCategoricalOption[0];
+            
+            var isReadonly = IsReadOnly(id);
 
             return new EditOptionsViewModel
             (
@@ -72,7 +96,8 @@ namespace WB.UI.Designer.Controllers
                 questionId: questionId,
                 questionTitle: editQuestionView?.Title,
                 options: options.ToList(),
-                isCascading: isCascading
+                isCascading: isCascading,
+                isReadonly: isReadonly
             )
             {
                 CascadeFromQuestionId = editQuestionView?.CascadeFromQuestionId
@@ -113,7 +138,9 @@ namespace WB.UI.Designer.Controllers
                         {
                             ParentValue = c.ParentValue,
                             Title = c.Title,
-                            Value = c.Value
+                            Value = c.Value,
+                            AttachmentName = c.AttachmentName
+                            
                         }).ToArray()
                     };
                 }
@@ -186,7 +213,8 @@ namespace WB.UI.Designer.Controllers
                             Value = int.Parse(x.Id!),
                             ParentValue = string.IsNullOrEmpty(x.ParentId)
                                 ? (int?)null
-                                : int.Parse(x.ParentId)
+                                : int.Parse(x.ParentId),
+                            AttachmentName = x.AttachmentName
                         })
                         .ToArray()
                 };
@@ -218,6 +246,8 @@ namespace WB.UI.Designer.Controllers
             public int Value { set; get; }
             public int? ParentValue { set; get; }
             public string Title { set; get; } = String.Empty;
+
+            public string? AttachmentName { get; set; }
         }
 
         public class UpdateCategoriesModel
@@ -253,7 +283,8 @@ namespace WB.UI.Designer.Controllers
                             Id = x.Value.ToString(),
                             Text = x.Title,
                             ParentId = x.ParentValue == null ? "" : x.ParentValue.ToString(),
-                            RowId = i
+                            RowId = i,
+                            AttachmentName = x.AttachmentName
                         }).ToList());
                 }
                 catch (Exception e)
@@ -290,7 +321,8 @@ namespace WB.UI.Designer.Controllers
                 {
                     Value = x.Value,
                     ParentValue = x.ParentValue,
-                    Title = x.Title
+                    Title = x.Title,
+                    AttachmentName = x.AttachmentName
                 }).ToArray();
 
                 var command = isCascading
@@ -345,7 +377,7 @@ namespace WB.UI.Designer.Controllers
             return commandResult;
         }
 
-        public IActionResult ExportLookupTable(Guid id, Guid lookupTableId)
+        public IActionResult ExportLookupTable(QuestionnaireRevision id, Guid lookupTableId)
         {
             var lookupTableContentFile = this.lookupTableService.GetLookupTableContentFile(id, lookupTableId);
             if (lookupTableContentFile == null)
@@ -358,7 +390,7 @@ namespace WB.UI.Designer.Controllers
         {
             if (isCategory)
             {
-                var categoriesFile = this.categoriesService.GetAsExcelFile(id.QuestionnaireId, entityId);
+                var categoriesFile = this.categoriesService.GetAsExcelFile(id, entityId);
 
                 if (categoriesFile?.Content == null) return NotFound();
 
@@ -391,10 +423,12 @@ namespace WB.UI.Designer.Controllers
                 string? questionTitle = null,
                 bool? isCascading = null,
                 bool? isCategories = null,
-                string? categoriesName = null)
+                string? categoriesName = null,
+                bool? isReadonly = true)
             {
                 if (questionId == null && categoriesId == null)
-                    throw new InvalidOperationException($"{nameof(categoriesId)} or {nameof(questionId)} should not be empty");
+                    throw new InvalidOperationException(
+                        $"{nameof(categoriesId)} or {nameof(questionId)} should not be empty");
 
                 QuestionnaireId = questionnaireId;
                 if (questionId != null)
@@ -409,6 +443,7 @@ namespace WB.UI.Designer.Controllers
                 QuestionTitle = questionTitle;
                 IsCascading = isCascading ?? false;
                 IsCategories = isCategories ?? false;
+                IsReadonly = isReadonly ?? true;
             }
 
             public string QuestionnaireId { get; set; }
@@ -423,6 +458,7 @@ namespace WB.UI.Designer.Controllers
 
             public bool IsCategories { get; set; }
             public string? CascadeFromQuestionId { get; set; }
+            public bool IsReadonly { get; set; }
         }
     }
 }

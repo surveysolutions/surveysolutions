@@ -153,7 +153,6 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             dbConnection.Close();
         }
 
-
         static PostgresEventStore eventStore;
         static NpgsqlConnection dbConnection;
         private NpgsqlTransaction transaction;

@@ -15,6 +15,8 @@ namespace Main.Core.Entities.SubEntities
         public decimal? AnswerCode { get; set; }
 
         public decimal? ParentCode { get; set; }
+        
+        public string? AttachmentName { get; set; }
 
         public Answer Clone()
         {
@@ -44,12 +46,13 @@ namespace Main.Core.Entities.SubEntities
 
         public override bool Equals(object obj)
         {
-            return obj is Answer answer &&
-                   AnswerText == answer.AnswerText &&
-                   EqualityComparer<decimal?>.Default.Equals(
+            return obj is Answer answer 
+                   && EqualityComparer<decimal?>.Default.Equals(
                        HasValue() ? GetParsedValue() : null, 
-                       answer.HasValue() ? answer.GetParsedValue() : null) &&
-                   EqualityComparer<decimal?>.Default.Equals(GetParsedParentValue(), answer.GetParsedParentValue());
+                       answer.HasValue() ? answer.GetParsedValue() : null) 
+                   && EqualityComparer<decimal?>.Default.Equals(GetParsedParentValue(), answer.GetParsedParentValue()) 
+                   && AnswerText == answer.AnswerText 
+                   && AttachmentName == answer.AttachmentName;
         }
 
         public override int GetHashCode()
@@ -58,6 +61,7 @@ namespace Main.Core.Entities.SubEntities
             hashCode = hashCode * -1521134295 + EqualityComparer<string?>.Default.GetHashCode(AnswerText);
             hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(GetParsedValue());
             hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(GetParsedParentValue());
+            hashCode = hashCode * -1521134295 + EqualityComparer<string?>.Default.GetHashCode(AttachmentName);
             return hashCode;
         }
     }

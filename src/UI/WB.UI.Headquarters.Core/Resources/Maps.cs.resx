@@ -118,6 +118,54 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Jméno</value>
+    <value>Název</value>
+  </data>
+  <data name="FileLoadingNotTsvError" xml:space="preserve">
+    <value>Vyskytla se chyba. Soubor není .tab</value>
+  </data>
+  <data name="Levels" xml:space="preserve">
+    <value>Úrovně</value>
+  </data>
+  <data name="MapEngineIsNotInitialized" xml:space="preserve">
+    <value>Komponent mapy nebyl inicializován. Kontaktujte administrátora.</value>
+  </data>
+  <data name="MapLoadingInvalidFile" xml:space="preserve">
+    <value>Soubor '{0}' obsahuje data, která systém nemůže zpracovat. Chyba: {1}</value>
+  </data>
+  <data name="MapLoadingInvalidFilesError" xml:space="preserve">
+    <value>Vyskytla se chyba. Následující soubory byly ignorovány:</value>
+  </data>
+  <data name="MapLoadingNoMapsInArchive" xml:space="preserve">
+    <value>Vyskytla se chyba. Archiv neobsahuje mapové soubory</value>
+  </data>
+  <data name="MapLoadingNotZipError" xml:space="preserve">
+    <value>Vyskytla se chyba. Soubor není archiv .zip</value>
+  </data>
+  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve">
+    <value>Vyskytla se chyba. Archiv obsahuje nejen mapové soubory</value>
+  </data>
+  <data name="MappingsLoadingError" xml:space="preserve">
+    <value>Při načítání odkazů map došlo k chybě.</value>
+  </data>
+  <data name="MapsLoadingError" xml:space="preserve">
+    <value>Při načítání mapy došlo k chybě.</value>
+  </data>
+  <data name="MaxScale" xml:space="preserve">
+    <value>Maximální měřítko</value>
+  </data>
+  <data name="MinScale" xml:space="preserve">
+    <value>Minimální měřítko</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Velikost (MB)</value>
+  </data>
+  <data name="UpdateDate" xml:space="preserve">
+    <value>Importováno</value>
+  </data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve">
+    <value>propojení pro {0} mapy byly zpracovány s {1} neplatný</value>
+  </data>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve">
+    <value>{0} map bylo zpracováno s {1} neplatných mapových souborů</value>
   </data>
 </root>

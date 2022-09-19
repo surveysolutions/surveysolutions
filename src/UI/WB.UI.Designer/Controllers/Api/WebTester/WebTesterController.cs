@@ -200,7 +200,8 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                     CategoriesId = x.CategoriesId,
                     Id = x.Value,
                     ParentId = x.ParentId,
-                    Text = x.Text
+                    Text = x.Text,
+                    AttachmentName = x.AttachmentName
                 })
                 .ToArray();
 

@@ -2,12 +2,12 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using Plugin.Permissions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using Xamarin.Essentials;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
@@ -36,8 +36,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task StartAudioRecordingAsync(Guid interviewId)
         {
-            await this.permissions.AssureHasPermissionOrThrow<MicrophonePermission>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.Microphone>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
 
             audioAuditService.StartAuditRecording($"{interviewId.FormatGuid()}-{fileNamePrefix}");
         }

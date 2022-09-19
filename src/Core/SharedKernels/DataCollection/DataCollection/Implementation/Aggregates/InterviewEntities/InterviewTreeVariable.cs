@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Net;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
@@ -57,5 +58,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return AnswerUtils.AnswerToString(Value, isTimestamp: false);
         }
+        
+        public string GetValueAsStringBrowserReady()
+        {
+            var valueAsString = GetValueAsString();
+            return valueAsString == null? null : WebUtility.HtmlEncode(valueAsString);
+        }
+        
     }
 }

@@ -2,12 +2,10 @@
 using Android.Media;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using Xamarin.Essentials;
-using StoragePermission = Plugin.Permissions.StoragePermission;
 using Stream = System.IO.Stream;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
@@ -15,9 +13,9 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
     internal class PictureChooser : IPictureChooser
     {
         private readonly IMedia media;
-        private readonly IPermissions permissions;
+        private readonly IPermissionsService permissions;
 
-        public PictureChooser(IMedia media, IPermissions permissions)
+        public PictureChooser(IMedia media, IPermissionsService permissions)
         {
             this.media = media;
             this.permissions = permissions;
@@ -25,8 +23,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public async Task<Stream> TakePicture()
         {
-            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<CameraPermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>().ConfigureAwait(false);
             await this.media.Initialize().ConfigureAwait(false);
             var storeCameraMediaOptions = new StoreCameraMediaOptions()
             {
@@ -53,8 +51,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public async Task<Stream> ChoosePictureGallery()
         {
-            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<CameraPermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>().ConfigureAwait(false);
             await this.media.Initialize().ConfigureAwait(false);
 
             var photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);

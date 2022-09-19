@@ -104,11 +104,11 @@ namespace WB.UI.Shared.Extensions.Services
             switch (existingMap.MapType)
             {
                 case MapType.OnlineImagery:
-                    return new Basemap(BasemapStyle.ArcGISImageryStandard);
+                    return Basemap.CreateImagery();
                 case MapType.OnlineImageryWithLabels:
-                    return new Basemap(BasemapStyle.ArcGISImagery);
+                    return Basemap.CreateImageryWithLabels();
                 case MapType.OnlineOpenStreetMap:
-                    return new Basemap(BasemapStyle.OSMStandard);
+                    return Basemap.CreateOpenStreetMap();
                 case MapType.LocalFile:
                     return await GetLocalMap(existingMap);
                 default:

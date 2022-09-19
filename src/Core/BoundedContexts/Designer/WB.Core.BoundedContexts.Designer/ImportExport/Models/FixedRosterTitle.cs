@@ -2,7 +2,7 @@
 {
     public class FixedRosterTitle
     {
-        public decimal Value { set; get; }
+        public int? Value { set; get; }
         public string? Title { set; get; }
     }
 }

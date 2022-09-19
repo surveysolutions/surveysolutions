@@ -88,6 +88,8 @@ export default {
             const fd = new FormData()
             fd.append('file', this.$refs.uploader.files[0])
 
+            var self = this
+
             $.ajax({
                 url: this.$config.model.uploadUrl,
                 xhr() {
@@ -103,6 +105,7 @@ export default {
                 type: 'POST',
                 success: function(data) {
                     statusupdater(data)
+                    self.$refs.uploader.value = ''
                 },
                 error : function(error){
                     statusupdater(uploadingErrorMessage)

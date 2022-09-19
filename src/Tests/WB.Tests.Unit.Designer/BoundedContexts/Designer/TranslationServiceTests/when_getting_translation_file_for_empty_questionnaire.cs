@@ -4,6 +4,8 @@ using ClosedXML.Excel;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -19,12 +21,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             var questionnaireId = Id.g1;
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(Create.QuestionnaireDocument(questionnaireId, title: "To be translated"));
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(Create.QuestionnaireDocument(questionnaireId, title: "To be translated")));
 
             var service = Create.TranslationsService(questionnaireStorage: questionnaires.Object);
 
-            TranslationFile excelFile = service.GetAsExcelFile(questionnaireId, Id.gD);
+            TranslationFile excelFile = service.GetAsExcelFile(new QuestionnaireRevision(questionnaireId), Id.gD);
             
             IXLWorksheet workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile)).Worksheets.First();
             

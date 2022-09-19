@@ -149,6 +149,10 @@ namespace WB.UI.Designer.Controllers
             if(id == null)
                 return this.RedirectToAction("Index", "QuestionnaireList");
 
+            var questionnaire = questionnaireViewFactory.Load(id);
+            if (questionnaire == null || questionnaire.Source.IsDeleted)
+                return NotFound();
+
             if (ShouldRedirectToOriginalId(id))
             {
                 return RedirectToAction("Details", new RouteValueDictionary
@@ -185,7 +189,7 @@ namespace WB.UI.Designer.Controllers
             if (questionnaireListItem == null)
                 return false;
 
-            if (questionnaireListItem.CreatedBy == userId)
+            if (questionnaireListItem.OwnerId == userId)
                 return true;
 
             if (questionnaireListItem.IsPublic)
@@ -336,7 +340,7 @@ namespace WB.UI.Designer.Controllers
         {
             var historyReferenceId = commandId;
 
-            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId());
+            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id, this.User.GetId());
             if (!hasAccess)
             {
                 this.Error(Resources.QuestionnaireController.ForbiddenRevert);
@@ -356,7 +360,7 @@ namespace WB.UI.Designer.Controllers
         public async Task<ActionResult<bool>> SaveComment(Guid id, Guid historyItemId, string comment)
         {
             bool hasAccess = this.User.IsAdmin() 
-                || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId());
+                || this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id, this.User.GetId());
 
             if (!hasAccess)
                 return false;

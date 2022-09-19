@@ -7,8 +7,6 @@ using Humanizer;
 using Humanizer.Localisation;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -20,6 +18,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using Xamarin.Essentials;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -209,8 +208,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                await this.permissions.AssureHasPermissionOrThrow<MicrophonePermission>().ConfigureAwait(false);
-                await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+                await this.permissions.AssureHasPermissionOrThrow<Permissions.Microphone>().ConfigureAwait(false);
+                await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
 
                 this.audioDialog.OnRecorded += this.AudioDialog_OnRecorded;
                 this.audioDialog.OnCancelRecording += AudioDialog_OnCancel;
@@ -218,12 +217,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await InvokeOnMainThreadAsync(() =>
                     this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText));
             }
-            catch (MissingPermissionsException e) when (e.PermissionType == typeof(MicrophonePermission))
+            catch (MissingPermissionsException e) when (e.PermissionType == typeof(Permissions.Microphone))
             {
                 await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                     .MissingPermissions_Microphone);
             }
-            catch (MissingPermissionsException e) when (e.PermissionType == typeof(StoragePermission))
+            catch (MissingPermissionsException e) when (e.PermissionType == typeof(Permissions.StorageWrite))
             {
                 await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                     .MissingPermissions_Storage);

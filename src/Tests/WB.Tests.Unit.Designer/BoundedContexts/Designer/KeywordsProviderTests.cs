@@ -140,6 +140,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         [TestCase("self")]
         [TestCase("state")]
         [TestCase("quest")]
+        [TestCase("questionnaire")]
         [TestCase("optioncode")]
         [TestCase("complete")]
         [TestCase("cover")]

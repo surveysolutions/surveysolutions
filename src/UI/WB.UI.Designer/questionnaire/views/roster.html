@@ -217,10 +217,10 @@
                     <div class="table-row fixed-roster-titles-editor" ng-repeat="title in activeRoster.fixedRosterTitles">
                         <div class="column-2">
                             <input type="number" min="-2147483648" max="2147483647" ng-model="title.value" name="title_value_{{$index}}" ng-pattern="/^([-+]?\d+)$/"
-                                   ng-class="{'has-error': !editRosterForm.title_value_{{$index}}.$valid}" ng-keypress="onKeyPressInOptions($event)" class="form-control fixed-roster-value-editor">
+                                   ng-class="{'has-error': !editRosterForm.title_value_{{$index}}.$valid}" ng-keypress="onKeyPressInOptions($event)" class="form-control fixed-roster-value-editor border-right">
                         </div>
                         <div class="column-3">
-                            <input ng-attr-id="{{'fixed-item-' + $index}}" type="text" ng-model="title.title" ng-keypress="onKeyPressInOptions($event)" class="form-control">
+                            <input ng-attr-id="{{'fixed-item-' + $index}}" type="text" ng-model="title.title" ng-keypress="onKeyPressInOptions($event)" class="form-control border-right">
                         </div>
                         <div class="column-4">
                             <a href class="btn" tabindex="-1" ng:click="removeFixedTitle($index)"></a>

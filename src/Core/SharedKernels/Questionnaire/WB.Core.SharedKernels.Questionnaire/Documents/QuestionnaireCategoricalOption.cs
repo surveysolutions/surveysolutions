@@ -9,5 +9,7 @@ namespace Main.Core.Entities.SubEntities
         public int Value { get; set; }
         public int? ParentValue { get; set; }
         public int[]? ValueWithParentValues { get; set; }
+        
+        public string? AttachmentName { get; set; }
     }
 }

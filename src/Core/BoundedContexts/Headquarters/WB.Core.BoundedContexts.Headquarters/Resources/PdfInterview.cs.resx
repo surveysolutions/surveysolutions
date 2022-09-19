@@ -153,4 +153,70 @@
   <data name="YesNo" xml:space="preserve">
     <value>Ano / Ne</value>
   </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Úvod</value>
+  </data>
+  <data name="Generated" xml:space="preserve">
+    <value>Vygenerováno</value>
+  </data>
+  <data name="GeneratedAt" xml:space="preserve">
+    <value>na {0}</value>
+  </data>
+  <data name="GeneratedBy" xml:space="preserve">
+    <value>Generováno {0}</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>ID rozhovoru</value>
+  </data>
+  <data name="InterviewStatisticsAnswered" xml:space="preserve">
+    <value>Zdpovězených otázek - {0}</value>
+  </data>
+  <data name="InterviewStatisticsCommented" xml:space="preserve">
+    <value>Otázek s poznámkou - {0}</value>
+  </data>
+  <data name="InterviewStatisticsErrors" xml:space="preserve">
+    <value>Chyb - {0}</value>
+  </data>
+  <data name="InterviewStatisticsSections" xml:space="preserve">
+    <value>Sekcí - {0}</value>
+  </data>
+  <data name="InterviewStatisticsUnanswered" xml:space="preserve">
+    <value>Nezodpovězených otázek - {0}</value>
+  </data>
+  <data name="InterviewStatisticsWarnings" xml:space="preserve">
+    <value>Upozornění - {0}</value>
+  </data>
+  <data name="InterviewTranscript" xml:space="preserve">
+    <value>Přepis rozhovoru</value>
+  </data>
+  <data name="InterviewVolume" xml:space="preserve">
+    <value>Objem rozhovoru</value>
+  </data>
+  <data name="NotAnswered" xml:space="preserve">
+    <value>Nezodpovězeno</value>
+  </data>
+  <data name="NotCalculated" xml:space="preserve">
+    <value>Bez hodnoty</value>
+  </data>
+  <data name="PageOf" xml:space="preserve">
+    <value> z</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Typ dotazníku</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>Rozhovor zahájen</value>
+  </data>
+  <data name="SurveySolutions" xml:space="preserve">
+    <value>Survey Solutions</value>
+  </data>
+  <data name="TableOfContent" xml:space="preserve">
+    <value>Obsah</value>
+  </data>
+  <data name="UserRoles_ApiUser" xml:space="preserve">
+    <value>ApiUživatel</value>
+  </data>
+  <data name="UserRoles_Observer" xml:space="preserve">
+    <value>Pozorovatel</value>
+  </data>
 </root>

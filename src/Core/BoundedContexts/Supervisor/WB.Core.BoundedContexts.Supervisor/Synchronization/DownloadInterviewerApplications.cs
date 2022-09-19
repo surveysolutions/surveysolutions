@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Humanizer;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -17,6 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
+using Xamarin.Essentials;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
@@ -55,7 +54,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                 Status = SynchronizationStatus.Download
             });
 
-            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
 
             var apksBySupervisorAppVersion = this.PreparePathToInterviewerApksDirectoryBySupervisorAppVersion();
 

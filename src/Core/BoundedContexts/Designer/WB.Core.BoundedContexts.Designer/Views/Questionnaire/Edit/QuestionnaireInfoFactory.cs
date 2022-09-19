@@ -32,15 +32,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
        
         private readonly IExpressionProcessor expressionProcessor;
 
-        private SelectOption[] GetQuestionScopeOptions(QuestionnaireDocument document)
+        private SelectOption[] GetQuestionScopeOptions(QuestionnaireDocument document, IQuestion question)
         {
             if (document.IsCoverPageSupported)
+            {
+                var parent = question.GetParent();
+                if (parent != null && document.IsCoverPage(parent.PublicKey))
+                    return Array.Empty<SelectOption>();
+                
                 return new[]
                 {
                     new SelectOption {Value = "Interviewer", Text = QuestionnaireEditor.QuestionScopeInterviewer},
                     new SelectOption {Value = "Supervisor", Text = QuestionnaireEditor.QuestionScopeSupervisor},
                     new SelectOption {Value = "Hidden", Text = QuestionnaireEditor.QuestionScopeHidden},
                 };
+            }
 
             return new[]
             {
@@ -359,7 +365,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 result.SourceOfLinkedEntities = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
                 result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
                 result.QuestionTypeOptions = GetQuestionTypeOptions(document, question);
-                result.AllQuestionScopeOptions = GetQuestionScopeOptions(document);
+                result.AllQuestionScopeOptions = GetQuestionScopeOptions(document, question);
                 result.GeometryTypeOptions = GeometryTypeOptions;
                 result.ChapterId = questionnaire.GetParentGroupsIds(question).LastOrDefault();
 
@@ -640,6 +646,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     option.Value = answerValue;
                 }
                 option.ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) || !x.ParentValue.IsDecimal() ? (decimal?)null : Convert.ToDecimal(x.ParentValue);
+                option.AttachmentName = x.AttachmentName;
+                
                 return option;
             }).ToArray()
                    ?? new CategoricalOption[0];

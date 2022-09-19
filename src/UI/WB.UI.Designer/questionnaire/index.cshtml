@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="~/css/markup.css">
     <!-- endinject -->
     <!-- manifest:json -->
-    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-a2300482a6.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-0c56ffca7d.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-e0455a71da.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-5a5afd869f.fr.json","QuestionnaireEditor.ro.json":"../../resx/QuestionnaireEditor-014130c697.ro.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-8802b97f52.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-5a4c133b69.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-ac3c63b215.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-a2300482a6.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-0c56ffca7d.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-e0455a71da.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-5a5afd869f.fr.json"",""QuestionnaireEditor.ro.json"":""../../resx/QuestionnaireEditor-014130c697.ro.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-8802b97f52.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-5a4c133b69.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-ac3c63b215.zh.json""}"; }
+    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-2e5c1430d6.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-0c56ffca7d.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-edbaf54455.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-5a5afd869f.fr.json","QuestionnaireEditor.ro.json":"../../resx/QuestionnaireEditor-ee8f4f2308.ro.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-f9519e7526.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-5a4c133b69.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-ac3c63b215.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-2e5c1430d6.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-0c56ffca7d.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-edbaf54455.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-5a5afd869f.fr.json"",""QuestionnaireEditor.ro.json"":""../../resx/QuestionnaireEditor-ee8f4f2308.ro.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-f9519e7526.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-5a4c133b69.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-ac3c63b215.zh.json""}"; }
     <!-- endinject -->
     @{
         var locales = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(locales_json) ?? new Dictionary<string, string>();
@@ -50,7 +50,6 @@
     <!-- app:js -->  
     <script defer src="~/js/app/app.js"></script>  
     <script defer src="~/js/app/ui-js.js"></script>  
-    <script defer src="~/js/app/decorators/exceptionhandlerdecorator.js"></script>  
     <script defer src="~/js/app/controllers/addClassification.js"></script>  
     <script defer src="~/js/app/controllers/alert.js"></script>  
     <script defer src="~/js/app/controllers/attachments.js"></script>  
@@ -77,6 +76,7 @@
     <script defer src="~/js/app/controllers/translations.js"></script>  
     <script defer src="~/js/app/controllers/tree.js"></script>  
     <script defer src="~/js/app/controllers/variable.js"></script>  
+    <script defer src="~/js/app/decorators/exceptionhandlerdecorator.js"></script>  
     <script defer src="~/js/app/directives/animations.js"></script>  
     <script defer src="~/js/app/directives/directives.js"></script>  
     <script defer src="~/js/app/directives/help.js"></script>  

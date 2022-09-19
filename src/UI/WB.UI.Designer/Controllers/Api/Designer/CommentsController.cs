@@ -47,7 +47,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return new List<CommentThread>();
             
             bool hasAccess = User.IsAdmin() || 
-                             this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id.QuestionnaireId, this.User.GetId());
+                             this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id.QuestionnaireId, this.User.GetId());
 
             return hasAccess ? this.commentsService.LoadCommentThreads(id.QuestionnaireId) : new List<CommentThread>();
         }
@@ -60,7 +60,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return new List<CommentView>();
 
             bool hasAccess = User.IsAdmin() 
-                             || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id.QuestionnaireId, User.GetId());
+                             || this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id.QuestionnaireId, User.GetId());
 
             return hasAccess 
                 ? await this.commentsService.LoadCommentsForEntity(id.QuestionnaireId, itemId) 
@@ -82,7 +82,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 });
             }
             bool hasAccess = User.IsAdmin() 
-                || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id.QuestionnaireId, User.GetId());
+                || this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id.QuestionnaireId, User.GetId());
 
             hasAccess = hasAccess && id.Revision == null;
 

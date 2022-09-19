@@ -7,7 +7,7 @@
                 <a class="btn" href="https://forum.mysurvey.solutions" target="_blank" ng-i18next>Forum</a>
             
                 <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank"
-                   ng-if="!questionnaire.isReadOnlyForUser && (questionnaire.hasViewerAdminRights || questionnaire.isSharedWithUser)" ng-i18next>History</a>
+                   ng-if="questionnaire.hasViewerAdminRights || questionnaire.isSharedWithUser" ng-i18next>History</a>
                 <button class="btn" type="button" ng-click="showDownloadPdf()" ng-i18next>DownloadPdf</button>
                 <a class="btn" type="button" ng-show="questionnaire.hasViewerAdminRights" ng-click="exportQuestionnaire()" ng-i18next>SaveAs</a>
 
@@ -153,7 +153,7 @@
                                     </div>
                                     <div class="divider"></div>
                                     <button type="button" class="btn lighter-hover" ng-click="runScenario(scenario)" ng-i18next>Run</button>
-                                    <button type="button" class="btn lighter-hover" ng-click="showScenarioEditor(scenario.id)" ng-i18next>View</button>
+                                    <button type="button" class="btn lighter-hover" ng-click="showScenarioEditor(scenario.id, scenario.title)" ng-i18next>View</button>
                                     <div class="actions" ng-show="scenario.form.$dirty" ng-if="!questionnaire.isReadOnlyForUser">
                                         <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || scenario.form.$invalid" class="btn lighter-hover" ng-click="saveScenario(scenario)" ng-i18next>Save</button>
                                         <button type="button" class="btn lighter-hover" ng-click="cancel(scenario)" ng-i18next>Cancel</button>
@@ -191,7 +191,7 @@
                         <ul ng-model="macros">
                             <li class="macros-panel-item" ng-repeat="macro in macros">
                                 <ng-form name="macro.form">
-                                    <a href ng-click="deleteMacro($index)" ng-disabled="questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href ng-click="deleteMacro($index)" ng-disabled="questionnaire.isReadOnlyForUser" ng-if="!questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="input-group macros-name">
                                         <span class="input-group-addon">$</span>
                                         <input focus-on-out="focusMacro{{macro.itemId}}" ng-i18next="[placeholder]SideBarMacroName" maxlength="32" spellcheck="false" ng-model="macro.name" name="name" class="form-control" type="text" />
@@ -239,7 +239,7 @@
                         <ul ng-model="lookupTables">
                             <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file)" ngf-max-size="1MB" accept=".tab,.txt" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                 <ng-form name="table.form">
-                                    <a href="javascript:void(0);" ng-click="deleteLookupTable($index)" ng-disabled="questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href="javascript:void(0);" ng-click="deleteLookupTable($index)" ng-disabled="questionnaire.isReadOnlyForUser" ng-if="!questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
                                     <input focus-on-out="focusLookupTable{{table.itemId}}" required="" ng-i18next="[placeholder]SideBarLookupTableName"
                                            maxlength="32" spellcheck="false" autocomplete="off"
                                            ng-model="table.name" name="name" class="form-control table-name" type="text" />
@@ -311,11 +311,11 @@
                         <div class="attachment-list">
                             <ng-form name="attachment.form" ng-repeat="attachment in attachments">
                                 <div class="attachments-panel-item" ng-class="{'has-error': attachment.form.name.$error.pattern}" ngf-drop="" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                                    <a href ng-click="deleteAttachment($index)" ng-disabled="questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href ng-click="deleteAttachment($index)" ng-disabled="questionnaire.isReadOnlyForUser" ng-if="!questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="attachment">
                                         <div class="attachment-preview">
                                             <div class="attachment-preview-cover clearfix">
-                                                <img class="pull-right" ng-click="previewAttachment(attachment)" ngf-size="{width: 156, height: 140}" ng-src='{{downloadLookupFileBaseUrl + "/thumbnail/" + attachment.attachmentId}}'>
+                                                <img class="pull-right" ng-click="previewAttachment(attachment)" ngf-size="{width: 156, height: 140}" ng-src='{{downloadLookupFileBaseUrl + "/" + questionnaire.questionnaireId + "/thumbnail/" + attachment.attachmentId}}'>
                                             </div>
                                         </div>
                                         <div class="attachment-content">
@@ -342,7 +342,7 @@
                                                     <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-accept="'.pdf,image/*,video/*,audio/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file);$event.stopPropagation()" type="file">
                                                         <span ng-i18next>Update</span>
                                                     </button>
-                                                    <a href="{{downloadLookupFileBaseUrl  + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank" ng-i18next>Download</a>
+                                                    <a href="{{downloadLookupFileBaseUrl + '/' + questionnaire.questionnaireId + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank" ng-i18next>Download</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -381,7 +381,7 @@
                                        ng-disabled="questionnaire.isReadOnlyForUser" 
                                        class="btn delete-btn" 
                                        tabindex="-1"
-                                       ng-show="!translation.isOriginalTranslation"></a>
+                                       ng-show="!translation.isOriginalTranslation && !questionnaire.isReadOnlyForUser"></a>
                                     <div class="translation-content">
                                         <input focus-on-out="focusTranslation{{translation.translationId}}"
                                                required=""
@@ -491,7 +491,7 @@
                                 <div class="categories-panel-item" ng-class="{'has-error': categories.form.name.$error.pattern}"
                                      ngf-drop="" ngf-change="fileSelected(categories, $file)"
                                      ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                                    <a href ng-click="deleteCategories($index)" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href ng-click="deleteCategories($index)" class="btn delete-btn" tabindex="-1" ng-if="!questionnaire.isReadOnlyForUser"></a>
                                     <div class="categories-content">
                                         <input focus-on-out="focusCategories{{categories.categoriesId}}"
                                                required=""
@@ -863,7 +863,7 @@
 
 <script type="text/ng-template" id="Image-attachment-info-template.html">
     <p>
-        <span class="file-name">{{attachment.meta.fileName}}</span>, &nbsp;
+        <span class="file-name">{{attachment.meta.fileName}}</span><br>
         <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}" ng-if="attachment.content.details.width" ng-i18next="({width: attachment.content.details.width, height: attachment.content.details.height})SideBarAttachmentDetailsResolution"></span>{{attachment.content.details.width ? ',&nbsp;' : ''}}
         <span ng-i18next="({type: attachment.content.type})SideBarAttachmentDetailsFormat"></span>,
         <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}" ng-i18next="({size: formatBytes(attachment.content.size)})SideBarAttachmentDetailsSize"></span>

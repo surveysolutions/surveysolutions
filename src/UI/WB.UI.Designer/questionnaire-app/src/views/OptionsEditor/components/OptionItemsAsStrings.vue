@@ -11,6 +11,7 @@
             :rules="textRules"
             :disabled="loading || convert"
             :loading="loading || convert"
+            :readonly="readonly"
             style="font-family: monospace, monospace"
             @change="change"
             @focus="onFocus"
@@ -36,7 +37,8 @@ export default {
     props: {
         categories: { type: Array, required: true },
         showParentValue: { type: Boolean, required: true },
-        loading: { type: Boolean, required: true }
+        loading: { type: Boolean, required: true },
+        readonly: { type: Boolean, required: true }
     },
 
     data() {
@@ -94,7 +96,7 @@ export default {
 
             if (this.lineCount > 15000) {
                 return this.$t('QuestionnaireEditor.OptionsSizeLimit', {
-                    max: 15000
+                    max_rows: 15000
                 });
             }
 

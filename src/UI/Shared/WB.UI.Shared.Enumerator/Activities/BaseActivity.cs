@@ -10,7 +10,6 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using NLog;
 using Plugin.CurrentActivity;
-using Plugin.Permissions;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Utils;
 
@@ -50,7 +49,6 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             log.Trace($"OnRequestPermissionsResult permissions {string.Join(',', permissions)} grantResults {string.Join(',', grantResults)}");
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 

@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+    <value>Archivy chráněné heslem nejsou podporovány</value>
+  </data>
+  <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+    <value>[PL0002] N/A. Kontaktujte Administrátora.</value>
+  </data>
+  <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
+    <value>Sloupec nelze namapovat na žádnou otázku v dotazníku.</value>
+  </data>
+  <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
+    <value>Soubor nelze namapovat na žádný seznam (roster) v typu dotazníku.</value>
+  </data>
+  <data name="PL0006_IdDublication" xml:space="preserve">
+    <value>Byly nalezeny duplicitní hodnoty ID.</value>
+  </data>
+  <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
+    <value>Chybí jeden nebo více nadřazených ID polí.</value>
+  </data>
+  <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
+    <value>Seznam (roster) nemá nadřazenou hodnotu.</value>
+  </data>
+  <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
+    <value>ID seznamu (rosteru) není konzistentní s velikostí seznamu.</value>
+  </data>
+  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <value>Hodnota otázky není povolena.</value>
+  </data>
+  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <value>Neplatná hodnota data nebo času zadaná v otázce data.</value>
+  </data>
+  <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
+    <value>Neplatná hodnota GPS.</value>
+  </data>
+  <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
+    <value>Jsou povoleny pouze celočíselné hodnoty.</value>
+  </data>
+  <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
+    <value>Jsou povoleny pouze skutečné hodnoty.</value>
+  </data>
+  <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
+    <value>Otázka velikosti seznamu (rosteru) nemůže mít záporné hodnoty.</value>
+  </data>
+  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <value>Předběžné data nebyly nalezeny.</value>
+  </data>
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>Zodpovědný uživatel neexistuje pro 1 nebo více pozorování.</value>
+  </data>
+  <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+    <value>Zodpovědný uživatel je uzamčený pro 1 nebo více pozorování.</value>
+  </data>
+  <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+    <value>Uživatel není z Ústředí, Garant nebo tazatel pro 1 nebo více pozorování.</value>
+  </data>
+  <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
+    <value>Odpověď na otázku o velikosti seznamu (rosteru) nemůže být větší než {0}.</value>
+  </data>
+  <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
+    <value>Otázky GPS vyžadují samostatné sloupce pro zeměpisnou šířku a délku</value>
+  </data>
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>Otázky GPS vyžadují nastavenou zeměpisnou šířku a délku.</value>
+  </data>
+  <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
+    <value>Dva nebo více sloupců mají stejný název.</value>
+  </data>
+  <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
+    <value>Zeměpisná šířka musí být větší než -90° a menší než 90°.</value>
+  </data>
+  <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
+    <value>Zeměpisná délka musí být větší než -180° a menší než 180°.</value>
+  </data>
+  <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
+    <value>Neplatný oddělovač desetinných míst. Symbol "," není povolen v číselných odpovědích. Prosím, použijte "." namísto.</value>
+  </data>
+  <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+    <value>Jsou povoleny pouze celočíselné hodnoty.</value>
+  </data>
+  <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
+    <value>Množství by mělo být větší nebo rovné -1.</value>
+  </data>
+  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <value>Chybí soubor s údaji úrovně typu dotazníku.</value>
+  </data>
+  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+    <value>Počet zodpovězených možností u otázky s výběrem odpovědí nemůže být vyšší než maximální povolený počet odpovědí.</value>
+  </data>
+  <data name="PL0042_IdIsEmpty" xml:space="preserve">
+    <value>Pole s ID nemá žádnou hodnotu.</value>
+  </data>
+  <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+    <value>Chybí požadovaný sloupec {0}.</value>
+  </data>
+  <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+    <value>Chráněná proměnná se v poskytnutém typu dotazníku nenachází.</value>
+  </data>
+  <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+    <value>Typ proměnné nelze chránit.</value>
+  </data>
+  <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+    <value>Záporná hodnota není povolena pro kategorickou vícenásobnou otázku.</value>
+  </data>
+  <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+    <value>Seznam seznamů (rosterů) by měl mít sloupec pro textové odpovědi</value>
+  </data>
+  <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+    <value>Nekonzistentní kód rozpisu pro číselný seznam. Posloupnost kódů rozpisu by měla být 0, 1, ..., aby bylo možné počítat výskyty rozpisu</value>
+  </data>
+  <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
+    <value>Maximální množství by nemělo být větší než {0}.</value>
+  </data>
+  <data name="PL0055_InvalidEmail" xml:space="preserve">
+    <value>E-mail není platný</value>
+  </data>
+  <data name="PL0056_InvalidPassword" xml:space="preserve">
+    <value>Neplatné heslo. Alespoň 6 číslic a velká písmena nebo jeden symbol '?' pro vygenerování hesla</value>
+  </data>
+  <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+    <value>Pokud je uveden e-mail je možné přiřadit pouze 1 dotazník</value>
+  </data>
+  <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+    <value>Webový dotazník musí obsahovat e-mail, aby byl aktivován</value>
+  </data>
+  <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+    <value>Webový dotazník musí obsahovat heslo, aby byl aktivován</value>
+  </data>
+  <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+    <value>Přidělené dotazníky s velikostí 1 pro webový režim by měly obsahovat buď e-mail, nebo heslo</value>
+  </data>
+  <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+    <value>Heslo není jedinečné. Heslo ke každému webovému dotazníku by mělo být jedinečné.</value>
+  </data>
+  <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+    <value>Všechny dotazníky pro webové dotazníky musí být zadány tazateli</value>
+  </data>
+  <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+    <value>Odpověď na otázku s názvem proměnné {0} nelze předem načíst, protože jde o nepodporovaný typ. Podrobnosti o tom, co lze v aktuální verzi předinstalovat, najdete na https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type</value>
+  </data>
+</root>

@@ -118,6 +118,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="NeverUploaded" xml:space="preserve">
-    <value>Ještě nenahráváno</value>
+    <value>Zatím nic nenahráno</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Tazatelé</value>
+  </data>
+  <data name="LowStorage" xml:space="preserve">
+    <value>Méně než 100 MB volného místa</value>
+  </data>
+  <data name="NeverSynchronized" xml:space="preserve">
+    <value>Nikdy nepřipojen</value>
+  </data>
+  <data name="NoAssignments" xml:space="preserve">
+    <value>Žádné dotazníky ke stažení</value>
+  </data>
+  <data name="OldAndroidVersion" xml:space="preserve">
+    <value>Android 4.4 nebo nižší</value>
+  </data>
+  <data name="OldInterviewerVersion" xml:space="preserve">
+    <value>Zastaralá verze</value>
+  </data>
+  <data name="TabletReassigned" xml:space="preserve">
+    <value>Tablet přeřazen</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Týmy</value>
+  </data>
+  <data name="TeamSize" xml:space="preserve">
+    <value>Velikost týmu</value>
+  </data>
+  <data name="WrongDateOnTablet" xml:space="preserve">
+    <value>Špatný čas na tabletu</value>
   </data>
 </root>

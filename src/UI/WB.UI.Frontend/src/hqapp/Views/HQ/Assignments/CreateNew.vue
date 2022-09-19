@@ -255,6 +255,9 @@
                 </div>
             </div>
         </div>
+        <portal-target name="body"
+            multiple >
+        </portal-target>
         <IdleTimeoutService />
         <signalr @connected="connected"
             mode="takeNew"

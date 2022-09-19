@@ -46,7 +46,8 @@ namespace WB.Infrastructure.Native.Questionnaire
             {
                 new Tuple<string, string>(worksheet.Cell("A1").GetString(), "A"),
                 new Tuple<string, string>(worksheet.Cell("B1").GetString(), "B"),
-                new Tuple<string, string>(worksheet.Cell("C1").GetString(), "C")
+                new Tuple<string, string>(worksheet.Cell("C1").GetString(), "C"),
+                new Tuple<string, string>(worksheet.Cell("D1").GetString(), "D"),
             }.Where(kv => kv.Item1 != null).ToDictionary(k => k.Item1.Trim(), v => v.Item2);
 
             return new CategoriesHeaderMap()
@@ -54,6 +55,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                 IdIndex = headers.GetOrNull("id"),
                 ParentIdIndex = headers.GetOrNull("parentid"),
                 TextIndex = headers.GetOrNull("text"),
+                AttachmentNameIndex = headers.GetOrNull("attachmentname"),
             };
         }
 
@@ -70,6 +72,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                 Id = int.Parse(id),
                 Text = worksheet.Cell($"{headers.TextIndex}{rowNumber}").GetString(),
                 ParentId = string.IsNullOrEmpty(parentId) ? (int?)null : int.Parse(parentId),
+                AttachmentName = worksheet.Cell($"{headers.AttachmentNameIndex}{rowNumber}").GetString(),
             };
         }
 
@@ -78,6 +81,7 @@ namespace WB.Infrastructure.Native.Questionnaire
             public string IdIndex { get; set; }
             public string ParentIdIndex { get; set; }
             public string TextIndex { get; set; }
+            public string AttachmentNameIndex { get; set; }
         }
     }
 }

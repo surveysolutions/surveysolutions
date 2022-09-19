@@ -320,15 +320,18 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
     public class DropdownItem
     {
-        public DropdownItem(int value, string title)
+        public DropdownItem(int value, string title, string attachmentName)
         {
             this.Value = value;
             this.Title = title;
+            this.AttachmentName = attachmentName;
         }
 
         public int Value { get; set; }
 
         public string Title { get; set; }
+        
+        public string AttachmentName { get; set; }
     }
 
     /// <summary>

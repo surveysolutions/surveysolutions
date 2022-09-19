@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApprovedData" xml:space="preserve">
-      <value>Approved </value>
+      <value>Schválená data</value>
   </data>
   <data name="DownloadLinks" xml:space="preserve">
     <value>Stáhněte si webové odkazy</value>
@@ -127,6 +127,129 @@
     <value>Mapy</value>
   </data>
   <data name="UploadAssignments" xml:space="preserve">
-    <value>Nahrát požadavky</value>
+    <value>Nahrát dotazníky</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Akce</value>
+  </data>
+  <data name="AllData" xml:space="preserve">
+    <value>Všechna data</value>
+  </data>
+  <data name="AllDataSpss" xml:space="preserve">
+    <value>Všechna data Spss</value>
+  </data>
+  <data name="AllDataStata" xml:space="preserve">
+    <value>Všechna data Stata</value>
+  </data>
+  <data name="ApprovedDataSpss" xml:space="preserve">
+    <value>Schválená data Spss</value>
+  </data>
+  <data name="ApprovedDataStata" xml:space="preserve">
+    <value>Schválená data Stata</value>
+  </data>
+  <data name="BinaryData" xml:space="preserve">
+    <value>Binární data</value>
+  </data>
+  <data name="CloneQuestionnaire" xml:space="preserve">
+    <value>Duplikovat typ dotazníku</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Vytvořit Uživatele</value>
+  </data>
+  <data name="CreationDate" xml:space="preserve">
+    <value>Vytvořeno dne</value>
+  </data>
+  <data name="DeleteMap" xml:space="preserve">
+    <value>Smazat mapu</value>
+  </data>
+  <data name="DeleteMapUser" xml:space="preserve">
+    <value>Smazat uživatele mapy</value>
+  </data>
+  <data name="DeleteQuestionnaire" xml:space="preserve">
+    <value>Smazat typ dotazníku</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Podrobnosti</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Upravit</value>
+  </data>
+  <data name="ExportQuestionnaire" xml:space="preserve">
+    <value>Export typu dotazníku</value>
+  </data>
+  <data name="ExposedVariables" xml:space="preserve">
+    <value>Odhalené proměnné</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>Historie</value>
+  </data>
+  <data name="ImportDate" xml:space="preserve">
+    <value>Importováno</value>
+  </data>
+  <data name="ImportedBy" xml:space="preserve">
+    <value>Importováno</value>
+  </data>
+  <data name="ImportedByText" xml:space="preserve">
+    <value>{{role}} uživatel {{name}}</value>
+  </data>
+  <data name="ImportTemplate" xml:space="preserve">
+    <value>Import typu dotazníku</value>
+  </data>
+  <data name="LastEntryDate" xml:space="preserve">
+    <value>Upraveno dne</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Mapa šetření</value>
+  </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>Nový dotazník</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Typ dotazníku</value>
+  </data>
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve">
+    <value>Rozhovorů - {{receivedInterviews}}, dotazníků - {{receivedAssignments}}; Počet rozhovorů a dotazníků, které byly staženy tazateli/Garanty, kteří pracují offline. Po potvrzení smazání šetření, server již nebude přijímat informace na základě těchto rozhovorů/dotazníků a při příští synchronizaci zmizí bez možnosti obnovení, i kdyby obsahovaly nově zadané/upravené informace. Je Vaše zodpovědnost upozornit tazatele, aby již tyto rozhovory/dotazníky nevyplňovali, protože nebudou automaticky upozorněni. Chcete pokračovat?</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Typy dotazníků</value>
+  </data>
+  <data name="RecordAudio" xml:space="preserve">
+    <value>Záznam zvuku</value>
+  </data>
+  <data name="RecordAudioTitle" xml:space="preserve">
+    <value>Aplikace Tazatel zaznamená zvuk rozhovoru, když je povoleno nahrávání zvuku v aplikaci. Pozor: Uložená data budou výrazně větší.</value>
+  </data>
+  <data name="SendInvitations" xml:space="preserve">
+    <value>Poslat pozvánky</value>
+  </data>
+  <data name="ShowOnDesigner" xml:space="preserve">
+    <value>Zobrazit v aplikaci Designer</value>
+  </data>
+  <data name="SurveySetupIntroMessage1" xml:space="preserve">
+    <value>Klikněte na tlačítko Importovat typ dotazníku pro načtení typu dotazníku z aplikace Designer</value>
+  </data>
+  <data name="SurveySetupIntroMessage2" xml:space="preserve">
+    <value>Klikněte na typ dotazníku ze seznamu pro vytvoření dotazníků</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titul</value>
+  </data>
+  <data name="TypeQuestionnaireName" xml:space="preserve">
+    <value>Pro potvrzení zadejte '{{questionnaireTitle}}'</value>
+  </data>
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>Aktualizace dotazníků</value>
+  </data>
+  <data name="UsersManagement" xml:space="preserve">
+    <value>Správa uživatelů</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Verze</value>
+  </data>
+  <data name="WebInterviewSetup" xml:space="preserve">
+    <value>Nastavení webového rozhovoru</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Režim</value>
   </data>
 </root>

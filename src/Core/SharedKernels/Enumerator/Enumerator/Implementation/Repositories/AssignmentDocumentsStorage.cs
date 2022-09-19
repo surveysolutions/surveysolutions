@@ -191,6 +191,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                     {
                         assignment.IdentifyingAnswers = answersLookup[assignment.Id]
                             .Where(answer => answer.Identity.Id != assignment.LocationQuestionId)
+                            .OrderBy(answer => answer.SortOrder)
                             .ToList();
                         
                         yield return assignment;

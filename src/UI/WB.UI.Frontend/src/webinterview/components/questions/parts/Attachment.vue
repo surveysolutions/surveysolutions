@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="attachment">
         <div
             v-if="localContentType === 'image'"
             class="image-zoom-box image-wrapper"
@@ -8,17 +8,20 @@
                 :src="thumbPath"
                 alt="custom photo"
                 class="zoomImg"
+                @load="imageLoaded"
                 @click="showModal(true)"
                 :style="previewStyle"/>
-            <div class="modal-img"
-                :style="modalView"
-                @click="showModal(false)">
-                <span class="close-zoomming-img">×</span>
-                <img class="modal-img-content"
-                    :src="fullPath"
-                    alt />
-                <span class="caption"></span>
-            </div>
+            <portal to="body">
+                <div class="modal-img"
+                    :style="modalView"
+                    @click="showModal(false)">
+                    <span class="close-zoomming-img">×</span>
+                    <img class="modal-img-content"
+                        :src="fullPath"
+                        alt />
+                    <span class="caption"></span>
+                </div>
+            </portal>
         </div>
         <div v-if="localContentType === 'audio'">
             <div class="instructions-wrapper">
@@ -77,6 +80,7 @@ function appendSearchParam(uri, name, value) {
 }
 
 export default {
+    emits: ['imageLoaded'],
     data() {
         return {
             modal: false,
@@ -88,6 +92,10 @@ export default {
             type: String,
         },
         contentId: {
+            type: String,
+            required: false,
+        },
+        attachmentName: {
             type: String,
             required: false,
         },
@@ -115,6 +123,18 @@ export default {
             default: false,
         },
     },
+    created() {
+        const self = this
+        const onEscape = (e) => {
+            if (self.modal && e.keyCode === 27) {
+                self.showModal(false)
+            }
+        }
+        document.addEventListener('keydown', onEscape)
+        this.$once('hook:destroyed', () => {
+            document.removeEventListener('keydown', onEscape)
+        })
+    },
     mounted() {
         return this.fetchContentType()
     },
@@ -122,10 +142,15 @@ export default {
         contentId(){
             this.fetchContentType()
         },
+        attachmentName(){
+            this.fetchContentType()
+        },
     },
     computed: {
         contentUrl() {
-            return `${this.$config.imageGetBase}/Content?interviewId=${this.interviewId}&contentId=${this.contentId}`
+            if (this.contentId) return `${this.$config.imageGetBase}/Content?interviewId=${this.interviewId}&contentId=${this.contentId}`
+            if (this.attachmentName) return `${this.$config.imageGetBase}/Attachment?interviewId=${this.interviewId}&attachment=${this.attachmentName}`
+            return null
         },
         thumbPath() {
             if (this.isPreview) return this.imageThumb
@@ -139,6 +164,7 @@ export default {
             if (this.thumb) return this.thumb
             if (this.filename) return `${this.$config.imageGetBase}/Image/${this.filename}`
             if (this.contentId) return `${this.$config.imageGetBase}/Content?interviewId=${this.interviewId}&contentId=${this.contentId}`
+            if (this.attachmentName) return `${this.$config.imageGetBase}/Attachment?interviewId=${this.interviewId}&attachment=${this.attachmentName}`
             return null
         },
         isPreview() {
@@ -192,6 +218,9 @@ export default {
             if (this.previewOnly)
                 return
             this.modal = show
+        },
+        imageLoaded() {
+            this.$emit('imageLoaded')
         },
     },
     name: 'wb-attachment',

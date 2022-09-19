@@ -133,12 +133,153 @@
     <value>Staré heslo</value>
   </data>
   <data name="PasswordFieldName" xml:space="preserve">
-    <value>Helo</value>
+    <value>Heslo</value>
   </data>
   <data name="SupervisorFieldName" xml:space="preserve">
     <value>Garant</value>
   </data>
   <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
     <value>Vyberte soubor</value>
+  </data>
+  <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
+    <value>Informace o uživateli nelze aktualizovat, protože aktuální uživatel neexistuje</value>
+  </data>
+  <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
+    <value>Informace o uživateli nelze aktualizovat, protože aktuální uživatel je neaktivní</value>
+  </data>
+  <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
+    <value>Název typu dotazníku je povinný</value>
+  </data>
+  <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
+    <value>Titul</value>
+  </data>
+  <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
+    <value>Potvrzení nového hesla</value>
+  </data>
+  <data name="ConfirmPasswordErrorMassage" xml:space="preserve">
+    <value>Heslo a Potvrzení hesla se neshodují</value>
+  </data>
+  <data name="ConfirmPasswordFieldName" xml:space="preserve">
+    <value>Potvrzení hesla</value>
+  </data>
+  <data name="ConfirmPasswordRequired" xml:space="preserve">
+    <value>Potvrzení hesla je vyžadováno</value>
+  </data>
+  <data name="EmailErrorMessage" xml:space="preserve">
+    <value>Není platná e-mailová adresa</value>
+  </data>
+  <data name="EmailFieldName" xml:space="preserve">
+    <value>E-mailová adresa</value>
+  </data>
+  <data name="InvalidUser" xml:space="preserve">
+    <value>Neplatný uživatel</value>
+  </data>
+  <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
+    <value>Je uzamčeno Garantem</value>
+  </data>
+  <data name="IsLockedFieldName" xml:space="preserve">
+    <value>Je uzamčen Adminem nebo Ústředím</value>
+  </data>
+  <data name="LogOnModel_Password" xml:space="preserve">
+    <value>Heslo</value>
+  </data>
+  <data name="LogOnModel_UserName" xml:space="preserve">
+    <value>Uživatelské jméno</value>
+  </data>
+  <data name="MandatoryField" xml:space="preserve">
+    <value>Toto pole je povinné</value>
+  </data>
+  <data name="OldPasswordErrorMessage" xml:space="preserve">
+    <value>Chcete-li změnit heslo, zadejte platné současné heslo</value>
+  </data>
+  <data name="PasswordChangeRequired" xml:space="preserve">
+    <value>Vaše heslo bylo resetováno. Změňte si ho pro přístup k internetové aplikaci.</value>
+  </data>
+  <data name="PasswordErrorMessage" xml:space="preserve">
+    <value>Heslo musí obsahovat alespoň jedno číslo, jedno velké písmeno a jedno malé písmeno</value>
+  </data>
+  <data name="PasswordLengthMessage" xml:space="preserve">
+    <value>Heslo musí mít alespoň {2} znaků</value>
+  </data>
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+    <value>Hesla musí mít alespoň jednu číslici ('0'-'9').</value>
+  </data>
+  <data name="PasswordRequiresLower" xml:space="preserve">
+    <value>Hesla musí mít alespoň jedno malé písmeno ('a'-'z').</value>
+  </data>
+  <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+    <value>Hesla musí mít alespoň jeden nealfanumerický znak.</value>
+  </data>
+  <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+    <value>Hesla musí obsahovat alespoň {0} různých znaků.</value>
+  </data>
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+    <value>Hesla musí mít alespoň jedno velké písmeno ('A'-'Z').</value>
+  </data>
+  <data name="PasswordTooShort" xml:space="preserve">
+    <value>Hesla musí mít alespoň {0} znaků.</value>
+  </data>
+  <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
+    <value>Jméno osoby obsahuje neplatné znaky. Jsou povolena pouze písmena, tečky, mezery a pomlčky</value>
+  </data>
+  <data name="PersonNameErrorMessage" xml:space="preserve">
+    <value>Jméno osoby nesmí obsahovat více než {1} znaků</value>
+  </data>
+  <data name="PersonNameFieldName" xml:space="preserve">
+    <value>Celé jméno</value>
+  </data>
+  <data name="PhoneErrorLength" xml:space="preserve">
+    <value>Telefonní číslo nesmí obsahovat více než {1} znaků</value>
+  </data>
+  <data name="PhoneErrorMessage" xml:space="preserve">
+    <value>Neplatné telefonní číslo</value>
+  </data>
+  <data name="PhoneNumberFieldName" xml:space="preserve">
+    <value>Telefonní číslo</value>
+  </data>
+  <data name="RequiredEmailErrorMessage" xml:space="preserve">
+    <value>E-mail je povinný</value>
+  </data>
+  <data name="RequiredPasswordErrorMessage" xml:space="preserve">
+    <value>Heslo je vyžadováno</value>
+  </data>
+  <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
+    <value>Garant je vyžadován</value>
+  </data>
+  <data name="RequiredUserNameErrorMessage" xml:space="preserve">
+    <value>Je vyžadováno uživatelské jméno</value>
+  </data>
+  <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
+    <value>Zadejte prosím platné GUID v následujícím formátu xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</value>
+  </data>
+  <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
+    <value>Soubor CSV</value>
+  </data>
+  <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
+    <value>Musíte vybrat soubor, který chcete nahrát</value>
+  </data>
+  <data name="UserIsLockedByHq" xml:space="preserve">
+    <value>Uživatel je uzamčen Ústředím</value>
+  </data>
+  <data name="UserName_Taken" xml:space="preserve">
+    <value>Vyberte prosím jiné uživatelské jméno</value>
+  </data>
+  <data name="UserNameErrorMessage" xml:space="preserve">
+    <value>Přihlašovací jméno musí mít 3 až 15 znaků a může obsahovat pouze písmena, číslice a podtržítko. Písmena musí být pouze z (anglické) abecedy: 'A'..'Z' nebo 'a'..'z'. Jiná písmena (cyrilice, arabština atd.) nejsou platná pro použití v přihlašovacích jménech.</value>
+  </data>
+  <data name="UserNameFieldName" xml:space="preserve">
+    <value>Uživatelské jméno</value>
+  </data>
+  <data name="UserRoleRequired" xml:space="preserve">
+    <value>Je vyžadována uživatelská role</value>
+  </data>
+  <data name="VerificationCodeFieldName" xml:space="preserve">
+    <value>Ověřovací kód</value>
+  </data>
+  <data name="WorkspaceMissing" xml:space="preserve">
+    <value>Úloha nenalezena</value>
+  </data>
+  <data name="WorkspaceRequired" xml:space="preserve">
+    <value>Je vyžadována úloha</value>
   </data>
 </root>

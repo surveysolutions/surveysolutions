@@ -118,9 +118,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
-    <value>Pokud dotazník, který hledáte, není v seznamu, zdělte tazateli, aby rozhovor dokončil a znovu synchronizoval.</value>
+    <value>Pokud dotazník, který hledáte, není v seznamu, sdělte tazateli, aby rozhovor dokončil a znovu synchronizoval.</value>
   </data>
   <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
-    <value>Pokud dotazník, který hledáte, není v seznamu, zdělte tazateli, aby rozhovor dokončil a znovu synchronizoval. Poté zkuste vyhledat  dotazník znovu. Pokud se zde dotazník opět nenachází, kontaktujte programátora.</value>
+    <value>Pokud dotazník, který hledáte, není v seznamu, sdělte to tazateli, aby rozhovor dokončil a znovu synchronizoval. Poté zkuste vyhledat dotazník znovu. Pokud se dotazník v seznamu opět nenachází, kontaktujte Ústředí.</value>
+  </data>
+  <data name="NoData_ContactSupport" xml:space="preserve">
+    <value>Data z rozhovoru {0} byla poškozena. Chcete-li tento rozhovor obnovit, kontaktujte Garanta</value>
+  </data>
+  <data name="NoData_ContactSupportWithMoreDetails" xml:space="preserve">
+    <value>Chcete-li poskytnout další podrobnosti, kontaktujte Administrátora</value>
+  </data>
+  <data name="NoData_InterveiwWasNotUploadedYet" xml:space="preserve">
+    <value>Rozhovor {0} ještě nebyl synchronizován</value>
+  </data>
+  <data name="NoData_InterviewDeleted" xml:space="preserve">
+    <value>Rozhovor {0} byl odstraněn Ústředím nebo Administrátorem, a proto jej nelze obnovit</value>
+  </data>
+  <data name="NoData_InterviewerChangedDevice" xml:space="preserve">
+    <value>Tazatel vyměnil tablet. Data pro rozhovor {0} mohou být ztracena, protože data jsou smazána, když tazatelé přecházejí z jednoho tabletu na druhý. Pokud je tomu tak, rozhovor nelze obnovit</value>
+  </data>
+  <data name="NoData_InterviewWasNotReceived" xml:space="preserve">
+    <value>Rozhovor {0} dosud tazatel {1} ​​nestáhl do tabletu.</value>
+  </data>
+  <data name="NoData_InterviewWasReassigned" xml:space="preserve">
+    <value>Rozhovor {0} byl přeřazen jinému tazateli. Rozhovor je aktuálně na tabletu tohoto tazatele.</value>
+  </data>
+  <data name="NoData_NoIssuesInterviewOnServer" xml:space="preserve">
+    <value>Rozhovor {0} nemá na serveru zaznamenány žádné problémy.&lt;br /&gt;Získejte prosím více informací od uživatele aktuálně zodpovědného za tento rozhovor.&lt;br /&gt;Pokud problém přetrvává, kontaktujte Administrátora</value>
+  </data>
+  <data name="NoData_NotFound" xml:space="preserve">
+    <value>Rozhovor {0} nenalezen</value>
+  </data>
+  <data name="NoData_QuestionnaireDeleted" xml:space="preserve">
+    <value>Administrátor serveru smazal typ dotazníku pro rozhovor {0}. V důsledku toho byly všechny rozhovory spojené s tímto typem smazány a nelze je obnovit</value>
   </data>
 </root>

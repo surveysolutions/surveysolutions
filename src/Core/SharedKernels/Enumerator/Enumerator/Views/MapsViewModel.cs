@@ -3,14 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using Xamarin.Essentials;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
@@ -83,7 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
             try
             {
-                await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+                await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
             }
             catch (MissingPermissionsException)
             {

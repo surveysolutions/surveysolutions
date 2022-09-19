@@ -1997,8 +1997,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string ApplyMarkDownTransformation(string text) => 
             markdownTransformationCache.GetOrAdd(text, s =>
             {
-                var transform = QuestionnaireMarkdown.ToHtml(s);
-                if (s.Equals(transform, StringComparison.Ordinal))
+                if (s == null) return null;
+                var singleLined = s.Replace("\n", " ").Replace("\r", "");
+                var transform = QuestionnaireMarkdown.ToHtml(singleLined);
+                if (singleLined.Equals(transform, StringComparison.Ordinal))
                 {
                     return null;
                 }

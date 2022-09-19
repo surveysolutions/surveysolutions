@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Platforms.Android;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using Xamarin.Essentials;
 using ZXing.Mobile;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
@@ -11,9 +11,9 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
     internal class QRBarcodeScanService : IQRBarcodeScanService
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
-        private readonly IPermissions permissions;
+        private readonly IPermissionsService permissions;
 
-        public QRBarcodeScanService( IPermissions permissions)
+        public QRBarcodeScanService(IPermissionsService permissions)
         {
             this.androidCurrentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
             this.permissions = permissions;
@@ -21,7 +21,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public async Task<QRBarcodeScanResult> ScanAsync()
         {
-            await this.permissions.AssureHasPermissionOrThrow<CameraPermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>().ConfigureAwait(false);
             
             MobileBarcodeScanner.Initialize(this.androidCurrentTopActivity.Activity.Application);
             var scanner = new MobileBarcodeScanner();

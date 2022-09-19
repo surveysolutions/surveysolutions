@@ -219,7 +219,9 @@ namespace WB.Tests.Unit.Designer
 
         public static IDesignerEngineVersionService DesignerEngineVersionService()
         {
-            return new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), Mock.Of<IDesignerTranslationService>());
+            return new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), 
+                Mock.Of<IDesignerTranslationService>(), 
+                Mock.Of<ICategoriesService>());
         }
 
         public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
@@ -466,31 +468,36 @@ namespace WB.Tests.Unit.Designer
             return options.Select(x => new Option(x.GetParsedValue().ToString(CultureInfo.InvariantCulture), x.AnswerText)).ToArray();
         }
 
-        public static QuestionnaireCategoricalOption QuestionnaireCategoricalOption(int code, string text = null, int? parentValue = null) =>
+        public static QuestionnaireCategoricalOption QuestionnaireCategoricalOption(int code, string text = null, 
+            int? parentValue = null, string attachmentName = null) =>
             new QuestionnaireCategoricalOption
             {
                 Title = text ?? "text",
                 ParentValue = parentValue,
-                Value = code
+                Value = code,
+                AttachmentName = attachmentName
             };
 
-        public static Answer Option(int code, string text = null, string parentValue = null)
+        public static Answer Option(int code, string text = null, string parentValue = null, string attachmentName = null)
         {
             return new Answer
             {
                 AnswerText = text ?? "text",
                 ParentValue = parentValue,
-                AnswerCode = code
+                AnswerCode = code,
+                AttachmentName = attachmentName
             };
         }
 
-        public static Answer Option(string value = null, string text = null, string parentValue = null)
+        public static Answer Option(string value = null, string text = null, 
+            string parentValue = null, string attachmentName = null)
         {
             return new Answer
             {
                 AnswerText = text ?? "text",
                 AnswerValue = value ?? "1",
-                ParentValue = parentValue
+                ParentValue = parentValue,
+                AttachmentName = attachmentName
             };
         }
 
@@ -791,7 +798,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
-            => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X", variable: "questionnaire");
+            => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X", variable: "questionnaire_doc");
 
         public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? id, params IComposite[] children)
             => Create.QuestionnaireDocumentWithCoverPage(id, null, children: children);
@@ -1552,10 +1559,10 @@ namespace WB.Tests.Unit.Designer
 
         public static TranslationsService TranslationsService(
             DesignerDbContext dbContext = null,
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
+            IQuestionnaireViewFactory questionnaireStorage = null)
             => new TranslationsService(
                 dbContext ?? Create.InMemoryDbContext(),
-                questionnaireStorage ?? Stub<IPlainKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()),
+                questionnaireStorage ?? Stub<IQuestionnaireViewFactory>.Returning(Create.QuestionnaireView()),
                 new TranslationsExportService(),
                 Mock.Of<ICategoriesService>()
             );
@@ -1574,7 +1581,7 @@ namespace WB.Tests.Unit.Designer
             SharedPerson[] sharedPersons = null)
         {
             return new QuestionnaireListViewItem() {
-                CreatedBy = createdBy.GetValueOrDefault(),
+                OwnerId = createdBy.GetValueOrDefault(),
                 IsPublic = isPublic,
                 PublicId = id,
                 Title = title,
@@ -1645,7 +1652,8 @@ namespace WB.Tests.Unit.Designer
                 expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object,
                 new DesignerEngineVersionService(
                     Mock.Of<IAttachmentService>(a => a.GetContent(It.IsAny<string>()) == new AttachmentContent(){ContentType = "image/png"})
-                    , Mock.Of<IDesignerTranslationService>()),
+                    , Mock.Of<IDesignerTranslationService>(),
+                    Mock.Of<ICategoriesService>()),
                 macrosSubstitutionServiceImp,
                 lookupTableService ?? lookupTableServiceMock.Object,
                 attachmentService ?? attachmentServiceMock,
@@ -1793,11 +1801,11 @@ namespace WB.Tests.Unit.Designer
             new CopyPastePreProcessor(categoriesService);
 
         public static ICategoriesService CategoriesService(DesignerDbContext dbContext = null,
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null,
+            IQuestionnaireViewFactory questionnaireStorage = null,
             ICategoriesExportService categoriesExportService = null,
             ICategoriesExtractFactory categoriesExtractFactory = null)
             => new CategoriesService(dbContext ?? Mock.Of<DesignerDbContext>(),
-                questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
                 categoriesExportService ?? Mock.Of<ICategoriesExportService>(),
                 categoriesExtractFactory ?? Mock.Of<ICategoriesExtractFactory>());
 

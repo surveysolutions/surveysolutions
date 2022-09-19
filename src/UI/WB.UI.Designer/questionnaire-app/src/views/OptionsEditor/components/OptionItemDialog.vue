@@ -57,6 +57,14 @@
                                     required
                                 ></v-text-field>
                             </v-col>
+                            <v-col cols="12">
+                                <v-text-field
+                                    v-model="itemAttachmentName"
+                                    :label="
+                                        $t('QuestionnaireEditor.AttachmentName')
+                                    "
+                                ></v-text-field>
+                            </v-col>
                         </v-row>
                     </v-form>
                 </v-container>
@@ -93,11 +101,14 @@ export default {
             itemTitle: this.item.title,
             itemValue: this.item.value,
             itemParentValue: this.item.parentValue,
+            itemAttachmentName: this.item.attachmentName,
 
             required: value =>
                 !!value || this.$t('QuestionnaireEditor.RequiredField'),
             maxValue: v =>
-                (/^\d+$/.test(v) && Math.abs(parseInt(v)) < 2147483647) ||
+                (/^[-+]?\d+$/.test(v) &&
+                    Math.abs(parseInt(v)) <= 2147483647 &&
+                    Math.abs(parseInt(v)) >= -2147483648) ||
                 this.$t('QuestionnaireEditor.ValidationIntValue'),
 
             valid: true
@@ -111,7 +122,8 @@ export default {
                 this.$emit('change', {
                     title: this.itemTitle,
                     value: this.itemValue,
-                    parentValue: this.itemParentValue
+                    parentValue: this.itemParentValue,
+                    attachmentName: this.itemAttachmentName
                 });
             }
         },

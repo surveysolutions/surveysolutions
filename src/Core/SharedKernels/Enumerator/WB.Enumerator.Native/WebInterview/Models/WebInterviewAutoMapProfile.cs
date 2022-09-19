@@ -138,7 +138,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
             this.CreateMap<InterviewTreeVariable, InterviewVariable>()
                 .IncludeBase<InterviewTreeVariable, InterviewEntity>()
-                .ForMember(x => x.Value, opts => opts.MapFrom(x => x.GetValueAsString()));
+                .ForMember(x => x.Value, opts => opts.MapFrom(x => x.GetValueAsStringBrowserReady()));
 
             this.CreateMap<InterviewTreeGroup, InterviewEntity>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
@@ -187,7 +187,15 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
         private static DropdownItem GetSingleFixedOptionAnswerAsDropdownItem(InterviewTreeQuestion question)
         {
-            return new DropdownItem(question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue, question.GetAnswerAsString());
+            var singleOptionAnswer = question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer();
+            var selectedValue = singleOptionAnswer.SelectedValue;
+            int? parentAnswer = null;
+
+            if (question.IsCascading && question.InterviewQuestion is InterviewTreeCascadingQuestion cascading)
+                parentAnswer = cascading.GetCascadingParentQuestion()?.GetAnswer()?.SelectedValue;
+
+            var attachmentName = question.Tree.GetAttachmentNameForQuestionOptionByOptionValue(question.Identity.Id, selectedValue, parentAnswer);
+            return new DropdownItem(selectedValue, question.GetAnswerAsString(), attachmentName);
         }
     }
 }

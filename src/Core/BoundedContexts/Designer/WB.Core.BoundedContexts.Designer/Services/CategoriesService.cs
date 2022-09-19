@@ -10,6 +10,8 @@ using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
@@ -20,12 +22,12 @@ namespace WB.Core.BoundedContexts.Designer.Services
     internal class CategoriesService : ICategoriesService
     {
         private readonly DesignerDbContext dbContext;
-        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
+        private readonly IQuestionnaireViewFactory questionnaireStorage;
         private readonly ICategoriesExportService categoriesExportService;
         private readonly ICategoriesExtractFactory categoriesExtractFactory;
 
         public CategoriesService(DesignerDbContext dbContext, 
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage, 
+            IQuestionnaireViewFactory questionnaireStorage, 
             ICategoriesExportService categoriesExportService,
             ICategoriesExtractFactory categoriesExtractFactory)
         {
@@ -59,6 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 worksheet.Cells("A1").Value = "id";
                 worksheet.Cells("B1").Value = "text";
                 worksheet.Cells("C1").Value = "parentid";
+                worksheet.Cells("D1").Value = "attachmentname";
 
                 void FormatCell(string address)
                 {
@@ -69,6 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 FormatCell("A1");
                 FormatCell("B1");
                 FormatCell("C1");
+                FormatCell("D1");
 
                 using var stream = new MemoryStream();
                 excelPackage.SaveAs(stream);
@@ -76,30 +80,30 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
         }
 
-        public CategoriesFile? GetAsExcelFile(Guid questionnaireId, Guid categoriesId)
+        public CategoriesFile? GetAsExcelFile(QuestionnaireRevision questionnaireId, Guid categoriesId)
         {
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.ToString("N"));
+            var questionnaire = this.questionnaireStorage.Load(questionnaireId);
             if (questionnaire == null)
                 return null;
 
             return new CategoriesFile
             {
                 QuestionnaireTitle = questionnaire.Title,
-                CategoriesName = questionnaire.Categories.FirstOrDefault(x => x.Id == categoriesId)?.Name ?? string.Empty,
-                Content = this.GetExcelFileContentEEPlus(questionnaireId, categoriesId)
+                CategoriesName = questionnaire.Source.Categories.FirstOrDefault(x => x.Id == categoriesId)?.Name ?? string.Empty,
+                Content = this.GetExcelFileContentEEPlus(questionnaire.PublicKey, categoriesId)
             };
         }
 
         public void DeleteAllByQuestionnaireId(Guid questionnaireId)
         {
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaire = this.questionnaireStorage.Load(new QuestionnaireRevision(questionnaireId));
             if (questionnaire == null)
                 return;
 
-            foreach (var categories in questionnaire.Categories)
+            foreach (var categories in questionnaire.Source.Categories)
             {
                 this.dbContext.CategoriesInstances.RemoveRange(
-                    this.dbContext.CategoriesInstances.Where(x => x.CategoriesId == categories.Id && x.QuestionnaireId == questionnaireId));
+                    this.dbContext.CategoriesInstances.Where(x => x.CategoriesId == categories.Id && x.QuestionnaireId == questionnaire.PublicKey));
             }
 
             this.dbContext.SaveChanges();
@@ -114,7 +118,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 {
                     Id = i.Value,
                     ParentId = i.ParentId,
-                    Text = i.Text
+                    Text = i.Text,
+                    AttachmentName = i.AttachmentName
                 });
             return categoriesExportService.GetAsExcelFile(items);
         }
@@ -127,7 +132,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 {
                     Id = x.Value,
                     ParentId = x.ParentId,
-                    Text = x.Text
+                    Text = x.Text,
+                    AttachmentName = x.AttachmentName
                 });
 
         public void Store(Guid questionnaireId, Guid categoriesId, Stream file, CategoriesFileType fileType)
@@ -173,7 +179,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 Text = x.Text,
                 ParentId = string.IsNullOrEmpty(x.ParentId)
                     ? (int?)null
-                    : int.Parse(x.ParentId)
+                    : int.Parse(x.ParentId),
+                AttachmentName = x.AttachmentName
             }));
         }
     }

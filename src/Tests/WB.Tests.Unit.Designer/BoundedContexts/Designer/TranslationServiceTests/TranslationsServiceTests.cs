@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -45,8 +46,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 Create.Group(groupId: Guid.Parse("11111111111111111111111111111111"), title:"Section Text"),
             });
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -100,8 +101,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                     })
             });
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -163,8 +164,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 Create.Group(groupId: sectionId, title:"Section Text")
             });
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -199,8 +200,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 Create.Group(groupId: sectionId, title:"Section Text")
             });
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -235,8 +236,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 Create.Group(groupId: sectionId, title:"Section Text")
             });
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -278,8 +279,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 new Categories{ Id = categoriesId, Name = categoriesName}
             };
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -321,8 +322,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 new Categories{ Id = categoriesId, Name = categoriesName}
             };
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -364,8 +365,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 new Categories{ Id = categoriesId, Name = categoriesName}
             };
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -406,8 +407,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 new Categories{ Id = categoriesId, Name = categoriesName}
             };
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -467,8 +468,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var plainStorageAccessor = Create.InMemoryDbContext();
 
             var questionnaire = Create.QuestionnaireDocument(questionnaireId, Create.Group(sectionId));
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -521,8 +522,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
             var questionnaire = Create.QuestionnaireDocument(questionnaireId, Create.Group(sectionId));
             questionnaire.Categories.Add(Create.Categories(name: categoriesName));
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 

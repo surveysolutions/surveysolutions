@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         
         private IQueryable<Workspace> Filter(string query, bool includeDisabled, IQueryable<Workspace> source)
         {
-            IQueryable<Workspace> result = source.OrderBy(x => x.Name);
+            IQueryable<Workspace> result = source.OrderBy(x => x.DisplayName);
 
             if (!this.authorizedUser.IsAdministrator)
             {

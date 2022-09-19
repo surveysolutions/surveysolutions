@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>{{count}} dotazník bude schválen.</value>
+    <value>{{count}} rozhovor bude schválen.</value>
   </data>
   <data name="ApproveConfirmMessage_plural" xml:space="preserve">
-    <value>{{count}} dotazníků bude schváleno.</value>
+    <value>Počet rozhovorů, které budou schváleny: {{count}}.</value>
   </data>
   <data name="DynamicFilter_MatchTypes_And" xml:space="preserve">
     <value>A</value>
@@ -133,9 +133,155 @@
     <value>hodnota</value>
   </data>
   <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
-    <value>Počet nezodpovězených otázek. Zahrnuje garantské otázky, identifikace a tazatelské otázky. Může obsahovat nuly pro dotazníky které byly dokončeny před vydáním verze 20.09.</value>
+    <value>Počet nezodpovězených otázek. Zahrnuje garantské a tazatelské otázky a technické údaje. Může obsahovat prázné hodnoty pro dotazníky které byly dokončeny před vydáním verze 20.09.</value>
   </data>
   <data name="Tooltip_Table_ReceivedByInterviewer" xml:space="preserve">
-    <value>Ukázat, zda byl dotazník stažen do tazatelského tabletu. Seřadíte podle přijetí tazatelem kliknutím na ikonu řazení.</value>
+    <value>Indikátor, zda byl dotazník stažen do tazatelského tabletu. Seřadíte podle přijetí tazatelem kliknutím na ikonu řazení.</value>
+  </data>
+  <data name="AdvancedFilterSelector" xml:space="preserve">
+    <value>Rozšířený filtr</value>
+  </data>
+  <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
+    <value>Rozhovory můžete schvalovat pouze s následujícími statusy: {{status1}}, {{status2}} a {{status3}}.</value>
+  </data>
+  <data name="ApproveConfirmMessageHQ" xml:space="preserve">
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů co bude schváleno.&lt;/h3&gt;
+&lt;b&gt;Pozor!&lt;/b&gt; Schvalovat můžete pouze rozhovory s následujícím statusem: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
+  </data>
+  <data name="ApproveReceivedWarning" xml:space="preserve">
+    <value>Pokud tazatel již na rozhovoru začal pracovat, budou veškerá data, která tazatel zadal před další synchronizací, VYMAZÁNY!</value>
+  </data>
+  <data name="AssignConfirmMessage" xml:space="preserve">
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů vybraných k přeřazení.&lt;/h3&gt;
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete přiřadit pouze rozhovory s následujícími statusy: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (pouze u jiného tazatele)&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.
+</value>
+  </data>
+  <data name="Assignment" xml:space="preserve">
+    <value>ID dotazníku</value>
+  </data>
+  <data name="AssignReceivedConfirm" xml:space="preserve">
+    <value>Aplikovat na {{count}} rozhovorů, které tazatel již stáhnul</value>
+  </data>
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Pokud tazatel již na rozhovoru začal pracovat, budou veškerá data, která tazatel zadal před další synchronizací, VYMAZÁNY!</value>
+  </data>
+  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů co bude přiděleno.&lt;/h3&gt;
+&lt;b&gt;Pozor!&lt;/b&gt; Pouze rozhovory, které nejsou ve stavu &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt; lze přeřadit.</value>
+  </data>
+  <data name="ChooseQuestionsTitle" xml:space="preserve">
+    <value>Vyberte technické údaje, které chcete použít ve filtru</value>
+  </data>
+  <data name="ChooseResponsible" xml:space="preserve">
+    <value>Vyberte prosím Garanta nebo tazatele.</value>
+  </data>
+  <data name="ChooseResponsibleInterviewer" xml:space="preserve">
+    <value>Vyberte tazatele.</value>
+  </data>
+  <data name="ChooseResponsibleSupervisor" xml:space="preserve">
+    <value>Vyberte prosím Garanta.</value>
+  </data>
+  <data name="ClientKeyTitle" xml:space="preserve">
+    <value>Klíč, který byl vygenerován na zařízení, ale byl změněn kvůli kolizi s existujícím rozhovorem na serveru</value>
+  </data>
+  <data name="ContinueConfirmMessage" xml:space="preserve">
+    <value>Chcete pokračovat?</value>
+  </data>
+  <data name="ContinueConfirmMessageHQ" xml:space="preserve">
+    <value>Chcete pokračovat?</value>
+  </data>
+  <data name="DeleteConfirmMessageHQ" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů co bude smazáno.&lt;/h3&gt;
+&lt;b&gt;Pozor!&lt;/b&gt; Rozhovory, které nebyly staženy tazatelem, můžete smazat pouze s následujícími statusy: &lt;i&gt;{{status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+  </data>
+  <data name="DynamicFilter" xml:space="preserve">
+    <value>Rozšířený filtr</value>
+  </data>
+  <data name="DynamicFilter_MatchType" xml:space="preserve">
+    <value>Shodný typ</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddGroup" xml:space="preserve">
+    <value>Přidat Skupinu</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddRule" xml:space="preserve">
+    <value>Přidat Pravidlo</value>
+  </data>
+  <data name="DynamicFilterNotAvailable" xml:space="preserve">
+    <value>Nic nebylo nalezeno</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Počet chyb</value>
+  </data>
+  <data name="FiltersByQuestions" xml:space="preserve">
+    <value>Filtr podle otázek</value>
+  </data>
+  <data name="NotAnsweredCount" xml:space="preserve">
+    <value>Nezodpovězeno</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Pozor!</value>
+  </data>
+  <data name="QuestionsFilterNotAvailable" xml:space="preserve">
+    <value>Filtr podle otázek je dostupný pouze v případě, že je vybrána konkrétní verze typu dotazníku</value>
+  </data>
+  <data name="QuestionsSelector" xml:space="preserve">
+    <value>Filtr technických údajů</value>
+  </data>
+  <data name="RejectConfirmMessage" xml:space="preserve">
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; rozhovory, které budou vráceny.&lt;/h3&gt;
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícími statusy: &lt;i&gt;{{status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+  </data>
+  <data name="RejectConfirmMessageHQ" xml:space="preserve">
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; rozhovory, které budou vráceny.&lt;/h3&gt;
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícím statusem: &lt;i&gt;{{status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+  </data>
+  <data name="RejectToNewResponsible" xml:space="preserve">
+    <value>Vrátit a vybrat nového zodpovědného uživatele</value>
+  </data>
+  <data name="RejectToOriginal" xml:space="preserve">
+    <value>Vrátit původnímu zodpovědnému uživateli</value>
+  </data>
+  <data name="SwitchToCawiReceivedWarning" xml:space="preserve">
+    <value>Pokud tazatel již na rozhovoru začal pracovat, budou veškerá data, která tazatel zadal před další synchronizací, VYMAZÁNY!</value>
+  </data>
+  <data name="Tooltip_Filter_Assignment" xml:space="preserve">
+    <value>ID dotazníku. Klikněte do pole a zadejte celé ID.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Výběrem typu dotazníku zobrazíte související rozhovory. Vyberte „Všechny typy“, chcete-li zobrazit rozhovory jakéhokoli typu.</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>Zodpovědný uživatel. Klikněte do pole k vybrání uživatelského jména buď přímým výběrem, nebo zadáním jména pro další filtrování v seznamu uživatelských jmen.</value>
+  </data>
+  <data name="Tooltip_Filter_Status" xml:space="preserve">
+    <value>Stav rozhovoru. Výběrem stavu zobrazíte všechny rozhovory s tímto stavem. Chcete-li zobrazit rozhovory s libovolným stavem, vyberte „Všechny stavy“.</value>
+  </data>
+  <data name="Tooltip_Table_Assignment" xml:space="preserve">
+    <value>Identifikátor dotazníku, ke kterému tento rozhovor patří. Kliknutím na ikonu seřazení dojde k seřazení podle čísla dotazníku.</value>
+  </data>
+  <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
+    <value>Zobrazuje celkový počet neplatných otázek a statických textů v rozhovoru. Více neúspěšných podmínek ověření u stejné entity se počítá jako 1.</value>
+  </data>
+  <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
+    <value>Klikněte sem pro skrytí nebo zobrazení technických údajů. Skrytí technických údajů může poskytnout více prostoru pro další informace. Zobrazenítechnických údajů může poskytnout podrobnosti potřebné k rozlišení mezi rozhovory.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Informace, které identifikují každý dotazník. Toto jsou odpovědi na otázky označené v aplikaci Designer jako identifikační.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewKey" xml:space="preserve">
+    <value>Krátký identifikátor případu, který se objevuje v celém systému – Ústředí, Garantům a tazatelům. Zvažte použití tohoto ID při komunikaci s týmem v terénu, spíše než velké sady technických údajů.</value>
+  </data>
+  <data name="Tooltip_Table_LastUpdate" xml:space="preserve">
+    <value>Kdy byly změny v rozhovoru naposledy zveřejněny na serveru. Kliknutím na ikonu řazení seřadíte podle času.</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>Uživatel aktuálně zodpovědný za dotazník. Kliknutím na ikonu řazení seřadíte podle uživatelského jména.</value>
+  </data>
+  <data name="Tooltip_Table_Status" xml:space="preserve">
+    <value>Stav rozhovoru v pracovním postupu šetření. Kliknutím na ikonu řazení seřadíte podle stavu.</value>
+  </data>
+  <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů co nebude schváleno.&lt;/h3&gt;
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete zrušit schválení rozhovoru pouze s následujícím statusem: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
   </data>
 </root>

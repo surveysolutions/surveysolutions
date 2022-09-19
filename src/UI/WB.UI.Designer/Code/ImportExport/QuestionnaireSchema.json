@@ -57,7 +57,8 @@
       "properties": {
         "Text": { "type": "string" },
         "Code": { "type": [ "integer", "null" ]},
-        "ParentCode": { "type": [ "integer", "null" ] }
+        "ParentCode": { "type": [ "integer", "null" ] },
+        "AttachmentName" : {"type":  ["string", "null"] }
       },
       "additionalProperties": false,
       "required": []
@@ -166,7 +167,7 @@
     "FixedRosterTitle": {
       "type": "object",
       "properties": {
-        "Value": { "type": "number" },
+        "Value": { "type": "integer" },
         "Title": { "type": "string" }
       },
       "additionalProperties": false,
@@ -501,7 +502,7 @@
       "type": "object",
       "properties": {
         "Text": { "type": "string" },
-        "Code": { "type": "number" }
+        "Code": { "type": "integer" }
       },
       "additionalProperties": false,
       "required": []

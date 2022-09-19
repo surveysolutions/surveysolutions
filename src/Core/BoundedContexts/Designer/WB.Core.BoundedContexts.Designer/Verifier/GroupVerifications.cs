@@ -116,6 +116,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             foreach (var node in Markdown.Parse(text, pipeline).AsEnumerable())
             {
                 if(!(node is LeafBlock leafBlock)) continue;
+                if(leafBlock.Inline == null) continue;
                 foreach (var inline in leafBlock.Inline)
                 {
                     if(!(inline is LinkInline link) || link.Url==null) continue;
@@ -240,7 +241,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static bool GroupTitleIsTooLong(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-            => group.Title?.Length > 500;
+            => group.Title?.Length > MaxTitleLength;
 
         private static bool GroupTitleIsEmpty(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => string.IsNullOrWhiteSpace(group.Title);

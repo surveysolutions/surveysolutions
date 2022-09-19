@@ -1209,6 +1209,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                     {
                         Create.StaticText(staticTextId),
                         Create.TextQuestion(questionId: questionId),
+                        Create.Variable()
                     }),
                     Create.Group(sourceGroupId),
                 }.ToReadOnlyCollection()
@@ -1273,6 +1274,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                     {
                         Create.TextQuestion(questionId: questionId),
                         Create.TextQuestion(questionId: newQuestionId),
+                        Create.Variable()
                     }),
                     Create.Group(sourceGroupId),
                 }.ToReadOnlyCollection()
