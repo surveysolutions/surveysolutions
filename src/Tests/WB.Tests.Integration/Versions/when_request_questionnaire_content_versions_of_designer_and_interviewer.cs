@@ -10,7 +10,9 @@ namespace WB.Tests.Integration.Versions
     internal class when_request_questionnaire_content_versions_of_designer_and_interviewer
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            designerEngineVersionService = new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), Mock.Of<IDesignerTranslationService>());
+            designerEngineVersionService = new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), 
+                Mock.Of<IDesignerTranslationService>(),
+                Mock.Of<ICategoriesService>());
             questionnaireContentVersionProvider = new QuestionnaireContentVersionProvider();
             BecauseOf();
         }
