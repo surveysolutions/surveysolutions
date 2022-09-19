@@ -402,15 +402,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             option.Title = optionValue.Text;
             option.QuestionState = this.QuestionState;
 
-            /*
-            var option = new SingleOptionQuestionOptionViewModel
-            {
-                Title = optionValue.Text,
-                Value = optionValue.Value,
-                QuestionState = this.QuestionState
-            };
-            */
-
             option.BeforeSelected += this.OptionSelected;
             option.AnswerRemoved += this.RemoveAnswer;
 

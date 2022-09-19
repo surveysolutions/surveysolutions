@@ -86,7 +86,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public virtual bool IsAnswered() => this.Checked;
         public virtual bool IsOrdered() => this.Checked;
         
-        public virtual void Dispose()
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
         {
             Attachment?.ViewDestroy();
             Attachment?.Dispose();

@@ -3,17 +3,17 @@
         .config([
             '$provide', function ($provide) {
                 $provide.factory('optionsService', function (utilityService) {
-                    var optionsService = {};
+                    let optionsService = {};
 
-                    var regex = new RegExp(/^(.+?)(\.)+([-+]?\d+)((\.\.\.)(.+?))?\s*$/);
+                    let regex = new RegExp(/^(.+?)(\.)+([-+]?\d+)((\.\.\.)(.+?))?\s*$/);
 
                     optionsService.validateOptionAsText = function (option) {
                         return regex.test((option || ""));
                     };
 
                     optionsService.stringifyOptions = function (options) {
-                        var stringifiedOptions = "";
-                        var maxLength = _.max(_.map(options, function (o) { return o.title.length; })) + 3;
+                        let stringifiedOptions = "";
+                        let maxLength = _.max(_.map(options, function (o) { return o.title.length; })) + 3;
                         _.each(options, function (option) {
                             if (!_.isEmpty(option)) {
                                 stringifiedOptions += 
@@ -28,12 +28,12 @@
                     };
 
                     optionsService.parseOptions = function(stringifiedOptions) {
-                        var optionsStringList = (stringifiedOptions || "").split("\n");
+                        let optionsStringList = (stringifiedOptions || "").split("\n");
                         _.filter(optionsStringList, _.isEmpty);
 
-                        var options = _.map(optionsStringList, function(item) {
-                            var matches = item.match(regex);
-                            var attachment = matches.length > 5 ? matches[6]: '';                                 
+                        let options = _.map(optionsStringList, function(item) {
+                            let matches = item.match(regex);
+                            let attachment = matches.length > 5 ? matches[6]: '';                                 
                             return {
                                 id: utilityService.guid(),
                                 value: matches[3] * 1,

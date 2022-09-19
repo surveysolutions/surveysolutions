@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -21,7 +19,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class CategoricalYesNoViewModel : CategoricalMultiViewModelBase<decimal, AnsweredYesNoOption>,
         IAsyncViewModelEventHandler<YesNoQuestionAnswered>
     {
-        private readonly IUserInteractionService userInteraction;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
 
@@ -36,7 +33,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             : base(questionStateViewModel, questionnaireRepository, eventRegistry, interviewRepository, principal,
                 answering, instructionViewModel, throttlingModel)
         {
-            this.userInteraction = userInteraction;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.Options = new CovariantObservableCollection<CategoricalMultiOptionViewModel<decimal>>();

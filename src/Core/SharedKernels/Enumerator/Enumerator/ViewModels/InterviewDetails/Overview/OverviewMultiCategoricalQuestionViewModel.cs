@@ -25,6 +25,11 @@ public class OverviewMultiCategoricalQuestionViewModel : OverviewQuestionViewMod
 
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
             Attachment?.ViewDestroy();
             Attachment?.Dispose();
         }

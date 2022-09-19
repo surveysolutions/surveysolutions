@@ -60,9 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            this.interviewId = interviewId;
-            //this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
+            this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
             this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -77,11 +75,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.BindNoAttachment().WaitAndUnwrapException();
                 return;
             }
-            
-            if (interviewId == null) 
-                throw new ArgumentNullException(nameof(interviewId));
 
-            this.interviewId = interviewId;
+            this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
             
             BindAttachment(attachmentName).WaitAndUnwrapException();
             this.supportPreview = supportPreview;

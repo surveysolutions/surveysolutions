@@ -81,7 +81,7 @@ export function convertToTable(stringified, isCascading) {
             return {};
         }
         if (isCascading) {
-            var attachmentC = matches.length > 6 ? matches[7] : '';
+            let attachmentC = matches.length > 6 ? matches[7] : '';
             if (matches.length > 3) {
                 return {
                     value: matches[4] * 1,
@@ -95,7 +95,7 @@ export function convertToTable(stringified, isCascading) {
                     title: matches[1]
                 };
         } else {
-            var attachment = matches.length > 5 ? matches[6] : '';
+            let attachment = matches.length > 5 ? matches[6] : '';
             return {
                 value: matches[3] * 1,
                 title: matches[1],
