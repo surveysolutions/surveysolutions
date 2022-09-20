@@ -821,6 +821,9 @@
   <data name="GeometryInputMode" xml:space="preserve">
     <value>Input mode</value>
   </data>
+  <data name="GeometryShowNeighbours" xml:space="preserve">
+    <value>Show neighbours</value>
+  </data>
   <data name="QuestionDecimalPlaces" xml:space="preserve">
     <value>Number of decimal places</value>
   </data>

@@ -109,6 +109,7 @@
 
                 $scope.activeQuestion.geometryInputModeOptions = question.geometryInputModeOptions;
                 $scope.activeQuestion.geometryInputMode = question.geometryInputMode;
+                $scope.activeQuestion.geometryShowNeighbours = question.geometryShowNeighbours;                
 
                 var options = question.options || [];  
                 _.each(options, function(option) {
@@ -860,8 +861,8 @@
 
             $scope.isIntegerChange = function () {
                 $scope.activeQuestion.countOfDecimalPlaces = null;
-            };
-
+            };                 
+            
             $scope.showAsListChange = function () {
                 $scope.activeQuestion.showAsListThreshold = null;
             };

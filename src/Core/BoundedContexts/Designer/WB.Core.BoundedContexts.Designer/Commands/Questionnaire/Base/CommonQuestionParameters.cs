@@ -16,5 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         public GeometryType? GeometryType { get; set; }
         
         public GeometryInputMode? GeometryInputMode { get; set; }
+        
+        public bool? GeometryShowNeighbours { get; set; }
     }
 }

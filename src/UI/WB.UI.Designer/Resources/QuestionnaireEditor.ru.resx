@@ -1192,7 +1192,10 @@
   <data name="GeometryInputMode" xml:space="preserve">
     <value>Режим ввода</value>
   </data>
-    <data name="CollaboratorsSettings" xml:space="preserve">
+  <data name="GeometryShowNeighbours" xml:space="preserve">
+    <value>Показывать соседей</value>
+  </data>
+  <data name="CollaboratorsSettings" xml:space="preserve">
     <value>Совместная работа</value>
   </data>
   <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
