@@ -309,6 +309,14 @@
                 <div class="question-meta">
                     <span>@(question.Properties?.GeometryInputMode ?? GeometryInputMode.Manual)</span>
                 </div>
+                <div class="question-meta more">
+                    <div class="type">
+                        @PdfStrings.GeometryShowNeighbours
+                    </div>
+                </div>
+                <div class="question-meta">
+                    <span>@(question.Properties?.GeometryShowNeighbours ?? false)</span>
+                </div>
                 break;
             case QuestionType.Audio:
                 <div class="answer-editor">

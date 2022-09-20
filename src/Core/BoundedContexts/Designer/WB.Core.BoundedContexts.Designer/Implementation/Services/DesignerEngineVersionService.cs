@@ -289,8 +289,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                 x.Properties?.GeometryInputMode != null 
                                 && x.Properties?.GeometryInputMode != GeometryInputMode.Manual).Any();
                         },
-                        description: "Geography question non manual input mode"
+                        description: "Geography question has non manual input mode"
                     ),
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire =>
+                        {
+                            return questionnaire.Find<AreaQuestion>(x => 
+                                x.Properties?.GeometryShowNeighbours == true).Any();
+                        },
+                        description: "Geography question has show neighbours on"
+                    )
+                    
                 }
             },
         };

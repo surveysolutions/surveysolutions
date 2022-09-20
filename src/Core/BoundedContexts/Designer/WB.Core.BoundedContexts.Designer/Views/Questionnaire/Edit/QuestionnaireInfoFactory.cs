@@ -589,7 +589,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 questionTypeOptions : question.Answers
                     .Select(a => new SelectOption() {Text = a.AnswerText, Value = a.AnswerValue}).ToArray(),
                 geometryType : question.Properties?.GeometryType ?? GeometryType.Polygon,
-                geometryInputMode: question.Properties?.GeometryInputMode ?? GeometryInputMode.Manual
+                geometryInputMode: question.Properties?.GeometryInputMode ?? GeometryInputMode.Manual,
+                geometryShowNeighbours: question.Properties?.GeometryShowNeighbours
             );
             questionView.ValidationConditions.AddRange(question.ValidationConditions);
 

@@ -378,5 +378,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             //aaa
             Assert.That(contentVersion, Is.EqualTo(34));
         }
+        
+        [Test]
+        public void should_return_34_when_geography_show_neighbours_is_on()
+        {
+            var categoryId = Id.g1;
+            
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.Question(questionType:QuestionType.Area, 
+                        properties:new QuestionProperties(false,false)
+                        {
+                            GeometryShowNeighbours = true
+                        }),
+                });
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(34));
+        }
     }
 }

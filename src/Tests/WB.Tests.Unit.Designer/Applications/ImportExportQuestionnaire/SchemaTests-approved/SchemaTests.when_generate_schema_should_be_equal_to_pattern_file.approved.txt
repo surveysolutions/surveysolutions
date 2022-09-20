@@ -355,6 +355,12 @@
                   "$ref": "#/definitions/GeometryInputMode"
                 }
               ]
+            },
+            "GeometryShowNeighbours": {
+              "type": [
+                "boolean",
+                "null"
+              ]
             }
           }
         }

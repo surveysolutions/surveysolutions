@@ -85,7 +85,7 @@
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
         "Id": { "$ref": "#/definitions/GUID" },
-
+        
         "GeometryType": {
           "type": "string",
           "oneOf": [
@@ -96,6 +96,7 @@
           ],
           "default": "Polygon"
         },
+        
         "GeometryInputMode": {
           "type": "string",
           "oneOf": [
@@ -104,7 +105,9 @@
             { "const": "Semiautomatic",      "description": "Semiautomatic" }
           ],
           "default": "Manual"
-        }
+        },
+        
+        "GeometryShowNeighbours": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
       "required": ["Type"]

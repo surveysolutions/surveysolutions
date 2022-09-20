@@ -45,7 +45,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             int? showAsListThreshold = null, Guid[]? parentGroupsIds = null, Guid[]? rosterScopeIds = null,
             string? categoriesId = null, string? mask = null, int? countOfDecimalPlaces = null, int? maxAnswerCount = null, 
             List<ValidationCondition>? validationConditions = null, CategoricalOption[]? options = null, bool? areAnswersOrdered = null,
-            QuestionnaireInfoFactory.SelectOption[]? geometryInputModeOptions = null)
+            QuestionnaireInfoFactory.SelectOption[]? geometryInputModeOptions = null,
+            bool? geometryShowNeighbours = null)
         {
 
             this.SourceOfLinkedEntities = sourceOfLinkedEntities ?? new List<DropdownEntityView>();
@@ -99,7 +100,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             CategoriesId = categoriesId;
             
             GeometryInputMode = geometryInputMode;
+            GeometryShowNeighbours = geometryShowNeighbours;
         }
+
+        public bool? GeometryShowNeighbours { get; set; }
 
         public Guid Id { get; set; }
         public Guid[]? ParentGroupsIds { get; set; }

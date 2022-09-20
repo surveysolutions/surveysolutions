@@ -177,6 +177,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show neighbours.
+        /// </summary>
+        public static string GeometryShowNeighbours {
+            get {
+                return ResourceManager.GetString("GeometryShowNeighbours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to in roster.
         /// </summary>
         public static string InRosterSourceOfCategories {

@@ -227,12 +227,14 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             this.CreateMap<AreaQuestion, Models.Question.AreaQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
                 .ForMember(s => s.GeometryType, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryType : GeometryType.Point))
-                .ForMember(s => s.GeometryInputMode, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryInputMode : GeometryInputMode.Manual));
+                .ForMember(s => s.GeometryInputMode, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryInputMode : GeometryInputMode.Manual))
+                .ForMember(s => s.GeometryShowNeighbours, d=>d.MapFrom(t => t.Properties != null ? t.Properties.GeometryShowNeighbours : false));
             
             this.CreateMap<Models.Question.AreaQuestion, AreaQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
                 .AfterMap((s, d) => d.Properties!.GeometryType = (GeometryType?)(s.GeometryType ?? null))
-                .AfterMap((s, d) => d.Properties!.GeometryInputMode = (GeometryInputMode?)(s.GeometryInputMode ?? null));
+                .AfterMap((s, d) => d.Properties!.GeometryInputMode = (GeometryInputMode?)(s.GeometryInputMode ?? null))
+                .AfterMap((s, d) => d.Properties!.GeometryShowNeighbours = s.GeometryShowNeighbours ?? null);
 
             this.CreateMap<AudioQuestion, Models.Question.AudioQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
