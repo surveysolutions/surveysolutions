@@ -285,7 +285,8 @@
                         hideInstructions: question.hideInstructions,
                         optionsFilterExpression: question.optionsFilterExpression,
                         geometryType: question.geometryType,
-                        geometryInputMode: question.geometryInputMode
+                        geometryInputMode: question.geometryInputMode,
+                        geometryShowNeighbours: question.geometryShowNeighbours
                     }
                 };
 

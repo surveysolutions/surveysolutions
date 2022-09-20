@@ -431,6 +431,7 @@
                 else {
                     $scope.activeQuestion.geometryType = null;
                     $scope.activeQuestion.geometryInputMode = null;
+                    $scope.activeQuestion.geometryShowNeighbours = null;
                 }
 
                 markFormAsChanged();
