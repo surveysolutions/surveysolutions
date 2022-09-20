@@ -345,6 +345,16 @@
                   "$ref": "#/definitions/GeometryType"
                 }
               ]
+            },
+            "GeometryInputMode": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/definitions/GeometryInputMode"
+                }
+              ]
             }
           }
         }
@@ -364,6 +374,20 @@
         "Polyline",
         "Point",
         "Multipoint"
+      ]
+    },
+    "GeometryInputMode": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Manual",
+        "Automatic",
+        "Semiautomatic"
+      ],
+      "enum": [
+        "Manual",
+        "Automatic",
+        "Semiautomatic"
       ]
     },
     "AudioQuestion": {
