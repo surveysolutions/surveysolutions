@@ -2131,6 +2131,33 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Question option refers to non existent attachment.
+        /// </summary>
+        public static string WB0313_QuestionOptionReferenceToNonExistentAttachment {
+            get {
+                return ResourceManager.GetString("WB0313_QuestionOptionReferenceToNonExistentAttachment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question contains multiple options that refer to the same attachment.
+        /// </summary>
+        public static string WB0314_NonUniqueAttachment {
+            get {
+                return ResourceManager.GetString("WB0314_NonUniqueAttachment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attachment name should contain only letters, digits and underscore character. Is starting with letter, no consecutive underscores, not ending with underscore and is not a reserved word. Not empty and less than 32 characters..
+        /// </summary>
+        public static string WB0315_AttachmentHasInvalidName {
+            get {
+                return ResourceManager.GetString("WB0315_AttachmentHasInvalidName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only string variable type can be used as source of the attachment name.
         /// </summary>
         public static string WB0390_OnlyStringVariableAllowedAsAttachmentName {

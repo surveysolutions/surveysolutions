@@ -340,6 +340,7 @@
     "OptionsUploadLimit": "No categories. Choose tab separated file. The file can contain up to {limit} categories.",
     "OptionsUploadTitle": "Title",
     "OptionsUploadValue": "Value",
+    "AttachmentName": "Attachment name",
     "OptionsUploadParent": "Parent value",
     "SideBarMacroNoName": "macro with no name",
     "Upload": "Upload",

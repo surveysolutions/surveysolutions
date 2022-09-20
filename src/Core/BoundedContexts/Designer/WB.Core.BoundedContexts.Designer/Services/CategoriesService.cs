@@ -61,6 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 worksheet.Cells("A1").Value = "id";
                 worksheet.Cells("B1").Value = "text";
                 worksheet.Cells("C1").Value = "parentid";
+                worksheet.Cells("D1").Value = "attachmentname";
 
                 void FormatCell(string address)
                 {
@@ -71,6 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 FormatCell("A1");
                 FormatCell("B1");
                 FormatCell("C1");
+                FormatCell("D1");
 
                 using var stream = new MemoryStream();
                 excelPackage.SaveAs(stream);
@@ -116,7 +118,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 {
                     Id = i.Value,
                     ParentId = i.ParentId,
-                    Text = i.Text
+                    Text = i.Text,
+                    AttachmentName = i.AttachmentName
                 });
             return categoriesExportService.GetAsExcelFile(items);
         }
@@ -129,7 +132,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 {
                     Id = x.Value,
                     ParentId = x.ParentId,
-                    Text = x.Text
+                    Text = x.Text,
+                    AttachmentName = x.AttachmentName
                 });
 
         public void Store(Guid questionnaireId, Guid categoriesId, Stream file, CategoriesFileType fileType)
@@ -175,7 +179,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 Text = x.Text,
                 ParentId = string.IsNullOrEmpty(x.ParentId)
                     ? (int?)null
-                    : int.Parse(x.ParentId)
+                    : int.Parse(x.ParentId),
+                AttachmentName = x.AttachmentName
             }));
         }
     }

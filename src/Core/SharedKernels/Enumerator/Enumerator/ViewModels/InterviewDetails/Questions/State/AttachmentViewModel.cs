@@ -24,18 +24,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly Func<IMediaAttachment> attachmentFactory;
         private readonly IInterviewPdfService pdfService;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         private AttachmentContentMetadata attachmentContentMetadata;
-        private NavigationState navigationState;
+        private string interviewId;
         private Guid? attachmentId;
         public Identity Identity { get; private set; }
 
-        public string Tag => "attachment_" + Identity.ToString();
+        public string Tag => "attachment_" + Identity;
 
         private const string ImageMimeType = "image/";
         private const string VideoMimeType = "video/";
         private const string AudioMimeType = "audio/";
         private const string PdfMimeType = "application/pdf";
+
+        private bool supportPreview = false;
 
         public AttachmentViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -43,7 +46,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IViewModelEventRegistry eventRegistry,
             IAttachmentContentStorage attachmentContentStorage,
             Func<IMediaAttachment> attachmentFactory,
-            IInterviewPdfService pdfService)
+            IInterviewPdfService pdfService,
+            IViewModelNavigationService viewModelNavigationService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
@@ -51,22 +55,61 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.attachmentContentStorage = attachmentContentStorage;
             this.attachmentFactory = attachmentFactory;
             this.pdfService = pdfService;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
+            this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
             this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
             this.eventRegistry.Subscribe(this, interviewId);
             BindAttachment().WaitAndUnwrapException();
+            this.supportPreview = false;
         }
 
-        private async Task BindAttachment()
+        public void InitAsStatic(string interviewId, string attachmentName, bool supportPreview = true)
         {
-            var interview = this.interviewRepository.GetOrThrow(navigationState.InterviewId);
+            if (attachmentName == null)
+            {
+                this.BindNoAttachment().WaitAndUnwrapException();
+                return;
+            }
+
+            this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
+            
+            BindAttachment(attachmentName).WaitAndUnwrapException();
+            this.supportPreview = supportPreview;
+        }
+
+        public IMvxAsyncCommand ShowPhotoView => new MvxAsyncCommand(async () =>
+        {
+            await this.viewModelNavigationService.NavigateToAsync<PhotoViewViewModel, PhotoViewViewModelArgs>(
+                new PhotoViewViewModelArgs
+                {
+                    InterviewId = Guid.Parse(this.interviewId),
+                    AttachmentId = this.attachmentId
+                });
+        }, () => this.supportPreview);
+
+
+        private Task BindAttachment(string attachmentName)
+        {
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
+            var newAttachment = questionnaire.GetAttachmentIdByName(attachmentName);
+            return BindAttachment(newAttachment);
+        }
+
+        private Task BindAttachment()
+        {
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
             var newAttachment = interview.GetAttachmentForEntity(Identity);
+            return BindAttachment(newAttachment);
+        }
+
+        private async Task BindAttachment(Guid? newAttachment)
+        {
             if (newAttachment == null)
             {
                 await BindNoAttachment();
@@ -76,8 +119,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.attachmentId != newAttachment)
             {
                 this.attachmentId = newAttachment;
-                IQuestionnaire questionnaire =
-                    this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+                var interview = this.interviewRepository.GetOrThrow(interviewId);
+                IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
                 var attachment = questionnaire.GetAttachmentById(this.attachmentId.Value);
                 
                 this.attachmentContentMetadata = this.attachmentContentStorage.GetMetadata(attachment.ContentId);
@@ -150,8 +193,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void OpenPdf()
         {
-            var interviewId = this.navigationState.InterviewId;
-            pdfService.Open(interviewId, this.Identity);
+            if (this.attachmentId.HasValue)
+                pdfService.OpenAttachment(interviewId, this.attachmentId.Value);
+            else
+                pdfService.Open(interviewId, this.Identity);
         }
 
         public override void ViewDestroy(bool viewFinishing = true)

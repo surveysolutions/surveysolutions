@@ -57,7 +57,8 @@
       "properties": {
         "Text": { "type": "string" },
         "Code": { "type": [ "integer", "null" ]},
-        "ParentCode": { "type": [ "integer", "null" ] }
+        "ParentCode": { "type": [ "integer", "null" ] },
+        "AttachmentName" : {"type":  ["string", "null"] }
       },
       "additionalProperties": false,
       "required": []

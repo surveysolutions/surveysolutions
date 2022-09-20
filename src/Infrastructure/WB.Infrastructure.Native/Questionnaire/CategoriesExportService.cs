@@ -17,6 +17,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                 worksheet.Cell("A1").Value = "id";
                 worksheet.Cell("B1").Value = "text";
                 worksheet.Cell("C1").Value = "parentid";
+                worksheet.Cells("D1").Value = "attachmentname";
 
                 void FormatCell(string address)
                 {
@@ -27,6 +28,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                 FormatCell("A1");
                 FormatCell("B1");
                 FormatCell("C1");
+                FormatCell("D1");
 
                 int currentRowNumber = 1;
 
@@ -40,9 +42,12 @@ namespace WB.Infrastructure.Native.Questionnaire
                     worksheet.Cell($"B{currentRowNumber}").Style.Alignment.WrapText = true;
                     worksheet.Cell($"C{currentRowNumber}").Value = row.ParentId;
                     worksheet.Cell($"C{currentRowNumber}").Style.Alignment.WrapText = true;
+                    worksheet.Cell($"D{currentRowNumber}").Value = row.AttachmentName;
+                    worksheet.Cell($"D{currentRowNumber}").Style.Alignment.WrapText = true;
                 }
 
                 worksheet.Column(3).AdjustToContents();
+                worksheet.Column(4).AdjustToContents();
                 worksheet.Protection.AllowElement(XLSheetProtectionElements.FormatColumns);
 
                 using var stream = new MemoryStream();

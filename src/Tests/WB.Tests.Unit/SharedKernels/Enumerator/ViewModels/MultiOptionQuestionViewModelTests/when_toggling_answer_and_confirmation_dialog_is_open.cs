@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 questionnaireStorage: questionnaireStorage,
                 interviewRepository: interviewRepository,
                 filteredOptionsViewModel: SetUp.FilteredOptionsViewModel(options),
-                userInteractionService: userInteractionService.Object);
+                userInteraction: userInteractionService.Object);
 
             interview.AnswerMultipleOptionsQuestion(Id.gF, Id.g1, RosterVector.Empty, DateTimeOffset.UtcNow, new [] { 1, 2 });
             

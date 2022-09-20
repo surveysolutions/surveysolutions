@@ -869,7 +869,7 @@
     <AndroidResource Include="Resources\drawable\lock_icon.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets" />
+    <Folder Include="Assets\" />
     <Folder Include="Services\Resources\" />
   </ItemGroup>
   <ItemGroup>
@@ -1557,6 +1557,35 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\qr_code_popup.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\shape.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_question__attachment.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_question_single.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_question_multi.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_question_multi_item.axml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>

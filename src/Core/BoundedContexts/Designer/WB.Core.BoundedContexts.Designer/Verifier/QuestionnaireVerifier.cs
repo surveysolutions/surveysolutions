@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 new QuestionVerifications(substitutionService, categoriesService),
                 new GroupVerifications(fileSystemAccessor),
-                new AttachmentVerifications(attachmentService), 
+                new AttachmentVerifications(attachmentService, keywordsProvider), 
                 new ExpressionVerifications(macrosSubstitutionService, expressionProcessor, compilerSettings), 
                 new LookupVerifications(lookupTableService, keywordsProvider), 
                 new MacroVerifications(), 

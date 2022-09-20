@@ -95,14 +95,17 @@ namespace WB.Core.BoundedContexts.Designer.Services
             {
                 new Tuple<string, string>(worksheet.Cell("A1").GetString(), "A"),
                 new Tuple<string, string>(worksheet.Cell("B1").GetString(), "B"),
-                new Tuple<string, string>(worksheet.Cell("C1").GetString(), "C")
-            }.Where(kv => kv.Item1 != null).ToDictionary(k => k.Item1.Trim(), v => v.Item2);
+                new Tuple<string, string>(worksheet.Cell("C1").GetString(), "C"),
+                new Tuple<string, string>(worksheet.Cell("D1").GetString(), "D")
+            }.Where(kv => !string.IsNullOrEmpty(kv.Item1))
+                .ToDictionary(k => k.Item1.Trim(), v => v.Item2);
 
             return new CategoriesHeaderMap()
             {
                 IdIndex = headers.GetOrNull("id"),
                 ParentIdIndex = headers.GetOrNull("parentid"),
                 TextIndex = headers.GetOrNull("text"),
+                AttachmentNameIndex = headers.GetOrNull("attachmentname"),
             };
         }
 
@@ -111,7 +114,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
             Id = worksheet.Cell($"{headers.IdIndex}{rowNumber}").GetString(),
             Text = worksheet.Cell($"{headers.TextIndex}{rowNumber}").GetString(),
             ParentId = worksheet.Cell($"{headers.ParentIdIndex}{rowNumber}").GetString(),
-            RowId = rowNumber
+            RowId = rowNumber,
+            AttachmentName = headers.AttachmentNameIndex != null ? worksheet.Cell($"{headers.AttachmentNameIndex}{rowNumber}").GetString() : null,
         };
     }
 }

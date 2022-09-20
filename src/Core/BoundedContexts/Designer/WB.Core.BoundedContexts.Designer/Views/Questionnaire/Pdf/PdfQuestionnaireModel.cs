@@ -77,6 +77,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             public int Id { get; set; }
             public int? ParentId { get; set; }
             public string Text { get; set; } = String.Empty;
+            public string? AttachmentName { get; set; }
         }
 
         private readonly QuestionnaireDocument questionnaire;

@@ -75,8 +75,9 @@
                 return Upload.upload({
                     url: urlCommands + '/attachment',
                     data: { file: _.isNull(attachment.file) ? "" : attachment.file, fileName: fileName, "command": JSON.stringify(command) }
-                }).then(function () {
+                }).then(function (response) {
                     blockUI.stop();
+                    return response;
                 }, function () {
                     blockUI.stop();
                 });

@@ -366,9 +366,9 @@ namespace WB.Tests.Unit.Designer.Services
             var categoriesId = Id.g2;
             var data = new[]
             {
-                new[] {"1", "option 1", "1"}, 
-                new[] {"", "", ""}, 
-                new[] {"2", "option 2", "1"} 
+                new[] {"1", "option 1", "1", ""}, 
+                new[] {"", "", "", ""}, 
+                new[] {"2", "option 2", "1", ""} 
             };
             
             var options = new DbContextOptionsBuilder<DesignerDbContext>().UseInMemoryDatabase(new Random().Next(0, 10000000).ToString());

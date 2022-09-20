@@ -463,7 +463,12 @@
                                 @PdfStrings.Options
                                 @for (var j = 0; j < categories.Items.Count; j++)
                                 {
-                                    <span><span>@categories.Items[j].Id:</span>@(categories.Items[j].Text)@(j < categories.Items.Count - 1 ? "," : "")</span>
+                                    <span>
+                                        <span>@categories.Items[j].Id: </span>
+                                        @(categories.Items[j].Text)
+                                        @(string.IsNullOrWhiteSpace(categories.Items[j].AttachmentName)? "" : ": " +  categories.Items[j].AttachmentName)
+                                        @(j < categories.Items.Count - 1 ? "," : "")
+                                    </span>
                                 }
                             </p>
                         </div>
@@ -481,7 +486,12 @@
                                 @PdfStrings.Options
                                 @for (var j = 0; j < question.Answers.Count; j++)
                                 {
-                                    <span><span>@question.Answers[j].AnswerValue:</span>@(question.Answers[j].AnswerText)@(j < question.Answers.Count - 1 ? "," : "")</span>
+                                    <span>
+                                        <span>@question.Answers[j].AnswerValue: </span>
+                                        @(question.Answers[j].AnswerText)
+                                        @(string.IsNullOrWhiteSpace(question.Answers[j].AttachmentName)? "" : ": " + question.Answers[j].AttachmentName)
+                                        @(j < question.Answers.Count - 1 ? "," : "")
+                                    </span>
                                 }
                             </p>
                         </div>

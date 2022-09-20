@@ -912,6 +912,9 @@
   <data name="OptionsUploadValue" xml:space="preserve">
     <value>Значение</value>
   </data>
+  <data name="AttachmentName" xml:space="preserve">
+    <value>Имя файла вложения</value>
+  </data>
   <data name="SideBarMacroNoName" xml:space="preserve">
     <value>Макрос без имени</value>
   </data>
@@ -1246,6 +1249,9 @@
   <data name="NotSupportedAttachment" xml:space="preserve">
     <value>Выбранный файл не поддерживается во вложениях</value>
   </data>
+  <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+    <value>Размер слишком большой</value>
+  </data>  
   <data name="HelpDefaultDate" xml:space="preserve">
     <value>Эта дата будет показана как начальная дата для выбора на планшете</value>
   </data>
@@ -1536,7 +1542,7 @@
     <value>Data changes reverted</value>
   </data>
   <data name="OptionsSizeLimit" xml:space="preserve">
-    <value>Максимально допустимо только {{ max }} строк</value>
+    <value>Максимально допустимо только {max_rows} строк</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
     <value>Ошибка сети</value>
