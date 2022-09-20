@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
@@ -354,6 +355,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
             //aaa
             Assert.That(contentVersion, Is.EqualTo(28));
+        }
+        
+        [Test]
+        public void should_return_34_when_geography_input_mode_is_auto()
+        {
+            var categoryId = Id.g1;
+            
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.Question(questionType:QuestionType.Area, 
+                        properties:new QuestionProperties(false,false)
+                        {
+                            GeometryInputMode = GeometryInputMode.Automatic
+                        }),
+                });
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(34));
         }
     }
 }
