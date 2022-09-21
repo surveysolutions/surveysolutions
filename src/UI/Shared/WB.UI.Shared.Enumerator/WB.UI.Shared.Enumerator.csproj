@@ -68,7 +68,6 @@
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="Converters\TextWithHighlightedSearchTermConverter.cs" />
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
-    <Compile Include="CustomBindings\BitmapHelper.cs" />
     <Compile Include="CustomBindings\ButtonGroupStyleBinding.cs" />
     <Compile Include="CustomBindings\EditTextMaxLengthBinding.cs" />
     <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
@@ -209,6 +208,7 @@
     <Compile Include="Services\Autofac.MvvmCross\MvxIoCProviderWithParent.cs" />
     <Compile Include="Services\BackupRestoreService.cs" />
     <Compile Include="Services\BaseViewModelNavigationService.cs" />
+    <Compile Include="Services\BitmapHelper.cs" />
     <Compile Include="Services\CurrentViewModelPresenter.cs" />
     <Compile Include="Services\DeviceInformationService.cs" />
     <Compile Include="Services\DevicePasswordHasher.cs" />

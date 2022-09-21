@@ -3,8 +3,7 @@ using Android.Graphics;
 using FFImageLoading;
 using WB.Core.SharedKernels.Enumerator.Services;
 
-
-namespace WB.UI.Shared.Enumerator.CustomBindings;
+namespace WB.UI.Shared.Enumerator.Services;
 
 public class BitmapHelper : IImageHelper
 {

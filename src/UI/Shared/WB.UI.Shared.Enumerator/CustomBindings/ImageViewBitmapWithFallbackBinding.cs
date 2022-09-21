@@ -7,6 +7,7 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings;
 
