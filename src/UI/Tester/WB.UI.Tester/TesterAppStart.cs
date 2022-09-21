@@ -51,6 +51,9 @@ namespace WB.UI.Tester
 
             var attachmentContentDataStorage = Mvx.IoCProvider.Resolve<IPlainStorage<AttachmentContentData>>();
             attachmentContentDataStorage.RemoveAll();
+            
+            var attachmentPreviewContentDataStorage = Mvx.IoCProvider.Resolve<IPlainStorage<AttachmentPreviewContentData>>();
+            attachmentPreviewContentDataStorage.RemoveAll();
         }
 
         private void ClearPlainInterviewStorage()

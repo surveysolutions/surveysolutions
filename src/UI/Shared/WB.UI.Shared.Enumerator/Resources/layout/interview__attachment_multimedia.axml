@@ -3,6 +3,7 @@
     <ImageView style="@style/Interview_Attachment_Picture"
                android:scaleType="centerCrop"
                android:adjustViewBounds="true"
+               android:maxHeight="@dimen/Interview_Attachment_max_height"
                local:MvxBind="MarginsBitmapWithFallback Attachment.Image; 
                     Tag Attachment.Tag;
                     Click Attachment.ShowPhotoView;

@@ -127,7 +127,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (IsImage)
                 {
-                    this.Image = this.attachmentContentStorage.GetContent(attachment.ContentId);
+                    this.Image = this.attachmentContentStorage.GetPreviewContent(attachment.ContentId);
                 }
 
                 var backingFile = this.attachmentContentStorage.GetFileCacheLocation(attachment.ContentId);
