@@ -832,15 +832,23 @@ namespace WB.Tests.Unit.Designer
             string variable, Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null, Categories[] categories = null)
         {
             var publicKey = id ?? Guid.NewGuid();
-            return new QuestionnaireDocument
+            var coverId = Guid.NewGuid();
+
+            var questionnaireDocument = new QuestionnaireDocument
             {
                 PublicKey = publicKey,
-                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
+                CoverPageSectionId = coverId,
+                Children = new IComposite[]
+                {
+                    Section(sectionId: coverId, title: "cover"),
+                    Section(children: children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())),
+                }.ToReadOnlyCollection(),
                 Title = title,
                 VariableName = variable,
                 CreatedBy = userId ?? Guid.NewGuid(),
                 Categories = categories?.ToList() ?? new List<Categories>()
             };
+            return questionnaireDocument;
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(IEnumerable<Macro> macros = null, IEnumerable<IComposite> children = null)
@@ -868,21 +876,27 @@ namespace WB.Tests.Unit.Designer
             Translation[] translations = null, IEnumerable<Macro> macros = null, params IComposite[] children)
         {
             var publicKey = questionnaireId ?? Guid.NewGuid();
+            var firstChapterId = chapterId.GetValueOrDefault();
+            var coverId = Guid.NewGuid();
             var result = new QuestionnaireDocument
             {
                 Title = "Q",
                 VariableName = "Q",
                 PublicKey = publicKey,
+                CoverPageSectionId = coverId,
                 Children = new IComposite[]
                 {
+                    new Group("Cover")
+                    {
+                        PublicKey = coverId,
+                    },
                     new Group("Chapter")
                     {
-                        PublicKey = chapterId.GetValueOrDefault(),
+                        PublicKey = firstChapterId,
                         Children = children.ToReadOnlyCollection()
                     }
                 }.ToReadOnlyCollection()
             };
-
             result.Attachments.AddRange(attachments ?? new Attachment[0]);
             result.Translations.AddRange(translations ?? new Translation[0]);
 
