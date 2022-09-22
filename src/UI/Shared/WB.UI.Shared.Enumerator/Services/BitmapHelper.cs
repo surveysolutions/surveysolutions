@@ -6,22 +6,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 namespace WB.UI.Shared.Enumerator.Services;
 
 public class BitmapHelper : IImageHelper
-{
-    public static Bitmap GetTransformedBitmapOrNull(byte[] value, int maxAllowedDimension)
-    {
-        // Calculate inSampleSize
-        BitmapFactory.Options boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true, InPurgeable = true };
-        using (BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions)) // To determine actual image size
-        {
-            int sampleSize = CalculateInSampleSize(boundsOptions, maxAllowedDimension, maxAllowedDimension);
-            var bitmapOptions = new BitmapFactory.Options { InSampleSize = sampleSize, InPurgeable = true };
-            using (var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, bitmapOptions))
-            {
-                return bitmap;
-            }
-        }
-    }
-    
+{        
     // http://stackoverflow.com/a/10127787/72174
     private static int CalculateInSampleSize(BitmapFactory.Options actualImageParams, int maxAllowedWidth, int maxAllowedHeight)
     {
@@ -53,6 +38,7 @@ public class BitmapHelper : IImageHelper
         BitmapFactory.Options boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true, InPurgeable = true };
         using (BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions)) // To determine actual image size
         {
+            //image dimensions are less than preiew
             if (boundsOptions.OutHeight < maxAllowedDimension && boundsOptions.OutWidth < maxAllowedDimension)
             {
                 return null;
@@ -60,20 +46,19 @@ public class BitmapHelper : IImageHelper
 
             int sampleSize = CalculateInSampleSize(boundsOptions, maxAllowedDimension, maxAllowedDimension);
             var bitmapOptions = new BitmapFactory.Options { InSampleSize = sampleSize, InPurgeable = true };
-            using (var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, bitmapOptions))
-            {
-                if (bitmap == null)
-                    return null;
-                MemoryStream outputStream = new MemoryStream();
-                if (bitmap.Compress(Bitmap.CompressFormat.Png, 100, outputStream))
-                {
-                    bitmap.Recycle();
-                    return outputStream.ToByteArray();
-                }
-                
-                bitmap.Recycle();
+            using var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, bitmapOptions);
+            if (bitmap == null)
                 return null;
+
+            using var outputStream = new MemoryStream();
+            if (bitmap.Compress(Bitmap.CompressFormat.Png, 100, outputStream))
+            {
+                bitmap.Recycle();
+                return outputStream.ToByteArray();
             }
+
+            bitmap.Recycle();
+            return null;
         }
     }
 }

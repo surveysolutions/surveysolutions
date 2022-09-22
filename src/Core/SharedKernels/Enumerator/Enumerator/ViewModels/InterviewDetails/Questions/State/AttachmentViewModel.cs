@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.eventRegistry.Subscribe(this, interviewId);
             BindAttachment().WaitAndUnwrapException();
-            this.supportPreview = false;
+            this.supportPreview = true;
         }
 
         public void InitAsStatic(string interviewId, string attachmentName, bool supportPreview = true)
