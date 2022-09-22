@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)
         {
-            return Create.QuestionnaireDocument(children: questionnaireChildren);
+            return Create.QuestionnaireDocumentWithoutChildren(children: questionnaireChildren);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
