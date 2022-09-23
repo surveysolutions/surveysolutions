@@ -14,8 +14,6 @@ using MvvmCross.IoC;
 using MvvmCross.Views;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.Enumerator.Utils;
-using MvvmCross.Plugin.Messenger;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.LinkerInclusion
 {
@@ -168,11 +166,6 @@ namespace WB.UI.LinkerInclusion
             vh.ItemView.LongClick += (sender, args) => { };
             list.ItemsSource = null;
             list.Click += (sender, args) => { };
-        }
-
-        public void Include(IMvxMessenger mvxMessenger)
-        {
-            mvxMessenger.Publish(new SectionChangeMessage(this));
         }
     }
 }
