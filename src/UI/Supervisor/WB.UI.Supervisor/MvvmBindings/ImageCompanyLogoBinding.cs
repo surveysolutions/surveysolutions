@@ -4,7 +4,7 @@ using WB.UI.Shared.Enumerator.CustomBindings;
 
 namespace WB.UI.Supervisor.MvvmBindings
 {
-    public class ImageCompanyLogoBinding : ImageViewBitmapWithFallbackBinding
+    public class ImageCompanyLogoBinding : ImageViewMarginsBitmapWithFallbackBinding
     {
         public ImageCompanyLogoBinding(ImageView androidControl) : base(androidControl)
         {
