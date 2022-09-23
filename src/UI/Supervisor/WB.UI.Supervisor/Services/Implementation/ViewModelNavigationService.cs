@@ -87,7 +87,7 @@ namespace WB.UI.Supervisor.Services.Implementation
             throw new System.NotImplementedException();
         }
 
-        public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
+        public override Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
         {
             this.log.Trace("Navigating to SupervisorInterviewViewModel");
             return NavigationService.Navigate<SupervisorInterviewViewModel, InterviewViewModelArgs>(
