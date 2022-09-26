@@ -1488,7 +1488,7 @@
       <Version>5.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugins.Android.ExoPlayer.UI">
-      <Version>2.11.8</Version>
+      <Version>2.14.6</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.PhotoView">
       <Version>2.1.4</Version>
