@@ -12,6 +12,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings;
 
 public class ImageViewBitmapWithFallbackBinding : BaseBinding<ImageView, byte[]>
 {
+    private const int maxAllowedDimension = 400; 
+    
     public ImageViewBitmapWithFallbackBinding(ImageView androidControl) : base(androidControl)
     {
     }
@@ -28,10 +30,18 @@ public class ImageViewBitmapWithFallbackBinding : BaseBinding<ImageView, byte[]>
 
             // Calculate inSampleSize
             BitmapFactory.Options boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true, InPurgeable = true };
-            using (BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions)) // To determine actual image size
+            using (var initBitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions)) // To determine actual image size
             {
+                //if source image is smaller limit - do not transform it 
+                if (boundsOptions.OutHeight <= maxAllowedDimension && boundsOptions.OutWidth <= maxAllowedDimension)
+                {
+                    SetupImageView(control, displayMetrics, boundsOptions);
+                    control.Drawable?.Dispose();
+                    control.SetImageBitmap(initBitmap);
+                    return;
+                }
+                
                 int sampleSize = CalculateInSampleSize(boundsOptions, minSize, minSize);
-
                 var bitmapOptions = new BitmapFactory.Options { InSampleSize = sampleSize, InPurgeable = true };
                 using (var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, bitmapOptions))
                 {
