@@ -65,12 +65,8 @@ public class AttachmentPreviewHelper : IAttachmentPreviewHelper
 
             bytes = thumbBytes;
         }
-        
-        return new AttachmentPreviewContent()
-        {
-            ContentType = contentType,
-            Content = bytes,
-        };
+
+        return new AttachmentPreviewContent(contentType, bytes);
     }
     
     private static byte[] GetTransformedContent(byte[] source, int? sizeToScale = null)
