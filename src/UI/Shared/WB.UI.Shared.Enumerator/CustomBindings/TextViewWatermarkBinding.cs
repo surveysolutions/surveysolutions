@@ -21,11 +21,12 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             base.SubscribeToEvents();
 
-            if (this.Target == null)
+            var target = Target;
+            if (target == null)
                 return;
 
-            subscription = this.Target.WeakSubscribe<TextView, TextChangedEventArgs>(
-                nameof(this.Target.TextChanged),
+            subscription = target.WeakSubscribe<TextView, TextChangedEventArgs>(
+                nameof(target.TextChanged),
                 TextChangedHandler);
         }
 

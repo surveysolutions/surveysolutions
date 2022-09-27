@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
@@ -21,9 +23,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class GroupNavigationViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        IViewModelEventHandler<GroupsEnabled>, 
-        IViewModelEventHandler<GroupsDisabled>, 
-        IViewModelEventHandler<RosterInstancesTitleChanged>,
+        IAsyncViewModelEventHandler<GroupsEnabled>,
+        IAsyncViewModelEventHandler<GroupsDisabled>,
+        IAsyncViewModelEventHandler<RosterInstancesTitleChanged>,
         IDisposable
     {
 
@@ -52,7 +54,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly ICommandService commandService;
+        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
         private readonly AnswerNotifier answerNotifier;
+
 
         private GroupStateViewModel navigateToGroupState;
         public GroupStateViewModel NavigateToGroupState
@@ -109,6 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.commandService = commandService;
             this.Title = title;
             this.answerNotifier = answerNotifier;
+            this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>(); ;
         }
 
         public virtual void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
@@ -255,11 +260,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
-        private void UpdateNavigation()
+        private async Task UpdateNavigation()
         {
-            this.SetNextEnabledSection();
-            this.SetNavigationItemTitle();
-            this.SetGroupsStates();
+            await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            {
+                this.SetNextEnabledSection();
+                this.SetNavigationItemTitle();
+                this.SetGroupsStates();
+            });
         }
 
         public void Dispose()
@@ -271,31 +279,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.answerNotifier.Dispose();
         }
 
-        public void Handle(GroupsEnabled @event)
+        public async Task HandleAsync(GroupsEnabled @event)
         {
             if (this.NavigationGroupType == NavigationGroupType.ToParentGroup) return;
             if (!this.listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection.Intersect(@event.Groups).Any()) return;
 
-            this.UpdateNavigation();
+            await this.UpdateNavigation();
         }
 
-        public void Handle(RosterInstancesTitleChanged @event)
+        public Task HandleAsync(RosterInstancesTitleChanged @event)
         {
-            if (!this.isRoster) return;
+            if (!this.isRoster) return Task.CompletedTask;
 
             var changedInstance =
                 @event.ChangedInstances.SingleOrDefault(x => this.groupOrSectionToNavigateIdentity.Equals(x.RosterInstance.GetIdentity()));
 
             if (changedInstance != null)
                 this.RosterInstanceTitle = changedInstance.Title;
+
+            return Task.CompletedTask;
         }
 
-        public void Handle(GroupsDisabled @event)
+        public async Task HandleAsync(GroupsDisabled @event)
         {
             if (this.NavigationGroupType == NavigationGroupType.ToParentGroup) return;
             if (!@event.Groups.Contains(this.groupOrSectionToNavigateIdentity)) return;
 
-            this.UpdateNavigation();
+            await this.UpdateNavigation();
         }
     }
 }
