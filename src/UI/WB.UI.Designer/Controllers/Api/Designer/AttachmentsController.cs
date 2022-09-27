@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Services.AttachmentPreview;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
@@ -26,14 +27,17 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IAttachmentService attachmentService;
         private readonly IWebHostEnvironment environment;
         private readonly IDesignerQuestionnaireStorage questionnaireStorage;
+        private readonly IAttachmentPreviewHelper attachmentPreviewHelper;
 
         public AttachmentsController(IAttachmentService attachmentService,
             IWebHostEnvironment environment,
-            IDesignerQuestionnaireStorage questionnaireStorage)
+            IDesignerQuestionnaireStorage questionnaireStorage,
+            IAttachmentPreviewHelper attachmentPreviewHelper)
         {
             this.attachmentService = attachmentService;
             this.environment = environment;
             this.questionnaireStorage = questionnaireStorage;
+            this.attachmentPreviewHelper = attachmentPreviewHelper;
         }
 
         [HttpGet]
@@ -97,71 +101,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             AttachmentContent? attachmentContent = this.attachmentService.GetContent(attachment.ContentId);
             if (attachmentContent == null) return NotFound();
 
-            if (thumbnail)
-            {
-                string contentType = "image/jpg";
-                byte[]? thumbBytes = null;
-                if (attachmentContent.Details.Thumbnail == null || attachmentContent.Details.Thumbnail.Length == 0)
-                {
-                    if (attachmentContent.IsImage())
-                    {
-                        thumbBytes = attachmentContent.Content;
-                    }
-
-                    if (attachmentContent.IsAudio())
-                    {
-                        thumbBytes = System.IO.File.ReadAllBytes(environment.MapPath("images/icons-files-audio.png"));
-                        contentType = @"image/png";
-                    }
-
-                    if (attachmentContent.IsPdf())
-                    {
-                        thumbBytes = System.IO.File.ReadAllBytes(environment.MapPath(@"images/icons-files-pdf.png"));
-                        contentType = @"image/png";
-                    }
-                }
-                else
-                {
-                    thumbBytes = attachmentContent.Details.Thumbnail;
-                }
-
-                if (thumbBytes == null)
-                {
-                    return NoContent();
-                }
-
-                if (sizeToScale != null && contentType == "image/jpg")
-                {
-                    thumbBytes = GetTransformedContent(thumbBytes, sizeToScale);
-                }
-
-                return File(thumbBytes, contentType);
-            }
-
             if (attachmentContent.Content == null) return NoContent();
 
-            return File(attachmentContent.Content, attachmentContent.ContentType, attachment.FileName,
+            var previewContent = attachmentPreviewHelper.GetPreviewImage(attachmentContent, sizeToScale);
+
+            if (previewContent == null)
+                return NoContent();
+            
+            return File(previewContent.Content, previewContent.ContentType, attachment.FileName,
                 attachment.LastUpdateDate, new EntityTagHeaderValue("\"" + attachmentContent.ContentId + "\""), false);
-        }
-
-        private static byte[] GetTransformedContent(byte[] source, int? sizeToScale = null)
-        {
-            if (!sizeToScale.HasValue) return source;
-            using (var outputStream = new MemoryStream())
-            {
-                using (Image image = Image.Load(source, out var format))
-                {
-                    var opt = new ResizeOptions()
-                    {
-                       Mode = ResizeMode.Max,
-                       Size = new Size(sizeToScale.Value)
-                    };
-                    image.Mutate(ctx => ctx.Resize(opt)); 
-                    image.Save(outputStream, format); 
-                } 
-
-                return outputStream.ToArray();
-            }
         }
     }
 }
