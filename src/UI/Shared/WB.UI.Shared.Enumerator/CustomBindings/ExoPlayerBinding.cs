@@ -26,7 +26,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         protected override void Dispose(bool isDisposing)
         {
             base.Dispose(isDisposing);
+            Target?.Player?.Stop();
             Target?.Player?.Release();
+            Target?.Player?.Dispose();
         }
 
         static readonly DefaultExtractorsFactory ExtractorsFactory = new DefaultExtractorsFactory();
@@ -48,6 +50,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             view.Player?.Stop();
             view.Player?.Release();
+            view.Player?.Dispose();
             
             SimpleExoPlayer.Builder exoPlayer = new SimpleExoPlayer.Builder(view.Context);
             

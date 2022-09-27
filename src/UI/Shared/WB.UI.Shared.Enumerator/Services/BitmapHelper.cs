@@ -53,6 +53,7 @@ public class BitmapHelper : IImageHelper
             if (bitmap.Compress(Bitmap.CompressFormat.Png, 100, outputStream))
             {
                 bitmap.Recycle();
+                bitmap.Dispose();
                 return outputStream.ToByteArray();
             }
 

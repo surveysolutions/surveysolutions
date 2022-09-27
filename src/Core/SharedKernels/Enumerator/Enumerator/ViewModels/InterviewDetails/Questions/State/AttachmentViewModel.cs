@@ -204,6 +204,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Video?.Release();
             this.Audio?.Release();
             this.ContentPath = null;
+            this.Image = null;
             base.ViewDestroy(viewFinishing);
         }
 
@@ -215,6 +216,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
+
+            this.Video?.Dispose();
+            this.Audio?.Dispose();
         }
     }
 }
