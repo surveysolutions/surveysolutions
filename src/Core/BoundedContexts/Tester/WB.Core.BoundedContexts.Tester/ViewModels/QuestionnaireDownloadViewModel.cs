@@ -112,6 +112,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     var interviewId = Guid.NewGuid();
 
+                    var targetGroup = navigationIdentity.TargetGroup != null
+                        ? NavigationIdentity.CreateForGroup(navigationIdentity.TargetGroup)
+                        : null;
+
                     var existingInterviewCommands = this.executedCommandsStorage.Get(interview.Id);
                     foreach (var existingInterviewCommand in existingInterviewCommands)
                     {
@@ -123,11 +127,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         await this.commandService.ExecuteAsync(existingInterviewCommand, cancellationToken: cancellationToken);
                     }
 
-                    var targetGroup = navigationIdentity.TargetGroup != null
-                        ? NavigationIdentity.CreateForGroup(navigationIdentity.TargetGroup)
-                        : null;
-                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(),
-                        targetGroup).ConfigureAwait(false);
+                    return await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), targetGroup);
                 }
                 catch (Exception e)
                 {

@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                     translationIndex: "42")
             };
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+            QuestionnaireDocument questionnaire = Create.OldQuestionnaireDocumentWithOneChapter(
                 children: new IComposite[]
                 {
                     Create.FixedRoster(rosterId: rosterId,

@@ -1,7 +1,7 @@
 ﻿{
   "Id": "11111111-1111-1111-1111-111111111111",
   "CoverPage": {
-    "Title": "Chapter",
+    "Title": "Cover",
     "Children": [
       {
         "VariableName": "text_question_333333333333333333",
