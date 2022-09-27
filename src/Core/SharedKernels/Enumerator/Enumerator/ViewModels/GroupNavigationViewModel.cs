@@ -186,7 +186,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var sections = questionnaire.GetAllSections().ToList();
 
             int currentSectionIndex = this.Identity == null ? 0 :sections.FindIndex(x => x == this.Identity.Id);
-            for (int sectionIndex = currentSectionIndex + 1; sectionIndex < sections.Count; sectionIndex++)
+            int startSectionIndex = !questionnaire.IsCoverPageSupported && this.Identity == null 
+                ? currentSectionIndex 
+                : currentSectionIndex + 1;
+            for (int sectionIndex = startSectionIndex; sectionIndex < sections.Count; sectionIndex++)
             {
                 var nextSectionIdentity = new Identity(sections[sectionIndex], RosterVector.Empty);
 
