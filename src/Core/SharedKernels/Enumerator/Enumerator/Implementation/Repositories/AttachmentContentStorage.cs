@@ -21,8 +21,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         private readonly IFileSystemAccessor files;
         private readonly IImageHelper imageHelper;
 
-        private const int PreviewMaxDimension = 400;
-
         public AttachmentContentStorage(
             IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository,
             IPlainStorage<AttachmentContentData> attachmentContentDataRepository,

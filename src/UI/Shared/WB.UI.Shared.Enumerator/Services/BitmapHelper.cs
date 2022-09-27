@@ -8,7 +8,7 @@ namespace WB.UI.Shared.Enumerator.Services;
 public class BitmapHelper : IImageHelper
 {        
     // http://stackoverflow.com/a/10127787/72174
-    private static int CalculateInSampleSize(BitmapFactory.Options actualImageParams, int maxAllowedWidth, int maxAllowedHeight)
+    public static int CalculateInSampleSize(BitmapFactory.Options actualImageParams, int maxAllowedWidth, int maxAllowedHeight)
     {
         // Raw height and width of image
         int height = actualImageParams.OutHeight;
@@ -28,7 +28,6 @@ public class BitmapHelper : IImageHelper
                 inSampleSize *= 2;
             }
         }
-
         return inSampleSize;
     }
     
@@ -38,7 +37,7 @@ public class BitmapHelper : IImageHelper
         BitmapFactory.Options boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true, InPurgeable = true };
         using (BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions)) // To determine actual image size
         {
-            //image dimensions are less than preiew
+            //image dimensions are less than preview limits
             if (boundsOptions.OutHeight < maxAllowedDimension && boundsOptions.OutWidth < maxAllowedDimension)
             {
                 return null;
@@ -60,5 +59,12 @@ public class BitmapHelper : IImageHelper
             bitmap.Recycle();
             return null;
         }
+    }
+
+    public static Bitmap GetBitmapOrNull(byte[] value, BitmapFactory.Options boundsOptions, int maxAllowedDimension)
+    {
+        int sampleSize = BitmapHelper.CalculateInSampleSize(boundsOptions, maxAllowedDimension, maxAllowedDimension);
+        var bitmapOptions = new BitmapFactory.Options { InSampleSize = sampleSize, InPurgeable = true };
+        return BitmapFactory.DecodeByteArray(value, 0, value.Length, bitmapOptions);
     }
 }
