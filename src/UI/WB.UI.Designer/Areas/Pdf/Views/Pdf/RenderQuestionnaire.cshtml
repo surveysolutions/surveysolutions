@@ -18,7 +18,7 @@
 	@*is passed as get param along with other on pdf generation and exceeds 2K limit for unicode*@
 	<title>@*@(questionnaire.Title.Length < 70 ? questionnaire.Title : questionnaire.Title.Substring(0, 70))*@</title>
 	<!-- pdf:css -->
-	<link rel='stylesheet' href='@Html.ContentAbsolute("~/css/pdf.css")'>
+	<style>@Html.Raw(System.IO.File.ReadAllText("wwwroot/css/pdf.css"))</style>
 	<!-- endinject -->
 </head>
 <body>
@@ -76,7 +76,10 @@
 		</div>
 		<div class="column_header">
 			<a href="https://mysurvey.solutions/" target="_blank" class="logo">
+				@*
 				<img src="@Html.ContentAbsolute("~/images/suso-logo-dark.svg")" alt="Survey Solutions" />
+				*@
+				<img src="@Html.EmbedImageContent("images/suso-logo-dark.svg")" alt="Survey Solutions" />
 			</a>
 		</div>
 
@@ -579,8 +582,12 @@
 		<h2 id="legend_appendix">@PdfStrings.Legend</h2>
 		<section>
 			<h3>@PdfStrings.PdfLegend</h3>
+			@*
 			<img src="@Html.ContentAbsolute("~/images/pdf-question-legend.png")" />
 			<img src="@Html.ContentAbsolute("~/images/pdf-roster-legend.png")" />
+			*@
+			<img src="@Html.EmbedImageContent("images/pdf-question-legend.png")" />
+			<img src="@Html.EmbedImageContent("images/pdf-roster-legend.png")" />
 		</section>
 	</article>
 </body>
