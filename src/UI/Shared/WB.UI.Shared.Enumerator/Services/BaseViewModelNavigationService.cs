@@ -100,7 +100,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public abstract Task NavigateToMapsAsync();
 
-        public abstract Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
+        public abstract Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
         public abstract Task NavigateToPrefilledQuestionsAsync(string interviewId);
         public abstract void NavigateToSplashScreen();
 
