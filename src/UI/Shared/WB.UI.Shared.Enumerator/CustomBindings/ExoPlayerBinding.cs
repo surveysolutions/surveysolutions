@@ -62,12 +62,12 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 .CreateMediaSource(uri));
 
             // adjust video view height so that video take all horizontal space
-            simpleExoPlayer.RenderedFirstFrame += (sender, args) =>
+            /*simpleExoPlayer.RenderedFirstFrame += (sender, args) =>
             {
                 var ratio = (float)simpleExoPlayer.VideoFormat.Height / (float)simpleExoPlayer.VideoFormat.Width / (float)simpleExoPlayer.VideoFormat.PixelWidthHeightRatio;
                 view.SetMinimumHeight((int)(view.Width * ratio));
                 view.HideController();
-            };
+            };*/
 
             simpleExoPlayer.SeekTo(1);
             view.Player = simpleExoPlayer;
