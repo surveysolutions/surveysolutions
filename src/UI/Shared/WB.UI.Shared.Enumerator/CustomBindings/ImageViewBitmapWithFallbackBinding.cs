@@ -30,7 +30,7 @@ public class ImageViewBitmapWithFallbackBinding : BaseBinding<ImageView, byte[]>
             var minSize = Math.Min(displayMinSize, controlMinSize);
 
             // Calculate inSampleSize
-            BitmapFactory.Options boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true, InPurgeable = true };
+            BitmapFactory.Options boundsOptions = new BitmapFactory.Options { InPurgeable = true };
             using (var initBitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions)) // To determine actual image size
             {
                 //if source image is smaller limit - do not transform it 
