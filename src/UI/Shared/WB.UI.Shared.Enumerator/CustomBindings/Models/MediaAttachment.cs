@@ -12,7 +12,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
 
         public void Release()
         {
-            Player?.Stop();
             Player?.Release();
         }
 
