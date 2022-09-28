@@ -9,11 +9,13 @@
                     Click Attachment.ShowPhotoView;
                     Visible Attachment.IsImage;"/>
 
-    <com.google.android.exoplayer2.ui.PlayerView android:id="@+id/player_view"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             local:controller_layout_id="@layout/simple_video_controls"
-             local:MvxBind="Video Attachment.Video; 
+    <com.google.android.exoplayer2.ui.PlayerView 
+            android:id="@+id/player_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="400dp"
+            local:controller_layout_id="@layout/simple_video_controls"
+            local:MvxBind="Video Attachment.Video; 
                             Tag Attachment.Tag;
                             Visible Attachment.IsVideo;" />
 
