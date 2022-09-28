@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public interface IMediaAttachment : IDisposable
+    public interface IMediaAttachment
     {
         string ContentPath { get; set; }
 

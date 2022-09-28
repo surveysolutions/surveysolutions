@@ -14,19 +14,13 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
         {
             Player?.Release();
         }
-
-        public void Dispose()
-        {
-            Player?.Dispose();
-        }
-
+        
         public SimpleExoPlayer Player
         {
             get => player;
             set
             {
                 player?.Release();
-                player?.Dispose();
                 player = value;
             }
         }
