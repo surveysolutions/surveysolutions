@@ -48,8 +48,6 @@ namespace WB.Tests.Abc.TestFactories
             public string ContentPath { get; set; }
 
             public void Release() { }
-
-            public void Dispose() { }
         }
 
         public AttachmentViewModel AttachmentViewModel(
