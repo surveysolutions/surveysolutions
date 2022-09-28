@@ -217,8 +217,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.eventRegistry.Unsubscribe(this);
 
-            this.Video?.Dispose();
-            this.Audio?.Dispose();
+            //this.Video?.Dispose();
+            //this.Audio?.Dispose();
         }
     }
 }
