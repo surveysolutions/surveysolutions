@@ -9,7 +9,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
     internal class when_questionnaire_with_one_empty_section : QuestionnaireVerifierTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter();
+            questionnaire = Create.OldQuestionnaireDocumentWithOneChapter();
             verifier = CreateQuestionnaireVerifier();
             BecauseOf();
         }

@@ -808,7 +808,7 @@ namespace WB.Tests.Unit.Designer
             var coverId = Guid.NewGuid();
             var cover = Create.Chapter("Cover", coverId);
             var allChildren = Enumerable.Concat((cover as IComposite).ToEnumerable(), children).ToArray();
-            var questionnaireDocument = Create.QuestionnaireDocument(id, "Questionnaire with empty cover", children: allChildren);
+            var questionnaireDocument = Create.QuestionnaireDocumentWithoutChildren(id, "Questionnaire with empty cover", children: allChildren);
             questionnaireDocument.CoverPageSectionId = coverId;
             return questionnaireDocument;
         }
@@ -832,7 +832,36 @@ namespace WB.Tests.Unit.Designer
             string variable, Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null, Categories[] categories = null)
         {
             var publicKey = id ?? Guid.NewGuid();
-            return new QuestionnaireDocument
+            var coverId = Guid.NewGuid();
+
+            var questionnaireDocument = new QuestionnaireDocument
+            {
+                PublicKey = publicKey,
+                CoverPageSectionId = coverId,
+                Children = new IComposite[]
+                {
+                    Section(sectionId: coverId, title: "cover"),
+                    Section(children: children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())),
+                }.ToReadOnlyCollection(),
+                Title = title,
+                VariableName = variable,
+                CreatedBy = userId ?? Guid.NewGuid(),
+                Categories = categories?.ToList() ?? new List<Categories>()
+            };
+            return questionnaireDocument;
+        }
+
+        public static QuestionnaireDocument QuestionnaireDocumentWithoutChildren(
+            Guid? id = null, string title = "qqq", IEnumerable<IComposite> children = null, Guid? userId = null)
+        {
+            return QuestionnaireDocumentWithoutChildren("questionnaire", id, title, children, userId);
+        }
+        public static QuestionnaireDocument QuestionnaireDocumentWithoutChildren(
+            string variable, Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null, Categories[] categories = null)
+        {
+            var publicKey = id ?? Guid.NewGuid();
+
+            var questionnaireDocument = new QuestionnaireDocument
             {
                 PublicKey = publicKey,
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
@@ -841,6 +870,7 @@ namespace WB.Tests.Unit.Designer
                 CreatedBy = userId ?? Guid.NewGuid(),
                 Categories = categories?.ToList() ?? new List<Categories>()
             };
+            return questionnaireDocument;
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(IEnumerable<Macro> macros = null, IEnumerable<IComposite> children = null)
@@ -867,22 +897,50 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? questionnaireId = null, Guid? chapterId = null, Attachment[] attachments = null, 
             Translation[] translations = null, IEnumerable<Macro> macros = null, params IComposite[] children)
         {
+            var firstChapterId = chapterId.GetValueOrDefault();
+            var childrenWithStruct = new IComposite[]
+            {
+                new Group("Cover")
+                {
+                    PublicKey = Guid.Parse("C46EE895-0E6E-4063-8136-31E6BFA7C3F8"),
+                },
+                new Group("Chapter")
+                {
+                    PublicKey = firstChapterId,
+                    Children = children.ToReadOnlyCollection()
+                }
+            };
+
+            return QuestionnaireDocumentWithoutChildren(questionnaireId, attachments, translations, macros, childrenWithStruct);
+        }
+
+        public static QuestionnaireDocument OldQuestionnaireDocumentWithOneChapter(Guid? questionnaireId = null, Guid? chapterId = null, Attachment[] attachments = null,
+            Translation[] translations = null, IEnumerable<Macro> macros = null, params IComposite[] children)
+        {
+            var firstChapterId = chapterId.GetValueOrDefault();
+            var childrenWithStruct = new IComposite[]
+            {
+                new Group("Chapter")
+                {
+                    PublicKey = firstChapterId,
+                    Children = children.ToReadOnlyCollection()
+                }
+            };
+
+            return QuestionnaireDocumentWithoutChildren(questionnaireId, attachments, translations, macros, childrenWithStruct);
+        }
+
+        public static QuestionnaireDocument QuestionnaireDocumentWithoutChildren(Guid? questionnaireId = null, Attachment[] attachments = null,
+            Translation[] translations = null, IEnumerable<Macro> macros = null, params IComposite[] children)
+        {
             var publicKey = questionnaireId ?? Guid.NewGuid();
             var result = new QuestionnaireDocument
             {
                 Title = "Q",
                 VariableName = "Q",
                 PublicKey = publicKey,
-                Children = new IComposite[]
-                {
-                    new Group("Chapter")
-                    {
-                        PublicKey = chapterId.GetValueOrDefault(),
-                        Children = children.ToReadOnlyCollection()
-                    }
-                }.ToReadOnlyCollection()
+                Children = children.ToReadOnlyCollection(),
             };
-
             result.Attachments.AddRange(attachments ?? new Attachment[0]);
             result.Translations.AddRange(translations ?? new Translation[0]);
 
@@ -895,12 +953,20 @@ namespace WB.Tests.Unit.Designer
 
             return result;
         }
-        
+
         public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? id = null, Attachment[] attachments = null, 
             Translation[] translations = null, IEnumerable<Macro> macros = null, Guid? coverId = null, params IComposite[] children)
         {
             var cover = coverId ?? Guid.NewGuid();
-            var document = QuestionnaireDocumentWithOneChapter(id, cover, attachments, translations, macros, children);
+            var childrenWithStruct = new IComposite[]
+            {
+                new Group("Cover")
+                {
+                    PublicKey = cover,
+                    Children = children.ToReadOnlyCollection()
+                }
+            };
+            var document = QuestionnaireDocumentWithoutChildren(id,  attachments, translations, macros, childrenWithStruct);
             document.CoverPageSectionId = cover;
             return document;
         }

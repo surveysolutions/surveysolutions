@@ -628,7 +628,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
         [Test]
         public void section_with_5_questions_and_other_big_section()
-            => Create.QuestionnaireDocument(children: new IComposite[]
+            => Create.QuestionnaireDocumentWithoutChildren(children: new IComposite[]
                 {
                     Create.Section(children: new []
                     {
@@ -653,7 +653,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
         [Test]
         public void section_with_4_questions_and_no_other_sections()
-            => Create.QuestionnaireDocument(children: new IComposite[]
+            => Create.QuestionnaireDocumentWithoutChildren(children: new IComposite[]
                 {
                     Create.Section(children: new []
                     {
