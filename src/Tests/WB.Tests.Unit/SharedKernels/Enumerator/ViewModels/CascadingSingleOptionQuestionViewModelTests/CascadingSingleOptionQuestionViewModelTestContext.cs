@@ -64,7 +64,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 filteredOptionsViewModel ??  Abc.SetUp.FilteredOptionsViewModel(),
                 Create.ViewModel.ThrottlingViewModel(),
                 Create.Service.InterviewViewModelFactory(serviceLocator: serviceLocator.Object),
-                Create.ViewModel.AttachmentViewModel());
+                Create.ViewModel.AttachmentViewModel(),
+                Create.Fake.MvxMainThreadAsyncDispatcher());
 
             return cascadingSingleOptionQuestionViewModel;
         }

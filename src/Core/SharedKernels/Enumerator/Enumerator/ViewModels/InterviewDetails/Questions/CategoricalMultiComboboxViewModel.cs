@@ -30,10 +30,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IUserInteractionService userInteraction, AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel, QuestionInstructionViewModel instructionViewModel,
             ThrottlingViewModel throttlingModel,
-            IInterviewViewModelFactory interviewViewModelFactory) 
+            IInterviewViewModelFactory interviewViewModelFactory,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
             : base(questionStateViewModel, questionnaireRepository, eventRegistry,
             interviewRepository, principal, userInteraction, answering, filteredOptionsViewModel, instructionViewModel,
-            throttlingModel, interviewViewModelFactory)
+            throttlingModel, interviewViewModelFactory, mainThreadAsyncDispatcher)
         {
             this.comboboxViewModel =
                 new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, 
@@ -60,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private async Task UpdateComboboxAsync(int[] answeredOptions) =>
-            await this.InvokeOnMainThreadAsync(async () =>
+            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () =>
             {
                 answeredOptions = answeredOptions ?? Array.Empty<int>();
 

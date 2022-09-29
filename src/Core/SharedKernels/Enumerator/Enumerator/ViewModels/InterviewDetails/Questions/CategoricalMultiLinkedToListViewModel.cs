@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -32,10 +33,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireRepository, IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel,
-            IInterviewViewModelFactory interviewViewModelFactory) 
+            IInterviewViewModelFactory interviewViewModelFactory,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
             : base(
             questionStateViewModel, questionnaireRepository, eventRegistry, interviewRepository, principal, answering,
-            instructionViewModel, throttlingModel)
+            instructionViewModel, throttlingModel, mainThreadAsyncDispatcher)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.Options = new CovariantObservableCollection<CategoricalMultiOptionViewModel<int>>();
