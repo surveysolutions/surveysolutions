@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CategoricalMultiLinkedToListViewModel : 
         CategoricalMultiViewModelBase<int, int>,
-        IViewModelEventHandler<TextListQuestionAnswered>,
+        IAsyncViewModelEventHandler<TextListQuestionAnswered>,
         IAsyncViewModelEventHandler<LinkedToListOptionsChanged>,
         IAsyncViewModelEventHandler<MultipleOptionsQuestionAnswered>,
         IAsyncViewModelEventHandler<QuestionsEnabled>,
@@ -85,12 +85,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected override bool IsInterviewAnswer(int interviewAnswer, int optionValue)
             => interviewAnswer == optionValue;
 
-        public void Handle(TextListQuestionAnswered @event)
+        public async Task HandleAsync(TextListQuestionAnswered @event)
         {
             if (@event.QuestionId != this.linkedToQuestionId)
                 return;
 
-            this.InvokeOnMainThread(() =>
+            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 foreach (var answer in @event.Answers)
                 {

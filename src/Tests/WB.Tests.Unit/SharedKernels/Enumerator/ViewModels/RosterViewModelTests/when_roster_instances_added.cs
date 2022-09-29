@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty,
                 DateTime.UtcNow, new[] { 1, 3 });
-            viewModel.Handle(Create.Event.RosterInstancesAdded(rosterId, new[] { Create.Entity.RosterVector(3) }));
+            await viewModel.HandleAsync(Create.Event.RosterInstancesAdded(rosterId, new[] { Create.Entity.RosterVector(3) }));
 
             Assert.That(viewModel.RosterInstances.Count(), Is.EqualTo(2));
         }
@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty,
                 DateTime.UtcNow, new[] { 1, 2, 3 });
 
-            viewModel.Handle(Create.Event.RosterInstancesAdded(rosterId, new[] { Create.Entity.RosterVector(2) }));
+            await viewModel.HandleAsync(Create.Event.RosterInstancesAdded(rosterId, new[] { Create.Entity.RosterVector(2) }));
 
             Assert.That(viewModel.RosterInstances[1].Identity, Is.EqualTo(Identity.Create(rosterId, Create.Entity.RosterVector(2))));
         }

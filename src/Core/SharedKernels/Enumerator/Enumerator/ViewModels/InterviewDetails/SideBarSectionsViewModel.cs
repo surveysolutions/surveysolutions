@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -18,12 +20,13 @@ using WB.Core.SharedKernels.Enumerator.Utils;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class SideBarSectionsViewModel : MvxNotifyPropertyChanged,
-        IViewModelEventHandler<GroupsEnabled>,
-        IViewModelEventHandler<GroupsDisabled>,
-        IViewModelEventHandler<RosterInstancesRemoved>,
+        IAsyncViewModelEventHandler<GroupsEnabled>,
+        IAsyncViewModelEventHandler<GroupsDisabled>,
+        IAsyncViewModelEventHandler<RosterInstancesRemoved>,
         IDisposable
     {
         private readonly IViewModelEventRegistry eventRegistry;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
         private NavigationState navigationState;
 
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -46,12 +49,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireRepository,
             ISideBarSectionViewModelsFactory modelsFactory,
-            IViewModelEventRegistry eventRegistry)
+            IViewModelEventRegistry eventRegistry,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.modelsFactory = modelsFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.eventRegistry = eventRegistry;
+            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
         }
 
         public void Init(string interviewId, NavigationState navigationState)
@@ -78,51 +83,51 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             predefItems.Add(this.modelsFactory.BuildCompleteItem(this.navigationState, this.interviewId));
 
             this.AllVisibleSections = new ObservableRangeCollection<ISideBarItem>(predefItems);
-            this.UpdateSections();
+            this.UpdateSectionsAsync().WaitAndUnwrapException();
 
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private void OnScreenChanged(ScreenChangedEventArgs e) => this.UpdateSections(clearExpanded: true);
+        private async void OnScreenChanged(ScreenChangedEventArgs e) => await this.UpdateSectionsAsync(clearExpanded: true);
 
-        public void Handle(GroupsEnabled @event)
+        public async Task HandleAsync(GroupsEnabled @event)
         {
             var addedSections = @event.Groups.Intersect(this.sectionIdentities).ToArray();
 
             if (addedSections.Any())
-                this.UpdateSections();
+                await this.UpdateSectionsAsync();
         }
 
-        public void Handle(GroupsDisabled @event)
+        public async Task HandleAsync(GroupsDisabled @event)
         {
             var removedViewModels = this.items.Where(
                     sectionViewModel => @event.Groups.Contains(sectionViewModel.SectionIdentity)).ToList();
 
             if (removedViewModels.Any())
-                this.UpdateSections();
+                await this.UpdateSectionsAsync();
         }
 
-        public void Handle(RosterInstancesRemoved @event)
+        public async Task HandleAsync(RosterInstancesRemoved @event)
         {
             var removedViewModels = this.items.Where(sectionViewModel =>
                     @event.Instances.Select(x => x.GetIdentity()).Contains(sectionViewModel.SectionIdentity)).ToList();
 
             if (removedViewModels.Any())
-                this.UpdateSections();
+                await this.UpdateSectionsAsync();
         }
 
-        private void UpdateSections(object sender, EventArgs e)
+        private async void UpdateSectionsAsync(object sender, EventArgs e)
         {
             var args = e as ToggleSectionEventArgs;
 
-            this.UpdateSections(args, false);
+            await this.UpdateSectionsAsync(args, false);
         }
 
-        private void UpdateSections(ToggleSectionEventArgs toggledSection = null, bool clearExpanded = false)
+        private Task UpdateSectionsAsync(ToggleSectionEventArgs toggledSection = null, bool clearExpanded = false)
         {
             var expectedSectionIdentities = this.GetSectionsAndExpandedSubSections(clearExpanded, toggledSection).ToList();
             this.UpdateViewModels(expectedSectionIdentities);
-            this.UpdateUI();
+            return this.UpdateUIAsync();
         }
 
         private void UpdateViewModels(List<Identity> expectedSectionIdentities)
@@ -150,7 +155,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private void UpdateUI() => this.InvokeOnMainThread(() =>
+        private Task UpdateUIAsync() => mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
         {
             var sectionItems = this.AllVisibleSections.OfType<ISideBarSectionItem>().ToArray();
 
@@ -263,7 +268,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var sectionViewModel = this.modelsFactory.BuildSectionItem(sectionIdentity, this.navigationState,
                 this.interviewId);
 
-            sectionViewModel.OnSectionUpdated += this.UpdateSections;
+            sectionViewModel.OnSectionUpdated += this.UpdateSectionsAsync;
             return sectionViewModel;
         }
 
@@ -298,7 +303,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void DisposeSectionViewModel(ISideBarSectionItem viewModel)
         {
-            viewModel.OnSectionUpdated -= this.UpdateSections;
+            viewModel.OnSectionUpdated -= this.UpdateSectionsAsync;
             viewModel.Dispose();
         }
     }

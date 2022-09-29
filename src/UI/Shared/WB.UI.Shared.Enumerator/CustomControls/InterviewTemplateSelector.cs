@@ -30,7 +30,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (SingleOptionLinkedToListQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionRosterLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (CategoricalComboboxAutocompleteViewModel), Resource.Layout.interview_question_categorical_combobox},
-            {typeof (CategoricalComboboxAutocompleteWithAttachmentViewModel), Resource.Layout.interview_question_categorical_combobox},
+            {typeof (CategoricalComboboxAutocompleteWithAttachmentViewModel), Resource.Layout.interview_question_categorical_combobox_with_attachment},
             {typeof (CategoricalMultiComboboxViewModel), Resource.Layout.interview_question_multi_combobox},
             {typeof (CategoricalMultiComboboxOptionViewModel), Resource.Layout.interview_question_multi_combobox_option_item},
             {typeof (CategoricalMultiViewModel), Resource.Layout.interview_question_multi_option},
