@@ -47,10 +47,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             public string ContentPath { get; set; }
 
-            public void Release()
-            {
-                
-            }
+            public void Release() { }
         }
 
         public AttachmentViewModel AttachmentViewModel(
@@ -179,7 +176,8 @@ namespace WB.Tests.Abc.TestFactories
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
                 Create.ViewModel.ThrottlingViewModel(),
-                mockOfViewModelFactory.Object);
+                mockOfViewModelFactory.Object,
+                Create.Fake.MvxMainThreadAsyncDispatcher());
         }
 
         public SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
@@ -430,7 +428,8 @@ namespace WB.Tests.Abc.TestFactories
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
                 Create.ViewModel.ThrottlingViewModel(),
-                Create.Service.InterviewViewModelFactory());
+                Create.Service.InterviewViewModelFactory(),
+                Create.Fake.MvxMainThreadAsyncDispatcher());
         }
 
         public CategoricalMultiLinkedToRosterTitleViewModel MultiOptionLinkedToRosterTitleViewModel(
@@ -460,7 +459,8 @@ namespace WB.Tests.Abc.TestFactories
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
                 Create.ViewModel.ThrottlingViewModel(),
-                mockOfViewModelFactory.Object);
+                mockOfViewModelFactory.Object,
+                Create.Fake.MvxMainThreadAsyncDispatcher());
         }
 
         public VibrationViewModel VibrationViewModel(IViewModelEventRegistry eventRegistry = null,

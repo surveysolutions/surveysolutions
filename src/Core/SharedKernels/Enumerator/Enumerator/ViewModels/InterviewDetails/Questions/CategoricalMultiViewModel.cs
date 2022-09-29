@@ -34,10 +34,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             FilteredOptionsViewModel filteredOptionsViewModel,
             QuestionInstructionViewModel instructionViewModel,
             ThrottlingViewModel throttlingModel,
-            IInterviewViewModelFactory interviewViewModelFactory) 
+            IInterviewViewModelFactory interviewViewModelFactory,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
             : base(questionStateViewModel, questionnaireRepository, eventRegistry,
             interviewRepository, principal, answering, instructionViewModel,
-            throttlingModel)
+            throttlingModel, mainThreadAsyncDispatcher)
         {
             this.userInteraction = userInteraction;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
