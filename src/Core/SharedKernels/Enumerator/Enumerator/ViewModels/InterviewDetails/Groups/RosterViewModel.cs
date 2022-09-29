@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.navigationState = navigationState;
 
             this.RosterInstances = new CovariantObservableCollection<IInterviewEntityViewModel>();
-            this.UpdateFromInterview().WaitAndUnwrapException();
+            this.UpdateFromInterviewAsync().WaitAndUnwrapException();
 
             this.eventRegistry.Subscribe(this, interviewId);
         }
@@ -67,16 +67,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public async Task HandleAsync(RosterInstancesRemoved @event)
         {
             if (@event.Instances.Any(rosterInstance => rosterInstance.GroupId == this.Identity.Id))
-                await this.UpdateFromInterview();
+                await this.UpdateFromInterviewAsync();
         }
 
         public async Task HandleAsync(RosterInstancesAdded @event)
         {
             if (@event.Instances.Any(rosterInstance => rosterInstance.GroupId == this.Identity.Id))
-                await this.UpdateFromInterview();
+                await this.UpdateFromInterviewAsync();
         }
 
-        private async Task UpdateFromInterview()
+        private async Task UpdateFromInterviewAsync()
         {
             if (this.isDisposed) return;
             

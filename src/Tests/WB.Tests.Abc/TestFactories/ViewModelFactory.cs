@@ -589,7 +589,8 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new RosterViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
-                eventRegistry ?? Mock.Of<IViewModelEventRegistry>());
+                eventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
+                Create.Fake.MvxMainThreadDispatcher());
         }
 
         public FlatRosterViewModel FlatRosterViewModel(IStatefulInterviewRepository interviewRepository = null,
@@ -601,7 +602,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 viewModelFactory?? Mock.Of<IInterviewViewModelFactory>(),
                 eventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
-                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>()
+                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>(),
+                Create.Fake.MvxMainThreadDispatcher()
                 );
         }
 
