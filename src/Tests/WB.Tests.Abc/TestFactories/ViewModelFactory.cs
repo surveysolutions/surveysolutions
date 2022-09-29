@@ -103,7 +103,8 @@ namespace WB.Tests.Abc.TestFactories
                     interviewRepository: interviewRepository),
                 compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>(),
                 Mock.Of<IViewModelEventRegistry>(),
-                Mock.Of<ICommandService>());
+                Mock.Of<ICommandService>(),
+                Create.Fake.MvxMainThreadDispatcher());
 
         public ErrorMessagesViewModel ErrorMessagesViewModel(
             IQuestionnaireStorage questionnaireRepository = null,
