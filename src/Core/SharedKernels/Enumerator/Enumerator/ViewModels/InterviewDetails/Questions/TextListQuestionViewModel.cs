@@ -30,6 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IUserInteractionService userInteractionService;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private string interviewId;
         private bool isRosterSizeQuestion;
@@ -53,7 +54,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<TextListQuestionAnswered> questionStateViewModel,
             IUserInteractionService userInteractionService,
             AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel)
+            QuestionInstructionViewModel instructionViewModel,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
@@ -61,6 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.userInteractionService = userInteractionService;
+            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
             this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
             this.Answering = answering;
             this.Answers = new CovariantObservableCollection<ICompositeEntity>();
@@ -129,7 +132,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             listItem.ItemEdited -= this.ListItemEdited;
             listItem.ItemDeleted -= this.ListItemDeleted;
 
-            this.InvokeOnMainThread(() => this.Answers.Remove(listItem));
+            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => this.Answers.Remove(listItem));
 
             await this.SaveAnswers();
         }

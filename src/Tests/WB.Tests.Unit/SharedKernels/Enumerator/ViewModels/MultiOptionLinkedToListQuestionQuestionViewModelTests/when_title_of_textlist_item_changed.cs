@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -10,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToL
     public class when_title_of_textlist_item_changed
     {
         [Test]
-        public void should_title_of_option_be_updated()
+        public async Task should_title_of_option_be_updated()
         {
             //arrange
             string expectedTitle = "new title";
@@ -34,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToL
 
             interview.AnswerTextListQuestion(Guid.NewGuid(), textListQuestionId, RosterVector.Empty, DateTime.UtcNow, answers);
             //act
-            viewModel.Handle(Create.Event.TextListQuestionAnswered(textListQuestionId, Create.Entity.RosterVector(), answers: answers));
+            await viewModel.HandleAsync(Create.Event.TextListQuestionAnswered(textListQuestionId, Create.Entity.RosterVector(), answers: answers));
             //assert
             Assert.That(viewModel.Options[0].Title, Is.EqualTo(expectedTitle));
         }
