@@ -397,7 +397,8 @@ namespace WB.Tests.Abc.TestFactories
                 statefulInterviewRepository: interviewsRepository,
                 questionnaireRepository: questionnaireRepository,
                 modelsFactory: sideBarSectionViewModelsFactory,
-                eventRegistry: liteEventRegistry);
+                eventRegistry: liteEventRegistry,
+                Create.Fake.MvxMainThreadDispatcher());
 
             sidebarViewModel.Init("", navigationState);
 

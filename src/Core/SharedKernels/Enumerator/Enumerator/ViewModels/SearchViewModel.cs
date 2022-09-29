@@ -160,7 +160,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     if (i is IDashboardItemWithEvents withEvents)
                         withEvents.OnItemUpdated -= OnItemUpdated;
                 });
-                this.InvokeOnMainThread(()=>this.UiItems.ReplaceWith(items));
+                await this.InvokeOnMainThreadAsync(()=>this.UiItems.ReplaceWith(items));
                 this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i =>
                 {
                     i.OnItemRemoved += InterviewItemRemoved;
