@@ -20,7 +20,8 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         protected override Task InvokeOnMainThread(Action action)
         {
-            return base.InvokeOnMainThread(action);
+            action();
+            return Task.CompletedTask;
         }
     }
 }

@@ -160,10 +160,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             await this.InvokeOnMainThreadAsync(() =>
             {
-                var newOptions = this.GetOptions(interview).ToList();
                 var oldOptions = this.Options.ToList();
+                this.Options.ReplaceWith(this.GetOptions(interview).ToList());
                 oldOptions.ForEach(o => o.Dispose());
-                this.Options.ReplaceWith(newOptions);
             });
 
             await this.UpdateOptionsFromInterviewAsync();
