@@ -582,7 +582,8 @@ namespace WB.Tests.Abc.TestFactories
                 viewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(m => m.LoadAll() == Enumerable.Empty<InterviewView>().ToReadOnlyCollection()),
                 identifyingQuestionsRepo ?? Mock.Of<IPlainStorage<PrefilledQuestionView>>(m => m.LoadAll() == Enumerable.Empty<PrefilledQuestionView>().ToReadOnlyCollection()),
-                assignmentsRepository ?? Mock.Of<IAssignmentDocumentsStorage>());
+                assignmentsRepository ?? Mock.Of<IAssignmentDocumentsStorage>(),
+                Create.Fake.MvxMainThreadDispatcher());
 
         public RosterViewModel RosterViewModel(IStatefulInterviewRepository interviewRepository = null,
             IInterviewViewModelFactory interviewViewModelFactory = null,
