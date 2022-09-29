@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
          IAsyncViewModelEventHandler<SingleOptionQuestionAnswered>
     {
         private readonly ThrottlingViewModel throttlingModel;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
 
         private readonly IQuestionnaireStorage questionnaireRepository;
 
@@ -42,7 +43,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             FilteredOptionsViewModel filteredOptionsViewModel,
             ThrottlingViewModel throttlingModel,
             IInterviewViewModelFactory viewModelFactory,
-            AttachmentViewModel attachment) :
+            AttachmentViewModel attachment,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
                 eventRegistry: eventRegistry, filteredOptionsViewModel, viewModelFactory)
@@ -52,6 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Options = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
             this.throttlingModel = throttlingModel;
+            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
             this.throttlingModel.Init(SaveAnswer);
 
             this.comboboxViewModel = new CategoricalComboboxAutocompleteWithAttachmentViewModel(questionStateViewModel, filteredOptionsViewModel, true, attachment);
@@ -118,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             await this.RaisePropertyChanged(nameof(RenderAsComboBox));
 
-            await this.InvokeOnMainThreadAsync(async () => await this.UpdateOptions());
+            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () => await this.UpdateOptions());
 
             await this.RaisePropertyChanged(nameof(Options));
             await this.RaisePropertyChanged(nameof(Children));

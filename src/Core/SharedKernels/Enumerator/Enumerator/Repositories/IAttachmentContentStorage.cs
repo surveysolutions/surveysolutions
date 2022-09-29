@@ -11,6 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.Repositories
         AttachmentContentMetadata GetMetadata(string attachmentContentId);
         bool Exists(string attachmentContentId);
         byte[] GetContent(string attachmentContentId);
+        byte[] GetPreviewContent(string attachmentContentId);
         string GetFileCacheLocation(string attachmentContentId);
         void Remove(string attachmentContentId);
         Task<IEnumerable<string>> EnumerateCacheAsync();

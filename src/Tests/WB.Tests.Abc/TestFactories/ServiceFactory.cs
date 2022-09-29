@@ -1025,15 +1025,19 @@ namespace WB.Tests.Abc.TestFactories
         public AttachmentContentStorage AttachmentContentStorage(
             IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository = null,
             IPlainStorage<AttachmentContentData> attachmentContentDataRepository = null,
+            IPlainStorage<AttachmentPreviewContentData> attachmentPreviewContentData = null, 
             IPathUtils pathUtils = null,
-            IFileSystemAccessor files = null)
+            IFileSystemAccessor files = null,
+            IImageHelper imageHelper = null)
         {
             return new AttachmentContentStorage(
                 attachmentContentMetadataRepository ?? Mock.Of<IPlainStorage<AttachmentContentMetadata>>(),
                 attachmentContentDataRepository ?? Mock.Of<IPlainStorage<AttachmentContentData>>(),
+                attachmentPreviewContentData ?? Mock.Of<IPlainStorage<AttachmentPreviewContentData>>(),
                 pathUtils ?? Mock.Of<IPathUtils>(p => p.GetRootDirectory() == @"c:\tmp"),
                 Mock.Of<IPermissionsService>(),
-                files ?? Mock.Of<IFileSystemAccessor>());
+                files ?? Mock.Of<IFileSystemAccessor>(),
+                imageHelper ?? Mock.Of<IImageHelper>());
         }
 
         public Core.BoundedContexts.Interviewer.Implementation.Services.MapSyncProvider MapSyncProvider(
