@@ -109,6 +109,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 var ratio = (float)args.P2.Height / (float)args.P2.Width / (float)args.P2.PixelWidthHeightRatio;
                 view.SetMinimumHeight((int)(view.Width * ratio));
                 view.HideController();
+                
+                this.metadataEventSubscription?.Dispose();
+                this.metadataEventSubscription = null;
             });
         }
     }
