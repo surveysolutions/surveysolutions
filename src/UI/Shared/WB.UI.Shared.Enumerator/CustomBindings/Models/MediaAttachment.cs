@@ -12,7 +12,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
 
         public void Release()
         {
-            Player?.Stop();
+            //Player?.Stop();
             Player?.Release();
         }
         
@@ -22,7 +22,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
             set
             {
                 player?.Release();
-                player?.Dispose();
+                //player?.Dispose();
                 player = value;
             }
         }
