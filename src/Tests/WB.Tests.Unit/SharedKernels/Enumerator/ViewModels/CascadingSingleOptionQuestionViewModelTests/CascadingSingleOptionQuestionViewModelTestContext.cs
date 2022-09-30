@@ -11,6 +11,7 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -48,6 +49,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(s => s.GetInstance<SingleOptionQuestionOptionViewModel>())
+                .Returns(() => Create.ViewModel.SingleOptionQuestionOptionViewModel());
 
             var cascadingSingleOptionQuestionViewModel = new CascadingSingleOptionQuestionViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
@@ -58,7 +62,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 AnsweringViewModelMock.Object,
                 Mock.Of<QuestionInstructionViewModel>(),
                 filteredOptionsViewModel ??  Abc.SetUp.FilteredOptionsViewModel(),
-                Create.ViewModel.ThrottlingViewModel());
+                Create.ViewModel.ThrottlingViewModel(),
+                Create.Service.InterviewViewModelFactory(serviceLocator: serviceLocator.Object),
+                Create.ViewModel.AttachmentViewModel());
 
             return cascadingSingleOptionQuestionViewModel;
         }

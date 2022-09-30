@@ -29,9 +29,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository, IPrincipal principal,
             IUserInteractionService userInteraction, AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel, QuestionInstructionViewModel instructionViewModel,
-            ThrottlingViewModel throttlingModel) : base(questionStateViewModel, questionnaireRepository, eventRegistry,
+            ThrottlingViewModel throttlingModel,
+            IInterviewViewModelFactory interviewViewModelFactory) 
+            : base(questionStateViewModel, questionnaireRepository, eventRegistry,
             interviewRepository, principal, userInteraction, answering, filteredOptionsViewModel, instructionViewModel,
-            throttlingModel)
+            throttlingModel, interviewViewModelFactory)
         {
             this.comboboxViewModel =
                 new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, 
@@ -98,9 +100,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var categoricalOption = interview.GetOptionForQuestionWithoutFilter(this.Identity, optionCode);
 
-                var vm = new CategoricalMultiComboboxOptionViewModel(this.userInteraction);
+                var vm = interviewViewModelFactory.GetNew<CategoricalMultiComboboxOptionViewModel>();
 
-                base.InitViewModel(categoricalOption.Title, categoricalOption.Value, interview, vm,
+                base.InitViewModel(categoricalOption.Title, categoricalOption.Value, interview, vm, categoricalOption.AttachmentName,
                     interview.IsAnswerProtected(this.Identity, categoricalOption.Value));
 
                 if (this.isRosterSizeQuestion) vm.MakeRosterSize();

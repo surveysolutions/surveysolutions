@@ -70,6 +70,7 @@
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
     <Compile Include="CustomBindings\ButtonGroupStyleBinding.cs" />
     <Compile Include="CustomBindings\EditTextMaxLengthBinding.cs" />
+    <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
     <Compile Include="CustomBindings\ImageViewQRCodeBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewDisableDefaultSearchBinding.cs" />
     <Compile Include="CustomBindings\MaterialButtonToQuestionStateBinding.cs" />
@@ -149,7 +150,7 @@
     <Compile Include="CustomBindings\TextViewAnswerStateBinding.cs" />
     <Compile Include="CustomBindings\TextViewOnDoneBinding.cs" />
     <Compile Include="CustomBindings\TextViewOverviewStateTextColorBinding.cs" />
-    <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
+    <Compile Include="CustomBindings\ImageViewMarginsBitmapWithFallbackBinding.cs" />
     <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
     <Compile Include="CustomBindings\FrameLayoutCurrentScreenBinding.cs" />
@@ -869,7 +870,7 @@
     <AndroidResource Include="Resources\drawable\lock_icon.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets" />
+    <Folder Include="Assets\" />
     <Folder Include="Services\Resources\" />
   </ItemGroup>
   <ItemGroup>
@@ -1557,6 +1558,35 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\qr_code_popup.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\shape.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_question__attachment.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_question_single.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_question_multi.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_question_multi_item.axml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>

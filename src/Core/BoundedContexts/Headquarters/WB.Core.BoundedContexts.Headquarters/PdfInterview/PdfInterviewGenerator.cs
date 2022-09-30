@@ -161,7 +161,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 if (questionnaire.IsQuestion(node.Id))
                 {
                     var question = interview.GetQuestion(node);
-                    new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig)
+                    new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig, attachmentContentService)
                         .Write(section.AddParagraph());
                     if (question.FailedErrors != null && question.FailedErrors.Any())
                         new ErrorsPdfWriter(question).Write(section.AddParagraph());
@@ -219,7 +219,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                         prevDateTime = question.AnswerTime;
                     }
 
-                    new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig)
+                    new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig, attachmentContentService)
                         .Write(row[2].AddParagraph());
 
                     if (question.FailedErrors != null && question.FailedErrors.Any())

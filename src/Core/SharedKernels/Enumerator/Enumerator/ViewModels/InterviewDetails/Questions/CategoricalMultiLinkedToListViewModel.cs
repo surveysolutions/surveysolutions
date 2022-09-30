@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -22,6 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IAsyncViewModelEventHandler<QuestionsEnabled>,
         IAsyncViewModelEventHandler<QuestionsDisabled>
     {
+        private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private int[] selectedOptionsToSave;
         private Guid linkedToQuestionId;
 
@@ -29,10 +31,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
             IQuestionnaireStorage questionnaireRepository, IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel) : base(
+            QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel,
+            IInterviewViewModelFactory interviewViewModelFactory) 
+            : base(
             questionStateViewModel, questionnaireRepository, eventRegistry, interviewRepository, principal, answering,
             instructionViewModel, throttlingModel)
         {
+            this.interviewViewModelFactory = interviewViewModelFactory;
             this.Options = new CovariantObservableCollection<CategoricalMultiOptionViewModel<int>>();
         }
 
@@ -68,8 +73,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             foreach (var optionCode in filteredOptions)
             {
-                var vm = new CategoricalMultiOptionViewModel<int>();
-                base.InitViewModel(listOptions.First(x => x.Value == optionCode).Text, optionCode, interview, vm);
+                var vm = interviewViewModelFactory.GetNew<CategoricalMultiOptionViewModel<int>>();
+                base.InitViewModel(listOptions.First(x => x.Value == optionCode).Text, optionCode, interview, vm, null);
 
                 yield return vm;
             }

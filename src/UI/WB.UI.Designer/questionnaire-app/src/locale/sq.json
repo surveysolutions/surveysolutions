@@ -419,6 +419,7 @@
     "CategoriesObtained": "Obtained {0} row from categories file",
     "CategoriesObtained_plural": "Obtained {0} rows from categories file",
     "OptionsUploadRevert": "Revert changes",
+    "AttachmentName": "Attachment name",
     "SideBarCategoriesNoName": "categories with no name",
     "EditorShowComments": "Show comments ({{count}})",
     "JumpToEdit": "Jump to edit",

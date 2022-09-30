@@ -82,7 +82,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             return this.NavigateToAsync<MapsViewModel>();
         }
 
-        public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
+        public override Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
         {
             this.log.Trace($"Navigating to interview {interviewId}:{navigationIdentity}");
             return NavigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:local="http://schemas.android.com/apk/res-auto"
+           style="@style/Interview_Question_Answer_Option_Attachment">
+        <ImageView style="@style/Interview_Attachment_Picture"
+                   android:scaleType="fitCenter"
+                   android:adjustViewBounds="true"
+                   android:maxHeight="@dimen/Interview_Question_Answer_Option_Attachment_max_height"
+                   local:MvxBind="BitmapWithFallback Attachment.Image; 
+                    Tag Attachment.Tag;
+                    Click Attachment.ShowPhotoView;
+                    Visible Attachment.IsImage;"/>
+
+        <com.google.android.exoplayer2.ui.PlayerView 
+            android:id="@+id/video_player_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            local:controller_layout_id="@layout/simple_video_controls"
+            local:MvxBind="Video Attachment.Video; 
+                        Tag Attachment.Tag;
+                        Visible Attachment.IsVideo;" />
+
+        <com.google.android.exoplayer2.ui.PlayerView 
+            android:id="@+id/audio_player_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/Interview_Question_Answer_Option_padding_left"
+            android:paddingRight="@dimen/Interview_Question_Answer_Option_padding_left"
+            android:paddingBottom="@dimen/Interview_Entity_margin_vertical"
+            local:use_artwork="false"
+            local:controller_layout_id="@layout/simple_audio_controls"
+            local:MvxBind="Audio Attachment.Audio; 
+                       Visible Attachment.IsAudio; 
+                       Tag Attachment.Tag" />
+
+        <TextView 
+            android:layout_width="match_parent"  
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="@dimen/Interview_Entity_margin_vertical"
+            local:MvxBind="Text Localization('Interview_ShowPdf'); 
+                     Click Attachment.ShowPdf; 
+                     Visible Attachment.IsPdf;
+                     Tag Format('Show_Pdf_{0}', Identity)"/>
+
+</LinearLayout>

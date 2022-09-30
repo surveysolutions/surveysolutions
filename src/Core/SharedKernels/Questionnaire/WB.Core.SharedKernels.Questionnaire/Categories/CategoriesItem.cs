@@ -9,12 +9,15 @@ namespace WB.Core.SharedKernels.Questionnaire.Categories
         public int Id { get; set; }
         public int? ParentId { get; set; }
         public string Text { get; set; } = String.Empty;
+        public string? AttachmentName { get; set; }
 
         public override bool Equals(object obj)
         {
             return obj is CategoriesItem item &&
                    Id == item.Id &&
-                   ParentId == item.ParentId;
+                   ParentId == item.ParentId &&
+                   Text == item.Text &&
+                   AttachmentName == item.AttachmentName;
         }
 
         public override int GetHashCode()

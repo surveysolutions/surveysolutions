@@ -111,7 +111,8 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 {
                     Title = answer.AnswerText, 
                     Value = (int)answer.GetParsedValue(),
-                    ParentValue = answer.GetParsedParentValue()
+                    ParentValue = answer.GetParsedParentValue(),
+                    AttachmentName = answer.AttachmentName
                 };
 
                 if(excludeOptionIds?.Contains(categoricalOption.Value) ?? false) continue;
