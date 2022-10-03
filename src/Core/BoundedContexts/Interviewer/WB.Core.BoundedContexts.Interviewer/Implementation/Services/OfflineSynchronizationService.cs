@@ -255,13 +255,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Categories;
         }
 
-        public Task<RemoteTabletSettingsApiView> GetTabletSettings(CancellationToken cancellationToken)
+        public async Task<RemoteTabletSettingsApiView> GetTabletSettings(CancellationToken cancellationToken)
         {
-            var tabletSettingsApiView = new RemoteTabletSettingsApiView()
-            {
-                PartialSynchronizationEnabled = false,
-            };
-            return Task.FromResult(tabletSettingsApiView);
+            var response = await syncClient.SendAsync<RemoteTabletSettingsRequest, RemoteTabletSettingsResponse>(
+                new RemoteTabletSettingsRequest(), cancellationToken);
+
+            return response.Settings;
         }
 
         public Task UploadCalendarEventAsync(Guid calendarEventId, CalendarEventPackageApiView calendarEventsPackage,

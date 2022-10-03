@@ -46,6 +46,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool InterviewerAutoUpdatesEnabled { get; set; }
             public bool NotificationsEnabled { get; set; }
             public bool PartialSynchronizationEnabled { get; set; }
+            public int GeographyQuestionAccuracyInMeters { get; set; }
+            public int GeographyQuestionPeriodInSeconds { get; set; }
         }
 
         public class WebInterviewSettingsModel
@@ -148,6 +150,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                     AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled,
                     DeviceNotificationsEnabled = message.NotificationsEnabled,
                     PartialSynchronizationEnabled = message.PartialSynchronizationEnabled,
+                    GeographyQuestionAccuracyInMeters = message.GeographyQuestionAccuracyInMeters,
+                    GeographyQuestionPeriodInSeconds = message.GeographyQuestionPeriodInSeconds,
                 },
                 AppSetting.InterviewerSettings);
 

@@ -3,7 +3,9 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation;
@@ -18,15 +20,21 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
         private readonly IPlainStorageAccessor<ServerSettings> tenantSettings;
         private readonly ISecureStorage secureStorage;
+        private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
+        private readonly IWebInterviewLinkProvider webInterviewLinkProvider;
 
         protected SettingsControllerBase(
             IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
             IPlainStorageAccessor<ServerSettings> tenantSettings,
-            ISecureStorage secureStorage)
+            ISecureStorage secureStorage,
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
+            IWebInterviewLinkProvider webInterviewLinkProvider)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.tenantSettings = tenantSettings;
             this.secureStorage = secureStorage;
+            this.interviewerSettingsStorage = interviewerSettingsStorage;
+            this.webInterviewLinkProvider = webInterviewLinkProvider;
         }
 
         public virtual IActionResult CompanyLogo()
@@ -69,5 +77,25 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             new JsonResult(Convert.ToBase64String(this.secureStorage.Retrieve(RsaEncryptionService.PublicKey)));
 
         public virtual IActionResult NotificationsEnabled() => new JsonResult(true);
+        
+        [HttpGet]
+        [Route("tabletsettings")]
+        public virtual RemoteTabletSettingsApiView TabletSettings() => new()
+        {
+            PartialSynchronizationEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
+                .IsPartialSynchronizationEnabled(),
+
+            WebInterviewUrlTemplate = this.webInterviewLinkProvider.WebInterviewRequestLink(
+                "{assignment}", "{interviewId}"),
+            
+            GeographyQuestionAccuracyInMeters = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
+                .IsGeographyQuestionAccuracyInMeters(),
+            
+            GeographyQuestionPeriodInSeconds = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
+                .IsGeographyQuestionPeriodInSeconds(),
+            
+            NotificationsEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
+                .IsDeviceNotificationsEnabled(),
+        };
     }
 }

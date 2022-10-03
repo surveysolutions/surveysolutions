@@ -574,11 +574,14 @@ class AdminSettings {
             allowInterviewerUpdateProfile: allowInterviewerUpdateProfile,
         })
     }
-    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled) {
+    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled,
+        geographyQuestionAccuracyInMeters, geographyQuestionPeriodInSeconds) {
         return this.http.post(`${this.base}/InterviewerSettings`, {
             interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled,
             notificationsEnabled: isDeviceNotificationsEnabled,
             partialSynchronizationEnabled: isPartialSynchronizationEnabled,
+            geographyQuestionAccuracyInMeters: geographyQuestionAccuracyInMeters,
+            geographyQuestionPeriodInSeconds: geographyQuestionPeriodInSeconds,
         })
     }
     getInterviewerSettings() {
