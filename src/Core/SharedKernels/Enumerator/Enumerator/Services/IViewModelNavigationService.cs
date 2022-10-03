@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         Task NavigateToLoginAsync();
         Task NavigateToFinishInstallationAsync();
         Task NavigateToMapsAsync();
-        Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
+        Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
         Task NavigateToPrefilledQuestionsAsync(string interviewId);
         void NavigateToSplashScreen();
         void ShowWaitMessage();

@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
@@ -336,6 +337,21 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
             verificationMessages.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void when_verifying_questionnaire_having_old_cover_page()
+        {
+            var questionnaire = Create.QuestionnaireDocument(children: Create.Chapter(children: new IComposite[]
+            {
+                Create.TextQuestion(Id.g1, variable:"name")
+            }));
+            questionnaire.CoverPageSectionId = Guid.NewGuid();
+
+            var verifier = CreateQuestionnaireVerifier();
+            var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire)).ToList();
+
+            verificationMessages.ShouldContainError("WB0316");
         }
     }
 }

@@ -1,18 +1,21 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:local="http://schemas.android.com/apk/res-auto">
     <ImageView style="@style/Interview_Attachment_Picture"
-               android:scaleType="centerCrop"
+               android:scaleType="fitCenter"
                android:adjustViewBounds="true"
+               android:maxHeight="@dimen/Interview_Attachment_max_height"
                local:MvxBind="BitmapWithFallback Attachment.Image; 
                     Tag Attachment.Tag;
                     Click Attachment.ShowPhotoView;
                     Visible Attachment.IsImage;"/>
 
-    <com.google.android.exoplayer2.ui.PlayerView android:id="@+id/player_view"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             local:controller_layout_id="@layout/simple_video_controls"
-             local:MvxBind="Video Attachment.Video; 
+    <com.google.android.exoplayer2.ui.PlayerView 
+            android:id="@+id/player_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="400dp"
+            local:controller_layout_id="@layout/simple_video_controls"
+            local:MvxBind="Video Attachment.Video; 
                             Tag Attachment.Tag;
                             Visible Attachment.IsVideo;" />
 

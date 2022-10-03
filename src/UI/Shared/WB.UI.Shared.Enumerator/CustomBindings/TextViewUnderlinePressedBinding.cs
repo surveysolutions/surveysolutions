@@ -27,11 +27,12 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             base.SubscribeToEvents();
 
-            if (this.Target == null)
+            var target = Target;
+            if (target == null)
                 return;
 
-            subscription = this.Target.WeakSubscribe<TextView, View.TouchEventArgs>(
-                nameof(this.Target.Touch),
+            subscription = target.WeakSubscribe<TextView, TextView.TouchEventArgs>(
+                nameof(target.Touch),
                 OnTouch);
         }
 

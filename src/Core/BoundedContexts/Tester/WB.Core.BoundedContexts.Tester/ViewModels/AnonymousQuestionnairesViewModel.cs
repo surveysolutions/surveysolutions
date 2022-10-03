@@ -348,9 +348,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public void Dispose()
         {
-            if (principal.IsFakeIdentity)
-                principal.UseFakeIdentity();
-
             tokenSource?.Dispose();
         }
     }

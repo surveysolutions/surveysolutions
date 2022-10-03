@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Humanizer;
 using Humanizer.Localisation;
+using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -43,6 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IAudioDialog audioDialog;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioService audioService;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
         public AnsweringViewModel Answering { get; }
 
         public AudioQuestionViewModel(
@@ -56,7 +58,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPermissionsService permissions,
             IAudioDialog audioDialog,
             IAudioFileStorage audioFileStorage,
-            IAudioService audioService)
+            IAudioService audioService,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -70,6 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.audioDialog = audioDialog;
             this.audioFileStorage = audioFileStorage;
             this.audioService = audioService;
+            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
 
             this.audioService.OnPlaybackCompleted += OnPlaybackCompleted;
         }
@@ -214,7 +218,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.audioDialog.OnRecorded += this.AudioDialog_OnRecorded;
                 this.audioDialog.OnCancelRecording += AudioDialog_OnCancel;
 
-                await InvokeOnMainThreadAsync(() =>
+                await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
                     this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText));
             }
             catch (MissingPermissionsException e) when (e.PermissionType == typeof(Permissions.Microphone))

@@ -29,12 +29,12 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
         [NUnit.Framework.Test] public void should_return_WB0202_warning_with_reference_to_empty_group () 
         {
-            var warning = errors
+            var warnings = errors
                 .Where(x => x.MessageLevel == VerificationMessageLevel.Warning)
-                .SingleOrDefault(x => x.Code == "WB0202");
+                .Where(x => x.Code == "WB0202");
 
-            warning.Should().NotBeNull();
-            warning.References.First().Id.Should().Be(groupId);
+            warnings.Should().NotBeEmpty();
+            warnings.Second().References.First().Id.Should().Be(groupId);
         }
 
 

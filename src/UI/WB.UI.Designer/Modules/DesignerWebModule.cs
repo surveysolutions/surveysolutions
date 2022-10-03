@@ -16,6 +16,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Controllers.Api.WebTester;
 using WB.UI.Designer.Services;
+using WB.UI.Designer.Services.AttachmentPreview;
 using ILoggerProvider = Microsoft.Extensions.Logging.ILoggerProvider;
 
 namespace WB.UI.Designer.Modules
@@ -44,6 +45,7 @@ namespace WB.UI.Designer.Modules
             registry.Bind<IQuestionnaireSerializer, QuestionnaireSerializer>();   
             registry.Bind<ITranslationImportExportService, TranslationImportExportService>();   
             registry.Bind<ICategoriesImportExportService, CategoriesImportExportService>();   
+            registry.BindAsSingleton<IAttachmentPreviewHelper, AttachmentPreviewHelper>();   
             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {

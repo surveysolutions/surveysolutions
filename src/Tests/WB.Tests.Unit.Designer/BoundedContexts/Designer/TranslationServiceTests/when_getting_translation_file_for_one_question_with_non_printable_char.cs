@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                     questionnaireEntityId: questionId),
             };
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            QuestionnaireDocument questionnaire = Create.OldQuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Question(questionId: questionId, title: $"В скобках символ без графического отобажения ({non_printable})")
             },
