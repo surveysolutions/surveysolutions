@@ -299,8 +299,70 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                 x.Properties?.GeometryShowNeighbours == true).Any();
                         },
                         description: "Geography question has show neighbours on"
-                    )
+                    ),
                     
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire =>
+                        {
+                            var geoQuestionsAccuracy =  questionnaire.Find<AreaQuestion>()
+                                .Select(x => $"{x.VariableName}.Accuracy").ToList();
+                            
+                            if (!geoQuestionsAccuracy.Any())
+                                return false;
+                            
+                            geoQuestionsAccuracy.Add("self.Accuracy");
+                            
+                            //conditions
+                            //validations
+                            //LinkedFilterExpression
+                            //question.Properties!.OptionsFilterExpression
+
+                            bool IsUsedInExpression(string? itemToCheck, List<string> geoQuestions)
+                            {
+                                if (string.IsNullOrWhiteSpace(itemToCheck)) return false;
+                                var validationExpressionTrimmed = itemToCheck
+                                    .Replace("\r", "")
+                                    .Replace("\n", "")
+                                    .Replace(" ", "");
+
+                                return geoQuestions.Any(geo =>
+                                    validationExpressionTrimmed.Contains(geo));
+                            }
+
+                            foreach (var composite in questionnaire.Find<IComposite>())
+                            {
+                                if (composite is IConditional conditional 
+                                    && IsUsedInExpression(conditional.ConditionExpression, geoQuestionsAccuracy))
+                                {
+                                    return true;
+                                }
+                                
+                                if (composite is IValidatable validatable)
+                                {
+                                    foreach (var validationExpression in validatable.ValidationConditions.Select(x =>
+                                                 x.Expression))
+                                    {
+                                        if (IsUsedInExpression(validationExpression, geoQuestionsAccuracy))
+                                        {
+                                            return true;
+                                        }
+                                    }
+                                }
+                                
+                                if (composite is IQuestion question)
+                                {
+                                    if (IsUsedInExpression(question.LinkedFilterExpression, geoQuestionsAccuracy) 
+                                        ||IsUsedInExpression(question.Properties!.OptionsFilterExpression, geoQuestionsAccuracy))
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+                            return false;
+                        },
+                        description: "Geography question accuracy is used in expressions"
+                    ),
                 }
             },
         };

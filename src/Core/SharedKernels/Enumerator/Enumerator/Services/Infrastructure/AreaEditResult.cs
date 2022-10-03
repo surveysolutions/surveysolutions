@@ -12,5 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 
         public int? NumberOfPoints { set; get; }
         public byte[] Preview { set; get; }
+        
+        public double? Accuracy { set; get; }
     }
 }

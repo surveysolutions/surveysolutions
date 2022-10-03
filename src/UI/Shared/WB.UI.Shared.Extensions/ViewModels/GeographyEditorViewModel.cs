@@ -32,6 +32,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 fileSystemAccessor, enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
         {
         }
+
+        //setup from settings
+        private double? RequestedAccuracy = null;
         
         private Geometry Geometry { set; get; }
         public string MapName { set; get; }
@@ -111,7 +114,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     Area = GetGeometryArea(result),
                     Length = GetGeometryLength(result),
                     DistanceToEditor = distanceToEditor,
-                    NumberOfPoints = GetGeometryPointsCount(result)
+                    NumberOfPoints = GetGeometryPointsCount(result),
+                    Accuracy = RequestedAccuracy
                 };
 
                 //save

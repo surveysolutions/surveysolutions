@@ -151,7 +151,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var questionAnswer = areaQuestion.GetAnswer().Value;
                 answerValue = new Area(questionAnswer.Geometry, questionAnswer.MapName, questionAnswer.NumberOfPoints, 
-                    questionAnswer.AreaSize, questionAnswer.Length, questionAnswer.DistanceToEditor);
+                    questionAnswer.AreaSize, questionAnswer.Length, 
+                    questionAnswer.DistanceToEditor, questionAnswer.Accuracy);
             }
 
             SetAnswerAndUpdateLabels(answerValue);
@@ -178,13 +179,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         coordinates:answerArea.Coordinates,
                         length: answerArea.Length,
                         distanceToEditor: answerArea.DistanceToEditor,
-                        numberOfPoints: answerArea.NumberOfPoints);
+                        numberOfPoints: answerArea.NumberOfPoints,
+                        accuracy: answerArea.Accuracy);
 
                     await this.Answering.SendQuestionCommandAsync(command);
                     await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
-                    var answerValue = new Area(answerArea.Geometry, answerArea.MapName, answerArea.NumberOfPoints, answerArea.Area, answerArea.Length,
-                        answerArea.DistanceToEditor);
+                    var answerValue = new Area(answerArea.Geometry, answerArea.MapName, answerArea.NumberOfPoints, 
+                        answerArea.Area, answerArea.Length, answerArea.DistanceToEditor, answerArea.Accuracy);
                     SetAnswerAndUpdateLabels(answerValue);
                 }
             }
