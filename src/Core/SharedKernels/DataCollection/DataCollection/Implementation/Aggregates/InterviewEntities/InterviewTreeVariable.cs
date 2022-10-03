@@ -19,9 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override string ToString()
         {
-            var formattableString = $"Variable ({this.Identity}). Value = {Value ?? "'NULL'"}";
-            
-            return formattableString;
+            return $"Variable ({this.Identity}). Value = {Value ?? "'NULL'"}";
         }
 
         public void SetValue(object value)
@@ -29,6 +27,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (value is string stringValue)
             {
                 this.Value = stringValue.RemoveControlChars();
+            }
+            else if (value is DateTimeOffset dateTimeOffset)
+            {
+                this.Value = dateTimeOffset.DateTime;
             }
             else
             {
@@ -64,6 +66,5 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var valueAsString = GetValueAsString();
             return valueAsString == null? null : WebUtility.HtmlEncode(valueAsString);
         }
-        
     }
 }

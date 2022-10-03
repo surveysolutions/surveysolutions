@@ -402,6 +402,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [TestCase("2000-02-29", "2004-02-28", ExpectedResult = 3)]
         [TestCase("2000-02-29", "2004-02-29", ExpectedResult = 4)]
         [TestCase("2000-02-29", "2004-03-01", ExpectedResult = 4)]
+        [TestCase("1990-11-01", "2022-09-01", ExpectedResult = 31)]
         public int Test_FullYearsBetween(DateTime? first, DateTime? second)
         {
             return new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(first, second);
