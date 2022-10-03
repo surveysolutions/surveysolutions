@@ -15,6 +15,7 @@
             android:id="@+id/video_player_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="200dp"
             local:controller_layout_id="@layout/simple_video_controls"
             local:MvxBind="Video Attachment.Video; 
                         Tag Attachment.Tag;

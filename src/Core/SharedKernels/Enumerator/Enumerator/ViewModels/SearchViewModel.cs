@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
@@ -25,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
 
         private readonly IDisposable startingLongOperationMessageSubscriptionToken;
         private readonly IDisposable stopLongOperationMessageSubscriptionToken;
@@ -35,13 +37,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IInterviewViewModelFactory viewModelFactory,
             IPlainStorage<InterviewView> interviewViewRepository,
             IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo,
-            IAssignmentDocumentsStorage assignmentsRepository
+            IAssignmentDocumentsStorage assignmentsRepository,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher
         ) : base(principal, viewModelNavigationService)
         {
             this.viewModelFactory = viewModelFactory;
             this.interviewViewRepository = interviewViewRepository;
             this.identifyingQuestionsRepo = identifyingQuestionsRepo;
             this.assignmentsRepository = assignmentsRepository;
+            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
 
             var messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             startingLongOperationMessageSubscriptionToken = messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
@@ -160,7 +164,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     if (i is IDashboardItemWithEvents withEvents)
                         withEvents.OnItemUpdated -= OnItemUpdated;
                 });
-                this.InvokeOnMainThread(()=>this.UiItems.ReplaceWith(items));
+                await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(()=>this.UiItems.ReplaceWith(items));
                 this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i =>
                 {
                     i.OnItemRemoved += InterviewItemRemoved;

@@ -208,6 +208,7 @@
     <Compile Include="Services\Autofac.MvvmCross\MvxIoCProviderWithParent.cs" />
     <Compile Include="Services\BackupRestoreService.cs" />
     <Compile Include="Services\BaseViewModelNavigationService.cs" />
+    <Compile Include="Services\BitmapHelper.cs" />
     <Compile Include="Services\CurrentViewModelPresenter.cs" />
     <Compile Include="Services\DeviceInformationService.cs" />
     <Compile Include="Services\DevicePasswordHasher.cs" />
@@ -299,6 +300,10 @@
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_overview_variable.xml" />
+    <AndroidResource Include="Resources\layout\interview_question_categorical_combobox_with_attachment.axml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_filtered_single_option_loading.axml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
@@ -1487,7 +1492,7 @@
       <Version>5.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugins.Android.ExoPlayer.UI">
-      <Version>2.11.8</Version>
+      <Version>2.14.6</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.PhotoView">
       <Version>2.1.4</Version>

@@ -33,6 +33,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.CustomBindings.Models;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
@@ -57,6 +58,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<IUserInterfaceStateService, UserInterfaceStateService>();
             registry.Bind<IExternalAppLauncher, ExternalAppLauncher>();
             registry.Bind<IPermissionsService, PermissionsService>();
+            registry.Bind<IImageHelper, BitmapHelper>();
             registry.Bind<IVirbationService, VibrationService>();
             registry.Bind<IMvxViewModelTypeFinder, MvxViewModelViewTypeFinder>();
             registry.Bind<MvxViewModelViewTypeFinder>();

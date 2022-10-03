@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -28,6 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IDisposable
     {
         protected readonly ThrottlingViewModel throttlingModel;
+        protected readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IPrincipal principal;
@@ -79,7 +81,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            ThrottlingViewModel throttlingModel)
+            ThrottlingViewModel throttlingModel,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.eventRegistry = eventRegistry;
@@ -91,6 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
 
             this.throttlingModel = throttlingModel;
+            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
 
             this.bottomInfoViewModel = new CategoricalMultiBottomInfoViewModel();
             this.topBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
@@ -158,12 +162,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
 
-            await this.InvokeOnMainThreadAsync(() =>
+            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
             {
+                var newOptions = this.GetOptions(interview).ToList();
                 var oldOptions = this.Options.ToList();
-                this.Options.ReplaceWith(this.GetOptions(interview).ToList());
                 oldOptions.ForEach(o => o.Dispose());
-            });
+                this.Options.ReplaceWith(newOptions);
+            }, false);
 
             await this.UpdateOptionsFromInterviewAsync();
         }
@@ -219,7 +224,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var filteredAnswers = this.FilterAnsweredOptions(answeredOptions);
 
-            await this.InvokeOnMainThreadAsync(() =>
+            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 foreach (var option in this.Options)
                 {
