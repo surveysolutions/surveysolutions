@@ -5,6 +5,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         public string Geometry { get; set; }
         public string MapName { get; set; }
         public double? Area { get; set; }
+        public double? RequestedAccuracy { get; set; }
         public double? Length { set; get; }
         public string Coordinates { set; get; }
 
@@ -12,7 +13,5 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 
         public int? NumberOfPoints { set; get; }
         public byte[] Preview { set; get; }
-        
-        public double? Accuracy { set; get; }
     }
 }

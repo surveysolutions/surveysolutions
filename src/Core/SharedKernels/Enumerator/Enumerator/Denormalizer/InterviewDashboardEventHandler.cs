@@ -565,7 +565,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, 
                 new Area(evnt.Payload.Geometry, evnt.Payload.MapName, evnt.Payload.NumberOfPoints,
                 evnt.Payload.AreaSize, evnt.Payload.Length, evnt.Payload.Coordinates, 
-                evnt.Payload.DistanceToEditor, evnt.Payload.Accuracy),
+                evnt.Payload.DistanceToEditor, evnt.Payload.RequestedAccuracy),
                 evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 

@@ -715,8 +715,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 @event.Payload.OriginDate?.Offset,
             this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(
                 new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.NumberOfPoints,
-                    @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, 
-                    @event.Payload.DistanceToEditor, @event.Payload.Accuracy)),
+                    @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, @event.Payload.DistanceToEditor,
+                    @event.Payload.RequestedAccuracy)),
             @event.Payload.RosterVector));
 
             return view;

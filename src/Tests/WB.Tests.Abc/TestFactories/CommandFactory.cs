@@ -215,7 +215,7 @@ namespace WB.Tests.Abc.TestFactories
                 length:0,
                 distanceToEditor:0,
                 numberOfPoints:0,
-                accuracy: null);
+                requestedAccuracy: null);
 
         public DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)
         {

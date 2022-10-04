@@ -92,6 +92,7 @@ namespace WB.UI.Shared.Extensions.Services
                             DistanceToEditor = editResult.DistanceToEditor,
                             Preview = editResult.Preview,
                             NumberOfPoints = editResult.NumberOfPoints,
+                            RequestedAccuracy = editResult.RequestedAccuracy,
                             Accuracy = editResult.Accuracy
                         });
                 };

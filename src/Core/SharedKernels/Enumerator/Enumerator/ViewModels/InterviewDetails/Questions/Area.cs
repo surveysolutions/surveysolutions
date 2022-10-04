@@ -3,7 +3,7 @@
     public class Area
     {
         public Area(string geometry, string mapName, int? numberOfPoints,  
-            double? areaSize, double? length, double? distanceToEditor, double? accuracy)
+            double? areaSize, double? length, double? distanceToEditor, double? requestedAccuracy)
         {
             this.Geometry = geometry;
             this.MapName = mapName;
@@ -11,10 +11,10 @@
             this.Length = length;
             this.DistanceToEditor = distanceToEditor;
             this.NumberOfPoints = numberOfPoints;
-            this.Accuracy = accuracy;
+            this.RequestedAccuracy = requestedAccuracy;
         }
 
-        public double? Accuracy { get; set; }
+        public double? RequestedAccuracy { get; set; }
 
         public string Geometry { set; get; }
         public string MapName { set; get; }
