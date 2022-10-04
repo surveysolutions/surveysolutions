@@ -63,6 +63,8 @@
     </style>
 
     <style name="Interview_Group_Navigation_Button" parent="Button_Primary">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_background_padding</item>
         <item name="android:textColor">@color/group_title_text</item>
     </style>

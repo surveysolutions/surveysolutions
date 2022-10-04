@@ -174,7 +174,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         }
 
         [Test]
-        public void When_section_enabled_Then_new_view_model_should_be_added_with_specified_index()
+        public async Task When_section_enabled_Then_new_view_model_should_be_added_with_specified_index()
         {
             //arrange
             var section1Id = Guid.Parse("11111111111111111111111111111112");
@@ -198,7 +198,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             //act
             interview.Apply(Create.Event.GroupsEnabled(disabledSectionId, RosterVector.Empty));
-            viewModel.Handle(Create.Event.GroupsEnabled(disabledSectionId, RosterVector.Empty));
+            await viewModel.HandleAsync(Create.Event.GroupsEnabled(disabledSectionId, RosterVector.Empty));
             //assert
             var addedDisabledSectionViewModel = viewModel.AllVisibleSections.Except(viewModelsWithoutDisabled).Single();
 

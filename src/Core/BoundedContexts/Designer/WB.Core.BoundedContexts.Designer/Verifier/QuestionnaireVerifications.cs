@@ -38,6 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error("WB0098", QuestionnaireHasSizeMoreThan5Mb, size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size, MaxQuestionnaireSizeInMb)),
             Error("WB0277", QuestionnaireTitleHasConsecutiveUnderscores, VerificationMessages.WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore),
             Error("WB0281", QuestionnaireExceededEntitiesLimit, limit => string.Format(VerificationMessages.WB0281_QuestionnaireExceededEntitiesLimit, limit, QuestionnaireTotalEntitiesLimit)),
+            Error("WB0316", QuestionnaireWithOldCoverPage, VerificationMessages.WB0316_QuestionnaireWithOldCoverPage),
             Error<IComposite, int>("WB0121", VariableNameTooLong, length => string.Format(VerificationMessages.WB0121_VariableNameTooLong, length)),
             Error<IComposite>("WB0124", VariableNameEndWithUnderscore, VerificationMessages.WB0124_VariableNameEndWithUnderscore),
             Error<IComposite>("WB0125", VariableNameHasConsecutiveUnderscores, VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores),
@@ -527,6 +528,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool NoQuestionsExist(MultiLanguageQuestionnaireDocument questionnaire)
         {
             return !questionnaire.Find<IQuestion>().Any();
+        }
+
+        private static bool QuestionnaireWithOldCoverPage(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            return !questionnaire.Questionnaire.IsCoverPageSupported;
         }
 
         private static bool QuestionnaireTitleTooLong(MultiLanguageQuestionnaireDocument questionnaire)

@@ -38,6 +38,4 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <include layout="@layout/interview_question__attachment" />
 </LinearLayout>

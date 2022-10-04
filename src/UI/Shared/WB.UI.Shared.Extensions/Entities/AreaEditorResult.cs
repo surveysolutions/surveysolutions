@@ -11,5 +11,7 @@
         public int? NumberOfPoints { set; get; }
         public double? DistanceToEditor { set; get; }
         public byte[] Preview { set; get; }
+        
+        public double? Accuracy { set; get; }
     }
 }

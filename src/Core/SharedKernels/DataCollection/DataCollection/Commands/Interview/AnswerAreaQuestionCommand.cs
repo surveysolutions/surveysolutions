@@ -12,11 +12,12 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public double? Length { get; private set; }
         public double? DistanceToEditor { get; private set; }
 
+        public double? Accuracy { get; private set; }
         public int? NumberOfPoints { set; get; }
 
         public AnswerGeographyQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector,
             string geometry, string mapName, double? area,string coordinates, 
-            double? length, double? distanceToEditor, int? numberOfPoints)
+            double? length, double? distanceToEditor, int? numberOfPoints, double? accuracy)
             : base(interviewId, userId, questionId, rosterVector)
         {
             this.Geometry = geometry;
@@ -26,6 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.Coordinates = coordinates;
             this.DistanceToEditor = distanceToEditor;
             this.NumberOfPoints = numberOfPoints;
+            this.Accuracy = accuracy;
         }
     }
 }

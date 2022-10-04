@@ -91,7 +91,8 @@ namespace WB.UI.Shared.Extensions.Services
                             Coordinates = editResult.Coordinates,
                             DistanceToEditor = editResult.DistanceToEditor,
                             Preview = editResult.Preview,
-                            NumberOfPoints = editResult.NumberOfPoints
+                            NumberOfPoints = editResult.NumberOfPoints,
+                            Accuracy = editResult.Accuracy
                         });
                 };
                 return await tcs.Task;

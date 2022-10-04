@@ -160,7 +160,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private CompositeCollection<ICompositeEntity> GetEditablePrefilledData(string interviewId, NavigationState navigationState)
         {
-            var prefilledEntities = this.interviewViewModelFactory.GetPrefilledEntities(interviewId, navigationState).ToList();
+            prefilledEntities = this.interviewViewModelFactory.GetPrefilledEntities(interviewId, navigationState).ToList();
             return this.compositeCollectionInflationService.GetInflatedCompositeCollection(prefilledEntities);
         }
         
@@ -217,7 +217,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         private bool isDisposed = false;
-        
+        private List<IInterviewEntityViewModel> prefilledEntities;
+
         public void Dispose()
         {
             if (isDisposed)
@@ -228,9 +229,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (PrefilledReadOnlyEntities != null)
             {
                 var prefilledQuestionsLocal = PrefilledReadOnlyEntities.ToArray();
-                prefilledQuestionsLocal.ForEach(viewModel => viewModel?.DisposeIfDisposable());
+                prefilledQuestionsLocal.ForEach(viewModel => viewModel?.Dispose());
             }
 
+            if (prefilledEntities != null)
+            {
+                var prefilledEntity = prefilledEntities.ToArray();
+                prefilledEntity.ForEach(viewModel => viewModel?.DisposeIfDisposable());
+            }         
+            
             if (PrefilledEditableEntities != null)
             {
                 var prefilledEditable = PrefilledEditableEntities.ToArray();

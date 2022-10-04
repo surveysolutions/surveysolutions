@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AngleSharp.Dom.Events;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Extensions.Caching.Memory;
@@ -714,7 +715,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 @event.Payload.OriginDate?.Offset,
             this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(
                 new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.NumberOfPoints,
-                    @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, @event.Payload.DistanceToEditor)),
+                    @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, 
+                    @event.Payload.DistanceToEditor, @event.Payload.Accuracy)),
             @event.Payload.RosterVector));
 
             return view;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AngleSharp.Dom.Events;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Caching.Memory;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -536,7 +537,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AreaQuestionAnswered> @event)
         {
             var area = new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.NumberOfPoints,
-                @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, @event.Payload.DistanceToEditor);
+                @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, 
+                @event.Payload.DistanceToEditor, @event.Payload.Accuracy);
             return this.AnswerQuestion(state, @event.Payload.QuestionId, area, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 

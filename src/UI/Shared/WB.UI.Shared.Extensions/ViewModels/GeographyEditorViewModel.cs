@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.UI;
+using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -26,11 +27,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
         public GeographyEditorViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService, 
             IMapService mapService, IUserInteractionService userInteractionService, ILogger logger, 
             IFileSystemAccessor fileSystemAccessor, IEnumeratorSettings enumeratorSettings,
-            IMapUtilityService mapUtilityService) 
+            IMapUtilityService mapUtilityService, IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
-                fileSystemAccessor, enumeratorSettings, mapUtilityService)
+                fileSystemAccessor, enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
         {
         }
+
+        //setup from settings
+        private double? RequestedAccuracy = null;
         
         private Geometry Geometry { set; get; }
         public string MapName { set; get; }
@@ -110,7 +114,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     Area = GetGeometryArea(result),
                     Length = GetGeometryLength(result),
                     DistanceToEditor = distanceToEditor,
-                    NumberOfPoints = GetGeometryPointsCount(result)
+                    NumberOfPoints = GetGeometryPointsCount(result),
+                    Accuracy = RequestedAccuracy
                 };
 
                 //save

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.DataCollection;
@@ -36,6 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
         private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly ICommandService commandService;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
 
         readonly IUserInterfaceStateService userInterfaceStateService;
 
@@ -53,13 +55,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             DynamicTextViewModel dynamicTextViewModel, 
             ICompositeCollectionInflationService compositeCollectionInflationService,
             IViewModelEventRegistry liteEventRegistry,
-            ICommandService commandService)
+            ICommandService commandService,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.interviewRepository = interviewRepository;
             this.userInterfaceStateService = userInterfaceStateService;
             this.liteEventRegistry = liteEventRegistry;
             this.commandService = commandService;
+            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
 
             this.Name = dynamicTextViewModel;
             this.compositeCollectionInflationService = compositeCollectionInflationService;
@@ -74,16 +78,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.groupId = groupId;
             this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
             
-            this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
+            this.InitRegularGroupScreenAsync(groupId, anchoredElementIdentity).WaitAndUnwrapException();
 
             liteEventRegistry.Subscribe(this, interviewId);
         }
 
-        private void InitRegularGroupScreen(Identity groupIdentity, Identity anchoredElementIdentity)
+        private async Task InitRegularGroupScreenAsync(Identity groupIdentity, Identity anchoredElementIdentity)
         {
             this.Name.Init(this.interviewId, groupIdentity);
 
-            this.LoadFromModel(groupIdentity);
+            await this.LoadFromModelAsync(groupIdentity);
             this.SetScrollTo(anchoredElementIdentity);
         }
 
@@ -102,7 +106,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public int? ScrollToIndex { get; set; }
 
-        private void LoadFromModel(Identity groupIdentity)
+        private async Task LoadFromModelAsync(Identity groupIdentity)
         {
             try
             {
@@ -120,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 var newEntities = this.compositeCollectionInflationService.GetInflatedCompositeCollection(entities);
 
-                InvokeOnMainThread(() =>
+                await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
                     this.Items.ToArray().ForEach(ie => ie.DisposeIfDisposable());
                     this.Items = newEntities;

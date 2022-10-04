@@ -23,10 +23,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireRepository, IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel,
-            IInterviewViewModelFactory interviewViewModelFactory) 
+            IInterviewViewModelFactory interviewViewModelFactory, IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
             : base(
             questionStateViewModel, questionnaireRepository, eventRegistry, interviewRepository, principal, answering,
-            instructionViewModel, throttlingModel, interviewViewModelFactory)
+            instructionViewModel, throttlingModel, interviewViewModelFactory, mainThreadAsyncDispatcher)
         {
         }
 

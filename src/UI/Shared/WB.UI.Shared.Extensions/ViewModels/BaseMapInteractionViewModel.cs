@@ -9,6 +9,7 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
@@ -33,6 +34,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         protected readonly IMvxNavigationService navigationService;
         private readonly IEnumeratorSettings enumeratorSettings;
         private readonly IMapUtilityService mapUtilityService;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
 
         protected BaseMapInteractionViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -41,7 +43,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             ILogger logger,
             IFileSystemAccessor fileSystemAccessor,
             IEnumeratorSettings enumeratorSettings,
-            IMapUtilityService mapUtilityService) 
+            IMapUtilityService mapUtilityService,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
             : base(principal, viewModelNavigationService)
         {
             this.userInteractionService = userInteractionService;
@@ -51,6 +54,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.navigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
             this.enumeratorSettings = enumeratorSettings;
             this.mapUtilityService = mapUtilityService;
+            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
         }
 
         public override async Task Initialize()
@@ -229,7 +233,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                     if (baseMap?.BaseLayers.Count > 0 && baseMap?.BaseLayers[0]?.FullExtent != null)
                     {
-                        await InvokeOnMainThreadAsync(() =>
+                        await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
                         {
                             if (this.MapView?.VisibleArea != null)
                             {

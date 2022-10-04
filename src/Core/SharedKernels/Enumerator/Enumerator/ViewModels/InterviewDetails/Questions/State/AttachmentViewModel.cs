@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.eventRegistry.Subscribe(this, interviewId);
             BindAttachment().WaitAndUnwrapException();
-            this.supportPreview = false;
+            this.supportPreview = true;
         }
 
         public void InitAsStatic(string interviewId, string attachmentName, bool supportPreview = true)
@@ -127,7 +127,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (IsImage)
                 {
-                    this.Image = this.attachmentContentStorage.GetContent(attachment.ContentId);
+                    this.Image = this.attachmentContentStorage.GetPreviewContent(attachment.ContentId);
                 }
 
                 var backingFile = this.attachmentContentStorage.GetFileCacheLocation(attachment.ContentId);
@@ -204,6 +204,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Video?.Release();
             this.Audio?.Release();
             this.ContentPath = null;
+            this.Image = null;
             base.ViewDestroy(viewFinishing);
         }
 
@@ -215,6 +216,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
+
+            //this.Video?.Dispose();
+            //this.Audio?.Dispose();
         }
     }
 }

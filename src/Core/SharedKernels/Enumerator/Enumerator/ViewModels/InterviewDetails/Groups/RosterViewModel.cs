@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -15,14 +18,15 @@ using WB.Core.SharedKernels.Enumerator.Utils;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public class RosterViewModel : MvxNotifyPropertyChanged,
-        IViewModelEventHandler<RosterInstancesAdded>,
-        IViewModelEventHandler<RosterInstancesRemoved>,
+        IAsyncViewModelEventHandler<RosterInstancesAdded>,
+        IAsyncViewModelEventHandler<RosterInstancesRemoved>,
         IDisposable,
         IInterviewEntityViewModel
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IViewModelEventRegistry eventRegistry;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
         private string interviewId;
         private NavigationState navigationState;
 
@@ -39,11 +43,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public RosterViewModel(IStatefulInterviewRepository interviewRepository,
             IInterviewViewModelFactory interviewViewModelFactory,
-            IViewModelEventRegistry eventRegistry)
+            IViewModelEventRegistry eventRegistry,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
         {
             this.interviewRepository = interviewRepository;
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.eventRegistry = eventRegistry;
+            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
         }
 
         public void Init(string interviewId, Identity entityId, NavigationState navigationState)
@@ -53,24 +59,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.navigationState = navigationState;
 
             this.RosterInstances = new CovariantObservableCollection<IInterviewEntityViewModel>();
-            this.UpdateFromInterview();
+            this.UpdateFromInterviewAsync().WaitAndUnwrapException();
 
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        public void Handle(RosterInstancesRemoved @event)
+        public async Task HandleAsync(RosterInstancesRemoved @event)
         {
             if (@event.Instances.Any(rosterInstance => rosterInstance.GroupId == this.Identity.Id))
-                this.UpdateFromInterview();
+                await this.UpdateFromInterviewAsync();
         }
 
-        public void Handle(RosterInstancesAdded @event)
+        public async Task HandleAsync(RosterInstancesAdded @event)
         {
             if (@event.Instances.Any(rosterInstance => rosterInstance.GroupId == this.Identity.Id))
-                this.UpdateFromInterview();
+                await this.UpdateFromInterviewAsync();
         }
 
-        private void UpdateFromInterview()
+        private async Task UpdateFromInterviewAsync()
         {
             if (this.isDisposed) return;
             
@@ -81,7 +87,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 .ToList();
 
             this.UpdateViewModels(interviewRosterInstances);
-            this.InvokeOnMainThread(() => this.RosterInstances.ReplaceWith(this.synchronizedItems));
+
+            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => this.RosterInstances.ReplaceWith(this.synchronizedItems));
         }
 
         private void UpdateViewModels(IList<Identity> interviewRosterInstances)
