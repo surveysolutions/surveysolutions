@@ -78,6 +78,18 @@ namespace WB.Services.Export.CsvExport.Exporters
                 };
             }
 
+            var areaQuestion = question.AsArea;
+            if (areaQuestion != null)
+            {
+                return new[]
+                {
+                    areaQuestion.AreaSize?.ToString(ExportCulture) ?? string.Empty,
+                    areaQuestion.Length?.ToString(ExportCulture) ?? string.Empty,
+                    areaQuestion.NumberOfPoints?.ToString(ExportCulture) ?? string.Empty,
+                    areaQuestion.Accuracy?.ToString(ExportCulture) ?? string.Empty,
+                };
+            }
+            
             switch (header.QuestionType)
             {
                 case QuestionType.DateTime:
@@ -85,7 +97,6 @@ namespace WB.Services.Export.CsvExport.Exporters
                 case QuestionType.Numeric:
                 case QuestionType.Text:
                 case QuestionType.QRBarcode:
-                case QuestionType.Area:
                 case QuestionType.Audio:
                     return new string[] { this.ConvertAnswerToStringValue(question.AsObject(), header) };
 

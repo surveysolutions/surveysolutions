@@ -548,6 +548,10 @@ namespace WB.Services.Export.Questionnaire
                     {
                         this.AddHeadersForGpsQuestion(headerStructureForLevel, question, questionnaire);
                     }
+                    else if (question is AreaQuestion)
+                    {
+                        this.AddHeadersForAreaQuestion(headerStructureForLevel, question, questionnaire);
+                    }
                     else
                     {
                         this.AddHeaderForSingleColumnExportQuestion(headerStructureForLevel, question, questionnaire);
@@ -688,6 +692,36 @@ namespace WB.Services.Export.Questionnaire
             }
 
             headerStructureForLevel.HeaderItems.Add(question.PublicKey, gpsQuestionExportHeader);
+        }
+
+        private void AddHeadersForAreaQuestion(HeaderStructureForLevel headerStructureForLevel, Question question,
+            QuestionnaireDocument questionnaire)
+        {
+            var areaColumns = Area.PropertyNames;
+            var areaQuestionExportHeader = this.CreateExportedQuestionHeaderItem(question,
+                questionnaire,
+                headerStructureForLevel,
+                this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire));
+
+            areaQuestionExportHeader.ColumnHeaders = new List<HeaderColumn>();
+
+            var questionLabel = string.IsNullOrEmpty(question.VariableLabel)
+                ? question.QuestionText
+                : question.VariableLabel;
+
+            foreach (var column in areaColumns)
+            {
+                areaQuestionExportHeader.ColumnHeaders.Add(new HeaderColumn()
+                {
+                    Name = string.Format(GeneratedTitleExportFormat, question.VariableName.Take(26), column),
+                    Title = $"{questionLabel}: {column}",
+                    ExportType = string.Compare(column, "Num", StringComparison.OrdinalIgnoreCase) == 0 
+                        ? ExportValueType.NumericInt 
+                        : ExportValueType.Numeric
+                });
+            }
+
+            headerStructureForLevel.HeaderItems.Add(question.PublicKey, areaQuestionExportHeader);
         }
 
         private int GetRostersSizeForLinkedQuestion(Question question, QuestionnaireDocument questionnaire,

@@ -4,10 +4,12 @@ namespace WB.Services.Export.Interview.Entities
 {
     public class Area
     {
+        public static string[] PropertyNames { get; } = new[] { "Area", "Len", "Num", "Acc" };
+
         public Area() { }
 
         public Area(string geometry, string mapName, int? numberOfPoints, double? areaSize,
-            double? length, string coordinates, double? distanceToEditor)
+            double? length, string coordinates, double? distanceToEditor, double? accuracy)
         {
             this.Geometry = geometry;
             this.MapName = mapName;
@@ -16,6 +18,7 @@ namespace WB.Services.Export.Interview.Entities
             this.DistanceToEditor = distanceToEditor;
             this.Coordinates = coordinates;
             this.NumberOfPoints = numberOfPoints;
+            this.Accuracy = accuracy;
         }
 
         public string Geometry { set; get; } = String.Empty;
@@ -27,6 +30,7 @@ namespace WB.Services.Export.Interview.Entities
         public double? DistanceToEditor { set; get; }
 
         public int? NumberOfPoints { set; get; }
+        public double? Accuracy { set; get; }
 
         public override string ToString()
         {
