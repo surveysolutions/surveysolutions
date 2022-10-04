@@ -4,7 +4,7 @@ namespace WB.Services.Export.Interview.Entities
 {
     public class Area
     {
-        public static string[] PropertyNames { get; } = new[] { "Area", "Len", "Num", "Acc" };
+        public static string[] PropertyNames { get; } = new[] { "area", "len", "num", "racc" };
 
         public Area() { }
 
