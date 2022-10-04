@@ -14,6 +14,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         bool PartialSynchronizationEnabled { get; }
         void SetPartialSynchronizationEnabled(bool enable);
-        void SetWebInterviewUrlTemplate(string tabletSettingsWebInterviewUrlTemplate);
     }
 }

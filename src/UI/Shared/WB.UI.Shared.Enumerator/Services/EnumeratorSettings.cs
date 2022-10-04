@@ -235,6 +235,18 @@ namespace WB.UI.Shared.Enumerator.Services
         }
 
         public string WebInterviewUriTemplate => this.CurrentWorkspaceSettings.WebInterviewUriTemplate;
+        public int GeographyQuestionAccuracyInMeters => this.CurrentWorkspaceSettings.GeographyQuestionAccuracyInMeters ?? 10;
+        public void SetGeographyQuestionAccuracyInMeters(int geographyQuestionAccuracyInMeters)
+        {
+            this.SaveCurrentSettings(settings => { settings.GeographyQuestionAccuracyInMeters = geographyQuestionAccuracyInMeters; });
+        }
+
+        public int GeographyQuestionPeriodInSeconds => this.CurrentWorkspaceSettings.GeographyQuestionPeriodInSeconds ?? 10;
+        public void SetGeographyQuestionPeriodInSeconds(int geographyQuestionPeriodInSeconds)
+        {
+            this.SaveCurrentSettings(settings => { settings.GeographyQuestionPeriodInSeconds = geographyQuestionPeriodInSeconds; });
+        }
+
         public void SetWebInterviewUrlTemplate(string webInterviewUriTemplate)
         {
             this.SaveCurrentSettings(settings => settings.WebInterviewUriTemplate = webInterviewUriTemplate);

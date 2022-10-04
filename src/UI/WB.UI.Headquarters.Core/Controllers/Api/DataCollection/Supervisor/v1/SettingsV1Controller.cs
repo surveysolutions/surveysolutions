@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -14,8 +16,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
     {
         public SettingsV1Controller(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, 
             IPlainStorageAccessor<ServerSettings> settings, 
-            ISecureStorage secureStorage)
-            : base(appSettingsStorage, settings, secureStorage)
+            ISecureStorage secureStorage,
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
+            IWebInterviewLinkProvider webInterviewLinkProvider)
+            : base(appSettingsStorage, settings, secureStorage, interviewerSettingsStorage, webInterviewLinkProvider)
         {
         }
 
@@ -38,5 +42,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [HttpGet]
         [Route("tenantId")]
         public override ActionResult<TenantIdApiView> TenantId() => base.TenantId();
+        
+        [HttpGet]
+        [Route("tabletsettings")]
+        public override RemoteTabletSettingsApiView TabletSettings() => base.TabletSettings();
     }
 }

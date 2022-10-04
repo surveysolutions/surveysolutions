@@ -179,6 +179,46 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-7">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <input
+                            class="checkbox-filter single-checkbox"
+                            v-model="geographyQuestionAccuracyInMeters"
+                            @change="updateDeviceSettings"
+                            id="interviewerGeographyQuestionAccuracyInMeters"
+                            type="number"
+                            min="5"
+                            max="1000" />
+                        <label for="interviewerGeographyQuestionAccuracyInMeters"
+                            style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{$t('Settings.InterviewerGeographyQuestionAccuracyInMeters')}}
+                            <p style="font-weight: normal">{{$t('Settings.GeographyQuestionAccuracyInMetersDescription')}}</p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <input
+                            class="checkbox-filter single-checkbox"
+                            v-model="geographyQuestionPeriodInSeconds"
+                            @change="updateDeviceSettings"
+                            id="interviewerGeographyQuestionPeriodInSeconds"
+                            type="number"
+                            min="5"
+                            max="1000" />
+                        <label for="interviewerGeographyQuestionPeriodInSeconds"
+                            style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{$t('Settings.InterviewerGeographyQuestionPeriodInSeconds')}}
+                            <p style="font-weight: normal">{{$t('Settings.GeographyQuestionPeriodInSecondsDescription')}}</p>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row extra-margin-bottom contain-input">
@@ -299,6 +339,8 @@ export default {
             isDeviceNotificationsEnabled: false,
             isEmailAllowed: false,
             files: [],
+            geographyQuestionAccuracyInMeters: 10,
+            geographyQuestionPeriodInSeconds: 10,
         }
     },
     mounted() {
@@ -321,6 +363,8 @@ export default {
             this.isInterviewerAutomaticUpdatesEnabled = interviewerSettings.data.interviewerAutoUpdatesEnabled
             this.isDeviceNotificationsEnabled = interviewerSettings.data.notificationsEnabled
             this.isPartialSynchronizationEnabled = interviewerSettings.data.partialSynchronizationEnabled
+            this.geographyQuestionAccuracyInMeters = interviewerSettings.data.geographyQuestionAccuracyInMeters
+            this.geographyQuestionPeriodInSeconds = interviewerSettings.data.geographyQuestionPeriodInSeconds
 
             const webInterviewSettings = await this.$hq.AdminSettings.getWebInterviewSettings()
             this.isEmailAllowed = webInterviewSettings.data.allowEmails
@@ -367,7 +411,9 @@ export default {
             return this.$hq.AdminSettings.setInterviewerSettings(
                 this.isInterviewerAutomaticUpdatesEnabled,
                 this.isDeviceNotificationsEnabled,
-                this.isPartialSynchronizationEnabled
+                this.isPartialSynchronizationEnabled,
+                this.geographyQuestionAccuracyInMeters,
+                this.geographyQuestionPeriodInSeconds
             )
         },
         updateWebInterviewEmailNotifications() {

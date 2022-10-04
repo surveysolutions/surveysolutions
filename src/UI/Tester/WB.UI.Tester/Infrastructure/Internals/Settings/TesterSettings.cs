@@ -163,5 +163,23 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
 
         public List<QuestionnaireIdentity> QuestionnairesInWebMode { get; }
         public string WebInterviewUriTemplate { get; }
+        public void SetWebInterviewUrlTemplate(string tabletSettingsWebInterviewUrlTemplate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GeographyQuestionAccuracyInMeters { get; }
+
+        public void SetGeographyQuestionAccuracyInMeters(int geographyQuestionAccuracyInMeters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GeographyQuestionPeriodInSeconds { get; }
+
+        public void SetGeographyQuestionPeriodInSeconds(int geographyQuestionPeriodInSeconds)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
