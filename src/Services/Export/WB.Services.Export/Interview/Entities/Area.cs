@@ -9,7 +9,7 @@ namespace WB.Services.Export.Interview.Entities
         public Area() { }
 
         public Area(string geometry, string mapName, int? numberOfPoints, double? areaSize,
-            double? length, string coordinates, double? distanceToEditor, double? accuracy)
+            double? length, string coordinates, double? distanceToEditor, double? requestedAccuracy)
         {
             this.Geometry = geometry;
             this.MapName = mapName;
@@ -18,7 +18,7 @@ namespace WB.Services.Export.Interview.Entities
             this.DistanceToEditor = distanceToEditor;
             this.Coordinates = coordinates;
             this.NumberOfPoints = numberOfPoints;
-            this.Accuracy = accuracy;
+            this.RequestedAccuracy = requestedAccuracy;
         }
 
         public string Geometry { set; get; } = String.Empty;
@@ -30,7 +30,7 @@ namespace WB.Services.Export.Interview.Entities
         public double? DistanceToEditor { set; get; }
 
         public int? NumberOfPoints { set; get; }
-        public double? Accuracy { set; get; }
+        public double? RequestedAccuracy { set; get; }
 
         public override string ToString()
         {
@@ -46,9 +46,13 @@ namespace WB.Services.Export.Interview.Entities
         }
 
         protected bool Equals(Area other)
-            => string.Equals(Geometry, other.Geometry) && string.Equals(MapName, other.MapName) &&
-               AreaSize.Equals(other.AreaSize) && Length.Equals(other.Length) &&
-               string.Equals(Coordinates, other.Coordinates) && DistanceToEditor.Equals(other.DistanceToEditor);
+            => string.Equals(Geometry, other.Geometry) 
+               && string.Equals(MapName, other.MapName) 
+               && AreaSize.Equals(other.AreaSize) 
+               && Length.Equals(other.Length) 
+               && string.Equals(Coordinates, other.Coordinates) 
+               && DistanceToEditor.Equals(other.DistanceToEditor)
+               && RequestedAccuracy.Equals(other.RequestedAccuracy);
 
         public override int GetHashCode()
         {
@@ -58,6 +62,7 @@ namespace WB.Services.Export.Interview.Entities
                 hashCode = (hashCode * 397) ^ (MapName != null ? MapName.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ AreaSize.GetHashCode();
                 hashCode = (hashCode * 397) ^ Length.GetHashCode();
+                hashCode = (hashCode * 397) ^ RequestedAccuracy.GetHashCode();
                 hashCode = (hashCode * 397) ^ (Coordinates != null ? Coordinates.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ DistanceToEditor.GetHashCode();
                 return hashCode;

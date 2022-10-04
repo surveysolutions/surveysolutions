@@ -83,10 +83,11 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 return new[]
                 {
+                    this.ConvertAnswerToStringValue(question.AsObject(), header),
                     areaQuestion.AreaSize?.ToString(ExportCulture) ?? string.Empty,
                     areaQuestion.Length?.ToString(ExportCulture) ?? string.Empty,
                     areaQuestion.NumberOfPoints?.ToString(ExportCulture) ?? string.Empty,
-                    areaQuestion.Accuracy?.ToString(ExportCulture) ?? string.Empty,
+                    areaQuestion.RequestedAccuracy?.ToString(ExportCulture) ?? string.Empty,
                 };
             }
             

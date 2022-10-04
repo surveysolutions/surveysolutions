@@ -706,9 +706,16 @@ namespace WB.Services.Export.Questionnaire
             areaQuestionExportHeader.ColumnHeaders = new List<HeaderColumn>();
 
             var questionLabel = string.IsNullOrEmpty(question.VariableLabel)
-                ? question.QuestionText
+                ? question.QuestionText.RemoveHtmlTags()
                 : question.VariableLabel;
 
+            areaQuestionExportHeader.ColumnHeaders.Add(new HeaderColumn()
+            {
+                Name = string.Concat(question.VariableName.Take(26)),
+                Title = questionLabel,
+                ExportType = ExportValueType.String
+            });
+            
             foreach (var column in areaColumns)
             {
                 areaQuestionExportHeader.ColumnHeaders.Add(new HeaderColumn()
