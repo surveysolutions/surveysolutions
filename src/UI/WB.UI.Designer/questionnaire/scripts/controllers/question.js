@@ -775,7 +775,8 @@
                     if (newValue) {
                         if ($scope.activeQuestion.questionScope !== 'Interviewer'
                             && $scope.activeQuestion.questionScope !== 'Hidden'
-                            && $scope.activeQuestion.questionScope !== 'Supervisor') {
+                            && $scope.activeQuestion.questionScope !== 'Supervisor'
+                            && $scope.activeQuestion.questionScope !== 'Identifying') {
                             $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                         }
                         $scope.activeQuestion.optionsFilterExpression = null;
