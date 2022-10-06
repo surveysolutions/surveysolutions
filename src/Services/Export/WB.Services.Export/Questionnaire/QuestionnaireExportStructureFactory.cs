@@ -709,9 +709,10 @@ namespace WB.Services.Export.Questionnaire
                 ? question.QuestionText.RemoveHtmlTags()
                 : question.VariableLabel;
 
+            var columnName = string.Concat(question.VariableName.Take(26));
             areaQuestionExportHeader.ColumnHeaders.Add(new HeaderColumn()
             {
-                Name = string.Concat(question.VariableName.Take(26)),
+                Name = columnName,
                 Title = questionLabel,
                 ExportType = ExportValueType.String
             });
@@ -720,7 +721,7 @@ namespace WB.Services.Export.Questionnaire
             {
                 areaQuestionExportHeader.ColumnHeaders.Add(new HeaderColumn()
                 {
-                    Name = string.Format(GeneratedTitleExportFormat, question.VariableName.Take(26), column),
+                    Name = string.Format(GeneratedTitleExportFormat, columnName, column),
                     Title = $"{questionLabel}: {column}",
                     ExportType = string.Compare(column, "Num", StringComparison.OrdinalIgnoreCase) == 0 
                         ? ExportValueType.NumericInt 
