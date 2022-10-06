@@ -14,6 +14,8 @@
                                 v-if="isPolygon || isPolyline">{{this.$t('Pages.AreaQestion_Length')}}: {{$me.answer.length}} {{this.$t('Pages.AreaQestion_AreaMeter')}}</li>
                             <li
                                 v-if="isMultiPoints">{{this.$t('Pages.AreaQestion_Points')}}: {{$me.answer.selectedPoints.length}}</li>
+                            <li
+                                v-if="!isManualMode && $me.answer.requestedAccuracy">{{this.$t('Pages.AreaQestion_RequestedAccuracy')}}: {{$me.answer.requestedAccuracy}}</li>
                             <li v-if="!coordinatesShown">
                                 <button
                                     class="btn btn-link"
@@ -72,6 +74,9 @@ export default {
         },
         isMultiPoints() {
             return this.$me.type == 'Multipoint'
+        },
+        isManualMode() {
+            return this.$me.mode == null || this.$me.mode == 'Manual'
         },
     },
     methods: {

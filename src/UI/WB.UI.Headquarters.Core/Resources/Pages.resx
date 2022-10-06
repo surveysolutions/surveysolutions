@@ -1195,6 +1195,9 @@
   <data name="AreaQestion_Points" xml:space="preserve">
     <value>Points</value>
   </data>
+  <data name="AreaQestion_RequestedAccuracy" xml:space="preserve">
+    <value>Accuracy</value>
+  </data>
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
     <value>square meters</value>
   </data>

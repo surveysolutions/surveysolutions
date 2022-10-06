@@ -2013,6 +2013,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             return question.Properties.GeometryType;
         }
+        public GeometryInputMode? GetQuestionGeometryMode(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            return question.Properties.GeometryInputMode;
+        }
 
         public int GetEntityIdMapValue(Guid entityId)
         {

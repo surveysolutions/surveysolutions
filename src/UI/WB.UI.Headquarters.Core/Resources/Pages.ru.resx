@@ -1380,6 +1380,9 @@
     <value>Кол-во точек</value>
     <comment>Кол-во точек</comment>
   </data>
+  <data name="AreaQestion_RequestedAccuracy" xml:space="preserve">
+    <value>Точность</value>
+  </data>
   <data name="InterviewOverview" xml:space="preserve">
     <value>Обзор интервью</value>
   </data>

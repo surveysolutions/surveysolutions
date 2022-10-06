@@ -12,6 +12,6 @@
         public double? DistanceToEditor { set; get; }
         public byte[] Preview { set; get; }
         
-        public double? Accuracy { set; get; }
+        public double? RequestedAccuracy { set; get; }
     }
 }

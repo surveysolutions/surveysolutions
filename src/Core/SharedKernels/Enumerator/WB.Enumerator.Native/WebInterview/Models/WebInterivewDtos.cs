@@ -108,6 +108,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string DisplayUrl { get; set; }
         public GeometryType? Type { get; set; }
         public InterviewGeometryAnswer Answer { get; set; }
+        public GeometryInputMode? Mode { get; set; }
     }
 
     public class InterviewGeometryAnswer

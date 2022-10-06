@@ -93,7 +93,6 @@ namespace WB.UI.Shared.Extensions.Services
                             Preview = editResult.Preview,
                             NumberOfPoints = editResult.NumberOfPoints,
                             RequestedAccuracy = editResult.RequestedAccuracy,
-                            Accuracy = editResult.Accuracy
                         });
                 };
                 return await tcs.Task;
