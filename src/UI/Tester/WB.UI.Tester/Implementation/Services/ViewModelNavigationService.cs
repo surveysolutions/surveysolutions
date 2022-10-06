@@ -59,7 +59,7 @@ namespace WB.UI.Tester.Implementation.Services
         public override Task NavigateToMapsAsync()
         => throw new NotImplementedException();
 
-        public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
+        public override Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
             => NavigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId,

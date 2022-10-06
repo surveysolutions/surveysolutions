@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         protected readonly IUserInteractionService userInteraction;
         protected readonly FilteredOptionsViewModel filteredOptionsViewModel;
+        protected readonly IInterviewViewModelFactory interviewViewModelFactory;
 
         public CategoricalMultiViewModel(
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
@@ -32,12 +33,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel,
             QuestionInstructionViewModel instructionViewModel,
-            ThrottlingViewModel throttlingModel) : base(questionStateViewModel, questionnaireRepository, eventRegistry,
+            ThrottlingViewModel throttlingModel,
+            IInterviewViewModelFactory interviewViewModelFactory,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
+            : base(questionStateViewModel, questionnaireRepository, eventRegistry,
             interviewRepository, principal, answering, instructionViewModel,
-            throttlingModel)
+            throttlingModel, mainThreadAsyncDispatcher)
         {
             this.userInteraction = userInteraction;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
+            this.interviewViewModelFactory = interviewViewModelFactory;
             this.Options = new CovariantObservableCollection<CategoricalMultiOptionViewModel<int>>();
         }
 
@@ -45,8 +50,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             foreach (var categoricalOption in this.filteredOptionsViewModel.GetOptions())
             {
-                var vm = new CategoricalMultiOptionViewModel(this.userInteraction);
-                base.InitViewModel(categoricalOption.Title, categoricalOption.Value, interview, vm, interview.IsAnswerProtected(this.Identity, categoricalOption.Value));
+                var vm = interviewViewModelFactory.GetNew<CategoricalMultiOptionViewModel>();
+                base.InitViewModel(categoricalOption.Title, categoricalOption.Value, interview, vm, 
+                    categoricalOption.AttachmentName, interview.IsAnswerProtected(this.Identity, categoricalOption.Value));
 
                 if(this.isRosterSizeQuestion) vm.MakeRosterSize();
 

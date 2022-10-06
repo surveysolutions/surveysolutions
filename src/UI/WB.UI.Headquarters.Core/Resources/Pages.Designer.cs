@@ -2383,7 +2383,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of unfinished or unsynchronized assignments on device every given moment.
+        ///   Looks up a localized string similar to Number of unfinished or not synchronized assignments on device every given moment.
         /// </summary>
         public static string InterviewerProfile_Sync_Activity_All_Assignments_Desc {
             get {
@@ -3166,7 +3166,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delink User from map.
+        ///   Looks up a localized string similar to Unlink User from map.
         /// </summary>
         public static string MapDetails_DelinkUser {
             get {
@@ -3481,7 +3481,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are You sure You want to delink user from the map?.
+        ///   Looks up a localized string similar to Are You sure You want to unlink user from the map?.
         /// </summary>
         public static string MapUserLink_DiscardConfirm {
             get {

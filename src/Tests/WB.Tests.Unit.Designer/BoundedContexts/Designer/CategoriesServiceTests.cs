@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
@@ -21,8 +24,12 @@ public class CategoriesServiceTests
     {
         var document = Create.QuestionnaireDocument(Id.g1);
         document.Categories.Add(Create.Categories(Id.g2));
-        var documentStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(s =>
-            s.GetById(Id.g1.FormatGuid()) == document);
+        var view = new QuestionnaireView(document, Array.Empty<SharedPersonView>());
+        
+        var revision = new QuestionnaireRevision(Id.g1);
+        
+        var documentStorage = Mock.Of<IQuestionnaireViewFactory>(s =>
+            s.Load(revision) == view);
 
         var categoriesDb = Create.InMemoryDbContext();
         categoriesDb.CategoriesInstances.AddRange(
@@ -38,7 +45,7 @@ public class CategoriesServiceTests
         
         var service = CreateCategoriesService(documentStorage, categoriesDb, categoriesExportService.Object);
 
-        var excelFile = service.GetAsExcelFile(Id.g1, Id.g2);
+        var excelFile = service.GetAsExcelFile(revision, Id.g2);
         
         categoriesExportService.Verify(m => 
             m.GetAsExcelFile(It.Is<IEnumerable<CategoriesItem>>(list =>
@@ -48,13 +55,13 @@ public class CategoriesServiceTests
             )), Times.Once);
     }
 
-    private ICategoriesService CreateCategoriesService(IPlainKeyValueStorage<QuestionnaireDocument> documentStorage,
+    private ICategoriesService CreateCategoriesService(IQuestionnaireViewFactory documentStorage,
         DesignerDbContext designerDbContext,
         ICategoriesExportService categoriesExportService)
     {
         return new CategoriesService(
             designerDbContext ?? Mock.Of<DesignerDbContext>(),
-            documentStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
+            documentStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
             categoriesExportService ?? Mock.Of<ICategoriesExportService>(),
             Mock.Of<ICategoriesExtractFactory>());
     }

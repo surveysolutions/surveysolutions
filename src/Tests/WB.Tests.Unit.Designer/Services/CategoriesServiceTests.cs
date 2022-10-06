@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Tests.Abc;
@@ -27,12 +28,12 @@ namespace WB.Tests.Unit.Designer.Services
     internal class CategoriesServiceTests
     {
         private static CategoriesService CreateCategoriesService(DesignerDbContext dbContext = null, 
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null, 
+            IQuestionnaireViewFactory questionnaireStorage = null, 
             ICategoriesExportService categoriesExportService = null)
         {
             return new CategoriesService(
                 dbContext: dbContext ?? Mock.Of<DesignerDbContext>(),
-                questionnaireStorage: questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
+                questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
                 categoriesExportService: categoriesExportService ?? Mock.Of<ICategoriesExportService>(), 
                 categoriesExtractFactory: new CategoriesExtractFactory(new CategoriesVerifier()));
         }
@@ -365,9 +366,9 @@ namespace WB.Tests.Unit.Designer.Services
             var categoriesId = Id.g2;
             var data = new[]
             {
-                new[] {"1", "option 1", "1"}, 
-                new[] {"", "", ""}, 
-                new[] {"2", "option 2", "1"} 
+                new[] {"1", "option 1", "1", ""}, 
+                new[] {"", "", "", ""}, 
+                new[] {"2", "option 2", "1", ""} 
             };
             
             var options = new DbContextOptionsBuilder<DesignerDbContext>().UseInMemoryDatabase(new Random().Next(0, 10000000).ToString());

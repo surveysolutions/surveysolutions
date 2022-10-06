@@ -159,6 +159,9 @@
   <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
     <value>Uploaded file is not an image</value>
   </data>
+  <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+    <value>Image dimensions are too big</value>
+  </data>
   <data name="Attachments_Unsupported_content" xml:space="preserve">
     <value>Uploaded content is not supported</value>
   </data>
@@ -359,6 +362,9 @@
   </data>
   <data name="ImportOptions_TitleTooLong" xml:space="preserve">
     <value>Title is too long. Title length should be less than {0}</value>
+  </data>
+  <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+    <value>Attachment name is too long. Attachment name should be less than {0}</value>
   </data>
   <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
     <value>Duplicated category '{0}' with value '{1}'</value>

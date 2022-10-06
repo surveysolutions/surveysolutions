@@ -100,7 +100,8 @@ namespace WB.UI.WebTester.Services.Implementation
                     {
                         Id = x.Id,
                         ParentId = x.ParentId,
-                        Text = x.Text
+                        Text = x.Text,
+                        AttachmentName = x.AttachmentName,
                     }).ToList());
                 });
 

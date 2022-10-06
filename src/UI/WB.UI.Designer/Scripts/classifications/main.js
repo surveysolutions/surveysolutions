@@ -3,7 +3,7 @@
     VeeValidate.Validator.extend('stringOptions',
         {
             getMessage(field, args, data) {
-                return "You entered an invalid input. Each line should follow the format: 'Title...Value'. 'Value' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed. Lines: " + data + ".";
+                return "You entered an invalid input. Each line should follow the format: 'Title...Value[...Attachment name]'. 'Value' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed. Lines: " + data + ".";
             },
             validate(value, args) {
                 if (!_.isEmpty(value)) {

@@ -225,15 +225,6 @@
 
             $scope.editCategories = function (questionnaireId, categoriesId)
             {
-                if ($scope.questionnaire.isReadOnlyForUser) {
-                    confirmService.open({
-                        title: $i18next.t('ReadOnlyQuestion'),
-                        cancelButtonTitle: $i18next.t('Cancel'),
-                        isReadOnly: true
-                    }).result;
-                    return;
-                }
-
                 $scope.shouldUserSeeReloadPromt = true;
                 $scope.openEditor = categoriesId
 

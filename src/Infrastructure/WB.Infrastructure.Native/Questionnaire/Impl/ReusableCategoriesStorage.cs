@@ -28,7 +28,8 @@ namespace WB.Infrastructure.Native.Questionnaire.Impl
                         {
                             ParentId = co.ParentValue,
                             Text = co.Text,
-                            Id = co.Value
+                            Id = co.Value,
+                            AttachmentName = co.AttachmentName
                         })
                     .ToList()
                 );
@@ -45,7 +46,8 @@ namespace WB.Infrastructure.Native.Questionnaire.Impl
                 SortIndex = index,
                 ParentValue = option.ParentId,
                 Text = option.Text,
-                Value = option.Id
+                Value = option.Id,
+                AttachmentName = option.AttachmentName,
             }).Select(x => Tuple.Create(x, (object)x));
 
             this.storageAccessor.Store(enumerable);
@@ -73,7 +75,8 @@ namespace WB.Infrastructure.Native.Questionnaire.Impl
                 SortIndex = x.SortIndex,
                 ParentValue = x.ParentValue,
                 Text = x.Text,
-                Value = x.Value
+                Value = x.Value,
+                AttachmentName = x.AttachmentName,
             }).ToList();
 
             this.storageAccessor.Store(newCategories);

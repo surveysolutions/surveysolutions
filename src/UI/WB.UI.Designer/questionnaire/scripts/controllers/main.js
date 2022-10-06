@@ -144,7 +144,7 @@ angular.module('designerApp')
             };
 
             var scenarioEditorShown = false;
-            $scope.showScenarioEditor = function(scenarioId) {
+            $scope.showScenarioEditor = function(scenarioId, scenarioTitle) {
                 if (!scenarioEditorShown) {
                     var modalInstance = $uibModal.open({
                         templateUrl: 'views/scenario-editor.html',
@@ -154,7 +154,8 @@ angular.module('designerApp')
                         controller: 'scenarioEditorCtrl',
                         resolve: {
                             isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false,
-                            scenarioId: scenarioId
+                            scenarioId: scenarioId,
+                            scenarioTitle: function(){ return scenarioTitle }
                         }
                     });
                     scenarioEditorShown = true;
@@ -622,12 +623,17 @@ angular.module('designerApp')
                     enableLiveAutocompletion: true
                 });
                 $scope.aceEditorUpdateMode(editor, editorType);
-                
-                $rootScope.$on('variablesChanged', function () {
+
+                const unbindEventHandler = $rootScope.$on('variablesChanged', function () {
                     $scope.aceEditorUpdateMode(editor, editorType);
                 });
 
                 setCommonAceOptions(editor);
+
+                // remove subscription on delete editor element
+                $(editor.container).on('$destroy', function () {
+                    unbindEventHandler();
+                });
             };
 
             $scope.getVariablesNames = function () {

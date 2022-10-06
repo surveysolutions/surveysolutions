@@ -46,9 +46,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IPlainStorage<InterviewView> interviewViewRepository,
             IEnumeratorSettings enumeratorSettings,
             ILogger logger,
-            IMapUtilityService mapUtilityService) 
+            IMapUtilityService mapUtilityService,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
-                fileSystemAccessor, enumeratorSettings, mapUtilityService)
+                fileSystemAccessor, enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
         {
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;

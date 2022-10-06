@@ -2,8 +2,10 @@
 using Moq;
 using MvvmCross.Base;
 using MvvmCross.Tests;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -28,11 +30,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             IPrincipal userIdentity = null, 
             AnswerNotifier answerNotifier = null,
             IViewModelEventRegistry eventRegistry = null,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null,
+            IUserInteractionService userInteraction = null)
         {
             var questionnaireRepository = questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>();
             var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
             var liteEventRegistry = eventRegistry ?? Mock.Of<IViewModelEventRegistry>();
+            
+            
+            userInteraction = userInteraction ?? Mock.Of<IUserInteractionService>();
+            var mockOfViewModelFactory = new Mock<IInterviewViewModelFactory>();
+            mockOfViewModelFactory.Setup(x => x.GetNew<CategoricalMultiOptionViewModel<RosterVector>>()).Returns(() =>
+                new CategoricalMultiOptionViewModel<RosterVector>(userInteraction, Create.ViewModel.AttachmentViewModel()));
+            
 
             return new CategoricalMultiLinkedToQuestionViewModel(
                 questionState ?? Create.ViewModel.QuestionState<MultipleOptionsLinkedQuestionAnswered>(liteEventRegistry, statefulInterviewRepository, questionnaireStorage),
@@ -42,7 +52,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 userIdentity ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
-                Create.ViewModel.ThrottlingViewModel());
+                Create.ViewModel.ThrottlingViewModel(),
+                mockOfViewModelFactory.Object,
+                Create.Fake.MvxMainThreadAsyncDispatcher());
         }
 
         protected static CategoricalMultiLinkedToRosterTitleViewModel CreateMultiOptionRosterLinkedQuestionViewModel(
@@ -67,7 +79,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                     userIdentity ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                     answering ?? Mock.Of<AnsweringViewModel>(),
                     Mock.Of<QuestionInstructionViewModel>(),
-                    Create.ViewModel.ThrottlingViewModel());
+                    Create.ViewModel.ThrottlingViewModel(),
+                    Create.Service.InterviewViewModelFactory(),
+                    Create.Fake.MvxMainThreadAsyncDispatcher());
         }
     }
 }

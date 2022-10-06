@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -16,8 +18,8 @@ using WB.Core.SharedKernels.Enumerator.Utils;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public class FlatRosterViewModel : MvxNotifyPropertyChanged,
-        IViewModelEventHandler<RosterInstancesAdded>,
-        IViewModelEventHandler<RosterInstancesRemoved>,
+        IAsyncViewModelEventHandler<RosterInstancesAdded>,
+        IAsyncViewModelEventHandler<RosterInstancesRemoved>,
         IInterviewEntityViewModel,
         IDisposable
     {
@@ -25,6 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
         private string interviewId;
         private NavigationState navigationState;
         private readonly Dictionary<Identity, CompositeCollection<ICompositeEntity>> shownRosterInstances;
@@ -33,12 +36,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public FlatRosterViewModel(IStatefulInterviewRepository interviewRepository,
             IInterviewViewModelFactory viewModelFactory,
             IViewModelEventRegistry eventRegistry,
-            ICompositeCollectionInflationService compositeCollectionInflationService)
+            ICompositeCollectionInflationService compositeCollectionInflationService,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
         {
             this.interviewRepository = interviewRepository;
             this.viewModelFactory = viewModelFactory;
             this.eventRegistry = eventRegistry;
             this.compositeCollectionInflationService = compositeCollectionInflationService;
+            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
             this.RosterInstances = new CompositeCollection<ICompositeEntity>();
             this.shownRosterInstances = new Dictionary<Identity, CompositeCollection<ICompositeEntity>>();
             this.viewModelsInstances = new Dictionary<Identity, List<IInterviewEntityViewModel>>();
@@ -51,12 +56,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.interviewId = interviewId;
             this.navigationState = navigationState;
             this.Identity = entityIdentity;
-            UpdateFromInterview();
+            UpdateFromInterviewAsync().WaitAndUnwrapException();
 
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private void UpdateFromInterview()
+        private async Task UpdateFromInterviewAsync()
         {
             if (this.isDisposed) return;
             
@@ -87,7 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 viewModels.ForEach(viewModel => viewModel.DisposeIfDisposable());
                 this.viewModelsInstances.Remove(removedRosterInstance);
                 
-                InvokeOnMainThread(() =>
+                await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
                     RosterInstances.RemoveCollection(collection);
                 });
@@ -97,11 +102,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             {
                 if (this.isDisposed) return;
 
-                InsertRosterInstance(interviewRosterInstances.IndexOf(addedRosterInstance), addedRosterInstance, statefulInterview);
+                await InsertRosterInstanceAsync(interviewRosterInstances.IndexOf(addedRosterInstance), addedRosterInstance, statefulInterview);
             } 
         }
         
-        private void InsertRosterInstance(int rosterIndex, Identity interviewRosterInstance, IStatefulInterview statefulInterview)
+        private async Task InsertRosterInstanceAsync(int rosterIndex, Identity interviewRosterInstance, IStatefulInterview statefulInterview)
         {
             if (this.isDisposed) return;
 
@@ -120,7 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             viewModelsInstances[interviewRosterInstance] = underlyingInterviewerEntities;
             
             shownRosterInstances[interviewRosterInstance] = inflatedChildren;
-            InvokeOnMainThread(() =>
+            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 RosterInstances.InsertCollection(rosterIndex, inflatedChildren);
             });
@@ -128,16 +133,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public CompositeCollection<ICompositeEntity> RosterInstances { get; }
 
-        public void Handle(RosterInstancesAdded @event)
+        public async Task HandleAsync(RosterInstancesAdded @event)
         {
             if(@event.Instances.Any(x => x.GroupId == this.Identity.Id))
-                UpdateFromInterview();
+                await UpdateFromInterviewAsync();
         }
 
-        public void Handle(RosterInstancesRemoved @event)
+        public async Task HandleAsync(RosterInstancesRemoved @event)
         {
             if(@event.Instances.Any(x => x.GroupId == this.Identity.Id))
-                UpdateFromInterview();
+                await UpdateFromInterviewAsync();
         }
 
         private bool isDisposed;

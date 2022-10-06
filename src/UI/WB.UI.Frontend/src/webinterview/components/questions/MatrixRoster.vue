@@ -76,6 +76,7 @@ export default {
             resizable: true,
             editable: false, // make every column editable
             autoHeight: true,
+            wrapText: true,
         }
 
         this.initQuestionAsColumns()
@@ -130,6 +131,7 @@ export default {
                             //title: question.title,
                             instruction: question.instruction,
                             question: question,
+                            attachmentImageLoadedCallback: () => self.attachmentImageLoaded(),
                         },
                         width:question.options.length * 180,
 
@@ -197,9 +199,10 @@ export default {
         },
 
         autosizeHeaders(event) {
-            if (event.finished !== false) {
+            if (this.gridApi && event && (event === true || event.finished !== false)) {
+                const self = this
                 const MIN_HEIGHT = 16
-                event.api.setHeaderHeight(MIN_HEIGHT)
+                this.gridApi.setHeaderHeight(MIN_HEIGHT)
                 const headerCells = $(this.$refs.matrixRoster.$el).find('.ag-header-cell-label')
                 let minHeight = MIN_HEIGHT
                 for (let index = 0; index < headerCells.length; index++) {
@@ -208,10 +211,10 @@ export default {
                 }
 
                 // set header height to calculated height + padding (top: 8px, bottom: 8px)
-                event.api.setHeaderHeight(minHeight)
+                this.gridApi.setHeaderHeight(minHeight)
 
                 // set all rows height to auto
-                event.api.resetRowHeights()
+                this.gridApi.resetRowHeights()
             }
         },
 
@@ -240,6 +243,11 @@ export default {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
                 this.doScroll()
             }
+        },
+
+        attachmentImageLoaded() {
+            this.autosizeHeaders(true)
+            this.setTableRosterHeight()
         },
     },
 }

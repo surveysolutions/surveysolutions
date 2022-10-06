@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -22,16 +23,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IAsyncViewModelEventHandler<LinkedOptionsChanged>,
         IAsyncViewModelEventHandler<RosterInstancesTitleChanged>
     {
+        private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private RosterVector[] selectedOptionsToSave;
         private HashSet<Guid> parentRosters;
 
         public CategoricalMultiLinkedToQuestionViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionStateViewModel,
             IQuestionnaireStorage questionnaireRepository, IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel)
+            QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel,
+            IInterviewViewModelFactory interviewViewModelFactory, IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
             : base(questionStateViewModel, questionnaireRepository, eventRegistry,
-                interviewRepository, principal, answering, instructionViewModel, throttlingModel)
+                interviewRepository, principal, answering, instructionViewModel, throttlingModel,
+                mainThreadAsyncDispatcher)
         {
+            this.interviewViewModelFactory = interviewViewModelFactory;
             this.Options = new CovariantObservableCollection<CategoricalMultiOptionViewModel<RosterVector>>();
         }
 
@@ -68,8 +73,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             foreach (var answeredOption in interview.GetLinkedMultiOptionQuestion(this.Identity).Options)
             {
-                var vm = new CategoricalMultiOptionViewModel<RosterVector>();
-                base.InitViewModel(interview.GetLinkedOptionTitle(this.Identity, answeredOption), answeredOption, interview, vm);
+                var vm = interviewViewModelFactory.GetNew<CategoricalMultiOptionViewModel<RosterVector>>();
+                base.InitViewModel(interview.GetLinkedOptionTitle(this.Identity, answeredOption), answeredOption, interview, vm, null);
 
                 yield return vm;
             }

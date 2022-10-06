@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using Plugin.Permissions;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -21,6 +20,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.Views;
+using Xamarin.Essentials;
 
 namespace WB.UI.Interviewer.ViewModel
 {
@@ -135,11 +135,11 @@ namespace WB.UI.Interviewer.ViewModel
                         await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
                             .ConfigureAwait(false);
 
-                        if (missingPermissionsException.PermissionType == typeof(MicrophonePermission))
+                        if (missingPermissionsException.PermissionType == typeof(Permissions.Microphone))
                         {
                             this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone);
                         }
-                        else if (missingPermissionsException.PermissionType == typeof(StoragePermission))
+                        else if (missingPermissionsException.PermissionType == typeof(Permissions.StorageWrite))
                         {
                             this.userInteractionService.ShowToast(UIResources.MissingPermissions_Storage);
                         }

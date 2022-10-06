@@ -11,52 +11,86 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Services.AttachmentPreview;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Route("attachments")]
-    [Authorize]
+    [AuthorizeOrAnonymousQuestionnaire]
+    [QuestionnairePermissions]
     public class AttachmentsController : Controller
     {
         private const int defaultImageSizeToScale = 156;
 
         private readonly IAttachmentService attachmentService;
         private readonly IWebHostEnvironment environment;
+        private readonly IDesignerQuestionnaireStorage questionnaireStorage;
+        private readonly IAttachmentPreviewHelper attachmentPreviewHelper;
 
         public AttachmentsController(IAttachmentService attachmentService,
-            IWebHostEnvironment environment)
+            IWebHostEnvironment environment,
+            IDesignerQuestionnaireStorage questionnaireStorage,
+            IAttachmentPreviewHelper attachmentPreviewHelper)
         {
             this.attachmentService = attachmentService;
             this.environment = environment;
+            this.questionnaireStorage = questionnaireStorage;
+            this.attachmentPreviewHelper = attachmentPreviewHelper;
         }
 
         [HttpGet]
-        [Route("{id:Guid}")]
-        public IActionResult Get(Guid id)
+        [Route("{id}/{attachmentId:Guid}")]
+        public IActionResult Get(QuestionnaireRevision id, Guid attachmentId)
         {
-            return this.CreateAttachmentResponse(id);
+            return this.CreateAttachmentResponse(id, attachmentId);
         }
 
         [HttpGet]
-        [Route("thumbnail/{id:Guid}", Name = "AttachmentThumbnail")]
-        public IActionResult Thumbnail(Guid id)
+        [Route("{id}/thumbnail/{attachmentId:Guid}")]
+        public IActionResult Thumbnail(QuestionnaireRevision id, Guid attachmentId)
         {
-            return this.CreateAttachmentResponse(id, defaultImageSizeToScale, true);
+            return this.CreateAttachmentResponse(id, attachmentId, defaultImageSizeToScale, true);
         }
 
         [HttpGet]
+        [Route("{id}/thumbnail/{attachmentId:Guid}/{size:int}")]
+        public IActionResult Thumbnail(QuestionnaireRevision id, Guid attachmentId, int size)
+        {
+            return this.CreateAttachmentResponse(id, attachmentId, size, true);
+        }
+        
+        [HttpGet]
+        [Obsolete]
         [AllowAnonymous]
-        [Route("thumbnail/{id:Guid}/{size:int}", Name = "AttachmentThumbnailWithSize")]
-        public IActionResult Thumbnail(Guid id, int size)
+        [Route("thumbnail/{attachmentId:Guid}", Name = "AttachmentThumbnail")]
+        public IActionResult Thumbnail(Guid attachmentId)
         {
-            return this.CreateAttachmentResponse(id, size, true);
+            return this.CreateAttachmentResponse(null, attachmentId, defaultImageSizeToScale, true);
         }
 
-        private IActionResult CreateAttachmentResponse(Guid attachmentId, int? sizeToScale = null, bool thumbnail = false)
+        [HttpGet]
+        [Obsolete]
+        [AllowAnonymous]
+        [Route("thumbnail/{attachmentId:Guid}/{size:int}", Name = "AttachmentThumbnailWithSize")]
+        public IActionResult Thumbnail(Guid attachmentId, int size)
         {
-            AttachmentMeta? attachment = this.attachmentService.GetAttachmentMeta(attachmentId);
+            return this.CreateAttachmentResponse(null, attachmentId, size, true);
+        }
 
+        private IActionResult CreateAttachmentResponse(QuestionnaireRevision? questionnaireRevision, Guid attachmentId, int? sizeToScale = null, bool thumbnail = false)
+        {
+            if (questionnaireRevision != null)
+            {
+                var questionnaire = questionnaireStorage.Get(questionnaireRevision);
+                if (questionnaire == null) return NotFound();
+
+                var hasAttachment = questionnaire.Attachments.Any(a => a.AttachmentId == attachmentId);
+                if (!hasAttachment) return NotFound();
+            }
+
+            AttachmentMeta? attachment = this.attachmentService.GetAttachmentMeta(attachmentId);
             if (attachment == null) return NotFound();
 
             var requestHeaders = new RequestHeaders(this.Request.Headers);
@@ -67,71 +101,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             AttachmentContent? attachmentContent = this.attachmentService.GetContent(attachment.ContentId);
             if (attachmentContent == null) return NotFound();
 
-            if (thumbnail)
-            {
-                string contentType = "image/jpg";
-                byte[]? thumbBytes = null;
-                if (attachmentContent.Details.Thumbnail == null || attachmentContent.Details.Thumbnail.Length == 0)
-                {
-                    if (attachmentContent.IsImage())
-                    {
-                        thumbBytes = attachmentContent.Content;
-                    }
-
-                    if (attachmentContent.IsAudio())
-                    {
-                        thumbBytes = System.IO.File.ReadAllBytes(environment.MapPath("images/icons-files-audio.png"));
-                        contentType = @"image/png";
-                    }
-
-                    if (attachmentContent.IsPdf())
-                    {
-                        thumbBytes = System.IO.File.ReadAllBytes(environment.MapPath(@"images/icons-files-pdf.png"));
-                        contentType = @"image/png";
-                    }
-                }
-                else
-                {
-                    thumbBytes = attachmentContent.Details.Thumbnail;
-                }
-
-                if (thumbBytes == null)
-                {
-                    return NoContent();
-                }
-
-                if (sizeToScale != null && contentType == "image/jpg")
-                {
-                    thumbBytes = GetTransformedContent(thumbBytes, sizeToScale);
-                }
-
-                return File(thumbBytes, contentType);
-            }
-
             if (attachmentContent.Content == null) return NoContent();
 
-            return File(attachmentContent.Content, attachmentContent.ContentType, attachment.FileName,
+            var previewContent = attachmentPreviewHelper.GetPreviewImage(attachmentContent, sizeToScale);
+
+            if (previewContent == null)
+                return NoContent();
+            
+            return File(previewContent.Content, previewContent.ContentType, attachment.FileName,
                 attachment.LastUpdateDate, new EntityTagHeaderValue("\"" + attachmentContent.ContentId + "\""), false);
-        }
-
-        private static byte[] GetTransformedContent(byte[] source, int? sizeToScale = null)
-        {
-            if (!sizeToScale.HasValue) return source;
-            using (var outputStream = new MemoryStream())
-            {
-                using (Image image = Image.Load(source, out var format))
-                {
-                    var opt = new ResizeOptions()
-                    {
-                       Mode = ResizeMode.Max,
-                       Size = new Size(sizeToScale.Value)
-                    };
-                    image.Mutate(ctx => ctx.Resize(opt)); 
-                    image.Save(outputStream, format); 
-                } 
-
-                return outputStream.ToArray();
-            }
         }
     }
 }

@@ -3,8 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Synchronization;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -13,6 +11,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using Xamarin.Essentials;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests.Steps
 {
@@ -57,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             await step.ExecuteAsync();
             // assert
 
-            permissions.Verify(x => x.AssureHasPermissionOrThrow<StoragePermission>(), Times.Once);
+            permissions.Verify(x => x.AssureHasPermissionOrThrow<Permissions.StorageWrite>(), Times.Once);
             mockOfSynchronizationService.Verify(x => x.GetApplicationAsync(It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Once);
             fileSystemService.Verify(x => x.WriteAllBytes(It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
             navigationService.Verify(x => x.InstallNewApp(It.IsAny<string>()), Times.Once);

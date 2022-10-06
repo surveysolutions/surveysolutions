@@ -3,8 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -12,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Tests.Abc;
+using Xamarin.Essentials;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 {
@@ -37,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             // act
             await step.ExecuteAsync();
             // assert
-            mockOfPermissionsService.Verify(x=>x.AssureHasPermissionOrThrow<StoragePermission>(), Times.Once);
+            mockOfPermissionsService.Verify(x=>x.AssureHasPermissionOrThrow<Permissions.StorageWrite>(), Times.Once);
         }
 
         [Test]

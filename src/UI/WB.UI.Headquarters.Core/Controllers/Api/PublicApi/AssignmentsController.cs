@@ -767,7 +767,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return rosterRows.Union(new[] {assignmentRow});
         }
 
-        private BaseAssignmentValue ToPreloadAnswer(AssignmentAnswer answer, IQuestionnaire questionnaire)
+        public BaseAssignmentValue ToPreloadAnswer(AssignmentAnswer answer, IQuestionnaire questionnaire)
         {
             switch (questionnaire.GetAnswerType(answer.QuestionIdentity.Id))
             {
@@ -818,7 +818,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 }).ToArray()
         }.ToAssignmentAnswers(questionnaire);
 
-        private BaseAssignmentValue ToPreloadTextListAnswer(AssignmentAnswer answer,
+        public BaseAssignmentValue ToPreloadTextListAnswer(AssignmentAnswer answer,
             IQuestionnaire questionnaire) => new PreloadingCompositeValue
         {
             VariableOrCodeOrPropertyName = answer.Variable,
@@ -856,7 +856,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }.ToAssignmentAnswers(questionnaire);
         }
 
-        private class AssignmentAnswer
+        public class AssignmentAnswer
         {
             public static AssignmentAnswer UnknownAssignmentAnswer(AssignmentIdentifyingDataItem source)
             {

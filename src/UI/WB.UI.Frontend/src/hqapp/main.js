@@ -22,6 +22,9 @@ import '~/webinterview/componentsRegistry'
 import VueTextareaAutosize from 'vue-textarea-autosize'
 Vue.use(VueTextareaAutosize)
 
+import PortalVue from 'portal-vue'
+Vue.use(PortalVue)
+
 import { Popover } from 'uiv'
 Vue.component('popover', Popover)
 

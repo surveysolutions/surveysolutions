@@ -1654,8 +1654,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (targetToPasteIn.PublicKey == this.Id)
                 throw new QuestionnaireException(string.Format(ExceptionMessages.VariableCantBePaste));
-            if (IsCoverPage(targetToPasteIn.PublicKey))
-                throw new QuestionnaireException(string.Format(ExceptionMessages.VariableCantBePaste));
 
             var variable = (Variable) entityToInsertAsVariable.Clone();
             variable.PublicKey = pasteItemId;
@@ -1677,7 +1675,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var clonedGroup = entityToInsertAsGroup.Clone();
             var targetIsCoverPage = IsCoverPage(targetToPasteIn.PublicKey);
             var elementsToCopy = targetIsCoverPage
-                ? clonedGroup.Children.Where(el => el is IQuestion || el is StaticText)
+                ? clonedGroup.Children.Where(el => el is IQuestion or StaticText or Variable)
                 : clonedGroup.TreeToEnumerable(x => x.Children);
             elementsToCopy.ForEach(c =>
             {
@@ -2125,7 +2123,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             AnswerText = option.Title,
             ParentCode = option.ParentValue,
             ParentValue = option.ParentValue?.ToString(),
-            AnswerValue = option.Value.ToString()
+            AnswerValue = option.Value.ToString(),
+            AttachmentName = option.AttachmentName,
         };
 
         private static Answer[]? ConvertOptionsToAnswers(Option[]? options) 
@@ -2135,7 +2134,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             AnswerValue = option.Value,
             AnswerText = option.Title,
-            ParentValue = option.ParentValue
+            ParentValue = option.ParentValue,
+            AttachmentName = option.AttachmentName
         };
 
         private IQuestion? GetQuestion(Guid questionId)

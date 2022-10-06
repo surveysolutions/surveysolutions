@@ -1,6 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
+using Moq;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
@@ -1096,6 +1102,39 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[1].References.First().Content, Is.EqualTo((-20).ToString()));
             Assert.That(errors[1].References.First().Column, Is.EqualTo($"{variableName}[4]"));
             Assert.That(errors[1].References.First().DataFile, Is.EqualTo(fileName));
+        }
+
+        [Test]
+        public void when_verify_cascading_answers_should_analyze_answers_in_correct_order_without_error()
+        {
+            // arrange
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.SingleOptionQuestion(Id.g1, variable: "parent", answerCodes: new decimal[]{1,2}),
+                Create.Entity.SingleOptionQuestion(Id.g2, variable: "child", cascadeFromQuestionId: Id.g1, answers: new List<Answer>()
+                {
+                    Create.Entity.Answer("11", 11, 1),
+                    Create.Entity.Answer("12", 12, 1),
+                    Create.Entity.Answer("22", 22, 2),
+                })
+            );
+            var option = Create.Entity.CategoricalOption("11", 11);
+            var optionsRepository = Mock.Of<IQuestionOptionsRepository>(r => r.
+                GetOptionForQuestionByOptionValue(It.IsAny<IQuestionnaire>(), Id.g2, 11, 1, null) == option);
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, questionOptionsRepository: optionsRepository);
+
+            var answers = new List<InterviewAnswer>
+            {
+                Create.Entity.InterviewAnswer(Create.Identity(Id.g2), Create.Entity.SingleOptionAnswer(11)),
+                Create.Entity.InterviewAnswer(Create.Identity(Id.g1), Create.Entity.SingleOptionAnswer(1)),
+            };
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var error = verifier.VerifyWithInterviewTree(answers, Guid.NewGuid(), questionnaire);
+
+            // assert
+            Assert.That(error, Is.Null);
         }
     }
 }

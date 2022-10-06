@@ -575,7 +575,7 @@
     <value>Failed synchronizations attempt</value>
   </data>
   <data name="InterviewerProfile_Sync_Activity_All_Assignments_Desc" xml:space="preserve">
-    <value>Number of unfinished or unsynchronized assignments on device every given moment</value>
+    <value>Number of unfinished or not synchronized assignments on device every given moment</value>
   </data>
   <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
     <value>Recent synchronization activity</value>
@@ -974,8 +974,6 @@
   </data>
   <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
     <value>You will archive supervisors and interviewers within theirs team. Interviewers assigned to archived supervisor will be also archived in all workspaces. If interviewers have any non synchronized data on tablets it will be deleted.</value>
-
-
   </data>
   <data name="Supervisors_Selected" xml:space="preserve">
     <value>supervisor(s) selected</value>
@@ -1228,7 +1226,7 @@
     <value>Are you sure you want to delete the map "{{map}}"?</value>
   </data>
   <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
-    <value>Are You sure You want to delink user from the map?</value>
+    <value>Are You sure You want to unlink user from the map?</value>
   </data>
   <data name="CautionTitle" xml:space="preserve">
     <value>Caution:</value>
@@ -1279,7 +1277,7 @@
     <value>Interviewer name</value>
   </data>
   <data name="MapDetails_DelinkUser" xml:space="preserve">
-    <value>Delink User from map</value>
+    <value>Unlink User from map</value>
   </data>
   <data name="MapDetails_MapDisclaimer" xml:space="preserve">
     <value>This preview shows the loaded map superimposed on the world map.</value>

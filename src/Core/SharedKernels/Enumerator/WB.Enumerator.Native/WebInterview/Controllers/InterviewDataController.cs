@@ -536,7 +536,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 : null;
 
             var topFilteredOptionsForQuestion = statefulInterview.GetTopFilteredOptionsForQuestion(questionIdentity, parentCascadingQuestionAnswer, filter, count, excludedOptionIds);
-            return topFilteredOptionsForQuestion.Select(x => new DropdownItem(x.Value, x.Title)).ToArray();
+            return topFilteredOptionsForQuestion.Select(x => new DropdownItem(x.Value, x.Title, x.AttachmentName)).ToArray();
         }
 
         public virtual CompleteInfo GetCompleteInfo(Guid interviewId)

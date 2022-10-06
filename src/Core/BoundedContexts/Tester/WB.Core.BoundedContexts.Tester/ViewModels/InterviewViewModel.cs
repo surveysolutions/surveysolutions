@@ -91,9 +91,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public override void Dispose()
         {
-            if (testerPrincipal.IsFakeIdentity)
-                testerPrincipal.RemoveFakeIdentity();
-            
             base.Dispose();
         }
     }

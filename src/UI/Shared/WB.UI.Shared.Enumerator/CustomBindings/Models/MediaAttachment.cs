@@ -12,16 +12,17 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
 
         public void Release()
         {
-            Player?.Stop();
+            //Player?.Stop();
             Player?.Release();
         }
-
+        
         public SimpleExoPlayer Player
         {
             get => player;
             set
             {
                 player?.Release();
+                //player?.Dispose();
                 player = value;
             }
         }

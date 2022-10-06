@@ -166,7 +166,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     ParentId = y.ParentId,
                     Text = translationData != null 
                         ? translationData.GetCategoriesText(x.Id, y.Id, y.ParentId) ?? y.Text
-                        : y.Text
+                        : y.Text,
+                    AttachmentName = y.AttachmentName
                 }).ToList()
             }).ToList();
         }

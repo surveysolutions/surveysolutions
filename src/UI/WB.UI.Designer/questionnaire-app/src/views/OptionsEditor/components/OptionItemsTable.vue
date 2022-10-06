@@ -10,7 +10,12 @@
                 hide-details
             ></v-text-field>
             <v-spacer></v-spacer>
-            <v-btn class="ma-2" color="primary" @click="newRow">
+            <v-btn
+                v-if="!readonly"
+                class="ma-2"
+                color="primary"
+                @click="newRow"
+            >
                 <v-icon left>mdi-plus</v-icon
                 >{{ $t('QuestionnaireEditor.NewItem') }}
             </v-btn>
@@ -73,7 +78,7 @@
                 </div>
             </template>
             <template #item.actions="{ item }">
-                <div>
+                <div v-if="!readonly">
                     <v-icon small class="mr-2" @click="editItem(item)"
                         >mdi-pencil</v-icon
                     >
@@ -106,7 +111,8 @@ export default {
         parentCategories: { type: Array, required: false, default: () => [] },
         isCategory: { type: Boolean, required: true },
         isCascading: { type: Boolean, required: true },
-        loading: { type: Boolean, required: true }
+        loading: { type: Boolean, required: true },
+        readonly: { type: Boolean, required: true }
     },
 
     data() {
@@ -139,7 +145,13 @@ export default {
                     text: this.$t('QuestionnaireEditor.OptionsUploadTitle'),
                     sortable: false,
                     value: 'title',
-                    width: this.isCascading ? '60%' : '70%'
+                    width: this.isCascading ? '45%' : '55%'
+                },
+                {
+                    text: this.$t('QuestionnaireEditor.AttachmentName'),
+                    sortable: false,
+                    width: '15%',
+                    value: 'attachmentName'
                 }
             ];
 

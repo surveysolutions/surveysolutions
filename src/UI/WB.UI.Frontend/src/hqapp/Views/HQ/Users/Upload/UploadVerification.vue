@@ -87,6 +87,8 @@ export default {
 
                     if (errors.length > 0) self.$store.dispatch('setUploadVerificationErrors', errors)
                     else self.$router.push({name: 'uploadprogress'})
+
+                    self.$refs.uploader.value = ''
                 })
                 .catch(e => {
                     if (e.response.data.message) toastr.error(e.response.data.message)

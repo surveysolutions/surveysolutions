@@ -207,6 +207,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid? GetAttachmentForEntity(Identity entityId);
 
+        string GetAttachmentForEntityOption(Identity entityId, int optionValue, int? parentValue);
+
         InterviewSimpleStatus GetInterviewSimpleStatus(bool includingSupervisorEntities);
     }
 }

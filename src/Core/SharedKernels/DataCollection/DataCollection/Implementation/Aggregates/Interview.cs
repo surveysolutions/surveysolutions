@@ -959,7 +959,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, double latitude, double longitude,
-            double accuracy, double altitude, DateTimeOffset timestamp)
+            double? accuracy, double? altitude, DateTimeOffset timestamp)
         {
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();

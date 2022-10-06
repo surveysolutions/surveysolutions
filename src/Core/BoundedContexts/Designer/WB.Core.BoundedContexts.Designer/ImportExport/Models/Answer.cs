@@ -9,5 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models
         public int? Code { get; set; }
 
         public int? ParentCode { get; set; }
+
+        public string? AttachmentName { get; set; }
     }
 }

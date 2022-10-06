@@ -396,15 +396,35 @@ namespace WB.Tests.Abc.TestFactories
                 Create.Service.VariableToUIStringService());
         }
 
-        public InterviewViewModelFactory InterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository,
-            IStatefulInterviewRepository interviewRepository,
-            IServiceLocator serviceLocator,
-            IEnumeratorSettings settings)
+        public InterviewViewModelFactory InterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository = null,
+            IStatefulInterviewRepository interviewRepository = null,
+            IServiceLocator serviceLocator = null,
+            IEnumeratorSettings settings = null)
         {
+            var locator = serviceLocator;
+            if (locator == null)
+            {
+
+                locator = Stub<IServiceLocator>.WithNotEmptyValues;
+                /*
+                var mockLocator = new Mock<IServiceLocator>() { DefaultValue = DefaultValue.Mock };
+
+                
+                mockLocator.Setup(pa => pa.GetInstance<It.IsAnyType>())
+                    .Callback<T>((T typ) => new Mock<T>().Object)
+                    .Returns(new Mock<T>());
+                mockLocator.Setup(pa => pa.GetInstance<T>())
+                    .Returns(new Mock<T>().Object);
+                mockLocator.Setup(s => s.GetInstance<It.IsAnyType>())
+                    .Returns(t => Mock.Of<It.IsAnyType>());
+                
+                locator = mockLocator.Object;
+            */
+            }
             return new InterviewerInterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 settings ?? Mock.Of<IEnumeratorSettings>(),
-                serviceLocator ?? Mock.Of<IServiceLocator>());
+                locator);
         }
 
         public SupervisorInterviewViewModelFactory SupervisorInterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository = null,
@@ -1005,15 +1025,19 @@ namespace WB.Tests.Abc.TestFactories
         public AttachmentContentStorage AttachmentContentStorage(
             IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository = null,
             IPlainStorage<AttachmentContentData> attachmentContentDataRepository = null,
+            IPlainStorage<AttachmentPreviewContentData> attachmentPreviewContentData = null, 
             IPathUtils pathUtils = null,
-            IFileSystemAccessor files = null)
+            IFileSystemAccessor files = null,
+            IImageHelper imageHelper = null)
         {
             return new AttachmentContentStorage(
                 attachmentContentMetadataRepository ?? Mock.Of<IPlainStorage<AttachmentContentMetadata>>(),
                 attachmentContentDataRepository ?? Mock.Of<IPlainStorage<AttachmentContentData>>(),
+                attachmentPreviewContentData ?? Mock.Of<IPlainStorage<AttachmentPreviewContentData>>(),
                 pathUtils ?? Mock.Of<IPathUtils>(p => p.GetRootDirectory() == @"c:\tmp"),
                 Mock.Of<IPermissionsService>(),
-                files ?? Mock.Of<IFileSystemAccessor>());
+                files ?? Mock.Of<IFileSystemAccessor>(),
+                imageHelper ?? Mock.Of<IImageHelper>());
         }
 
         public Core.BoundedContexts.Interviewer.Implementation.Services.MapSyncProvider MapSyncProvider(

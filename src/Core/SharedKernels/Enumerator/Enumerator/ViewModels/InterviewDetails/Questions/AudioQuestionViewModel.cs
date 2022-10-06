@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Humanizer;
 using Humanizer.Localisation;
+using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -20,6 +19,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using Xamarin.Essentials;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -44,6 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IAudioDialog audioDialog;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioService audioService;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
         public AnsweringViewModel Answering { get; }
 
         public AudioQuestionViewModel(
@@ -57,7 +58,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPermissionsService permissions,
             IAudioDialog audioDialog,
             IAudioFileStorage audioFileStorage,
-            IAudioService audioService)
+            IAudioService audioService,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -71,6 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.audioDialog = audioDialog;
             this.audioFileStorage = audioFileStorage;
             this.audioService = audioService;
+            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
 
             this.audioService.OnPlaybackCompleted += OnPlaybackCompleted;
         }
@@ -209,21 +212,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                await this.permissions.AssureHasPermissionOrThrow<MicrophonePermission>().ConfigureAwait(false);
-                await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+                await this.permissions.AssureHasPermissionOrThrow<Permissions.Microphone>().ConfigureAwait(false);
+                await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
 
                 this.audioDialog.OnRecorded += this.AudioDialog_OnRecorded;
                 this.audioDialog.OnCancelRecording += AudioDialog_OnCancel;
 
-                await InvokeOnMainThreadAsync(() =>
+                await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
                     this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText));
             }
-            catch (MissingPermissionsException e) when (e.PermissionType == typeof(MicrophonePermission))
+            catch (MissingPermissionsException e) when (e.PermissionType == typeof(Permissions.Microphone))
             {
                 await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                     .MissingPermissions_Microphone);
             }
-            catch (MissingPermissionsException e) when (e.PermissionType == typeof(StoragePermission))
+            catch (MissingPermissionsException e) when (e.PermissionType == typeof(Permissions.StorageWrite))
             {
                 await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                     .MissingPermissions_Storage);

@@ -505,16 +505,6 @@
             };
 
             var openOptionsEditor = function () {
-                if ($scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly)
-                {
-                    confirmService.open({
-                        title: $i18next.t('ReadOnlyQuestion'),
-                        cancelButtonTitle: $i18next.t('Cancel'),
-                        isReadOnly: true
-                    }).result;
-                    return;
-                }
-                
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
                 $scope.openEditor =  $scope.activeQuestion.itemId
                 window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
@@ -522,16 +512,6 @@
             };
 
             var openCascadeOptionsEditor = function () {
-                if ($scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly)
-                {
-                    confirmService.open({
-                        title: $i18next.t('ReadOnlyQuestion'),
-                        cancelButtonTitle: $i18next.t('Cancel'),
-                        isReadOnly: true
-                    }).result;
-                    return;
-                }
-
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
                 $scope.openEditor =  $scope.activeQuestion.itemId
                 window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId 
@@ -780,7 +760,8 @@
                     if (newValue) {
                         if ($scope.activeQuestion.questionScope !== 'Interviewer'
                             && $scope.activeQuestion.questionScope !== 'Hidden'
-                            && $scope.activeQuestion.questionScope !== 'Supervisor') {
+                            && $scope.activeQuestion.questionScope !== 'Supervisor'
+                            && $scope.activeQuestion.questionScope !== 'Identifying') {
                             $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                         }
                         $scope.activeQuestion.optionsFilterExpression = null;
@@ -838,6 +819,14 @@
                 return $scope.activeQuestion &&
                     !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type);
 
+            };
+
+            $scope.doesQuestionSupportQuestionScope = function () {
+                return $scope.activeQuestion &&
+                    $scope.activeQuestion.allQuestionScopeOptions &&
+                    $scope.activeQuestion.allQuestionScopeOptions.length > 0 &&
+                    $scope.questionnaire &&
+                    (!$scope.questionnaire.isCoverPageSupported || !$scope.activeQuestion.parentIsCover);
             };
 
             $scope.doesQuestionSupportOptionsFilters = function () {

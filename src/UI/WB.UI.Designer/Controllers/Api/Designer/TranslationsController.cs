@@ -1,11 +1,14 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
+    [AuthorizeOrAnonymousQuestionnaire]
+    [QuestionnairePermissions]
     [Route("translations")]
     public class TranslationsController : Controller
     {
@@ -21,7 +24,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("{id:Guid}/template")]
-        public IActionResult Get(Guid id)
+        public IActionResult Get(QuestionnaireRevision id)
         {
             var translationFile = this.translationsService.GetTemplateAsExcelFile(id);
             return this.GetTranslation(translationFile, "xlsx", "application/vnd.oasis.opendocument.spreadsheet");
@@ -29,7 +32,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("{id:Guid}/xlsx/{translationId:Guid}")]
-        public IActionResult Get(Guid id, Guid translationId )
+        public IActionResult Get(QuestionnaireRevision id, Guid translationId )
         {
             var translationFile = this.translationsService.GetAsExcelFile(id, translationId);
 
