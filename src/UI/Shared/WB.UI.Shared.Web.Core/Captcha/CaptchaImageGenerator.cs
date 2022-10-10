@@ -94,7 +94,7 @@ namespace WB.UI.Shared.Web.Captcha
                     ctx.DrawText(c.ToString(), font, RandomItemFrom(colors), location);
 
                     // determine next letter position
-                    var fontSize = TextMeasurer.Measure(c.ToString(), new RendererOptions(font, location));
+                    var fontSize = TextMeasurer.Measure(c.ToString(), new TextOptions(font));
                     totalWidth = position + fontSize.Width;
                     position = totalWidth + rnd.Next(-3, 5);
                     totalHeight = Math.Max(totalHeight, fontSize.Height);
