@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using AutoMapper;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
@@ -19,6 +20,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
+using AssignmentAnswer = WB.UI.Headquarters.Controllers.Api.PublicApi.AssignmentAnswer;
 
 namespace WB.Tests.Web.Headquarters.Controllers;
 
@@ -54,7 +56,7 @@ public class AssignmentsControllerTests
                         StataExportCaption = "test1"
                     }}));
         
-        AssignmentsController.AssignmentAnswer answer = new AssignmentsController.AssignmentAnswer(
+        AssignmentAnswer answer = new AssignmentAnswer(
             new AssignmentIdentifyingDataItem()
             {
                 Answer = "[\"test\", \"test1\"]",
@@ -70,3 +72,4 @@ public class AssignmentsControllerTests
 
     }
 }
+*/
