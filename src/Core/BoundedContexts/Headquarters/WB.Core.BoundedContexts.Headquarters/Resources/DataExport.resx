@@ -373,7 +373,7 @@
     <value>Data export API</value>
   </data>
   <data name="DataExportApiDesc" xml:space="preserve">
-    <value>You can setup automatic export of collected interview data using our API toolset for more information and inctruction use:</value>
+    <value>You can setup automatic export of collected interview data using our API toolset for more information and instruction use:</value>
   </data>
   <data name="DataExportApiInfoPage" xml:space="preserve">
     <value>Data Export API reference</value>
