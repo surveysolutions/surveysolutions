@@ -228,13 +228,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             var geometryType = questionnaire.GetQuestionGeometryType(identity.Id);
 
-            return this.View(new GeographyPreview() { AreaAnswer = area, Geometry = geometryType ?? GeometryType.Polygon });
+            var neighboringIds = questionnaire.IsNeighboringSupport(identity.Id)
+                ? interview.GetNeighboringQuestionIdentities(identity)
+                : Enumerable.Empty<Identity>();
+            var neighboring = neighboringIds
+                .Select(qId => interview.GetAreaQuestion(qId)?.GetAnswer()?.Value)
+                .Where(answer => answer != null)
+                .ToArray();
+
+            return this.View(new GeographyPreview()
+            {
+                AreaAnswer = area, 
+                Geometry = geometryType ?? GeometryType.Polygon,
+                Neighboring = neighboring,
+            });
         }
     }
 
     public class GeographyPreview
     {
         public Area AreaAnswer { set; get; }
+        public Area[] Neighboring  { set; get; }
         public GeometryType Geometry { set; get; }
     }
 

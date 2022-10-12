@@ -934,6 +934,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             };
         }
 
+        public IEnumerable<Identity> GetNeighboringQuestionIdentities(Identity identity)
+        {
+            return FindEntity(identity.Id).Where(id => id != identity);
+        }
+
         private GroupStatus GetGroupStatus(SimpleGroupStatus simpleStatus, int questionsCount, int answeredQuestionsCount)
         {
             switch (simpleStatus)

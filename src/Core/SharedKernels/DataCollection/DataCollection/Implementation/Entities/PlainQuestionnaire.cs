@@ -1325,6 +1325,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return false;
         }
 
+        public bool IsNeighboringSupport(Guid entityId)
+            => GetQuestion(entityId)?.Properties?.GeometryShowNeighbours ?? false;
+
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
         {
             IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);

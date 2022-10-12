@@ -44,50 +44,76 @@
                     basemap: "hybrid"
                 });
 
-                var geometryJson = @Html.Raw(Model.AreaAnswer.Geometry);
+                function getPolyGraphic(geometryJson, isNeighbour) {
 
-
-                @switch (Model.Geometry)
-                {
-                    case GeometryType.Multipoint:
-                        @Html.Raw("var polyline = Polyline.fromJSON(geometryJson); " +
-                                  "var polyGeometry = new Multipoint();" +
-                                  "for (var i = 0; i < polyline.paths[0].length; i++) {" +
-                                  "polyGeometry.addPoint(polyline.getPoint(0, i));" +
-                                  "};" +
-                                  "polyGeometry.spatialReference = polyline.spatialReference;" +
-                                  "var markerType = 'simple-marker';");
-                        break;
-                    case GeometryType.Polyline:
-                        @Html.Raw("var polyGeometry = Polyline.fromJSON(geometryJson); var markerType = 'simple-line';");
-                        break;
-                    case GeometryType.Point:
-                        @Html.Raw("var polyGeometry = Point.fromJSON(geometryJson); var markerType = 'simple-marker';");
-                        break;
-                    default:
-                        @Html.Raw("var polyGeometry = Polygon.fromJSON(geometryJson); var markerType = 'simple-line';");
-                        break;
-                }
-
-                var fillSymbol = {
-                    type: markerType,
-                    color: [255, 255, 255],
-                    width: 1
-                };
-
-                var polyGraphic = new Graphic({
+                    @switch (Model.Geometry)
+                    {
+                        case GeometryType.Multipoint:
+                            <text>
+                            var polyline = Polyline.fromJSON(geometryJson); 
+                            var polyGeometry = new Multipoint();
+                            for (var i = 0; i < polyline.paths[0].length; i++) { //>//it is for razor to end compare char
+                                polyGeometry.addPoint(polyline.getPoint(0, i));
+                            };
+                            polyGeometry.spatialReference = polyline.spatialReference;
+                            var markerType = 'simple-marker';
+                            </text>
+                            break;
+                        case GeometryType.Polyline:
+                            <text>
+                            var polyGeometry = Polyline.fromJSON(geometryJson); 
+                            var markerType = 'simple-line';
+                            </text>
+                            break;
+                        case GeometryType.Point:
+                            <text>
+                            var polyGeometry = Point.fromJSON(geometryJson); 
+                            var markerType = 'simple-marker';
+                            </text>
+                            break;
+                        default:
+                            <text>
+                            var polyGeometry = Polygon.fromJSON(geometryJson); 
+                            var markerType = 'simple-line';
+                            </text>
+                            break;
+                    }
+    
+                    var fillSymbol = {
+                        type: markerType,
+                        color: isNeighbour ? [255, 238, 0] : [255, 255, 255],
+                        width: 1
+                    };
+                    
+                    var polyGraphic = new Graphic({
                         geometry: polyGeometry,
                         symbol: fillSymbol
                     });
-                
 
+                    return polyGraphic;
+                }
+                
+                var geometryJson = @Html.Raw(Model.AreaAnswer.Geometry);
+                var polyGraphic = getPolyGraphic(geometryJson, false)
+                
+                var areas = [polyGraphic]
+                
+                @foreach (var neighbour in Model.Neighboring)
+                {
+                    <text>
+                    var neighbourGeometryJson = @Html.Raw(neighbour.Geometry);
+                    var neighbourPolyGraphic = getPolyGraphic(neighbourGeometryJson, true);
+                    areas.push(neighbourPolyGraphic);
+                    </text>
+                }
+                
                 var view = new MapView({
                     container: "viewDiv",
                     map: map,
-                    spatialReference: polyGeometry.spatialReference
+                    spatialReference: polyGraphic.geometry.spatialReference
                 });
 
-                view.graphics.addMany([polyGraphic]);
+                view.graphics.addMany(areas);
 
                 var taxLotExtent = view.graphics.items[0].geometry;
 

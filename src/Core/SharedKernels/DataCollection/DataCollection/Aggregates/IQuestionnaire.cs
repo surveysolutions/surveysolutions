@@ -330,5 +330,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetStaticTextsThatUseVariableAsAttachment(Guid variableId);
         Guid GetEntityReferencedByLinkedQuestion(Guid linkedQuestionId);
         bool IsInsideRoster(Guid entityId);
+        bool IsNeighboringSupport(Guid entityId);
     }
 }
