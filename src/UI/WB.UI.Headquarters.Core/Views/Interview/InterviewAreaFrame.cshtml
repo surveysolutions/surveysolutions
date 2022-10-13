@@ -21,6 +21,16 @@
             height: 100%;
             width: 100%;
         }
+        #messageDiv {
+            position: absolute;
+            padding: 6px;
+            z-index: 10000;
+            background-color: white;
+            margin: auto;
+            right: 10px;
+            top: 10px;
+            display: none;
+        }
     </style>
     @if (Model != null)
     {
@@ -35,11 +45,13 @@
             "esri/geometry/Point",
             "esri/geometry/Multipoint",
             "esri/geometry/Polyline",
+            "esri/geometry/geometryEngine",
             "esri/symbols/SimpleLineSymbol",
             "esri/symbols/SimpleFillSymbol",
-            "dojo/domReady!"
+            "dojo/dom",
+            "dojo/domReady!",
         ],
-            function (Map, MapView, Graphic, Polygon, Point, Multipoint, Polyline, SimpleLineSymbol, SimpleFillSymbol) {
+            function (Map, MapView, Graphic, Polygon, Point, Multipoint, Polyline, geometryEngine, SimpleLineSymbol, SimpleFillSymbol, dom) {
                 var map = new Map({
                     basemap: "hybrid"
                 });
@@ -95,16 +107,33 @@
                 
                 var geometryJson = @Html.Raw(Model.AreaAnswer.Geometry);
                 var polyGraphic = getPolyGraphic(geometryJson, false)
-                
                 var areas = [polyGraphic]
                 
+                var neighbours = [
                 @foreach (var neighbour in Model.Neighboring)
                 {
-                    <text>
-                    var neighbourGeometryJson = @Html.Raw(neighbour.Geometry);
-                    var neighbourPolyGraphic = getPolyGraphic(neighbourGeometryJson, true);
+                    @Html.Raw(neighbour.Geometry);
+                    <text>,</text>
+                }
+                ]
+
+                var overlapingCount = 0
+                for (let neighbourIndex in neighbours)
+                {
+                    var neighbourJson = neighbours[neighbourIndex];
+                    var neighbourPolyGraphic = getPolyGraphic(neighbourJson, true);
                     areas.push(neighbourPolyGraphic);
-                    </text>
+
+                    var isOverlaping = geometryEngine.overlaps(geometryJson, neighbourJson);
+                    if (isOverlaping)
+                        overlapingCount++
+                }
+                
+                if (overlapingCount > 0)
+                {
+                    var messageDiv = dom.byId("messageDiv");
+                    messageDiv.innerText = overlapingCount + " overlapping neighbours";
+                    messageDiv.style.display = 'block';
                 }
                 
                 var view = new MapView({
@@ -128,6 +157,7 @@
     }
 </head>
 <body>
+    <div id="messageDiv"></div>
     <div id="viewDiv"></div>
 </body>
 </html>
