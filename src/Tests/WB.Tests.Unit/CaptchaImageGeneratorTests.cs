@@ -12,7 +12,7 @@ public class CaptchaImageGeneratorTests
     {
         string code = "12345";
         var captchaImageGenerator = new CaptchaImageGenerator();
-        captchaImageGenerator.ChangeFonts("Arial");
+        captchaImageGenerator.ChangeFonts("Symbol");
 
         var imageContent = captchaImageGenerator.Generate(code);
         
