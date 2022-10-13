@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
@@ -231,16 +232,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var neighboringIds = questionnaire.IsNeighboringSupport(identity.Id)
                 ? interview.GetNeighboringQuestionIdentities(identity)
                 : Enumerable.Empty<Identity>();
-            var neighboring = neighboringIds
-                .Select(qId => interview.GetAreaQuestion(qId)?.GetAnswer()?.Value)
-                .Where(answer => answer != null)
+            var neighbors = neighboringIds
+                .Select(qId =>
+                {
+                    var question = interview.GetQuestion(qId);
+                    var parentRosterInstance = question.GetParent(questionnaire);
+                    var areaQuestion = question.GetAsInterviewTreeAreaQuestion();
+
+                    return new GeographyNeighbor
+                    {
+                        Title = parentRosterInstance.Title.Text,
+                        Geometry = areaQuestion?.GetAnswer()?.Value?.Geometry
+                    };
+                })
+                .Where(neighbor => neighbor.Geometry != null)
                 .ToArray();
 
             return this.View(new GeographyPreview()
             {
                 AreaAnswer = area, 
                 Geometry = geometryType ?? GeometryType.Polygon,
-                Neighboring = neighboring,
+                Neighbors = neighbors,
             });
         }
     }
@@ -248,8 +260,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class GeographyPreview
     {
         public Area AreaAnswer { set; get; }
-        public Area[] Neighboring  { set; get; }
+        public GeographyNeighbor[] Neighbors  { set; get; }
         public GeometryType Geometry { set; get; }
+    }
+
+    public class GeographyNeighbor
+    {
+        public string Title { get; set; }
+        public string Geometry { get; set; }
     }
 
 

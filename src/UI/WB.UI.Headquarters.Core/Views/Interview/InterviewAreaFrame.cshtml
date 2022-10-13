@@ -30,6 +30,10 @@
             right: 10px;
             top: 10px;
             display: none;
+            opacity: 65%;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10pt;
+            color: red;
         }
     </style>
     @if (Model != null)
@@ -56,7 +60,7 @@
                     basemap: "hybrid"
                 });
 
-                function getPolyGraphic(geometryJson, isNeighbour) {
+                function getPolyGraphic(geometryJson, isNeighbour, isOverlaping) {
 
                     @switch (Model.Geometry)
                     {
@@ -91,9 +95,13 @@
                             break;
                     }
     
+                    let borderColor = isOverlaping 
+                        ? [255, 0, 0]
+                        : (isNeighbour ? [255, 238, 0] : [255, 255, 255])
+                        
                     var fillSymbol = {
                         type: markerType,
-                        color: isNeighbour ? [255, 238, 0] : [255, 255, 255],
+                        color: borderColor,
                         width: 1
                     };
                     
@@ -110,29 +118,39 @@
                 var areas = [polyGraphic]
                 
                 var neighbours = [
-                @foreach (var neighbour in Model.Neighboring)
+                @foreach (var neighbour in Model.Neighbors)
                 {
-                    @Html.Raw(neighbour.Geometry);
-                    <text>,</text>
+                    <text>
+                    {
+                        title: '@Html.Raw(neighbour.Title)',
+                        geometry: @Html.Raw(neighbour.Geometry) 
+                    },
+                    </text>
                 }
                 ]
 
-                var overlapingCount = 0
+                var overlapingTitles = []
                 for (let neighbourIndex in neighbours)
                 {
-                    var neighbourJson = neighbours[neighbourIndex];
-                    var neighbourPolyGraphic = getPolyGraphic(neighbourJson, true);
-                    areas.push(neighbourPolyGraphic);
+                    var neighbour = neighbours[neighbourIndex];
 
-                    var isOverlaping = geometryEngine.overlaps(geometryJson, neighbourJson);
+                    let isOverlaping = !geometryEngine.disjoint(geometryJson, neighbour.geometry);
+                    //let isOverlaping = geometryEngine.overlaps(geometryJson, neighbour.geometry);
+                    //isOverlaping = isOverlaping || geometryEngine.crosses(geometryJson, neighbour.geometry);
                     if (isOverlaping)
-                        overlapingCount++
+                        overlapingTitles.push(neighbour.title);
+
+                    var neighbourPolyGraphic = getPolyGraphic(neighbour.geometry, true, isOverlaping);
+                    areas.push(neighbourPolyGraphic);
                 }
                 
-                if (overlapingCount > 0)
+                if (overlapingTitles.length > 0)
                 {
-                    var messageDiv = dom.byId("messageDiv");
-                    messageDiv.innerText = overlapingCount + " overlapping neighbours";
+                    let message = overlapingTitles.length + ' @Maps.MapOverlappingNeighbours'
+                    overlapingTitles.forEach((value) => message += '\r\n' + value);
+
+                    const messageDiv = dom.byId("messageDiv");
+                    messageDiv.innerText = message;
                     messageDiv.style.display = 'block';
                 }
                 
@@ -146,8 +164,10 @@
 
                 var taxLotExtent = view.graphics.items[0].geometry;
 
-                if (taxLotExtent.extent !== null && taxLotExtent.extent !== undefined)
-                    view.extent = taxLotExtent.extent;
+                if (taxLotExtent.extent !== null && taxLotExtent.extent !== undefined) {
+                    let displayExtent = taxLotExtent.extent.clone()
+                    view.extent = displayExtent.expand(1.5);
+                }
                 else {
                     view.center = taxLotExtent;
                     view.scale = 24000;
@@ -157,7 +177,7 @@
     }
 </head>
 <body>
-    <div id="messageDiv"></div>
     <div id="viewDiv"></div>
+    <div id="messageDiv"></div>
 </body>
 </html>
