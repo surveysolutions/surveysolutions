@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
@@ -63,7 +64,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 Responsible = "any"
             });
 
-            this.commandService.Verify(ass => ass.Execute(It.Is<ReassignAssignment>(a => a.ResponsibleId == Id.g1 && a.PublicKey == Id.g7), null), Times.Once );
+            this.commandService.Verify(ass => 
+                ass.ExecuteAsync(It.Is<ReassignAssignment>(a => a.ResponsibleId == Id.g1 && a.PublicKey == Id.g7), 
+                    null, It.IsAny<CancellationToken>()), Times.Once );
         }
     }
 }
