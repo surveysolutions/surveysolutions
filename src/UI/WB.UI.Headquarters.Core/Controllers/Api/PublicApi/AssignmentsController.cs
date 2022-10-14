@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -21,14 +20,11 @@ using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Domain;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
@@ -129,7 +125,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("")]
         [Produces(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
-        public async Task<ActionResult<AssignmentsListView>> List([FromQuery] AssignmentsListFilter filter)
+        public async Task<ActionResult<AssignmentsListView>> List([FromQuery] AssignmentsListFilter? filter)
         {
             filter ??= new AssignmentsListFilter
             {
@@ -160,9 +156,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     SupervisorId = filter.SupervisorId
                 });
 
-                var listView = new AssignmentsListView(result.Page, result.PageSize, result.TotalCount, filter.Order);
+                var listView = new AssignmentsListView(result.Page, result.PageSize, result.TotalCount, filter.Order)
+                    {
+                        Assignments = this.mapper.Map<List<AssignmentViewItem>>(result.Items)
+                    };
 
-                listView.Assignments = this.mapper.Map<List<AssignmentViewItem>>(result.Items);
                 return listView;
             }
             catch (NotSupportedException)
@@ -210,7 +208,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<CreateAssignmentResult> Create(
-            [FromBody, BindRequired] CreateAssignmentApiRequest createItem)
+            [FromBody, BindRequired] CreateAssignmentApiRequest? createItem)
         {
             if (!ModelState.IsValid)
                 return StatusCode(StatusCodes.Status400BadRequest, 
@@ -235,7 +233,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             try
             {
                 var assignmentAnswers = createItem.IdentifyingData
-                .Select(x => this.ToAssignmentAnswer(x, questionnaire))
+                .Select(x => x.ToAssignmentAnswer(questionnaire))
                 .ToList();
 
             var unknownQuestions = assignmentAnswers
@@ -246,7 +244,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return StatusCode(StatusCodes.Status400BadRequest,
                     $"Question(s) not found: {string.Join(", ", unknownQuestions.Select(x => x.Source.Variable ?? x.Source.Identity))}");
 
-            var assignmentRows = this.ToAssignmentRows(createItem, assignmentAnswers, questionnaire).ToList();
+            var assignmentRows = createItem.ToAssignmentRows(assignmentAnswers, 
+                questionnaire, userViewFactory, serializer).ToList();
 
             var verificationErrors = VerifyAssignment(assignmentRows, questionnaire).ToList();
             if (verificationErrors.Any())
@@ -320,7 +319,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Produces(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public async Task<ActionResult<AssignmentDetails>> Assign(int id,
-            [FromBody, BindRequired] AssignmentAssignRequest assigneeRequest)
+            [FromBody, BindRequired] AssignmentAssignRequest? assigneeRequest)
         {
             if (assigneeRequest == null) return StatusCode(StatusCodes.Status400BadRequest, "User was not set");
             
@@ -342,7 +341,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             
             try
             {
-                this.VerifyAssigneeInRoles(responsibleUser, assigneeRequest?.Responsible, UserRoles.Interviewer,
+                this.VerifyAssigneeInRoles(responsibleUser, assigneeRequest.Responsible, UserRoles.Interviewer,
                     UserRoles.Supervisor);
             }
             catch (HttpException e)
@@ -351,7 +350,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return StatusCode(e.StatusCode, e.Message);
             }
 
-            commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, responsibleUser.Id,
+            await commandService.ExecuteAsync(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, responsibleUser.Id,
                 assignment.Comments, assignment.QuestionnaireId));
 
             return GetUpdatedAssignment(id);
@@ -365,7 +364,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     var assignmentsService = sl.GetInstance<IAssignmentsService>();
                     var assignment = assignmentsService.GetAssignment(id);
 
-                    return this.mapper.Map<AssignmentDetails>(assignment);;
+                    return this.mapper.Map<AssignmentDetails>(assignment);
                 });
             return updatedDetails;
         }
@@ -533,51 +532,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return NoContent();
         }
 
-        /*/// <summary>
-        /// Updates assignment mode
-        /// </summary>
-        /// <param name="id">Assignment id</param>
-        /// <response code="200"></response>
-        /// <response code="404">Assignment not found</response>
-        /// <response code="406">Mode cannot be changed</response>
-        [HttpPatch]
-        [Route("{id:int}/changeMode")]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Supervisor, UserRoles.Headquarter, UserRoles.Administrator)]
-        public ActionResult ChangeMode(int id, [FromBody] UpdateModeRequest request)
-        {
-            var assignment = assignmentsStorage.GetAssignment(id);
-            if (assignment == null || assignment.Archived)
-                return NotFound();
-
-            if (assignment.WebMode == request.Enabled)
-                return NoContent();
-
-            if (request.Enabled)
-            {
-                if (!string.IsNullOrEmpty(assignment.Email) && assignment.Quantity != 1)
-                    this.BadRequest(new {Message = "For assignments with provided email allowed quantity is 1"});
-            }
-            else
-            {
-                if ((!string.IsNullOrEmpty(assignment.Email) || !string.IsNullOrEmpty(assignment.Password)))
-                    this.BadRequest(new {Message = "For assignments having Email or Password Web Mode (CAWI) should be activated"});
-            }
-
-            commandService.Execute(
-                new UpdateAssignmentWebMode(assignment.PublicKey, authorizedUser.Id, request.Enabled));
-
-            if (request.Enabled)
-            {
-                var invitation = this.invitationService.GetInvitationByAssignmentId(assignment.Id);
-
-                assignment.WebMode = true;
-                if(invitation == null)
-                    this.invitationService.CreateInvitationForWebInterview(assignment);
-            }
-
-            return NoContent();
-        }*/
-
         /// <summary>
         /// Gets Quantity Settings for provided assignment
         /// </summary>
@@ -699,212 +653,5 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             foreach (var error in this.verifier.VerifyWebPasswords(assignmentRows, questionnaire))
                 yield return error;
         }
-
-        private IEnumerable<PreloadingAssignmentRow> ToAssignmentRows(CreateAssignmentApiRequest assignmentInfo,
-            List<AssignmentAnswer> answers, IQuestionnaire questionnaire)
-        {
-            var tempAssignmentId = Guid.NewGuid().ToString("N");
-
-            var identifyingAnswers = answers
-                .Where(x => x.QuestionIdentity.RosterVector == RosterVector.Empty)
-                .ToList();
-
-            var rosterAnswers = answers.Except(identifyingAnswers).ToList();
-
-            var assignmentRow = new PreloadingAssignmentRow
-            {
-                FileName = questionnaire.Title,
-                QuestionnaireOrRosterName = questionnaire.VariableName,
-                InterviewIdValue = new PreloadingValue {Value = tempAssignmentId}.ToAssignmentInterviewId(),
-                Email = new PreloadingValue {Value = assignmentInfo.Email, Column = nameof(assignmentInfo.Email)}
-                    .ToAssignmentEmail(),
-                Password = new PreloadingValue
-                    {Value = assignmentInfo.Password, Column = nameof(assignmentInfo.Password)}.ToAssignmentPassword(),
-                Quantity = new AssignmentQuantity
-                    {Quantity = assignmentInfo.Quantity, Column = nameof(assignmentInfo.Quantity)},
-                WebMode = new AssignmentWebMode
-                    {WebMode = assignmentInfo.WebMode, Column = nameof(assignmentInfo.WebMode)},
-                RecordAudio = new AssignmentRecordAudio
-                {
-                    DoesNeedRecord = assignmentInfo.IsAudioRecordingEnabled,
-                    Column = nameof(assignmentInfo.IsAudioRecordingEnabled)
-                },
-                Responsible = new PreloadingValue
-                        {Value = assignmentInfo.Responsible, Column = nameof(assignmentInfo.Responsible)}
-                    .ToAssignmentResponsible(
-                        this.userViewFactory, new Dictionary<string, UserToVerify>()),
-                Answers = identifyingAnswers.Select(x => this.ToPreloadAnswer(x, questionnaire)).ToArray(),
-                Comments = new PreloadingValue
-                    {Value = assignmentInfo.Comments, Column = nameof(assignmentInfo.Comments)}.ToAssignmentComments()
-            };
-
-            var rosterRows = rosterAnswers
-                .Select(x => new
-                {
-                    answer = x,
-                    codes = questionnaire.GetRostersFromTopToSpecifiedQuestion(x.QuestionIdentity.Id)
-                        .Select(questionnaire.GetRosterVariableName)
-                        .Select((y, i) => new AssignmentRosterInstanceCode
-                        {
-                            Column = y,
-                            VariableName = string.Format(ServiceColumns.IdSuffixFormat, y),
-                            Code = x.QuestionIdentity.RosterVector.ElementAtOrDefault(i)
-                        }).ToArray(),
-                    roster = questionnaire.GetRosterVariableName(questionnaire
-                        .GetRostersFromTopToSpecifiedQuestion(x.QuestionIdentity.Id).Last())
-                })
-                .GroupBy(x => new{x.roster, x.answer.QuestionIdentity.RosterVector})
-                .Where(x => x.Any())
-                .Select(x => new PreloadingAssignmentRow
-                {
-                    RosterInstanceCodes = x.First().codes,
-                    FileName = x.First().roster,
-                    QuestionnaireOrRosterName = x.First().roster,
-                    InterviewIdValue = new PreloadingValue {Value = tempAssignmentId}.ToAssignmentInterviewId(),
-                    Answers = x.Select(y => this.ToPreloadAnswer(y.answer, questionnaire)).ToArray()
-                });
-
-            return rosterRows.Union(new[] {assignmentRow});
-        }
-
-        private BaseAssignmentValue ToPreloadAnswer(AssignmentAnswer answer, IQuestionnaire questionnaire)
-        {
-            switch (questionnaire.GetAnswerType(answer.QuestionIdentity.Id))
-            {
-                case AnswerType.GpsData:
-                    return ToPreloadGpsAnswer(answer, questionnaire);
-                case AnswerType.DecimalAndStringArray:
-                    return ToPreloadTextListAnswer(answer, questionnaire);
-                case AnswerType.OptionCodeArray:
-                    return ToPreloadMultiAnswer(answer, questionnaire);
-                case AnswerType.YesNoArray:
-                    return ToPreloadYesNoAnswer(answer, questionnaire);
-                default:
-                    return new PreloadingValue
-                    {
-                        VariableOrCodeOrPropertyName = answer.Variable,
-                        Value = answer.Source.Answer,
-                        Column = answer.Variable
-                    }.ToAssignmentAnswer(questionnaire);
-            }
-        }
-
-        private BaseAssignmentValue ToPreloadYesNoAnswer(AssignmentAnswer answer, IQuestionnaire questionnaire)
-        {
-            return new PreloadingCompositeValue
-            {
-                VariableOrCodeOrPropertyName = answer.Variable,
-                Values = (this.serializer.Deserialize<string[]>(answer.Source.Answer) ?? Array.Empty<string>())
-                    .Select(CheckedYesNoAnswerOption.Parse)
-                    .Select((x, i) => new PreloadingValue
-                    {
-                        Value = x.Yes ? (i + 1).ToString() : "0",
-                        VariableOrCodeOrPropertyName = x.Value.ToString(),
-                        Column = $"{answer.Variable}{ServiceColumns.ColumnDelimiter}{x.Value}"
-                    }).ToArray()
-            }.ToAssignmentAnswers(questionnaire);
-        }
-
-        private BaseAssignmentValue ToPreloadMultiAnswer(AssignmentAnswer answer,
-            IQuestionnaire questionnaire) => new PreloadingCompositeValue
-        {
-            VariableOrCodeOrPropertyName = answer.Variable,
-            Values = (this.serializer.Deserialize<string[]>(answer.Source.Answer) ?? Array.Empty<string>())
-                .Select((x, i) => new PreloadingValue
-                {
-                    Value = (i + 1).ToString(),
-                    VariableOrCodeOrPropertyName = x,
-                    Column = $"{answer.Variable}{ServiceColumns.ColumnDelimiter}{x}"
-                }).ToArray()
-        }.ToAssignmentAnswers(questionnaire);
-
-        private BaseAssignmentValue ToPreloadTextListAnswer(AssignmentAnswer answer,
-            IQuestionnaire questionnaire) => new PreloadingCompositeValue
-        {
-            VariableOrCodeOrPropertyName = answer.Variable,
-            Values = (this.serializer.Deserialize<string[]>(answer.Source.Answer) ?? Array.Empty<string>())
-                .Select((x, i) => new PreloadingValue
-                {
-                    Value = x,
-                    VariableOrCodeOrPropertyName = i.ToString(),
-                    Column = $"{answer.Variable}{ServiceColumns.ColumnDelimiter}{i}"
-                }).ToArray()
-        }.ToAssignmentAnswers(questionnaire);
-
-        private static BaseAssignmentValue ToPreloadGpsAnswer(AssignmentAnswer answer, IQuestionnaire questionnaire)
-        {
-            var gpsCoordinates = answer.Source.Answer?.Split('$') ?? Array.Empty<string>();
-
-            return new PreloadingCompositeValue
-            {
-                VariableOrCodeOrPropertyName = answer.Variable,
-                Values = new[]
-                {
-                    new PreloadingValue
-                    {
-                        Value = gpsCoordinates.ElementAtOrDefault(0),
-                        VariableOrCodeOrPropertyName = nameof(GeoPosition.Latitude).ToLower(),
-                        Column = $"{answer.Variable}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Latitude)}"
-                    },
-                    new PreloadingValue
-                    {
-                        Value = gpsCoordinates.ElementAtOrDefault(1),
-                        VariableOrCodeOrPropertyName = nameof(GeoPosition.Longitude).ToLower(),
-                        Column = $"{answer.Variable}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Longitude)}"
-                    },
-                }
-            }.ToAssignmentAnswers(questionnaire);
-        }
-
-        
-
-        private AssignmentAnswer ToAssignmentAnswer(AssignmentIdentifyingDataItem item, IQuestionnaire questionnaire)
-        {
-            if (!string.IsNullOrEmpty(item.Identity) && Identity.TryParse(item.Identity, out Identity identity))
-            {
-                if (questionnaire.HasQuestion(identity.Id))
-                {
-                    var answer = new AssignmentAnswer(item, identity);
-                    answer.Variable = questionnaire.GetQuestionVariableName(identity.Id);
-                    answer.QuestionType = questionnaire.GetQuestionType(identity.Id);
-                    
-                    return answer;
-                }
-            }
-            else if (!string.IsNullOrEmpty(item.Variable))
-            {
-                var questionId = questionnaire.GetQuestionIdByVariable(item.Variable);
-                if (questionId.HasValue)
-                {
-                    var answer = new AssignmentAnswer(item, Identity.Create(questionId.Value, RosterVector.Empty));
-                    answer.Variable = item.Variable;
-                    answer.QuestionType = questionnaire.GetQuestionType(answer.QuestionIdentity.Id);
-                    
-                    return answer;
-                }
-            }
-
-            return new AssignmentAnswer(item, Identity.Create(Guid.Empty, RosterVector.Empty))
-            {
-                IsUnknownQuestion = true
-            };
-        }
-    }
-    
-    public class AssignmentAnswer
-    {
-        public AssignmentAnswer(AssignmentIdentifyingDataItem source, Identity questionIdentity)
-        {
-            Source = source;
-            QuestionIdentity = questionIdentity;
-        }
-
-        public AssignmentIdentifyingDataItem Source { get; }
-        public Identity QuestionIdentity { get; }
-        public string? Variable { get; set; }
-
-        public QuestionType? QuestionType { get; set; }
-
-        public bool IsUnknownQuestion { get; set; }
     }
 }

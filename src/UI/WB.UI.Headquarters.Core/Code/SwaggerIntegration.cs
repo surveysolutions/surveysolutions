@@ -15,10 +15,9 @@ namespace WB.UI.Headquarters.Code
 {
     public static class SwaggerIntegration
     {
-        public static void AddHqSwaggerGen(this IServiceCollection services)
+
+        public static void AddOptions(SwaggerGenOptions c)
         {
-            services.AddSwaggerGen(c =>
-            {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Survey Solutions API",
@@ -106,8 +105,11 @@ namespace WB.UI.Headquarters.Code
                 });
                 c.TagActionsBy(x => 
                     new List<string> {x.ActionDescriptor.RouteValues["controller"].Replace("PublicApi", "")});
-            });
+            }
 
+        public static void AddHqSwaggerGen(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(AddOptions);
             services.Replace(
                 ServiceDescriptor.Transient<ISerializerDataContractResolver>(s =>
                     new NewtonsoftDataContractResolver(PublicApiJsonAttribute.PublicApiSerializerSettings)));
