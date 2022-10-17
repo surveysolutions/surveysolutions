@@ -709,7 +709,21 @@ namespace WB.Services.Export.Questionnaire
                 ? question.QuestionText.RemoveHtmlTags()
                 : question.VariableLabel;
 
-            var columnName = string.Concat(question.VariableName.Take(26));
+            var columnName = question.VariableName;
+
+            const int maxAreaNameLength = 26;
+            if (columnName.Length > maxAreaNameLength)
+            {
+                var shortColumnName = string.Concat(question.VariableName.Take(maxAreaNameLength));
+                var uniquesNames = new HashSet<string>(
+                    headerStructureForLevel.HeaderItems.Values.SelectMany(eh =>
+                    eh.ColumnHeaders
+                        .Where(c => c.Name.Length >= maxAreaNameLength && c.Name.StartsWith(shortColumnName))
+                        .Select(c => c.Name.Split("__")[0])
+                    ));
+                columnName = shortColumnName + uniquesNames.Count;
+            }
+
             areaQuestionExportHeader.ColumnHeaders.Add(new HeaderColumn()
             {
                 Name = columnName,

@@ -287,6 +287,21 @@ namespace WB.Services.Export.Tests
             public List<string[]> Data { get; set; }
         }
 
+        public static AreaQuestion AreaQuestion(Guid? id = null,
+            string variable = "area_question",
+            string questionText = null,
+            IEnumerable<ValidationCondition> validationConditions = null)
+        {
+            return new AreaQuestion
+            {
+                QuestionText = questionText ?? "text",
+                QuestionType = QuestionType.Area,
+                PublicKey = id ?? Guid.NewGuid(),
+                VariableName = variable,
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>()
+            };
+        }
+
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null,
             string variable = "numeric_question",
             bool isPrefilled = false,
