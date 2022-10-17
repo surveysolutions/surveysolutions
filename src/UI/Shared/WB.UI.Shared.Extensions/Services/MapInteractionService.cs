@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.UI.Shared.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Shared.Extensions.Activities;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.ViewModels;
@@ -40,12 +40,12 @@ namespace WB.UI.Shared.Extensions.Services
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public async Task<AreaEditResult> EditAreaAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
+        public async Task<AreaEditResult> EditAreaAsync(EditAreaArgs args)
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
             await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
 
-            return await this.EditAreaImplAsync(area, geometryType);
+            return await this.EditAreaImplAsync(args);
         }
 
         public async Task OpenMapDashboardAsync()
@@ -64,14 +64,19 @@ namespace WB.UI.Shared.Extensions.Services
 
         public bool DoesSupportMaps => true;
 
-        private async Task<AreaEditResult> EditAreaImplAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
+        private async Task<AreaEditResult> EditAreaImplAsync(EditAreaArgs args)
         {
             bool activityCreated = await this.viewModelNavigationService.NavigateToAsync<GeographyEditorViewModel, GeographyEditorViewModelArgs>(
                 new GeographyEditorViewModelArgs
                 {
-                    Geometry = area?.Geometry,
-                    MapName = area?.MapName,
-                    RequestedGeometryType = geometryType
+                    Geometry = args.Area?.Geometry,
+                    MapName = args.Area?.MapName,
+                    RequestedGeometryType = args.GeometryType,
+                    
+                    RequestedGeometryInputMode = args.RequestedGeometryInputMode,
+                    RequestedAccuracy = args.RequestedAccuracy,
+                    RequestedFrequency = args.RequestedFrequency
+                    
                 }).ConfigureAwait(false);
 
             if (activityCreated)

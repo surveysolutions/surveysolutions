@@ -4,6 +4,12 @@
     {
         public string Geometry { get; set; }
         public string MapName { get; set; }
-        public WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? RequestedGeometryType { set; get; }
+        public Core.SharedKernels.Questionnaire.Documents.GeometryType? RequestedGeometryType { set; get; }
+
+        public int? RequestedAccuracy { set; get; }
+
+        public int? RequestedFrequency { set; get; }
+        
+        public Core.SharedKernels.Questionnaire.Documents.GeometryInputMode? RequestedGeometryInputMode { set; get; }
     }
 }

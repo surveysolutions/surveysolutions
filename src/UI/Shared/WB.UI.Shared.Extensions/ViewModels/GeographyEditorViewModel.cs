@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.Services;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
@@ -33,8 +34,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
         }
 
-        //setup from settings
-        private double? RequestedAccuracy = null;
+        private int? RequestedAccuracy { get; set; }
+        public int? RequestedFrequency { get; set; }
+        public GeometryInputMode RequestedGeometryInputMode { get; set; }
         
         private Geometry Geometry { set; get; }
         public string MapName { set; get; }
@@ -44,14 +46,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             this.MapName = parameter.MapName;
             this.requestedGeometryType = parameter.RequestedGeometryType;
+            this.RequestedAccuracy = parameter.RequestedAccuracy;
+            this.RequestedFrequency = parameter.RequestedFrequency;
+            this.RequestedGeometryInputMode = parameter.RequestedGeometryInputMode ?? GeometryInputMode.Manual;
 
             if (string.IsNullOrEmpty(parameter.Geometry)) return;
 
             this.Geometry = Geometry.FromJson(parameter.Geometry);
-
             this.UpdateLabels(this.Geometry);
         }
-        
+
         public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(async () =>
         {
             var handler = this.OnAreaEditCompleted;
@@ -138,7 +142,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if(result == null)
                 return coordinates;
             
-            //project to geocoordinates
+            //project to geo-coordinates
             SpatialReference reference = SpatialReference.Create(4326);
 
             switch (result.GeometryType)

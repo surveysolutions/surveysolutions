@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 throw new InvalidOperationException($"Questionnaire {interview.QuestionnaireIdentity} for language {interview.Language} was not found");
             
             this.geometryType = questionnaire.GetQuestionGeometryType(entityIdentity.Id);
-
+            this.requestedGeometryMode = questionnaire.GetQuestionGeometryMode(entityIdentity.Id);
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
             this.eventRegistry.Subscribe(this, interviewId);
@@ -163,7 +163,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering.StartInProgressIndicator();
             try
             {
-                var answerArea = await this.mapInteractionService.EditAreaAsync(this.answer, geometryType)
+                var answerArea = await this.mapInteractionService.EditAreaAsync(
+                        new EditAreaArgs(
+                            area: this.answer,
+                            geometryType: geometryType,
+                            requestedGeometryInputMode: requestedGeometryMode,
+                            requestedAccuracy: 10, //load from settings
+                            requestedFrequency: 10 //load from settings
+                            ))
                     .ConfigureAwait(false);
 
                 if (answerArea != null)
@@ -246,7 +253,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private bool isDisposed = false;
-        
+        private GeometryInputMode? requestedGeometryMode;
+
         public void Dispose()
         {
             if (isDisposed)
