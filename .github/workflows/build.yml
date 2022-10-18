@@ -221,7 +221,7 @@ jobs:
 
       - name: Setup WIX
         run: |
-          Invoke-WebRequest -Uri https://wixtoolset.org/downloads/v3.14.0.5722/wix314-binaries.zip -OutFile wix314-binaries.zip
+          Invoke-WebRequest -Uri https://wixtoolset.org/downloads/v3.14.0.6526/wix314-binaries.zip -OutFile wix314-binaries.zip
           Expand-Archive -Path wix314-binaries.zip -DestinationPath installer/wix314-binaries
 
       - name: Download mobile artifacts
