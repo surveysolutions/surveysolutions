@@ -1,15 +1,17 @@
-﻿namespace WB.UI.Shared.Extensions.ViewModels
+﻿using WB.Core.SharedKernels.Questionnaire.Documents;
+
+namespace WB.UI.Shared.Extensions.ViewModels
 {
     public class GeographyEditorViewModelArgs
     {
         public string Geometry { get; set; }
         public string MapName { get; set; }
-        public Core.SharedKernels.Questionnaire.Documents.GeometryType? RequestedGeometryType { set; get; }
+        public GeometryType? RequestedGeometryType { set; get; }
 
         public int? RequestedAccuracy { set; get; }
 
         public int? RequestedFrequency { set; get; }
         
-        public Core.SharedKernels.Questionnaire.Documents.GeometryInputMode? RequestedGeometryInputMode { set; get; }
+        public GeometryInputMode? RequestedGeometryInputMode { set; get; }
     }
 }

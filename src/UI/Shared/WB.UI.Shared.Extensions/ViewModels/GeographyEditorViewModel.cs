@@ -20,7 +20,6 @@ using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
 
 namespace WB.UI.Shared.Extensions.ViewModels
 {
-
     public class GeographyEditorViewModel : BaseMapInteractionViewModel<GeographyEditorViewModelArgs>
     {
         public Action<AreaEditorResult> OnAreaEditCompleted;
@@ -295,7 +294,22 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public IMvxCommand UndoCommand => new MvxCommand(this.BtnUndo);
         public IMvxCommand CancelEditCommand => new MvxCommand(this.BtnCancelCommand);
+
+
+        private bool isCollecting = false;
+        public IMvxCommand StartCollectingCommand => new MvxCommand(this.StartCollecting);
+        private void StartCollecting()
+        {
+            isCollecting = !isCollecting;
+            //call SwitchLocatorCommand
+        }
         
+        public IMvxCommand AddPointCommand => new MvxCommand(this.AddPoint);
+        private void AddPoint()
+        {
+            //call SwitchLocatorCommand
+        }
+
         private int GetGeometryPointsCount(Geometry geometry)
         {
             switch (geometry.GeometryType)

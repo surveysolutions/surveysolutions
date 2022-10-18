@@ -6,12 +6,12 @@
     <dimen name="area_editor_toolbar_margin_left">20dp</dimen>
     <dimen name="area_editor_common_margin_top">30dp</dimen>
     <dimen name="area_editor_common_margin_right">30dp</dimen>
-    <dimen name="area_editor_common_margin_left">30dp</dimen>
-    <dimen name="area_editor_lower_panel_margin_bottom">33dp</dimen>
+    <dimen name="area_editor_common_margin_left">20dp</dimen>
+    <dimen name="area_editor_lower_panel_margin_bottom">30dp</dimen>
     <dimen name="area_editor_undo_margin_top">95dp</dimen>
-    <dimen name="area_editor_zoom_out_margin_bottom">160dp</dimen>
-    <dimen name="area_editor_zoom_in_margin_bottom">230dp</dimen>
-    <dimen name="area_editor_compass_margin_bottom">300dp</dimen>
+    <dimen name="area_editor_zoom_out_margin_bottom">130dp</dimen>
+    <dimen name="area_editor_zoom_in_margin_bottom">200dp</dimen>
+    <dimen name="area_editor_compass_margin_bottom">270dp</dimen>
     
     <dimen name="button_corners_radius">6dp</dimen>
 
