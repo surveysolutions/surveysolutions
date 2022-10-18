@@ -40,7 +40,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 mto.Cascade(Cascade.None);
                 mto.Update(false);
                 mto.Insert(false);
-                mto.NotFound(NotFoundMode.Ignore);
             });
         }
     }
