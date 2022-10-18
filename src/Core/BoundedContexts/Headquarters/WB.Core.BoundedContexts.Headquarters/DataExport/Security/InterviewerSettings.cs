@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
             return settings.PartialSynchronizationEnabled.Value;
         }
         
-        public static int IsGeographyQuestionAccuracyInMeters(this InterviewerSettings settings)
+        public static int GetGeographyQuestionAccuracyInMeters(this InterviewerSettings settings)
         {
             if (settings?.GeographyQuestionAccuracyInMeters == null)
                 return InterviewerSettings.GeographyQuestionAccuracyInMetersDefault;
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
             return settings.GeographyQuestionAccuracyInMeters.Value;
         }
 
-        public static int IsGeographyQuestionPeriodInSeconds(this InterviewerSettings settings)
+        public static int GetGeographyQuestionPeriodInSeconds(this InterviewerSettings settings)
         {
             if (settings?.GeographyQuestionPeriodInSeconds == null)
                 return InterviewerSettings.GeographyQuestionPeriodInSecondsDefault;
