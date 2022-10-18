@@ -138,6 +138,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 InterviewerAutoUpdatesEnabled = interviewerSettings.IsAutoUpdateEnabled(),
                 NotificationsEnabled = interviewerSettings.IsDeviceNotificationsEnabled(),
                 PartialSynchronizationEnabled = interviewerSettings.IsPartialSynchronizationEnabled(),
+                GeographyQuestionAccuracyInMeters = interviewerSettings.GetGeographyQuestionAccuracyInMeters(),
+                GeographyQuestionPeriodInSeconds = interviewerSettings.GetGeographyQuestionPeriodInSeconds(),
             };
         }
 

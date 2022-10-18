@@ -180,16 +180,9 @@
                 </div>
             </div>
             <div class="col-sm-7">
-                <div class="block-filter">
+                <div class="block-filter"
+                    style="padding-left: 30px">
                     <div class="form-group">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            v-model="geographyQuestionAccuracyInMeters"
-                            @change="updateDeviceSettings"
-                            id="interviewerGeographyQuestionAccuracyInMeters"
-                            type="number"
-                            min="5"
-                            max="1000" />
                         <label for="interviewerGeographyQuestionAccuracyInMeters"
                             style="font-weight: bold">
                             <span class="tick"></span>
@@ -197,25 +190,44 @@
                             <p style="font-weight: normal">{{$t('Settings.GeographyQuestionAccuracyInMetersDescription')}}</p>
                         </label>
                     </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input
+                                class="form-control number"
+                                v-model.number="geographyQuestionAccuracyInMeters"
+                                v-validate="{ required: true, min_value: 10 || Number.MIN_VALUE, max_value: 1000 || Number.MAX_VALUE }"
+                                @change="updateDeviceSettings"
+                                id="interviewerGeographyQuestionAccuracyInMeters"
+                                type="number"
+                                min="5"
+                                max="1000" />
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-7">
-                <div class="block-filter">
+                <div class="block-filter"
+                    style="padding-left: 30px">
                     <div class="form-group">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            v-model="geographyQuestionPeriodInSeconds"
-                            @change="updateDeviceSettings"
-                            id="interviewerGeographyQuestionPeriodInSeconds"
-                            type="number"
-                            min="5"
-                            max="1000" />
                         <label for="interviewerGeographyQuestionPeriodInSeconds"
                             style="font-weight: bold">
                             <span class="tick"></span>
                             {{$t('Settings.InterviewerGeographyQuestionPeriodInSeconds')}}
                             <p style="font-weight: normal">{{$t('Settings.GeographyQuestionPeriodInSecondsDescription')}}</p>
                         </label>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input
+                                class="form-control number"
+                                v-model.number="geographyQuestionPeriodInSeconds"
+                                v-validate="{ required: true, min_value: 10, max_value: 1000 }"
+                                @change="updateDeviceSettings"
+                                id="interviewerGeographyQuestionPeriodInSeconds"
+                                type="number"
+                                min="5"
+                                max="1000" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -322,7 +334,25 @@
             </h3>
     </script>-->
 </template>
+
+<style scoped>
+    .logo {
+        max-width: 365px;
+        max-height: 329px;
+    }
+
+    .input-group .form-control.number {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .input-group .form-control.number[aria-invalid="true"] {
+        color: red;
+    }
+</style>
+
 <script>
+
 import Vue from 'vue'
 import modal from '@/shared/modal'
 
@@ -474,9 +504,4 @@ export default {
     },
 }
 </script>
-<style scoped>
-.logo {
-    max-width: 365px;
-    max-height: 329px;
-}
-</style>
+
