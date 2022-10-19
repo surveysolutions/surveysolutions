@@ -533,6 +533,9 @@
   <data name="AreaMap_OverlapsWith" xml:space="preserve">
     <value>{0} пересекается с:</value>
   </data>
+  <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
+    <value>и {0} других.</value>
+  </data>
   <data name="AreaMap_Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>

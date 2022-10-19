@@ -273,8 +273,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             if (overlappingTitles.Count > 0)
             {
-                this.Warning = string.Format(UIResources.AreaMap_OverlapsWith, this.Title) 
-                    + "\r\n - " + string.Join("\r\n - ", overlappingTitles.ToArray());
+                var maxTitlesDisplay = 4;
+                var message = string.Format(UIResources.AreaMap_OverlapsWith, this.Title) 
+                              + "\r\n - " + string.Join("\r\n - ", overlappingTitles.Take(maxTitlesDisplay).ToArray());
+                if (overlappingTitles.Count > maxTitlesDisplay)
+                    message += "\r\n" + string.Format(UIResources.AreaMap_OverlapsWithOther, overlappingTitles.Count - maxTitlesDisplay);
+                this.Warning = message;
             }
 
             IsWarningVisible = overlappingTitles.Count > 0;

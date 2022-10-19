@@ -249,6 +249,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to and {0} other..
+        /// </summary>
+        public static string AreaMap_OverlapsWithOther {
+            get {
+                return ResourceManager.GetString("AreaMap_OverlapsWithOther", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Perimeter: {0:0.00} m.
         /// </summary>
         public static string AreaMap_PerimeterFormat {
