@@ -72,11 +72,10 @@ namespace WB.UI.Shared.Extensions.Services
                     Geometry = args.Area?.Geometry,
                     MapName = args.Area?.MapName,
                     RequestedGeometryType = args.GeometryType,
-                    
                     RequestedGeometryInputMode = args.RequestedGeometryInputMode,
                     RequestedAccuracy = args.RequestedAccuracy,
-                    RequestedFrequency = args.RequestedFrequency
-                    
+                    RequestedFrequency = args.RequestedFrequency,
+                    GeographyNeighbors = args.GeographyNeighbors,
                 }).ConfigureAwait(false);
 
             if (activityCreated)

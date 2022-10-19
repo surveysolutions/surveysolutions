@@ -55,6 +55,7 @@
     <Compile Include="Activities\MapDashboardActivity.cs" />
     <Compile Include="Entities\AreaEditorResult.cs" />
     <Compile Include="Entities\QuestionnaireItem.cs" />
+    <Compile Include="Extensions\GeometryTypeExtension.cs" />
     <Compile Include="Services\MapInteractionService.cs" />
     <Compile Include="Services\MapUtilityService.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="ViewModels\BaseMapInteractionViewModel.cs" />
     <Compile Include="ViewModels\GeographyEditorViewModel.cs" />
     <Compile Include="ViewModels\GeographyEditorViewModelArgs.cs" />
+    <Compile Include="ViewModels\GeometryNeighbor.cs" />
     <Compile Include="ViewModels\MapDashboardViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using MvvmCross.Base;
 using MvvmCross.Commands;
@@ -15,6 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.UI.Shared.Extensions.Entities;
+using WB.UI.Shared.Extensions.Extensions;
 using WB.UI.Shared.Extensions.Services;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
 
@@ -36,7 +42,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private int? RequestedAccuracy { get; set; }
         public int? RequestedFrequency { get; set; }
         public GeometryInputMode RequestedGeometryInputMode { get; set; }
-        
+        public GeometryNeighbor[] GeographyNeighbors { get; set; }
+
         private Geometry Geometry { set; get; }
         public string MapName { set; get; }
         private WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? requestedGeometryType;
@@ -48,12 +55,19 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.RequestedAccuracy = parameter.RequestedAccuracy;
             this.RequestedFrequency = parameter.RequestedFrequency;
             this.RequestedGeometryInputMode = parameter.RequestedGeometryInputMode ?? GeometryInputMode.Manual;
+            this.GeographyNeighbors = parameter.GeographyNeighbors
+                .Select(n => new GeometryNeighbor()
+                {
+                    Title = n.Title,
+                    Geometry = Geometry.FromJson(n.Geometry)
+                }).ToArray();
 
             if (string.IsNullOrEmpty(parameter.Geometry)) return;
 
             this.Geometry = Geometry.FromJson(parameter.Geometry);
             this.UpdateLabels(this.Geometry);
         }
+
 
         public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(async () =>
         {
@@ -99,6 +113,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
                 }
 
+                await DrawNeighborsAsync(this.requestedGeometryType, this.GeographyNeighbors).ConfigureAwait(false);
                 var result = await GetGeometry(this.requestedGeometryType, this.Geometry).ConfigureAwait(false);
 
                 var position = this.MapView?.LocationDisplay?.Location?.Position;
@@ -201,8 +216,43 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     ? UIResources.AreaMap_PerimeterFormat
                     : UIResources.AreaMap_LengthFormat, length.ToString("#.##")) : string.Empty;
         }
-        
-        
+
+
+        private async Task DrawNeighborsAsync(GeometryType? geometryType, Geometry geometry, GeometryNeighbor[] neighbors)
+        {
+            if (neighbors == null || neighbors.Length <= 0)
+                return;
+
+            var gType = geometryType ?? GeometryType.Polygon;
+            var esriGeometryType = gType.ToEsriGeometryType();
+
+            IEnumerable<Field> fields = new Field[]
+            {
+                new Field(FieldType.Text, "name", "Name", 50)
+            };
+            var featureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, this.MapView.SpatialReference);
+            featureCollectionTable.Renderer = CreateRenderer(gType);
+
+            List<string> overlapingTitles = new List<string>();
+
+            foreach (var neighbor in neighbors)
+            {
+                var isOverlaping = !GeometryEngine.Disjoint(geometry, neighbor.Geometry);
+                if (isOverlaping)
+                    overlapingTitles.Add(neighbor.Title);
+                
+                var feature = featureCollectionTable.CreateFeature();
+                feature.Geometry = neighbor.Geometry;
+                await featureCollectionTable.AddFeatureAsync(feature);
+            }
+
+            FeatureCollection featuresCollection = new FeatureCollection();
+            featuresCollection.Tables.Add(featureCollectionTable);
+            FeatureCollectionLayer featureCollectionLayer = new FeatureCollectionLayer(featuresCollection);
+            featureCollectionLayer.Name = "neighbors";
+            this.MapView.Map.OperationalLayers.Add(featureCollectionLayer);
+        }
+
         private async Task<Geometry> GetGeometry(GeometryType? geometryType, Geometry geometry)
         {
             switch (geometryType)
@@ -211,7 +261,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     {
                         IsGeometryLengthVisible = true;
                         IsGeometryAreaVisible = false;
-
+                        
                         return geometry == null
                             ? await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polyline).ConfigureAwait(false)
                             : await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polyline)
@@ -250,6 +300,30 @@ namespace WB.UI.Shared.Extensions.ViewModels
                                 .ConfigureAwait(false);
                     }
             }
+        }
+        
+        private Renderer CreateRenderer(GeometryType rendererType)
+        {
+            Symbol sym = null;
+
+            switch (rendererType)
+            {
+                case GeometryType.Point:
+                case GeometryType.Multipoint:
+                    sym = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, Color.Red, 18);
+                    break;
+
+                case GeometryType.Polyline:
+                    sym = new SimpleLineSymbol(SimpleLineSymbolStyle.Dash, Color.Green, 3);
+                    break;
+
+                case GeometryType.Polygon:
+                    SimpleLineSymbol lineSym = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.DarkBlue, 2);
+                    sym = new SimpleFillSymbol(SimpleFillSymbolStyle.DiagonalCross, Color.Cyan, lineSym);
+                    break;
+            }
+
+            return new SimpleRenderer(sym);
         }
 
         public override Task OnMapLoaded()

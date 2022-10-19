@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -163,13 +164,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering.StartInProgressIndicator();
             try
             {
+                var interview = interviewRepository.GetOrThrow(interviewId);
+                var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
+
+                var neighboringIds = questionnaire.IsNeighboringSupport(Identity.Id)
+                    ? interview.GetNeighboringQuestionIdentities(Identity)
+                    : Enumerable.Empty<Identity>();
+                var neighbors = neighboringIds
+                    .Select(qId =>
+                    {
+                        var question = interview.GetQuestion(qId);
+                        var parentRosterInstance = question.Parent;
+                        var areaQuestion = question.GetAsInterviewTreeAreaQuestion();
+                
+                        return new GeographyNeighbor
+                                                   {
+                            Title = parentRosterInstance.Title.Text,
+                            Geometry = areaQuestion?.GetAnswer()?.Value?.Geometry
+                                                   };
+                    })
+                    .Where(neighbor => neighbor.Geometry != null)
+                    .ToArray();
+                
                 var answerArea = await this.mapInteractionService.EditAreaAsync(
                         new EditAreaArgs(
                             area: this.answer,
                             geometryType: geometryType,
                             requestedGeometryInputMode: requestedGeometryMode,
                             requestedAccuracy: 10, //load from settings
-                            requestedFrequency: 10 //load from settings
+                            requestedFrequency: 10, //load from settings
+                            geographyNeighbors: neighbors
                             ))
                     .ConfigureAwait(false);
 
