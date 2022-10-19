@@ -1326,7 +1326,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public bool IsNeighboringSupport(Guid entityId)
-            => GetQuestion(entityId)?.Properties?.GeometryShowNeighbours ?? false;
+            => GetQuestion(entityId)?.Properties?.GeometryOverlapDetection ?? false;
 
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
         {
