@@ -228,13 +228,13 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
                 .ForMember(s => s.GeometryType, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryType : GeometryType.Point))
                 .ForMember(s => s.GeometryInputMode, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryInputMode : GeometryInputMode.Manual))
-                .ForMember(s => s.GeometryShowNeighbours, d=>d.MapFrom(t => t.Properties != null ? t.Properties.GeometryShowNeighbours : false));
+                .ForMember(s => s.GeometryOverlapDetection, d=>d.MapFrom(t => t.Properties != null ? t.Properties.GeometryOverlapDetection : false));
             
             this.CreateMap<Models.Question.AreaQuestion, AreaQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
                 .AfterMap((s, d) => d.Properties!.GeometryType = (GeometryType?)(s.GeometryType ?? null))
                 .AfterMap((s, d) => d.Properties!.GeometryInputMode = (GeometryInputMode?)(s.GeometryInputMode ?? null))
-                .AfterMap((s, d) => d.Properties!.GeometryShowNeighbours = s.GeometryShowNeighbours ?? null);
+                .AfterMap((s, d) => d.Properties!.GeometryOverlapDetection = s.GeometryOverlapDetection ?? null);
 
             this.CreateMap<AudioQuestion, Models.Question.AudioQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();

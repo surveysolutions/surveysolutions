@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models.Question
         public GeometryType? GeometryType { get; set; }
         public GeometryInputMode? GeometryInputMode { get; set; }
         
-        public bool? GeometryShowNeighbours { get; set; }
+        public bool? GeometryOverlapDetection { get; set; }
     }
     
     public enum GeometryType

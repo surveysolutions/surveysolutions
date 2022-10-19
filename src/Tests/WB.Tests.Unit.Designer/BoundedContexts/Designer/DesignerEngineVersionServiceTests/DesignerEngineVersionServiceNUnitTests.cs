@@ -219,7 +219,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
                     Create.Question(questionType:QuestionType.Area, 
                         properties:new QuestionProperties(false,false)
                         {
-                            GeometryShowNeighbours = true
+                            GeometryOverlapDetection = true
                         }),
                 });
 
@@ -246,7 +246,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
                         },
                         properties:new QuestionProperties(false,false)
                         {
-                            GeometryShowNeighbours = false
+                            GeometryOverlapDetection = false
                         }),
                 });
 
@@ -273,7 +273,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
                         },
                         properties:new QuestionProperties(false,false)
                         {
-                            GeometryShowNeighbours = false
+                            GeometryOverlapDetection = false
                         }),
                 });
 

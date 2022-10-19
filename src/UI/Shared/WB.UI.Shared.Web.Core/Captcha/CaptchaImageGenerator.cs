@@ -18,7 +18,7 @@ namespace WB.UI.Shared.Web.Captcha
 {
     public class CaptchaImageGenerator
     {
-        static readonly string[] fontFamilies = { "Noto Sans" };
+        string[] fontFamilies = { "Noto Sans" };
         static readonly Color[] colors = { Color.Red, Color.DarkBlue, Color.Chocolate, Color.DarkCyan, Color.Orange };
         private static readonly FontStyle[] fontStyles = {FontStyle.Bold, FontStyle.Italic, FontStyle.Regular};
 
@@ -27,6 +27,11 @@ namespace WB.UI.Shared.Web.Captcha
 
         readonly Random rnd = new Random();
 
+        public void ChangeFonts(params string[] fontFamilies)
+        {
+            this.fontFamilies = fontFamilies;
+        }
+        
         T RandomItemFrom<T>(T[] collection)
         {
             return collection[rnd.Next(0, collection.Length)];
@@ -94,7 +99,7 @@ namespace WB.UI.Shared.Web.Captcha
                     ctx.DrawText(c.ToString(), font, RandomItemFrom(colors), location);
 
                     // determine next letter position
-                    var fontSize = TextMeasurer.Measure(c.ToString(), new RendererOptions(font, location));
+                    var fontSize = TextMeasurer.Measure(c.ToString(), new TextOptions(font));
                     totalWidth = position + fontSize.Width;
                     position = totalWidth + rnd.Next(-3, 5);
                     totalHeight = Math.Max(totalHeight, fontSize.Height);

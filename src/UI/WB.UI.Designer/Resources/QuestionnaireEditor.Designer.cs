@@ -1023,6 +1023,33 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automatic.
+        /// </summary>
+        public static string GeographyInputModeAutomatic {
+            get {
+                return ResourceManager.GetString("GeographyInputModeAutomatic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual.
+        /// </summary>
+        public static string GeographyInputModeManual {
+            get {
+                return ResourceManager.GetString("GeographyInputModeManual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Semiautomatic.
+        /// </summary>
+        public static string GeographyInputModeSemiautomatic {
+            get {
+                return ResourceManager.GetString("GeographyInputModeSemiautomatic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Input mode.
         /// </summary>
         public static string GeometryInputMode {
@@ -1032,11 +1059,11 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show neighbours.
+        ///   Looks up a localized string similar to Overlap detection.
         /// </summary>
-        public static string GeometryShowNeighbours {
+        public static string GeometryOverlapDetection {
             get {
-                return ResourceManager.GetString("GeometryShowNeighbours", resourceCulture);
+                return ResourceManager.GetString("GeometryOverlapDetection", resourceCulture);
             }
         }
         
@@ -1217,6 +1244,15 @@ namespace WB.UI.Designer.Resources {
         public static string HelpOptionValue {
             get {
                 return ResourceManager.GetString("HelpOptionValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display and highlight the overlaps of this question answer with answers to the same questions in sibling roster instances.
+        /// </summary>
+        public static string HelpOverlapDetection {
+            get {
+                return ResourceManager.GetString("HelpOverlapDetection", resourceCulture);
             }
         }
         

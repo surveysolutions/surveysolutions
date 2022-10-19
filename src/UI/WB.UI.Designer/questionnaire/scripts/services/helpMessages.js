@@ -31,6 +31,7 @@
                 questionnaireDefaultLanguageName: $i18next.t('HelpQuestionnaireDefaultLanguageName'),
                 coverPage: $i18next.t('HelpCoverPage'),
                 virtualCoverPage: $i18next.t('HelpVirtualCoverPage'),
+                HelpOverlapDetection: $i18next.t('HelpOverlapDetection'),
             };
 
             helpService.getHelpMessage = function(key) {

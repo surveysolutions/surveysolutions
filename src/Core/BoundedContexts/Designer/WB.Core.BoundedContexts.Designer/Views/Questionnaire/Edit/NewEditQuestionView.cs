@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             string? categoriesId = null, string? mask = null, int? countOfDecimalPlaces = null, int? maxAnswerCount = null, 
             List<ValidationCondition>? validationConditions = null, CategoricalOption[]? options = null, bool? areAnswersOrdered = null,
             QuestionnaireInfoFactory.SelectOption[]? geometryInputModeOptions = null,
-            bool? geometryShowNeighbours = null)
+            bool? geometryOverlapDetection = null)
         {
 
             this.SourceOfLinkedEntities = sourceOfLinkedEntities ?? new List<DropdownEntityView>();
@@ -55,7 +55,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.Options = options ?? new CategoricalOption[0];
             this.AllQuestionScopeOptions = allQuestionScopeOptions ?? new QuestionnaireInfoFactory.SelectOption[0];
             this.GeometryTypeOptions = geometryTypeOptions ?? new QuestionnaireInfoFactory.SelectOption[0];
-            this.GeometryInputModeOptions = geometryInputModeOptions ?? new QuestionnaireInfoFactory.SelectOption[0];
             this.Breadcrumbs = breadcrumbs ?? new Breadcrumb[0];
             QualityOptions = qualityOptions?? new List<QualityOption>();
             Id = id;
@@ -100,10 +99,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             CategoriesId = categoriesId;
             
             GeometryInputMode = geometryInputMode;
-            GeometryShowNeighbours = geometryShowNeighbours;
+            GeometryOverlapDetection = geometryOverlapDetection;
         }
 
-        public bool? GeometryShowNeighbours { get; set; }
+        public bool? GeometryOverlapDetection { get; set; }
 
         public Guid Id { get; set; }
         public Guid[]? ParentGroupsIds { get; set; }
@@ -160,8 +159,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public bool? ShowAsList { get; set; }
         public int? ShowAsListThreshold { get; set; }
         public string? CategoriesId { get; set; }
-        public QuestionnaireInfoFactory.SelectOption[] GeometryInputModeOptions { get; set; }
-
         public GeometryInputMode GeometryInputMode { get; set; }
     }
 }

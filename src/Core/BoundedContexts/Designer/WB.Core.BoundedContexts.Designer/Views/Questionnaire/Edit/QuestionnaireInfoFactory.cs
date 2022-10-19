@@ -94,44 +94,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             new SelectOption
             {
                 Value = GeometryType.Polygon.ToString(),
-                Text = "Polygon"
+                Text = QuestionnaireEditor.GeometryTypePolygon
             },
             new SelectOption
             {
                 Value = GeometryType.Polyline.ToString(),
-                Text = "Polyline"
+                Text = QuestionnaireEditor.GeometryTypePolyline
             },
 
             new SelectOption
             {
                 Value = GeometryType.Point.ToString(),
-                Text = "Point"
+                Text = QuestionnaireEditor.GeometryTypePoint
             },
 
             new SelectOption
             {
                 Value = GeometryType.Multipoint.ToString(),
-                Text = "Multipoint"
-            }
-        };
-        
-        private SelectOption[] GeometryInputModeOptions => new[]
-        {
-            new SelectOption
-            {
-                Value = GeometryInputMode.Manual.ToString(),
-                Text = "Manual"
-            },
-            new SelectOption
-            {
-                Value = GeometryInputMode.Automatic.ToString(),
-                Text = "Automatic"
-            },
-
-            new SelectOption
-            {
-                Value = GeometryInputMode.Semiautomatic.ToString(),
-                Text = "Semiautomatic"
+                Text = QuestionnaireEditor.GeometryTypeMultipoint
             }
         };
 
@@ -387,7 +367,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 result.QuestionTypeOptions = GetQuestionTypeOptions(document, question);
                 result.AllQuestionScopeOptions = GetQuestionScopeOptions(document, question);
                 result.GeometryTypeOptions = GeometryTypeOptions;
-                result.GeometryInputModeOptions = GeometryInputModeOptions;
                 result.ChapterId = questionnaire.GetParentGroupsIds(question).LastOrDefault();
 
                 this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
@@ -590,7 +569,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     .Select(a => new SelectOption() {Text = a.AnswerText, Value = a.AnswerValue}).ToArray(),
                 geometryType : question.Properties?.GeometryType ?? GeometryType.Polygon,
                 geometryInputMode: question.Properties?.GeometryInputMode ?? GeometryInputMode.Manual,
-                geometryShowNeighbours: question.Properties?.GeometryShowNeighbours
+                geometryOverlapDetection: question.Properties?.GeometryOverlapDetection
             );
             questionView.ValidationConditions.AddRange(question.ValidationConditions);
 
