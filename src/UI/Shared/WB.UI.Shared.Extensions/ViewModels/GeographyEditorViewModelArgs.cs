@@ -8,6 +8,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
     {
         public string Geometry { get; set; }
         public string MapName { get; set; }
+        public string Title { get; set; }
         public GeometryType? RequestedGeometryType { set; get; }
         public int? RequestedAccuracy { set; get; }
         public int? RequestedFrequency { set; get; }

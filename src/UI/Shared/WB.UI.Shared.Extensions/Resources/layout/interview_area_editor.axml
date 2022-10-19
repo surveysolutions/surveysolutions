@@ -196,6 +196,18 @@
                 android:fontFamily="Roboto"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:textColor="@android:color/holo_red_light"
+                android:gravity="left"
+                android:duplicateParentState="true"
+                android:id="@+id/areaEditor_Warnings"
+                local:MvxBind="Text Warning; Visibility Visibility(IsWarningVisible);" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/area_editor_common_margin_left"
+                android:fontFamily="Roboto"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 android:gravity="left"
                 android:duplicateParentState="true"
                 android:id="@+id/areaEditor_GeometryArea"

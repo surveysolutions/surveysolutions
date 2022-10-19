@@ -166,6 +166,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var interview = interviewRepository.GetOrThrow(interviewId);
                 var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
+                var question = interview.GetQuestion(this.Identity);
 
                 var neighboringIds = questionnaire.IsNeighboringSupport(Identity.Id)
                     ? interview.GetNeighboringQuestionIdentities(Identity)
@@ -173,15 +174,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 var neighbors = neighboringIds
                     .Select(qId =>
                     {
-                        var question = interview.GetQuestion(qId);
-                        var parentRosterInstance = question.Parent;
-                        var areaQuestion = question.GetAsInterviewTreeAreaQuestion();
+                        var nQuestion = interview.GetQuestion(qId);
+                        var parentRosterInstance = nQuestion.Parent;
+                        var areaQuestion = nQuestion.GetAsInterviewTreeAreaQuestion();
                 
                         return new GeographyNeighbor
-                                                   {
+                        {
                             Title = parentRosterInstance.Title.Text,
                             Geometry = areaQuestion?.GetAnswer()?.Value?.Geometry
-                                                   };
+                        };
                     })
                     .Where(neighbor => neighbor.Geometry != null)
                     .ToArray();
@@ -193,7 +194,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             requestedGeometryInputMode: requestedGeometryMode,
                             requestedAccuracy: 10, //load from settings
                             requestedFrequency: 10, //load from settings
-                            geographyNeighbors: neighbors
+                            geographyNeighbors: neighbors,
+                            title: question.Parent.Title.Text
                             ))
                     .ConfigureAwait(false);
 

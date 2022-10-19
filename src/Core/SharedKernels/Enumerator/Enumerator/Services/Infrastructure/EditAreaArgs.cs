@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 public class EditAreaArgs
 {
     public EditAreaArgs(Area area, GeometryType? geometryType, int? requestedAccuracy, int? requestedFrequency,
-        GeometryInputMode? requestedGeometryInputMode, GeographyNeighbor[] geographyNeighbors)
+        GeometryInputMode? requestedGeometryInputMode, GeographyNeighbor[] geographyNeighbors, string title)
     {
         Area = area;
         GeometryType = geometryType;
@@ -14,6 +14,7 @@ public class EditAreaArgs
         RequestedFrequency = requestedFrequency;
         RequestedGeometryInputMode = requestedGeometryInputMode;
         GeographyNeighbors = geographyNeighbors;
+        Title = title;
     }
 
     public Area Area { set; get; }
@@ -22,6 +23,7 @@ public class EditAreaArgs
     public int? RequestedFrequency { get; set; }
     public GeometryInputMode? RequestedGeometryInputMode { get; set; }
     public GeographyNeighbor[] GeographyNeighbors { get; set; }
+    public string Title { get; set; }
 }
 
 public class GeographyNeighbor

@@ -46,11 +46,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private Geometry Geometry { set; get; }
         public string MapName { set; get; }
+        public string Title { set; get; }
+
         private WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? requestedGeometryType;
         
         public override void Prepare(GeographyEditorViewModelArgs parameter)
         {
             this.MapName = parameter.MapName;
+            this.Title = parameter.Title;
             this.requestedGeometryType = parameter.RequestedGeometryType;
             this.RequestedAccuracy = parameter.RequestedAccuracy;
             this.RequestedFrequency = parameter.RequestedFrequency;
@@ -267,6 +270,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.MapView.Map.OperationalLayers.Remove(existedLayer);
             
             this.MapView.Map.OperationalLayers.Add(featureCollectionLayer);
+
+            if (overlappingTitles.Count > 0)
+            {
+                this.Warning = string.Format(UIResources.AreaMap_OverlapsWith, this.Title) 
+                    + "\r\n - " + string.Join("\r\n - ", overlappingTitles.ToArray());
+            }
+
+            IsWarningVisible = overlappingTitles.Count > 0;
         }
 
         private async Task<Geometry> GetGeometry(GeometryType? geometryType, Geometry geometry)
@@ -449,6 +460,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return true;
         }
 
+        private string warning;
+        public string Warning
+        {
+            get => this.warning;
+            set => this.RaiseAndSetIfChanged(ref this.warning, value);
+        }
+ 
+        private bool isWarningVisible;
+        public bool IsWarningVisible
+        {
+            get => this.isWarningVisible;
+            set => this.RaiseAndSetIfChanged(ref this.isWarningVisible, value);
+        }
+
+        
         private string geometryArea;
         public string GeometryArea
         {

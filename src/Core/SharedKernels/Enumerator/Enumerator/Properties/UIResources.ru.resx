@@ -530,6 +530,9 @@
   <data name="AreaMap_AreaFormat" xml:space="preserve">
     <value>Площадь: {0:0.00} кв.м.</value>
   </data>
+  <data name="AreaMap_OverlapsWith" xml:space="preserve">
+    <value>{0} пересекается с:</value>
+  </data>
   <data name="AreaMap_Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>

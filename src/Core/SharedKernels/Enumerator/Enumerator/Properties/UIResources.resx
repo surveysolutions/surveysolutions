@@ -599,6 +599,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_AreaFormat" xml:space="preserve">
     <value>Area: {0:0.00} m2</value>
   </data>
+  <data name="AreaMap_OverlapsWith" xml:space="preserve">
+    <value>{0} overlaps with:</value>
+  </data>
   <data name="AreaMap_PointsFormat" xml:space="preserve">
     <value>Points: {0}</value>
   </data>

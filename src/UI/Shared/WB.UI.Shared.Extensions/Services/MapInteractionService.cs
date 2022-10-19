@@ -76,6 +76,7 @@ namespace WB.UI.Shared.Extensions.Services
                     RequestedAccuracy = args.RequestedAccuracy,
                     RequestedFrequency = args.RequestedFrequency,
                     GeographyNeighbors = args.GeographyNeighbors,
+                    Title = args.Title,
                 }).ConfigureAwait(false);
 
             if (activityCreated)
