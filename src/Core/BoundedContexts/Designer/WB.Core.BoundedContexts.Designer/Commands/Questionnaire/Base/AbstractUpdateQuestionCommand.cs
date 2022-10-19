@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
                 OptionsFilterExpression = commonQuestionParameters.OptionsFilterExpression,
                 GeometryType = commonQuestionParameters.GeometryType,
                 GeometryInputMode = commonQuestionParameters.GeometryInputMode,
-                GeometryShowNeighbours = commonQuestionParameters.GeometryShowNeighbours
+                GeometryOverlapDetection = commonQuestionParameters.GeometryOverlapDetection
             };
         }
 

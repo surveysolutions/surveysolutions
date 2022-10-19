@@ -171,4 +171,16 @@
   <data name="CoverPageSection" xml:space="preserve">
     <value>Обложка</value>
   </data>
+    <data name="GeometryTypePolygon" xml:space="preserve">
+    <value>Полигон</value>
+  </data>
+    <data name="GeometryTypePolyline" xml:space="preserve">
+    <value>Полилиния</value>
+  </data>
+    <data name="GeometryTypePoint" xml:space="preserve">
+    <value>Точка</value>
+  </data>
+    <data name="GeometryTypeMultipoint" xml:space="preserve">
+    <value>Множество точек</value>
+  </data>
 </root>

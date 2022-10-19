@@ -17,6 +17,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         
         public GeometryInputMode? GeometryInputMode { get; set; }
         
-        public bool? GeometryShowNeighbours { get; set; }
+        public bool? GeometryOverlapDetection { get; set; }
     }
 }

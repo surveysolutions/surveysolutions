@@ -279,8 +279,8 @@
   <data name="GeographyInputMode" xml:space="preserve">
     <value>Geography input mode</value>
   </data>
-  <data name="GeometryShowNeighbours" xml:space="preserve">
-    <value>Show neighbours</value>
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Overlap detection</value>
   </data>
   <data name="StaticText" xml:space="preserve">
     <value>Static text</value>

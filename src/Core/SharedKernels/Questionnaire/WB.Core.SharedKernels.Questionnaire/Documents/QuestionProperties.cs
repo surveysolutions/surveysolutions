@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
 
         public GeometryInputMode? GeometryInputMode { get; set; }
         
-        public bool? GeometryShowNeighbours { get; set; }
+        public bool? GeometryOverlapDetection { get; set; }
 
         // for date question
         public DateTime? DefaultDate { get; set; }

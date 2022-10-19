@@ -107,7 +107,7 @@
           "default": "Manual"
         },
         
-        "GeometryShowNeighbours": { "type": "boolean", "default": false }
+        "GeometryOverlapDetection": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
       "required": ["Type"]
