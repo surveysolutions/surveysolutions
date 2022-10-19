@@ -177,11 +177,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show neighbours.
+        ///   Looks up a localized string similar to Overlap detection.
         /// </summary>
-        public static string GeometryShowNeighbours {
+        public static string GeometryOverlapDetection {
             get {
-                return ResourceManager.GetString("GeometryShowNeighbours", resourceCulture);
+                return ResourceManager.GetString("GeometryOverlapDetection", resourceCulture);
             }
         }
         

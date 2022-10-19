@@ -356,7 +356,7 @@
                 }
               ]
             },
-            "GeometryShowNeighbours": {
+            "GeometryOverlapDetection": {
               "type": [
                 "boolean",
                 "null"

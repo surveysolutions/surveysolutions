@@ -671,6 +671,15 @@
   <data name="QuestionYesNoMode" xml:space="preserve">
     <value>Да/Нет режим</value>
   </data>
+  <data name="GeographyInputModeManual" xml:space="preserve">
+    <value>Ручной</value>
+  </data>
+    <data name="GeographyInputModeAutomatic" xml:space="preserve">
+    <value>Автоматический</value>
+  </data>
+    <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+    <value>Полуавстоматический</value>
+  </data>  
   <data name="Search" xml:space="preserve">
     <value>Поиск</value>
   </data>
@@ -1192,8 +1201,8 @@
   <data name="GeometryInputMode" xml:space="preserve">
     <value>Режим ввода</value>
   </data>
-  <data name="GeometryShowNeighbours" xml:space="preserve">
-    <value>Показывать соседей</value>
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Отслеживать перекрытия ответов</value>
   </data>
   <data name="CollaboratorsSettings" xml:space="preserve">
     <value>Совместная работа</value>
@@ -1516,6 +1525,9 @@
   </data>
   <data name="HelpOptionTitle" xml:space="preserve">
     <value>Текстовое название категории (отображается интервьюеру)</value>
+  </data>
+  <data name="HelpOverlapDetection" xml:space="preserve">
+    <value>Отображать и выделять перекрытия ответов на этот вопрос в других экземплярах ростера</value>
   </data>
   <data name="NewItem" xml:space="preserve">
     <value>Новый элемент</value>

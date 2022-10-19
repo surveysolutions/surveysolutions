@@ -296,7 +296,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         hasQuestionnaire: questionnaire =>
                         {
                             return questionnaire.Find<AreaQuestion>(x => 
-                                x.Properties?.GeometryShowNeighbours == true).Any();
+                                x.Properties?.GeometryOverlapDetection == true).Any();
                         },
                         description: "Geography question has show neighbours on"
                     ),
@@ -353,7 +353,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                 if (composite is IQuestion question)
                                 {
                                     if (IsUsedInExpression(question.LinkedFilterExpression, geoQuestionsAccuracy) 
-                                        ||IsUsedInExpression(question.Properties?.OptionsFilterExpression, geoQuestionsAccuracy))
+                                        || IsUsedInExpression(question.Properties?.OptionsFilterExpression, geoQuestionsAccuracy))
                                     {
                                         return true;
                                     }

@@ -286,7 +286,7 @@
                         optionsFilterExpression: question.optionsFilterExpression,
                         geometryType: question.geometryType,
                         geometryInputMode: question.geometryInputMode,
-                        geometryShowNeighbours: question.geometryShowNeighbours
+                        geometryOverlapDetection: question.geometryOverlapDetection
                     }
                 };
 

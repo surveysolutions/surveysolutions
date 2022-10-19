@@ -387,8 +387,8 @@
     <data name="GeographyInputMode" xml:space="preserve">
     <value>Режим ввода географии</value>
   </data>
-  <data name="GeometryShowNeighbours" xml:space="preserve">
-    <value>Отображать соседние измерения</value>
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Отслеживать перекрытия ответов</value>
   </data>
   <data name="SideBarMetadataBasicInfo" xml:space="preserve">
     <value>Базовая информация</value>

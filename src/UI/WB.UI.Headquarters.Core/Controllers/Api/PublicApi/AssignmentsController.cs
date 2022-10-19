@@ -767,7 +767,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return rosterRows.Union(new[] {assignmentRow});
         }
 
-        public BaseAssignmentValue ToPreloadAnswer(AssignmentAnswer answer, IQuestionnaire questionnaire)
+        private BaseAssignmentValue ToPreloadAnswer(AssignmentAnswer answer, IQuestionnaire questionnaire)
         {
             switch (questionnaire.GetAnswerType(answer.QuestionIdentity.Id))
             {
@@ -818,7 +818,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 }).ToArray()
         }.ToAssignmentAnswers(questionnaire);
 
-        public BaseAssignmentValue ToPreloadTextListAnswer(AssignmentAnswer answer,
+        private BaseAssignmentValue ToPreloadTextListAnswer(AssignmentAnswer answer,
             IQuestionnaire questionnaire) => new PreloadingCompositeValue
         {
             VariableOrCodeOrPropertyName = answer.Variable,
@@ -856,30 +856,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }.ToAssignmentAnswers(questionnaire);
         }
 
-        public class AssignmentAnswer
-        {
-            public static AssignmentAnswer UnknownAssignmentAnswer(AssignmentIdentifyingDataItem source)
-            {
-                return new AssignmentAnswer(source, Identity.Create(Guid.Empty, RosterVector.Empty))
-                {
-                    IsUnknownQuestion = true
-                };
-            }
-
-            public AssignmentAnswer(AssignmentIdentifyingDataItem source, Identity questionIdentity)
-            {
-                Source = source;
-                QuestionIdentity = questionIdentity;
-            }
-
-            public AssignmentIdentifyingDataItem Source { get; }
-            public Identity QuestionIdentity { get; }
-            public string? Variable { get; set; }
-
-            public QuestionType? QuestionType { get; set; }
-
-            public bool IsUnknownQuestion { get; private set; }
-        }
+        
 
         private AssignmentAnswer ToAssignmentAnswer(AssignmentIdentifyingDataItem item, IQuestionnaire questionnaire)
         {
@@ -907,7 +884,27 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 }
             }
 
-            return AssignmentAnswer.UnknownAssignmentAnswer(item);
+            return new AssignmentAnswer(item, Identity.Create(Guid.Empty, RosterVector.Empty))
+            {
+                IsUnknownQuestion = true
+            };
         }
+    }
+    
+    public class AssignmentAnswer
+    {
+        public AssignmentAnswer(AssignmentIdentifyingDataItem source, Identity questionIdentity)
+        {
+            Source = source;
+            QuestionIdentity = questionIdentity;
+        }
+
+        public AssignmentIdentifyingDataItem Source { get; }
+        public Identity QuestionIdentity { get; }
+        public string? Variable { get; set; }
+
+        public QuestionType? QuestionType { get; set; }
+
+        public bool IsUnknownQuestion { get; set; }
     }
 }
