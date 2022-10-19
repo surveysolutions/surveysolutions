@@ -113,7 +113,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
                 }
 
-                await DrawNeighborsAsync(this.requestedGeometryType, this.GeographyNeighbors).ConfigureAwait(false);
+                await DrawNeighborsAsync(this.requestedGeometryType, this.Geometry, this.GeographyNeighbors).ConfigureAwait(false);
                 var result = await GetGeometry(this.requestedGeometryType, this.Geometry).ConfigureAwait(false);
 
                 var position = this.MapView?.LocationDisplay?.Location?.Position;
