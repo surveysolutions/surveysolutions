@@ -84,21 +84,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             try
             {
-                this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
+                this.MapView.SketchEditor.GeometryChanged += async delegate (object sender, GeometryChangedEventArgs args)
                 {
                     var geometry = args.NewGeometry;
                     try
                     {
                         this.UpdateLabels(geometry);
+                        await DrawNeighborsAsync(this.requestedGeometryType, geometry, this.GeographyNeighbors).ConfigureAwait(false);
                     }
                     catch
                     {
                     }
 
-                    this.CanUndo =
-                        this.MapView.SketchEditor.UndoCommand.CanExecute(this.MapView.SketchEditor.UndoCommand);
-                    this.CanSave =
-                        this.MapView.SketchEditor.CompleteCommand.CanExecute(this.MapView.SketchEditor.CompleteCommand);
+                    this.CanUndo = this.MapView.SketchEditor.UndoCommand.CanExecute(this.MapView.SketchEditor.UndoCommand);
+                    this.CanSave = this.MapView.SketchEditor.CompleteCommand.CanExecute(this.MapView.SketchEditor.CompleteCommand);
                 };
 
                 if (this.Geometry == null)
@@ -230,26 +229,43 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 new Field(FieldType.Text, "name", "Name", 50)
             };
-            var featureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, this.MapView.SpatialReference);
-            featureCollectionTable.Renderer = CreateRenderer(gType);
+            var neighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, this.MapView.SpatialReference);
+            neighborsFeatureCollectionTable.Renderer = CreateRenderer(gType, Color.Blue);
+            var overlappingNeighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, this.MapView.SpatialReference);
+            overlappingNeighborsFeatureCollectionTable.Renderer = CreateRenderer(gType, Color.Red);
 
-            List<string> overlapingTitles = new List<string>();
+            List<string> overlappingTitles = new List<string>();
 
             foreach (var neighbor in neighbors)
             {
-                var isOverlaping = !GeometryEngine.Disjoint(geometry, neighbor.Geometry);
-                if (isOverlaping)
-                    overlapingTitles.Add(neighbor.Title);
+                var featureCollectionTable = neighborsFeatureCollectionTable;
                 
+                if (geometry != null)
+                {
+                    var isOverlapping = !GeometryEngine.Disjoint(geometry, neighbor.Geometry);
+                    if (isOverlapping)
+                        overlappingTitles.Add(neighbor.Title);
+                    
+                    featureCollectionTable = isOverlapping
+                        ? overlappingNeighborsFeatureCollectionTable
+                        : neighborsFeatureCollectionTable;
+                }
+
                 var feature = featureCollectionTable.CreateFeature();
                 feature.Geometry = neighbor.Geometry;
                 await featureCollectionTable.AddFeatureAsync(feature);
             }
 
             FeatureCollection featuresCollection = new FeatureCollection();
-            featuresCollection.Tables.Add(featureCollectionTable);
+            featuresCollection.Tables.Add(neighborsFeatureCollectionTable);
+            featuresCollection.Tables.Add(overlappingNeighborsFeatureCollectionTable);
             FeatureCollectionLayer featureCollectionLayer = new FeatureCollectionLayer(featuresCollection);
             featureCollectionLayer.Name = "neighbors";
+
+            var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == featureCollectionLayer.Name);
+            if (existedLayer != null)
+                this.MapView.Map.OperationalLayers.Remove(existedLayer);
+            
             this.MapView.Map.OperationalLayers.Add(featureCollectionLayer);
         }
 
@@ -302,7 +318,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
         
-        private Renderer CreateRenderer(GeometryType rendererType)
+        private Renderer CreateRenderer(GeometryType rendererType, Color color)
         {
             Symbol sym = null;
 
@@ -310,16 +326,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 case GeometryType.Point:
                 case GeometryType.Multipoint:
-                    sym = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, Color.Red, 18);
+                    sym = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, color, 18);
                     break;
 
                 case GeometryType.Polyline:
-                    sym = new SimpleLineSymbol(SimpleLineSymbolStyle.Dash, Color.Green, 3);
+                    sym = new SimpleLineSymbol(SimpleLineSymbolStyle.Dash, color, 3);
                     break;
 
                 case GeometryType.Polygon:
-                    SimpleLineSymbol lineSym = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.DarkBlue, 2);
-                    sym = new SimpleFillSymbol(SimpleFillSymbolStyle.DiagonalCross, Color.Cyan, lineSym);
+                    SimpleLineSymbol lineSym = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2);
+                    sym = new SimpleFillSymbol(SimpleFillSymbolStyle.DiagonalCross, color, lineSym);
                     break;
             }
 
