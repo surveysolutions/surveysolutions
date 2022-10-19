@@ -353,7 +353,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                 if (composite is IQuestion question)
                                 {
                                     if (IsUsedInExpression(question.LinkedFilterExpression, geoQuestionsAccuracy) 
-                                        ||IsUsedInExpression(question.Properties!.OptionsFilterExpression, geoQuestionsAccuracy))
+                                        || IsUsedInExpression(question.Properties?.OptionsFilterExpression, geoQuestionsAccuracy))
                                     {
                                         return true;
                                     }
