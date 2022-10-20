@@ -26,6 +26,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
 {
     public abstract class BaseMapInteractionViewModel<TParam> : BaseViewModel<TParam>, IDisposable
     {
+        protected const string ShapefileLayerName = "shapefile";
+
         readonly ILogger logger;
         private readonly IMapService mapService;
         protected readonly IUserInteractionService userInteractionService;
@@ -317,8 +319,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             try
             {
                 var newFeatureLayer = await mapUtilityService.GetShapefileAsFeatureLayer(fullPathToShapefile);
+                newFeatureLayer.Name = ShapefileLayerName;
                 
-                this.MapView.Map.OperationalLayers.Clear();
+                RemoveShapefileLayer();
 
                 // Add the feature layer to the map
                 this.MapView.Map.OperationalLayers.Add(newFeatureLayer);
@@ -335,6 +338,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         });
 
+        private void RemoveShapefileLayer()
+        {
+            var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == ShapefileLayerName);
+            if (existedLayer != null)
+                this.MapView.Map.OperationalLayers.Remove(existedLayer);
+        }
+
         public bool ShapeFileLoaded
         {
             get => shapeFileLoaded;
@@ -348,7 +358,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             try
             {
-                this.MapView.Map.OperationalLayers.Clear();
+                RemoveShapefileLayer();
                 ShapeFileLoaded = false;
             }
             catch (Exception e)
