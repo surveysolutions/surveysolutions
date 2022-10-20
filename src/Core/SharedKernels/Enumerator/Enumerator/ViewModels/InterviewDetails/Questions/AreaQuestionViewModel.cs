@@ -180,6 +180,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 
                         return new GeographyNeighbor
                         {
+                            Id = qId.ToString(),
                             Title = parentRosterInstance.Title.Text,
                             Geometry = areaQuestion?.GetAnswer()?.Value?.Geometry
                         };

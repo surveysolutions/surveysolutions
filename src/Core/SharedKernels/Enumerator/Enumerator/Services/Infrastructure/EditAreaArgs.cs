@@ -28,6 +28,7 @@ public class EditAreaArgs
 
 public class GeographyNeighbor
 {
+    public string Id { get; set; }
     public string Title { get; set; }
     public string Geometry { get; set; }
 }

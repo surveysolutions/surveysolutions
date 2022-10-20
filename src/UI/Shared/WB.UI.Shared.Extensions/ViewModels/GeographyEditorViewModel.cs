@@ -28,6 +28,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
 {
     public class GeographyEditorViewModel : BaseMapInteractionViewModel<GeographyEditorViewModelArgs>
     {
+        protected const string NeighborsLayerName = "neighbors";
+        
         public Action<AreaEditorResult> OnAreaEditCompleted;
 
         public GeographyEditorViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService, 
@@ -61,8 +63,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.GeographyNeighbors = parameter.GeographyNeighbors
                 .Select(n => new GeometryNeighbor()
                 {
+                    Id = n.Id,
                     Title = n.Title,
-                    Geometry = Geometry.FromJson(n.Geometry)
+                    Geometry = Geometry.FromJson(n.Geometry),
                 }).ToArray();
 
             if (string.IsNullOrEmpty(parameter.Geometry)) return;
@@ -93,7 +96,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     try
                     {
                         this.UpdateLabels(geometry);
-                        await DrawNeighborsAsync(this.requestedGeometryType, geometry, this.GeographyNeighbors).ConfigureAwait(false);
+                        await UpdateDrawNeighborsAsync(geometry, this.GeographyNeighbors).ConfigureAwait(false);
                     }
                     catch
                     {
@@ -222,7 +225,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private async Task DrawNeighborsAsync(GeometryType? geometryType, Geometry geometry, GeometryNeighbor[] neighbors)
         {
-            if (neighbors == null || neighbors.Length <= 0)
+            if (neighbors == null || neighbors.Length == 0)
                 return;
 
             var gType = geometryType ?? GeometryType.Polygon;
@@ -239,13 +242,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             List<string> overlappingTitles = new List<string>();
 
-            foreach (var neighbor in neighbors)
+            for (int i = 0; i < neighbors.Length; i++)
             {
+                var neighbor = neighbors[i];
                 var featureCollectionTable = neighborsFeatureCollectionTable;
                 
                 if (geometry != null)
                 {
                     var isOverlapping = !GeometryEngine.Disjoint(geometry, neighbor.Geometry);
+                    neighbor.IsOverlapping = isOverlapping;
+                    
                     if (isOverlapping)
                         overlappingTitles.Add(neighbor.Title);
                     
@@ -256,6 +262,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                 var feature = featureCollectionTable.CreateFeature();
                 feature.Geometry = neighbor.Geometry;
+                neighbor.Feature = feature;
                 await featureCollectionTable.AddFeatureAsync(feature);
             }
 
@@ -263,7 +270,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             featuresCollection.Tables.Add(neighborsFeatureCollectionTable);
             featuresCollection.Tables.Add(overlappingNeighborsFeatureCollectionTable);
             FeatureCollectionLayer featureCollectionLayer = new FeatureCollectionLayer(featuresCollection);
-            featureCollectionLayer.Name = "neighbors";
+            featureCollectionLayer.Name = NeighborsLayerName;
 
             var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == featureCollectionLayer.Name);
             if (existedLayer != null)
@@ -271,17 +278,67 @@ namespace WB.UI.Shared.Extensions.ViewModels
             
             this.MapView.Map.OperationalLayers.Add(featureCollectionLayer);
 
+            UpdateWarningMessage(overlappingTitles);
+        }
+
+        private void UpdateWarningMessage(List<string> overlappingTitles)
+        {
             if (overlappingTitles.Count > 0)
             {
-                var maxTitlesDisplay = 4;
-                var message = string.Format(UIResources.AreaMap_OverlapsWith, this.Title) 
+                var maxTitlesDisplay = 2;
+                var message = string.Format(UIResources.AreaMap_OverlapsWith, this.Title)
                               + "\r\n - " + string.Join("\r\n - ", overlappingTitles.Take(maxTitlesDisplay).ToArray());
                 if (overlappingTitles.Count > maxTitlesDisplay)
-                    message += "\r\n" + string.Format(UIResources.AreaMap_OverlapsWithOther, overlappingTitles.Count - maxTitlesDisplay);
+                    message += "\r\n" + string.Format(UIResources.AreaMap_OverlapsWithOther,
+                        overlappingTitles.Count - maxTitlesDisplay);
                 this.Warning = message;
             }
 
             IsWarningVisible = overlappingTitles.Count > 0;
+        }
+
+        private async Task UpdateDrawNeighborsAsync(Geometry geometry, GeometryNeighbor[] neighbors)
+        {
+            if (neighbors == null || neighbors.Length == 0)
+                return;
+
+            var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == NeighborsLayerName);
+            if (existedLayer == null)
+                return;
+            
+            var featureCollectionLayer = (FeatureCollectionLayer)existedLayer;
+            var featureCollectionTables = featureCollectionLayer.FeatureCollection.Tables;
+            var neighborsFeatureCollectionTable = featureCollectionTables[0];
+            var overlappingNeighborsFeatureCollectionTable = featureCollectionTables[1];
+
+            List<string> overlappingTitles = new List<string>();
+
+            foreach (var neighbor in neighbors)
+            {
+                var isOverlapping = geometry != null && !GeometryEngine.Disjoint(geometry, neighbor.Geometry);
+                if (isOverlapping)
+                    overlappingTitles.Add(neighbor.Title);
+                
+                if (neighbor.IsOverlapping != isOverlapping)
+                {
+                    var featureCollectionTable = isOverlapping
+                        ? overlappingNeighborsFeatureCollectionTable
+                        : neighborsFeatureCollectionTable;
+                    var feature = featureCollectionTable.CreateFeature();
+                    feature.Geometry = neighbor.Geometry;
+                    await featureCollectionTable.AddFeatureAsync(feature);
+                    
+                    var oldFeatureCollectionTable = !isOverlapping
+                        ? overlappingNeighborsFeatureCollectionTable
+                        : neighborsFeatureCollectionTable;
+                    await oldFeatureCollectionTable.DeleteFeatureAsync(neighbor.Feature);
+                    
+                    neighbor.Feature = feature;
+                    neighbor.IsOverlapping = isOverlapping;
+                }
+            }
+
+            UpdateWarningMessage(overlappingTitles);
         }
 
         private async Task<Geometry> GetGeometry(GeometryType? geometryType, Geometry geometry)
@@ -341,16 +398,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 case GeometryType.Point:
                 case GeometryType.Multipoint:
-                    sym = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, color, 18);
+                    sym = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18);
                     break;
 
                 case GeometryType.Polyline:
-                    sym = new SimpleLineSymbol(SimpleLineSymbolStyle.Dash, color, 3);
+                    sym = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2);
                     break;
 
                 case GeometryType.Polygon:
-                    SimpleLineSymbol lineSym = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2);
-                    sym = new SimpleFillSymbol(SimpleFillSymbolStyle.DiagonalCross, color, lineSym);
+                    sym = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2);
                     break;
             }
 
