@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Data;
@@ -13,7 +12,6 @@ using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -33,24 +31,23 @@ namespace WB.UI.Shared.Extensions.ViewModels
         public Action<AreaEditorResult> OnAreaEditCompleted;
 
         public GeographyEditorViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService, 
-            IMapService mapService, IUserInteractionService userInteractionService, ILogger logger, 
-            IFileSystemAccessor fileSystemAccessor, IEnumeratorSettings enumeratorSettings,
-            IMapUtilityService mapUtilityService, IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
+            IMapService mapService, IUserInteractionService userInteractionService, ILogger logger,
+            IEnumeratorSettings enumeratorSettings, IMapUtilityService mapUtilityService, 
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
-                fileSystemAccessor, enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
-        {
-        }
+                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher){}
 
         private int? RequestedAccuracy { get; set; }
         public int? RequestedFrequency { get; set; }
         public GeometryInputMode RequestedGeometryInputMode { get; set; }
         public GeometryNeighbor[] GeographyNeighbors { get; set; }
-
         private Geometry Geometry { set; get; }
         public string MapName { set; get; }
         public string Title { set; get; }
+        private GeometryType? requestedGeometryType;
 
-        private WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? requestedGeometryType;
+        public bool IsManual => RequestedGeometryInputMode == GeometryInputMode.Manual;
+        public bool IsCanAddPoint => false;
         
         public override void Prepare(GeographyEditorViewModelArgs parameter)
         {
@@ -79,7 +76,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             var handler = this.OnAreaEditCompleted;
             handler?.Invoke(null);
-            await this.navigationService.Close(this);
+            await this.NavigationService.Close(this);
         });
         
         public IMvxAsyncCommand StartEditAreaCommand => new MvxAsyncCommand(async () => await EditGeometry());
@@ -133,11 +130,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     Geometry = result?.ToJson(),
                     MapName = this.SelectedMap,
-                    Coordinates = GetProjectedCoordinates(result),
-                    Area = GetGeometryArea(result),
-                    Length = GetGeometryLength(result),
+                    Coordinates = GeometryHelper.GetProjectedCoordinates(result),
+                    Area = GeometryHelper.GetGeometryArea(result),
+                    Length = GeometryHelper.GetGeometryLength(result),
                     DistanceToEditor = distanceToEditor,
-                    NumberOfPoints = GetGeometryPointsCount(result),
+                    NumberOfPoints = GeometryHelper.GetGeometryPointsCount(result),
                     RequestedAccuracy = RequestedAccuracy
                 };
 
@@ -151,69 +148,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 if(this.MapView?.LocationDisplay != null)
                     this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
                 
-                await this.navigationService.Close(this);
+                await this.NavigationService.Close(this);
             }
         }
 
-        private string GetProjectedCoordinates(Geometry result)
-        {
-            string coordinates = string.Empty;
-            if(result == null)
-                return coordinates;
-            
-            //project to geo-coordinates
-            SpatialReference reference = SpatialReference.Create(4326);
-
-            switch (result.GeometryType)
-            {
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Polygon:
-                    var polygonCoordinates = (result as Polygon).Parts[0].Points
-                        .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
-                        .Select(coordinate => $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
-                    coordinates = string.Join(";", polygonCoordinates);
-                    break;
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Point:
-                    var projected = GeometryEngine.Project(result as MapPoint, reference) as MapPoint;
-                    coordinates = $"{projected.X.ToString(CultureInfo.InvariantCulture)},{projected.Y.ToString(CultureInfo.InvariantCulture)}";
-                    break;
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
-                    var polylineCoordinates = (result as Polyline).Parts[0].Points
-                        .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
-                        .Select(coordinate => $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
-                    coordinates = string.Join(";", polylineCoordinates);
-                    break;
-            }
-
-            return coordinates;
-        }
-
-        private double GetGeometryArea(Geometry geometry)
-        {
-            bool doesGeometrySupportDimensionsCalculation = DoesGeometrySupportAreaCalculation(geometry);
-            return doesGeometrySupportDimensionsCalculation ? GeometryEngine.AreaGeodetic(geometry) : 0;
-        }
-
-        private double GetGeometryLength(Geometry geometry)
-        {
-            bool doesGeometrySupportDimensionsCalculation = DoesGeometrySupportLengthCalculation(geometry);
-            return doesGeometrySupportDimensionsCalculation ? GeometryEngine.LengthGeodetic(geometry) : 0;
-        }
-        
-        private bool DoesGeometrySupportLengthCalculation(Geometry geometry)
-        {
-            if (geometry == null)
-                return false;
-
-            if (requestedGeometryType == GeometryType.Multipoint || requestedGeometryType == GeometryType.Point)
-                return false;
-
-            return true;
-        }
-        
         private void UpdateLabels(Geometry geometry)
         {
-            var area = this.GetGeometryArea(geometry);
-            var length = this.GetGeometryLength(geometry);
+            var area = GeometryHelper.GetGeometryArea(geometry);
+            var length = GeometryHelper.GetGeometryLength(geometry);
 
             this.GeometryArea = area > 0 ? string.Format(UIResources.AreaMap_AreaFormat, area.ToString("#.##")) : string.Empty;
             this.GeometryLengthLabel = length > 0 ? string.Format(
@@ -221,7 +163,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     ? UIResources.AreaMap_PerimeterFormat
                     : UIResources.AreaMap_LengthFormat, length.ToString("#.##")) : string.Empty;
         }
-
 
         private async Task DrawNeighborsAsync(GeometryType? geometryType, Geometry geometry, GeometryNeighbor[] neighbors)
         {
@@ -269,8 +210,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             FeatureCollection featuresCollection = new FeatureCollection();
             featuresCollection.Tables.Add(neighborsFeatureCollectionTable);
             featuresCollection.Tables.Add(overlappingNeighborsFeatureCollectionTable);
-            FeatureCollectionLayer featureCollectionLayer = new FeatureCollectionLayer(featuresCollection);
-            featureCollectionLayer.Name = NeighborsLayerName;
+            FeatureCollectionLayer featureCollectionLayer = new FeatureCollectionLayer(featuresCollection)
+            {
+                Name = NeighborsLayerName
+            };
 
             var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == featureCollectionLayer.Name);
             if (existedLayer != null)
@@ -392,23 +335,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
         
         private Renderer CreateRenderer(GeometryType rendererType, Color color)
         {
-            Symbol sym = null;
-
-            switch (rendererType)
+            Symbol sym = rendererType switch
             {
-                case GeometryType.Point:
-                case GeometryType.Multipoint:
-                    sym = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18);
-                    break;
-
-                case GeometryType.Polyline:
-                    sym = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2);
-                    break;
-
-                case GeometryType.Polygon:
-                    sym = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2);
-                    break;
-            }
+                GeometryType.Point => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
+                GeometryType.Multipoint => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
+                GeometryType.Polyline => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
+                GeometryType.Polygon => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
+                _ => null
+            };
 
             return new SimpleRenderer(sym);
         }
@@ -456,7 +390,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
         public IMvxCommand UndoCommand => new MvxCommand(this.BtnUndo);
         public IMvxCommand CancelEditCommand => new MvxCommand(this.BtnCancelCommand);
 
-
         private bool isCollecting = false;
         public IMvxCommand StartCollectingCommand => new MvxCommand(this.StartCollecting);
         private void StartCollecting()
@@ -469,55 +402,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private void AddPoint()
         {
             //call SwitchLocatorCommand
-        }
-
-        private int GetGeometryPointsCount(Geometry geometry)
-        {
-            switch (geometry.GeometryType)
-            {
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Point:
-                    return 1;
-
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
-                    return (geometry as Polyline).Parts[0].PointCount;
-
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Polygon:
-                    return (geometry as Polygon).Parts[0].PointCount;
-
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Multipoint:
-                    return (geometry as Multipoint).Points.Count();
-                default:
-                    return 0;
-            }
-        }
-
-        private bool DoesGeometrySupportAreaCalculation(Geometry geometry)
-        {
-            if (geometry == null)
-                return false;
-
-            if (geometry.GeometryType != Esri.ArcGISRuntime.Geometry.GeometryType.Polygon || geometry.Dimension != GeometryDimension.Area)
-                return false;
-
-            var polygon = geometry as Polygon;
-            if (polygon == null)
-                return false;
-
-            if (polygon.Parts.Count < 1)
-                return false;
-
-            var readOnlyPart = polygon.Parts[0];
-            if (readOnlyPart.PointCount < 3)
-                return false;
-
-            var groupedPoints = from point in readOnlyPart.Points
-                group point by new { X = point.X, Y = point.Y } into xyPoint
-                select new { X = xyPoint.Key.X, Y = xyPoint.Key.Y, Count = xyPoint.Count() };
-
-            if (groupedPoints.Count() < 3)
-                return false;
-
-            return true;
         }
 
         private string warning;
@@ -534,7 +418,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.isWarningVisible, value);
         }
 
-        
         private string geometryArea;
         public string GeometryArea
         {

@@ -16,7 +16,6 @@ using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -34,14 +33,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
     {
         private readonly ILogger logger;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
-        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
 
         public MapDashboardViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
             IUserInteractionService userInteractionService,
             IMapService mapService,
-            IFileSystemAccessor fileSystemAccessor,
             IAssignmentDocumentsStorage assignmentsRepository,
             IPlainStorage<InterviewView> interviewViewRepository,
             IEnumeratorSettings enumeratorSettings,
@@ -49,10 +46,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IMapUtilityService mapUtilityService,
             IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
-                fileSystemAccessor, enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
+                   enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
         {
             this.logger = logger;
-            this.fileSystemAccessor = fileSystemAccessor;
             this.assignmentsRepository = assignmentsRepository;
             this.interviewViewRepository = interviewViewRepository;
             this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
@@ -84,9 +80,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => this.showAssignments;
             set => this.RaiseAndSetIfChanged(ref this.showAssignments, value);
         }
-
-        
-
         public override void Prepare(MapDashboardViewModelArgs parameter)
         {
         }
@@ -139,7 +132,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             if (ShowAssignments)
             {
-                result.AddRange(Assignments.Select(ToQuestionnaryItem));
+                result.AddRange(Assignments.Select(ToQuestionnaireItem));
             }
 
             var questionnairesList = new List<QuestionnaireItem> {AllQuestionnaireDefault};
@@ -157,7 +150,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 SelectedQuestionnaire = AllQuestionnaireDefault;
         }
 
-        private QuestionnaireItem ToQuestionnaryItem(AssignmentDocument assignmentDocument)
+        private QuestionnaireItem ToQuestionnaireItem(AssignmentDocument assignmentDocument)
         {
             return new QuestionnaireItem(
                 QuestionnaireIdentity.Parse(assignmentDocument.QuestionnaireId).QuestionnaireId.FormatGuid(),
@@ -490,7 +483,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 var interview = interviewViewRepository.GetById(interviewId);
                 if (interview != null && interview.Status == InterviewStatus.Completed)
                 {
-                    var isReopen = await userInteractionService.ConfirmAsync(
+                    var isReopen = await UserInteractionService.ConfirmAsync(
                         EnumeratorUIResources.Dashboard_Reinitialize_Interview_Message,
                         okButton: UIResources.Yes,
                         cancelButton: UIResources.No);
