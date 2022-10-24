@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -46,7 +47,11 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool InterviewerAutoUpdatesEnabled { get; set; }
             public bool NotificationsEnabled { get; set; }
             public bool PartialSynchronizationEnabled { get; set; }
+            [Required]
+            [Range(5, 1000)]
             public int GeographyQuestionAccuracyInMeters { get; set; }
+            [Required]
+            [Range(5, 1000)]
             public int GeographyQuestionPeriodInSeconds { get; set; }
         }
 
@@ -146,6 +151,9 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpPost]
         public IActionResult InterviewerSettings([FromBody] InterviewerSettingsModel message)
         {
+            if (!ModelState.IsValid)
+                return Ok(new {sucess = false});
+
             this.interviewerSettingsStorage.Store(
                 new InterviewerSettings
                 {
