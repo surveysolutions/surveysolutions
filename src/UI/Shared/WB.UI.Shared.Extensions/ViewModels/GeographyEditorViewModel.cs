@@ -179,7 +179,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             var neighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, this.MapView.SpatialReference);
             neighborsFeatureCollectionTable.Renderer = CreateRenderer(gType, Color.Blue);
             var overlappingNeighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, this.MapView.SpatialReference);
-            overlappingNeighborsFeatureCollectionTable.Renderer = CreateRenderer(gType, Color.Red);
+            overlappingNeighborsFeatureCollectionTable.Renderer = CreateRenderer(gType, Color.Orange);
 
             List<string> overlappingTitles = new List<string>();
 
