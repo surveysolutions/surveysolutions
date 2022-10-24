@@ -103,8 +103,8 @@
                     }
     
                     let borderColor = isOverlaping 
-                        ? [255, 0, 0]
-                        : (isNeighbour ? [255, 238, 0] : [255, 255, 255])
+                        ? [255, 165, 0] // orange
+                        : (isNeighbour ? [0, 0, 255] /* blue */ : [255, 255, 255])
                         
                     var fillSymbol = {
                         type: markerType,
