@@ -207,13 +207,14 @@ namespace WB.Services.Export.Questionnaire
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.NumericInteger;
             }
 
-            exportedHeaderItem.VariableName = question.VariableName;
+            var columnName = questionnaire.GetExportVariableName(question.PublicKey);
+            exportedHeaderItem.VariableName = columnName;
 
             exportedHeaderItem.ColumnHeaders = new List<HeaderColumn>()
             {
                 new HeaderColumn
                 {
-                    Name = question.VariableName,
+                    Name = columnName,
                     Title = string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText.RemoveHtmlTags() : question.VariableLabel,
                     ExportType = GetStorageType(question, exportedHeaderItem.QuestionSubType)
                 }
@@ -249,10 +250,11 @@ namespace WB.Services.Export.Questionnaire
                 {
                     exportedHeaderItem.LabelReferenceId = question.PublicKey;
 
+                    var exportVariableName = questionnaire.GetExportVariableName(question.PublicKey);
                     headerStructureForLevel.ReusableLabels[question.PublicKey] =
                         new ReusableLabels
                         (
-                            name : question.VariableName,
+                            name : exportVariableName,
                             labels : question.Answers.Select(a => new LabelItem(a.AnswerValue, a.AnswerText)).ToArray()
                         );
                 }
@@ -323,7 +325,8 @@ namespace WB.Services.Export.Questionnaire
 
             exportedHeaderItem.ColumnValues = new int[columnCount];
             exportedHeaderItem.ColumnHeaders = new List<HeaderColumn>();
-
+            var exportVariableName = questionnaire.GetExportVariableName(question.PublicKey);
+            
             for (int i = 0; i < columnCount; i++)
             {
                 HeaderColumn headerColumn = new HeaderColumn();
@@ -331,7 +334,7 @@ namespace WB.Services.Export.Questionnaire
                 
                 if (isQuestionLinked || isMultiCombobox || asCategorical == null)
                 {
-                    headerColumn.Name = string.Format(GeneratedTitleExportFormat, question.VariableName, i);
+                    headerColumn.Name = string.Format(GeneratedTitleExportFormat, exportVariableName, i);
                 }
                 else
                 {
@@ -340,7 +343,7 @@ namespace WB.Services.Export.Questionnaire
                         : int.Parse(question.Answers[i].AnswerValue);
 
                     headerColumn.Name = string.Format(GeneratedTitleExportFormat,
-                        question.VariableName, DecimalToHeaderConverter.ToHeader(columnValue));
+                        exportVariableName, DecimalToHeaderConverter.ToHeader(columnValue));
 
                     exportedHeaderItem.ColumnValues[i] = columnValue;
                 }
@@ -681,11 +684,13 @@ namespace WB.Services.Export.Questionnaire
                 ? question.QuestionText
                 : question.VariableLabel;
 
+            var columnName = questionnaire.GetExportVariableName(question.PublicKey);
+            
             foreach (var column in gpsColumns)
             {
                 gpsQuestionExportHeader.ColumnHeaders.Add(new HeaderColumn()
                 {
-                    Name = string.Format(GeneratedTitleExportFormat, question.VariableName, column),
+                    Name = string.Format(GeneratedTitleExportFormat, columnName, column),
                     Title = $"{questionLabel}: {column}",
                     ExportType = string.Compare(column, "timestamp", StringComparison.OrdinalIgnoreCase) == 0 ? ExportValueType.DateTime : ExportValueType.Numeric
                 });
@@ -709,20 +714,7 @@ namespace WB.Services.Export.Questionnaire
                 ? question.QuestionText.RemoveHtmlTags()
                 : question.VariableLabel;
 
-            var columnName = question.VariableName;
-
-            const int maxAreaNameLength = 26;
-            if (columnName.Length > maxAreaNameLength)
-            {
-                var shortColumnName = string.Concat(question.VariableName.Take(maxAreaNameLength));
-                var uniquesNames = new HashSet<string>(
-                    headerStructureForLevel.HeaderItems.Values.SelectMany(eh =>
-                    eh.ColumnHeaders
-                        .Where(c => c.Name.Length >= maxAreaNameLength && c.Name.StartsWith(shortColumnName))
-                        .Select(c => c.Name.Split("__")[0])
-                    ));
-                columnName = shortColumnName + uniquesNames.Count;
-            }
+            var columnName = questionnaire.GetExportVariableName(question.PublicKey);
 
             areaQuestionExportHeader.ColumnHeaders.Add(new HeaderColumn()
             {
@@ -737,7 +729,7 @@ namespace WB.Services.Export.Questionnaire
                 {
                     Name = string.Format(GeneratedTitleExportFormat, columnName, column),
                     Title = $"{questionLabel}: {column}",
-                    ExportType = string.Compare(column, "Num", StringComparison.OrdinalIgnoreCase) == 0 
+                    ExportType = string.Compare(column, "num", StringComparison.OrdinalIgnoreCase) == 0 
                         ? ExportValueType.NumericInt 
                         : ExportValueType.Numeric
                 });

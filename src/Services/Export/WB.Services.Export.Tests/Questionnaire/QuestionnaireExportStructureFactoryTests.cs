@@ -303,8 +303,8 @@ namespace WB.Services.Export.Tests.Questionnaire
             HeaderStructureForLevel rosterStructureForLevel = questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
             var areaColumnHeaders = rosterStructureForLevel.HeaderItems[Id.g1].ColumnHeaders;
 
-            var shortVariable = "area_variable_has_long_nam0";
-            Assert.That(areaColumnHeaders[0].Name.Length, Is.EqualTo(27));
+            var shortVariable = "area_variable_has_long_na1";
+            Assert.That(areaColumnHeaders[0].Name.Length, Is.EqualTo(26));
             Assert.That(areaColumnHeaders[0].Name, Is.EqualTo(shortVariable));
             Assert.That(areaColumnHeaders[1].Name, Is.EqualTo(shortVariable + "__area"));
             Assert.That(areaColumnHeaders[2].Name, Is.EqualTo(shortVariable + "__len"));
@@ -365,8 +365,8 @@ namespace WB.Services.Export.Tests.Questionnaire
             HeaderStructureForLevel rosterStructureForLevel = questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
             
             var areaColumnHeaders1 = rosterStructureForLevel.HeaderItems[Id.g1].ColumnHeaders;
-            var shortVariable1 = "area_variable_has_long_nam0";
-            Assert.That(areaColumnHeaders1[0].Name.Length, Is.EqualTo(27));
+            var shortVariable1 = "area_variable_has_long_na1";
+            Assert.That(areaColumnHeaders1[0].Name.Length, Is.EqualTo(26));
             Assert.That(areaColumnHeaders1[0].Name, Is.EqualTo(shortVariable1));
             Assert.That(areaColumnHeaders1[1].Name, Is.EqualTo(shortVariable1 + "__area"));
             Assert.That(areaColumnHeaders1[2].Name, Is.EqualTo(shortVariable1 + "__len"));
@@ -374,8 +374,8 @@ namespace WB.Services.Export.Tests.Questionnaire
             Assert.That(areaColumnHeaders1[4].Name, Is.EqualTo(shortVariable1 + "__racc"));
 
             var areaColumnHeaders2 = rosterStructureForLevel.HeaderItems[Id.g2].ColumnHeaders;
-            var shortVariable2 = "area_variable_has_long_nam1";
-            Assert.That(areaColumnHeaders2[0].Name.Length, Is.EqualTo(27));
+            var shortVariable2 = "area_variable_has_long_na2";
+            Assert.That(areaColumnHeaders2[0].Name.Length, Is.EqualTo(26));
             Assert.That(areaColumnHeaders2[0].Name, Is.EqualTo(shortVariable2));
             Assert.That(areaColumnHeaders2[1].Name, Is.EqualTo(shortVariable2 + "__area"));
             Assert.That(areaColumnHeaders2[2].Name, Is.EqualTo(shortVariable2 + "__len"));
@@ -425,8 +425,8 @@ namespace WB.Services.Export.Tests.Questionnaire
             HeaderStructureForLevel rosterStructureForLevel = questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>(new []{Id.gA})];
             
             var areaColumnHeaders1 = rosterStructureForLevel.HeaderItems[Id.g1].ColumnHeaders;
-            var shortVariable1 = "area_variable_has_long_nam0";
-            Assert.That(areaColumnHeaders1[0].Name.Length, Is.EqualTo(27));
+            var shortVariable1 = "area_variable_has_long_na1";
+            Assert.That(areaColumnHeaders1[0].Name.Length, Is.EqualTo(26));
             Assert.That(areaColumnHeaders1[0].Name, Is.EqualTo(shortVariable1));
             Assert.That(areaColumnHeaders1[1].Name, Is.EqualTo(shortVariable1 + "__area"));
             Assert.That(areaColumnHeaders1[2].Name, Is.EqualTo(shortVariable1 + "__len"));
@@ -434,8 +434,8 @@ namespace WB.Services.Export.Tests.Questionnaire
             Assert.That(areaColumnHeaders1[4].Name, Is.EqualTo(shortVariable1 + "__racc"));
 
             var areaColumnHeaders2 = rosterStructureForLevel.HeaderItems[Id.g2].ColumnHeaders;
-            var shortVariable2 = "area_variable_has_long_nam1";
-            Assert.That(areaColumnHeaders2[0].Name.Length, Is.EqualTo(27));
+            var shortVariable2 = "area_variable_has_long_na2";
+            Assert.That(areaColumnHeaders2[0].Name.Length, Is.EqualTo(26));
             Assert.That(areaColumnHeaders2[0].Name, Is.EqualTo(shortVariable2));
             Assert.That(areaColumnHeaders2[1].Name, Is.EqualTo(shortVariable2 + "__area"));
             Assert.That(areaColumnHeaders2[2].Name, Is.EqualTo(shortVariable2 + "__len"));
@@ -485,8 +485,8 @@ namespace WB.Services.Export.Tests.Questionnaire
             HeaderStructureForLevel rosterStructureForLevel = questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>(new []{Id.gA})];
             
             var areaColumnHeaders1 = rosterStructureForLevel.HeaderItems[Id.g1].ColumnHeaders;
-            var shortVariable1 = "area_variable_has_long_nam0";
-            Assert.That(areaColumnHeaders1[0].Name.Length, Is.EqualTo(27));
+            var shortVariable1 = "area_variable_has_long_na1";
+            Assert.That(areaColumnHeaders1[0].Name.Length, Is.EqualTo(26));
             Assert.That(areaColumnHeaders1[0].Name, Is.EqualTo(shortVariable1));
             Assert.That(areaColumnHeaders1[1].Name, Is.EqualTo(shortVariable1 + "__area"));
             Assert.That(areaColumnHeaders1[2].Name, Is.EqualTo(shortVariable1 + "__len"));
@@ -496,8 +496,8 @@ namespace WB.Services.Export.Tests.Questionnaire
 
             HeaderStructureForLevel rosterStructureForLevel2 = questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>(new []{Id.gC})];
             var areaColumnHeaders2 = rosterStructureForLevel2.HeaderItems[Id.g2].ColumnHeaders;
-            var shortVariable2 = "area_variable_has_long_nam0";
-            Assert.That(areaColumnHeaders2[0].Name.Length, Is.EqualTo(27));
+            var shortVariable2 = "area_variable_has_long_na2";
+            Assert.That(areaColumnHeaders2[0].Name.Length, Is.EqualTo(26));
             Assert.That(areaColumnHeaders2[0].Name, Is.EqualTo(shortVariable2));
             Assert.That(areaColumnHeaders2[1].Name, Is.EqualTo(shortVariable2 + "__area"));
             Assert.That(areaColumnHeaders2[2].Name, Is.EqualTo(shortVariable2 + "__len"));
