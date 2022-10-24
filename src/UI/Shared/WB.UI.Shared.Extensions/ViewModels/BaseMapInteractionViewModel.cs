@@ -27,7 +27,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
     {
         protected const string ShapefileLayerName = "shapefile";
 
-        readonly ILogger logger;
+        protected readonly ILogger logger;
         private readonly IMapService mapService;
         protected readonly IUserInteractionService UserInteractionService;
         protected readonly IMvxNavigationService NavigationService;
@@ -288,22 +288,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (this.MapView != null)
                 await this.MapView.SetViewpointScaleAsync(this.MapView.MapScale * 1.3);
-        });
-
-        public IMvxCommand SaveAreaCommand => new MvxCommand(() =>
-        {
-            if (this.MapView.SketchEditor != null)
-            {
-                var command = this.MapView.SketchEditor.CompleteCommand;
-                if (this.MapView.SketchEditor.CompleteCommand.CanExecute(command))
-                {
-                    this.MapView.SketchEditor.CompleteCommand.Execute(command);
-                }
-                else
-                {
-                    this.UserInteractionService.ShowToast(UIResources.AreaMap_NoChangesInfo);
-                }
-            }
         });
 
         public IMvxAsyncCommand LoadShapefile => new MvxAsyncCommand(async () =>

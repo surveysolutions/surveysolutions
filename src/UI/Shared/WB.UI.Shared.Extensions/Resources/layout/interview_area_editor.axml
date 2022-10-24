@@ -136,7 +136,7 @@
             android:layout_alignParentRight="true"
             style="@style/Area_Screen_Button_Bordered"
             android:id="@+id/areaEditor_AddPoint"
-            local:MvxBind="Click AddPointCommand; Text 'Add point'; Enabled IsCanAddPoint; Visible Not(IsManual);"
+            local:MvxBind="Click AddPointCommand; Text 'Add point'; Enabled CanAddPoint; Visible Not(IsManual);"
             android:layout_marginRight="@dimen/area_editor_common_margin_right"
             android:layout_marginBottom="@dimen/area_editor_zoom_in_margin_bottom" />
 
@@ -145,7 +145,7 @@
             android:layout_alignParentRight="true"
             style="@style/Area_Screen_Button_Bordered"
             android:id="@+id/areaEditor_StartMeasurement"
-            local:MvxBind="Click StartCollectingCommand; Text 'Start(Stop)'; Enabled True; Visible Not(IsManual);"
+            local:MvxBind="Click StartStopCollectingCommand; Text 'Start(Stop)'; Enabled CanStartStopCollecting; Visible Not(IsManual);"
             android:layout_marginRight="@dimen/area_editor_common_margin_right"
             android:layout_marginBottom="@dimen/area_editor_zoom_out_margin_bottom" />
     
