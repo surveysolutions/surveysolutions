@@ -527,7 +527,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             while (true)
             {
-                AddPointToCollection();
+                await AddPointToCollection();
                 await Task.Delay(interval, cancellationToken);
             }
         }
