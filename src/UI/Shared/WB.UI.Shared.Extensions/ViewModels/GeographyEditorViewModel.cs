@@ -509,7 +509,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     collectionCancellationTokenSource = new CancellationTokenSource();
                     TimeSpan period = TimeSpan.FromSeconds(RequestedFrequency ?? 10);
-                    await PeriodicCollectionAsync(period, collectionCancellationTokenSource.Token);
+                    _ = Task.Run(() => PeriodicCollectionAsync(period, collectionCancellationTokenSource.Token));
                 }
             }
         }
