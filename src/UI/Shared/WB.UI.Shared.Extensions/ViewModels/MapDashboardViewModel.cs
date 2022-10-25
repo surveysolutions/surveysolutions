@@ -31,7 +31,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
 {
     public class MapDashboardViewModel: BaseMapInteractionViewModel<MapDashboardViewModelArgs>
     {
-        private readonly ILogger logger;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
 
@@ -48,7 +47,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
                    enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
         {
-            this.logger = logger;
             this.assignmentsRepository = assignmentsRepository;
             this.interviewViewRepository = interviewViewRepository;
             this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
