@@ -186,6 +186,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
             else
             {
+                collectionCancellationTokenSource.Cancel();
+
                 SaveGeometry(locationOverlay.Graphics[0].Geometry,null);
                 await FinishEditing();
             }
@@ -510,16 +512,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     await PeriodicCollectionAsync(period, collectionCancellationTokenSource.Token);
                 }
             }
-            else
-            {
-                locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
-                if (RequestedGeometryInputMode == GeometryInputMode.Automatic)
-                {
-                    collectionCancellationTokenSource.Cancel();
-                }
-                
-                //create geometry ready to be saved
-            }
         }
 
         CancellationTokenSource collectionCancellationTokenSource;
@@ -532,7 +524,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        private MapPoint lastPosition { set; get; } = null;
+        private MapPoint LastPosition { set; get; } = null;
 
         private void LocationDataSourceOnLocationChanged(object sender, Location e)
         {
@@ -548,7 +540,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             if (e.HorizontalAccuracy <= RequestedAccuracy)
             {
-                lastPosition = e.Position;
+                LastPosition = e.Position;
                 
                 if (RequestedGeometryInputMode == GeometryInputMode.Semiautomatic)
                 {
@@ -569,9 +561,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             try
             {
-                if (lastPosition != null)
+                if (LastPosition != null)
                 {
-                    var lastPositionProjected = GeometryEngine.Project(lastPosition, polylineBuilder.SpatialReference) as MapPoint;
+                    var lastPositionProjected = GeometryEngine.Project(LastPosition, polylineBuilder.SpatialReference) as MapPoint;
                     locationOverlay.Graphics.Add(new Graphic(lastPositionProjected));
 
                     if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
@@ -735,6 +727,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
                 locationDataSource.StopAsync();
             }
+
+            collectionCancellationTokenSource.Cancel();
+            collectionCancellationTokenSource.Dispose();
 
             base.Dispose();
         }
