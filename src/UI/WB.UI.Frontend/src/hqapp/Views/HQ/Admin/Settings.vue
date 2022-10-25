@@ -195,12 +195,15 @@
                             <input
                                 class="form-control number"
                                 v-model.number="geographyQuestionAccuracyInMeters"
-                                v-validate="{ required: true, min_value: 10 || Number.MIN_VALUE, max_value: 1000 || Number.MAX_VALUE }"
+                                v-validate="{ required: true, min_value: 5, max_value: 1000 }"
                                 @change="updateDeviceSettings"
                                 id="interviewerGeographyQuestionAccuracyInMeters"
-                                type="number"
-                                min="5"
-                                max="1000" />
+                                type="text"
+                                v-numericFormatting="{
+                                    decimalPlaces: 0,
+                                    minimumValue: '5',
+                                    maximumValue: '1000'
+                                }"/>
                         </div>
                     </div>
                 </div>
@@ -221,12 +224,15 @@
                             <input
                                 class="form-control number"
                                 v-model.number="geographyQuestionPeriodInSeconds"
-                                v-validate="{ required: true, min_value: 10, max_value: 1000 }"
+                                v-validate="{ required: true, min_value: 5, max_value: 1000 }"
                                 @change="updateDeviceSettings"
                                 id="interviewerGeographyQuestionPeriodInSeconds"
-                                type="number"
-                                min="5"
-                                max="1000" />
+                                type="text"
+                                v-numericFormatting="{
+                                    decimalPlaces: 0,
+                                    minimumValue: '5',
+                                    maximumValue: '1000'
+                                }"/>
                         </div>
                     </div>
                 </div>
@@ -438,6 +444,11 @@ export default {
             )
         },
         updateDeviceSettings() {
+            if (this.geographyQuestionAccuracyInMeters < 5 && this.geographyQuestionAccuracyInMeters > 1000)
+                return
+            if (this.geographyQuestionPeriodInSeconds < 5 && this.geographyQuestionPeriodInSeconds > 1000)
+                return
+
             return this.$hq.AdminSettings.setInterviewerSettings(
                 this.isInterviewerAutomaticUpdatesEnabled,
                 this.isDeviceNotificationsEnabled,
