@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Core;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
@@ -54,7 +55,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
         public string Title { set; get; }
 
         public bool IsManual => RequestedGeometryInputMode == GeometryInputMode.Manual;
-        public bool CanAddPoint { set; get; } = false;
 
         public override void Prepare(GeographyEditorViewModelArgs parameter)
         {
@@ -168,7 +168,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         }
 
 
-        public IMvxCommand SaveAreaCommand => new MvxAsyncCommand(async() =>
+        public IMvxAsyncCommand SaveAreaCommand => new MvxAsyncCommand(async() =>
         {
             if (IsManual)
             {
@@ -189,7 +189,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 //stop location collection
                 //get geometry
-                SaveGeometry(locationOverlay.Graphics[0].Geometry ,null);
+                SaveGeometry(locationOverlay.Graphics[0].Geometry,null);
                 await FinishEditing();
             }
         });
@@ -404,6 +404,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private async Task StartAuto()
         {
+            StartButtonText = "Initiating...";
+            IsLocationServiceSwitchEnabled = false;
+
             if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
             {
                 //init map overlay
@@ -415,17 +418,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
 
             locationOverlay = new GraphicsOverlay();
-            SimpleMarkerSymbol locationPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Yellow, 3);
+            SimpleMarkerSymbol locationPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Blue, 6);
             locationOverlay.Renderer = new SimpleRenderer(locationPointSymbol);
             this.MapView.GraphicsOverlays.Add(locationOverlay);
 
             //project and use current map
-            polylineBuilder = new PolylineBuilder(SpatialReferences.WebMercator);
-            
+            polylineBuilder = new PolylineBuilder(this.MapView.SpatialReference);
+
             if (this.Geometry == null)
             {
                 {
-
                     try
                     {
                         await locationDataSource.StartAsync();
@@ -436,6 +438,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                             this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Recenter;
 
                             CanStartStopCollecting = true;
+                            StartButtonText = "Start";
                         }
                         else
                         {
@@ -494,8 +497,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
         public IMvxCommand CancelEditCommand => new MvxCommand(this.BtnCancelCommand);
 
         private bool isCollecting = false;
-        public IMvxAsyncCommand StartStopCollectingCommand => new MvxAsyncCommand(this.StartStopCollecting);
-        private async Task StartStopCollecting()
+        public IMvxAsyncCommand StartStopCollectingCommand => new MvxAsyncCommand(this.StartCollecting);
+        private async Task StartCollecting()
         {
             isCollecting = !isCollecting;
 
@@ -531,13 +534,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 await Task.Delay(interval, cancellationToken);
             }
         }
-        
-        private MapPoint lastPosition = null;
-        
+
+        private MapPoint lastPosition { set; get; } = null;
+
         private void LocationDataSourceOnLocationChanged(object sender, Location e)
         {
             //filter values that not fulfill accuracy condition
             //save the latest value to temp storage
+
+            var source = e.AdditionalSourceProperties.ContainsKey("positionSource")
+                ? e.AdditionalSourceProperties["positionSource"]
+                : "unknown";
+
+            this.UserInteractionService.ShowToast(
+                $"Position: {e.Position}; e.HorizontalAccuracy: {e.HorizontalAccuracy}; Source: {source}"); 
+
             if (e.HorizontalAccuracy <= RequestedAccuracy)
             {
                 lastPosition = e.Position;
@@ -549,34 +560,50 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        public IMvxCommand AddPointCommand => new MvxCommand(this.AddPoint);
-        private void AddPoint()
+        public IMvxCommand AddPointCommand => new MvxAsyncCommand(async() => await this.AddPoint());
+        private async Task AddPoint()
         {
             // manually add point from last position
             CanAddPoint = false;
-            AddPointToCollection();
+            await AddPointToCollection();
         }
 
-        private void AddPointToCollection()
+        private async Task AddPointToCollection()
         {
-            if (lastPosition != null)
+            try
             {
-                polylineBuilder.AddPoint(lastPosition);
-                locationOverlay.Graphics.Add(new Graphic(lastPosition));
-            }
+                if (lastPosition != null)
+                {
+                    var lastPositionProjected = GeometryEngine.Project(lastPosition, polylineBuilder.SpatialReference) as MapPoint;
+                    locationOverlay.Graphics.Add(new Graphic(lastPositionProjected));
 
-            if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
-            {
-                // Remove the old line.
-                locationLineOverlay.Graphics.Clear();
-                // Add the updated line.
-                locationLineOverlay.Graphics.Add(new Graphic(polylineBuilder.ToGeometry()));
-            }
+                    if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
+                    {
+                        polylineBuilder.AddPoint(lastPositionProjected);
 
-            if (RequestedGeometryType == GeometryType.Point)
-            {
-                //stop collection on first point collected
+                        // Remove the old line.
+                        locationLineOverlay.Graphics.Clear();
+                        // Add the updated line.
+                        locationLineOverlay.Graphics.Add(new Graphic(polylineBuilder.ToGeometry()));
+                    }
+                    
+                    if (RequestedGeometryType == GeometryType.Point)
+                    {
+                        //stop collection on first point collected
+                        if (SaveAreaCommand.CanExecute())
+                            await SaveAreaCommand.ExecuteAsync();
+                    }
+
+                    this.CanSave = RequestedGeometryType != GeometryType.Polygon || ((Polygon)locationOverlay.Graphics[0].Geometry).Parts[0].Points.Count > 2;
+
+                }
             }
+            catch (Exception e)
+            {
+                logger.Error("Error on adding point", e);
+                throw;
+            }
+            
         }
 
         private string warning;
@@ -605,6 +632,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             get => this.geometryLengthLabel;
             set => this.RaiseAndSetIfChanged(ref this.geometryLengthLabel, value);
+        }
+
+        private string startButtonText;
+        public string StartButtonText
+        {
+            get => this.startButtonText;
+            set => this.RaiseAndSetIfChanged(ref this.startButtonText, value);
         }
 
         private bool isEditing;
@@ -658,6 +692,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.isInProgress, value);
         }
 
+        private bool canAddPoint;
+        public bool CanAddPoint
+        {
+            get => this.canAddPoint;
+            set => this.RaiseAndSetIfChanged(ref this.canAddPoint, value);
+        }
+
         private bool isPanelVisible;
         public bool IsPanelVisible
         {
@@ -689,5 +730,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.MapView?.SketchEditor.ReplaceGeometry(geometry);
             }
         });
+
+        public override void Dispose()
+        {
+            if (locationDataSource != null)
+            {
+                locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
+                locationDataSource.StopAsync();
+            }
+
+            base.Dispose();
+        }
     }
 }

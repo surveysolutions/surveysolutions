@@ -145,7 +145,7 @@
             android:layout_alignParentRight="true"
             style="@style/Area_Screen_Button_Bordered"
             android:id="@+id/areaEditor_StartMeasurement"
-            local:MvxBind="Click StartStopCollectingCommand; Text 'Start(Stop)'; Enabled CanStartStopCollecting; Visible Not(IsManual);"
+            local:MvxBind="Click StartStopCollectingCommand; Text StartButtonText; Enabled CanStartStopCollecting; Visible Not(IsManual);"
             android:layout_marginRight="@dimen/area_editor_common_margin_right"
             android:layout_marginBottom="@dimen/area_editor_zoom_out_margin_bottom" />
     
@@ -199,29 +199,7 @@
                 android:gravity="left"
                 android:duplicateParentState="true"
                 android:id="@+id/areaEditor_Warnings"
-                local:MvxBind="Text Warning; Visibility Visibility(IsWarningVisible);" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/area_editor_common_margin_left"
-                android:fontFamily="Roboto"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:gravity="left"
-                android:duplicateParentState="true"
-                android:id="@+id/areaEditor_GeometryArea"
-                local:MvxBind="Text GeometryArea; Visibility Visibility(IsGeometryAreaVisible);" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/area_editor_common_margin_left"
-                android:fontFamily="Roboto"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:gravity="left"
-                android:duplicateParentState="true"
-                android:id="@+id/areaEditor_GeometryLength"
-                local:MvxBind="Text GeometryLengthLabel; Visibility Visibility(IsGeometryLengthVisible);" />
+                local:MvxBind="Text Warning; Visibility Visibility(IsWarningVisible);" />            
         </LinearLayout>
         <LinearLayout
             android:layout_gravity="left"

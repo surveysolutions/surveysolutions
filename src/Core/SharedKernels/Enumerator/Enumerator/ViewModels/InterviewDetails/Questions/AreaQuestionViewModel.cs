@@ -193,7 +193,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             area: this.answer,
                             geometryType: geometryType,
                             requestedGeometryInputMode: requestedGeometryMode,
-                            requestedAccuracy: 10, //load from settings
+                            requestedAccuracy: 30, //load from settings
                             requestedFrequency: 10, //load from settings
                             geographyNeighbors: neighbors,
                             title: question.Parent.Title.Text
