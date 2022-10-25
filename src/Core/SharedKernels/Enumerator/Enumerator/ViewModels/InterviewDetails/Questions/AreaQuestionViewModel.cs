@@ -48,7 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireRepository,
             QuestionStateViewModel<AreaQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering,
+            IEnumeratorSettings settings)
         {
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
@@ -66,7 +67,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userInteractionService = userInteractionService;
 
             this.questionnaireRepository = questionnaireRepository;
+
+            this.Settings = settings;
         }
+
+        public IEnumeratorSettings Settings { get; set; }
 
         public Guid Id { get; } = Guid.NewGuid();
         
@@ -193,8 +198,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             area: this.answer,
                             geometryType: geometryType,
                             requestedGeometryInputMode: requestedGeometryMode,
-                            requestedAccuracy: 30, //load from settings
-                            requestedFrequency: 10, //load from settings
+                            requestedAccuracy: Settings.GeographyQuestionAccuracyInMeters,
+                            requestedFrequency: Settings.GeographyQuestionPeriodInSeconds,
                             geographyNeighbors: neighbors,
                             title: question.Parent.Title.Text
                             ))

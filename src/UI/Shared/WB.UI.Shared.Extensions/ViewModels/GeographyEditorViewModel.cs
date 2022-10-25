@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac.Core;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
@@ -187,8 +186,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
             else
             {
-                //stop location collection
-                //get geometry
                 SaveGeometry(locationOverlay.Graphics[0].Geometry,null);
                 await FinishEditing();
             }
@@ -412,13 +409,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 //init map overlay
                 locationLineOverlay = new GraphicsOverlay();
                 SimpleLineSymbol locationLineSymbol =
-                    new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 2);
+                    new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 3);
                 locationLineOverlay.Renderer = new SimpleRenderer(locationLineSymbol);
                 this.MapView.GraphicsOverlays.Add(locationLineOverlay);
             }
 
             locationOverlay = new GraphicsOverlay();
-            SimpleMarkerSymbol locationPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Blue, 6);
+            SimpleMarkerSymbol locationPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Blue, 5);
             locationOverlay.Renderer = new SimpleRenderer(locationPointSymbol);
             this.MapView.GraphicsOverlays.Add(locationOverlay);
 
