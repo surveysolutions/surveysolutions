@@ -127,6 +127,8 @@
                 android:textColor="@android:color/holo_red_light"
                 android:gravity="left"
                 android:duplicateParentState="true"
+                android:singleLine="false"
+                android:maxLines="2"
                 android:id="@+id/areaEditor_Warnings"
                 local:MvxBind="Text Warning; Visible And(IsWarningVisible, Not(IsPanelVisible));"/>
     </LinearLayout>
