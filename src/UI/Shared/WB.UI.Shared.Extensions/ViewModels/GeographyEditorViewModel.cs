@@ -118,6 +118,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
                 }
 
+                await DrawNeighborsAsync(this.RequestedGeometryType, this.Geometry, this.GeographyNeighbors).ConfigureAwait(false);
+
                 var result = await GetGeometry().ConfigureAwait(false);
 
                 var position = this.MapView?.LocationDisplay?.Location?.Position;
@@ -393,8 +395,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public override async Task OnMapLoaded()
         {
-            await DrawNeighborsAsync(this.RequestedGeometryType, this.Geometry, this.GeographyNeighbors).ConfigureAwait(false);
-            
             if (IsManual)
                 await StartEditingGeometry();
             else
@@ -420,6 +420,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             SimpleMarkerSymbol locationPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Blue, 5);
             locationOverlay.Renderer = new SimpleRenderer(locationPointSymbol);
             this.MapView.GraphicsOverlays.Add(locationOverlay);
+
+            await DrawNeighborsAsync(this.RequestedGeometryType, this.Geometry, this.GeographyNeighbors).ConfigureAwait(false);
 
             //project and use current map
             polylineBuilder = new PolylineBuilder(this.MapView.SpatialReference);
@@ -719,6 +721,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                 this.MapView?.SketchEditor.ClearGeometry();
                 this.MapView?.SketchEditor.ReplaceGeometry(geometry);
+                
+                await DrawNeighborsAsync(this.RequestedGeometryType, geometry, this.GeographyNeighbors).ConfigureAwait(false);
             }
         });
 
@@ -730,8 +734,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 locationDataSource.StopAsync();
             }
 
-            collectionCancellationTokenSource.Cancel();
-            collectionCancellationTokenSource.Dispose();
+            collectionCancellationTokenSource?.Cancel();
+            collectionCancellationTokenSource?.Dispose();
 
             base.Dispose();
         }
