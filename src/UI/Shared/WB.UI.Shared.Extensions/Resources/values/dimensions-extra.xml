@@ -8,7 +8,7 @@
     <dimen name="area_editor_common_margin_right">30dp</dimen>
     <dimen name="area_editor_common_margin_left">20dp</dimen>
     <dimen name="area_editor_lower_panel_margin_bottom">28dp</dimen>
-    <dimen name="area_editor_undo_margin_top">95dp</dimen>
+    <dimen name="area_editor_undo_margin_top">100dp</dimen>
     <dimen name="area_editor_zoom_out_margin_bottom">130dp</dimen>
     <dimen name="area_editor_zoom_in_margin_bottom">200dp</dimen>
     <dimen name="area_editor_compass_margin_bottom">270dp</dimen>

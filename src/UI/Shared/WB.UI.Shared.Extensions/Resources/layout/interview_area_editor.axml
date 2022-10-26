@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" />
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout 
+        android:id="@+id/area_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <com.google.android.material.appbar.AppBarLayout
@@ -46,6 +47,7 @@
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    
     <LinearLayout
         android:clickable="true"
         android:layout_alignParentTop="true"
@@ -107,6 +109,26 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|right" />
         </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:id="@+id/area_warning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:orientation="vertical">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/area_editor_common_margin_left"
+                android:textSize="@dimen/area_editor_text_size_regular"
+                android:textStyle="bold"
+                android:textColor="@android:color/holo_red_light"
+                android:gravity="left"
+                android:duplicateParentState="true"
+                android:id="@+id/areaEditor_Warnings"
+                local:MvxBind="Text Warning; Visible And(IsWarningVisible, Not(IsPanelVisible));"/>
     </LinearLayout>
     <Button
         android:layout_alignParentTop="true"
@@ -178,29 +200,6 @@
         android:gravity="center_vertical|right"
         android:clickable="true"
         local:MvxBind="Visible Not(IsPanelVisible);">
-        <LinearLayout
-            android:layout_alignParentLeft="true"
-            android:id="@+id/area_stats"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:layout_weight="0.6"
-            android:duplicateParentState="true"
-            android:gravity="center_vertical|left"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/area_editor_common_margin_left"
-                android:fontFamily="Roboto"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/holo_red_light"
-                android:gravity="left"
-                android:duplicateParentState="true"
-                android:id="@+id/areaEditor_Warnings"
-                local:MvxBind="Text Warning; Visibility Visibility(IsWarningVisible);" />            
-        </LinearLayout>
         <LinearLayout
             android:layout_gravity="left"
             android:layout_weight="0.4"

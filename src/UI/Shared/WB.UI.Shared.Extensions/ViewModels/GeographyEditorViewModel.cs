@@ -275,9 +275,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 var maxTitlesDisplay = 2;
                 var message = string.Format(UIResources.AreaMap_OverlapsWith, this.Title)
-                              + "\r\n - " + string.Join("\r\n - ", overlappingTitles.Take(maxTitlesDisplay).ToArray());
+                              + " " + string.Join(", ", overlappingTitles.Take(maxTitlesDisplay).ToArray());
                 if (overlappingTitles.Count > maxTitlesDisplay)
-                    message += "\r\n" + string.Format(UIResources.AreaMap_OverlapsWithOther,
+                    message += " " + string.Format(UIResources.AreaMap_OverlapsWithOther,
                         overlappingTitles.Count - maxTitlesDisplay);
                 this.Warning = message;
             }
