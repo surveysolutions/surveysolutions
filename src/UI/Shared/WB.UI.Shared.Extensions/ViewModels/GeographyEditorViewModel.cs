@@ -497,7 +497,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private bool isCollecting = false;
         public IMvxAsyncCommand StartStopCollectingCommand => new MvxAsyncCommand(this.StartCollecting);
-        private async Task StartCollecting()
+        private Task StartCollecting()
         {
             isCollecting = !isCollecting;
 
@@ -512,6 +512,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     _ = Task.Run(() => PeriodicCollectionAsync(period, collectionCancellationTokenSource.Token));
                 }
             }
+
+            return Task.CompletedTask;
         }
 
         CancellationTokenSource collectionCancellationTokenSource;
