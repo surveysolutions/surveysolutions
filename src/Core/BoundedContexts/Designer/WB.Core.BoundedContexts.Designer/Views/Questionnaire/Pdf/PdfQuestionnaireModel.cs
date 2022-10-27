@@ -356,7 +356,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 case QuestionType.Multimedia:
                     return PdfStrings.QuestionType_Picture;
                 case QuestionType.Area:
-                    return PdfStrings.QuestionType_Area;
+                    var type = question.Properties?.GeometryType ?? GeometryType.Polygon;
+                    string displayTypeName = type switch
+                    {
+                        GeometryType.Polygon => PdfStrings.QuestionType_Area_Polygon,
+                        GeometryType.Polyline => PdfStrings.QuestionType_Area_Polyline,
+                        GeometryType.Multipoint => PdfStrings.QuestionType_Area_Multipoint,
+                        GeometryType.Point => PdfStrings.QuestionType_Area_Point,
+                        _ => throw new ArgumentOutOfRangeException(nameof(type), "Unexpected value")
+                    };
+                    return $"{PdfStrings.QuestionType_Area} {displayTypeName}";
                 case QuestionType.Audio:
                     return PdfStrings.QuestionType_Audio;
                 default:
