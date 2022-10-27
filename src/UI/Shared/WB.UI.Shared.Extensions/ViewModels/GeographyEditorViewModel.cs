@@ -34,7 +34,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private readonly LocationDataSource locationDataSource = new SystemLocationDataSource();
         private GraphicsOverlay locationOverlay;
         private GraphicsOverlay locationLineOverlay;
-        private PolylineBuilder polylineBuilder;
+        private PolylineBuilder polylineBuilder;        
 
         public GeographyEditorViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService, 
             IMapService mapService, IUserInteractionService userInteractionService, ILogger logger,
@@ -188,9 +188,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
             else
             {
-                collectionCancellationTokenSource.Cancel();
+                collectionCancellationTokenSource?.Cancel();
 
-                SaveGeometry(locationOverlay.Graphics[0].Geometry,null);
+                SaveGeometry(polylineBuilder.ToGeometry(), null);
                 await FinishEditing();
             }
         });
@@ -405,6 +405,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             StartButtonText = "Initiating...";
             IsLocationServiceSwitchEnabled = false;
+            AddPointVisible = false;
 
             if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
             {
@@ -421,13 +422,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
             locationOverlay.Renderer = new SimpleRenderer(locationPointSymbol);
             this.MapView.GraphicsOverlays.Add(locationOverlay);
 
-            await DrawNeighborsAsync(this.RequestedGeometryType, this.Geometry, this.GeographyNeighbors).ConfigureAwait(false);
+            //await DrawNeighborsAsync(this.RequestedGeometryType, this.Geometry, this.GeographyNeighbors).ConfigureAwait(false);
 
             //project and use current map
             polylineBuilder = new PolylineBuilder(this.MapView.SpatialReference);
 
             if (this.Geometry == null)
             {
+                StartButtonVisible = true;
+
                 {
                     try
                     {
@@ -503,6 +506,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             isCollecting = !isCollecting;
 
+            StartButtonVisible = false;
+
+            if (RequestedGeometryInputMode == GeometryInputMode.Semiautomatic)
+                AddPointVisible = true;
+
             if (isCollecting)
             {
                 locationDataSource.LocationChanged += LocationDataSourceOnLocationChanged;
@@ -511,7 +519,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     collectionCancellationTokenSource = new CancellationTokenSource();
                     TimeSpan period = TimeSpan.FromSeconds(RequestedFrequency ?? 10);
-                    _ = Task.Run(() => PeriodicCollectionAsync(period, collectionCancellationTokenSource.Token));
+                    Task.Run(() => PeriodicCollectionAsync(period, collectionCancellationTokenSource.Token), collectionCancellationTokenSource.Token);
                 }
             }
 
@@ -540,7 +548,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 : "unknown";
 
             this.UserInteractionService.ShowToast(
-                $"Position: {e.Position}; e.HorizontalAccuracy: {e.HorizontalAccuracy}; Source: {source}"); 
+                $"Position: {e.Position}; e.HorizontalAccuracy: {e.HorizontalAccuracy}; Source: {source}; Valid: {e.HorizontalAccuracy <= RequestedAccuracy}"); 
 
             if (e.HorizontalAccuracy <= RequestedAccuracy)
             {
@@ -568,27 +576,36 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 if (LastPosition != null)
                 {
                     var lastPositionProjected = GeometryEngine.Project(LastPosition, polylineBuilder.SpatialReference) as MapPoint;
-                    locationOverlay.Graphics.Add(new Graphic(lastPositionProjected));
+                    
+                    //reset collected point
+                    LastPosition = null;
+                    CanAddPoint = false;
+                    
+                    await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => { locationOverlay.Graphics.Add(new Graphic(lastPositionProjected)); });                    
 
                     if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
                     {
                         polylineBuilder.AddPoint(lastPositionProjected);
 
-                        // Remove the old line.
-                        locationLineOverlay.Graphics.Clear();
-                        // Add the updated line.
-                        locationLineOverlay.Graphics.Add(new Graphic(polylineBuilder.ToGeometry()));
+                        await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => 
+                        {
+                            // Remove the old line.
+                            locationLineOverlay.Graphics.Clear();
+                            // Add the updated line.
+                            locationLineOverlay.Graphics.Add(new Graphic(polylineBuilder.ToGeometry()));
+                        });
                     }
                     
                     if (RequestedGeometryType == GeometryType.Point)
                     {
                         //stop collection on first point collected
                         if (SaveAreaCommand.CanExecute())
-                            await SaveAreaCommand.ExecuteAsync();
+                            await SaveAreaCommand.ExecuteAsync();                    
                     }
 
-                    this.CanSave = RequestedGeometryType != GeometryType.Polygon || ((Polygon)locationOverlay.Graphics[0].Geometry).Parts[0].Points.Count > 2;
+                    var collectedPoints = polylineBuilder.Parts[0].PointCount;
 
+                    this.CanSave = (RequestedGeometryType != GeometryType.Polygon && RequestedGeometryType != GeometryType.Polyline)  ||  collectedPoints > 2;
                 }
             }
             catch (Exception e)
@@ -692,6 +709,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.canAddPoint, value);
         }
 
+        private bool addPointVisible;
+        public bool AddPointVisible
+        {
+            get => this.addPointVisible;
+            set => this.RaiseAndSetIfChanged(ref this.addPointVisible, value);
+        }
+
+        private bool startButtonVisible;
+        public bool StartButtonVisible
+        {
+            get => this.startButtonVisible;
+            set => this.RaiseAndSetIfChanged(ref this.startButtonVisible, value);
+        }        
+
         private bool isPanelVisible;
         public bool IsPanelVisible
         {
@@ -730,12 +761,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (locationDataSource != null)
             {
-                locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
                 locationDataSource.StopAsync();
+                locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;                
             }
 
             collectionCancellationTokenSource?.Cancel();
             collectionCancellationTokenSource?.Dispose();
+            collectionCancellationTokenSource = null;
 
             base.Dispose();
         }

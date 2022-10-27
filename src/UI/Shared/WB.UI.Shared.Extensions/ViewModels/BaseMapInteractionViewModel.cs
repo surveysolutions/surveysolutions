@@ -33,7 +33,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         protected readonly IMvxNavigationService NavigationService;
         private readonly IEnumeratorSettings enumeratorSettings;
         private readonly IMapUtilityService mapUtilityService;
-        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
+        protected readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
 
         protected BaseMapInteractionViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
