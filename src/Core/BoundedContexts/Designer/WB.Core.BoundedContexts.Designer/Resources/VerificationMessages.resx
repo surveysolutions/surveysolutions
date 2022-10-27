@@ -712,6 +712,12 @@
   <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
     <value>Special values titles must be unique.</value>
   </data>
+  <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
+    <value>Special values attachment name must be unique.</value>
+  </data>
+  <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
+    <value>Special values attachment refers to non existent attachment.</value>
+  </data>    
   <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
     <value>Questionnaire title shouldn't have two and more consecutive underscore characters.</value>
   </data>

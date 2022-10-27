@@ -243,6 +243,9 @@
                                 <div class="option-text">
                                     <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
                                 </div>
+                                <div class="option-attachment-name">
+                                    <span>@option.AttachmentName</span>
+                                </div>
                             </div>
                         }
                         @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)

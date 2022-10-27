@@ -181,7 +181,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.BeforeSelected -= this.SpecialValueSelected;
                     option.AnswerRemoved -= this.RemoveAnswerHandler;
-                    option.DisposeIfDisposable();
+                    option.Dispose();
                 });
                 this.SpecialValues.Clear();
                 this.RaisePropertyChanged(() => this.SpecialValues);
@@ -215,7 +215,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public IObservableCollection<ICompositeEntity> AsChildren {
+        public IObservableCollection<ICompositeEntity> AsChildren 
+        {
             get
             {
                 var result = new CompositeCollection<ICompositeEntity>();
@@ -233,10 +234,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.optionsViewModel.Dispose();
 
-            foreach (var option in this.SpecialValues)
+            var options = this.SpecialValues.ToList();
+            foreach (var option in options)
             {
                 option.BeforeSelected -= this.SpecialValueSelected;
                 option.AnswerRemoved -= this.RemoveAnswerHandler;
+                option.Dispose();
             }
         }
     }

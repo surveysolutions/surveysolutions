@@ -1267,6 +1267,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Имя вложения для специального значения должно быть уникальным..
+        /// </summary>
+        public static string WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion {
+            get {
+                return ResourceManager.GetString("WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Специальное значение ссылается на несуществующее вложение..
+        /// </summary>
+        public static string WB0139_SpecialValuesAttachmentsReferAbsentAttachment {
+            get {
+                return ResourceManager.GetString("WB0139_SpecialValuesAttachmentsReferAbsentAttachment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Создано большое количество ростеров. Экспорт этих структур в файлы данных может быть проблематичным. Подумайте об уменьшении количества ростеров..
         /// </summary>
         public static string WB0200_LargeNumberOfRostersIsCreated {
@@ -2156,6 +2174,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0315_AttachmentHasInvalidName {
             get {
                 return ResourceManager.GetString("WB0315_AttachmentHasInvalidName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Опросник в старом формате. Используйте ссылку &quot;Сгенерировать обложку&quot; на секции Обложка..
+        /// </summary>
+        public static string WB0316_QuestionnaireWithOldCoverPage {
+            get {
+                return ResourceManager.GetString("WB0316_QuestionnaireWithOldCoverPage", resourceCulture);
             }
         }
         
