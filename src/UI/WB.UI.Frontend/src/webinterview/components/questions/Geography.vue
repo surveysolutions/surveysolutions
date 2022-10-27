@@ -9,13 +9,13 @@
                     <div class="block-with-data">
                         <ul class="list-unstyled">
                             <li
-                                v-if="isPolygon">{{this.$t('Pages.AreaQestion_Area')}}: {{$me.answer.area}} {{this.$t('Pages.AreaQestion_AreaUnitMeter')}}</li>
+                                v-if="isPolygon">{{this.$t('Pages.AreaQestion_Area')}}:&emsp; {{$me.answer.area.toLocaleString()}} {{this.$t('Pages.AreaQestion_AreaUnitMeter')}}</li>
                             <li
-                                v-if="isPolygon || isPolyline">{{this.$t('Pages.AreaQestion_Length')}}: {{$me.answer.length}} {{this.$t('Pages.AreaQestion_AreaMeter')}}</li>
+                                v-if="isPolygon || isPolyline">{{this.$t('Pages.AreaQestion_Length')}}:&emsp; {{$me.answer.length.toLocaleString()}} {{this.$t('Pages.AreaQestion_AreaMeter')}}</li>
                             <li
-                                v-if="isMultiPoints">{{this.$t('Pages.AreaQestion_Points')}}: {{$me.answer.selectedPoints.length}}</li>
+                                v-if="isMultiPoints">{{this.$t('Pages.AreaQestion_Points')}}:&emsp; {{$me.answer.selectedPoints.length.toLocaleString()}}</li>
                             <li
-                                v-if="!isManualMode && $me.answer.requestedAccuracy">{{this.$t('Pages.AreaQestion_RequestedAccuracy')}}: {{$me.answer.requestedAccuracy}}</li>
+                                v-if="!isManualMode && $me.answer.requestedAccuracy">{{this.$t('Pages.AreaQestion_RequestedAccuracy')}}:&emsp; {{$me.answer.requestedAccuracy.toLocaleString()}}</li>
                             <li v-if="!coordinatesShown">
                                 <button
                                     class="btn btn-link"
