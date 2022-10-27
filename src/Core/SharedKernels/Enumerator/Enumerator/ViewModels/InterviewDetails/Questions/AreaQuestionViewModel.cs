@@ -276,12 +276,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.HasArea = this.answer?.AreaSize > 0;
             this.HasLength = this.answer?.Length > 0;
 
-            this.PointsText = this.answer == null ? string.Empty : string.Format(UIResources.AreaMap_PointsFormat, this.answer.NumberOfPoints);
-            this.AreaText = this.answer == null ? string.Empty : string.Format(UIResources.AreaMap_AreaFormat, this.answer.AreaSize?.ToString("#.##"));
+            this.PointsText = this.answer == null 
+                ? string.Empty 
+                : string.Format(UIResources.AreaMap_PointsFormat, this.answer.NumberOfPoints);
+            this.AreaText = this.answer == null 
+                ? string.Empty 
+                : string.Format(UIResources.AreaMap_AreaFormat, this.answer.AreaSize.HasValue 
+                    ? this.answer.AreaSize.FormatDouble(2)
+                    : string.Empty);
             this.LengthText = this.answer == null ? string.Empty : string.Format(
-                this.geometryType == GeometryType.Polygon
-                    ? UIResources.AreaMap_PerimeterFormat
-                    : UIResources.AreaMap_LengthFormat, this.answer.Length?.ToString("#.##"));
+                this.geometryType == GeometryType.Polygon 
+                    ? UIResources.AreaMap_PerimeterFormat 
+                    : UIResources.AreaMap_LengthFormat, 
+                this.answer.Length.HasValue
+                    ? this.answer.Length.FormatDouble(2)
+                    : string.Empty);
         }
 
         private bool isDisposed = false;
