@@ -23,6 +23,7 @@ using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.Extensions;
 using WB.UI.Shared.Extensions.Services;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
+using EsriGeometryType = Esri.ArcGISRuntime.Geometry.GeometryType;
 
 namespace WB.UI.Shared.Extensions.ViewModels
 {
@@ -118,7 +119,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
                 }
 
-                await DrawNeighborsAsync(this.RequestedGeometryType, this.Geometry, this.GeographyNeighbors).ConfigureAwait(false);
+                await DrawNeighborsAsync(this.Geometry, this.GeographyNeighbors).ConfigureAwait(false);
 
                 var result = await GetGeometry().ConfigureAwait(false);
 
@@ -209,22 +210,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     : UIResources.AreaMap_LengthFormat, length.ToString("#.##")) : string.Empty;
         }
 
-        private async Task DrawNeighborsAsync(GeometryType? geometryType, Geometry geometry, GeometryNeighbor[] neighbors)
+        private async Task DrawNeighborsAsync(Geometry geometry, GeometryNeighbor[] neighbors)
         {
             if (neighbors == null || neighbors.Length == 0)
                 return;
 
-            var gType = geometryType ?? GeometryType.Polygon;
-            var esriGeometryType = gType.ToEsriGeometryType();
+            var esriGeometryType = neighbors[0].Geometry.GeometryType;
 
             IEnumerable<Field> fields = new Field[]
             {
                 new Field(FieldType.Text, "name", "Name", 50)
             };
             var neighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, this.MapView.SpatialReference);
-            neighborsFeatureCollectionTable.Renderer = CreateRenderer(gType, Color.Blue);
+            neighborsFeatureCollectionTable.Renderer = CreateRenderer(esriGeometryType, Color.Blue);
             var overlappingNeighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, this.MapView.SpatialReference);
-            overlappingNeighborsFeatureCollectionTable.Renderer = CreateRenderer(gType, Color.Orange);
+            overlappingNeighborsFeatureCollectionTable.Renderer = CreateRenderer(esriGeometryType, Color.Orange);
 
             List<string> overlappingTitles = new List<string>();
 
@@ -379,14 +379,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
         
-        private Renderer CreateRenderer(GeometryType rendererType, Color color)
+        private Renderer CreateRenderer(EsriGeometryType rendererType, Color color)
         {
             Symbol sym = rendererType switch
             {
-                GeometryType.Point => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
-                GeometryType.Multipoint => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
-                GeometryType.Polyline => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
-                GeometryType.Polygon => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
+                EsriGeometryType.Point => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
+                EsriGeometryType.Multipoint => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
+                EsriGeometryType.Polyline => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
+                EsriGeometryType.Polygon => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
                 _ => null
             };
 
@@ -753,7 +753,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.MapView?.SketchEditor.ClearGeometry();
                 this.MapView?.SketchEditor.ReplaceGeometry(geometry);
                 
-                await DrawNeighborsAsync(this.RequestedGeometryType, geometry, this.GeographyNeighbors).ConfigureAwait(false);
+                await DrawNeighborsAsync(geometry, this.GeographyNeighbors).ConfigureAwait(false);
             }
         });
 
