@@ -7,31 +7,50 @@
                     :class="{answered: $me.isAnswered}"
                     v-if="$me.isAnswered">
                     <div class="block-with-data">
-                        <ul class="list-unstyled">
-                            <li
-                                v-if="isPolygon">{{this.$t('Pages.AreaQestion_Area')}}:&emsp; {{$me.answer.area.toLocaleString()}} {{this.$t('Pages.AreaQestion_AreaUnitMeter')}}</li>
-                            <li
-                                v-if="isPolygon || isPolyline">{{this.$t('Pages.AreaQestion_Length')}}:&emsp; {{$me.answer.length.toLocaleString()}} {{this.$t('Pages.AreaQestion_AreaMeter')}}</li>
-                            <li
-                                v-if="isMultiPoints">{{this.$t('Pages.AreaQestion_Points')}}:&emsp; {{$me.answer.selectedPoints.length.toLocaleString()}}</li>
-                            <li
-                                v-if="!isManualMode && $me.answer.requestedAccuracy">{{this.$t('Pages.AreaQestion_RequestedAccuracy')}}:&emsp; {{$me.answer.requestedAccuracy.toLocaleString()}}</li>
-                            <li v-if="!coordinatesShown">
-                                <button
-                                    class="btn btn-link"
-                                    type="button"
-                                    @click="showCoordinates">{{this.$t('Details.Area_ShowCoordinates')}}</button>
-                            </li>
-                            <li
-                                v-else
-                                v-for="(selectedPoint, i) in $me.answer.selectedPoints"
-                                :key="i">
-                                <a
-                                    v-bind:href="`${$config.googleMapsBaseUrl}/maps?q=${selectedPoint.latitude},${selectedPoint.longitude}`"
-                                    :title="$t('WebInterviewUI.ShowOnMap')"
-                                    target="_blank">{{selectedPoint.latitude}}, {{selectedPoint.longitude}}</a>
-                            </li>
-                        </ul>
+                        <table class="list-unstyled">
+                            <colgroup>
+                                <col span="1"
+                                    style="width: 30%;">
+                                <col span="1"
+                                    style="width: 70%;">
+                            </colgroup>
+                            <tbody>
+                                <tr v-if="isPolygon">
+                                    <td>{{this.$t('Pages.AreaQestion_Area')}}:</td>
+                                    <td>{{$me.answer.area.toLocaleString()}} {{this.$t('Pages.AreaQestion_AreaUnitMeter')}}</td>
+                                </tr>
+                                <tr v-if="isPolygon || isPolyline">
+                                    <td>{{this.$t('Pages.AreaQestion_Length')}}:</td>
+                                    <td>{{$me.answer.length.toLocaleString()}} {{this.$t('Pages.AreaQestion_AreaMeter')}}</td>
+                                </tr>
+                                <tr v-if="isMultiPoints">
+                                    <td>{{this.$t('Pages.AreaQestion_Points')}}:</td>
+                                    <td>{{$me.answer.selectedPoints.length.toLocaleString()}}</td>
+                                </tr>
+                                <tr v-if="!isManualMode && $me.answer.requestedAccuracy">
+                                    <td>{{this.$t('Pages.AreaQestion_RequestedAccuracy')}}:</td>
+                                    <td>{{$me.answer.requestedAccuracy.toLocaleString()}}</td>
+                                </tr>
+                                <tr v-if="!coordinatesShown">
+                                    <td>
+                                        <button
+                                            class="btn btn-link"
+                                            type="button"
+                                            @click="showCoordinates">{{this.$t('Details.Area_ShowCoordinates')}}</button>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr v-else
+                                    v-for="(selectedPoint, i) in $me.answer.selectedPoints"
+                                    :key="i">
+                                    <td colspan="2">
+                                        <a
+                                            v-bind:href="`${$config.googleMapsBaseUrl}/maps?q=${selectedPoint.latitude},${selectedPoint.longitude}`"
+                                            :title="$t('WebInterviewUI.ShowOnMap')"
+                                            target="_blank">{{selectedPoint.latitude}}, {{selectedPoint.longitude}}</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                     <iframe width="100%"
