@@ -600,7 +600,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Area: {0:0.00} m2</value>
   </data>
   <data name="AreaMap_OverlapsWith" xml:space="preserve">
-    <value>{0} overlaps with:</value>
+    <value>Overlaps with:</value>
   </data>
   <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
     <value>and {0} other.</value>

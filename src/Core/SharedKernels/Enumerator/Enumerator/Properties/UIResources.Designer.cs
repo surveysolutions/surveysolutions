@@ -240,7 +240,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} overlaps with:.
+        ///   Looks up a localized string similar to Overlaps with:.
         /// </summary>
         public static string AreaMap_OverlapsWith {
             get {

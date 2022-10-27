@@ -274,8 +274,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (overlappingTitles.Count > 0)
             {
                 var maxTitlesDisplay = 2;
-                var message = string.Format(UIResources.AreaMap_OverlapsWith, this.Title)
-                              + " " + string.Join(", ", overlappingTitles.Take(maxTitlesDisplay).ToArray());
+                var message = UIResources.AreaMap_OverlapsWith + " " 
+                    + string.Join(", ", overlappingTitles.Take(maxTitlesDisplay).ToArray());
                 if (overlappingTitles.Count > maxTitlesDisplay)
                     message += " " + string.Format(UIResources.AreaMap_OverlapsWithOther,
                         overlappingTitles.Count - maxTitlesDisplay);
