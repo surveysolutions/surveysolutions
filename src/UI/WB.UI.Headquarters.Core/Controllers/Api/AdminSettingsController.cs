@@ -47,9 +47,17 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool InterviewerAutoUpdatesEnabled { get; set; }
             public bool NotificationsEnabled { get; set; }
             public bool PartialSynchronizationEnabled { get; set; }
+        }
+
+        public class InterviewerGeographyQuestionAccuracyInMetersModel
+        {
             [Required]
             [Range(5, 1000)]
             public int GeographyQuestionAccuracyInMeters { get; set; }
+        }
+
+        public class InterviewerGeographyQuestionPeriodInSecondsModel
+        {
             [Required]
             [Range(5, 1000)]
             public int GeographyQuestionPeriodInSeconds { get; set; }
@@ -134,11 +142,11 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public ActionResult<InterviewerSettingsModel> InterviewerSettings()
+        public ActionResult<object> InterviewerSettings()
         {
             var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
 
-            return new InterviewerSettingsModel
+            return new
             {
                 InterviewerAutoUpdatesEnabled = interviewerSettings.IsAutoUpdateEnabled(),
                 NotificationsEnabled = interviewerSettings.IsDeviceNotificationsEnabled(),
@@ -154,16 +162,51 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (!ModelState.IsValid)
                 return Ok(new {sucess = false});
 
-            this.interviewerSettingsStorage.Store(
-                new InterviewerSettings
-                {
-                    AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled,
-                    DeviceNotificationsEnabled = message.NotificationsEnabled,
-                    PartialSynchronizationEnabled = message.PartialSynchronizationEnabled,
-                    GeographyQuestionAccuracyInMeters = message.GeographyQuestionAccuracyInMeters,
-                    GeographyQuestionPeriodInSeconds = message.GeographyQuestionPeriodInSeconds,
-                },
-                AppSetting.InterviewerSettings);
+            UpdateInterviewerSettings(settings =>
+            {
+                settings.AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled;
+                settings.DeviceNotificationsEnabled = message.NotificationsEnabled;
+                settings.PartialSynchronizationEnabled = message.PartialSynchronizationEnabled;
+            });
+
+            return Ok(new {sucess = true});
+        }
+
+        private void UpdateInterviewerSettings(Action<InterviewerSettings> updateAction)
+        {
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+            if (interviewerSettings == null)
+                interviewerSettings = new InterviewerSettings();
+            
+            updateAction.Invoke(interviewerSettings);
+            
+            this.interviewerSettingsStorage.Store(interviewerSettings, AppSetting.InterviewerSettings);
+        }
+
+        [HttpPost]
+        public IActionResult InterviewerGeographyQuestionAccuracyInMeters([FromBody] InterviewerGeographyQuestionAccuracyInMetersModel message)
+        {
+            if (!ModelState.IsValid)
+                return Ok(new {sucess = false});
+
+            UpdateInterviewerSettings(settings =>
+            {
+                settings.GeographyQuestionAccuracyInMeters = message.GeographyQuestionAccuracyInMeters;
+            });
+
+            return Ok(new {sucess = true});
+        }
+
+        [HttpPost]
+        public IActionResult InterviewerGeographyQuestionPeriodInSeconds([FromBody] InterviewerGeographyQuestionPeriodInSecondsModel message)
+        {
+            if (!ModelState.IsValid)
+                return Ok(new {sucess = false});
+
+            UpdateInterviewerSettings(settings =>
+            {
+                settings.GeographyQuestionPeriodInSeconds = message.GeographyQuestionPeriodInSeconds;
+            });
 
             return Ok(new {sucess = true});
         }
