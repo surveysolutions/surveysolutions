@@ -113,6 +113,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 }
                 else
                 {
+                    if (this.MapView != null && !this.MapView.SpatialReference.IsEqual(Geometry.SpatialReference))
+                        Geometry = GeometryEngine.Project(Geometry, this.MapView.SpatialReference);
+
                     if (this.Geometry.GeometryType == Esri.ArcGISRuntime.Geometry.GeometryType.Point)
                         await this.MapView.SetViewpointCenterAsync(this.Geometry as MapPoint).ConfigureAwait(false);
                     else
@@ -214,7 +217,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (neighbors == null || neighbors.Length == 0)
                 return;
-
+            
             var gType = geometryType ?? GeometryType.Polygon;
             var esriGeometryType = neighbors[0].Geometry.GeometryType;
 
@@ -222,9 +225,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 new Field(FieldType.Text, "name", "Name", 50)
             };
-            var neighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, this.MapView.SpatialReference);
+            var mapViewSpatialReference = this.MapView.SpatialReference;
+            var neighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference);
             neighborsFeatureCollectionTable.Renderer = CreateRenderer(gType, Color.Blue);
-            var overlappingNeighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, this.MapView.SpatialReference);
+            var overlappingNeighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference);
             overlappingNeighborsFeatureCollectionTable.Renderer = CreateRenderer(gType, Color.Orange);
 
             List<string> overlappingTitles = new List<string>();
@@ -232,6 +236,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             for (int i = 0; i < neighbors.Length; i++)
             {
                 var neighbor = neighbors[i];
+                
+                if (neighbor.Geometry.SpatialReference != mapViewSpatialReference)
+                    neighbor.Geometry = GeometryEngine.Project(neighbor.Geometry, mapViewSpatialReference);
+                
                 var featureCollectionTable = neighborsFeatureCollectionTable;
                 
                 if (geometry != null)
