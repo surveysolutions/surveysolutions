@@ -267,7 +267,7 @@ namespace WB.UI.Headquarters.Controllers
                     RecoveryCodes = "",
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     TokenIssued = await this.tokenProvider.DoesTokenExist(user),
-                    CanSetupTwoFactorAuthentication = tokenProvider.CanGenerate && HasPermissionsToSetupTwoFactorAuthentication(user),
+                    CanSetupTwoFactorAuthentication = HasPermissionsToSetupTwoFactorAuthentication(user),
                 },
                 Api = new
                 {
