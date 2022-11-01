@@ -63,6 +63,7 @@
     <Compile Include="ViewModels\BaseMapInteractionViewModel.cs" />
     <Compile Include="ViewModels\GeographyEditorViewModel.cs" />
     <Compile Include="ViewModels\GeographyEditorViewModelArgs.cs" />
+    <Compile Include="ViewModels\GeometryByTypeBuilder.cs" />
     <Compile Include="ViewModels\GeometryHelper.cs" />
     <Compile Include="ViewModels\GeometryNeighbor.cs" />
     <Compile Include="ViewModels\MapDashboardViewModel.cs" />

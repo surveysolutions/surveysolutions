@@ -35,7 +35,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private readonly LocationDataSource locationDataSource = new SystemLocationDataSource();
         private GraphicsOverlay locationOverlay;
         private GraphicsOverlay locationLineOverlay;
-        private PolylineBuilder polylineBuilder;        
+        private GeometryByTypeBuilder geometryBuilder;        
 
         public GeographyEditorViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService, 
             IMapService mapService, IUserInteractionService userInteractionService, ILogger logger,
@@ -49,7 +49,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private GeometryInputMode RequestedGeometryInputMode { get; set; }
         private GeometryNeighbor[] GeographyNeighbors { get; set; }
         private Geometry Geometry { set; get; }
-        private GeometryType? RequestedGeometryType { set; get; }
+        private GeometryType RequestedGeometryType { set; get; }
 
         public string MapName { set; get; }
         public string Title { set; get; }
@@ -60,7 +60,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             this.MapName = parameter.MapName;
             this.Title = parameter.Title;
-            this.RequestedGeometryType = parameter.RequestedGeometryType;
+            this.RequestedGeometryType = parameter.RequestedGeometryType ?? GeometryType.Polygon;
             this.RequestedAccuracy = parameter.RequestedAccuracy;
             this.RequestedFrequency = parameter.RequestedFrequency;
             this.RequestedGeometryInputMode = parameter.RequestedGeometryInputMode ?? GeometryInputMode.Manual;
@@ -194,7 +194,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 collectionCancellationTokenSource?.Cancel();
 
-                SaveGeometry(polylineBuilder.ToGeometry(), null);
+                var resultGeometry = geometryBuilder.ToGeometry();
+                SaveGeometry(resultGeometry, null);
+                
                 await FinishEditing();
             }
         });
@@ -434,7 +436,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             await DrawNeighborsAsync(this.RequestedGeometryType, this.Geometry, this.GeographyNeighbors).ConfigureAwait(false);
 
             //project and use current map
-            polylineBuilder = new PolylineBuilder(this.MapView.SpatialReference);
+            geometryBuilder = new GeometryByTypeBuilder(this.MapView.SpatialReference, RequestedGeometryType);
 
             if (this.Geometry == null)
             {
@@ -467,7 +469,54 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
             else
             {
-                //just display it
+                if (this.MapView != null && !this.MapView.SpatialReference.IsEqual(Geometry.SpatialReference))
+                    Geometry = GeometryEngine.Project(Geometry, this.MapView.SpatialReference);
+
+
+                switch (this.Geometry.GeometryType)
+                {
+                    case EsriGeometryType.Point:
+                        geometryBuilder.AddPoint(this.Geometry as MapPoint);
+                        break;
+                    case EsriGeometryType.Polyline:
+                    {
+                        var polyline = this.Geometry as Polyline;
+                        foreach (var point in polyline.Parts[0].Points)
+                        {
+                            geometryBuilder.AddPoint(point);
+                        }
+                    }
+                        break;
+                    case EsriGeometryType.Polygon:
+                    {
+                        var polygon = this.Geometry as Polygon;
+                        foreach (var point in polygon.Parts[0].Points)
+                        {
+                            geometryBuilder.AddPoint(point);
+                        }
+                    }
+                        break;
+                    case EsriGeometryType.Multipoint:
+                    {
+                        var multipoint = this.Geometry as Multipoint;
+                        foreach (var point in multipoint.Points)
+                        {
+                            geometryBuilder.AddPoint(point);
+                        }
+                    }
+                        break;
+                    case EsriGeometryType.Unknown:
+                    case EsriGeometryType.Envelope:
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                
+                
+                locationLineOverlay.Graphics.Clear();
+                // Add the updated line.
+                var geometry = geometryBuilder.ToGeometry();
+                locationLineOverlay.Graphics.Add(new Graphic(geometry));
+
             }
         }
 
@@ -584,7 +633,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 if (LastPosition != null)
                 {
-                    var lastPositionProjected = GeometryEngine.Project(LastPosition, polylineBuilder.SpatialReference) as MapPoint;
+                    var lastPositionProjected = GeometryEngine.Project(LastPosition, geometryBuilder.SpatialReference) as MapPoint;
                     
                     //reset collected point
                     LastPosition = null;
@@ -594,14 +643,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                     if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
                     {
-                        polylineBuilder.AddPoint(lastPositionProjected);
+                        geometryBuilder.AddPoint(lastPositionProjected);
 
                         await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () => 
                         {
                             // Remove the old line.
                             locationLineOverlay.Graphics.Clear();
                             // Add the updated line.
-                            var geometry = polylineBuilder.ToGeometry();
+                            var geometry = geometryBuilder.ToGeometry();
                             locationLineOverlay.Graphics.Add(new Graphic(geometry));
 
                             await UpdateDrawNeighborsAsync(geometry, this.GeographyNeighbors);
@@ -615,8 +664,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                             await SaveAreaCommand.ExecuteAsync();                    
                     }
 
-                    var collectedPoints = polylineBuilder.Parts[0].PointCount;
-
+                    var collectedPoints = geometryBuilder.PointCount;
                     this.CanSave = (RequestedGeometryType != GeometryType.Polygon && RequestedGeometryType != GeometryType.Polyline)  ||  collectedPoints > 2;
                 }
             }
