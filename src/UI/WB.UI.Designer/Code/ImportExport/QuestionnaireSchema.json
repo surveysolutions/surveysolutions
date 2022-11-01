@@ -502,7 +502,8 @@
       "type": "object",
       "properties": {
         "Text": { "type": "string" },
-        "Code": { "type": "integer" }
+        "Code": { "type": "integer" },
+        "AttachmentName": {"type": "string"}
       },
       "additionalProperties": false,
       "required": []
