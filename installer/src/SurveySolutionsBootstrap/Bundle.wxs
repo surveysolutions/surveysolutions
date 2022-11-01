@@ -11,7 +11,7 @@
 
         <!--allow only install to Server OS x64 starting Server 2012 R2 x64 but not on old laptop with consumer OS-->
         <bal:Condition Message="This application requires server operating system such as Windows Server 2012 R2 or newer.">
-            (VersionNT64 &gt;= v6.3 AND MsiNTProductType &gt; 1)
+            (VersionNT64 &gt;= v6.3 AND MsiNTProductType &lt;&gt; 1)
         </bal:Condition>
 
         <Variable Name="Siteport" bal:Overridable="yes" Value="9700" />
