@@ -353,12 +353,16 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 .ForMember(a => a.Code, opt => 
                     opt.MapFrom(x => x.AnswerCode ?? decimal.Parse(x.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture)))
                 .ForMember(a => a.Text, opt => 
-                    opt.MapFrom(answer => answer.AnswerText));
+                    opt.MapFrom(answer => answer.AnswerText))
+                .ForMember(a => a.AttachmentName, opt => 
+                    opt.MapFrom(answer => answer.AttachmentName));
             this.CreateMap<Models.SpecialValue, Answer>()
                 .ForMember(a => a.AnswerValue, opt => 
                     opt.MapFrom(x => x.Code.ToString()))
                 .ForMember(a => a.AnswerText, opt => 
-                    opt.MapFrom(answer => answer.Text));
+                    opt.MapFrom(answer => answer.Text))
+                .ForMember(a => a.AttachmentName, opt => 
+                    opt.MapFrom(answer => answer.AttachmentName));
         }
         
         private string? GetVarName(Guid? id, ResolutionContext context)
