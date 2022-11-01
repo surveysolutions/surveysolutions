@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  NODE_VERSION: 18
+  NODE_VERSION: 17
   DOTNET_VERSION: '6.0.x'
 
 jobs:
