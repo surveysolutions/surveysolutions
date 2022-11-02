@@ -113,8 +113,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 }
                 else
                 {
-                    if (this.MapView != null && !this.MapView.SpatialReference.IsEqual(Geometry.SpatialReference))
-                        Geometry = GeometryEngine.Project(Geometry, this.MapView.SpatialReference);
+                    if (this.MapView != null && this.MapView.Map.SpatialReference != null && !this.MapView.Map.SpatialReference.IsEqual(Geometry.SpatialReference))
+                        Geometry = GeometryEngine.Project(Geometry, this.MapView.Map.SpatialReference);
 
                     if (this.Geometry.GeometryType == Esri.ArcGISRuntime.Geometry.GeometryType.Point)
                         await this.MapView.SetViewpointCenterAsync(this.Geometry as MapPoint).ConfigureAwait(false);
@@ -130,7 +130,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 double? distanceToEditor = null;
                 if (position != null)
                 {
-                    var point = GeometryEngine.Project(position, this.MapView.SpatialReference);
+                    var point = GeometryEngine.Project(position, this.MapView.Map.SpatialReference);
                     distanceToEditor = GeometryEngine.Distance(result, point);
                 }
 
@@ -139,7 +139,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             finally
             {
                 await FinishEditing();
-
             }
         }
 
@@ -227,7 +226,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 new Field(FieldType.Text, "name", "Name", 50)
             };
-            var mapViewSpatialReference = this.MapView.SpatialReference;
+            var mapViewSpatialReference = this.MapView.Map.SpatialReference;
             var neighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference);
             neighborsFeatureCollectionTable.Renderer = CreateRenderer(gType, Color.Blue);
             var overlappingNeighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference);
@@ -436,7 +435,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             await DrawNeighborsAsync(this.RequestedGeometryType, this.Geometry, this.GeographyNeighbors).ConfigureAwait(false);
 
             //project and use current map
-            geometryBuilder = new GeometryByTypeBuilder(this.MapView.SpatialReference, RequestedGeometryType);
+            geometryBuilder = new GeometryByTypeBuilder(this.MapView.Map.SpatialReference, RequestedGeometryType);
 
             if (this.Geometry == null)
             {
@@ -469,8 +468,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
             else
             {
-                if (this.MapView != null && !this.MapView.SpatialReference.IsEqual(Geometry.SpatialReference))
-                    Geometry = GeometryEngine.Project(Geometry, this.MapView.SpatialReference);
+                if (this.MapView != null && this.MapView.Map.SpatialReference != null 
+                                         && !this.MapView.Map.SpatialReference.IsEqual(Geometry.SpatialReference))
+                    Geometry = GeometryEngine.Project(Geometry, this.MapView.Map.SpatialReference);
 
 
                 switch (this.Geometry.GeometryType)
@@ -577,7 +577,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     collectionCancellationTokenSource = new CancellationTokenSource();
                     TimeSpan period = TimeSpan.FromSeconds(RequestedFrequency ?? 10);
-                    Task.Run(() => PeriodicCollectionAsync(period, collectionCancellationTokenSource.Token), collectionCancellationTokenSource.Token);
+                    Task.Run(() => PeriodicCollectionAsync(period, collectionCancellationTokenSource.Token), collectionCancellationTokenSource.Token)
+                        .ConfigureAwait(false);
                 }
             }
 
@@ -807,8 +808,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             //SpatialReferense of new map could differ from initial
             if (geometry != null)
             {
-                if (this.MapView != null && geometry != null && !this.MapView.SpatialReference.IsEqual(geometry.SpatialReference))
-                    geometry = GeometryEngine.Project(geometry, this.MapView.SpatialReference);
+                if (this.MapView != null && geometry != null && !this.MapView.Map.SpatialReference.IsEqual(geometry.SpatialReference))
+                    geometry = GeometryEngine.Project(geometry, this.MapView.Map.SpatialReference);
 
                 this.MapView?.SketchEditor.ClearGeometry();
                 this.MapView?.SketchEditor.ReplaceGeometry(geometry);
