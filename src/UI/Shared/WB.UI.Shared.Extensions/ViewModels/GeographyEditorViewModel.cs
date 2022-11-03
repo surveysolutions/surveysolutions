@@ -424,7 +424,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if(this.MapView?.Map?.SpatialReference == null)
                 return;
             
-            if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
+            if (RequestedGeometryType is GeometryType.Polygon or GeometryType.Polyline)
             {
                 //init map overlay
                 locationLineOverlay = new GraphicsOverlay();
@@ -483,7 +483,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 switch (this.Geometry.GeometryType)
                 {
                     case EsriGeometryType.Point:
-                        geometryBuilder.AddPoint(this.Geometry as MapPoint);
+                        var newPoint = this.Geometry as MapPoint; 
+                        geometryBuilder.AddPoint(newPoint);
+                        locationOverlay.Graphics.Add(new Graphic(newPoint));
                         break;
                     case EsriGeometryType.Polyline:
                     {
@@ -491,6 +493,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         foreach (var point in polyline.Parts[0].Points)
                         {
                             geometryBuilder.AddPoint(point);
+                            locationOverlay.Graphics.Add(new Graphic(point));
                         }
                     }
                         break;
@@ -500,6 +503,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         foreach (var point in polygon.Parts[0].Points)
                         {
                             geometryBuilder.AddPoint(point);
+                            locationOverlay.Graphics.Add(new Graphic(point));
                         }
                     }
                         break;
@@ -509,6 +513,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         foreach (var point in multipoint.Points)
                         {
                             geometryBuilder.AddPoint(point);
+                            locationOverlay.Graphics.Add(new Graphic(point));
                         }
                     }
                         break;
@@ -517,13 +522,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                
-                
-                locationLineOverlay.Graphics.Clear();
-                // Add the updated line.
-                var geometry = geometryBuilder.ToGeometry();
-                locationLineOverlay.Graphics.Add(new Graphic(geometry));
 
+                if (RequestedGeometryType is GeometryType.Polygon or GeometryType.Polyline)
+                {
+                    locationLineOverlay.Graphics.Clear();
+                    // Add the updated line.
+                    var geometry = geometryBuilder.ToGeometry();
+                    locationLineOverlay.Graphics.Add(new Graphic(geometry));
+                }
             }
         }
 
@@ -642,17 +648,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 if (LastPosition != null)
                 {
                     var lastPositionProjected = GeometryEngine.Project(LastPosition, geometryBuilder.SpatialReference) as MapPoint;
+
+                    //remove Z component
+                    var newPoint = new MapPoint(lastPositionProjected.X, lastPositionProjected.Y,
+                        lastPositionProjected.SpatialReference);
                     
                     //reset collected point
                     LastPosition = null;
                     CanAddPoint = false;
                     
-                    await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => { locationOverlay.Graphics.Add(new Graphic(lastPositionProjected)); });                    
+                    geometryBuilder.AddPoint(newPoint);
+                    await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => { locationOverlay.Graphics.Add(new Graphic(newPoint)); });                    
 
                     if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
                     {
-                        geometryBuilder.AddPoint(lastPositionProjected);
-
                         await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () => 
                         {
                             // Remove the old line.
