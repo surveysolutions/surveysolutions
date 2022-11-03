@@ -377,8 +377,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         this.MapView.SketchEditor.Style.LineSymbol = null;
 
                         return geometry == null ?
-                            await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polyline).ConfigureAwait(false) :
-                            await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polyline).ConfigureAwait(false);
+                            await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Multipoint).ConfigureAwait(false) :
+                            await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Multipoint).ConfigureAwait(false);
                     }
                 default:
                     {
