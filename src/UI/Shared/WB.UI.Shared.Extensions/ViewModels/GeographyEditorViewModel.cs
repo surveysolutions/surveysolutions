@@ -49,7 +49,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private GeometryInputMode RequestedGeometryInputMode { get; set; }
         private GeometryNeighbor[] GeographyNeighbors { get; set; }
         private Geometry Geometry { set; get; }
-        private GeometryType RequestedGeometryType { set; get; }
+        private GeometryType RequestedGeometryType { get; set; }
 
         public string MapName { set; get; }
         public string Title { set; get; }
@@ -122,7 +122,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
                 }
 
-                await DrawNeighborsAsync(this.RequestedGeometryType, this.Geometry, this.GeographyNeighbors).ConfigureAwait(false);
+                await DrawNeighborsAsync(this.Geometry).ConfigureAwait(false);
 
                 var result = await GetGeometry().ConfigureAwait(false);
 
@@ -214,12 +214,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     : UIResources.AreaMap_LengthFormat, length.ToString("#.##")) : string.Empty;
         }
 
-        private async Task DrawNeighborsAsync(GeometryType? geometryType, Geometry geometry, GeometryNeighbor[] neighbors)
+        private async Task DrawNeighborsAsync(Geometry geometry)
         {
+            var neighbors = this.GeographyNeighbors;
             if (neighbors == null || neighbors.Length == 0)
                 return;
             
-            var gType = geometryType ?? GeometryType.Polygon;
+            if(this.MapView?.Map?.SpatialReference == null)
+                return;
+            
+            var gType = this.RequestedGeometryType;
             var esriGeometryType = neighbors[0].Geometry.GeometryType;
 
             IEnumerable<Field> fields = new Field[]
@@ -417,6 +421,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IsLocationServiceSwitchEnabled = false;
             AddPointVisible = false;
 
+            if(this.MapView?.Map?.SpatialReference == null)
+                return;
+            
             if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
             {
                 //init map overlay
@@ -432,7 +439,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             locationOverlay.Renderer = new SimpleRenderer(locationPointSymbol);
             this.MapView.GraphicsOverlays.Add(locationOverlay);
 
-            await DrawNeighborsAsync(this.RequestedGeometryType, this.Geometry, this.GeographyNeighbors).ConfigureAwait(false);
+            await DrawNeighborsAsync(this.Geometry).ConfigureAwait(false);
 
             //project and use current map
             geometryBuilder = new GeometryByTypeBuilder(this.MapView.Map.SpatialReference, RequestedGeometryType);
@@ -814,7 +821,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.MapView?.SketchEditor.ClearGeometry();
                 this.MapView?.SketchEditor.ReplaceGeometry(geometry);
                 
-                await DrawNeighborsAsync(this.RequestedGeometryType, geometry, this.GeographyNeighbors).ConfigureAwait(false);
+                await DrawNeighborsAsync(geometry).ConfigureAwait(false);
             }
         });
 
