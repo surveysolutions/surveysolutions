@@ -98,4 +98,28 @@ internal class GeometryByTypeBuilder
                 throw new ArgumentOutOfRangeException(nameof(geometryType), geometryType, "Invalid requested type");
         }
     }
+
+    public void RemoveLastPoint()
+    {
+        switch (geometryType)
+        {
+            case GeometryType.Polygon:
+                if (polygonBuilder.Parts[0].Points.Count > 0)  
+                    polygonBuilder.Parts[0].RemovePoint(polygonBuilder.Parts[0].Points.Count - 1);
+                break;
+            case GeometryType.Polyline:
+                if (polylineBuilder.Parts[0].Points.Count > 0)  
+                    polylineBuilder.Parts[0].RemovePoint(polylineBuilder.Parts[0].Points.Count - 1);
+                break;
+            case GeometryType.Point:
+                mapPointBuilder = new MapPointBuilder(mapPointBuilder.SpatialReference);
+                break;
+            case GeometryType.Multipoint:
+                if (multipointBuilder.Points.Count > 0) 
+                    multipointBuilder.Points.RemoveAt(multipointBuilder.Points.Count - 1);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(geometryType), geometryType, "Invalid requested type");
+        }
+    }
 }
