@@ -20,7 +20,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.UI.Shared.Extensions.Entities;
-using WB.UI.Shared.Extensions.Extensions;
 using WB.UI.Shared.Extensions.Services;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
 using EsriGeometryType = Esri.ArcGISRuntime.Geometry.GeometryType;
@@ -554,9 +553,27 @@ namespace WB.UI.Shared.Extensions.ViewModels
         
         private void BtnUndo()
         {
-            var command = this.MapView?.SketchEditor.UndoCommand;
-            if (this.MapView?.SketchEditor?.UndoCommand.CanExecute(command) ?? false)
-                this.MapView.SketchEditor.UndoCommand.Execute(command);
+            if (IsManual)
+            {
+                var command = this.MapView?.SketchEditor.UndoCommand;
+                if (this.MapView?.SketchEditor?.UndoCommand.CanExecute(command) ?? false)
+                    this.MapView.SketchEditor.UndoCommand.Execute(command);
+            }
+            else if (RequestedGeometryInputMode == GeometryInputMode.Semiautomatic)
+            {
+                if(locationOverlay.Graphics.Count > 0)
+                    locationOverlay.Graphics.RemoveAt(locationOverlay.Graphics.Count - 1);
+                
+                geometryBuilder.RemoveLastPoint();
+                
+                if (RequestedGeometryType is GeometryType.Polygon or GeometryType.Polyline)
+                {
+                    locationLineOverlay.Graphics.Clear();
+                    // Add the updated line.
+                    var geometry = geometryBuilder.ToGeometry();
+                    locationLineOverlay.Graphics.Add(new Graphic(geometry));
+                }
+            }
         }
 
         private void BtnCancelCommand()
@@ -690,6 +707,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                             GeometryType.Multipoint => collectedPoints > 1,
                             _ => throw new ArgumentOutOfRangeException()
                         };
+
+                    this.CanUndo =
+                        (RequestedGeometryInputMode == GeometryInputMode.Semiautomatic && collectedPoints > 0);
                 }
             }
             catch (Exception e)
