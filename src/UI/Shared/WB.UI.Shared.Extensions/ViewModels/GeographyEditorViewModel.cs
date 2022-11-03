@@ -112,7 +112,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 }
                 else
                 {
-                    if (this.MapView != null && this.MapView.Map.SpatialReference != null && !this.MapView.Map.SpatialReference.IsEqual(Geometry.SpatialReference))
+                    if (this.MapView != null && this.MapView.Map?.SpatialReference != null && !this.MapView.Map.SpatialReference.IsEqual(Geometry.SpatialReference))
                         Geometry = GeometryEngine.Project(Geometry, this.MapView.Map.SpatialReference);
 
                     if (this.Geometry.GeometryType == Esri.ArcGISRuntime.Geometry.GeometryType.Point)
@@ -474,10 +474,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
             else
             {
-                if (this.MapView != null && this.MapView.Map.SpatialReference != null 
+                if (this.MapView != null && this.MapView.Map?.SpatialReference != null 
                                          && !this.MapView.Map.SpatialReference.IsEqual(Geometry.SpatialReference))
                     Geometry = GeometryEngine.Project(Geometry, this.MapView.Map.SpatialReference);
-
+                
+                if (this.Geometry.GeometryType == Esri.ArcGISRuntime.Geometry.GeometryType.Point)
+                    await this.MapView.SetViewpointCenterAsync(this.Geometry as MapPoint).ConfigureAwait(false);
+                else
+                    await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
 
                 switch (this.Geometry.GeometryType)
                 {
