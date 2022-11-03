@@ -195,8 +195,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             this.AssignmentIdLabel = interview.Assignment.HasValue
                 ? EnumeratorUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(interview.Assignment)
                 : EnumeratorUIResources.Dashboard_CensusAssignment;
+
+            RefreshSubtitle();
         }
 
+        protected override void RefreshSubtitle()
+        {
+            this.SubTitle = GetSubTitle();
+        }
+        
         private string GetSubTitle()
         {
             var comment = GetInterviewCommentByStatus(interview);
@@ -206,9 +213,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             var subTitle = $"{dateComment}{separator}{comment}";
             return subTitle;
         }
-
-        public override string SubTitle => GetSubTitle();
-
         private ZonedDateTime? GetCalendarEventDate()
         {
             if (interview.CalendarEvent.HasValue)
