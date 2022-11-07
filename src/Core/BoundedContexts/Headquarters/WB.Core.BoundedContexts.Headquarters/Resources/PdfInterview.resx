@@ -219,4 +219,22 @@
   <data name="UserRoles_ApiUser" xml:space="preserve">
     <value>ApiUser</value>
   </data>
+  <data name="AreaQestion_Area" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="AreaQestion_Length" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="AreaQestion_Points" xml:space="preserve">
+    <value>Points</value>
+  </data>
+  <data name="AreaQestion_RequestedAccuracy" xml:space="preserve">
+    <value>Accuracy</value>
+  </data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+    <value>square meters</value>
+  </data>
+  <data name="AreaQestion_AreaMeter" xml:space="preserve">
+    <value>meters</value>
+  </data>
 </root>
