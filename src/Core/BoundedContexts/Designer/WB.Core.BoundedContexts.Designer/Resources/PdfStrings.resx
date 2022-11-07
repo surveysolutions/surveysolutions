@@ -175,7 +175,19 @@
     <value>identifying</value>
   </data>
   <data name="QuestionType_Area" xml:space="preserve">
-    <value>geography</value>
+    <value>geography: </value>
+  </data>
+  <data name="QuestionType_Area_Polygon" xml:space="preserve">
+    <value>polygon</value>
+  </data>
+  <data name="QuestionType_Area_Polyline" xml:space="preserve">
+    <value>polyline</value>
+  </data>
+  <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+    <value>multipoint</value>
+  </data>
+  <data name="QuestionType_Area_Point" xml:space="preserve">
+    <value>point</value>
   </data>
   <data name="QuestionType_Audio" xml:space="preserve">
     <value>audio</value>
