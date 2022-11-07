@@ -483,11 +483,47 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to geography.
+        ///   Looks up a localized string similar to geography: .
         /// </summary>
         public static string QuestionType_Area {
             get {
                 return ResourceManager.GetString("QuestionType_Area", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to multipoint.
+        /// </summary>
+        public static string QuestionType_Area_Multipoint {
+            get {
+                return ResourceManager.GetString("QuestionType_Area_Multipoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to point.
+        /// </summary>
+        public static string QuestionType_Area_Point {
+            get {
+                return ResourceManager.GetString("QuestionType_Area_Point", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to polygon.
+        /// </summary>
+        public static string QuestionType_Area_Polygon {
+            get {
+                return ResourceManager.GetString("QuestionType_Area_Polygon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to polyline.
+        /// </summary>
+        public static string QuestionType_Area_Polyline {
+            get {
+                return ResourceManager.GetString("QuestionType_Area_Polyline", resourceCulture);
             }
         }
         

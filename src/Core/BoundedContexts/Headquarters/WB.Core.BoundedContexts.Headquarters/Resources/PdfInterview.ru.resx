@@ -219,4 +219,23 @@
   <data name="UserRoles_ApiUser" xml:space="preserve">
     <value>Пользователь Апи</value>
   </data>
+  <data name="AreaQestion_Area" xml:space="preserve">
+    <value>Площадь</value>
+  </data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+    <value>квадратных метров</value>
+  </data>
+  <data name="AreaQestion_Length" xml:space="preserve">
+    <value>Длинна</value>
+  </data>
+  <data name="AreaQestion_AreaMeter" xml:space="preserve">
+    <value>метра(ов)</value>
+  </data>
+  <data name="AreaQestion_Points" xml:space="preserve">
+    <value>Кол-во точек</value>
+  </data>
+  <data name="AreaQestion_RequestedAccuracy" xml:space="preserve">
+    <value>Точность</value>
+  </data>
+
 </root>
