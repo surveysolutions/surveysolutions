@@ -213,29 +213,31 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                     paragraph.AddWrapFormattedText(question.GetAnswerAsString(), PdfStyles.QuestionAnswer, textColor);
                     
                     var answerValue = question.GetAsInterviewTreeIntegerQuestion().GetAnswer()?.Value;
-                    if (answerValue.HasValue)
-                    {
-                        var specialValue = questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, answerValue.Value, null);
-                        WriteOptionAttachmentIfNeed(paragraph, specialValue);
-                        paragraph.AddLineBreak();
-                    }
+                    if (!answerValue.HasValue) return;
+                    
+                    var specialValue = questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, answerValue.Value, null);
+                    if (specialValue == null) return;
+                        
+                    WriteOptionAttachmentIfNeed(paragraph, specialValue);
+                    paragraph.AddLineBreak();
                 }
                 else if (question.IsDouble)
                 {
                     paragraph.AddWrapFormattedText(question.GetAnswerAsString(), PdfStyles.QuestionAnswer, textColor);
                     
                     var answerValue = question.GetAsInterviewTreeDoubleQuestion().GetAnswer()?.Value;
-                    if (answerValue.HasValue && Math.Truncate(answerValue.Value) == answerValue.Value)
+                    if (!answerValue.HasValue || Math.Truncate(answerValue.Value) != answerValue.Value) return;
+                    
+                    try
                     {
-                        try
-                        {
-                            var specialValue = questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, Convert.ToInt32(answerValue.Value), null);
-                            WriteOptionAttachmentIfNeed(paragraph, specialValue);
-                            paragraph.AddLineBreak();
-                        }
-                        catch (OverflowException)
-                        {
-                        }
+                        var specialValue = questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, Convert.ToInt32(answerValue.Value), null);
+                        if (specialValue == null) return;
+                            
+                        WriteOptionAttachmentIfNeed(paragraph, specialValue);
+                        paragraph.AddLineBreak();
+                    }
+                    catch (OverflowException)
+                    {
                     }
                 }
                 else
