@@ -641,24 +641,18 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 : "unknown";
 
             this.UserInteractionService.ShowToast(
-                $"Position: {e.Position}; e.HorizontalAccuracy: {e.HorizontalAccuracy}; Source: {source}; Valid: {e.HorizontalAccuracy <= RequestedAccuracy}"); 
+                $"Position: {e.Position}; e.HorizontalAccuracy: {e.HorizontalAccuracy}; Source: {source}; Valid: {e.HorizontalAccuracy <= RequestedAccuracy}");
 
-            if (e.HorizontalAccuracy <= RequestedAccuracy)
-            {
-                LastPosition = e.Position;
-                
-                if (RequestedGeometryInputMode == GeometryInputMode.Semiautomatic)
-                {
-                    CanAddPoint = true;
-                }
-            }
+            if (e.HorizontalAccuracy > RequestedAccuracy) return;
+            
+            LastPosition = e.Position;
+            CanAddPoint = true;
         }
 
         public IMvxCommand AddPointCommand => new MvxAsyncCommand(async() => await this.AddPoint());
         private async Task AddPoint()
         {
             // manually add point from last position
-            CanAddPoint = false;
             await AddPointToCollection();
         }
 

@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Linq;
 using Esri.ArcGISRuntime.Geometry;
+using Java.Security;
 
 namespace WB.UI.Shared.Extensions.ViewModels;
 
@@ -70,21 +71,21 @@ public class GeometryHelper
                 var polygonCoordinates = ((Polygon) result).Parts[0].Points
                     .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
                     .Select(coordinate => $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
-                coordinates = string.Join(";", polygonCoordinates);
-                break;
+                return string.Join(";", polygonCoordinates);
             case Esri.ArcGISRuntime.Geometry.GeometryType.Point:
                 var projected = GeometryEngine.Project(result as MapPoint, reference) as MapPoint;
-                coordinates = $"{projected.X.ToString(CultureInfo.InvariantCulture)},{projected.Y.ToString(CultureInfo.InvariantCulture)}";
-                break;
+                return $"{projected.X.ToString(CultureInfo.InvariantCulture)},{projected.Y.ToString(CultureInfo.InvariantCulture)}";
             case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
                 var polylineCoordinates = ((Polyline) result).Parts[0].Points
                     .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
                     .Select(coordinate => $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
-                coordinates = string.Join(";", polylineCoordinates);
-                break;
+                return string.Join(";", polylineCoordinates);
+            case Esri.ArcGISRuntime.Geometry.GeometryType.Multipoint:
+                var projectedMultipoint = (GeometryEngine.Project(result as Multipoint, reference) as Multipoint).Points.Select(coordinate=> $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList()
+                return string.Join(";", projectedMultipoint);
         }
 
-        return coordinates;
+        throw new InvalidParameterException("Invalid geometry type");
     }
     
     public static double GetGeometryArea(Geometry geometry)
