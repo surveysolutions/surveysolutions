@@ -23,11 +23,11 @@
                                     <td>{{this.$t('Pages.AreaQestion_Length')}}:</td>
                                     <td>{{$me.answer.length.toLocaleString()}} {{this.$t('Pages.AreaQestion_AreaMeter')}}</td>
                                 </tr>
-                                <tr v-if="isMultiPoints">
+                                <tr>
                                     <td>{{this.$t('Pages.AreaQestion_Points')}}:</td>
                                     <td>{{$me.answer.selectedPoints.length.toLocaleString()}}</td>
                                 </tr>
-                                <tr v-if="!isManualMode && $me.answer.requestedAccuracy">
+                                <tr v-if="!isManualMode">
                                     <td>{{this.$t('Pages.AreaQestion_RequestedAccuracy')}}:</td>
                                     <td>{{$me.answer.requestedAccuracy.toLocaleString()}}</td>
                                 </tr>
