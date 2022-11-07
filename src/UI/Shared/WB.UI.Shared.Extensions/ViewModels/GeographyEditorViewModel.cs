@@ -649,7 +649,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             CanAddPoint = true;
         }
 
-        public IMvxCommand AddPointCommand => new MvxAsyncCommand(async() => await this.AddPoint());
+        public IMvxAsyncCommand AddPointCommand => new MvxAsyncCommand(async() => await this.AddPoint());
         private async Task AddPoint()
         {
             // manually add point from last position
@@ -668,12 +668,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     var newPoint = new MapPoint(lastPositionProjected.X, lastPositionProjected.Y,
                         lastPositionProjected.SpatialReference);
                     
-                    //reset collected point
+                    //reset temp collected point
                     LastPosition = null;
-                    CanAddPoint = false;
-                    
+
                     geometryBuilder.AddPoint(newPoint);
-                    await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => { locationOverlay.Graphics.Add(new Graphic(newPoint)); });                    
+                    await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
+                    {
+                        CanAddPoint = false;
+                        locationOverlay.Graphics.Add(new Graphic(newPoint));
+                    });                    
 
                     if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
                     {
@@ -846,7 +849,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             await this.UpdateBaseMap();
 
             //update internal structures
-            //SpatialReferense of new map could differ from initial
+            //SpatialReference of new map could differ from initial
             if (geometry != null)
             {
                 if (this.MapView != null && geometry != null && !this.MapView.Map.SpatialReference.IsEqual(geometry.SpatialReference))
@@ -858,13 +861,19 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 await DrawNeighborsAsync(geometry).ConfigureAwait(false);
             }
         });
+        
+        public override void ViewDisappearing()
+        {
+            locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
+            base.ViewDisappearing();
+        }
 
         public override void Dispose()
         {
             if (locationDataSource != null)
             {
+                locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
                 locationDataSource.StopAsync();
-                locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;                
             }
 
             collectionCancellationTokenSource?.Cancel();
