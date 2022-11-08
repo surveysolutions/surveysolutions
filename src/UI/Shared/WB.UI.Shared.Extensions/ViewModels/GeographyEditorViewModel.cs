@@ -447,31 +447,30 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (this.Geometry == null)
             {
                 StartButtonVisible = true;
-
+                try
                 {
-                    try
+                    await locationDataSource.StartAsync();
+                    if (locationDataSource.Status == LocationDataSourceStatus.Started)
                     {
-                        await locationDataSource.StartAsync();
-                        if (locationDataSource.Status == LocationDataSourceStatus.Started)
-                        {
-                            this.MapView.LocationDisplay.DataSource = locationDataSource;
-                            this.MapView.LocationDisplay.IsEnabled = true;
-                            this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Recenter;
+                        this.MapView.LocationDisplay.DataSource = locationDataSource;
+                        this.MapView.LocationDisplay.IsEnabled = true;
+                        this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Recenter;
+                        this.MapView.LocationDisplay.Opacity = 0.5;
 
-                            CanStartStopCollecting = true;
-                            StartButtonText = "Start";
-                        }
-                        else
-                        {
-                            this.UserInteractionService.ShowToast("Error on location services start");
-                        }
+                        CanStartStopCollecting = true;
+                        StartButtonText = "Start";
                     }
-                    catch (Exception e)
+                    else
                     {
-                        logger.Error("Error on location start", e);
                         this.UserInteractionService.ShowToast("Error on location services start");
                     }
                 }
+                catch (Exception e)
+                {
+                    logger.Error("Error on location start", e);
+                    this.UserInteractionService.ShowToast("Error on location services start");
+                }
+                
             }
             else
             {
@@ -577,6 +576,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     // Add the updated line.
                     var geometry = geometryBuilder.ToGeometry();
                     locationLineOverlay.Graphics.Add(new Graphic(geometry));
+                }
+                
+                if (RequestedGeometryType == GeometryType.Polygon)
+                {
+                    HasWarning = !geometryBuilder.IsCorrectlyMeasured(RequestedAccuracy);
                 }
             }
         }
@@ -710,6 +714,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
                             _ => throw new ArgumentOutOfRangeException()
                         };
 
+                    if (RequestedGeometryType == GeometryType.Polygon && !IsManual)
+                    {
+                        HasWarning = !geometryBuilder.IsCorrectlyMeasured(RequestedAccuracy);
+                    }
+
                     this.CanUndo =
                         (RequestedGeometryInputMode == GeometryInputMode.Semiautomatic && collectedPoints > 0);
                 }
@@ -767,14 +776,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private bool isGeometryAreaVisible;
         public bool IsGeometryAreaVisible
         {
-            get => this.isEditing;
+            get => this.isGeometryAreaVisible;
             set => this.RaiseAndSetIfChanged(ref this.isGeometryAreaVisible, value);
+        }
+
+        private bool hasWarning;
+        public bool HasWarning
+        {
+            get => this.hasWarning;
+            set => this.RaiseAndSetIfChanged(ref this.hasWarning, value);
         }
 
         private bool isGeometryLengthVisible;
         public bool IsGeometryLengthVisible
         {
-            get => this.isEditing;
+            get => this.isGeometryLengthVisible;
             set => this.RaiseAndSetIfChanged(ref this.isGeometryLengthVisible, value);
         }
 
@@ -792,7 +808,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.canSave, value);
         }
 
-        
         private bool canStartStopCollecting;
         public bool CanStartStopCollecting
         {

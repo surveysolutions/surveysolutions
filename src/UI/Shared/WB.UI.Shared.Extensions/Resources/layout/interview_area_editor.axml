@@ -222,7 +222,7 @@
                     style="@style/Area_Screen_Button"
                     android:id="@+id/areaEditor_Save"
                     android:layout_marginRight="@dimen/area_editor_common_margin_right"
-                    local:MvxBind="Click SaveAreaCommand;Text Localization('AreaMap_Save'); Enabled CanSave;" />
+                    local:MvxBind="Click SaveAreaCommand;Text Localization('AreaMap_Save'); Enabled CanSave; ButtonHasWarningOrSuccess HasWarning;" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

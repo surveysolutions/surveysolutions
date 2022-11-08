@@ -12,8 +12,7 @@ internal class GeometryByTypeBuilder
     private MapPointBuilder mapPointBuilder;
 
     private GeometryType geometryType;
-        
-        
+
     public GeometryByTypeBuilder(SpatialReference spatialReference, GeometryType geometryType)
     {
         this.geometryType = geometryType;
@@ -35,7 +34,6 @@ internal class GeometryByTypeBuilder
             default:
                 throw new ArgumentOutOfRangeException(nameof(geometryType), geometryType, "Invalid requested type");
         }
-            
     }
 
     public Geometry ToGeometry()
@@ -76,6 +74,25 @@ internal class GeometryByTypeBuilder
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
+    }
+    
+    public bool IsCorrectlyMeasured(int? requestedAccuracy)
+    {
+        if (!requestedAccuracy.HasValue)
+            return true;
+        
+        return geometryType switch
+            {
+                GeometryType.Polygon => polygonBuilder.Parts[0].PointCount < 3 
+                    ? false
+                    : GeometryEngine.Distance(
+                        polygonBuilder.Parts[0].StartPoint, 
+                        polygonBuilder.Parts[0].EndPoint) <= requestedAccuracy,
+                GeometryType.Polyline => true,
+                GeometryType.Point => true,
+                GeometryType.Multipoint => true,
+                _ => throw new ArgumentOutOfRangeException()
+            };
     }
 
     public void AddPoint(MapPoint point)

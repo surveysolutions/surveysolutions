@@ -3,13 +3,14 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light">
     </style>
     
-    <style name="Area_Screen_Button" parent="Button_Primary">
+    <style name="Area_Screen_Button" parent="Button_Success">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
     </style>
 
-    <style name="Area_Screen_Button_Bordered" parent="Area_Screen_Button">
-        
+    <style name="Area_Screen_Button_Bordered" parent="Button_Primary">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
     </style>
         
     <style name="Progress_Indicator" parent="android:Widget.ProgressBar.Horizontal">
