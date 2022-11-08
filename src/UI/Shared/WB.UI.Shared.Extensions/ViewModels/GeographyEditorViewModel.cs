@@ -451,7 +451,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     try
                     {
                         await locationDataSource.StartAsync();
-                        if (locationDataSource.IsStarted)
+                        if (locationDataSource.Status == LocationDataSourceStatus.Started)
                         {
                             this.MapView.LocationDisplay.DataSource = locationDataSource;
                             this.MapView.LocationDisplay.IsEnabled = true;
