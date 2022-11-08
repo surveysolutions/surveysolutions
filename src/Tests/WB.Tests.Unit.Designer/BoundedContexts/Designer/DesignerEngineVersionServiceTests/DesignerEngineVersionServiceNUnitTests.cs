@@ -242,7 +242,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
                         variable: "geo",
                         validationConditions: new ValidationCondition[]
                         {
-                          new ValidationCondition("geo.Accuracy > 3", "test")  
+                          new ValidationCondition("geo.RequestedAccuracy > 3", "test")  
                         },
                         properties:new QuestionProperties(false,false)
                         {
@@ -269,7 +269,34 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
                         variable: "geo",
                         validationConditions: new ValidationCondition[]
                         {
-                            new ValidationCondition("self.  Accuracy > 3", "test")  
+                            new ValidationCondition("self.  RequestedAccuracy > 3", "test")  
+                        },
+                        properties:new QuestionProperties(false,false)
+                        {
+                            GeometryOverlapDetection = false
+                        }),
+                });
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(34));
+        }
+        
+        [Test]
+        public void should_return_34_when_geography_frequency_is_used_in_validation()
+        {
+            var categoryId = Id.g1;
+            
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.Question(questionType:QuestionType.Area,
+                        variable: "geo",
+                        validationConditions: new ValidationCondition[]
+                        {
+                            new ValidationCondition("geo.RequestedFrequency > 11", "test")  
                         },
                         properties:new QuestionProperties(false,false)
                         {
