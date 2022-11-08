@@ -142,6 +142,7 @@ jobs:
         -KeystorePassword "${{ secrets.INTERVIEWER_KEYSTORE_PASSWORD }}" `
         -GoogleMapKey "${{ secrets.GOOGLEMAPS_KEY }}" `
         -ArcGisKey "${{ secrets.ARCGIS_KEY }}"
+        -ArcGisApiKey "${{ secrets.ARCGIS_API_KEY }}"
        
     - name: Publish
       uses: actions/upload-artifact@v2
