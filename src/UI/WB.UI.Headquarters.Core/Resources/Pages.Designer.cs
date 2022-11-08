@@ -656,9 +656,18 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Accuracy.
         /// </summary>
-        public static string AreaQestion_RequestedAccuracy {
+        public static string AreaQuestion_RequestedAccuracy {
             get {
-                return ResourceManager.GetString("AreaQestion_RequestedAccuracy", resourceCulture);
+                return ResourceManager.GetString("AreaQuestion_RequestedAccuracy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Frequency.
+        /// </summary>
+        public static string AreaQuestion_RequestedFrequency {
+            get {
+                return ResourceManager.GetString("AreaQuestion_RequestedFrequency", resourceCulture);
             }
         }
         

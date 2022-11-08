@@ -28,8 +28,12 @@
                                     <td>{{$me.answer.selectedPoints.length.toLocaleString()}}</td>
                                 </tr>
                                 <tr v-if="!isManualMode && $me.answer.requestedAccuracy">
-                                    <td>{{this.$t('Pages.AreaQestion_RequestedAccuracy')}}:</td>
+                                    <td>{{this.$t('Pages.AreaQuestion_RequestedAccuracy')}}:</td>
                                     <td>{{$me.answer.requestedAccuracy.toLocaleString()}}</td>
+                                </tr>
+                                <tr v-if="isAutoMode && $me.answer.requestedFrequency">
+                                    <td>{{this.$t('Pages.AreaQuestion_RequestedFrequency')}}:</td>
+                                    <td>{{$me.answer.requestedFrequency.toLocaleString()}}</td>
                                 </tr>
                                 <tr v-if="!coordinatesShown">
                                     <td>
@@ -96,6 +100,9 @@ export default {
         },
         isManualMode() {
             return this.$me.mode == null || this.$me.mode == 'Manual'
+        },
+        isAutoMode() {
+            return this.$me.mode != null && this.$me.mode == 'Automatic'
         },
     },
     methods: {
