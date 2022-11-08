@@ -159,7 +159,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Geography input mode.
+        ///   Looks up a localized string similar to Input mode.
         /// </summary>
         public static string GeographyInputMode {
             get {
