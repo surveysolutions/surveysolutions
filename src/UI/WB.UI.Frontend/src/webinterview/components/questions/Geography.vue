@@ -27,9 +27,13 @@
                                     <td>{{this.$t('Pages.AreaQestion_Points')}}:</td>
                                     <td>{{$me.answer.selectedPoints.length.toLocaleString()}}</td>
                                 </tr>
-                                <tr v-if="!isManualMode">
-                                    <td>{{this.$t('Pages.AreaQestion_RequestedAccuracy')}}:</td>
+                                <tr v-if="!isManualMode && $me.answer.requestedAccuracy">
+                                    <td>{{this.$t('Pages.AreaQuestion_RequestedAccuracy')}}:</td>
                                     <td>{{$me.answer.requestedAccuracy.toLocaleString()}}</td>
+                                </tr>
+                                <tr v-if="isAutoMode && $me.answer.requestedFrequency">
+                                    <td>{{this.$t('Pages.AreaQuestion_RequestedFrequency')}}:</td>
+                                    <td>{{$me.answer.requestedFrequency.toLocaleString()}}</td>
                                 </tr>
                                 <tr v-if="!coordinatesShown">
                                     <td>
@@ -47,7 +51,7 @@
                                         <a
                                             v-bind:href="`${$config.googleMapsBaseUrl}/maps?q=${selectedPoint.latitude},${selectedPoint.longitude}`"
                                             :title="$t('WebInterviewUI.ShowOnMap')"
-                                            target="_blank">{{selectedPoint.latitude}}, {{selectedPoint.longitude}}</a></td>
+                                            target="_blank">{{selectedPoint.latitude.toFixed(6)}}, {{selectedPoint.longitude.toFixed(6)}}</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -96,6 +100,9 @@ export default {
         },
         isManualMode() {
             return this.$me.mode == null || this.$me.mode == 'Manual'
+        },
+        isAutoMode() {
+            return this.$me.mode != null && this.$me.mode == 'Automatic'
         },
     },
     methods: {
