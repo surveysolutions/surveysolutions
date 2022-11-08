@@ -7,7 +7,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         Task<AreaEditResult> EditAreaAsync(EditAreaArgs args);
         Task OpenMapDashboardAsync();
 
-        public void Init(string key);
+        public void SetLicenseKey(string key);
+        public void SetApiKey(string key);
         
         bool DoesSupportMaps { get; }
     }

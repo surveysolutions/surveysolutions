@@ -187,6 +187,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
     Set-AndroidXmlResourceValue $CapiProject "appcenter_key" $AppCenterKey
     Set-AndroidXmlResourceValue $CapiProject "google_maps_api_key" $GoogleMapKey
     Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_key" $ArcGisKey
+    Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_api_key" $ArcGisApiKey
 
     $keyStore = [System.IO.Path]::GetTempFileName()
     if ($signapk) {

@@ -16,7 +16,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             return Task.CompletedTask;
         }
 
-        public void Init(string key)
+        public void SetLicenseKey(string key)
+        {
+        }
+
+        public void SetApiKey(string key)
         {
         }
 

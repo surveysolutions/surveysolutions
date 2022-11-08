@@ -57,9 +57,14 @@ namespace WB.UI.Shared.Extensions.Services
                 new MapDashboardViewModelArgs()).ConfigureAwait(false);
         }
 
-        public void Init(string key)
+        public void SetLicenseKey(string key)
         {
             ArcGISRuntimeEnvironment.SetLicense(key);
+        }
+
+        public void SetApiKey(string key)
+        {
+            ArcGISRuntimeEnvironment.ApiKey = key;
         }
 
         public bool DoesSupportMaps => true;
