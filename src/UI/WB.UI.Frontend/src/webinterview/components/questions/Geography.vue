@@ -27,7 +27,7 @@
                                     <td>{{this.$t('Pages.AreaQestion_Points')}}:</td>
                                     <td>{{$me.answer.selectedPoints.length.toLocaleString()}}</td>
                                 </tr>
-                                <tr v-if="!isManualMode">
+                                <tr v-if="!isManualMode && $me.answer.requestedAccuracy">
                                     <td>{{this.$t('Pages.AreaQestion_RequestedAccuracy')}}:</td>
                                     <td>{{$me.answer.requestedAccuracy.toLocaleString()}}</td>
                                 </tr>
@@ -47,7 +47,7 @@
                                         <a
                                             v-bind:href="`${$config.googleMapsBaseUrl}/maps?q=${selectedPoint.latitude},${selectedPoint.longitude}`"
                                             :title="$t('WebInterviewUI.ShowOnMap')"
-                                            target="_blank">{{selectedPoint.latitude}}, {{selectedPoint.longitude}}</a></td>
+                                            target="_blank">{{selectedPoint.latitude.toFixed(6)}}, {{selectedPoint.longitude.toFixed(6)}}</a></td>
                                 </tr>
                             </tbody>
                         </table>
