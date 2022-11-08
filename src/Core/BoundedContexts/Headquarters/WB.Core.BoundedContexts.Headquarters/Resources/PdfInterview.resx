@@ -231,6 +231,9 @@
   <data name="AreaQestion_RequestedAccuracy" xml:space="preserve">
     <value>Accuracy</value>
   </data>
+  <data name="AreaQestion_RequestedFrequency" xml:space="preserve">
+    <value>Frequency</value>
+  </data>
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
     <value>square meters</value>
   </data>

@@ -6,5 +6,6 @@
         public double Length { get; set; }
         public int PointsCount { get; set; }
         public double? RequestedAccuracy { get; set; }
+        public double? RequestedFrequency { get; set; }
     }
 }

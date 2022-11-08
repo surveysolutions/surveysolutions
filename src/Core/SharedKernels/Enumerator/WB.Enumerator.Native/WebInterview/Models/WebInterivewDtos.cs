@@ -117,6 +117,8 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public double? Area { get; set; }
         public double? Length { get; set; }
         public double? RequestedAccuracy { set; get; }
+        
+        public double? RequestedFrequency { set; get; }
     }
 
     public class InterviewDateQuestion : GenericQuestion

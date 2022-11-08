@@ -270,8 +270,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(
-                new Area(@event.Geometry, @event.MapName, @event.NumberOfPoints, @event.AreaSize,
-                @event.Length, @event.Coordinates, @event.DistanceToEditor, @event.RequestedAccuracy)), 
+                new Area(@event.Geometry, @event.MapName, @event.NumberOfPoints, @event.AreaSize, @event.Length, 
+                    @event.Coordinates, @event.DistanceToEditor, @event.RequestedAccuracy, @event.RequestedFrequency)), 
                 @event.OriginDate ?? @event.AnswerTimeUtc);
         }
 
@@ -1018,7 +1018,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedInterviewTree = GetChangedTree();
 
             var answer = new Area(command.Geometry, command.MapName, command.NumberOfPoints, 
-                command.Area, command.Length, command.Coordinates, command.DistanceToEditor, command.RequestedAccuracy);
+                command.Area, command.Length, command.Coordinates, command.DistanceToEditor, 
+                command.RequestedAccuracy, command.RequestedFrequency);
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(answer), command.OriginDate);
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, command.OriginDate);
@@ -2144,8 +2145,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     var answer = changedQuestion.GetAsInterviewTreeAreaQuestion().GetAnswer().Value;
                     this.ApplyEvent(new AreaQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, now, answer.Geometry, answer.MapName, answer.AreaSize, answer.Length,
-                        answer.Coordinates, answer.DistanceToEditor, answer.NumberOfPoints, answer.RequestedAccuracy));
+                        changedQuestion.Identity.RosterVector, now, answer.Geometry, answer.MapName, 
+                        answer.AreaSize, answer.Length, answer.Coordinates, answer.DistanceToEditor, 
+                        answer.NumberOfPoints, answer.RequestedAccuracy ,answer.RequestedFrequency));
                 }
 
                 else if (changedQuestion.IsAudio)

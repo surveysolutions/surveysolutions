@@ -9,6 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public string MapName { set; get; }
         public double? AreaSize { set; get; }
         public double? RequestedAccuracy { set; get; }
+        public double? RequestedFrequency { set; get; }
         public double? Length { set; get; }
         public string Coordinates { set; get; }
         public double? DistanceToEditor { set; get; }
@@ -18,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public AreaQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector,
                                     DateTimeOffset originDate, string geometry, string mapName, double? areaSize, 
                                     double? length, string coordinates, double? distanceToEditor, 
-                                    int? numberOfPoints, double? requestedAccuracy)
+                                    int? numberOfPoints, double? requestedAccuracy, double? requestedFrequency)
             : base(userId, questionId, rosterVector, originDate)
         {
             this.Geometry = geometry;
@@ -29,6 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             this.DistanceToEditor = distanceToEditor;
             this.NumberOfPoints = numberOfPoints;
             this.RequestedAccuracy = requestedAccuracy;
+            this.RequestedFrequency = requestedFrequency;
         }
     }
 }

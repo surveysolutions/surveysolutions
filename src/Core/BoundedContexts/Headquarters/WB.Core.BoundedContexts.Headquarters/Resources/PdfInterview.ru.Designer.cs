@@ -114,6 +114,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Частота.
+        /// </summary>
+        public static string AreaQestion_RequestedFrequency {
+            get {
+                return ResourceManager.GetString("AreaQestion_RequestedFrequency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Комментарии.
         /// </summary>
         public static string Comments {

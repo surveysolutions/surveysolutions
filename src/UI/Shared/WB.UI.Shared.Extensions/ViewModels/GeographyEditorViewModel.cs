@@ -162,7 +162,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 Length = GeometryHelper.GetGeometryLength(result),
                 DistanceToEditor = distanceToEditor,
                 NumberOfPoints = GeometryHelper.GetGeometryPointsCount(result),
-                RequestedAccuracy = RequestedAccuracy
+                RequestedAccuracy = RequestedAccuracy,
+                RequestedFrequency = RequestedFrequency
             };
 
             //save

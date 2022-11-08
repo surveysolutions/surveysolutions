@@ -130,6 +130,13 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                         paragraph.AddWrapFormattedText(areaAnswer.RequestedAccuracy.FormatDouble(2), answerStyle, textColor);
                         paragraph.AddLineBreak();
                     }
+                    if (geometryMode == GeometryInputMode.Automatic)
+                    {
+                        paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_RequestedFrequency, PdfStyles.QuestionTitle);
+                        paragraph.AddTab();
+                        paragraph.AddWrapFormattedText(areaAnswer.RequestedFrequency.FormatDouble(2), answerStyle, textColor);
+                        paragraph.AddLineBreak();
+                    }
 
                     paragraph.AddWrapFormattedText(areaAnswer.ToString(), answerStyle, textColor);
                 }

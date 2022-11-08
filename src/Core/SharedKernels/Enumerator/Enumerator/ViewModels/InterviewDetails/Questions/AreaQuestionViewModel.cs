@@ -157,8 +157,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var questionAnswer = areaQuestion.GetAnswer().Value;
                 answerValue = new Area(questionAnswer.Geometry, questionAnswer.MapName, questionAnswer.NumberOfPoints, 
-                    questionAnswer.AreaSize, questionAnswer.Length, 
-                    questionAnswer.DistanceToEditor, questionAnswer.RequestedAccuracy);
+                    questionAnswer.AreaSize, questionAnswer.Length, questionAnswer.DistanceToEditor, 
+                    questionAnswer.RequestedAccuracy, questionAnswer.RequestedFrequency);
             }
 
             SetAnswerAndUpdateLabels(answerValue);
@@ -198,8 +198,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             area: this.answer,
                             geometryType: geometryType,
                             requestedGeometryInputMode: requestedGeometryMode,
-                            requestedAccuracy: Settings.GeographyQuestionAccuracyInMeters,
-                            requestedFrequency: Settings.GeographyQuestionPeriodInSeconds,
+                            requestedAccuracy: requestedGeometryMode == GeometryInputMode.Manual ? null: Settings.GeographyQuestionAccuracyInMeters,
+                            requestedFrequency: (requestedGeometryMode is GeometryInputMode.Manual or GeometryInputMode.Semiautomatic) ? null: Settings.GeographyQuestionPeriodInSeconds,
                             geographyNeighbors: neighbors,
                             title: question.Parent.Title.Text
                             ))
@@ -219,7 +219,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         length: answerArea.Length,
                         distanceToEditor: answerArea.DistanceToEditor,
                         numberOfPoints: answerArea.NumberOfPoints,
-                        requestedAccuracy: answerArea.RequestedAccuracy);
+                        requestedAccuracy: answerArea.RequestedAccuracy,
+                        requestedFrequency: answerArea.RequestedFrequency);
 
                     await this.Answering.SendQuestionCommandAsync(command);
                     await this.QuestionState.Validity.ExecutedWithoutExceptions();

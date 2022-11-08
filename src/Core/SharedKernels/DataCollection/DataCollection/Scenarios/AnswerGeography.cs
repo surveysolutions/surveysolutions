@@ -4,7 +4,7 @@
     {
         public AnswerGeography(string variable, RosterVector rosterVector, string geometry, 
             string mapName, double? area, string coordinates, double? length, 
-            double? distanceToEditor, int? numberOfPoints, double? requestedAccuracy) 
+            double? distanceToEditor, int? numberOfPoints, double? requestedAccuracy, double? requestedFrequency) 
             : base(variable, rosterVector)
         {
             Geometry = geometry;
@@ -15,6 +15,7 @@
             DistanceToEditor = distanceToEditor;
             NumberOfPoints = numberOfPoints;
             RequestedAccuracy = requestedAccuracy;
+            RequestedFrequency = requestedFrequency;
         }
 
         public string Geometry { get; }
@@ -25,5 +26,6 @@
         public double? Length { get; }
         public double? DistanceToEditor { get;  }
         public int? NumberOfPoints { get; }
+        public double? RequestedFrequency { get; set; }
     }
 }
