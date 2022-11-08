@@ -110,6 +110,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                     return new OverviewMultiCategoricalQuestionViewModel(question, interview, userInteractionService,
                         interviewViewModelFactory, questionnaire);
                 }
+                
+                if (question.IsInteger || question.IsDouble)
+                {
+                    return new OverviewNumericQuestionViewModel(question, interview,userInteractionService,
+                        questionnaire, interviewViewModelFactory);
+                }
 
                 return new OverviewQuestionViewModel(question, interview,userInteractionService);
             }

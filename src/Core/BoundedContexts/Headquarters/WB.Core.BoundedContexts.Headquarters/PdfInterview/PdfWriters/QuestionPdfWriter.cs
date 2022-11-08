@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using System;
 using System.Linq;
 using Humanizer;
 using Microsoft.Extensions.Options;
@@ -206,6 +207,38 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                     paragraph.AddWrapFormattedText(option.Title, PdfStyles.QuestionAnswer, textColor);
                     WriteOptionAttachmentIfNeed(paragraph, option);
                     paragraph.AddLineBreak();
+                }
+                else if (question.IsInteger)
+                {
+                    paragraph.AddWrapFormattedText(question.GetAnswerAsString(), PdfStyles.QuestionAnswer, textColor);
+                    
+                    var answerValue = question.GetAsInterviewTreeIntegerQuestion().GetAnswer()?.Value;
+                    if (!answerValue.HasValue) return;
+                    
+                    var specialValue = questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, answerValue.Value, null);
+                    if (specialValue == null) return;
+                        
+                    WriteOptionAttachmentIfNeed(paragraph, specialValue);
+                    paragraph.AddLineBreak();
+                }
+                else if (question.IsDouble)
+                {
+                    paragraph.AddWrapFormattedText(question.GetAnswerAsString(), PdfStyles.QuestionAnswer, textColor);
+                    
+                    var answerValue = question.GetAsInterviewTreeDoubleQuestion().GetAnswer()?.Value;
+                    if (!answerValue.HasValue || Math.Truncate(answerValue.Value) != answerValue.Value) return;
+                    
+                    try
+                    {
+                        var specialValue = questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, Convert.ToInt32(answerValue.Value), null);
+                        if (specialValue == null) return;
+                            
+                        WriteOptionAttachmentIfNeed(paragraph, specialValue);
+                        paragraph.AddLineBreak();
+                    }
+                    catch (OverflowException)
+                    {
+                    }
                 }
                 else
                 {
