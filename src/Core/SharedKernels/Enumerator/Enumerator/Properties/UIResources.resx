@@ -241,7 +241,7 @@
     <value>Tap to take barcode</value>
   </data>
   <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
-    <value>Tap to edit area</value>
+    <value>Tap to answer</value>
   </data>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
     <value>Section completed: {0}</value>

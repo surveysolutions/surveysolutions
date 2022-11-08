@@ -1214,7 +1214,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to edit area.
+        ///   Looks up a localized string similar to Tap to answer.
         /// </summary>
         public static string Interview_Questions_Area_SaveAnswer {
             get {
