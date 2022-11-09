@@ -88,6 +88,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     areaQuestion.Length?.ToString(ExportCulture) ?? string.Empty,
                     areaQuestion.NumberOfPoints?.ToString(ExportCulture) ?? string.Empty,
                     areaQuestion.RequestedAccuracy?.ToString(ExportCulture) ?? string.Empty,
+                    areaQuestion.RequestedFrequency?.ToString(ExportCulture) ?? string.Empty,
                 };
             }
             
