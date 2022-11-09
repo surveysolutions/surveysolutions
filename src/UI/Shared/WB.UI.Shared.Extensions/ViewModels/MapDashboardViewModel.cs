@@ -99,10 +99,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             PropertyChanged += OnPropertyChanged;
         }
 
-        public override Task OnMapLoaded()
+        public override async Task OnMapLoaded()
         {
             CollectQuestionnaires();
-            return RefreshMarkers();
+            await RefreshMarkers();
         }
 
         public override MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom)
@@ -241,7 +241,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                     //MapView.Map.MinScale = 591657527.591555;
                     //MapView.Map.MaxScale = 0;
-                    await SetViewExtentToItems();
+                    await SetViewToValues();
                 }
                 catch (Exception e)
                 {
@@ -251,7 +251,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        private async Task SetViewExtentToItems()
+        protected override async Task SetViewToValues()
         {
             Envelope graphicExtent = null;
             var geometries = graphicsOverlay.Graphics
@@ -529,22 +529,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => this.isPanelVisible;
             set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
         }
-
-        public IMvxAsyncCommand ShowFullMapCommand => new MvxAsyncCommand(async () =>
-        {
-            if (this.Map?.Basemap?.BaseLayers.Count > 0 && this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
-                await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
-        });
-
-        public IMvxAsyncCommand ShowAllItemsCommand => new MvxAsyncCommand(async () =>
-        {
-            await SetViewExtentToItems();
-        });
-
+        
         private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         
-
         public IMvxCommand NavigateToDashboardCommand => 
             new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
         

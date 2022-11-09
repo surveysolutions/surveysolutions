@@ -194,7 +194,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.NavigateToMaps);
 
-        public IMvxCommand NavigateToMapDashboardCommand =>
+        public IMvxAsyncCommand NavigateToMapDashboardCommand =>
             new MvxAsyncCommand(async () => await NavigateToMapDashboard(), () => !string.IsNullOrEmpty(this.principal.CurrentUserIdentity.Workspace));
 
         private async Task NavigateToMapDashboard()

@@ -49,7 +49,7 @@ namespace WB.UI.Shared.Extensions.Services
                         if (package.Maps.Count > 0)
                         {
                             {
-                                var basemap = package.Maps.First().Basemap.Clone();
+                                var basemap = package.Maps.First()?.Basemap?.Clone();
                                 return basemap;
                             }
                         }

@@ -325,8 +325,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         //new instance will react on event
         public void Handle(AreaQuestionAnswered @event)
         {
-            if (@event.QuestionId == this.Identity.Id &&
-                @event.RosterVector.Identical(this.Identity.RosterVector))
+            if (@event.QuestionId == this.Identity.Id && @event.RosterVector.Identical(this.Identity.RosterVector))
             {
                 this.UpdateSelfFromModel();
             }

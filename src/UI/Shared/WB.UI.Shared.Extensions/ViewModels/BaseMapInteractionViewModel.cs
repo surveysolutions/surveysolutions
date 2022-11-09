@@ -77,14 +77,23 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     return;
                 
                 this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
-                var mapToDisplay = GetSelectedMap(this.AvailableMaps);
-                
-                var defaultBaseMap = await mapUtilityService.GetBaseMap(mapToDisplay).ConfigureAwait(false);
-                //var basemap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, mapToDisplay).ConfigureAwait(false);
+
+                var defaultBaseMap = await mapUtilityService.GetBaseMap(defaultMap).ConfigureAwait(false);
+                await defaultBaseMap.LoadAsync();
                 this.Map = new Map(defaultBaseMap);
+                
+                if (defaultBaseMap?.BaseLayers.Count > 0 && defaultBaseMap?.BaseLayers[0]?.FullExtent != null)
+                    this.Map.MaxExtent = defaultBaseMap.BaseLayers[0].FullExtent;
+
+                var mapToDisplay = GetSelectedMap(this.AvailableMaps);
+                if (mapToDisplay.MapName != defaultMap.MapName)
+                {
+                    var lastBaseMap = await mapUtilityService.GetBaseMap(mapToDisplay).ConfigureAwait(false);
+                    this.Map.Basemap = lastBaseMap;
+                }
 
                 this.SelectedMap = mapToDisplay.MapName;
-
+                this.FirstLoad = true;
             }
             catch (Exception e)
             {
@@ -94,7 +103,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             
             this.Map.Loaded += MapOnLoaded;
         }
-        
+
+        public bool FirstLoad { get; set; }
+
         protected string LastMap
         {
             set => enumeratorSettings.SetLastOpenedMapName(value);
@@ -107,6 +118,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => this.isLocationServiceSwitchEnabled;
             set => this.RaiseAndSetIfChanged(ref this.isLocationServiceSwitchEnabled, value);
         }
+        
+        public IMvxAsyncCommand ShowFullMapCommand => new MvxAsyncCommand(async () =>
+        {
+            if (this.Map?.Basemap?.BaseLayers.Count > 0 && this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
+                await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
+        });
         
         public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async () =>
         {
@@ -216,6 +233,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => this.selectedMap;
             set => this.RaiseAndSetIfChanged(ref this.selectedMap, value);
         }
+        
+        public IMvxAsyncCommand ShowAllItemsCommand => new MvxAsyncCommand(async () =>
+        {
+            await SetViewToValues();
+        });
+
+        protected abstract Task SetViewToValues();
 
         public async Task UpdateBaseMap()
         {
@@ -226,34 +250,37 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 var baseMap = await mapUtilityService.GetBaseMap(existingMap);
                 if (baseMap != null)
                 {
+                    await baseMap.LoadAsync();
                     this.Map.Basemap = baseMap;
 
-                    if (baseMap?.BaseLayers.Count > 0 && baseMap?.BaseLayers[0]?.FullExtent != null)
+                    if (this.Map.Basemap?.BaseLayers.Count > 0 && this.Map.Basemap?.BaseLayers[0]?.FullExtent != null)
                     {
-                        await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
+                        if (FirstLoad)
                         {
-                            if (this.MapView?.VisibleArea != null)
+                            FirstLoad = false;
+                            await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
+                        }
+                        
+                        if (this.MapView?.VisibleArea != null)
+                        {
+                            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
                             {
-                                var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea,
-                                    baseMap.BaseLayers[0].SpatialReference);
+                                var projectedArea =
+                                    GeometryEngine.Project(this.MapView.VisibleArea, this.Map.Basemap.BaseLayers[0].SpatialReference);
 
                                 if (projectedArea != null &&
-                                    !GeometryEngine.Intersects(baseMap.BaseLayers[0].FullExtent, projectedArea))
+                                    !GeometryEngine.Intersects(this.Map.Basemap.BaseLayers[0].FullExtent, projectedArea))
                                     this.UserInteractionService.ShowToast(UIResources
                                         .AreaMap_MapIsOutOfVisibleBoundaries);
-                            }
-                        });
+                            });
+                        }
                     }
-
-                    /*if (basemap?.BaseLayers[0]?.FullExtent != null)
-                        await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);*/
                     
                     if (LastMap != existingMap.MapName)
                         LastMap = existingMap.MapName;
                 }
             }
         }
-
 
         private Map map;
         public Map Map

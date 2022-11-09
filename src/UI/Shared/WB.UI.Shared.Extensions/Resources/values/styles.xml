@@ -33,6 +33,7 @@
         <item name="iconPadding">0dp</item>
         <item name="iconTint">@drawable/mtrl_btn_text_color_selector</item>
         <item name="rippleColor">?colorOnPrimary</item>
+        <item name="android:layout_marginRight">10dp</item>        
     </style>
     
     <style name="Area_LocationButton" parent="Widget.AppTheme.Button.IconButton">

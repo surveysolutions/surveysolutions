@@ -815,7 +815,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.canStartStopCollecting, value);
         }
         
-        
         private bool isInProgress;
         public bool IsInProgress
         {
@@ -861,14 +860,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.SelectedMap = mapDescription.MapName;
             IsPanelVisible = false;
 
-            var geometry = this.MapView.SketchEditor.Geometry;
             await this.UpdateBaseMap();
+            var geometry = this.MapView.SketchEditor?.Geometry;
 
             //update internal structures
             //SpatialReference of new map could differ from initial
             if (geometry != null)
             {
-                if (this.MapView != null && geometry != null && !this.MapView.Map.SpatialReference.IsEqual(geometry.SpatialReference))
+                if (this.MapView != null && !this.MapView.Map.SpatialReference.IsEqual(geometry.SpatialReference))
                     geometry = GeometryEngine.Project(geometry, this.MapView.Map.SpatialReference);
 
                 this.MapView?.SketchEditor.ClearGeometry();
@@ -882,6 +881,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
             base.ViewDisappearing();
+        }
+
+        protected override async Task SetViewToValues()
+        {
+            Geometry currentGeometry = IsManual ? this.MapView.SketchEditor?.Geometry : geometryBuilder?.ToGeometry();
+            if (currentGeometry != null)
+            {
+                //not a MapPoint or Polygon with one point 
+                if (currentGeometry.Extent != null 
+                    && currentGeometry.Extent.Height != 0 
+                    && currentGeometry.Extent.Width != 0)
+                {
+                    await this.MapView.SetViewpointGeometryAsync(currentGeometry, 120).ConfigureAwait(false);
+                }
+            }
         }
 
         public override void Dispose()
