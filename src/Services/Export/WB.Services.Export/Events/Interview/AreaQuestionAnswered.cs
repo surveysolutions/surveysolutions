@@ -12,6 +12,7 @@ namespace WB.Services.Export.Events.Interview
         public string Coordinates { get; set; } = String.Empty;
         public double? DistanceToEditor { get; set; }
         public double? RequestedAccuracy { get; set; }
+        public double? RequestedFrequency { get; set; }
 
         public int? NumberOfPoints { get; set; }
     }

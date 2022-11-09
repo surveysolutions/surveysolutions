@@ -203,7 +203,7 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             var area = new Area(@event.Event.Geometry, @event.Event.MapName, @event.Event.NumberOfPoints,
                 @event.Event.AreaSize, @event.Event.Length, @event.Event.Coordinates, @event.Event.DistanceToEditor,
-                @event.Event.RequestedAccuracy);
+                @event.Event.RequestedAccuracy, @event.Event.RequestedFrequency);
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
