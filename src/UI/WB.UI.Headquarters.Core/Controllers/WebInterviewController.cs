@@ -390,6 +390,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [Route("EmailLink")]
         public async Task<IActionResult> EmailLink([FromBody]SendLinkModel data)
         {
             var interviewId = data.InterviewId;
