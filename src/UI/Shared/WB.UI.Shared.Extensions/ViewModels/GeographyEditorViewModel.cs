@@ -73,6 +73,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             if (string.IsNullOrEmpty(parameter.Geometry)) return;
 
+            IsLocationServiceSwitchEnabled = IsManual;
             this.Geometry = Geometry.FromJson(parameter.Geometry);
             this.UpdateLabels(this.Geometry);
         }
@@ -231,10 +232,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 new Field(FieldType.Text, "name", "Name", 50)
             };
             var mapViewSpatialReference = this.MapView.Map.SpatialReference;
-            var neighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference);
-            neighborsFeatureCollectionTable.Renderer = CreateRenderer(gType, Color.Blue);
-            var overlappingNeighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference);
-            overlappingNeighborsFeatureCollectionTable.Renderer = CreateRenderer(gType, Color.Orange);
+            var neighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference)
+                {
+                    Renderer = CreateRenderer(gType, Color.Blue)
+                };
+            var overlappingNeighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference)
+                {
+                    Renderer = CreateRenderer(gType, Color.Orange)
+                };
 
             List<string> overlappingTitles = new List<string>();
 
@@ -418,7 +423,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private async Task StartAuto()
         {
             StartButtonText = "Initiating...";
-            IsLocationServiceSwitchEnabled = false;
             AddPointVisible = false;
 
             if(this.MapView?.Map?.SpatialReference == null)
@@ -428,9 +432,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 //init map overlay
                 locationLineOverlay = new GraphicsOverlay();
-                SimpleLineSymbol locationLineSymbol =
-                    new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 3);
-                locationLineOverlay.Renderer = new SimpleRenderer(locationLineSymbol);
+                SimpleLineSymbol locationLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 3);
+
+                if (RequestedGeometryType is GeometryType.Polygon)
+                {
+                    SimpleFillSymbol fillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Solid, Color.FromArgb(22,0,0, 0), locationLineSymbol);
+                    locationLineOverlay.Renderer = new SimpleRenderer(fillSymbol);
+                }
+                else
+                    locationLineOverlay.Renderer = new SimpleRenderer(locationLineSymbol);
+                
                 this.MapView.GraphicsOverlays.Add(locationLineOverlay);
             }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Esri.ArcGISRuntime.Geometry;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
 
@@ -80,14 +81,12 @@ internal class GeometryByTypeBuilder
     {
         if (!requestedAccuracy.HasValue)
             return true;
-        
+       
         return geometryType switch
             {
-                GeometryType.Polygon => polygonBuilder.Parts[0].PointCount < 3 
-                    ? false
-                    : GeometryEngine.Distance(
-                        polygonBuilder.Parts[0].StartPoint, 
-                        polygonBuilder.Parts[0].EndPoint) <= requestedAccuracy,
+                GeometryType.Polygon => polygonBuilder.Parts[0].PointCount >= 3 && GeometryEngine.Distance(
+                    polygonBuilder.Parts[0].Points.First(), 
+                    polygonBuilder.Parts[0].Points.Last()) <= requestedAccuracy,
                 GeometryType.Polyline => true,
                 GeometryType.Point => true,
                 GeometryType.Multipoint => true,
