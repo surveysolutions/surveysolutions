@@ -116,10 +116,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     if (this.MapView != null && this.MapView.Map?.SpatialReference != null && !this.MapView.Map.SpatialReference.IsEqual(Geometry.SpatialReference))
                         Geometry = GeometryEngine.Project(Geometry, this.MapView.Map.SpatialReference);
 
-                    if (this.Geometry.GeometryType == Esri.ArcGISRuntime.Geometry.GeometryType.Point)
-                        await this.MapView.SetViewpointCenterAsync(this.Geometry as MapPoint).ConfigureAwait(false);
-                    else
-                        await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
+                    await SetViewpointToGeometry(this.Geometry);
                 }
 
                 await DrawNeighborsAsync(this.Geometry).ConfigureAwait(false);
@@ -489,11 +486,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                                          && !this.MapView.Map.SpatialReference.IsEqual(Geometry.SpatialReference))
                     Geometry = GeometryEngine.Project(Geometry, this.MapView.Map.SpatialReference);
                 
-                if (this.Geometry.GeometryType == Esri.ArcGISRuntime.Geometry.GeometryType.Point)
-                    await this.MapView.SetViewpointCenterAsync(this.Geometry as MapPoint).ConfigureAwait(false);
-                else
-                    await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
-
+                await SetViewpointToGeometry(this.Geometry);
+                
                 switch (this.Geometry.GeometryType)
                 {
                     case EsriGeometryType.Point:
@@ -897,14 +891,22 @@ namespace WB.UI.Shared.Extensions.ViewModels
         protected override async Task SetViewToValues()
         {
             Geometry currentGeometry = IsManual ? this.MapView.SketchEditor?.Geometry : geometryBuilder?.ToGeometry();
-            if (currentGeometry != null)
+            await SetViewpointToGeometry(currentGeometry);
+        }
+        
+        
+        protected async Task SetViewpointToGeometry(Geometry geometry)
+        {
+            if (geometry != null)
             {
-                //not a MapPoint or Polygon with one point 
-                if (currentGeometry.Extent != null 
-                    && currentGeometry.Extent.Height != 0 
-                    && currentGeometry.Extent.Width != 0)
+                if (geometry is MapPoint point)
+                    await this.MapView.SetViewpointCenterAsync(point).ConfigureAwait(false);
+                else if (geometry.Extent != null 
+                         && geometry.Extent.Height != 0 
+                         && geometry.Extent.Width != 0
+                         && !geometry.Extent.IsEmpty)
                 {
-                    await this.MapView.SetViewpointGeometryAsync(currentGeometry, 120).ConfigureAwait(false);
+                    await this.MapView.SetViewpointGeometryAsync(geometry, 120).ConfigureAwait(false);
                 }
             }
         }
