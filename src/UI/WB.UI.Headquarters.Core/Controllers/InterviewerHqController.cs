@@ -150,6 +150,11 @@ namespace WB.UI.Headquarters.Controllers
         {
             var assignment = this.assignments.GetAssignment(id);
 
+            if (assignment.InterviewsNeeded <= 0)
+            {
+                throw new ArgumentException("You can't create interview from this assigment. No interviews needed."); 
+            }
+            
             var interviewId = CreateInterview(assignment);
             TempData["lastCreatedInterviewId"] = interviewId; // todo replace with lastCreatedInterviewId from webinterview controller when its migrated
 
