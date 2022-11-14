@@ -84,9 +84,9 @@ internal class GeometryByTypeBuilder
        
         return geometryType switch
             {
-                GeometryType.Polygon => polygonBuilder.Parts[0].PointCount >= 3 && GeometryEngine.Distance(
-                    polygonBuilder.Parts[0].Points.First(), 
-                    polygonBuilder.Parts[0].Points.Last()) <= requestedAccuracy,
+                GeometryType.Polygon => polygonBuilder.Parts[0].SegmentCount >= 2 && GeometryEngine.Distance(
+                    polygonBuilder.Parts[0].Last().EndPoint, 
+                    polygonBuilder.Parts[0].First().StartPoint) <= requestedAccuracy,
                 GeometryType.Polyline => true,
                 GeometryType.Point => true,
                 GeometryType.Multipoint => true,
