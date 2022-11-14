@@ -1,87 +1,129 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Location;
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.Services;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
+using EsriGeometryType = Esri.ArcGISRuntime.Geometry.GeometryType;
 
 namespace WB.UI.Shared.Extensions.ViewModels
 {
-
     public class GeographyEditorViewModel : BaseMapInteractionViewModel<GeographyEditorViewModelArgs>
     {
+        protected const string NeighborsLayerName = "neighbors";
         public Action<AreaEditorResult> OnAreaEditCompleted;
+        
+        private readonly LocationDataSource locationDataSource = new SystemLocationDataSource();
+        private GraphicsOverlay locationOverlay;
+        private GraphicsOverlay locationLineOverlay;
+        private GeometryByTypeBuilder geometryBuilder;        
 
         public GeographyEditorViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService, 
-            IMapService mapService, IUserInteractionService userInteractionService, ILogger logger, 
-            IFileSystemAccessor fileSystemAccessor, IEnumeratorSettings enumeratorSettings,
-            IMapUtilityService mapUtilityService, IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
+            IMapService mapService, IUserInteractionService userInteractionService, ILogger logger,
+            IEnumeratorSettings enumeratorSettings, IMapUtilityService mapUtilityService, 
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
-                fileSystemAccessor, enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
-        {
-        }
+                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher){}
 
-        //setup from settings
-        private double? RequestedAccuracy = null;
-        
+        private int? RequestedAccuracy { get; set; }
+        private int? RequestedFrequency { get; set; }
+        private GeometryInputMode RequestedGeometryInputMode { get; set; }
+        private GeometryNeighbor[] GeographyNeighbors { get; set; }
         private Geometry Geometry { set; get; }
+        private GeometryType RequestedGeometryType { get; set; }
+
         public string MapName { set; get; }
-        private WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? requestedGeometryType;
-        
+        public string Title { set; get; }
+
+        public bool IsManual => RequestedGeometryInputMode == GeometryInputMode.Manual;
+
         public override void Prepare(GeographyEditorViewModelArgs parameter)
         {
             this.MapName = parameter.MapName;
-            this.requestedGeometryType = parameter.RequestedGeometryType;
+            this.Title = parameter.Title;
+            this.RequestedGeometryType = parameter.RequestedGeometryType ?? GeometryType.Polygon;
+            this.RequestedAccuracy = parameter.RequestedAccuracy;
+            this.RequestedFrequency = parameter.RequestedFrequency;
+            this.RequestedGeometryInputMode = parameter.RequestedGeometryInputMode ?? GeometryInputMode.Manual;
+            this.GeographyNeighbors = parameter.GeographyNeighbors
+                .Select(n => new GeometryNeighbor()
+                {
+                    Id = n.Id,
+                    Title = n.Title,
+                    Geometry = Geometry.FromJson(n.Geometry),
+                }).ToArray();
 
             if (string.IsNullOrEmpty(parameter.Geometry)) return;
 
-            this.Geometry = Geometry.FromJson(parameter.Geometry);
-
+            IsLocationServiceSwitchEnabled = IsManual;
+            var geometry = Geometry.FromJson(parameter.Geometry);
+            this.Geometry = GetAndFixIfNeedGeometry(geometry, RequestedGeometryType);
             this.UpdateLabels(this.Geometry);
         }
-        
+
+        private Geometry GetAndFixIfNeedGeometry(Geometry geometry, GeometryType requestedGeometryType)
+        {
+            if (requestedGeometryType == GeometryType.Multipoint &&
+                geometry.GeometryType == EsriGeometryType.Polyline &&
+                geometry is Polyline polyline)
+            {
+                var builder = new GeometryByTypeBuilder(polyline.SpatialReference, GeometryType.Multipoint);
+                foreach (var mapPoint in polyline.Parts[0].Points)
+                {
+                    builder.AddPoint(mapPoint);
+                }
+
+                return builder.ToGeometry();
+            }
+
+            return geometry;
+        }
+
         public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(async () =>
         {
             var handler = this.OnAreaEditCompleted;
             handler?.Invoke(null);
-            await this.navigationService.Close(this);
+            await this.NavigationService.Close(this);
         });
         
-        public IMvxAsyncCommand StartEditAreaCommand => new MvxAsyncCommand(async () => await EditGeometry());
-
-        private async Task EditGeometry()
+        private async Task StartEditingGeometry()
         {
             this.IsEditing = true;
 
             try
             {
-                this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
+                this.MapView.SketchEditor.GeometryChanged += async delegate (object sender, GeometryChangedEventArgs args)
                 {
                     var geometry = args.NewGeometry;
                     try
                     {
                         this.UpdateLabels(geometry);
+                        await UpdateDrawNeighborsAsync(geometry, this.GeographyNeighbors).ConfigureAwait(false);
                     }
                     catch
                     {
                     }
 
-                    this.CanUndo =
-                        this.MapView.SketchEditor.UndoCommand.CanExecute(this.MapView.SketchEditor.UndoCommand);
-                    this.CanSave =
-                        this.MapView.SketchEditor.CompleteCommand.CanExecute(this.MapView.SketchEditor.CompleteCommand);
+                    this.CanUndo = this.MapView.SketchEditor.UndoCommand.CanExecute(this.MapView.SketchEditor.UndoCommand);
+                    this.CanSave = this.MapView.SketchEditor.CompleteCommand.CanExecute(this.MapView.SketchEditor.CompleteCommand);
                 };
 
                 if (this.Geometry == null)
@@ -90,125 +132,248 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 }
                 else
                 {
-                    if (this.Geometry.GeometryType == Esri.ArcGISRuntime.Geometry.GeometryType.Point)
-                        await this.MapView.SetViewpointCenterAsync(this.Geometry as MapPoint).ConfigureAwait(false);
-                    else
-                        await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
+                    if (this.MapView != null && this.MapView.Map?.SpatialReference != null && !this.MapView.Map.SpatialReference.IsEqual(Geometry.SpatialReference))
+                        Geometry = GeometryEngine.Project(Geometry, this.MapView.Map.SpatialReference);
+
+                    await SetViewpointToGeometry(this.Geometry);
                 }
 
-                var result = await GetGeometry(this.requestedGeometryType, this.Geometry).ConfigureAwait(false);
+                await DrawNeighborsAsync(this.Geometry).ConfigureAwait(false);
+
+                var result = await GetGeometry().ConfigureAwait(false);
 
                 var position = this.MapView?.LocationDisplay?.Location?.Position;
                 double? distanceToEditor = null;
                 if (position != null)
                 {
-                    var point = GeometryEngine.Project(position, this.MapView.SpatialReference);
+                    var point = GeometryEngine.Project(position, this.MapView.Map.SpatialReference);
                     distanceToEditor = GeometryEngine.Distance(result, point);
                 }
 
-                var resultArea = new AreaEditorResult()
-                {
-                    Geometry = result?.ToJson(),
-                    MapName = this.SelectedMap,
-                    Coordinates = GetProjectedCoordinates(result),
-                    Area = GetGeometryArea(result),
-                    Length = GetGeometryLength(result),
-                    DistanceToEditor = distanceToEditor,
-                    NumberOfPoints = GetGeometryPointsCount(result),
-                    Accuracy = RequestedAccuracy
-                };
-
-                //save
-                var handler = this.OnAreaEditCompleted;
-                handler?.Invoke(resultArea);
+                SaveGeometry(result, distanceToEditor);
             }
             finally
             {
-                this.IsEditing = false;
-                if(this.MapView?.LocationDisplay != null)
-                    this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
+                await FinishEditing();
+            }
+        }
+
+
+        private async Task FinishEditing()
+        {
+            this.IsEditing = false;
+            if(this.MapView?.LocationDisplay != null)
+                this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
                 
-                await this.navigationService.Close(this);
-            }
+            await this.NavigationService.Close(this);
         }
 
-        private string GetProjectedCoordinates(Geometry result)
+        private void SaveGeometry(Geometry result, double? distanceToEditor)
         {
-            string coordinates = string.Empty;
-            if(result == null)
-                return coordinates;
-            
-            //project to geocoordinates
-            SpatialReference reference = SpatialReference.Create(4326);
-
-            switch (result.GeometryType)
+            var resultArea = new AreaEditorResult()
             {
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Polygon:
-                    var polygonCoordinates = (result as Polygon).Parts[0].Points
-                        .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
-                        .Select(coordinate => $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
-                    coordinates = string.Join(";", polygonCoordinates);
-                    break;
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Point:
-                    var projected = GeometryEngine.Project(result as MapPoint, reference) as MapPoint;
-                    coordinates = $"{projected.X.ToString(CultureInfo.InvariantCulture)},{projected.Y.ToString(CultureInfo.InvariantCulture)}";
-                    break;
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
-                    var polylineCoordinates = (result as Polyline).Parts[0].Points
-                        .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
-                        .Select(coordinate => $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
-                    coordinates = string.Join(";", polylineCoordinates);
-                    break;
+                Geometry = result?.ToJson(),
+                MapName = this.SelectedMap,
+                Coordinates = GeometryHelper.GetProjectedCoordinates(result),
+                Area = GeometryHelper.GetGeometryArea(result),
+                Length = GeometryHelper.GetGeometryLength(result),
+                DistanceToEditor = distanceToEditor,
+                NumberOfPoints = GeometryHelper.GetGeometryPointsCount(result),
+                RequestedAccuracy = RequestedAccuracy,
+                RequestedFrequency = RequestedFrequency
+            };
+
+            //save
+            var handler = this.OnAreaEditCompleted;
+            handler?.Invoke(resultArea);
+        }
+
+
+        public IMvxAsyncCommand SaveAreaCommand => new MvxAsyncCommand(async() =>
+        {
+            if (IsManual)
+            {
+                if (this.MapView.SketchEditor != null)
+                {
+                    var command = this.MapView.SketchEditor.CompleteCommand;
+                    if (this.MapView.SketchEditor.CompleteCommand.CanExecute(command))
+                    {
+                        this.MapView.SketchEditor.CompleteCommand.Execute(command);
+                    }
+                    else
+                    {
+                        this.UserInteractionService.ShowToast(UIResources.AreaMap_NoChangesInfo);
+                    }
+                }
             }
+            else
+            {
+                collectionCancellationTokenSource?.Cancel();
 
-            return coordinates;
-        }
+                var resultGeometry = geometryBuilder.ToGeometry();
+                SaveGeometry(resultGeometry, null);
+                
+                await FinishEditing();
+            }
+        });
 
-        private double GetGeometryArea(Geometry geometry)
-        {
-            bool doesGeometrySupportDimensionsCalculation = DoesGeometrySupportAreaCalculation(geometry);
-            return doesGeometrySupportDimensionsCalculation ? GeometryEngine.AreaGeodetic(geometry) : 0;
-        }
-
-        private double GetGeometryLength(Geometry geometry)
-        {
-            bool doesGeometrySupportDimensionsCalculation = DoesGeometrySupportLengthCalculation(geometry);
-            return doesGeometrySupportDimensionsCalculation ? GeometryEngine.LengthGeodetic(geometry) : 0;
-        }
-        
-        private bool DoesGeometrySupportLengthCalculation(Geometry geometry)
-        {
-            if (geometry == null)
-                return false;
-
-            if (requestedGeometryType == GeometryType.Multipoint || requestedGeometryType == GeometryType.Point)
-                return false;
-
-            return true;
-        }
-        
         private void UpdateLabels(Geometry geometry)
         {
-            var area = this.GetGeometryArea(geometry);
-            var length = this.GetGeometryLength(geometry);
+            if (geometry == null) return;
+            
+            var area = GeometryHelper.GetGeometryArea(geometry);
+            var length = GeometryHelper.GetGeometryLength(geometry);
 
             this.GeometryArea = area > 0 ? string.Format(UIResources.AreaMap_AreaFormat, area.ToString("#.##")) : string.Empty;
             this.GeometryLengthLabel = length > 0 ? string.Format(
-                this.requestedGeometryType == GeometryType.Polygon
+                this.RequestedGeometryType == GeometryType.Polygon
                     ? UIResources.AreaMap_PerimeterFormat
                     : UIResources.AreaMap_LengthFormat, length.ToString("#.##")) : string.Empty;
         }
-        
-        
-        private async Task<Geometry> GetGeometry(GeometryType? geometryType, Geometry geometry)
+
+        private async Task DrawNeighborsAsync(Geometry geometry)
         {
-            switch (geometryType)
+            var neighbors = this.GeographyNeighbors;
+            if (neighbors == null || neighbors.Length == 0)
+                return;
+            
+            if(this.MapView?.Map?.SpatialReference == null)
+                return;
+            
+            var gType = this.RequestedGeometryType;
+            var esriGeometryType = neighbors[0].Geometry.GeometryType;
+
+            IEnumerable<Field> fields = new Field[]
+            {
+                new Field(FieldType.Text, "name", "Name", 50)
+            };
+            var mapViewSpatialReference = this.MapView.Map.SpatialReference;
+            var neighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference)
+                {
+                    Renderer = CreateRenderer(gType, Color.Blue)
+                };
+            var overlappingNeighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference)
+                {
+                    Renderer = CreateRenderer(gType, Color.Orange)
+                };
+
+            List<string> overlappingTitles = new List<string>();
+
+            for (int i = 0; i < neighbors.Length; i++)
+            {
+                var neighbor = neighbors[i];
+                
+                if (neighbor.Geometry.SpatialReference != mapViewSpatialReference)
+                    neighbor.Geometry = GeometryEngine.Project(neighbor.Geometry, mapViewSpatialReference);
+                
+                var featureCollectionTable = neighborsFeatureCollectionTable;
+                
+                if (geometry != null)
+                {
+                    var isOverlapping = !GeometryEngine.Disjoint(geometry, neighbor.Geometry);
+                    neighbor.IsOverlapping = isOverlapping;
+                    
+                    if (isOverlapping)
+                        overlappingTitles.Add(neighbor.Title);
+                    
+                    featureCollectionTable = isOverlapping
+                        ? overlappingNeighborsFeatureCollectionTable
+                        : neighborsFeatureCollectionTable;
+                }
+
+                var feature = featureCollectionTable.CreateFeature();
+                feature.Geometry = neighbor.Geometry;
+                neighbor.Feature = feature;
+                await featureCollectionTable.AddFeatureAsync(feature);
+            }
+
+            FeatureCollection featuresCollection = new FeatureCollection();
+            featuresCollection.Tables.Add(neighborsFeatureCollectionTable);
+            featuresCollection.Tables.Add(overlappingNeighborsFeatureCollectionTable);
+            FeatureCollectionLayer featureCollectionLayer = new FeatureCollectionLayer(featuresCollection)
+            {
+                Name = NeighborsLayerName
+            };
+
+            var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == featureCollectionLayer.Name);
+            if (existedLayer != null)
+                this.MapView.Map.OperationalLayers.Remove(existedLayer);
+            
+            this.MapView.Map.OperationalLayers.Add(featureCollectionLayer);
+
+            UpdateWarningMessage(overlappingTitles);
+        }
+
+        private void UpdateWarningMessage(List<string> overlappingTitles)
+        {
+            if (overlappingTitles.Count > 0)
+            {
+                var maxTitlesDisplay = 2;
+                var message = UIResources.AreaMap_OverlapsWith + " " 
+                    + string.Join(", ", overlappingTitles.Take(maxTitlesDisplay).ToArray());
+                if (overlappingTitles.Count > maxTitlesDisplay)
+                    message += " " + string.Format(UIResources.AreaMap_OverlapsWithOther,
+                        overlappingTitles.Count - maxTitlesDisplay);
+                this.Warning = message;
+            }
+
+            IsWarningVisible = overlappingTitles.Count > 0;
+        }
+
+        private async Task UpdateDrawNeighborsAsync(Geometry geometry, GeometryNeighbor[] neighbors)
+        {
+            if (neighbors == null || neighbors.Length == 0)
+                return;
+
+            var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == NeighborsLayerName);
+            if (existedLayer == null)
+                return;
+            
+            var featureCollectionLayer = (FeatureCollectionLayer)existedLayer;
+            var featureCollectionTables = featureCollectionLayer.FeatureCollection.Tables;
+            var neighborsFeatureCollectionTable = featureCollectionTables[0];
+            var overlappingNeighborsFeatureCollectionTable = featureCollectionTables[1];
+
+            List<string> overlappingTitles = new List<string>();
+
+            foreach (var neighbor in neighbors)
+            {
+                var isOverlapping = geometry != null && !GeometryEngine.Disjoint(geometry, neighbor.Geometry);
+                if (isOverlapping)
+                    overlappingTitles.Add(neighbor.Title);
+                
+                if (neighbor.IsOverlapping != isOverlapping)
+                {
+                    var featureCollectionTable = isOverlapping
+                        ? overlappingNeighborsFeatureCollectionTable
+                        : neighborsFeatureCollectionTable;
+                    var feature = featureCollectionTable.CreateFeature();
+                    feature.Geometry = neighbor.Geometry;
+                    await featureCollectionTable.AddFeatureAsync(feature);
+                    
+                    var oldFeatureCollectionTable = !isOverlapping
+                        ? overlappingNeighborsFeatureCollectionTable
+                        : neighborsFeatureCollectionTable;
+                    await oldFeatureCollectionTable.DeleteFeatureAsync(neighbor.Feature);
+                    
+                    neighbor.Feature = feature;
+                    neighbor.IsOverlapping = isOverlapping;
+                }
+            }
+
+            UpdateWarningMessage(overlappingTitles);
+        }
+
+        private async Task<Geometry> GetGeometry()
+        {
+            Geometry geometry = Geometry;
+            switch (RequestedGeometryType)
             {
                 case GeometryType.Polyline:
                     {
                         IsGeometryLengthVisible = true;
                         IsGeometryAreaVisible = false;
-
+                        
                         return geometry == null
                             ? await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polyline).ConfigureAwait(false)
                             : await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polyline)
@@ -233,8 +398,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         this.MapView.SketchEditor.Style.LineSymbol = null;
 
                         return geometry == null ?
-                            await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polyline).ConfigureAwait(false) :
-                            await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polyline).ConfigureAwait(false);
+                            await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Multipoint).ConfigureAwait(false) :
+                            await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Multipoint).ConfigureAwait(false);
                     }
                 default:
                     {
@@ -248,10 +413,151 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     }
             }
         }
-
-        public override Task OnMapLoaded()
+        
+        private Renderer CreateRenderer(GeometryType rendererType, Color color)
         {
-            return EditGeometry();
+            Symbol sym = rendererType switch
+            {
+                GeometryType.Point => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
+                GeometryType.Multipoint => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
+                GeometryType.Polyline => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
+                GeometryType.Polygon => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
+                _ => null
+            };
+
+            return new SimpleRenderer(sym);
+        }
+
+        public override async Task OnMapLoaded()
+        {
+            if (IsManual)
+                await StartEditingGeometry();
+            else
+                await StartAuto();
+        }
+
+        private async Task StartAuto()
+        {
+            StartButtonText = "Initiating...";
+            AddPointVisible = false;
+
+            if(this.MapView?.Map?.SpatialReference == null)
+                return;
+            
+            if (RequestedGeometryType is GeometryType.Polygon or GeometryType.Polyline)
+            {
+                //init map overlay
+                locationLineOverlay = new GraphicsOverlay();
+                SimpleLineSymbol locationLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 3);
+
+                if (RequestedGeometryType is GeometryType.Polygon)
+                {
+                    SimpleFillSymbol fillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Solid, Color.FromArgb(22,0,0, 0), locationLineSymbol);
+                    locationLineOverlay.Renderer = new SimpleRenderer(fillSymbol);
+                }
+                else
+                    locationLineOverlay.Renderer = new SimpleRenderer(locationLineSymbol);
+                
+                this.MapView.GraphicsOverlays.Add(locationLineOverlay);
+            }
+
+            locationOverlay = new GraphicsOverlay();
+            SimpleMarkerSymbol locationPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Blue, 5);
+            locationOverlay.Renderer = new SimpleRenderer(locationPointSymbol);
+            this.MapView.GraphicsOverlays.Add(locationOverlay);
+
+            await DrawNeighborsAsync(this.Geometry).ConfigureAwait(false);
+
+            //project and use current map
+            geometryBuilder = new GeometryByTypeBuilder(this.MapView.Map.SpatialReference, RequestedGeometryType);
+
+            if (this.Geometry == null)
+            {
+                StartButtonVisible = true;
+                try
+                {
+                    await locationDataSource.StartAsync();
+                    if (locationDataSource.Status == LocationDataSourceStatus.Started)
+                    {
+                        this.MapView.LocationDisplay.DataSource = locationDataSource;
+                        this.MapView.LocationDisplay.IsEnabled = true;
+                        this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Recenter;
+                        this.MapView.LocationDisplay.Opacity = 0.5;
+
+                        CanStartStopCollecting = true;
+                        StartButtonText = "Start";
+                    }
+                    else
+                    {
+                        this.UserInteractionService.ShowToast("Error on location services start");
+                    }
+                }
+                catch (Exception e)
+                {
+                    logger.Error("Error on location start", e);
+                    this.UserInteractionService.ShowToast("Error on location services start");
+                }
+                
+            }
+            else
+            {
+                if (this.MapView != null && this.MapView.Map?.SpatialReference != null 
+                                         && !this.MapView.Map.SpatialReference.IsEqual(Geometry.SpatialReference))
+                    Geometry = GeometryEngine.Project(Geometry, this.MapView.Map.SpatialReference);
+                
+                await SetViewpointToGeometry(this.Geometry);
+                
+                switch (this.Geometry.GeometryType)
+                {
+                    case EsriGeometryType.Point:
+                        var newPoint = this.Geometry as MapPoint; 
+                        geometryBuilder.AddPoint(newPoint);
+                        locationOverlay.Graphics.Add(new Graphic(newPoint));
+                        break;
+                    case EsriGeometryType.Polyline:
+                    {
+                        var polyline = this.Geometry as Polyline;
+                        foreach (var point in polyline.Parts[0].Points)
+                        {
+                            geometryBuilder.AddPoint(point);
+                            locationOverlay.Graphics.Add(new Graphic(point));
+                        }
+                    }
+                        break;
+                    case EsriGeometryType.Polygon:
+                    {
+                        var polygon = this.Geometry as Polygon;
+                        foreach (var point in polygon.Parts[0].Points)
+                        {
+                            geometryBuilder.AddPoint(point);
+                            locationOverlay.Graphics.Add(new Graphic(point));
+                        }
+                    }
+                        break;
+                    case EsriGeometryType.Multipoint:
+                    {
+                        var multipoint = this.Geometry as Multipoint;
+                        foreach (var point in multipoint.Points)
+                        {
+                            geometryBuilder.AddPoint(point);
+                            locationOverlay.Graphics.Add(new Graphic(point));
+                        }
+                    }
+                        break;
+                    case EsriGeometryType.Unknown:
+                    case EsriGeometryType.Envelope:
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                if (RequestedGeometryType is GeometryType.Polygon or GeometryType.Polyline)
+                {
+                    locationLineOverlay.Graphics.Clear();
+                    // Add the updated line.
+                    var geometry = geometryBuilder.ToGeometry();
+                    locationLineOverlay.Graphics.Add(new Graphic(geometry));
+                }
+            }
         }
 
         public override MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom)
@@ -275,9 +581,32 @@ namespace WB.UI.Shared.Extensions.ViewModels
         
         private void BtnUndo()
         {
-            var command = this.MapView?.SketchEditor.UndoCommand;
-            if (this.MapView?.SketchEditor?.UndoCommand.CanExecute(command) ?? false)
-                this.MapView.SketchEditor.UndoCommand.Execute(command);
+            if (IsManual)
+            {
+                var command = this.MapView?.SketchEditor.UndoCommand;
+                if (this.MapView?.SketchEditor?.UndoCommand.CanExecute(command) ?? false)
+                    this.MapView.SketchEditor.UndoCommand.Execute(command);
+            }
+            else if (RequestedGeometryInputMode == GeometryInputMode.Semiautomatic)
+            {
+                if(locationOverlay.Graphics.Count > 0)
+                    locationOverlay.Graphics.RemoveAt(locationOverlay.Graphics.Count - 1);
+                
+                geometryBuilder.RemoveLastPoint();
+                
+                if (RequestedGeometryType is GeometryType.Polygon or GeometryType.Polyline)
+                {
+                    locationLineOverlay.Graphics.Clear();
+                    // Add the updated line.
+                    var geometry = geometryBuilder.ToGeometry();
+                    locationLineOverlay.Graphics.Add(new Graphic(geometry));
+                }
+                
+                if (RequestedGeometryType == GeometryType.Polygon)
+                {
+                    HasWarning = !geometryBuilder.IsCorrectlyMeasured(RequestedAccuracy);
+                }
+            }
         }
 
         private void BtnCancelCommand()
@@ -291,54 +620,150 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public IMvxCommand UndoCommand => new MvxCommand(this.BtnUndo);
         public IMvxCommand CancelEditCommand => new MvxCommand(this.BtnCancelCommand);
-        
-        private int GetGeometryPointsCount(Geometry geometry)
+
+        private bool isCollecting = false;
+        public IMvxAsyncCommand StartStopCollectingCommand => new MvxAsyncCommand(this.StartCollecting);
+        private Task StartCollecting()
         {
-            switch (geometry.GeometryType)
+            isCollecting = !isCollecting;
+
+            StartButtonVisible = false;
+
+            if (RequestedGeometryInputMode == GeometryInputMode.Semiautomatic)
+                AddPointVisible = true;
+
+            if (isCollecting)
             {
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Point:
-                    return 1;
+                locationDataSource.LocationChanged += LocationDataSourceOnLocationChanged;
+                
+                if (RequestedGeometryInputMode == GeometryInputMode.Automatic)
+                {
+                    collectionCancellationTokenSource = new CancellationTokenSource();
+                    TimeSpan period = TimeSpan.FromSeconds(RequestedFrequency ?? 10);
+                    Task.Run(() => PeriodicCollectionAsync(period, collectionCancellationTokenSource.Token), collectionCancellationTokenSource.Token)
+                        .ConfigureAwait(false);
+                }
+            }
 
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
-                    return (geometry as Polyline).Parts[0].PointCount;
+            return Task.CompletedTask;
+        }
 
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Polygon:
-                    return (geometry as Polygon).Parts[0].PointCount;
-
-                case Esri.ArcGISRuntime.Geometry.GeometryType.Multipoint:
-                    return (geometry as Multipoint).Points.Count();
-                default:
-                    return 0;
+        CancellationTokenSource collectionCancellationTokenSource;
+        public async Task PeriodicCollectionAsync(TimeSpan interval, CancellationToken cancellationToken)
+        {
+            while (true)
+            {
+                await AddPointToCollection();
+                await Task.Delay(interval, cancellationToken);
             }
         }
 
-        private bool DoesGeometrySupportAreaCalculation(Geometry geometry)
+        private MapPoint LastPosition { set; get; } = null;
+
+        private void LocationDataSourceOnLocationChanged(object sender, Location e)
         {
-            if (geometry == null)
-                return false;
+            //filter values that not fulfill accuracy condition
+            //save the latest value to temp storage
 
-            if (geometry.GeometryType != Esri.ArcGISRuntime.Geometry.GeometryType.Polygon || geometry.Dimension != GeometryDimension.Area)
-                return false;
+            var source = e.AdditionalSourceProperties.ContainsKey("positionSource")
+                ? e.AdditionalSourceProperties["positionSource"]
+                : "unknown";
 
-            var polygon = geometry as Polygon;
-            if (polygon == null)
-                return false;
+            this.UserInteractionService.ShowToast(
+                $"Position: {e.Position}; e.HorizontalAccuracy: {e.HorizontalAccuracy}; Source: {source}; Valid: {e.HorizontalAccuracy <= RequestedAccuracy}");
 
-            if (polygon.Parts.Count < 1)
-                return false;
+            if (e.HorizontalAccuracy > RequestedAccuracy) return;
+            
+            LastPosition = e.Position;
+            CanAddPoint = true;
+        }
 
-            var readOnlyPart = polygon.Parts[0];
-            if (readOnlyPart.PointCount < 3)
-                return false;
+        public IMvxAsyncCommand AddPointCommand => new MvxAsyncCommand(async() => await this.AddPoint());
+        private async Task AddPoint()
+        {
+            // manually add point from last position
+            await AddPointToCollection();
+        }
 
-            var groupedPoints = from point in readOnlyPart.Points
-                group point by new { X = point.X, Y = point.Y } into xyPoint
-                select new { X = xyPoint.Key.X, Y = xyPoint.Key.Y, Count = xyPoint.Count() };
+        private async Task AddPointToCollection()
+        {
+            try
+            {
+                if (LastPosition != null)
+                {
+                    var lastPositionProjected = GeometryEngine.Project(LastPosition, geometryBuilder.SpatialReference) as MapPoint;
 
-            if (groupedPoints.Count() < 3)
-                return false;
+                    //remove Z component
+                    var newPoint = new MapPoint(lastPositionProjected.X, lastPositionProjected.Y,
+                        lastPositionProjected.SpatialReference);
+                    
+                    //reset temp collected point
+                    LastPosition = null;
 
-            return true;
+                    geometryBuilder.AddPoint(newPoint);
+                    await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
+                    {
+                        CanAddPoint = false;
+                        locationOverlay.Graphics.Add(new Graphic(newPoint));
+                    });                    
+
+                    if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
+                    {
+                        // Remove the old line.
+                        locationLineOverlay.Graphics.Clear();
+                        // Add the updated line.
+                        var geometry = geometryBuilder.ToGeometry();
+                        locationLineOverlay.Graphics.Add(new Graphic(geometry));
+                    }
+                    
+                    await UpdateDrawNeighborsAsync(geometryBuilder.ToGeometry(), this.GeographyNeighbors);
+
+                    if (RequestedGeometryType == GeometryType.Point)
+                    {
+                        //stop collection on first point collected
+                        if (SaveAreaCommand.CanExecute())
+                            await SaveAreaCommand.ExecuteAsync();                    
+                    }
+
+                    var collectedPoints = geometryBuilder.PointCount;
+
+                    this.CanSave = RequestedGeometryType switch {
+                            GeometryType.Polygon => collectedPoints > 2,
+                            GeometryType.Polyline => collectedPoints > 2,
+                            GeometryType.Point => collectedPoints  > 0,
+                            GeometryType.Multipoint => collectedPoints > 1,
+                            _ => throw new ArgumentOutOfRangeException()
+                        };
+
+                    if (RequestedGeometryType == GeometryType.Polygon && !IsManual)
+                    {
+                        HasWarning = !geometryBuilder.IsCorrectlyMeasured(RequestedAccuracy);
+                    }
+
+                    this.CanUndo =
+                        (RequestedGeometryInputMode == GeometryInputMode.Semiautomatic && collectedPoints > 0);
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error("Error on adding point", e);
+                throw;
+            }
+            
+        }
+
+        private string warning;
+        public string Warning
+        {
+            get => this.warning;
+            set => this.RaiseAndSetIfChanged(ref this.warning, value);
+        }
+ 
+        private bool isWarningVisible;
+        public bool IsWarningVisible
+        {
+            get => this.isWarningVisible;
+            set => this.RaiseAndSetIfChanged(ref this.isWarningVisible, value);
         }
 
         private string geometryArea;
@@ -355,7 +780,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.geometryLengthLabel, value);
         }
 
-        
+        private string startButtonText;
+        public string StartButtonText
+        {
+            get => this.startButtonText;
+            set => this.RaiseAndSetIfChanged(ref this.startButtonText, value);
+        }
 
         private bool isEditing;
         public bool IsEditing
@@ -367,14 +797,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private bool isGeometryAreaVisible;
         public bool IsGeometryAreaVisible
         {
-            get => this.isEditing;
+            get => this.isGeometryAreaVisible;
             set => this.RaiseAndSetIfChanged(ref this.isGeometryAreaVisible, value);
+        }
+
+        private bool hasWarning;
+        public bool HasWarning
+        {
+            get => this.hasWarning;
+            set => this.RaiseAndSetIfChanged(ref this.hasWarning, value);
         }
 
         private bool isGeometryLengthVisible;
         public bool IsGeometryLengthVisible
         {
-            get => this.isEditing;
+            get => this.isGeometryLengthVisible;
             set => this.RaiseAndSetIfChanged(ref this.isGeometryLengthVisible, value);
         }
 
@@ -392,12 +829,40 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.canSave, value);
         }
 
+        private bool canStartStopCollecting;
+        public bool CanStartStopCollecting
+        {
+            get => this.canStartStopCollecting;
+            set => this.RaiseAndSetIfChanged(ref this.canStartStopCollecting, value);
+        }
+        
         private bool isInProgress;
         public bool IsInProgress
         {
             get => this.isInProgress;
             set => this.RaiseAndSetIfChanged(ref this.isInProgress, value);
         }
+
+        private bool canAddPoint;
+        public bool CanAddPoint
+        {
+            get => this.canAddPoint;
+            set => this.RaiseAndSetIfChanged(ref this.canAddPoint, value);
+        }
+
+        private bool addPointVisible;
+        public bool AddPointVisible
+        {
+            get => this.addPointVisible;
+            set => this.RaiseAndSetIfChanged(ref this.addPointVisible, value);
+        }
+
+        private bool startButtonVisible;
+        public bool StartButtonVisible
+        {
+            get => this.startButtonVisible;
+            set => this.RaiseAndSetIfChanged(ref this.startButtonVisible, value);
+        }        
 
         private bool isPanelVisible;
         public bool IsPanelVisible
@@ -406,7 +871,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
         }
 
-        
         public IMvxCommand SwitchPanelCommand => new MvxCommand(() =>
         {
             IsPanelVisible = !IsPanelVisible;
@@ -417,19 +881,65 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.SelectedMap = mapDescription.MapName;
             IsPanelVisible = false;
 
-            var geometry = this.MapView.SketchEditor.Geometry;
             await this.UpdateBaseMap();
+            var geometry = this.MapView.SketchEditor?.Geometry;
 
             //update internal structures
-            //SpatialReferense of new map could differ from initial
+            //SpatialReference of new map could differ from initial
             if (geometry != null)
             {
-                if (this.MapView != null && geometry != null && !this.MapView.SpatialReference.IsEqual(geometry.SpatialReference))
-                    geometry = GeometryEngine.Project(geometry, this.MapView.SpatialReference);
+                if (this.MapView != null && !this.MapView.Map.SpatialReference.IsEqual(geometry.SpatialReference))
+                    geometry = GeometryEngine.Project(geometry, this.MapView.Map.SpatialReference);
 
                 this.MapView?.SketchEditor.ClearGeometry();
                 this.MapView?.SketchEditor.ReplaceGeometry(geometry);
+                
+                await DrawNeighborsAsync(geometry).ConfigureAwait(false);
             }
         });
+        
+        public override void ViewDisappearing()
+        {
+            locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
+            base.ViewDisappearing();
+        }
+
+        protected override async Task SetViewToValues()
+        {
+            Geometry currentGeometry = IsManual ? this.MapView.SketchEditor?.Geometry : geometryBuilder?.ToGeometry();
+            await SetViewpointToGeometry(currentGeometry);
+        }
+        
+        
+        protected async Task SetViewpointToGeometry(Geometry geometry)
+        {
+            if (geometry != null)
+            {
+                if (geometry is MapPoint point)
+                    await this.MapView.SetViewpointCenterAsync(point).ConfigureAwait(false);
+                else if (geometry.Extent != null 
+                         && geometry.Extent.Height != 0 
+                         && geometry.Extent.Width != 0
+                         && !geometry.Extent.IsEmpty)
+                {
+                    await this.MapView.SetViewpointGeometryAsync(geometry, 120).ConfigureAwait(false);
+                }
+            }
+        }
+
+        public override void Dispose()
+        {
+            if (locationDataSource != null)
+            {
+                locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
+                locationDataSource.StopAsync();
+            }
+
+            collectionCancellationTokenSource?.Cancel();
+            collectionCancellationTokenSource?.Dispose();
+            collectionCancellationTokenSource = null;
+
+            base.Dispose();
+        }
     }
 }

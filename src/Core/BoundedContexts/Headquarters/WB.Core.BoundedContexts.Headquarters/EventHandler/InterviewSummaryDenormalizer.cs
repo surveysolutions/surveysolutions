@@ -538,7 +538,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             var area = new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.NumberOfPoints,
                 @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, 
-                @event.Payload.DistanceToEditor, @event.Payload.Accuracy);
+                @event.Payload.DistanceToEditor, @event.Payload.RequestedAccuracy, @event.Payload.RequestedFrequency);
             return this.AnswerQuestion(state, @event.Payload.QuestionId, area, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 

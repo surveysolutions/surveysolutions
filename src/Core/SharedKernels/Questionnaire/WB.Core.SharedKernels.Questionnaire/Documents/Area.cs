@@ -5,7 +5,8 @@
         //public Area(){}
 
         public Area(string geometry, string mapName, int? numberOfPoints, double? areaSize, 
-            double? length, string coordinates, double? distanceToEditor, double? accuracy)
+            double? length, string coordinates, double? distanceToEditor, double? requestedAccuracy,
+            double? requestedFrequency)
         {
             this.Geometry = geometry;
             this.MapName = mapName;
@@ -14,7 +15,8 @@
             this.DistanceToEditor = distanceToEditor;
             this.Coordinates = coordinates;
             this.NumberOfPoints = numberOfPoints;
-            this.Accuracy = accuracy;
+            this.RequestedAccuracy = requestedAccuracy;
+            this.RequestedFrequency = requestedFrequency;
         }
 
         public string Geometry { set; get; }
@@ -27,7 +29,9 @@
 
         public int? NumberOfPoints { set; get; }
         
-        public double? Accuracy { set; get; }
+        public double? RequestedAccuracy { set; get; }
+        
+        public double? RequestedFrequency { get; set; }
 
         public override string ToString()
         {
@@ -48,7 +52,8 @@
                && AreaSize.Equals(other.AreaSize) && Length.Equals(other.Length) 
                && string.Equals(Coordinates, other.Coordinates) 
                && DistanceToEditor.Equals(other.DistanceToEditor)
-               && Accuracy.Equals(other.Accuracy);
+               && RequestedAccuracy.Equals(other.RequestedAccuracy)
+               && RequestedFrequency.Equals(other.RequestedFrequency);
 
         public override int GetHashCode()
         {
@@ -60,7 +65,8 @@
                 hashCode = (hashCode * 397) ^ Length.GetHashCode();
                 hashCode = (hashCode * 397) ^ (Coordinates != null ? Coordinates.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ DistanceToEditor.GetHashCode();
-                hashCode = (hashCode * 397) ^ Accuracy.GetHashCode();
+                hashCode = (hashCode * 397) ^ RequestedAccuracy.GetHashCode();
+                hashCode = (hashCode * 397) ^ RequestedFrequency.GetHashCode();
                 return hashCode;
             }
         }

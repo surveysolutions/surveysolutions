@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
@@ -222,20 +223,51 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return NotFound();
 
             var identity = Identity.Parse(questionId);
-            var interview = this.statefulInterviewRepository.Get(id.FormatGuid());
+            var interview = this.statefulInterviewRepository.GetOrThrow(id.FormatGuid());
             var area = interview.GetAreaQuestion(identity)?.GetAnswer()?.Value;
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
             var geometryType = questionnaire.GetQuestionGeometryType(identity.Id);
 
-            return this.View(new GeographyPreview() { AreaAnswer = area, Geometry = geometryType ?? GeometryType.Polygon });
+            var neighboringIds = questionnaire.IsNeighboringSupport(identity.Id)
+                ? interview.GetNeighboringQuestionIdentities(identity)
+                : Enumerable.Empty<Identity>();
+            var neighbors = neighboringIds
+                .Select(qId =>
+                {
+                    var question = interview.GetQuestion(qId);
+                    var parentRosterInstance = question.Parent;
+                    var areaQuestion = question.GetAsInterviewTreeAreaQuestion();
+
+                    return new GeographyNeighbor
+                    {
+                        Title = parentRosterInstance.Title.Text,
+                        Geometry = areaQuestion?.GetAnswer()?.Value?.Geometry
+                    };
+                })
+                .Where(neighbor => neighbor.Geometry != null)
+                .ToArray();
+
+            return this.View(new GeographyPreview()
+            {
+                AreaAnswer = area, 
+                Geometry = geometryType ?? GeometryType.Polygon,
+                Neighbors = neighbors,
+            });
         }
     }
 
     public class GeographyPreview
     {
         public Area AreaAnswer { set; get; }
+        public GeographyNeighbor[] Neighbors  { set; get; }
         public GeometryType Geometry { set; get; }
+    }
+
+    public class GeographyNeighbor
+    {
+        public string Title { get; set; }
+        public string Geometry { get; set; }
     }
 
 

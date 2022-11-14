@@ -495,7 +495,7 @@
     <value>Ошибка</value>
   </data>
   <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
-    <value>Редактировать область</value>
+    <value>Ответить</value>
   </data>
   <data name="AreaMap_Edit" xml:space="preserve">
     <value>Редактировать</value>
@@ -529,6 +529,12 @@
   </data>
   <data name="AreaMap_AreaFormat" xml:space="preserve">
     <value>Площадь: {0:0.00} кв.м.</value>
+  </data>
+  <data name="AreaMap_OverlapsWith" xml:space="preserve">
+    <value>Пересекается с:</value>
+  </data>
+  <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
+    <value>и {0} других.</value>
   </data>
   <data name="AreaMap_Cancel" xml:space="preserve">
     <value>Отмена</value>

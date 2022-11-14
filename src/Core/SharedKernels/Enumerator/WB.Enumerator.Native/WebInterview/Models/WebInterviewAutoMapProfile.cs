@@ -182,7 +182,9 @@ namespace WB.Enumerator.Native.WebInterview.Models
             SelectedPoints = area.Coordinates.Split(';').Select(x =>
                 new GeoLocation(double.Parse(x.Split(',')[0]), double.Parse(x.Split(',')[1]), 0, 0)).ToArray(),
             Length = area.Length,
-            Area = area.AreaSize
+            Area = area.AreaSize,
+            RequestedAccuracy = area.RequestedAccuracy,
+            RequestedFrequency = area.RequestedFrequency
         };
 
         private static DropdownItem GetSingleFixedOptionAnswerAsDropdownItem(InterviewTreeQuestion question)

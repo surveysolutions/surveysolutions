@@ -89,10 +89,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 "{assignment}", "{interviewId}"),
             
             GeographyQuestionAccuracyInMeters = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
-                .IsGeographyQuestionAccuracyInMeters(),
+                .GetGeographyQuestionAccuracyInMeters(),
             
             GeographyQuestionPeriodInSeconds = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
-                .IsGeographyQuestionPeriodInSeconds(),
+                .GetGeographyQuestionPeriodInSeconds(),
             
             NotificationsEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
                 .IsDeviceNotificationsEnabled(),

@@ -180,16 +180,9 @@
                 </div>
             </div>
             <div class="col-sm-7">
-                <div class="block-filter">
+                <div class="block-filter"
+                    style="padding-left: 30px">
                     <div class="form-group">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            v-model="geographyQuestionAccuracyInMeters"
-                            @change="updateDeviceSettings"
-                            id="interviewerGeographyQuestionAccuracyInMeters"
-                            type="number"
-                            min="5"
-                            max="1000" />
                         <label for="interviewerGeographyQuestionAccuracyInMeters"
                             style="font-weight: bold">
                             <span class="tick"></span>
@@ -197,25 +190,58 @@
                             <p style="font-weight: normal">{{$t('Settings.GeographyQuestionAccuracyInMetersDescription')}}</p>
                         </label>
                     </div>
+                    <div class="form-group">
+                        <div class="input-group input-group-save">
+                            <input
+                                class="form-control number"
+                                v-model.number="geographyQuestionAccuracyInMeters"
+                                v-validate="{ required: true, min_value: 5, max_value: 1000 }"
+                                id="interviewerGeographyQuestionAccuracyInMeters"
+                                type="number" />
+                        </div>
+                        <button
+                            type="button"
+                            class="btn btn-success"
+                            :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel || geographyQuestionAccuracyInMeters < 5 || geographyQuestionAccuracyInMeters > 1000"
+                            @click="updateGeographyQuestionAccuracyInMeters">{{$t('Common.Save')}}</button>
+                        <button
+                            type="button"
+                            class="btn btn-link"
+                            :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel"
+                            @click="cancelGeographyQuestionAccuracyInMeters">{{$t('Common.Cancel')}}</button>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-7">
-                <div class="block-filter">
+                <div class="block-filter"
+                    style="padding-left: 30px">
                     <div class="form-group">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            v-model="geographyQuestionPeriodInSeconds"
-                            @change="updateDeviceSettings"
-                            id="interviewerGeographyQuestionPeriodInSeconds"
-                            type="number"
-                            min="5"
-                            max="1000" />
                         <label for="interviewerGeographyQuestionPeriodInSeconds"
                             style="font-weight: bold">
                             <span class="tick"></span>
                             {{$t('Settings.InterviewerGeographyQuestionPeriodInSeconds')}}
                             <p style="font-weight: normal">{{$t('Settings.GeographyQuestionPeriodInSecondsDescription')}}</p>
                         </label>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group input-group-save">
+                            <input
+                                class="form-control number"
+                                v-model.number="geographyQuestionPeriodInSeconds"
+                                v-validate="{ required: true, min_value: 5, max_value: 1000 }"
+                                id="interviewerGeographyQuestionPeriodInSeconds"
+                                type="number" />
+                        </div>
+                        <button
+                            type="button"
+                            class="btn btn-success"
+                            :disabled="geographyQuestionPeriodInSeconds == geographyQuestionPeriodInSecondsCancel || geographyQuestionPeriodInSeconds < 5 || geographyQuestionPeriodInSeconds > 1000"
+                            @click="updateGeographyQuestionPeriodInSeconds">{{$t('Common.Save')}}</button>
+                        <button
+                            type="button"
+                            class="btn btn-link"
+                            :disabled="geographyQuestionPeriodInSeconds == geographyQuestionPeriodInSecondsCancel"
+                            @click="cancelGeographyQuestionPeriodInSeconds">{{$t('Common.Cancel')}}</button>
                     </div>
                 </div>
             </div>
@@ -322,7 +348,34 @@
             </h3>
     </script>-->
 </template>
+
+<style scoped>
+    .logo {
+        max-width: 365px;
+        max-height: 329px;
+    }
+
+    .input-group .form-control.number {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .input-group .form-control.number[aria-invalid="true"] {
+        color: red;
+    }
+
+    .form-group .btn-success {
+        margin-left: 20px;
+        margin-top: 2px;
+    }
+
+    .form-group .input-group-save {
+        display: inline;
+    }
+</style>
+
 <script>
+
 import Vue from 'vue'
 import modal from '@/shared/modal'
 
@@ -341,6 +394,8 @@ export default {
             files: [],
             geographyQuestionAccuracyInMeters: 10,
             geographyQuestionPeriodInSeconds: 10,
+            geographyQuestionAccuracyInMetersCancel: 10,
+            geographyQuestionPeriodInSecondsCancel: 10,
         }
     },
     mounted() {
@@ -365,6 +420,8 @@ export default {
             this.isPartialSynchronizationEnabled = interviewerSettings.data.partialSynchronizationEnabled
             this.geographyQuestionAccuracyInMeters = interviewerSettings.data.geographyQuestionAccuracyInMeters
             this.geographyQuestionPeriodInSeconds = interviewerSettings.data.geographyQuestionPeriodInSeconds
+            this.geographyQuestionAccuracyInMetersCancel = interviewerSettings.data.geographyQuestionAccuracyInMeters
+            this.geographyQuestionPeriodInSecondsCancel = interviewerSettings.data.geographyQuestionPeriodInSeconds
 
             const webInterviewSettings = await this.$hq.AdminSettings.getWebInterviewSettings()
             this.isEmailAllowed = webInterviewSettings.data.allowEmails
@@ -402,6 +459,32 @@ export default {
             this.globalNotice = ''
             return this.updateMessage()
         },
+        async updateGeographyQuestionAccuracyInMeters() {
+            if (this.geographyQuestionAccuracyInMeters < 5 && this.geographyQuestionAccuracyInMeters > 1000)
+                return
+
+            return this.$hq.AdminSettings.setGeographyQuestionAccuracyInMeters(
+                this.geographyQuestionAccuracyInMeters
+            ).then(() => {
+                this.geographyQuestionAccuracyInMetersCancel = this.geographyQuestionAccuracyInMeters
+            })
+        },
+        cancelGeographyQuestionAccuracyInMeters() {
+            this.geographyQuestionAccuracyInMeters = this.geographyQuestionAccuracyInMetersCancel
+        },
+        async updateGeographyQuestionPeriodInSeconds() {
+            if (this.geographyQuestionPeriodInSeconds < 5 && this.geographyQuestionPeriodInSeconds > 1000)
+                return
+
+            return this.$hq.AdminSettings.setGeographyQuestionPeriodInSeconds(
+                this.geographyQuestionPeriodInSeconds
+            ).then(() => {
+                this.geographyQuestionPeriodInSecondsCancel = this.geographyQuestionPeriodInSeconds
+            })
+        },
+        cancelGeographyQuestionPeriodInSeconds() {
+            this.geographyQuestionPeriodInSeconds = this.geographyQuestionPeriodInSecondsCancel
+        },
         updateAllowInterviewerUpdateProfile() {
             this.$hq.AdminSettings.setProfileSettings(
                 this.isAllowInterviewerUpdateProfile
@@ -411,9 +494,7 @@ export default {
             return this.$hq.AdminSettings.setInterviewerSettings(
                 this.isInterviewerAutomaticUpdatesEnabled,
                 this.isDeviceNotificationsEnabled,
-                this.isPartialSynchronizationEnabled,
-                this.geographyQuestionAccuracyInMeters,
-                this.geographyQuestionPeriodInSeconds
+                this.isPartialSynchronizationEnabled
             )
         },
         updateWebInterviewEmailNotifications() {
@@ -474,9 +555,4 @@ export default {
     },
 }
 </script>
-<style scoped>
-.logo {
-    max-width: 365px;
-    max-height: 329px;
-}
-</style>
+

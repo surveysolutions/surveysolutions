@@ -574,13 +574,20 @@ class AdminSettings {
             allowInterviewerUpdateProfile: allowInterviewerUpdateProfile,
         })
     }
-    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled,
-        geographyQuestionAccuracyInMeters, geographyQuestionPeriodInSeconds) {
+    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled) {
         return this.http.post(`${this.base}/InterviewerSettings`, {
             interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled,
             notificationsEnabled: isDeviceNotificationsEnabled,
             partialSynchronizationEnabled: isPartialSynchronizationEnabled,
+        })
+    }
+    setGeographyQuestionAccuracyInMeters(geographyQuestionAccuracyInMeters) {
+        return this.http.post(`${this.base}/InterviewerGeographyQuestionAccuracyInMeters`, {
             geographyQuestionAccuracyInMeters: geographyQuestionAccuracyInMeters,
+        })
+    }
+    setGeographyQuestionPeriodInSeconds(geographyQuestionPeriodInSeconds) {
+        return this.http.post(`${this.base}/InterviewerGeographyQuestionPeriodInSeconds`, {
             geographyQuestionPeriodInSeconds: geographyQuestionPeriodInSeconds,
         })
     }

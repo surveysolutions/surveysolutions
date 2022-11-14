@@ -241,7 +241,7 @@
     <value>Tap to take barcode</value>
   </data>
   <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
-    <value>Tap to edit area</value>
+    <value>Tap to answer</value>
   </data>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
     <value>Section completed: {0}</value>
@@ -598,6 +598,12 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="AreaMap_AreaFormat" xml:space="preserve">
     <value>Area: {0:0.00} m2</value>
+  </data>
+  <data name="AreaMap_OverlapsWith" xml:space="preserve">
+    <value>Overlaps with:</value>
+  </data>
+  <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
+    <value>and {0} other.</value>
   </data>
   <data name="AreaMap_PointsFormat" xml:space="preserve">
     <value>Points: {0}</value>

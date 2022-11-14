@@ -7,7 +7,8 @@ param([string]$VersionName = $null,
 [string]$GoogleMapKey,
 [string]$AppCenterKey,
 [string]$KeystoreName = 'WBCapiTester.keystore',
-[string]$KeystoreAlias = 'Tester')
+[string]$KeystoreAlias = 'Tester',
+[string]$ArcGisApiKey = $NULL)
 
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
@@ -26,6 +27,7 @@ Log-Block "Update project version" {
 Set-AndroidXmlResourceValue $AndroidProject "google_maps_api_key" $GoogleMapKey
 Set-AndroidXmlResourceValue $AndroidProject "appcenter_key" $AppCenterKey
 Set-AndroidXmlResourceValue $AndroidProject "arcgisruntime_key" $ArcGisKey
+Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_api_key" $ArcGisApiKey
 
 $androidKeyStore = $ENV:ANDROID_KEY_STORE
 $keyStore = [System.IO.Path]::GetTempFileName()

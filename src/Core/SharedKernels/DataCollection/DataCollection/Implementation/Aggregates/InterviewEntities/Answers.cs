@@ -582,7 +582,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 Area = Value.AreaSize ?? 0,
                 Length = Value.Length ?? 0,
                 PointsCount = Value.NumberOfPoints ?? 0,
-                Accuracy = Value.Accuracy
+                RequestedAccuracy = Value.RequestedAccuracy,
+                RequestedFrequency = Value.RequestedFrequency
             };
         }
 
