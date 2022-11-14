@@ -74,8 +74,27 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (string.IsNullOrEmpty(parameter.Geometry)) return;
 
             IsLocationServiceSwitchEnabled = IsManual;
-            this.Geometry = Geometry.FromJson(parameter.Geometry);
+            var geometry = Geometry.FromJson(parameter.Geometry);
+            this.Geometry = GetAndFixIfNeedGeometry(geometry, RequestedGeometryType);
             this.UpdateLabels(this.Geometry);
+        }
+
+        private Geometry GetAndFixIfNeedGeometry(Geometry geometry, GeometryType requestedGeometryType)
+        {
+            if (requestedGeometryType == GeometryType.Multipoint &&
+                geometry.GeometryType == EsriGeometryType.Polyline &&
+                geometry is Polyline polyline)
+            {
+                var builder = new GeometryByTypeBuilder(polyline.SpatialReference, GeometryType.Multipoint);
+                foreach (var mapPoint in polyline.Parts[0].Points)
+                {
+                    builder.AddPoint(mapPoint);
+                }
+
+                return builder.ToGeometry();
+            }
+
+            return geometry;
         }
 
         public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(async () =>
