@@ -74,14 +74,14 @@
                         case GeometryType.Multipoint:
                             <text>
                             var polyGeometry = Multipoint.fromJSON(geometryJson);
-                            if (polyGeometry.points.length <= 0) { //>//it is for razor to end compare char
+                            if (polyGeometry.points.length == 0) { 
                                 var polyline = Polyline.fromJSON(geometryJson); 
                                 polyGeometry = new Multipoint();
                                 for (var i = 0; i < polyline.paths[0].length; i++) { //>//it is for razor to end compare char
                                     polyGeometry.addPoint(polyline.getPoint(0, i));
                                 }
+                                polyGeometry.spatialReference = polyline.spatialReference;
                             }
-                            polyGeometry.spatialReference = polyline.spatialReference;
                             var markerType = 'simple-marker';
                             </text>
                             break;
