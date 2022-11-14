@@ -13,5 +13,7 @@
         public byte[] Preview { set; get; }
         
         public double? RequestedAccuracy { set; get; }
+        
+        public double? RequestedFrequency { set; get; }
     }
 }

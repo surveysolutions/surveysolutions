@@ -14,7 +14,6 @@ using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -24,38 +23,39 @@ using WB.UI.Shared.Extensions.Services;
 
 namespace WB.UI.Shared.Extensions.ViewModels
 {
-    public abstract class BaseMapInteractionViewModel<TParam> : BaseViewModel<TParam>, IDisposable
+    public abstract class BaseMapInteractionViewModel<TParam> : BaseViewModel<TParam>
     {
-        readonly ILogger logger;
-        private readonly IMapService mapService;
-        protected readonly IUserInteractionService userInteractionService;
+        protected const string ShapefileLayerName = "shapefile";
 
-        private readonly IFileSystemAccessor fileSystemAccessor;
-        protected readonly IMvxNavigationService navigationService;
+        protected readonly ILogger logger;
+        private readonly IMapService mapService;
+        protected readonly IUserInteractionService UserInteractionService;
+        protected readonly IMvxNavigationService NavigationService;
         private readonly IEnumeratorSettings enumeratorSettings;
         private readonly IMapUtilityService mapUtilityService;
-        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
+        protected readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
 
         protected BaseMapInteractionViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMapService mapService,
             IUserInteractionService userInteractionService,
             ILogger logger,
-            IFileSystemAccessor fileSystemAccessor,
             IEnumeratorSettings enumeratorSettings,
             IMapUtilityService mapUtilityService,
             IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
             : base(principal, viewModelNavigationService)
         {
-            this.userInteractionService = userInteractionService;
+            this.UserInteractionService = userInteractionService;
             this.mapService = mapService;
             this.logger = logger;
-            this.fileSystemAccessor = fileSystemAccessor;
-            this.navigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
+            this.NavigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
             this.enumeratorSettings = enumeratorSettings;
             this.mapUtilityService = mapUtilityService;
             this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
         }
+
+        public abstract Task OnMapLoaded();
+        public abstract MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom);
 
         public override async Task Initialize()
         {
@@ -77,14 +77,23 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     return;
                 
                 this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
-                var mapToDisplay = GetSelectedMap(this.AvailableMaps);
-                
-                var defaultBaseMap = await mapUtilityService.GetBaseMap(mapToDisplay).ConfigureAwait(false);
-                //var basemap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, mapToDisplay).ConfigureAwait(false);
+
+                var defaultBaseMap = await mapUtilityService.GetBaseMap(defaultMap).ConfigureAwait(false);
+                await defaultBaseMap.LoadAsync();
                 this.Map = new Map(defaultBaseMap);
+                
+                if (defaultBaseMap?.BaseLayers.Count > 0 && defaultBaseMap?.BaseLayers[0]?.FullExtent != null)
+                    this.Map.MaxExtent = defaultBaseMap.BaseLayers[0].FullExtent;
+
+                var mapToDisplay = GetSelectedMap(this.AvailableMaps);
+                if (mapToDisplay.MapName != defaultMap.MapName)
+                {
+                    var lastBaseMap = await mapUtilityService.GetBaseMap(mapToDisplay).ConfigureAwait(false);
+                    this.Map.Basemap = lastBaseMap;
+                }
 
                 this.SelectedMap = mapToDisplay.MapName;
-
+                this.FirstLoad = true;
             }
             catch (Exception e)
             {
@@ -94,7 +103,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             
             this.Map.Loaded += MapOnLoaded;
         }
-        
+
+        public bool FirstLoad { get; set; }
+
         protected string LastMap
         {
             set => enumeratorSettings.SetLastOpenedMapName(value);
@@ -107,6 +118,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => this.isLocationServiceSwitchEnabled;
             set => this.RaiseAndSetIfChanged(ref this.isLocationServiceSwitchEnabled, value);
         }
+        
+        public IMvxAsyncCommand ShowFullMapCommand => new MvxAsyncCommand(async () =>
+        {
+            if (this.Map?.Basemap?.BaseLayers.Count > 0 && this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
+                await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
+        });
         
         public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async () =>
         {
@@ -140,7 +157,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private void DataSourceOnStatusChanged(object sender, LocationDataSourceStatus e)
         {
             if(e == LocationDataSourceStatus.FailedToStart)
-                this.userInteractionService.ShowToast(UIResources.AreaMap_LocationDataSourceFailed);
+                this.UserInteractionService.ShowToast(UIResources.AreaMap_LocationDataSourceFailed);
         }
 
         protected async void LocationDisplayOnLocationChanged(object sender, Location e)
@@ -158,7 +175,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             
             if (!GeometryEngine.Contains(extent, point))
             {
-                this.userInteractionService.ShowToast(UIResources.AreaMap_LocationOutOfBoundaries);
+                this.UserInteractionService.ShowToast(UIResources.AreaMap_LocationOutOfBoundaries);
             }
 
             if (ShapeFileLoaded)
@@ -170,7 +187,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     var featureLayer = (FeatureLayer)shapeLayer;
                     var shapefileFeatureTable = (ShapefileFeatureTable)featureLayer?.FeatureTable;
-                    var labelFieldIndex = shapefileFeatureTable.Fields.ToList().FindIndex(f => string.Compare(f.Name, "label", StringComparison.OrdinalIgnoreCase) == 0);
+                    var labelFieldIndex = shapefileFeatureTable.Fields.ToList().FindIndex(f => 
+                        string.Compare(f.Name, "label", StringComparison.OrdinalIgnoreCase) == 0);
+                    
                     if (labelFieldIndex < 0)
                         return;
                     var features = await shapefileFeatureTable.QueryFeaturesAsync(new QueryParameters()
@@ -180,13 +199,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     }).ConfigureAwait(false);
                     var featuresField = features.Fields[labelFieldIndex];
                     var featuresFieldName = featuresField.Name;
-                    this.userInteractionService.ShowToast(featuresFieldName);
+                    this.UserInteractionService.ShowToast(featuresFieldName);
                 }
             }
         }
-
-        public abstract Task OnMapLoaded();
-
 
         public async void MapOnLoaded(object sender, EventArgs e)
         {
@@ -196,8 +212,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             //if (AvailableShapefiles.Count == 1)
             //    await LoadShapefile.ExecuteAsync().ConfigureAwait(false);
         }
-
-        public abstract MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom);
 
         private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
         public MvxObservableCollection<MapDescription> AvailableMaps
@@ -219,6 +233,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => this.selectedMap;
             set => this.RaiseAndSetIfChanged(ref this.selectedMap, value);
         }
+        
+        public IMvxAsyncCommand ShowAllItemsCommand => new MvxAsyncCommand(async () =>
+        {
+            await SetViewToValues();
+        });
+
+        protected abstract Task SetViewToValues();
 
         public async Task UpdateBaseMap()
         {
@@ -231,32 +252,34 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     this.Map.Basemap = baseMap;
 
-                    if (baseMap?.BaseLayers.Count > 0 && baseMap?.BaseLayers[0]?.FullExtent != null)
+                    if (this.Map.Basemap?.BaseLayers.Count > 0 && this.Map.Basemap?.BaseLayers[0]?.FullExtent != null)
                     {
-                        await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
+                        if (FirstLoad)
                         {
-                            if (this.MapView?.VisibleArea != null)
+                            FirstLoad = false;
+                            await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
+                        }
+                        
+                        if (this.MapView?.VisibleArea != null)
+                        {
+                            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
                             {
-                                var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea,
-                                    baseMap.BaseLayers[0].SpatialReference);
+                                var projectedArea =
+                                    GeometryEngine.Project(this.MapView.VisibleArea, this.Map.Basemap.BaseLayers[0].SpatialReference);
 
                                 if (projectedArea != null &&
-                                    !GeometryEngine.Intersects(baseMap.BaseLayers[0].FullExtent, projectedArea))
-                                    this.userInteractionService.ShowToast(UIResources
+                                    !GeometryEngine.Intersects(this.Map.Basemap.BaseLayers[0].FullExtent, projectedArea))
+                                    this.UserInteractionService.ShowToast(UIResources
                                         .AreaMap_MapIsOutOfVisibleBoundaries);
-                            }
-                        });
+                            });
+                        }
                     }
-
-                    /*if (basemap?.BaseLayers[0]?.FullExtent != null)
-                        await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);*/
                     
                     if (LastMap != existingMap.MapName)
                         LastMap = existingMap.MapName;
                 }
             }
         }
-
 
         private Map map;
         public Map Map
@@ -276,25 +299,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
         }
 
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
-            await this.MapView?.SetViewpointRotationAsync(0));
+        {
+            if (this.MapView != null)
+                await this.MapView.SetViewpointRotationAsync(0);
+        });
 
         public IMvxAsyncCommand ZoomMapIn => new MvxAsyncCommand(async () =>
-            await this.MapView?.SetViewpointScaleAsync(this.MapView.MapScale / 1.3));
+        {
+            if (this.MapView != null)
+                await this.MapView.SetViewpointScaleAsync(this.MapView.MapScale / 1.3);
+        });
 
         public IMvxAsyncCommand ZoomMapOut => new MvxAsyncCommand(async () =>
-            await this.MapView?.SetViewpointScaleAsync(this.MapView.MapScale * 1.3));
-
-        public IMvxCommand SaveAreaCommand => new MvxCommand(() =>
         {
-            var command = this.MapView.SketchEditor.CompleteCommand;
-            if (this.MapView.SketchEditor.CompleteCommand.CanExecute(command))
-            {
-                this.MapView.SketchEditor.CompleteCommand.Execute(command);
-            }
-            else
-            {
-                this.userInteractionService.ShowToast(UIResources.AreaMap_NoChangesInfo);
-            }
+            if (this.MapView != null)
+                await this.MapView.SetViewpointScaleAsync(this.MapView.MapScale * 1.3);
         });
 
         public IMvxAsyncCommand LoadShapefile => new MvxAsyncCommand(async () =>
@@ -309,7 +328,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     new Tuple<string, string>(s.ShapefileName,
                         s.FullPath)
                 ).ToArray();
-                fullPathToShapefile = await userInteractionService.SelectOneOptionFromList(UIResources.AreaMap_SelectShapefile, options);
+                fullPathToShapefile = await UserInteractionService.SelectOneOptionFromList(UIResources.AreaMap_SelectShapefile, options);
                 if (string.IsNullOrEmpty(fullPathToShapefile))
                     return;
             }
@@ -317,23 +336,32 @@ namespace WB.UI.Shared.Extensions.ViewModels
             try
             {
                 var newFeatureLayer = await mapUtilityService.GetShapefileAsFeatureLayer(fullPathToShapefile);
+                newFeatureLayer.Name = ShapefileLayerName;
                 
-                this.MapView.Map.OperationalLayers.Clear();
+                RemoveShapefileLayer();
 
                 // Add the feature layer to the map
                 this.MapView.Map.OperationalLayers.Add(newFeatureLayer);
 
                 // Zoom the map to the extent of the shapefile
-                await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
+                if(newFeatureLayer.FullExtent != null)
+                    await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
 
                 ShapeFileLoaded = true;
             }
             catch (Exception e)
             {
                 logger.Error("Error on shapefile loading", e);
-                userInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
+                UserInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
             }
         });
+
+        private void RemoveShapefileLayer()
+        {
+            var existedLayer = this.MapView.Map?.OperationalLayers.FirstOrDefault(l => l.Name == ShapefileLayerName);
+            if (existedLayer != null)
+                this.MapView.Map.OperationalLayers.Remove(existedLayer);
+        }
 
         public bool ShapeFileLoaded
         {
@@ -348,13 +376,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             try
             {
-                this.MapView.Map.OperationalLayers.Clear();
+                RemoveShapefileLayer();
                 ShapeFileLoaded = false;
             }
             catch (Exception e)
             {
                 logger.Error("Error on shapefile loading", e);
-                userInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
+                UserInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
             }
         });
 

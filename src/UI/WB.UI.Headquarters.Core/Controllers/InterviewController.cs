@@ -223,10 +223,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return NotFound();
 
             var identity = Identity.Parse(questionId);
-            var interview = this.statefulInterviewRepository.Get(id.FormatGuid());
+            var interview = this.statefulInterviewRepository.GetOrThrow(id.FormatGuid());
             var area = interview.GetAreaQuestion(identity)?.GetAnswer()?.Value;
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
             var geometryType = questionnaire.GetQuestionGeometryType(identity.Id);
 
             var neighboringIds = questionnaire.IsNeighboringSupport(identity.Id)
@@ -236,7 +236,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 .Select(qId =>
                 {
                     var question = interview.GetQuestion(qId);
-                    var parentRosterInstance = question.GetParent(questionnaire);
+                    var parentRosterInstance = question.Parent;
                     var areaQuestion = question.GetAsInterviewTreeAreaQuestion();
 
                     return new GeographyNeighbor

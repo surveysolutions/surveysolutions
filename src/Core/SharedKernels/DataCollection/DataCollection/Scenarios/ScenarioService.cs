@@ -59,7 +59,8 @@ namespace WB.Core.SharedKernels.DataCollection.Scenarios
                             geography.Length,
                             geography.DistanceToEditor,
                             geography.NumberOfPoints,
-                            geography.RequestedAccuracy));
+                            geography.RequestedAccuracy,
+                            geography.RequestedFrequency));
                         break;
                     case AnswerMultipleOptionsLinked linkedMultipleOption:
                         result.Add(new AnswerMultipleOptionsLinkedQuestionCommand(
@@ -186,7 +187,8 @@ namespace WB.Core.SharedKernels.DataCollection.Scenarios
                             geography.Length,
                             geography.DistanceToEditor,
                             geography.NumberOfPoints,
-                            geography.RequestedAccuracy));
+                            geography.RequestedAccuracy,
+                            geography.RequestedFrequency));
                         break;
                     case AnswerMultipleOptionsLinkedQuestionCommand linkedMultipleOption:
                         result.Add(new AnswerMultipleOptionsLinked(questionnaire.GetEntityVariableOrThrow(linkedMultipleOption.QuestionId),

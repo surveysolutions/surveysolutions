@@ -184,6 +184,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
             Length = area.Length,
             Area = area.AreaSize,
             RequestedAccuracy = area.RequestedAccuracy,
+            RequestedFrequency = area.RequestedFrequency
         };
 
         private static DropdownItem GetSingleFixedOptionAnswerAsDropdownItem(InterviewTreeQuestion question)

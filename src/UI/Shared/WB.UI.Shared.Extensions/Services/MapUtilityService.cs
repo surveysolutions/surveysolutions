@@ -49,7 +49,7 @@ namespace WB.UI.Shared.Extensions.Services
                         if (package.Maps.Count > 0)
                         {
                             {
-                                var basemap = package.Maps.First().Basemap.Clone();
+                                var basemap = package.Maps.First()?.Basemap?.Clone();
                                 return basemap;
                             }
                         }
@@ -104,11 +104,11 @@ namespace WB.UI.Shared.Extensions.Services
             switch (existingMap.MapType)
             {
                 case MapType.OnlineImagery:
-                    return Basemap.CreateImagery();
+                    return new Basemap(BasemapStyle.ArcGISImageryStandard);
                 case MapType.OnlineImageryWithLabels:
-                    return Basemap.CreateImageryWithLabels();
+                    return new Basemap(BasemapStyle.ArcGISImagery);
                 case MapType.OnlineOpenStreetMap:
-                    return Basemap.CreateOpenStreetMap();
+                    return new Basemap(BasemapStyle.OSMStandard);
                 case MapType.LocalFile:
                     return await GetLocalMap(existingMap);
                 default:
