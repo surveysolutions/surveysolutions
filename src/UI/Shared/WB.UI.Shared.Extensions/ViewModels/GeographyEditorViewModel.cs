@@ -690,18 +690,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                     if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
                     {
-                        await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () => 
-                        {
-                            // Remove the old line.
-                            locationLineOverlay.Graphics.Clear();
-                            // Add the updated line.
-                            var geometry = geometryBuilder.ToGeometry();
-                            locationLineOverlay.Graphics.Add(new Graphic(geometry));
-
-                            await UpdateDrawNeighborsAsync(geometry, this.GeographyNeighbors);
-                        });
+                        // Remove the old line.
+                        locationLineOverlay.Graphics.Clear();
+                        // Add the updated line.
+                        var geometry = geometryBuilder.ToGeometry();
+                        locationLineOverlay.Graphics.Add(new Graphic(geometry));
                     }
                     
+                    await UpdateDrawNeighborsAsync(geometryBuilder.ToGeometry(), this.GeographyNeighbors);
+
                     if (RequestedGeometryType == GeometryType.Point)
                     {
                         //stop collection on first point collected
