@@ -305,13 +305,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     (
                         hasQuestionnaire: questionnaire =>
                         {
-                            var geoQuestionsAccuracy =  questionnaire.Find<AreaQuestion>()
-                                .Select(x => $"{x.VariableName}.Accuracy").ToList();
-                            
-                            if (!geoQuestionsAccuracy.Any())
+                            var allGeoQuestions =  questionnaire.Find<AreaQuestion>()
+                                .ToList();
+
+                            if (!allGeoQuestions.Any())
                                 return false;
-                            
-                            geoQuestionsAccuracy.Add("self.Accuracy");
+                           
+                            var geoQuestionsPropertiesRefs = 
+                                allGeoQuestions.Select(x => $"{x.VariableName}.RequestedAccuracy")
+                                    .Union(allGeoQuestions.Select(x => $"{x.VariableName}.RequestedFrequency")).ToList();
+
+                            geoQuestionsPropertiesRefs.Add("self.RequestedAccuracy");
+                            geoQuestionsPropertiesRefs.Add("self.RequestedFrequency");
                             
                             //conditions
                             //validations
@@ -333,7 +338,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             foreach (var composite in questionnaire.Find<IComposite>())
                             {
                                 if (composite is IConditional conditional 
-                                    && IsUsedInExpression(conditional.ConditionExpression, geoQuestionsAccuracy))
+                                    && IsUsedInExpression(conditional.ConditionExpression, geoQuestionsPropertiesRefs))
                                 {
                                     return true;
                                 }
@@ -343,7 +348,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                     foreach (var validationExpression in validatable.ValidationConditions.Select(x =>
                                                  x.Expression))
                                     {
-                                        if (IsUsedInExpression(validationExpression, geoQuestionsAccuracy))
+                                        if (IsUsedInExpression(validationExpression, geoQuestionsPropertiesRefs))
                                         {
                                             return true;
                                         }
@@ -352,8 +357,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                 
                                 if (composite is IQuestion question)
                                 {
-                                    if (IsUsedInExpression(question.LinkedFilterExpression, geoQuestionsAccuracy) 
-                                        || IsUsedInExpression(question.Properties?.OptionsFilterExpression, geoQuestionsAccuracy))
+                                    if (IsUsedInExpression(question.LinkedFilterExpression, geoQuestionsPropertiesRefs) 
+                                        || IsUsedInExpression(question.Properties?.OptionsFilterExpression, geoQuestionsPropertiesRefs))
                                     {
                                         return true;
                                     }
@@ -361,7 +366,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             }
                             return false;
                         },
-                        description: "Geography question accuracy is used in expressions"
+                        description: "Geography question accuracy or frequency is used in expressions"
                     ),
                 }
             },

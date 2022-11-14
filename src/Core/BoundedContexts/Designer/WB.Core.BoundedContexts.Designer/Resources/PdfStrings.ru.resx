@@ -397,7 +397,7 @@
     <value>Тип географии</value>
   </data>
     <data name="GeographyInputMode" xml:space="preserve">
-    <value>Режим ввода географии</value>
+    <value>Режим ввода </value>
   </data>
   <data name="GeometryOverlapDetection" xml:space="preserve">
     <value>Отслеживать перекрытия ответов</value>
