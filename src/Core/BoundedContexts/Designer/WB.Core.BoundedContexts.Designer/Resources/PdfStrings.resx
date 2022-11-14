@@ -289,7 +289,7 @@
     <value>Geography type</value>
   </data>
   <data name="GeographyInputMode" xml:space="preserve">
-    <value>Geography input mode</value>
+    <value>Input mode</value>
   </data>
   <data name="GeometryOverlapDetection" xml:space="preserve">
     <value>Overlap detection</value>
