@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -35,8 +36,10 @@ namespace WB.Core.Infrastructure.Services
                 {
                     try
                     {
-                        var events = this.inMemoryEventStore.Read(id, 0);
+                        var events = this.inMemoryEventStore.Read(id, 0).ToList();
                         this.prototypeService.RemovePrototype(id);
+
+                        ThrowIfAssignmentQuantityLimitReached(events);
                         
                         var uncommittedEvents = events.Select(e => new UncommittedEvent(e.EventIdentifier, e.EventSourceId,
                             e.EventSequence, 0, e.EventTimeStamp, e.Payload));
@@ -56,6 +59,13 @@ namespace WB.Core.Infrastructure.Services
                     break;
                 }
             }
+        }
+
+        private void ThrowIfAssignmentQuantityLimitReached(List<CommittedEvent> events)
+        {
+            events.First().
+            this.cache.EvictAggregateRoot(id);
+            throw new Exception("Assigment quantity limit reached");
         }
     }
 }
