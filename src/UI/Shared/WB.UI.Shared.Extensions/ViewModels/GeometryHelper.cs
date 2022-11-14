@@ -9,10 +9,13 @@ public class GeometryHelper
 {
     public static int GetGeometryPointsCount(Geometry geometry)
     {
+        if (geometry == null)
+            return 0; 
+        
         switch (geometry.GeometryType)
         {
             case Esri.ArcGISRuntime.Geometry.GeometryType.Point:
-                return 1;
+                return geometry.IsEmpty ? 0 : 1;
 
             case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
                 return ((Polyline) geometry).Parts[0].PointCount;

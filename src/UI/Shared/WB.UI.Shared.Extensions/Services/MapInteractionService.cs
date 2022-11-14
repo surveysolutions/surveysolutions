@@ -102,8 +102,8 @@ namespace WB.UI.Shared.Extensions.Services
                             DistanceToEditor = editResult.DistanceToEditor,
                             Preview = editResult.Preview,
                             NumberOfPoints = editResult.NumberOfPoints,
-                            RequestedAccuracy = editResult.RequestedAccuracy,
-                            RequestedFrequency = editResult.RequestedFrequency
+                            RequestedAccuracy = args.RequestedAccuracy,
+                            RequestedFrequency = args.RequestedFrequency
                         });
                 };
                 return await tcs.Task;
