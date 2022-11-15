@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Android.Gms.Maps;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
@@ -176,9 +177,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private void SaveGeometry(Geometry result, double? distanceToEditor)
         {
+            var geometryWgs84 = result != null
+                ? GeometryEngine.Project(result, SpatialReferences.Wgs84)
+                : null;
             var resultArea = new AreaEditorResult()
             {
-                Geometry = result?.ToJson(),
+                Geometry = geometryWgs84?.ToJson(),
                 MapName = this.SelectedMap,
                 Coordinates = GeometryHelper.GetProjectedCoordinates(result),
                 Area = GeometryHelper.GetGeometryArea(result),
