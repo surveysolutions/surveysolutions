@@ -264,7 +264,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 };
             var overlappingNeighborsFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference)
                 {
-                    Renderer = CreateRenderer(gType, Color.Orange)
+                    Renderer = CreateRenderer(gType, Color.DarkOrange)
                 };
 
             List<string> overlappingTitles = new List<string>();

@@ -179,7 +179,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/area_editor_common_margin_left"
                     android:textSize="@dimen/area_editor_text_size_regular"                    
-                    android:textColor="@android:color/holo_red_light"
+                    android:textColor="@android:color/holo_orange_dark"
                     android:gravity="left"
                     android:duplicateParentState="true"
                     android:singleLine="false"
