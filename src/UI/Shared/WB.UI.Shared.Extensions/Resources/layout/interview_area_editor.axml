@@ -171,13 +171,14 @@
                 android:layout_weight="0.75"
                 android:gravity="center_vertical|left"
                 android:orientation="vertical"
-                android:layout_marginBottom="4dp">
+                android:layout_marginBottom="4dp"
+                android:background="@color/lower_panel_background_color"
+                local:MvxBind="Visible And(IsWarningVisible, Not(IsPanelVisible));">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/area_editor_common_margin_left"
-                    android:textSize="@dimen/area_editor_text_size_regular"
-                    android:textStyle="bold"
+                    android:textSize="@dimen/area_editor_text_size_regular"                    
                     android:textColor="@android:color/holo_red_light"
                     android:gravity="left"
                     android:duplicateParentState="true"

@@ -34,14 +34,18 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private readonly LocationDataSource locationDataSource = new SystemLocationDataSource();
         private GraphicsOverlay locationOverlay;
         private GraphicsOverlay locationLineOverlay;
-        private GeometryByTypeBuilder geometryBuilder;        
+        private GeometryByTypeBuilder geometryBuilder;
 
-        public GeographyEditorViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService, 
+        public GeographyEditorViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService,
             IMapService mapService, IUserInteractionService userInteractionService, ILogger logger,
-            IEnumeratorSettings enumeratorSettings, IMapUtilityService mapUtilityService, 
-            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
-            : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
-                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher){}
+            IEnumeratorSettings enumeratorSettings, IMapUtilityService mapUtilityService,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
+            IVirbationService vibrationService)
+            : base(principal, viewModelNavigationService, mapService, userInteractionService, logger,
+                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
+        {
+            VibrationService = vibrationService;
+        }
 
         private int? RequestedAccuracy { get; set; }
         private int? RequestedFrequency { get; set; }
@@ -49,6 +53,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private GeometryNeighbor[] GeographyNeighbors { get; set; }
         private Geometry Geometry { set; get; }
         private GeometryType RequestedGeometryType { get; set; }
+
+        private IVirbationService VibrationService { get; set; }
 
         public string MapName { set; get; }
         public string Title { set; get; }
@@ -495,7 +501,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     logger.Error("Error on location start", e);
                     this.UserInteractionService.ShowToast("Error on location services start");
                 }
-                
             }
             else
             {
@@ -626,7 +631,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private Task StartCollecting()
         {
             isCollecting = !isCollecting;
-
+            VibrationService.Enable();
             StartButtonVisible = false;
 
             if (RequestedGeometryInputMode == GeometryInputMode.Semiautomatic)
@@ -665,12 +670,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
             //filter values that not fulfill accuracy condition
             //save the latest value to temp storage
 
-            var source = e.AdditionalSourceProperties.ContainsKey("positionSource")
+            // toast on collecting
+            /*var source = e.AdditionalSourceProperties.ContainsKey("positionSource")
                 ? e.AdditionalSourceProperties["positionSource"]
                 : "unknown";
 
             this.UserInteractionService.ShowToast(
                 $"Position: {e.Position}; e.HorizontalAccuracy: {e.HorizontalAccuracy}; Source: {source}; Valid: {e.HorizontalAccuracy <= RequestedAccuracy}");
+                */
 
             if (e.HorizontalAccuracy > RequestedAccuracy) return;
             
@@ -701,12 +708,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     LastPosition = null;
 
                     geometryBuilder.AddPoint(newPoint);
-                    await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
-                    {
-                        CanAddPoint = false;
-                        locationOverlay.Graphics.Add(new Graphic(newPoint));
-                    });                    
-
+                    CanAddPoint = false;
+                    locationOverlay.Graphics.Add(new Graphic(newPoint));
+                    
                     if (RequestedGeometryType == GeometryType.Polygon || RequestedGeometryType == GeometryType.Polyline)
                     {
                         // Remove the old line.
@@ -726,7 +730,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     }
 
                     var collectedPoints = geometryBuilder.PointCount;
-
                     this.CanSave = RequestedGeometryType switch {
                             GeometryType.Polygon => collectedPoints > 2,
                             GeometryType.Polyline => collectedPoints > 2,
@@ -742,6 +745,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                     this.CanUndo =
                         (RequestedGeometryInputMode == GeometryInputMode.Semiautomatic && collectedPoints > 0);
+                    
+                    VibrationService.Vibrate();
                 }
             }
             catch (Exception e)
@@ -749,7 +754,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 logger.Error("Error on adding point", e);
                 throw;
             }
-            
         }
 
         private string warning;
@@ -900,7 +904,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         
         public override void ViewDisappearing()
         {
-            locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
+            //locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
             base.ViewDisappearing();
         }
 
