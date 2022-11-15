@@ -168,11 +168,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to overlapping neighbours:.
+        ///   Looks up a localized string similar to Overlaps with:.
         /// </summary>
-        public static string MapOverlappingNeighbours {
+        public static string MapOverlapsWith {
             get {
-                return ResourceManager.GetString("MapOverlappingNeighbours", resourceCulture);
+                return ResourceManager.GetString("MapOverlapsWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to and {0} other..
+        /// </summary>
+        public static string MapOverlapsWithOther {
+            get {
+                return ResourceManager.GetString("MapOverlapsWithOther", resourceCulture);
             }
         }
         

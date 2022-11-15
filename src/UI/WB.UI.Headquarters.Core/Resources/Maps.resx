@@ -159,8 +159,11 @@
   <data name="MappingsLoadingError" xml:space="preserve">
     <value>Error occurred on map links loading.</value>
   </data>
-  <data name="MapOverlappingNeighbours" xml:space="preserve">
-    <value>overlapping neighbours:</value>
+  <data name="MapOverlapsWith" xml:space="preserve">
+    <value>Overlaps with:</value>
+  </data>
+  <data name="MapOverlapsWithOther" xml:space="preserve">
+    <value>and {0} other.</value>
   </data>
   <data name="MapLoadingNoMapsInArchive" xml:space="preserve">
     <value>Error occurred. Archive doesn't contain map files</value>

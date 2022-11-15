@@ -132,8 +132,11 @@
   <data name="MappingsLoadingError" xml:space="preserve">
     <value>Произошла ошибка во время загрузки.</value>
   </data>
-  <data name="MapOverlappingNeighbours" xml:space="preserve">
-    <value>соприкасающиеся соседи:</value>
+  <data name="MapOverlapsWith" xml:space="preserve">
+    <value>Пересекается с:</value>
+  </data>
+  <data name="MapOverlapsWithOther" xml:space="preserve">
+    <value>и {0} других.</value>
   </data>
   <data name="MapsLoadingError" xml:space="preserve">
     <value>Произошла ошибка при загрузке карт.</value>
