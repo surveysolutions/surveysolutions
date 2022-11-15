@@ -145,15 +145,23 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         private static string[] BuildMissingValueAnswer(ExportedQuestionHeaderItem header)
         {
-            if (header.QuestionType == QuestionType.GpsCoordinates)
-                return new[] { ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingStringQuestionValue };
-
-            string missingValue = header.QuestionType == QuestionType.Numeric
-                                  || header.QuestionType == QuestionType.SingleOption
-                                  || header.QuestionType == QuestionType.MultyOption
-                ? ExportFormatSettings.MissingNumericQuestionValue
-                : ExportFormatSettings.MissingStringQuestionValue;
-            return header.ColumnHeaders.Select(c => missingValue).ToArray();
+            return header.ColumnHeaders.Select(headerColumn =>
+            {
+                switch (headerColumn.ExportType)
+                {
+                    case ExportValueType.NumericInt:
+                    case ExportValueType.Numeric:
+                        return ExportFormatSettings.MissingNumericQuestionValue;
+                    case ExportValueType.Boolean:
+                    case ExportValueType.Date:
+                    case ExportValueType.String:
+                    case ExportValueType.DateTime:
+                        return ExportFormatSettings.MissingStringQuestionValue;
+                    case ExportValueType.Unknown:
+                    default:
+                        throw new Exception("Unknown ExportValueType: " + headerColumn.ExportType);
+                }
+            }).ToArray();
         }
 
         private IEnumerable<object>? TryCastToEnumerable(object? value)

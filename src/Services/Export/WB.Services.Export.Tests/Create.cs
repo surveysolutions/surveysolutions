@@ -457,9 +457,14 @@ namespace WB.Services.Export.Tests
             return questionnaireDocumentWithOneChapter;
         }
 
-        public static List<HeaderColumn> ColumnHeaders(string[] columnNames)
+        public static List<HeaderColumn> ColumnHeaders(string[] columnNames, ExportValueType exportType = ExportValueType.String)
         {
-            return columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x }).ToList() ?? new List<HeaderColumn>();
+            return columnNames?.Select(x => ColumnHeader(x, exportType)).ToList() ?? new List<HeaderColumn>();
+        }
+        
+        public static HeaderColumn ColumnHeader(string columnName, ExportValueType exportType = ExportValueType.String)
+        {
+            return new HeaderColumn() { Name = columnName, Title = columnName, ExportType = exportType};
         }
 
         public static TextListQuestion TextListQuestion(Guid? questionId = null,
