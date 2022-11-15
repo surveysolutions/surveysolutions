@@ -466,8 +466,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             locationOverlay.Renderer = new SimpleRenderer(locationPointSymbol);
             this.MapView.GraphicsOverlays.Add(locationOverlay);
 
-            await DrawNeighborsAsync(this.Geometry).ConfigureAwait(false);
-
             //project and use current map
             geometryBuilder = new GeometryByTypeBuilder(this.MapView.Map.SpatialReference, RequestedGeometryType);
 
@@ -558,6 +556,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     locationLineOverlay.Graphics.Add(new Graphic(geometry));
                 }
             }
+            
+            await DrawNeighborsAsync(this.Geometry).ConfigureAwait(false);
         }
 
         public override MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom)
