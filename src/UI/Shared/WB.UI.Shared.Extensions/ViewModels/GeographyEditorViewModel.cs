@@ -184,11 +184,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 Geometry = geometryWgs84?.ToJson(),
                 MapName = this.SelectedMap,
-                Coordinates = GeometryHelper.GetProjectedCoordinates(result),
-                Area = GeometryHelper.GetGeometryArea(result),
-                Length = GeometryHelper.GetGeometryLength(result),
+                Coordinates = GeometryHelper.GetProjectedCoordinates(geometryWgs84),
+                Area = GeometryHelper.GetGeometryArea(geometryWgs84),
+                Length = GeometryHelper.GetGeometryLength(geometryWgs84),
                 DistanceToEditor = distanceToEditor,
-                NumberOfPoints = GeometryHelper.GetGeometryPointsCount(result),
+                NumberOfPoints = GeometryHelper.GetGeometryPointsCount(geometryWgs84),
                 RequestedAccuracy = RequestedAccuracy,
                 RequestedFrequency = RequestedFrequency
             };
