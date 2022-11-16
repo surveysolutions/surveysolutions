@@ -177,18 +177,18 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private void SaveGeometry(Geometry result, double? distanceToEditor)
         {
-            var geometryWgs84 = result != null
-                ? GeometryEngine.Project(result, SpatialReferences.Wgs84)
+            var geometryWebMercator = result != null
+                ? GeometryEngine.Project(result, SpatialReferences.WebMercator)
                 : null;
             var resultArea = new AreaEditorResult()
             {
-                Geometry = geometryWgs84?.ToJson(),
+                Geometry = geometryWebMercator?.ToJson(),
                 MapName = this.SelectedMap,
-                Coordinates = GeometryHelper.GetProjectedCoordinates(geometryWgs84),
-                Area = GeometryHelper.GetGeometryArea(geometryWgs84),
-                Length = GeometryHelper.GetGeometryLength(geometryWgs84),
+                Coordinates = GeometryHelper.GetProjectedCoordinates(result),
+                Area = GeometryHelper.GetGeometryArea(geometryWebMercator),
+                Length = GeometryHelper.GetGeometryLength(geometryWebMercator),
                 DistanceToEditor = distanceToEditor,
-                NumberOfPoints = GeometryHelper.GetGeometryPointsCount(geometryWgs84),
+                NumberOfPoints = GeometryHelper.GetGeometryPointsCount(geometryWebMercator),
                 RequestedAccuracy = RequestedAccuracy,
                 RequestedFrequency = RequestedFrequency
             };
