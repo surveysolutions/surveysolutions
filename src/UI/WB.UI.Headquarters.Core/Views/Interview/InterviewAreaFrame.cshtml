@@ -161,12 +161,12 @@
                 
                 if (overlapingTitles.length > 0)
                 {
-                    let message = '@Maps.MapOverlapsWith '
+                    let message = '@Html.Raw(Maps.MapOverlapsWith) '
                     message += overlapingTitles[0]
                     if (overlapingTitles.length > 1)
                         message += ', ' + overlapingTitles[1]
                     if (overlapingTitles.length > 2)
-                        message += ' @Maps.MapOverlapsWithOther'.replace('{0}', overlapingTitles.length - 2)
+                        message += ' @Html.Raw(Maps.MapOverlapsWithOther)'.replace('{0}', overlapingTitles.length - 2)
 
                     const messageDiv = dom.byId("messageDiv");
                     messageDiv.innerHTML = message;
