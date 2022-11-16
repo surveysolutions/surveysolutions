@@ -260,7 +260,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? interviewerId = null,
             InterviewKey interviewKey = null,
             int? assignmentId = null,
-            List<string> protectedAnswers = null)
+            List<string> protectedAnswers = null,
+            InterviewMode interviewMode = InterviewMode.CAPI)
         {
             return new CreateInterview(
                 interviewId, 
@@ -273,7 +274,7 @@ namespace WB.Tests.Abc.TestFactories
                 interviewKey, 
                 assignmentId,
                 false,
-                InterviewMode.CAPI);
+                interviewMode);
         }
 
         public CreateInterview CreateInterview(Guid? questionnaireId = null,
@@ -304,7 +305,8 @@ namespace WB.Tests.Abc.TestFactories
             InterviewKey interviewKey = null,
             int? assignmentId = null,
             List<InterviewAnswer> answers = null,
-            List<string> protectedAnswers = null
+            List<string> protectedAnswers = null,
+            InterviewMode interviewMode = InterviewMode.CAPI
             )
         {
             return this.CreateInterview(interviewId ?? Guid.NewGuid(),
@@ -316,7 +318,8 @@ namespace WB.Tests.Abc.TestFactories
                 userId,
                 interviewKey, 
                 assignmentId,
-                protectedAnswers);
+                protectedAnswers,
+                interviewMode);
         }
 
         public AssignResponsibleCommand AssignResponsibleCommand(Guid? interviewId = null, 

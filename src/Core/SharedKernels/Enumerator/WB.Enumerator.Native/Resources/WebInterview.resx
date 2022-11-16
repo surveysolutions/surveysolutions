@@ -316,6 +316,9 @@
   <data name="InterviewSizeLimitReached" xml:space="preserve">
     <value>Interview contains total number of roster instances and questions exceeding the system limits.</value>
   </data>
+  <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>We collect all interviews in this survey.</value>
+  </data>
   <data name="InterviewNotFound" xml:space="preserve">
     <value>Interview was not found.</value>
   </data>
