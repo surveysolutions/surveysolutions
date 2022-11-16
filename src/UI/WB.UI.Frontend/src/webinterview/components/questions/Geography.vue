@@ -10,49 +10,72 @@
                         <table class="list-unstyled">
                             <colgroup>
                                 <col span="1"
-                                    style="width: 30%;">
+                                    style="width: 30px;">
                                 <col span="1"
-                                    style="width: 70%;">
+                                    style="width: 40px;">
+                                <col span="1">
                             </colgroup>
                             <tbody>
                                 <tr v-if="isPolygon">
-                                    <td>{{this.$t('Pages.AreaQestion_Area')}}:</td>
+                                    <td colspan="2">
+                                        {{this.$t('Pages.AreaQestion_Area')}}:
+                                    </td>
                                     <td>{{$me.answer.area.toLocaleString()}} {{this.$t('Pages.AreaQestion_AreaUnitMeter')}}</td>
                                 </tr>
                                 <tr v-if="isPolygon || isPolyline">
-                                    <td>{{this.$t('Pages.AreaQestion_Length')}}:</td>
+                                    <td colspan="2">
+                                        {{this.$t('Pages.AreaQestion_Length')}}:
+                                    </td>
                                     <td>{{$me.answer.length.toLocaleString()}} {{this.$t('Pages.AreaQestion_AreaMeter')}}</td>
                                 </tr>
                                 <tr>
-                                    <td>{{this.$t('Pages.AreaQestion_Points')}}:</td>
+                                    <td colspan="2">
+                                        {{this.$t('Pages.AreaQestion_Points')}}:
+                                    </td>
                                     <td>{{$me.answer.selectedPoints.length.toLocaleString()}}</td>
                                 </tr>
                                 <tr v-if="!isManualMode && $me.answer.requestedAccuracy">
-                                    <td>{{this.$t('Pages.AreaQuestion_RequestedAccuracy')}}:</td>
+                                    <td colspan="2">
+                                        {{this.$t('Pages.AreaQuestion_RequestedAccuracy')}}:
+                                    </td>
                                     <td>{{$me.answer.requestedAccuracy.toLocaleString()}}</td>
                                 </tr>
                                 <tr v-if="isAutoMode && $me.answer.requestedFrequency">
-                                    <td>{{this.$t('Pages.AreaQuestion_RequestedFrequency')}}:</td>
+                                    <td colspan="2">
+                                        {{this.$t('Pages.AreaQuestion_RequestedFrequency')}}:
+                                    </td>
                                     <td>{{$me.answer.requestedFrequency.toLocaleString()}}</td>
                                 </tr>
                                 <tr v-if="!coordinatesShown">
-                                    <td>
+                                    <td colspan="3">
                                         <button
                                             class="btn btn-link"
                                             type="button"
                                             @click="showCoordinates">{{this.$t('Details.Area_ShowCoordinates')}}</button>
                                     </td>
-                                    <td></td>
                                 </tr>
-                                <tr v-else
-                                    v-for="(selectedPoint, i) in $me.answer.selectedPoints"
-                                    :key="i">
-                                    <td colspan="2">
-                                        <a
-                                            v-bind:href="`${$config.googleMapsBaseUrl}/maps?q=${selectedPoint.latitude},${selectedPoint.longitude}`"
-                                            :title="$t('WebInterviewUI.ShowOnMap')"
-                                            target="_blank">{{selectedPoint.latitude.toFixed(6)}}, {{selectedPoint.longitude.toFixed(6)}}</a></td>
-                                </tr>
+                                <template v-else>
+                                    <tr>
+                                        <td colspan="3">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            {{this.$t('Pages.Area_Coordinates')}}:
+                                        </td>
+                                    </tr>
+                                    <tr
+                                        v-for="(selectedPoint, i) in $me.answer.selectedPoints"
+                                        :key="i">
+                                        <td>{{ i + 1 }}</td>
+                                        <td colspan="2">
+                                            <a
+                                                v-bind:href="`${$config.googleMapsBaseUrl}/maps?q=${selectedPoint.latitude},${selectedPoint.longitude}`"
+                                                :title="$t('WebInterviewUI.ShowOnMap')"
+                                                target="_blank">{{selectedPoint.latitude.toFixed(6)}}, {{selectedPoint.longitude.toFixed(6)}}</a></td>
+                                    </tr>
+                                </template>
                             </tbody>
                         </table>
                     </div>
