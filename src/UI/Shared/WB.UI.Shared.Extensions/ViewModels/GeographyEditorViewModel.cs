@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Android.Gms.Maps;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
@@ -218,8 +217,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
             else
             {
-                collectionCancellationTokenSource?.Cancel();
+                if (HasWarning)
+                {
+                    var saveConfirmed = await UserInteractionService.ConfirmAsync(
+                        UIResources.AreaMap_Save_With_Warning_Confirm,
+                        okButton: UIResources.Yes,
+                        cancelButton: UIResources.No);
 
+                    if (!saveConfirmed) { return; }
+                }
+
+                collectionCancellationTokenSource?.Cancel();
                 var resultGeometry = geometryBuilder.ToGeometry();
                 SaveGeometry(resultGeometry, null);
                 

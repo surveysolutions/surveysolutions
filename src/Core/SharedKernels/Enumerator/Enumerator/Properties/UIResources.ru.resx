@@ -805,4 +805,7 @@
   <data name="Loading" xml:space="preserve">
     <value>Загрузка...</value>
   </data>
+  <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
+    <value>Вы сохраняете недостаточно точный результат. Продолжить?</value>
+  </data>
 </root>

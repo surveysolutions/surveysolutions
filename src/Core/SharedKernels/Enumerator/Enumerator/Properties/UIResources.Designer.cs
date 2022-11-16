@@ -285,6 +285,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are about to save not a precise the result. Do you want to continue?.
+        /// </summary>
+        public static string AreaMap_Save_With_Warning_Confirm {
+            get {
+                return ResourceManager.GetString("AreaMap_Save_With_Warning_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select boundaries file.
         /// </summary>
         public static string AreaMap_SelectShapefile {

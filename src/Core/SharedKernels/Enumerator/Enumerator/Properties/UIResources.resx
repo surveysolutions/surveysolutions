@@ -801,4 +801,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
    <data name="Loading" xml:space="preserve">
     <value>Loading...</value>
   </data>
+  <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
+    <value>You are about to save not a precise the result. Do you want to continue?</value>
+  </data>
 </root>
