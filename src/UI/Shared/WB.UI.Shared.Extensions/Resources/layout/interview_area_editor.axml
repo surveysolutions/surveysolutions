@@ -171,7 +171,7 @@
                 android:layout_weight="0.75"
                 android:gravity="center_vertical|left"
                 android:orientation="vertical"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="1dp"
                 android:background="@color/lower_panel_background_color"
                 local:MvxBind="Visible And(IsWarningVisible, Not(IsPanelVisible));">
             <TextView
