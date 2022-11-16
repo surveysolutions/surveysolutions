@@ -69,47 +69,50 @@ namespace WB.UI.Shared.Extensions.Services
 
         public bool DoesSupportMaps => true;
 
-        private async Task<AreaEditResult> EditAreaImplAsync(EditAreaArgs args)
+        private Task<AreaEditResult> EditAreaImplAsync(EditAreaArgs args)
         {
-            bool activityCreated = await this.viewModelNavigationService.NavigateToAsync<GeographyEditorViewModel, GeographyEditorViewModelArgs>(
-                new GeographyEditorViewModelArgs
-                {
-                    Geometry = args.Area?.Geometry,
-                    MapName = args.Area?.MapName,
-                    RequestedGeometryType = args.GeometryType,
-                    RequestedGeometryInputMode = args.RequestedGeometryInputMode,
-                    RequestedAccuracy = args.RequestedAccuracy,
-                    RequestedFrequency = args.RequestedFrequency,
-                    GeographyNeighbors = args.GeographyNeighbors,
-                    Title = args.Title,
-                }).ConfigureAwait(false);
-
-            if (activityCreated)
+            var task = Task.Factory.StartNew(() =>
             {
-                var tcs = new TaskCompletionSource<AreaEditResult>();
+                var waitScanResetEvent = new System.Threading.ManualResetEvent(false);
                 
+                this.viewModelNavigationService.NavigateToAsync<GeographyEditorViewModel, GeographyEditorViewModelArgs>(
+                    new GeographyEditorViewModelArgs
+                    {
+                        Geometry = args.Area?.Geometry,
+                        MapName = args.Area?.MapName,
+                        RequestedGeometryType = args.GeometryType,
+                        RequestedGeometryInputMode = args.RequestedGeometryInputMode,
+                        RequestedAccuracy = args.RequestedAccuracy,
+                        RequestedFrequency = args.RequestedFrequency,
+                        GeographyNeighbors = args.GeographyNeighbors,
+                        Title = args.Title,
+                    }).ConfigureAwait(false);
+
+                AreaEditResult areaResult = null;
                 GeographyEditorActivity.OnAreaEditCompleted = (AreaEditorResult editResult) =>
                 {
-                    tcs.TrySetResult(editResult == null
-                        ? null
-                        : new AreaEditResult
-                        {
-                            Geometry = editResult.Geometry,
-                            MapName = editResult.MapName,
-                            Area = editResult.Area,
-                            Length = editResult.Length,
-                            Coordinates = editResult.Coordinates,
-                            DistanceToEditor = editResult.DistanceToEditor,
-                            Preview = editResult.Preview,
-                            NumberOfPoints = editResult.NumberOfPoints,
-                            RequestedAccuracy = args.RequestedAccuracy,
-                            RequestedFrequency = args.RequestedFrequency
-                        });
+                    areaResult = editResult == null
+                            ? null
+                            : new AreaEditResult
+                            {
+                                Geometry = editResult.Geometry,
+                                MapName = editResult.MapName,
+                                Area = editResult.Area,
+                                Length = editResult.Length,
+                                Coordinates = editResult.Coordinates,
+                                DistanceToEditor = editResult.DistanceToEditor,
+                                Preview = editResult.Preview,
+                                NumberOfPoints = editResult.NumberOfPoints,
+                                RequestedAccuracy = args.RequestedAccuracy,
+                                RequestedFrequency = args.RequestedFrequency
+                            };
+                        waitScanResetEvent.Set();
                 };
-                return await tcs.Task;
-            }
+                waitScanResetEvent.WaitOne();
+                return areaResult;
+            });
 
-            return await Task.FromResult<AreaEditResult>(null);
+            return task;
         }
     }
 }
