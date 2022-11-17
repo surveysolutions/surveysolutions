@@ -11,8 +11,7 @@
         "hot": "vue-cli-service build --mode development --watch",
         "styles": "vue-cli-service build --css",
         "styles:dev": "vue-cli-service build --css --mode development",
-        "test": "jest",
-        "preinstall": "npx npm-force-resolutions"
+        "test": "jest"
     },
     "dependencies": {
         "@google/markerclustererplus": "^4.0.1",
@@ -85,7 +84,6 @@
         "graphql-tag": "^2.12.6",
         "jest": "^27.5.1",
         "mini-css-extract-plugin": "^0.9.0",
-        "npm-force-resolutions": "0.0.6",
         "rimraf": "3.0.2",
         "sass": "^1.49.7",
         "sass-loader": "10.1.0",
@@ -146,9 +144,9 @@
             "/locale//.resources/"
         ]
     },
-    "resolutions": {
+    "overrides": {
         "@apollo/client": "3.6.9",
-        "@types/ejs": "3.1.8",
+        "@types/ejs": "3.1.1",
         "async": ">=3.2.3",
         "braces": ">=2.3.1",
         "chokidar": "3.5.3",
@@ -179,7 +177,7 @@
         "ts-node": "10.8.0",
         "jest-config": "29.0.3",
         "jest-environment-jsdom": "29.0.3",
-        "vue-jest": ">=3.0.7",
+        "vue-jest": "^3.0.7",
         "webpack-dev-server": ">=3.11.3",
         "ws": ">=7.4.6"
     }
