@@ -482,13 +482,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
 
             locationOverlay = new GraphicsOverlay();
-            SimpleMarkerSymbol locationPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Blue, 5);
+            SimpleMarkerSymbol locationPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Blue, 6);
             locationOverlay.Renderer = new SimpleRenderer(locationPointSymbol);
             this.MapView.GraphicsOverlays.Add(locationOverlay);
 
             positionCandidateOverlay = new GraphicsOverlay();
             
-            SimpleLineSymbol positionCandidateOverlaySymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Chartreuse, 2);
+            SimpleLineSymbol positionCandidateOverlaySymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Chartreuse, 3);
             SimpleFillSymbol positionCandidateOverlayBufferFillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Solid, Color.FromArgb(33,0,0, 0),
                 positionCandidateOverlaySymbol);
 
@@ -700,20 +700,32 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             this.UserInteractionService.ShowToast(
                 $"Position: {e.Position}; e.HorizontalAccuracy: {e.HorizontalAccuracy}; Source: {source}; Valid: {e.HorizontalAccuracy <= RequestedAccuracy}");*/
-            
-            if (e.HorizontalAccuracy > RequestedAccuracy) return;
-            
+
+            var isAccurate = e.HorizontalAccuracy <= RequestedAccuracy;
+
+            if (isAccurate || LastPosition == null)
+            {
+                SimpleLineSymbol positionCandidateOverlaySymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid,
+                    isAccurate ? Color.Chartreuse : Color.Yellow, 3);
+                SimpleFillSymbol positionCandidateOverlayBufferFillSymbol = new SimpleFillSymbol(
+                    SimpleFillSymbolStyle.Solid, Color.FromArgb(33, 0, 0, 0),
+                    positionCandidateOverlaySymbol);
+
+                var lastPositionProjected =
+                    GeometryEngine.Project(e.Position, geometryBuilder.SpatialReference) as MapPoint;
+                
+                positionCandidateOverlay.Graphics.Clear();
+                Geometry bufferGeometryPlanar = GeometryEngine.Buffer(lastPositionProjected, e.HorizontalAccuracy);
+                Graphic planarBufferGraphic =
+                    new Graphic(bufferGeometryPlanar, positionCandidateOverlayBufferFillSymbol);
+                positionCandidateOverlay.Graphics.Add(planarBufferGraphic);
+                positionCandidateOverlay.Graphics.Add(new Graphic(lastPositionProjected, new TextSymbol(
+                    $"{e.HorizontalAccuracy:N2}", Color.Blue, 16, HorizontalAlignment.Center,
+                    VerticalAlignment.Baseline)));
+            }
+
+            if(!isAccurate) return;
             LastPosition = e.Position;
-            
-            var lastPositionProjected = GeometryEngine.Project(LastPosition, geometryBuilder.SpatialReference) as MapPoint;
-            
-            positionCandidateOverlay.Graphics.Clear();
-            Geometry bufferGeometryPlanar = GeometryEngine.Buffer(lastPositionProjected, e.HorizontalAccuracy);
-            Graphic planarBufferGraphic = new Graphic(bufferGeometryPlanar);
-            positionCandidateOverlay.Graphics.Add(planarBufferGraphic);
-            positionCandidateOverlay.Graphics.Add(new Graphic(lastPositionProjected, new TextSymbol(
-                $"{e.HorizontalAccuracy:N2}", Color.Indigo, 12, HorizontalAlignment.Center, VerticalAlignment.Baseline)));
-            
             CanAddPoint = true;
         }
 
