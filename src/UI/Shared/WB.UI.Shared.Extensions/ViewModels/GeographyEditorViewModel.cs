@@ -699,9 +699,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 : "unknown";
 
             this.UserInteractionService.ShowToast(
-                $"Position: {e.Position}; e.HorizontalAccuracy: {e.HorizontalAccuracy}; Source: {source}; Valid: {e.HorizontalAccuracy <= RequestedAccuracy}");
-                */
-
+                $"Position: {e.Position}; e.HorizontalAccuracy: {e.HorizontalAccuracy}; Source: {source}; Valid: {e.HorizontalAccuracy <= RequestedAccuracy}");*/
+            
             if (e.HorizontalAccuracy > RequestedAccuracy) return;
             
             LastPosition = e.Position;
@@ -712,7 +711,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             Geometry bufferGeometryPlanar = GeometryEngine.Buffer(lastPositionProjected, e.HorizontalAccuracy);
             Graphic planarBufferGraphic = new Graphic(bufferGeometryPlanar);
             positionCandidateOverlay.Graphics.Add(planarBufferGraphic);
-            positionCandidateOverlay.Graphics.Add(new Graphic(lastPositionProjected));
+            positionCandidateOverlay.Graphics.Add(new Graphic(lastPositionProjected, new TextSymbol(
+                $"{e.HorizontalAccuracy:N2}", Color.Indigo, 12, HorizontalAlignment.Center, VerticalAlignment.Baseline)));
             
             CanAddPoint = true;
         }
