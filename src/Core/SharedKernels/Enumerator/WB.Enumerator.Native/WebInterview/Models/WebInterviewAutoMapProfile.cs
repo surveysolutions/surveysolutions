@@ -179,8 +179,9 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
         private static InterviewGeometryAnswer ToGeometryAnswer(Area area) => new InterviewGeometryAnswer
         {
+            //order is inverted in coordinates
             SelectedPoints = area.Coordinates.Split(';').Select(x =>
-                new GeoLocation(double.Parse(x.Split(',')[0]), double.Parse(x.Split(',')[1]), 0, 0)).ToArray(),
+                new GeoLocation(double.Parse(x.Split(',')[1]), double.Parse(x.Split(',')[0]), 0, 0)).ToArray(),
             Length = area.Length,
             Area = area.AreaSize,
             RequestedAccuracy = area.RequestedAccuracy,
