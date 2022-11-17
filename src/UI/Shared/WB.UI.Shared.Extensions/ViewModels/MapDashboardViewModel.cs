@@ -210,7 +210,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private async Task RefreshMarkers()
         {
-            if (MapView != null)
+            if (MapView?.Map?.SpatialReference != null)
             {
                 await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() => { MapView.DismissCallout(); });
 
