@@ -74,21 +74,21 @@ public class GeometryHelper
                 var polygonCoordinates = ((Polygon) result).Parts[0].Points
                     .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
                     .Select(coordinate => 
-                        $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
+                        $"{coordinate.Y.ToString(CultureInfo.InvariantCulture)},{coordinate.X.ToString(CultureInfo.InvariantCulture)}").ToList();
                 return string.Join(";", polygonCoordinates);
             case Esri.ArcGISRuntime.Geometry.GeometryType.Point:
                 var projected = GeometryEngine.Project(result as MapPoint, reference) as MapPoint;
-                return $"{projected.X.ToString(CultureInfo.InvariantCulture)},{projected.Y.ToString(CultureInfo.InvariantCulture)}";
+                return $"{projected.Y.ToString(CultureInfo.InvariantCulture)},{projected.X.ToString(CultureInfo.InvariantCulture)}";
             case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
                 var polylineCoordinates = ((Polyline) result).Parts[0].Points
                     .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
                     .Select(coordinate => 
-                        $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
+                        $"{coordinate.Y.ToString(CultureInfo.InvariantCulture)},{coordinate.X.ToString(CultureInfo.InvariantCulture)}").ToList();
                 return string.Join(";", polylineCoordinates);
             case Esri.ArcGISRuntime.Geometry.GeometryType.Multipoint:
                 var projectedMultipoint = (GeometryEngine.Project(result as Multipoint, reference) as Multipoint)
                     .Points.Select(coordinate =>
-                        $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}")
+                        $"{coordinate.Y.ToString(CultureInfo.InvariantCulture)},{coordinate.X.ToString(CultureInfo.InvariantCulture)}")
                     .ToList();
                 return string.Join(";", projectedMultipoint);
         }

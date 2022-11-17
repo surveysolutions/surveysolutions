@@ -65,6 +65,12 @@
                                             {{this.$t('Pages.Area_Coordinates')}}:
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td colspan="2">
+                                            <span>Latitude &nbsp; Longitude</span>
+                                        </td>
+                                    </tr>
                                     <tr
                                         v-for="(selectedPoint, i) in $me.answer.selectedPoints"
                                         :key="i">
