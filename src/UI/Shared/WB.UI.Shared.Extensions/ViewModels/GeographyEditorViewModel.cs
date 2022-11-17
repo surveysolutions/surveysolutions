@@ -35,6 +35,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private GraphicsOverlay locationOverlay;
         private GraphicsOverlay locationLineOverlay;
         private GeometryByTypeBuilder geometryBuilder;
+        
+        private GraphicsOverlay positionCandidateOverlay;
 
         public GeographyEditorViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService,
             IMapService mapService, IUserInteractionService userInteractionService, ILogger logger,
@@ -484,6 +486,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
             locationOverlay.Renderer = new SimpleRenderer(locationPointSymbol);
             this.MapView.GraphicsOverlays.Add(locationOverlay);
 
+            positionCandidateOverlay = new GraphicsOverlay();
+            
+            SimpleLineSymbol positionCandidateOverlaySymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Chartreuse, 2);
+            SimpleFillSymbol positionCandidateOverlayBufferFillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Solid, Color.FromArgb(33,0,0, 0),
+                positionCandidateOverlaySymbol);
+
+            positionCandidateOverlay.Renderer = new SimpleRenderer(positionCandidateOverlayBufferFillSymbol);
+            this.MapView.GraphicsOverlays.Add(positionCandidateOverlay);
+
             //project and use current map
             geometryBuilder = new GeometryByTypeBuilder(this.MapView.Map.SpatialReference, RequestedGeometryType);
 
@@ -694,6 +705,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (e.HorizontalAccuracy > RequestedAccuracy) return;
             
             LastPosition = e.Position;
+            
+            var lastPositionProjected = GeometryEngine.Project(LastPosition, geometryBuilder.SpatialReference) as MapPoint;
+            
+            positionCandidateOverlay.Graphics.Clear();
+            Geometry bufferGeometryPlanar = GeometryEngine.Buffer(lastPositionProjected, e.HorizontalAccuracy);
+            Graphic planarBufferGraphic = new Graphic(bufferGeometryPlanar);
+            positionCandidateOverlay.Graphics.Add(planarBufferGraphic);
+            positionCandidateOverlay.Graphics.Add(new Graphic(lastPositionProjected));
+            
             CanAddPoint = true;
         }
 
