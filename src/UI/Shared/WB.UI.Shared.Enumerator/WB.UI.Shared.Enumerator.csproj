@@ -304,6 +304,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_overview_question_numeric.axml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_overview_variable.xml" />
     <AndroidResource Include="Resources\layout\interview_question_categorical_combobox_with_attachment.axml">
       <SubType>Designer</SubType>

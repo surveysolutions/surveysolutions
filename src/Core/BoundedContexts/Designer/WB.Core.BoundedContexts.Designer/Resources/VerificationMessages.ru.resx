@@ -519,7 +519,13 @@
   <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
     <value>Заголовки специальных значений должны быть уникальны.</value>
   </data>
-  <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+  <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
+    <value>Имя вложения для специального значения должно быть уникальным.</value>
+  </data>
+    <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
+    <value>Специальное значение ссылается на несуществующее вложение.</value>
+  </data>
+    <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
     <value>Создано большое количество ростеров. Экспорт этих структур в файлы данных может быть проблематичным. Подумайте об уменьшении количества ростеров.</value>
   </data>
   <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">

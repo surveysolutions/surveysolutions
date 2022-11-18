@@ -23,32 +23,32 @@ namespace WB.Services.Export.Tests.InterviewDataExport
 
             var structure = new QuestionnaireDatabaseStructure(questionnaire);
 
-            Assert.That(structure.GetAllLevelTables().Count(), Is.EqualTo(2));
+            Assert.That(structure.GetAllLevelTables().Count(), Is.EqualTo(5));
             Assert.That(structure.GetAllLevelTables().Select(l => l.Id).ToHashSet().Single(), Is.EqualTo(questionnaireId));
-            Assert.That(structure.GetAllLevelTables().Select(l => l.TableName).ToHashSet().Count, Is.EqualTo(2));
+            Assert.That(structure.GetAllLevelTables().Select(l => l.TableName).ToHashSet().Count, Is.EqualTo(5));
         }
 
 
         [TestCase("12345678901234567890123456789012", // questionnaireVariable
                   "12345678901234567890123456789012", // rosterVariable
-                  "EREREREREREREREREREREQ$2222_IiIiIiIiIiIiIiIiIiIiIg$133", // data table name
-                  "EREREREREREREREREREREQ$2222_IiIiIiIiIiIiIiIiIiIiIg$133-e", // enablement table name
-                  "EREREREREREREREREREREQ$2222_IiIiIiIiIiIiIiIiIiIiIg$133-v")] // validity table name
+                  "EREREREREREREREREREREQ$2222_IiIiIiIiIiIiIiIiIiIiIg$400", // data table name
+                  "EREREREREREREREREREREQ$2222_IiIiIiIiIiIiIiIiIiIiIg$400-e", // enablement table name
+                  "EREREREREREREREREREREQ$2222_IiIiIiIiIiIiIiIiIiIiIg$400-v")] // validity table name
         [TestCase("12345678901234567890123456789012", // questionnaireVariable
                   "1234567890123456789012", // rosterVariable
-                  "EREREREREREREREREREREQ$2222_1234567890123456789012$133", // data table name
-                  "EREREREREREREREREREREQ$2222_1234567890123456789012$133-e", // enablement table name
-                  "EREREREREREREREREREREQ$2222_1234567890123456789012$133-v")] // validity table name
+                  "EREREREREREREREREREREQ$2222_1234567890123456789012$400", // data table name
+                  "EREREREREREREREREREREQ$2222_1234567890123456789012$400-e", // enablement table name
+                  "EREREREREREREREREREREQ$2222_1234567890123456789012$400-v")] // validity table name
         [TestCase("1234567890123456789012", // questionnaireVariable
                   "12345678901234567890123456789012", // rosterVariable
-                  "1234567890123456789012$2222_IiIiIiIiIiIiIiIiIiIiIg$133", // data table name
-                  "1234567890123456789012$2222_IiIiIiIiIiIiIiIiIiIiIg$133-e", // enablement table name
-                  "1234567890123456789012$2222_IiIiIiIiIiIiIiIiIiIiIg$133-v")] // validity table name
+                  "1234567890123456789012$2222_IiIiIiIiIiIiIiIiIiIiIg$400", // data table name
+                  "1234567890123456789012$2222_IiIiIiIiIiIiIiIiIiIiIg$400-e", // enablement table name
+                  "1234567890123456789012$2222_IiIiIiIiIiIiIiIiIiIiIg$400-v")] // validity table name
         [TestCase("1234567890123456789012", // questionnaireVariable
                   "1234567890123456789012", // rosterVariable
-                  "1234567890123456789012$2222_1234567890123456789012$133", // data table name
-                  "1234567890123456789012$2222_1234567890123456789012$133-e", // enablement table name
-                  "1234567890123456789012$2222_1234567890123456789012$133-v")] // validity table name
+                  "1234567890123456789012$2222_1234567890123456789012$400", // data table name
+                  "1234567890123456789012$2222_1234567890123456789012$400-e", // enablement table name
+                  "1234567890123456789012$2222_1234567890123456789012$400-v")] // validity table name
         public void when_questionnaire_has__bif_variable_label_and_roster_too_should_generate_table_name_max_64_chars(
             string questionnaireVariable, 
             string rosterVariable,
@@ -71,7 +71,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
 
             var structure = new QuestionnaireDatabaseStructure(questionnaire);
 
-            Assert.That(structure.GetAllLevelTables().Count(), Is.EqualTo(135));
+            Assert.That(structure.GetAllLevelTables().Count(), Is.EqualTo(402));
             var last = structure.GetAllLevelTables().Last();
             Assert.That(last.TableName, Is.EqualTo(dataTableName));
             Assert.That(last.EnablementTableName, Is.EqualTo(enablementTableName));

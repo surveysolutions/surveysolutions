@@ -7,5 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models
         public string Text { get; set; } = String.Empty;
 
         public int? Code { get; set; }
+
+        public string AttachmentName { set; get; } = String.Empty;
     }
 }
