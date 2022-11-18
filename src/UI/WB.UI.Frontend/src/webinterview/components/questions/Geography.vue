@@ -62,7 +62,7 @@
                                     </tr>
                                     <tr>
                                         <td colspan="3">
-                                            {{this.$t('Pages.Area_Coordinates')}}:
+                                            {{this.$t('Details.Area_Coordinates')}}:
                                         </td>
                                     </tr>
                                     <tr>
