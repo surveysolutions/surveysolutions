@@ -974,12 +974,36 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 if (geometry is MapPoint point)
                     await this.MapView.SetViewpointCenterAsync(point).ConfigureAwait(false);
-                else if (geometry.Extent != null 
-                         && geometry.Extent.Height != 0 
-                         && geometry.Extent.Width != 0
-                         && !geometry.Extent.IsEmpty)
+                else
                 {
-                    await this.MapView.SetViewpointGeometryAsync(geometry, 120).ConfigureAwait(false);
+                    if (geometry.Extent != null
+                      && geometry.Extent.Height != 0
+                      && geometry.Extent.Width != 0
+                      && !geometry.Extent.IsEmpty)
+                    {
+                        await this.MapView.SetViewpointGeometryAsync(geometry, 120).ConfigureAwait(false);
+                    }
+                    else //extent is empty
+                    {
+                        switch (geometry)
+                        {
+                            case Polygon polygon:
+                                var polygonStart = polygon?.Parts[0]?.StartPoint;
+                                if(polygonStart != null)
+                                    await this.MapView.SetViewpointCenterAsync(polygonStart).ConfigureAwait(false);
+                                break;
+                            case Polyline polyline:
+                                var polylineStart = polyline?.Parts[0]?.StartPoint;
+                                if(polylineStart != null)
+                                    await this.MapView.SetViewpointCenterAsync(polylineStart).ConfigureAwait(false);
+                                break;
+                            case Multipoint multipoint:
+                                var multipointStart = multipoint?.Points?.First();
+                                if(multipointStart != null)
+                                    await this.MapView.SetViewpointCenterAsync(multipoint.Points.First()).ConfigureAwait(false);
+                                break;
+                        }
+                    }
                 }
             }
         }
