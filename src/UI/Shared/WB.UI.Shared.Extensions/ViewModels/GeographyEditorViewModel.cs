@@ -1000,7 +1000,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                             case Multipoint multipoint:
                                 var multipointStart = multipoint?.Points?.First();
                                 if(multipointStart != null)
-                                    await this.MapView.SetViewpointCenterAsync(multipoint.Points.First()).ConfigureAwait(false);
+                                    await this.MapView.SetViewpointCenterAsync(multipointStart).ConfigureAwait(false);
                                 break;
                         }
                     }
