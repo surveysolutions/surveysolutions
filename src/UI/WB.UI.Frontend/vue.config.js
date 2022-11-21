@@ -119,8 +119,10 @@ module.exports = {
         });
 
         config.plugin("fileManager").use(FileManagerPlugin, [{
-            // verbose: true,
-            onEnd: { copy: fileTargets }
+            events: {
+                //verbose: true,
+                onEnd: { copy: fileTargets }
+            }
         }]);
 
         config.plugin('cleanup-dists').use(CleanupPlugin, [{
