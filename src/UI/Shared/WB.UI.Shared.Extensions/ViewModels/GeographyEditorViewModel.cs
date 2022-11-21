@@ -634,6 +634,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     HasWarning = !geometryBuilder.IsCorrectlyMeasured(RequestedAccuracy);
                 }
+                
+                var collectedPoints = geometryBuilder.PointCount;
+                this.CanSave = RequestedGeometryType switch {
+                    GeometryType.Polygon => collectedPoints > 2,
+                    GeometryType.Polyline => collectedPoints > 2,
+                    GeometryType.Point => collectedPoints  > 0,
+                    GeometryType.Multipoint => collectedPoints > 1,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
             }
         }
 
