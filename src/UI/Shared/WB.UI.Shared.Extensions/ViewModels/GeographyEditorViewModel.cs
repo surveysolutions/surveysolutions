@@ -640,7 +640,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     GeometryType.Polygon => collectedPoints > 2,
                     GeometryType.Polyline => collectedPoints > 2,
                     GeometryType.Point => collectedPoints  > 0,
-                    GeometryType.Multipoint => collectedPoints > 1,
+                    GeometryType.Multipoint => collectedPoints > 0,
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }
@@ -787,7 +787,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                             GeometryType.Polygon => collectedPoints > 2,
                             GeometryType.Polyline => collectedPoints > 2,
                             GeometryType.Point => collectedPoints  > 0,
-                            GeometryType.Multipoint => collectedPoints > 1,
+                            GeometryType.Multipoint => collectedPoints > 0,
                             _ => throw new ArgumentOutOfRangeException()
                         };
 
