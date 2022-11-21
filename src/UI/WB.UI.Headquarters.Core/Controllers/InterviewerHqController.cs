@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
@@ -21,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.UI.Headquarters.Controllers
@@ -152,7 +154,11 @@ namespace WB.UI.Headquarters.Controllers
 
             if (assignment.InterviewsNeeded <= 0)
             {
-                throw new ArgumentException("You can't create interview from this assigment. No interviews needed."); 
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    ErrorMessage = WebInterviewUI.AssignmentLimitError,
+                    RedirectUrl = Url.Action("Error", "WebInterview"),
+                });
             }
             
             var interviewId = CreateInterview(assignment);
