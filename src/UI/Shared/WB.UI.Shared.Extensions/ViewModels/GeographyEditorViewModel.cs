@@ -607,7 +607,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return mapToLoad ?? mapsToSelectFrom.First();
         }
         
-        private void BtnUndo()
+        private async Task BtnUndo()
         {
             if (IsManual)
             {
@@ -638,11 +638,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 var collectedPoints = geometryBuilder.PointCount;
                 this.CanSave = RequestedGeometryType switch {
                     GeometryType.Polygon => collectedPoints > 2,
-                    GeometryType.Polyline => collectedPoints > 2,
+                    GeometryType.Polyline => collectedPoints >= 2,
                     GeometryType.Point => collectedPoints  > 0,
                     GeometryType.Multipoint => collectedPoints > 0,
                     _ => throw new ArgumentOutOfRangeException()
                 };
+                
+                await UpdateDrawNeighborsAsync(geometryBuilder.ToGeometry(), this.GeographyNeighbors);
             }
         }
 
@@ -655,7 +657,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        public IMvxCommand UndoCommand => new MvxCommand(this.BtnUndo);
+        public IMvxAsyncCommand UndoCommand => new MvxAsyncCommand(this.BtnUndo);
         public IMvxCommand CancelEditCommand => new MvxCommand(this.BtnCancelCommand);
 
         private bool isCollecting = false;
@@ -785,7 +787,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     var collectedPoints = geometryBuilder.PointCount;
                     this.CanSave = RequestedGeometryType switch {
                             GeometryType.Polygon => collectedPoints > 2,
-                            GeometryType.Polyline => collectedPoints > 2,
+                            GeometryType.Polyline => collectedPoints >= 2,
                             GeometryType.Point => collectedPoints  > 0,
                             GeometryType.Multipoint => collectedPoints > 0,
                             _ => throw new ArgumentOutOfRangeException()
