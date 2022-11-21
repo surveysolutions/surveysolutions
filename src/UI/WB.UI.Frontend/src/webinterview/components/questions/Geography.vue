@@ -7,7 +7,8 @@
                     :class="{answered: $me.isAnswered}"
                     v-if="$me.isAnswered">
                     <div class="block-with-data">
-                        <table class="list-unstyled">
+                        <table class="list-unstyled"
+                            role="presentation">
                             <colgroup>
                                 <col span="1"
                                     style="width: 30px;">
