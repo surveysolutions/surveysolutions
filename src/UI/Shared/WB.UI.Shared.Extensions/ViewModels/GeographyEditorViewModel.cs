@@ -617,9 +617,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
             else if (RequestedGeometryInputMode == GeometryInputMode.Semiautomatic)
             {
+                if (geometryBuilder.PointCount < 1) return;
+                
                 if(locationOverlay.Graphics.Count > 0)
                     locationOverlay.Graphics.RemoveAt(locationOverlay.Graphics.Count - 1);
-                
                 geometryBuilder.RemoveLastPoint();
                 
                 if (RequestedGeometryType is GeometryType.Polygon or GeometryType.Polyline)
