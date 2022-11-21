@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using Android.App;
+using Esri.ArcGISRuntime;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
@@ -206,11 +207,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public async void MapOnLoaded(object sender, EventArgs e)
         {
-            await UpdateBaseMap().ConfigureAwait(false);
-            await OnMapLoaded().ConfigureAwait(false);
+            if (this.Map.LoadStatus == LoadStatus.Loaded)
+            {
+                await UpdateBaseMap().ConfigureAwait(false);
+                await OnMapLoaded().ConfigureAwait(false);
 
-            //if (AvailableShapefiles.Count == 1)
-            //    await LoadShapefile.ExecuteAsync().ConfigureAwait(false);
+                //if (AvailableShapefiles.Count == 1)
+                //    await LoadShapefile.ExecuteAsync().ConfigureAwait(false);
+            }
         }
 
         private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
@@ -252,7 +256,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     this.Map.Basemap = baseMap;
 
-                    if (this.Map.Basemap?.BaseLayers.Count > 0 && this.Map.Basemap?.BaseLayers[0]?.FullExtent != null)
+                    if (this.Map.LoadStatus == LoadStatus.Loaded && this.Map.Basemap?.BaseLayers.Count > 0 && this.Map.Basemap?.BaseLayers[0]?.FullExtent != null)
                     {
                         if (FirstLoad)
                         {
