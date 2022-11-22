@@ -741,7 +741,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             CanAddPoint = true;
         }
 
-        public IMvxAsyncCommand AddPointCommand => new MvxAsyncCommand(async() => await this.AddPoint());
+        public IMvxAsyncCommand AddPointCommand => new MvxAsyncCommand(async() => await this.AddPoint(), 
+            () => CanAddPoint);
         private async Task AddPoint()
         {
             // manually add point from last position
