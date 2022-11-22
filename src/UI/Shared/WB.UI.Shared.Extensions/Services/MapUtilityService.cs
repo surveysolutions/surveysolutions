@@ -101,19 +101,29 @@ namespace WB.UI.Shared.Extensions.Services
         {
             if (existingMap == null) return null;
 
-            switch (existingMap.MapType)
+            if (existingMap.MapType == MapType.LocalFile)
+                return await GetLocalMap(existingMap);
+            
+            try
             {
-                case MapType.OnlineImagery:
-                    return new Basemap(BasemapStyle.ArcGISImageryStandard);
-                case MapType.OnlineImageryWithLabels:
-                    return new Basemap(BasemapStyle.ArcGISImagery);
-                case MapType.OnlineOpenStreetMap:
-                    return new Basemap(BasemapStyle.OSMStandard);
-                case MapType.LocalFile:
-                    return await GetLocalMap(existingMap);
-                default:
-                    return null;
+                Basemap map = null;
+                if (existingMap.MapType == MapType.OnlineImagery)
+                {
+                    map = new Basemap(BasemapStyle.ArcGISImageryStandard);
+                }
+                else if (existingMap.MapType == MapType.OnlineImageryWithLabels)
+                {
+                    map = new Basemap(BasemapStyle.ArcGISImagery);
+                }
+                else if (existingMap.MapType == MapType.OnlineOpenStreetMap)
+                {
+                    map = new Basemap(BasemapStyle.OSMStandard);
+                }
+
+                await map.LoadAsync();
+                return map;
             }
+            catch { return null; }
         }
 
         public async Task<FeatureLayer> GetShapefileAsFeatureLayer(string fullPathToShapefile)

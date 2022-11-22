@@ -939,15 +939,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
         
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
         {
-            this.SelectedMap = mapDescription.MapName;
             IsPanelVisible = false;
 
-            await this.UpdateBaseMap();
+            await this.UpdateBaseMap(mapDescription.MapName);
             var geometry = this.MapView.SketchEditor?.Geometry;
 
             //update internal structures
             //SpatialReference of new map could differ from initial
-            if (geometry != null)
+            if (geometry != null && Map.Basemap != null)
             {
                 if (this.MapView != null && !this.MapView.Map.SpatialReference.IsEqual(geometry.SpatialReference))
                     geometry = GeometryEngine.Project(geometry, this.MapView.Map.SpatialReference);

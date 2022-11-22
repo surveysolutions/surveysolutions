@@ -209,7 +209,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (this.Map.LoadStatus == LoadStatus.Loaded)
             {
-                await UpdateBaseMap().ConfigureAwait(false);
+                await UpdateBaseMap(this.SelectedMap).ConfigureAwait(false);
                 await OnMapLoaded().ConfigureAwait(false);
 
                 //if (AvailableShapefiles.Count == 1)
@@ -245,44 +245,44 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         protected abstract Task SetViewToValues();
 
-        public async Task UpdateBaseMap()
+        public async Task UpdateBaseMap(string selectedMapToLoad)
         {
-            var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == this.SelectedMap);
+            var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == selectedMapToLoad);
+            if (existingMap == null) return;
+            
+            var baseMap = await mapUtilityService.GetBaseMap(existingMap);
+            if (baseMap == null) return;
+                
+            this.SelectedMap = selectedMapToLoad;
+            this.Map.Basemap = baseMap;
 
-            if (existingMap != null)
+            if (this.Map.LoadStatus == LoadStatus.Loaded 
+                && this.Map.Basemap?.BaseLayers.Count > 0 
+                && this.Map.Basemap?.BaseLayers[0]?.FullExtent != null)
             {
-                var baseMap = await mapUtilityService.GetBaseMap(existingMap);
-                if (baseMap != null)
+                if (FirstLoad)
                 {
-                    this.Map.Basemap = baseMap;
-
-                    if (this.Map.LoadStatus == LoadStatus.Loaded && this.Map.Basemap?.BaseLayers.Count > 0 && this.Map.Basemap?.BaseLayers[0]?.FullExtent != null)
+                    FirstLoad = false;
+                    await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
+                }
+                
+                if (this.MapView?.VisibleArea != null)
+                {
+                    await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
                     {
-                        if (FirstLoad)
-                        {
-                            FirstLoad = false;
-                            await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
-                        }
-                        
-                        if (this.MapView?.VisibleArea != null)
-                        {
-                            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
-                            {
-                                var projectedArea =
-                                    GeometryEngine.Project(this.MapView.VisibleArea, this.Map.Basemap.BaseLayers[0].SpatialReference);
+                        var projectedArea =
+                            GeometryEngine.Project(this.MapView.VisibleArea, this.Map.Basemap.BaseLayers[0].SpatialReference);
 
-                                if (projectedArea != null &&
-                                    !GeometryEngine.Intersects(this.Map.Basemap.BaseLayers[0].FullExtent, projectedArea))
-                                    this.UserInteractionService.ShowToast(UIResources
-                                        .AreaMap_MapIsOutOfVisibleBoundaries);
-                            });
-                        }
-                    }
-                    
-                    if (LastMap != existingMap.MapName)
-                        LastMap = existingMap.MapName;
+                        if (projectedArea != null &&
+                            !GeometryEngine.Intersects(this.Map.Basemap.BaseLayers[0].FullExtent, projectedArea))
+                            this.UserInteractionService.ShowToast(UIResources
+                                .AreaMap_MapIsOutOfVisibleBoundaries);
+                    });
                 }
             }
+            
+            if (LastMap != existingMap.MapName)
+                LastMap = existingMap.MapName;
         }
 
         private Map map;

@@ -512,10 +512,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
         {
-            this.SelectedMap = mapDescription.MapName;
             IsPanelVisible = false;
-
-            await this.UpdateBaseMap();
+            await this.UpdateBaseMap(mapDescription.MapName);
         });
 
         public IMvxCommand SwitchPanelCommand => new MvxCommand(() =>
