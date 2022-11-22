@@ -274,14 +274,14 @@
             border-left: 6px solid transparent;
             @include absolute(17px, 10px);
         }
-        &.sorting_asc{
+        &.sorting.sorting_asc{
             color: $blue;
             &:after{
                 border-top: none;
                 border-bottom: 10px solid $blue;
             }
         }
-        &.sorting_desc{
+        &.sorting.sorting_desc{
             color: $blue;
             &:after{
                 border-top-color: $blue;
