@@ -13,6 +13,7 @@
                 :style="previewStyle"/>
             <portal to="body">
                 <div class="modal-img"
+                    v-if="modal"
                     :style="modalView"
                     @click="showModal(false)">
                     <span class="close-zoomming-img">×</span>
