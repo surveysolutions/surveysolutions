@@ -1325,7 +1325,8 @@ namespace WB.Tests.Abc.TestFactories
         public AssignmentLimitInterviewValidator AssignmentLimitInterviewValidator(IAssignmentsService assignmentsService,
             IAggregateRootPrototypeService prototypeService)
         {
-            return new AssignmentLimitInterviewValidator(assignmentsService, prototypeService, Mock.Of<IAggregateRootCache>());
+            var cache = Create.Storage.NewAggregateRootCache();
+            return new AssignmentLimitInterviewValidator(assignmentsService, prototypeService, cache);
         }
 
         public QuestionnaireTranslator QuestionnaireTranslator()
