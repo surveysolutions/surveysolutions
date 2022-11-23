@@ -43,6 +43,11 @@
                     </span>
                 </p>
 
+                <p v-if="isFailed"
+                    class="text-danger">
+                    <span>{{data.error}}</span>
+                </p>
+
                 <div class="d-flex ai-center"
                     v-if="data.isRunning">
                     <span class="success-text status">{{data.processStatus}}</span>
@@ -78,10 +83,6 @@
                     <div
                         v-if="!data.hasFile && !isFailed"
                         class="file-info">{{ $t('DataExport.DataExport_FileWasRegenerated') }}</div>
-                    <div v-if="isFailed"
-                        class="text-danger">
-                        {{data.error}}
-                    </div>
                 </div>
             </div>
         </div>
