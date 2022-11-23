@@ -5,7 +5,5 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public interface IMediaAttachment
     {
         string ContentPath { get; set; }
-
-        void Release();
     }
 }

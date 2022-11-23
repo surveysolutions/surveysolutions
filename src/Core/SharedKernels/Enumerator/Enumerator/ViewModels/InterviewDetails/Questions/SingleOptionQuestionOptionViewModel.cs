@@ -67,13 +67,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         public void Dispose()
         {
-            if(IsDisposed)
-                return;
+            if(IsDisposed) return;
+            IsDisposed = true;
             
             Attachment?.ViewDestroy();
             Attachment?.Dispose();
-            
-            IsDisposed = true;
         }
 
         private bool IsDisposed = false;

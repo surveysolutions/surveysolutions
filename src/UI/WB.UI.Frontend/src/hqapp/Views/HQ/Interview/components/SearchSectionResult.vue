@@ -2,15 +2,14 @@
     <div class="unit-section">
         <search-breabcrumbs :sections="search.sections"/>
 
-        <router-link
+        <a href="javascript:void(0)"
             v-for="link in search.questions"
             :key="link.target"
-            active-class=""
-            :to="{ name: 'section', params: { sectionId: search.sectionId }, hash: '#' + link.target}"
-            class="question short-row">
+            class="question short-row"
+            @click="navigate(link)">
             <span
                 v-html="link.title"/>
-        </router-link>
+        </a>
     </div>
 </template>
 
@@ -25,5 +24,15 @@ export default {
         },
     },
     components: { SearchBreabcrumbs },
+    methods: {
+        navigate(link) {
+            var self = this
+            this.$router.push(
+                { name: 'section', params: { sectionId: this.search.sectionId }, hash: '#' + link.target },
+                undefined,
+                () => { self.$store.dispatch('sectionRequireScroll', {id: '#' + link.target}) }
+            )
+        },
+    },
 }
 </script>

@@ -142,12 +142,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         {
                             this.Video = media;
                         }
-
-                        if (IsAudio)
+                        else if (IsAudio)
                         {
                             this.Audio = media;
                         }
-
                     }
 
                     if (IsPdf)
@@ -199,12 +197,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 pdfService.Open(interviewId, this.Identity);
         }
 
+        private bool isDestroyed = false;
+        
         public override void ViewDestroy(bool viewFinishing = true)
         {
-            this.Video?.Release();
-            this.Audio?.Release();
-            this.ContentPath = null;
-            this.Image = null;
+            if (!isDestroyed)
+            {
+                isDestroyed = true;
+
+                //should be released through the binding
+                //this.Video?.Release();
+                //this.Audio?.Release();
+                
+                this.ContentPath = null;
+                this.Image = null;
+            }
+
             base.ViewDestroy(viewFinishing);
         }
 
