@@ -230,8 +230,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool HasSpecialValues => this.allSpecialValues.Any();
 
+
+        private bool isDisposed;
         public void Dispose()
         {
+            if (isDisposed) return;
+            isDisposed = true;
+            
             this.optionsViewModel.Dispose();
 
             var options = this.SpecialValues.ToList();
