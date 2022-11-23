@@ -133,7 +133,7 @@
     <value>Информация по этому интервью была записана. Никаких дальнейших действий не требуется</value>
   </data>
   <data name="Error_NotFound" xml:space="preserve">
-    <value>Интервью не найдено</value>
+    <value>Интервью не найдено или новые интервью не нужны</value>
   </data>
   <data name="Error_UserNotAuthorised" xml:space="preserve">
     <value>Пользователь не авторизован</value>

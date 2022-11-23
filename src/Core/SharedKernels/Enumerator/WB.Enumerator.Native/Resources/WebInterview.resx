@@ -248,7 +248,7 @@
     <value>Cannot modify interview that was received by device</value>
   </data>
   <data name="Error_NotFound" xml:space="preserve">
-    <value>Interview not found</value>
+    <value>The interview is not found or no need for a new interview</value>
   </data>
   <data name="EnterPasswordText" xml:space="preserve">
     <value>This link is protected with password, that was distributed with the link. Please enter it here</value>

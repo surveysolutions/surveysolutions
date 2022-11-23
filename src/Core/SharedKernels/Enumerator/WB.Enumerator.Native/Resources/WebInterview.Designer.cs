@@ -271,7 +271,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview not found.
+        ///   Looks up a localized string similar to The interview is not found or no need for a new interview.
         /// </summary>
         public static string Error_NotFound {
             get {
