@@ -225,6 +225,18 @@
   <data name="PartialSynchronizationDescription" xml:space="preserve">
     <value>When enabled, interviewer tablets will send answers in noncompleted interviews to Headquarters</value>
   </data>
+  <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
+    <value>Geography question accuracy</value>
+  </data>
+  <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
+    <value>Set accuracy in meters for geography question</value>
+  </data>
+  <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
+    <value>Geography question period</value>
+  </data>
+  <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
+    <value>Set period in seconds for geography question</value>
+  </data>
   <data name="EmailProvider_Amazon" xml:space="preserve">
     <value>Amazon Simple Email Service (SES)</value>
   </data>

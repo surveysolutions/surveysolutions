@@ -94,24 +94,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             new SelectOption
             {
                 Value = GeometryType.Polygon.ToString(),
-                Text = "Polygon"
+                Text = QuestionnaireEditor.GeometryTypePolygon
             },
             new SelectOption
             {
                 Value = GeometryType.Polyline.ToString(),
-                Text = "Polyline"
+                Text = QuestionnaireEditor.GeometryTypePolyline
             },
 
             new SelectOption
             {
                 Value = GeometryType.Point.ToString(),
-                Text = "Point"
+                Text = QuestionnaireEditor.GeometryTypePoint
             },
 
             new SelectOption
             {
                 Value = GeometryType.Multipoint.ToString(),
-                Text = "Multipoint"
+                Text = QuestionnaireEditor.GeometryTypeMultipoint
             }
         };
 
@@ -567,7 +567,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 linkedToEntityId : (question.LinkedToQuestionId ?? question.LinkedToRosterId)?.FormatGuid(),
                 questionTypeOptions : question.Answers
                     .Select(a => new SelectOption() {Text = a.AnswerText, Value = a.AnswerValue}).ToArray(),
-                geometryType : question.Properties?.GeometryType ?? GeometryType.Polygon
+                geometryType : question.Properties?.GeometryType ?? GeometryType.Polygon,
+                geometryInputMode: question.Properties?.GeometryInputMode ?? GeometryInputMode.Manual,
+                geometryOverlapDetection: question.Properties?.GeometryOverlapDetection
             );
             questionView.ValidationConditions.AddRange(question.ValidationConditions);
 

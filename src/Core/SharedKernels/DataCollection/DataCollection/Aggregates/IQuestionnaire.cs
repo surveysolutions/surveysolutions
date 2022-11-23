@@ -321,6 +321,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string ApplyMarkDownTransformation(string text);
 
         GeometryType? GetQuestionGeometryType(Guid questionId);
+        GeometryInputMode? GetQuestionGeometryMode(Guid questionId);
         int GetEntityIdMapValue(Guid entityId);
         bool IsCoverPage(Guid identityId);
         bool IsCoverPageSupported { get; }
@@ -329,5 +330,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetStaticTextsThatUseVariableAsAttachment(Guid variableId);
         Guid GetEntityReferencedByLinkedQuestion(Guid linkedQuestionId);
         bool IsInsideRoster(Guid entityId);
+        bool IsNeighboringSupport(Guid entityId);
     }
 }

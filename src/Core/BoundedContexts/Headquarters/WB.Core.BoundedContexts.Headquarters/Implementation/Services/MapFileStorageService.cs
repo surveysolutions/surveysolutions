@@ -232,7 +232,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                     {
                                         throw new InvalidOperationException(".mmpk file has no base layers");
                                     }
-
                                 }
                             }
                         }
@@ -285,7 +284,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                 item.XMaxVal = xMax;
                                 item.YMaxVal = yMax;
 
-                                item.Wkid = 4326; //geographic coordinates Wgs84
+                                item.Wkid = WGS84Wkid; //geographic coordinates Wgs84
                             }
                             else
                                 throw new InvalidOperationException(".tif file is not recognized as map");

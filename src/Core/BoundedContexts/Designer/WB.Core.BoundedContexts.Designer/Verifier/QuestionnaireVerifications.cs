@@ -118,6 +118,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 variableLengthLimit = RestrictedVariableLengthQuestionTypes.Contains(question.QuestionType)
                     ? DefaultRestrictedVariableLengthLimit
                     : DefaultVariableLengthLimit;
+
+                if (question.QuestionType == QuestionType.Area)
+                    variableLengthLimit = GeographyVariableNameLimit;
             }
 
             if (entity is IGroup group && group.IsRoster)

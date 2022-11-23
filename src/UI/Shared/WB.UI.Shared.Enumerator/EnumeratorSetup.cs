@@ -174,6 +174,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<View>("BackgroundColor", textView => new ViewBackgroundColorBinding(textView));
             registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditTextDateBinding(editText));
             registry.RegisterCustomBindingFactory<Button>("ButtonGroupStyle", button => new ButtonGroupStyleBinding(button));
+            registry.RegisterCustomBindingFactory<Button>("ButtonHasWarningOrSuccess", button => new ButtonHasWarningOrSuccessBinding(button));
             registry.RegisterCustomBindingFactory<MaterialButton>("ToParentButtonGroupStyle", button => new ToParentButtonGroupStyleButtonBinding(button));
             registry.RegisterCustomBindingFactory<MaterialButton>("ButtonToQuestionState", button => new MaterialButtonToQuestionStateBinding(button));
             registry.RegisterCustomBindingFactory<TextView>("GroupStatus", textView => new TextViewGroupStatusBinding(textView));

@@ -175,7 +175,19 @@
     <value>identifying</value>
   </data>
   <data name="QuestionType_Area" xml:space="preserve">
-    <value>geography</value>
+    <value>geography: </value>
+  </data>
+  <data name="QuestionType_Area_Polygon" xml:space="preserve">
+    <value>polygon</value>
+  </data>
+  <data name="QuestionType_Area_Polyline" xml:space="preserve">
+    <value>polyline</value>
+  </data>
+  <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+    <value>multipoint</value>
+  </data>
+  <data name="QuestionType_Area_Point" xml:space="preserve">
+    <value>point</value>
   </data>
   <data name="QuestionType_Audio" xml:space="preserve">
     <value>audio</value>
@@ -272,6 +284,15 @@
   </data>
   <data name="SpecialValues" xml:space="preserve">
     <value>Special values</value>
+  </data>  
+  <data name="GeographyType" xml:space="preserve">
+    <value>Geography type</value>
+  </data>
+  <data name="GeographyInputMode" xml:space="preserve">
+    <value>Input mode</value>
+  </data>
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Overlap detection</value>
   </data>
   <data name="StaticText" xml:space="preserve">
     <value>Static text</value>
@@ -401,5 +422,11 @@
   </data>
   <data name="VariableExcludedFromExport" xml:space="preserve">
     <value>This variable is excluded from the exported data</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>ON</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>OFF</value>
   </data>
 </root>

@@ -20,7 +20,9 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.Properties = new QuestionProperties(commonQuestionParameters.HideInstructions, false)
             {
                 OptionsFilterExpression = commonQuestionParameters.OptionsFilterExpression,
-                GeometryType = commonQuestionParameters.GeometryType
+                GeometryType = commonQuestionParameters.GeometryType,
+                GeometryInputMode = commonQuestionParameters.GeometryInputMode,
+                GeometryOverlapDetection = commonQuestionParameters.GeometryOverlapDetection
             };
         }
 

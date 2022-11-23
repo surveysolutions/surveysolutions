@@ -53,16 +53,16 @@
                   style="@style/Area_MapNameTitle"
                   android:id="@+id/areaEditor_Map_Name"
                   local:MvxBind="Text SelectedMap;" />
-            </LinearLayout>
-              <Button
-                  style="@style/Area_LocationButton"                  
-                  local:MvxBind="Click SwitchLocatorCommand; Visibility Visibility(Map != null)" />
+            </LinearLayout>              
               <Button
                     style="@style/Area_ShowFullMap"
                     local:MvxBind="Click ShowFullMapCommand; Visibility Visibility(Map != null)" />
               <Button
                     style="@style/Area_ShowAllItems"
                     local:MvxBind="Click ShowAllItemsCommand; Visibility Visibility(Map != null)" />
+              <Button
+                      style="@style/Area_LocationButton"
+                      local:MvxBind="Click SwitchLocatorCommand; Visibility Visibility(Map != null)" />
           </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
       </androidx.coordinatorlayout.widget.CoordinatorLayout>

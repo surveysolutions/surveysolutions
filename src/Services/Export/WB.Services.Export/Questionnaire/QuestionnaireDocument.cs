@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Services.Export.Interview;
@@ -220,5 +221,88 @@ namespace WB.Services.Export.Questionnaire
         public bool IsDeleted { get; set; }
 
         public string? DefaultLanguageName { get; set; }
+
+        public bool IsExistsVariableName(string variableName)
+        {
+            return EntitiesVariableNameCache.Contains(variableName);
+        }
+        
+        private HashSet<string>? entitiesVariableNameCache;
+        private HashSet<string> EntitiesVariableNameCache
+        {
+            get
+            {
+                return this.entitiesVariableNameCache ??= EntitiesCache.Values
+                    .Select(e =>
+                    {
+                        switch (e)
+                        {
+                            case Question question:
+                                return question.VariableName;
+                            case Variable variable:
+                                return variable.Name;
+                            case Group group:
+                                return group.VariableName;
+                            case StaticText staticText:
+                            default:
+                                return string.Empty;
+                        }
+                    })
+                    .Where(name => !string.IsNullOrWhiteSpace(name))
+                    .ToHashSet();
+            }
+        }
+
+        private Dictionary<Guid, string>? friendlyVariableNameCache;
+        private Dictionary<Guid, string> FriendlyVariableNameCache
+        {
+            get
+            {
+                if (this.friendlyVariableNameCache == null)
+                {
+                    var dic = new Dictionary<Guid, string>();
+
+                    var entities = EntitiesCache.Values;
+                    foreach (var entity in entities)
+                    {
+                        switch (entity)
+                        {
+                            case AreaQuestion areaQuestion:
+                                dic.Add(areaQuestion.PublicKey, FindUniqueVariableName(areaQuestion.VariableName, 1, 26, dic));
+                                break;
+                            case Question question:
+                                dic.Add(question.PublicKey, question.VariableName); break;
+                            case Variable variable:
+                                dic.Add(variable.PublicKey, variable.Name); break;
+                            case Group group:
+                                dic.Add(group.PublicKey, group.VariableName); break;
+                        }
+                    }
+                    
+                    this.friendlyVariableNameCache = dic;
+                }
+
+                return this.friendlyVariableNameCache;
+            }
+        }
+
+        public string GetExportVariableName(Guid publicKey) => FriendlyVariableNameCache[publicKey];
+        
+        private string FindUniqueVariableName(string original, int index, int maxLength, Dictionary<Guid, string> friendlyNames)
+        {
+            if (original.Length <= maxLength)
+                return original;
+            var indexStr = index.ToString(CultureInfo.InvariantCulture);
+            var shortColumnName = string.Concat(original.Take(maxLength - indexStr.Length)) + indexStr;
+            var existsInQuestionnaire = IsExistsVariableName(shortColumnName);
+            if (existsInQuestionnaire)
+                return FindUniqueVariableName(original, index + 1, maxLength, friendlyNames);
+
+            var existsInFriendlyScope = friendlyNames.ContainsValue(shortColumnName);
+            if (existsInFriendlyScope)
+                return FindUniqueVariableName(original, index + 1, maxLength, friendlyNames);
+            
+            return shortColumnName;
+        }
     }
 }
