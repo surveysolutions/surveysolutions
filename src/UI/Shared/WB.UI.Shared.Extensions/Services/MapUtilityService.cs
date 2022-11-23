@@ -108,21 +108,17 @@ namespace WB.UI.Shared.Extensions.Services
             //if it's loaded, it's not working to collect data
             try
             {
-                Basemap map = null;
-                if (existingMap.MapType == MapType.OnlineImagery)
+                switch (existingMap.MapType)
                 {
-                    await new Basemap(BasemapStyle.ArcGISImageryStandard).LoadAsync();
-                    return new Basemap(BasemapStyle.ArcGISImageryStandard);
-                }
-                else if (existingMap.MapType == MapType.OnlineImageryWithLabels)
-                {
-                    await new Basemap(BasemapStyle.ArcGISImagery).LoadAsync();
-                    return new Basemap(BasemapStyle.ArcGISImagery);
-                }
-                else if (existingMap.MapType == MapType.OnlineOpenStreetMap)
-                {
-                    await new Basemap(BasemapStyle.OSMStandard).LoadAsync();
-                    return new Basemap(BasemapStyle.OSMStandard);
+                    case MapType.OnlineImagery:
+                        await new Basemap(BasemapStyle.ArcGISImageryStandard).LoadAsync();
+                        return new Basemap(BasemapStyle.ArcGISImageryStandard);
+                    case MapType.OnlineImageryWithLabels:
+                        await new Basemap(BasemapStyle.ArcGISImagery).LoadAsync();
+                        return new Basemap(BasemapStyle.ArcGISImagery);
+                    case MapType.OnlineOpenStreetMap:
+                        await new Basemap(BasemapStyle.OSMStandard).LoadAsync();
+                        return new Basemap(BasemapStyle.OSMStandard);
                 }
             }
             catch {}
