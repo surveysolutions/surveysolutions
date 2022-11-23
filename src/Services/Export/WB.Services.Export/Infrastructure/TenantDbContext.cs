@@ -31,6 +31,7 @@ namespace WB.Services.Export.Infrastructure
 
         private readonly Lazy<string> connectionString;
 
+
         private const long ContextSchemaVersion = 7;
 
         private readonly IOptions<DbConnectionSettings> connectionSettings;
