@@ -425,4 +425,10 @@
   <data name="VariableExcludedFromExport" xml:space="preserve">
     <value>Значение этой переменной исключено из экспортных данных</value>
   </data>
+  <data name="On" xml:space="preserve">
+    <value>ВКЛ</value>
+  </data>
+    <data name="Off" xml:space="preserve">
+    <value>ВЫКЛ</value>
+  </data>
 </root>

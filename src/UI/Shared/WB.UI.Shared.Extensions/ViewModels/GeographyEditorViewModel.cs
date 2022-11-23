@@ -458,7 +458,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private async Task StartAuto()
         {
-            StartButtonText = "Initiating...";
+            StartButtonText = UIResources.AreaMap_InitLocation;
             AddPointVisible = false;
 
             if(this.MapView?.Map?.SpatialReference == null)
@@ -512,7 +512,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         this.MapView.LocationDisplay.Opacity = 0.5;
 
                         CanStartStopCollecting = true;
-                        StartButtonText = "Start";
+                        StartButtonText = UIResources.AreaMap_Start_Measurement; 
+                            
                     }
                     else
                     {
@@ -637,13 +638,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 }
                 
                 var collectedPoints = geometryBuilder.PointCount;
-                this.CanSave = RequestedGeometryType switch {
-                    GeometryType.Polygon => collectedPoints > 2,
-                    GeometryType.Polyline => collectedPoints >= 2,
-                    GeometryType.Point => collectedPoints  > 0,
-                    GeometryType.Multipoint => collectedPoints > 0,
-                    _ => throw new ArgumentOutOfRangeException()
-                };
+                this.CanSave = CalculateCanSave(collectedPoints);
                 
                 await UpdateDrawNeighborsAsync(geometryBuilder.ToGeometry(), this.GeographyNeighbors);
             }
@@ -787,13 +782,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     }
 
                     var collectedPoints = geometryBuilder.PointCount;
-                    this.CanSave = RequestedGeometryType switch {
-                            GeometryType.Polygon => collectedPoints > 2,
-                            GeometryType.Polyline => collectedPoints >= 2,
-                            GeometryType.Point => collectedPoints  > 0,
-                            GeometryType.Multipoint => collectedPoints > 0,
-                            _ => throw new ArgumentOutOfRangeException()
-                        };
+                    this.CanSave = CalculateCanSave(collectedPoints);
 
                     if (RequestedGeometryType == GeometryType.Polygon && !IsManual)
                     {
@@ -811,6 +800,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 logger.Error("Error on adding point", e);
                 throw;
             }
+        }
+
+        private bool CalculateCanSave(int collectedPoints)
+        {
+            return RequestedGeometryType switch {
+                GeometryType.Polygon => collectedPoints > 2,
+                GeometryType.Polyline => collectedPoints >= 2,
+                GeometryType.Point => collectedPoints  > 0,
+                GeometryType.Multipoint => collectedPoints > 0,
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
 
         private string warning;

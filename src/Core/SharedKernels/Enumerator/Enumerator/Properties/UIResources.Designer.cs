@@ -159,6 +159,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Initiating....
+        /// </summary>
+        public static string AreaMap_InitLocation {
+            get {
+                return ResourceManager.GetString("AreaMap_InitLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Length: {0:0.00} m.
         /// </summary>
         public static string AreaMap_LengthFormat {
@@ -308,6 +317,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string AreaMap_ShowBoundaries {
             get {
                 return ResourceManager.GetString("AreaMap_ShowBoundaries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        public static string AreaMap_Start_Measurement {
+            get {
+                return ResourceManager.GetString("AreaMap_Start_Measurement", resourceCulture);
             }
         }
         

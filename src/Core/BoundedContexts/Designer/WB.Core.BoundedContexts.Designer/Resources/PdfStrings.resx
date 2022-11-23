@@ -423,4 +423,10 @@
   <data name="VariableExcludedFromExport" xml:space="preserve">
     <value>This variable is excluded from the exported data</value>
   </data>
+  <data name="On" xml:space="preserve">
+    <value>ON</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>OFF</value>
+  </data>
 </root>

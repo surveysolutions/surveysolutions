@@ -808,4 +808,10 @@
   <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
     <value>Вы сохраняете недостаточно точный результат. Продолжить?</value>
   </data>
+  <data name="AreaMap_Start_Measurement" xml:space="preserve">
+    <value>Начать</value>
+  </data>
+  <data name="AreaMap_InitLocation" xml:space="preserve">
+    <value>Запуск...</value>
+  </data>
 </root>
