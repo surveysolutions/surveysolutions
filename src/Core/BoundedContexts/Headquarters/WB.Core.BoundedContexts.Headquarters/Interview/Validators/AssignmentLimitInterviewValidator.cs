@@ -58,7 +58,7 @@ public class AssignmentLimitInterviewValidator:
         if (assignment.InterviewsNeeded is null or > 0)
             return;
 
-        cache.EvictAggregateRoot(interviewId);
+        cache.Evict(interviewId);
         throw new InterviewException(CommandValidatorsMessages.AssignmentLimitReached, InterviewDomainExceptionType.AssignmentLimitReached);
     }
 }

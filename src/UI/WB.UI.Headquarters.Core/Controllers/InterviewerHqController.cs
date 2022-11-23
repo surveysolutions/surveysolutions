@@ -154,6 +154,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (assignment.InterviewsNeeded <= 0)
             {
+                TempData["WebInterview.ErrorMessage"] = WebInterviewUI.AssignmentLimitError; 
                 return StatusCode(StatusCodes.Status403Forbidden, new
                 {
                     ErrorMessage = WebInterviewUI.AssignmentLimitError,
