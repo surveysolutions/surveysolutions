@@ -1,5 +1,4 @@
-﻿using System;
-using Com.Google.Android.Exoplayer2;
+﻿using Com.Google.Android.Exoplayer2;
 using Com.Google.Android.Exoplayer2.UI;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -7,19 +6,25 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
 {
     public class MediaAttachment : IMediaAttachment
     {
+        private SimpleExoPlayer player;
+        public PlayerView View { get; set; }
         public string ContentPath { get; set; }
-        
-        private WeakReference<PlayerView> view;
-        public PlayerView View
+
+        /*
+        public void Release()
         {
-            get => view.TryGetTarget(out var target) ? target : null;
-            set => view = new WeakReference<PlayerView>(value);
+            Player?.Release();
         }
-        private WeakReference<SimpleExoPlayer> player;
+        */
+        
         public SimpleExoPlayer Player
         {
-            get => player.TryGetTarget(out var target) ? target : null;
-            set => player = new WeakReference<SimpleExoPlayer>(value);
+            get => player;
+            set
+            {
+                player?.Release();
+                player = value;
+            }
         }
     }
 }
