@@ -104,26 +104,30 @@ namespace WB.UI.Shared.Extensions.Services
             if (existingMap.MapType == MapType.LocalFile)
                 return await GetLocalMap(existingMap);
             
+            //if map is failing to load 
+            //if it's loaded, it's not working to collect data
             try
             {
                 Basemap map = null;
                 if (existingMap.MapType == MapType.OnlineImagery)
                 {
-                    map = new Basemap(BasemapStyle.ArcGISImageryStandard);
+                    await new Basemap(BasemapStyle.ArcGISImageryStandard).LoadAsync();
+                    return new Basemap(BasemapStyle.ArcGISImageryStandard);
                 }
                 else if (existingMap.MapType == MapType.OnlineImageryWithLabels)
                 {
-                    map = new Basemap(BasemapStyle.ArcGISImagery);
+                    await new Basemap(BasemapStyle.ArcGISImagery).LoadAsync();
+                    return new Basemap(BasemapStyle.ArcGISImagery);
                 }
                 else if (existingMap.MapType == MapType.OnlineOpenStreetMap)
                 {
-                    map = new Basemap(BasemapStyle.OSMStandard);
+                    await new Basemap(BasemapStyle.OSMStandard).LoadAsync();
+                    return new Basemap(BasemapStyle.OSMStandard);
                 }
-
-                await map.LoadAsync();
-                return map;
             }
-            catch { return null; }
+            catch {}
+            
+            return null;
         }
 
         public async Task<FeatureLayer> GetShapefileAsFeatureLayer(string fullPathToShapefile)
