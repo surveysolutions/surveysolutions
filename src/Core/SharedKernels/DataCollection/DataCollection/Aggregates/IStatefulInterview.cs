@@ -210,5 +210,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetAttachmentForEntityOption(Identity entityId, int optionValue, int? parentValue);
 
         InterviewSimpleStatus GetInterviewSimpleStatus(bool includingSupervisorEntities);
+        IEnumerable<Identity> GetNeighboringQuestionIdentities(Identity identity);
     }
 }

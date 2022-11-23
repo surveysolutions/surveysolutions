@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Globalization;
 using System.Linq;
 
@@ -26,17 +26,30 @@ namespace WB.Core.GenericSubdomains.Portable
         {
             if (!source.HasValue) return string.Empty;
 
+            return FormatNumber(format => source.Value.ToString(format, CultureInfo.CurrentCulture), precigion);
+        }
+        
+        public static string FormatDouble(this double? source, int precigion = 2)
+        {
+            if (!source.HasValue) return string.Empty;
+
+            return FormatNumber(format => source.Value.ToString(format, CultureInfo.CurrentCulture), precigion);
+        }
+
+        private static string FormatNumber(Func<string, string> formatNumber, int precigion)
+        {
             var mantissaFormat = new string('#', precigion);
             var groupSeparator = CultureInfo.InvariantCulture.NumberFormat.CurrencyGroupSeparator;
             var decimalSeparator = CultureInfo.InvariantCulture.NumberFormat.CurrencyDecimalSeparator;
             string format = $"#{groupSeparator}0{decimalSeparator}{mantissaFormat}";
 
-            var valueAsString = source.Value.ToString(format, CultureInfo.CurrentCulture);
+            var valueAsString = formatNumber.Invoke(format);
 
             valueAsString = FixLeadingZeroes(valueAsString);
 
             return valueAsString;
         }
+
 
         private static string FixLeadingZeroes(string valueAsString)
         {

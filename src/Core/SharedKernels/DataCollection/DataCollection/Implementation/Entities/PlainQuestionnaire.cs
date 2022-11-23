@@ -1325,6 +1325,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return false;
         }
 
+        public bool IsNeighboringSupport(Guid entityId)
+            => GetQuestion(entityId)?.Properties?.GeometryOverlapDetection ?? false;
+
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
         {
             IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
@@ -2012,6 +2015,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             return question.Properties.GeometryType;
+        }
+        public GeometryInputMode? GetQuestionGeometryMode(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            return question.Properties.GeometryInputMode;
         }
 
         public int GetEntityIdMapValue(Guid entityId)

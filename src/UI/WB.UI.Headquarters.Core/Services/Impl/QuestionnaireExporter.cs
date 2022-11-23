@@ -88,7 +88,8 @@ namespace WB.UI.Headquarters.Services.Impl
 
                 void PutTextFileEntry(string path, string content) => PutEntry(path, Encoding.UTF8.GetBytes(content));
 
-                PutTextFileEntry($"{variable}.json", this.serializer.Serialize(questionnaire));
+                var documentJson = this.serializer.Serialize(questionnaire);
+                PutTextFileEntry($"{variable}.json", documentJson);
 
                 for (var attachmentIndex = 0; attachmentIndex < questionnaire.Attachments.Count; attachmentIndex++)
                 {

@@ -581,6 +581,16 @@ class AdminSettings {
             partialSynchronizationEnabled: isPartialSynchronizationEnabled,
         })
     }
+    setGeographyQuestionAccuracyInMeters(geographyQuestionAccuracyInMeters) {
+        return this.http.post(`${this.base}/InterviewerGeographyQuestionAccuracyInMeters`, {
+            geographyQuestionAccuracyInMeters: geographyQuestionAccuracyInMeters,
+        })
+    }
+    setGeographyQuestionPeriodInSeconds(geographyQuestionPeriodInSeconds) {
+        return this.http.post(`${this.base}/InterviewerGeographyQuestionPeriodInSeconds`, {
+            geographyQuestionPeriodInSeconds: geographyQuestionPeriodInSeconds,
+        })
+    }
     getInterviewerSettings() {
         return this.http.get(`${this.base}/InterviewerSettings`)
     }

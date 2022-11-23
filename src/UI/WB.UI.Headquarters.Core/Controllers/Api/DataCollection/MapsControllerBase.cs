@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -33,11 +36,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         public virtual async Task<IActionResult> GetMapContent(string id)
         {
             var mapContent = await this.mapRepository.GetMapContentAsync(id);
-
             if (mapContent == null)
                 return NotFound();
 
-            return File(mapContent, "application/octet-stream");
+            Stream exportFileStream = new MemoryStream(mapContent);
+            var result = new FileStreamResult(exportFileStream, "application/octet-stream") { };
+            return result;
         }
     }
 }

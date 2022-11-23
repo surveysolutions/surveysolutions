@@ -14,5 +14,9 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         public bool HideInstructions { get; set; }
         public string? OptionsFilterExpression { get; set; }
         public GeometryType? GeometryType { get; set; }
+        
+        public GeometryInputMode? GeometryInputMode { get; set; }
+        
+        public bool? GeometryOverlapDetection { get; set; }
     }
 }

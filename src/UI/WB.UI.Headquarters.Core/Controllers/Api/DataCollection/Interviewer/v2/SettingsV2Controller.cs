@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             ISecureStorage secureStorage, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
             IWebInterviewLinkProvider webInterviewLinkProvider) 
-            : base(appSettingsStorage, tenantSettings, secureStorage)
+            : base(appSettingsStorage, tenantSettings, secureStorage, interviewerSettingsStorage, webInterviewLinkProvider)
         {
             this.interviewerSettingsStorage = interviewerSettingsStorage;
             this.questionnaires = questionnaires;
@@ -60,13 +60,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 
         [HttpGet]
         [Route("tabletsettings")]
-        public RemoteTabletSettingsApiView TabletSettings() => new()
-        {
-            PartialSynchronizationEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
-                .IsPartialSynchronizationEnabled(),
-
-            WebInterviewUrlTemplate = this.webInterviewLinkProvider.WebInterviewRequestLink(
-                "{assignment}", "{interviewId}")
-        };
+        public override RemoteTabletSettingsApiView TabletSettings() => base.TabletSettings();
     }
 }

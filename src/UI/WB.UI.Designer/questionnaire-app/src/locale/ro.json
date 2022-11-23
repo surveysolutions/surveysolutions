@@ -441,7 +441,7 @@
     "HideParentValues": "Ascundere valori parent",
     "NewItem": "Element nou",
     "OptionsCascadingListError": "Ați introdus ceva nevalid. Fiecare linie trebuie să urmeze formatul: \"Title...ParentValue/Value\". \"Value\" și \"ParentValue\" trebuie să fie un număr întreg. Titlul trebuie să fie un șir alfa-numeric. Nu sunt permise linii goale.",
-    "OptionsSizeLimit": "Maxim {{ max }} rânduri permise",
+    "OptionsSizeLimit": "Maxim {max_rows} rânduri permise",
     "OptionsUploadRevert": "Reveniți la modificări",
     "RequiredField": "Câmp necesar",
     "RowAdded": "Rând adăugat",
@@ -460,6 +460,8 @@
     "SettingsStatusDontAllowAnonymousAccess": "Anonymous sharing is currently turned off.",
     "SettingsTurnOnAnonymousAccess": "Turn on anonymous sharing.",
     "SettingsTurnOffAnonymousAccess": "Turn off anonymous sharing.",
+    "GeometryInputMode": "Input mode",
+    "GeometryShowNeighbours": "Show neighbours",
     "AttachmentName": "Attachment name",
     "EditorShowComments": "Show comments ({{count}})",
     "CollaboratorsDescriptionSettings": "the following users have access to this questionnaire",
@@ -472,6 +474,7 @@
     "AnonymousQuestionnaireSettings": "Link sharing",
     "AnonymousLink": "Anonymous link:",
     "CopyLink": "Copy link",
-    "AnonymousQuestionnaireDescriptionSettings": "Users having this link will be able to open this questionnaire"
+    "AnonymousQuestionnaireDescriptionSettings": "Users having this link will be able to open this questionnaire",
+    "AttachmentDimensionsAreTooBig": "Dimensions are too big"
   }
 }

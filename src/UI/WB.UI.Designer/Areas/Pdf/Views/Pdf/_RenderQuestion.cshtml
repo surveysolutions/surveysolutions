@@ -295,6 +295,16 @@
             case QuestionType.Area:
                 <div class="answer-editor">
                 </div>
+                <div class="question-meta more">
+                    <div class="type">
+                        @PdfStrings.GeographyInputMode : <span>@(question.Properties?.GeometryInputMode ?? GeometryInputMode.Manual)</span>
+                    </div>
+                </div>
+                <div class="question-meta more">
+                    <div class="type">
+                        @PdfStrings.GeometryOverlapDetection : <span>@(question.Properties?.GeometryOverlapDetection == true? PdfStrings.On: PdfStrings.Off )</span> 
+                    </div>
+                </div>
                 break;
             case QuestionType.Audio:
                 <div class="answer-editor">

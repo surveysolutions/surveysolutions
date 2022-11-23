@@ -27,8 +27,8 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>3</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -55,6 +55,7 @@
     <Compile Include="Activities\MapDashboardActivity.cs" />
     <Compile Include="Entities\AreaEditorResult.cs" />
     <Compile Include="Entities\QuestionnaireItem.cs" />
+    <Compile Include="Extensions\GeometryTypeExtension.cs" />
     <Compile Include="Services\MapInteractionService.cs" />
     <Compile Include="Services\MapUtilityService.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -62,6 +63,9 @@
     <Compile Include="ViewModels\BaseMapInteractionViewModel.cs" />
     <Compile Include="ViewModels\GeographyEditorViewModel.cs" />
     <Compile Include="ViewModels\GeographyEditorViewModelArgs.cs" />
+    <Compile Include="ViewModels\GeometryByTypeBuilder.cs" />
+    <Compile Include="ViewModels\GeometryHelper.cs" />
+    <Compile Include="ViewModels\GeometryNeighbor.cs" />
     <Compile Include="ViewModels\MapDashboardViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -212,7 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android">
-      <Version>100.13.1</Version>
+      <Version>100.15.0</Version>
     </PackageReference>
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>

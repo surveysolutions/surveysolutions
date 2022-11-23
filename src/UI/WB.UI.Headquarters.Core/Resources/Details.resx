@@ -120,6 +120,9 @@
   <data name="Area_ShowCoordinates" xml:space="preserve">
     <value>Show coordinates</value>
   </data>
+  <data name="Area_Coordinates" xml:space="preserve">
+    <value>Coordinates</value>
+  </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
     <value>Please choose a person responsible for the assignment.</value>
   </data>

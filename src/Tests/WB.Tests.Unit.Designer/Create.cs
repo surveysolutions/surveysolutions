@@ -538,6 +538,7 @@ namespace WB.Tests.Unit.Designer
             QuestionScope scope = QuestionScope.Interviewer,
             Guid? linkedToQuestion = null,
             Guid? linkedToRoster = null,
+            QuestionProperties properties = null,
             params Answer[] answers)
         {
             var publicKey = questionId ?? Guid.NewGuid();
@@ -561,6 +562,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.Audio:
                     return new AudioQuestion()

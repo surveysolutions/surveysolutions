@@ -1,17 +1,63 @@
-﻿<div class="form-group">
-    <label for="geometry-type" ng-i18next="GeometryType"></label>
-    <div class="btn-group dropup " uib-dropdown>
-        <button class="btn dropdown-toggle" id="geometry-type" uib-dropdown-toggle type="button">
-            {{ (activeQuestion.geometryTypeOptions | filter : {value : activeQuestion.geometryType})[0].text }}
-            <span class="dropdown-arrow"></span>
-        </button>
+﻿<div class="row">
+    <div class="col-xs-12">
+        <label class="wb-label" for="geometry-type" ng-i18next="GeometryType"></label>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="dropdown-with-breadcrumbs-and-icons">
+            <div class="btn-group" uib-dropdown>
+                <button class="btn dropdown-toggle" id="geometry-type" uib-dropdown-toggle type="button">
+                    {{ (activeQuestion.geometryTypeOptions | filter : {value : activeQuestion.geometryType})[0].text }}
+                    <span class="dropdown-arrow"></span>
+                </button>
 
-        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
-            <li role="presentation" ng-repeat="type in activeQuestion.geometryTypeOptions">
-                <a role="menuitem" tabindex="-1" ng-click="changeGeometryType(type.value)">
-                    {{type.text}}
-                </a>
-            </li>
-        </ul>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="geometry-type">
+                    <li role="presentation" ng-repeat="type in activeQuestion.geometryTypeOptions">
+                        <a role="menuitem" tabindex="-1" ng-click="changeGeometryType(type.value)">
+                            {{type.text}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <p></p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <label class="wb-label" for="geometry-input-mode" ng-i18next="GeometryInputMode"></label>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="dropdown-with-breadcrumbs-and-icons">
+            <div class="btn-group" uib-dropdown>
+                <button class="btn dropdown-toggle" id="geometry-input-mode" uib-dropdown-toggle type="button">
+                    {{ (activeQuestion.geometryInputModeOptions | filter : {value : activeQuestion.geometryInputMode})[0].text }}
+                    <span class="dropdown-arrow"></span>
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="geometry-input-mode">
+                    <li role="presentation" ng-repeat="mode in activeQuestion.geometryInputModeOptions">
+                        <a role="menuitem" tabindex="-1" ng-click="changeGeometryInputMode(mode.value)">
+                            {{mode.text}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <p></p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5">
+        <div class="checkbox checkbox-in-column">
+            <input id="cb-show-neighbours" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.geometryOverlapDetection" />
+            <label for="cb-show-neighbours"><span></span>{{'GeometryOverlapDetection' | i18next}}
+                <help key="HelpOverlapDetection" />
+            </label>            
+        </div>
     </div>
 </div>

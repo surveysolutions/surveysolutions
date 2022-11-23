@@ -46,6 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         public const int DefaultVariableLengthLimit = 32;
         protected const int DefaultRestrictedVariableLengthLimit = 20;
         protected const int RosterVariableNameLimit = 28;
+        protected const int GeographyVariableNameLimit = 26;
 
         protected const int MaxRosterPropagationLimit = 10000;
         protected const int QuestionnaireTotalEntitiesLimit = Constants.MaxTotalRosterPropagationLimit;
