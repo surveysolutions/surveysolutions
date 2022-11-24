@@ -512,6 +512,6 @@ Contact support for assistance.</value>
     <value>The following link could be used to continue this interview</value>
   </data>
   <data name="AssignmentLimitError" xml:space="preserve">
-    <value>You can not create more interviews from this assignment.</value>
+    <value>You can not create more interviews from this assignment</value>
   </data>
 </root>

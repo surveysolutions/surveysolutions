@@ -87,7 +87,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can not create more interviews from this assignment..
+        ///   Looks up a localized string similar to You can not create more interviews from this assignment.
         /// </summary>
         public static string AssignmentLimitError {
             get {

@@ -87,7 +87,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Вы не можите создать интервью из этого задания..
+        ///   Looks up a localized string similar to Вы не можите создать интервью из этого задания.
         /// </summary>
         public static string AssignmentLimitError {
             get {
