@@ -94,7 +94,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 geometry is Polyline polyline)
             {
                 var builder = new GeometryByTypeBuilder(polyline.SpatialReference, GeometryType.Multipoint);
-                foreach (var mapPoint in polyline.Parts[0].Points)
+                foreach (var mapPoint in polyline.Parts.SelectMany(p => p.Points))
                 {
                     builder.AddPoint(mapPoint);
                 }
@@ -544,7 +544,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     case EsriGeometryType.Polyline:
                     {
                         var polyline = this.Geometry as Polyline;
-                        foreach (var point in polyline.Parts[0].Points)
+                        foreach (var point in polyline.Parts.SelectMany(p => p.Points))
                         {
                             geometryBuilder.AddPoint(point);
                             locationOverlay.Graphics.Add(new Graphic(point));
@@ -554,7 +554,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     case EsriGeometryType.Polygon:
                     {
                         var polygon = this.Geometry as Polygon;
-                        foreach (var point in polygon.Parts[0].Points)
+                        foreach (var point in polygon.Parts.SelectMany(p => p.Points))
                         {
                             geometryBuilder.AddPoint(point);
                             locationOverlay.Graphics.Add(new Graphic(point));
