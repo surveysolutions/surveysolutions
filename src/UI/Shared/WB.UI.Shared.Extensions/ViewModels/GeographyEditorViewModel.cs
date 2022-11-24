@@ -517,6 +517,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     }
                     else
                     {
+                        logger.Warn("Error on location services start. Status: " + locationDataSource.Status);
                         this.UserInteractionService.ShowToast("Error on location services start");
                     }
                 }
