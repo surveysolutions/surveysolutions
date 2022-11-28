@@ -4,6 +4,7 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Binding.BindingContext;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
@@ -34,29 +35,20 @@ namespace WB.UI.Shared.Extensions.Activities
             handler?.Invoke(null);
             this.Finish();
         }
-        
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+
+            this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
+
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
 
             this.ViewModel.OnAreaEditCompleted = OnAreaEditCompleted;
-
-            //workaround
-            //inflated map doesn't work (should be fixed in next Esri release) 
-            var mapView = this.ViewModel.MapView;
-            var bindingSet = this.CreateBindingSet<GeographyEditorActivity, GeographyEditorViewModel>();
-
-            bindingSet.Bind(mapView)
-                .For(v => v.Map)
-                .To(vm => vm.Map);
-
-            bindingSet.Apply();
             
-            var container = this.FindViewById<LinearLayout>(Resource.Id.area_map_view_container);
-            container.AddView(mapView);
+            this.ViewModel.MapControlCreatedAsync().Wait();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -73,6 +65,13 @@ namespace WB.UI.Shared.Extensions.Activities
                 this.ViewModel.CancelCommand.Execute();
             
             return base.OnOptionsItemSelected(item);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            this.ViewModel.OnAreaEditCompleted = null;
+            
+            base.Dispose(disposing);
         }
     }
 }

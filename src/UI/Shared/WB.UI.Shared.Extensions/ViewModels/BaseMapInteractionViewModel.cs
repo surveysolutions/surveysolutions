@@ -80,9 +80,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
 
                 var defaultBaseMap = await mapUtilityService.GetBaseMap(defaultMap).ConfigureAwait(false);
-                await defaultBaseMap.LoadAsync();
                 this.Map = new Map(defaultBaseMap);
-                
+
                 if (defaultBaseMap?.BaseLayers.Count > 0 && defaultBaseMap?.BaseLayers[0]?.FullExtent != null)
                     this.Map.MaxExtent = defaultBaseMap.BaseLayers[0].FullExtent;
 
@@ -101,8 +100,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 logger.Error("Error on map initialization", e);
                 throw;
             }
-            
-            this.Map.Loaded += MapOnLoaded;
         }
 
         public bool FirstLoad { get; set; }
@@ -205,7 +202,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        public async void MapOnLoaded(object sender, EventArgs e)
+        public async Task MapControlCreatedAsync()
         {
             if (this.Map.LoadStatus != LoadStatus.FailedToLoad)
             {
@@ -298,7 +295,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public MapView MapView
         {
-            get { return mapView ??= new MapView(Application.Context); }
+            get { return mapView; }
             set => mapView = value;
         }
 
@@ -405,9 +402,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (this.MapView?.LocationDisplay?.DataSource != null)
                 this.MapView.LocationDisplay.DataSource.StatusChanged -= DataSourceOnStatusChanged;
             
-            if (this.Map != null)
-                this.Map.Loaded -= MapOnLoaded;
-            
+           
             this.MapView?.Dispose();
         }
     }

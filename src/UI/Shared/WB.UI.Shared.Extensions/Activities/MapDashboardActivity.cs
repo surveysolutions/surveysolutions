@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using System;
+using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
@@ -6,6 +7,7 @@ using AndroidX.AppCompat.App;
 using AndroidX.AppCompat.Widget;
 using AndroidX.DrawerLayout.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
+using MvvmCross.WeakSubscription;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Extensions.ViewModels;
 
@@ -21,6 +23,8 @@ namespace WB.UI.Shared.Extensions.Activities
 
         private DrawerLayout drawerLayout;
         private ActionBarDrawerToggle drawerToggle;
+
+        private IDisposable onDrawerOpenedSubscription;
 
         public Toolbar Toolbar { get; private set; }
 
@@ -50,14 +54,31 @@ namespace WB.UI.Shared.Extensions.Activities
             this.drawerToggle.DrawerIndicatorEnabled = true;
             this.drawerToggle.SyncState();
 
-            this.drawerLayout.DrawerOpened += (sender, args) =>
-            {
-                this.RemoveFocusFromEditText();
-                this.HideKeyboard(drawerLayout.WindowToken);
-            };
+            onDrawerOpenedSubscription = this.drawerLayout.WeakSubscribe<DrawerLayout, DrawerLayout.DrawerOpenedEventArgs>(
+                nameof(this.drawerLayout.DrawerOpened),
+                OnDrawerLayoutOnDrawerOpened);
 
             this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
             this.ViewModel.MapView.GeoViewTapped += this.ViewModel.OnMapViewTapped;
+            
+            this.ViewModel.MapControlCreatedAsync().Wait();
+        }
+
+        private void OnDrawerLayoutOnDrawerOpened(object sender, DrawerLayout.DrawerOpenedEventArgs args)
+        {
+            this.RemoveFocusFromEditText();
+            this.HideKeyboard(drawerLayout.WindowToken);
+        }
+
+        protected override void OnStop()
+        {
+            onDrawerOpenedSubscription?.Dispose();
+            
+            var mapView = this.ViewModel?.MapView;
+            if (mapView != null)
+                mapView.GeoViewTapped -= this.ViewModel.OnMapViewTapped;
+            
+            base.OnStop();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
