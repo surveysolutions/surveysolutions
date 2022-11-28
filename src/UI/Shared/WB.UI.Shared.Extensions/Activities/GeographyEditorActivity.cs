@@ -49,7 +49,7 @@ namespace WB.UI.Shared.Extensions.Activities
 
             this.ViewModel.OnAreaEditCompleted = OnAreaEditCompleted;
             
-            this.ViewModel.MapControlCreatedAsync().WaitAndUnwrapException();
+            System.Threading.Tasks.Task.Run(() => this.ViewModel.MapControlCreatedAsync());
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

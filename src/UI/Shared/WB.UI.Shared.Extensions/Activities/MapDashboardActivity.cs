@@ -62,7 +62,7 @@ namespace WB.UI.Shared.Extensions.Activities
             this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
             this.ViewModel.MapView.GeoViewTapped += this.ViewModel.OnMapViewTapped;
             
-            this.ViewModel.MapControlCreatedAsync().WaitAndUnwrapException();
+            System.Threading.Tasks.Task.Run(() => this.ViewModel.MapControlCreatedAsync());
         }
 
         private void OnDrawerLayoutOnDrawerOpened(object sender, DrawerLayout.DrawerOpenedEventArgs args)
