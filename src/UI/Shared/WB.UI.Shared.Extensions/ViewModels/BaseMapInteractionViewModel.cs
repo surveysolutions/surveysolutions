@@ -80,6 +80,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
 
                 var defaultBaseMap = await mapUtilityService.GetBaseMap(defaultMap).ConfigureAwait(false);
+                await defaultBaseMap.LoadAsync();
                 this.Map = new Map(defaultBaseMap);
 
                 if (defaultBaseMap?.BaseLayers.Count > 0 && defaultBaseMap?.BaseLayers[0]?.FullExtent != null)
