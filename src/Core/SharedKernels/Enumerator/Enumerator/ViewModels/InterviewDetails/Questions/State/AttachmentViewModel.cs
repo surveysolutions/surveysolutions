@@ -206,8 +206,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 isDestroyed = true;
 
                 //should be released through the binding
-                //this.Video?.Release();
-                //this.Audio?.Release();
+                this.Video?.Release();
+                this.Audio?.Release();
                 
                 this.ContentPath = null;
                 this.Image = null;
@@ -225,8 +225,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.eventRegistry.Unsubscribe(this);
 
-            //this.Video?.Dispose();
-            //this.Audio?.Dispose();
+            // this.Video?.Dispose();
+            // this.Audio?.Dispose();
         }
     }
 }
