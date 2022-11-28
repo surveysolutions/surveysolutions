@@ -8,7 +8,13 @@
         android:id="@+id/area_map_view_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" />
+        android:orientation="vertical">
+        <Esri.ArcGISRuntime.UI.Controls.MapView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/map_view"
+            local:MvxBind="Map Map;"/>
+    </LinearLayout>
     <androidx.coordinatorlayout.widget.CoordinatorLayout 
         android:id="@+id/area_toolbar"
         android:layout_width="match_parent"

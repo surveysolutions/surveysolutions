@@ -18,10 +18,10 @@ public class GeometryHelper
                 return geometry.IsEmpty ? 0 : 1;
 
             case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
-                return ((Polyline) geometry).Parts[0].PointCount;
+                return ((Polyline) geometry).Parts.Sum(p => p.PointCount);
 
             case Esri.ArcGISRuntime.Geometry.GeometryType.Polygon:
-                return ((Polygon) geometry).Parts[0].PointCount;
+                return ((Polygon) geometry).Parts.Sum(p => p.PointCount);
 
             case Esri.ArcGISRuntime.Geometry.GeometryType.Multipoint:
                 return ((Multipoint) geometry).Points.Count();
@@ -45,11 +45,11 @@ public class GeometryHelper
         if (polygon.Parts.Count < 1)
             return false;
 
-        var readOnlyPart = polygon.Parts[0];
-        if (readOnlyPart.PointCount < 3)
+        var readOnlyPart = polygon.Parts.SelectMany(p => p.Points).ToList();
+        if (readOnlyPart.Count < 3)
             return false;
 
-        var groupedPoints = from point in readOnlyPart.Points
+        var groupedPoints = from point in readOnlyPart
             group point by new { X = point.X, Y = point.Y } into xyPoint
             select new { X = xyPoint.Key.X, Y = xyPoint.Key.Y, Count = xyPoint.Count() };
 
@@ -71,7 +71,7 @@ public class GeometryHelper
         switch (result.GeometryType)
         {
             case Esri.ArcGISRuntime.Geometry.GeometryType.Polygon:
-                var polygonCoordinates = ((Polygon) result).Parts[0].Points
+                var polygonCoordinates = ((Polygon) result).Parts.SelectMany(p => p.Points)
                     .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
                     .Select(coordinate => 
                         $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
@@ -80,7 +80,7 @@ public class GeometryHelper
                 var projected = GeometryEngine.Project(result as MapPoint, reference) as MapPoint;
                 return $"{projected.X.ToString(CultureInfo.InvariantCulture)},{projected.Y.ToString(CultureInfo.InvariantCulture)}";
             case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
-                var polylineCoordinates = ((Polyline) result).Parts[0].Points
+                var polylineCoordinates = ((Polyline) result).Parts.SelectMany(p => p.Points)
                     .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
                     .Select(coordinate => 
                         $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();

@@ -94,7 +94,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 geometry is Polyline polyline)
             {
                 var builder = new GeometryByTypeBuilder(polyline.SpatialReference, GeometryType.Multipoint);
-                foreach (var mapPoint in polyline.Parts[0].Points)
+                foreach (var mapPoint in polyline.Parts.SelectMany(p => p.Points))
                 {
                     builder.AddPoint(mapPoint);
                 }
@@ -517,6 +517,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     }
                     else
                     {
+                        logger.Warn("Error on location services start. Status: " + locationDataSource.Status);
                         this.UserInteractionService.ShowToast("Error on location services start");
                     }
                 }
@@ -544,7 +545,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     case EsriGeometryType.Polyline:
                     {
                         var polyline = this.Geometry as Polyline;
-                        foreach (var point in polyline.Parts[0].Points)
+                        foreach (var point in polyline.Parts.SelectMany(p => p.Points))
                         {
                             geometryBuilder.AddPoint(point);
                             locationOverlay.Graphics.Add(new Graphic(point));
@@ -554,7 +555,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     case EsriGeometryType.Polygon:
                     {
                         var polygon = this.Geometry as Polygon;
-                        foreach (var point in polygon.Parts[0].Points)
+                        foreach (var point in polygon.Parts.SelectMany(p => p.Points))
                         {
                             geometryBuilder.AddPoint(point);
                             locationOverlay.Graphics.Add(new Graphic(point));
@@ -991,17 +992,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         switch (geometry)
                         {
                             case Polygon polygon:
-                                var polygonStart = polygon?.Parts != null ? polygon?.Parts[0]?.StartPoint : null;
+                                var polygonStart = polygon?.Parts != null ? polygon?.Parts.First()?.StartPoint : null;
                                 if(polygonStart != null)
                                     await this.MapView.SetViewpointCenterAsync(polygonStart).ConfigureAwait(false);
                                 break;
                             case Polyline polyline:
-                                var polylineStart = polyline?.Parts != null ? polyline?.Parts[0]?.StartPoint : null;
+                                var polylineStart = polyline?.Parts != null ? polyline?.Parts.First()?.StartPoint : null;
                                 if(polylineStart != null)
                                     await this.MapView.SetViewpointCenterAsync(polylineStart).ConfigureAwait(false);
                                 break;
                             case Multipoint multipoint:
-                                var multipointStart = multipoint?.Points != null ? multipoint?.Points[0] : null ;
+                                var multipointStart = multipoint?.Points != null ? multipoint?.Points.First() : null ;
                                 if(multipointStart != null)
                                     await this.MapView.SetViewpointCenterAsync(multipointStart).ConfigureAwait(false);
                                 break;
