@@ -254,7 +254,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.SelectedMap = selectedMapToLoad;
             this.Map.Basemap = baseMap;
 
-            if (this.Map.LoadStatus != LoadStatus.FailedToLoad 
+            if (this.Map.LoadStatus == LoadStatus.Loaded 
                 && this.Map.Basemap?.BaseLayers.Count > 0 
                 && this.Map.Basemap?.BaseLayers[0]?.FullExtent != null)
             {

@@ -992,17 +992,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         switch (geometry)
                         {
                             case Polygon polygon:
-                                var polygonStart = polygon?.Parts != null ? polygon?.Parts[0]?.StartPoint : null;
+                                var polygonStart = polygon?.Parts != null ? polygon?.Parts.First()?.StartPoint : null;
                                 if(polygonStart != null)
                                     await this.MapView.SetViewpointCenterAsync(polygonStart).ConfigureAwait(false);
                                 break;
                             case Polyline polyline:
-                                var polylineStart = polyline?.Parts != null ? polyline?.Parts[0]?.StartPoint : null;
+                                var polylineStart = polyline?.Parts != null ? polyline?.Parts.First()?.StartPoint : null;
                                 if(polylineStart != null)
                                     await this.MapView.SetViewpointCenterAsync(polylineStart).ConfigureAwait(false);
                                 break;
                             case Multipoint multipoint:
-                                var multipointStart = multipoint?.Points != null ? multipoint?.Points[0] : null ;
+                                var multipointStart = multipoint?.Points != null ? multipoint?.Points.First() : null ;
                                 if(multipointStart != null)
                                     await this.MapView.SetViewpointCenterAsync(multipointStart).ConfigureAwait(false);
                                 break;
