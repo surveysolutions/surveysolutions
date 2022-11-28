@@ -19,6 +19,7 @@
         DuplicateCreationCommand,
         QuestionnaireOutdated,
         InterviewHasIncompatibleMode,
-        QuestionnaireDeleted
+        QuestionnaireDeleted,
+        AssignmentLimitReached,
     }
 }

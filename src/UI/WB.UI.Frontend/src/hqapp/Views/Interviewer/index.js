@@ -20,7 +20,7 @@ const store = {
                     },
                 }
             )
-                .done(function( data ) {
+                .done(function( data, textStatus ) {
                     dispatch('showProgress', true)
                     const interviewId = data.interviewId
                     const workspace = Vue.$config.workspace
@@ -28,6 +28,11 @@ const store = {
                     window.location = url
                 })
                 .catch(data => {
+                    if (data.responseJSON && data.responseJSON.redirectUrl) {
+                        window.location = data.responseJSON.redirectUrl
+                        return
+                    }
+
                     new PNotify({
                         title: 'Unhandled error occurred',
                         text: data.responseStatus,
