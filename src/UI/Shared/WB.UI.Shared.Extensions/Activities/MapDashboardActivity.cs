@@ -8,6 +8,7 @@ using AndroidX.AppCompat.Widget;
 using AndroidX.DrawerLayout.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.WeakSubscription;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Extensions.ViewModels;
 
@@ -61,7 +62,7 @@ namespace WB.UI.Shared.Extensions.Activities
             this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
             this.ViewModel.MapView.GeoViewTapped += this.ViewModel.OnMapViewTapped;
             
-            this.ViewModel.MapControlCreatedAsync().Wait();
+            this.ViewModel.MapControlCreatedAsync().WaitAndUnwrapException();
         }
 
         private void OnDrawerLayoutOnDrawerOpened(object sender, DrawerLayout.DrawerOpenedEventArgs args)

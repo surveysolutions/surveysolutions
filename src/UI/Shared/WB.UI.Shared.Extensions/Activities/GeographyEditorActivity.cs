@@ -6,6 +6,7 @@ using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Binding.BindingContext;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Extensions.Entities;
@@ -48,7 +49,7 @@ namespace WB.UI.Shared.Extensions.Activities
 
             this.ViewModel.OnAreaEditCompleted = OnAreaEditCompleted;
             
-            this.ViewModel.MapControlCreatedAsync().Wait();
+            this.ViewModel.MapControlCreatedAsync().WaitAndUnwrapException();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
