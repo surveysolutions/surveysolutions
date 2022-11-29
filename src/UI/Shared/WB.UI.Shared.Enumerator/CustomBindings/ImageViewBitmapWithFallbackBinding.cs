@@ -91,7 +91,7 @@ public class ImageViewBitmapWithFallbackBinding : BaseBinding<ImageView, byte[]>
             if (i.Drawable is BitmapDrawable d)
             {
                 Bitmap bitmap = d.Bitmap;
-                if (bitmap != null)
+                if (bitmap != null && !bitmap.IsRecycled)
                 {
                     bitmap.Recycle();
                     bitmap.Dispose();
