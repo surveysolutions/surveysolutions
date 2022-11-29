@@ -1,4 +1,5 @@
 ﻿using Com.Google.Android.Exoplayer2;
+using Com.Google.Android.Exoplayer2.Metadata;
 using Com.Google.Android.Exoplayer2.UI;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -10,12 +11,11 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
         public PlayerView View { get; set; }
         public string ContentPath { get; set; }
 
-        /*
         public void Release()
         {
-            Player?.Release();
+            Player = null; // call inside Release
+            View.Player = null;
         }
-        */
         
         public SimpleExoPlayer Player
         {
