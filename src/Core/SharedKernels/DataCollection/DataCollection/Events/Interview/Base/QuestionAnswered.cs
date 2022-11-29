@@ -9,10 +9,6 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
         protected QuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTimeOffset originDate)
             : base(userId, questionId, rosterVector, originDate)
         {
-            if (originDate != default(DateTimeOffset))
-            {
-                this.AnswerTimeUtc = originDate.UtcDateTime;
-            }
         }
     }
 }
