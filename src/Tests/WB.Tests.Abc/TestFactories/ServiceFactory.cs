@@ -1322,6 +1322,13 @@ namespace WB.Tests.Abc.TestFactories
                                                                Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
         }
 
+        public AssignmentLimitInterviewValidator AssignmentLimitInterviewValidator(IAssignmentsService assignmentsService,
+            IAggregateRootPrototypeService prototypeService)
+        {
+            var cache = Create.Storage.NewAggregateRootCache();
+            return new AssignmentLimitInterviewValidator(assignmentsService, prototypeService, cache);
+        }
+
         public QuestionnaireTranslator QuestionnaireTranslator()
             => new QuestionnaireTranslator();
 

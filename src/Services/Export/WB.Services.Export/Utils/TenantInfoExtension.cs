@@ -23,7 +23,7 @@ namespace WB.Services.Export
 
             return tenantInfo.ShortName.Substring(0, Math.Min(nameLength, 8))
                    + "_"
-                   + tenantInfo.Workspace.Substring(0, Math.Min(tenantInfo.Workspace.Length, 8)) 
+                   + tenantInfo.Workspace.Substring(0, Math.Min(tenantInfo.Workspace.Length, 12)) 
                    + "_" 
                    + DebugTag 
                    + tenantInfo.Id;

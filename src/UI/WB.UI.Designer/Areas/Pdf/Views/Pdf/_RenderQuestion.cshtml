@@ -243,6 +243,9 @@
                                 <div class="option-text">
                                     <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
                                 </div>
+                                <div class="option-attachment-name">
+                                    <span>@option.AttachmentName</span>
+                                </div>
                             </div>
                         }
                         @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
@@ -291,6 +294,16 @@
                 break;
             case QuestionType.Area:
                 <div class="answer-editor">
+                </div>
+                <div class="question-meta more">
+                    <div class="type">
+                        @PdfStrings.GeographyInputMode : <span>@(question.Properties?.GeometryInputMode ?? GeometryInputMode.Manual)</span>
+                    </div>
+                </div>
+                <div class="question-meta more">
+                    <div class="type">
+                        @PdfStrings.GeometryOverlapDetection : <span>@(question.Properties?.GeometryOverlapDetection == true? PdfStrings.On: PdfStrings.Off )</span> 
+                    </div>
                 </div>
                 break;
             case QuestionType.Audio:

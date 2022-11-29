@@ -78,6 +78,20 @@ namespace WB.Services.Export.CsvExport.Exporters
                 };
             }
 
+            var areaQuestion = question.AsArea;
+            if (areaQuestion != null)
+            {
+                return new[]
+                {
+                    this.ConvertAnswerToStringValue(question.AsObject(), header),
+                    areaQuestion.AreaSize?.ToString(ExportCulture) ?? string.Empty,
+                    areaQuestion.Length?.ToString(ExportCulture) ?? string.Empty,
+                    areaQuestion.NumberOfPoints?.ToString(ExportCulture) ?? string.Empty,
+                    areaQuestion.RequestedAccuracy?.ToString(ExportCulture) ?? string.Empty,
+                    areaQuestion.RequestedFrequency?.ToString(ExportCulture) ?? string.Empty,
+                };
+            }
+            
             switch (header.QuestionType)
             {
                 case QuestionType.DateTime:
@@ -85,7 +99,6 @@ namespace WB.Services.Export.CsvExport.Exporters
                 case QuestionType.Numeric:
                 case QuestionType.Text:
                 case QuestionType.QRBarcode:
-                case QuestionType.Area:
                 case QuestionType.Audio:
                     return new string[] { this.ConvertAnswerToStringValue(question.AsObject(), header) };
 
@@ -132,15 +145,23 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         private static string[] BuildMissingValueAnswer(ExportedQuestionHeaderItem header)
         {
-            if (header.QuestionType == QuestionType.GpsCoordinates)
-                return new[] { ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingStringQuestionValue };
-
-            string missingValue = header.QuestionType == QuestionType.Numeric
-                                  || header.QuestionType == QuestionType.SingleOption
-                                  || header.QuestionType == QuestionType.MultyOption
-                ? ExportFormatSettings.MissingNumericQuestionValue
-                : ExportFormatSettings.MissingStringQuestionValue;
-            return header.ColumnHeaders.Select(c => missingValue).ToArray();
+            return header.ColumnHeaders.Select(headerColumn =>
+            {
+                switch (headerColumn.ExportType)
+                {
+                    case ExportValueType.NumericInt:
+                    case ExportValueType.Numeric:
+                        return ExportFormatSettings.MissingNumericQuestionValue;
+                    case ExportValueType.Boolean:
+                    case ExportValueType.Date:
+                    case ExportValueType.String:
+                    case ExportValueType.DateTime:
+                        return ExportFormatSettings.MissingStringQuestionValue;
+                    case ExportValueType.Unknown:
+                    default:
+                        throw new Exception("Unknown ExportValueType: " + headerColumn.ExportType);
+                }
+            }).ToArray();
         }
 
         private IEnumerable<object>? TryCastToEnumerable(object? value)

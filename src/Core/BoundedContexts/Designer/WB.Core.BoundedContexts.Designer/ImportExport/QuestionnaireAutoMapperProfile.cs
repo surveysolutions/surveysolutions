@@ -17,6 +17,7 @@ using DateTimeQuestion = Main.Core.Entities.SubEntities.Question.DateTimeQuestio
 using Group = Main.Core.Entities.SubEntities.Group;
 using Documents = WB.Core.SharedKernels.SurveySolutions.Documents;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
+using GeometryInputMode = WB.Core.SharedKernels.Questionnaire.Documents.GeometryInputMode;
 using GpsCoordinateQuestion = Main.Core.Entities.SubEntities.Question.GpsCoordinateQuestion;
 using IQuestion = Main.Core.Entities.SubEntities.IQuestion;
 using IQuestionnaireEntity = WB.Core.BoundedContexts.Designer.ImportExport.Models.IQuestionnaireEntity;
@@ -225,10 +226,15 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             
             this.CreateMap<AreaQuestion, Models.Question.AreaQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
-                .ForMember(s => s.GeometryType, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryType : GeometryType.Point));
+                .ForMember(s => s.GeometryType, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryType : GeometryType.Point))
+                .ForMember(s => s.GeometryInputMode, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryInputMode : GeometryInputMode.Manual))
+                .ForMember(s => s.GeometryOverlapDetection, d=>d.MapFrom(t => t.Properties != null ? t.Properties.GeometryOverlapDetection : false));
+            
             this.CreateMap<Models.Question.AreaQuestion, AreaQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .AfterMap((s, d) => d.Properties!.GeometryType = (GeometryType?)(s.GeometryType ?? null));
+                .AfterMap((s, d) => d.Properties!.GeometryType = (GeometryType?)(s.GeometryType ?? null))
+                .AfterMap((s, d) => d.Properties!.GeometryInputMode = (GeometryInputMode?)(s.GeometryInputMode ?? null))
+                .AfterMap((s, d) => d.Properties!.GeometryOverlapDetection = s.GeometryOverlapDetection ?? null);
 
             this.CreateMap<AudioQuestion, Models.Question.AudioQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
@@ -353,12 +359,16 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 .ForMember(a => a.Code, opt => 
                     opt.MapFrom(x => x.AnswerCode ?? decimal.Parse(x.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture)))
                 .ForMember(a => a.Text, opt => 
-                    opt.MapFrom(answer => answer.AnswerText));
+                    opt.MapFrom(answer => answer.AnswerText))
+                .ForMember(a => a.AttachmentName, opt => 
+                    opt.MapFrom(answer => answer.AttachmentName));
             this.CreateMap<Models.SpecialValue, Answer>()
                 .ForMember(a => a.AnswerValue, opt => 
                     opt.MapFrom(x => x.Code.ToString()))
                 .ForMember(a => a.AnswerText, opt => 
-                    opt.MapFrom(answer => answer.Text));
+                    opt.MapFrom(answer => answer.Text))
+                .ForMember(a => a.AttachmentName, opt => 
+                    opt.MapFrom(answer => answer.AttachmentName));
         }
         
         private string? GetVarName(Guid? id, ResolutionContext context)

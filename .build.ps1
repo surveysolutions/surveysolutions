@@ -21,7 +21,8 @@ param(
     [switch] $signapk ,
     [string] $apkFolder = "artifacts", # where should docker build look for apk artifacts
     [string] $runtime = "win-x64",
-    [String] $nodeVersion = '16'
+    [String] $nodeVersion = '16',
+	[string] $ArcGisApiKey = $NULL
 )
 
 #region Bootstrap
@@ -187,6 +188,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
     Set-AndroidXmlResourceValue $CapiProject "appcenter_key" $AppCenterKey
     Set-AndroidXmlResourceValue $CapiProject "google_maps_api_key" $GoogleMapKey
     Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_key" $ArcGisKey
+    Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_api_key" $ArcGisApiKey
 
     $keyStore = [System.IO.Path]::GetTempFileName()
     if ($signapk) {

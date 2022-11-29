@@ -49,7 +49,7 @@
     "Metadata": { "$ref": "#/definitions/QuestionnaireMetaInfo" }
   },
 
-  "required": ["Id", "Children", "Title"],
+  "required": ["Id", "Title"],
 
   "definitions": {
     "Answer": {
@@ -85,7 +85,7 @@
         "ValidationConditions": { "$ref": "#/definitions/ValidationConditions" },
         "VariableName": { "$ref": "#/definitions/VariableName" },
         "Id": { "$ref": "#/definitions/GUID" },
-
+        
         "GeometryType": {
           "type": "string",
           "oneOf": [
@@ -95,7 +95,19 @@
             { "const": "Multipoint", "description": "Multipoint" }
           ],
           "default": "Polygon"
-        }
+        },
+        
+        "GeometryInputMode": {
+          "type": "string",
+          "oneOf": [
+            { "const": "Manual",    "description": "Manual" },
+            { "const": "Automatic",   "description": "Automatic" },
+            { "const": "Semiautomatic",      "description": "Semiautomatic" }
+          ],
+          "default": "Manual"
+        },
+        
+        "GeometryOverlapDetection": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
       "required": ["Type"]
@@ -502,7 +514,8 @@
       "type": "object",
       "properties": {
         "Text": { "type": "string" },
-        "Code": { "type": "integer" }
+        "Code": { "type": "integer" },
+        "AttachmentName": {"type": "string"}
       },
       "additionalProperties": false,
       "required": []

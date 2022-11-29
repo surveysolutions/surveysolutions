@@ -116,12 +116,12 @@ namespace WB.Tests.Abc.TestFactories
             => new ImportFromDesigner(responsibleId, questionnaire, allowCensus, assembly, contentVersion, 1, comment);
 
         public InterviewCreated InterviewCreated(Guid? questionnaireId = null, long? questionnaireVersion = null,
-            DateTimeOffset? originDate = null)
+            DateTimeOffset? originDate = null, int? assignmentId = null)
             => new InterviewCreated(
                 userId: Guid.NewGuid(),
                 questionnaireId: questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion: questionnaireVersion ?? 7,
-                assignmentId: null,
+                assignmentId: assignmentId,
                 isAudioRecordingEnabled:false,
                 originDate: originDate ?? DateTimeOffset.Now,
                 usesExpressionStorage: true);

@@ -500,4 +500,7 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
     <value>Следующая ссылка может быть использована, чтобы продолжить интервью</value>
   </data>
+  <data name="AssignmentLimitError" xml:space="preserve">
+    <value>Вы не можите создать интервью из этого задания</value>
+  </data>
 </root>

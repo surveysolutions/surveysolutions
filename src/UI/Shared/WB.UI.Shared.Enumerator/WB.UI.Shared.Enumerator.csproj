@@ -69,6 +69,7 @@
     <Compile Include="Converters\TextWithHighlightedSearchTermConverter.cs" />
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
     <Compile Include="CustomBindings\ButtonGroupStyleBinding.cs" />
+    <Compile Include="CustomBindings\ButtonHasWarningOrSuccessBinding.cs" />
     <Compile Include="CustomBindings\EditTextMaxLengthBinding.cs" />
     <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
     <Compile Include="CustomBindings\ImageViewQRCodeBinding.cs" />
@@ -273,6 +274,10 @@
     <AndroidResource Include="Resources\color\button_success_selector.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\color\button_warning_selector.xml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\alert_dialog_btn.xml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
@@ -296,6 +301,10 @@
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\confirmation_password.axml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_overview_question_numeric.axml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>

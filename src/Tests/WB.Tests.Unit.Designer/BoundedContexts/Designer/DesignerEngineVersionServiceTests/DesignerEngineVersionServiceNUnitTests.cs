@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
@@ -184,6 +185,131 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
             //aaa
             Assert.That(contentVersion, Is.EqualTo(30));
+        }
+        
+        [Test]
+        public void should_return_34_when_geography_input_mode_is_auto()
+        {
+            var categoryId = Id.g1;
+            
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.Question(questionType:QuestionType.Area, 
+                        properties:new QuestionProperties(false,false)
+                        {
+                            GeometryInputMode = GeometryInputMode.Automatic
+                        }),
+                });
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(34));
+        }
+        
+        [Test]
+        public void should_return_34_when_geography_show_neighbours_is_on()
+        {
+            var categoryId = Id.g1;
+            
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.Question(questionType:QuestionType.Area, 
+                        properties:new QuestionProperties(false,false)
+                        {
+                            GeometryOverlapDetection = true
+                        }),
+                });
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(34));
+        }
+        
+        [Test]
+        public void should_return_34_when_geography_accuracy_is_used_in_validation()
+        {
+            var categoryId = Id.g1;
+            
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.Question(questionType:QuestionType.Area,
+                        variable: "geo",
+                        validationConditions: new ValidationCondition[]
+                        {
+                          new ValidationCondition("geo.RequestedAccuracy > 3", "test")  
+                        },
+                        properties:new QuestionProperties(false,false)
+                        {
+                            GeometryOverlapDetection = false
+                        }),
+                });
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(34));
+        }
+        
+        [Test]
+        public void should_return_34_when_geography_accuracy_is_used_in_validation_as_self()
+        {
+            var categoryId = Id.g1;
+            
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.Question(questionType:QuestionType.Area,
+                        variable: "geo",
+                        validationConditions: new ValidationCondition[]
+                        {
+                            new ValidationCondition("self.  RequestedAccuracy > 3", "test")  
+                        },
+                        properties:new QuestionProperties(false,false)
+                        {
+                            GeometryOverlapDetection = false
+                        }),
+                });
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(34));
+        }
+        
+        [Test]
+        public void should_return_34_when_geography_frequency_is_used_in_validation()
+        {
+            var categoryId = Id.g1;
+            
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.Question(questionType:QuestionType.Area,
+                        variable: "geo",
+                        validationConditions: new ValidationCondition[]
+                        {
+                            new ValidationCondition("geo.RequestedFrequency > 11", "test")  
+                        },
+                        properties:new QuestionProperties(false,false)
+                        {
+                            GeometryOverlapDetection = false
+                        }),
+                });
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(34));
         }
     }
 }

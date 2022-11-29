@@ -20,9 +20,9 @@ namespace WB.UI.Headquarters.Metrics
         private readonly MemoryCache memoryCache;
         private ServerStatusResponse state;
         private DateTime lastQuery = DateTime.UtcNow;
-        private ManualResetEventSlim gate = new ManualResetEventSlim(false);
+        private readonly ManualResetEventSlim gate = new ManualResetEventSlim(false);
 
-        List<MetricsDiffHolder> Counters = new List<MetricsDiffHolder>();
+        readonly List<MetricsDiffHolder> counters = new List<MetricsDiffHolder>();
 
         public DashboardStatisticsService(IMemoryCache memoryCache, IWorkspacesCache workspaces)
         {
@@ -42,13 +42,13 @@ namespace WB.UI.Headquarters.Metrics
                         gate.Reset();
                     }
 
-                    gate.Wait();
+                    gate.Wait(stoppingToken);
 
                     if (stoppingToken.IsCancellationRequested) break;
 
                     state = await CollectMetrics();
                 } while (!stoppingToken.IsCancellationRequested);
-            });
+            }, stoppingToken);
         }
 
         public ServerStatusResponse GetState()
@@ -100,10 +100,10 @@ namespace WB.UI.Headquarters.Metrics
             var connections = CommonMetrics.WebInterviewConnection.GetDiffForLabels(OpenConnectionsLabel, ClosedConnectionsLabel);
             result.Add(new MetricState("Web interview connections", "connection".ToQuantity(connections, "N0"), connections));
 
-            // statefull interviews
+            // stateful interviews
             var statefulInterviews = (CoreMetrics.StatefullInterviewsCached as Counter).GetDiffForLabels(CacheAddedLabel, CacheRemovedLabel);
 
-            result.Add(new MetricState("Statefull interviews in cache", "interview".ToQuantity(statefulInterviews, "N0")
+            result.Add(new MetricState("Stateful interviews in cache", "interview".ToQuantity(statefulInterviews, "N0")
                     + $" (cached {await interviewsCached:N2} / evicted {await interviewsEvicted:N2} per second)", statefulInterviews));
 
             // exceptions
@@ -184,7 +184,7 @@ namespace WB.UI.Headquarters.Metrics
                 Result = new TaskCompletionSource<double>()
             };
 
-            Counters.Add(counter);
+            counters.Add(counter);
             return counter.Result.Task;
         }
 
@@ -192,7 +192,7 @@ namespace WB.UI.Headquarters.Metrics
         {
             var sw = Stopwatch.StartNew();
 
-            foreach (var data in Counters)
+            foreach (var data in counters)
             {
                 data.InitialValue = data.MetricValueFactory();
             }
@@ -201,14 +201,14 @@ namespace WB.UI.Headquarters.Metrics
 
             sw.Stop();
 
-            foreach (var data in Counters)
+            foreach (var data in counters)
             {
                 var current = data.MetricValueFactory();
 
                 data.Result.SetResult((current - data.InitialValue) / sw.Elapsed.TotalSeconds);
             }
 
-            Counters.Clear();
+            counters.Clear();
         }
 
 

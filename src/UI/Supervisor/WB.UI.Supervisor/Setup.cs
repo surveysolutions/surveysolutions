@@ -69,7 +69,7 @@ namespace WB.UI.Supervisor
                 {typeof(PhotoViewViewModel), typeof(PhotoViewActivity) },
                 {typeof(SearchViewModel), typeof(SupervisorSearchActivity)}
 #if !EXCLUDEEXTENSIONS
-                , {typeof (Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (Shared.Extensions.Activities.GeographyEditorActivity)}
+                ,{typeof (Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (Shared.Extensions.Activities.GeographyEditorActivity)}
                 ,{typeof (Shared.Extensions.ViewModels.MapDashboardViewModel), typeof (Shared.Extensions.Activities.MapDashboardActivity)}
 #endif
             };
@@ -113,7 +113,13 @@ namespace WB.UI.Supervisor
             string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key);
             if (!string.IsNullOrEmpty(arcgisruntimeKey))
             {
-                ServiceLocator.Current.GetInstance<IMapInteractionService>().Init(arcgisruntimeKey);
+                ServiceLocator.Current.GetInstance<IMapInteractionService>().SetLicenseKey(arcgisruntimeKey);
+            }
+            
+            string arcgisruntimeApiKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_api_key);
+            if (!string.IsNullOrEmpty(arcgisruntimeApiKey))
+            {
+                ServiceLocator.Current.GetInstance<IMapInteractionService>().SetApiKey(arcgisruntimeApiKey);
             }
 
             var status = new UnderConstructionInfo();

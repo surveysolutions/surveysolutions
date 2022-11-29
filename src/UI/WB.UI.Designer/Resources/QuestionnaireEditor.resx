@@ -818,6 +818,12 @@
   <data name="GeometryType" xml:space="preserve">
     <value>Geometry type</value>
   </data>
+  <data name="GeometryInputMode" xml:space="preserve">
+    <value>Input mode</value>
+  </data>
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Overlap detection</value>
+  </data>
   <data name="QuestionDecimalPlaces" xml:space="preserve">
     <value>Number of decimal places</value>
   </data>
@@ -859,6 +865,15 @@
   </data>
   <data name="QuestionYesNoMode" xml:space="preserve">
     <value>Yes/No buttons</value>
+  </data>
+  <data name="GeographyInputModeManual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+    <data name="GeographyInputModeAutomatic" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+    <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+    <value>Semiautomatic</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
@@ -1495,6 +1510,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="HelpOptionTitle" xml:space="preserve">
     <value>Text label for the category (visible to the interviewer)</value>
+  </data>
+  <data name="HelpOverlapDetection" xml:space="preserve">
+    <value>Display and highlight the overlaps of this question answer with answers to the same questions in sibling roster instances</value>
   </data>
   <data name="NewItem" xml:space="preserve">
     <value>New item</value>

@@ -269,8 +269,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
             this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(new Area(@event.Geometry, @event.MapName, @event.NumberOfPoints, @event.AreaSize,
-                @event.Length, @event.Coordinates, @event.DistanceToEditor)), @event.OriginDate ?? @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(
+                new Area(@event.Geometry, @event.MapName, @event.NumberOfPoints, @event.AreaSize, @event.Length, 
+                    @event.Coordinates, @event.DistanceToEditor, @event.RequestedAccuracy, @event.RequestedFrequency)), 
+                @event.OriginDate ?? @event.AnswerTimeUtc);
         }
 
         protected virtual void Apply(AudioQuestionAnswered @event)
@@ -1015,7 +1017,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = GetChangedTree();
 
-            var answer = new Area(command.Geometry, command.MapName, command.NumberOfPoints, command.Area, command.Length, command.Coordinates, command.DistanceToEditor);
+            var answer = new Area(command.Geometry, command.MapName, command.NumberOfPoints, 
+                command.Area, command.Length, command.Coordinates, command.DistanceToEditor, 
+                command.RequestedAccuracy, command.RequestedFrequency);
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(answer), command.OriginDate);
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, command.OriginDate);
@@ -2141,8 +2145,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     var answer = changedQuestion.GetAsInterviewTreeAreaQuestion().GetAnswer().Value;
                     this.ApplyEvent(new AreaQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, now, answer.Geometry, answer.MapName, answer.AreaSize, answer.Length,
-                        answer.Coordinates, answer.DistanceToEditor, answer.NumberOfPoints));
+                        changedQuestion.Identity.RosterVector, now, answer.Geometry, answer.MapName, 
+                        answer.AreaSize, answer.Length, answer.Coordinates, answer.DistanceToEditor, 
+                        answer.NumberOfPoints, answer.RequestedAccuracy ,answer.RequestedFrequency));
                 }
 
                 else if (changedQuestion.IsAudio)
@@ -2158,10 +2163,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyRemoveAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions, Guid userId, DateTimeOffset originDate)
         {
-            var questionIdentittiesWithRemovedAnswer = diffByQuestions.Select(x => x.SourceNode.Identity).ToArray();
+            var questionIdentitiesWithRemovedAnswer = diffByQuestions.Select(x => x.SourceNode.Identity).ToArray();
 
-            if (questionIdentittiesWithRemovedAnswer.Any())
-                this.ApplyEvent(new AnswersRemoved(userId, questionIdentittiesWithRemovedAnswer, originDate));
+            if (questionIdentitiesWithRemovedAnswer.Any())
+                this.ApplyEvent(new AnswersRemoved(userId, questionIdentitiesWithRemovedAnswer, originDate));
         }
 
         private void ApplyRosterEvents(InterviewTreeRosterDiff[] diff, DateTimeOffset originDate)

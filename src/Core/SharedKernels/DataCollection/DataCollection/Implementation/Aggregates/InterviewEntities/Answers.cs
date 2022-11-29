@@ -537,7 +537,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override string ToString() => $"{FileName} => {Length}";
 
-        public AudioAnswerForConditions ToAudioAnswerForContions()
+        public AudioAnswerForConditions ToAudioAnswerForConditions()
         {
             return new AudioAnswerForConditions
             {
@@ -575,13 +575,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override string ToString() => Value.ToString();
 
-        public Georgaphy ToGeorgaphy()
+        public Georgaphy ToGeography()
         {
             return new Georgaphy
             {
                 Area = Value.AreaSize ?? 0,
                 Length = Value.Length ?? 0,
-                PointsCount = Value.NumberOfPoints ?? 0
+                PointsCount = Value.NumberOfPoints ?? 0,
+                RequestedAccuracy = Value.RequestedAccuracy,
+                RequestedFrequency = Value.RequestedFrequency
             };
         }
 

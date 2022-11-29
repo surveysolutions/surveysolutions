@@ -274,6 +274,8 @@
         <item name="backgroundTint">@color/button_error_selector</item> <!--needed for android 5-->
     </style>
 
-
-  
+    <style name="Button_Warning" parent="Button_Primary">
+        <item name="android:backgroundTint">@color/button_warning_selector</item>
+        <item name="backgroundTint">@color/button_warning_selector</item><!--needed for android 5-->
+    </style>  
 </resources>

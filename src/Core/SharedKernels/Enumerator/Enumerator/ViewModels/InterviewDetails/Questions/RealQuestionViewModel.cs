@@ -223,7 +223,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             if (this.isDisposed) return;
-
             this.isDisposed = true;
 
             this.liteEventRegistry.Unsubscribe(this); 

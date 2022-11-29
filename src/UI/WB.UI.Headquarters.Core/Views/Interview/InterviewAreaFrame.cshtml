@@ -21,6 +21,26 @@
             height: 100%;
             width: 100%;
         }
+        #messageDiv {
+            position: absolute;
+            padding: 6px;
+            z-index: 10000;
+            background-color: white;
+            margin: auto;
+            bottom: 20px;
+            display: none;
+            opacity: 75%;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10pt;
+            color: darkorange;
+        }
+        #messageDiv ul{
+            padding: 0 0 0 6px;
+            max-height: 60px;
+            overflow: hidden;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
     </style>
     @if (Model != null)
     {
@@ -35,64 +55,138 @@
             "esri/geometry/Point",
             "esri/geometry/Multipoint",
             "esri/geometry/Polyline",
+            "esri/geometry/geometryEngine",
+            "esri/geometry/projection",
             "esri/symbols/SimpleLineSymbol",
             "esri/symbols/SimpleFillSymbol",
-            "dojo/domReady!"
+            "dojo/dom",
+            "dojo/domReady!",
         ],
-            function (Map, MapView, Graphic, Polygon, Point, Multipoint, Polyline, SimpleLineSymbol, SimpleFillSymbol) {
+            function (Map, MapView, Graphic, Polygon, Point, Multipoint, Polyline, geometryEngine, projection, SimpleLineSymbol, SimpleFillSymbol, dom) {
                 var map = new Map({
                     basemap: "hybrid"
                 });
 
-                var geometryJson = @Html.Raw(Model.AreaAnswer.Geometry);
+                function getPolyGraphic(geometryJson, isNeighbour, isOverlaping) {
 
-
-                @switch (Model.Geometry)
-                {
-                    case GeometryType.Multipoint:
-                        @Html.Raw("var polyline = Polyline.fromJSON(geometryJson); " +
-                                  "var polyGeometry = new Multipoint();" +
-                                  "for (var i = 0; i < polyline.paths[0].length; i++) {" +
-                                  "polyGeometry.addPoint(polyline.getPoint(0, i));" +
-                                  "};" +
-                                  "polyGeometry.spatialReference = polyline.spatialReference;" +
-                                  "var markerType = 'simple-marker';");
-                        break;
-                    case GeometryType.Polyline:
-                        @Html.Raw("var polyGeometry = Polyline.fromJSON(geometryJson); var markerType = 'simple-line';");
-                        break;
-                    case GeometryType.Point:
-                        @Html.Raw("var polyGeometry = Point.fromJSON(geometryJson); var markerType = 'simple-marker';");
-                        break;
-                    default:
-                        @Html.Raw("var polyGeometry = Polygon.fromJSON(geometryJson); var markerType = 'simple-line';");
-                        break;
-                }
-
-                var fillSymbol = {
-                    type: markerType,
-                    color: [255, 255, 255],
-                    width: 1
-                };
-
-                var polyGraphic = new Graphic({
+                    @switch (Model.Geometry)
+                    {
+                        case GeometryType.Multipoint:
+                            <text>
+                            var polyGeometry = Multipoint.fromJSON(geometryJson);
+                            if (polyGeometry.points.length == 0) { 
+                                var polyline = Polyline.fromJSON(geometryJson); 
+                                polyGeometry = new Multipoint();
+                                for (var i = 0; i < polyline.paths[0].length; i++) { //>//it is for razor to end compare char
+                                    polyGeometry.addPoint(polyline.getPoint(0, i));
+                                }
+                                polyGeometry.spatialReference = polyline.spatialReference;
+                            }
+                            var markerType = 'simple-marker';
+                            </text>
+                            break;
+                        case GeometryType.Polyline:
+                            <text>
+                            var polyGeometry = Polyline.fromJSON(geometryJson); 
+                            var markerType = 'simple-line';
+                            </text>
+                            break;
+                        case GeometryType.Point:
+                            <text>
+                            var polyGeometry = Point.fromJSON(geometryJson); 
+                            var markerType = 'simple-marker';
+                            </text>
+                            break;
+                        default:
+                            <text>
+                            var polyGeometry = Polygon.fromJSON(geometryJson); 
+                            var markerType = 'simple-line';
+                            </text>
+                            break;
+                    }
+    
+                    let borderColor = isOverlaping 
+                        ? [255, 140, 0] // orange
+                        : (isNeighbour ? [0, 0, 255] /* blue */ : [255, 0, 0] /* red */) 
+                        
+                    var fillSymbol = {
+                        type: markerType,
+                        color: borderColor,
+                        width: 2
+                    };
+                    
+                    var polyGraphic = new Graphic({
                         geometry: polyGeometry,
                         symbol: fillSymbol
                     });
-                
 
+                    return polyGraphic;
+                }
+                
+                var geometryJson = @Html.Raw(Model.AreaAnswer.Geometry);
+                var polyGraphic = getPolyGraphic(geometryJson, false)
+                var areas = [polyGraphic]
+                
+                var neighbours = [
+                @foreach (var neighbour in Model.Neighbors)
+                {
+                    <text>
+                    {
+                        title: '@Html.Raw(neighbour.Title)',
+                        geometry: @Html.Raw(neighbour.Geometry) 
+                    },
+                    </text>
+                }
+                ]
+
+                var overlapingTitles = []
+                for (let neighbourIndex in neighbours)
+                {
+                    var neighbour = neighbours[neighbourIndex];
+                    var neighbourGeometry = neighbour.geometry;
+                    
+                    /*if (neighbourGeometry.spatialReference != geometryJson.spatialReference)
+                    {
+                        var transformation = projection.getTransformation(neighbourGeometry.spatialReference, geometryJson.spatialReference); 
+                        neighbourGeometry = projection.project(neighbourGeometry, geometryJson.spatialReference, transformation);
+                    }*/
+
+                    let isOverlaping = !geometryEngine.disjoint(geometryJson, neighbourGeometry);
+                    if (isOverlaping)
+                        overlapingTitles.push(neighbour.title);
+
+                    var neighbourPolyGraphic = getPolyGraphic(neighbourGeometry, true, isOverlaping);
+                    areas.push(neighbourPolyGraphic);
+                }
+                
+                if (overlapingTitles.length > 0)
+                {
+                    let message = '@Html.Raw(Maps.MapOverlapsWith) '
+                    message += overlapingTitles[0]
+                    if (overlapingTitles.length > 1)
+                        message += ', ' + overlapingTitles[1]
+                    if (overlapingTitles.length > 2)
+                        message += ' @Html.Raw(Maps.MapOverlapsWithOther)'.replace('{0}', overlapingTitles.length - 2)
+
+                    const messageDiv = dom.byId("messageDiv");
+                    messageDiv.innerHTML = message;
+                    messageDiv.style.display = 'block';
+                }
+                
                 var view = new MapView({
                     container: "viewDiv",
                     map: map,
-                    spatialReference: polyGeometry.spatialReference
+                    spatialReference: polyGraphic.geometry.spatialReference
                 });
 
-                view.graphics.addMany([polyGraphic]);
+                view.graphics.addMany(areas);
 
                 var taxLotExtent = view.graphics.items[0].geometry;
 
-                if (taxLotExtent.extent !== null && taxLotExtent.extent !== undefined)
-                    view.extent = taxLotExtent.extent;
+                if (taxLotExtent.extent !== null && taxLotExtent.extent !== undefined) {
+                    let displayExtent = taxLotExtent.extent.clone()
+                    view.extent = displayExtent.expand(1.5);
+                }
                 else {
                     view.center = taxLotExtent;
                     view.scale = 24000;
@@ -103,5 +197,6 @@
 </head>
 <body>
     <div id="viewDiv"></div>
+    <div id="messageDiv"></div>
 </body>
 </html>

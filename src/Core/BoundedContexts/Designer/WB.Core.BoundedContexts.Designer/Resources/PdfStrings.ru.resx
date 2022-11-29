@@ -174,6 +174,18 @@
   <data name="QuestionType_Area" xml:space="preserve">
     <value>география</value>
   </data>
+  <data name="QuestionType_Area_Polygon" xml:space="preserve">
+    <value>полигон</value>
+  </data>
+    <data name="QuestionType_Area_Polyline" xml:space="preserve">
+    <value>полилиния</value>
+  </data>
+    <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+    <value>множество точек</value>
+  </data>
+    <data name="QuestionType_Area_Point" xml:space="preserve">
+    <value>точка</value>
+  </data>  
   <data name="QuestionType_Audio" xml:space="preserve">
     <value>аудио</value>
   </data>
@@ -381,6 +393,15 @@
   <data name="SpecialValues" xml:space="preserve">
     <value>Специальные значения</value>
   </data>
+  <data name="GeographyType" xml:space="preserve">
+    <value>Тип географии</value>
+  </data>
+    <data name="GeographyInputMode" xml:space="preserve">
+    <value>Режим ввода </value>
+  </data>
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Отслеживать перекрытия ответов</value>
+  </data>
   <data name="SideBarMetadataBasicInfo" xml:space="preserve">
     <value>Базовая информация</value>
   </data>
@@ -403,5 +424,11 @@
   </data>
   <data name="VariableExcludedFromExport" xml:space="preserve">
     <value>Значение этой переменной исключено из экспортных данных</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>ВКЛ</value>
+  </data>
+    <data name="Off" xml:space="preserve">
+    <value>ВЫКЛ</value>
   </data>
 </root>

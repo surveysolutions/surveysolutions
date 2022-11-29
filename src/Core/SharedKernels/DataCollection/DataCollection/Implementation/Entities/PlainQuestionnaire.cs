@@ -389,7 +389,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             string searchFor, int[] excludedOptionIds)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            CheckShouldQestionProvideOptions(question, questionId);
+            CheckShouldQuestionProvideOptions(question, questionId);
 
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
@@ -417,7 +417,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            CheckShouldQestionProvideOptions(question, questionId);
+            CheckShouldQuestionProvideOptions(question, questionId);
 
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
@@ -445,7 +445,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Select(x => x.Value).ToReadOnlyCollection();
         }
 
-        private void CheckShouldQestionProvideOptions(IQuestion question, Guid questionId)
+        private void CheckShouldQuestionProvideOptions(IQuestion question, Guid questionId)
         {
             bool questionTypeDoesNotSupportAnswerOptions
                 = question.QuestionType != QuestionType.SingleOption && 
@@ -471,7 +471,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue, int? parentValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            CheckShouldQestionProvideOptions(question, questionId);
+            CheckShouldQuestionProvideOptions(question, questionId);
 
             return AnswerUtils.GetOptionForQuestionByOptionValue(question, optionValue, parentValue);
         }
@@ -485,7 +485,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private CategoricalOption GetAnswerOptionImpl(Guid questionId, decimal optionValue, int? answerParentValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            CheckShouldQestionProvideOptions(question, questionId);
+            CheckShouldQuestionProvideOptions(question, questionId);
 
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
@@ -504,7 +504,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter, int[] excludedOptionIds = null)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            CheckShouldQestionProvideOptions(question, questionId);
+            CheckShouldQuestionProvideOptions(question, questionId);
 
             return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, filter, excludedOptionIds);
         }
@@ -512,7 +512,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public CategoricalOption GetOptionForQuestionByOptionTextFromStructure(Guid questionId, string optionText, int? parentQuestionValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            CheckShouldQestionProvideOptions(question, questionId);
+            CheckShouldQuestionProvideOptions(question, questionId);
 
             return question.Answers.SingleOrDefault(x => x.AnswerText == optionText && x.ParentCode == parentQuestionValue).ToCategoricalOption();
         }
@@ -1325,6 +1325,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return false;
         }
 
+        public bool IsNeighboringSupport(Guid entityId)
+            => GetQuestion(entityId)?.Properties?.GeometryOverlapDetection ?? false;
+
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
         {
             IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
@@ -2012,6 +2015,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             return question.Properties.GeometryType;
+        }
+        public GeometryInputMode? GetQuestionGeometryMode(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            return question.Properties.GeometryInputMode;
         }
 
         public int GetEntityIdMapValue(Guid entityId)

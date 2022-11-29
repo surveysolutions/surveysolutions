@@ -274,14 +274,14 @@
             border-left: 6px solid transparent;
             @include absolute(17px, 10px);
         }
-        &.sorting_asc{
+        &.sorting.sorting_asc{
             color: $blue;
             &:after{
                 border-top: none;
                 border-bottom: 10px solid $blue;
             }
         }
-        &.sorting_desc{
+        &.sorting.sorting_desc{
             color: $blue;
             &:after{
                 border-top-color: $blue;
@@ -485,14 +485,15 @@
     .table-ordered{
         thead{
             tr th{
-                &:after{
-                    border-top: 8px solid $gray_form;
-                }
-                &.sorting_desc:after{
+                &.sorting.sorting_desc:after{
                     border-top: 8px solid $blue;
                 } 
-                &.sorting_asc:after{
+                &.sorting.sorting_asc:after{
                     border-bottom-width: 8px;
+					border-top: none;
+                }
+                &:after{
+                    border-top: 8px solid $gray_form;
                 }
             }
         }

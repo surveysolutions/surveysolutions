@@ -49,7 +49,7 @@ namespace WB.UI.Shared.Extensions.Services
                         if (package.Maps.Count > 0)
                         {
                             {
-                                var basemap = package.Maps.First().Basemap.Clone();
+                                var basemap = package.Maps.First()?.Basemap?.Clone();
                                 return basemap;
                             }
                         }
@@ -101,19 +101,29 @@ namespace WB.UI.Shared.Extensions.Services
         {
             if (existingMap == null) return null;
 
-            switch (existingMap.MapType)
+            if (existingMap.MapType == MapType.LocalFile)
+                return await GetLocalMap(existingMap);
+            
+            //if map is failing to load 
+            //if it's loaded, it's not working to collect data
+            try
             {
-                case MapType.OnlineImagery:
-                    return Basemap.CreateImagery();
-                case MapType.OnlineImageryWithLabels:
-                    return Basemap.CreateImageryWithLabels();
-                case MapType.OnlineOpenStreetMap:
-                    return Basemap.CreateOpenStreetMap();
-                case MapType.LocalFile:
-                    return await GetLocalMap(existingMap);
-                default:
-                    return null;
+                switch (existingMap.MapType)
+                {
+                    case MapType.OnlineImagery:
+                        await new Basemap(BasemapStyle.ArcGISImageryStandard).LoadAsync();
+                        return new Basemap(BasemapStyle.ArcGISImageryStandard);
+                    case MapType.OnlineImageryWithLabels:
+                        await new Basemap(BasemapStyle.ArcGISImagery).LoadAsync();
+                        return new Basemap(BasemapStyle.ArcGISImagery);
+                    case MapType.OnlineOpenStreetMap:
+                        await new Basemap(BasemapStyle.OSMStandard).LoadAsync();
+                        return new Basemap(BasemapStyle.OSMStandard);
+                }
             }
+            catch {}
+            
+            return null;
         }
 
         public async Task<FeatureLayer> GetShapefileAsFeatureLayer(string fullPathToShapefile)
