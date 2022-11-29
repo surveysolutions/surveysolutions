@@ -53,12 +53,14 @@ public class ImageViewBitmapWithFallbackBinding : BaseBinding<ImageView, byte[]>
                 }
                 else
                 {
+                    control.Drawable?.Dispose();
                     this.SetDefaultImage(control);
                 }
             }
         }
         else
         {
+            control.Drawable?.Dispose();
             this.SetDefaultImage(control);
         }
     }
@@ -81,25 +83,26 @@ public class ImageViewBitmapWithFallbackBinding : BaseBinding<ImageView, byte[]>
         return displayMetrics;
     }
 
-    protected override void Dispose(bool isDisposing)
+    //temp excluding 
+    //to check crashes
+    /*protected override void Dispose(bool isDisposing)
     {
         base.Dispose(isDisposing);
 
         var i = Target;
-        if (i != null)
+        if (i == null) return;
+        
+        if (i.Drawable is BitmapDrawable d)
         {
-            if (i.Drawable is BitmapDrawable d)
+            var bitmap = d.Bitmap;
+            if (bitmap != null && !bitmap.IsRecycled)
             {
-                Bitmap bitmap = d.Bitmap;
-                if (bitmap != null && !bitmap.IsRecycled)
-                {
-                    bitmap.Recycle();
-                    bitmap.Dispose();
-                }
+                bitmap.Recycle();
+                bitmap.Dispose();
             }
-
-            i.SetImageBitmap(null);
-            i.SetImageDrawable(null);
         }
-    }
+
+        i.SetImageBitmap(null);
+        i.SetImageDrawable(null);
+    }*/
 }
