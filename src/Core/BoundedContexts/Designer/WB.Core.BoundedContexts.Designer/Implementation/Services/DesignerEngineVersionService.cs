@@ -298,7 +298,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             return questionnaire.Find<AreaQuestion>(x => 
                                 x.Properties?.GeometryOverlapDetection == true).Any();
                         },
-                        description: "Geography question has show neighbours on"
+                        description: "Geography question has overlap detection on"
                     ),
                     
                     new QuestionnaireFeature
