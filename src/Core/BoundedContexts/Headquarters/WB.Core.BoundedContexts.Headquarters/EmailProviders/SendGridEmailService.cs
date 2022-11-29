@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             var client = new SendGridClient(settings.SendGridApiKey);
             var msg = new SendGridMessage
             {
-                From = new EmailAddress(settings.SenderAddress),
+                From = new EmailAddress(settings.SenderAddress, settings.SenderName),
                 Subject = subject,
                 PlainTextContent = textBody,
                 HtmlContent = htmlBody,
