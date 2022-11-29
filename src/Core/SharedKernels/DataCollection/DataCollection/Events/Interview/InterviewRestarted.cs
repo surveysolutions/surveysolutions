@@ -9,13 +9,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             : base(userId, originDate)
         {
             Comment = comment;
-
-            if (originDate != default(DateTimeOffset))
-            {
-                this.RestartTime = originDate.UtcDateTime;
-            }
         }
 
+        [Obsolete("Please use OriginDate property")]
         public DateTime? RestartTime { get; set; }
         public string Comment { get; private set; }
     }

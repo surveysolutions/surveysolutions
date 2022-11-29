@@ -5,17 +5,13 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class AnswersRemoved : QuestionsPassiveEvent
     {
+        [Obsolete("Please use OriginDate property")]
         public DateTime? RemoveTime { get; set; }
         public Guid? UserId { get; set; }
 
         public AnswersRemoved(Guid? userId, Identity[] questions, DateTimeOffset originDate)
             : base(questions, originDate)
         {
-            if (originDate != default(DateTimeOffset))
-            {
-                this.RemoveTime = originDate.UtcDateTime;
-            }
-
             UserId = userId;
         }
     }
