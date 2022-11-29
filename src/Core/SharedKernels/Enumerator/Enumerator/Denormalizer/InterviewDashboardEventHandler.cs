@@ -354,20 +354,20 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
             if (evnt.Payload.Status == InterviewStatus.Completed)
             {
-                interviewView.CompletedDateTime = evnt.Payload.UtcTime ?? evnt.EventTimeStamp;
+                interviewView.CompletedDateTime = evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.UtcTime ?? evnt.EventTimeStamp;
             }
 
             if (evnt.Payload.Status == InterviewStatus.RejectedBySupervisor ||
                 evnt.Payload.Status == InterviewStatus.RejectedByHeadquarters)
             {
-                interviewView.RejectedDateTime = evnt.Payload.UtcTime ?? evnt.EventTimeStamp;
+                interviewView.RejectedDateTime = evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.UtcTime ?? evnt.EventTimeStamp;
                 interviewView.LastInterviewerOrSupervisorComment = evnt.Payload.Comment;
                 interviewView.CanBeDeleted = false;
             }
 
             if (evnt.Payload.Status == InterviewStatus.ApprovedBySupervisor)
             {
-                interviewView.ApprovedDateTimeUtc = evnt.Payload.UtcTime;
+                interviewView.ApprovedDateTimeUtc = evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.UtcTime;
             }
             
             interviewView.ReceivedByInterviewerAtUtc = null;
@@ -596,7 +596,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 interviewView.ResponsibleId = @event.Payload.InterviewerId.Value;
             }
 
-            interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;
+            interviewView.InterviewerAssignedDateTime = @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AssignTime;
             interviewView.ReceivedByInterviewerAtUtc = null;
 
             this.interviewViewRepository.Store(interviewView);
@@ -609,7 +609,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 return;
 
             interviewView.ResponsibleId = @event.Payload.SupervisorId;
-            interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;
+            interviewView.InterviewerAssignedDateTime = @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AssignTime;
             this.interviewViewRepository.Store(interviewView);
         }
 
