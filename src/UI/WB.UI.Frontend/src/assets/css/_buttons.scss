@@ -1,463 +1,576 @@
 @use "sass:math";
 
-.btn{
-	font: 12px/14px $trebuchet_bold;
-	text-transform: uppercase;
+.btn {
+    font: 12px/14px $trebuchet_bold;
+    text-transform: uppercase;
     letter-spacing: 0.13em;
     @include transition(background, 0.2s);
     word-break: break-word;
-	&:disabled, &.disabled{
-		border-color: #d7d7d7 !important;	
-		color: $gray_light !important;
-		cursor: not-allowed;
-		@include stripe-gradient(#d7d7d7, #fff);
-		&.btn-clear{
-			background: none;
-			border-color: transparent !important;
-		}
-		&:hover, &:focus{
-			border-color: #d7d7d7;
-			outline: none;
-			box-shadow: none !important;
-		}
-	}
-	&.resolve-comments {
-		padding: 9px 0;
-		margin-top: 10px;
-	}
-	&.show-resolved-comments {
-		padding: 9px 0;
-		margin-bottom: 10px;
-		color: $gray_text;
-	}
+
+    &:disabled,
+    &.disabled {
+        border-color: #d7d7d7 !important;
+        color: $gray_light !important;
+        cursor: not-allowed;
+        @include stripe-gradient(#d7d7d7, #fff);
+
+        &.btn-clear {
+            background: none;
+            border-color: transparent !important;
+        }
+
+        &:hover,
+        &:focus {
+            border-color: #d7d7d7;
+            outline: none;
+            box-shadow: none !important;
+        }
+    }
+
+    &.resolve-comments {
+        padding: 9px 0;
+        margin-top: 10px;
+    }
+
+    &.show-resolved-comments {
+        padding: 9px 0;
+        margin-bottom: 10px;
+        color: $gray_text;
+    }
 }
-a.disabled{
-	pointer-events: none;
-	cursor: not-allowed;
-	&.btn{
-		background-color: $gray-highlighting;
-	}
+
+a.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+
+    &.btn {
+        background-color: $gray-highlighting;
+    }
 }
-.btn-link{
-	@extend %gray-uppercase;
-	color: $blue;
-	&::hover, &::focus{
-		text-decoration: none;
-		color: darken($blue, 15%);
-	}
-	&:disabled, &.disabled{
-		border: transparent;
-		background: none;
-	}
+
+.btn-link {
+    @extend %gray-uppercase;
+    color: $blue;
+
+    &::hover,
+    &::focus {
+        text-decoration: none;
+        color: darken($blue, 15%);
+    }
+
+    &:disabled,
+    &.disabled {
+        border: transparent;
+        background: none;
+    }
 }
-.foldback-button{
-	display: none;
-	@include size($width-foldback-button, $height-foldback-button);
-	cursor: pointer;
-	@include absolute(5px, 0, null, null);
-	border-radius: 4px;
-	z-index: 3;
-	@extend .add-transition;
-	&:hover, &:focus{
-	    span.arrow{
-	    	background-color: rgba(0, 0, 0, 1);
-	    }
-	    .glyphicon{
-	    	color: rgba(0, 0, 0, 1);
-		}
-	}
-	span.arrow{
-		display: inline-block;
-		@include size(20px, 2px); 
-		background-color: rgba(0, 0, 0, 0.5);
-		@include absolute((($height-foldback-button)*0.5 + 5px), 10px);
-		@include rotate(45deg);
-		&:first-of-type{
-			@include rotate(-45deg);
-			top: math.div($height-foldback-button, 3);
-		}
-	}
-	.glyphicon{
-		display: none;
-		color: rgba(0, 0, 0, 0.5);
-		font-size: 18px;
-		top: math.div($height-foldback-button, 3);
-		left: 10px;
-	}
+
+.foldback-button {
+    display: none;
+    @include size($width-foldback-button, $height-foldback-button);
+    cursor: pointer;
+    @include absolute(5px, 0, null, null);
+    border-radius: 4px;
+    z-index: 3;
+    @extend .add-transition;
+
+    &:hover,
+    &:focus {
+        span.arrow {
+            background-color: rgba(0, 0, 0, 1);
+        }
+
+        .glyphicon {
+            color: rgba(0, 0, 0, 1);
+        }
+    }
+
+    span.arrow {
+        display: inline-block;
+        @include size(20px, 2px);
+        background-color: rgba(0, 0, 0, 0.5);
+        @include absolute((($height-foldback-button)*0.5 + 5px), 10px);
+        @include rotate(45deg);
+
+        &:first-of-type {
+            @include rotate(-45deg);
+            top: math.div($height-foldback-button, 3);
+        }
+    }
+
+    .glyphicon {
+        display: none;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 18px;
+        top: math.div($height-foldback-button, 3);
+        left: 10px;
+    }
 }
-.humburger-foldback-button{
-	border-radius: 4px;
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
-	@include absolute(5px, 0, null, null);
-	display: block;
-	@include size($width-foldback-button, $height-foldback-button);
-	cursor: pointer;
-	z-index: 3;
-	@extend .add-transition;
-	&:before, &:after{
-		content: "";
-		display: block;
-		@include size(22px, 2px); 
-		@include absolute(((42px)*0.5 + 4px), 10px);
-		@include rotate(45deg);
-		background-color: rgba(63,63,63, 0.5);
-	}
-	span{
-		display: block;
-		@include size(22px, 2px); 
-		background-color: rgba(63,63,63, 0.5);
-		@include absolute(((42px)*0.5), null, null, 10px);
-		visibility: hidden;
-	}
-	&:after{
-		@include rotate(-45deg);
-		top: 10px;
-	}
-	&:hover, &:focus, &:active{
-		span{
-			background-color: rgba(63,63,63, 1);
-		}
-		&:before, &:after{
-			background-color: rgba(63,63,63, 1);
-		}
-	}
+
+.humburger-foldback-button {
+    border-radius: 4px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    @include absolute(5px, 0, null, null);
+    display: block;
+    @include size($width-foldback-button, $height-foldback-button);
+    cursor: pointer;
+    z-index: 3;
+    @extend .add-transition;
+
+    &:before,
+    &:after {
+        content: "";
+        display: block;
+        @include size(22px, 2px);
+        @include absolute(((42px)*0.5 + 4px), 10px);
+        @include rotate(45deg);
+        background-color: rgba(63, 63, 63, 0.5);
+    }
+
+    span {
+        display: block;
+        @include size(22px, 2px);
+        background-color: rgba(63, 63, 63, 0.5);
+        @include absolute(((42px)*0.5), null, null, 10px);
+        visibility: hidden;
+    }
+
+    &:after {
+        @include rotate(-45deg);
+        top: 10px;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+        span {
+            background-color: rgba(63, 63, 63, 1);
+        }
+
+        &:before,
+        &:after {
+            background-color: rgba(63, 63, 63, 1);
+        }
+    }
 }
-@media (max-width: $screen-sm-min){
-	.humburger-foldback-button{
-		&:before, &:after{
-			right: 2px;
-			@include rotate(-45deg);
-		}
-		&:after{
-			@include rotate(45deg);
-		}
-	}
+
+@media (max-width: $screen-sm-min) {
+    .humburger-foldback-button {
+
+        &:before,
+        &:after {
+            right: 2px;
+            @include rotate(-45deg);
+        }
+
+        &:after {
+            @include rotate(45deg);
+        }
+    }
 }
-.btn-default{
-	&.btn-gray{
-		color: $white;
-		padding: 12px;
-		background-color: $gray_light;
-		border: none;
-		&:hover, &:focus{
-			border: none;
-			background-color: darken($gray_light, 10%);
-		}
-	}
-	&.btn-post-comment{
-		@extend .add-transition;
-		padding: 12px;
-		background-color: #fff;
-		color: $gray_light;
-		border-color: $gray_form;
-		border-radius: 5px;
-		&:hover, &:focus, &:active, &.comment-added{
-			color: $blue;
-			border-color: $blue;
-			background-color: transparent;
-		}
-		&:active{
-			background-color: #dfeaf4;
-			box-shadow: none;
-		}
-	}
+
+.btn-default {
+    &.btn-gray {
+        color: $white;
+        padding: 12px;
+        background-color: $gray_light;
+        border: none;
+
+        &:hover,
+        &:focus {
+            border: none;
+            background-color: darken($gray_light, 10%);
+        }
+    }
+
+    &.btn-post-comment {
+        @extend .add-transition;
+        padding: 12px;
+        background-color: #fff;
+        color: $gray_light;
+        border-color: $gray_form;
+        border-radius: 5px;
+
+        &:hover,
+        &:focus,
+        &:active,
+        &.comment-added {
+            color: $blue;
+            border-color: $blue;
+            background-color: transparent;
+        }
+
+        &:active {
+            background-color: #dfeaf4;
+            box-shadow: none;
+        }
+    }
 }
-.comment .input-group .input-group-btn{
-	padding-left: 5px;
+
+.comment .input-group .input-group-btn {
+    padding-left: 5px;
 }
+
 .input-group .input-group-btn {
-	.btn.btn-post-comment{
-		@extend .add-transition;
-		padding: 12px;
-		color: $gray_light;
-		background-color: #fff;
-		border-color: $gray_form;
-		border-radius: 5px;
-		border-left: 1px solid $gray_form;
-		&:hover, &:focus, &:active, &.comment-added{
-			color: $blue;
-			border-color: $blue;
-			background-color: #fff;
-		}
-		&:active{
-			background-color: #dfeaf4;
-			box-shadow: none;
-		}
-		&:disabled{
-			@include stripe-gradient($gray_form, #fff);
-		}
-	}
+    .btn.btn-post-comment {
+        @extend .add-transition;
+        padding: 12px;
+        color: $gray_light;
+        background-color: #fff;
+        border-color: $gray_form;
+        border-radius: 5px;
+        border-left: 1px solid $gray_form;
+
+        &:hover,
+        &:focus,
+        &:active,
+        &.comment-added {
+            color: $blue;
+            border-color: $blue;
+            background-color: #fff;
+        }
+
+        &:active {
+            background-color: #dfeaf4;
+            box-shadow: none;
+        }
+
+        &:disabled {
+            @include stripe-gradient($gray_form, #fff);
+        }
+    }
 }
-.back-link{
+
+.back-link {
     text-transform: uppercase;
-	font: 12.5px/14px $trebuchet_bold;
+    font: 12.5px/14px $trebuchet_bold;
     letter-spacing: 0.13em;
     display: inline-block;
 }
-#hidden-links{
+
+#hidden-links {
     display: none;
 }
-.cancel{
-	border: none;
-	$cross-height: 24px;
-	@include cancel($cross-height);
+
+.cancel {
+    border: none;
+    $cross-height: 24px;
+    @include cancel($cross-height);
 }
-.button-flag{
-	display: inline-block;
-    @include size(19px, 22px); 
+
+.button-flag {
+    display: inline-block;
+    @include size(19px, 22px);
     @include image-2x("#{$assetsPath}/img/flags2k.png", 75px, 22px);
     background: transparent url("#{$assetsPath}/img/flags.png") no-repeat;
     background-size: 75px 22px;
-    background-position: -38px 0;  
-	border: none;
-	outline: none;
-	&:hover, &:focus{
-		background-position: -57px 0;
-	}
+    background-position: -38px 0;
+    border: none;
+    outline: none;
+
+    &:hover,
+    &:focus {
+        background-position: -57px 0;
+    }
 }
-.reject{
-	border-width: 3px;
-	border-color: $red_error;
-	padding-top: 8px;
-	padding-bottom: 8px;
-	background-color: #fff;
-	color: $red_error;
-	&:focus,
-	&.focus,
-	&:hover {
-	    color: darken($red_error, 10%);
-	    border-color: darken($red_error, 10%);
-	}
+
+.reject {
+    border-width: 3px;
+    border-color: $red_error;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background-color: #fff;
+    color: $red_error;
+
+    &:focus,
+    &.focus,
+    &:hover {
+        color: darken($red_error, 10%);
+        border-color: darken($red_error, 10%);
+    }
 }
-.btn-clear{
-	@include clear();
+
+.btn-clear {
+    @include clear();
 }
-.answered{
-	& > .btn-clear{
-		@extend %visibility-visible;
-	}
-	.wrapper-dynamic{
-		.btn-clear{
-			@extend %visibility-visible;
-		}
-	}
+
+.answered {
+    &>.btn-clear {
+        @extend %visibility-visible;
+    }
+
+    .wrapper-dynamic {
+        .btn-clear {
+            @extend %visibility-visible;
+        }
+    }
 }
+
 .marl {
     margin-left: 10px;
 }
-.btn-action-questionnaire{
-	background-color: $white;
-	border-color: transparent;
-	color: $gray_light;
-	border-radius: 5px;
-	text-transform: none;
-	letter-spacing: 0.5px;
-	font: 14px/18px Arial, sans-serif;
-	font-style: italic;
-	&:hover, &:focus, &:active{
-		background-color: $gray-super-light;
-		border-color: darken($gray_light, 10%);
-		color: darken($gray_light, 20%);
-	}
+
+.btn-action-questionnaire {
+    background-color: $white;
+    border-color: transparent;
+    color: $gray_light;
+    border-radius: 5px;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    font: 14px/18px Arial, sans-serif;
+    font-style: italic;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: $gray-super-light;
+        border-color: darken($gray_light, 10%);
+        color: darken($gray_light, 20%);
+    }
 }
-.btn-plus{
-	@include cancel(14px);
-	@include opacity(1);
-		&:before, &:after{
-			@extend .add-transition;
-	        @include rotate(0deg);
-	        top: 0;
-	    }
-	    &:after{
-	        top: -2px;
-	    }
-	&.collapsed{
-	    &:after{
-	        @include rotate(90deg);
-	    }
-	}
+
+.btn-plus {
+    @include cancel(14px);
+    @include opacity(1);
+
+    &:before,
+    &:after {
+        @extend .add-transition;
+        @include rotate(0deg);
+        top: 0;
+    }
+
+    &:after {
+        top: -2px;
+    }
+
+    &.collapsed {
+        &:after {
+            @include rotate(90deg);
+        }
+    }
 }
-.btn-roster-section{
-	letter-spacing: normal;
-	font: 14px/16px "RobotoBold";
-	width: 100%;
-	text-transform: none;
-	padding: 11px 15px;
-	text-align: left;
-	white-space: normal;
+
+.btn-roster-section {
+    letter-spacing: normal;
+    font: 14px/16px "RobotoBold";
+    width: 100%;
+    text-transform: none;
+    padding: 11px 15px;
+    text-align: left;
+    white-space: normal;
 }
-.btn-back{
-	&:before{
-		content: "";
-		display: block;
-		float: left;
-		@include size(22.5px, 33.75px);
-		margin-right: 15px;
-	}
-	span{
-		display: table-cell;
-		vertical-align: middle;
-	}
-	display: table;
-	padding-left: 15px;
-	background-color: transparent;
-	border-width: 3px;
-	border-radius: 4px;
-	font: 14px/16px $trebuchet_bold;
-	letter-spacing: 0.05em;
-    text-transform: uppercase;  
-	&.btn-success{
-		@include btn-back-questionnaire ($green, "back-to-parrent-1-no-animation-2.png");	
-	}
-	&.btn-danger{
-		@include btn-back-questionnaire (#f05a26, "back-to-parrent-1-no-animation-3.png");
-	}
-	&.btn-primary{
-		@include btn-back-questionnaire ($blue, "back-to-parrent-1-no-animation-1.png");
-	}
-	&.btn-success,
-	&.btn-primary,
-	&.btn-danger{
-		&.disabled{
-			@include btn-back-questionnaire (transparent, "back-to-parrent-1-no-animation-4.png");
-		}
-	}
+
+.btn-back {
+    &:before {
+        content: "";
+        display: block;
+        float: left;
+        @include size(22.5px, 33.75px);
+        margin-right: 15px;
+    }
+
+    span {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    display: table;
+    padding-left: 15px;
+    background-color: transparent;
+    border-width: 3px;
+    border-radius: 4px;
+    font: 14px/16px $trebuchet_bold;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    &.btn-success {
+        @include btn-back-questionnaire ($green, "back-to-parrent-1-no-animation-2.png");
+    }
+
+    &.btn-danger {
+        @include btn-back-questionnaire (#f05a26, "back-to-parrent-1-no-animation-3.png");
+    }
+
+    &.btn-primary {
+        @include btn-back-questionnaire ($blue, "back-to-parrent-1-no-animation-1.png");
+    }
+
+    &.btn-success,
+    &.btn-primary,
+    &.btn-danger {
+        &.disabled {
+            @include btn-back-questionnaire (transparent, "back-to-parrent-1-no-animation-4.png");
+        }
+    }
 }
-.section-blocker{
-	border: none;
-	margin: 0;
-	padding: 0;
-	@include absolute(0, 0, 0, 0);
-	width: 100%;
-	height: 100%;
-	background-color: transparent;
-	z-index: 2;
+
+.section-blocker {
+    border: none;
+    margin: 0;
+    padding: 0;
+    @include absolute(0, 0, 0, 0);
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    z-index: 2;
 }
-.btn-looks-like-link{
-	padding: 0;
-	text-transform: none;
-	font: 16px/18px Arial, sans-serif;
-	letter-spacing: normal;
-	&:hover, &:focus, &:active{
-		text-decoration: underline;
-	}
+
+.btn-looks-like-link {
+    padding: 0;
+    text-transform: none;
+    font: 16px/18px Arial, sans-serif;
+    letter-spacing: normal;
+
+    &:hover,
+    &:focus,
+    &:active {
+        text-decoration: underline;
+    }
 }
-.btn-strips{
-	border-radius: 0;
-	display: block;
-	padding: 0;
-	background-color: transparent;
-	@include square(16px);
-	position: relative;
-	border: none;
-	span{
-		display: block;
-		height: 100%;
-		width: 2px;
-		background-color: $blue;
-		position: absolute;
-		top: 0;
-		left: calc(50% - 1px);
-	}
-	&:before, &:after{
-		content: "";
-		display: block;
-		@include absolute(0, 0);
-		height: 100%;
-		width: 2px;
-		background-color: $blue;
-	}
-	&:after{
-		right: auto;
-		left: 0;
-	}
-	span, &:before, &:after{
-		@include opacity(0.5);
-		@extend .add-transition;
-	}
-	&:hover, &:focus, &:active{
-		span, &:before, &:after{
-		@include opacity(1);
-		}
-	}
+
+.btn-strips {
+    border-radius: 0;
+    display: block;
+    padding: 0;
+    background-color: transparent;
+    @include square(16px);
+    position: relative;
+    border: none;
+
+    span {
+        display: block;
+        height: 100%;
+        width: 2px;
+        background-color: $blue;
+        position: absolute;
+        top: 0;
+        left: calc(50% - 1px);
+    }
+
+    &:before,
+    &:after {
+        content: "";
+        display: block;
+        @include absolute(0, 0);
+        height: 100%;
+        width: 2px;
+        background-color: $blue;
+    }
+
+    &:after {
+        right: auto;
+        left: 0;
+    }
+
+    span,
+    &:before,
+    &:after {
+        @include opacity(0.5);
+        @extend .add-transition;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+
+        span,
+        &:before,
+        &:after {
+            @include opacity(1);
+        }
+    }
 }
-.btn-history{
-	background-color: #fff;
-	@include square(36px);
-	border-color: $gray_light;
-	border-width: 2px;
-	border-radius: 100%;
-	padding: 0;
-	position: relative;
-	&:after{
-		@include absolute(5px, 9px);
-		content: "";
-		display: block;
-		width: 15px;
-		height: 10px;
-		@include rotate(45deg);
-		border-bottom: 2px solid $gray_light;
-		border-right: 2px solid $gray_light;
-	}
-	&:active{
-		&:after{
-			@include rotate(90deg);
-			right: 5px;
-		}
-	}
-	&:hover, &:focus, &:active{
-		background-color: darken(#fff, 10%);
-	    border-color: darken($gray_light, 10%);
-	}
+
+.btn-history {
+    background-color: #fff;
+    @include square(36px);
+    border-color: $gray_light;
+    border-width: 2px;
+    border-radius: 100%;
+    padding: 0;
+    position: relative;
+
+    &:after {
+        @include absolute(5px, 9px);
+        content: "";
+        display: block;
+        width: 15px;
+        height: 10px;
+        @include rotate(45deg);
+        border-bottom: 2px solid $gray_light;
+        border-right: 2px solid $gray_light;
+    }
+
+    &:active {
+        &:after {
+            @include rotate(90deg);
+            right: 5px;
+        }
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: darken(#fff, 10%);
+        border-color: darken($gray_light, 10%);
+    }
 }
-.get-mobile-app{
-	@extend .add-transition;
+
+.get-mobile-app {
+    @extend .add-transition;
     width: 248px;
-	height: 85px;
+    height: 105px;
     margin-bottom: 25px;
     @extend %uppercase-font;
     text-decoration: none;
     color: $gray_text;
     text-decoration: none;
-    padding: 10px 27px 10px 85px;
+    padding: 5px 27px 10px 85px;
     text-align: left;
     border-radius: 10px;
-	border: 2px solid $gray_form;
+    border: 2px solid $gray_form;
     display: block;
-    &:hover, &:focus{
+
+    &:hover,
+    &:focus {
         text-decoration: none;
-		border-color: $gray_light;
-		color: #000;
-    }   
-    span{
+        border-color: $gray_light;
+        color: #000;
+    }
+
+    span {
         display: block;
-		letter-spacing: 0.05em;
-        &.version{
+        letter-spacing: 0.05em;
+
+        &.version {
             text-transform: none;
-			font-style: italic;
+            font-style: italic;
             margin-top: 5px;
             color: $gray_text;
         }
     }
 }
 
-.get-interviewer-app{
-    background:  url("#{$assetsPath}/img/HQ-login-mobile-get-button-logo.png") no-repeat;
+.get-interviewer-app {
+    background: url("#{$assetsPath}/img/HQ-login-mobile-get-button-logo.png") no-repeat;
     background-size: 55px;
     background-position: 15px 13px;
     @extend .get-mobile-app;
-	
-	span{
+
+    span {
         margin-top: 10px;
     }
 }
-.get-supervisor-app{
-    background:  url("#{$assetsPath}/img/HQ-login-supervisor-get-button-logo.png") no-repeat;
+
+.get-supervisor-app {
+    background: url("#{$assetsPath}/img/HQ-login-supervisor-get-button-logo.png") no-repeat;
     background-size: 55px;
     background-position: 15px 13px;
     @extend .get-mobile-app;
 }
+
 .btn-horizontal-hamburger {
     display: inline-block;
     position: relative;
@@ -474,33 +587,41 @@ a.disabled{
     border-radius: 100%;
     background-color: rgba(0, 0, 0, 0.85);
     -webkit-transition: background 0.3s linear 0s;
-	transition: background 0.3s linear 0s;
-	&:before, &:after{
-		content: "";
-		display: block;
-		position: relative;
-		left: -8px;
-		width: 5px;
-		height: 5px;
-		border-radius: 100%;
-		background-color: rgba(0, 0, 0, 0.85);
-		-webkit-transition: background 0.3s linear 0s;
-		transition: background 0.3s linear 0s;
-	}
-	&:after{
-		left: 8px;
-    	top: -5px;
-	}
+    transition: background 0.3s linear 0s;
+
+    &:before,
+    &:after {
+        content: "";
+        display: block;
+        position: relative;
+        left: -8px;
+        width: 5px;
+        height: 5px;
+        border-radius: 100%;
+        background-color: rgba(0, 0, 0, 0.85);
+        -webkit-transition: background 0.3s linear 0s;
+        transition: background 0.3s linear 0s;
+    }
+
+    &:after {
+        left: 8px;
+        top: -5px;
+    }
 }
-.gray-link-underline{
-	color: $gray_light;
-	text-decoration: underline;
-	&:hover,&:focus,&:active{
-		text-decoration: none;
-		color: $gray_light;
-	}
+
+.gray-link-underline {
+    color: $gray_light;
+    text-decoration: underline;
+
+    &:hover,
+    &:focus,
+    &:active {
+        text-decoration: none;
+        color: $gray_light;
+    }
 }
-.btn-turn-off{
-	border: 2px solid #FD8900;
-	color: #FD8900;
+
+.btn-turn-off {
+    border: 2px solid #FD8900;
+    color: #FD8900;
 }
