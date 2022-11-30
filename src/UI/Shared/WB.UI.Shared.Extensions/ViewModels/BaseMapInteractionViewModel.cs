@@ -302,19 +302,19 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
         {
-            if (this.MapView != null)
+            if (this.MapView != null && this.MapView.MapScale != Double.NaN)
                 await this.MapView.SetViewpointRotationAsync(0);
         });
 
         public IMvxAsyncCommand ZoomMapIn => new MvxAsyncCommand(async () =>
         {
-            if (this.MapView != null)
+            if (this.MapView != null && this.MapView.MapScale != Double.NaN)
                 await this.MapView.SetViewpointScaleAsync(this.MapView.MapScale / 1.3);
         });
 
         public IMvxAsyncCommand ZoomMapOut => new MvxAsyncCommand(async () =>
         {
-            if (this.MapView != null)
+            if (this.MapView != null && this.MapView.MapScale != Double.NaN)
                 await this.MapView.SetViewpointScaleAsync(this.MapView.MapScale * 1.3);
         });
 
