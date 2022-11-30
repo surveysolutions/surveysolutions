@@ -52,8 +52,8 @@ a.disabled {
     @extend %gray-uppercase;
     color: $blue;
 
-    &::hover,
-    &::focus {
+    &:hover,
+    &:focus {
         text-decoration: none;
         color: darken($blue, 15%);
     }
@@ -521,7 +521,6 @@ a.disabled {
 .get-mobile-app {
     @extend .add-transition;
     width: 248px;
-    height: 105px;
     margin-bottom: 25px;
     @extend %uppercase-font;
     text-decoration: none;
