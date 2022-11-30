@@ -247,6 +247,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == selectedMapToLoad);
             if (existingMap == null) return;
+
+            if (this.SelectedMap == selectedMapToLoad) return;
             
             var baseMap = await mapUtilityService.GetBaseMap(existingMap);
             if (baseMap == null) return;
