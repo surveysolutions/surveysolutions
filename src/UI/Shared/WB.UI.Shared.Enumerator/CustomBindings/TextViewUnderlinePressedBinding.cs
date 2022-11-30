@@ -36,7 +36,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 OnTouch);
         }
 
-        private void OnTouch(object sender, Android.Views.View.TouchEventArgs e)
+        private void OnTouch(object sender, TextView.TouchEventArgs e)
         {
             if (e.Event?.Action == MotionEventActions.Down)
             {

@@ -14,7 +14,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
         public void Release()
         {
             Player = null; // call inside Release
-            View.Player = null;
+            
+            if (View != null)
+                View.Player = null;
         }
         
         public SimpleExoPlayer Player

@@ -47,7 +47,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             || eventPayload is VariablesDisabled
             || eventPayload is VariablesEnabled 
             || eventPayload is VariablesChanged
-            || eventPayload is SubstitutionTitlesChanged;
+            || eventPayload is SubstitutionTitlesChanged
+            || eventPayload is StaticTextsDeclaredPlausible
+            || eventPayload is StaticTextsDeclaredImplausible
+            || eventPayload is AnswersDeclaredPlausible
+            || eventPayload is AnswersDeclaredImplausible;
 
         private static bool IsFromLastCompletion(CommittedEvent committedEvent, Guid lastCompletionCommitId)
             => committedEvent.CommitId == lastCompletionCommitId;
