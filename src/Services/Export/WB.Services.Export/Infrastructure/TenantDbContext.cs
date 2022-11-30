@@ -226,7 +226,7 @@ namespace WB.Services.Export.Infrastructure
                 }
 
                 // move metadata tables in end of list, to remove last
-                var metadataTable = $@".""metaadata""";
+                var metadataTable = $@".""metadata""";
                 tablesToDelete = tablesToDelete.Where(tableName => !tableName.EndsWith(metadataTable))
                     .Concat(tablesToDelete.Where(tableName => tableName.EndsWith(metadataTable)))
                     .ToList();
