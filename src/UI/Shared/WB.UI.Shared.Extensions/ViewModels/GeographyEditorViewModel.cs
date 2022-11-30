@@ -181,15 +181,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
             var geometryWebMercator = result != null
                 ? GeometryEngine.Project(result, SpatialReferences.WebMercator)
                 : null;
+            var coordinates = GeometryHelper.GetProjectedCoordinates(geometryWebMercator);
             var resultArea = new AreaEditorResult()
             {
                 Geometry = geometryWebMercator?.ToJson(),
                 MapName = this.SelectedMap,
-                Coordinates = GeometryHelper.GetProjectedCoordinates(result),
+                Coordinates = coordinates,
                 Area = GeometryHelper.GetGeometryArea(geometryWebMercator),
                 Length = GeometryHelper.GetGeometryLength(geometryWebMercator),
                 DistanceToEditor = distanceToEditor,
-                NumberOfPoints = GeometryHelper.GetGeometryPointsCount(geometryWebMercator),
+                NumberOfPoints = coordinates.Length,
                 RequestedAccuracy = RequestedAccuracy,
                 RequestedFrequency = RequestedFrequency
             };
