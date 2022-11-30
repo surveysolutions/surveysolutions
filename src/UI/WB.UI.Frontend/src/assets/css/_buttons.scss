@@ -521,6 +521,7 @@ a.disabled {
 .get-mobile-app {
     @extend .add-transition;
     width: 248px;
+    min-height: 85px;
     margin-bottom: 25px;
     @extend %uppercase-font;
     text-decoration: none;
