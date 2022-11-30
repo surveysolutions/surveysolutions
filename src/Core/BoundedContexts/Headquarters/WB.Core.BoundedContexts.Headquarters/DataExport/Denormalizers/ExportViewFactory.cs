@@ -252,11 +252,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             exportedHeaderItem.ColumnValues = new int[columnCount];
             exportedHeaderItem.ColumnHeaders = new List<HeaderColumn>();
 
-            CategoriesItem[] options = null;
+            CategoriesItem[] reusableOptions = null;
             var multi = question as IMultyOptionsQuestion;
             if (multi != null && multi.CategoriesId.HasValue)
             {
-                options = reusableCategoriesStorage.GetOptions(id, multi.CategoriesId.Value).ToArray();
+                reusableOptions = reusableCategoriesStorage.GetOptions(id, multi.CategoriesId.Value).ToArray();
             }
 
 
@@ -266,7 +266,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 if (!IsQuestionLinked(question) && multi != null)
                 {
                     var columnValue = multi.CategoriesId.HasValue 
-                        ? options[i].Id
+                        ? reusableOptions[i].Id
                         : int.Parse(question.Answers[i].AnswerValue);
               
                     headerColumn.Name = string.Format(GeneratedTitleExportFormat,
@@ -289,7 +289,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                         var optionText = multi?.IsFilteredCombobox ?? false
                             ? i.ToString()
                             : multi?.CategoriesId.HasValue ?? false
-                                ? options[i].Text
+                                ? reusableOptions[i].Text
                                 : question.Answers[i].AnswerText;
 
                         headerColumn.Title = $"{questionLabel}:{optionText}";
