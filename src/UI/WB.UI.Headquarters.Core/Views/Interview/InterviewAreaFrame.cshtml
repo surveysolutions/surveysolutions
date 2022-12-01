@@ -123,9 +123,7 @@
                     return polyGraphic;
                 }
                 
-                var geometryJson = @Html.Raw(Model.AreaAnswer.Geometry);
-                var polyGraphic = getPolyGraphic(geometryJson, false)
-                var areas = [polyGraphic]
+                var areas = [];
                 
                 var neighbours = [
                 @foreach (var neighbour in Model.Neighbors)
@@ -179,6 +177,10 @@
                     spatialReference: polyGraphic.geometry.spatialReference
                 });
 
+                let geometryJson = @Html.Raw(Model.AreaAnswer.Geometry);
+                let polyGraphic = getPolyGraphic(geometryJson, false);
+                areas.push(polyGraphic);
+                
                 view.graphics.addMany(areas);
 
                 var taxLotExtent = view.graphics.items[0].geometry;
