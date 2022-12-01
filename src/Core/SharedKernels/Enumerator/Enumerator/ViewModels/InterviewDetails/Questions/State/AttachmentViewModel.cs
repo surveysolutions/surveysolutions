@@ -205,10 +205,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 isDestroyed = true;
 
-                //should be released through the binding
-                this.Video?.Release();
-                this.Audio?.Release();
-                
                 this.ContentPath = null;
                 this.Image = null;
             }

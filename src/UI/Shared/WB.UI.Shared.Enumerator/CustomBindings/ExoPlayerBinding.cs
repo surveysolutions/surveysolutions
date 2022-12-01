@@ -46,10 +46,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             base.Dispose(isDisposing);
         }
 
-        protected override void SetValueToView(PlayerView view, IMediaAttachment value)
+        protected override void SetValueToView(PlayerView view, IMediaAttachment media)
         {
-            var media = value as MediaAttachment;
-
             // exit if there is no content path of file not exists
             if (media == null 
                 || string.IsNullOrWhiteSpace(media.ContentPath) 
@@ -59,30 +57,38 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             }
 
             // we don't want to rebind same player on same view
-            if (media.View == view && media.Player != null && media.Player == view.Player) return;
-
-            if (view.Player != null)
-            {
-                metadataEventSubscription?.Dispose();
-                metadataEventSubscription = null;
-                
-                view.Player.Stop();
-                view.Player.Release();
-                view.Player.Dispose();
-                view.Player = null;
-            }
+            var mediaId = view.Player?.CurrentMediaItem?.MediaId;
+            if (mediaId != null && media.ContentPath == mediaId) return;
 
             var dataSourceFactory = new DefaultDataSourceFactory(
                 view.Context, Util.GetUserAgent(view.Context, "ExoPlayerInfo")
             );
 
             var uri = Uri.FromFile(new File(media.ContentPath));
-
+            var mediaItem = MediaItem.FromUri(uri);
+            mediaItem.MediaId = media.ContentPath;
             var mediaSourceFactory = new ProgressiveMediaSource.Factory(dataSourceFactory, new DefaultExtractorsFactory());
-            var mediaSource = mediaSourceFactory.CreateMediaSource(MediaItem.FromUri(uri));
+            var mediaSource = mediaSourceFactory.CreateMediaSource(mediaItem);
 
-            SimpleExoPlayer.Builder exoPlayer = new SimpleExoPlayer.Builder(view.Context);
-            var simpleExoPlayer = exoPlayer.Build();
+            SimpleExoPlayer simpleExoPlayer = view.Player as SimpleExoPlayer;
+            
+            if (simpleExoPlayer == null)
+            {
+                metadataEventSubscription?.Dispose();
+                metadataEventSubscription = null;
+                
+                SimpleExoPlayer.Builder exoPlayerBuilder = new SimpleExoPlayer.Builder(view.Context);
+                simpleExoPlayer = exoPlayerBuilder.Build();
+                
+                view.Player = simpleExoPlayer;
+            }
+            else
+            {
+                var currentMediaItem = simpleExoPlayer.CurrentMediaItem;
+                simpleExoPlayer.RemoveMediaItem(0);
+                currentMediaItem?.Dispose();
+            }
+
             simpleExoPlayer.SetMediaSource(mediaSource);
             simpleExoPlayer.Prepare();
 
@@ -92,9 +98,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 this.HandleVideoFrameMetadata);
 
             simpleExoPlayer.SeekTo(1);
-            view.Player = simpleExoPlayer;
-            media.Player = simpleExoPlayer;
-            media.View = view;
         }
 
         private async void HandleVideoFrameMetadata(object sender, VideoFrameMetadataEventArgs args)
