@@ -9,6 +9,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -88,6 +89,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly ISystemLog auditLog;
         private readonly IWebInterviewEmailRenderer emailRenderer;
         private readonly IExportFactory exportFactory;
+        private readonly ILogger<AdminSettingsController> logger;
 
         public AdminSettingsController(
             IPlainKeyValueStorage<GlobalNotice> appSettingsStorage,
@@ -99,7 +101,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             ISystemLog auditLog, 
             ISystemLogViewFactory systemLogViewFactory,
             IWebInterviewEmailRenderer emailRenderer,
-            IExportFactory exportFactory)
+            IExportFactory exportFactory,
+            ILogger<AdminSettingsController> logger)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
             this.interviewerSettingsStorage = interviewerSettingsStorage ?? throw new ArgumentNullException(nameof(interviewerSettingsStorage));
@@ -113,6 +116,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.auditLog = auditLog;
             this.emailRenderer = emailRenderer;
             this.exportFactory = exportFactory;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -299,6 +303,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
             catch (EmailServiceException e)
             {
+                logger.LogError(e, "Error when send test email to {Email}", model.Email);
                 return StatusCode((int)e.StatusCode, new
                 {
                     Success = false,
