@@ -94,6 +94,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Workspaces;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
@@ -1939,7 +1940,8 @@ namespace WB.Tests.Abc.TestFactories
                 fileSystemAccessor.Object,
                 Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire),
                 new RosterStructureService(),
-                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
+                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
+                 Mock.Of<IReusableCategoriesStorage>());
             return exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(Guid.NewGuid(), 1));
         }
 
