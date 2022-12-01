@@ -181,7 +181,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             var geometryWebMercator = result != null
                 ? GeometryEngine.Project(result, SpatialReferences.WebMercator)
                 : null;
-            var coordinates = GeometryHelper.GetProjectedCoordinates(geometryWebMercator);
+            string coordinates = GeometryHelper.GetProjectedCoordinates(geometryWebMercator, out var pointsCount);
             var resultArea = new AreaEditorResult()
             {
                 Geometry = geometryWebMercator?.ToJson(),
@@ -190,7 +190,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 Area = GeometryHelper.GetGeometryArea(geometryWebMercator),
                 Length = GeometryHelper.GetGeometryLength(geometryWebMercator),
                 DistanceToEditor = distanceToEditor,
-                NumberOfPoints = coordinates.Length,
+                NumberOfPoints = pointsCount,
                 RequestedAccuracy = RequestedAccuracy,
                 RequestedFrequency = RequestedFrequency
             };
