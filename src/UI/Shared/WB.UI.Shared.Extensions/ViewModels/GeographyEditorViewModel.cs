@@ -504,7 +504,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 StartButtonVisible = true;
                 try
                 {
-                    await locationDataSource.StartAsync();
+                    await locationDataSource.StartAsync().ConfigureAwait(false);
                     if (locationDataSource.Status == LocationDataSourceStatus.Started)
                     {
                         this.MapView.LocationDisplay.DataSource = locationDataSource;
@@ -534,7 +534,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                                          && !this.MapView.Map.SpatialReference.IsEqual(Geometry.SpatialReference))
                     Geometry = GeometryEngine.Project(Geometry, this.MapView.Map.SpatialReference);
                 
-                await SetViewpointToGeometry(this.Geometry);
+                await SetViewpointToGeometry(this.Geometry).ConfigureAwait(false);
                 
                 switch (this.Geometry.GeometryType)
                 {
