@@ -65,7 +65,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public override void Prepare(GeographyEditorViewModelArgs parameter)
         {
-            this.MapName = parameter.MapName;
+            this.MapName = parameter.MapNameForGivenAnswer;
             this.Title = parameter.Title;
             this.RequestedGeometryType = parameter.RequestedGeometryType ?? GeometryType.Polygon;
             this.RequestedAccuracy = parameter.RequestedAccuracy;

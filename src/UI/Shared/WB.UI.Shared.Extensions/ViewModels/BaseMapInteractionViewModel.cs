@@ -205,13 +205,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public async Task MapControlCreatedAsync()
         {
+            await this.Map.LoadAsync().ConfigureAwait(false);
+            
             if (this.Map.LoadStatus != LoadStatus.FailedToLoad)
             {
                 await UpdateBaseMap(this.SelectedMap).ConfigureAwait(false);
                 await OnMapLoaded().ConfigureAwait(false);
-
-                //if (AvailableShapefiles.Count == 1)
-                //    await LoadShapefile.ExecuteAsync().ConfigureAwait(false);
             }
         }
 
