@@ -184,7 +184,7 @@
                 
                 view.graphics.addMany(areas);
 
-                let taxLotExtent = view.graphics.items[0].geometry;
+                let taxLotExtent = polyGraphic.geometry;
 
                 if (taxLotExtent.extent !== null && taxLotExtent.extent !== undefined) {
                     let displayExtent = taxLotExtent.extent.clone()
