@@ -729,7 +729,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     new Graphic(bufferGeometryPlanar, positionCandidateOverlayBufferFillSymbol);
                 positionCandidateOverlay.Graphics.Add(planarBufferGraphic);
                 positionCandidateOverlay.Graphics.Add(new Graphic(lastPositionProjected, new TextSymbol(
-                    $"{e.HorizontalAccuracy:N2}", Color.Blue, 16, HorizontalAlignment.Center,
+                    $"{e.HorizontalAccuracy:N2}", isAccurate ? Color.Chartreuse : Color.Yellow, 16, HorizontalAlignment.Justify,
                     VerticalAlignment.Baseline)));
             }
 
@@ -993,17 +993,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         switch (geometry)
                         {
                             case Polygon polygon:
-                                var polygonStart = polygon?.Parts != null ? polygon?.Parts.First()?.StartPoint : null;
+                                var polygonStart = polygon?.Parts is { Count: > 0 }? polygon?.Parts.First()?.StartPoint : null;
                                 if(polygonStart != null)
                                     await this.MapView.SetViewpointCenterAsync(polygonStart).ConfigureAwait(false);
                                 break;
                             case Polyline polyline:
-                                var polylineStart = polyline?.Parts != null ? polyline?.Parts.First()?.StartPoint : null;
+                                var polylineStart = polyline?.Parts is { Count: > 0 }? polyline?.Parts.First()?.StartPoint : null;
                                 if(polylineStart != null)
                                     await this.MapView.SetViewpointCenterAsync(polylineStart).ConfigureAwait(false);
                                 break;
                             case Multipoint multipoint:
-                                var multipointStart = multipoint?.Points != null ? multipoint?.Points.First() : null ;
+                                var multipointStart = multipoint?.Points is { Count: > 0 }? multipoint?.Points.First() : null ;
                                 if(multipointStart != null)
                                     await this.MapView.SetViewpointCenterAsync(multipointStart).ConfigureAwait(false);
                                 break;
