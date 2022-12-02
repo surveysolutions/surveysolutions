@@ -730,7 +730,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 positionCandidateOverlay.Graphics.Add(planarBufferGraphic);
                 positionCandidateOverlay.Graphics.Add(new Graphic(lastPositionProjected, new TextSymbol(
                     $"{e.HorizontalAccuracy:N2}", isAccurate ? Color.Chartreuse : Color.Yellow, 16, HorizontalAlignment.Justify,
-                    VerticalAlignment.Baseline)));
+                    VerticalAlignment.Baseline){HaloColor = Color.Blue, HaloWidth = 1}));
             }
 
             if(!isAccurate) return;
