@@ -170,20 +170,20 @@
                     messageDiv.innerHTML = message;
                     messageDiv.style.display = 'block';
                 }
-                
-                var view = new MapView({
-                    container: "viewDiv",
-                    map: map,
-                    spatialReference: polyGraphic.geometry.spatialReference
-                });
 
                 let geometryJson = @Html.Raw(Model.AreaAnswer.Geometry);
                 let polyGraphic = getPolyGraphic(geometryJson, false);
                 areas.push(polyGraphic);
                 
+                let view = new MapView({
+                    container: "viewDiv",
+                    map: map,
+                    spatialReference: polyGraphic.geometry.spatialReference
+                });
+                
                 view.graphics.addMany(areas);
 
-                var taxLotExtent = view.graphics.items[0].geometry;
+                let taxLotExtent = view.graphics.items[0].geometry;
 
                 if (taxLotExtent.extent !== null && taxLotExtent.extent !== undefined) {
                     let displayExtent = taxLotExtent.extent.clone()
