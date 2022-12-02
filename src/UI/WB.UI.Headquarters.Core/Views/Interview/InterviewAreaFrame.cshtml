@@ -124,6 +124,9 @@
                 }
                 
                 var areas = [];
+
+                let geometryJson = @Html.Raw(Model.AreaAnswer.Geometry);
+                let polyGraphic = getPolyGraphic(geometryJson, false);
                 
                 var neighbours = [
                 @foreach (var neighbour in Model.Neighbors)
@@ -171,8 +174,6 @@
                     messageDiv.style.display = 'block';
                 }
 
-                let geometryJson = @Html.Raw(Model.AreaAnswer.Geometry);
-                let polyGraphic = getPolyGraphic(geometryJson, false);
                 areas.push(polyGraphic);
                 
                 let view = new MapView({
