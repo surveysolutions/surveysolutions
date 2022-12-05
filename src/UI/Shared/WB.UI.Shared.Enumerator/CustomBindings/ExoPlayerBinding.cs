@@ -1,7 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using AndroidX.ConstraintLayout.Helper.Widget;
 using Com.Google.Android.Exoplayer2;
 using Com.Google.Android.Exoplayer2.Extractor;
 using Com.Google.Android.Exoplayer2.Source;
+using Com.Google.Android.Exoplayer2.Trackselection;
 using Com.Google.Android.Exoplayer2.UI;
 using Com.Google.Android.Exoplayer2.Upstream;
 using Com.Google.Android.Exoplayer2.Util;
@@ -13,6 +19,7 @@ using MvvmCross.Binding;
 using MvvmCross.WeakSubscription;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.UI.Shared.Enumerator.CustomBindings.Models;
+using Console = System.Console;
 using Uri = Android.Net.Uri;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
@@ -37,8 +44,13 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 
                 if (Target?.Player != null)
                 {
-                    Target.Player.Release();
-                    Target.Player.Dispose();
+                    try
+                    {
+                        Target.Player.Release();
+                        Target.Player.Dispose();
+                    }
+                    catch (ObjectDisposedException) { }
+                    
                     Target.Player = null;
                 }
             }
