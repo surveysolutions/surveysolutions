@@ -9,5 +9,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
     public class MediaAttachment : IMediaAttachment
     {
         public string ContentPath { get; set; }
+        
+        public SimpleExoPlayer Player { get; set; }
+
+        public void Dispose()
+        {
+            Player?.Release();
+            Player?.Dispose();
+            Player = null;
+        }
     }
 }

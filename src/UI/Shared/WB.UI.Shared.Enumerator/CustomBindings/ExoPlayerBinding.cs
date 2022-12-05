@@ -55,7 +55,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             {
                 return;
             }
-
+            
             // we don't want to rebind same player on same view
             var mediaId = view.Player?.CurrentMediaItem?.MediaId;
             if (mediaId != null && media.ContentPath == mediaId) return;
@@ -81,9 +81,15 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 simpleExoPlayer = exoPlayerBuilder.Build();
                 
                 view.Player = simpleExoPlayer;
+                
+                if (media is MediaAttachment mediaAttachment)
+                    mediaAttachment.Player = simpleExoPlayer;
             }
             else
             {
+                //simpleExoPlayer.Stop();
+                //simpleExoPlayer.Release();
+                
                 var currentMediaItem = simpleExoPlayer.CurrentMediaItem;
                 simpleExoPlayer.RemoveMediaItem(0);
                 currentMediaItem?.Dispose();
