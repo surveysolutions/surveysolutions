@@ -46,6 +46,7 @@ namespace WB.Tests.Abc.TestFactories
         internal class MediaAttachment : IMediaAttachment
         {
             public string ContentPath { get; set; }
+            public void Dispose() { }
         }
 
         public AttachmentViewModel AttachmentViewModel(
