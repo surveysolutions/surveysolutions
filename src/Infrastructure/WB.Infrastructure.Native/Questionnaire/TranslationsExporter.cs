@@ -4,10 +4,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using SixLabors.Fonts;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -44,7 +46,11 @@ namespace WB.Infrastructure.Native.Questionnaire
         
         private byte[] GetExcelFileContentEEPlus(QuestionnaireDocument questionnaire, ITranslation translation, ICategories categoriesService)
         {
-            using (XLWorkbook excelPackage = new XLWorkbook())
+            //non windows fonts
+            var firstFont = SystemFonts.Collection.Families.First();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            
+            using (XLWorkbook excelPackage = new XLWorkbook(loadOptions))
             {
                 var textsToTranslateGroupedBySheets = GetTranslatedTexts(questionnaire, translation, categoriesService)
                     .OrderByDescending(x => x.Sheet)
