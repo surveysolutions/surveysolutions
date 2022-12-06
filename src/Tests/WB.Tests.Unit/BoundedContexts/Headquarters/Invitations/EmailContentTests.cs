@@ -70,8 +70,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             emailContent.RenderInterviewData(interview, questionnaire);
 
             Assert.That(emailContent.MainText.Contains("your answer answer "), Is.True);
-            Assert.That(emailContent.MainText.Contains("barcode <img src='data:image/png;base64,/9j/"), Is.True);
-            Assert.That(emailContent.MainText.Contains("qrcode <img src='data:image/png;base64,/9j/"), Is.True);
+            Assert.That(emailContent.MainText.Contains("barcode <img src='data:image/jpeg;base64,/9j/"), Is.True);
+            Assert.That(emailContent.MainText.Contains("qrcode <img src='data:image/jpeg;base64,/9j/"), Is.True);
         }
 
         [Test]
