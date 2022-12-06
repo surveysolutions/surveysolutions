@@ -14,7 +14,7 @@
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Anemonis.AspNetCore.RequestDecompression" Version="1.10.0" />
+    <PackageReference Include="Anemonis.AspNetCore.RequestDecompression" Version="1.14.0" />
     <PackageReference Include="AntiXSS.NetStandard" Version="0.1.125" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
@@ -60,7 +60,7 @@
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
 
     <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="6.0.3" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.3" />
