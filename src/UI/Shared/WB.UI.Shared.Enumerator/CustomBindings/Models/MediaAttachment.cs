@@ -17,7 +17,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
             {
                 player?.Release();
             }
-            catch (ObjectDisposedException e)
+            catch (ObjectDisposedException)
             {
             }
             
