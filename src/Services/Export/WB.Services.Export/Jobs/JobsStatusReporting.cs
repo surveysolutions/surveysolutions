@@ -86,8 +86,10 @@ namespace WB.Services.Export.Jobs
             DataExportFormat? exportType, InterviewStatus? interviewStatus, string? questionnaireIdentity,
             DataExportJobStatus? exportStatus, bool? hasFile, int? limit, int? offset)
         {
-            var allProcesses = await this.dataExportProcessesService.GetAllProcessesAsync(false);
-                
+            var allProcesses = 
+                (await this.dataExportProcessesService.GetAllProcessesAsync(false))
+                .OrderByDescending(x => x.ProcessId);
+            
             var allViews = new List<DataExportProcessView>();
             foreach (var process in allProcesses)
             {
@@ -98,12 +100,13 @@ namespace WB.Services.Export.Jobs
             }
 
             var filteredViews = allViews.AsEnumerable();
+            
             if (offset.HasValue)
                 filteredViews = filteredViews.Skip(offset.Value);
             if (limit.HasValue)
                 filteredViews = filteredViews.Take(limit.Value);
 
-            return filteredViews.OrderByDescending(x => x.Id);
+            return filteredViews;
         }
 
         private bool IsInFilter(DataExportProcessView process, DataExportFormat? exportType,
