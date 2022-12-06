@@ -73,11 +73,13 @@
     <PackageReference Include="Quartz" Version="3.2.4" />
     <PackageReference Include="refit" Version="6.3.2" />
     <PackageReference Include="Sendgrid" Version="9.22.0" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.3" />
+    <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0" />
     <PackageReference Include="SuperclusterBox" Version="0.1.18" />
     <PackageReference Include="MigraDocCore.DocumentObjectModel" Version="0.1.1" />
     <PackageReference Include="MigraDocCore.Rendering" Version="0.1.1" />
     <PackageReference Include="PdfSharpCore" Version="1.2.16" />
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.3" />
     <PackageReference Include="ZXing.Net" Version="0.16.8" />
   </ItemGroup>
 
