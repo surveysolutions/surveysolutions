@@ -53,7 +53,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.3" />
 
 
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     <PackageReference Include="VueCliMiddleware" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
