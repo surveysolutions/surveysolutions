@@ -554,7 +554,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             if (IsCoverPageSupported)
             {
-                innerDocument.Children
+                return innerDocument.Children
                     .First(c => c.PublicKey == CoverPageSectionId)
                     .Children
                     .Where(e => e is IQuestion)
