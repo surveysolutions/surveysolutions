@@ -29,7 +29,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
             get => player;
             set
             {
-                player?.Release();
+                try
+                {
+                    player?.Release();
+                }
+                catch (ObjectDisposedException)
+                {
+                }
+                
                 //player?.Dispose();
                 player = value;
             }
