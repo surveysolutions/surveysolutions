@@ -1,16 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
-using NHibernate.Criterion;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Tests.Abc;
 using WB.UI.Designer.Controllers;
 
@@ -50,7 +45,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
         [NUnit.Framework.Test]
         public void should_add_one_option_with_expected_value() =>
-            view.Options.Single().Title.Should().Equals("First");
+            view.Options.Single().Title.Equals("First");
 
         [NUnit.Framework.OneTimeTearDown]
         public void cleanup()
