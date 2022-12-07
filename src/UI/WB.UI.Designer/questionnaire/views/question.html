@@ -86,7 +86,11 @@
             </div>
         </div>
 
-        <div class="form-group enabling-group" ng-hide="!doesQuestionSupportEnablementConditions()">
+        <div class="form-group" ng-show="(doesQuestionSupportEnablementConditions() && !((showEnablingConditions===undefined && initialQuestion.enablementCondition) || showEnablingConditions))">
+            <button type="button" class="btn btn-lg btn-link" ng-click="showEnablingConditions=true" ng-i18next="AddEnablingCondition"></button>
+        </div>
+
+        <div class="form-group enabling-group" ng-show="(doesQuestionSupportEnablementConditions() && ((showEnablingConditions===undefined && initialQuestion.enablementCondition) || showEnablingConditions))">
             <div class="enabling-group-marker" ng-class="{'hide-if-disabled': activeQuestion.hideIfDisabled}"></div>
             <label for="edit-question-enablement-condition">{{'EnablingCondition' | i18next}} <help key="conditionExpression" /></label>
 
