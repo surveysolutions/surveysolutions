@@ -41,7 +41,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (Input!= null && ModelState.IsValid)
+            if (Input?.Email != null && ModelState.IsValid)
             {
                 var user = await userManager.FindByNameAsync(Input.Email)
                     ?? await userManager.FindByEmailAsync(Input.Email);

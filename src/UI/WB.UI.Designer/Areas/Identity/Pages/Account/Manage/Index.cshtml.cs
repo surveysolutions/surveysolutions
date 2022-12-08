@@ -86,7 +86,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
             }
 
             var user = await userManager.GetUserAsync(User);
-            if (user == null)
+            if (user?.UserName == null)
             {
                 return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
             }

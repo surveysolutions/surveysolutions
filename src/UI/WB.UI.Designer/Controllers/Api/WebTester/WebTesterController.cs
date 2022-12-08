@@ -102,6 +102,9 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             try
             {
                 var composeQuestionnaire = this.questionnairePackageComposer.ComposeQuestionnaire(questionnaireId.Value);
+                if(composeQuestionnaire == null)
+                    if (questionnaireId == null) return NotFound();
+                
                 return Ok(this.serializer.Serialize(composeQuestionnaire));
             }
             catch (ComposeException )

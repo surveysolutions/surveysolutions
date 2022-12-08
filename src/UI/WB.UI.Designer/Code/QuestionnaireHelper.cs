@@ -121,7 +121,7 @@ namespace WB.UI.Designer.Code
         public IPagedList<QuestionnaireListViewModel> GetSharedQuestionnairesByViewer(DesignerIdentityUser viewer, bool isAdmin, Guid? folderId)
             => this.GetQuestionnaires(viewer: viewer, isAdmin: isAdmin, type: QuestionnairesType.Shared, folderId: folderId);
 
-        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, string viewerName,
+        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, string? viewerName,
             bool isAdmin, bool showPublic, string? location)
             => new QuestionnaireListViewModel
             {

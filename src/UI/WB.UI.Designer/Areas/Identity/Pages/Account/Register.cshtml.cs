@@ -107,7 +107,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     CreatedAtUtc = DateTime.UtcNow
                 };
-                var result = await userManager.CreateAsync(user, Input.Password);
+                var result = await userManager.CreateAsync(user, Input.Password ?? string.Empty);
                 if (result.Succeeded)
                 {
                     logger.LogInformation("User created a new account with password.");

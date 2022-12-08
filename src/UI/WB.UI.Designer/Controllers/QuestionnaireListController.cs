@@ -38,13 +38,23 @@ namespace WB.UI.Designer.Controllers
         [Route("questionnaire/my")]
         [AntiForgeryFilter]
         public async Task<ActionResult> My(int? p, string sb, int? so, string f)
-            => this.View(await this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, type: QuestionnairesType.My, folderId: null));
+        {
+            var account = await this.accountRepository.FindByIdAsync(User.GetId().FormatGuid());
+            if (account == null) return NotFound();
+            
+            return this.View(this.GetQuestionnaires(account, pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f,
+                type: QuestionnairesType.My, folderId: null));
+        }
 
         [AntiForgeryFilter]
         [Route("questionnaire/public/{id?}")]
         public async Task<ActionResult> Public(int? p, string sb, int? so, string f, Guid? id)
         {
-            var questionnaires = await this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f,
+            var account = await this.accountRepository.FindByIdAsync(User.GetId().FormatGuid());
+            if (account == null) return NotFound();
+            
+            var questionnaires = this.GetQuestionnaires(account, 
+                pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f,
                 type: QuestionnairesType.Public, folderId: id);
 
             var folderPath = publicFoldersStorage.GetFoldersPath(folderId: id);
@@ -68,12 +78,19 @@ namespace WB.UI.Designer.Controllers
         [Route("questionnaire/shared")]
         [AntiForgeryFilter]
         public async Task<ActionResult> Shared(int? p, string sb, int? so, string f)
-            => this.View(await this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, type: QuestionnairesType.Shared, folderId: null));
-
-
-        private async Task<IPagedList<QuestionnaireListViewModel>> GetQuestionnaires(int? pageIndex, string sortBy, int? sortOrder, string searchFor, QuestionnairesType type, Guid? folderId)
         {
             var account = await this.accountRepository.FindByIdAsync(User.GetId().FormatGuid());
+            if (account == null) return NotFound();
+
+            return this.View(this.GetQuestionnaires(account, pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f,
+                type: QuestionnairesType.Shared, folderId: null));
+        }
+
+
+        private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(DesignerIdentityUser viewer, 
+            int? pageIndex, string sortBy, int? sortOrder, string searchFor, QuestionnairesType type, Guid? folderId)
+        {
+            //var account = await this.accountRepository.FindByIdAsync(User.GetId().FormatGuid());
 
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, searchFor: searchFor, folderId: folderId);
 
@@ -83,7 +100,7 @@ namespace WB.UI.Designer.Controllers
                 sortOrder: sortOrder,
                 searchFor: searchFor,
                 folderId: folderId,
-                viewer: account,
+                viewer: viewer,
                 isAdmin: User.IsAdmin(),
                 type: type);
         }
