@@ -140,12 +140,11 @@ namespace WB.UI.Designer.Controllers
                             Title = c.Title,
                             Value = c.Value,
                             AttachmentName = c.AttachmentName
-                            
                         }).ToArray()
                     };
                 }
-                else
-                    errors.AddRange(importResult.Errors);
+                
+                errors.AddRange(importResult.Errors);
             }
             catch (Exception e)
             {
@@ -390,7 +389,7 @@ namespace WB.UI.Designer.Controllers
         {
             if (isCategory)
             {
-                var categoriesFile = this.categoriesService.GetAsExcelFile(id, entityId);
+                var categoriesFile = this.categoriesService.GetAsFile(id, entityId, CategoriesFileType.Excel);
 
                 if (categoriesFile?.Content == null) return NotFound();
 

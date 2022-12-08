@@ -28,13 +28,11 @@ namespace WB.Tests.Unit.Designer.Services
     internal class CategoriesServiceTests
     {
         private static CategoriesService CreateCategoriesService(DesignerDbContext dbContext = null, 
-            IQuestionnaireViewFactory questionnaireStorage = null, 
-            ICategoriesExportService categoriesExportService = null)
+            IQuestionnaireViewFactory questionnaireStorage = null)
         {
             return new CategoriesService(
                 dbContext: dbContext ?? Mock.Of<DesignerDbContext>(),
                 questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
-                categoriesExportService: categoriesExportService ?? Mock.Of<ICategoriesExportService>(), 
                 categoriesExtractFactory: new CategoriesExtractFactory(new CategoriesVerifier()));
         }
 

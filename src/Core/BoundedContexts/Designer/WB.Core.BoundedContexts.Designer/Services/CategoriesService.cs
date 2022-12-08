@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using ClosedXML.Excel;
-using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.DataAccess;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
-using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
@@ -23,17 +17,14 @@ namespace WB.Core.BoundedContexts.Designer.Services
     {
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireViewFactory questionnaireStorage;
-        private readonly ICategoriesExportService categoriesExportService;
         private readonly ICategoriesExtractFactory categoriesExtractFactory;
 
         public CategoriesService(DesignerDbContext dbContext, 
             IQuestionnaireViewFactory questionnaireStorage, 
-            ICategoriesExportService categoriesExportService,
             ICategoriesExtractFactory categoriesExtractFactory)
         {
             this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
-            this.categoriesExportService = categoriesExportService;
             this.categoriesExtractFactory = categoriesExtractFactory;
         }
 
@@ -52,48 +43,12 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
         }
 
-        public byte[] GetTemplateAsExcelFile()
+        public byte[] GetTemplate(CategoriesFileType fileType)
         {
-            using (XLWorkbook excelPackage = new XLWorkbook())
-            {
-                var worksheet = excelPackage.Worksheets.Add("Categories");
-
-                worksheet.Cells("A1").Value = "id";
-                worksheet.Cells("B1").Value = "text";
-                worksheet.Cells("C1").Value = "parentid";
-                worksheet.Cells("D1").Value = "attachmentname";
-
-                void FormatCell(string address)
-                {
-                    var cell = worksheet.Cells(address);
-                    cell.Style.Font.Bold = true;
-                }
-
-                FormatCell("A1");
-                FormatCell("B1");
-                FormatCell("C1");
-                FormatCell("D1");
-
-                using var stream = new MemoryStream();
-                excelPackage.SaveAs(stream);
-                return stream.ToArray();
-            }
+            var extractService = this.categoriesExtractFactory.GetExtractService(fileType);
+            return extractService.GetTemplateFile();
         }
-
-        public CategoriesFile? GetAsExcelFile(QuestionnaireRevision questionnaireId, Guid categoriesId)
-        {
-            var questionnaire = this.questionnaireStorage.Load(questionnaireId);
-            if (questionnaire == null)
-                return null;
-
-            return new CategoriesFile
-            {
-                QuestionnaireTitle = questionnaire.Title,
-                CategoriesName = questionnaire.Source.Categories.FirstOrDefault(x => x.Id == categoriesId)?.Name ?? string.Empty,
-                Content = this.GetExcelFileContentEEPlus(questionnaire.PublicKey, categoriesId)
-            };
-        }
-
+        
         public void DeleteAllByQuestionnaireId(Guid questionnaireId)
         {
             var questionnaire = this.questionnaireStorage.Load(new QuestionnaireRevision(questionnaireId));
@@ -109,10 +64,15 @@ namespace WB.Core.BoundedContexts.Designer.Services
             this.dbContext.SaveChanges();
         }
 
-        private byte[] GetExcelFileContentEEPlus(Guid questionnaireId, Guid categoriesId)
+        public CategoriesFile? GetAsFile(QuestionnaireRevision questionnaireRevision, Guid categoriesId, CategoriesFileType fileType)
         {
+            var questionnaire = this.questionnaireStorage.Load(questionnaireRevision);
+            if (questionnaire == null)
+                return null;
+
             var items = this.dbContext.CategoriesInstances
-                .Where(x => x.QuestionnaireId == questionnaireId && x.CategoriesId == categoriesId)
+                .Where(x => x.QuestionnaireId == questionnaire.PublicKey
+                            && x.CategoriesId == categoriesId)
                 .OrderBy(x => x.SortIndex)
                 .Select(i => new CategoriesItem()
                 {
@@ -121,7 +81,15 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     Text = i.Text,
                     AttachmentName = i.AttachmentName
                 });
-            return categoriesExportService.GetAsExcelFile(items);
+            
+            var extractService = this.categoriesExtractFactory.GetExtractService(fileType);
+            
+            return new CategoriesFile
+            {
+                QuestionnaireTitle = questionnaire.Title,
+                CategoriesName = questionnaire.Source.Categories.FirstOrDefault(x => x.Id == categoriesId)?.Name ?? string.Empty,
+                Content = extractService.GetAsFile(items.ToList())
+            };
         }
 
         public IQueryable<CategoriesItem> GetCategoriesById(Guid questionnaireId, Guid id) =>

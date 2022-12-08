@@ -77,6 +77,8 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IDesignerTranslationService, TranslationsService>();
             registry.Bind<ICategoriesVerifier, CategoriesVerifier>();
             registry.Bind<ICategoriesExtractFactory, CategoriesExtractFactory>();
+            registry.Bind<ExcelCategoriesExtractService, ExcelCategoriesExtractService>();
+            registry.Bind<TsvCategoriesExtractService, TsvCategoriesExtractService>();
             registry.Bind<ICategoriesService, CategoriesService>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();

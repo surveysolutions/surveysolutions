@@ -42,6 +42,7 @@ namespace WB.Tests.Unit.Designer.Services
 
             Assert.That(result.Errors, Has.One.Items);
             Assert.That(result.Errors.First(), Is.EqualTo("No categories for parent cascading question 'parentCombobox' found"));
+            Assert.That(result.ImportedOptions.Count(), Is.EqualTo(0));
         }
 
         [Test]
@@ -72,6 +73,12 @@ namespace WB.Tests.Unit.Designer.Services
             var result = service.ImportOptions("1\tStreet 1\t1".GenerateStream(), questionnaireId.FormatGuid(), questionId);
 
             Assert.That(result.Succeeded, Is.True);
+            Assert.That(result.ImportedOptions.Count(), Is.EqualTo(1));
+            var option = result.ImportedOptions.Single();
+            Assert.That(option.AttachmentName, Is.Null);
+            Assert.That(option.Title, Is.EqualTo("Street 1"));
+            Assert.That(option.ParentValue, Is.EqualTo(1));
+            Assert.That(option.Value, Is.EqualTo(1));
         }
 
         [Test]
@@ -98,6 +105,12 @@ namespace WB.Tests.Unit.Designer.Services
             var result = service.ImportOptions("1\tStreet 1\t1".GenerateStream(), questionnaireId.FormatGuid(), questionId);
 
             Assert.That(result.Succeeded, Is.True);
+            Assert.That(result.ImportedOptions.Count(), Is.EqualTo(1));
+            var option = result.ImportedOptions.Single();
+            Assert.That(option.AttachmentName, Is.Null);
+            Assert.That(option.Title, Is.EqualTo("Street 1"));
+            Assert.That(option.ParentValue, Is.EqualTo(1));
+            Assert.That(option.Value, Is.EqualTo(1));
         }
         
         

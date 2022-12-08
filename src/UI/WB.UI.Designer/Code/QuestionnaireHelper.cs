@@ -242,7 +242,7 @@ namespace WB.UI.Designer.Code
 
             foreach (var categories in questionnaireDocument.Categories)
             {
-                var excelFile = this.categoriesService.GetAsExcelFile(questionnaireRevision, categories.Id);
+                var excelFile = this.categoriesService.GetAsFile(questionnaireRevision, categories.Id, CategoriesFileType.Excel);
                 if (excelFile?.Content == null)
                     continue;
                 zipStream.PutFileEntry($"Categories/{categories.Id.FormatGuid()}.xlsx", excelFile.Content);

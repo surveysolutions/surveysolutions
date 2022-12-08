@@ -48,6 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var importedOptions = new List<QuestionnaireCategoricalOption>();
             
             var cfg = this.CreateCsvConfiguration();
+            cfg.HasHeaderRecord = false;
 
             if (question.CascadeFromQuestionId != null)
             {
@@ -79,38 +80,43 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var importErrors = new List<string>();
 
-            using (var csvReader = new CsvReader(new StreamReader(file), cfg))
+            var streamReader = new StreamReader(file);
+            using (var csvReaderHeader = new CsvReader(streamReader, cfg))
             {
-                csvReader.Read();
-                csvReader.ReadHeader();
+                csvReaderHeader.Context.ReaderConfiguration.HasHeaderRecord = true;
+                csvReaderHeader.Read();
+                csvReaderHeader.ReadHeader();
 
-                var headerRecord = csvReader.Context.HeaderRecord;
-                if (!headerRecord.Contains(IdColumnName) && !headerRecord.Contains(TextColumnName))
-                    csvReader.Configuration.HasHeaderRecord = false;
+                var headerRecord = csvReaderHeader.Context.HeaderRecord;
+                cfg.HasHeaderRecord = headerRecord.Contains(IdColumnName) && headerRecord.Contains(TextColumnName);
 
-                csvReader.Context.Row = 0; // return index after header check
-                
-                while (csvReader.Read())
+                file.Position = 0;
+
+                using (var csvReader = new CsvReader(streamReader, cfg))
                 {
-                    try
+                    while (csvReader.Read())
                     {
-                        importedOptions.Add(csvReader.GetRecord<QuestionnaireCategoricalOption>());
-                    }
-                    catch (MissingFieldException)
-                    {
-                        importErrors.Add(ExceptionMessages.ImportOptions_MissingRequiredColumns);
-                        break;
-                    }
-                    catch (Exception e)
-                    {
-                        if (e.InnerException is CsvReaderException csvReaderException)
-                            importErrors.Add(
-                                $"({ExceptionMessages.Column}: {csvReaderException.ColumnIndex + 1}, " +
-                                $"{ExceptionMessages.Row}: {csvReaderException.RowIndex}) " +
-                                $"{csvReaderException.Message}");
-                        else
-                            importErrors.Add(e.Message);
-                    }
+                        try
+                        {
+                            var option = csvReader.GetRecord<QuestionnaireCategoricalOption>();
+                            importedOptions.Add(option);
+                        }
+                        catch (MissingFieldException)
+                        {
+                            importErrors.Add(ExceptionMessages.ImportOptions_MissingRequiredColumns);
+                            break;
+                        }
+                        catch (Exception e)
+                        {
+                            if (e.InnerException is CsvReaderException csvReaderException)
+                                importErrors.Add(
+                                    $"({ExceptionMessages.Column}: {csvReaderException.ColumnIndex + 1}, " +
+                                    $"{ExceptionMessages.Row}: {csvReaderException.RowIndex}) " +
+                                    $"{csvReaderException.Message}");
+                            else
+                                importErrors.Add(e.Message);
+                        }
+                    } 
                 }
             }
 
@@ -175,6 +181,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         
         private CsvConfiguration CreateCsvConfiguration() => new CsvConfiguration(CultureInfo.InvariantCulture)
         {
+            HeaderValidated = null,
             HasHeaderRecord = true,
             TrimOptions = TrimOptions.Trim,
             IgnoreQuotes = false,

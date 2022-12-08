@@ -3,22 +3,27 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
     internal class TsvCategoriesExtractService : ICategoriesExtractService
     {
         private readonly ICategoriesVerifier verifier;
+        private readonly ICategoricalOptionsImportService categoricalOptionsImportService;
 
-        public TsvCategoriesExtractService(ICategoriesVerifier verifier)
+        public TsvCategoriesExtractService(ICategoriesVerifier verifier,
+            ICategoricalOptionsImportService categoricalOptionsImportService)
         {
             this.verifier = verifier;
+            this.categoricalOptionsImportService = categoricalOptionsImportService;
         }
 
         private static CsvConfiguration CreateCsvConfiguration() => new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -27,7 +32,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
             TrimOptions = TrimOptions.Trim,
             IgnoreQuotes = false,
             Delimiter = "\t"
-
         };
 
         public List<CategoriesRow> Extract(Stream file)
@@ -87,6 +91,55 @@ namespace WB.Core.BoundedContexts.Designer.Services
             return categories;
         }
 
+        public class CategoricalOptionMap: ClassMap<CategoriesItem>
+        {
+            protected CategoricalOptionMap()
+            {
+                Map(m => m.Id).Index(0).Name(CategoriesConstants.IdColumnName);
+                Map(m => m.Text).Index(1).Name(CategoriesConstants.TextColumnName);
+                Map(m => m.AttachmentName).Index(2).Name(CategoriesConstants.AttachmentNameColumnName);
+            }
+        }
+        
+        private class CascadingOptionMap : CategoricalOptionMap
+        {
+            public CascadingOptionMap()
+            {
+                Map(m => m.ParentId).Index(2).Name(CategoriesConstants.ParentIdColumnName);
+                Map(m => m.AttachmentName).Index(3); // change index for cascading
+            }
+        }
+
+        public byte[] GetTemplateFile()
+        {
+            return GetCsvFile(isCascading: true, new List<CategoriesItem>());
+        }
+
+        private static byte[] GetCsvFile(bool isCascading, List<CategoriesItem> options)
+        {
+            var cfg = CreateCsvConfiguration();
+
+            if (isCascading)
+                cfg.RegisterClassMap<CascadingOptionMap>();
+            else
+                cfg.RegisterClassMap<CategoricalOptionMap>();
+
+            var sb = new StringBuilder();
+            using (var csvWriter = new CsvWriter(new StringWriter(sb), cfg))
+            {
+                csvWriter.WriteRecords(options);
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+            return bytes;
+        }
+
+        public byte[] GetAsFile(List<CategoriesItem> items)
+        {
+            var isCascading = items.Any(i => i.ParentId.HasValue);
+            return GetCsvFile(isCascading, items);
+        }
+
         private CategoriesHeaderMap? TryGetHeadersFromFile(List<string>? rowValues)
         {
             if (rowValues == null)
@@ -99,10 +152,10 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
                 switch (rowValue)
                 {
-                    case "text":     headerMap.TextIndex     = i.ToString(); break;
-                    case "id":       headerMap.IdIndex       = i.ToString(); break;
-                    case "parentid": headerMap.ParentIdIndex = i.ToString(); break;
-                    case "attachmentName": headerMap.AttachmentNameIndex = i.ToString(); break;
+                    case CategoriesConstants.TextColumnName:     headerMap.TextIndex     = i.ToString(); break;
+                    case CategoriesConstants.IdColumnName:       headerMap.IdIndex       = i.ToString(); break;
+                    case CategoriesConstants.ParentIdColumnName: headerMap.ParentIdIndex = i.ToString(); break;
+                    case CategoriesConstants.AttachmentNameColumnName: headerMap.AttachmentNameIndex = i.ToString(); break;
                     default:
                         return null;
                 }

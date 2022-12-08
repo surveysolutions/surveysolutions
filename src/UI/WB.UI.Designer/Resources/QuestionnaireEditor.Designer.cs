@@ -3855,6 +3855,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tab (txt).
+        /// </summary>
+        public static string SideBarTranslationGetTemplateLinkTextCsv {
+            get {
+                return ResourceManager.GetString("SideBarTranslationGetTemplateLinkTextCsv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Excel (xlsx).
         /// </summary>
         public static string SideBarTranslationGetTemplateLinkTextXlsx {

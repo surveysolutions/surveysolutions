@@ -45,7 +45,7 @@ public class CategoriesServiceTests
         
         var service = CreateCategoriesService(documentStorage, categoriesDb, categoriesExportService.Object);
 
-        var excelFile = service.GetAsExcelFile(revision, Id.g2);
+        var excelFile = service.GetAsFile(revision, Id.g2, CategoriesFileType.Excel);
         
         categoriesExportService.Verify(m => 
             m.GetAsExcelFile(It.Is<IEnumerable<CategoriesItem>>(list =>
@@ -56,13 +56,11 @@ public class CategoriesServiceTests
     }
 
     private ICategoriesService CreateCategoriesService(IQuestionnaireViewFactory documentStorage,
-        DesignerDbContext designerDbContext,
-        ICategoriesExportService categoriesExportService)
+        DesignerDbContext designerDbContext)
     {
         return new CategoriesService(
             designerDbContext ?? Mock.Of<DesignerDbContext>(),
             documentStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
-            categoriesExportService ?? Mock.Of<ICategoriesExportService>(),
             Mock.Of<ICategoriesExtractFactory>());
     }
 }

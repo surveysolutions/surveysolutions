@@ -53,6 +53,20 @@ class OptionsApi {
         return `/questionnaire/ExportOptions/${questionnaireRev}?${params}`;
     }
 
+    getExportOptionsAsExlsUri(
+        questionnaireRev,
+        entityId,
+        isCategory,
+        isCascading
+    ) {
+        var params = qs({
+            entityId,
+            isCategory,
+            isCascading
+        });
+        return `/questionnaire/ExportOptions/${questionnaireRev}?${params}`;
+    }
+
     async resetOptions() {
         await axios.post('/questionnaire/ResetOptions');
     }

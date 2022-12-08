@@ -319,6 +319,9 @@
   <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
     <value>Excel (xlsx)</value>
   </data>
+  <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+    <value>Tab (txt)</value>
+  </data>
   <data name="SideBarTranslationName" xml:space="preserve">
     <value>translation name</value>
   </data>

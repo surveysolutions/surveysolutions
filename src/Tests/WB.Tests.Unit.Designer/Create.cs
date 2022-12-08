@@ -1873,11 +1873,9 @@ namespace WB.Tests.Unit.Designer
 
         public static ICategoriesService CategoriesService(DesignerDbContext dbContext = null,
             IQuestionnaireViewFactory questionnaireStorage = null,
-            ICategoriesExportService categoriesExportService = null,
             ICategoriesExtractFactory categoriesExtractFactory = null)
             => new CategoriesService(dbContext ?? Mock.Of<DesignerDbContext>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
-                categoriesExportService ?? Mock.Of<ICategoriesExportService>(),
                 categoriesExtractFactory ?? Mock.Of<ICategoriesExtractFactory>());
 
         public static CategoriesRow CategoriesRow(string id, string text, string parentId, int rowId) => new CategoriesRow

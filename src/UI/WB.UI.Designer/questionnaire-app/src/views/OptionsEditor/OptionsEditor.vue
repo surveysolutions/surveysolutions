@@ -100,6 +100,12 @@
                 <v-icon>mdi-download</v-icon>
                 {{ $t('QuestionnaireEditor.Download') }}</a
             >
+            <a
+                :href="exportOptionsAsExlsUri"
+                class="ma-2 v-btn v-size--default"
+            >
+                {{ $t('QuestionnaireEditor.AsExls') }}</a
+            >
         </v-footer>
     </v-container>
 </template>
@@ -195,6 +201,15 @@ export default {
 
         exportOptionsUri() {
             return optionsApi.getExportOptionsUri(
+                this.questionnaireRev,
+                this.id,
+                this.isCategory,
+                this.isCascading
+            );
+        },
+
+        exportOptionsAsExlsUri() {
+            return optionsApi.getExportOptionsAsExlsUri(
                 this.questionnaireRev,
                 this.id,
                 this.isCategory,
