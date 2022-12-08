@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
+using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
 
 namespace WB.UI.WebTester.Infrastructure
 {
@@ -27,7 +28,7 @@ namespace WB.UI.WebTester.Infrastructure
             this.substitutionService = substitutionService;
         }
 
-        public PlainQuestionnaire Translate(PlainQuestionnaire questionnaire, long version, string? language)
+        public PlainQuestionnaire Translate(WebTesterPlainQuestionnaire questionnaire, long version, string? language)
         {
             return translationsCache.GetOrCreate($"{questionnaire.QuestionnaireIdentity}${language}", (entry) =>
             {

@@ -12,5 +12,7 @@ public class WebTesterPlainQuestionnaire : PlainQuestionnaire
     {
     }
     
+    public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
+    
     public bool CanSaveScenario { get; set; }
 }

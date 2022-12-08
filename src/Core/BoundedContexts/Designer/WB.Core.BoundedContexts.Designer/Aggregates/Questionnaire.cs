@@ -851,6 +851,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ? this.GetQuestion(command.QuestionId)?.Answers.ToArray()
                 : ConvertOptionsToAnswers(command.Options);
 
+            if (command.CategoriesId.HasValue)
+                answers = Array.Empty<Answer>();
+            
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
                 command.QuestionId,
@@ -920,6 +923,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ExtractLinkedQuestionValues(command.LinkedToEntityId, out linkedQuestionId, out linkedRosterId);
 
+            if (command.CategoriesId.HasValue)
+                answers = Array.Empty<Answer>();
+            
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(command.QuestionId,
                 QuestionType.SingleOption,

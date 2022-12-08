@@ -123,9 +123,10 @@
                     return polyGraphic;
                 }
                 
-                var geometryJson = @Html.Raw(Model.AreaAnswer.Geometry);
-                var polyGraphic = getPolyGraphic(geometryJson, false)
-                var areas = [polyGraphic]
+                var areas = [];
+
+                let geometryJson = @Html.Raw(Model.AreaAnswer.Geometry);
+                let polyGraphic = getPolyGraphic(geometryJson, false);
                 
                 var neighbours = [
                 @foreach (var neighbour in Model.Neighbors)
@@ -172,16 +173,18 @@
                     messageDiv.innerHTML = message;
                     messageDiv.style.display = 'block';
                 }
+
+                areas.push(polyGraphic);
                 
-                var view = new MapView({
+                let view = new MapView({
                     container: "viewDiv",
                     map: map,
                     spatialReference: polyGraphic.geometry.spatialReference
                 });
-
+                
                 view.graphics.addMany(areas);
 
-                var taxLotExtent = view.graphics.items[0].geometry;
+                let taxLotExtent = polyGraphic.geometry;
 
                 if (taxLotExtent.extent !== null && taxLotExtent.extent !== undefined) {
                     let displayExtent = taxLotExtent.extent.clone()

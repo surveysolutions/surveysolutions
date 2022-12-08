@@ -79,7 +79,7 @@ namespace WB.UI.Shared.Extensions.Services
                     new GeographyEditorViewModelArgs
                     {
                         Geometry = args.Area?.Geometry,
-                        MapName = args.Area?.MapName,
+                        MapNameForGivenAnswer = args.Area?.MapName,
                         RequestedGeometryType = args.GeometryType,
                         RequestedGeometryInputMode = args.RequestedGeometryInputMode,
                         RequestedAccuracy = args.RequestedAccuracy,

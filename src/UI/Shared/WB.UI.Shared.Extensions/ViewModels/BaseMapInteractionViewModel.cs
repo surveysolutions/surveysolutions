@@ -58,6 +58,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
         public abstract Task OnMapLoaded();
         public abstract MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom);
 
+        protected string DefaultMapName = "";
+        
         public override async Task Initialize()
         {
             await base.Initialize();
@@ -72,6 +74,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 if (defaultMap != null)
                 {
                     localMaps.Add(defaultMap);
+                    DefaultMapName = defaultMap.MapName;
                 }
                 
                 if (localMaps.Count == 0)
@@ -86,15 +89,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 if (defaultBaseMap?.BaseLayers.Count > 0 && defaultBaseMap?.BaseLayers[0]?.FullExtent != null)
                     this.Map.MaxExtent = defaultBaseMap.BaseLayers[0].FullExtent;
 
-                var mapToDisplay = GetSelectedMap(this.AvailableMaps);
-                if (mapToDisplay.MapName != defaultMap.MapName)
-                {
-                    var lastBaseMap = await mapUtilityService.GetBaseMap(mapToDisplay).ConfigureAwait(false);
-                    this.Map.Basemap = lastBaseMap;
-                }
-
-                this.SelectedMap = mapToDisplay.MapName;
-                this.FirstLoad = true;
             }
             catch (Exception e)
             {
@@ -205,13 +199,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public async Task MapControlCreatedAsync()
         {
+            await this.Map.LoadAsync().ConfigureAwait(false);
+            
+            var mapToDisplay = GetSelectedMap(this.AvailableMaps);
+            var selectedMapToLoad = mapToDisplay.MapName;
+            this.FirstLoad = true;
+
             if (this.Map.LoadStatus != LoadStatus.FailedToLoad)
             {
-                await UpdateBaseMap(this.SelectedMap).ConfigureAwait(false);
+                await UpdateBaseMap(selectedMapToLoad).ConfigureAwait(false);
                 await OnMapLoaded().ConfigureAwait(false);
-
-                //if (AvailableShapefiles.Count == 1)
-                //    await LoadShapefile.ExecuteAsync().ConfigureAwait(false);
             }
         }
 
@@ -247,12 +244,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == selectedMapToLoad);
             if (existingMap == null) return;
-            
-            var baseMap = await mapUtilityService.GetBaseMap(existingMap);
-            if (baseMap == null) return;
+
+            if (this.SelectedMap != selectedMapToLoad)
+            {
+                var baseMap = await mapUtilityService.GetBaseMap(existingMap);
+                if (baseMap == null) return;
                 
-            this.SelectedMap = selectedMapToLoad;
-            this.Map.Basemap = baseMap;
+                this.SelectedMap = selectedMapToLoad;
+                this.Map.Basemap = baseMap;
+            }
 
             if (this.Map.LoadStatus == LoadStatus.Loaded 
                 && this.Map.Basemap?.BaseLayers.Count > 0 
@@ -302,19 +302,19 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
         {
-            if (this.MapView != null)
+            if (this.MapView != null && this.MapView.MapScale != Double.NaN)
                 await this.MapView.SetViewpointRotationAsync(0);
         });
 
         public IMvxAsyncCommand ZoomMapIn => new MvxAsyncCommand(async () =>
         {
-            if (this.MapView != null)
+            if (this.MapView != null && this.MapView.MapScale != Double.NaN)
                 await this.MapView.SetViewpointScaleAsync(this.MapView.MapScale / 1.3);
         });
 
         public IMvxAsyncCommand ZoomMapOut => new MvxAsyncCommand(async () =>
         {
-            if (this.MapView != null)
+            if (this.MapView != null && this.MapView.MapScale != Double.NaN)
                 await this.MapView.SetViewpointScaleAsync(this.MapView.MapScale * 1.3);
         });
 

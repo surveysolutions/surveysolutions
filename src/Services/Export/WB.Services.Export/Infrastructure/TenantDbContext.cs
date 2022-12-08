@@ -14,6 +14,7 @@ using WB.Services.Export.InterviewDataStorage.EfMappings;
 using WB.Services.Infrastructure.Storage;
 using WB.Services.Infrastructure.Tenant;
 using Microsoft.Extensions.Logging;
+using WB.Services.Export.InterviewDataStorage.Services;
 
 namespace WB.Services.Export.Infrastructure
 {
@@ -36,6 +37,10 @@ namespace WB.Services.Export.Infrastructure
 
         private readonly IOptions<DbConnectionSettings> connectionSettings;
         private readonly ILogger<TenantDbContext>? logger;
+        
+        // there is no single table in DB to acquire lock on,
+        // so using some pretty random value for advisory lock
+        public const long SchemaChangesLock = -12312312312;
 
         public TenantDbContext(ITenantContext tenantContext,
             IOptions<DbConnectionSettings> connectionSettings,
@@ -195,48 +200,63 @@ namespace WB.Services.Export.Infrastructure
 
             logger?.LogInformation("Start drop tenant schema: {Tenant}", tenant);
 
-            var schemas = (await db.QueryAsync<string>(
-                "select nspname from pg_catalog.pg_namespace n " +
-                "join pg_catalog.pg_description d on d.objoid = n.oid " +
-                "where d.description = @tenant",
-                new
-                {
-                    tenant
-                })).ToList();
-
-            foreach (var schema in schemas)
+            try
             {
-                var tables = await db.QueryAsync<string>(
-                    "select tablename from pg_tables where schemaname= @schema",
-                    new { schema });
+                await db.QueryAsync($"select pg_advisory_lock ({SchemaChangesLock})");
+                
+                var schemas = (await db.QueryAsync<string>(
+                    "select nspname from pg_catalog.pg_namespace n " +
+                    "join pg_catalog.pg_description d on d.objoid = n.oid " +
+                    "where d.description = @tenant",
+                    new
+                    {
+                        tenant
+                    })).ToList();
 
-                foreach (var table in tables)
-                {
-                    tablesToDelete.Add($@"""{schema}"".""{table}""");
-                }
-            }
-
-            foreach (var tables in tablesToDelete.Batch(10))
-            {
-                await using var tr = await db.BeginTransactionAsync(cancellationToken);
-                foreach (var table in tables)
-                {
-                    await db.ExecuteAsync($@"drop table if exists {table}");
-                    logger?.LogInformation("Dropped {Table}", table);
-                }
-
-                await tr.CommitAsync(cancellationToken);
-            }
-
-            await using (var tr = await db.BeginTransactionAsync(cancellationToken))
-            {
                 foreach (var schema in schemas)
                 {
-                    await db.ExecuteAsync($@"drop schema if exists ""{schema}""");
-                    logger?.LogInformation("Dropped schema {Schema}", schema);
+                    var tables = await db.QueryAsync<string>(
+                        "select tablename from pg_tables where schemaname= @schema",
+                        new { schema });
+
+                    foreach (var table in tables)
+                    {
+                        tablesToDelete.Add($@"""{schema}"".""{table}""");
+                    }
                 }
 
-                await tr.CommitAsync(cancellationToken);
+                // move metadata tables in end of list, to remove last
+                var metadataTable = $@".""metadata""";
+                tablesToDelete = tablesToDelete.Where(tableName => !tableName.EndsWith(metadataTable))
+                    .Concat(tablesToDelete.Where(tableName => tableName.EndsWith(metadataTable)))
+                    .ToList();
+
+                foreach (var tables in tablesToDelete.Batch(10))
+                {
+                    await using var tr = await db.BeginTransactionAsync(cancellationToken);
+                    foreach (var table in tables)
+                    {
+                        await db.ExecuteAsync($@"drop table if exists {table}");
+                        logger?.LogInformation("Dropped {Table}", table);
+                    }
+
+                    await tr.CommitAsync(cancellationToken);
+                }
+
+                await using (var tr = await db.BeginTransactionAsync(cancellationToken))
+                {
+                    foreach (var schema in schemas)
+                    {
+                        await db.ExecuteAsync($@"drop schema if exists ""{schema}""");
+                        logger?.LogInformation("Dropped schema {Schema}", schema);
+                    }
+
+                    await tr.CommitAsync(cancellationToken);
+                }
+            }
+            finally
+            {
+                await db.QueryAsync($"select pg_advisory_unlock ({SchemaChangesLock})");
             }
         }
 
