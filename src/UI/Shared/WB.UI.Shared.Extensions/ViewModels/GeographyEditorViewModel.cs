@@ -65,7 +65,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public override void Prepare(GeographyEditorViewModelArgs parameter)
         {
-            this.MapName = parameter.MapName;
+            this.MapName = parameter.MapNameForGivenAnswer;
             this.Title = parameter.Title;
             this.RequestedGeometryType = parameter.RequestedGeometryType ?? GeometryType.Polygon;
             this.RequestedAccuracy = parameter.RequestedAccuracy;
@@ -181,15 +181,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
             var geometryWebMercator = result != null
                 ? GeometryEngine.Project(result, SpatialReferences.WebMercator)
                 : null;
+            string coordinates = GeometryHelper.GetProjectedCoordinates(geometryWebMercator, out var pointsCount);
             var resultArea = new AreaEditorResult()
             {
                 Geometry = geometryWebMercator?.ToJson(),
                 MapName = this.SelectedMap,
-                Coordinates = GeometryHelper.GetProjectedCoordinates(result),
+                Coordinates = coordinates,
                 Area = GeometryHelper.GetGeometryArea(geometryWebMercator),
                 Length = GeometryHelper.GetGeometryLength(geometryWebMercator),
                 DistanceToEditor = distanceToEditor,
-                NumberOfPoints = GeometryHelper.GetGeometryPointsCount(geometryWebMercator),
+                NumberOfPoints = pointsCount,
                 RequestedAccuracy = RequestedAccuracy,
                 RequestedFrequency = RequestedFrequency
             };
@@ -503,7 +504,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 StartButtonVisible = true;
                 try
                 {
-                    await locationDataSource.StartAsync();
+                    await locationDataSource.StartAsync().ConfigureAwait(false);
                     if (locationDataSource.Status == LocationDataSourceStatus.Started)
                     {
                         this.MapView.LocationDisplay.DataSource = locationDataSource;
@@ -533,7 +534,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                                          && !this.MapView.Map.SpatialReference.IsEqual(Geometry.SpatialReference))
                     Geometry = GeometryEngine.Project(Geometry, this.MapView.Map.SpatialReference);
                 
-                await SetViewpointToGeometry(this.Geometry);
+                await SetViewpointToGeometry(this.Geometry).ConfigureAwait(false);
                 
                 switch (this.Geometry.GeometryType)
                 {
@@ -728,8 +729,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     new Graphic(bufferGeometryPlanar, positionCandidateOverlayBufferFillSymbol);
                 positionCandidateOverlay.Graphics.Add(planarBufferGraphic);
                 positionCandidateOverlay.Graphics.Add(new Graphic(lastPositionProjected, new TextSymbol(
-                    $"{e.HorizontalAccuracy:N2}", Color.Blue, 16, HorizontalAlignment.Center,
-                    VerticalAlignment.Baseline)));
+                    $"{e.HorizontalAccuracy:N2}", isAccurate ? Color.Chartreuse : Color.Yellow, 16, HorizontalAlignment.Justify,
+                    VerticalAlignment.Baseline){HaloColor = Color.Blue, HaloWidth = 1}));
             }
 
             if(!isAccurate) return;
@@ -992,17 +993,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         switch (geometry)
                         {
                             case Polygon polygon:
-                                var polygonStart = polygon?.Parts != null ? polygon?.Parts.First()?.StartPoint : null;
+                                var polygonStart = polygon?.Parts is { Count: > 0 }? polygon?.Parts.First()?.StartPoint : null;
                                 if(polygonStart != null)
                                     await this.MapView.SetViewpointCenterAsync(polygonStart).ConfigureAwait(false);
                                 break;
                             case Polyline polyline:
-                                var polylineStart = polyline?.Parts != null ? polyline?.Parts.First()?.StartPoint : null;
+                                var polylineStart = polyline?.Parts is { Count: > 0 }? polyline?.Parts.First()?.StartPoint : null;
                                 if(polylineStart != null)
                                     await this.MapView.SetViewpointCenterAsync(polylineStart).ConfigureAwait(false);
                                 break;
                             case Multipoint multipoint:
-                                var multipointStart = multipoint?.Points != null ? multipoint?.Points.First() : null ;
+                                var multipointStart = multipoint?.Points is { Count: > 0 }? multipoint?.Points.First() : null ;
                                 if(multipointStart != null)
                                     await this.MapView.SetViewpointCenterAsync(multipointStart).ConfigureAwait(false);
                                 break;

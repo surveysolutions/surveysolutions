@@ -7,7 +7,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
     public class GeographyEditorViewModelArgs
     {
         public string Geometry { get; set; }
-        public string MapName { get; set; }
+        public string MapNameForGivenAnswer { get; set; }
         public string Title { get; set; }
         public GeometryType? RequestedGeometryType { set; get; }
         public int? RequestedAccuracy { set; get; }
