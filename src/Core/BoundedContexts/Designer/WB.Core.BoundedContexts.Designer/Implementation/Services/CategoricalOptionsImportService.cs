@@ -23,6 +23,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly ICategoriesService categoriesService;
 
+        private const string IdColumnName = "Id";
+        private const string TextColumnName = "Text";
+        private const string AttachmentNameColumnName = "Attachment Name";
+        private const string ParentIdColumnName = "Parent Id";
+        
         public CategoricalOptionsImportService(IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             ICategoriesService categoriesService)
         {
@@ -76,6 +81,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             using (var csvReader = new CsvReader(new StreamReader(file), cfg))
             {
+                csvReader.Read();
+                csvReader.ReadHeader();
+
+                var headerRecord = csvReader.Context.HeaderRecord;
+                if (!headerRecord.Contains(IdColumnName) && !headerRecord.Contains(TextColumnName))
+                    csvReader.Configuration.HasHeaderRecord = false;
+
+                csvReader.Context.Row = 0; // return index after header check
+                
                 while (csvReader.Read())
                 {
                     try
@@ -161,7 +175,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         
         private CsvConfiguration CreateCsvConfiguration() => new CsvConfiguration(CultureInfo.InvariantCulture)
         {
-            HasHeaderRecord = false,
+            HasHeaderRecord = true,
             TrimOptions = TrimOptions.Trim,
             IgnoreQuotes = false,
             Delimiter = "\t",
@@ -178,8 +192,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 var values = allValuesByAllParents?.Values?.FirstOrDefault()?.Select(x => x.value);
                 var nearestParentValues = values == null ? new HashSet<int>() : new HashSet<int>(values);
 
-                Map(m => m.ParentValue).Index(2).TypeConverter(new ConvertToInt32AndCheckParentOptionValueOrThrow(nearestParentValues));
-                
+                Map(m => m.ParentValue)
+                    .Index(2)
+                    .Name(ParentIdColumnName)
+                    .TypeConverter(new ConvertToInt32AndCheckParentOptionValueOrThrow(nearestParentValues));
+
+                Map(m => m.AttachmentName)
+                    .Index(3); // change index for cascading
+
                 Map(m => m.ValueWithParentValues).Ignore().ConvertUsing(x =>
                   {
                       if (!x.TryGetField(1, out string title) || !x.TryGetField(2, out int? parentValue) || !parentValue.HasValue) return null;
@@ -248,10 +268,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             protected CategoricalOptionMap()
             {
-                Map(m => m.Value).Index(0).TypeConverter<ConvertToInt32OrThrowConverter>();
-                Map(m => m.Title).Index(1).TypeConverter<ValidateTitleOrThrowConverter>();
-                Map(m => m.AttachmentName).Index(2).TypeConverter<ValidateAttachmentNameOrThrowConverter>();
-
+                Map(m => m.Value)
+                    .Index(0)
+                    .Name(IdColumnName)
+                    .TypeConverter<ConvertToInt32OrThrowConverter>();
+                Map(m => m.Title)
+                    .Index(1)
+                    .Name(TextColumnName)
+                    .TypeConverter<ValidateTitleOrThrowConverter>();
+                Map(m => m.AttachmentName)
+                    .Index(2)
+                    .Name(AttachmentNameColumnName)
+                    .TypeConverter<ValidateAttachmentNameOrThrowConverter>();
             }
 
             private class ValidateTitleOrThrowConverter : DefaultTypeConverter
