@@ -141,7 +141,7 @@ namespace WB.UI.WebTester.Controllers
         }
 
 
-        private string GetQueryStringValue(string key)
+        private string? GetQueryStringValue(string key)
         {
             return (this.Request.Query.Where(query => query.Key == key).Select(query => query.Value))
                 .FirstOrDefault();
