@@ -99,5 +99,72 @@ namespace WB.Tests.Unit.Designer.Services
 
             Assert.That(result.Succeeded, Is.True);
         }
+        
+        
+        [Test]
+        public void when_ImportOptions_for_categorical_cascading_question_and_parent_question_with_header_then_should_return_success_ImportCategoricalOptionsResult()
+        {
+            // arrange
+            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            var questionId = Guid.Parse("22222222222222222222222222222222");
+            var comboboxQuestionId = Guid.Parse("12345678901234567890123456789012");
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId: questionnaireId,
+                children: new IComposite[]
+                {
+                    Create.SingleOptionQuestion(
+                        questionId: comboboxQuestionId,
+                        isComboBox: true,
+                        variable: "parentCombobox",
+                        answerCodes: new[] {1m, 2m, 3m}),
+                    Create.SingleOptionQuestion(questionId: questionId, cascadeFromQuestionId: comboboxQuestionId),
+                });
+
+            var service = Create.CategoricalOptionsImportService(questionnaire);
+
+            var header = $"{CategoricalOptionsImportService.IdColumnName}\t{CategoricalOptionsImportService.TextColumnName}\t{CategoricalOptionsImportService.ParentIdColumnName}\r\n";
+            // act
+            var result = service.ImportOptions((header + "1\tStreet 1\t2").GenerateStream(), questionnaireId.FormatGuid(), questionId);
+
+            Assert.That(result.Succeeded, Is.True);
+            Assert.That(result.ImportedOptions.Count(), Is.EqualTo(1));
+            var option = result.ImportedOptions.Single();
+            Assert.That(option.AttachmentName, Is.Null);
+            Assert.That(option.Title, Is.EqualTo("Street 1"));
+            Assert.That(option.ParentValue, Is.EqualTo(2));
+            Assert.That(option.Value, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void when_ImportOptions_for_categorical_cascading_question_and_parent_question_with_reordered_header_then_should_return_success_ImportCategoricalOptionsResult()
+        {
+            // arrange
+            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            var questionId = Guid.Parse("22222222222222222222222222222222");
+            var comboboxQuestionId = Guid.Parse("12345678901234567890123456789012");
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId: questionnaireId,
+                children: new IComposite[]
+                {
+                    Create.SingleOptionQuestion(
+                        questionId: comboboxQuestionId,
+                        isComboBox: true,
+                        variable: "parentCombobox",
+                        answerCodes: new[] {1m, 2m, 3m}),
+                    Create.SingleOptionQuestion(questionId: questionId, cascadeFromQuestionId: comboboxQuestionId),
+                });
+
+            var service = Create.CategoricalOptionsImportService(questionnaire);
+
+            var header = $"{CategoricalOptionsImportService.TextColumnName}\t{CategoricalOptionsImportService.IdColumnName}\t{CategoricalOptionsImportService.AttachmentNameColumnName}\t{CategoricalOptionsImportService.ParentIdColumnName}\r\n";
+            // act
+            var result = service.ImportOptions((header + "Street 1\t1\tAttachment Name 1\t2").GenerateStream(), questionnaireId.FormatGuid(), questionId);
+
+            Assert.That(result.Succeeded, Is.True);
+            Assert.That(result.ImportedOptions.Count(), Is.EqualTo(1));
+            var option = result.ImportedOptions.Single();
+            Assert.That(option.AttachmentName, Is.EqualTo("Attachment Name 1"));
+            Assert.That(option.Title, Is.EqualTo("Street 1"));
+            Assert.That(option.ParentValue, Is.EqualTo(2));
+            Assert.That(option.Value, Is.EqualTo(1));
+        }
     }
 }

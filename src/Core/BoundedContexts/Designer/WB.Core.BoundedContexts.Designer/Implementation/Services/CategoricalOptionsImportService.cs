@@ -23,10 +23,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly ICategoriesService categoriesService;
 
-        private const string IdColumnName = "Id";
-        private const string TextColumnName = "Text";
-        private const string AttachmentNameColumnName = "Attachment Name";
-        private const string ParentIdColumnName = "Parent Id";
+        internal const string IdColumnName = "Id";
+        internal const string TextColumnName = "Text";
+        internal const string AttachmentNameColumnName = "Attachment Name";
+        internal const string ParentIdColumnName = "Parent Id";
         
         public CategoricalOptionsImportService(IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             ICategoriesService categoriesService)
