@@ -1766,9 +1766,7 @@ namespace WB.Tests.Unit.Designer
                             document.PublicKey.FormatGuid(),
                             document
                         }
-                    }), categoriesExtractFactory: new CategoriesExtractFactory(
-                    new ExcelCategoriesExtractService(new CategoriesVerifier(), new CategoriesExportService()), 
-                    new TsvCategoriesExtractService(new CategoriesVerifier())));
+                    }), categoriesExtractFactory: CategoriesExtractFactory());
 
         public static ClassificationsStorage ClassificationStorage(
             DesignerDbContext dbContext)
@@ -1899,10 +1897,11 @@ namespace WB.Tests.Unit.Designer
                 SortIndex = sortIndex
             };
 
-        public static ICategoriesExtractFactory CategoriesExtractFactory()
+        public static ICategoriesExtractFactory CategoriesExtractFactory(
+            ICategoriesExportService categoriesExportService = null)
         {
             return new CategoriesExtractFactory(
-                new ExcelCategoriesExtractService(new CategoriesVerifier(), new CategoriesExportService()),
+                new ExcelCategoriesExtractService(new CategoriesVerifier(), categoriesExportService ?? new CategoriesExportService()),
                 new TsvCategoriesExtractService(new CategoriesVerifier()));
         }
     }

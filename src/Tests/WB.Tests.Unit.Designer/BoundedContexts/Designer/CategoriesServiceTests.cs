@@ -43,7 +43,7 @@ public class CategoriesServiceTests
 
         Mock<ICategoriesExportService> categoriesExportService = new Mock<ICategoriesExportService>();
         
-        var service = CreateCategoriesService(documentStorage, categoriesDb);
+        var service = CreateCategoriesService(documentStorage, categoriesDb, categoriesExportService.Object);
 
         var excelFile = service.GetAsFile(revision, Id.g2, CategoriesFileType.Excel);
         
@@ -56,11 +56,11 @@ public class CategoriesServiceTests
     }
 
     private IReusableCategoriesService CreateCategoriesService(IQuestionnaireViewFactory documentStorage,
-        DesignerDbContext designerDbContext)
+        DesignerDbContext designerDbContext, ICategoriesExportService categoriesExportService = null)
     {
         return new ReusableCategoriesService(
             designerDbContext ?? Mock.Of<DesignerDbContext>(),
             documentStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
-            Create.CategoriesExtractFactory());
+            Create.CategoriesExtractFactory(categoriesExportService));
     }
 }

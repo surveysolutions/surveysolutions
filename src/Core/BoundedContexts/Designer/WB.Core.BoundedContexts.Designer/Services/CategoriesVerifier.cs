@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         public void VerifyAll(List<CategoriesRow> rows, CategoriesHeaderMap headers)
         {
             ThrowIfNoCategories(rows);
-            ThrowIfLessThan2Categories(rows);
+            //ThrowIfLessThan2Categories(rows);
             ThrowIfTextLengthMoreThan250(rows, headers);
             ThrowIfParentIdIsEmpty(rows);
             ThrowIfDuplicatedByIdAndParentId(rows, headers);

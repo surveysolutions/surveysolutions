@@ -35,9 +35,7 @@ namespace WB.Tests.Unit.Designer.Services
             return new ReusableCategoriesService(
                 dbContext: dbContext ?? Mock.Of<DesignerDbContext>(),
                 questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
-                categoriesExtractFactory: new CategoriesExtractFactory(
-                    new ExcelCategoriesExtractService(new CategoriesVerifier(), new CategoriesExportService()),
-                    new TsvCategoriesExtractService(new CategoriesVerifier())));
+                categoriesExtractFactory: Create.CategoriesExtractFactory());
         }
 
         private static Stream CreateFileWithHeader(string[][] data, CategoriesFileType type)
