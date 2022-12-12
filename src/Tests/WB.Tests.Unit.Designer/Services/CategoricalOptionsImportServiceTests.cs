@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.Designer.Services
     [TestOf(typeof(CategoricalOptionsImportService))]
     internal class CategoricalOptionsImportServiceTests
     {
+        [Ignore("use different csv parser")]
         [Test]
         public void when_ImportOptions_for_categorical_cascading_question_and_parent_question_with_empty_reusable_categories_then_should_return_failed_ImportCategoricalOptionsResult()
         {
