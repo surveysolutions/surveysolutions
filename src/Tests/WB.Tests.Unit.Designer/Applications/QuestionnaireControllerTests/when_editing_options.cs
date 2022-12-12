@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             controller = CreateQuestionnaireController(
                 categoricalOptionsImportService: Create.CategoricalOptionsImportService(questionnaire));
 
-            stream = GenerateStreamFromString("1\tStreet 1");
+            stream = GenerateStreamFromString("1\tStreet 1\r\n2\tStreet 2");
 
             stream.Position = 0;
             postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream && pf.FileName == "data.csv");
@@ -45,12 +45,12 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
            view.Errors.Count.Should().Be(0);
 
         [NUnit.Framework.Test]
-        public void should_add_one_option() =>
-            view.Options.Length.Should().Be(1);
+        public void should_add_two_option() =>
+            view.Options.Length.Should().Be(2);
 
         [NUnit.Framework.Test]
-        public void should_add_one_option_with_expected_value() =>
-            view.Options.Single().Title.Should().Equals("First");
+        public void should_add_first_option_with_expected_value() =>
+            view.Options.First().Title.Should().Equals("First");
 
         [NUnit.Framework.OneTimeTearDown]
         public void cleanup()

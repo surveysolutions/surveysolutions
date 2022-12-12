@@ -71,11 +71,11 @@ namespace WB.Tests.Unit.Designer.Services
             var service = Create.CategoricalOptionsImportService(questionnaire, categoriesService);
 
             // act
-            var result = service.ImportOptions("1\tStreet 1\t1".GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
+            var result = service.ImportOptions("1\tStreet 1\t1\r\n2\tStreet 2\t2".GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
 
             Assert.That(result.Succeeded, Is.True);
-            Assert.That(result.ImportedOptions.Count(), Is.EqualTo(1));
-            var option = result.ImportedOptions.Single();
+            Assert.That(result.ImportedOptions.Count(), Is.EqualTo(2));
+            var option = result.ImportedOptions.First();
             Assert.That(option.AttachmentName, Is.Null);
             Assert.That(option.Title, Is.EqualTo("Street 1"));
             Assert.That(option.ParentValue, Is.EqualTo(1));
@@ -103,11 +103,11 @@ namespace WB.Tests.Unit.Designer.Services
             var service = Create.CategoricalOptionsImportService(questionnaire);
 
             // act
-            var result = service.ImportOptions("1\tStreet 1\t1".GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
+            var result = service.ImportOptions("1\tStreet 1\t1\r\n2\tStreet 2\t2".GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
 
             Assert.That(result.Succeeded, Is.True);
-            Assert.That(result.ImportedOptions.Count(), Is.EqualTo(1));
-            var option = result.ImportedOptions.Single();
+            Assert.That(result.ImportedOptions.Count(), Is.EqualTo(2));
+            var option = result.ImportedOptions.First();
             Assert.That(option.AttachmentName, Is.Null);
             Assert.That(option.Title, Is.EqualTo("Street 1"));
             Assert.That(option.ParentValue, Is.EqualTo(1));
@@ -137,11 +137,11 @@ namespace WB.Tests.Unit.Designer.Services
 
             var header = $"{CategoriesConstants.IdColumnName}\t{CategoriesConstants.TextColumnName}\t{CategoriesConstants.ParentIdColumnName}\r\n";
             // act
-            var result = service.ImportOptions((header + "1\tStreet 1\t2").GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
+            var result = service.ImportOptions((header + "1\tStreet 1\t2\r\n2\tStreet 2\t2").GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
 
             Assert.That(result.Succeeded, Is.True);
-            Assert.That(result.ImportedOptions.Count(), Is.EqualTo(1));
-            var option = result.ImportedOptions.Single();
+            Assert.That(result.ImportedOptions.Count(), Is.EqualTo(2));
+            var option = result.ImportedOptions.First();
             Assert.That(option.AttachmentName, Is.Null);
             Assert.That(option.Title, Is.EqualTo("Street 1"));
             Assert.That(option.ParentValue, Is.EqualTo(2));
@@ -170,11 +170,11 @@ namespace WB.Tests.Unit.Designer.Services
 
             var header = $"{CategoriesConstants.TextColumnName}\t{CategoriesConstants.IdColumnName}\t{CategoriesConstants.AttachmentNameColumnName}\t{CategoriesConstants.ParentIdColumnName}\r\n";
             // act
-            var result = service.ImportOptions((header + "Street 1\t1\tAttachment Name 1\t2").GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
+            var result = service.ImportOptions((header + "Street 1\t1\tAttachment Name 1\t2\r\nStreet 2\t2\tattach2\t2").GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
 
             Assert.That(result.Succeeded, Is.True);
-            Assert.That(result.ImportedOptions.Count(), Is.EqualTo(1));
-            var option = result.ImportedOptions.Single();
+            Assert.That(result.ImportedOptions.Count(), Is.EqualTo(2));
+            var option = result.ImportedOptions.First();
             Assert.That(option.AttachmentName, Is.EqualTo("Attachment Name 1"));
             Assert.That(option.Title, Is.EqualTo("Street 1"));
             Assert.That(option.ParentValue, Is.EqualTo(2));
