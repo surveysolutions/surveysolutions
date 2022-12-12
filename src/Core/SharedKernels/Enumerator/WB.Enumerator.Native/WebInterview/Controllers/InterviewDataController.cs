@@ -226,8 +226,16 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (statefulInterview == null) return null;
 
             var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity);
-
             var sectionIdentity = Identity.Parse(sectionId);
+
+            if (questionnaire.IsCoverPage(sectionIdentity.Id))
+            {
+                return questionnaire
+                    .GetPrefilledEntities()
+                    .Select(x => this.GetIdentifyingEntity(x, statefulInterview, questionnaire))
+                    .Concat(ActionButtonsDefinition)
+                    .ToArray();
+            }
 
             var ids = GetGroupEntitiesIds(sectionIdentity);
 
@@ -265,7 +273,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     Identity = x.ToString(),
                     EntityType = this.interviewEntityFactory.GetEntityType(x, questionnaire, statefulInterview, IsReviewMode()).ToString()
                 })
-                .Union(ActionButtonsDefinition)
+                .Concat(ActionButtonsDefinition)
                 .ToArray();
 
             return entities;
