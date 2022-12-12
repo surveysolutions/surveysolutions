@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.Services
                 questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
                 categoriesExtractFactory: new CategoriesExtractFactory(
                     new ExcelCategoriesExtractService(new CategoriesVerifier(), new CategoriesExportService()),
-                    new TsvCategoriesExtractService(new CategoriesVerifier(), new CategoricalOptionsImportService())));
+                    new TsvCategoriesExtractService(new CategoriesVerifier())));
         }
 
         private static Stream CreateFileWithHeader(string[][] data, CategoriesFileType type)

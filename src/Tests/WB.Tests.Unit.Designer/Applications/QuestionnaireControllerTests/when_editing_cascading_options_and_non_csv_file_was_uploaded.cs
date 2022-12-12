@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         private void BecauseOf() => result = controller.EditOptions(new QuestionnaireRevision(Abc.Id.g1), Abc.Id.g2, postedFile).Value;
 
         [NUnit.Framework.Test] public void should_add_error_message_to_temp_data () =>
-            result.Errors[0].Should().Be("Only tab-separated values files are accepted");
+            result.Errors[0].Should().Be("Only tab-separated values (*.tab, *.txt, *.tsv) or excel (*.xslx, *.xls, *.ods) files are accepted");
 
         private static QuestionnaireController controller;
         private static IFormFile postedFile;

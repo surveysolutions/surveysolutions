@@ -61,6 +61,6 @@ public class CategoriesServiceTests
         return new ReusableCategoriesService(
             designerDbContext ?? Mock.Of<DesignerDbContext>(),
             documentStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
-            Mock.Of<ICategoriesExtractFactory>());
+            Create.CategoriesExtractFactory());
     }
 }

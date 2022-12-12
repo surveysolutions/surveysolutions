@@ -17,13 +17,10 @@ namespace WB.Core.BoundedContexts.Designer.Services
     internal class TsvCategoriesExtractService : ICategoriesExtractService
     {
         private readonly ICategoriesVerifier verifier;
-        private readonly ICategoricalOptionsImportService categoricalOptionsImportService;
 
-        public TsvCategoriesExtractService(ICategoriesVerifier verifier,
-            ICategoricalOptionsImportService categoricalOptionsImportService)
+        public TsvCategoriesExtractService(ICategoriesVerifier verifier)
         {
             this.verifier = verifier;
-            this.categoricalOptionsImportService = categoricalOptionsImportService;
         }
 
         private static CsvConfiguration CreateCsvConfiguration() => new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -91,9 +88,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
             return categories;
         }
 
-        public class CategoricalOptionMap: ClassMap<CategoriesItem>
+        public class CategoriesItemMap: ClassMap<CategoriesItem>
         {
-            protected CategoricalOptionMap()
+            protected CategoriesItemMap()
             {
                 Map(m => m.Id).Index(0).Name(CategoriesConstants.IdColumnName);
                 Map(m => m.Text).Index(1).Name(CategoriesConstants.TextColumnName);
@@ -101,9 +98,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
         }
         
-        private class CascadingOptionMap : CategoricalOptionMap
+        private class CascadingItemMap : CategoriesItemMap
         {
-            public CascadingOptionMap()
+            public CascadingItemMap()
             {
                 Map(m => m.ParentId).Index(2).Name(CategoriesConstants.ParentIdColumnName);
                 Map(m => m.AttachmentName).Index(3); // change index for cascading
@@ -120,9 +117,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
             var cfg = CreateCsvConfiguration();
 
             if (isCascading)
-                cfg.RegisterClassMap<CascadingOptionMap>();
+                cfg.RegisterClassMap<CascadingItemMap>();
             else
-                cfg.RegisterClassMap<CategoricalOptionMap>();
+                cfg.RegisterClassMap<CategoriesItemMap>();
 
             var sb = new StringBuilder();
             using (var csvWriter = new CsvWriter(new StringWriter(sb), cfg))

@@ -24,6 +24,9 @@ namespace WB.UI.Designer.Controllers
 {
     public partial class QuestionnaireController
     {
+        private string[] excelExtensions = new[] { ".xlsx", ".ods", ".xls" };
+        private string[] tsvExtensions = new[] { ".txt", ".tab", ".tsv", ".csv" };
+
         public ActionResult<EditOptionsViewModel> GetCategoryOptions(QuestionnaireRevision id, Guid categoriesId)
         {
             var categoriesView = this.questionnaireInfoFactory.GetCategoriesView(id, categoriesId);
@@ -125,10 +128,27 @@ namespace WB.UI.Designer.Controllers
                 };
             }
 
+            var extension = this.fileSystemAccessor.GetFileExtension(csvFile.FileName);
+
+            if (!excelExtensions.Union(tsvExtensions).Contains(extension))
+            {
+                return new EditOptionsResponse
+                {
+                    Errors = new List<string>()
+                    {
+                        ExceptionMessages.ImportOptions_Tab_Or_Excel_Only
+                    }
+                };
+            }
+
+            var fileType = excelExtensions.Contains(extension)
+                ? CategoriesFileType.Excel
+                : CategoriesFileType.Tsv;
+            
             try
             {
                 var importResult = this.categoricalOptionsImportService.ImportOptions(
-                    csvFile.OpenReadStream(), id.ToString(), questionId);
+                    csvFile.OpenReadStream(), id.ToString(), questionId, fileType);
 
                 if (importResult.Succeeded)
                 {
@@ -145,6 +165,14 @@ namespace WB.UI.Designer.Controllers
                 }
                 
                 errors.AddRange(importResult.Errors);
+            }
+            catch (InvalidFileException e)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine(e.Message);
+                e.FoundErrors?.ForEach(x => sb.AppendLine(x.Message));
+
+                errors.Add(sb.ToString());
             }
             catch (Exception e)
             {
@@ -182,9 +210,6 @@ namespace WB.UI.Designer.Controllers
             try
             {
                 var extension = this.fileSystemAccessor.GetFileExtension(csvFile.FileName);
-
-                var excelExtensions = new[] { ".xlsx", ".ods", ".xls" };
-                var tsvExtensions = new[] { ".txt", ".tab", ".tsv" };
 
                 if (!excelExtensions.Union(tsvExtensions).Contains(extension))
                 {
@@ -385,11 +410,17 @@ namespace WB.UI.Designer.Controllers
             return File(lookupTableContentFile.Content, "text/csv", lookupTableContentFile.FileName);
         }
 
-        public IActionResult ExportOptions(QuestionnaireRevision id, Guid entityId, bool isCategory, bool isCascading)
+        public IActionResult ExportOptions(QuestionnaireRevision id, string type, Guid entityId, bool isCategory, bool isCascading)
         {
+            var fileType = type == "xlsx" ? CategoriesFileType.Excel : CategoriesFileType.Tsv;
+            var contentType = fileType == CategoriesFileType.Excel
+                ? @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                : "text/csv";
+            var fileExtension = fileType == CategoriesFileType.Excel ? "xlsx" : "txt";
+            
             if (isCategory)
             {
-                var categoriesFile = this.reusableCategoriesService.GetAsFile(id, entityId, CategoriesFileType.Excel);
+                var categoriesFile = this.reusableCategoriesService.GetAsFile(id, entityId, fileType);
 
                 if (categoriesFile?.Content == null) return NotFound();
 
@@ -399,18 +430,17 @@ namespace WB.UI.Designer.Controllers
 
                 var filename = this.fileSystemAccessor.MakeValidFileName($"[{categoriesName}]{categoriesFile.QuestionnaireTitle}");
 
-                return File(categoriesFile.Content,
-                    @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{filename}.xlsx");
+                return File(categoriesFile.Content, contentType, $"{filename}.{fileExtension}");
             }
 
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, entityId);
 
             var title = editQuestionView?.Title ?? "";
-            var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
+            var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.{fileExtension}");
 
-            var export = this.categoricalOptionsImportService.ExportOptions(id.QuestionnaireId.FormatGuid(), entityId);
+            var export = this.categoricalOptionsImportService.ExportOptions(id.QuestionnaireId.FormatGuid(), entityId, fileType);
 
-            return File(export, "text/csv", fileDownloadName);
+            return File(export, contentType, fileDownloadName);
         }
 
         public class EditOptionsViewModel

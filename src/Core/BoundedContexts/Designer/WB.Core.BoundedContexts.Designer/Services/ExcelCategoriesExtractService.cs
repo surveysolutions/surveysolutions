@@ -138,10 +138,10 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
             return new CategoriesHeaderMap()
             {
-                IdIndex = headers.GetOrNull("id"),
-                ParentIdIndex = headers.GetOrNull("parentid"),
-                TextIndex = headers.GetOrNull("text"),
-                AttachmentNameIndex = headers.GetOrNull("attachmentname"),
+                IdIndex = headers.GetOrNull(CategoriesConstants.IdColumnName),
+                ParentIdIndex = headers.GetOrNull(CategoriesConstants.ParentIdColumnName),
+                TextIndex = headers.GetOrNull(CategoriesConstants.TextColumnName),
+                AttachmentNameIndex = headers.GetOrNull(CategoriesConstants.AttachmentNameColumnName),
             };
         }
 

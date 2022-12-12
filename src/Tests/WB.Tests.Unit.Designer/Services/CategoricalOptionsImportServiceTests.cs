@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Designer.Services
             var service = Create.CategoricalOptionsImportService(questionnaire, categoriesService);
 
             // act
-            var result = service.ImportOptions("1\tStreet 1\t2".GenerateStream(), questionnaireId.FormatGuid(), questionId);
+            var result = service.ImportOptions("1\tStreet 1\t2".GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
 
             Assert.That(result.Errors, Has.One.Items);
             Assert.That(result.Errors.First(), Is.EqualTo("No categories for parent cascading question 'parentCombobox' found"));
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.Designer.Services
             var service = Create.CategoricalOptionsImportService(questionnaire, categoriesService);
 
             // act
-            var result = service.ImportOptions("1\tStreet 1\t1".GenerateStream(), questionnaireId.FormatGuid(), questionId);
+            var result = service.ImportOptions("1\tStreet 1\t1".GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
 
             Assert.That(result.Succeeded, Is.True);
             Assert.That(result.ImportedOptions.Count(), Is.EqualTo(1));
@@ -102,7 +102,7 @@ namespace WB.Tests.Unit.Designer.Services
             var service = Create.CategoricalOptionsImportService(questionnaire);
 
             // act
-            var result = service.ImportOptions("1\tStreet 1\t1".GenerateStream(), questionnaireId.FormatGuid(), questionId);
+            var result = service.ImportOptions("1\tStreet 1\t1".GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
 
             Assert.That(result.Succeeded, Is.True);
             Assert.That(result.ImportedOptions.Count(), Is.EqualTo(1));
@@ -134,9 +134,9 @@ namespace WB.Tests.Unit.Designer.Services
 
             var service = Create.CategoricalOptionsImportService(questionnaire);
 
-            var header = $"{CategoricalOptionsImportService.IdColumnName}\t{CategoricalOptionsImportService.TextColumnName}\t{CategoricalOptionsImportService.ParentIdColumnName}\r\n";
+            var header = $"{CategoriesConstants.IdColumnName}\t{CategoriesConstants.TextColumnName}\t{CategoriesConstants.ParentIdColumnName}\r\n";
             // act
-            var result = service.ImportOptions((header + "1\tStreet 1\t2").GenerateStream(), questionnaireId.FormatGuid(), questionId);
+            var result = service.ImportOptions((header + "1\tStreet 1\t2").GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
 
             Assert.That(result.Succeeded, Is.True);
             Assert.That(result.ImportedOptions.Count(), Is.EqualTo(1));
@@ -167,9 +167,9 @@ namespace WB.Tests.Unit.Designer.Services
 
             var service = Create.CategoricalOptionsImportService(questionnaire);
 
-            var header = $"{CategoricalOptionsImportService.TextColumnName}\t{CategoricalOptionsImportService.IdColumnName}\t{CategoricalOptionsImportService.AttachmentNameColumnName}\t{CategoricalOptionsImportService.ParentIdColumnName}\r\n";
+            var header = $"{CategoriesConstants.TextColumnName}\t{CategoriesConstants.IdColumnName}\t{CategoriesConstants.AttachmentNameColumnName}\t{CategoriesConstants.ParentIdColumnName}\r\n";
             // act
-            var result = service.ImportOptions((header + "Street 1\t1\tAttachment Name 1\t2").GenerateStream(), questionnaireId.FormatGuid(), questionId);
+            var result = service.ImportOptions((header + "Street 1\t1\tAttachment Name 1\t2").GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
 
             Assert.That(result.Succeeded, Is.True);
             Assert.That(result.ImportedOptions.Count(), Is.EqualTo(1));

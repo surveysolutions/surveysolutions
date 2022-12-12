@@ -35,7 +35,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
-        [Route("templateCsv")]
+        [Route("templateTab")]
         public IActionResult GetCsv()
         {
             var categoriesFile = this.reusableCategoriesService.GetTemplate(CategoriesFileType.Tsv);

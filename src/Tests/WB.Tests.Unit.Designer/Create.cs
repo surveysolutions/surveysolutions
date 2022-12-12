@@ -1766,7 +1766,9 @@ namespace WB.Tests.Unit.Designer
                             document.PublicKey.FormatGuid(),
                             document
                         }
-                    }), reusableCategoriesService: reusableCategoriesService ?? Mock.Of<IReusableCategoriesService>());
+                    }), categoriesExtractFactory: new CategoriesExtractFactory(
+                    new ExcelCategoriesExtractService(new CategoriesVerifier(), new CategoriesExportService()), 
+                    new TsvCategoriesExtractService(new CategoriesVerifier())));
 
         public static ClassificationsStorage ClassificationStorage(
             DesignerDbContext dbContext)
@@ -1896,5 +1898,12 @@ namespace WB.Tests.Unit.Designer
                 Text = text,
                 SortIndex = sortIndex
             };
+
+        public static ICategoriesExtractFactory CategoriesExtractFactory()
+        {
+            return new CategoriesExtractFactory(
+                new ExcelCategoriesExtractService(new CategoriesVerifier(), new CategoriesExportService()),
+                new TsvCategoriesExtractService(new CategoriesVerifier()));
+        }
     }
 }
