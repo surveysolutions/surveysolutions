@@ -44,8 +44,14 @@ class OptionsApi {
         return response.data;
     }
 
-    getExportOptionsUri(questionnaireRev, entityId, isCategory, isCascading) {
+    getExportOptionsAsTabUri(
+        questionnaireRev,
+        entityId,
+        isCategory,
+        isCascading
+    ) {
         var params = qs({
+            type: 'tsv',
             entityId,
             isCategory,
             isCascading
@@ -60,6 +66,7 @@ class OptionsApi {
         isCascading
     ) {
         var params = qs({
+            type: 'xlsx',
             entityId,
             isCategory,
             isCascading

@@ -70,6 +70,7 @@
     "SideBarTab": "Tab",
     "SideBarTranslationGetTemplate": "Get Template for ",
     "SideBarTranslationGetTemplateLinkTextXlsx": "Excel (xlsx)",
+    "SideBarTranslationGetTemplateLinkTextCsv": "Tab (txt)",
     "SideBarTranslationName": "translation name",
     "SideBarCategoriesName": "name of categories",
     "SideBarTranslationsCounter": "{{count}} Translation",

@@ -100,17 +100,14 @@
                 <v-icon>mdi-download</v-icon>
                 {{ $t('QuestionnaireEditor.SideBarDownload') }}
             </span>
-            <a :href="exportOptionsUri" class="ma-2 v-btn v-size--default">
-                {{ $t('QuestionnaireEditor.SideBarXlsx') }}</a
-            >
-            <a :href="exportOptionsUri" class="ma-2 v-btn v-size--default">
-                {{ $t('QuestionnaireEditor.SideBarTab') }}</a
-            >
             <a
                 :href="exportOptionsAsExlsUri"
                 class="ma-2 v-btn v-size--default"
             >
-                {{ $t('QuestionnaireEditor.AsExls') }}</a
+                {{ $t('QuestionnaireEditor.SideBarXlsx') }}</a
+            >
+            <a :href="exportOptionsAsTabUri" class="ma-2 v-btn v-size--default">
+                {{ $t('QuestionnaireEditor.SideBarTab') }}</a
             >
         </v-footer>
     </v-container>
@@ -205,8 +202,8 @@ export default {
             );
         },
 
-        exportOptionsUri() {
-            return optionsApi.getExportOptionsUri(
+        exportOptionsAsTabUri() {
+            return optionsApi.getExportOptionsAsTabUri(
                 this.questionnaireRev,
                 this.id,
                 this.isCategory,

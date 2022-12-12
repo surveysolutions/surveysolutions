@@ -347,6 +347,7 @@
     "SideBarDownload": "Download:",
     "SideBarXlsx": "Xlsx",
     "SideBarTab": "Tab",
+    "SideBarTranslationGetTemplateLinkTextCsv": "Tab (txt)",
     "SideBarCategoriesName": "name of categories",
     "SideBarCategoriesCounter": "{{count}} Categories",
     "SideBarCategoriesEmptyLine1": "Use this tab to manage reusable categories.",

@@ -533,9 +533,9 @@
                                                 </button>
 
                                                 {{'SideBarDownload' | i18next}}
-                                                <a href="{{'/questionnaire/ExportOptions/' + questionnaire.questionnaireId  + '?type=xlsx&entityId=' + categories.categoriesId}}" class="btn btn-default"
+                                                <a href="{{'/questionnaire/ExportOptions/' + questionnaire.questionnaireId  + '?type=xlsx&isCategory=true&entityId=' + categories.categoriesId}}" class="btn btn-default"
                                                    target="_blank" ng-i18next>SideBarXlsx</a>
-                                                <a href="{{'/questionnaire/ExportOptions/' + questionnaire.questionnaireId  + '?type=csv&entityId=' + categories.categoriesId}}" class="btn btn-default"
+                                                <a href="{{'/questionnaire/ExportOptions/' + questionnaire.questionnaireId  + '?type=csv&isCategory=true&entityId=' + categories.categoriesId}}" class="btn btn-default"
                                                    target="_blank" ng-i18next>SideBarTab</a>
 
                                             </div>

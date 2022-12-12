@@ -437,6 +437,7 @@
     "SideBarDownload": "Download:",
     "SideBarXlsx": "Xlsx",
     "SideBarTab": "Tab",
+    "SideBarTranslationGetTemplateLinkTextCsv": "Tab (txt)",
     "SettingsAnonymous": "Anonymous",
     "RegenerateQuestionnaireSharingLink": "Regenerate link",
     "AnonymousQuestionnaireGeneratedDate": "link generated: {{datetime}}",

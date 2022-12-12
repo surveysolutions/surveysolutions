@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         private static CsvConfiguration CreateCsvConfiguration() => new CsvConfiguration(CultureInfo.InvariantCulture)
         {
-            HasHeaderRecord = false,
+            HasHeaderRecord = true,
             TrimOptions = TrimOptions.Trim,
             IgnoreQuotes = false,
             Delimiter = "\t"
@@ -43,7 +43,10 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 AttachmentNameIndex = "3"
             };
 
-            using (var csvReader = new CsvParser(new StreamReader(file), CreateCsvConfiguration()))
+            var csvConfiguration = CreateCsvConfiguration();
+            csvConfiguration.HasHeaderRecord = false;
+            
+            using (var csvReader = new CsvParser(new StreamReader(file), csvConfiguration))
             {
                 var rawRow = csvReader.Read()?.ToList();
                 var headersFromFile = TryGetHeadersFromFile(rawRow);

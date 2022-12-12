@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     ParentId = i.ParentId,
                     Text = i.Text,
                     AttachmentName = i.AttachmentName
-                });
+                }).ToList();
             
             var extractService = this.categoriesExtractFactory.GetExtractService(fileType);
             
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             {
                 QuestionnaireTitle = questionnaire.Title,
                 CategoriesName = questionnaire.Source.Categories.FirstOrDefault(x => x.Id == categoriesId)?.Name ?? string.Empty,
-                Content = extractService.GetAsFile(items.ToList())
+                Content = extractService.GetAsFile(items)
             };
         }
 
