@@ -3288,6 +3288,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download:.
+        /// </summary>
+        public static string SideBarDownload {
+            get {
+                return ResourceManager.GetString("SideBarDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Categories.
         /// </summary>
         public static string SideBarEditCategories {
@@ -3837,6 +3846,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tab.
+        /// </summary>
+        public static string SideBarTab {
+            get {
+                return ResourceManager.GetString("SideBarTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download xlsx.
         /// </summary>
         public static string SideBarTranslationDownloadXlsx {
@@ -3950,6 +3968,15 @@ namespace WB.UI.Designer.Resources {
         public static string SideBarTranslationsUploadNew {
             get {
                 return ResourceManager.GetString("SideBarTranslationsUploadNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xlsx.
+        /// </summary>
+        public static string SideBarXlsx {
+            get {
+                return ResourceManager.GetString("SideBarXlsx", resourceCulture);
             }
         }
         

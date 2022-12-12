@@ -96,9 +96,15 @@
                 dense
                 @change="uploadFile"
             ></v-file-input>
-            <a :href="exportOptionsUri" class="ma-2 v-btn v-size--default">
+            <span>
                 <v-icon>mdi-download</v-icon>
-                {{ $t('QuestionnaireEditor.Download') }}</a
+                {{ $t('QuestionnaireEditor.SideBarDownload') }}
+            </span>
+            <a :href="exportOptionsUri" class="ma-2 v-btn v-size--default">
+                {{ $t('QuestionnaireEditor.SideBarXlsx') }}</a
+            >
+            <a :href="exportOptionsUri" class="ma-2 v-btn v-size--default">
+                {{ $t('QuestionnaireEditor.SideBarTab') }}</a
             >
             <a
                 :href="exportOptionsAsExlsUri"
