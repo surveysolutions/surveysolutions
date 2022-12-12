@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 categoricalOptionsImportService ?? Mock.Of<ICategoricalOptionsImportService>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 dbContext ?? Create.InMemoryDbContext(),
-                categoriesService: Mock.Of<ICategoriesService>(),
+                reusableCategoriesService: Mock.Of<IReusableCategoriesService>(),
                 Mock.Of<IEmailSender>(),
                 Mock.Of<IViewRenderService>(),
                 null!);

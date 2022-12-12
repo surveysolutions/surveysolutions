@@ -13,12 +13,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     [AuthorizeOrAnonymousQuestionnaire]
     public class CategoriesController : Controller
     {
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public CategoriesController(ICategoriesService categoriesService, IFileSystemAccessor fileSystemAccessor)
+        public CategoriesController(IReusableCategoriesService reusableCategoriesService, IFileSystemAccessor fileSystemAccessor)
         {
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("template")]
         public IActionResult Get()
         {
-            var categoriesFile = this.categoriesService.GetTemplate(CategoriesFileType.Excel);
+            var categoriesFile = this.reusableCategoriesService.GetTemplate(CategoriesFileType.Excel);
 
             if (categoriesFile == null) return NotFound();
 
@@ -38,7 +38,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("templateCsv")]
         public IActionResult GetCsv()
         {
-            var categoriesFile = this.categoriesService.GetTemplate(CategoriesFileType.Tsv);
+            var categoriesFile = this.reusableCategoriesService.GetTemplate(CategoriesFileType.Tsv);
 
             if (categoriesFile == null) 
                 return NotFound();
@@ -50,7 +50,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("{id}/xlsx/{categoriesId:Guid}")]
         public IActionResult Get(QuestionnaireRevision id, Guid categoriesId)
         {
-            var categoriesFile = this.categoriesService.GetAsFile(id, categoriesId, CategoriesFileType.Excel);
+            var categoriesFile = this.reusableCategoriesService.GetAsFile(id, categoriesId, CategoriesFileType.Excel);
 
             if (categoriesFile?.Content == null) return NotFound();
 

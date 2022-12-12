@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<ICategoriesExtractFactory, CategoriesExtractFactory>();
             registry.Bind<ExcelCategoriesExtractService, ExcelCategoriesExtractService>();
             registry.Bind<TsvCategoriesExtractService, TsvCategoriesExtractService>();
-            registry.Bind<ICategoriesService, CategoriesService>();
+            registry.Bind<IReusableCategoriesService, ReusableCategoriesService>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<ICategoriesExportService, CategoriesExportService>();

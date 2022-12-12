@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     public class CategoricalOptionsImportService : ICategoricalOptionsImportService
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
 
         internal const string IdColumnName = "Id";
         internal const string TextColumnName = "Text";
@@ -29,10 +29,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         internal const string ParentIdColumnName = "Parent Id";
         
         public CategoricalOptionsImportService(IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
-            ICategoriesService categoriesService)
+            IReusableCategoriesService reusableCategoriesService)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
         }
 
         public ImportCategoricalOptionsResult ImportOptions(Stream file, string questionnaireId, Guid categoricalQuestionId)
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         question.CascadeFromQuestionId.Value));
 
                 if ((parentCascadingQuestion.CategoriesId.HasValue && 
-                    !this.categoriesService.GetCategoriesById(document.PublicKey, parentCascadingQuestion.CategoriesId.Value).Any()) || 
+                    !this.reusableCategoriesService.GetCategoriesById(document.PublicKey, parentCascadingQuestion.CategoriesId.Value).Any()) || 
                     (!parentCascadingQuestion.CategoriesId.HasValue && parentCascadingQuestion.Answers.Count == 0))
                 {
                     return ImportCategoricalOptionsResult.Failed(
@@ -140,7 +140,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 result.Add(cascadingQuestion.VariableName,
                     cascadingQuestion.CategoriesId.HasValue
-                        ? this.categoriesService.GetCategoriesById(document.PublicKey, cascadingQuestion.CategoriesId.Value).ToList().Select(x => (x.Id, x.ParentId)).ToArray()
+                        ? this.reusableCategoriesService.GetCategoriesById(document.PublicKey, cascadingQuestion.CategoriesId.Value).ToList().Select(x => (x.Id, x.ParentId)).ToArray()
                         : cascadingQuestion.Answers.Select(x => ((int) x.GetParsedValue(), x.GetParsedParentValue())).ToArray());
 
                 parentQuestionId = cascadingQuestion.CascadeFromQuestionId;

@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.Services
                     Create.SingleOptionQuestion(questionId: questionId, cascadeFromQuestionId: comboboxQuestionId),
                 });
 
-            var categoriesService = Mock.Of<ICategoriesService>(x =>
+            var categoriesService = Mock.Of<IReusableCategoriesService>(x =>
                 x.GetCategoriesById(It.IsAny<Guid>(), categoriesId) == Array.Empty<CategoriesItem>().AsQueryable());
 
             var service = Create.CategoricalOptionsImportService(questionnaire, categoriesService);
@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.Designer.Services
                     Create.SingleOptionQuestion(questionId: questionId, cascadeFromQuestionId: comboboxQuestionId),
                 });
 
-            var categoriesService = Mock.Of<ICategoriesService>(x =>
+            var categoriesService = Mock.Of<IReusableCategoriesService>(x =>
                 x.GetCategoriesById(It.IsAny<Guid>(), categoriesId) == new[] {new CategoriesItem {Id = 1, Text = "parent 1"}}.AsQueryable());
 
             var service = Create.CategoricalOptionsImportService(questionnaire, categoriesService);

@@ -14,26 +14,30 @@ using NSubstitute.Extensions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.DataAccess;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.Services
 {
-    [TestOf(typeof(CategoriesService))]
+    [TestOf(typeof(ReusableCategoriesService))]
     internal class CategoriesServiceTests
     {
-        private static CategoriesService CreateCategoriesService(DesignerDbContext dbContext = null, 
+        private static ReusableCategoriesService CreateCategoriesService(DesignerDbContext dbContext = null, 
             IQuestionnaireViewFactory questionnaireStorage = null)
         {
-            return new CategoriesService(
+            return new ReusableCategoriesService(
                 dbContext: dbContext ?? Mock.Of<DesignerDbContext>(),
                 questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
-                categoriesExtractFactory: new CategoriesExtractFactory(new CategoriesVerifier()));
+                categoriesExtractFactory: new CategoriesExtractFactory(
+                    new ExcelCategoriesExtractService(new CategoriesVerifier(), new CategoriesExportService()),
+                    new TsvCategoriesExtractService(new CategoriesVerifier(), new CategoricalOptionsImportService())));
         }
 
         private static Stream CreateFileWithHeader(string[][] data, CategoriesFileType type)

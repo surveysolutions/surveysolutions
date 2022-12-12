@@ -16,7 +16,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer;
 
-[TestOf(typeof(CategoriesService))]
+[TestOf(typeof(ReusableCategoriesService))]
 public class CategoriesServiceTests
 {
     [Test]
@@ -43,7 +43,7 @@ public class CategoriesServiceTests
 
         Mock<ICategoriesExportService> categoriesExportService = new Mock<ICategoriesExportService>();
         
-        var service = CreateCategoriesService(documentStorage, categoriesDb, categoriesExportService.Object);
+        var service = CreateCategoriesService(documentStorage, categoriesDb);
 
         var excelFile = service.GetAsFile(revision, Id.g2, CategoriesFileType.Excel);
         
@@ -55,10 +55,10 @@ public class CategoriesServiceTests
             )), Times.Once);
     }
 
-    private ICategoriesService CreateCategoriesService(IQuestionnaireViewFactory documentStorage,
+    private IReusableCategoriesService CreateCategoriesService(IQuestionnaireViewFactory documentStorage,
         DesignerDbContext designerDbContext)
     {
-        return new CategoriesService(
+        return new ReusableCategoriesService(
             designerDbContext ?? Mock.Of<DesignerDbContext>(),
             documentStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
             Mock.Of<ICategoriesExtractFactory>());

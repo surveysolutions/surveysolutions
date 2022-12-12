@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Code.ImportExport
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
         private readonly ITranslationImportExportService translationImportExportService;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IImportExportQuestionnaireMapper importExportQuestionnaireMapper;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IQuestionnaireSerializer questionnaireSerializer;
@@ -49,7 +49,7 @@ namespace WB.UI.Designer.Code.ImportExport
             IAttachmentService attachmentService, 
             ITranslationsService translationsService, 
             ITranslationImportExportService translationImportExportService, 
-            ICategoriesService categoriesService, 
+            IReusableCategoriesService reusableCategoriesService, 
             IImportExportQuestionnaireMapper importExportQuestionnaireMapper,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
             IQuestionnaireSerializer questionnaireSerializer,
@@ -61,7 +61,7 @@ namespace WB.UI.Designer.Code.ImportExport
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
             this.translationImportExportService = translationImportExportService;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
             this.importExportQuestionnaireMapper = importExportQuestionnaireMapper;
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireSerializer = questionnaireSerializer;
@@ -107,7 +107,7 @@ namespace WB.UI.Designer.Code.ImportExport
             ImportStructure importStructure = GetStructure(zipStream, questionnaire, questionnaireDocument, state);
 
             this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
-            this.categoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
+            this.reusableCategoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
            
             this.RestoreDataFromZipFileEntry(importStructure, state, questionnaire, questionnaireDocument);
 

@@ -33,7 +33,7 @@ namespace WB.UI.Designer.Controllers
 
             var questionnaireId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
             var categories =
-                this.categoriesService.GetCategoriesById(questionnaireId, categoriesId).
+                this.reusableCategoriesService.GetCategoriesById(questionnaireId, categoriesId).
                     Select(
                         option => new QuestionnaireCategoricalOption
                         {
@@ -201,7 +201,7 @@ namespace WB.UI.Designer.Controllers
                     ? CategoriesFileType.Excel
                     : CategoriesFileType.Tsv;
 
-                var rows = this.categoriesService.GetRowsFromFile(csvFile.OpenReadStream(), fileType);
+                var rows = this.reusableCategoriesService.GetRowsFromFile(csvFile.OpenReadStream(), fileType);
 
                 return new EditOptionsResponse
                 {
@@ -276,7 +276,7 @@ namespace WB.UI.Designer.Controllers
                 //remove double parse
                 try
                 {
-                    this.categoriesService.Store(questionnaireId,
+                    this.reusableCategoriesService.Store(questionnaireId,
                         categoriesId, categoriesModel.Categories.Select((x, i) => new CategoriesRow()
                         {
                             Id = x.Value.ToString(),
@@ -389,7 +389,7 @@ namespace WB.UI.Designer.Controllers
         {
             if (isCategory)
             {
-                var categoriesFile = this.categoriesService.GetAsFile(id, entityId, CategoriesFileType.Excel);
+                var categoriesFile = this.reusableCategoriesService.GetAsFile(id, entityId, CategoriesFileType.Excel);
 
                 if (categoriesFile?.Content == null) return NotFound();
 
