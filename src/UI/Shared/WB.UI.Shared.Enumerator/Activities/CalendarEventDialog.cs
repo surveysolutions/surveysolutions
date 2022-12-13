@@ -29,15 +29,19 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            Context?.Theme?.ApplyStyle(Resource.Style.DialogWithTitle, true);
+            if (Context == null) throw new InvalidOperationException("Context is null");
             
+            Context.Theme?.ApplyStyle(Resource.Style.DialogWithTitle, true);
             var ignore = base.OnCreateView(inflater, container, savedInstanceState);
-            
             var view = this.BindingInflate(Resource.Layout.calendar_event_dialog, null);
-            this.Dialog?.SetTitle(ViewModel.Title);
-            this.Dialog?.SetCancelable(false);
-            this.Dialog?.SetCanceledOnTouchOutside(false);
-            Activity?.Window?.SetSoftInputMode(SoftInput.AdjustPan);
+            
+            if (this.Dialog == null) throw new InvalidOperationException("Dialog is null");
+            this.Dialog.SetTitle(ViewModel.Title);
+            this.Dialog.SetCancelable(false);
+            this.Dialog.SetCanceledOnTouchOutside(false);
+            
+            if (Activity == null) throw new InvalidOperationException("Activity is null");
+            Activity.Window?.SetSoftInputMode(SoftInput.AdjustPan);
             return view;
         }
 
