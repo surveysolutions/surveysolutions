@@ -1,7 +1,11 @@
-﻿public class CategoriesConstants
+﻿
+namespace WB.Core.BoundedContexts.Designer.Services
 {
-    public const string IdColumnName = "id";
-    public const string TextColumnName = "text";
-    public const string AttachmentNameColumnName = "attachmentname";
-    public const string ParentIdColumnName = "parentid";
+    public class CategoriesConstants
+    {
+        public const string IdColumnName = "id";
+        public const string TextColumnName = "text";
+        public const string AttachmentNameColumnName = "attachmentname";
+        public const string ParentIdColumnName = "parentid";
+    }
 }
