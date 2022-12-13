@@ -2194,7 +2194,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Static text can not reference variable that has deeper roster scope then itself.
+        ///   Looks up a localized string similar to Static text cannot reference variable that has deeper roster scope then itself.
         /// </summary>
         public static string WB0391 {
             get {

@@ -815,7 +815,7 @@
     <value>Only string variable type can be used as source of the attachment name</value>
   </data>
   <data name="WB0391" xml:space="preserve">
-    <value>Static text can not reference variable that has deeper roster scope then itself</value>
+    <value>Static text cannot reference variable that has deeper roster scope then itself</value>
   </data>
   <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
       <value>Link to hidden question is not allowed</value>

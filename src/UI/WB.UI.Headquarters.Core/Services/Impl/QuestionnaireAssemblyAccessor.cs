@@ -104,7 +104,7 @@ namespace WB.UI.Headquarters.Services.Impl
             if (this.assemblyService.GetAssemblyInfo(assemblyFileName) != null)
             {
                 throw new QuestionnaireAssemblyAlreadyExistsException(
-                    "Questionnaire assembly file already exists and can not be overwritten",
+                    "Questionnaire assembly file already exists and cannot be overwritten",
                     new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
             }
 
