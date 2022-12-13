@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             if(DisabledAtUtc != null)
                 throw new InvalidOperationException("Workspace already disabled");
             if (Name == Default.Name)
-                throw new InvalidOperationException($"{Default.Name} workspace can not be disabled");
+                throw new InvalidOperationException($"{Default.Name} workspace cannot be disabled");
             this.DisabledAtUtc = DateTime.UtcNow;
         }
 

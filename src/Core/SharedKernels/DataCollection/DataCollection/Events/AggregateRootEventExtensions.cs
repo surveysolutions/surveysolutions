@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events
             if (filteredSvEvents.Any(e => ChangeEventsState.Contains(e.Payload.GetType().Name)))
             {
                 throw new InterviewException(
-                    "Found active event on hq/supervisor side. Can not merge streams",
+                    "Found active event on hq/supervisor side. Cannot merge streams",
                     exceptionType: InterviewDomainExceptionType.PackageIsOudated);
             }
 

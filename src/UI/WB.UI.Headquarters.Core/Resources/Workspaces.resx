@@ -154,7 +154,7 @@
     <value>Workspace creation</value>
   </data>
   <data name="CanNotBeChanged" xml:space="preserve">
-    <value>Can not be changed after creation</value>
+    <value>Cannot be changed after creation</value>
   </data>
   <data name="DisplayNameHelpText" xml:space="preserve">
     <value>Will be used to display workspace in menus. Try to choose shorter names</value>

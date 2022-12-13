@@ -217,7 +217,7 @@
     <value>Last existing section cannot be removed from questionnaire</value>
   </data>
   <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
-    <value>Cover section can not be removed from questionnaire</value>
+    <value>Cover section cannot be removed from questionnaire</value>
   </data>
   <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
     <value>Cover section must be first section in questionnaire</value>
@@ -226,7 +226,7 @@
     <value>Cover section can contain only questions, static texts and variables</value>
   </data>
   <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
-    <value>It is readonly Cover section. You can not edit or re-order questions in it.</value>
+    <value>It is readonly Cover section. You cannot edit or re-order questions in it.</value>
   </data>
   <data name="CantRemoveUserFromTheList" xml:space="preserve">
     <value>Couldn't remove user, because it doesn't exist in share list</value>
