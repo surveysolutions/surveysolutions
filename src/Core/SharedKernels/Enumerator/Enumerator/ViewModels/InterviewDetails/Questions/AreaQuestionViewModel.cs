@@ -198,8 +198,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             area: this.answer,
                             geometryType: geometryType,
                             requestedGeometryInputMode: requestedGeometryMode,
-                            requestedAccuracy: requestedGeometryMode == GeometryInputMode.Manual ? null: Settings.GeographyQuestionAccuracyInMeters,
-                            requestedFrequency: (requestedGeometryMode is GeometryInputMode.Manual or GeometryInputMode.Semiautomatic) ? null: Settings.GeographyQuestionPeriodInSeconds,
+                            requestedAccuracy: requestedGeometryMode == GeometryInputMode.Manual ? null : Settings.GeographyQuestionAccuracyInMeters,
+                            requestedFrequency: (requestedGeometryMode is GeometryInputMode.Manual or GeometryInputMode.Semiautomatic) ? null : Settings.GeographyQuestionPeriodInSeconds,
                             geographyNeighbors: neighbors,
                             title: question.Parent.Title.Text
                             ))

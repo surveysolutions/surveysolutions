@@ -2388,7 +2388,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is readonly question. You can not edit it..
+        ///   Looks up a localized string similar to It is readonly question. You cannot edit it..
         /// </summary>
         public static string ReadOnlyQuestion {
             get {

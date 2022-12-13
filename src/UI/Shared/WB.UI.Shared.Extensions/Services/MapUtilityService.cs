@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Symbology;
@@ -168,17 +169,30 @@ namespace WB.UI.Shared.Extensions.Services
             // Make sure labeling is enabled for the layer
             newFeatureLayer.LabelsEnabled = true;
 
-            SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Red, 2.0);
-            SimpleFillSymbol fillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Null, Color.White, lineSymbol);
-            
-            var alternateRenderer = new SimpleRenderer(fillSymbol);
-            
+            var symbolForRenderer = CreateSymbolForRenderer(myShapefile.GeometryType, Color.Red);
+            var alternateRenderer = new SimpleRenderer(symbolForRenderer);
+
             RendererSceneProperties myRendererSceneProperties = alternateRenderer.SceneProperties;
             myRendererSceneProperties.ExtrusionMode = ExtrusionMode.Minimum;
 
             newFeatureLayer.Renderer = alternateRenderer;
 
             return newFeatureLayer;
+        }
+        
+        private Symbol CreateSymbolForRenderer(GeometryType rendererType, Color color)
+        {
+            switch (rendererType)
+            {
+                case GeometryType.Point:
+                case GeometryType.Multipoint:
+                    return new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 6);
+                case GeometryType.Polygon:
+                case GeometryType.Polyline:
+                default:
+                    SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2.0);
+                    return new SimpleFillSymbol(SimpleFillSymbolStyle.Null, Color.White, lineSymbol);
+            }
         }
     }
 }
