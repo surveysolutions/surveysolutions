@@ -50,7 +50,7 @@ class OptionsApi {
         isCategory,
         isCascading
     ) {
-        var params = qs({
+        const params = qs({
             type: 'tsv',
             entityId,
             isCategory,
@@ -65,7 +65,7 @@ class OptionsApi {
         isCategory,
         isCascading
     ) {
-        var params = qs({
+        const params = qs({
             type: 'xlsx',
             entityId,
             isCategory,
