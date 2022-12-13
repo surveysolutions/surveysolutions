@@ -441,10 +441,10 @@
                     <div class="button-holder">
                         <p>
                             <span ng-i18next="SideBarTranslationGetTemplate"></span>
-                            <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template' }}" target="_blank" ng-i18next>
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template' }}" target="_blank" rel="noopener" ng-i18next>
                                 SideBarTranslationGetTemplateLinkTextXlsx
                             </a>
-                            <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/templateCsv' }}" target="_blank" ng-i18next>
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/templateCsv' }}" target="_blank" rel="noopener" ng-i18next>
                                 SideBarTranslationGetTemplateLinkTextCsv
                             </a>
                         </p>
@@ -534,9 +534,9 @@
 
                                                 {{'SideBarDownload' | i18next}}
                                                 <a href="{{'/questionnaire/ExportOptions/' + questionnaire.questionnaireId  + '?type=xlsx&isCategory=true&entityId=' + categories.categoriesId}}" class="btn btn-default"
-                                                   target="_blank" ng-i18next>SideBarXlsx</a>
+                                                   target="_blank" rel="noopener" ng-i18next>SideBarXlsx</a>
                                                 <a href="{{'/questionnaire/ExportOptions/' + questionnaire.questionnaireId  + '?type=csv&isCategory=true&entityId=' + categories.categoriesId}}" class="btn btn-default"
-                                                   target="_blank" ng-i18next>SideBarTab</a>
+                                                   target="_blank" rel="noopener" ng-i18next>SideBarTab</a>
 
                                             </div>
                                         </div>
@@ -549,10 +549,10 @@
                         <p>
                             <span ng-i18next="SideBarTranslationGetTemplate"></span>
 
-                            <a class="btn btn-default" href="{{downloadBaseUrl + '/template' }}" target="_blank" ng-i18next>
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/template' }}" target="_blank" rel="noopener" ng-i18next>
                                 SideBarXlsx
                             </a>
-                            <a class="btn btn-default" href="{{downloadBaseUrl + '/templateTab' }}" target="_blank" ng-i18next>
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/templateTab' }}" target="_blank" rel="noopener" ng-i18next>
                                 SideBarTab
                             </a>
                         </p>
