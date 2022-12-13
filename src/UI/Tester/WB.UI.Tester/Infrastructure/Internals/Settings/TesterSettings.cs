@@ -168,14 +168,14 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             throw new NotImplementedException();
         }
 
-        public int GeographyQuestionAccuracyInMeters { get; }
+        public int GeographyQuestionAccuracyInMeters { get; } = 20;
 
         public void SetGeographyQuestionAccuracyInMeters(int geographyQuestionAccuracyInMeters)
         {
             throw new NotImplementedException();
         }
 
-        public int GeographyQuestionPeriodInSeconds { get; }
+        public int GeographyQuestionPeriodInSeconds { get; } = 10;
 
         public void SetGeographyQuestionPeriodInSeconds(int geographyQuestionPeriodInSeconds)
         {

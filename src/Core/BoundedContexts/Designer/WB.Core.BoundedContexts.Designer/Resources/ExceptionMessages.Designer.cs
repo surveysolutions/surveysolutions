@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is readonly Cover section. You can not edit or re-order questions in it..
+        ///   Looks up a localized string similar to It is readonly Cover section. You cannot edit or re-order questions in it..
         /// </summary>
         public static string CantEditCoverPageInOldQuestionnaire {
             get {
@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cover section can not be removed from questionnaire.
+        ///   Looks up a localized string similar to Cover section cannot be removed from questionnaire.
         /// </summary>
         public static string CantRemoveCoverPageInQuestionnaire {
             get {

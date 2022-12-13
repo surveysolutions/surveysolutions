@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if (this.InterviewProperties.WasCreated)
             {
-                throw new InterviewException("Interview was created and can not be created again", InterviewDomainExceptionType.DuplicateCreationCommand)
+                throw new InterviewException("Interview was created and cannot be created again", InterviewDomainExceptionType.DuplicateCreationCommand)
                 {
                     Data =
                     {
