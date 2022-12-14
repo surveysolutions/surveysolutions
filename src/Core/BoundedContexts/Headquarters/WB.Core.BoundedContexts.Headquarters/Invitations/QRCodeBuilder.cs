@@ -1,14 +1,32 @@
-﻿using System.Drawing;
+﻿#nullable enable
+using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using SkiaSharp;
+using SkiaSharp.QrCode.Image;
 using ZXing;
 using ZXing.QrCode;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
-    public class BarCodeUtilities
+    public static class QRCodeBuilder
     {
-        public MemoryStream RenderBarCodeImage(string text)
+        public static string GetQRCodeAsBase64String(string content, int height = 250, int width = 250)
+        {
+            if (string.IsNullOrWhiteSpace(content))
+                return string.Empty;
+
+            // generate QRCode
+            var qrCode = new QrCode(content, new Vector2Slim(height, width), SKEncodedImageFormat.Png);
+
+            // output to file
+            using var output = new MemoryStream();
+            qrCode.GenerateImage(output);
+            return Convert.ToBase64String(output.ToArray());
+        }
+
+        public static MemoryStream RenderBarCodeImage(string text)
         {
             var width = 250;
             var height = 53;
@@ -33,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return ms;
         }
 
-        public MemoryStream RenderQrCodeImage(string text)
+        public static MemoryStream RenderQrCodeImage(string text)
         {
             var width = 250;
             var height = 250;
