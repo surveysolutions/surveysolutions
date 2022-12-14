@@ -1,6 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net6.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>31</SupportedOSPlatformVersion>
+    <OutputType>Library</OutputType>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidEnableMultiDex>false</AndroidEnableMultiDex>
     <AndroidDexTool>d8</AndroidDexTool>
@@ -10,12 +15,10 @@
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <RootNamespace>WB.UI.Tester</RootNamespace>
     <AssemblyName>WB.UI.Tester</AssemblyName>
-    <OutputType>Library</OutputType>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <AndroidResgenClass>Resource</AndroidResgenClass>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidApplication>True</AndroidApplication>
-    <TargetFrameworkVersion>v12.0</TargetFrameworkVersion>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
@@ -80,8 +83,6 @@
   <ItemGroup>
     <Reference Include="Java.Interop" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Mono.Android" />
-    <Reference Include="Mono.Android.Export" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
@@ -90,31 +91,6 @@
     <Compile Include="..\..\Interviewer\WB.UI.Interviewer\LinkerPleaseInclude.cs">
       <Link>LinkerPleaseInclude.cs</Link>
     </Compile>
-    <Compile Include="Activities\AnonymousQuestionnairesActivity.cs" />
-    <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
-    <Compile Include="Activities\PrefsActivity.cs" />
-    <Compile Include="Activities\InterviewActivity.cs" />
-    <Compile Include="Converters\TesterLocalizationValueConverter.cs" />
-    <Compile Include="Implementation\Services\TesterDenormalizerRegistry.cs" />
-    <Compile Include="TesterApplication.cs" />
-    <Compile Include="TesterAppStart.cs" />
-    <Compile Include="TesterMvxApplication.cs" />
-    <Compile Include="Converters\QuestionnaireTypeToBackgroundConverter.cs" />
-    <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
-    <Compile Include="Infrastructure\Internals\Rest\RestServicePointManager.cs" />
-    <Compile Include="Infrastructure\Internals\Security\TesterPrincipal.cs" />
-    <Compile Include="Infrastructure\Internals\Settings\TesterSettings.cs" />
-    <Compile Include="Infrastructure\Internals\Compression\Compressor.cs" />
-    <Compile Include="Infrastructure\Internals\DesignerApiService.cs" />
-    <Compile Include="Infrastructure\Internals\Storage\TesterQuestionnaireAssemblyFileAccessor.cs" />
-    <Compile Include="Infrastructure\TesterInfrastructureModule.cs" />
-    <Compile Include="ServiceLocation\TesterUIModule.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\Resource.designer.cs" />
-    <Compile Include="Setup.cs" />
-    <Compile Include="Activities\DashboardActivity.cs" />
-    <Compile Include="Activities\LoginActivity.cs" />
-    <Compile Include="Activities\SplashActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\scan_icon.xml">

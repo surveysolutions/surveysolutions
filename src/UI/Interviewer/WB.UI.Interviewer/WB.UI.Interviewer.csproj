@@ -1,6 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net6.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>29</SupportedOSPlatformVersion>
+    <OutputType>Library</OutputType>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidEnableMultiDex>false</AndroidEnableMultiDex>
     <AndroidDexTool>d8</AndroidDexTool>
@@ -9,7 +14,6 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2FE00F67-A1BA-4A93-ABF4-DAE0857711C9}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.UI.Interviewer</RootNamespace>
     <Deterministic>True</Deterministic>
@@ -22,7 +26,6 @@
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
-    <TargetFrameworkVersion>v12.0</TargetFrameworkVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
     <AndroidHttpClientHandlerType>System.Net.Http.HttpClientHandler</AndroidHttpClientHandlerType>
@@ -80,65 +83,8 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="Mono.Android" />
-    <Reference Include="Mono.Android.Export" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Activities\CreateAndLoadInterviewActivity.cs" />
-    <Compile Include="Activities\Dashboard\DashboardActivity.cs" />
-    <Compile Include="Activities\Dashboard\CompletedInterviewsFragment.cs" />
-    <Compile Include="Activities\Dashboard\QuestionnairesFragment.cs" />
-    <Compile Include="Activities\Dashboard\RecyclerViewFragment.cs" />
-    <Compile Include="Activities\Dashboard\RejectedInterviewsFragment.cs" />
-    <Compile Include="Activities\Dashboard\StartedInterviewsFragment.cs" />
-    <Compile Include="Activities\Dashboard\WebInterviewsFragment.cs" />
-    <Compile Include="Activities\DiagnosticsActivity.cs" />
-    <Compile Include="Activities\InterviewActivity.cs" />
-    <Compile Include="Activities\FinishInstallationActivity.cs" />
-    <Compile Include="Activities\InterviewerSearchActivity.cs" />
-    <Compile Include="Activities\LoadingInterviewActivity.cs" />
-    <Compile Include="Activities\MapsActivity.cs" />
-    <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
-    <Compile Include="Activities\PrefsActivity.cs" />
-    <Compile Include="Activities\ProgressInterviewActivity.cs" />
-    <Compile Include="Activities\RelinkDeviceActivity.cs" />
-    <Compile Include="Activities\LoginActivity.cs" />
-    <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
-    <Compile Include="Converters\TransferingStatusToTextColorConverter.cs" />
-    <Compile Include="CustomBindings\ImageCompanyLogoBinding.cs" />
-    <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
-    <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
-    <Compile Include="CustomControls\InterviewerDashboardTemplateSelector.cs" />
-    <Compile Include="CustomControls\MvxFragmentStatePagerAdapter.cs" />
-    <Compile Include="Implementations\Services\StoredEvent.cs" />
-    <Compile Include="Implementations\Services\TabletDiagnosticService.cs" />
-    <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
-    <Compile Include="InterviewerMvxApplication.cs" />
-    <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
-    <Compile Include="InterviewerApplication.cs" />
-    <Compile Include="InterviewerAppStart.cs" />
-    <Compile Include="LinkerPleaseInclude.cs" />
-    <Compile Include="Migrations\Workspaces\M202106151719_FillWorkspaceIfEmpty.cs" />
-    <Compile Include="Migrations\Workspace\AddTitleToOptionViewForSearching.cs" />
-    <Compile Include="Migrations\Workspaces\M202103101642_MoveSqliteTablesInWorkspaceFolder.cs" />
-    <Compile Include="Migrations\Workspaces\M202105191419_SetPrimaryWorkspaceAsDefaultIfNotSet.cs" />
-    <Compile Include="Migrations\Workspace\UpdateAssignmentsWithInterviewsCount.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
-    <Compile Include="ServiceLocation\InterviewerUIModule.cs" />
-    <Compile Include="Services\CheckForExtendedVersionUriProvider.cs" />
-    <Compile Include="Services\CheckForVersionUriProvider.cs" />
-    <Compile Include="Services\InterviewerInAppNotificationsCollector.cs" />
-    <Compile Include="Services\InterviewerInterviewUniqueKeyGenerator.cs" />
-    <Compile Include="Services\InterviewerNotificationsCollector.cs" />
-    <Compile Include="Settings\InterviewerSettings.cs" />
-    <Compile Include="SharedPreferences\SettingsNames.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Setup.cs" />
-    <Compile Include="Activities\SplashActivity.cs" />
-    <Compile Include="ViewModel\InterviewViewModel.cs" />
-    <Compile Include="ViewModel\PrefilledQuestionsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

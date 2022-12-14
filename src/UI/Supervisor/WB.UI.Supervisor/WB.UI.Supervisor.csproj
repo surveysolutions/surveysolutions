@@ -1,6 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net6.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>29</SupportedOSPlatformVersion>
+    <OutputType>Exe</OutputType>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidEnableMultiDex>false</AndroidEnableMultiDex>
     <AndroidDexTool>d8</AndroidDexTool>
@@ -9,7 +14,6 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{7090D2BF-8B25-4744-9E7E-3AA31098C76B}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.UI.Supervisor</RootNamespace>
     <AssemblyName>WB.UI.Supervisor</AssemblyName>
@@ -23,7 +27,6 @@
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
     <JavaMaximumHeapSize />
     <JavaOptions />
-    <TargetFrameworkVersion>v12.0</TargetFrameworkVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -78,61 +81,16 @@
   <ItemGroup>
     <Reference Include="Java.Interop" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Mono.Android" />
-    <Reference Include="Mono.Android.Export" />
-    <Reference Include="Mono.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="Xamarin.AndroidX.Lifecycle.ViewModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\..\..\.nuget\packages\xamarin.androidx.lifecycle.viewmodel\2.2.0.2\lib\monoandroid90\Xamarin.AndroidX.Lifecycle.ViewModel.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Interviewer\WB.UI.Interviewer\LinkerPleaseInclude.cs">
       <Link>LinkerPleaseInclude.cs</Link>
     </Compile>
-    <Compile Include="Activities\DashboardActivity.cs" />
-    <Compile Include="Activities\Dashboard\DashboardFragmets.cs" />
-    <Compile Include="Activities\Dashboard\MenuFragment.cs" />
-    <Compile Include="Activities\Dashboard\RecyclerViewFragment.cs" />
-    <Compile Include="Activities\DiagnosticsActivity.cs" />
-    <Compile Include="Activities\FinishInstallationActivity.cs" />
-    <Compile Include="Activities\Interview\InterviewActivity.cs" />
-    <Compile Include="Activities\Interview\SupervisorCompleteFragment.cs" />
-    <Compile Include="Activities\LoadingActivity.cs" />
-    <Compile Include="Activities\LoginActivity.cs" />
-    <Compile Include="Activities\Interview\PrefilledQuestionsActivity.cs" />
-    <Compile Include="Activities\MapsActivity.cs" />
-    <Compile Include="Activities\OfflineSupervisorSyncActitivy.cs" />
-    <Compile Include="Activities\PrefsActivity.cs" />
-    <Compile Include="Activities\SupervisorSearchActivity.cs" />
-    <Compile Include="CustomControls\SupervisorDashboardTemplateSelector.cs" />
-    <Compile Include="Migrations\Workspaces\M202103101642_MoveSqliteTablesInWorkspaceFolder.cs" />
-    <Compile Include="Migrations\Workspaces\M202105191419_SetPrimaryWorkspaceAsDefaultIfNotSet.cs" />
-    <Compile Include="Migrations\Workspaces\M202106151719_FillWorkspaceIfEmpty.cs" />
-    <Compile Include="MvvmBindings\DrawerLockModeBinding.cs" />
-    <Compile Include="MvvmBindings\ImageCompanyLogoBinding.cs" />
-    <Compile Include="MvvmBindings\SupervisorLocalizationValueConverter.cs" />
-    <Compile Include="MvvmBindings\SelectedBackgroundConverter.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
-    <Compile Include="ServiceLocation\SupervisorInfrastructureModule.cs" />
-    <Compile Include="Services\Implementation\CheckForExtendedVersionUriProvider.cs" />
-    <Compile Include="Services\Implementation\CheckForVersionUriProvider.cs" />
-    <Compile Include="Services\Implementation\SupervisorSettings.cs" />
-    <Compile Include="Services\Implementation\TabletDiagnosticService.cs" />
-    <Compile Include="Services\Implementation\ViewModelNavigationService.cs" />
-    <Compile Include="SharedPreferences\SettingsNames.cs" />
-    <Compile Include="SupervisorMvxApplication.cs" />
-    <Compile Include="SupervisorApplication.cs" />
-    <Compile Include="SupervisorAppStart.cs" />
-    <Compile Include="ServiceLocation\SupervisorUIModule.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Setup.cs" />
-    <Compile Include="Activities\SplashActivity.cs" />
-    <Compile Include="Views\ApplicationSettingsView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
