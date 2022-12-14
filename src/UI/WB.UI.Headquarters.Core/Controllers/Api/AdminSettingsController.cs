@@ -53,7 +53,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public class InterviewerGeographyQuestionAccuracyInMetersModel
         {
             [Required]
-            [Range(5, 1000)]
+            [Range(1, 1000)]
             public int GeographyQuestionAccuracyInMeters { get; set; }
         }
 

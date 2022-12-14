@@ -195,14 +195,14 @@
                             <input
                                 class="form-control number"
                                 v-model.number="geographyQuestionAccuracyInMeters"
-                                v-validate="{ required: true, min_value: 5, max_value: 1000 }"
+                                v-validate="{ required: true, min_value: 1, max_value: 1000 }"
                                 id="interviewerGeographyQuestionAccuracyInMeters"
                                 type="number" />
                         </div>
                         <button
                             type="button"
                             class="btn btn-success"
-                            :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel || geographyQuestionAccuracyInMeters < 5 || geographyQuestionAccuracyInMeters > 1000"
+                            :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel || geographyQuestionAccuracyInMeters < 1 || geographyQuestionAccuracyInMeters > 1000"
                             @click="updateGeographyQuestionAccuracyInMeters">{{$t('Common.Save')}}</button>
                         <button
                             type="button"
