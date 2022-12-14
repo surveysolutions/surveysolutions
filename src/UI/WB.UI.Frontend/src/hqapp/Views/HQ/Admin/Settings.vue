@@ -203,7 +203,7 @@
                         <button
                             type="button"
                             class="btn btn-success"
-                            :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel || geographyQuestionAccuracyInMeters < 1 || geographyQuestionAccuracyInMeters > 1000"
+                            :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel || geographyQuestionAccuracyInMeters < 1 || geographyQuestionAccuracyInMeters > 1000 || errors.has('accuracy')"
                             @click="updateGeographyQuestionAccuracyInMeters">{{$t('Common.Save')}}</button>
                         <button
                             type="button"
@@ -211,7 +211,8 @@
                             :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel"
                             @click="cancelGeographyQuestionAccuracyInMeters">{{$t('Common.Cancel')}}</button>
                     </div>
-                    <div class="error">
+                    <div class="error"
+                        v-show="errors.has('accuracy')">
                         {{ errors.first('accuracy') }}
                     </div>
                 </div>
@@ -240,7 +241,7 @@
                         <button
                             type="button"
                             class="btn btn-success"
-                            :disabled="geographyQuestionPeriodInSeconds == geographyQuestionPeriodInSecondsCancel || geographyQuestionPeriodInSeconds < 5 || geographyQuestionPeriodInSeconds > 1000"
+                            :disabled="geographyQuestionPeriodInSeconds == geographyQuestionPeriodInSecondsCancel || geographyQuestionPeriodInSeconds < 5 || geographyQuestionPeriodInSeconds > 1000 || errors.has('period')"
                             @click="updateGeographyQuestionPeriodInSeconds">{{$t('Common.Save')}}</button>
                         <button
                             type="button"
@@ -248,7 +249,8 @@
                             :disabled="geographyQuestionPeriodInSeconds == geographyQuestionPeriodInSecondsCancel"
                             @click="cancelGeographyQuestionPeriodInSeconds">{{$t('Common.Cancel')}}</button>
                     </div>
-                    <div class="error">
+                    <div class="error"
+                        v-show="errors.has('period')">
                         {{ errors.first('period') }}
                     </div>
                 </div>
