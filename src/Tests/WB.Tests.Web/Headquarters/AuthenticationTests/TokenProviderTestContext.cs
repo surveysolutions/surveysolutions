@@ -23,12 +23,13 @@ namespace WB.Tests.Web.Headquarters.AuthenticationTests
             {
                 var userId = Guid.NewGuid();
 
-                var user = Mock.Of<HqUser>();
+                var user = Mock.Of<HqUser?>();
             
                 var userStoreMock = new Mock<IUserStore<HqUser>>();
                 userStoreMock.Setup(u => u.FindByIdAsync(userId.FormatGuid(), It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(user));
-                userStoreMock.Setup(u => u.UpdateAsync(user, It.IsAny<CancellationToken>()))
+                
+                userStoreMock.Setup(u => u.UpdateAsync(It.IsAny<HqUser>(), It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(new IdentityResult()));
 
                 userStoreMock.As<IUserPasswordStore<HqUser>>();
