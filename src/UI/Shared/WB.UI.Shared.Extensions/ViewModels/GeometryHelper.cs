@@ -59,8 +59,9 @@ public class GeometryHelper
         return true;
     }
     
-    public static string GetProjectedCoordinates(Geometry result)
+    public static string GetProjectedCoordinates(Geometry result, out int count)
     {
+        count = 0;
         string coordinates = string.Empty;
         if(result == null)
             return coordinates;
@@ -75,21 +76,25 @@ public class GeometryHelper
                     .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
                     .Select(coordinate => 
                         $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
+                count = polygonCoordinates.Count;
                 return string.Join(";", polygonCoordinates);
             case Esri.ArcGISRuntime.Geometry.GeometryType.Point:
                 var projected = GeometryEngine.Project(result as MapPoint, reference) as MapPoint;
+                count = 1;
                 return $"{projected.X.ToString(CultureInfo.InvariantCulture)},{projected.Y.ToString(CultureInfo.InvariantCulture)}";
             case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
                 var polylineCoordinates = ((Polyline) result).Parts.SelectMany(p => p.Points)
                     .Select(point => GeometryEngine.Project(point, reference) as MapPoint)
                     .Select(coordinate => 
                         $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
+                count = polylineCoordinates.Count;
                 return string.Join(";", polylineCoordinates);
             case Esri.ArcGISRuntime.Geometry.GeometryType.Multipoint:
                 var projectedMultipoint = (GeometryEngine.Project(result as Multipoint, reference) as Multipoint)
                     .Points.Select(coordinate =>
                         $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}")
                     .ToList();
+                count = projectedMultipoint.Count;
                 return string.Join(";", projectedMultipoint);
         }
 

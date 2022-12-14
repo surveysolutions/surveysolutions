@@ -18,6 +18,22 @@ Vue.config.errorHandler = (error, vm) => {
             toastr.error(message, data.Title)
             return
         }
+
+        if (data.errors && data.errors.length > 0) {
+            let message = ''
+            data.errors.forEach(errMessage => message += '  ' + errMessage + '\r\n')
+
+            console.error(data)
+            toastr.error(message)
+            return
+        }
+
+        const errorMessage = data.error || data.errorMessage
+        if (errorMessage) {
+            console.error(data)
+            toastr.error(errorMessage)
+            return
+        }
     }
     console.error(error, vm)
     toastr.error(error)

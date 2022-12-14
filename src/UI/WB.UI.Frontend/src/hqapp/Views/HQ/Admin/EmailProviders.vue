@@ -514,7 +514,8 @@ export default {
                     })
                     .catch(function(error) {
                         self.sendEmailResult = false
-                        self.sendingErrors = [this.$t('Settings.EmailProvider_GeneralError')]
+                        const data = error.response.data
+                        self.sendingErrors = data && data.errors ? data.errors : [self.$t('Settings.EmailProvider_GeneralError')]
                         Vue.config.errorHandler(error, self)
                     })
                     .then(function() {

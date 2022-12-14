@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (name == Workspace.Default.Name)
             {
-                ModelState.AddModelError(nameof(name), $"Workspace {name} can not be disabled");
+                ModelState.AddModelError(nameof(name), $"Workspace {name} cannot be disabled");
             }
 
             if (ModelState.IsValid)
