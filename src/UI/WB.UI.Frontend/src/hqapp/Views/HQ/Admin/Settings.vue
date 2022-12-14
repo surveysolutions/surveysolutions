@@ -195,7 +195,8 @@
                             <input
                                 class="form-control number"
                                 v-model.number="geographyQuestionAccuracyInMeters"
-                                v-validate="{ required: true, min_value: 1, max_value: 1000 }"
+                                v-validate="{ 'numeric':true, required: true, min_value: 1, max_value: 1000 }"
+                                name="accuracy"
                                 id="interviewerGeographyQuestionAccuracyInMeters"
                                 type="number" />
                         </div>
@@ -209,6 +210,9 @@
                             class="btn btn-link"
                             :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel"
                             @click="cancelGeographyQuestionAccuracyInMeters">{{$t('Common.Cancel')}}</button>
+                    </div>
+                    <div class="error">
+                        {{ errors.first('accuracy') }}
                     </div>
                 </div>
             </div>
@@ -228,8 +232,9 @@
                             <input
                                 class="form-control number"
                                 v-model.number="geographyQuestionPeriodInSeconds"
-                                v-validate="{ required: true, min_value: 5, max_value: 1000 }"
+                                v-validate="{ 'numeric':true, required: true, min_value: 5, max_value: 1000 }"
                                 id="interviewerGeographyQuestionPeriodInSeconds"
+                                name="period"
                                 type="number" />
                         </div>
                         <button
@@ -242,6 +247,9 @@
                             class="btn btn-link"
                             :disabled="geographyQuestionPeriodInSeconds == geographyQuestionPeriodInSecondsCancel"
                             @click="cancelGeographyQuestionPeriodInSeconds">{{$t('Common.Cancel')}}</button>
+                    </div>
+                    <div class="error">
+                        {{ errors.first('period') }}
                     </div>
                 </div>
             </div>
@@ -371,6 +379,10 @@
 
     .form-group .input-group-save {
         display: inline;
+    }
+
+    .block-filter .error {
+        color: red;
     }
 </style>
 
