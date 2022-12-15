@@ -68,7 +68,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private string GetVariableName(ResolutionContext ctx, string value, string identity)
         {
             if (string.IsNullOrWhiteSpace(value) 
-                && ctx != ctx.Mapper.DefaultContext
+                //&& ctx != ctx.Mapper.DefaultContext
                 && ctx.Items.TryGetValue("questionnaire", out var ctxItem) 
                 && ctxItem is IQuestionnaire questionnaire)
             {

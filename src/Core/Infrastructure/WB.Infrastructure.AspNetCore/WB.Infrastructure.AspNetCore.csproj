@@ -8,12 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />        
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />        
         <PackageReference Include="Dapper" Version="2.0.123" />
         <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
         <PackageReference Include="Npgsql" Version="6.0.3" />
         <PackageReference Include="refit" Version="6.3.2" />
         <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />

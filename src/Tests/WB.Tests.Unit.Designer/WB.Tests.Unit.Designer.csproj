@@ -47,7 +47,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="AutoFixture.AutoMoq" Version="4.15.0" />
+    <PackageReference Include="AutoFixture.AutoMoq" Version="4.17.0" />
     <PackageReference Include="Castle.Core" Version="4.4.1" />
     <PackageReference Include="CsvHelper" Version="19.0.0" />
     <PackageReference Include="FluentAssertions" Version="6.8.0" />
