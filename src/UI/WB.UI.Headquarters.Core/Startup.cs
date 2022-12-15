@@ -480,7 +480,10 @@ namespace WB.UI.Headquarters
             app.UseSwagger();
             app.UseSession();
             app.UseResponseCompression();
-            app.UseRequestDecompression();
+
+            //resolve ambiguity
+            RequestDecompressionApplicationBuilderExtensions.UseRequestDecompression(app);
+            //app.UseRequestDecompression();
 
             app.UseHqSwaggerUI();
 
