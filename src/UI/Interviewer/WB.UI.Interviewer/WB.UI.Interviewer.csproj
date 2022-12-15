@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-android29.0</TargetFramework>
+    <TargetFramework>net6.0-android31.0</TargetFramework>
     <SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
     <OutputType>Exe</OutputType>
     <Nullable>disable</Nullable>
@@ -318,7 +318,7 @@
       <Version>1.4.25</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Build.Download">
-      <Version>0.11.0</Version>
+      <Version>0.11.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Controls.SignaturePad">
       <Version>3.0.0</Version>
