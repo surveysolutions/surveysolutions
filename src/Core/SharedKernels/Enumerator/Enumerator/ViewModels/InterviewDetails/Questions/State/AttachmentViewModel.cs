@@ -142,8 +142,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         {
                             this.Video = media;
                         }
-
-                        if (IsAudio)
+                        else if (IsAudio)
                         {
                             this.Audio = media;
                         }

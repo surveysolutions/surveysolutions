@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  NODE_VERSION: 16
+  NODE_VERSION: 17
   DOTNET_VERSION: '6.0.x'
 
 jobs:
@@ -142,6 +142,7 @@ jobs:
         -KeystorePassword "${{ secrets.INTERVIEWER_KEYSTORE_PASSWORD }}" `
         -GoogleMapKey "${{ secrets.GOOGLEMAPS_KEY }}" `
         -ArcGisKey "${{ secrets.ARCGIS_KEY }}"
+        -ArcGisApiKey "${{ secrets.ARCGIS_API_KEY }}"
        
     - name: Publish
       uses: actions/upload-artifact@v2
@@ -221,7 +222,7 @@ jobs:
 
       - name: Setup WIX
         run: |
-          Invoke-WebRequest -Uri https://wixtoolset.org/downloads/v3.14.0.5722/wix314-binaries.zip -OutFile wix314-binaries.zip
+          Invoke-WebRequest -Uri https://wixtoolset.org/downloads/v3.14.0.6526/wix314-binaries.zip -OutFile wix314-binaries.zip
           Expand-Archive -Path wix314-binaries.zip -DestinationPath installer/wix314-binaries
 
       - name: Download mobile artifacts

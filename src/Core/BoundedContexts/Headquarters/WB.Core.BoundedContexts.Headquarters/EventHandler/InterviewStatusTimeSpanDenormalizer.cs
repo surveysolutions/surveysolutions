@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (lastAssignOfRejectStatus == null)
                 return state;
 
-            var completeTime = evnt.Payload.CompleteTime ?? evnt.EventTimeStamp;
+            var completeTime = evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.CompleteTime ?? evnt.EventTimeStamp;
             var completeTimeSpan = completeTime - lastAssignOfRejectStatus.Timestamp;
 
             var statusesAfterLastAssign = this.GetStatusesAfterLastAssignOrReject(state, lastAssignOfRejectStatus);

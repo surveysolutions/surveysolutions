@@ -171,11 +171,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void UpdateSelection(Identity targetGroup)
         {
+            if (targetGroup == null || this.SectionIdentity == null)
+                return;
+            
             this.IsCurrent = this.SectionIdentity.Equals(targetGroup);
             this.IsSelected = this.IsCurrent 
-                              || (targetGroup != null 
-                                 && (this.statefulInterviewRepository.GetOrThrow(this.interviewId).GetGroup(targetGroup)
-                                     .Parents?.Any(x => x.Identity == this.SectionIdentity) ?? false));
+                              || (this.statefulInterviewRepository.GetOrThrow(this.interviewId)
+                                  .GetGroup(targetGroup)?
+                                  .Parents?.Any(x => x.Identity == this.SectionIdentity) ?? false);
             this.Expanded = this.IsSelected;
         }
 

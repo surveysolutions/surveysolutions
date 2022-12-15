@@ -255,7 +255,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion,
+                Version = 33,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -273,6 +273,100 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                 .Any(x => !string.IsNullOrWhiteSpace(x.AttachmentName)));
                         },
                         description: "Attachment name is used in options or categories"
+                    ),
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion,
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire =>
+                        {
+                            return questionnaire.Find<AreaQuestion>(x => 
+                                x.Properties?.GeometryInputMode != null 
+                                && x.Properties?.GeometryInputMode != GeometryInputMode.Manual).Any();
+                        },
+                        description: "Geography question has non manual input mode"
+                    ),
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire =>
+                        {
+                            return questionnaire.Find<AreaQuestion>(x => 
+                                x.Properties?.GeometryOverlapDetection == true).Any();
+                        },
+                        description: "Geography question has overlap detection on"
+                    ),
+                    
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire =>
+                        {
+                            var allGeoQuestions =  questionnaire.Find<AreaQuestion>()
+                                .ToList();
+
+                            if (!allGeoQuestions.Any())
+                                return false;
+                           
+                            var geoQuestionsPropertiesRefs = 
+                                allGeoQuestions.Select(x => $"{x.VariableName}.RequestedAccuracy")
+                                    .Union(allGeoQuestions.Select(x => $"{x.VariableName}.RequestedFrequency")).ToList();
+
+                            geoQuestionsPropertiesRefs.Add("self.RequestedAccuracy");
+                            geoQuestionsPropertiesRefs.Add("self.RequestedFrequency");
+                            
+                            //conditions
+                            //validations
+                            //LinkedFilterExpression
+                            //question.Properties!.OptionsFilterExpression
+
+                            bool IsUsedInExpression(string? itemToCheck, List<string> geoQuestions)
+                            {
+                                if (string.IsNullOrWhiteSpace(itemToCheck)) return false;
+                                var validationExpressionTrimmed = itemToCheck
+                                    .Replace("\r", "")
+                                    .Replace("\n", "")
+                                    .Replace(" ", "");
+
+                                return geoQuestions.Any(geo =>
+                                    validationExpressionTrimmed.Contains(geo));
+                            }
+
+                            foreach (var composite in questionnaire.Find<IComposite>())
+                            {
+                                if (composite is IConditional conditional 
+                                    && IsUsedInExpression(conditional.ConditionExpression, geoQuestionsPropertiesRefs))
+                                {
+                                    return true;
+                                }
+                                
+                                if (composite is IValidatable validatable)
+                                {
+                                    foreach (var validationExpression in validatable.ValidationConditions.Select(x =>
+                                                 x.Expression))
+                                    {
+                                        if (IsUsedInExpression(validationExpression, geoQuestionsPropertiesRefs))
+                                        {
+                                            return true;
+                                        }
+                                    }
+                                }
+                                
+                                if (composite is IQuestion question)
+                                {
+                                    if (IsUsedInExpression(question.LinkedFilterExpression, geoQuestionsPropertiesRefs) 
+                                        || IsUsedInExpression(question.Properties?.OptionsFilterExpression, geoQuestionsPropertiesRefs))
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+                            return false;
+                        },
+                        description: "Geography question accuracy or frequency is used in expressions"
                     ),
                 }
             },

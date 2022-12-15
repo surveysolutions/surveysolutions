@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -48,6 +50,20 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool PartialSynchronizationEnabled { get; set; }
         }
 
+        public class InterviewerGeographyQuestionAccuracyInMetersModel
+        {
+            [Required]
+            [Range(1, 1000)]
+            public int GeographyQuestionAccuracyInMeters { get; set; }
+        }
+
+        public class InterviewerGeographyQuestionPeriodInSecondsModel
+        {
+            [Required]
+            [Range(5, 1000)]
+            public int GeographyQuestionPeriodInSeconds { get; set; }
+        }
+
         public class WebInterviewSettingsModel
         {
             public bool AllowEmails { get; set; }
@@ -73,6 +89,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly ISystemLog auditLog;
         private readonly IWebInterviewEmailRenderer emailRenderer;
         private readonly IExportFactory exportFactory;
+        private readonly ILogger<AdminSettingsController> logger;
 
         public AdminSettingsController(
             IPlainKeyValueStorage<GlobalNotice> appSettingsStorage,
@@ -84,7 +101,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             ISystemLog auditLog, 
             ISystemLogViewFactory systemLogViewFactory,
             IWebInterviewEmailRenderer emailRenderer,
-            IExportFactory exportFactory)
+            IExportFactory exportFactory,
+            ILogger<AdminSettingsController> logger)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
             this.interviewerSettingsStorage = interviewerSettingsStorage ?? throw new ArgumentNullException(nameof(interviewerSettingsStorage));
@@ -98,6 +116,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.auditLog = auditLog;
             this.emailRenderer = emailRenderer;
             this.exportFactory = exportFactory;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -127,29 +146,71 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public ActionResult<InterviewerSettingsModel> InterviewerSettings()
+        public ActionResult<object> InterviewerSettings()
         {
             var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
 
-            return new InterviewerSettingsModel
+            return new
             {
                 InterviewerAutoUpdatesEnabled = interviewerSettings.IsAutoUpdateEnabled(),
                 NotificationsEnabled = interviewerSettings.IsDeviceNotificationsEnabled(),
                 PartialSynchronizationEnabled = interviewerSettings.IsPartialSynchronizationEnabled(),
+                GeographyQuestionAccuracyInMeters = interviewerSettings.GetGeographyQuestionAccuracyInMeters(),
+                GeographyQuestionPeriodInSeconds = interviewerSettings.GetGeographyQuestionPeriodInSeconds(),
             };
         }
 
         [HttpPost]
         public IActionResult InterviewerSettings([FromBody] InterviewerSettingsModel message)
         {
-            this.interviewerSettingsStorage.Store(
-                new InterviewerSettings
-                {
-                    AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled,
-                    DeviceNotificationsEnabled = message.NotificationsEnabled,
-                    PartialSynchronizationEnabled = message.PartialSynchronizationEnabled,
-                },
-                AppSetting.InterviewerSettings);
+            if (!ModelState.IsValid)
+                return Ok(new {sucess = false});
+
+            UpdateInterviewerSettings(settings =>
+            {
+                settings.AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled;
+                settings.DeviceNotificationsEnabled = message.NotificationsEnabled;
+                settings.PartialSynchronizationEnabled = message.PartialSynchronizationEnabled;
+            });
+
+            return Ok(new {sucess = true});
+        }
+
+        private void UpdateInterviewerSettings(Action<InterviewerSettings> updateAction)
+        {
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+            if (interviewerSettings == null)
+                interviewerSettings = new InterviewerSettings();
+            
+            updateAction.Invoke(interviewerSettings);
+            
+            this.interviewerSettingsStorage.Store(interviewerSettings, AppSetting.InterviewerSettings);
+        }
+
+        [HttpPost]
+        public IActionResult InterviewerGeographyQuestionAccuracyInMeters([FromBody] InterviewerGeographyQuestionAccuracyInMetersModel message)
+        {
+            if (!ModelState.IsValid)
+                return Ok(new {sucess = false});
+
+            UpdateInterviewerSettings(settings =>
+            {
+                settings.GeographyQuestionAccuracyInMeters = message.GeographyQuestionAccuracyInMeters;
+            });
+
+            return Ok(new {sucess = true});
+        }
+
+        [HttpPost]
+        public IActionResult InterviewerGeographyQuestionPeriodInSeconds([FromBody] InterviewerGeographyQuestionPeriodInSecondsModel message)
+        {
+            if (!ModelState.IsValid)
+                return Ok(new {sucess = false});
+
+            UpdateInterviewerSettings(settings =>
+            {
+                settings.GeographyQuestionPeriodInSeconds = message.GeographyQuestionPeriodInSeconds;
+            });
 
             return Ok(new {sucess = true});
         }
@@ -242,6 +303,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
             catch (EmailServiceException e)
             {
+                logger.LogError(e, "Error when send test email to {Email}", model.Email);
                 return StatusCode((int)e.StatusCode, new
                 {
                     Success = false,

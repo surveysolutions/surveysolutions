@@ -341,6 +341,18 @@
   <data name="InterviewerPartialSynchronization" xml:space="preserve">
     <value>Частичная синхронизация</value>
   </data>
+  <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
+    <value>Точность для гео вопроса</value>
+  </data>
+  <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
+    <value>Установить точность для геовопроса в метрах</value>
+  </data>
+  <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
+    <value>Период для гео вопроса</value>
+  </data>
+  <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
+    <value>Установить период опроса для геовопроса в секундах</value>
+  </data>
   <data name="LogoSettings_Description1" xml:space="preserve">
       <value>Нажмите кнопку «Выбрать файл», чтобы загрузить изображение со своего компьютера на сервер.</value>
   </data>

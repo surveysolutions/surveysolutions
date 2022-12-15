@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public InterviewModeChanged(Guid userId, DateTimeOffset originDate, InterviewMode mode, string? comment = null)
             : base(userId, originDate)
         {
-            Mode = mode;
+            this.Mode = mode;
             this.Comment = comment;
         }
         

@@ -51,7 +51,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                     if (i.Drawable is BitmapDrawable d)
                     {
                         Bitmap bitmap = d.Bitmap;
-                        if (bitmap != null)
+                        if (bitmap != null && !bitmap.IsRecycled)
                         {
                             bitmap.Recycle();
                             bitmap.Dispose();

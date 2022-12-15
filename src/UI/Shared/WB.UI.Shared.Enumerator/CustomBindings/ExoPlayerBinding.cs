@@ -15,9 +15,11 @@ using Com.Google.Android.Exoplayer2.Video;
 using Java.IO;
 using MvvmCross;
 using MvvmCross.Base;
+using MvvmCross.Binding;
 using MvvmCross.WeakSubscription;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.UI.Shared.Enumerator.CustomBindings.Models;
+using Console = System.Console;
 using Uri = Android.Net.Uri;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
@@ -28,6 +30,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             
         }
+
+        public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
         private IDisposable metadataEventSubscription;
 
@@ -40,8 +44,13 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 
                 if (Target?.Player != null)
                 {
-                    Target.Player.Release();
-                    Target.Player.Dispose();
+                    try
+                    {
+                        Target.Player.Release();
+                        Target.Player.Dispose();
+                    }
+                    catch (ObjectDisposedException) { }
+                    
                     Target.Player = null;
                 }
             }
@@ -49,16 +58,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             base.Dispose(isDisposing);
         }
 
-        static readonly DefaultExtractorsFactory ExtractorsFactory = new DefaultExtractorsFactory();
-        
         protected override void SetValueToView(PlayerView view, IMediaAttachment value)
         {
             var media = value as MediaAttachment;
 
             // exit if there is no content path of file not exists
             if (media == null 
-                || string.IsNullOrWhiteSpace(value.ContentPath) 
-                || !System.IO.File.Exists(value.ContentPath))
+                || string.IsNullOrWhiteSpace(media.ContentPath) 
+                || !System.IO.File.Exists(media.ContentPath))
             {
                 return;
             }
@@ -68,6 +75,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             if (view.Player != null)
             {
+                metadataEventSubscription?.Dispose();
+                metadataEventSubscription = null;
+                
                 view.Player.Stop();
                 view.Player.Release();
                 view.Player.Dispose();
@@ -78,9 +88,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 view.Context, Util.GetUserAgent(view.Context, "ExoPlayerInfo")
             );
 
-            var uri = Uri.FromFile(new File(value.ContentPath));
+            var uri = Uri.FromFile(new File(media.ContentPath));
 
-            var mediaSourceFactory = new ProgressiveMediaSource.Factory(dataSourceFactory, ExtractorsFactory);
+            var mediaSourceFactory = new ProgressiveMediaSource.Factory(dataSourceFactory, new DefaultExtractorsFactory());
             var mediaSource = mediaSourceFactory.CreateMediaSource(MediaItem.FromUri(uri));
 
             SimpleExoPlayer.Builder exoPlayer = new SimpleExoPlayer.Builder(view.Context);

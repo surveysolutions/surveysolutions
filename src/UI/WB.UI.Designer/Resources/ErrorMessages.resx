@@ -130,7 +130,7 @@
     <value>User is not authorized. Please check your login and password.</value>
   </data>
   <data name="OldClientPleaseUpdate" xml:space="preserve">
-    <value>You have an obsolete version of the Headquarters application. Please contact support@mysurvey.solutions to request an update.</value>
+    <value>You have an obsolete version of the Headquarters application. Please contact your server administrator to request an update.</value>
   </data>
   <data name="VersionParameterIsIncorrect" xml:space="preserve">
     <value>There is a problem with the version of your questionnaire. Please contact support@mysurvey.solutions.</value>

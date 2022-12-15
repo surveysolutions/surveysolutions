@@ -57,6 +57,7 @@ namespace WB.Services.Scheduler.Tests
 
         protected IConfiguration Configuration => new ConfigurationBuilder()
             .AddJsonFile($@"appsettings.json", true)
+            .AddJsonFile($"appsettings.{Environment.MachineName}.json", true)
             .Build();
 
     }

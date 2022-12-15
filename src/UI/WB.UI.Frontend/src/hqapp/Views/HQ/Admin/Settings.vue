@@ -179,6 +179,82 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-7">
+                <div class="block-filter"
+                    style="padding-left: 30px">
+                    <div class="form-group">
+                        <label for="interviewerGeographyQuestionAccuracyInMeters"
+                            style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{$t('Settings.InterviewerGeographyQuestionAccuracyInMeters')}}
+                            <p style="font-weight: normal">{{$t('Settings.GeographyQuestionAccuracyInMetersDescription')}}</p>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group input-group-save">
+                            <input
+                                class="form-control number"
+                                v-model.number="geographyQuestionAccuracyInMeters"
+                                v-validate="{ 'numeric':true, required: true, min_value: 1, max_value: 1000 }"
+                                name="accuracy"
+                                id="interviewerGeographyQuestionAccuracyInMeters"
+                                type="number" />
+                        </div>
+                        <button
+                            type="button"
+                            class="btn btn-success"
+                            :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel || geographyQuestionAccuracyInMeters < 1 || geographyQuestionAccuracyInMeters > 1000 || errors.has('accuracy')"
+                            @click="updateGeographyQuestionAccuracyInMeters">{{$t('Common.Save')}}</button>
+                        <button
+                            type="button"
+                            class="btn btn-link"
+                            :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel"
+                            @click="cancelGeographyQuestionAccuracyInMeters">{{$t('Common.Cancel')}}</button>
+                    </div>
+                    <div class="error"
+                        v-show="errors.has('accuracy')">
+                        {{ errors.first('accuracy') }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <div class="block-filter"
+                    style="padding-left: 30px">
+                    <div class="form-group">
+                        <label for="interviewerGeographyQuestionPeriodInSeconds"
+                            style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{$t('Settings.InterviewerGeographyQuestionPeriodInSeconds')}}
+                            <p style="font-weight: normal">{{$t('Settings.GeographyQuestionPeriodInSecondsDescription')}}</p>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group input-group-save">
+                            <input
+                                class="form-control number"
+                                v-model.number="geographyQuestionPeriodInSeconds"
+                                v-validate="{ 'numeric':true, required: true, min_value: 5, max_value: 1000 }"
+                                id="interviewerGeographyQuestionPeriodInSeconds"
+                                name="period"
+                                type="number" />
+                        </div>
+                        <button
+                            type="button"
+                            class="btn btn-success"
+                            :disabled="geographyQuestionPeriodInSeconds == geographyQuestionPeriodInSecondsCancel || geographyQuestionPeriodInSeconds < 5 || geographyQuestionPeriodInSeconds > 1000 || errors.has('period')"
+                            @click="updateGeographyQuestionPeriodInSeconds">{{$t('Common.Save')}}</button>
+                        <button
+                            type="button"
+                            class="btn btn-link"
+                            :disabled="geographyQuestionPeriodInSeconds == geographyQuestionPeriodInSecondsCancel"
+                            @click="cancelGeographyQuestionPeriodInSeconds">{{$t('Common.Cancel')}}</button>
+                    </div>
+                    <div class="error"
+                        v-show="errors.has('period')">
+                        {{ errors.first('period') }}
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row extra-margin-bottom contain-input">
@@ -282,7 +358,38 @@
             </h3>
     </script>-->
 </template>
+
+<style scoped>
+    .logo {
+        max-width: 365px;
+        max-height: 329px;
+    }
+
+    .input-group .form-control.number {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .input-group .form-control.number[aria-invalid="true"] {
+        color: red;
+    }
+
+    .form-group .btn-success {
+        margin-left: 20px;
+        margin-top: 2px;
+    }
+
+    .form-group .input-group-save {
+        display: inline;
+    }
+
+    .block-filter .error {
+        color: red;
+    }
+</style>
+
 <script>
+
 import Vue from 'vue'
 import modal from '@/shared/modal'
 
@@ -299,6 +406,10 @@ export default {
             isDeviceNotificationsEnabled: false,
             isEmailAllowed: false,
             files: [],
+            geographyQuestionAccuracyInMeters: 10,
+            geographyQuestionPeriodInSeconds: 10,
+            geographyQuestionAccuracyInMetersCancel: 10,
+            geographyQuestionPeriodInSecondsCancel: 10,
         }
     },
     mounted() {
@@ -321,6 +432,10 @@ export default {
             this.isInterviewerAutomaticUpdatesEnabled = interviewerSettings.data.interviewerAutoUpdatesEnabled
             this.isDeviceNotificationsEnabled = interviewerSettings.data.notificationsEnabled
             this.isPartialSynchronizationEnabled = interviewerSettings.data.partialSynchronizationEnabled
+            this.geographyQuestionAccuracyInMeters = interviewerSettings.data.geographyQuestionAccuracyInMeters
+            this.geographyQuestionPeriodInSeconds = interviewerSettings.data.geographyQuestionPeriodInSeconds
+            this.geographyQuestionAccuracyInMetersCancel = interviewerSettings.data.geographyQuestionAccuracyInMeters
+            this.geographyQuestionPeriodInSecondsCancel = interviewerSettings.data.geographyQuestionPeriodInSeconds
 
             const webInterviewSettings = await this.$hq.AdminSettings.getWebInterviewSettings()
             this.isEmailAllowed = webInterviewSettings.data.allowEmails
@@ -357,6 +472,32 @@ export default {
         async clearMessage() {
             this.globalNotice = ''
             return this.updateMessage()
+        },
+        async updateGeographyQuestionAccuracyInMeters() {
+            if (this.geographyQuestionAccuracyInMeters < 5 && this.geographyQuestionAccuracyInMeters > 1000)
+                return
+
+            return this.$hq.AdminSettings.setGeographyQuestionAccuracyInMeters(
+                this.geographyQuestionAccuracyInMeters
+            ).then(() => {
+                this.geographyQuestionAccuracyInMetersCancel = this.geographyQuestionAccuracyInMeters
+            })
+        },
+        cancelGeographyQuestionAccuracyInMeters() {
+            this.geographyQuestionAccuracyInMeters = this.geographyQuestionAccuracyInMetersCancel
+        },
+        async updateGeographyQuestionPeriodInSeconds() {
+            if (this.geographyQuestionPeriodInSeconds < 5 && this.geographyQuestionPeriodInSeconds > 1000)
+                return
+
+            return this.$hq.AdminSettings.setGeographyQuestionPeriodInSeconds(
+                this.geographyQuestionPeriodInSeconds
+            ).then(() => {
+                this.geographyQuestionPeriodInSecondsCancel = this.geographyQuestionPeriodInSeconds
+            })
+        },
+        cancelGeographyQuestionPeriodInSeconds() {
+            this.geographyQuestionPeriodInSeconds = this.geographyQuestionPeriodInSecondsCancel
         },
         updateAllowInterviewerUpdateProfile() {
             this.$hq.AdminSettings.setProfileSettings(
@@ -428,9 +569,4 @@ export default {
     },
 }
 </script>
-<style scoped>
-.logo {
-    max-width: 365px;
-    max-height: 329px;
-}
-</style>
+

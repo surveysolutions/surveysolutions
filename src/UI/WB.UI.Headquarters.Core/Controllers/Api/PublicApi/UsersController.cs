@@ -324,7 +324,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (createdUserRole == UserRoles.Administrator)
             {
-                ModelState.AddModelError(nameof(model.Role), "Administrator user can not be created with api");
+                ModelState.AddModelError(nameof(model.Role), "Administrator user cannot be created with api");
             }
 
             if (ModelState.IsValid)

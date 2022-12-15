@@ -18,7 +18,7 @@ namespace WB.UI.Shared.Web.Captcha
 {
     public class CaptchaImageGenerator
     {
-        static readonly string[] fontFamilies = { "Noto Sans" };
+        string[] fontFamilies = { "Noto Sans" };
         static readonly Color[] colors = { Color.Red, Color.DarkBlue, Color.Chocolate, Color.DarkCyan, Color.Orange };
         private static readonly FontStyle[] fontStyles = {FontStyle.Bold, FontStyle.Italic, FontStyle.Regular};
 
@@ -27,6 +27,11 @@ namespace WB.UI.Shared.Web.Captcha
 
         readonly Random rnd = new Random();
 
+        public void ChangeFonts(params string[] fontFamilies)
+        {
+            this.fontFamilies = fontFamilies;
+        }
+        
         T RandomItemFrom<T>(T[] collection)
         {
             return collection[rnd.Next(0, collection.Length)];

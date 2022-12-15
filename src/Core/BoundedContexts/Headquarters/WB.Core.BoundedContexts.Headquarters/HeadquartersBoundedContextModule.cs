@@ -264,6 +264,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<QuestionnaireStateForAssignmentValidator>();
             registry.Bind<QuestionnaireStateForCalendarEventValidator>();
             registry.Bind<QuestionnaireStateForInterviewValidator>();
+            registry.Bind<AssignmentLimitInterviewValidator>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
             registry.Bind<ICalendarEventPackageService, CalendarEventPackageService>();
@@ -512,6 +513,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                     .SkipValidationFor<ApproveInterviewCommand>()
                     .SkipValidationFor<HqApproveInterviewCommand>()
                     .SkipValidationFor<ChangeInterviewModeCommand>()
+                .ValidatedBy<AssignmentLimitInterviewValidator>()
                 .ValidatedBy<QuestionnaireStateForInterviewValidator>()
                     .SkipValidationFor<HardDeleteInterview>()
             

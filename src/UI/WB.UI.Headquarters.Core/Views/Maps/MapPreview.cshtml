@@ -19,6 +19,13 @@
             height: 100%;
             width: 100%;
         }
+        #loadingImg {
+            position:relative; 
+            display: block; 
+            z-index:100; 
+            margin: 0 auto; 
+            margin-top: -300px;
+        }
     </style>
     
         <link rel="stylesheet" href="https://js.arcgis.com/4.22/esri/css/main.css">
@@ -134,6 +141,6 @@
 <body>
     <div id="viewDiv">
     </div>
-    <img id="loadingImg" alt="@Common.Loading" src="/img/loader.gif" style="position:relative; display: block; z-index:100; margin: 0 auto; margin-top: -300px;" />
+    <img id="loadingImg" alt="@Common.Loading" src="/img/loader.gif" />
 </body>
 </html>

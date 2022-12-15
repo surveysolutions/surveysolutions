@@ -3,22 +3,28 @@
         function ($rootScope, $scope, $state, $i18next, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, 
             hotkeys, optionsService, alertService, $uibModal) {
             $scope.currentChapterId = $state.params.chapterId;
-            var dictionnaires = {
+            const dictionaries = {
                 categoricalMultiKinds:
                 [
                     { value: 1, text: $i18next.t('QuestionCheckboxes') },
                     { value: 2, text: $i18next.t('QuestionYesNoMode') },
                     { value: 3, text: $i18next.t('QuestionComboBox') }
-                ]
+                ],
+                geographyInputModeOptions:
+                    [
+                        { value: 'Manual', text: $i18next.t('GeographyInputModeManual') },
+                        { value: 'Automatic', text: $i18next.t('GeographyInputModeAutomatic') },
+                        { value: 'Semiautomatic', text: $i18next.t('GeographyInputModeSemiautomatic') }
+                    ],                
             };
 
-            var saveQuestion = 'ctrl+s';
+            let saveQuestion = 'ctrl+s';
             
             if (hotkeys.get(saveQuestion) !== false) {
                 hotkeys.del(saveQuestion);
             }
 
-            var markFormAsChanged = function () {
+            let markFormAsChanged = function () {
                 if ($scope.questionForm) {
                     $scope.questionForm.$setDirty();
                 }
@@ -72,7 +78,7 @@
                 }
             }
 
-            var bindQuestion = function(question) {
+            let bindQuestion = function(question) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
                 $scope.activeQuestion.breadcrumbs = question.breadcrumbs;
 
@@ -105,7 +111,11 @@
                 $scope.activeQuestion.geometryTypeOptions = question.geometryTypeOptions;
                 $scope.activeQuestion.geometryType = question.geometryType;
                 $scope.activeQuestion.defaultDate = question.defaultDate;
-                $scope.activeQuestion.categoricalMultiKinds = dictionnaires.categoricalMultiKinds;
+                $scope.activeQuestion.categoricalMultiKinds = dictionaries.categoricalMultiKinds;
+
+                $scope.activeQuestion.geometryInputModeOptions = dictionaries.geographyInputModeOptions;
+                $scope.activeQuestion.geometryInputMode = question.geometryInputMode;
+                $scope.activeQuestion.geometryOverlapDetection = question.geometryOverlapDetection;                
 
                 var options = question.options || [];  
                 _.each(options, function(option) {
@@ -156,7 +166,7 @@
             $scope.MAX_OPTIONS_COUNT = 200;
 
             var dataBind = function (result) {
-                dictionnaires.allQuestionScopeOptions = result.allQuestionScopeOptions;
+                dictionaries.allQuestionScopeOptions = result.allQuestionScopeOptions;
 
                 $scope.sourceOfLinkedEntities = result.sourceOfLinkedEntities;
                 $scope.sourceOfSingleQuestions = result.sourceOfSingleQuestions;
@@ -375,7 +385,7 @@
             $scope.setQuestionType = function (type) {
                 $scope.activeQuestion.type = type;
                 $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
-                $scope.activeQuestion.allQuestionScopeOptions = dictionnaires.allQuestionScopeOptions;
+                $scope.activeQuestion.allQuestionScopeOptions = dictionaries.allQuestionScopeOptions;
 
                 var isQuestionScopeSupervisorOrPrefilled = $scope.activeQuestion.questionScope === 'Supervisor' || $scope.activeQuestion.questionScope === 'Identifying';
                 if (type === 'TextList' && isQuestionScopeSupervisorOrPrefilled) {
@@ -420,9 +430,15 @@
                 if (type === "Area") {
                     if($scope.activeQuestion.geometryType === null)
                         $scope.activeQuestion.geometryType = $scope.activeQuestion.geometryTypeOptions[0].value;
+
+                    if($scope.activeQuestion.geometryInputMode === null)
+                        $scope.activeQuestion.geometryInputMode = $scope.activeQuestion.geometryInputModeOptions[0].value;
                 }
-                else
+                else {
                     $scope.activeQuestion.geometryType = null;
+                    $scope.activeQuestion.geometryInputMode = null;
+                    $scope.activeQuestion.geometryOverlapDetection = null;
+                }
 
                 markFormAsChanged();
             };
@@ -582,7 +598,12 @@
                 markFormAsChanged();
             };
 
+            $scope.changeGeometryInputMode = function (mode) {
+                $scope.activeQuestion.geometryInputMode = mode;
 
+                markFormAsChanged();
+            };
+            
             $scope.getQuestionScopes = function (currentQuestion) {
                 if (!currentQuestion)
                     return [];
@@ -630,11 +651,11 @@
             
             $scope.getCategoricalKind = function () {
                 if ($scope.activeQuestion.isFilteredCombobox)
-                    return dictionnaires.categoricalMultiKinds[2];
+                    return dictionaries.categoricalMultiKinds[2];
                 else if ($scope.activeQuestion.yesNoView)
-                    return dictionnaires.categoricalMultiKinds[1];
+                    return dictionaries.categoricalMultiKinds[1];
                 else
-                    return dictionnaires.categoricalMultiKinds[0];
+                    return dictionaries.categoricalMultiKinds[0];
             };
 
             $scope.getSourceOfCategories = function() {
@@ -848,8 +869,8 @@
 
             $scope.isIntegerChange = function () {
                 $scope.activeQuestion.countOfDecimalPlaces = null;
-            };
-
+            };                 
+            
             $scope.showAsListChange = function () {
                 $scope.activeQuestion.showAsListThreshold = null;
             };

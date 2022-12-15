@@ -108,6 +108,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string DisplayUrl { get; set; }
         public GeometryType? Type { get; set; }
         public InterviewGeometryAnswer Answer { get; set; }
+        public GeometryInputMode? Mode { get; set; }
     }
 
     public class InterviewGeometryAnswer
@@ -115,6 +116,9 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public GeoLocation[] SelectedPoints { get; set; }
         public double? Area { get; set; }
         public double? Length { get; set; }
+        public double? RequestedAccuracy { set; get; }
+        
+        public double? RequestedFrequency { set; get; }
     }
 
     public class InterviewDateQuestion : GenericQuestion

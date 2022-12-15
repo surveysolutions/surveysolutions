@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         #region State
 
-        private readonly QuestionnaireDocument innerDocument;
+        protected readonly QuestionnaireDocument innerDocument;
 
         private IReadOnlyCollection<Guid> allRosterSizeQuestionsCache;
         private Dictionary<Guid, IVariable> variablesCache = null;
@@ -71,9 +71,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private readonly ConcurrentDictionary<Guid, HashSet<int>> cacheOfWarningsIndeces = new ConcurrentDictionary<Guid, HashSet<int>>();
         
-
-        public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
-
         public Guid? ResponsibleId => null;
 
         private readonly Translation translation;
@@ -311,7 +308,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetQuestionOrThrow(linkedQuestionId.Value).QuestionType == QuestionType.TextList;
         }
 
-        public bool IsUsingExpressionStorage() => this.QuestionnaireDocument.IsUsingExpressionStorage;
+        public bool IsUsingExpressionStorage() => this.innerDocument.IsUsingExpressionStorage;
 
         public Guid[] GetQuestionsLinkedToRoster()
         {
@@ -389,7 +386,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             string searchFor, int[] excludedOptionIds)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            CheckShouldQestionProvideOptions(question, questionId);
+            CheckShouldQuestionProvideOptions(question, questionId);
 
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
@@ -417,7 +414,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            CheckShouldQestionProvideOptions(question, questionId);
+            CheckShouldQuestionProvideOptions(question, questionId);
 
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
@@ -445,7 +442,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Select(x => x.Value).ToReadOnlyCollection();
         }
 
-        private void CheckShouldQestionProvideOptions(IQuestion question, Guid questionId)
+        private void CheckShouldQuestionProvideOptions(IQuestion question, Guid questionId)
         {
             bool questionTypeDoesNotSupportAnswerOptions
                 = question.QuestionType != QuestionType.SingleOption && 
@@ -471,7 +468,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue, int? parentValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            CheckShouldQestionProvideOptions(question, questionId);
+            CheckShouldQuestionProvideOptions(question, questionId);
 
             return AnswerUtils.GetOptionForQuestionByOptionValue(question, optionValue, parentValue);
         }
@@ -485,7 +482,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private CategoricalOption GetAnswerOptionImpl(Guid questionId, decimal optionValue, int? answerParentValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            CheckShouldQestionProvideOptions(question, questionId);
+            CheckShouldQuestionProvideOptions(question, questionId);
 
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
@@ -504,7 +501,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter, int[] excludedOptionIds = null)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            CheckShouldQestionProvideOptions(question, questionId);
+            CheckShouldQuestionProvideOptions(question, questionId);
 
             return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, filter, excludedOptionIds);
         }
@@ -512,7 +509,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public CategoricalOption GetOptionForQuestionByOptionTextFromStructure(Guid questionId, string optionText, int? parentQuestionValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            CheckShouldQestionProvideOptions(question, questionId);
+            CheckShouldQuestionProvideOptions(question, questionId);
 
             return question.Answers.SingleOrDefault(x => x.AnswerText == optionText && x.ParentCode == parentQuestionValue).ToCategoricalOption();
         }
@@ -557,7 +554,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             if (IsCoverPageSupported)
             {
-                this.QuestionnaireDocument.Children
+                return innerDocument.Children
                     .First(c => c.PublicKey == CoverPageSectionId)
                     .Children
                     .Where(e => e is IQuestion)
@@ -565,8 +562,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .ToReadOnlyCollection();
             }
             
-            return this
-                .QuestionnaireDocument
+            return innerDocument
                 .Find<IQuestion>(question => question.Featured)
                 .Select(question => question.PublicKey)
                 .ToReadOnlyCollection();
@@ -574,11 +570,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public ReadOnlyCollection<Guid> GetPrefilledEntities()
         {
-            if (this.QuestionnaireDocument.IsCoverPageSupported)
+            if (innerDocument.IsCoverPageSupported)
             {
-                return this.QuestionnaireDocument
+                return innerDocument
                     .Children
-                    .First(section => this.QuestionnaireDocument.IsCoverPage(section.PublicKey))
+                    .First(section => innerDocument.IsCoverPage(section.PublicKey))
                     .Children
                     .Select(entity => entity.PublicKey)
                     .ToReadOnlyCollection();
@@ -599,7 +595,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public ReadOnlyCollection<Guid> GetHiddenQuestions()
             => this
-                .QuestionnaireDocument
+                .innerDocument
                 .Find<IQuestion>(question => question.QuestionScope == QuestionScope.Hidden)
                 .Select(question => question.PublicKey)
                 .ToReadOnlyCollection();
@@ -1233,17 +1229,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public IReadOnlyCollection<string> GetTranslationLanguages()
             => this
-                .QuestionnaireDocument
+                .innerDocument
                 .Translations
                 .Select(translation => translation.Name)
                 .ToReadOnlyCollection();
 
-        public IReadOnlyList<Translation> Translations => this.QuestionnaireDocument.Translations.ToList();
+        public IReadOnlyList<Translation> Translations => this.innerDocument.Translations.ToList();
 
         public string GetDefaultTranslation()
         {
-            return this.QuestionnaireDocument.Translations.SingleOrDefault(t =>
-                t.Id == this.QuestionnaireDocument.DefaultTranslation)?.Name;
+            return this.innerDocument.Translations.SingleOrDefault(t =>
+                t.Id == this.innerDocument.DefaultTranslation)?.Name;
         }
 
         public bool IsQuestionIsRosterSizeForLongRoster(Guid questionId)
@@ -1324,6 +1320,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             return false;
         }
+
+        public bool IsNeighboringSupport(Guid entityId)
+            => GetQuestion(entityId)?.Properties?.GeometryOverlapDetection ?? false;
 
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
         {
@@ -1902,18 +1901,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public List<Guid> GetExpressionsPlayOrder()
         {
-            return this.QuestionnaireDocument.ExpressionsPlayOrder;
+            return this.innerDocument.ExpressionsPlayOrder;
         }
 
         public bool SupportsExpressionsGraph()
         {
-            return this.QuestionnaireDocument.DependencyGraph != null;
+            return this.innerDocument.DependencyGraph != null;
         }
 
         public List<Guid> GetExpressionsPlayOrder(Guid changedEntity)
         {
             var sorter = new TopologicalSorter<Guid>();
-            IEnumerable<Guid> lisOsfOrderedConditions = sorter.Sort(this.QuestionnaireDocument.DependencyGraph, changedEntity);
+            IEnumerable<Guid> lisOsfOrderedConditions = sorter.Sort(this.innerDocument.DependencyGraph, changedEntity);
             return lisOsfOrderedConditions.ToList();
         }
 
@@ -1924,7 +1923,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             {
                 entityIds.Add(entity);
 
-                if (this.QuestionnaireDocument.ValidationDependencyGraph.TryGetValue(entity, out Guid[] referancecs))
+                if (this.innerDocument.ValidationDependencyGraph.TryGetValue(entity, out Guid[] referancecs))
                     referancecs.ForEach(id => entityIds.Add(id));
             }
 
@@ -1977,7 +1976,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             if (!hasAnyMultimediaQuestion.HasValue)
             {
-                hasAnyMultimediaQuestion = this.QuestionnaireDocument.Children.TreeToEnumerable(x => x.Children)
+                hasAnyMultimediaQuestion = this.innerDocument.Children.TreeToEnumerable(x => x.Children)
                     .OfType<IQuestion>()
                     .Any(x => x.QuestionType == QuestionType.Multimedia ||
                               x.QuestionType == QuestionType.Audio);
@@ -2012,6 +2011,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             return question.Properties.GeometryType;
+        }
+        public GeometryInputMode? GetQuestionGeometryMode(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            return question.Properties.GeometryInputMode;
         }
 
         public int GetEntityIdMapValue(Guid entityId)

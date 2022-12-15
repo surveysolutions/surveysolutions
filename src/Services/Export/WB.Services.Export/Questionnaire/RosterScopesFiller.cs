@@ -40,7 +40,8 @@ namespace WB.Services.Export.Questionnaire
                                 .Where(group => this.GetScopeOfQuestionnaireItem(groupsMappedOnPropagatableQuestion, group)
                                     .SequenceEqual(scopeVectorsOfTrigger.Key)));
 
-                    var rosterDescription = new RosterScopeDescription(scopeVectorsOfTrigger.Key, rosterSizeQuestion.VariableName,
+                    var rosterSizeVariableName = document.GetExportVariableName(rosterSizeQuestion.PublicKey);
+                    var rosterDescription = new RosterScopeDescription(scopeVectorsOfTrigger.Key, rosterSizeVariableName,
                         this.GetRosterScopeTypeByQuestionType(rosterSizeQuestion.QuestionType), rosterIdWithTitleQuestionIds);
 
                     result.Add(new ValueVector<Guid>(scopeVectorsOfTrigger.Key), rosterDescription);
