@@ -1,11 +1,9 @@
-using Android.App;
 using Android.Content;
-using Android.OS;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Tester.Activities
 {
