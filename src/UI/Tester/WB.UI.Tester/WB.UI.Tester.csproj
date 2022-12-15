@@ -43,7 +43,7 @@
     <Optimize>false</Optimize>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>3</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
     <ConsolePause>false</ConsolePause>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
@@ -60,6 +60,8 @@
     <Debugger>.Net (Xamarin)</Debugger>
     <AndroidTlsProvider>btls</AndroidTlsProvider>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>618</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>

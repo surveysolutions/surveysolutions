@@ -48,7 +48,7 @@
     <Optimize>false</Optimize>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>3</WarningLevel>
     <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
     <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
@@ -64,6 +64,8 @@
     <EnableLLVM>false</EnableLLVM>
     <EnableProguard>False</EnableProguard>
     <AndroidTlsProvider>btls</AndroidTlsProvider>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>618</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
