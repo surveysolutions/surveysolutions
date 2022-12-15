@@ -68,11 +68,14 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                 emailModel.ConfirmationLink = callbackUrl;
                 emailModel.UserName = !string.IsNullOrEmpty(existingFullName?.Value) ? existingFullName?.Value : user.UserName;
                 string body = await this.viewRenderingService.RenderToStringAsync("Emails/ResetPasswordEmail", emailModel);
-                
-                await emailSender.SendEmailAsync(
-                    user.Email,
-                    AccountResources.PasswordReset,
-                    body);
+
+                if (user.Email != null)
+                {
+                    await emailSender.SendEmailAsync(
+                        user.Email,
+                        AccountResources.PasswordReset,
+                        body);
+                }
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

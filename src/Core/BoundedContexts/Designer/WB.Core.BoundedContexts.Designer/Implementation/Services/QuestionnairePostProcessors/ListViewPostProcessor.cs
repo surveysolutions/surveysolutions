@@ -208,7 +208,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             var questionnaireOwnerId = questionnaireListViewItem.OwnerId;
             
-            if(personEmail!= null)
+            if(personEmail != null)
                 this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireOwnerId, responsibleId,
                     ShareChangeType.StopShare, personEmail, questionnaireListViewItem.QuestionnaireId, ShareType.Edit);
         }
@@ -299,7 +299,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             if (!questionnaireOwnerId.HasValue || questionnaireOwnerId.Value == responsibleId) return;
 
             var questionnaireOwner = this.dbContext.Users.Find(questionnaireOwnerId.Value);
-            if (questionnaireOwner != null && shareChangeType != ShareChangeType.TransferOwnership && questionnaireOwner.Email != null && questionnaireOwner.UserName != null)
+            if (questionnaireOwner != null && shareChangeType != ShareChangeType.TransferOwnership 
+                                           && questionnaireOwner.Email != null
+                                           && questionnaireOwner.UserName != null
+                                           && !string.IsNullOrEmpty(mailTo))
             {
                 this.emailNotifier.NotifyOwnerAboutShareChange(shareChangeType, questionnaireOwner.Email, questionnaireOwner.UserName,
                     questionnaireId, questionnaireTitle, shareType, mailFrom, mailTo);

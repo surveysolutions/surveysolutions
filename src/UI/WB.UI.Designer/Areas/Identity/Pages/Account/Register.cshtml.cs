@@ -133,9 +133,12 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                         await viewRenderingService.RenderToStringAsync("Emails/ConfirmationEmail",
                             model);
 
-                    await emailSender.SendEmailAsync(Input.Email,
-                        NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process,
-                        messageBody);
+                    if (user.Email != null)
+                    {
+                        await emailSender.SendEmailAsync(user.Email,
+                            NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process,
+                            messageBody);
+                    }
 
                     return RedirectToPage("RegisterStepTwo", new { returnUrl });
                 }

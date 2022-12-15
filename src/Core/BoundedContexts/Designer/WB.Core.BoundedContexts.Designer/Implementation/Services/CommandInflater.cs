@@ -118,7 +118,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 throw new CommandInflaitingException(CommandInflatingExceptionType.Common,
                     "User was not found");
             }
-
+            
+            if (sharedWith.Email == null)
+            {
+                throw new CommandInflaitingException(CommandInflatingExceptionType.Common,
+                    "Invalid user");
+            }
 
             addSharedPersonCommand.PersonId = sharedWith.Id;
             addSharedPersonCommand.EmailOrLogin = sharedWith.Email;

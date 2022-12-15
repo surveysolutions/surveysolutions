@@ -58,7 +58,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             if (!string.IsNullOrWhiteSpace(input.Filter))
             {
                 var filterUpperCase = input.Filter.Trim().ToUpper();
-                result = result.Where(x => x.User.UserName.ToUpper().Contains(filterUpperCase) || x.User.Email.ToUpper().Contains(filterUpperCase));
+                result = result.Where(x => (x.User.UserName != null && x.User.UserName.ToUpper().Contains(filterUpperCase)) 
+                                           || (x.User.Email != null && x.User.Email.ToUpper().Contains(filterUpperCase)));
             }
 
             return result.Select(x => x.User).Distinct();
