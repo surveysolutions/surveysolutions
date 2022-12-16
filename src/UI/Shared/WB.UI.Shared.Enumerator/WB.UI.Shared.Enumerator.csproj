@@ -833,7 +833,8 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidJavaLibrary Include="patch-applier.jar" />
+    <!--AndroidJavaLibrary Include="patch-applier.jar" /-->
+    <AndroidLibrary Remove="patch-applier.jar" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_overview_node_details.axml">
@@ -1394,6 +1395,9 @@
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="patch-applier.jar" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
