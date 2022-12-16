@@ -60,7 +60,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public InterviewerIdentity GetInterviewerByName(string name)
         {
             var userName = name.ToLower();
-               return this.usersStorage.Where(user => user.Name.ToLower() == userName).FirstOrDefault();
+            var interviewerIdentity = this.usersStorage.Where(user => user.Name.ToLower() == userName).FirstOrDefault();
+            if (interviewerIdentity == null)
+                throw new NullReferenceException($"Interviewer with {name} not found");
+            return interviewerIdentity;
         }
 
         protected override void UpdateUserHash(string userId, string hash)

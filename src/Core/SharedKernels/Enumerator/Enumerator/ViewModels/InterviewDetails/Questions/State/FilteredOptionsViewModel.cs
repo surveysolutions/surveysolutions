@@ -31,8 +31,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private class CategoricalOptionEqualityComparer : IEqualityComparer<CategoricalOption>
         {
-            public bool Equals(CategoricalOption x, CategoricalOption y)
+            public bool Equals(CategoricalOption? x, CategoricalOption? y)
             {
+                if (x == null && y == null) return true;
+                if (x == null || y == null) return false;
                 return x.Title == y.Title && x.Value == y.Value;
             }
 
@@ -128,7 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
 
-        private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
+        private void AnswerNotifierOnQuestionAnswered(object? sender, EventArgs eventArgs)
         {
             //temporary fix for KP-13068
             //if view model was created for item in roster
