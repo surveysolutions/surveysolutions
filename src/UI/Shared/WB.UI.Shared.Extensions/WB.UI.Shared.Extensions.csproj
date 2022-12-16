@@ -1,13 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net6.0-android31.0</TargetFramework>
+    <SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
+    <OutputType>Library</OutputType>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Debug-ESRI;Release</Configurations>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F69D3C48-F648-4B9F-9B4F-BA44E014224C}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.UI.Shared.Extensions</RootNamespace>
     <AssemblyName>WB.UI.Shared.Extensions</AssemblyName>
@@ -41,33 +53,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="Mono.Android" />
-    <Reference Include="Mono.Android.Export" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Activities\GeographyEditorActivity.cs" />
-    <Compile Include="Activities\MapDashboardActivity.cs" />
-    <Compile Include="Entities\AreaEditorResult.cs" />
-    <Compile Include="Entities\QuestionnaireItem.cs" />
-    <Compile Include="Extensions\GeometryTypeExtension.cs" />
-    <Compile Include="Services\MapInteractionService.cs" />
-    <Compile Include="Services\MapUtilityService.cs" />
-    <Compile Include="Resources\Resource.designer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\BaseMapInteractionViewModel.cs" />
-    <Compile Include="ViewModels\GeographyEditorViewModel.cs" />
-    <Compile Include="ViewModels\GeographyEditorViewModelArgs.cs" />
-    <Compile Include="ViewModels\GeometryByTypeBuilder.cs" />
-    <Compile Include="ViewModels\GeometryHelper.cs" />
-    <Compile Include="ViewModels\GeometryNeighbor.cs" />
-    <Compile Include="ViewModels\MapDashboardViewModel.cs" />
-  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <AndroidAsset Include="Assets\worldmap%28default%29.tpk" />
@@ -276,7 +261,6 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\show_full_map_icon.xml" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
 		<Target Name="BeforeBuild">

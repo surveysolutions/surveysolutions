@@ -1,13 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net6.0-android31.0</TargetFramework>
+    <SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
+    <OutputType>Library</OutputType>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Debug-ESRI;Release</Configurations>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <Configuration Condition=" '$(Configuration)' == ''">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5DAA7EAF-9A68-4302-AE74-EF0DAA0BD169}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.UI.Shared.Enumerator</RootNamespace>
     <AssemblyName>WB.UI.Shared.Enumerator</AssemblyName>
@@ -16,9 +28,6 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
-    <TargetFrameworkVersion>v12.0</TargetFrameworkVersion>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU'  or '$(Configuration)' == 'Debug-ESRI'">
     <DebugSymbols>true</DebugSymbols>
@@ -27,8 +36,9 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>3</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
     <LangVersion>latest</LangVersion>
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
   </PropertyGroup>
@@ -43,226 +53,6 @@
     <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Java.Interop" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Mono.Android" />
-    <Reference Include="Mono.Android.Export" />
-    <Reference Include="Mono.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Activities\ActivityExtensions.cs" />
-    <Compile Include="Activities\CalendarEventDialog.cs" />
-    <Compile Include="Activities\Dashboard\ExpandableViewHolder.cs" />
-    <Compile Include="Activities\Dashboard\MenuItemOnMenuItemClickListener.cs" />
-    <Compile Include="Activities\EnumeratorSplashScreenAppCompatActivity.cs" />
-    <Compile Include="Activities\MenuHelper.cs" />
-    <Compile Include="Activities\SearchActivity.cs" />
-    <Compile Include="Activities\SecureStorage.cs" />
-    <Compile Include="Activities\SelectResponsibleForInterviewFragment.cs" />
-    <Compile Include="Converters\CalendarEventAndStatusToColorConverter.cs" />
-    <Compile Include="Converters\EnumToStringConverter.cs" />
-    <Compile Include="Converters\TextWithHighlightedSearchTermConverter.cs" />
-    <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
-    <Compile Include="CustomBindings\ButtonGroupStyleBinding.cs" />
-    <Compile Include="CustomBindings\ButtonHasWarningOrSuccessBinding.cs" />
-    <Compile Include="CustomBindings\EditTextMaxLengthBinding.cs" />
-    <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
-    <Compile Include="CustomBindings\ImageViewQRCodeBinding.cs" />
-    <Compile Include="CustomBindings\InstantAutoCompleteTextViewDisableDefaultSearchBinding.cs" />
-    <Compile Include="CustomBindings\MaterialButtonToQuestionStateBinding.cs" />
-    <Compile Include="CustomBindings\TextInputLayoutHintBinding.cs" />
-    <Compile Include="CustomBindings\ToParentButtonGroupStyleButtonBinding.cs" />
-    <Compile Include="CustomBindings\ViewBackgroundColorBinding.cs" />
-    <Compile Include="CustomBindings\ViewSetGpsLocationBinding.cs" />
-    <Compile Include="CustomBindings\Models\MediaAttachment.cs" />
-    <Compile Include="CustomBindings\ProgressBarProgressBinding.cs" />
-    <Compile Include="CustomBindings\ExoPlayerBinding.cs" />
-    <Compile Include="CustomBindings\TextViewHtmlWithLinksBinding.cs" />
-    <Compile Include="CustomBindings\ProgressBarIndeterminateModeBinding.cs" />
-    <Compile Include="CustomControls\FixedMvxFilteringAdapter.cs" />
-    <Compile Include="CustomServices\GoogleApiService.cs" />
-    <Compile Include="CustomServices\StringFormat.cs" />
-    <Compile Include="EnumeratorIocRegistrationModule.cs" />
-    <Compile Include="EnumeratorLoggingModule.cs" />
-    <Compile Include="Migrations\Workspaces\Encrypt_Data.cs" />
-    <Compile Include="Migrations\Workspaces\M201912091307_ChangeIdTypeInOptionViewTable.cs" />
-    <Compile Include="Migrations\Workspaces\M202001291224_RemoveDuplicatedCategoriesInOptionViewTable.cs" />
-    <Compile Include="Migrations\Workspaces\M202103291222_MoveMapsFiles.cs" />
-    <Compile Include="Migrations\Workspaces\M202103101500_UpdateInterviewsMode.cs" />
-    <Compile Include="Migrations\Workspaces\UpdateOptionsForMultiComboboxQuestions.cs" />
-    <Compile Include="Migrations\Workspace\M202106151642_RunCheckAndProcessInterviewsToFixViews.cs" />
-    <Compile Include="Migrations\Workspace\M20211539_Init.cs" />
-    <Compile Include="OfflineSync\Activities\BluetoothReceiver.cs" />
-    <Compile Include="OfflineSync\Activities\GoogleApiConnectedActivity.cs" />
-    <Compile Include="Activities\Dashboard\RecyclerViewAdapter.cs" />
-    <Compile Include="Activities\OverviewFragment.cs" />
-    <Compile Include="Activities\OverviewNodeDetailsFragment.cs" />
-    <Compile Include="Activities\PhotoViewActivity.cs" />
-    <Compile Include="Activities\BaseActivity.cs" />
-    <Compile Include="Activities\BaseFragment.cs" />
-    <Compile Include="Activities\CompleteInterviewFragment.cs" />
-    <Compile Include="Activities\BaseInterviewActivity.cs" />
-    <Compile Include="Activities\CoverInterviewFragment.cs" />
-    <Compile Include="Activities\InterviewEntitiesListFragment.cs" />
-    <Compile Include="Activities\MenuLocalizationHelper.cs" />
-    <Compile Include="Activities\BasePrefilledQuestionsActivity.cs" />
-    <Compile Include="Activities\SingleInterviewActivity.cs" />
-    <Compile Include="Converters\AudioNoiseTypeToShapeConverter.cs" />
-    <Compile Include="Converters\InMemoryImageValueWithDefaultConverter.cs" />
-    <Compile Include="Converters\EnumeratorLocalizationValueConverter.cs" />
-    <Compile Include="Converters\InterviewStatusToButtonConverter.cs" />
-    <Compile Include="Converters\InterviewStatusToColorConverter.cs" />
-    <Compile Include="Converters\InterviewStatusToDrawableConverter.cs" />
-    <Compile Include="Converters\IsStringNotEmptyConverter.cs" />
-    <Compile Include="Converters\GroupStateToColorConverter.cs" />
-    <Compile Include="Converters\IsSynchronizationFailOrCanceledConverter.cs" />
-    <Compile Include="Converters\LocalizationValueConverter.cs" />
-    <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
-    <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
-    <Compile Include="Converters\QuestionCornerOptionBackgroundConverter.cs" />
-    <Compile Include="Converters\QuestionOptionBackgroundConverter.cs" />
-    <Compile Include="Converters\QuestionStateStyle.cs" />
-    <Compile Include="Converters\IsCurrentUserCommentToColorConverter.cs" />
-    <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
-    <Compile Include="Converters\StatusToDasboardBackgroundConverter.cs" />
-    <Compile Include="Converters\SynchronizationStatusToDrawableConverter.cs" />
-    <Compile Include="Converters\SynchronizationStatusToTextColorConverter.cs" />
-    <Compile Include="Converters\TextEditValidationStyleBackgroundConverter.cs" />
-    <Compile Include="Converters\VisibleOrInvisibleValueConverter.cs" />
-    <Compile Include="CustomBindings\BaseBinding.cs" />
-    <Compile Include="CustomBindings\EditTextChangedBinding.cs" />
-    <Compile Include="CustomBindings\EditTextDateBinding.cs" />
-    <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
-    <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
-    <Compile Include="CustomBindings\ImageButtonPlaybackToggleBinding.cs" />
-    <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnFocusChangeBinding.cs" />
-    <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnPartialTextChangedBinding.cs" />
-    <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnItemSelectedBinding.cs" />
-    <Compile Include="CustomBindings\InstantAutoCompleteTextViewPartialTextTargetBinding.cs" />
-    <Compile Include="CustomBindings\AudioSizeByNoiseLevelBinding.cs" />
-    <Compile Include="CustomBindings\NumericDisableBinding.cs" />
-    <Compile Include="CustomBindings\RecyclerViewScrollToPositionBinding.cs" />
-    <Compile Include="CustomBindings\SignaturePadSettingsBinding.cs" />
-    <Compile Include="CustomBindings\TextViewAnswerStateBinding.cs" />
-    <Compile Include="CustomBindings\TextViewOnDoneBinding.cs" />
-    <Compile Include="CustomBindings\TextViewOverviewStateTextColorBinding.cs" />
-    <Compile Include="CustomBindings\ImageViewMarginsBitmapWithFallbackBinding.cs" />
-    <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
-    <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
-    <Compile Include="CustomBindings\FrameLayoutCurrentScreenBinding.cs" />
-    <Compile Include="CustomBindings\NumericValueBinding.cs" />
-    <Compile Include="CustomBindings\TextViewIsSelectedYesNoOptionColorBinding.cs" />
-    <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
-    <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
-    <Compile Include="CustomBindings\TextViewWatermarkBinding.cs" />
-    <Compile Include="CustomBindings\TextViewHtmlBinding.cs" />
-    <Compile Include="CustomBindings\TextViewTextColorBinding.cs" />
-    <Compile Include="CustomBindings\TextViewTextFormattedBinding.cs" />
-    <Compile Include="CustomBindings\TextViewUnderlinePressedBinding.cs" />
-    <Compile Include="CustomBindings\ViewActivatedBinding.cs" />
-    <Compile Include="CustomBindings\ViewBackgroundDrawableBinding.cs" />
-    <Compile Include="CustomBindings\ViewGroupColorByInterviewStatusBinding.cs" />
-    <Compile Include="CustomBindings\ViewGroupStatusBarColorByInterviewStatusBinding.cs" />
-    <Compile Include="CustomBindings\ViewHideKeyboardOnClickBinding.cs" />
-    <Compile Include="CustomBindings\ViewOverviewNodeStateBinding.cs" />
-    <Compile Include="CustomBindings\ViewPaddingLeftBinding.cs" />
-    <Compile Include="CustomBindings\ViewTagBinding.cs" />
-    <Compile Include="CustomBindings\ViewTransparentBinding.cs" />
-    <Compile Include="CustomControls\DatePickerDialogFragment.cs" />
-    <Compile Include="CustomControls\FlowLayout.cs" />
-    <Compile Include="CustomControls\InstantAutoCompleteTextView.cs" />
-    <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
-    <Compile Include="CustomControls\InterviewOverviewTemplateSelector.cs" />
-    <Compile Include="CustomControls\InterviewTemplateSelector.cs" />
-    <Compile Include="CustomControls\MaskedEditTextControl\MaskedEditText.cs" />
-    <Compile Include="CustomControls\NumericEditText.cs" />
-    <Compile Include="CustomBindings\SignatureBindging.cs" />
-    <Compile Include="CustomServices\AndroidNetworkService.cs" />
-    <Compile Include="CustomServices\AreaEditor\DummyMapInteractionService.cs" />
-    <Compile Include="CustomServices\AudioDialog.cs" />
-    <Compile Include="CustomServices\AudioService.cs" />
-    <Compile Include="CustomServices\ExternalAppLauncher.cs" />
-    <Compile Include="CustomServices\PermissionsService.cs" />
-    <Compile Include="CustomServices\UserInteractionService.cs" />
-    <Compile Include="CustomServices\UserInterfaceStateService.cs" />
-    <Compile Include="CustomServices\VibrationService.cs" />
-    <Compile Include="EnumeratorUIModule.cs" />
-    <Compile Include="OfflineSync\Services\Entities\Payload.cs" />
-    <Compile Include="OfflineSync\Services\Implementation\ConnectionsApiLimits.cs" />
-    <Compile Include="OfflineSync\Services\Implementation\GoogleApiClientFactory.cs" />
-    <Compile Include="OfflineSync\Services\Implementation\IGoogleApiClientFactory.cs" />
-    <Compile Include="OfflineSync\Services\Implementation\NearbyConnectionImplementation.cs" />
-    <Compile Include="OfflineSync\Services\Implementation\PayloadProvider.cs" />
-    <Compile Include="OfflineSync\Services\Implementation\SecureStorage.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EnumeratorSetup.cs" />
-    <Compile Include="Services\AndroidPathUtils.cs" />
-    <Compile Include="Services\ApplicationResumeMessage.cs" />
-    <Compile Include="Services\ArchivePatcherService.cs" />
-    <Compile Include="Services\Autofac.MvvmCross\AutofacMvxIocProvider.cs" />
-    <Compile Include="Services\Autofac.MvvmCross\MvxIoCProviderWithParent.cs" />
-    <Compile Include="Services\BackupRestoreService.cs" />
-    <Compile Include="Services\BaseViewModelNavigationService.cs" />
-    <Compile Include="Services\BitmapHelper.cs" />
-    <Compile Include="Services\CurrentViewModelPresenter.cs" />
-    <Compile Include="Services\DeviceInformationService.cs" />
-    <Compile Include="Services\DevicePasswordHasher.cs" />
-    <Compile Include="Services\EnumeratorSettings.cs" />
-    <Compile Include="Services\EnumeratorTabletDiagnosticService.cs" />
-    <Compile Include="Services\IApplicationCypher.cs" />
-    <Compile Include="Services\Internals\AndroidHttpClientFactory.cs" />
-    <Compile Include="Services\Internals\FileSystem\FileSystemService.cs" />
-    <Compile Include="Services\Internals\GpsLocationService.cs" />
-    <Compile Include="Services\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
-    <Compile Include="Services\IQRCodeRenderer.cs" />
-    <Compile Include="Services\Logging\NLogLogger.cs" />
-    <Compile Include="Services\Logging\NLogLoggerProvider.cs" />
-    <Compile Include="Services\Internals\PictureChooser.cs" />
-    <Compile Include="Services\Internals\PortableJsonAllTypesSerializer.cs" />
-    <Compile Include="Services\Internals\PortableJsonSerializer.cs" />
-    <Compile Include="Services\Internals\PortableOldToNewAssemblyRedirectSerializationBinder.cs" />
-    <Compile Include="Services\Internals\QRBarcodeScanService.cs" />
-    <Compile Include="Services\MapDownloadBackgroundService.cs" />
-    <Compile Include="Services\MapService.cs" />
-    <Compile Include="OfflineSync\Entities\OnConnectionLifecycleCallback.cs" />
-    <Compile Include="OfflineSync\Entities\OnDiscoveryCallback.cs" />
-    <Compile Include="OfflineSync\Entities\OnPayloadCallback.cs" />
-    <Compile Include="Services\Notifications\IEnumeratorWorkerManager.cs" />
-    <Compile Include="Services\Notifications\IInAppNotificationsCollector.cs" />
-    <Compile Include="Services\Notifications\INotificationsCollector.cs" />
-    <Compile Include="Services\Notifications\NotificationModel.cs" />
-    <Compile Include="Services\Notifications\NotificationPublisher.cs" />
-    <Compile Include="Services\Notifications\INotificationPublisher.cs" />
-    <Compile Include="Services\Notifications\NotificationsGenerationWorker.cs" />
-    <Compile Include="Services\Notifications\EnumeratorWorkerManager.cs" />
-    <Compile Include="Services\Notifications\NotificationType.cs" />
-    <Compile Include="Services\Notifications\SimpleNotification.cs" />
-    <Compile Include="Services\ServiceBinder.cs" />
-    <Compile Include="Services\SyncBgService.cs" />
-    <Compile Include="Services\SyncServiceConnection.cs" />
-    <Compile Include="Settings\AndroidBattery.cs" />
-    <Compile Include="Settings\AndroidDeviceOrientation.cs" />
-    <Compile Include="Settings\GsmSignalStrengthListener.cs" />
-    <Compile Include="Settings\PreferenceExtensions.cs" />
-    <Compile Include="Utils\AndroidInformationUtils.cs" />
-    <Compile Include="Utils\ANRListener.cs" />
-    <Compile Include="Utils\ContextExtensions.cs" />
-    <Compile Include="Utils\CrashReporting.cs" />
-    <Compile Include="Utils\LogCatTarget.cs" />
-    <Compile Include="Utils\StringExtensions.cs" />
-    <Compile Include="ValueCombiners\BaseValueCombiner.cs" />
-    <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
-    <Compile Include="ValueCombiners\LayoutOptionBackgroundStyleValueCombiner.cs" />
-    <Compile Include="ValueCombiners\NotValueCombiner.cs" />
-    <Compile Include="ValueCombiners\MakeMarkdownLinksExecutableValueCombiner.cs" />
-    <Compile Include="ValueCombiners\SpannableGroupTitleValueCombiner.cs" />
-  </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\anim\slide_from_left.xml" />
     <AndroidResource Include="Resources\anim\slide_from_right.xml" />
@@ -805,7 +595,7 @@
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj">
-      <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
+      <Project>{0f1ddefe-df5c-4856-a89c-241f3bd41b5f}</Project>
       <Name>WB.Core.SharedKernels.Enumerator</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
@@ -1605,7 +1395,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
