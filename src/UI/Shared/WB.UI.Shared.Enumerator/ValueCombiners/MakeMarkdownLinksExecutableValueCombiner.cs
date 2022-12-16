@@ -56,7 +56,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             strBuilder.RemoveSpan(span);
         }
 
-        private void NavigateToEntity(string entityVariable, IInterviewEntity sourceEntity)
+        private async Task NavigateToEntity(string entityVariable, IInterviewEntity sourceEntity)
         {
             if(sourceEntity.NavigationState == null) return;
             if (string.IsNullOrEmpty(entityVariable)) return;
@@ -64,11 +64,11 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             entityVariable = entityVariable.ToLower();
 
             if (entityVariable == "cover")
-                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForCoverScreen());
+                await sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForCoverScreen());
             else if (entityVariable == "complete")
-                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
+                await sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
             else if (entityVariable == "overview")
-                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForOverviewScreen());
+                await sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForOverviewScreen());
             else
             {
                 var interview = ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>().Get(sourceEntity.InterviewId);
@@ -82,11 +82,11 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
                 if (attachmentId.HasValue)
                     NavigateToAttachment(sourceEntity, attachmentId, questionnaire);
                 else
-                    NavigateToQuestionOrRosterOrSection(entityVariable, sourceEntity, questionnaire, interview);
+                    await NavigateToQuestionOrRosterOrSection(entityVariable, sourceEntity, questionnaire, interview);
             }
         }
 
-        private static void NavigateToQuestionOrRosterOrSection(string entityVariable, IInterviewEntity sourceEntity,
+        private static async Task NavigateToQuestionOrRosterOrSection(string entityVariable, IInterviewEntity sourceEntity,
             IQuestionnaire questionnaire, IStatefulInterview interview)
         {
             var questionId = questionnaire.GetQuestionIdByVariable(entityVariable);
@@ -128,7 +128,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
 
             if (questionId.HasValue)
             {
-                sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
+                await sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
                 {
                     TargetScreen = questionnaire.IsPrefilled(questionId.Value)
                         ? ScreenType.Cover
@@ -139,7 +139,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             }
             else if (rosterOrGroupId.HasValue)
             {
-                sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
+                await sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
                 {
                     TargetScreen = ScreenType.Group,
                     TargetGroup = interview.GetParentGroup(nearestInterviewEntity) ?? nearestInterviewEntity, //for section(chapter) it would be opened
@@ -162,11 +162,11 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
 
         private class NavigateToEntitySpan : ClickableSpan
         {
-            private Action<string, IInterviewEntity> onClick;
+            private Func<string, IInterviewEntity, Task> onClick;
             private string variable;
             private IInterviewEntity interviewEntity;
 
-            public NavigateToEntitySpan(Action<string, IInterviewEntity> onClick, string variable, IInterviewEntity interviewEntity)
+            public NavigateToEntitySpan(Func<string, IInterviewEntity, Task> onClick, string variable, IInterviewEntity interviewEntity)
             {
                 this.onClick = onClick;
                 this.variable = variable;

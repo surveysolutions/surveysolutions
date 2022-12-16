@@ -12,10 +12,10 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public string Hash(string password)
         {
-            var rng = new RNGCryptoServiceProvider();
-            var data = Encoding.UTF8.GetBytes(password);
+            using var rng = RandomNumberGenerator.Create();
             var saltBuffer = new byte[20];
             rng.GetBytes(saltBuffer);
+            var data = Encoding.UTF8.GetBytes(password);
             var hash = SHA512.Create().ComputeHash(data.Concat(saltBuffer).ToArray());
             return CurrentHashImplementationVersion + ":" + Convert.ToBase64String(saltBuffer) + ":" + Convert.ToBase64String(hash);
         }
