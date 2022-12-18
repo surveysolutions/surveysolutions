@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         private int? cachedHashCode;
         public static readonly RosterVector Empty = new int[] { };
-        private readonly int[] coordinates;
+        private int[] coordinates;
         private decimal[] coordinatesAsDecimals;
 
         public static RosterVector Convert(object obj)
@@ -49,6 +49,10 @@ namespace WB.Core.SharedKernels.DataCollection
                 default:
                     throw new ArgumentException(nameof(obj));
             }
+        }
+
+        public RosterVector()
+        {
         }
 
         public RosterVector(IEnumerable<decimal> coordinates)
