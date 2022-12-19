@@ -46,7 +46,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         protected override void UpdatePasswordOfResponsible(RestCredentials credentials)
         {
             var localInterviewer = this.interviewerPrincipal.GetInterviewerByName(credentials.Login);
-
+            if (localInterviewer == null)
+                throw new NullReferenceException($"Interviewer with {credentials.Login} not found");
             localInterviewer.PasswordHash = this.passwordHasher.Hash(credentials.Password);
             localInterviewer.Token = credentials.Token;
 

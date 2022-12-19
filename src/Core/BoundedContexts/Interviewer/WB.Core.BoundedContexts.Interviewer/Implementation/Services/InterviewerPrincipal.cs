@@ -57,12 +57,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return user == null;
         }
         
-        public InterviewerIdentity GetInterviewerByName(string name)
+        public InterviewerIdentity? GetInterviewerByName(string name)
         {
             var userName = name.ToLower();
             var interviewerIdentity = this.usersStorage.Where(user => user.Name.ToLower() == userName).FirstOrDefault();
-            if (interviewerIdentity == null)
-                throw new NullReferenceException($"Interviewer with {name} not found");
             return interviewerIdentity;
         }
 
