@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
   <Fragment>
-    <Variable Name="WindowsDotNetHosting501InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\6.0.3" />
+    <Variable Name="WindowsDotNetHosting501InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\6.0.12" />
     <util:DirectorySearch Id="WindowsDotNetHosting501Installed" Path="[WindowsDotNetHosting501InstallDir]" Variable="WindowsDotNetHosting501Installed" Result="exists" />
 
     <WixVariable Id="WindowsDotNetHosting501InstalledDetectCondition" Value="WindowsDotNetHosting501Installed" Overridable="yes" />
@@ -10,7 +10,7 @@
 
     <PackageGroup Id="WindowsDotNetHosting501">
       <ExePackage
-          Name="dotnet-hosting-6.0.3-win.exe"
+          Name="dotnet-hosting-6.0.12-win.exe"
           InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
@@ -20,17 +20,17 @@
           Vital="yes"
           Permanent="yes"
           Protocol="burn"
-          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/41d7c644-140a-40b5-9eb7-071544b79c65/885b7fa698a2d1d3a79ad363613f8ff2/dotnet-hosting-6.0.3-win.exe"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/cab723a6-dc1f-4b3a-8675-34dc84a21306/1ee69c32da9ba78d80d65f9c067c4f68/dotnet-hosting-6.0.12-win.exe"
           LogPathVariable="WindowsDotNetHosting501Log"
           Compressed="no">
         <!-- heat.exe payload "dotnet-hosting-3.1.1-win.exe" -o "dotnet-hosting.wxs" -->
-		<RemotePayload CertificatePublicKey="13D6BFE4ADC9AD828EC78546ECEDE746B44C863F" 
-			CertificateThumbprint="921263EA40B2C7592E8CC1C1A4EF66E64D511674" 
-			Description="Microsoft .NET 6.0.3 - Windows Server Hosting" 
-			Hash="5C98D9F3552F272B508C6CED607A1C6BCF2C1596" 
-			ProductName="Microsoft .NET 6.0.3 - Windows Server Hosting" 
-			Size="71985704" 
-			Version="6.0.3.22124" /> 
+          <RemotePayload CertificatePublicKey="9705EC06868355E06D7DF0269606E61B39D51890" 
+                         CertificateThumbprint="AB38D4012B7F90EFE140FA937E71DB39B12E1CAD" 
+                         Description="Microsoft .NET 6.0.12 - Windows Server Hosting" 
+                         Hash="CBC75FF56187D1161C41D4D87EFFBDD476FF2D9F" 
+                         ProductName="Microsoft .NET 6.0.12 - Windows Server Hosting" 
+                         Size="71307960" 
+                         Version="6.0.12.22571" />		
       </ExePackage>
     </PackageGroup>
   </Fragment>
