@@ -49,7 +49,9 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             log.Trace($"OnRequestPermissionsResult permissions {string.Join(',', permissions)} grantResults {string.Join(',', grantResults)}");
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+#pragma warning disable CA1416 // Validate platform compatibility
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+#pragma warning restore CA1416 // Validate platform compatibility
         }
 
         protected override void OnPause()
