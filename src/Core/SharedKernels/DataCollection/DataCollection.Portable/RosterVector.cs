@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         private int? cachedHashCode;
         public static readonly RosterVector Empty = new int[] { };
-        private int[] coordinates;
+        private readonly int[] coordinates = {};
         private decimal[] coordinatesAsDecimals;
 
         public static RosterVector Convert(object obj)
