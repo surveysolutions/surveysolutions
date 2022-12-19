@@ -1,8 +1,0 @@
-<Project>
-    <ItemGroup>
-      <AssemblyAttribute Include="System.Reflection.AssemblyMetadata" Condition=" '$(BUILD_VCS_NUMBER)' != '' ">
-        <_Parameter1>GIT_REV</_Parameter1>
-        <_Parameter2>$(BUILD_VCS_NUMBER)</_Parameter2>
-      </AssemblyAttribute>
-   </ItemGroup>
-</Project>
