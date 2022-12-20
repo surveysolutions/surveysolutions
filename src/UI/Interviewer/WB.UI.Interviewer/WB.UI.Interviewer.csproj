@@ -87,7 +87,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Extensions.props" />
-    <None Include="Directory.Build.targets" />
+    <None Include="Directory.Build.props" />
     <AndroidResource Include="Resources\drawable\dashboard_remove_icon.xml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
@@ -341,6 +341,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup />
+  <Import Project="Directory.Build.props" />
   <Import Project="Extensions.props" Condition=" '$(ExcludeExtensions)' != 'True' " />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
