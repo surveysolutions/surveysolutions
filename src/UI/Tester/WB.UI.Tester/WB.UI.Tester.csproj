@@ -37,7 +37,7 @@
     <WarningLevel>3</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>618</NoWarn>
-    <RuntimeIdentifiers>android-arm;android-arm64;android-x86</RuntimeIdentifiers>
+    <RuntimeIdentifiers>android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' OR '$(Configuration)|$(Platform)' == 'Debug-ESRI|AnyCPU'">
     <DebugSymbols>True</DebugSymbols>
