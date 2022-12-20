@@ -81,6 +81,7 @@
     <DefineConstants>$(Constants)</DefineConstants>
     <DebugSymbols>False</DebugSymbols>
     <AndroidSupportedAbis>armeabi-v7a;arm64-v8a</AndroidSupportedAbis>
+    <PublishTrimmed>False</PublishTrimmed>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <MandroidI18n>CJK;Mideast;Rare;West;Other</MandroidI18n>
