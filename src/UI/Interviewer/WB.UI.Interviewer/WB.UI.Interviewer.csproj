@@ -43,12 +43,6 @@
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <NoWarn>618</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(ExcludeExtensions)' == ''">
-    <ExcludeExtensions Condition="'$(Configuration)' == 'Debug'">True</ExcludeExtensions>
-  </PropertyGroup>
-  <PropertyGroup Condition="$(DefineConstants.Contains('EXCLUDEEXTENSIONS')) != 'True'">
-    <DefineConstants Condition="'$(ExcludeExtensions)' == 'True'">$(DefineConstants);EXCLUDEEXTENSIONS</DefineConstants>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' OR '$(Configuration)|$(Platform)' == 'Debug-ESRI|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
@@ -93,7 +87,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Extensions.props" />
-    <None Include="Directory.Build.props" />
+    <None Include="Directory.Build.targets" />
     <AndroidResource Include="Resources\drawable\dashboard_remove_icon.xml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
@@ -346,7 +340,8 @@
       <Version>1.1.0.15</Version>
     </PackageReference>
   </ItemGroup>
-  <Import Project="Extensions.props" Condition="'$(ExcludeExtensions)' != 'True' " />
+  <ItemGroup />
+  <Import Project="Extensions.props" Condition=" '$(ExcludeExtensions)' != 'True' " />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
