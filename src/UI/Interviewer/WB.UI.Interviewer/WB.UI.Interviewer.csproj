@@ -87,7 +87,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Extensions.props" />
-    <None Include="Directory.Build.props" />
+    <None Include="Directory.Build.targets" />
     <AndroidResource Include="Resources\drawable\dashboard_remove_icon.xml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
