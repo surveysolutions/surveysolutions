@@ -2,11 +2,5 @@
 <Project>
     <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
-    <PropertyGroup Condition="'$(ExcludeExtensions)' == ''">
-        <ExcludeExtensions Condition="'$(Configuration)' == 'Debug'">True</ExcludeExtensions>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="$(DefineConstants.Contains('EXCLUDEEXTENSIONS')) != 'True'">
-        <DefineConstants Condition="'$(ExcludeExtensions)' == 'True'">$(DefineConstants);EXCLUDEEXTENSIONS</DefineConstants>
-    </PropertyGroup>
+    
 </Project>
