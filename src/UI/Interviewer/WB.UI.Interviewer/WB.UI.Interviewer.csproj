@@ -340,6 +340,15 @@
       <Version>1.1.0.15</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\WB.UI.Shared.Extensions\WB.UI.Shared.Extensions.csproj">
+      <Project>{f69d3c48-f648-4b9f-9b4f-ba44e014224c}</Project>
+      <Name>WB.UI.Shared.Extensions</Name>
+    </ProjectReference>
+    <PackageReference Include="Esri.ArcGISRuntime">
+      <Version>200.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
   <!--Import Project="Extensions.props" Condition="'$(ExcludeExtensions)' != 'True' " /-->
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
