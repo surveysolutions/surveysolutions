@@ -64,7 +64,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>True</Optimize>
     <AndroidPackageFormat>aab</AndroidPackageFormat>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
