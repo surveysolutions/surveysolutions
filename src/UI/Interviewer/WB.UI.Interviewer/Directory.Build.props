@@ -9,4 +9,6 @@
     <PropertyGroup Condition="$(DefineConstants.Contains('EXCLUDEEXTENSIONS')) != 'True'">
         <DefineConstants Condition="'$(ExcludeExtensions)' == 'True'">$(DefineConstants);EXCLUDEEXTENSIONS</DefineConstants>
     </PropertyGroup>
+
+    <Import Project="Extensions.props" Condition="'$(ExcludeExtensions)' != 'True'" />
 </Project>
