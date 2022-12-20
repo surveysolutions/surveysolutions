@@ -10,5 +10,5 @@
         <DefineConstants Condition="'$(ExcludeExtensions)' == 'True'">$(DefineConstants);EXCLUDEEXTENSIONS</DefineConstants>
     </PropertyGroup>
 
-    <Import Project="Extensions.props" Condition="'$(ExcludeExtensions)' != 'True'" />
+    <Import Project="Extensions.props" Condition="$(DefineConstants.Contains('EXCLUDEEXTENSIONS')) != 'True'" />
 </Project>
