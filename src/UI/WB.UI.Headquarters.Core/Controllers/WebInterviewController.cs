@@ -970,10 +970,10 @@ namespace WB.UI.Headquarters.Controllers
                 Description = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.Invitation).ToString(),
                     questionnaireBrowseItem.Title),
-                CaptchaErrors = ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any()
-                                ? ViewData.ModelState["InvalidCaptcha"].Errors.Select(e => e.ErrorMessage).ToList()
+                CaptchaErrors = ViewData.ModelState.TryGetValue("InvalidCaptcha", out var invalidCaptcha) && invalidCaptcha.Errors.Any()
+                                ? invalidCaptcha.Errors.Select(e => e.ErrorMessage).ToList()
                                 : new List<string>(),
-                IsPasswordInvalid = ViewData.ModelState.ContainsKey("InvalidPassword") && ViewData.ModelState["InvalidPassword"].Errors.Any(),
+                IsPasswordInvalid = ViewData.ModelState.TryGetValue("InvalidPassword", out var invalidPassword) && invalidPassword.Errors.Any(),
                 SubmitUrl = Url.Action("Start", "WebInterview"),
                 UseCaptcha = webInterviewConfig.UseCaptcha,
                 RecaptchaSiteKey = webInterviewConfig.UseCaptcha && captchaConfig.Value.CaptchaType == CaptchaProviderType.Recaptcha ? recaptchaSettings.Value.SiteKey : null,
