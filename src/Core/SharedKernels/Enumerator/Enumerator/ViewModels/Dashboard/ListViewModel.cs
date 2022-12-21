@@ -33,25 +33,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             try
             {
-                var newItems = await Task.Run(this.GetUiItems).ConfigureAwait(false);
-
-                this.UiItems.ToList().ForEach(uiItem =>
-                {
-                    if (uiItem is IDashboardItemWithEvents withEvents)
-                        withEvents.OnItemUpdated -= ListViewModel_OnItemUpdated;
-                    uiItem.DisposeIfDisposable();
-                });
-
                 await this.InvokeOnMainThreadAsync(() =>
                 {
+                    var newItems = this.GetUiItems();
+                    
+                    this.UiItems.ToList().ForEach(uiItem =>
+                    {
+                        if (uiItem is IDashboardItemWithEvents withEvents)
+                            withEvents.OnItemUpdated -= ListViewModel_OnItemUpdated;
+                        uiItem.DisposeIfDisposable();
+                    });
+                    
                     this.UiItems.ReplaceWith(newItems);
 
+                    this.UiItems.ToList().ForEach(item =>
+                    {
+                        if (item is IDashboardItemWithEvents withEvents)
+                            withEvents.OnItemUpdated += ListViewModel_OnItemUpdated;
+                    });
                 }, false).ConfigureAwait(false);
-                this.UiItems.ToList().ForEach(item =>
-                {
-                    if (item is IDashboardItemWithEvents withEvents)
-                        withEvents.OnItemUpdated += ListViewModel_OnItemUpdated;
-                });
+                
             }
             finally
             {
@@ -80,16 +81,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             throw new ArgumentException("Need implement this method to refresh dashboard item");
         }
 
-        public override async void ViewAppeared()
+        public override void ViewAppeared()
         {
             base.ViewAppeared();
-
-            await this.InvokeOnMainThreadAsync(() =>
-            {
-                this.UiItems.ToList()
+            this.UiItems.ToList()
                     .Select(i => i as IDashboardItemWithEvents)
                     .ForEach(i => i?.RefreshDataTime());
-            });
         }
     }
 }

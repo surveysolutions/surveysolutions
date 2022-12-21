@@ -50,7 +50,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.ItemsCount--;
             this.UpdateTitle();
 
-            this.UiItems.Remove(dashboardItem);
+            await this.InvokeOnMainThreadAsync(() =>
+            {
+                this.UiItems.Remove(dashboardItem);
+
+            }, false).ConfigureAwait(false);
 
             this.OnInterviewRemoved?.Invoke(sender,
                 new InterviewRemovedArgs(dashboardItem.AssignmentId, dashboardItem.InterviewId));
