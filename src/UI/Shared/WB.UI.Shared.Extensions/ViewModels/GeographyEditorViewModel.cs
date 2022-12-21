@@ -112,27 +112,30 @@ namespace WB.UI.Shared.Extensions.ViewModels
             await this.NavigationService.Close(this);
         });
         
+        private async void GeometryChangedHandler(object sender, GeometryChangedEventArgs args)
+        {
+            var geometry = args.NewGeometry;
+            try
+            {
+                this.UpdateLabels(geometry);
+                await UpdateDrawNeighborsAsync(geometry, this.GeographyNeighbors).ConfigureAwait(false);
+                
+                CanUndo = this.MapView.SketchEditor.UndoCommand.CanExecute(this.MapView.SketchEditor.UndoCommand);
+                CanSave = this.MapView.SketchEditor.CompleteCommand.CanExecute(this.MapView.SketchEditor.CompleteCommand);
+            }
+            catch
+            {
+            }
+        }
+        
+        
         private async Task StartEditingGeometry()
         {
             this.IsEditing = true;
 
             try
             {
-                this.MapView.SketchEditor.GeometryChanged += async delegate (object sender, GeometryChangedEventArgs args)
-                {
-                    var geometry = args.NewGeometry;
-                    try
-                    {
-                        this.UpdateLabels(geometry);
-                        await UpdateDrawNeighborsAsync(geometry, this.GeographyNeighbors).ConfigureAwait(false);
-                    }
-                    catch
-                    {
-                    }
-
-                    this.CanUndo = this.MapView.SketchEditor.UndoCommand.CanExecute(this.MapView.SketchEditor.UndoCommand);
-                    this.CanSave = this.MapView.SketchEditor.CompleteCommand.CanExecute(this.MapView.SketchEditor.CompleteCommand);
-                };
+                this.MapView.SketchEditor.GeometryChanged += GeometryChangedHandler;
 
                 if (this.Geometry == null)
                 {
@@ -165,7 +168,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 await FinishEditing();
             }
         }
-
 
         private async Task FinishEditing()
         {
@@ -953,13 +955,19 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 if (this.MapView != null && !this.MapView.Map.SpatialReference.IsEqual(geometry.SpatialReference))
                     geometry = GeometryEngine.Project(geometry, this.MapView.Map.SpatialReference);
 
-                this.MapView?.SketchEditor.ClearGeometry();
-                this.MapView?.SketchEditor.ReplaceGeometry(geometry);
+                this.MapView.SketchEditor.GeometryChanged -= GeometryChangedHandler;
                 
+                this.MapView.SketchEditor.ClearGeometry();
+                this.MapView.SketchEditor.ReplaceGeometry(geometry);
+                
+                this.MapView.SketchEditor.GeometryChanged += GeometryChangedHandler;
+
                 await DrawNeighborsAsync(geometry).ConfigureAwait(false);
             }
         });
-        
+
+        public bool IgnoreRecalculationStatus { get; set; }
+
         public override void ViewDisappearing()
         {
             //locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
