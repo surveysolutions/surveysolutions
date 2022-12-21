@@ -39,7 +39,7 @@
     <DefineConstants Condition="'$(Configuration)' == 'Debug'">$(DefineConstants);TRACE;DEBUG</DefineConstants>
     <DefineConstants Condition="'$(Configuration)' == 'Debug-ESRI'">$(DefineConstants);TRACE;DEBUG</DefineConstants>
     <Configurations>Debug;Debug-ESRI;Release</Configurations>
-    <WarningLevel>3</WarningLevel>
+	<WarningLevel>3</WarningLevel>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <NoWarn>618</NoWarn>
   </PropertyGroup>
@@ -73,7 +73,6 @@
     <DefineConstants>$(Constants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <AndroidLinkSkip>mscorlib;System.Runtime;System.Runtime.Extensions;System.Linq;System.Collections;System.Text.RegularExpressions;netstandard;WB.Core.SharedKernels.DataCollection.Portable</AndroidLinkSkip>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
