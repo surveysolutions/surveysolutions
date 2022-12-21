@@ -26,7 +26,6 @@
     <AndroidResgenClass>Resource</AndroidResgenClass>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidApplication>True</AndroidApplication>
-    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <ApplicationManifest>Properties\AndroidManifest.xml</ApplicationManifest>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
