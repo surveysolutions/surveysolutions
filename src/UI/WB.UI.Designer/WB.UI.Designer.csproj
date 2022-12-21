@@ -53,6 +53,9 @@
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.3" />
 
 
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+
+
     <PackageReference Include="System.Drawing.Common" Version="5.0.3" />
     <PackageReference Include="VueCliMiddleware" Version="6.0.0" />
   </ItemGroup>
