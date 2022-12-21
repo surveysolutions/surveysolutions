@@ -80,13 +80,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             throw new ArgumentException("Need implement this method to refresh dashboard item");
         }
 
-        public override void ViewAppeared()
+        public override async void ViewAppeared()
         {
             base.ViewAppeared();
 
-            this.UiItems.ToList()
-                .Select(i => i as IDashboardItemWithEvents)
-                .ForEach(i => i?.RefreshDataTime());
+            await this.InvokeOnMainThreadAsync(() =>
+            {
+                this.UiItems.ToList()
+                    .Select(i => i as IDashboardItemWithEvents)
+                    .ForEach(i => i?.RefreshDataTime());
+            });
         }
     }
 }
