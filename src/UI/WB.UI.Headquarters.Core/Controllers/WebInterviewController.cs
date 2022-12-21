@@ -255,7 +255,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 id = interviewId,
                 sectionId = sectionId
-            });
+            })!;
         }
 
         [HttpGet]
