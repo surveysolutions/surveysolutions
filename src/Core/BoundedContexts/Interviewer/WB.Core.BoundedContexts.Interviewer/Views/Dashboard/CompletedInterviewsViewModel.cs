@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             interviewDashboardItem.OnItemRemoved += this.InterviewDashboardItem_OnItemRemoved;
         }
 
-        private void InterviewDashboardItem_OnItemRemoved(object sender, System.EventArgs e)
+        private async void InterviewDashboardItem_OnItemRemoved(object sender, System.EventArgs e)
         {
             var dashboardItem = (InterviewDashboardItemViewModel) sender;
 
