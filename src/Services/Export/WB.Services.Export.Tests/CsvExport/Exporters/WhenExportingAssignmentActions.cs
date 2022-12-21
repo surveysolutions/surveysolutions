@@ -64,13 +64,31 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                 .Setup(x => x.WriteData(It.IsAny<string>(), It.IsAny<IEnumerable<string[]>>(), It.IsAny<string>()))
                 .Callback<string, IEnumerable<string[]>, string>((f, data, d) => { fileData.AddRange(data); });
 
+            var headquartersUser = new WB.Services.Export.User.User()
+            {
+                Id = headquarters,
+                UserName = "headquarters",
+                Roles = new []{UserRoles.Headquarter}
+            };
+            
+            var supervisorUser = new WB.Services.Export.User.User()
+            {
+                Id = supervisor,
+                UserName = "supervisor",
+                Roles = new []{UserRoles.Supervisor}
+            };
+            
+            var interviewerUser = new WB.Services.Export.User.User()
+            {
+                Id = interviewer,
+                UserName = "interviewer",
+                Roles = new []{UserRoles.Interviewer}
+            };
+            
             var userStorage = Mock.Of<IUserStorage>(s =>
-                s.GetUserNameAsync(headquarters) == Task.FromResult("headquarters")
-                && s.GetUserNameAsync(supervisor) == Task.FromResult("supervisor")
-                && s.GetUserNameAsync(interviewer) == Task.FromResult("interviewer")
-                && s.GetUserRoleAsync(headquarters) == Task.FromResult(UserRoles.Headquarter)
-                && s.GetUserRoleAsync(supervisor) == Task.FromResult(UserRoles.Supervisor)
-                && s.GetUserRoleAsync(interviewer) == Task.FromResult(UserRoles.Interviewer)
+                s.GetUserAsync(headquarters) == Task.FromResult(headquartersUser)
+                && s.GetUserAsync(supervisor) == Task.FromResult(supervisorUser)
+                && s.GetUserAsync(interviewer) == Task.FromResult(interviewerUser)
             );
 
             actionsExporter = Create.AssignmentActionsExporter(csvWriter: csvWriterMock.Object,

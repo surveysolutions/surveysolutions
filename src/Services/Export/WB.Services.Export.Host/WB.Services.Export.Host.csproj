@@ -1,77 +1,77 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <PackageId>WB.Services.Export.Host</PackageId>
-    <Product>Survey Solutions Export Service</Product>
-    <Configurations>Debug;Release;DebugEmptyTenant</Configurations>
-    <DefineConstants Condition="'$(Configuration)' == 'DebugEmptyTenant'">DEBUG;TRACE;RANDOMSCHEMA</DefineConstants>
-    <RootNamespace>WB.Services.Export.Host</RootNamespace>
-    <Nullable>enable</Nullable>
-    <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>..\..</DockerfileContext>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <PackageId>WB.Services.Export.Host</PackageId>
+        <Product>Survey Solutions Export Service</Product>
+        <Configurations>Debug;Release;DebugEmptyTenant</Configurations>
+        <DefineConstants Condition="'$(Configuration)' == 'DebugEmptyTenant'">DEBUG;TRACE;RANDOMSCHEMA</DefineConstants>
+        <RootNamespace>WB.Services.Export.Host</RootNamespace>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..</DockerfileContext>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DebugType>full</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="logs\**" />
-    <Content Remove="logs\**" />
-    <EmbeddedResource Remove="logs\**" />
-    <None Remove="logs\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="logs\**" />
+        <Content Remove="logs\**" />
+        <EmbeddedResource Remove="logs\**" />
+        <None Remove="logs\**" />
+    </ItemGroup>
 
-  <ItemGroup>
-      <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-    <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never">
-      <DependentUpon>appsettings.ini</DependentUpon>
-    </Content>
-  </ItemGroup>
+    <ItemGroup>
+        <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never">
+            <DependentUpon>appsettings.ini</DependentUpon>
+        </Content>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.123" />
-    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.3" />
-    <PackageReference Include="Masking.Serilog" Version="1.0.13" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
-    <PackageReference Include="Npgsql" Version="6.0.3" />
-    <PackageReference Include="Polly" Version="7.2.3" />
-    <PackageReference Include="prometheus-net.AspNetCore" Version="4.1.1" />
-    <PackageReference Include="prometheus-net" Version="4.1.1" />
-    <PackageReference Include="Refit" Version="6.3.2" />
-    <PackageReference Include="Refit.Newtonsoft.Json" Version="6.3.2" />
-    <PackageReference Include="Serilog.AspNetCore" Version="4.0.0" />
-    <PackageReference Include="Serilog.Exceptions" Version="6.1.0" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
-    <PackageReference Include="Serilog" Version="2.10.0" />
+    <ItemGroup>
+        <PackageReference Include="Dapper" Version="2.0.123" />
+        <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.1" />
+        <PackageReference Include="Masking.Serilog" Version="1.0.13" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="7.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="7.0.0" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
+        <PackageReference Include="Npgsql" Version="7.0.1" />
+        <PackageReference Include="Polly" Version="7.2.3" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="4.1.1" />
+        <PackageReference Include="prometheus-net" Version="4.1.1" />
+        <PackageReference Include="Refit" Version="6.3.2" />
+        <PackageReference Include="Refit.Newtonsoft.Json" Version="6.3.2" />
+        <PackageReference Include="Serilog.AspNetCore" Version="4.0.0" />
+        <PackageReference Include="Serilog.Exceptions" Version="6.1.0" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+        <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+        <PackageReference Include="Serilog" Version="2.10.0" />
 
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Infrastructure.AspNetCore\WB.Infrastructure.AspNetCore.csproj" />
-    <ProjectReference Include="..\..\Core\WB.Services.Scheduler\WB.Services.Scheduler.csproj" />
-    <ProjectReference Include="..\WB.Services.Export\WB.Services.Export.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Infrastructure.AspNetCore\WB.Infrastructure.AspNetCore.csproj" />
+        <ProjectReference Include="..\..\Core\WB.Services.Scheduler\WB.Services.Scheduler.csproj" />
+        <ProjectReference Include="..\WB.Services.Export\WB.Services.Export.csproj" />
+    </ItemGroup>
 
 </Project>

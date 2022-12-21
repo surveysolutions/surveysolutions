@@ -14,7 +14,7 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
-        <PackageReference Include="Npgsql" Version="7.0.0" />
+        <PackageReference Include="Npgsql" Version="7.0.1" />
         <PackageReference Include="refit" Version="6.3.2" />
         <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
         <PackageReference Include="Serilog" Version="2.10.0" />

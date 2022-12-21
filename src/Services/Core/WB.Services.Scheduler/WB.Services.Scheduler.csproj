@@ -1,36 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Jobs\**" />
-    <EmbeddedResource Remove="Jobs\**" />
-    <None Remove="Jobs\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Jobs\**" />
+        <EmbeddedResource Remove="Jobs\**" />
+        <None Remove="Jobs\**" />
+    </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Dapper" Version="2.0.123" />
         <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="6.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
-        <PackageReference Include="Npgsql" Version="6.0.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="7.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
+        <PackageReference Include="Npgsql" Version="7.0.1" />
         <PackageReference Include="prometheus-net" Version="4.1.1" />
         <PackageReference Include="System.Reactive" Version="5.0.0" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\WB.Services.Infrastructure\WB.Services.Infrastructure.csproj" />
+        <ProjectReference Include="..\WB.Services.Infrastructure\WB.Services.Infrastructure.csproj" />
     </ItemGroup>
 </Project>
