@@ -29,8 +29,9 @@
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a</AndroidSupportedAbis>
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <ApplicationManifest>Properties\AndroidManifest.xml</ApplicationManifest>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
