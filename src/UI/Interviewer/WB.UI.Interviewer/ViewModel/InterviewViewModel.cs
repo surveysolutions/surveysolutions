@@ -128,7 +128,7 @@ namespace WB.UI.Interviewer.ViewModel
 
                 if (IsAudioRecordingEnabled == true && !isAuditStarting)
                 {
-                    asyncDispatcher.ExecuteOnMainThreadAsync(async () =>
+                    await asyncDispatcher.ExecuteOnMainThreadAsync(async () =>
                     {
                         isAuditStarting = true;
                         try
