@@ -82,80 +82,18 @@
     <AndroidSupportedAbis>armeabi-v7a;arm64-v8a</AndroidSupportedAbis>
     <PublishTrimmed>False</PublishTrimmed>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <MandroidI18n>CJK;Mideast;Rare;West;Other</MandroidI18n>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\Interviewer\WB.UI.Interviewer\LinkerPleaseInclude.cs">
       <Link>LinkerPleaseInclude.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\scan_icon.xml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\anonymousquestionnaires.axml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\menu\anonymousquestionnaires.xml" />
-    <AndroidResource Include="Resources\xml\preferences.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\menu\interview.xml" />
-    <AndroidResource Include="Resources\menu\dashboard.xml" />
-    <AndroidResource Include="Resources\menu\login.xml" />
-    <AndroidResource Include="Resources\values\settings.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\dashboard_item.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_item_bg.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\dashboard_item_pressed.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_my_questionnaires_bg.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_public_questionnaires_bg.xml" />
-    <AndroidResource Include="Resources\drawable-v21\dashboard_item_bg.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\styles-dashboard.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\dimensions.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\colors.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
-    <AndroidResource Include="Resources\drawable\icon.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\loginLogo.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\loginLogo.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\loginLogo.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\loginLogo.png" />
-    <AndroidResource Include="Resources\drawable\loginLogo.png" />
-    <AndroidResource Include="Resources\xml\file_paths.xml" />
-    <AndroidResource Include="Resources\menu\prefilled_questions.xml" />
     <LinkDescription Include="linker.xml" />
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <None Include="app.config" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\login.axml" />
-    <AndroidResource Include="Resources\layout\splash.axml" />
-    <AndroidResource Include="Resources\layout\dashboard.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\questionnaire_list_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj">
@@ -190,18 +128,6 @@
       <Project>{5daa7eaf-9a68-4302-ae74-ef0daa0bd169}</Project>
       <Name>WB.UI.Shared.Enumerator</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\dashboard_refresh_icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\refresh.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\dashboard_shared_with_me_questionnaires_bg.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac">
