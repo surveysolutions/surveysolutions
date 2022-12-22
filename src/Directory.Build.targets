@@ -4,7 +4,7 @@
     <Move SourceFiles="$(MSBuildProjectDirectory)\$(ApkFileSigned)" DestinationFiles="$(ApkOutputPath)" OverwriteReadOnlyFiles="True" />
   </Target>
 
-  <Target Name="PrepareManifest" BeforeTargets="PrepareForBuild" Condition="'$(VersionCode)' != '' and '$(AndroidManifest)' != ''">
+  <Target Name="PrepareManifest" BeforeTargets="PrepareForBuild" Condition="'$(VersionCode)' != '' and '$(ApplicationManifest)' != ''">
     <PropertyGroup>
       <VersionFile>$([MSBuild]::GetPathOfFileAbove('.version', '$(MSBuildThisFileDirectory)/'))</VersionFile>
     </PropertyGroup>
@@ -24,8 +24,8 @@
       </_AndroidNS>
     </PropertyGroup>
 
-    <XmlPoke XmlInputPath="$(AndroidManifest)" Query="manifest/@android:versionCode" Value="$(VersionCode)" Namespaces="$(_AndroidNS)" />
-    <XmlPoke XmlInputPath="$(AndroidManifest)" Query="manifest/@android:versionName" Value="$(VersionName)" Namespaces="$(_AndroidNS)" />
+    <XmlPoke XmlInputPath="$(ApplicationManifest)" Query="manifest/@android:versionCode" Value="$(VersionCode)" Namespaces="$(_AndroidNS)" />
+    <XmlPoke XmlInputPath="$(ApplicationManifest)" Query="manifest/@android:versionName" Value="$(VersionName)" Namespaces="$(_AndroidNS)" />
 
   </Target>
 </Project>
