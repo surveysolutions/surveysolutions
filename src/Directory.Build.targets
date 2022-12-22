@@ -11,7 +11,6 @@
       </_AndroidNS>
     </PropertyGroup>
 
-    <XmlPoke XmlInputPath="$(ApplicationManifest)" Query="manifest/@android:versionCode" Value="$(VersionCode)" Namespaces="$(_AndroidNS)" />
 
     <PropertyGroup>
       <VersionFile>$([MSBuild]::GetPathOfFileAbove('.version', '$(MSBuildThisFileDirectory)/'))</VersionFile>
