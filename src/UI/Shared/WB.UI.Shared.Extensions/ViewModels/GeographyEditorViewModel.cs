@@ -127,8 +127,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
             }
         }
-        
-        
+
         private async Task StartEditingGeometry()
         {
             this.IsEditing = true;
@@ -966,8 +965,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         });
 
-        public bool IgnoreRecalculationStatus { get; set; }
-
         public override void ViewDisappearing()
         {
             //locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
@@ -979,8 +976,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             Geometry currentGeometry = IsManual ? this.MapView.SketchEditor?.Geometry : geometryBuilder?.ToGeometry();
             await SetViewpointToGeometry(currentGeometry);
         }
-        
-        
+
         protected async Task SetViewpointToGeometry(Geometry geometry)
         {
             if (geometry != null)
@@ -1029,6 +1025,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 locationDataSource.StopAsync();
             }
 
+            if(this.MapView?.SketchEditor != null)
+                this.MapView.SketchEditor.GeometryChanged -= GeometryChangedHandler;
+            
             collectionCancellationTokenSource?.Cancel();
             collectionCancellationTokenSource?.Dispose();
             collectionCancellationTokenSource = null;
