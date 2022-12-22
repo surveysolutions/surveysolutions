@@ -6,13 +6,6 @@
 
   <Target Name="PrepareManifest" BeforeTargets="PrepareForBuild" Condition="'$(VersionCode)' != '' and '$(ApplicationManifest)' != ''">
     <PropertyGroup>
-      <_AndroidNS>
-        <Namespace Prefix="android" Uri="http://schemas.android.com/apk/res/android" />
-      </_AndroidNS>
-    </PropertyGroup>
-
-
-    <PropertyGroup>
       <VersionFile>$([MSBuild]::GetPathOfFileAbove('.version', '$(MSBuildThisFileDirectory)/'))</VersionFile>
     </PropertyGroup>
 
@@ -25,6 +18,14 @@
       <VersionName Condition="'$(ExcludeExtensions)' != 'True'">$(VersionNumber) (build $(VersionCode)) with Maps</VersionName>
     </PropertyGroup>
 
+    <PropertyGroup>
+      <_AndroidNS>
+        <Namespace Prefix="android" Uri="http://schemas.android.com/apk/res/android" />
+      </_AndroidNS>
+    </PropertyGroup>
+
+    <XmlPoke XmlInputPath="$(ApplicationManifest)" Query="manifest/@android:versionCode" Value="$(VersionCode)" Namespaces="$(_AndroidNS)" />
+    <XmlPoke XmlInputPath="$(ApplicationManifest)" Query="manifest/@android:versionName" Value="$(VersionName)" Namespaces="$(_AndroidNS)" />
 
   </Target>
 </Project>
