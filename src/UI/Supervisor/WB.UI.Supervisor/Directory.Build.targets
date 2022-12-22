@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Project>
-    <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))" />
-
-    <PropertyGroup>
+	<PropertyGroup>
         <DefineConstants Condition="'$(GIT_BRANCH)' == 'release'" >$(DefineConstants);PRODUCTION</DefineConstants>
     </PropertyGroup>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))" />
 </Project>
