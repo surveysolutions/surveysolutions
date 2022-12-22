@@ -25,7 +25,6 @@
       <VersionName Condition="'$(ExcludeExtensions)' != 'True'">$(VersionNumber) (build $(VersionCode)) with Maps</VersionName>
     </PropertyGroup>
 
-    <XmlPoke XmlInputPath="$(ApplicationManifest)" Query="manifest/@android:versionName" Value="$(VersionName)" Namespaces="$(_AndroidNS)" />
 
   </Target>
 </Project>
