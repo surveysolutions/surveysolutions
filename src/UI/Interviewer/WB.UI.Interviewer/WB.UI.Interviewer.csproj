@@ -39,7 +39,7 @@
     <DefineConstants Condition="'$(Configuration)' == 'Debug'">$(DefineConstants);TRACE;DEBUG</DefineConstants>
     <DefineConstants Condition="'$(Configuration)' == 'Debug-ESRI'">$(DefineConstants);TRACE;DEBUG</DefineConstants>
     <Configurations>Debug;Debug-ESRI;Release</Configurations>
-	<WarningLevel>3</WarningLevel>
+	  <WarningLevel>3</WarningLevel>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <NoWarn>618</NoWarn>
   </PropertyGroup>
@@ -88,64 +88,7 @@
     <None Include="app.config" />
     <None Include="Extensions.props" />
     <None Include="Directory.Build.targets" />
-    <AndroidResource Include="Resources\drawable\dashboard_remove_icon.xml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\ActionBar.axml" />
-    <AndroidResource Include="Resources\layout\Login.axml" />
-    <AndroidResource Include="Resources\layout\Diagnostics.axml" />
-    <AndroidResource Include="Resources\layout\diagnostics__tabletinformation.axml" />
-    <AndroidResource Include="Resources\layout\SyncLogin.axml" />
-    <AndroidResource Include="Resources\layout\InterviewActionBar.axml" />
-    <AndroidResource Include="Resources\layout\splash.axml" />
-    <AndroidResource Include="Resources\values\styles.xml" />
-    <AndroidResource Include="Resources\layout\dashboard.axml" />
-    <AndroidResource Include="Resources\layout\relink.axml" />
-    <AndroidResource Include="Resources\layout\finish_installation.axml" />
-    <AndroidResource Include="Resources\layout\diagnostics__check_new_version.axml" />
-    <AndroidResource Include="Resources\layout\diagnostics__backup_restore.axml" />
-    <AndroidResource Include="Resources\layout\diagnostics__test_bandwidth_to_server.axml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
-    <AndroidResource Include="Resources\drawable\dashboardquestionnaire.xml" />
-    <AndroidResource Include="Resources\values\Themes.xml" />
-    <AndroidResource Include="Resources\menu\interview.xml" />
-    <AndroidResource Include="Resources\values\settings.xml" />
-    <AndroidResource Include="Resources\menu\login.xml" />
-    <AndroidResource Include="Resources\menu\settings.xml" />
-    <AndroidResource Include="Resources\menu\dashboard.xml" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
-    <AndroidResource Include="Resources\drawable\icon.png" />
-    <AndroidResource Include="Resources\drawable\login_logo.png" />
-    <AndroidResource Include="Resources\drawable\capi_splash.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\login_logo.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\login_logo.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\login_logo.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\login_logo.png" />
-    <AndroidResource Include="Resources\xml\preferences.xml" />
-    <AndroidResource Include="Resources\values\relink.xml" />
-    <AndroidResource Include="Resources\menu\troubleshooting.xml" />
-    <AndroidResource Include="Resources\menu\relink.xml" />
-    <AndroidResource Include="Resources\menu\finish.xml" />
-    <AndroidResource Include="Resources\values\strings.xml" />
-    <AndroidResource Include="Resources\drawable\borderless_button.xml" />
-    <AndroidResource Include="Resources\drawable-hdpi\filepicker_file.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\filepicker_folder.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\filepicker_new_folder.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\filepicker_previous.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_file.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_folder.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_new_folder.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_previous.png" />
-    <AndroidResource Include="Resources\menu\diagnostics.xml" />
-    <AndroidResource Include="Resources\xml\file_paths.xml" />
-    <AndroidResource Include="Resources\values-small\dimensions.xml" />
-    <AndroidResource Include="Resources\values-large\dimensions.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
@@ -180,18 +123,6 @@
       <Project>{5DAA7EAF-9A68-4302-AE74-EF0DAA0BD169}</Project>
       <Name>WB.UI.Shared.Enumerator</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\menu\maps.xml" />
-    <AndroidResource Include="Resources\values\login.xml" />
-    <AndroidResource Include="Resources\values\dimensions.xml" />
-    <AndroidResource Include="Resources\values\diagnostics.xml" />
-    <AndroidResource Include="Resources\values\colors.xml" />
-    <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
-    <AndroidResource Include="Resources\layout\dashboard_tab.axml" />
-    <AndroidResource Include="Resources\layout\dashboard_assignments_tab.axml" />
-    <AndroidResource Include="Resources\values\offline_sync.xml" />
-    <AndroidResource Include="Resources\drawable\scan_icon.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac">
