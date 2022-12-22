@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -31,6 +32,7 @@ namespace WB.UI.Interviewer.ViewModel
         private readonly IUserInteractionService userInteractionService;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IJsonAllTypesSerializer serializer;
+        private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
         private bool isAuditStarting;
         private readonly ILogger logger;
 
@@ -56,7 +58,8 @@ namespace WB.UI.Interviewer.ViewModel
             IUserInteractionService userInteractionService,
             ILogger logger,
             IPlainStorage<InterviewView> interviewViewRepository,
-            IJsonAllTypesSerializer serializer)
+            IJsonAllTypesSerializer serializer,
+            IMvxMainThreadAsyncDispatcher asyncDispatcher)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState,
                 principal, viewModelNavigationService,
@@ -68,6 +71,7 @@ namespace WB.UI.Interviewer.ViewModel
             this.logger = logger;
             this.interviewViewRepository = interviewViewRepository;
             this.serializer = serializer;
+            this.asyncDispatcher = asyncDispatcher;
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () =>
@@ -119,46 +123,49 @@ namespace WB.UI.Interviewer.ViewModel
                 var interview = interviewRepository.Get(this.InterviewId);
                 if (interview == null) return;
 
-                commandService.Execute(new ResumeInterviewCommand(interviewId,
+                await commandService.ExecuteAsync(new ResumeInterviewCommand(interviewId,
                     Principal.CurrentUserIdentity.UserId, AgentDeviceType.Tablet));
 
                 if (IsAudioRecordingEnabled == true && !isAuditStarting)
                 {
-                    isAuditStarting = true;
-                    try
+                    await asyncDispatcher.ExecuteOnMainThreadAsync(async () =>
                     {
-                        await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
-                    }
-                    catch (MissingPermissionsException missingPermissionsException)
-                    {
-                        this.logger.Info("Audio audit failed to start.", exception: missingPermissionsException);
-                        await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
-                            .ConfigureAwait(false);
+                        isAuditStarting = true;
+                        try
+                        {
+                            await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
+                        }
+                        catch (MissingPermissionsException missingPermissionsException)
+                        {
+                            this.logger.Info("Audio audit failed to start.", exception: missingPermissionsException);
+                            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
+                                .ConfigureAwait(false);
 
-                        if (missingPermissionsException.PermissionType == typeof(Permissions.Microphone))
-                        {
-                            this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone);
+                            if (missingPermissionsException.PermissionType == typeof(Permissions.Microphone))
+                            {
+                                this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone);
+                            }
+                            else if (missingPermissionsException.PermissionType == typeof(Permissions.StorageWrite))
+                            {
+                                this.userInteractionService.ShowToast(UIResources.MissingPermissions_Storage);
+                            }
+                            else
+                            {
+                                this.userInteractionService.ShowToast(missingPermissionsException.Message);
+                            }
                         }
-                        else if (missingPermissionsException.PermissionType == typeof(Permissions.StorageWrite))
+                        catch (Exception exc)
                         {
-                            this.userInteractionService.ShowToast(UIResources.MissingPermissions_Storage);
+                            logger.Warn("Audio audit failed to start.", exception: exc);
+                            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
+                                .ConfigureAwait(false);
+                            this.userInteractionService.ShowToast(exc.Message);
                         }
-                        else
+                        finally
                         {
-                            this.userInteractionService.ShowToast(missingPermissionsException.Message);  
+                            isAuditStarting = false;
                         }
-                    }
-                    catch (Exception exc)
-                    {
-                        logger.Warn("Audio audit failed to start.", exception: exc);
-                        await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
-                            .ConfigureAwait(false);
-                        this.userInteractionService.ShowToast(exc.Message);
-                    }
-                    finally
-                    {
-                        isAuditStarting = false;
-                    }
+                    });
                 }
 
                 auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(),
