@@ -109,7 +109,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
-    <None Include="Properties\AndroidManifest.xml" />
     <AndroidResource Include="Resources\drawable\dashboardquestionnaire.xml" />
     <AndroidResource Include="Resources\values\Themes.xml" />
     <AndroidResource Include="Resources\menu\interview.xml" />
