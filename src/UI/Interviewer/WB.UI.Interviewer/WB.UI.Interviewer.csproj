@@ -85,13 +85,11 @@
     <PublishTrimmed>False</PublishTrimmed>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="Properties\AndroidManifest.xml" />
     <None Include="app.config" />
     <None Include="Extensions.props" />
     <None Include="Directory.Build.targets" />
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
-    <None Update="Properties\AndroidManifest.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
