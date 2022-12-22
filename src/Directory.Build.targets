@@ -24,8 +24,15 @@
       </_AndroidNS>
     </PropertyGroup>
 
-    <XmlPoke XmlInputPath="$(ApplicationManifest)" Query="manifest/@android:versionCode" Value="$(VersionCode)" Namespaces="$(_AndroidNS)" />
-    <XmlPoke XmlInputPath="$(ApplicationManifest)" Query="manifest/@android:versionName" Value="$(VersionName)" Namespaces="$(_AndroidNS)" />
+    <PropertyGroup>
+      <Output TaskParameter="Lines" PropertyName="MSBuildThisFileDirectory" />
+      <Output TaskParameter="Lines" PropertyName="ApplicationManifest" />
+      <FullApplicationManifest>$([MSBuild]::GetPathOfFileAbove('$(ApplicationManifest)', '$(MSBuildThisFileDirectory)/'))</FullApplicationManifest>
+      <Output TaskParameter="Lines" PropertyName="FullApplicationManifest" />
+    </PropertyGroup>
+
+    <XmlPoke XmlInputPath="$(FullApplicationManifest)" Query="manifest/@android:versionCode" Value="$(VersionCode)" Namespaces="$(_AndroidNS)" />
+    <XmlPoke XmlInputPath="$(FullApplicationManifest)" Query="manifest/@android:versionName" Value="$(VersionName)" Namespaces="$(_AndroidNS)" />
 
   </Target>
 </Project>
