@@ -24,19 +24,8 @@
       </_AndroidNS>
     </PropertyGroup>
 
-    
-    <PropertyGroup>
-      <AndroidManifest>$([MSBuild]::GetPathOfFileAbove('AndroidManifest.xml', '$(MSBuildThisFileDirectory)/'))</AndroidManifest>
-    </PropertyGroup>
-
-    <ReadLinesFromFile File="$(AndroidManifest)">
-      <Output
-              TaskParameter="Lines"
-              ItemName="ItemsFromFile"/>
-    </ReadLinesFromFile>
-
-    <XmlPoke XmlInputPath="$(AndroidManifest)" Query="manifest/@android:versionCode" Value="$(VersionCode)" Namespaces="$(_AndroidNS)" />
-    <XmlPoke XmlInputPath="$(AndroidManifest)" Query="manifest/@android:versionName" Value="$(VersionName)" Namespaces="$(_AndroidNS)" />
+    <XmlPoke XmlInputPath="$(ApplicationManifest)" Query="manifest/@android:versionCode" Value="$(VersionCode)" Namespaces="$(_AndroidNS)" />
+    <XmlPoke XmlInputPath="$(ApplicationManifest)" Query="manifest/@android:versionName" Value="$(VersionName)" Namespaces="$(_AndroidNS)" />
 
   </Target>
 </Project>
