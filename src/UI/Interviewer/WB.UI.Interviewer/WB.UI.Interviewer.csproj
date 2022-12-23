@@ -82,7 +82,7 @@
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
     <DebugSymbols>False</DebugSymbols>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
-    <NoWarn>CA1416</NoWarn>
+    <NoWarn>618;CA1416</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

@@ -83,7 +83,7 @@
     <Debugger>Xamarin</Debugger>
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
     <DebugSymbols>False</DebugSymbols>
-    <NoWarn>CA1416</NoWarn>
+    <NoWarn>618;CA1416</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\Interviewer\WB.UI.Interviewer\LinkerPleaseInclude.cs">
