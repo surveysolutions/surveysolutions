@@ -41,7 +41,7 @@
     <Configurations>Debug;Debug-ESRI;Release</Configurations>
 	  <WarningLevel>3</WarningLevel>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <NoWarn>618;CA1416</NoWarn>
+    <NoWarn>618</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' OR '$(Configuration)|$(Platform)' == 'Debug-ESRI|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -82,6 +82,7 @@
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
     <DebugSymbols>False</DebugSymbols>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
+    <NoWarn>CA1416</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
