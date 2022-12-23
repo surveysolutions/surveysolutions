@@ -83,6 +83,7 @@
     <DebugSymbols>False</DebugSymbols>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <NoWarn>618;CA1416</NoWarn>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
