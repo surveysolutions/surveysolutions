@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
         [NUnit.Framework.Test]
         public void should_add_first_option_with_expected_value() =>
-            view.Options.First().Title.Should().Equals("First");
+            view.Options.First().Title.Equals("First");
 
         [NUnit.Framework.OneTimeTearDown]
         public void cleanup()
