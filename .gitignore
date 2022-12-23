@@ -140,3 +140,4 @@ artifacts
 /.tool
 appsettings.*.ini
 !/installer/src/**/appsettings.*.ini
+appsettings.*.json

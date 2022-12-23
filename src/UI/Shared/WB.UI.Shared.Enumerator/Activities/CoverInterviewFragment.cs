@@ -30,7 +30,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
         
-        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        public override void OnViewCreated(View view, Bundle? savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
 

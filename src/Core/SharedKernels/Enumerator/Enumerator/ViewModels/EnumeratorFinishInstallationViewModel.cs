@@ -158,7 +158,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 #pragma warning restore 4014
         }
 
-        public async Task RefreshEndpoint()
+        private async Task RefreshEndpoint()
         {
             var settingsEndpoint = this.deviceSettings.Endpoint;
             if (!string.IsNullOrEmpty(settingsEndpoint) && !string.Equals(settingsEndpoint, this.endpoint, StringComparison.OrdinalIgnoreCase))
