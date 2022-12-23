@@ -29,14 +29,18 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
+            if (Context == null) throw new InvalidOperationException("Context is null");
+            
             Context.Theme?.ApplyStyle(Resource.Style.DialogWithTitle, true);
-            
             var ignore = base.OnCreateView(inflater, container, savedInstanceState);
-            
             var view = this.BindingInflate(Resource.Layout.calendar_event_dialog, null);
+            
+            if (this.Dialog == null) throw new InvalidOperationException("Dialog is null");
             this.Dialog.SetTitle(ViewModel.Title);
             this.Dialog.SetCancelable(false);
             this.Dialog.SetCanceledOnTouchOutside(false);
+            
+            if (Activity == null) throw new InvalidOperationException("Activity is null");
             Activity.Window?.SetSoftInputMode(SoftInput.AdjustPan);
             return view;
         }
@@ -61,7 +65,8 @@ namespace WB.UI.Shared.Enumerator.Activities
             var activity = topActivity.Activity;
 
             activity.RemoveFocusFromEditText();
-            activity.HideKeyboard(View.WindowToken);
+            if(View!= null)
+                activity.HideKeyboard(View.WindowToken);
         }
     }
 }
