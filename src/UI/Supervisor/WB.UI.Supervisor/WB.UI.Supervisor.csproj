@@ -29,7 +29,7 @@
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <ApplicationManifest>Properties\AndroidManifest.xml</ApplicationManifest>
-    <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a</AndroidSupportedAbis>
+    <RuntimeIdentifiers>android-arm;android-arm64;android-x86</RuntimeIdentifiers>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
     <JavaMaximumHeapSize />

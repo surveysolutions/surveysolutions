@@ -29,7 +29,7 @@
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a</AndroidSupportedAbis>
+    <RuntimeIdentifiers>android-arm;android-arm64;android-x86</RuntimeIdentifiers>
     <ApplicationManifest>Properties\AndroidManifest.xml</ApplicationManifest>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
@@ -39,7 +39,7 @@
     <DefineConstants Condition="'$(Configuration)' == 'Debug'">$(DefineConstants);TRACE;DEBUG</DefineConstants>
     <DefineConstants Condition="'$(Configuration)' == 'Debug-ESRI'">$(DefineConstants);TRACE;DEBUG</DefineConstants>
     <Configurations>Debug;Debug-ESRI;Release</Configurations>
-	  <WarningLevel>3</WarningLevel>
+    <WarningLevel>3</WarningLevel>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <NoWarn>618</NoWarn>
   </PropertyGroup>
