@@ -1581,4 +1581,7 @@
   <data name="HideParentValues" xml:space="preserve">
     <value>Спрятать родительские значения</value>
   </data>
+  <data name="AddEnablingCondition" xml:space="preserve">
+    <value>Добавить условие</value>
+  </data>  
 </root>
