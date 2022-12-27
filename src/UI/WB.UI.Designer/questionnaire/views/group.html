@@ -19,8 +19,13 @@
             </div>
         </div>
 
-        <div class="form-group enabling-group" ng-if="!activeGroup.isCoverPage">
-            <div class="enabling-group-marker" ng-class="{'hide-if-disabled': activeGroup.hideIfDisabled}"></div>
+        <div class="form-group" ng-show="!activeGroup.isCoverPage && !((showEnablingConditions===undefined && activeGroup.enablementCondition) || showEnablingConditions)">
+            <button type="button" class="btn btn-lg btn-link" ng-click="showEnablingConditions=true" ng-i18next="AddEnablingCondition"></button>
+        </div>
+
+        <div class="row" ng-show="!activeGroup.isCoverPage && ((showEnablingConditions===undefined && activeGroup.enablementCondition) || showEnablingConditions)">
+          <div class="form-group col-xs-11" >
+           <div class="enabling-group-marker" ng-class="{'hide-if-disabled': activeGroup.hideIfDisabled}"></div>
             <label for="edit-group-condition">{{'EnablingCondition' | i18next}} <help key="conditionExpression"/></label>
                 
                 <input type="checkbox" class="wb-checkbox" disabled="disabled" checked="checked" ng-if="questionnaire.hideIfDisabled"
@@ -31,8 +36,14 @@
             <div class="pseudo-form-control">
                 <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}" ng-model="activeGroup.enablementCondition"></div>
             </div>
-        </div>
-        </div>
+            </div>
+            <div class="form-group col-xs-1">
+                <button type="button" class="btn cross instructions-cross"
+                        ng-click="showEnablingConditions=false;activeGroup.enablementCondition='';activeGroup.hideIfDisabled=false;groupForm.$setDirty();"></button>
+            </div>
+        </div>       
+        
+    </div>
 <div class="form-buttons-holder">
     <div class="pull-left">
         <button type="submit" ng-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly" 

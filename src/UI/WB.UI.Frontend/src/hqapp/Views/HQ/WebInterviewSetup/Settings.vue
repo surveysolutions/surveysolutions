@@ -169,7 +169,7 @@
                                                             v-validate="'required'"
                                                             data-vv-name="message"
                                                             :ref="'message' + emailTemplate.value"
-                                                            maxlength="1000"
+                                                            maxlength="3000"
                                                             :min-height="79"
                                                             class="form-control js-elasticArea"
                                                             placeholder="Please enter the main text">

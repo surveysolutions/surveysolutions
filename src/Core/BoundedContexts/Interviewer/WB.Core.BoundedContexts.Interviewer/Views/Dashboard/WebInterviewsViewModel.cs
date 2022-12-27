@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             interviewDashboardItem.OnItemRemoved += this.InterviewDashboardItem_OnItemRemoved;
         }
 
-        private void InterviewDashboardItem_OnItemRemoved(object? sender, System.EventArgs e)
+        private async void InterviewDashboardItem_OnItemRemoved(object? sender, System.EventArgs e)
         {
             if (sender == null) return;
             var dashboardItem = (InterviewDashboardItemViewModel)sender;
@@ -48,8 +48,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.ItemsCount--;
             this.UpdateTitle();
 
-            this.UiItems.Remove(dashboardItem);
+            await this.InvokeOnMainThreadAsync(() =>
+            {
+                this.UiItems.Remove(dashboardItem);
 
+            }, false).ConfigureAwait(false);
+            
             this.OnInterviewRemoved?.Invoke(sender,
                 new InterviewRemovedArgs(dashboardItem.AssignmentId, dashboardItem.InterviewId));
         }

@@ -78,6 +78,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add enabling condition.
+        /// </summary>
+        public static string AddEnablingCondition {
+            get {
+                return ResourceManager.GetString("AddEnablingCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new section.
         /// </summary>
         public static string AddNewSection {

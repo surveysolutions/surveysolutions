@@ -1566,4 +1566,7 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   <data name="HideParentValues" xml:space="preserve">
     <value>Hide Parent values</value>
   </data>
+  <data name="AddEnablingCondition" xml:space="preserve">
+    <value>Add enabling condition</value>
+  </data>
 </root>
