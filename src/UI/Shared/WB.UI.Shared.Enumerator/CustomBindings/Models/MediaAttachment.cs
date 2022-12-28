@@ -7,8 +7,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
 {
     public class MediaAttachment : IMediaAttachment
     {
-        private SimpleExoPlayer player;
-        public PlayerView View { get; set; }
+        private IExoPlayer player;
+        public StyledPlayerView View { get; set; }
         public string ContentPath { get; set; }
 
         public void Release()
@@ -24,7 +24,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
             player = null;
         }
         
-        public SimpleExoPlayer Player
+        public IExoPlayer Player
         {
             get => player;
             set

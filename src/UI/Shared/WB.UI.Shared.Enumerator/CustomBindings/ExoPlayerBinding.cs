@@ -1,4 +1,5 @@
-﻿using Com.Google.Android.Exoplayer2;
+﻿using Android.Media;
+using Com.Google.Android.Exoplayer2;
 using Com.Google.Android.Exoplayer2.Extractor;
 using Com.Google.Android.Exoplayer2.Source;
 using Com.Google.Android.Exoplayer2.UI;
@@ -15,24 +16,19 @@ using Uri = Android.Net.Uri;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class ExoPlayerBinding : BaseBinding<PlayerView, IMediaAttachment>
+    public class ExoPlayerBinding : BaseBinding<StyledPlayerView, IMediaAttachment>
     {
-        public ExoPlayerBinding(PlayerView view) : base(view)
+        public ExoPlayerBinding(StyledPlayerView view) : base(view)
         {
             
         }
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
-        private IDisposable metadataEventSubscription;
-
         protected override void Dispose(bool isDisposing)
         {
             if (isDisposing)
             {
-                this.metadataEventSubscription?.Dispose();
-                this.metadataEventSubscription = null;
-                
                 if (Target?.Player != null)
                 {
                     try
@@ -49,7 +45,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             base.Dispose(isDisposing);
         }
 
-        protected override void SetValueToView(PlayerView view, IMediaAttachment value)
+        protected override void SetValueToView(StyledPlayerView view, IMediaAttachment value)
         {
             var media = value as MediaAttachment;
 
@@ -66,9 +62,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             if (view.Player != null)
             {
-                metadataEventSubscription?.Dispose();
-                metadataEventSubscription = null;
-                
                 view.Player.Stop();
                 view.Player.Release();
                 view.Player.Dispose();
@@ -84,47 +77,56 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             var mediaSourceFactory = new ProgressiveMediaSource.Factory(dataSourceFactory, new DefaultExtractorsFactory());
             var mediaSource = mediaSourceFactory.CreateMediaSource(MediaItem.FromUri(uri));
 
-            SimpleExoPlayer.Builder exoPlayer = new SimpleExoPlayer.Builder(view.Context);
-            var simpleExoPlayer = exoPlayer.Build();
-            simpleExoPlayer.SetMediaSource(mediaSource);
-            simpleExoPlayer.Prepare();
+            IExoPlayer.Builder exoPlayerBuilder = new IExoPlayer.Builder(view.Context);
+            var exoPlayer = exoPlayerBuilder.Build();
+            exoPlayer.SetMediaSource(mediaSource);
+            exoPlayer.Prepare();
 
             // adjust video view height so that video take all horizontal space
-            metadataEventSubscription = simpleExoPlayer.WeakSubscribe<SimpleExoPlayer, VideoFrameMetadataEventArgs>(
-                nameof(simpleExoPlayer.VideoFrameMetadata),
-                this.HandleVideoFrameMetadata);
+            exoPlayer.SetVideoFrameMetadataListener(new VideoFrameMetadataListener(view, exoPlayer)); 
 
-            simpleExoPlayer.SeekTo(1);
-            view.Player = simpleExoPlayer;
-            media.Player = simpleExoPlayer;
+            exoPlayer.SeekTo(1);
+            view.Player = exoPlayer;
+            media.Player = exoPlayer;
             media.View = view;
         }
-
-        private async void HandleVideoFrameMetadata(object sender, VideoFrameMetadataEventArgs args)
+        
+        private class VideoFrameMetadataListener : Java.Lang.Object, IVideoFrameMetadataListener
         {
-            var mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
+            private readonly StyledPlayerView playerView;
+            private readonly IExoPlayer exoPlayer;
 
-            await mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            public VideoFrameMetadataListener(StyledPlayerView playerView, IExoPlayer exoPlayer)
             {
-                var view = Target;
-                var ratio = (float)args.P2.Height / (float)args.P2.Width / (float)args.P2.PixelWidthHeightRatio;
-                view.SetMinimumHeight((int)(view.Width * ratio));
-                view.HideController();
+                this.playerView = playerView;
+                this.exoPlayer = exoPlayer;
+            }
+
+            public async void OnVideoFrameAboutToBeRendered(long presentationTimeUs, long releaseTimeNs, Format format,
+                MediaFormat mediaFormat)
+            {
+                var mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
+
+                await mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                {
+                    var ratio = (float)format.Height / (float)format.Width / (float)format.PixelWidthHeightRatio;
+                    playerView.SetMinimumHeight((int)(playerView.Width * ratio));
+                    playerView.HideController();
                 
-                this.metadataEventSubscription?.Dispose();
-                this.metadataEventSubscription = null;
-            });
+                    exoPlayer.ClearVideoFrameMetadataListener(this);
+                });
+            }
         }
     }
 
     public class ExoPlayerAudioAttachmentBinding : ExoPlayerBinding
     {
-        public ExoPlayerAudioAttachmentBinding(PlayerView view) : base(view)
+        public ExoPlayerAudioAttachmentBinding(StyledPlayerView view) : base(view)
         {
 
         }
 
-        protected override void SetValueToView(PlayerView view, IMediaAttachment value)
+        protected override void SetValueToView(StyledPlayerView view, IMediaAttachment value)
         {
             base.SetValueToView(view, value);
             view.ControllerShowTimeoutMs = 0;
