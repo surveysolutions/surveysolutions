@@ -8,6 +8,7 @@ using Java.Interop;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Supervisor.Activities
@@ -27,14 +28,14 @@ namespace WB.UI.Supervisor.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
-        }
-
-        public override void OnBackPressed()
-        {
-            if (this.ViewModel.IsInProgress)
+            
+            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() =>
             {
-                this.ViewModel.CancelInProgressTask();
-            }
+                if (this.ViewModel.IsInProgress)
+                {
+                    this.ViewModel.CancelInProgressTask();
+                }
+            }));
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

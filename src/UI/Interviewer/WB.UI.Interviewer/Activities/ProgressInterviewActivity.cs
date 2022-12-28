@@ -5,6 +5,7 @@ using AndroidX.AppCompat.Widget;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities
@@ -20,15 +21,15 @@ namespace WB.UI.Interviewer.Activities
             base.OnCreate(savedInstanceState);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(toolbar);
-        }
-
-        public override void OnBackPressed()
-        {
-            if (IsSupportMenu)
+            
+            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() =>
             {
-                this.ViewModel.NavigateToDashboardCommand.Execute();
-                this.CancelLoadingAndFinishActivity();
-            }
+                if (IsSupportMenu)
+                {
+                    this.ViewModel.NavigateToDashboardCommand.Execute();
+                    this.CancelLoadingAndFinishActivity();
+                }
+            }));
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)

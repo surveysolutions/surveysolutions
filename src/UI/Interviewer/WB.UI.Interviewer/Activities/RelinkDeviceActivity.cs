@@ -5,6 +5,7 @@ using AndroidX.AppCompat.Widget;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities
@@ -16,14 +17,17 @@ namespace WB.UI.Interviewer.Activities
     public class RelinkDeviceActivity : BaseActivity<RelinkDeviceViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.relink;
-        public override void OnBackPressed() => this.ViewModel.NavigateToPreviousViewModel();
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
+            
+            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() =>
+            {
+                this.ViewModel.NavigateToPreviousViewModel();
+            }));
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

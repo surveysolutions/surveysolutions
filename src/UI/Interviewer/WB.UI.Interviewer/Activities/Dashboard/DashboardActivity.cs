@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Activities.Dashboard;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
@@ -70,6 +71,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             base.OnCreate(bundle);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
+
+            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() => { }));
 
             var enumeratorSettings = Mvx.IoCProvider.Resolve<IEnumeratorSettings>();
             if (!enumeratorSettings.NotificationsEnabled) return;
@@ -217,8 +220,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 this.InvalidateOptionsMenu();
             }
         }
-
-        public override void OnBackPressed() { }
 
         private void WorkspaceListUpdated(object sender, EventArgs e)
         {
