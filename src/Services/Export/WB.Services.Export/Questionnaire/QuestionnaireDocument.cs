@@ -120,7 +120,7 @@ namespace WB.Services.Export.Questionnaire
                 }
 
                 return rosterSizes.ToArray();
-            });
+            } ) ?? Array.Empty<Guid>();
         }
 
         private Guid GetRosterSource(Guid rosterId)
@@ -134,7 +134,7 @@ namespace WB.Services.Export.Questionnaire
             });
         }
 
-        public Guid[] GetAllGroups()
+        private Guid[] GetAllGroups()
             => this.GroupsCache.Values.Select(question => question.PublicKey).ToArray();
 
         public Group GetGroup(Guid groupId) => this.GroupsCache[groupId];
@@ -163,7 +163,7 @@ namespace WB.Services.Export.Questionnaire
                 }
 
                 return rostersInLevelCache[rosterScope];
-            });
+            }) ?? Array.Empty<Guid>();
         }
 
         private readonly MemoryCache memoryCache;

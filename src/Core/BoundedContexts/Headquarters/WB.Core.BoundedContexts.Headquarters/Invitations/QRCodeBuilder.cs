@@ -1,7 +1,5 @@
 ﻿#nullable enable
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using SkiaSharp;
 using SkiaSharp.QrCode.Image;
@@ -35,19 +33,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var bm = writer.encode(text, BarcodeFormat.CODE_128, width, 1);
             int bmWidth = bm.Width;
 
-            using Bitmap imageBitmap = new Bitmap(bmWidth, height, PixelFormat.Format32bppRgb);
+            using SKBitmap bitmap = new SKBitmap(bmWidth, height);
+            
+            //using Bitmap imageBitmap = new Bitmap(bmWidth, height, PixelFormat.Format32bppRgb);
 
             for (int x = 0; x < bmWidth; x++) 
             {
-                var color = bm[x, 0] ? Color.Black : Color.White;
+                var color = bm[x, 0] ? SKColors.Black : SKColors.White;
                 for (int y = 0; y < height; y++)
-                    imageBitmap.SetPixel(x, y, color);
+                    bitmap.SetPixel(x, y, color);
             }
             
             //imageBitmap.Save("c:\\Temp\\barcode.jpeg", ImageFormat.Jpeg);
 
             var ms = new MemoryStream();
-            imageBitmap.Save(ms, ImageFormat.Jpeg);
+            using var image = SKImage.FromBitmap(bitmap);
+            using var data = image.Encode(SKEncodedImageFormat.Jpeg, 80);
+            
+            data.SaveTo(ms);
+            
             return ms;
         }
 
@@ -61,20 +65,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             int bmWidth = bm.Width;
             int bmHeight = bm.Height;
 
-            using Bitmap imageBitmap = new Bitmap(bmWidth, bmHeight, PixelFormat.Format32bppRgb);
+            using SKBitmap bitmap = new SKBitmap(bmWidth, height);
             for (int x = 0; x < bmWidth; x++) 
             {
                 for (int y = 0; y < bmHeight; y++)
                 {
-                    var color = bm[x, y] ? Color.Black : Color.White;
-                    imageBitmap.SetPixel(x, y, color);
+                    var color = bm[x, y] ? SKColors.Black : SKColors.White;
+                    bitmap.SetPixel(x, y, color);
                 }
             }
             
             //imageBitmap.Save("c:\\Temp\\qrcode.jpeg", ImageFormat.Jpeg);
 
             var ms = new MemoryStream();
-            imageBitmap.Save(ms, ImageFormat.Jpeg);
+            using var image = SKImage.FromBitmap(bitmap);
+            using var data = image.Encode(SKEncodedImageFormat.Jpeg, 80);
+            
+            data.SaveTo(ms);
+            
             return ms;
         }
     }

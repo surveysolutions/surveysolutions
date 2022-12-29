@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <TargetFramework>net6.0</TargetFramework>
+      <TargetFramework>net7.0</TargetFramework>
       <GenerateAssemblyInformationalVersionAttribute>true</GenerateAssemblyInformationalVersionAttribute>
       <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
       <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
@@ -41,7 +41,7 @@
       <PackageReference Include="Dapper" Version="2.0.123" />
       <PackageReference Include="FluentMigrator" Version="3.3.2" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-      <PackageReference Include="Npgsql" Version="6.0.3" />
+      <PackageReference Include="Npgsql" Version="7.0.1" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />

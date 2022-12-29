@@ -1,48 +1,48 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <IsPackable>false</IsPackable>
-    <OutputType>Library</OutputType>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <OutputType>Library</OutputType>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="ExportProcessHandlers\**" />
-    <Content Remove="ExportProcessHandlers\**" />
-    <EmbeddedResource Remove="ExportProcessHandlers\**" />
-    <None Remove="ExportProcessHandlers\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="ExportProcessHandlers\**" />
+        <Content Remove="ExportProcessHandlers\**" />
+        <EmbeddedResource Remove="ExportProcessHandlers\**" />
+        <None Remove="ExportProcessHandlers\**" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="3.1.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="ApprovalTests" Version="5.7.2" />
-    <PackageReference Include="AutoBogus" Version="2.13.1" />
-    <PackageReference Include="Bogus" Version="34.0.2" />
-    <PackageReference Include="FluentAssertions" Version="6.5.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" Version="3.1.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="ApprovalTests" Version="5.7.2" />
+        <PackageReference Include="AutoBogus" Version="2.13.1" />
+        <PackageReference Include="Bogus" Version="34.0.2" />
+        <PackageReference Include="FluentAssertions" Version="6.5.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
 
-    <PackageReference Include="Moq" Version="4.17.2" />
+        <PackageReference Include="Moq" Version="4.17.2" />
 
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
-    <PackageReference Include="NUnit" Version="3.13.3" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
+        <PackageReference Include="NUnit" Version="3.13.3" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.2.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WB.Services.Export.Host\WB.Services.Export.Host.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\WB.Services.Export.Host\WB.Services.Export.Host.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="InterviewDataExport\InterviewDataDenormalizerTests-approved\" />
-  </ItemGroup>
+    <ItemGroup>
+        <Folder Include="InterviewDataExport\InterviewDataDenormalizerTests-approved\" />
+    </ItemGroup>
 
 </Project>

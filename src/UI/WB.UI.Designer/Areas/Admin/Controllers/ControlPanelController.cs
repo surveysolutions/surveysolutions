@@ -128,29 +128,34 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var account = await users.FindByNameAsync(model.Login);
-                if (account == null)
+                if (model.Login == null)
                     this.Error($"Account '{model.Login}' does not exists");
                 else
                 {
-                    if (model.IsAdmin)
-                    {
-                        if (await users.IsInRoleAsync(account, "Administrator"))
-                            this.Error($"Account '{model.Login}' has administrator role");
-                        else
-                        {
-                            await users.AddToRoleAsync(account, "Administrator");
-                            this.Success($"Administrator role for '{model.Login}' successfully added");   
-                        }
-                    }
+                    var account = await users.FindByNameAsync(model.Login);
+                    if (account == null)
+                        this.Error($"Account '{model.Login}' does not exists");
                     else
                     {
-                        if (!await users.IsInRoleAsync(account, "Administrator"))
-                            this.Error($"Account '{model.Login}' is not in administrator role");
+                        if (model.IsAdmin)
+                        {
+                            if (await users.IsInRoleAsync(account, "Administrator"))
+                                this.Error($"Account '{model.Login}' has administrator role");
+                            else
+                            {
+                                await users.AddToRoleAsync(account, "Administrator");
+                                this.Success($"Administrator role for '{model.Login}' successfully added");
+                            }
+                        }
                         else
                         {
-                            await users.RemoveFromRoleAsync(account, "Administrator");
-                            this.Success($"Administrator role for '{model.Login}' successfully removed");    
+                            if (!await users.IsInRoleAsync(account, "Administrator"))
+                                this.Error($"Account '{model.Login}' is not in administrator role");
+                            else
+                            {
+                                await users.RemoveFromRoleAsync(account, "Administrator");
+                                this.Success($"Administrator role for '{model.Login}' successfully removed");
+                            }
                         }
                     }
                 }

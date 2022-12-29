@@ -88,7 +88,7 @@ namespace StatData.Writers
             {
                 key32 = Convert.ToInt32(key);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 var errMsg = "May not attach a value label to value: " +
                              key.ToString(CultureInfo.InvariantCulture);

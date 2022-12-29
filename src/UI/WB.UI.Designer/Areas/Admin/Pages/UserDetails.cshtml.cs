@@ -109,7 +109,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 IsApproved = account.EmailConfirmed,
                 IsLockedOut = account.LockoutEnd.HasValue && account.LockoutEnd.Value >= DateTimeOffset.UtcNow ,
                 CanImportOnHq = account.CanImportOnHq,
-                UserName = account.UserName,
+                UserName = account.UserName ?? String.Empty,
                 OwnedQuestionnaires = ownedQuestionnaires,
                 SharedQuestionnaires = sharedQuestionnaires,
                 FullName = await this.users.GetFullName(account.Id)

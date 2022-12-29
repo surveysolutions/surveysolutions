@@ -194,7 +194,7 @@ namespace WB.Core.BoundedContexts.Designer
                     config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
 
                 .Handles<RemoveSharedPersonFromQuestionnaire>(
-                    (command, aggregate) => aggregate.RemoveSharedPerson(command.PersonId, command.Email, command.ResponsibleId),
+                    (command, aggregate) => aggregate.RemoveSharedPerson(command.PersonId, command.ResponsibleId),
                     config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
 
                 .Handles<PassOwnershipFromQuestionnaire>(

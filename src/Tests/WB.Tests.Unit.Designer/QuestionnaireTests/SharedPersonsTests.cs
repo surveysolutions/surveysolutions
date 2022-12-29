@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 
             // act
             questionnaire.AddSharedPerson(personId, email, ShareType.Edit, responsibleId);
-            questionnaire.RemoveSharedPerson(personId, email, responsibleId);
+            questionnaire.RemoveSharedPerson(personId, responsibleId);
 
             // assert
             var isExistsPerson = questionnaire.SharedPersons.Any(p => p.UserId == personId);
@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             // act
             questionnaire.AddSharedPerson(personId, email, ShareType.View, responsibleId);
-            questionnaire.RemoveSharedPerson(personId, email, personId);
+            questionnaire.RemoveSharedPerson(personId, personId);
 
             // assert
             var isExistsPerson = questionnaire.SharedPersons.Any(p => p.UserId == personId);
@@ -109,7 +109,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
 
             // act
-            TestDelegate act = () => questionnaire.RemoveSharedPerson(personId, string.Empty, responsibleId);
+            TestDelegate act = () => questionnaire.RemoveSharedPerson(personId, responsibleId);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);

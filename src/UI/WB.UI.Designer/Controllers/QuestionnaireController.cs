@@ -530,6 +530,10 @@ namespace WB.UI.Designer.Controllers
 
         private async Task SendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId)
         {
+            var user = await this.users.GetUserAsync(User);
+            if(user?.Email == null)
+                return;
+            
             var questionnaireView = GetQuestionnaireView(id);
             if (questionnaireView == null)
                 throw new ArgumentException($"Questionnaire not found {id}");
@@ -544,7 +548,7 @@ namespace WB.UI.Designer.Controllers
 
             var messageBody = await viewRenderService.RenderToStringAsync("Emails/AnonymousSharingEmail", model);
 
-            var user = await this.users.GetUserAsync(User);
+            
             await emailSender.SendEmailAsync(user.Email,
                 NotificationResources.SystemMailer_AnonymousSharingEmail_Subject,
                 messageBody);

@@ -1,13 +1,11 @@
 using System;
-using System.Drawing.Imaging;
+using SixLabors.ImageSharp;
 using System.IO;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.UI.Designer.Controllers;
-using Image = System.Drawing.Image;
-
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 {
@@ -20,7 +18,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             var imageInBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=";
             var imageStream = new MemoryStream(Convert.FromBase64String(imageInBase64));
-            Image.FromStream(imageStream).Save(stream, ImageFormat.Jpeg);
+            
+            Image.Load(imageStream).SaveAsJpeg(stream);
             stream.Position = 0;
             postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream);
 

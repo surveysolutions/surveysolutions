@@ -1530,7 +1530,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void RemoveSharedPerson(Guid personId, string email, Guid responsibleId)
+        public void RemoveSharedPerson(Guid personId, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsToUnsharePersonForQuestionnaire(personId, responsibleId);
 
@@ -1547,7 +1547,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerIsNotOwnerOfQuestionnaire(ownerId);
 
-            this.RemoveSharedPerson(newOwnerId, newOwnerEmail, ownerId);
+            this.RemoveSharedPerson(newOwnerId, ownerId);
             
             this.QuestionnaireDocument.CreatedBy = newOwnerId;
 

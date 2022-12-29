@@ -12,7 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   NODE_VERSION: 17
-  DOTNET_VERSION: '6.0.x'
+  DOTNET_VERSION: '7.0.x'
 
 jobs:
   prepare:

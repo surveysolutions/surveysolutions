@@ -22,7 +22,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.5.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     <PackageReference Include="MvvmCross" Version="8.0.2" />
     <PackageReference Include="MvvmCross.Plugin.Json" Version="8.0.2" />
@@ -30,7 +30,7 @@
     <PackageReference Include="MvvmCross.Plugin.PictureChooser" Version="8.0.2" />
     <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="8.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    <PackageReference Include="NodaTime" Version="3.0.5" />
+    <PackageReference Include="NodaTime" Version="3.1.6" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
