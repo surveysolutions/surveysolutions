@@ -61,7 +61,7 @@ namespace Main.Core.Entities.SubEntities
             hashCode = hashCode * -1521134295 + EqualityComparer<string?>.Default.GetHashCode(AnswerText);
             hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(GetParsedValue());
             hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(GetParsedParentValue());
-            hashCode = hashCode * -1521134295 + EqualityComparer<string?>.Default.GetHashCode(AttachmentName);
+            //hashCode = hashCode * -1521134295 + EqualityComparer<string?>.Default.GetHashCode(AttachmentName);
             return hashCode;
         }
     }
