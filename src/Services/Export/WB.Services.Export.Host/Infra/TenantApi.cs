@@ -43,10 +43,9 @@ namespace WB.Services.Export.Host.Infra
 
                 var urlOverrideKey = $"TenantUrlOverride:{tenant.ShortName}";
 
-                if (configuration[urlOverrideKey] != null)
+                var uri = configuration[urlOverrideKey];
+                if (uri != null)
                 {
-                    var uri = configuration[urlOverrideKey];
-                    
                     httpClient.BaseAddress = new Uri($"{uri.TrimEnd('/')}/{tenant.Workspace}");
 
                     var aspnetcoreToken = Environment.GetEnvironmentVariable("ASPNETCORE_TOKEN");

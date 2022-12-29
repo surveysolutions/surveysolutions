@@ -1,84 +1,84 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Configurations>Debug;Release</Configurations>
-    <Nullable>enable</Nullable>
-    <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Configurations>Debug;Release</Configurations>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DebugType>full</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Migrations\20190918154818_AddAssignmentTracking.cs" />
-    <Compile Remove="Migrations\20190918154818_AddAssignmentTracking.Designer.cs" />
-    <Compile Remove="Migrations\20190919084034_AddAssignmentTracking.cs" />
-    <Compile Remove="Migrations\20190919084034_AddAssignmentTracking.Designer.cs" />
-    <Compile Remove="Migrations\20190919084534_AddAssignmentTracking.cs" />
-    <Compile Remove="Migrations\20190919084534_AddAssignmentTracking.Designer.cs" />
-    <Compile Remove="Migrations\20190919091406_AddAssignmentTracking.cs" />
-    <Compile Remove="Migrations\20190919091406_AddAssignmentTracking.Designer.cs" />
-    <Compile Remove="Migrations\20190919094536_AddAssignmentTracking.cs" />
-    <Compile Remove="Migrations\20190919094536_AddAssignmentTracking.Designer.cs" />
-    <Compile Remove="Migrations\20190923164334_AddedPositionToActions.cs" />
-    <Compile Remove="Migrations\20190923164334_AddedPositionToActions.Designer.cs" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Migrations\20190918154818_AddAssignmentTracking.cs" />
+        <Compile Remove="Migrations\20190918154818_AddAssignmentTracking.Designer.cs" />
+        <Compile Remove="Migrations\20190919084034_AddAssignmentTracking.cs" />
+        <Compile Remove="Migrations\20190919084034_AddAssignmentTracking.Designer.cs" />
+        <Compile Remove="Migrations\20190919084534_AddAssignmentTracking.cs" />
+        <Compile Remove="Migrations\20190919084534_AddAssignmentTracking.Designer.cs" />
+        <Compile Remove="Migrations\20190919091406_AddAssignmentTracking.cs" />
+        <Compile Remove="Migrations\20190919091406_AddAssignmentTracking.Designer.cs" />
+        <Compile Remove="Migrations\20190919094536_AddAssignmentTracking.cs" />
+        <Compile Remove="Migrations\20190919094536_AddAssignmentTracking.Designer.cs" />
+        <Compile Remove="Migrations\20190923164334_AddedPositionToActions.cs" />
+        <Compile Remove="Migrations\20190923164334_AddedPositionToActions.Designer.cs" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="CsvExport\Exporters\DoFileHeader.txt" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Remove="CsvExport\Exporters\DoFileHeader.txt" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="3.5.3.7" />
-    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.101" />
-    <PackageReference Include="AWSSDK.S3" Version="3.5.9.7" />
-    <PackageReference Include="CsvHelper" Version="18.0.0" />
-    <PackageReference Include="Dapper" Version="2.0.123" />
-    <PackageReference Include="Dropbox.Api" Version="6.1.0" />
-    <PackageReference Include="Google.Apis" Version="1.50.0" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.50.0" />
-    <PackageReference Include="Google.Apis.Core" Version="1.50.0" />
-    <PackageReference Include="Google.Apis.Drive.v3" Version="1.50.0.2250" />
-    <PackageReference Include="HtmlSanitizer" Version="7.1.488" />
-    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="6.0.3" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Graph" Version="3.27.0" />
-    <PackageReference Include="Microsoft.Graph.Core" Version="1.24.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Npgsql" Version="6.0.3" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
-    <PackageReference Include="Refit" Version="6.3.2" />
-    <PackageReference Include="prometheus-net" Version="4.1.1" />
-    <PackageReference Include="Scrutor" Version="4.1.0" />
-    <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
-    <PackageReference Include="System.Reactive" Version="5.0.0" />
-    <PackageReference Include="System.Runtime.Caching" Version="6.0.0" />
-    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="6.0.0" />
-    <PackageReference Include="Unidecode.NET" Version="2.1.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AWSSDK.Core" Version="3.5.3.7" />
+        <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.101" />
+        <PackageReference Include="AWSSDK.S3" Version="3.5.9.7" />
+        <PackageReference Include="CsvHelper" Version="18.0.0" />
+        <PackageReference Include="Dapper" Version="2.0.123" />
+        <PackageReference Include="Dropbox.Api" Version="6.1.0" />
+        <PackageReference Include="Google.Apis" Version="1.50.0" />
+        <PackageReference Include="Google.Apis.Auth" Version="1.50.0" />
+        <PackageReference Include="Google.Apis.Core" Version="1.50.0" />
+        <PackageReference Include="Google.Apis.Drive.v3" Version="1.50.0.2250" />
+        <PackageReference Include="HtmlSanitizer" Version="7.1.488" />
+        <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="7.0.1" />
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Graph" Version="3.27.0" />
+        <PackageReference Include="Microsoft.Graph.Core" Version="1.24.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageReference Include="Npgsql" Version="7.0.1" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
+        <PackageReference Include="Refit" Version="6.3.2" />
+        <PackageReference Include="prometheus-net" Version="4.1.1" />
+        <PackageReference Include="Scrutor" Version="4.1.0" />
+        <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
+        <PackageReference Include="System.Reactive" Version="5.0.0" />
+        <PackageReference Include="System.Runtime.Caching" Version="6.0.0" />
+        <PackageReference Include="System.Threading.Tasks.Dataflow" Version="6.0.0" />
+        <PackageReference Include="Unidecode.NET" Version="2.1.0" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\WB.Services.Infrastructure\WB.Services.Infrastructure.csproj" />
-    <ProjectReference Include="..\Utils\ddidotnet\ddidotnet\ddidotnet.csproj" />
-    <ProjectReference Include="..\Utils\StatData\StatData\StatData.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Core\WB.Services.Infrastructure\WB.Services.Infrastructure.csproj" />
+        <ProjectReference Include="..\Utils\ddidotnet\ddidotnet\ddidotnet.csproj" />
+        <ProjectReference Include="..\Utils\StatData\StatData\StatData.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="CsvExport\Exporters\DoFileHeader.txt" />
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="CsvExport\Exporters\DoFileHeader.txt" />
+    </ItemGroup>
 
 </Project>

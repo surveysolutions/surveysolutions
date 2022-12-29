@@ -5,6 +5,6 @@ namespace WB.UI.WebTester.Infrastructure
 {
     public interface IWebTesterTranslationService
     {
-        PlainQuestionnaire Translate(WebTesterPlainQuestionnaire questionnaire, long version, string? language);
+        PlainQuestionnaire? Translate(WebTesterPlainQuestionnaire questionnaire, long version, string? language);
     }
 }

@@ -72,7 +72,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 IsApproved = user.EmailConfirmed,
                 IsLockedOut = user.LockoutEnd.HasValue && user.LockoutEnd.Value >= DateTimeOffset.UtcNow,
                 CanImportOnHq = user.CanImportOnHq,
-                UserName = user.UserName,
+                UserName = user.UserName ?? String.Empty,
                 FullName = await userManager.GetFullName(id)
             };
 
@@ -85,6 +85,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             {
                 var user = await this.userManager.FindByIdAsync(id);
                 if (user == null) return NotFound();
+                if (user.Email == null) return NotFound();
 
                 if (!user.Email.Equals(Input.Email, StringComparison.InvariantCultureIgnoreCase))
                 {

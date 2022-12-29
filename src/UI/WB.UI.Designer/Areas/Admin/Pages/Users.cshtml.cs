@@ -69,7 +69,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 {
                     Id = identityUser.Id,
                     UserName = identityUser.UserName,
-                    Email = identityUser.Email,
+                    Email = identityUser.Email ?? string.Empty,
                     CreationDate = identityUser.CreatedAtUtc,
                     IsApproved = identityUser.EmailConfirmed,
                     IsLockedOut = isLockedOut,

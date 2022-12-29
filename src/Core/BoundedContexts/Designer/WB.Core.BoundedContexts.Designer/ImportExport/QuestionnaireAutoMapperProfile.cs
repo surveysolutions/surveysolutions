@@ -60,17 +60,21 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 .ForPath(x => x.Translations.OriginalDisplayName, x => 
                     x.MapFrom(s => s.DefaultLanguageName))
                 .ForPath(x => x.Translations.Items, x => x.MapFrom(t => t.Translations));
+            
+            
             this.CreateMap<Questionnaire, QuestionnaireDocument>()
-                .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
-                .ForMember(s => s.Id, opt => opt.MapFrom(t => t.Id.FormatGuid()))
-                .ForMember(s => s.Children, opt => opt.MapFrom(t =>
-                    Enumerable.Concat<QuestionnaireEntity>((t.CoverPage != null ? t.CoverPage : new CoverPage() { Id = Guid.NewGuid(), Title = "Cover" }).ToEnumerable(), t.Children)))
+                .ConstructUsing((s,ctx) => new QuestionnaireDocument())
+                .ForMember(d => d.PublicKey, opt => opt.MapFrom(s => s.Id))
+                .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id.FormatGuid()))
+                .ForMember(d => d.Children, opt => opt.MapFrom(s =>
+                    (s.CoverPage ?? new CoverPage() { Id = Guid.NewGuid(), Title = "Cover" }).ToEnumerable().Concat<QuestionnaireEntity>(s.Children)
+                ))
+                
                 .AfterMap((s, d, context) =>
                 {
-                    if (s.CoverPage != null)
-                        d.CoverPageSectionId = d.Children[0].PublicKey;
-                    else
-                        d.CoverPageSectionId = Guid.NewGuid();
+                    d.CoverPageSectionId = s.CoverPage != null 
+                        ? d.Children[0].PublicKey 
+                        : Guid.NewGuid();
                 })
                 .AfterMap((s, d, context) =>
                 {
@@ -158,6 +162,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
 
             this.CreateMap<Group, Models.CoverPage>()
                 .IncludeBase<IComposite, QuestionnaireEntity>();
+            
             this.CreateMap<Models.CoverPage, Group>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom((s, d, value, context) => 

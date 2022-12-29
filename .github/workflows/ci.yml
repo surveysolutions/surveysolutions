@@ -22,7 +22,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '7.0.x'
       - name: Headquarters unit tests
         run: |
           dotnet test src/Tests/WB.Tests.Unit \
@@ -75,7 +75,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '7.0.x'
 
       - name: Create db connection string
         run: echo "DB_CONN=Server=127.0.0.1;Port=${{ job.services.postgres.ports[5432] }};User Id=${{ env.PG_USER }};Password=${{ env.PG_PASSWORD }};" >> $GITHUB_ENV
@@ -132,7 +132,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '7.0.x'
 
       - name: setup sonar scanner
         run: dotnet tool install --global dotnet-sonarscanner

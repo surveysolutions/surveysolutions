@@ -95,13 +95,20 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
 
             var user = await this.users.GetUserAsync(User);
+            if (user?.UserName == null)
+            {
+                return Json(new
+                {
+                    Error = "Access denied"
+                });
+            }
 
             commentsService.PostComment(commentModel.Id, 
                 commentModel.QuestionnaireId,
                 commentModel.EntityId, 
                 commentModel.Comment ?? "", 
                 user.UserName,
-                user.Email);
+                user.Email ?? string.Empty);
 
             await dbContext.SaveChangesAsync();
             return Ok();

@@ -63,9 +63,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             if (input.PublicKey != null)
                 query = query.Where(x => x.Id == input.PublicKey);
             else if (!string.IsNullOrEmpty(input.UserName))
-                query = query.Where(x => x.UserName.ToLower() == input.UserName.ToLower());
+                query = query.Where(x => x.UserName != null && x.UserName.ToLower() == input.UserName.ToLower());
             else if (!string.IsNullOrEmpty(input.UserEmail))
-                query = query.Where(x => x.Email.ToLower() == input.UserEmail.ToLower());
+                query = query.Where(x =>x.Email != null &&  x.Email.ToLower() == input.UserEmail.ToLower());
             else if (!string.IsNullOrEmpty(input.DeviceId))
                 query = query.Where(x => x.Profile.DeviceId == input.DeviceId);
 
@@ -271,6 +271,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     InterviewerId = g.Key,
                     TrafficUsed = g.Sum(x => x.Statistics.TotalDownloadedBytes + x.Statistics.TotalUploadedBytes)
                 }).ToList());
+            
             var supervisors = this.userRepository.Users
                 .Where(x => supervisorIds.Contains(x.Id))
                 .Select(x => new {x.Id, x.UserName})
@@ -280,7 +281,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             {
                 interviewer.TrafficUsed = deviceSyncInfos.FirstOrDefault(x => x.InterviewerId == interviewer.UserId)
                     ?.TrafficUsed;
-                interviewer.SupervisorName = supervisors.FirstOrDefault(x => x.Id == interviewer.SupervisorId)?.UserName;
+                interviewer.SupervisorName = supervisors.FirstOrDefault(x => x.Id == interviewer.SupervisorId)?.UserName ?? String.Empty;
             }
 
             return new InterviewersView
@@ -373,7 +374,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     InterviewerId = x.WorkspaceProfile.SupervisorId.HasValue ? x.Id : (Guid?)null,
                     SupervisorId = x.WorkspaceProfile.SupervisorId ?? x.Id,
                     UserName = x.UserName,
-                    Rank = x.UserName.ToLower().StartsWith(searchByToLower) ? 1 : 0
+                    Rank = x.UserName != null && x.UserName.ToLower().StartsWith(searchByToLower) ? 1 : 0
                 });
             };
 
@@ -420,9 +421,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                         IsLockedBySupervisor = supervisor.IsLockedBySupervisor,
                         IsLockedByHQ = supervisor.IsLockedByHeadquaters,
                         CreationDate = supervisor.CreationDate,
-                        Email = supervisor.Email,
+                        Email = supervisor.Email ?? String.Empty,
                         UserId = supervisor.Id,
-                        UserName = supervisor.UserName,
+                        UserName = supervisor.UserName ?? String.Empty,
                         IsArchived = supervisor.IsArchived,
                     });
 
@@ -471,7 +472,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             if (!string.IsNullOrWhiteSpace(searchBy))
             {
                 var searchByToLower = searchBy.ToLower();
-                allUsers = allUsers.Where(x => x.UserName.ToLower().Contains(searchByToLower) || x.Email.ToLower().Contains(searchByToLower));
+                allUsers = allUsers.Where(x =>  
+                    (x.UserName != null && x.UserName.ToLower().Contains(searchByToLower)) 
+                    || (x.Email != null && x.Email.ToLower().Contains(searchByToLower)));
             }
             return allUsers;
         }
