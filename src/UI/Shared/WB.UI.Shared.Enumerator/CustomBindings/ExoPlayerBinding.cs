@@ -93,8 +93,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         
         private class VideoFrameMetadataListener : Java.Lang.Object, IVideoFrameMetadataListener
         {
-            private readonly StyledPlayerView playerView;
-            private readonly IExoPlayer exoPlayer;
+            private StyledPlayerView playerView;
+            private IExoPlayer exoPlayer;
 
             public VideoFrameMetadataListener(StyledPlayerView playerView, IExoPlayer exoPlayer)
             {
@@ -114,6 +114,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                     playerView.HideController();
                 
                     exoPlayer.ClearVideoFrameMetadataListener(this);
+                    playerView = null;
+                    exoPlayer = null;
                 });
             }
         }
