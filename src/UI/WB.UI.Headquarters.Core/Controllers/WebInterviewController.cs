@@ -486,7 +486,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var requestInterviewIdCookie = Request.Cookies[$"InterviewId-{assignment.Id}"];
-            string stringValues = Request.Form["resume"];
+            string? stringValues = Request.Form["resume"];
 
             if (stringValues != null && Guid.TryParse(requestInterviewIdCookie, out Guid pendingInterviewId))
             {
@@ -1076,7 +1076,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var key = "invitation::" + invitationId;
 
-            if (this.memoryCache.TryGetValue(key, out object result)) return (Invitation?) result;
+            if (this.memoryCache.TryGetValue(key, out object? result)) return (Invitation?) result;
 
             var invitation = this.invitationService.GetInvitationByToken(invitationId);
 
