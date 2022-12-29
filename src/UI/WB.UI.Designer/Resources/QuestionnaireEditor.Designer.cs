@@ -87,6 +87,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add filter.
+        /// </summary>
+        public static string AddFilter {
+            get {
+                return ResourceManager.GetString("AddFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new section.
         /// </summary>
         public static string AddNewSection {

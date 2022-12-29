@@ -159,7 +159,11 @@
         </div>
 
         <script type="text/ng-template" id="categorical-filter-expression">
-            <div class="form-group" ng-hide="activeQuestion.isCascade == true">
+            <div class="form-group" ng-if="activeQuestion.showFilterInput != true && activeQuestion.isCascade != true">
+                <button type="button" class="btn btn-lg btn-link" ng-click="activeQuestion.showFilterInput = true" ng-i18next="AddFilter"></button>
+            </div>
+
+            <div class="form-group" ng-hide="activeQuestion.showFilterInput != true || activeQuestion.isCascade == true">
                 <label class="wb-label" for="optionsFilterExpression" ng-i18next="QuestionFilter"></label>
                 <div class="pseudo-form-control">
                     <div id="optionsFilterExpression" ng-if="activeQuestion.isLinked && activeQuestion.linkedToEntity.type != 'textlist'"
