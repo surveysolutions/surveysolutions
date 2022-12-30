@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         InterviewersView GetInterviewers(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, int? apkBuildVersion, Guid? supervisorId, InterviewerFacet facet = InterviewerFacet.None);
         UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, bool? archived = false);
+        UsersView GetTeamResponsibles(int pageSize, string searchBy, Guid supervisorId, bool showLocked = false, bool? archived = false);
         IEnumerable<InterviewerFullApiView> GetInterviewers(Guid supervisorId);
 
         SupervisorsView GetSupervisors(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived = null);

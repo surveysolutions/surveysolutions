@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Models.User;
 
@@ -78,6 +80,20 @@ namespace WB.UI.Headquarters.Controllers.Api
             bool? isNeedShowActiveAndArchivedInterviewers = showArchived ? (bool?) null : false;
             var supervisorId = this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?)null;
             var users = this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: supervisorId, showLocked: showLocked, archived: isNeedShowActiveAndArchivedInterviewers);
+            var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.UserId.FormatGuid(), x.UserName, x.IconClass)).ToArray();
+            return new ResponsibleComboboxModel(options, users.TotalCountByQuery);
+        }
+
+        [HttpGet]
+        [AuthorizeByRole(UserRoles.Supervisor)]
+        public ResponsibleComboboxModel TeamCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED, bool showArchived = DEFAULT_SHOW_ARCHIVED)
+        {
+            if (!this.authorizedUser.IsSupervisor)
+                throw new Exception("Allow only supervisor");
+            
+            bool? isNeedShowActiveAndArchivedInterviewers = showArchived ? (bool?) null : false;
+            var supervisorId = this.authorizedUser.Id;
+            var users = this.userViewFactory.GetTeamResponsibles(pageSize: pageSize, searchBy: query, supervisorId: supervisorId, showLocked: showLocked, archived: isNeedShowActiveAndArchivedInterviewers);
             var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.UserId.FormatGuid(), x.UserName, x.IconClass)).ToArray();
             return new ResponsibleComboboxModel(options, users.TotalCountByQuery);
         }
