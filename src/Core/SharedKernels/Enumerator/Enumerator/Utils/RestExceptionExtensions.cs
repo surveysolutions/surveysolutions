@@ -55,6 +55,10 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             exceptionType = SynchronizationExceptionType.ShouldChangePassword;
                             exceptionMessage = restException.Message;
                             break;
+                        case ServerErrorCodes.RelinkError: 
+                            exceptionType = SynchronizationExceptionType.RelinkError;
+                            exceptionMessage = restException.Message;
+                            break;
                         default:
                             exceptionType = SynchronizationExceptionType.UpgradeRequired;
                             exceptionMessage = restException.Message;

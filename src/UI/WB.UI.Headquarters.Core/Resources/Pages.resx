@@ -1123,6 +1123,9 @@
   <data name="Interviewer_LockWarning" xml:space="preserve">
     <value>Locked interviewers cannot connect their tablets with the server and send interviews.</value>
   </data>
+  <data name="Tablet_RelinkMessage" xml:space="preserve">
+    <value>Allow relink tablet for this user on new device. Data on old tablet will be LOST!!!</value>
+  </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>Locked supervisor (box checked) cannot login and perform any actions on the server.</value>
   </data>

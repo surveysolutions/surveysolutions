@@ -33,6 +33,23 @@
                     :haserror="modelState['PhoneNumber'] !== undefined"
                     id="PhoneNumber"/>
             </form-group>
+            <p v-if="!isOwnProfile && isInterviewer">{{this.$t('Pages.Tablet_RelinkMessage')}}</p>
+            <form-group v-if="!isOwnProfile && isInterviewer"
+                :error="modelState['isAllowRelink']">
+                <div>
+                    <input
+                        class="checkbox-filter single-checkbox"
+                        id="IsAllowRelink"
+                        name="IsAllowRelink"
+                        type="checkbox"
+                        v-model="isAllowRelink"/>
+                    <label for="IsAllowRelink"
+                        style="font-weight: bold">
+                        <span class="tick"></span>
+                        {{$t('FieldsAndValidations.AllowRelinkTablet')}}
+                    </label>
+                </div>
+            </form-group>
             <p v-if="!isOwnProfile && lockMessage != null">{{lockMessage}}</p>
             <form-group v-if="!isOwnProfile && canBeLockedAsHeadquarters"
                 :error="modelState['IsLockedByHeadquarters']">
@@ -115,6 +132,7 @@ export default {
             isLockedBySupervisor: false,
             isLockedOut : false,
             successMessage: null,
+            isAllowRelink: false,
         }
     },
     computed: {
@@ -166,6 +184,7 @@ export default {
         this.isLockedByHeadquarters = this.userInfo.isLockedByHeadquarters
         this.isLockedBySupervisor = this.userInfo.isLockedBySupervisor
         this.isLockedOut = this.userInfo.isLockedOut
+        this.isAllowRelink = this.userInfo.isAllowRelink
     },
     watch: {
         personName: function(val) {
@@ -196,6 +215,7 @@ export default {
                     phoneNumber: self.phoneNumber == '' ? null : self.phoneNumber,
                     isLockedByHeadquarters: self.isLockedByHeadquarters,
                     isLockedBySupervisor: self.isLockedBySupervisor,
+                    isAllowRelink: self.isAllowRelink,
                 },
                 headers: {
                     'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),

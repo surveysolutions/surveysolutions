@@ -4426,6 +4426,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow relink tablet for this user on new device. Data on old tablet will be LOST!!!.
+        /// </summary>
+        public static string Tablet_RelinkMessage {
+            get {
+                return ResourceManager.GetString("Tablet_RelinkMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team member.
         /// </summary>
         public static string TeamMember {
