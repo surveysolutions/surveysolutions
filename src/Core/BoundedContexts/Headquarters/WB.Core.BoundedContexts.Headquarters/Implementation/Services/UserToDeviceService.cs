@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             user.Profile.DeviceId = deviceId;
             user.Profile.DeviceRegistrationDate = DateTime.UtcNow;
-            user.Profile.AllowRelinkDate = null;
+            user.Profile.ResetAllowRelinkFlag();
         }
     }
 }

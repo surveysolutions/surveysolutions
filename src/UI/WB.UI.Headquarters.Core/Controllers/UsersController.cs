@@ -764,7 +764,10 @@ namespace WB.UI.Headquarters.Controllers
                 if ((authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter || authorizedUser.IsSupervisor) 
                     && currentUser.IsInRole(UserRoles.Interviewer))
                 {
-                    currentUser.Profile.AllowRelink();    
+                    if (editModel.IsAllowRelink)
+                        currentUser.Profile.AllowRelink();
+                    else
+                        currentUser.Profile.ResetAllowRelinkFlag();
                 }
 
                 var updateResult = await this.userManager.UpdateAsync(currentUser);

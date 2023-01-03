@@ -158,9 +158,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public virtual bool IsAllowRelink() => AllowRelinkDate.HasValue && AllowRelinkDate.Value > DateTime.UtcNow.AddDays(-1);
 
-        public virtual void AllowRelink()
-        {
-            AllowRelinkDate = DateTime.UtcNow;
-        }
+        public virtual void AllowRelink() => AllowRelinkDate = DateTime.UtcNow;
+
+        public virtual void ResetAllowRelinkFlag() => AllowRelinkDate = null;
     }
 }
