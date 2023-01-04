@@ -51,7 +51,6 @@
     <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-    <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a</AndroidSupportedAbis>
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
     <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
@@ -61,6 +60,7 @@
     <Debugger>.Net (Xamarin)</Debugger>
     <AndroidTlsProvider>btls</AndroidTlsProvider>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
+    <RuntimeIdentifiers>android-arm;android-arm64;android-x86</RuntimeIdentifiers>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -73,15 +73,14 @@
     <AndroidLinkSkip>mscorlib;System.Runtime;System.Runtime.Extensions;System.Linq;System.Collections;System.Text.RegularExpressions;netstandard;WB.Core.SharedKernels.Enumerator</AndroidLinkSkip>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <MandroidI18n>CJK;Mideast;Rare;West;Other</MandroidI18n>
-    <AndroidSupportedAbis>armeabi-v7a;arm64-v8a</AndroidSupportedAbis>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <Debugger>Xamarin</Debugger>
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
     <DefineConstants>$(Constants)</DefineConstants>
     <DebugSymbols>False</DebugSymbols>
-    <AndroidSupportedAbis>armeabi-v7a;arm64-v8a</AndroidSupportedAbis>
     <PublishTrimmed>false</PublishTrimmed>
     <NoWarn>618;CA1416</NoWarn>
+    <RuntimeIdentifiers>android-arm;android-arm64</RuntimeIdentifiers>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\Interviewer\WB.UI.Interviewer\LinkerPleaseInclude.cs">
