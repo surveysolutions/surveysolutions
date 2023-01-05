@@ -34,7 +34,6 @@
     <DefineConstants Condition="'$(Configuration)' == 'Debug'">TRACE;DEBUG;EXCLUDEEXTENSIONS</DefineConstants>
     <DefineConstants Condition="'$(Configuration)' == 'Debug-ESRI'">TRACE;DEBUG</DefineConstants>
     <Configurations>Debug;Debug-ESRI;Release</Configurations>
-    <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a</AndroidSupportedAbis>
     <WarningLevel>3</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>618</NoWarn>
