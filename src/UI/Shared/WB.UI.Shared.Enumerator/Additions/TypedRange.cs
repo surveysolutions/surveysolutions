@@ -5,16 +5,13 @@ namespace Com.Google.Archivepatcher.Shared
 {
     public partial class TypedRange : Object, Java.Lang.IComparable
     {
-        /*
-        int IComparable.CompareTo(object obj)
-        {
-            return 0;
-        }
-        */
-
         public int CompareTo(Object o)
         {
-            throw new System.NotImplementedException();
+            if (o == null)
+                return 1;
+            if (this == o)
+                return 0;
+            return -1;
         }
     }
 }
