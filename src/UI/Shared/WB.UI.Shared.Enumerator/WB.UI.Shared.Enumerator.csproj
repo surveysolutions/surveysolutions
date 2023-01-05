@@ -78,10 +78,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\" />
-    <Folder Include="Services\Resources\" />
-  </ItemGroup>
-  <ItemGroup>
     <!--AndroidJavaLibrary Include="patch-applier.jar" /-->
     <AndroidLibrary Remove="patch-applier.jar" />
   </ItemGroup>
