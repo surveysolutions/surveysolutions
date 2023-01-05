@@ -78,8 +78,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <!--AndroidJavaLibrary Include="patch-applier.jar" /-->
-    <AndroidLibrary Remove="patch-applier.jar" />
+    <AndroidJavaLibrary Include="patch-applier.jar" />
+    <!--AndroidLibrary Remove="patch-applier.jar" /-->
   </ItemGroup>
   <ItemGroup>
     <None Include="patch-applier.jar" />
