@@ -17,17 +17,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     {
         private readonly IAttachmentService attachmentService;
         private readonly IDesignerTranslationService translationManagementService;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
 
         public DesignerEngineVersionService(IAttachmentService attachmentService, 
             IDesignerTranslationService translationManagementService,
-            ICategoriesService categoriesService)
+            IReusableCategoriesService reusableCategoriesService)
         {
             this.attachmentService = attachmentService ?? throw new ArgumentNullException(nameof(attachmentService));
             this.translationManagementService = 
                 translationManagementService ?? throw new ArgumentNullException(nameof(translationManagementService));
-            this.categoriesService =
-                categoriesService ?? throw new ArgumentNullException(nameof(categoriesService));
+            this.reusableCategoriesService =
+                reusableCategoriesService ?? throw new ArgumentNullException(nameof(reusableCategoriesService));
         }
 
         private const int OldestQuestionnaireContentVersion = 16;
@@ -269,7 +269,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             var usedCategories = questionnaire.Find<ICategoricalQuestion>(x => x.CategoriesId != null)
                                 .Select(x=>x.CategoriesId).ToList();
 
-                            return usedCategories.Any(category => this.categoriesService.GetCategoriesById(questionnaire.PublicKey, category!.Value)
+                            return usedCategories.Any(category => this.reusableCategoriesService.GetCategoriesById(questionnaire.PublicKey, category!.Value)
                                 .Any(x => !string.IsNullOrWhiteSpace(x.AttachmentName)));
                         },
                         description: "Attachment name is used in options or categories"
