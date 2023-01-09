@@ -95,6 +95,7 @@ export default {
             return {
                 stopEditingWhenGridLosesFocus: true,
                 suppressMovableColumns:true,
+                singleClickEdit:true,
                 context: {
                     componentParent: this,
                 },

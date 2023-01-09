@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         private readonly DesignerDbContext dbContext;
         private readonly PdfSettings pdfSettings;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
 
         public PdfFactory(
@@ -40,14 +40,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             ITranslationsService translationService,
             IOptions<PdfSettings> pdfSettings,
             IQuestionnaireTranslator questionnaireTranslator,
-            ICategoriesService categoriesService,
+            IReusableCategoriesService reusableCategoriesService,
             IQuestionnaireViewFactory questionnaireViewFactory)
         {
             this.dbContext = dbContext;
             this.translationService = translationService;
             this.pdfSettings = pdfSettings.Value;
             this.questionnaireTranslator = questionnaireTranslator;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
             this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             {
                 Id = x.Id,
                 Name = x.Name,
-                Items = this.categoriesService.GetCategoriesById(questionnaire.PublicKey, x.Id).Select(y => new PdfQuestionnaireModel.CategoriesItem
+                Items = this.reusableCategoriesService.GetCategoriesById(questionnaire.PublicKey, x.Id).Select(y => new PdfQuestionnaireModel.CategoriesItem
                 {
                     Id = y.Id,
                     ParentId = y.ParentId,

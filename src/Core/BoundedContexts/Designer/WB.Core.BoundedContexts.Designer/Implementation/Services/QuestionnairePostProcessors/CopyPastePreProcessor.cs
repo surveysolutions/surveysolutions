@@ -17,11 +17,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPreProcessor<Questionnaire, PasteAfter>,
         ICommandPreProcessor<Questionnaire, PasteInto>
     {
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
 
-        public CopyPastePreProcessor(ICategoriesService categoriesService)
+        public CopyPastePreProcessor(IReusableCategoriesService reusableCategoriesService)
         {
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
         }
 
         public void Process(Questionnaire aggregate, PasteAfter command)
@@ -53,9 +53,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private void CloneCategories(Guid questionnaireId, Guid categoriesId, Guid targetQuestionnaireId)
         {
-            if (this.categoriesService.GetCategoriesById(targetQuestionnaireId, categoriesId).Any()) return;
+            if (this.reusableCategoriesService.GetCategoriesById(targetQuestionnaireId, categoriesId).Any()) return;
 
-            this.categoriesService.CloneCategories(questionnaireId,
+            this.reusableCategoriesService.CloneCategories(questionnaireId,
                 categoriesId, targetQuestionnaireId, categoriesId);
         }
     }
