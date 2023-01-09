@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, 
             IDynamicCompilerSettingsProvider compilerSettings,
             IExpressionsPlayOrderProvider graphProvider,
-            ICategoriesService categoriesService,
+            IReusableCategoriesService reusableCategoriesService,
             IQuestionnaireCodeGenerationPackageFactory generationPackageFactory)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             verifiers = new IPartialVerifier[]
             {
-                new QuestionVerifications(substitutionService, categoriesService),
+                new QuestionVerifications(substitutionService, reusableCategoriesService),
                 new GroupVerifications(fileSystemAccessor),
                 new AttachmentVerifications(attachmentService, keywordsProvider), 
                 new ExpressionVerifications(macrosSubstitutionService, expressionProcessor, compilerSettings), 
@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 new StaticTextVerifications(), 
                 new TranslationVerifications(translationService), 
                 new VariableVerifications(substitutionService),
-                new CategoriesVerifications(keywordsProvider, categoriesService), 
+                new CategoriesVerifications(keywordsProvider, reusableCategoriesService), 
             };
         }
 

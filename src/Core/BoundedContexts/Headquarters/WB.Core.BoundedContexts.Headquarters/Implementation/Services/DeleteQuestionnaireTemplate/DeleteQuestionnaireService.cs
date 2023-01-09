@@ -148,8 +148,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 var assignmentsImportStatus = this.importService.GetImportStatus();
 
                 var isAssignmentImportIsGoing =
-                    assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Verification ||
-                    assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Import;
+                    assignmentsImportStatus?.QuestionnaireIdentity == questionnaireIdentity &&
+                    (assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Verification ||
+                    assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Import);
 
                 if (!isAssignmentImportIsGoing)
                 {

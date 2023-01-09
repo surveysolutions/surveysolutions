@@ -12,7 +12,7 @@ namespace WB.Tests.Integration.Versions
         [NUnit.Framework.OneTimeSetUp] public void context () {
             designerEngineVersionService = new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), 
                 Mock.Of<IDesignerTranslationService>(),
-                Mock.Of<ICategoriesService>());
+                Mock.Of<IReusableCategoriesService>());
             questionnaireContentVersionProvider = new QuestionnaireContentVersionProvider();
             BecauseOf();
         }
