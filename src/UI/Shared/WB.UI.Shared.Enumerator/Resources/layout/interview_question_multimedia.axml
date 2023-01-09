@@ -14,7 +14,9 @@
               android:maxWidth="@dimen/Interview_Sidebar_GpsQuestions_max_width"
               android:scaleType="fitCenter"
               android:adjustViewBounds="true"
-              local:MvxBind="Bitmap Answer,Converter=InMemoryImageValueWithDefault;Click ShowPhotoView; Visible QuestionState.IsAnswered "/>
+              local:MvxBind="BitmapWithFallback Answer; 
+                             Click ShowPhotoView; 
+                             Visible QuestionState.IsAnswered "/>
           <include layout="@layout/interview_question__remove_button_recorded" />
         </TableRow>
       </TableLayout>
