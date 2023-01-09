@@ -26,11 +26,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
         private DesignerEngineVersionService CreateDesignerEngineVersionService(
             IAttachmentService attachments = null,
             IDesignerTranslationService translationsService = null,
-            ICategoriesService categoriesService = null)
+            IReusableCategoriesService reusableCategoriesService = null)
         {
             return new DesignerEngineVersionService(attachments ?? Mock.Of<IAttachmentService>(),
                 translationsService ?? Mock.Of<IDesignerTranslationService>(),
-                categoriesService ?? Mock.Of<ICategoriesService>());
+                reusableCategoriesService ?? Mock.Of<IReusableCategoriesService>());
         }
 
         [Test]
@@ -144,13 +144,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
                 new Categories() { Id = categoryId, Name = "category1"},
             };
 
-            var categoriesService = Mock.Of<ICategoriesService>(x =>
+            var categoriesService = Mock.Of<IReusableCategoriesService>(x =>
                 x.GetCategoriesById(It.IsAny<Guid>(), categoryId) == new[]
                 {
                     new CategoriesItem {Id = 1, Text = "opt 1", AttachmentName = "test"}
                 }.AsQueryable());
 
-            var service = this.CreateDesignerEngineVersionService(categoriesService: categoriesService);
+            var service = this.CreateDesignerEngineVersionService(reusableCategoriesService: categoriesService);
 
             // act 
             var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
@@ -173,13 +173,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
                 new Categories() { Id = categoryId, Name = "category1"},
             };
 
-            var categoriesService = Mock.Of<ICategoriesService>(x =>
+            var categoriesService = Mock.Of<IReusableCategoriesService>(x =>
                 x.GetCategoriesById(It.IsAny<Guid>(), categoryId) == new[]
                 {
                     new CategoriesItem {Id = 1, Text = "opt 1"}
                 }.AsQueryable());
 
-            var service = this.CreateDesignerEngineVersionService(categoriesService: categoriesService);
+            var service = this.CreateDesignerEngineVersionService(reusableCategoriesService: categoriesService);
 
             // act 
             var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
