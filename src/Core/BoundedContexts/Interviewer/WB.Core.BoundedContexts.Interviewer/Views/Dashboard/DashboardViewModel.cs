@@ -243,14 +243,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             => EnumeratorUIResources.Dashboard_Title.FormatString(this.NumberOfAssignedInterviews.ToString(),
                 Principal.CurrentUserIdentity.Name);
 
-        private async void OnInterviewRemoved(object sender, InterviewRemovedArgs e)
+        private async void OnInterviewRemoved(object? sender, InterviewRemovedArgs e)
         {
             await this.RaisePropertyChanged(() => this.DashboardTitle);
             this.CreateNew.UpdateAssignment(e.AssignmentId);
             await this.CreateNew.LoadAsync(this.Synchronization);
         }
 
-        private void OnItemsLoaded(object sender, EventArgs e) =>
+        private void OnItemsLoaded(object? sender, EventArgs e) =>
             this.IsInProgress = !(this.StartedInterviews.IsItemsLoaded
                                   && this.RejectedInterviews.IsItemsLoaded
                                   && this.CompletedInterviews.IsItemsLoaded
@@ -377,9 +377,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         protected override void SaveStateToBundle(IMvxBundle bundle)
         {
             base.SaveStateToBundle(bundle);
-            if (this.LastVisitedInterviewId != null)
+            if (this.LastVisitedInterviewId.HasValue)
             {
-                bundle.Data[nameof(LastVisitedInterviewId)] = this.LastVisitedInterviewId.ToString();
+                bundle.Data[nameof(LastVisitedInterviewId)] = this.LastVisitedInterviewId.Value.ToString();
             }
         }
 
@@ -485,12 +485,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.IsSynchronizationInProgress = false;
         }
 
-        private void Synchronization_OnCancel(object sender, EventArgs e)
+        private void Synchronization_OnCancel(object? sender, EventArgs e)
         {
             this.nearbyConnection.StopAll();
         }
 
-        private async void Synchronization_OnProgressChanged(object sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
+        private async void Synchronization_OnProgressChanged(object? sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
         {
             if (e.Status == SynchronizationStatus.Fail
                 || e.Status == SynchronizationStatus.Canceled

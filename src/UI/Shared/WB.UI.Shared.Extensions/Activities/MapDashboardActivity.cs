@@ -10,7 +10,9 @@ using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.WeakSubscription;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Extensions.ViewModels;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Shared.Extensions.Activities
 {
@@ -28,11 +30,6 @@ namespace WB.UI.Shared.Extensions.Activities
         private IDisposable onDrawerOpenedSubscription;
 
         public Toolbar Toolbar { get; private set; }
-
-        public override void OnBackPressed()
-        {
-            this.Cancel();
-        }
 
         private void Cancel()
         {
@@ -58,6 +55,8 @@ namespace WB.UI.Shared.Extensions.Activities
             onDrawerOpenedSubscription = this.drawerLayout.WeakSubscribe<DrawerLayout, DrawerLayout.DrawerOpenedEventArgs>(
                 nameof(this.drawerLayout.DrawerOpened),
                 OnDrawerLayoutOnDrawerOpened);
+            
+            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(this.Cancel));
 
             this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
             this.ViewModel.MapView.GeoViewTapped += this.ViewModel.OnMapViewTapped;

@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation
         {
             if (this.secureStorage.Contains(Key) && this.secureStorage.Contains(IV)) return;
 
-            using (var aes = new AesCryptoServiceProvider())
+            using (var aes = Aes.Create())
             {
                 aes.GenerateIV();
                 this.secureStorage.Store(IV, aes.IV);
@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation
             if (!this.secureStorage.Contains(Key) || !this.secureStorage.Contains(IV))
                 throw new Exception("Key or Initialization vector is missing.");
 
-            using (var aes = new AesCryptoServiceProvider())
+            using (var aes = Aes.Create())
             using (var cryptor = aes.CreateEncryptor(this.secureStorage.Retrieve(Key), this.secureStorage.Retrieve(IV)))
             {
                 return cryptor.TransformFinalBlock(value, 0, value.Length);
@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation
             if (!this.secureStorage.Contains(Key) || !this.secureStorage.Contains(IV))
                 throw new Exception("Key or Initialization vector is missing.");
 
-            using (var aes = new AesCryptoServiceProvider())
+            using (var aes = Aes.Create())
             using (var decryptor = aes.CreateDecryptor(this.secureStorage.Retrieve(Key), this.secureStorage.Retrieve(IV)))
             {
                 return decryptor.TransformFinalBlock(value, 0, value.Length);

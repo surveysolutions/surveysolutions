@@ -14,8 +14,10 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Activities.Dashboard;
 using WB.UI.Shared.Enumerator.Services;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Supervisor.Activities
 {
@@ -42,6 +44,8 @@ namespace WB.UI.Supervisor.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(toolbar);
             SupportActionBar.SetDefaultDisplayHomeAsUpEnabled(false);
+            
+            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() => { }));
 
             this.DrawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
             this.drawerToggle = new ActionBarDrawerToggle(this, DrawerLayout, toolbar, 0, 0);
@@ -100,7 +104,6 @@ namespace WB.UI.Supervisor.Activities
             this.ViewModel.Synchronization.SyncBgService = this;
         }
 
-        public override void OnBackPressed() { }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {

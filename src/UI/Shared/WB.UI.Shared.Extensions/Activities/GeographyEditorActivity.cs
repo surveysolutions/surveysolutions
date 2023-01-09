@@ -9,6 +9,7 @@ using MvvmCross.Binding.BindingContext;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.ViewModels;
 using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
@@ -24,11 +25,6 @@ namespace WB.UI.Shared.Extensions.Activities
         protected override int ViewResourceId => Resource.Layout.interview_area_editor;
 
         public static Action<AreaEditorResult> OnAreaEditCompleted;
-
-        public override void OnBackPressed()
-        {
-            this.Cancel();
-        }
 
         private void Cancel()
         {
@@ -46,6 +42,8 @@ namespace WB.UI.Shared.Extensions.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
+            
+            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(this.Cancel));
 
             this.ViewModel.OnAreaEditCompleted = OnAreaEditCompleted;
             

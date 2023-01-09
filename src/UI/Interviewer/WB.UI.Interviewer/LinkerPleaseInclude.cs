@@ -149,6 +149,7 @@ namespace WB.UI.LinkerInclusion
 
         public void Include(ConsoleColor color)
         {
+#pragma warning disable CA1416 // Validate platform compatibility
             Console.Write("");
             Console.WriteLine("");
             color = Console.ForegroundColor;
@@ -158,6 +159,7 @@ namespace WB.UI.LinkerInclusion
             Console.ForegroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.DarkGray;
+#pragma warning restore CA1416 // Validate platform compatibility
         }
 
         public void Include(RecyclerView.ViewHolder vh, MvxRecyclerView list)

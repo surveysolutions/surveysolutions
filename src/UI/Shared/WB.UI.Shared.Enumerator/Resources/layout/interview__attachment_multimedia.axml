@@ -9,7 +9,7 @@
                     Click Attachment.ShowPhotoView;
                     Visible Attachment.IsImage;"/>
 
-    <com.google.android.exoplayer2.ui.PlayerView 
+    <com.google.android.exoplayer2.ui.StyledPlayerView 
             android:id="@+id/player_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
                             Tag Attachment.Tag;
                             Visible Attachment.IsVideo;" />
 
-    <com.google.android.exoplayer2.ui.PlayerView 
+    <com.google.android.exoplayer2.ui.StyledPlayerView 
         android:id="@+id/player_view2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

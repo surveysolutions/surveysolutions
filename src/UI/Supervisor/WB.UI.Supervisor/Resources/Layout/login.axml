@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <TextView
+                style="@style/ToolbarTitle"
+                local:MvxBind="Text Localization('Supervisor_ApplicationName')"/>
+    </androidx.appcompat.widget.Toolbar>
+    <RelativeLayout
+            android:layout_above="@+id/login_page_scroll_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <ScrollView
+                android:layout_alignParentTop="true"
+                android:layout_above="@+id/login_page_footer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbarStyle="outsideOverlay"
+                android:gravity="center"
+                android:fillViewport="true">
+            <LinearLayout
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                <ImageView
+                        style="@style/Login_Logo"
+                        android:id="@+id/LoginPage_logo"
+                        local:MvxBind="CompanyLogo CustomLogo"/>
+
+                <TextView
+                        style="@style/Login_ErrorMessage"
+                        android:id="@+id/LoginPage_error_message"
+                        android:layout_width="wrap_content"
+                        local:MvxBind="Text ErrorMessage; Visible IsOnlineLoginButtonVisible"/>
+
+                <LinearLayout android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:orientation="vertical">
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/LoginPage_login"
+                                style="@style/Login_Editor"
+                                local:MvxBind="Text UserName; Enabled False;"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            local:passwordToggleEnabled="true"
+                            local:hintEnabled="true"
+                            local:errorEnabled="true"
+                            local:MvxBind="Hint Localization('PasswordHint'); Error PasswordError">
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:inputType="textPassword"
+                                style="@style/Login_Editor"
+                                android:id="@+id/LoginPage_password"
+                                local:MvxBind="Text Password;"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:orientation="horizontal"
+                                  android:gravity="left">
+                        <Button style="@style/Login_Button"
+                                local:MvxBind="Click SignInCommand; Text Localization('LoginText');"/>
+                        <Button style="@style/Login_OnlineSingin_Button"
+                                local:MvxBind="Click OnlineSignInCommand; Text Localization('Interviewer_TryOnlineLogin'); Visible IsOnlineLoginButtonVisible;"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+</LinearLayout>

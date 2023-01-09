@@ -8,6 +8,7 @@ using Android.Widget;
 using Autofac.Core;
 using ImageViews.Photo;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -20,11 +21,6 @@ namespace WB.UI.Shared.Enumerator.Activities
     {
         protected override int ViewResourceId => Resource.Layout.interview_photo_view;
         
-        public override void OnBackPressed()
-        {
-            this.Cancel();
-        }
-
         private void Cancel()
         {
             this.Finish();
@@ -33,6 +29,8 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+            
+            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(this.Cancel));
         }
 
         private bool imageCleared;

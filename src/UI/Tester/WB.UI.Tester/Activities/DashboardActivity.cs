@@ -8,6 +8,8 @@ using MvvmCross.DroidX.RecyclerView;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Tester.Activities
 {
@@ -29,10 +31,8 @@ namespace WB.UI.Tester.Activities
             var recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnairesList);
             var layoutManager = new LinearLayoutManager(this);
             recyclerView.SetLayoutManager(layoutManager);
-        }
-
-        public override void OnBackPressed()
-        {
+            
+            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() => { }));
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

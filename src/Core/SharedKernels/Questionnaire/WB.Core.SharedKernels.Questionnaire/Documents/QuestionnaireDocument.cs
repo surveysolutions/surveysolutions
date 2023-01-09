@@ -194,8 +194,9 @@ namespace Main.Core.Documents
 
         public void RemoveChild(Guid childId)
         {
-            IComposite child = this.children.Find(c => c.PublicKey == childId);
-            this.children.Remove(child);
+            var child = this.children.Find(c => c.PublicKey == childId);
+            if (child != null)
+                this.children.Remove(child);
             this.LastEntryDate = DateTime.UtcNow;
         }
 

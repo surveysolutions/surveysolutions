@@ -1,11 +1,10 @@
-using Android.App;
 using Android.Content;
-using Android.OS;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Tester.Activities
 {
@@ -21,10 +20,8 @@ namespace WB.UI.Tester.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
-        }
-
-        public override void OnBackPressed()
-        {
+            
+            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() => { }));
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

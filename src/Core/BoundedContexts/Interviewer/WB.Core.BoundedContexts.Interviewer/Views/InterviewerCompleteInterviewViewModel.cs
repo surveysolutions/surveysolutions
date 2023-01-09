@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public override void Configure(string interviewUid, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewUid));
+            if (interviewUid == null) throw new ArgumentNullException(nameof(interviewUid));
             base.Configure(interviewUid, navigationState);
 
             var interview = this.interviewRepository.GetOrThrow(interviewUid);
