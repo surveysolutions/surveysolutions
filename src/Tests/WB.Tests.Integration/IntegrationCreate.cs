@@ -486,7 +486,7 @@ namespace WB.Tests.Integration
         public static DesignerEngineVersionService DesignerEngineVersionService()
             => new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), 
                 Mock.Of<IDesignerTranslationService>(), 
-                Mock.Of<ICategoriesService>());
+                Mock.Of<IReusableCategoriesService>());
 
         public static PostgreReadSideStorage<TEntity> PostgresReadSideRepository<TEntity>(
             IUnitOfWork sessionProvider = null)

@@ -20,15 +20,15 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     public class QuestionVerifications : AbstractVerifier, IPartialVerifier
     {
         private readonly ISubstitutionService substitutionService;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
 
         private readonly Dictionary<(Guid questionnaire, Guid category), List<CategoriesItem>> categoriesCache
             = new Dictionary<(Guid questionnaire, Guid category), List<CategoriesItem>>();
 
-        public QuestionVerifications(ISubstitutionService substitutionService, ICategoriesService categoriesService)
+        public QuestionVerifications(ISubstitutionService substitutionService, IReusableCategoriesService reusableCategoriesService)
         {
             this.substitutionService = substitutionService;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
         }
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
@@ -1274,7 +1274,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return items;
             }
 
-            items = this.categoriesService.GetCategoriesById(questionnaire, category).ToList();
+            items = this.reusableCategoriesService.GetCategoriesById(questionnaire, category).ToList();
             categoriesCache.Add((questionnaire, category), items);
             return items;
         }
