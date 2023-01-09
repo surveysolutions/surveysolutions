@@ -275,7 +275,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
-            registry.Bind<ICategoriesExportService, CategoriesExportService >();
+            registry.Bind<ICategoriesExportService, CategoriesExportService>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<IQuestionnaireStorage, HqQuestionnaireStorage>(); 
            

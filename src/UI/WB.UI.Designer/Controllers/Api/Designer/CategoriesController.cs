@@ -13,12 +13,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     [AuthorizeOrAnonymousQuestionnaire]
     public class CategoriesController : Controller
     {
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public CategoriesController(ICategoriesService categoriesService, IFileSystemAccessor fileSystemAccessor)
+        public CategoriesController(IReusableCategoriesService reusableCategoriesService, IFileSystemAccessor fileSystemAccessor)
         {
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("template")]
         public IActionResult Get()
         {
-            var categoriesFile = this.categoriesService.GetTemplateAsExcelFile();
+            var categoriesFile = this.reusableCategoriesService.GetTemplate(CategoriesFileType.Excel);
 
             if (categoriesFile == null) return NotFound();
 
@@ -35,10 +35,22 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
+        [Route("templateTab")]
+        public IActionResult GetCsv()
+        {
+            var categoriesFile = this.reusableCategoriesService.GetTemplate(CategoriesFileType.Tsv);
+
+            if (categoriesFile == null) 
+                return NotFound();
+
+            return File(categoriesFile, "text/plain", $"{QuestionnaireEditor.SideBarCategoriesTitle}.txt");
+        }
+
+        [HttpGet]
         [Route("{id}/xlsx/{categoriesId:Guid}")]
         public IActionResult Get(QuestionnaireRevision id, Guid categoriesId)
         {
-            var categoriesFile = this.categoriesService.GetAsExcelFile(id, categoriesId);
+            var categoriesFile = this.reusableCategoriesService.GetAsFile(id, categoriesId, CategoriesFileType.Excel);
 
             if (categoriesFile?.Content == null) return NotFound();
 

@@ -452,6 +452,10 @@
     "TableView": "Vizualizare în tabel",
     "ValidationIntValue": "Valoarea este prea mare",
     "CopyTo": "Copy to",
+    "SideBarDownload": "Download:",
+    "SideBarXlsx": "Xlsx",
+    "SideBarTab": "Tab",
+    "SideBarTranslationGetTemplateLinkTextCsv": "Tab (txt)",
     "SettingsAnonymous": "Anonymous",
     "RegenerateQuestionnaireSharingLink": "Regenerate link",
     "AnonymousQuestionnaireGeneratedDate": "link generated: {{datetime}}",
@@ -461,7 +465,10 @@
     "SettingsTurnOnAnonymousAccess": "Turn on anonymous sharing.",
     "SettingsTurnOffAnonymousAccess": "Turn off anonymous sharing.",
     "GeometryInputMode": "Input mode",
-    "GeometryShowNeighbours": "Show neighbours",
+    "GeometryOverlapDetection": "Overlap detection",
+    "GeographyInputModeManual": "Manual",
+    "GeographyInputModeAutomatic": "Automatic",
+    "GeographyInputModeSemiautomatic": "Semiautomatic",
     "AttachmentName": "Attachment name",
     "EditorShowComments": "Show comments ({{count}})",
     "CollaboratorsDescriptionSettings": "the following users have access to this questionnaire",
@@ -475,6 +482,7 @@
     "AnonymousLink": "Anonymous link:",
     "CopyLink": "Copy link",
     "AnonymousQuestionnaireDescriptionSettings": "Users having this link will be able to open this questionnaire",
-    "AttachmentDimensionsAreTooBig": "Dimensions are too big"
+    "AttachmentDimensionsAreTooBig": "Dimensions are too big",
+    "HelpOverlapDetection": "Display and highlight the overlaps of this question answer with answers to the same questions in sibling roster instances"
   }
 }
