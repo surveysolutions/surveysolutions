@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public bool IsLockedByHQ { get; set; }
         public bool IsArchived { get; set; }
         public bool IsLockedBySupervisor { get; set; }
+        public bool IsRelinkAllowed { get; set; }
         public Guid PublicKey { get; set; }
         public UserLight Supervisor { get; set; }
         public string UserName { get; set; }
