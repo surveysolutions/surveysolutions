@@ -240,10 +240,6 @@ namespace WB.UI.Headquarters.Controllers
         {
             UserRoles userRole = user.Roles.First().Id.ToUserRole();
             
-            var isAllowRelink = userRole == UserRoles.Interviewer
-                                && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator || authorizedUser.IsSupervisor) 
-                                && user.Profile.IsRelinkAllowed();
-            
             return new
             {
                 UserInfo = new
@@ -273,7 +269,7 @@ namespace WB.UI.Headquarters.Controllers
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     TokenIssued = await this.tokenProvider.DoesTokenExist(user),
                     CanSetupTwoFactorAuthentication = HasPermissionsToSetupTwoFactorAuthentication(user),
-                    IsAllowRelink = isAllowRelink,
+                    IsRelinkAllowed = user.Profile.IsRelinkAllowed(),
                 },
                 Api = new
                 {
@@ -739,8 +735,8 @@ namespace WB.UI.Headquarters.Controllers
                 if (currentUser.IsLockedBySupervisor != editModel.IsLockedBySupervisor)
                     this.ModelState.AddModelError(nameof(EditUserModel.IsLockedBySupervisor), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
                 
-                if (editModel.IsAllowRelink)
-                    this.ModelState.AddModelError(nameof(EditUserModel.IsAllowRelink), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
+                if (editModel.IsRelinkAllowed)
+                    this.ModelState.AddModelError(nameof(EditUserModel.IsRelinkAllowed), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
                 
                 if(this.ModelState.IsValid)
                     this.ModelState.AddModelError(nameof(EditUserModel.PersonName), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
@@ -766,7 +762,7 @@ namespace WB.UI.Headquarters.Controllers
                     : currentUser.IsInRole(UserRoles.Supervisor) && (authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter);
                 if (shouldCheckRelinkParameter)
                 {
-                    if (editModel.IsAllowRelink)
+                    if (editModel.IsRelinkAllowed)
                         currentUser.Profile.AllowRelink();
                     else
                         currentUser.Profile.ResetAllowRelinkFlag();

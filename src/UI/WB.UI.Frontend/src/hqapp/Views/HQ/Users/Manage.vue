@@ -35,15 +35,15 @@
             </form-group>
             <p v-if="isRelinkVisible">{{this.$t('Pages.Tablet_RelinkMessage')}}</p>
             <form-group v-if="isRelinkVisible"
-                :error="modelState['isAllowRelink']">
+                :error="modelState['isRelinkAllowed']">
                 <div>
                     <input
                         class="checkbox-filter single-checkbox"
-                        id="IsAllowRelink"
-                        name="IsAllowRelink"
+                        id="IsRelinkAllowed"
+                        name="IsRelinkAllowed"
                         type="checkbox"
-                        v-model="isAllowRelink"/>
-                    <label for="IsAllowRelink"
+                        v-model="isRelinkAllowed"/>
+                    <label for="IsRelinkAllowed"
                         style="font-weight: bold">
                         <span class="tick"></span>
                         {{$t('FieldsAndValidations.AllowRelinkTablet')}}
@@ -132,7 +132,7 @@ export default {
             isLockedBySupervisor: false,
             isLockedOut : false,
             successMessage: null,
-            isAllowRelink: false,
+            isRelinkAllowed: false,
         }
     },
     computed: {
@@ -189,7 +189,7 @@ export default {
         this.isLockedByHeadquarters = this.userInfo.isLockedByHeadquarters
         this.isLockedBySupervisor = this.userInfo.isLockedBySupervisor
         this.isLockedOut = this.userInfo.isLockedOut
-        this.isAllowRelink = this.userInfo.isAllowRelink
+        this.isRelinkAllowed = this.userInfo.isRelinkAllowed
     },
     watch: {
         personName: function(val) {
@@ -220,7 +220,7 @@ export default {
                     phoneNumber: self.phoneNumber == '' ? null : self.phoneNumber,
                     isLockedByHeadquarters: self.isLockedByHeadquarters,
                     isLockedBySupervisor: self.isLockedBySupervisor,
-                    isAllowRelink: self.isAllowRelink,
+                    isRelinkAllowed: self.isRelinkAllowed,
                 },
                 headers: {
                     'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
