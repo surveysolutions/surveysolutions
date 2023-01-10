@@ -242,7 +242,7 @@ namespace WB.UI.Headquarters.Controllers
             
             var isAllowRelink = userRole == UserRoles.Interviewer
                                 && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator || authorizedUser.IsSupervisor) 
-                                && user.Profile.IsAllowRelink();
+                                && user.Profile.IsRelinkAllowed();
             
             return new
             {
@@ -761,8 +761,10 @@ namespace WB.UI.Headquarters.Controllers
                     currentUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
                 }
 
-                if ((authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter || authorizedUser.IsSupervisor) 
-                    && currentUser.IsInRole(UserRoles.Interviewer))
+                var shouldCheckRelinkParameter = currentUser.IsInRole(UserRoles.Interviewer)
+                    ? authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter || authorizedUser.IsSupervisor
+                    : currentUser.IsInRole(UserRoles.Supervisor) && (authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter);
+                if (shouldCheckRelinkParameter)
                 {
                     if (editModel.IsAllowRelink)
                         currentUser.Profile.AllowRelink();

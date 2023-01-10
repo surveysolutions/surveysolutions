@@ -156,7 +156,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual long? StorageFreeInBytes { get; set; }
         public virtual DateTime? AllowRelinkDate { get; set; }
 
-        public virtual bool IsAllowRelink() => AllowRelinkDate.HasValue && AllowRelinkDate.Value > DateTime.UtcNow.AddDays(-1);
+        public virtual bool IsRelinkAllowed() => AllowRelinkDate.HasValue;
 
         public virtual void AllowRelink() => AllowRelinkDate = DateTime.UtcNow;
 

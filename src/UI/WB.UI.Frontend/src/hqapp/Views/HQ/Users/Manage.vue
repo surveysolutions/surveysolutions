@@ -33,8 +33,8 @@
                     :haserror="modelState['PhoneNumber'] !== undefined"
                     id="PhoneNumber"/>
             </form-group>
-            <p v-if="!isOwnProfile && isInterviewer">{{this.$t('Pages.Tablet_RelinkMessage')}}</p>
-            <form-group v-if="!isOwnProfile && isInterviewer"
+            <p v-if="isRelinkVisible">{{this.$t('Pages.Tablet_RelinkMessage')}}</p>
+            <form-group v-if="isRelinkVisible"
                 :error="modelState['isAllowRelink']">
                 <div>
                     <input
@@ -175,6 +175,11 @@ export default {
         },
         lockedOutCanBeReleased(){
             return this.userInfo.lockedOutCanBeReleased
+        },
+        isRelinkVisible() {
+            if (this.isOwnProfile)
+                return false
+            return this.isInterviewer || this.isSupervisor
         },
     },
     mounted() {

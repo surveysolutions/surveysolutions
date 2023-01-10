@@ -33,9 +33,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (user.Profile != null
                 && !string.IsNullOrWhiteSpace(user.Profile.DeviceId)
                 && user.Profile.DeviceRegistrationDate.HasValue
-                && !user.Profile.IsAllowRelink())
+                && !user.Profile.IsRelinkAllowed())
             {
-                throw new InvalidOperationException("You must have approve from supervisor or headquarters to relink device");
+                throw new InvalidOperationException("You must have approval from supervisor or headquarters to relink device");
             }
 
             if(user.WorkspaceProfile == null)
