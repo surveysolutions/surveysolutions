@@ -7,13 +7,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class AssignToInterviewerTextBinding : BaseBinding<TextView, InterviewerToSelectViewModel>
+    public class AssignToInterviewerTextBinding : BaseBinding<TextView, ResponsibleToSelectViewModel>
     {
         public AssignToInterviewerTextBinding(TextView androidControl) : base(androidControl)
         {
         }
 
-        protected override void SetValueToView(TextView control, InterviewerToSelectViewModel value)
+        protected override void SetValueToView(TextView control, ResponsibleToSelectViewModel value)
         {
             var fullNameFormatted = string.IsNullOrEmpty(value.FullName) ? "" : $"{value.FullName} - ";
 
