@@ -13,6 +13,7 @@ env:
   REGISTRY: ghcr.io
   NODE_VERSION: 17
   DOTNET_VERSION: '7.0.x'
+  DOTNET_VERSION_COMPAT: '6.0.x'  
 
 jobs:
   prepare:
@@ -125,6 +126,12 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Setup Old .NET Core SDK
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION_COMPAT }}
+
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.3
 
