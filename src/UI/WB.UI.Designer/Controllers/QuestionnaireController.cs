@@ -84,7 +84,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private readonly ICategoricalOptionsImportService categoricalOptionsImportService;
         private readonly DesignerDbContext dbContext;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IEmailSender emailSender;
         private readonly IViewRenderService viewRenderService;
         private readonly UserManager<DesignerIdentityUser> users;
@@ -102,7 +102,7 @@ namespace WB.UI.Designer.Controllers
             ICategoricalOptionsImportService categoricalOptionsImportService,
             ICommandService commandService,
             DesignerDbContext dbContext,
-            ICategoriesService categoriesService,
+            IReusableCategoriesService reusableCategoriesService,
             IEmailSender emailSender,
             IViewRenderService viewRenderService,
             UserManager<DesignerIdentityUser> users)
@@ -117,7 +117,7 @@ namespace WB.UI.Designer.Controllers
             this.categoricalOptionsImportService = categoricalOptionsImportService;
             this.commandService = commandService;
             this.dbContext = dbContext;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
             this.emailSender = emailSender;
             this.viewRenderService = viewRenderService;
             this.users = users;

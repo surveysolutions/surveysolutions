@@ -49,7 +49,7 @@ namespace WB.Tests.Web.TestFactories
 
             var latestSupportedVersion = new DesignerEngineVersionService(Mock.Of<IAttachmentService>(),
                 Mock.Of<IDesignerTranslationService>(),
-                Mock.Of<ICategoriesService>()).LatestSupportedVersion;
+                Mock.Of<IReusableCategoriesService>()).LatestSupportedVersion;
             var package = new QuestionnaireCodeGenerationPackage(questionnaireDocument, null);
             var emitResult = 
                 expressionProcessorGenerator.GenerateProcessorStateAssembly(package,  

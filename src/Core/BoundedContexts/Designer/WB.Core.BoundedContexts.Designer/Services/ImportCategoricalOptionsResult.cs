@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Services
@@ -22,6 +24,15 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         public static ImportCategoricalOptionsResult Success(params QuestionnaireCategoricalOption[] importedOptions)
             => new ImportCategoricalOptionsResult(importedOptions);
+
+        public static ImportCategoricalOptionsResult Success(params CategoriesRow[] categoriesRows)
+            => new ImportCategoricalOptionsResult(categoriesRows.Select(o => new QuestionnaireCategoricalOption()
+            {
+                Title = o.Text,
+                Value = Convert.ToInt32(o.Id),
+                ParentValue = Convert.ToInt32(o.ParentId),
+                AttachmentName = o.AttachmentName
+            }).ToArray());
 
         public static ImportCategoricalOptionsResult Failed(params string[] errors) 
             => new ImportCategoricalOptionsResult(errors);

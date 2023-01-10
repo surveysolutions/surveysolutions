@@ -52,17 +52,17 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireViewFactory questionnaireStorage;
         private readonly ITranslationsExportService translationsExportService;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
 
         public TranslationsService(DesignerDbContext dbContext,
             IQuestionnaireViewFactory questionnaireStorage,
             ITranslationsExportService translationsExportService,
-            ICategoriesService categoriesService)
+            IReusableCategoriesService reusableCategoriesService)
         {
             this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
             this.translationsExportService = translationsExportService;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
         }
 
         public ITranslation Get(Guid questionnaireId, Guid translationId)
@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 ? this.Get(questionnaire.PublicKey, translationId.Value)
                 : new QuestionnaireTranslation(new List<TranslationDto>());
 
-            var categoriesService = new CategoriesService(questionnaire.PublicKey, this.categoriesService);
+            var categoriesService = new CategoriesService(questionnaire.PublicKey, this.reusableCategoriesService);
 
             return translationsExportService.GenerateTranslationFile(questionnaire.Source, translationId ?? Guid.Empty, translation, categoriesService);
         }
@@ -460,16 +460,16 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private class CategoriesService : ICategories
         {
             private readonly Guid questionnaireId;
-            private readonly ICategoriesService categoriesService;
+            private readonly IReusableCategoriesService reusableCategoriesService;
 
-            public CategoriesService(Guid questionnaireId, ICategoriesService categoriesService)
+            public CategoriesService(Guid questionnaireId, IReusableCategoriesService reusableCategoriesService)
             {
                 this.questionnaireId = questionnaireId;
-                this.categoriesService = categoriesService;
+                this.reusableCategoriesService = reusableCategoriesService;
             }
 
             public List<CategoriesItem> GetCategories(Guid categoriesId) =>
-                this.categoriesService.GetCategoriesById(questionnaireId, categoriesId).ToList();
+                this.reusableCategoriesService.GetCategoriesById(questionnaireId, categoriesId).ToList();
         }
     }
 }
