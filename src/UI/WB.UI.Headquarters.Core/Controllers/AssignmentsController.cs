@@ -117,7 +117,7 @@ namespace WB.UI.Headquarters.Controllers
                 Api = new
                 {
                     Responsible = this.currentUser.IsSupervisor
-                        ? Url.Action("TeamCombobox", "Teams")
+                        ? Url.Action("InterviewersCombobox", "Teams")
                         : Url.Action("ResponsiblesCombobox", "Teams"),
                     Assignments = Url.Action("Get", "AssignmentsApi"),
                     Interviews = Url.Action("Index", "Interviews"),

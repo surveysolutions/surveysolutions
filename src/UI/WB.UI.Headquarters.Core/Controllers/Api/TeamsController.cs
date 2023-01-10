@@ -62,37 +62,11 @@ namespace WB.UI.Headquarters.Controllers.Api
                 supervisorId: this.authorizedUser.Id);
 
         [HttpGet]
-        [Authorize(Roles = "Supervisor")]
-        public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-            => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query,
-                    supervisorId: this.authorizedUser.Id);
-
-        [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter")]
-        public UsersView AllInterviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-            => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: null);
-
-
-        [HttpGet]
         [Authorize]
         public ResponsibleComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED, bool showArchived = DEFAULT_SHOW_ARCHIVED)
         {
             bool? isNeedShowActiveAndArchivedInterviewers = showArchived ? (bool?) null : false;
             var supervisorId = this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?)null;
-            var users = this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: supervisorId, showLocked: showLocked, archived: isNeedShowActiveAndArchivedInterviewers);
-            var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.UserId.FormatGuid(), x.UserName, x.IconClass)).ToArray();
-            return new ResponsibleComboboxModel(options, users.TotalCountByQuery);
-        }
-
-        [HttpGet]
-        [AuthorizeByRole(UserRoles.Supervisor)]
-        public ResponsibleComboboxModel TeamCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED, bool showArchived = DEFAULT_SHOW_ARCHIVED)
-        {
-            if (!this.authorizedUser.IsSupervisor)
-                throw new Exception("Allow only supervisor");
-            
-            bool? isNeedShowActiveAndArchivedInterviewers = showArchived ? (bool?) null : false;
-            var supervisorId = this.authorizedUser.Id;
             var users = this.userViewFactory.GetTeamResponsibles(pageSize: pageSize, searchBy: query, supervisorId: supervisorId, showLocked: showLocked, archived: isNeedShowActiveAndArchivedInterviewers);
             var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.UserId.FormatGuid(), x.UserName, x.IconClass)).ToArray();
             return new ResponsibleComboboxModel(options, users.TotalCountByQuery);

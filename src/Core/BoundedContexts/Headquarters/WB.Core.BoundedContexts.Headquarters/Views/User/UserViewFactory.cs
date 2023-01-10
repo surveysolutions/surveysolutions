@@ -162,13 +162,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, bool? archived = false)
+        public UsersView GetTeamResponsibles(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, bool? archived = false)
         {
             var users = ApplyFilter(this.userRepository.Users, searchBy, archived, UserRoles.Interviewer)
                 .Where(user => showLocked || (!user.IsLockedBySupervisor && !user.IsLockedByHeadquaters));
 
             if (supervisorId.HasValue)
-                users = users.Where(user => user.WorkspaceProfile.SupervisorId == supervisorId);
+                users = users.Where(user => user.WorkspaceProfile.SupervisorId == supervisorId || user.Id == supervisorId);
 
             var filteredUsers = users
                 .OrderBy(x => x.UserName)
@@ -179,33 +179,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     UserId = x.Id,
                     UserName = x.UserName,
                     IconClass = UserRoles.Interviewer.ToString().ToLower(),
-                });
-
-            var result = new UsersView
-            {
-                TotalCountByQuery = users.Count(),
-                Users = filteredUsers.ToList()
-            };
-
-            return result;
-        }
-
-        public UsersView GetTeamResponsibles(int pageSize, string searchBy, Guid supervisorId, bool showLocked = false, bool? archived = false)
-        {
-            var users = ApplyFilter(this.userRepository.Users, searchBy, archived, UserRoles.Interviewer, UserRoles.Supervisor)
-                .Where(user => showLocked || (!user.IsLockedBySupervisor && !user.IsLockedByHeadquaters));
-
-            users = users.Where(user => user.WorkspaceProfile.SupervisorId == supervisorId || user.Id == supervisorId);
-
-            var filteredUsers = users
-                .OrderBy(x => x.UserName)
-                .Take(pageSize)
-                .ToList()
-                .Select(x => new UsersViewItem
-                {
-                    UserId = x.Id,
-                    UserName = x.UserName,
-                    IconClass = x.Role.ToString().ToLower(),
                 });
 
             var result = new UsersView
