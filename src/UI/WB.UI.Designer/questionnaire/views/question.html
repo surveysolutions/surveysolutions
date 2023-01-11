@@ -159,7 +159,7 @@
         </div>
 
         <script type="text/ng-template" id="categorical-filter-expression">
-            <div ng-if="activeQuestion.showFilterInput != true && activeQuestion.isCascade != true">
+            <div class="add-filter-label" ng-if="activeQuestion.showFilterInput != true && activeQuestion.isCascade != true">
                 <button type="button" class="btn btn-lg btn-link" ng-click="activeQuestion.showFilterInput = true" ng-i18next="AddFilter"></button>
             </div>
 
@@ -178,7 +178,7 @@
 
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross filter-cross"
-                            ng-click="activeQuestion.linkedFilterExpression='';activeQuestion.optionsFilterExpression='';questionForm.$setDirty();"></button>
+                            ng-click="activeQuestion.showFilterInput=false;activeQuestion.linkedFilterExpression='';activeQuestion.optionsFilterExpression='';questionForm.$setDirty();"></button>
                 </div>
             </div>
 
