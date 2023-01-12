@@ -179,7 +179,7 @@ export default {
         isRelinkVisible() {
             if (this.isOwnProfile)
                 return false
-            return this.isInterviewer || this.isSupervisor
+            return this.isInterviewer //|| this.isSupervisor
         },
     },
     mounted() {
