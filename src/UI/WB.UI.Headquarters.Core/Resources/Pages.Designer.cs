@@ -4426,7 +4426,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allow relink tablet for this user on new device. Data on old tablet will be LOST!!!.
+        ///   Looks up a localized string similar to A single device is linked to this account..
         /// </summary>
         public static string Tablet_RelinkMessage {
             get {

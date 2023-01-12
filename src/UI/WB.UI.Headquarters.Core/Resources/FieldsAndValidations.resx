@@ -136,7 +136,7 @@
     <value>Email address</value>
   </data>
   <data name="AllowRelinkTablet" xml:space="preserve">
-    <value>Allow relink to new tablet</value>
+    <value>Allow relinking to a different device with loss of data on the original device.</value>
   </data>
   <data name="IsLockedFieldName" xml:space="preserve">
     <value>Is locked by Admin or HQ</value>

@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allow relink to new tablet.
+        ///   Looks up a localized string similar to Allow relinking to a different device with loss of data on the original device..
         /// </summary>
         public static string AllowRelinkTablet {
             get {
