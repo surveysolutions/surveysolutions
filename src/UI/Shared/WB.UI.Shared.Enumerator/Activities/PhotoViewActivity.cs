@@ -26,11 +26,10 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.Finish();
         }
 
-        protected override void OnCreate(Bundle bundle)
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
         {
-            base.OnCreate(bundle);
-            
-            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(this.Cancel));
+            Cancel();
         }
 
         private bool imageCleared;

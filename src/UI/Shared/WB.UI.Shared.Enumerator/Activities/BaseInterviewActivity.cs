@@ -43,15 +43,16 @@ namespace WB.UI.Shared.Enumerator.Activities
             onDrawerOpenedSubscription = this.drawerLayout.WeakSubscribe<DrawerLayout, DrawerLayout.DrawerOpenedEventArgs>(
                 nameof(this.drawerLayout.DrawerOpened),
                 OnDrawerLayoutOnDrawerOpened)  ;
-            
-            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() =>
+        }
+        
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
+            this.ViewModel.NavigateToPreviousViewModel(() =>
             {
-                this.ViewModel.NavigateToPreviousViewModel(() =>
-                {
-                    this.ViewModel.NavigateBack();
-                    ReleaseActivity();
-                });
-            }));
+                this.ViewModel.NavigateBack();
+                ReleaseActivity();
+            });
         }
 
         private void OnDrawerLayoutOnDrawerOpened(object sender, DrawerLayout.DrawerOpenedEventArgs args)

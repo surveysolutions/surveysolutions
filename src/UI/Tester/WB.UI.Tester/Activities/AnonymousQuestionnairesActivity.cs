@@ -32,10 +32,12 @@ namespace WB.UI.Tester.Activities
             var recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnairesList);
             var layoutManager = new LinearLayoutManager(this);
             recyclerView.SetLayoutManager(layoutManager);
-            
-            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() => { }));
         }
-
+        
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
+        }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {

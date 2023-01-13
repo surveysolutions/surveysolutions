@@ -72,8 +72,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
 
-            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() => { }));
-
             var enumeratorSettings = Mvx.IoCProvider.Resolve<IEnumeratorSettings>();
             if (!enumeratorSettings.NotificationsEnabled) return;
 
@@ -86,6 +84,12 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 5000);
             snack.Show();
         }
+        
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
+        }
+
 
         private void RemoveFragments()
         {

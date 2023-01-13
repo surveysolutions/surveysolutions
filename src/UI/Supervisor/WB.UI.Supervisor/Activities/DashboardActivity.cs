@@ -45,8 +45,6 @@ namespace WB.UI.Supervisor.Activities
             this.SetSupportActionBar(toolbar);
             SupportActionBar.SetDefaultDisplayHomeAsUpEnabled(false);
             
-            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() => { }));
-
             this.DrawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
             this.drawerToggle = new ActionBarDrawerToggle(this, DrawerLayout, toolbar, 0, 0);
             DrawerLayout.AddDrawerListener(drawerToggle);
@@ -71,6 +69,11 @@ namespace WB.UI.Supervisor.Activities
             }
             
             this.ViewModel.WorkspaceListUpdated += this.WorkspaceListUpdated;
+        }
+
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
         }
 
         protected override void OnDestroy()

@@ -56,12 +56,16 @@ namespace WB.UI.Shared.Extensions.Activities
                 nameof(this.drawerLayout.DrawerOpened),
                 OnDrawerLayoutOnDrawerOpened);
             
-            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(this.Cancel));
-
             this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
             this.ViewModel.MapView.GeoViewTapped += this.ViewModel.OnMapViewTapped;
             
             System.Threading.Tasks.Task.Run(() => this.ViewModel.MapControlCreatedAsync());
+        }
+
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
+            this.Cancel();
         }
 
         private void OnDrawerLayoutOnDrawerOpened(object sender, DrawerLayout.DrawerOpenedEventArgs args)

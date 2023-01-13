@@ -26,14 +26,15 @@ namespace WB.UI.Supervisor.Activities
             base.OnCreate(savedInstanceState);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(toolbar);
-            
-            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() =>
-            {
-                this.ViewModel.NavigateToDashboardCommand.Execute();
-                this.CancelLoadingAndFinishActivity();
-            }));
         }
-        
+
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
+            this.ViewModel.NavigateToDashboardCommand.Execute();
+            this.CancelLoadingAndFinishActivity();
+        }
+
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             switch (item.ItemId)

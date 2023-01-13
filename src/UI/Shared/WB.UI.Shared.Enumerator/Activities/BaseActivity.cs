@@ -10,6 +10,7 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using NLog;
 using Plugin.CurrentActivity;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Utils;
 
@@ -18,9 +19,9 @@ namespace WB.UI.Shared.Enumerator.Activities
     [MvxActivityPresentation]
     public abstract class BaseActivity<TViewModel> : MvvmCross.Platforms.Android.Views.MvxActivity<TViewModel> where TViewModel : class, IMvxViewModel
     {
-        
         protected abstract int ViewResourceId { get; }
         private Logger log;
+        private OnBackPressedCallbackWrapper backPressedCallbackWrapper;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -29,6 +30,12 @@ namespace WB.UI.Shared.Enumerator.Activities
             base.OnCreate(bundle);
             Xamarin.Essentials.Platform.Init(this, bundle);
             CrossCurrentActivity.Current.Init(this, bundle);
+
+            if (BackButtonCustomAction)
+            {
+                backPressedCallbackWrapper = new OnBackPressedCallbackWrapper(BackButtonPressed);
+                OnBackPressedDispatcher.AddCallback(this, backPressedCallbackWrapper);
+            }
         }
         
         protected override void OnStart()
@@ -78,8 +85,18 @@ namespace WB.UI.Shared.Enumerator.Activities
             base.OnLowMemory();
         }
 
+        protected virtual bool BackButtonCustomAction => false;
+
+        protected virtual void BackButtonPressed()
+        {
+            
+        }
+
         protected override void OnDestroy()
         {
+            backPressedCallbackWrapper?.Remove();
+            backPressedCallbackWrapper?.Dispose();
+
             TryWriteMemoryInformationToLog($"Destroyed Activity {this.GetType().Name}");
             base.OnDestroy();
             
