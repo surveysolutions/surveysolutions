@@ -275,6 +275,7 @@ type User {
   creationDate: Date
   isLocked: Boolean
   isArchived: Boolean
+  isRelinkAllowed: Boolean
   workspaces: [String!]!
 }
 

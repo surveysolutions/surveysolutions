@@ -4426,6 +4426,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A single device is linked to this account..
+        /// </summary>
+        public static string Tablet_RelinkMessage {
+            get {
+                return ResourceManager.GetString("Tablet_RelinkMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team member.
         /// </summary>
         public static string TeamMember {

@@ -144,6 +144,9 @@
   <data name="EmailFieldName" xml:space="preserve">
     <value>Электронная почта</value>
   </data>
+  <data name="AllowRelinkTablet" xml:space="preserve">
+    <value>Разрешить перепривязку на новое устройство с потерей данных на старом устройстве</value>
+  </data>
   <data name="InvalidUser" xml:space="preserve">
     <value>Недопустимый пользователь</value>
   </data>
