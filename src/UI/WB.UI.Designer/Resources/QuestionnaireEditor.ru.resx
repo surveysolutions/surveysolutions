@@ -523,6 +523,9 @@
   <data name="SelectQuestion" xml:space="preserve">
     <value>Выбрать вопрос</value>
   </data>
+  <data name="AddFilter" xml:space="preserve">
+    <value>Добавить фильтр</value>
+  </data>
   <data name="SettingsCan" xml:space="preserve">
     <value>Может </value>
   </data>

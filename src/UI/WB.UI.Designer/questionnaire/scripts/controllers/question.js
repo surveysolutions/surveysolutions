@@ -112,6 +112,9 @@
                 $scope.activeQuestion.geometryType = question.geometryType;
                 $scope.activeQuestion.defaultDate = question.defaultDate;
                 $scope.activeQuestion.categoricalMultiKinds = dictionaries.categoricalMultiKinds;
+                $scope.activeQuestion.showFilterInput =
+                    (question.optionsFilterExpression != null && question.optionsFilterExpression !== '')    
+                    || (question.linkedFilterExpression != null && question.linkedFilterExpression !== '');
 
                 $scope.activeQuestion.geometryInputModeOptions = dictionaries.geographyInputModeOptions;
                 $scope.activeQuestion.geometryInputMode = question.geometryInputMode;
