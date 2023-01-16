@@ -123,7 +123,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             // act
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(1));
             // assert
-            Assert.That(viewModel.UiItems[0].InterviewsCount, Is.EqualTo(1));
+            Assert.That(viewModel.UiItems[1].InterviewsCount, Is.EqualTo(1));
         }
 
         [Test]
@@ -148,7 +148,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             // act
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(1));
             // assert
-            Assert.That(viewModel.UiItems[0].InterviewsCount, Is.EqualTo(2));
+            Assert.That(viewModel.UiItems[1].InterviewsCount, Is.EqualTo(2));
         }
 
         [Test]
@@ -173,7 +173,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             // act
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(1));
             // assert
-            Assert.That(viewModel.UiItems[0].InterviewsCount, Is.EqualTo(1));
+            Assert.That(viewModel.UiItems[1].InterviewsCount, Is.EqualTo(1));
         }
 
         [Test]
@@ -202,7 +202,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             // act
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(1));
             // assert
-            Assert.That(viewModel.UiItems[0].InterviewsCount, Is.EqualTo(2));
+            Assert.That(viewModel.UiItems[1].InterviewsCount, Is.EqualTo(2));
         }
 
         [Test]
@@ -232,7 +232,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             // act
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(1));
             // assert
-            Assert.That(viewModel.UiItems[0].InterviewsCount, Is.EqualTo(4));
+            Assert.That(viewModel.UiItems[1].InterviewsCount, Is.EqualTo(4));
         }
 
         [Test]
@@ -257,8 +257,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 commandService: mockOfCommandService.Object,
                 navigationService: mockOfNavigationViewModelService.Object);
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(interviewId));
-            viewModel.UiItems[0].IsSelected = true;
-            viewModel.UiItems[0].SelectCommand.Execute();
+            viewModel.UiItems[1].IsSelected = true;
+            viewModel.UiItems[1].SelectCommand.Execute();
             // act
             await viewModel.ReassignCommand.ExecuteAsync();
             // assert
@@ -291,8 +291,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 usersRepository: usersRepository,
                 assignmentsStorage: assignmentsRepository);
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(assignmentId));
-            viewModel.UiItems[0].IsSelected = true;
-            viewModel.UiItems[0].SelectCommand.Execute();
+            viewModel.UiItems[1].IsSelected = true;
+            viewModel.UiItems[1].SelectCommand.Execute();
             // act
             await viewModel.ReassignCommand.ExecuteAsync();
             // assert
@@ -326,13 +326,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 assignmentsStorage: assignmentsRepository);
 
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(assignmentId));
-            viewModel.UiItems[0].IsSelected = true;
-            viewModel.UiItems[0].SelectCommand.Execute();
-            // act
             viewModel.UiItems[1].IsSelected = true;
             viewModel.UiItems[1].SelectCommand.Execute();
+            // act
+            viewModel.UiItems[2].IsSelected = true;
+            viewModel.UiItems[2].SelectCommand.Execute();
             // assert
-            Assert.That(viewModel.UiItems[0].IsSelected, Is.False);
+            Assert.That(viewModel.UiItems[1].IsSelected, Is.False);
             Assert.That(viewModel.CanReassign, Is.True);
         }
 
@@ -361,7 +361,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             // act
             viewModel.Prepare(new SelectResponsibleForAssignmentArgs(1));
             // assert
-            Assert.That(viewModel.UiItems[0].InterviewsCount, Is.EqualTo(0));
+            Assert.That(viewModel.UiItems[1].InterviewsCount, Is.EqualTo(0));
         }
 
         private static SelectResponsibleForAssignmentViewModel CreateSelectResponsibleForAssignmentViewModel(
