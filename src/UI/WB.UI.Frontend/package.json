@@ -164,6 +164,7 @@
         "graphql-ws": "5.11.2",
         "glob-parent": "6.0.2",
         "json-schema": ">=0.4.0",
+        "json5": "2.2.3",
         "yargs-parser": ">=13.1.2",
         "merge": ">=2.1.1",
         "moment": "2.29.4",
