@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
@@ -71,10 +72,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private IMvxAsyncCommand reassignCommand;
         public IMvxAsyncCommand ReassignCommand => reassignCommand ??= new MvxAsyncCommand(this.ReassignAsync, () => this.CanReassign);
         public IMvxCommand CancelCommand => new MvxCommand(this.Cancel);
-        public IMvxCommand SelectInterviewerCommand => new MvxCommand<InterviewerToSelectViewModel>(this.SelectInterviewer);
+        public IMvxCommand SelectResponsibleCommand => new MvxCommand<ResponsibleToSelectViewModel>(this.SelectResponsible);
 
-        private MvxObservableCollection<InterviewerToSelectViewModel> uiItems;
-        public MvxObservableCollection<InterviewerToSelectViewModel> UiItems
+        private MvxObservableCollection<ResponsibleToSelectViewModel> uiItems;
+        public MvxObservableCollection<ResponsibleToSelectViewModel> UiItems
         {
             get => this.uiItems;
             private set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
@@ -87,14 +88,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             if (!this.CanReassign) return;
             this.CanReassign = false;
 
-            var selectedInterviewer = this.uiItems.Single(x => x.IsSelected);
+            var selectedResponsible = this.uiItems.Single(x => x.IsSelected);
 
             try
             {
                 if (this.input.InterviewId.HasValue)
-                    await this.AssignToInterviewAsync(this.input.InterviewId.Value, selectedInterviewer);
+                    await this.AssignToInterviewAsync(this.input.InterviewId.Value, selectedResponsible);
                 else if(this.input.AssignmentId.HasValue)
-                    this.AssignToAssignment(this.input.AssignmentId.Value, selectedInterviewer);
+                    this.AssignToAssignment(this.input.AssignmentId.Value, selectedResponsible);
                 else throw new NotSupportedException("Reassign dialog support interview or assignment only");
             }
             finally
@@ -103,39 +104,40 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
-        private void AssignToAssignment(int assignmentId, InterviewerToSelectViewModel interviewer)
+        private void AssignToAssignment(int assignmentId, ResponsibleToSelectViewModel responsible)
         {
             var assignment = this.assignmentsStorage.GetById(assignmentId);
 
             assignment.ReceivedByInterviewerAt = null;
-            assignment.ResponsibleId = interviewer.Id;
-            assignment.ResponsibleName = interviewer.Login;
+            assignment.ResponsibleId = responsible.Id;
+            assignment.ResponsibleName = responsible.Login;
             assignment.Comments = this.Comments;
 
             this.assignmentsStorage.Store(assignment);
 
             this.messenger.Publish(new DashboardChangedMsg(this));
-            this.auditLogService.Write(new AssignResponsibleToAssignmentAuditLogEntity(assignmentId, interviewer.Id, interviewer.Login));
+            this.auditLogService.Write(new AssignResponsibleToAssignmentAuditLogEntity(assignmentId, responsible.Id, responsible.Login));
         }
 
-        private async Task AssignToInterviewAsync(Guid interviewId, InterviewerToSelectViewModel interviewer)
+        private async Task AssignToInterviewAsync(Guid interviewId, ResponsibleToSelectViewModel responsible)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
-            var command = new AssignInterviewerCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
-                interviewer.Id);
+            ICommand command = responsible.Role == UserRoles.Supervisor
+                ? new AssignSupervisorCommand(interviewId, this.principal.CurrentUserIdentity.UserId, responsible.Id)
+                : new AssignInterviewerCommand(interviewId, this.principal.CurrentUserIdentity.UserId, responsible.Id);
 
             this.commandService.Execute(command);
 
             this.auditLogService.Write(new AssignResponsibleToInterviewAuditLogEntity(interviewId,
-                interview.GetInterviewKey().ToString(), interviewer.Id, interviewer.Login));
+                interview.GetInterviewKey().ToString(), responsible.Id, responsible.Login));
 
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }
 
-        private void SelectInterviewer(InterviewerToSelectViewModel interviewer)
+        private void SelectResponsible(ResponsibleToSelectViewModel responsible)
         {
-            this.UiItems.Where(x => x != interviewer).ForEach(x => x.IsSelected = false);
+            this.UiItems.Where(x => x != responsible).ForEach(x => x.IsSelected = false);
             this.CanReassign = true;
         }
 
@@ -145,14 +147,46 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.input = parameter;
 
             var responsible = GetResponsible(parameter);
-            var interviewerViewModels = this.usersRepository.LoadAll()
+            var interviewersViewModels = this.usersRepository.LoadAll()
                 .Where(x => x.InterviewerId != responsible 
                             && !x.IsLockedByHeadquarters 
                             && !x.IsLockedBySupervisor)
                 .Select(ToInterviewerToSelectViewModel)
                 .OrderBy(x => $"{x.FullName}{(string.IsNullOrEmpty(x.FullName) ? "" : " - ")}{x.Login}");
 
-            this.UiItems = new MvxObservableCollection<InterviewerToSelectViewModel>(interviewerViewModels);
+            var supervisorViewModel = GetSupervisorViewModel();
+            var responsiblesViewModels = supervisorViewModel.ToEnumerable()
+                .Concat(interviewersViewModels)
+                .Where(x => x.Id != responsible)
+                .ToList<ResponsibleToSelectViewModel>();
+            this.UiItems = new MvxObservableCollection<ResponsibleToSelectViewModel>(responsiblesViewModels);
+        }
+
+        private ResponsibleToSelectViewModel GetSupervisorViewModel()
+        {
+            var userIdentity = principal.CurrentUserIdentity;
+            
+            var interviewsQuantityByInterviewer = this.assignmentsStorage.WhereSelect(
+                @where => @where.ResponsibleId == userIdentity.UserId,
+                @select =>
+                    new InterviewsQuantity
+                    {
+                        Quantity = @select.Quantity,
+                        CreatedInterviewsCount = @select.CreatedInterviewsCount
+                    });
+
+            var assignmentsCount = interviewsQuantityByInterviewer.Sum(x =>
+                x.Quantity == null ? 1 : x.Quantity.GetValueOrDefault() - x.CreatedInterviewsCount.GetValueOrDefault());
+
+            var interviewsCount = this.interviewStorage.Count(y => y.ResponsibleId == userIdentity.UserId);
+            
+            return new ResponsibleToSelectViewModel(this)
+            {
+                Id = userIdentity.UserId,
+                Login = userIdentity.Name,
+                Role = UserRoles.Supervisor,
+                InterviewsCount = interviewsCount + assignmentsCount,
+            };
         }
 
         private Guid? GetResponsible(SelectResponsibleForAssignmentArgs args)
@@ -177,7 +211,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             public int? Quantity { get; set; }
             public int? CreatedInterviewsCount { get; set; }
         }
-        private InterviewerToSelectViewModel ToInterviewerToSelectViewModel(InterviewerDocument interviewer)
+        private ResponsibleToSelectViewModel ToInterviewerToSelectViewModel(InterviewerDocument interviewer)
         {
             var interviewsQuantityByInterviewer = this.assignmentsStorage.WhereSelect(
                 @where => @where.ResponsibleId == interviewer.InterviewerId,
@@ -195,12 +229,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 y.ResponsibleId == interviewer.InterviewerId && 
                 (y.Status == InterviewStatus.RejectedBySupervisor || y.Status == InterviewStatus.RejectedByHeadquarters));
 
-            return new InterviewerToSelectViewModel(this)
+            return new ResponsibleToSelectViewModel(this)
             {
                 Id = interviewer.InterviewerId,
                 Login = interviewer.UserName,
                 FullName = interviewer.FullaName,
-                InterviewsCount = interviewsCount + assignmentsCount
+                InterviewsCount = interviewsCount + assignmentsCount,
+                Role = UserRoles.Interviewer,
             };
         }
     }

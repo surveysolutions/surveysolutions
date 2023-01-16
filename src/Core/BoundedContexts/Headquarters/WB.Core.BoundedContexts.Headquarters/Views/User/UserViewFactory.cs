@@ -164,13 +164,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, bool? archived = false)
+        public UsersView GetTeamResponsibles(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, bool? archived = false)
         {
-            var users = ApplyFilter(this.userRepository.Users, searchBy, archived, UserRoles.Interviewer)
+            var users = ApplyFilter(this.userRepository.Users, searchBy, archived, UserRoles.Interviewer, UserRoles.Supervisor)
                 .Where(user => showLocked || (!user.IsLockedBySupervisor && !user.IsLockedByHeadquaters));
 
             if (supervisorId.HasValue)
-                users = users.Where(user => user.WorkspaceProfile.SupervisorId == supervisorId);
+                users = users.Where(user => user.WorkspaceProfile.SupervisorId == supervisorId || user.Id == supervisorId);
 
             var filteredUsers = users
                 .OrderBy(x => x.UserName)
@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 {
                     UserId = x.Id,
                     UserName = x.UserName,
-                    IconClass = UserRoles.Interviewer.ToString().ToLower(),
+                    IconClass = x.Role.ToString().ToLower(),
                 });
 
             var result = new UsersView
