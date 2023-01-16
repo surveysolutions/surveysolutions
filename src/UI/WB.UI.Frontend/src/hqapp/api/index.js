@@ -525,6 +525,15 @@ class ExportSettings {
                 headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
             })
     }
+
+    removeExportCache() {
+        return this.http(
+            {
+                method: 'delete',
+                url: `${this.base}/RemoveExportCache`,
+                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            })
+    }
 }
 
 // var $webInterviewSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "WebInterviewSettings" })';

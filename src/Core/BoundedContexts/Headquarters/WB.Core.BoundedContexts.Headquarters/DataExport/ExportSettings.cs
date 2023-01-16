@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using PasswordGenerator;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -10,14 +11,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
     public class ExportSettings : IExportSettings
     {
         private readonly IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage;
-        private readonly IMemoryCache settingCache; 
-        
+        private readonly IMemoryCache settingCache;
+        private readonly IExportServiceApi exportServiceApi;
+
         public ExportSettings(
             IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache,
+            IExportServiceApi exportServiceApi)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.settingCache = memoryCache;
+            this.exportServiceApi = exportServiceApi;
         }
 
         public bool EncryptionEnforced()
@@ -70,6 +74,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             var pwd = new Password(true, true, true, true, 12);
             var result = pwd.Next();
             return result;
+        }
+        
+        public async Task RemoveExportCache()
+        {
+            await exportServiceApi.DeleteTenant();
         }
     }
 }

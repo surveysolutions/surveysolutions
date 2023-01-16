@@ -59,6 +59,23 @@
                 </div>
             </div>
         </div>
+
+        <div class="row extra-margin-bottom contain-input"
+            data-suso="settings-page">
+            <div class="col-sm-7">
+                <h2>{{$t('Settings.ClearExportCache_Title')}}</h2>
+                <p>{{$t('Settings.ClearExportCache_Description')}}</p>
+            </div>
+            <div class="col-sm-7">
+                <div class="block-filter action-block">
+                    <button
+                        type="button"
+                        class="btn btn-danger"
+                        @click="removeExportCache">{{$t('Settings.RemoveExportCache')}}</button>
+                </div>
+            </div>
+        </div>
+
         <div class="row extra-margin-bottom contain-input">
             <div class="col-sm-7">
                 <h2>{{$t('Settings.GlobalNoteSettings')}}</h2>
@@ -565,6 +582,58 @@ export default {
         },
         changedFile(e) {
             this.files = this.$refs.logoRef.files
+        },
+        removeExportCache() {
+            var self = this
+            modal.dialog({
+                closeButton: false,
+                message: self.$t('Settings.RemoveExportCacheConfirm'),
+                buttons: {
+                    cancel: {
+                        label: self.$t('Common.No'),
+                        callback: () => { },
+                    },
+                    success: {
+                        label: self.$t('Common.Yes'),
+                        callback: async () => {
+                            await self.$hq.ExportSettings.removeExportCache()
+                                .then(response => {
+                                    const success = response.data.success
+                                    if (success) {
+                                        self.showAlert(self.$t('Settings.RemoveExportCacheSuccess'))
+                                        return
+                                    }
+                                })
+                                .catch(e => {
+                                    if (e.response && e.response.data && e.response.data.message) {
+                                        self.showAlert(e.response.data.message)
+                                        return
+                                    }
+                                    else {
+                                        self.showAlert(self.$t('Settings.RemoveExportCacheFail'))
+                                        return
+                                    }
+                                })
+                        },
+                    },
+                },
+            })
+        },
+        showAlert(message) {
+            modal.alert({
+                message: message,
+                callback: () => {
+                    location.reload()
+                },
+                onEscape: false,
+                closeButton: false,
+                buttons: {
+                    ok: {
+                        label: this.$t('WebInterviewUI.Reload'),
+                        className: 'btn-success',
+                    },
+                },
+            })
         },
     },
 }
