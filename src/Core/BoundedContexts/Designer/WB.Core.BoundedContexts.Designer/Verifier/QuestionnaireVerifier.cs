@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 new ExpressionVerifications(macrosSubstitutionService, expressionProcessor, compilerSettings), 
                 new LookupVerifications(lookupTableService, keywordsProvider), 
                 new MacroVerifications(), 
-                new QuestionnaireVerifications(substitutionService, keywordsProvider), 
+                new QuestionnaireVerifications(substitutionService, keywordsProvider, attachmentService), 
                 new StaticTextVerifications(), 
                 new TranslationVerifications(translationService), 
                 new VariableVerifications(substitutionService),
