@@ -221,7 +221,7 @@ namespace WB.Tests.Unit.Designer
         {
             return new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), 
                 Mock.Of<IDesignerTranslationService>(), 
-                Mock.Of<ICategoriesService>());
+                Mock.Of<IReusableCategoriesService>());
         }
 
         public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
@@ -751,7 +751,7 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<IDesignerTranslationService>(),
                 historyVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>(),
-                Mock.Of<ICategoriesService>(),
+                Mock.Of<IReusableCategoriesService>(),
                 findReplaceService ?? Mock.Of<IFindReplaceService>());
         }
 
@@ -1635,7 +1635,7 @@ namespace WB.Tests.Unit.Designer
                 dbContext ?? Create.InMemoryDbContext(),
                 questionnaireStorage ?? Stub<IQuestionnaireViewFactory>.Returning(Create.QuestionnaireView()),
                 new TranslationsExportService(),
-                Mock.Of<ICategoriesService>()
+                Mock.Of<IReusableCategoriesService>()
             );
 
 
@@ -1690,7 +1690,7 @@ namespace WB.Tests.Unit.Designer
             IAttachmentService attachmentService = null,
             ITopologicalSorter<Guid> topologicalSorter = null,
             IQuestionnaireTranslator questionnaireTranslator = null,
-            ICategoriesService categoriesService = null)
+            IReusableCategoriesService reusableCategoriesService = null)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
             fileSystemAccessorMock.Setup(x => x.MakeStataCompatibleFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
@@ -1724,7 +1724,7 @@ namespace WB.Tests.Unit.Designer
                 new DesignerEngineVersionService(
                     Mock.Of<IAttachmentService>(a => a.GetContent(It.IsAny<string>()) == new AttachmentContent(){ContentType = "image/png"})
                     , Mock.Of<IDesignerTranslationService>(),
-                    Mock.Of<ICategoriesService>()),
+                    Mock.Of<IReusableCategoriesService>()),
                 macrosSubstitutionServiceImp,
                 lookupTableService ?? lookupTableServiceMock.Object,
                 attachmentService ?? attachmentServiceMock,
@@ -1734,7 +1734,7 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<IQuestionnaireCompilationVersionService>(), 
                 Mock.Of<IDynamicCompilerSettingsProvider>(x => x.GetAssembliesToReference() == DynamicCompilerSettingsProvider().GetAssembliesToReference()),
                 expressionsPlayOrderProvider,
-                categoriesService ?? Mock.Of<ICategoriesService>(),
+                reusableCategoriesService ?? Mock.Of<IReusableCategoriesService>(),
                 new QuestionnaireCodeGenerationPackageFactory(lookupTableService ?? lookupTableServiceMock.Object));
         }
 
@@ -1757,7 +1757,7 @@ namespace WB.Tests.Unit.Designer
             return new JsonPatchService(new ZipArchiveUtils());
         }
 
-        public static ICategoricalOptionsImportService CategoricalOptionsImportService(QuestionnaireDocument document, ICategoriesService categoriesService = null)
+        public static ICategoricalOptionsImportService CategoricalOptionsImportService(QuestionnaireDocument document, IReusableCategoriesService reusableCategoriesService = null)
             => new CategoricalOptionsImportService(
                 new InMemoryKeyValueStorage<QuestionnaireDocument>(
                     new Dictionary<string, QuestionnaireDocument>()
@@ -1766,7 +1766,7 @@ namespace WB.Tests.Unit.Designer
                             document.PublicKey.FormatGuid(),
                             document
                         }
-                    }), categoriesService: categoriesService ?? Mock.Of<ICategoriesService>());
+                    }), categoriesExtractFactory: CategoriesExtractFactory());
 
         public static ClassificationsStorage ClassificationStorage(
             DesignerDbContext dbContext)
@@ -1868,16 +1868,14 @@ namespace WB.Tests.Unit.Designer
         public static DeleteCategories DeleteCategories(Guid questionnaireId, Guid responsibleId, Guid categoriesId) =>
             new DeleteCategories(questionnaireId, responsibleId, categoriesId);
 
-        public static CopyPastePreProcessor CopyPastePreProcessor(ICategoriesService categoriesService) =>
-            new CopyPastePreProcessor(categoriesService);
+        public static CopyPastePreProcessor CopyPastePreProcessor(IReusableCategoriesService reusableCategoriesService) =>
+            new CopyPastePreProcessor(reusableCategoriesService);
 
-        public static ICategoriesService CategoriesService(DesignerDbContext dbContext = null,
+        public static IReusableCategoriesService CategoriesService(DesignerDbContext dbContext = null,
             IQuestionnaireViewFactory questionnaireStorage = null,
-            ICategoriesExportService categoriesExportService = null,
             ICategoriesExtractFactory categoriesExtractFactory = null)
-            => new CategoriesService(dbContext ?? Mock.Of<DesignerDbContext>(),
+            => new ReusableCategoriesService(dbContext ?? Mock.Of<DesignerDbContext>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
-                categoriesExportService ?? Mock.Of<ICategoriesExportService>(),
                 categoriesExtractFactory ?? Mock.Of<ICategoriesExtractFactory>());
 
         public static CategoriesRow CategoriesRow(string id, string text, string parentId, int rowId) => new CategoriesRow
@@ -1898,5 +1896,13 @@ namespace WB.Tests.Unit.Designer
                 Text = text,
                 SortIndex = sortIndex
             };
+
+        public static ICategoriesExtractFactory CategoriesExtractFactory(
+            ICategoriesExportService categoriesExportService = null)
+        {
+            return new CategoriesExtractFactory(
+                new ExcelCategoriesExtractService(new CategoriesVerifier(), categoriesExportService ?? new CategoriesExportService()),
+                new TsvCategoriesExtractService(new CategoriesVerifier()));
+        }
     }
 }

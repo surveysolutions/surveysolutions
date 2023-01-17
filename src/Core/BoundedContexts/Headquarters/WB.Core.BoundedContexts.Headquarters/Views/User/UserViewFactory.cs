@@ -86,6 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     IsArchived = user.IsArchived,
                     IsLockedByHQ = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
+                    IsRelinkAllowed = user.Profile.IsRelinkAllowed(),
                     CreationDate = user.CreationDate,
                     Roles = user.Roles,
                     SecurityStamp = user.SecurityStamp,
@@ -104,6 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 IsArchived = dbUser.IsArchived,
                 IsLockedByHQ = dbUser.IsLockedByHQ,
                 IsLockedBySupervisor = dbUser.IsLockedBySupervisor,
+                IsRelinkAllowed = dbUser.IsRelinkAllowed,
                 CreationDate = dbUser.CreationDate,
                 Roles = dbUser.Roles.Select(x => x.Id.ToUserRole()).ToImmutableHashSet(),
                 SecurityStamp = dbUser.SecurityStamp,
@@ -162,13 +164,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, bool? archived = false)
+        public UsersView GetTeamResponsibles(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, bool? archived = false)
         {
-            var users = ApplyFilter(this.userRepository.Users, searchBy, archived, UserRoles.Interviewer)
+            var users = ApplyFilter(this.userRepository.Users, searchBy, archived, UserRoles.Interviewer, UserRoles.Supervisor)
                 .Where(user => showLocked || (!user.IsLockedBySupervisor && !user.IsLockedByHeadquaters));
 
             if (supervisorId.HasValue)
-                users = users.Where(user => user.WorkspaceProfile.SupervisorId == supervisorId);
+                users = users.Where(user => user.WorkspaceProfile.SupervisorId == supervisorId || user.Id == supervisorId);
 
             var filteredUsers = users
                 .OrderBy(x => x.UserName)
@@ -178,7 +180,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 {
                     UserId = x.Id,
                     UserName = x.UserName,
-                    IconClass = UserRoles.Interviewer.ToString().ToLower(),
+                    IconClass = x.Role.ToString().ToLower(),
                 });
 
             var result = new UsersView

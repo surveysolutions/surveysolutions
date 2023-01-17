@@ -239,6 +239,7 @@ namespace WB.UI.Headquarters.Controllers
         private async Task<dynamic> GetUserInfo(HqUser user)
         {
             UserRoles userRole = user.Roles.First().Id.ToUserRole();
+            
             return new
             {
                 UserInfo = new
@@ -268,6 +269,7 @@ namespace WB.UI.Headquarters.Controllers
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     TokenIssued = await this.tokenProvider.DoesTokenExist(user),
                     CanSetupTwoFactorAuthentication = HasPermissionsToSetupTwoFactorAuthentication(user),
+                    IsRelinkAllowed = user.Profile.IsRelinkAllowed(),
                 },
                 Api = new
                 {
@@ -733,6 +735,9 @@ namespace WB.UI.Headquarters.Controllers
                 if (currentUser.IsLockedBySupervisor != editModel.IsLockedBySupervisor)
                     this.ModelState.AddModelError(nameof(EditUserModel.IsLockedBySupervisor), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
                 
+                if (editModel.IsRelinkAllowed)
+                    this.ModelState.AddModelError(nameof(EditUserModel.IsRelinkAllowed), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
+                
                 if(this.ModelState.IsValid)
                     this.ModelState.AddModelError(nameof(EditUserModel.PersonName), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
             }
@@ -750,6 +755,17 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     currentUser.IsLockedByHeadquaters = editModel.IsLockedByHeadquarters;
                     currentUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
+                }
+
+                var shouldCheckRelinkParameter = currentUser.IsInRole(UserRoles.Interviewer)
+                    ? authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter || authorizedUser.IsSupervisor
+                    : currentUser.IsInRole(UserRoles.Supervisor) && (authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter);
+                if (shouldCheckRelinkParameter)
+                {
+                    if (editModel.IsRelinkAllowed)
+                        currentUser.Profile.AllowRelink();
+                    else
+                        currentUser.Profile.ResetAllowRelinkFlag();
                 }
 
                 var updateResult = await this.userManager.UpdateAsync(currentUser);

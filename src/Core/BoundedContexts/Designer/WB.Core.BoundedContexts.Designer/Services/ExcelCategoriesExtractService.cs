@@ -8,16 +8,52 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
     internal class ExcelCategoriesExtractService : ICategoriesExtractService
     {
         private readonly ICategoriesVerifier verifier;
+        private readonly ICategoriesExportService categoriesExportService;
 
-        public ExcelCategoriesExtractService(ICategoriesVerifier verifier)
+        public ExcelCategoriesExtractService(ICategoriesVerifier verifier,
+            ICategoriesExportService categoriesExportService)
         {
             this.verifier = verifier;
+            this.categoriesExportService = categoriesExportService;
+        }
+        
+        public byte[] GetTemplateFile()
+        {
+            using XLWorkbook excelPackage = new XLWorkbook();
+            var worksheet = excelPackage.Worksheets.Add("Categories");
+
+            worksheet.Cells("A1").Value = CategoriesConstants.IdColumnName;
+            worksheet.Cells("B1").Value = CategoriesConstants.TextColumnName;
+            worksheet.Cells("C1").Value = CategoriesConstants.ParentIdColumnName;
+            worksheet.Cells("D1").Value = CategoriesConstants.AttachmentNameColumnName;
+
+            void FormatCell(string address)
+            {
+                var cell = worksheet.Cells(address);
+                cell.Style.Font.Bold = true;
+            }
+
+            FormatCell("A1");
+            FormatCell("B1");
+            FormatCell("C1");
+            FormatCell("D1");
+
+            using var stream = new MemoryStream();
+            excelPackage.SaveAs(stream);
+            return stream.ToArray();
+        }
+
+        public byte[] GetAsFile(List<CategoriesItem> items)
+        {
+            return categoriesExportService.GetAsExcelFile(items);
         }
 
         public List<CategoriesRow> Extract(Stream file)
@@ -102,10 +138,10 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
             return new CategoriesHeaderMap()
             {
-                IdIndex = headers.GetOrNull("id"),
-                ParentIdIndex = headers.GetOrNull("parentid"),
-                TextIndex = headers.GetOrNull("text"),
-                AttachmentNameIndex = headers.GetOrNull("attachmentname"),
+                IdIndex = headers.GetOrNull(CategoriesConstants.IdColumnName),
+                ParentIdIndex = headers.GetOrNull(CategoriesConstants.ParentIdColumnName),
+                TextIndex = headers.GetOrNull(CategoriesConstants.TextColumnName),
+                AttachmentNameIndex = headers.GetOrNull(CategoriesConstants.AttachmentNameColumnName),
             };
         }
 

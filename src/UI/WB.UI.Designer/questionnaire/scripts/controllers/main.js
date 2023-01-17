@@ -609,7 +609,7 @@ angular.module('designerApp')
                 setCommonAceOptions(editor);
             };
 
-            $scope.aceLoadedForOtionFilter = $scope.aceLoaded = function (editor) {
+            $scope.aceLoadedForOptionFilter = $scope.aceLoaded = function (editor) {
                 $scope.aceLoaded(editor, "linkedOptionsFilter");
             }
             $scope.aceLoaded = function (editor, editorType) {
@@ -623,7 +623,8 @@ angular.module('designerApp')
                     enableLiveAutocompletion: true
                 });
                 $scope.aceEditorUpdateMode(editor, editorType);
-
+                editor.getSession().setUseWrapMode(true);
+                
                 const unbindEventHandler = $rootScope.$on('variablesChanged', function () {
                     $scope.aceEditorUpdateMode(editor, editorType);
                 });

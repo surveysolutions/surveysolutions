@@ -313,11 +313,23 @@
   <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
     <value>Download xlsx</value>
   </data>
+  <data name="SideBarDownload" xml:space="preserve">
+    <value>Download:</value>
+  </data>
+  <data name="SideBarXlsx" xml:space="preserve">
+    <value>Xlsx</value>
+  </data>
+  <data name="SideBarTab" xml:space="preserve">
+    <value>Tab</value>
+  </data>
   <data name="SideBarTranslationGetTemplate" xml:space="preserve">
     <value>Get Template for </value>
   </data>
   <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
     <value>Excel (xlsx)</value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+    <value>Tab (txt)</value>
   </data>
   <data name="SideBarTranslationName" xml:space="preserve">
     <value>translation name</value>
@@ -687,6 +699,9 @@
   </data>
   <data name="SelectQuestion" xml:space="preserve">
     <value>Select question</value>
+  </data>
+  <data name="AddFilter" xml:space="preserve">
+    <value>Add filter</value>
   </data>
   <data name="SettingsCan" xml:space="preserve">
     <value>Can </value>

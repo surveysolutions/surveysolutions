@@ -13,6 +13,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         {
             this.IsLockedByHeadquarters = userView.IsLockedByHQ;
             this.IsLockedBySupervisor = userView.IsLockedBySupervisor;
+            this.IsRelinkAllowed = userView.IsRelinkAllowed;
             this.SupervisorId = userView.Supervisor.Id;
             this.SupervisorName = userView.Supervisor.Name;
         }
@@ -32,5 +33,9 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         [DataMember]
         [Required]
         public bool IsLockedByHeadquarters { get; }
+        
+        [DataMember]
+        [Required]
+        public bool IsRelinkAllowed { get; }
     }
 }
