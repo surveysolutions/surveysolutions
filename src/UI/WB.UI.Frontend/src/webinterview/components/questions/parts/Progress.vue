@@ -1,6 +1,6 @@
 <template>
     <div class="progress question-progress"
-        :class="{'complited' : progress == 100}"
+        :class="{'completed' : progress == 100}"
         v-if="isVisible">
         <div class="progress-bar active"
             :class="{'progress-bar-striped':striped}"
