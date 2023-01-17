@@ -121,6 +121,7 @@
     "html-webpack-plugin": ">=5.5.0",
     "glob-parent": ">=5.1.2",
     "gulp-footer": "2.1.0",
+    "json5":"2.2.3",
     "json-schema": ">=0.4.0",
     "merge": ">=2.1.1",
     "minimist": ">=1.2.6",
