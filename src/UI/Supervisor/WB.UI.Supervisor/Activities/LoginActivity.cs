@@ -25,8 +25,11 @@ namespace WB.UI.Supervisor.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
-            
-            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() => { }));
+        }
+
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

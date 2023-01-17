@@ -20,16 +20,13 @@ namespace WB.UI.Interviewer.Activities
         protected override int LanguagesMenuItemId => Resource.Id.interview_language;
         protected override int MenuId => Resource.Menu.interview;
 
-        protected override void OnCreate(Bundle bundle)
+        protected override bool BackButtonCustomAction => true;
+        protected override async void BackButtonPressed()
         {
-            base.OnCreate(bundle);
-            
-            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(async () =>
-            {
-                await this.ViewModel.NavigateBack(); 
-                this.Finish();
-            }));
+            await this.ViewModel.NavigateBack(); 
+            this.Finish();
         }
+
 
         [Export("StartInterviewApi")]
         public void StartInterviewApi()

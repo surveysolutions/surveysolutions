@@ -21,15 +21,16 @@ namespace WB.UI.Interviewer.Activities
             base.OnCreate(savedInstanceState);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(toolbar);
-            
-            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() =>
+        }
+        
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
+            if (IsSupportMenu)
             {
-                if (IsSupportMenu)
-                {
-                    this.ViewModel.NavigateToDashboardCommand.Execute();
-                    this.CancelLoadingAndFinishActivity();
-                }
-            }));
+                this.ViewModel.NavigateToDashboardCommand.Execute();
+                this.CancelLoadingAndFinishActivity();
+            }
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)

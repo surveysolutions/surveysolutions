@@ -23,12 +23,14 @@ namespace WB.UI.Interviewer.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
-            
-            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(() =>
-            {
-                this.ViewModel.NavigateToPreviousViewModel();
-            }));
         }
+        
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
+            this.ViewModel.NavigateToPreviousViewModel();
+        }
+
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {

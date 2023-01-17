@@ -43,11 +43,15 @@ namespace WB.UI.Shared.Extensions.Activities
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
             
-            OnBackPressedDispatcher.AddCallback(this, new OnBackPressedCallbackWrapper(this.Cancel));
-
             this.ViewModel.OnAreaEditCompleted = OnAreaEditCompleted;
             
             System.Threading.Tasks.Task.Run(() => this.ViewModel.MapControlCreatedAsync());
+        }
+
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
+            Cancel();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
