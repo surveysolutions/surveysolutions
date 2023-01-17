@@ -15,8 +15,8 @@
               style="@style/Interview_Sidebar_Interview_ProgressBar"
               android:layout_weight="1"
               android:max="100"
-              local:MvxBind="Progress InterviewState.AnsweredProgress;
-                             ProgressBarComplete InterviewState.AnsweredProgress;" />
+              local:MvxBind="ProgressBarComplete InterviewState.AnsweredProgress;
+                             Progress InterviewState.AnsweredProgress;" />
           <TextView style="@style/Interview_Sidebar_Progress"
                     android:layout_gravity="right"
                     local:MvxBind="Text Format('{0}%', InterviewState.AnsweredProgress);" />

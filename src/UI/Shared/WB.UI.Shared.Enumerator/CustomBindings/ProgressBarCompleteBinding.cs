@@ -31,12 +31,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         private void SetProgressBarColor(ProgressBar view, int colorId)
         {
 #pragma warning disable CA1416
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
-            {
-                var color = ContextCompat.GetColor(view.Context, colorId);
-                var currentDrawable = view.CurrentDrawable;
-                currentDrawable.SetColorFilter(new Color(color), PorterDuff.Mode.SrcIn);
-            }
+            var color = ContextCompat.GetColor(view.Context, colorId);
+            var currentDrawable = view.CurrentDrawable;
+            currentDrawable.SetColorFilter(new Color(color), PorterDuff.Mode.SrcIn);
 #pragma warning restore CA1416
         }
 
