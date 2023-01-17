@@ -96,6 +96,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             backPressedCallbackWrapper?.Remove();
             backPressedCallbackWrapper?.Dispose();
+            backPressedCallbackWrapper = null;
 
             TryWriteMemoryInformationToLog($"Destroyed Activity {this.GetType().Name}");
             base.OnDestroy();
