@@ -89,7 +89,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (await this.IsExistsDataExportInProgress())
                 return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.ErrorThereAreRunningProcesses}); 
 
-            await this.exportSettings.RemoveExportCache();
+            await exportServiceApi.DeleteTenant();;
             await this.ClearExportData();
 
             this.logger.LogInformation("Export cache was removed by {User}.", new {User = base.User.Identity.Name});

@@ -12,16 +12,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
     {
         private readonly IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage;
         private readonly IMemoryCache settingCache;
-        private readonly IExportServiceApi exportServiceApi;
 
         public ExportSettings(
             IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage,
-            IMemoryCache memoryCache,
-            IExportServiceApi exportServiceApi)
+            IMemoryCache memoryCache)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.settingCache = memoryCache;
-            this.exportServiceApi = exportServiceApi;
         }
 
         public bool EncryptionEnforced()
@@ -74,11 +71,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             var pwd = new Password(true, true, true, true, 12);
             var result = pwd.Next();
             return result;
-        }
-        
-        public async Task RemoveExportCache()
-        {
-            await exportServiceApi.DeleteTenant();
         }
     }
 }
