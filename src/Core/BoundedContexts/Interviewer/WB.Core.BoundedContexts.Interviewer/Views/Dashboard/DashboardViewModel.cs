@@ -340,12 +340,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IsInProgress = false;
         }
 
-        private bool IsDisposed = false;
+        private bool isDisposed = false;
         
         public override void Dispose()
         {
-            if (IsDisposed) return;
-            IsDisposed = true;
+            if (isDisposed) return;
+            isDisposed = true;
 
             UnsubscribeFromMessages();
             syncSubscription.Dispose();
