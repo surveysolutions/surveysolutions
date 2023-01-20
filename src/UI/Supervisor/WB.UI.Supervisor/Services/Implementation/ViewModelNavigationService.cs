@@ -98,7 +98,6 @@ namespace WB.UI.Supervisor.Services.Implementation
                 });
         }
 
-        protected override void FinishActivity() => TopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
             TopActivity.Activity.StartActivity(new Intent(TopActivity.Activity, typeof(PrefsActivity)));
     }
