@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
   <Fragment>
-    <Variable Name="WindowsDotNetHosting501InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\6.0.12" />
+    <Variable Name="WindowsDotNetHosting501InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\6.*" />
     <util:DirectorySearch Id="WindowsDotNetHosting501Installed" Path="[WindowsDotNetHosting501InstallDir]" Variable="WindowsDotNetHosting501Installed" Result="exists" />
 
     <WixVariable Id="WindowsDotNetHosting501InstalledDetectCondition" Value="WindowsDotNetHosting501Installed" Overridable="yes" />
