@@ -211,8 +211,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             try
             {
-               await mapInteractionService.OpenMapDashboardAsync();
-               this.Dispose();
+                this.Synchronization.CancelSynchronizationCommand.Execute();
+                await mapInteractionService.OpenMapDashboardAsync();
+                this.Dispose();
             }
             catch (MissingPermissionsException e)
             {
@@ -397,6 +398,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public IMvxAsyncCommand ShowSearchCommand =>
             new MvxAsyncCommand(async()=>
             {
+                this.Synchronization.CancelSynchronizationCommand.Execute();
                 await ViewModelNavigationService.NavigateToAsync<SearchViewModel>();
                 this.Dispose();
             });
@@ -539,7 +541,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             return workspaceService.GetAll();
         }
 
-        public void ChangeWorkspace(string workspaceName)
+        public async void ChangeWorkspace(string workspaceName)
         {
             var workspaceView = workspaceService.GetByName(workspaceName);
             if (workspaceView?.SupervisorId == null)
@@ -552,7 +554,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             
             memoryCacheSource.ClearAll();
 
-            ViewModelNavigationService.NavigateToDashboardAsync();
+            await ViewModelNavigationService.NavigateToDashboardAsync();
             this.Dispose();
         }
 
