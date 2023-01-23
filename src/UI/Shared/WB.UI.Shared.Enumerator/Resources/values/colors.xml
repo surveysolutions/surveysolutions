@@ -163,6 +163,7 @@
     <color name="loading_background">#EEEEEE</color>
     <color name="loading_progress_color">#2D9CDB</color>
     <color name="loading_progress_background">#C4C4C4</color>
+    <color name="loading_progress_color_complete">#1f9500</color>
     <color name="loading_indeterminate_progress_gradient_start">#C4C4C4</color>
     <color name="loading_indeterminate_progress_gradient_center">#FFFFFF</color>
 
