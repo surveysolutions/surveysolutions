@@ -2,20 +2,26 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
   <Fragment>
-    <Variable Name="WindowsDotNetHosting501InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\7.0.1" />
-    <util:DirectorySearch Id="WindowsDotNetHosting501Installed" Path="[WindowsDotNetHosting501InstallDir]" Variable="WindowsDotNetHosting501Installed" Result="exists" />
+      <Variable Name="WindowsIISHostingModulePath" Value="[ProgramFiles64Folder]IIS\Asp.Net Core Module\V2\aspnetcorev2.dll" />
+      <util:FileSearch Id="WindowsIISHostingModuleExists" Path="[WindowsIISHostingModulePath]" Variable="WindowsIISHostingModuleExists" Result="exists" />
+      <util:FileSearch Id="WindowsIISHostingModuleVersion" Path="[WindowsIISHostingModulePath]" Variable="WindowsIISHostingModuleVersion" Result="version" />
 
-    <WixVariable Id="WindowsDotNetHosting501InstalledDetectCondition" Value="WindowsDotNetHosting501Installed" Overridable="yes" />
-    <WixVariable Id="WindowsDotNetHosting501InstalledInstallCondition" Value="" Overridable="yes" />
+      <!--<Variable Name="WindowsDotNetHosting501InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\6.*" />
+          <util:DirectorySearch Id="WindowsDotNetHosting501Installed" Path="[WindowsDotNetHosting501InstallDir]" Variable="WindowsDotNetHosting501Installed" Result="exists" />-->
+      <!--<WixVariable Id="WindowsDotNetHosting501InstalledDetectCondition" Value="WindowsIISHostingModuleExists AND WindowsIISHostingModuleVersion &gt;= MinDotNetCoreModuleVersion" Overridable="yes" />-->
 
-    <PackageGroup Id="WindowsDotNetHosting501">
-      <ExePackage
+      <WixVariable Id="WindowsDotNetHosting501InstalledInstallCondition" Value="" Overridable="yes" />
+
+      <!-- aspnetcorev2.dll version is v16.0.22335.13 for Bundle 6.0.13 -->
+      <!-- aspnetcorev2.dll version is v17.0.22323.1 for Bundle 7.0.1 -->
+      <PackageGroup Id="WindowsDotNetHosting501">
+        <ExePackage
           Name="dotnet-hosting-7.0.1-win.exe"
           InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           PerMachine="yes"
-          DetectCondition="!(wix.WindowsDotNetHosting501InstalledDetectCondition)"
+          DetectCondition="WindowsIISHostingModuleExists AND WindowsIISHostingModuleVersion &gt;= v17.0.22323.1"
           InstallCondition="!(wix.WindowsDotNetHosting501InstalledInstallCondition)"
           Vital="yes"
           Permanent="yes"
