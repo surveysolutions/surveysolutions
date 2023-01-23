@@ -84,6 +84,7 @@
     <NoWarn>618;CA1416</NoWarn>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
   </PropertyGroup>
+  <Import Project="..\..\Interviewer\WB.UI.Interviewer\ConfigureTrimming.props"  />
   <ItemGroup>
     <Compile Include="..\..\Interviewer\WB.UI.Interviewer\LinkerPleaseInclude.cs">
       <Link>LinkerPleaseInclude.cs</Link>
