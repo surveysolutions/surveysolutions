@@ -105,13 +105,17 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             public async void OnVideoFrameAboutToBeRendered(long presentationTimeUs, long releaseTimeNs, Format format,
                 MediaFormat mediaFormat)
             {
+                var player = playerView;
+                if (player == null)
+                    return;
+                
                 var mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
 
                 await mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
                     var ratio = (float)format.Height / (float)format.Width / (float)format.PixelWidthHeightRatio;
-                    playerView.SetMinimumHeight((int)(playerView.Width * ratio));
-                    playerView.HideController();
+                    player.SetMinimumHeight((int)(player.Width * ratio));
+                    player.HideController();
                 
                     exoPlayer.ClearVideoFrameMetadataListener(this);
                     playerView = null;
