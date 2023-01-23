@@ -144,7 +144,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             base.ViewAppeared();
 
             SubscribeOnMessages();
-
             this.SynchronizationWithHqEnabled = this.interviewerSettings.AllowSyncWithHq;
 
             DashboardNotifications.CheckTabletTimeAndWarn();
@@ -188,11 +187,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOut);
+        public IMvxAsyncCommand SignOutCommand => new MvxAsyncCommand(async () =>
+        {
+            await this.SignOut();
+        });
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.NavigateToDiagnostics);
+        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(async () =>
+        {
+            this.Synchronization.CancelSynchronizationCommand.Execute();
+            await this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
+            this.Dispose();
+        });
 
-        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.NavigateToMaps);
+        public IMvxAsyncCommand NavigateToMapsCommand => new MvxAsyncCommand(async() =>
+        {
+            await this.NavigateToMaps();
+        });
 
         public IMvxAsyncCommand NavigateToMapDashboardCommand =>
             new MvxAsyncCommand(async () => await NavigateToMapDashboard(), () => !string.IsNullOrEmpty(this.principal.CurrentUserIdentity.Workspace));
@@ -201,7 +211,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             try
             {
-               await mapInteractionService.OpenMapDashboardAsync();
+                this.Synchronization.CancelSynchronizationCommand.Execute();
+                await mapInteractionService.OpenMapDashboardAsync();
+                this.Dispose();
             }
             catch (MissingPermissionsException e)
             {
@@ -209,10 +221,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        private Task NavigateToMaps()
+        private async Task NavigateToMaps()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            return this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>();
+            await this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>();
+            this.Dispose();
         }
 
         private bool isInProgress;
@@ -309,18 +322,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.Synchronize();
         }
 
-        private Task NavigateToDiagnostics()
-        {
-            this.Synchronization.CancelSynchronizationCommand.Execute();
-            return this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
-        }
-
-        private Task SignOut()
+        private async Task SignOut()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
             var userName = this.Principal.CurrentUserIdentity.Name;
             this.auditLogService.Write(new LogoutAuditLogEntity(userName));
-            return this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            this.Dispose();
         }
 
         private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)
@@ -333,12 +341,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IsInProgress = false;
         }
 
+        private bool isDisposed = false;
+        
         public override void Dispose()
         {
-            base.Dispose();
+            if (isDisposed) return;
+            isDisposed = true;
 
             UnsubscribeFromMessages();
-
             syncSubscription.Dispose();
 
             this.StartedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
@@ -351,6 +361,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CreateNew.OnItemsLoaded -= this.OnItemsLoaded;
             this.Synchronization.OnCancel -= this.Synchronization_OnCancel;
             this.Synchronization.OnProgressChanged -= this.Synchronization_OnProgressChanged;
+            
+            base.Dispose();
         }
 
         protected override void InitFromBundle(IMvxBundle parameters)
@@ -384,7 +396,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         public IMvxAsyncCommand ShowSearchCommand =>
-            new MvxAsyncCommand(ViewModelNavigationService.NavigateToAsync<SearchViewModel>);
+            new MvxAsyncCommand(async()=>
+            {
+                this.Synchronization.CancelSynchronizationCommand.Execute();
+                await ViewModelNavigationService.NavigateToAsync<SearchViewModel>();
+                this.Dispose();
+            });
 
         #region Offline synchronization
 
@@ -524,7 +541,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             return workspaceService.GetAll();
         }
 
-        public void ChangeWorkspace(string workspaceName)
+        public async Task ChangeWorkspace(string workspaceName)
         {
             var workspaceView = workspaceService.GetByName(workspaceName);
             if (workspaceView?.SupervisorId == null)
@@ -537,7 +554,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             
             memoryCacheSource.ClearAll();
 
-            ViewModelNavigationService.NavigateToDashboardAsync();
+            await ViewModelNavigationService.NavigateToDashboardAsync();
+            this.Dispose();
         }
 
         public event EventHandler? WorkspaceListUpdated;
@@ -567,6 +585,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 if (interviewerApiView.Workspaces.All(w => CurrentWorkspace != w.Name))
                 {
                     await ViewModelNavigationService.NavigateToDashboardAsync();
+                    this.Dispose();
                     return;
                 }
                 
