@@ -335,11 +335,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 }
 
                 Logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
-                await this.ViewModelNavigationService.NavigateToAsync<LoadingInterviewViewModel, LoadingViewModelArg>(new LoadingViewModelArg
-                {
-                    InterviewId = this.interview.InterviewId,
-                    ShouldReopen = true
-                });
+                await this.ViewModelNavigationService.NavigateToAsync<LoadingInterviewViewModel, LoadingViewModelArg>(
+                    new LoadingViewModelArg
+                    {
+                        InterviewId = this.interview.InterviewId,
+                        ShouldReopen = true
+                    }, true);
             }
             finally
             {

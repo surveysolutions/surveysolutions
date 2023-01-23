@@ -53,7 +53,9 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         [Test]
         public void should_be_navigated_to_prefilled_questions_view_model() => mockOfViewModelNavigationService.Verify(
-            _ => _.NavigateToAsync<PrefilledQuestionsViewModel, InterviewViewModelArgs>(Moq.It.IsAny<InterviewViewModelArgs>()),
+            _ => _.NavigateToAsync<PrefilledQuestionsViewModel, InterviewViewModelArgs>(
+                It.IsAny<InterviewViewModelArgs>(), 
+                It.IsAny<bool>()),
             Times.Never);
 
         private static DashboardViewModel viewModel;
