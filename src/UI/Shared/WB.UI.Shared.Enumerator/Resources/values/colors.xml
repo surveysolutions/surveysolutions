@@ -158,6 +158,7 @@
     <color name="exo_player_seek_scrubber">@color/colorAccent</color>
     <color name="exo_player_seek_played">#2a81cb</color>
     <color name="exo_player_seek_unplayed">#2a81cb</color>
+    <color name="exo_player_background">@android:color/white</color>
 
     <color name="loading_title">#000000</color>
     <color name="loading_background">#EEEEEE</color>
