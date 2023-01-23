@@ -108,6 +108,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 var player = playerView;
                 if (player == null)
                     return;
+
+                var ePlayer = exoPlayer;
+                if (ePlayer == null)
+                    return;
                 
                 var mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
 
@@ -117,7 +121,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                     player.SetMinimumHeight((int)(player.Width * ratio));
                     player.HideController();
                 
-                    exoPlayer.ClearVideoFrameMetadataListener(this);
+                    ePlayer.ClearVideoFrameMetadataListener(this);
                     playerView = null;
                     exoPlayer = null;
                 });
