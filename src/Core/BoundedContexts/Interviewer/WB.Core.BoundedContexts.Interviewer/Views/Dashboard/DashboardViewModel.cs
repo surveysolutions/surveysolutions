@@ -541,7 +541,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             return workspaceService.GetAll();
         }
 
-        public async void ChangeWorkspace(string workspaceName)
+        public async Task ChangeWorkspace(string workspaceName)
         {
             var workspaceView = workspaceService.GetByName(workspaceName);
             if (workspaceView?.SupervisorId == null)
