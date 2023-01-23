@@ -2,36 +2,42 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
   <Fragment>
-    <Variable Name="WindowsDotNetHosting501InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\6.0.12" />
-    <util:DirectorySearch Id="WindowsDotNetHosting501Installed" Path="[WindowsDotNetHosting501InstallDir]" Variable="WindowsDotNetHosting501Installed" Result="exists" />
+      <Variable Name="WindowsIISHostingModulePath" Value="[ProgramFiles64Folder]IIS\Asp.Net Core Module\V2\aspnetcorev2.dll" />
+      <util:FileSearch Id="WindowsIISHostingModuleExists" Path="[WindowsIISHostingModulePath]" Variable="WindowsIISHostingModuleExists" Result="exists" />
+      <util:FileSearch Id="WindowsIISHostingModuleVersion" Path="[WindowsIISHostingModulePath]" Variable="WindowsIISHostingModuleVersion" Result="version" />
 
-    <WixVariable Id="WindowsDotNetHosting501InstalledDetectCondition" Value="WindowsDotNetHosting501Installed" Overridable="yes" />
-    <WixVariable Id="WindowsDotNetHosting501InstalledInstallCondition" Value="" Overridable="yes" />
+      <!--<Variable Name="WindowsDotNetHosting501InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\6.*" />
+          <util:DirectorySearch Id="WindowsDotNetHosting501Installed" Path="[WindowsDotNetHosting501InstallDir]" Variable="WindowsDotNetHosting501Installed" Result="exists" />-->
+      <!--<WixVariable Id="WindowsDotNetHosting501InstalledDetectCondition" Value="WindowsIISHostingModuleExists AND WindowsIISHostingModuleVersion &gt;= MinDotNetCoreModuleVersion" Overridable="yes" />-->
 
-    <PackageGroup Id="WindowsDotNetHosting501">
-      <ExePackage
-          Name="dotnet-hosting-6.0.12-win.exe"
+      <WixVariable Id="WindowsDotNetHosting501InstalledInstallCondition" Value="" Overridable="yes" />
+
+      <!-- aspnetcorev2.dll version is v16.0.22335.13 for Bundle 6.0.13 -->
+      <PackageGroup Id="WindowsDotNetHosting501">
+        <ExePackage
+          Name="dotnet-hosting-6.0.13-win.exe"
           InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           PerMachine="yes"
-          DetectCondition="!(wix.WindowsDotNetHosting501InstalledDetectCondition)"
+          DetectCondition="WindowsIISHostingModuleExists AND WindowsIISHostingModuleVersion &gt;= v16.0.22335.13"
           InstallCondition="!(wix.WindowsDotNetHosting501InstalledInstallCondition)"
           Vital="yes"
           Permanent="yes"
           Protocol="burn"
-          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/cab723a6-dc1f-4b3a-8675-34dc84a21306/1ee69c32da9ba78d80d65f9c067c4f68/dotnet-hosting-6.0.12-win.exe"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/0cb3c095-c4f4-4d55-929b-3b4888a7b5f1/4156664d6bfcb46b63916a8cd43f8305/dotnet-hosting-6.0.13-win.exe"
           LogPathVariable="WindowsDotNetHosting501Log"
           Compressed="no">
-        <!-- heat.exe payload "dotnet-hosting-3.1.1-win.exe" -o "dotnet-hosting.wxs" -->
-          <RemotePayload CertificatePublicKey="9705EC06868355E06D7DF0269606E61B39D51890" 
-                         CertificateThumbprint="AB38D4012B7F90EFE140FA937E71DB39B12E1CAD" 
-                         Description="Microsoft .NET 6.0.12 - Windows Server Hosting" 
-                         Hash="CBC75FF56187D1161C41D4D87EFFBDD476FF2D9F" 
-                         ProductName="Microsoft .NET 6.0.12 - Windows Server Hosting" 
-                         Size="71307960" 
-                         Version="6.0.12.22571" />		
-      </ExePackage>
-    </PackageGroup>
+            <!-- to generate run -->
+            <!-- heat.exe payload "dotnet-hosting-6.0.13-win.exe" -o "dotnet-hosting.wxs" -->
+            <RemotePayload CertificatePublicKey="9705EC06868355E06D7DF0269606E61B39D51890" 
+                           CertificateThumbprint="AB38D4012B7F90EFE140FA937E71DB39B12E1CAD" 
+                           Description="Microsoft .NET 6.0.13 - Windows Server Hosting" 
+                           Hash="BCB8ED035C50B4EEBE0992417753E1C5079926BF" 
+                           ProductName="Microsoft .NET 6.0.13 - Windows Server Hosting" 
+                           Size="71686984" 
+                           Version="6.0.13.22580" />
+        </ExePackage>
+      </PackageGroup>
   </Fragment>
 </Wix>

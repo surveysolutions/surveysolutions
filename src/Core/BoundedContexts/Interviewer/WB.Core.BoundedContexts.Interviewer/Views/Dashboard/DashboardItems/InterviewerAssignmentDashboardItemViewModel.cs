@@ -1,6 +1,5 @@
 ﻿using System;
 using MvvmCross.Commands;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.CreateInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -29,12 +28,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             Actions.Add(new ActionDefinition
             {
                 Command = new MvxAsyncCommand(
-                    () => viewModelNavigationService.NavigateToAsync<CreateAndLoadInterviewViewModel, CreateInterviewViewModelArg>(
-                        new CreateInterviewViewModelArg()
-                        {
-                            AssignmentId = Assignment.Id,
-                            InterviewId = Guid.NewGuid()
-                        }),
+                    async () =>
+                    {
+                        await viewModelNavigationService
+                            .NavigateToAsync<CreateAndLoadInterviewViewModel, CreateInterviewViewModelArg>(
+                                new CreateInterviewViewModelArg()
+                                {
+                                    AssignmentId = Assignment.Id,
+                                    InterviewId = Guid.NewGuid()
+                                }, true);
+                    },
                     () => !Assignment.Quantity.HasValue ||
                           Math.Max(val1: 0, val2: InterviewsLeftByAssignmentCount) > 0),
 
