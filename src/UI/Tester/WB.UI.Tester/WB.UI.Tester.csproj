@@ -80,7 +80,7 @@
     <NoWarn>618;CA1416</NoWarn>
     <RuntimeIdentifiers>android-arm;android-arm64</RuntimeIdentifiers>
   </PropertyGroup>
-  <Import Project="..\..\Interviewer\WB.UI.Interviewer\ConfigureTrimming.props" />
+  <Import Project="..\..\Interviewer\WB.UI.Interviewer\ConfigureTrimming.props"  />
   <ItemGroup>
     <Compile Include="..\..\Interviewer\WB.UI.Interviewer\LinkerPleaseInclude.cs">
       <Link>LinkerPleaseInclude.cs</Link>
@@ -223,25 +223,25 @@
       <Version>4.5.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Arch.Core.Common">
-      <Version>2.1.0.17</Version>
+      <Version>2.1.0.16</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Arch.Core.Runtime">
-      <Version>2.1.0.17</Version>
+      <Version>2.1.0.16</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.PhotoView">
       <Version>2.1.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.ConstraintLayout">
-      <Version>2.1.4.3</Version>
+      <Version>2.1.4.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.MediaRouter">
-      <Version>1.3.1.2</Version>
+      <Version>1.3.1.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Preference">
-      <Version>1.2.0.4</Version>
+      <Version>1.2.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Work.Runtime">
-      <Version>2.7.1.6</Version>
+      <Version>2.7.1.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.ANRWatchDog">
       <Version>1.4.25</Version>
@@ -253,7 +253,7 @@
       <Version>1.7.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Google.Android.Material">
-      <Version>1.7.0.2</Version>
+      <Version>1.7.0.1</Version>
     </PackageReference>
     <PackageReference Include="ZXing.Net.Mobile">
       <Version>3.0.0-beta5</Version>
@@ -262,10 +262,10 @@
       <Version>9.0.9</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
-      <Version>1.0.0.16</Version>
+      <Version>1.0.0.15</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
-      <Version>1.1.0.16</Version>
+      <Version>1.1.0.15</Version>
     </PackageReference>
   </ItemGroup>
   <Choose>
