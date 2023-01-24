@@ -105,8 +105,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             
             var result = new AssignmentsWithoutIdentifingData
             {
-                Page = input.Page,
-                PageSize = input.PageSize,
+                Page = input.Offset.Value,
+                PageSize = input.Limit.Value,
                 Items = assignments.Select(x =>
                 {
                     var row = new AssignmentRow

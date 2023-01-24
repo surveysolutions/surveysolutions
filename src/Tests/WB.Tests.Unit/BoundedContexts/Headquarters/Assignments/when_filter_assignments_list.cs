@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var result = sut.Load(new AssignmentsInputModel());
 
-            Assert.That(result.Page, Is.EqualTo(1));
+            Assert.That(result.Page, Is.EqualTo(0));
             Assert.That(result.PageSize, Is.EqualTo(20));
         }
 
