@@ -104,21 +104,24 @@ namespace WB.UI.Shared.Enumerator.Services
         public abstract Task NavigateToPrefilledQuestionsAsync(string interviewId);
         public abstract void NavigateToSplashScreen();
 
-        protected abstract void FinishActivity();
-
         protected abstract void NavigateToSettingsImpl();
 
-        public Task<bool> NavigateToAsync<TViewModel, TParam>(TParam param) where TViewModel : IMvxViewModel<TParam>
+        public async Task<bool> NavigateToAsync<TViewModel, TParam>(TParam param, bool finishActivityOnSuccess = false) where TViewModel : IMvxViewModel<TParam>
         {
             if (this.HasPendingOperations)
             {
                 this.logger.Trace($"Prevent navigate to {typeof(TViewModel)} with {typeof(TParam)} because answering in progress ");
                 this.ShowWaitMessage();
-                return Task.FromResult(false);
+                return false;
             }
 
             this.logger.Trace($"Navigate to new {typeof(TViewModel)} with {typeof(TParam)}");
-            return this.NavigationService.Navigate<TViewModel, TParam>(param);
+            var previousActivity = TopActivity.Activity;
+            var result = await this.NavigationService.Navigate<TViewModel, TParam>(param);
+            if(result && finishActivityOnSuccess)
+                previousActivity.Finish();
+            
+            return result;
         }
 
         public Task NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel
